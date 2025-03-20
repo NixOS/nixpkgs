@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, testers
-, bibtex-tidy
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  testers,
+  bibtex-tidy,
 }:
 
 buildNpmPackage rec {

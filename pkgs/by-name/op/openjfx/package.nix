@@ -5,9 +5,7 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
-  gradle,
+  gradle_8,
   gradle_7,
   perl,
   pkg-config,
@@ -57,7 +55,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
-  gradle_openjfx = if atLeast23 then gradle else gradle_7;
+  gradle_openjfx = if atLeast23 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
@@ -115,6 +113,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion";
   env.config = writeText "gradle.properties" ''
     CONF = Release
     JDK_HOME = ${jdk-bootstrap.home}

@@ -15,7 +15,7 @@ import ./make-test-python.nix (
         services.xserver.enable = true;
         services.xserver.desktopManager.retroarch = {
           enable = true;
-          package = pkgs.retroarchBare;
+          package = pkgs.retroarch-bare;
         };
         services.xserver.displayManager = {
           sddm.enable = true;

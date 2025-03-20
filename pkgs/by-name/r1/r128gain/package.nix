@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, substituteAll
-, ffmpeg
-, python3Packages
-, sox
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  replaceVars,
+  ffmpeg,
+  python3Packages,
+  sox,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,14 +20,21 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-location.patch;
+    (replaceVars ./ffmpeg-location.patch {
       inherit ffmpeg;
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
-  nativeCheckInputs = with python3Packages; [ requests sox ];
+  propagatedBuildInputs = with python3Packages; [
+    crcmod
+    ffmpeg-python
+    mutagen
+    tqdm
+  ];
+  nativeCheckInputs = with python3Packages; [
+    requests
+    sox
+  ];
 
   # Testing downloads media files for testing, which requires the
   # sandbox to be disabled.

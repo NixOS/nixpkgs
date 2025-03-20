@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ogdf";
   version = "2022.02";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ogdf";
+    repo = "ogdf";
     rev = "dogwood-202202";
     sha256 = "sha256-zkQ6sS0EUmiigv3T7To+tG3XbFbR3XEbFo15oQ0bWf0=";
   };
 
-  nativeBuildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-fPIC"
@@ -37,5 +46,5 @@ stdenv.mkDerivation rec {
       OGDF is developed and supported by Osnabrück University, TU Dortmund,
       University of Cologne, University of Konstanz, and TU Ilmenau.
     '';
-   };
+  };
 }

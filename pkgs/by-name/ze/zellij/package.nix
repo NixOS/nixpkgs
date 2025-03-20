@@ -1,37 +1,40 @@
 {
   lib,
-  fetchFromGitHub,
-  rustPlatform,
   stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  mandown,
   installShellFiles,
   pkg-config,
   curl,
   openssl,
-  mandown,
-  zellij,
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij";
-  version = "0.41.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
-    rev = "v${version}";
-    hash = "sha256-EUoJHM0Jm0uFKFeHhtzon/ZRC615SHfYa1gr4RnCNBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qvm8mRm/YYcuNX2Rv0tYjcIXjaF9dkwd7wpL++ho3t0=";
   };
 
-  cargoHash = "sha256-rI3pa0dvC/OVJz8gzD1bM0Q+8OWwvGj+jGDEMSbSb2I=";
+  # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
+  # the vendored one
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail ', "vendored_curl"' ""
+  '';
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cAO8A/e6tkUY7pm/T4Riz4UPIc22oj5FFC6sQL1QIuc=";
 
   env.OPENSSL_NO_VENDOR = 1;
-
-  # Workaround for https://github.com/zellij-org/zellij/issues/3720
-  postPatch = ''
-    substituteInPlace zellij-utils/Cargo.toml \
-      --replace-fail 'isahc = "1.7.2"' 'isahc = { version = "1.7.2", default-features = false, features = ["http2", "text-decoding"] }'
-  '';
 
   nativeBuildInputs = [
     mandown
@@ -45,13 +48,18 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  preCheck = ''
-    HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs
-  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
-  installCheckPhase = ''
+  installCheckPhase = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     runHook preInstallCheck
 
     ldd "$out/bin/zellij" | grep libcurl.so
@@ -63,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     ''
       mandown docs/MANPAGE.md > zellij.1
       installManPage zellij.1
-
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd $pname \
@@ -72,19 +79,20 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/zellij setup --generate-completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion { package = zellij; };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/zellij-org/zellij/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       therealansh
       _0x4A6F
       abbe
       pyrox0
+      matthiasbeyer
     ];
     mainProgram = "zellij";
   };
-}
+})

@@ -31,15 +31,15 @@ let
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.3";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HE7dARgKnZxqjAXX4iI1ml0N2BalyTo+ZAzjC2ThEN8=";
+    hash = "sha256-wAZBDPMJbTmujP1j7LjK28ZozZaUwKPDPZLZbFFTeAs=";
   };
 
   build-system = [
@@ -91,7 +91,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ld: symbol(s) not found for architecture arm64
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    badPlatforms = [
+      # ld: symbol(s) not found for architecture arm64/x86_64
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

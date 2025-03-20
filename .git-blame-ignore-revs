@@ -1,5 +1,11 @@
 # This file contains a list of commits that are not likely what you
 # are looking for in a blame, such as mass reformatting or renaming.
+#
+# If a commit's line ends with `# !autorebase <command>`,
+# where <command> is an idempotent bash command that reapplies the changes from the commit,
+# the `maintainers/scripts/auto-rebase/run.sh` script can be used to rebase
+# across that commit while automatically resolving merge conflicts caused by the commit.
+#
 # You can set this file as a default ignore file for blame by running
 # the following command.
 #
@@ -204,5 +210,34 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 # sqlc: format with nixfmt
 2bdec131b2bb2c8563f4556d741d34ccb77409e2
 
+# ant: format with nixfmt-rfc-style
+2538d58436b8d0b56d29780aeebf4bf720ddb9ea
+
 # treewide: migrate packages to pkgs/by-name, take 1
 571c71e6f73af34a229414f51585738894211408
+
+# format files with nixfmt (#347275)
+adb9714bd909df283c66bbd641bd631ff50a4260
+
+# treewide: incus packages
+9ab59bb5fb943ad6740f64f5a79eae9642fb8211
+
+# treewide nixfmt reformat pass 1, master, staging and staging-next
+4f0dadbf38ee4cf4cc38cbc232b7708fddf965bc
+667d42c00d566e091e6b9a19b365099315d0e611
+84d4f874c2bac9f3118cb6907d7113b3318dcb5e
+
+# tmuxPlugins sha-to-sri.py script
+516b1e74c358a9c4b06e5591f8c1a2897aad0c33
+
+# treewide: migrate comments in lib to rfc145 style
+ef85e0daa092c9eae0d32c7ce16b889728a5fbc0
+d89ad6c70e0e89aaae75e9f886878ea4e103965a
+e0fe216f4912dd88a021d12a44155fd2cfeb31c8
+80d5b411f6397d5c3e755a0635d95742f76f3c75
+
+# nixos/movim: format with nixfmt-rfc-style
+43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# nixos/iso-image.nix: nixfmt
+da9a092c34cef6947d7aee2b134f61df45171631

@@ -7,11 +7,12 @@
   pythonOlder,
   setuptools,
   typing-extensions,
+  cached-property,
 }:
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "2.2.0";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,13 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9BCYC8PW44pB348kkH7aB1YqXXN1VNcBHphlN503M6g=";
+    tag = "v${version}";
+    hash = "sha256-WrOQPUZ9vaLSR0hxIvCK8kBnARiOLh6qqWBw/h6XpaY=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    typing-extensions
+    cached-property
+  ];
 
   nativeCheckInputs = [
     pydantic
@@ -37,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
-    changelog = "https://github.com/fcurella/python-datauri/releases/tag/v${version}";
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ yuu ];
   };

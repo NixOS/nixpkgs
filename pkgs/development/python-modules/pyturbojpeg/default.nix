@@ -7,7 +7,7 @@
   setuptools,
   numpy,
   python,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JPjGZGVMZH6sDNRdV6kWsCpEjLT2aMrTy+bI4mRbdpw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./lib-path.patch;
+    (replaceVars ./lib-path.patch {
       libturbojpeg = "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

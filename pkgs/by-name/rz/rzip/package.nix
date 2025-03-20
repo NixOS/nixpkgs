@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, bzip2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  bzip2,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rzip";
@@ -8,6 +15,8 @@ stdenv.mkDerivation rec {
     url = "mirror://samba/rzip/rzip-${version}.tar.gz";
     sha256 = "4bb96f4d58ccf16749ed3f836957ce97dbcff3e3ee5fd50266229a48f89815b7";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ bzip2 ];
 
   patches = [
@@ -17,8 +26,6 @@ stdenv.mkDerivation rec {
       sha256 = "0jcjlx9ksdvxvjyxmyzscx9ar9992iy5icw0sc3n0p09qi4d6x1r";
     })
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-int";
 
   meta = with lib; {
     homepage = "https://rzip.samba.org/";

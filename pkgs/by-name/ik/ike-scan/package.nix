@@ -1,9 +1,10 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, stdenv
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "royhills";
-    repo = pname;
+    repo = "ike-scan";
     rev = version;
     sha256 = "sha256-mbfg8p3y4aKoXpmLuF9GXAMPEqV5CsvetwGCRDJ9UNY=";
   };

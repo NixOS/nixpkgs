@@ -1,20 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, enableStatic ? stdenv.hostPlatform.isStatic, enableShared ? !stdenv.hostPlatform.isStatic }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paho.mqtt.c";
-  version = "1.3.13";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.c";
-    rev = "v${version}";
-    hash = "sha256-dKQnepQAryAjImh2rX1jdgiKBtJQy9wzk/7rGQjUtPg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-42P55qzt3FUp6yQdsP82va0wXg0EWDRGL/KuZpjp04g=";
   };
 
   postPatch = ''
     substituteInPlace src/MQTTVersion.c \
-      --replace "namebuf[60]" "namebuf[120]" \
-      --replace "lib%s" "$out/lib/lib%s"
+      --replace-warn "namebuf[60]" "namebuf[120]" \
+      --replace-warn "lib%s" "$out/lib/lib%s"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -27,12 +35,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "PAHO_BUILD_SHARED" enableShared)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Eclipse Paho MQTT C Client Library";
     mainProgram = "MQTTVersion";
     homepage = "https://www.eclipse.org/paho/";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})

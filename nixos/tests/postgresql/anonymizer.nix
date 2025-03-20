@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -20,7 +21,7 @@ let
             inherit package;
             enable = true;
             enableJIT = lib.hasInfix "-jit-" package.name;
-            extraPlugins = ps: [ ps.anonymizer ];
+            extensions = ps: [ ps.anonymizer ];
             settings.shared_preload_libraries = [ "anon" ];
           };
         };
@@ -107,11 +108,7 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.anonymizer.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.anonymizer.meta.broken;
+}

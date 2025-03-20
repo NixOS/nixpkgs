@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
-, alsa-lib
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  alsa-lib,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "mobian1";
-    repo = pname;
+    repo = "callaudiod";
     rev = version;
     hash = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
   };

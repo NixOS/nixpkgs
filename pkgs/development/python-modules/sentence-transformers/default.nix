@@ -1,16 +1,18 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
+  accelerate,
+  datasets,
   huggingface-hub,
-  nltk,
-  numpy,
+  optimum,
+  pillow,
   scikit-learn,
   scipy,
   sentencepiece,
@@ -20,58 +22,67 @@
   transformers,
 
   # tests
-  accelerate,
-  datasets,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nF1E0w1OApajeo1bNNPufVC86KQRY0oTSI3pgKnOWrQ=";
+    tag = "v${version}";
+    hash = "sha256-TNqCukHdjQYxK/UkAV/lm+TTAm5NyoZjVPUyHPyE3Ko=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
-    nltk
-    numpy
+    pillow
     scikit-learn
     scipy
-    sentencepiece
-    tokenizers
     torch
     tqdm
     transformers
   ];
 
+  optional-dependencies = {
+    train = [
+      accelerate
+      datasets
+    ];
+    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
+  };
+
   nativeCheckInputs = [
-    accelerate
-    datasets
-    pytestCheckHook
     pytest-cov-stub
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
   disabledTests = [
     # Tests require network access
+    "test_LabelAccuracyEvaluator"
+    "test_ParaphraseMiningEvaluator"
+    "test_TripletEvaluator"
     "test_cmnrl_same_grad"
     "test_forward"
     "test_initialization_with_embedding_dim"
     "test_initialization_with_embedding_weights"
-    "test_LabelAccuracyEvaluator"
+    "test_loading_model2vec"
+    "test_model_card_base"
     "test_model_card_reuse"
+    "test_nanobeir_evaluator"
     "test_paraphrase_mining"
-    "test_ParaphraseMiningEvaluator"
     "test_save_and_load"
     "test_simple_encode"
     "test_tokenize"
@@ -100,10 +111,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
-    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${version}";
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
-    # Segmentation fault at import
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

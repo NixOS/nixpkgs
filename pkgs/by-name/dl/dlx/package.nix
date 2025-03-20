@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dlx";
   version = "2012-07-08";
 
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0508linnar9ivy3xr99gzrb2l027ngx12dlxaxs7w67cnwqnb0dg";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LINK=${stdenv.cc.targetPrefix}cc" "CFLAGS=-O2" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LINK=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS=-O2"
+  ];
   hardeningDisable = [ "format" ];
 
   installPhase = ''

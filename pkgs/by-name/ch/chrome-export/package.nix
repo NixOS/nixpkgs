@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bdesham";
-    repo = pname;
+    repo = "chrome-export";
     rev = "v${version}";
     sha256 = "0p1914wfjggjavw7a0dh2nb7z97z3wrkwrpwxkdc2pj5w5lv405m";
   };

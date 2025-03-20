@@ -9,20 +9,18 @@
   writeShellApplication,
   curl,
   common-updater-scripts,
+  jq,
   unzip,
+  typescript,
 }:
 
-let
-  owner = "angular";
-  repo = "vscode-ng-language-service";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "18.2.0";
+  version = "19.2.1";
   src = fetchurl {
-    name = "${finalAttrs.pname}-${finalAttrs.version}.zip";
-    url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/ng-template.vsix";
-    hash = "sha256-rl04nqSSBMjZfPW8Y+UtFLFLDFd5FSxJs3S937mhDWE=";
+    name = "angular-language-server-${finalAttrs.version}.zip";
+    url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
+    hash = "sha256-3piEpVwcRiL3lqu67y81var3N0sxKMCm1TQg77CUSmQ=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +32,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 server/bin/ngserver $out/lib/bin/ngserver
-    install -Dm755 server/index.js $out/lib/index.js
-    cp -r node_modules $out/lib/node_modules
+    install -Dm555 server/bin/ngserver $out/lib/bin/ngserver
+    install -Dm444 server/index.js $out/lib/index.js
+    mkdir -p $out/lib/node_modules
+    cp -r node_modules/* $out/lib/node_modules
+    # do not use vendored typescript
+    rm -rf $out/lib/node_modules/typescript
     runHook postInstall
   '';
 
@@ -44,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
     makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations $out/lib/node_modules --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
   '';
 
   passthru = {
@@ -56,10 +57,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
 
     updateScript = lib.getExe (writeShellApplication {
-      name = "update-${finalAttrs.pname}";
+      name = "update-angular-language-server";
       runtimeInputs = [
         curl
         common-updater-scripts
+        jq
       ];
       text = ''
         if [ -z "''${GITHUB_TOKEN:-}" ]; then
@@ -68,9 +70,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         LATEST_VERSION=$(curl -H "Accept: application/vnd.github+json" \
             ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
-          -Lsf https://api.github.com/repos/${owner}/${repo}/releases/latest | \
+          -Lsf https://api.github.com/repos/angular/vscode-ng-language-service/releases/latest | \
           jq -r .tag_name | cut -c 2-)
-        update-source-version ${finalAttrs.pname} "$LATEST_VERSION"
+        update-source-version angular-language-server "$LATEST_VERSION"
       '';
     });
   };

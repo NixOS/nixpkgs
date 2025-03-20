@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.243.1";
+  version = "0.258.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    rev = "refs/tags/${version}";
-    hash = "sha256-m+KaUd0rl0RRZzVPI+ldwW77YGLq45egkV5vYYz4dW8=";
+    tag = version;
+    hash = "sha256-gv/P7pz2wcIKXP5SChTlsM2j2GPuRK+iuLZil8/VvJk=";
   };
 
   postPatch = ''
@@ -147,6 +147,7 @@ buildPythonPackage rec {
     "tests/cli/"
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
+    "tests/experimental/pydantic/test_fields.py"
     "tests/http/"
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
@@ -162,7 +163,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
     mainProgram = "strawberry";

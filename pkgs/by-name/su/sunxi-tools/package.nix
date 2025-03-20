@@ -1,30 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, dtc, libusb1, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  dtc,
+  libusb1,
+  zlib,
+  unstableGitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sunxi-tools";
-  version = "unstable-2021-08-29";
+  version = "0-unstable-2024-10-13";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";
     repo = "sunxi-tools";
-    rev = "74273b671a3fc34048383c40c85c684423009fb9";
-    sha256 = "1gwamb64vr45iy2ry7jp1k3zc03q5sydmdflrbwr892f0ijh2wjl";
+    rev = "29d48c3c39d74200fb35b5750f99d06a4886bf2e";
+    sha256 = "sha256-IUgAM/wVHGbidJ2bfLcTIdXg7wxEjxCg1IA8FtDFpR4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dtc libusb1 zlib ];
+  buildInputs = [
+    dtc
+    libusb1
+    zlib
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags = [ "tools" "misc" ];
+  buildFlags = [
+    "tools"
+    "misc"
+  ];
 
-  installTargets = [ "install-tools" "install-misc" ];
+  installTargets = [
+    "install-tools"
+    "install-misc"
+  ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ elitak ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.elitak ];
   };
 }

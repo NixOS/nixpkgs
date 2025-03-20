@@ -1,31 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, dbus
-, libgcrypt
-, pam
-, python3
-, glib
-, libxslt
-, gettext
-, gcr
-, libcap_ng
-, libselinux
-, p11-kit
-, openssh
-, wrapGAppsHook3
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gnome
-, useWrappedDaemon ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dbus,
+  libgcrypt,
+  pam,
+  python3,
+  glib,
+  libxslt,
+  gettext,
+  gcr,
+  libcap_ng,
+  libselinux,
+  p11-kit,
+  openssh,
+  wrapGAppsHook3,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gnome,
+  useWrappedDaemon ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
   version = "46.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
@@ -52,7 +56,10 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  nativeCheckInputs = [ dbus python3 ];
+  nativeCheckInputs = [
+    dbus
+    python3
+  ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories

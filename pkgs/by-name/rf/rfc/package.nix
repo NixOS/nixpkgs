@@ -1,23 +1,27 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, curl
-, installShellFiles
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  curl,
+  installShellFiles,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "rfc";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "rfc";
     rev = "v${version}";
-    hash = "sha256-zN+MQtHh69PkzbrfceHFpBYCPmTg9qrOf/ML2efq6Xk=";
+    hash = "sha256-bCqgLkbZGQFcxhLwekVw+rUGinXTc7QJHlVRGtNf6Jc=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   dontConfigure = true;
   dontBuild = true;

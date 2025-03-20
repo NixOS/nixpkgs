@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, gmime3
-, gnutls
-, gobject-introspection
-, gpgme
-, gtk3
-, gtksourceview4
-, gtkspell3
-, intltool
-, libcanberra-gtk3
-, libesmtp
-, libical
-, libnotify
-, libsecret
-, openssl
-, pkg-config
-, sqlite
-, webkitgtk_4_0
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  gmime3,
+  gnutls,
+  gobject-introspection,
+  gpgme,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  intltool,
+  libcanberra-gtk3,
+  libesmtp,
+  libical,
+  libnotify,
+  libsecret,
+  openssl,
+  pkg-config,
+  sqlite,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

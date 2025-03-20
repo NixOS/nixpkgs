@@ -1,23 +1,24 @@
-{ autoPatchelfHook
-, curl
-, dpkg
-, dbus
-, fetchurl
-, lib
-, libnl
-, udev
-, cryptsetup
-, stdenv
-, nixosTests
+{
+  autoPatchelfHook,
+  curl,
+  dpkg,
+  dbus,
+  fetchurl,
+  lib,
+  libnl,
+  udev,
+  cryptsetup,
+  stdenv,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "2024.263.131851";
+  version = "2025.72.142645";
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-8rmTGCHROdq+g+IsuZUMbhXfQEKfiy0riSXjLZ2yDhA=";
+    hash = "sha256-8NIaPj6q2wPq908ZQt4Dihb0ffcc/pccrQD6lonsehc=";
   };
 
   buildInputs = [

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchgit, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "jitsiexporter";

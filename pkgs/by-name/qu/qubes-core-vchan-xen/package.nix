@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, xen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xen,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "QubesOS";
-    repo = pname;
+    repo = "qubes-core-vchan-xen";
     rev = "v${version}";
     hash = "sha256:02l1vs5c2jfw22gxvl2fb66m0d99n8ya1i7rphsb5cxsljvxary0";
   };

@@ -8,19 +8,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "melodeon";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "melodeon";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-CwJd77FAEcfCvxHeh3V1SIsgSam3S5WtpSLj9WrOOyI=";
+    tag = finalAttrs.version;
+    hash = "sha256-RlUQdidBUI3+xNpzgcffjQHjMpz7L7cJQPPCcTkvLRw=";
     fetchSubmodules = true;
   };
 
   buildInputs = [
     qt6.qtbase
     qt6.qtwebengine
+    qt6.qtsvg
   ];
 
   nativeBuildInputs = [

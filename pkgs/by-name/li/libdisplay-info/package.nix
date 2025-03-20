@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, pkg-config
-, ninja
-, python3
-, hwdata
-, edid-decode
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  ninja,
+  python3,
+  hwdata,
+  edid-decode,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,20 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
-    repo = pname;
+    repo = "libdisplay-info";
     rev = version;
     sha256 = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson pkg-config ninja edid-decode hwdata python3 ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    edid-decode
+    hwdata
+    python3
+  ];
 
   postPatch = ''
     patchShebangs tool/gen-search-table.py

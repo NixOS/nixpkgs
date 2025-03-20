@@ -23,16 +23,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.62.0";
-
-  format = "other";
+  version = "1.72.0";
+  pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-lU+AyslvuWr0BmhLvfqenOiWpBeC7q3Gtvek/q3o0ok=";
+    hash = "sha256-Kdt4nEWdxfZB7rmPbCegbj4abfv1nMSvAAC6mmUcv44=";
   };
 
   nativeBuildInputs = [
@@ -110,9 +109,12 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [
-      chuangzhu
-      infinitivewitch
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        chuangzhu
+        Gliczy
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

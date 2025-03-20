@@ -1,6 +1,6 @@
 # Systemd services for docker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -34,7 +34,7 @@ in
         default = ["/run/docker.sock"];
         description = ''
             A list of unix and tcp docker should listen to. The format follows
-            ListenStream as described in systemd.socket(5).
+            ListenStream as described in {manpage}`systemd.socket(5)`.
           '';
       };
 
@@ -159,6 +159,34 @@ in
           which the prune will occur.
         '';
       };
+
+      randomizedDelaySec = mkOption {
+        default = "0";
+        type = types.singleLineStr;
+        example = "45min";
+        description = ''
+          Add a randomized delay before each auto prune.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          {manpage}`systemd.time(7)`
+        '';
+      };
+
+      persistent = mkOption {
+        default = true;
+        type = types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
+      };
     };
 
     package = mkPackageOption pkgs "docker" { };
@@ -243,15 +271,26 @@ in
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
 
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
-        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = utils.escapeSystemdExecArgs ([
+            (lib.getExe cfg.package)
+            "system"
+            "prune"
+            "-f"
+          ] ++ cfg.autoPrune.flags);
+        };
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
         after = [ "docker.service" ];
         requires = [ "docker.service" ];
+      };
+
+      systemd.timers.docker-prune = mkIf cfg.autoPrune.enable {
+        timerConfig = {
+          RandomizedDelaySec = cfg.autoPrune.randomizedDelaySec;
+          Persistent = cfg.autoPrune.persistent;
+        };
       };
 
       assertions = [

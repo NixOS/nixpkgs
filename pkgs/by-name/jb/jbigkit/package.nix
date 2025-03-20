@@ -1,15 +1,39 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jbigkit";
   version = "2.1";
 
   src = fetchurl {
-    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${pname}-${version}.tar.gz";
-    sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
+    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/jbigkit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3nEGtr+vSV1oZcfdesbKE4G9EuDYFAXqgefyFnJj2TI=";
   };
 
   patches = [
+    # Archlinux patch: build shared object
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-shared_lib.patch";
+      hash = "sha256-+efeeKg3FJ/TjSOj58kD+DwnaCm3zhGzKLfUes/d5rg=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-ldflags.patch";
+      hash = "sha256-ik3NifyuhDHnIMTrNLAKInPgu2F5u6Gvk9daqrn8ZhY=";
+    })
+    # Archlinux patch: update coverity
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-coverity.patch";
+      hash = "sha256-APm9A2f4sMufuY3cnL9HOcSCa9ov3pyzgQTTKLd49/E=";
+    })
+    # Archlinux patch: fix build warnings
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-build_warnings.patch";
+      hash = "sha256-lDEJ1bvZ+zR7K4CiTq+aXJ8PGjILE3W13kznLLlGOOg=";
+    })
     # Archlinux patch: this helps users to reduce denial-of-service risks, as in CVE-2017-9937
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0013-new-jbig.c-limit-s-maxmem-maximum-decoded-image-size.patch";
@@ -23,8 +47,9 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "DESTDIR=${placeholder "out"}"
     "RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
   ];
 
@@ -39,27 +64,26 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D -m644 libjbig/libjbig.a $out/lib/libjbig.a
-    install -D -m644 libjbig/libjbig85.a $out/lib/libjbig85.a
-    install -D -m644 libjbig/jbig.h $out/include/jbig.h
-    install -D -m644 libjbig/jbig_ar.h $out/include/jbig_ar.h
-    install -D -m644 libjbig/jbig85.h $out/include/jbig85.h
+    install -vDm 644 libjbig/*.h -t "$out/include/"
+    install -vDm 755 pbmtools/{jbgtopbm{,85},pbmtojbg{,85}} -t "$out/bin/"
+    install -vDm 644 pbmtools/*.1* -t "$out/share/man/man1/"
 
-    install -d -m755 $out/share/man/man1
-    install -m644 pbmtools/*.1* $out/share/man/man1
-
-    install -D -m755 pbmtools/jbgtopbm $out/bin/jbgtopbm
-    install -D -m755 pbmtools/pbmtojbg $out/bin/pbmtojbg
-    install -D -m755 pbmtools/jbgtopbm85 $out/bin/jbgtopbm85
-    install -D -m755 pbmtools/pbmtojbg85 $out/bin/pbmtojbg85
+    install -vDm 755 libjbig/*.so.* -t "$out/lib/"
+    for lib in libjbig.so libjbig85.so; do
+      ln -sv "$lib.${finalAttrs.version}" "$out/lib/$lib"
+      ln -sv "$out/lib/$lib.${finalAttrs.version}" "$out/lib/$lib.0"
+    done
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
+  doCheck = true;
+
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Software implementation of the JBIG1 data compression standard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, python3, AppKit, libxcb }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  python3,
+  AppKit,
+  libxcb,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "jless";
@@ -11,11 +19,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-76oFPUWROX389U8DeMjle/GkdItu+0eYxZkt1c6l0V4=";
   };
 
-  cargoHash = "sha256-sas94liAOSIirIJGdexdApXic2gWIBDT4uJFRM3qMw0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-moXZcPGh0+KyyeUMjH7/+hvF86Penk2o2DQWj4BEzt8=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
@@ -25,6 +35,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://jless.io";
     changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda jfchevrette ];
+    maintainers = with maintainers; [
+      figsoda
+      jfchevrette
+    ];
   };
 }

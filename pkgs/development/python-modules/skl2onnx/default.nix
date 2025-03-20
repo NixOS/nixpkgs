@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "skl2onnx";
-  version = "1.17.0";
+  version = "1.18.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cSfchORw9In2gJTM//mlqBW2CfcA1D5wjm9lijOwZAM=";
+    hash = "sha256-OepK4wxcGCNVoYJEZwExWCFERODOCxjzMzi9gn1PsA8=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,6 @@ buildPythonPackage rec {
     scikit-learn
     onnxconverter-common
   ];
-
 
   pythonRelaxDeps = [ "scikit-learn" ];
 

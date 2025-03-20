@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, lib, python3, fetchpatch
-, cmake, lingeling, btor2tools, gtest, gmp
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  python3,
+  fetchpatch,
+  cmake,
+  lingeling,
+  btor2tools,
+  gtest,
+  gmp,
 }:
 
 stdenv.mkDerivation rec {
@@ -7,10 +16,10 @@ stdenv.mkDerivation rec {
   version = "3.2.3";
 
   src = fetchFromGitHub {
-    owner  = "boolector";
-    repo   = "boolector";
-    rev    = version;
-    hash   = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
+    owner = "boolector";
+    repo = "boolector";
+    rev = version;
+    hash = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
   };
 
   patches = [
@@ -22,29 +31,38 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [ lingeling btor2tools gmp ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ];
+  buildInputs = [
+    lingeling
+    btor2tools
+    gmp
+  ];
 
-  cmakeFlags =
-    [ "-DBUILD_SHARED_LIBS=ON"
-      "-DUSE_LINGELING=YES"
-      "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
-    ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_LINGELING=YES"
+    "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
+  ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;
   preCheck =
-    let var = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    let
+      var = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
-      # tests modelgen and modelgensmt2 spawn boolector in another processes and
-      # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
-      lib.optionalString stdenv.hostPlatform.isDarwin ''
-        cp -r bin bin.back
-        install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector
-      '' + ''
-        export ${var}=$(readlink -f lib)
-        patchShebangs ..
-      '';
+    # tests modelgen and modelgensmt2 spawn boolector in another processes and
+    # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      cp -r bin bin.back
+      install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector
+    ''
+    + ''
+      export ${var}=$(readlink -f lib)
+      patchShebangs ..
+    '';
 
   postCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm -rf bin
@@ -59,9 +77,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = "https://boolector.github.io";
-    license     = licenses.mit;
-    platforms   = with platforms; linux ++ darwin;
+    homepage = "https://boolector.github.io";
+    license = licenses.mit;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

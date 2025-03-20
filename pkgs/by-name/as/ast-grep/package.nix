@@ -1,57 +1,77 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  installShellFiles,
+  buildPackages,
+  versionCheckHook,
+  nix-update-script,
+  enableLegacySg ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.28.1";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
-    rev = version;
-    hash = "sha256-nMOj/oMJsBB0bI2RzxEytvEr0v+VmGIMY0uiK7ALEHM=";
+    tag = finalAttrs.version;
+    hash = "sha256-u2eRdOreThaTAe3Uo4C6K3u3qtfW+sow9w+Q3uqtPGs=";
   };
-
-  cargoHash = "sha256-alOLdkgyrJQNg/JACredGmfs/dKxnOm9cSahvVBHzTM=";
-
-  nativeBuildInputs = [ installShellFiles ];
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd sg \
-      --bash <($out/bin/sg completions bash) \
-      --fish <($out/bin/sg completions fish) \
-      --zsh <($out/bin/sg completions zsh)
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Nmmka1AxWhY3InOSmxiL9gg6sznrP8yQuC0EgAywATA=";
 
-  checkFlags = [
-    # disable flaky test
-    "--skip=test::test_load_parser_mac"
+  nativeBuildInputs = [ installShellFiles ];
 
-    # BUG: Broke by 0.12.1 update (https://github.com/NixOS/nixpkgs/pull/257385)
-    # Please check if this is fixed in future updates of the package
-    "--skip=verify::test_case::tests::test_unmatching_id"
-  ] ++ lib.optionals (with stdenv.hostPlatform; (isDarwin && isx86_64) || (isLinux && isAarch64)) [
-    # x86_64-darwin: source/benches/fixtures/json-mac.so\' (no such file), \'/private/tmp/nix-build-.../source/benches/fixtures/json-mac.so\' (mach-o file, but is an incompatible architecture (have \'arm64\', need \'x86_64h\' or \'x86_64\'))" })
-    # aarch64-linux: /build/source/benches/fixtures/json-linux.so: cannot open shared object file: No such file or directory"
-    "--skip=test::test_load_parser"
-    "--skip=test::test_register_lang"
+  cargoBuildFlags = [
+    "--package ast-grep --bin ast-grep"
+  ] ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd ast-grep \
+        --bash <(${emulator} $out/bin/ast-grep completions bash) \
+        --fish <(${emulator} $out/bin/ast-grep completions fish) \
+        --zsh <(${emulator} $out/bin/ast-grep completions zsh)
+    ''
+    + lib.optionalString enableLegacySg ''
+      installShellCompletion --cmd sg \
+        --bash <(${emulator} $out/bin/sg completions bash) \
+        --fish <(${emulator} $out/bin/sg completions fish) \
+        --zsh <(${emulator} $out/bin/sg completions zsh)
+    ''
+  );
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  meta = with lib; {
-    mainProgram = "sg";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    mainProgram = "ast-grep";
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     homepage = "https://ast-grep.github.io/";
-    changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ montchr lord-valen cafkafk ];
+    changelog = "https://github.com/ast-grep/ast-grep/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      montchr
+      lord-valen
+      cafkafk
+    ];
   };
-}
+})

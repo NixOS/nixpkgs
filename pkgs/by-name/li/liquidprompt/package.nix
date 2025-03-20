@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
-    repo = pname;
+    repo = "liquidprompt";
     rev = "v${version}";
     hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };

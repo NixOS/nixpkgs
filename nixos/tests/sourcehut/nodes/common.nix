@@ -1,4 +1,9 @@
-{ config, pkgs, nodes, ... }:
+{
+  config,
+  pkgs,
+  nodes,
+  ...
+}:
 let
   domain = config.networking.domain;
 
@@ -41,23 +46,25 @@ in
       smtp-from = "root+hut@${domain}";
       # WARNING: take care to keep pgp-privkey outside the Nix store in production,
       # or use LoadCredentialEncrypted=
-      pgp-privkey = toString (pkgs.writeText "sourcehut.pgp-privkey" ''
-        -----BEGIN PGP PRIVATE KEY BLOCK-----
+      pgp-privkey = toString (
+        pkgs.writeText "sourcehut.pgp-privkey" ''
+          -----BEGIN PGP PRIVATE KEY BLOCK-----
 
-        lFgEZrFBKRYJKwYBBAHaRw8BAQdAS1Ffiytk0h0z0jfaT3qyiDUV/plVIUwOg1Yr
-        AXP2YmsAAP0W6QMC3G2G41rzCGLeSHeGibor1+XuxvcwUpVdW7ge+BH/tDZuaXhv
-        cy90ZXN0cy9zb3VyY2VodXQgPHJvb3QraHV0QHNvdXJjZWh1dC5sb2NhbGRvbWFp
-        bj6IkwQTFgoAOxYhBMISh2Z08FCi969cq9R2wSP9QF2bBQJmsUEpAhsDBQsJCAcC
-        AiICBhUKCQgLAgQWAgMBAh4HAheAAAoJENR2wSP9QF2b4JMA+wQLdxVcod/ppyvH
-        QguGqqhkpk8KquCddOuFnQVAfHFWAQCK5putVk4mGzsoLTbOJCSGRC4pjEktZawQ
-        MTqJmnOuC5xdBGaxQSkSCisGAQQBl1UBBQEBB0Aed6UYJyighTY+KuPNQ439st3x
-        x04T1j58sx3AnKgYewMBCAcAAP9WLB79HO1zFRqTCnk7GIEWWogMFKVpazeBUNu9
-        h9rzCA2+iHgEGBYKACAWIQTCEodmdPBQovevXKvUdsEj/UBdmwUCZrFBKQIbDAAK
-        CRDUdsEj/UBdmwgJAQDVk/px/pSzqreSeDLzxlb6dOo+N1KcicsJ0akhSJUcvwD9
-        EPhpEDZu/UBKchAutOhWwz+y6pyoF4Vt7XG+jbJQtA4=
-        =KaQc
-        -----END PGP PRIVATE KEY BLOCK-----
-      '');
+          lFgEZrFBKRYJKwYBBAHaRw8BAQdAS1Ffiytk0h0z0jfaT3qyiDUV/plVIUwOg1Yr
+          AXP2YmsAAP0W6QMC3G2G41rzCGLeSHeGibor1+XuxvcwUpVdW7ge+BH/tDZuaXhv
+          cy90ZXN0cy9zb3VyY2VodXQgPHJvb3QraHV0QHNvdXJjZWh1dC5sb2NhbGRvbWFp
+          bj6IkwQTFgoAOxYhBMISh2Z08FCi969cq9R2wSP9QF2bBQJmsUEpAhsDBQsJCAcC
+          AiICBhUKCQgLAgQWAgMBAh4HAheAAAoJENR2wSP9QF2b4JMA+wQLdxVcod/ppyvH
+          QguGqqhkpk8KquCddOuFnQVAfHFWAQCK5putVk4mGzsoLTbOJCSGRC4pjEktZawQ
+          MTqJmnOuC5xdBGaxQSkSCisGAQQBl1UBBQEBB0Aed6UYJyighTY+KuPNQ439st3x
+          x04T1j58sx3AnKgYewMBCAcAAP9WLB79HO1zFRqTCnk7GIEWWogMFKVpazeBUNu9
+          h9rzCA2+iHgEGBYKACAWIQTCEodmdPBQovevXKvUdsEj/UBdmwUCZrFBKQIbDAAK
+          CRDUdsEj/UBdmwgJAQDVk/px/pSzqreSeDLzxlb6dOo+N1KcicsJ0akhSJUcvwD9
+          EPhpEDZu/UBKchAutOhWwz+y6pyoF4Vt7XG+jbJQtA4=
+          =KaQc
+          -----END PGP PRIVATE KEY BLOCK-----
+        ''
+      );
       pgp-pubkey = pkgs.writeText "sourcehut.pgp-pubkey" ''
         -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -78,7 +85,10 @@ in
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
   security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
   services.nginx = {
     enable = true;

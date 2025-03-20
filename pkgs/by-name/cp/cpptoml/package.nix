@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libcxxCmakeModule ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libcxxCmakeModule ? false,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cpptoml";
   version = "0.4.0";
 
@@ -10,6 +16,12 @@ stdenv.mkDerivation rec {
     rev = "fededad7169e538ca47e11a9ee9251bc361a9a65";
     sha256 = "0zlgdlk9nsskmr8xc2ajm6mn1x5wz82ssx9w88s02icz71mcihrx";
   };
+
+  patches = [
+    # Fix compilation with GCC 11.
+    # <https://github.com/skystrife/cpptoml/pull/123>
+    ./add-limits-include.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 

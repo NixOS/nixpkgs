@@ -1,7 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-,
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "espmonitor";
@@ -9,12 +9,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "esp-rs";
-    repo = pname;
+    repo = "espmonitor";
     rev = "v${version}";
     sha256 = "hWFdim84L2FfG6p9sEf+G5Uq4yhp5kv1ZMdk4sMHa+4=";
   };
 
-  cargoHash = "sha256-d0tN6NZiAd+RkRy941fIaVEw/moz6tkpL0rN8TZew3g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Fb/xJLhmInYOanJC6XGsxxsCJNCLvHDe04+wtvXMecE=";
 
   meta = with lib; {
     description = "Cargo tool for monitoring ESP32/ESP8266 execution";

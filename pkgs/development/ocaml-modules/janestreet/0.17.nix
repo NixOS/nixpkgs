@@ -1,11 +1,22 @@
 {
   self,
   bash,
+  fetchpatch,
   fzf,
   lib,
   openssl,
   zstd,
 }:
+
+let
+  js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+  js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+  gen_js_api = self.gen_js_api.override {
+    inherit js_of_ocaml-compiler;
+    ojs = self.ojs.override { inherit js_of_ocaml-compiler; };
+  };
+  js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+in
 
 with self;
 
@@ -211,6 +222,10 @@ with self;
       ctypes-foreign
       openssl
     ];
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/async_ssl/no-incompatible-pointer-types-017.patch";
+      hash = "sha256-bpfIi97/b1hIwsFzsmhFAZV1w8CdaMxXoi72ScSYMjY=";
+    };
   };
 
   async_unix = janePackage {
@@ -498,6 +513,13 @@ with self;
       patchShebangs unix_pseudo_terminal/src/discover.sh
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
+
+    # Compatibility with OCaml 5.3
+    patches = lib.optional (lib.versionAtLeast ocaml.version "5.3") (fetchpatch {
+      url = "https://github.com/janestreet/core_unix/commit/ebce389ac68e098f542e34400e114ac992f415af.patch";
+      includes = [ "bigstring_unix/src/bigstring_unix_stubs.c" ];
+      hash = "sha256-FGg2zlyp3aZFu1VeFdm7pgSPiW0HAkLYgMGTj+tqju8=";
+    });
   };
 
   csvfields = janePackage {
@@ -1536,12 +1558,25 @@ with self;
     ];
   };
 
-  ppxlib_jane = janePackage {
-    pname = "ppxlib_jane";
-    hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
-    meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
-    propagatedBuildInputs = [ ppxlib ];
-  };
+  ppxlib_jane = janePackage (
+    {
+      pname = "ppxlib_jane";
+      meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
+      propagatedBuildInputs = [ ppxlib ];
+    }
+    // (
+      if lib.versionAtLeast ocaml.version "5.3" then
+        {
+          version = "0.17.2";
+          hash = "sha256-AQJSdKtF6p/aG5Lx8VHVEOsisH8ep+iiml6DtW+Hdik=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
+        }
+    )
+  );
 
   profunctor = janePackage {
     pname = "profunctor";
@@ -1869,7 +1904,8 @@ with self;
 
   typerep = janePackage {
     pname = "typerep";
-    hash = "sha256-0KwJdWtibgjxghFmOYKyPrcOAfoLpxYGBZm2KpH8tgA=";
+    version = "0.17.1";
+    hash = "sha256-hw03erwLx9IAbkBibyhZxofA5jIi12rFJOHNEVYpLSk=";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
   };

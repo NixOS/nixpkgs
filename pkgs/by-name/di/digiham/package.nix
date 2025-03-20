@@ -1,17 +1,30 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, protobuf, icu, csdr, codecserver
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  protobuf,
+  icu,
+  csdr,
+  codecserver,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "digiham";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "jketterl";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-nKNA5xAhM/lyyvFJnajWwY0hwVZhLApbDkXoUYFjlt0=";
+    repo = "digiham";
+    tag = finalAttrs.version;
+    hash = "sha256-v7qp6Lv94Ec0yzHsc08YDfE5OU54nglosRLWb98yDiQ=";
   };
+
+  patches = [
+    # libicu headers require C++ 17, remove `set(CMAKE_CXX_STANDARD 11)`
+    ./cpp-17.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -24,11 +37,15 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${builtins.placeholder "out"}/bin/dmr_decoder";
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/jketterl/digiham";
-    description = "tools for decoding digital ham communication";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = teams.c3d2.members;
+    description = "Tools for decoding digital ham communication";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.c3d2.members;
   };
-}
+})

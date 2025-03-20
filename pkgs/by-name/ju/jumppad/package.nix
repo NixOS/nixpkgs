@@ -1,16 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "jumppad";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = "jumppad";
     rev = version;
-    hash = "sha256-UO1a8CoHLNoo74zJkzgSlTkB7XWWHWu2EUiqCvLOQj8=";
+    hash = "sha256-V+FDPNNNP7HMg0Somoj3EhGuhhq/Du8JcCBE/Ut2V1s=";
   };
-  vendorHash = "sha256-S4SyuidH8sxJbuG7yHgSP/iHcuP1h5EHaW8X6gG4GNw=";
+  vendorHash = "sha256-BuXbizA/OJiP11kSIO476tWPYPzGTKmzPHeyIqs8pWc=";
 
   subPackages = [ "." ];
 

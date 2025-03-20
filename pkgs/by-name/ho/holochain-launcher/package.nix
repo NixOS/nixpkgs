@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, openssl
-, webkitgtk_4_0
-, libappindicator
-, wrapGAppsHook3
-, shared-mime-info
-, glib-networking
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  openssl,
+  webkitgtk_4_0,
+  libappindicator,
+  wrapGAppsHook3,
+  shared-mime-info,
+  glib-networking,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +35,6 @@ stdenv.mkDerivation rec {
 
     glib-networking
   ];
-
-  unpackCmd = "dpkg-deb -x $curSrc source";
 
   installPhase = ''
     mv usr $out

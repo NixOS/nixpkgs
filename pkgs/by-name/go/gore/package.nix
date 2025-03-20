@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gore";
-  version = "0.5.7";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "motemen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J6rXz62y/qj4GFXnUwpfx9UEUQaUVQjf7KQCSzmNsws=";
+    sha256 = "sha256-7mhfegSSRE9FnKz+tWYMEtEKc+hayPQE8EEOEu33CjU=";
   };
 
-  vendorHash = "sha256-MpmDQ++32Rop1yYcibEr7hQJ7YAU1QvITzTSstL5V9w=";
+  vendorHash = "sha256-0eCRDlcqZf+RAbs8oBRr+cd7ncWX6fXk/9jd8/GnAiw=";
 
   doCheck = false;
 

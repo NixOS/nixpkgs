@@ -1,15 +1,22 @@
 { lib
 , mkXfceDerivation
+, wayland-scanner
 , exo
 , garcon
 , gtk3
+, gtk-layer-shell
 , glib
 , libnotify
+, libX11
+, libXext
 , libxfce4ui
 , libxfce4util
 , libxklavier
 , upower
-, withUpower ? true
+# Disabled by default on upstream and actually causes issues:
+# https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
+, withUpower ? false
+, wlr-protocols
 , xfconf
 , xf86inputlibinput
 , colord
@@ -19,19 +26,27 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.18.6";
+  version = "4.20.1";
 
-  sha256 = "sha256-xiu26B3dbWu+/AtF/iUC6Wo2U5ZZyzN9RfdbBaQRJ1M=";
+  sha256 = "sha256-9BFO1cN0etDHJzkGHl5GKL2qzJTlpaP/qfvfz6KWaMI=";
+
+  nativeBuildInputs = [
+    wayland-scanner
+  ];
 
   buildInputs = [
     exo
     garcon
     glib
     gtk3
+    gtk-layer-shell
     libnotify
+    libX11
+    libXext
     libxfce4ui
     libxfce4util
     libxklavier
+    wlr-protocols
     xf86inputlibinput
     xfconf
   ]

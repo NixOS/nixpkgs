@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "cliphist";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tImRbWjYCdIY8wVMibc5g5/qYZGwgT9pl4pWvY7BDlI=";
   };
 

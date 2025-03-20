@@ -3,10 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  exceptiongroup,
+  aioquic,
+  cacert,
   h11,
   h2,
+  httpx,
   priority,
+  trio,
+  uvloop,
   wsproto,
   poetry-core,
   pytest-asyncio,
@@ -16,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "hypercorn";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "0.17.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "Hypercorn";
-    rev = version;
-    hash = "sha256-pIUZCQmC3c6FiV0iMMwJGs9TMi6B/YM+vaSx//sAmKE=";
+    tag = version;
+    hash = "sha256-AtSMURz1rOr6VTQ7L2EQ4XZeKVEGTPXTbs3u7IhnZo8";
   };
 
   postPatch = ''
@@ -35,27 +39,36 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    exceptiongroup
     h11
     h2
     priority
     wsproto
   ];
 
+  optional-dependencies = {
+    h3 = [ aioquic ];
+    trio = [ trio ];
+    uvloop = [ uvloop ];
+  };
+
   nativeCheckInputs = [
+    httpx
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # https://github.com/pgjones/hypercorn/issues/217
-    "test_startup_failure"
-  ];
+  preCheck = ''
+    # httpx since 0.28.0+ depends on SSL_CERT_FILE
+    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
   meta = with lib; {
+    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";

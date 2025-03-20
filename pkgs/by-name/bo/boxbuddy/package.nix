@@ -1,24 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, distrobox
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  distrobox,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "boxbuddy";
-  version = "2.3.1";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
     rev = version;
-    hash = "sha256-s0StSMpLNRwiI+T78ySfW2DQ3s5A9kuclC9f32UDkiI=";
+    hash = "sha256-9BGgm4yRjCarJIGP/G9gPj/qsYWb96XGJmpgLj3XCdM=";
   };
 
-  cargoHash = "sha256-WJ35lxo4h91xtcfUuevLsWNBvulxq5ZaAVE3u9BbtzI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2ipLO2b/mEEwSl0PSCq6m9tBhhaiDj9mXXVO4pr/78c=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here

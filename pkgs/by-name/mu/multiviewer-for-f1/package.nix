@@ -1,37 +1,38 @@
-{ stdenvNoCC
-, fetchurl
-, lib
-, makeWrapper
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, at-spi2-atk
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, glib
-, gtk3
-, libdrm
-, libudev0-shim
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, pango
-, xorg
+{
+  stdenvNoCC,
+  fetchurl,
+  lib,
+  makeWrapper,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  at-spi2-atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  ffmpeg,
+  glib,
+  gtk3,
+  libdrm,
+  libudev0-shim,
+  libxkbcommon,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  xorg,
 }:
 let
-  id = "180492850";
+  id = "232635194";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "1.35.2";
+  version = "1.38.1";
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-V1+kMgfbgDS47YNIotmzrh2Hry5pvdQvrzWwuKJY1oM=";
+    sha256 = "sha256-3UgpjQdZYr48MPoqgHci6Yvo+jxK7oa3THl/JuL8tRo=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
     gtk3
     libdrm
     libxkbcommon
-    mesa
+    libgbm
     nspr
     nss
     pango
@@ -84,8 +85,10 @@ stdenvNoCC.mkDerivation rec {
     mv -t $out/share usr/share/* usr/lib/multiviewer-for-f1
 
     makeWrapper "$out/share/multiviewer-for-f1/MultiViewer for F1" $out/bin/multiviewer-for-f1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/Multiviewer for F1\""
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [ libudev0-shim ]
+      }:\"$out/share/Multiviewer for F1\""
 
     runHook postInstall
   '';

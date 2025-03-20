@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "infotagger";
   namespace = "script.module.infotagger";

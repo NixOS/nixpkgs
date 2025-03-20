@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   numpy,
   platformdirs,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   typing-extensions,
+  siphash24,
 }:
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2024.1.14";
+  version = "2025.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OeW7r4H6Qy5oi4LdCYAhLRj5eyPlGox6/nWSJJ/kCrE=";
+    hash = "sha256-gPjj8/d1bQyb1XmHnDUo1U5CKEO1CiiKnDtro+Dqwos=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     platformdirs
@@ -31,23 +32,17 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     numpy = [ numpy ];
-    # siphash = [ siphash ];
+    siphash = [ siphash24 ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ optional-dependencies.siphash;
 
   pythonImportsCheck = [
     "pytools"
     "pytools.batchjob"
     "pytools.lex"
-  ];
-
-  disabledTests = [
-    # siphash is not available
-    "test_class_hashing"
-    "test_dataclass_hashing"
-    "test_datetime_hashing"
-    "test_hash_function"
   ];
 
   meta = {

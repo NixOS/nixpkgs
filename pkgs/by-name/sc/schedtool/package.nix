@@ -1,24 +1,37 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schedtool";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "freequaos";
     repo = "schedtool";
-    rev = "${pname}-${version}";
-    sha256 = "1wdw6fnf9a01xfjhdah3mn8bp1bvahf2lfq74i6hk5b2cagkppyp";
+    rev = "schedtool-${finalAttrs.version}";
+    hash = "sha256-1987n2JilQlNJAc7KhxUe4W7kK0Dqgal6wGo5KwzvPE=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "DESTPREFIX=" ];
+  # Fix build with GCC 13
+  postPatch = ''
+    substituteInPlace schedtool.c \
+      --replace-fail 'TAB[policy] : policy' 'TAB[policy] : (char*)(intptr_t)policy'
+  '';
 
-  meta = with lib; {
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "DESTPREFIX="
+  ];
+
+  meta = {
     description = "Query or alter a process' scheduling policy under Linux";
     mainProgram = "schedtool";
-    homepage = "https://freequaos.host.sk/schedtool/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    homepage = "https://github.com/freequaos/schedtool";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
-}
+})

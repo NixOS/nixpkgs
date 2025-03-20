@@ -1,28 +1,36 @@
-{ lib, stdenv
-, build2
-, DarwinTools
-, fetchurl
-, libuuid
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  DarwinTools,
+  fetchurl,
+  libuuid,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
   version = "0.17.0";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
     hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
   };
 
-  nativeBuildInputs = [
-    build2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DarwinTools
-  ];
+  nativeBuildInputs =
+    [
+      build2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      DarwinTools
+    ];
 
   patches = [
     # Install missing .h files needed by dependers

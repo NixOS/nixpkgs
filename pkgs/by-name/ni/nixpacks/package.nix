@@ -1,17 +1,22 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixpacks";
-  version = "1.29.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
-    repo = pname;
+    repo = "nixpacks";
     rev = "v${version}";
-    sha256 = "sha256-th5nNOU4GBw82Bq+Ybv/JtFY5d/aimgm0vkBgnMScdQ=";
+    hash = "sha256-pCCyGFAeeRV9OV6bp5KIUb8/ZD7mktBR0pV+bB14AZc=";
   };
 
-  cargoHash = "sha256-6x6NSy9f74Snlqsk0zPiTPXoML3zzcQUEyNLV8P+ggk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/Q92s2I/JG745Nd2ZewKx4P/SMdyhXIMsR4oa7TImm8=";
 
   # skip test due FHS dependency
   doCheck = false;

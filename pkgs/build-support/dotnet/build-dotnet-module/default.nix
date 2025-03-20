@@ -3,14 +3,15 @@
   runtimeShell,
   stdenvNoCC,
   callPackage,
-  substituteAll,
   writeShellScript,
   makeWrapper,
   dotnetCorePackages,
   cacert,
   addNuGetDeps,
+  dotnet-sdk,
 }:
 let
+  default-sdk = dotnet-sdk;
   transformArgs =
     finalAttrs:
     {
@@ -82,9 +83,9 @@ let
       # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabled
       useAppHost ? true,
       # The dotnet SDK to use.
-      dotnet-sdk ? dotnetCorePackages.sdk_6_0,
+      dotnet-sdk ? default-sdk,
       # The dotnet runtime to use.
-      dotnet-runtime ? dotnetCorePackages.runtime_6_0,
+      dotnet-runtime ? dotnet-sdk.runtime,
       ...
     }@args:
     let
@@ -188,7 +189,9 @@ let
 
       # propagate the runtime sandbox profile since the contents apply to published
       # executables
-      propagatedSandboxProfile = toString dotnet-runtime.__propagatedSandboxProfile;
+      propagatedSandboxProfile = lib.optionalString (dotnet-runtime != null) (
+        toString dotnet-runtime.__propagatedSandboxProfile
+      );
 
       meta = (args.meta or { }) // {
         inherit platforms;

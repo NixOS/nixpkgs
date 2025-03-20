@@ -1,37 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, python3
-, pkg-config
-, libxml2
-, json-glib
-, sqlite
-, itstool
-, yelp-tools
-, vala
-, gsettings-desktop-schemas
-, gtk4
-, adwaita-icon-theme
-, desktop-file-utils
-, nix-update-script
-, wrapGAppsHook4
-, gobject-introspection
-# withWebkit enables the "webkit" feature, also known as Google Fonts
-, withWebkit ? true, glib-networking, libsoup_3, webkitgtk_6_0
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  pkg-config,
+  libxml2,
+  json-glib,
+  sqlite,
+  itstool,
+  yelp-tools,
+  vala,
+  gsettings-desktop-schemas,
+  gtk4,
+  adwaita-icon-theme,
+  desktop-file-utils,
+  nix-update-script,
+  wrapGAppsHook4,
+  gobject-introspection,
+  # withWebkit enables the "webkit" feature, also known as Google Fonts
+  withWebkit ? true,
+  glib-networking,
+  libsoup_3,
+  webkitgtk_6_0,
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
     rev = version;
-    hash = "sha256-nUFxjqUiL8zLfPJrLM1aQ/SZ2x6CYFKFJI1W/eXlrV8=";
+    hash = "sha256-x7ZRC/xwF6Y2BhbtApVZ4hPZGNGaJiilqpxLyax9r2g=";
   };
 
   nativeBuildInputs = [
@@ -49,18 +53,20 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libxml2
-    json-glib
-    sqlite
-    gsettings-desktop-schemas # for font settings
-    gtk4
-    adwaita-icon-theme
-  ] ++ lib.optionals withWebkit [
-    glib-networking # for SSL so that Google Fonts can load
-    libsoup_3
-    webkitgtk_6_0
-  ];
+  buildInputs =
+    [
+      libxml2
+      json-glib
+      sqlite
+      gsettings-desktop-schemas # for font settings
+      gtk4
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals withWebkit [
+      glib-networking # for SSL so that Google Fonts can load
+      libsoup_3
+      webkitgtk_6_0
+    ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…

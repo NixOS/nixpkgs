@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.13.0";
+  version = "1.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_resource_manager";
     inherit version;
-    hash = "sha256-rkv2lEPxSzcAfU2EFQEVsJQuiwFlD9eh/G/03Bdg5cQ=";
+    hash = "sha256-QenlRqqgPVFgzfojQdvoHvdZZwbDAKiblMQp8fNBH4c=";
   };
 
   build-system = [ setuptools ];

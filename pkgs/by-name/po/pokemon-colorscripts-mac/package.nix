@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pokemon-colorscripts-mac";
   version = "stable-2021-08-10";
 
   src = fetchFromGitHub {
     owner = "nuke-dash";
-    repo = "${pname}";
+    repo = "pokemon-colorscripts-mac";
     rev = "6aa0cd93b255bee35c5716652b8b7dfecb5fcfa2";
     sha256 = "06b86qy2fpzdd81n2mscc2njkrxx0dyzxpgnm1xk6ldn17c853lc";
   };

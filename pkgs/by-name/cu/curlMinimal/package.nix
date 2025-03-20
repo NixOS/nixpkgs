@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests, autoreconfHook
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -14,7 +14,7 @@
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
   ), libkrb5
 , http2Support ? true, nghttp2
-, http3Support ? false, nghttp3, ngtcp2
+, http3Support ? false, nghttp3, ngtcp2, quictls
 , websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
@@ -47,16 +47,20 @@
 
 assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsSupport ]) > 1);
 
+let
+  openssl' = if http3Support then quictls else openssl;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.11.0";
+  version = "8.12.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-21nPDWccpuf1wsXsF3CEozp54EyX5xzxg6XN6iNQVOs=";
+    hash = "sha256-A0Hx7ZeibIEauuvTfWK4M5VnkrdgfqPxXQAWE8dt4gI=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -79,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
@@ -94,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals http3Support [ nghttp3 ngtcp2 ] ++
     lib.optional idnSupport libidn2 ++
     lib.optional ldapSupport openldap ++
-    lib.optional opensslSupport openssl ++
+    lib.optional opensslSupport openssl' ++
     lib.optional pslSupport libpsl ++
     lib.optional rtmpSupport rtmpdump ++
     lib.optional scpSupport libssh2 ++
@@ -112,11 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
-  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
-    # curl doesn't understand that libpsl2 has deps because it doesn't use
-    # pkg-config.
-    # https://github.com/curl/curl/pull/12919
-    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -138,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl'))
       (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
       (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
     ]
@@ -177,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/data/test1592
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
 
@@ -193,7 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = let
     useThisCurl = attr: attr.override { curl = finalAttrs.finalPackage; };
   in {
-    inherit opensslSupport openssl;
+    inherit opensslSupport;
+    openssl = openssl';
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
       fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
@@ -217,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = lib.licenses.curl;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = with lib.maintainers; [ lovek323 Scrumplex ];
     platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);

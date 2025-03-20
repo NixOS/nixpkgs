@@ -1,31 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libosmocore
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libosmocore,
 }:
-
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
 
 stdenv.mkDerivation rec {
   pname = "osmo-pcu";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-pcu";
     rev = version;
-    hash = "sha256-deFUitxcg0G3dXY13BqgqToJrB2FBEU/YE2yKxyaMvk=";
+    hash = "sha256-UCgnBE+Sm9MTLteo/B5Ha9I64mfKxbO61B8QA4qJdLE=";
   };
 
   postPatch = ''
     echo "${version}" > .tarball-version
   '';
-
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,7 +38,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-pcu";
     homepage = "https://osmocom.org/projects/osmopcu";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
 }

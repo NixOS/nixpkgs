@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, imlib2
-, autoreconfHook
-, autoconf-archive
-, libX11
-, libXext
-, libXfixes
-, libXcomposite
-, libXinerama
-, pkg-config
-, libbsd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  imlib2,
+  autoreconfHook,
+  autoconf-archive,
+  libX11,
+  libXext,
+  libXfixes,
+  libXcomposite,
+  libXinerama,
+  pkg-config,
+  libbsd,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
-    repo = pname;
+    repo = "scrot";
     rev = version;
     sha256 = "sha256-MUmvzZMzzKKw5GjOUhpdrMIgKO9/i9RDqDtTsSghd18=";
   };

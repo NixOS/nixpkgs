@@ -1,14 +1,16 @@
-{ lib, stdenv
-, autoconf
-, automake
-, darwin
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, SDL2
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  darwin,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smpeg2";
   version = "unstable-2022-05-26";
 
@@ -19,12 +21,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z0u83K1GIXd0jUYo5ZyWUH2Zt7Hn8z+yr06DAtAEukw=";
   };
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   preConfigure = ''
     sh autogen.sh
@@ -34,13 +44,13 @@ stdenv.mkDerivation rec {
     moveToOutput bin/smpeg2-config "$dev"
     wrapProgram $dev/bin/smpeg2-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL2.dev}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL2}/lib/pkgconfig"
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://icculus.org/smpeg/";
+    homepage = "https://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;
     platforms = platforms.unix;

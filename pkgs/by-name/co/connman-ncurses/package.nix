@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkg-config, dbus, json_c, ncurses, connman }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  dbus,
+  json_c,
+  ncurses,
+  connman,
+}:
 
 stdenv.mkDerivation {
   pname = "connman-ncurses";
@@ -20,9 +31,17 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ dbus ncurses json_c connman ];
+  buildInputs = [
+    dbus
+    ncurses
+    json_c
+    connman
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 

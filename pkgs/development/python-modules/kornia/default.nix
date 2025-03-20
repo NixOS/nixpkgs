@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.7.4";
+  version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ecps1KniiL1WOGk+i/UAVuXJ2W7cgHSzAKCkZokyWIM=";
+    tag = "v${version}";
+    hash = "sha256-pMCGL33DTnMLlxRbhBhRuR/ZA575+kbUJ59N3nuqpdI=";
   };
 
   build-system = [ setuptools ];

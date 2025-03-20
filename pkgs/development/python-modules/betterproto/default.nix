@@ -19,6 +19,21 @@
   grpcio-tools,
 }:
 
+let
+  # using a older version of pytest-asyncio only for tests
+  # https://github.com/pytest-dev/pytest-asyncio/issues/928
+  pytest-asyncio_23_8 = (
+    pytest-asyncio.overridePythonAttrs (old: rec {
+      version = "0.23.8";
+      src = fetchFromGitHub {
+        inherit (old.src) owner repo;
+        tag = "v${version}";
+        hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
+      };
+    })
+  );
+in
+
 buildPythonPackage rec {
   pname = "betterproto";
   version = "2.0.0b6";
@@ -29,9 +44,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core>=1.0.0,<2" "poetry-core"
+  '';
 
   build-system = [ poetry-core ];
 
@@ -50,7 +70,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio
+    pytest-asyncio_23_8
     pytest-mock
     pytest7CheckHook
     tomlkit
@@ -78,7 +98,7 @@ buildPythonPackage rec {
     "test_binary_compatibility"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
@@ -88,7 +108,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
     changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

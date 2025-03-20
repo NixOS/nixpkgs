@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lightningcss";
-  version = "1.28.0";
+  version = "1.29.3";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nW5tnHD5saY7KnccRg5NsszvrADd/tuoN7SWr7JYBVs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+rSqRJaB6UMdCsAcr0X2BZuHk2o6NWDn1yIX4Yjn+Y4=";
   };
 
-  cargoHash = "sha256-He5lb5y3Zd1nygWJWZDzBq5avL81ZKoiZMxtxjKkU7I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6P559K7hKZcd/hjyEQGf4V+cTHoS9H0wprfpMqG3ugk=";
 
   patches = [
     # Backport fix for build error for lightningcss-napi
@@ -38,15 +40,18 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Extremely fast CSS parser, transformer, and minifier written in Rust";
     homepage = "https://lightningcss.dev/";
-    changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${version}";
+    changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ johnrtitor toastal ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      toastal
+    ];
     mainProgram = "lightningcss";
     platforms = lib.platforms.all;
   };
-}
+})

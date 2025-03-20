@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rshijack";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
+    repo = "rshijack";
     rev = "v${version}";
     sha256 = "sha256-vTbjb0tm6jCP9+QWG5R83v31W6RUgSEv96iR37QdnFo=";
   };
 
-  cargoHash = "sha256-3rDPk+lPRrDrE2iqHAOi7zhyc+xYPXkM9P4Bu0JUL40=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wRy+bSi6XxbbvxqE5PFWs4xW1zfkvTHyyGgRZCOU7cY=";
 
   meta = with lib; {
     description = "TCP connection hijacker";

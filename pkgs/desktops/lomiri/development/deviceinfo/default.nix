@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, pkg-config
-, cmake-extras
-, gtest
-, yaml-cpp
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  pkg-config,
+  cmake-extras,
+  gtest,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

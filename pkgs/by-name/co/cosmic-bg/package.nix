@@ -1,64 +1,72 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
+{
+  lib,
+  stdenv,
+  stdenvAdapters,
+  fetchFromGitHub,
+  rustPlatform,
+  libcosmicAppHook,
+  just,
+  nasm,
+  nix-update-script,
+
+  withMoldLinker ? stdenv.targetPlatform.isLinux,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-bg";
-  version = "1.0.0-alpha.2";
+rustPlatform.buildRustPackage.override
+  { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
+  (finalAttrs: {
+    pname = "cosmic-bg";
+    version = "1.0.0-alpha.6";
 
-  src = fetchFromGitHub {
-    owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
-    hash = "sha256-lAFAZBo5FnXgJV3MrZhaYmBxqtH1E7+Huj53ho/hPik=";
-  };
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
-      "cosmic-config-0.1.0" = "sha256-mdRRfXLyDBYQIPmbuXgXGoOKUlyw6CiSmOUBz1b3vJY=";
-      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
+    src = fetchFromGitHub {
+      owner = "pop-os";
+      repo = "cosmic-bg";
+      tag = "epoch-${finalAttrs.version}";
+      hash = "sha256-4b4laUXTnAbdngLVh8/dD144m9QrGReSEjRZoNR6Iks=";
     };
-  };
 
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-GLXooTjcGq4MsBNnlpHBBUJGNs5UjKMQJGJuj9UO2wk=";
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland ];
+    nativeBuildInputs = [
+      just
+      libcosmicAppHook
+      nasm
+    ];
 
-  dontUseJustBuild = true;
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
 
-  justFlags = [
-    "--set"
-    "prefix"
-    (placeholder "out")
-    "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-bg"
-  ];
+    justFlags = [
+      "--set"
+      "prefix"
+      (placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-bg"
+    ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-bg \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
-  '';
+    env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      lib.optionalString withMoldLinker "-C link-arg=-fuse-ld=mold";
 
-  meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-bg";
-    description = "Applies Background for the COSMIC Desktop Environment";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
-    mainProgram = "cosmic-bg";
-  };
-}
+    passthru.updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+
+    meta = {
+      homepage = "https://github.com/pop-os/cosmic-bg";
+      description = "Applies Background for the COSMIC Desktop Environment";
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [
+        nyabinary
+        HeitorAugustoLN
+      ];
+      platforms = lib.platforms.linux;
+      mainProgram = "cosmic-bg";
+    };
+  })

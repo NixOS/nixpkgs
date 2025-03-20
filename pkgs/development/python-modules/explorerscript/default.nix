@@ -7,7 +7,6 @@
   scikit-build-core,
   pybind11,
   ninja,
-  ruff,
   cmake,
   pytestCheckHook,
   setuptools,
@@ -15,43 +14,40 @@
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.2.1.post2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    hash = "sha256-cKEceWr7XmZbuomPOmjQ32ptAjz3LZDQBWAgZEFadDY=";
+    repo = "explorerscript";
+    tag = version;
+    hash = "sha256-fh40HCU12AVA3cZ5xvRott+93qo8VzHFsbPzTkoV3x4=";
     # Include a pinned antlr4 fork used as a C++ library
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     scikit-build-core
-    ninja
+    pybind11
+  ];
+
+  nativeBuildInputs = [
     cmake
-    ruff
+    ninja
   ];
 
   # The source include some auto-generated ANTLR code that could be recompiled, but trying that resulted in a crash while decompiling unionall.ssb.
   # We thus do not rebuild them.
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail ./generate_parser_bindings.py "python3 ./generate_parser_bindings.py"
-
-    # Doesn’t detect that package for some reason
-    substituteInPlace pyproject.toml \
-      --replace-fail "\"scikit-build-core<=0.9.8\"," ""
-  '';
-
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "igraph"
+  ];
+
+  dependencies = [
     igraph
-    pybind11
   ];
 
   optional-dependencies.pygments = [ pygments ];
@@ -60,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "explorerscript" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/explorerscript";
     description = "Programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

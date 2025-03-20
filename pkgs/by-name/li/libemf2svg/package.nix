@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fontconfig
-, freetype
-, libpng
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fontconfig,
+  freetype,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +14,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kakwa";
-    repo = pname;
+    repo = "libemf2svg";
     rev = version;
     sha256 = "04g6dp5xadszqjyjl162x26mfhhwinia65hbkl3mv70bs4an9898";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fontconfig freetype libpng ];
+  buildInputs = [
+    fontconfig
+    freetype
+    libpng
+  ];
 
   meta = with lib; {
     description = "Microsoft EMF to SVG conversion library";

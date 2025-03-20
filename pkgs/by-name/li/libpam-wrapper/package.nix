@@ -4,7 +4,7 @@
   fetchgit,
   cmake,
   linux-pam,
-  substituteAll,
+  replaceVars,
   enablePython ? false,
   python ? null,
 }:
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./python.patch;
+    (replaceVars ./python.patch {
       siteDir = lib.optionalString enablePython python.sitePackages;
       includeDir = lib.optionalString enablePython "include/${python.libPrefix}";
     })

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+Hd1Ymm2LKnHUKoUlfN6D6pwebxgwJQHgqwMHXXtP6Y=";
   };
 
-  cargoHash = "sha256-7Q6WSEiVLzRsyHNECbPhWN9prrN0A/nSJDtZWi09zzg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ckHwg7jEXZV0hjZFeR5dbqrt9APcyRV95LikwCFw/fM=";
 
   meta = with lib; {
     description = "Lambda calculus interpreter";

@@ -1,6 +1,11 @@
-{ buildDunePackage, tls, lwt, mirage-crypto-rng-lwt }:
+{
+  buildDunePackage,
+  tls,
+  lwt,
+  mirage-crypto-rng,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "tls-lwt";
 
   inherit (tls) src meta version;
@@ -11,7 +16,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     lwt
-    mirage-crypto-rng-lwt
+    mirage-crypto-rng
     tls
   ];
 }

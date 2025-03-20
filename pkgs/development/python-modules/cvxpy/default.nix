@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,12 +12,12 @@
   # dependencies
   clarabel,
   cvxopt,
-  ecos,
   osqp,
   scipy,
   scs,
 
-  # checks
+  # tests
+  hypothesis,
   pytestCheckHook,
 
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
@@ -26,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.5.3";
+  version = "1.6.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6RaEyFckvF3WhbfeffysMB/zt+aU1NU6B7Nm06znt9k=";
+    tag = "v${version}";
+    hash = "sha256-fQz9tPxSNKRSJdtyeEAE1qwK//x1U3kKozclav1G+nc=";
   };
 
   # we need to patch out numpy version caps from upstream
@@ -53,14 +50,16 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
-    ecos
     numpy
     osqp
     scipy
     scs
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
@@ -76,6 +75,12 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    # https://github.com/cvxpy/cvxpy/issues/1588
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];

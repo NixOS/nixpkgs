@@ -1,4 +1,4 @@
-From e82f2949b86d127aec908d90d872dfd6feb509e5 Mon Sep 17 00:00:00 2001
+From 54e426127a35ea6c88bf0ba882f97f0712533ef5 Mon Sep 17 00:00:00 2001
 From: Morgan Helton <mhelton@gmail.com>
 Date: Sun, 26 May 2024 12:17:01 -0500
 Subject: [PATCH] envoy: allow specification of external binary
@@ -8,7 +8,7 @@ Subject: [PATCH] envoy: allow specification of external binary
  1 file changed, 10 insertions(+), 7 deletions(-)
 
 diff --git a/pkg/envoy/envoy.go b/pkg/envoy/envoy.go
-index 6639d4bd..c6ca198f 100644
+index 66cf71ae..8d81090e 100644
 --- a/pkg/envoy/envoy.go
 +++ b/pkg/envoy/envoy.go
 @@ -8,9 +8,9 @@ import (
@@ -40,7 +40,7 @@ index 6639d4bd..c6ca198f 100644
  // NewServer creates a new server with traffic routed by envoy.
  func NewServer(ctx context.Context, src config.Source, builder *envoyconfig.Builder) (*Server, error) {
 -	if err := preserveRlimitNofile(); err != nil {
--		log.Debug(ctx).Err(err).Msg("couldn't preserve RLIMIT_NOFILE before starting Envoy")
+-		log.Ctx(ctx).Debug().Err(err).Msg("couldn't preserve RLIMIT_NOFILE before starting Envoy")
 -	}
 +	envoyPath := OverrideEnvoyPath
 +	wd := filepath.Join(os.TempDir(), workingDirectoryName)
@@ -59,5 +59,5 @@ index 6639d4bd..c6ca198f 100644
  		grpcPort:  src.GetConfig().GRPCPort,
  		httpPort:  src.GetConfig().HTTPPort,
 -- 
-2.46.0
+2.47.0
 

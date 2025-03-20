@@ -1,90 +1,42 @@
 {
   lib,
-  stdenv,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchurl,
-  apple-sdk,
   cctools,
+  cmake,
   darwin,
+  fetchFromGitHub,
   libtapi,
   llvm,
   meson,
   ninja,
   openssl,
   pkg-config,
-  python3,
-  swiftPackages,
+  stdenv,
   xar,
-  gitUpdater,
 }:
 
 let
-  # The targetPrefix is prepended to binary names to allow multiple binutils on the PATH to be usable.
-  targetPrefix = lib.optionalString (
-    stdenv.targetPlatform != stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  # Copy the files from their original sources instead of using patches to reduce the size of the patch set in nixpkgs.
+  otherSrcs = {
+    # The last version of ld64 to have dyldinfo
+    ld64 = fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = "ld64";
+      tag = "ld64-762";
+      hash = "sha256-UIq/fwO40vk8yvoTfx+UlLhnuzkI0Ih+Ym6W/BwnP0s=";
+    };
 
-  # ld64 needs CrashReporterClient.h, which is hard to find, but WebKit2 has it.
-  # Fetch it directly because the Darwin stdenv bootstrap can’t depend on fetchgit.
-  crashreporter_h = fetchurl {
-    url = "https://raw.githubusercontent.com/apple-oss-distributions/WebKit2/WebKit2-7605.1.33.0.2/Platform/spi/Cocoa/CrashReporterClientSPI.h";
-    hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
+    # Provides the source files used in the vendored libtapi. The libtapi derivation puts `tapi-src` first.
+    libtapi = lib.head libtapi.srcs;
   };
 
-  dyld = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "dyld";
-    rev = "dyld-1162";
-    hash = "sha256-uyFg8QnnP6NWv5lAOTCiFZ0SnFOA/aO/kpjkyvILVsk=";
-  };
+  ld64src = lib.escapeShellArg "${otherSrcs.ld64}";
+  libtapisrc = lib.escapeShellArg "${otherSrcs.libtapi}";
 
-  libdispatchPrivate = apple-sdk.sourceRelease "libdispatch";
-
-  # First version with all the required definitions. This is used in preference to darwin.xnu to make it easier
-  # to support Linux and because the version of darwin.xnu available on x86_64-darwin in the 10.12 SDK is too old.
-  xnu = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "xnu";
-    rev = "xnu-6153.11.26";
-    hash = "sha256-dcnGcp7bIjQxeAn5pXt+mHSYEXb2Ad9Smhd/WUG4kb4=";
-  };
-
-  privateHeaders = stdenvNoCC.mkDerivation {
-    name = "ld64-deps-private-headers";
-
-    buildCommand = ''
-      mkdir -p "$out/include/System"
-      for dir in arm i386 machine; do
-        cp -r '${xnu}/osfmk/'$dir "$out/include/System/$dir"
-      done
-
-      substitute '${crashreporter_h}' "$out/include/CrashReporterClient.h" \
-        --replace-fail 'USE(APPLE_INTERNAL_SDK)' '0'
-
-      cp -r '${libdispatchPrivate}/private' "$out/include/dispatch"
-
-      install -D -t "$out/include/mach-o" \
-        '${dyld}/include/mach-o/dyld_priv.h' \
-        '${cctools.src}/include/mach-o/loader.h'
-
-      install -D -t "$out/include/mach-o/arm" \
-        '${cctools.src}/include/mach-o/arm/reloc.h'
-
-      install -D -t "$out/include/sys" \
-        '${xnu}/bsd/sys/commpage.h'
-
-      substituteInPlace "$out/include/mach-o/dyld_priv.h" \
-        --replace-fail ', bridgeos(3.0)' ""
-    '';
-  };
-
-  # Avoid pulling in all of Swift just to build libdispatch
-  libdispatch = swiftPackages.Dispatch.override { useSwift = false; };
+  llvmPath = "${lib.getLib llvm}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld64";
-  version = "951.9";
+  version = "954.16";
 
   outputs = [
     "out"
@@ -95,96 +47,87 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "ld64";
-    rev = "ld64-${finalAttrs.version}";
-    hash = "sha256-hLkfqgBwVPlO4gfriYOawTO5E1zSD63ZcNetm1E5I70";
+    tag = "ld64-${finalAttrs.version}";
+    hash = "sha256-CVIyL2J9ISZnI4+r+wp4QtOb3+3Tmz2z2Z7/qeRqHS0=";
   };
 
-  xcodeHash = "sha256-+j7Ed/6aD46SJnr3DWPfWuYWylb2FNJRPmWsUVxZJHM=";
-
-  postUnpack = ''
-    # Verify that the Xcode project has not changed unexpectedly.
-    hashType=$(echo $xcodeHash | cut -d- -f1)
-    expectedHash=$(echo $xcodeHash | cut -d- -f2)
-    hash=$(openssl "$hashType" -binary "$sourceRoot/ld64.xcodeproj/project.pbxproj" | base64)
-
-    if [ "$hash" != "$expectedHash" ]; then
-      echo 'error: hash mismatch in ld64.xcodeproj/project.pbxproj'
-      echo "        specified: $xcodeHash"
-      echo "           got:    $hashType-$hash"
-      echo
-      echo 'Upstream Xcode project has changed. Update `meson.build` with any changes, then update `xcodeHash`.'
-      echo 'Use `nix-hash --flat --sri --type sha256 ld64.xcodeproj/project.pbxproj` to regenerate it.'
-      exit 1
-    fi
-  '';
-
   patches = [
-    # Use std::atomic for atomics. Replaces private APIs (`os/lock_private.h`) with standard APIs.
-    ./0004-Use-std-atomics-and-std-mutex.patch
-    # ld64 assumes the default libLTO.dylib can be found relative to its bindir, which is
-    # not the case in nixpkgs. Override it to default to `stdenv.cc`’s libLTO.dylib.
-    ./0005-Support-LTO-in-nixpkgs.patch
-    # Add implementation of missing function required for code directory support.
-    ./0006-Add-libcd_is_blob_a_linker_signature-implementation.patch
-    # Add OpenSSL implementation of CoreCrypto digest functions. Avoids use of private and non-free APIs.
-    ./0007-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
-    ./remove-unused-and-incomplete-blob-clone.diff
+    # These patches are vendored from https://github.com/reckenrode/ld64/tree/ld64-951.9-nixpkgs.
+    # See their comments for more on what they do.
+    ./patches/0001-Always-use-write-instead-of-mmap.patch
+    ./patches/0002-Add-compile_stubs.h-using-Clang-s-embed-extension-fo.patch
+    ./patches/0003-Inline-missing-definitions-instead-of-using-private-.patch
+    ./patches/0004-Removed-unused-Blob-clone-method.patch
+    ./patches/0005-Use-std-atomics-and-std-mutex-for-portability.patch
+    ./patches/0006-Add-Meson-build-system.patch
+    ./patches/0007-Add-CrashReporterClient-header.patch
+    ./patches/0008-Provide-mach-compatibility-headers-based-on-LLVM-s-h.patch
+    ./patches/0009-Support-LTO-in-nixpkgs.patch
+    ./patches/0010-Add-vendored-libtapi-to-the-ld64-build.patch
+    ./patches/0011-Modify-vendored-libtapi-to-build-with-upstream-LLVM.patch
+    ./patches/0012-Move-libcodedirectory-to-its-own-subproject.patch
+    ./patches/0013-Set-the-version-string-in-the-build.patch
+    ./patches/0014-Replace-corecrypto-and-CommonCrypto-with-OpenSSL.patch
+    ./patches/0015-Add-libcd_is_blob_a_linker_signature-implementation.patch
+    ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
+    ./patches/0017-Fix-dyldinfo-build.patch
+    ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
   ];
 
-  postPatch = ''
-    substitute ${./meson.build} meson.build \
-      --subst-var version
-    cp ${./meson.options} meson.options
+  prePatch = ''
+    # Copy dyldinfo source files
+    cp ${ld64src}/doc/man/man1/dyldinfo.1 doc/man/man1/dyldinfo.1
+    cp ${ld64src}/src/other/dyldinfo.cpp src/other/dyldinfo.cpp
 
-    # Match the version format used by upstream.
-    sed -i src/ld/Options.cpp \
-      -e '1iconst char ld_classicVersionString[] = "@(#)PROGRAM:ld PROJECT:ld64-${finalAttrs.version}\\n";'
+    # Copy files needed from libtapi by ld64
+    mkdir -p subprojects/libtapi/tapi
+    cp ${libtapisrc}/tools/libtapi/*.cpp subprojects/libtapi
+    cp ${libtapisrc}/LICENSE.TXT subprojects/libtapi/LICENSE.TXT
 
-    # Instead of messing around with trying to extract and run the script from the Xcode project,
-    # just use our own Python script to generate `compile_stubs.h`
-    cp ${./gen_compile_stubs.py} gen_compile_stubs.py
-
-    # Enable LTO support using LLVM’s libLTO.dylib by default.
-    substituteInPlace src/ld/InputFiles.cpp \
-      --subst-var-by libllvm '${lib.getLib llvm}'
-    substituteInPlace src/ld/parsers/lto_file.cpp \
-      --subst-var-by libllvm '${lib.getLib llvm}'
-
-    # Use portable includes
-    substituteInPlace src/ld/code-sign-blobs/endian.h \
-      --replace-fail '#include <machine/endian.h>' '#include <sys/types.h>'
+    declare -a tapiHeaders=(
+      APIVersion.h
+      Defines.h
+      LinkerInterfaceFile.h
+      PackedVersion32.h
+      Symbol.h
+      Version.h
+      Version.inc.in
+      tapi.h
+    )
+    for header in "''${tapiHeaders[@]}"; do
+      cp ${libtapisrc}/include/tapi/$header subprojects/libtapi/tapi/$header
+    done
   '';
 
-  strictDeps = true;
-
-  env.NIX_CFLAGS_COMPILE = "-DTARGET_OS_BRIDGE=0 -I${privateHeaders}/include";
+  xcodeHash = "sha256-qip/1eiGn8PdLThonhPq3oq2veN4E1zOiamDPBfTeNE=";
+  xcodeProject = "ld64.xcodeproj";
 
   nativeBuildInputs = [
+    cmake
+    darwin.xcodeProjectCheckHook
     meson
     ninja
     openssl
     pkg-config
-    python3
   ];
 
-  buildInputs =
-    [
-      libtapi
-      llvm
-      openssl
-      xar
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.dyld ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libdispatch ];
+  buildInputs = [
+    llvm
+    openssl
+    xar
+  ];
+
+  dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 
   # Note for overrides: ld64 cannot be built as a debug build because of UB in its iteration implementations,
-  # which trigger libc++ debug assertions due to trying to take the address of the first element of an emtpy vector.
+  # which trigger libc++ debug assertions due to trying to take the address of the first element of an empty vector.
   mesonBuildType = "release";
 
   mesonFlags = [
     (lib.mesonOption "b_ndebug" "if-release")
     (lib.mesonOption "default_library" (if stdenv.hostPlatform.isStatic then "static" else "shared"))
-  ] ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
+    (lib.mesonOption "libllvm_path" llvmPath)
+  ];
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -196,17 +139,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd "$NIX_BUILD_TOP/$sourceRoot"
 
-    export NIX_CFLAGS_COMPILE+=" --ld-path=$out/bin/${targetPrefix}ld"
+    export NIX_CFLAGS_COMPILE+=" --ld-path=$out/bin/ld"
     export NIX_CFLAGS_LINK+=" -L$SDKROOT/usr/lib"
-    meson setup build-install-check -Db_lto=true --buildtype=$mesonBuildType${
-      lib.optionalString (targetPrefix != "") " -Dtarget_prefix=${targetPrefix}"
+    meson setup build-install-check --buildtype=$mesonBuildType ${
+      lib.escapeShellArgs [
+        (lib.mesonBool "b_lto" true)
+        (lib.mesonOption "libllvm_path" llvmPath)
+      ]
     }
 
     cd build-install-check
-    ninja ${targetPrefix}ld "-j$NIX_BUILD_CORES"
+    ninja src/ld/ld "-j$NIX_BUILD_CORES"
 
     # Confirm that ld found the LTO library and reports it.
-    ./${targetPrefix}ld -v 2>&1 | grep -q 'LTO support'
+    if ./src/ld/ld -v 2>&1 | grep -q 'LTO support'; then
+        echo "LTO: supported"
+    else
+        echo "LTO: not supported" && exit 1
+    fi
 
     runHook postInstallCheck
   '';
@@ -218,8 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   __structuredAttrs = true;
-
-  passthru.updateScript = gitUpdater { rev-prefix = "ld64-"; };
 
   meta = {
     description = "The classic linker for Darwin";

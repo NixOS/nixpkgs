@@ -14,18 +14,19 @@
   libportal,
   gtk4,
   gtksourceview5,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";
-  version = "46.2.6";
+  version = "46.2.8";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mrvladus";
     repo = "Errands";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NIhDMsKPxxPJfDHXOpPl7NPUCO/M5wA2T72ej/+w+Z0=";
+    tag = version;
+    hash = "sha256-zFI3+U40zzQL3lPPYwL/ekWA1ugOkORlJui4QT6pgQI=";
   };
 
   nativeBuildInputs = [
@@ -59,15 +60,22 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Manage your tasks";
     changelog = "https://github.com/mrvladus/Errands/releases/tag/${version}";
     homepage = "https://github.com/mrvladus/Errands";
     license = lib.licenses.mit;
     mainProgram = "errands";
-    maintainers = with lib.maintainers; [
-      luftmensch-luftmensch
-      sund3RRR
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        luftmensch-luftmensch
+        sund3RRR
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

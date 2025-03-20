@@ -3,29 +3,27 @@
 , buildDotnetModule
 , dotnetCorePackages
 }:
-let
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
-
-in buildDotnetModule rec {
+buildDotnetModule rec {
   pname = "dotnet-outdated";
   version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "dotnet-outdated";
-    repo = pname;
+    repo = "dotnet-outdated";
     rev = "v${version}";
     hash = "sha256-Ah5VOCIkSRkeDWk/KYHIc/OELo0T/HuJl0LEUiumlu0=";
   };
 
-  inherit dotnet-sdk;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   useDotnetFromEnv = true;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "src/DotNetOutdated/DotNetOutdated.csproj";
   executables = "dotnet-outdated";
 
+  dotnetFlags = [ "-p:TargetFrameworks=net8.0" ];
   dotnetInstallFlags = [ "--framework" "net8.0" ];
 
   meta = with lib; {

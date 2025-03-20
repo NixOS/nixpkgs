@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
@@ -22,8 +27,11 @@ let
     "List-Unsubscribe: <mailto:${list}+unsubscribe@${domain}>"
   ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
-  createList = d: l:
-    let ctlDir = listCtl d l; in
+  createList =
+    d: l:
+    let
+      ctlDir = listCtl d l;
+    in
     ''
       for DIR in incoming queue queue/discarded archive text subconf unsubconf \
                  bounce control moderation subscribers.d digesters.d requeue \
@@ -76,7 +84,7 @@ in
 
       mailLists = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "The collection of hosted maillists";
       };
 
@@ -112,7 +120,7 @@ in
 
     services.postfix = {
       enable = true;
-      recipientDelimiter= "+";
+      recipientDelimiter = "+";
       masterConfig.mlmmj = {
         type = "unix";
         private = true;

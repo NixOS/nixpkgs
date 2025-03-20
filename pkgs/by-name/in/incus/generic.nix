@@ -1,8 +1,8 @@
 {
   hash,
   lts ? false,
-  patches,
-  updateScriptArgs ? "",
+  patches ? [ ],
+  nixUpdateExtraArgs ? [ ],
   vendorHash,
   version,
 }:
@@ -12,15 +12,16 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  writeScript,
   acl,
   cowsql,
+  incus-ui-canonical,
   libcap,
   lxc,
   pkg-config,
   sqlite,
   udev,
   installShellFiles,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -124,13 +125,13 @@ buildGoModule rec {
         ;
     };
 
-    tests = if lts then nixosTests.incus-lts else nixosTests.incus;
+    tests = if lts then nixosTests.incus-lts.all else nixosTests.incus.all;
 
-    ui = callPackage ./ui.nix { };
+    ui = lib.warnOnInstantiate "`incus.ui` renamed to `incus-ui-canonical`" incus-ui-canonical;
 
-    updateScript = writeScript "ovs-update.py" ''
-      ${./update.py} ${updateScriptArgs}
-    '';
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs;
+    };
   };
 
   meta = {

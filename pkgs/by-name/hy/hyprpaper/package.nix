@@ -1,51 +1,55 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cairo
-, expat
-, file
-, fribidi
-, hyprlang
-, libdatrie
-, libGL
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libwebp
-, libXdmcp
-, pango
-, pcre
-, pcre2
-, pkg-config
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, hyprwayland-scanner
-, hyprutils
+{
+  lib,
+  gcc14Stdenv,
+  fetchFromGitHub,
+  cmake,
+  cairo,
+  bash,
+  expat,
+  file,
+  fribidi,
+  hyprlang,
+  libdatrie,
+  libGL,
+  libjpeg,
+  libjxl,
+  libselinux,
+  libsepol,
+  libthai,
+  libwebp,
+  libXdmcp,
+  pango,
+  pcre,
+  pcre2,
+  pkg-config,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  hyprwayland-scanner,
+  hyprutils,
+  hyprgraphics,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HIK7XJWQCM0BAnwW5uC7P0e7DAkVTy5jlxQ0NwoSy4M=";
+    hash = "sha256-pmkJCzjflvsOytiu2mgn2wfSeyL6mTfoi214T4A2OZQ=";
   };
 
-  patches = [
-    # CMakeLists: look for wayland.xml protocol in wayland-scanner pkgdata
-    (fetchpatch {
-      url = "https://github.com/hyprwm/hyprpaper/commit/6c6e54faa84d2de94d2321eda43a8a669ebf3312.patch";
-      hash = "sha256-Ns7HlUPVgBDIocZRGR6kIW58Mt92kJPQRMSKTvp6Vik=";
-    })
-  ];
+  prePatch = ''
+    substituteInPlace src/main.cpp \
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+  '';
+  postPatch = ''
+    substituteInPlace src/helpers/MiscFunctions.cpp \
+      --replace-fail '/bin/bash' '${bash}/bin/bash'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -56,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    bash
     expat
     file
     fribidi
@@ -63,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdatrie
     libGL
     libjpeg
+    libjxl
     libselinux
     libsepol
     libthai
@@ -75,24 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     hyprutils
+    hyprgraphics
   ];
-
-  prePatch = ''
-    substituteInPlace src/main.cpp \
-      --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
-  '';
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      fufexan
-      khaneliman
-      wozeparrot
-    ];
+    maintainers = lib.teams.hyprland.members;
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc14Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

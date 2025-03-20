@@ -45,7 +45,7 @@
   sphinx-issues,
   towncrier,
 
-  # checks
+  # tests
   deepdiff,
   hypothesis,
   lxml,
@@ -55,19 +55,25 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.49.0";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AlrQH0yKbEz+ICdvWWjMD7LQvWl36cFWlp+fegAmtL8=";
+    tag = "v${version}";
+    hash = "sha256-QgCMoZrC3ZCo8yayRXw9fvBj5xi+XH2x/E1MuQFULPo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   build-system = [
     setuptools
@@ -142,6 +148,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyvisa-sim
     sphinx
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -181,19 +188,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "qcodes" ];
-
-  # Remove the `asyncio_default_fixture_loop_scope` option as it has been introduced in newer `pytest-asyncio` v0.24
-  # which is not in nixpkgs yet:
-  # pytest.PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
-      --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
 
   meta = {
     description = "Python-based data acquisition framework";

@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pkg-config
-, pcre2
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  pcre2,
 }:
 
 buildOctavePackage rec {

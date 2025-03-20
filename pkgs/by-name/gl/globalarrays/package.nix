@@ -1,20 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, mpi
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  blas,
+  gfortran,
+  openssh,
+  mpi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
-  version = "5.8.2";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
+    sha256 = "sha256-bMX538yen9cINPCtgf7SUGGsNRJugMrveqXtChHzPkk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook gfortran ];
-  buildInputs = [ mpi blas openssh ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gfortran
+  ];
+  buildInputs = [
+    mpi
+    blas
+    openssh
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \

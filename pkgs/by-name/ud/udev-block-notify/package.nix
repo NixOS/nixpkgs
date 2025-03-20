@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "eworm-de";
     repo = "udev-block-notify";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-A0uhfb2mEAAJgxRkv+MWTk/9oFiz3r7deAlu1Kpk+CI=";
   };
 

@@ -7,7 +7,7 @@
 }:
 let
   pname = "gitopper";
-  version = "0.0.16";
+  version = "0.0.20";
 in
 buildGoModule {
   inherit pname version;
@@ -16,12 +16,12 @@ buildGoModule {
     owner = "miekg";
     repo = "gitopper";
     rev = "v${version}";
-    hash = "sha256-EAOC54VtGx6axfty5m8JOebcayINTy4cP4NBo5+ioLk=";
+    hash = "sha256-y0gzoXSIQDQ6TMVsAijPaN0sRqFEtTKyd297YxXAukM=";
   };
 
   ldflags = [ "-X main.Version=${version}" ];
 
-  vendorHash = "sha256-sxeN7nbNTGfD8ZgNQiEQdYl11rhOvPP8UrnYXs9Ljhc=";
+  vendorHash = "sha256-b9lLOGk0h0kaWuZb142V8ojfpstRhzC9q2kSu0q7r7I=";
 
   nativeCheckInputs = [
     makeWrapper

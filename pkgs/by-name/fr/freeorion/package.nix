@@ -5,7 +5,7 @@
 , doxygen
 , graphviz
 , makeWrapper
-, boost179
+, boost
 , SDL2
 , python3
 , freetype
@@ -22,19 +22,21 @@
 , libxslt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "freeorion";
-  version = "0.5.0.1";
+  version = "0.5.0.1-unstable-2024-07-28";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
-    rev = "v${version}";
-    sha256 = "sha256-VvTq6TcLc5BMvRTjVsZ2HA9ug3WAqFuTHIoFQ/9/zWc=";
+    # Current `release-0.5` commit to pick up Boost and GCC 14 fixes
+    # until another release is cut.
+    rev = "dc3d6a4f01aa78229c419fa17b4e383f73b024e2";
+    hash = "sha256-9yPk77YeYkGMJqrlDYRTUMDKMWpxUXhVCnHhomiUc/A=";
   };
 
   buildInputs = [
-    (boost179.override { enablePython = true; python = python3; })
+    (boost.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype

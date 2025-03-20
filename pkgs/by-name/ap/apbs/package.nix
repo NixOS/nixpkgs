@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, blas
-, superlu
-, suitesparse
-, python3
-, libintl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  superlu,
+  suitesparse,
+  python3,
+  libintl,
 }:
 let
   # this is a fork version of fetk (http://www.fetk.org/)
@@ -30,11 +31,8 @@ let
       "-DBLAS_LIBRARIES=${blas}/lib"
       "-DBLA_STATIC=OFF"
       "-DBUILD_SUPERLU=OFF"
+      "-DCMAKE_C_FLAGS=-Wno-error=implicit-int"
     ];
-
-    env = lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-    };
 
     buildInputs = [
       blas
@@ -78,25 +76,24 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
-    fetk
-    suitesparse
-    blas
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libintl
-  ];
+  buildInputs =
+    [
+      fetk
+      suitesparse
+      blas
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libintl
+    ];
 
   cmakeFlags = [
     "-DPYTHON_VERSION=${python3.version}"
     "-DAPBS_LIBS=mc;maloc"
     "-DCMAKE_MODULE_PATH=${fetk}/share/fetk/cmake;"
     "-DENABLE_TESTS=1"
+    "-DCMAKE_C_FLAGS=-Wno-error=incompatible-pointer-types"
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
-  };
 
   doCheck = true;
 

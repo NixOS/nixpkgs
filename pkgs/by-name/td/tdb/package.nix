@@ -1,24 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wafHook
-, buildPackages
-, python3
-, readline
-, libxslt
-, libxcrypt
-, apple-sdk_11
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wafHook,
+  buildPackages,
+  python3,
+  readline,
+  libxslt,
+  libxcrypt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.11";
+  version = "1.4.13";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-Toum2T84NWW70GG+Te7hUxgjLRu8ynIS8Y4X9Wu5dag=";
+    hash = "sha256-XuJ252RNcT4Z5LatwAtECvtYUf8h5lgh/67YnhWl4Wc=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +35,6 @@ stdenv.mkDerivation rec {
     python3
     readline # required to build python
     libxcrypt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   # otherwise the configure script fails with
@@ -47,22 +46,31 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
-    "--bundled-libraries=NONE"
-    "--builtin-libraries=replace"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-  ];
+  wafConfigureFlags =
+    [
+      "--bundled-libraries=NONE"
+      "--builtin-libraries=replace"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-compile"
+      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+    ];
 
-  postFixup = if stdenv.hostPlatform.isDarwin
-    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
-    else null;
+  postFixup =
+    if stdenv.hostPlatform.isDarwin then
+      ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+    else
+      null;
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
+
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   meta = with lib; {
     description = "Trivial database";

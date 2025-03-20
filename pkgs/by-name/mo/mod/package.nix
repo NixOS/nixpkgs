@@ -1,17 +1,21 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "mod";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "sha256-QkLARUN/NiN0D6VEhosdFJSce6DP+sWRWFwAEocZaOQ=";
+    sha256 = "sha256-P0FE0Sl4IXH6DAETnlBwQ2CR0X0AP9Z0noW99By7mxU=";
   };
 
-  vendorHash = "sha256-5A4W99wcuXMWH0s+uykBWuKCxo8wr3GbTpUKj+Ql0os=";
+  vendorHash = "sha256-GiE2RNAxbKpIekn54bfYlNvIcQo8D3ysmPSvxQhujYI=";
 
   doCheck = false;
 
@@ -23,7 +27,7 @@ buildGoModule rec {
     longDescription = ''
       Command line tool to upgrade/downgrade Semantic Import Versioning in Go
       Modules.
-      '';
+    '';
     homepage = "https://github.com/marwan-at-work/mod";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

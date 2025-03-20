@@ -3,25 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  six,
   html5lib,
   setuptools,
   tinycss2,
   packaging,
-  pythonOlder,
   webencodings,
 }:
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CjHxg3ljxB1Gu/EzG4d44TCOoHkdsDzE5zV7l89CqP4=";
+    hash = "sha256-Ej6JQRi4pZn9gNPsGm1Mx85OWIKxMXp+G6abVulfmR8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,7 +26,6 @@ buildPythonPackage rec {
     html5lib
     packaging
     setuptools
-    six
     webencodings
   ];
 

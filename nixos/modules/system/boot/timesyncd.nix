@@ -28,7 +28,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
 
-          See man:timesyncd.conf(5) for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       fallbackServers = mkOption {
@@ -42,7 +42,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `FallbackNTP=` entirely.
 
-          See man:timesyncd.conf(5) for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       extraConfig = mkOption {
@@ -53,8 +53,7 @@ in
         '';
         description = ''
           Extra config options for systemd-timesyncd. See
-          [
-          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
+          {manpage}`timesyncd.conf(5)` for available options.
         '';
       };
     };
@@ -86,29 +85,31 @@ in
             test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
             touch /var/lib/systemd/timesync/clock
           fi
-        '' +
-        # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
-        #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
-        #  - https://github.com/systemd/systemd/issues/12131
-        (lib.optionalString (versionOlder config.system.stateVersion "19.09") ''
-          if [ -L /var/lib/systemd/timesync ]; then
-            rm /var/lib/systemd/timesync
-            mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
-          fi
-        '')
+        ''
+        +
+          # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
+          #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
+          #  - https://github.com/systemd/systemd/issues/12131
+          (lib.optionalString (versionOlder config.system.stateVersion "19.09") ''
+            if [ -L /var/lib/systemd/timesync ]; then
+              rm /var/lib/systemd/timesync
+              mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
+            fi
+          '')
       );
     };
 
-    environment.etc."systemd/timesyncd.conf".text = ''
-      [Time]
-    ''
-    + optionalString (cfg.servers != null) ''
-      NTP=${concatStringsSep " " cfg.servers}
-    ''
-    + optionalString (cfg.fallbackServers != null) ''
-      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-    ''
-    + cfg.extraConfig;
+    environment.etc."systemd/timesyncd.conf".text =
+      ''
+        [Time]
+      ''
+      + optionalString (cfg.servers != null) ''
+        NTP=${concatStringsSep " " cfg.servers}
+      ''
+      + optionalString (cfg.fallbackServers != null) ''
+        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+      ''
+      + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

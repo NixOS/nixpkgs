@@ -1,23 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGo124Module,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "hubble";
-  version = "0.13.6";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-evtXuVcaKKuAW+04S+IADKf+wJ1MrnGpHLNUbxWd9ZM=";
+    sha256 = "sha256-ZrLb2dITQPd9g4azlidpTHFWNwop0AMKEIzwMX1Y7Jw=";
   };
 
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/cilium/hubble/pkg.GitBranch=none"
-    "-X github.com/cilium/hubble/pkg.GitHash=none"
-    "-X github.com/cilium/hubble/pkg.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/cilium/cilium/hubble/pkg.GitBranch=none"
+    "-X github.com/cilium/cilium/hubble/pkg.GitHash=none"
+    "-X github.com/cilium/cilium/hubble/pkg.Version=${version}"
   ];
 
   # Test fails at Test_getFlowsRequestWithInvalidRawFilters in github.com/cilium/hubble/cmd/observe
@@ -43,6 +49,10 @@ buildGoModule rec {
     mainProgram = "hubble";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
-    maintainers = with maintainers; [ humancalico bryanasdev000 ];
+    maintainers = with maintainers; [
+      humancalico
+      bryanasdev000
+      FKouhai
+    ];
   };
 }

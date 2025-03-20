@@ -1,57 +1,58 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, nixosTests
-, pkg-config
-, file
-, linuxHeaders
-, openssl
-, pcre
-, perlPackages
-, python3
-, catch2
-# recommended dependencies
-, withHwloc ? true
-, hwloc
-, withCurl ? true
-, curl
-, withCurses ? true
-, ncurses
-, withCap ? stdenv.hostPlatform.isLinux
-, libcap
-, withUnwind ? stdenv.hostPlatform.isLinux
-, libunwind
-# optional dependencies
-, withBrotli ? false
-, brotli
-, withCjose ? false
-, cjose
-, withGeoIP ? false
-, geoip
-, withHiredis ? false
-, hiredis
-, withImageMagick ? false
-, imagemagick
-, withJansson ? false
-, jansson
-, withKyotoCabinet ? false
-, kyotocabinet
-, withLuaJIT ? false
-, luajit
-, withMaxmindDB ? false
-, libmaxminddb
-# optional features
-, enableWCCP ? false
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  file,
+  linuxHeaders,
+  openssl,
+  pcre,
+  perlPackages,
+  python3,
+  # recommended dependencies
+  withHwloc ? true,
+  hwloc,
+  withCurl ? true,
+  curl,
+  withCurses ? true,
+  ncurses,
+  withCap ? stdenv.hostPlatform.isLinux,
+  libcap,
+  withUnwind ? stdenv.hostPlatform.isLinux,
+  libunwind,
+  # optional dependencies
+  withBrotli ? false,
+  brotli,
+  withCjose ? false,
+  cjose,
+  withGeoIP ? false,
+  geoip,
+  withHiredis ? false,
+  hiredis,
+  withImageMagick ? false,
+  imagemagick,
+  withJansson ? false,
+  jansson,
+  withKyotoCabinet ? false,
+  kyotocabinet,
+  withLuaJIT ? false,
+  luajit,
+  withMaxmindDB ? false,
+  libmaxminddb,
+  # optional features
+  enableWCCP ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.5";
+  version = "9.2.7";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-RwhTI31LyupkAbXHsNrjcJqUjVoVpX3/2Ofxl2NdasU=";
+    hash = "sha256-i3UTqOO3gQezL2HmQllJa+hwy03tJViyOOflW2iXBAM=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -62,47 +63,63 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
-    ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      makeWrapper
+      pkg-config
+      file
+      python3
+    ]
+    ++ (with perlPackages; [
+      perl
+      ExtUtilsMakeMaker
+    ])
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
-  buildInputs = [
-    openssl
-    pcre
-    perlPackages.perl
-  ] ++ lib.optional withBrotli brotli
-  ++ lib.optional withCap libcap
-  ++ lib.optional withCjose cjose
-  ++ lib.optional withCurl curl
-  ++ lib.optional withGeoIP geoip
-  ++ lib.optional withHiredis hiredis
-  ++ lib.optional withHwloc hwloc
-  ++ lib.optional withImageMagick imagemagick
-  ++ lib.optional withJansson jansson
-  ++ lib.optional withKyotoCabinet kyotocabinet
-  ++ lib.optional withCurses ncurses
-  ++ lib.optional withLuaJIT luajit
-  ++ lib.optional withUnwind libunwind
-  ++ lib.optional withMaxmindDB libmaxminddb;
+  buildInputs =
+    [
+      openssl
+      pcre
+      perlPackages.perl
+    ]
+    ++ lib.optional withBrotli brotli
+    ++ lib.optional withCap libcap
+    ++ lib.optional withCjose cjose
+    ++ lib.optional withCurl curl
+    ++ lib.optional withGeoIP geoip
+    ++ lib.optional withHiredis hiredis
+    ++ lib.optional withHwloc hwloc
+    ++ lib.optional withImageMagick imagemagick
+    ++ lib.optional withJansson jansson
+    ++ lib.optional withKyotoCabinet kyotocabinet
+    ++ lib.optional withCurses ncurses
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional withUnwind libunwind
+    ++ lib.optional withMaxmindDB libmaxminddb;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  postPatch = ''
-    patchShebangs \
-      iocore/aio/test_AIO.sample \
-      src/traffic_via/test_traffic_via \
-      src/traffic_logstats/tests \
-      tools/check-unused-dependencies
-
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # 'xcrun leaks' probably requires non-free XCode
-    substituteInPlace iocore/net/test_certlookup.cc \
-      --replace 'xcrun leaks' 'true'
-  '';
+  postPatch =
+    ''
+      patchShebangs \
+        iocore/aio/test_AIO.sample \
+        src/traffic_via/test_traffic_via \
+        src/traffic_logstats/tests \
+        tools/check-unused-dependencies
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace configure.ac \
+        --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # 'xcrun leaks' probably requires non-free XCode
+      substituteInPlace iocore/net/test_certlookup.cc \
+        --replace-fail 'xcrun leaks' 'true'
+    '';
 
   configureFlags = [
     "--enable-layout=NixOS"
@@ -123,7 +140,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    substituteInPlace rc/trafficserver.service --replace "syslog.target" ""
     install -Dm644 rc/trafficserver.service $out/lib/systemd/system/trafficserver.service
 
     wrapProgram $out/bin/tspush \
@@ -136,29 +152,31 @@ stdenv.mkDerivation rec {
     rmdir $out/.install-trafficserver
   '';
 
-  installCheckPhase = let
-    expected = ''
-      Via header is [uScMsEf p eC:t cCMp sF], Length is 22
-      Via Header Details:
-      Request headers received from client                   :simple request (not conditional)
-      Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
-      Response information received from origin server       :error in response
-      Result of document write-to-cache:                     :no cache write performed
-      Proxy operation result                                 :unknown
-      Error codes (if any)                                   :connection to server failed
-      Tunnel info                                            :no tunneling
-      Cache Type                                             :cache
-      Cache Lookup Result                                    :cache miss (url not in cache)
-      Parent proxy connection status                         :no parent proxy or unknown
-      Origin server connection status                        :connection open failed
+  installCheckPhase =
+    let
+      expected = ''
+        Via header is [uScMsEf p eC:t cCMp sF], Length is 22
+        Via Header Details:
+        Request headers received from client                   :simple request (not conditional)
+        Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
+        Response information received from origin server       :error in response
+        Result of document write-to-cache:                     :no cache write performed
+        Proxy operation result                                 :unknown
+        Error codes (if any)                                   :connection to server failed
+        Tunnel info                                            :no tunneling
+        Cache Type                                             :cache
+        Cache Lookup Result                                    :cache miss (url not in cache)
+        Parent proxy connection status                         :no parent proxy or unknown
+        Origin server connection status                        :connection open failed
+      '';
+    in
+    ''
+      runHook preInstallCheck
+      diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
+      ${lib.removeSuffix "\n" expected}
+      EOF
+      runHook postInstallCheck
     '';
-  in ''
-    runHook preInstallCheck
-    diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
-    ${lib.removeSuffix "\n" expected}
-    EOF
-    runHook postInstallCheck
-  '';
 
   doCheck = true;
   doInstallCheck = true;

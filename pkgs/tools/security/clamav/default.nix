@@ -1,16 +1,37 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd, Foundation, json_c, check
-, rustc, rust-bindgen, rustfmt, cargo, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  zlib,
+  bzip2,
+  libiconv,
+  libxml2,
+  openssl,
+  ncurses,
+  curl,
+  libmilter,
+  pcre2,
+  libmspack,
+  systemd,
+  Foundation,
+  json_c,
+  check,
+  rustc,
+  rust-bindgen,
+  rustfmt,
+  cargo,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-oxjngKw5prPWxGlxOC+W7d6Xzki442HrgOY0Fe1Batg=";
+    hash = "sha256-jJL4reKo8snWaI0dY+5X9sr5ZddNzgbQlxxnCcjmwEw=";
   };
 
   patches = [
@@ -20,10 +41,31 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
-  buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustc
+    rust-bindgen
+    rustfmt
+    cargo
+    python3
+  ];
+  buildInputs =
+    [
+      zlib
+      bzip2
+      libxml2
+      openssl
+      ncurses
+      curl
+      libiconv
+      libmilter
+      pcre2
+      libmspack
+      json_c
+      check
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux systemd
     ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   cmakeFlags = [
@@ -41,7 +83,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ robberer qknight globin ];
+    maintainers = with maintainers; [
+      robberer
+      qknight
+      globin
+    ];
     platforms = platforms.unix;
   };
 }

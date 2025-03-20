@@ -1,36 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, pkg-config
-, meson
-, ninja
-, blueprint-compiler
-, glib
-, gtk4
-, libadwaita
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  pkg-config,
+  meson,
+  ninja,
+  blueprint-compiler,
+  glib,
+  gtk4,
+  libadwaita,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "1.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
-    repo = pname;
+    repo = "eyedropper";
     rev = "v${version}";
-    hash = "sha256-PStQC9n+DTTOiNO9fHUjIkwgvKeA2alVbtX5qfqhTYo=";
+    hash = "sha256-FyGj0180Wn8iIDTdDqnNEvFYegwdWCsCq+hmyTTUIo4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-WRjoyIoVvOYcw2i/cMycE67iziZ8dvQrZ3EfE2v2jkQ=";
+    hash = "sha256-nYmH7Nu43TDJKvwfSaBKSihD0acLPmIUQpQM6kV4CAk=";
   };
 
   nativeBuildInputs = [
@@ -52,12 +54,16 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Pick and format colors";
-    mainProgram = "eyedropper";
     homepage = "https://github.com/FineFindus/eyedropper";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    mainProgram = "eyedropper";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

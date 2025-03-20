@@ -189,7 +189,7 @@ class GitilesRepo(Repo):
 
         if url == "https://chromium.googlesource.com/chromium/src.git":
             self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
-            self.args["postFetch"] += "rm -r $out/third_party/hunspell/tests; "
+            self.args["postFetch"] += "rm -rf $out/third_party/hunspell/tests; "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
             self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
@@ -396,7 +396,7 @@ def repo_from_dep(dep: dict) -> Optional[Repo]:
         if search_object:
             return GitHubRepo(search_object.group(1), search_object.group(2), rev)
 
-        if re.match(r"https://.+.googlesource.com", url):
+        if re.match(r"https://.+\.googlesource.com", url):
             return GitilesRepo(url, rev)
 
         return GitRepo(url, rev)
@@ -470,7 +470,7 @@ def get_electron_info(major_version: str) -> Tuple[str, str, GitHubRepo]:
             },
             **{
             f"checkout_{arch}": True
-            for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64"]
+            for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc"]
             },
         },
         "src/electron",

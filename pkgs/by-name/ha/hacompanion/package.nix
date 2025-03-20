@@ -1,20 +1,21 @@
-{ lib,
+{
+  lib,
   fetchFromGitHub,
-  buildGoModule
+  buildGoModule,
 }:
 
 buildGoModule rec {
   pname = "hacompanion";
-  version = "1.0.15";
+  version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "tobias-kuendig";
     repo = "hacompanion";
     rev = "v${version}";
-    hash = "sha256-FR2IowbaHXr9x/eMt+NCuGusMwX2iVxPOuWEkhH2GFM=";
+    hash = "sha256-6fj9Gs/ezISx5Llele5mrTFR0IiQzzm1wWcAywTaFPk=";
   };
 
-  vendorHash = "sha256-ZZ8nxN+zUeFhSXyoHLMgzeFllnIkKdoVnbVK5KjrLEQ=";
+  vendorHash = "sha256-y2eSuMCDZTGdCs70zYdA8NKbuPPN5xmnRfMNK+AE/q8=";
 
   meta = {
     changelog = "https://github.com/tobias-kuendig/hacompanion/releases/tag/v${version}";

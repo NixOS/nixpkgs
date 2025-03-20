@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   pkg-config,
   qtwebengine,
   mobile-broadband-provider-info,
@@ -11,8 +11,7 @@ mkKdeDerivation {
   pname = "plasma-nm";
 
   patches = [
-    (substituteAll {
-      src = ./0002-openvpn-binary-path.patch;
+    (replaceVars ./0002-openvpn-binary-path.patch {
       inherit openvpn;
     })
   ];

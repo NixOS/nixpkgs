@@ -1,19 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, testers, kopia }:
+{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Bqy9eFUvUgSdyChzh52qqPVvMi+3ad01koxVgnibbLk=";
+    owner = "kopia";
+    repo = "kopia";
+    tag = "v${version}";
+    hash = "sha256-PfxMs9MwoI+4z8vZ1sVlIEal3TOmA06997jWwShNfrE=";
   };
 
-  vendorHash = "sha256-/NMp64JeCQjCcEYkE6lYzu/E+irTcwkmDCJhB04ALFY=";
-
-  doCheck = false;
+  vendorHash = "sha256-E9wF3mBm6pLHKVMMz3gvcXzb1wQkosecrmEk8c+2gcU=";
 
   subPackages = [ "." ];
 
@@ -21,6 +19,14 @@ buildGoModule rec {
     "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
     "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kopia \
+      --bash <($out/bin/kopia --completion-script-bash) \
+      --zsh <($out/bin/kopia --completion-script-zsh)
+  '';
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

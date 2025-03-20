@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, libsodium
-, xz
-, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  libsodium,
+  xz,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rdedup";
@@ -13,11 +21,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
   };
 
-  cargoHash = "sha256-I6d3IyPBcUsrvlzF7W0hFM4hcXi4wWro9bCeP4eArHI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JpsUceR9Y3r6RiaLOtbgBUrb6eoan7fFt76U9ztQoM8=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
-  buildInputs = [ openssl libsodium xz ]
-    ++ (lib.optional stdenv.hostPlatform.isDarwin Security);
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+  buildInputs = [
+    openssl
+    libsodium
+    xz
+  ] ++ (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   meta = with lib; {
     description = "Data deduplication with compression and public key encryption";

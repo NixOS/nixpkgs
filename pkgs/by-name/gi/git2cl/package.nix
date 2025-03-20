@@ -1,6 +1,11 @@
-{ fetchgit, lib, stdenv, perl }:
+{
+  fetchgit,
+  lib,
+  stdenv,
+  perl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git2cl";
   version = "unstable-2008-08-27";
 

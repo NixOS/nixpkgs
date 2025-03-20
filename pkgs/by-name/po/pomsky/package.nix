@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, oniguruma }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  oniguruma,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pomsky";
@@ -6,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
-    repo = pname;
+    repo = "pomsky";
     rev = "v${version}";
     hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
   };
@@ -39,7 +45,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
     changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

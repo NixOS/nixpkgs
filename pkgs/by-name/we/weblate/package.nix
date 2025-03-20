@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  gettext,
   pango,
   harfbuzz,
   librsvg,
@@ -26,11 +27,9 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.8.3";
+  version = "5.10.4";
 
   pyproject = true;
-
-  disabled = python.pythonOlder "3.11";
 
   outputs = [
     "out"
@@ -40,8 +39,8 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "refs/tags/weblate-${version}";
-    hash = "sha256-Kmna23jhhFRJ0ExplYNPFEaIAJxmwHU2azivfKHHnjs=";
+    tag = "weblate-${version}";
+    hash = "sha256-ReODTMaKMkvbaR8JETSeOrXxQIsL1Vy1pjKYWo5mw+A=";
   };
 
   patches = [
@@ -50,6 +49,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [ setuptools ];
+
+  nativeBuildInputs = [ gettext ];
 
   # Build static files into a separate output
   postBuild =
@@ -66,6 +67,7 @@ python.pkgs.buildPythonApplication rec {
       mkdir $static
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
       export DJANGO_SETTINGS_MODULE="weblate.settings_static"
+      ${python.pythonOnBuildForHost.interpreter} manage.py compilemessages
       ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
@@ -75,6 +77,7 @@ python.pkgs.buildPythonApplication rec {
     [
       aeidon
       ahocorasick-rs
+      altcha
       (toPythonModule (borgbackup.override { python3 = python; }))
       celery
       certifi
@@ -96,8 +99,11 @@ python.pkgs.buildPythonApplication rec {
       django-otp
       django-otp-webauthn
       django
+      djangorestframework-csv
       djangorestframework
+      docutils
       drf-spectacular
+      drf-standardized-errors
       filelock
       fluent-syntax
       gitpython
@@ -131,6 +137,7 @@ python.pkgs.buildPythonApplication rec {
       tesserocr
       translate-toolkit
       translation-finder
+      unidecode
       user-agents
       weblate-language-data
       weblate-schemas
@@ -138,7 +145,8 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
-    ++ drf-spectacular.optional-dependencies.sidecar;
+    ++ drf-spectacular.optional-dependencies.sidecar
+    ++ drf-standardized-errors.optional-dependencies.openapi;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];

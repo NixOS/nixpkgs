@@ -1,26 +1,33 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, gtk3
-, gettext
-, json_c
-, lcms2
-, libpng
-, librsvg
-, gobject-introspection
-, libmypaint
-, hicolor-icon-theme
-, mypaint-brushes
-, gdk-pixbuf
-, pkg-config
-, python3
-, swig
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gtk3,
+  gettext,
+  json_c,
+  lcms2,
+  libpng,
+  librsvg,
+  gobject-introspection,
+  libmypaint,
+  hicolor-icon-theme,
+  mypaint-brushes,
+  gdk-pixbuf,
+  pkg-config,
+  python3,
+  swig,
+  wrapGAppsHook3,
 }:
 
 let
-  inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
-in buildPythonApplication rec {
+  inherit (python3.pkgs)
+    pycairo
+    pygobject3
+    numpy
+    buildPythonApplication
+    ;
+in
+buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
   format = "other";
@@ -28,7 +35,7 @@ in buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
@@ -123,6 +130,10 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
+  # tests require unmaintained and removed nose, it should switch to pytest
+  # https://github.com/mypaint/mypaint/issues/1191
+  doCheck = false;
+
   checkPhase = ''
     runHook preCheck
 
@@ -131,11 +142,11 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphics application for digital painters";
     homepage = "http://mypaint.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jtojnar ];
   };
 }

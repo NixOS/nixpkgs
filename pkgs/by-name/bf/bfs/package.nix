@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, attr, acl, libcap, liburing, oniguruma }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  attr,
+  acl,
+  libcap,
+  liburing,
+  oniguruma,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "4.0.3";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-7sHuOk1QTBNaGaIQ3sFc+y7TzBFT6DqKdRLndy4ahc8=";
+    hash = "sha256-TXnoy+VWkS5ilW6QEtE6vd80FaJ/nIWGaeBJ/cjvquM=";
   };
 
-  buildInputs = [ oniguruma ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ acl attr libcap liburing ];
+  buildInputs =
+    [ oniguruma ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+      attr
+      libcap
+      liburing
+    ];
 
   configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];
@@ -26,7 +41,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tavianator/bfs";
     license = licenses.bsd0;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yesbox cafkafk ];
+    maintainers = with maintainers; [
+      yesbox
+      cafkafk
+    ];
     mainProgram = "bfs";
   };
 }

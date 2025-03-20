@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gitUpdater, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gitUpdater,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.621";
+  version = "0.664";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-bkuYYGYcnMwQDK81ZH+74hA4XaQfVFMWvAKpy+ODCak=";
+    hash = "sha256-VmeUO7zkBG0NojzpnfR+eVzoRhNpJh+7HwEunL/Ylqw=";
   };
 
   nativeBuildInputs = [ cmake ];

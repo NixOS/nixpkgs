@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "pastedeploy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
   };
 

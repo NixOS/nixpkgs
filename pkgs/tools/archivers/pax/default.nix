@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, utmp, musl-fts }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  utmp,
+  musl-fts,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pax";
@@ -9,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin utmp
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isDarwin utmp
     ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
@@ -29,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "POSIX standard archive tool from MirBSD";
     homepage = "https://www.mirbsd.org/pax.htm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

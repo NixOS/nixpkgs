@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tFaRvNoO5K7ytqMhL//Ntasc7jb4PYXB1yyjFvFqQH8=";
   };
 
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
   };
 }

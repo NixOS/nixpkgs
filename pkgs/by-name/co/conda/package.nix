@@ -1,20 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, runCommand
-, makeWrapper
-, buildFHSEnv
-, libselinux
-, libarchive
-, libGL
-, xorg
-, zlib
-# Conda installs its packages and environments under this directory
-, installationPath ? "~/.conda"
-# Conda manages most pkgs itself, but expects a few to be on the system.
-, condaDeps ? [ stdenv.cc xorg.libSM xorg.libICE xorg.libX11 xorg.libXau xorg.libXi xorg.libXrender libselinux libGL zlib]
-# Any extra nixpkgs you'd like available in the FHS env for Conda to use
-, extraPkgs ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runCommand,
+  makeWrapper,
+  buildFHSEnv,
+  libselinux,
+  libarchive,
+  libGL,
+  xorg,
+  zlib,
+  # Conda installs its packages and environments under this directory
+  installationPath ? "~/.conda",
+  # Conda manages most pkgs itself, but expects a few to be on the system.
+  condaDeps ? [
+    stdenv.cc
+    xorg.libSM
+    xorg.libICE
+    xorg.libX11
+    xorg.libXau
+    xorg.libXi
+    xorg.libXrender
+    libselinux
+    libGL
+    zlib
+  ],
+  # Any extra nixpkgs you'd like available in the FHS env for Conda to use
+  extraPkgs ? [ ],
 }:
 
 # How to use this package?
@@ -24,74 +36,108 @@
 # the installPath using the installer:
 # $ nix-env -iA conda
 # $ conda-shell
-# $ conda-install
+# $ install-conda
 #
 # Under normal usage, simply call `conda-shell` to activate the FHS env,
 # and then use conda commands as normal:
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "4.11.0";
-  src = fetchurl {
-      url = "https://repo.continuum.io/miniconda/Miniconda3-py39_${version}-Linux-x86_64.sh";
-      sha256 = "sha256-TunDqlMynNemO0mHfAurtJsZt+WvKYB7eTp2vbHTYrQ=";
-  };
+  version = "25.1.1-2";
+
+  src =
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system}
+          or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
+      arch = selectSystem {
+        x86_64-linux = "x86_64";
+        aarch64-linux = "aarch64";
+      };
+    in
+    fetchurl {
+      url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-Linux-${arch}.sh";
+      hash = selectSystem {
+        x86_64-linux = "sha256-R2bYW199I1ziUOmY67WoqCEMvU8rD+pNIXez7Z6oeIQ=";
+        aarch64-linux = "sha256-bQW5+bfzJ7kHl6TPVtaMgVeLqy9jJXo+eotyyw8OS10=";
+      };
+    };
+
   conda = (
     let
       libPath = lib.makeLibraryPath [
         zlib # libz.so.1
       ];
     in
-      runCommand "conda-install" { nativeBuildInputs = [ makeWrapper ]; buildInputs = [ zlib]; }
-        # on line 10, we have 'unset LD_LIBRARY_PATH'
-        # we have to comment it out however in a way that the number of bytes in the
-        # file does not change. So we replace the 'u' in the line with a '#'
-        # The reason is that the binary payload is encoded as number
-        # of bytes from the top of the installer script
-        # and unsetting the library path prevents the zlib library from being discovered
-        ''
-          mkdir -p $out/bin
+    runCommand "install-conda"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        buildInputs = [ zlib ];
+      }
+      # on line 10, we have 'unset LD_LIBRARY_PATH'
+      # we have to comment it out however in a way that the number of bytes in the
+      # file does not change. So we replace the 'u' in the line with a '#'
+      # The reason is that the binary payload is encoded as number
+      # of bytes from the top of the installer script
+      # and unsetting the library path prevents the zlib library from being discovered
+      ''
+        mkdir -p $out/bin
 
-          sed 's/unset LD_LIBRARY_PATH/#nset LD_LIBRARY_PATH/' ${src} > $out/bin/miniconda-installer.sh
-          chmod +x $out/bin/miniconda-installer.sh
+        sed 's/unset LD_LIBRARY_PATH/#nset LD_LIBRARY_PATH/' ${src} > $out/bin/miniconda-installer.sh
+        chmod +x $out/bin/miniconda-installer.sh
 
-          makeWrapper                            \
-            $out/bin/miniconda-installer.sh      \
-            $out/bin/conda-install               \
-            --add-flags "-p ${installationPath}" \
-            --add-flags "-b"                     \
-            --prefix "LD_LIBRARY_PATH" : "${libPath}"
-        '');
+        makeWrapper                            \
+          $out/bin/miniconda-installer.sh      \
+          $out/bin/install-conda               \
+          --add-flags "-p ${installationPath}" \
+          --add-flags "-b"                     \
+          --prefix "LD_LIBRARY_PATH" : "${libPath}"
+      ''
+  );
 in
-  buildFHSEnv {
-    name = "conda-shell";
-    targetPkgs = pkgs: (builtins.concatLists [ [ conda ] condaDeps extraPkgs]);
-    profile = ''
-      # Add conda to PATH
-      export PATH=${installationPath}/bin:$PATH
-      # Paths for gcc if compiling some C sources with pip
-      export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
-      export NIX_CFLAGS_LINK="-L${installationPath}lib"
-      # Some other required environment variables
-      export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-      export QTCOMPOSE=${xorg.libX11}/share/X11/locale
-      export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
-      # Allows `conda activate` to work properly
-      condaSh=${installationPath}/etc/profile.d/conda.sh
-      if [ ! -f $condaSh ]; then
-        conda-install
-      fi
-      source $condaSh
-    '';
 
-    runScript = "bash -l";
+buildFHSEnv {
+  pname = "conda-shell";
+  inherit version;
 
-    meta = {
-      description = "Conda is a package manager for Python";
-      mainProgram = "conda-shell";
-      homepage = "https://conda.io/";
-      platforms = lib.platforms.linux;
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ jluttine bhipple ];
-    };
-  }
+  targetPkgs =
+    pkgs:
+    (builtins.concatLists [
+      [ conda ]
+      condaDeps
+      extraPkgs
+    ]);
+
+  profile = ''
+    # Add conda to PATH
+    export PATH=${installationPath}/bin:$PATH
+    # Paths for gcc if compiling some C sources with pip
+    export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
+    export NIX_CFLAGS_LINK="-L${installationPath}lib"
+    # Some other required environment variables
+    export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+    export QTCOMPOSE=${xorg.libX11}/share/X11/locale
+    export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
+    # Allows `conda activate` to work properly
+    condaSh=${installationPath}/etc/profile.d/conda.sh
+    if [ ! -f $condaSh ]; then
+      install-conda
+    fi
+    source $condaSh
+  '';
+
+  runScript = "bash -l";
+
+  meta = {
+    description = "Package manager for Python";
+    mainProgram = "conda-shell";
+    homepage = "https://conda.io";
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ jluttine ];
+  };
+}

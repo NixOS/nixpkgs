@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjpeg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jhead";
@@ -13,7 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
-  makeFlags = [ "CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS=" ];
+  makeFlags = [
+    "CPPFLAGS="
+    "CFLAGS=-O3"
+    "LDFLAGS="
+  ];
 
   doCheck = true;
   checkPhase = ''

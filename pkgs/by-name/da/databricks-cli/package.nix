@@ -2,24 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
 }:
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.229.0";
+  version = "0.243.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-ap2IypBPFV4yJVXRS8zSXC0kW/QKpOvFS9Cod0pSlG0=";
+    hash = "sha256-U1ZQFRPL9iYtCHJXBdgCgaE1LZgKOWdYJ1gFAsgWPI8=";
   };
 
-  vendorHash = "sha256-yCwevuivIHZ0dns9QljiKvwws4cFknIydvfjs4Jib3s=";
+  vendorHash = "sha256-InVmtV3PH75exsftC3sxz9/xt9drJPlXgRYqvqnp+yM=";
 
-  excludedPackages = [ "bundle/internal" ];
+  excludedPackages = [
+    "bundle/internal"
+    "acceptance"
+    "integration"
+  ];
 
   postBuild = ''
     mv "$GOPATH/bin/cli" "$GOPATH/bin/databricks"
@@ -29,14 +33,17 @@ buildGoModule rec {
     "-skip="
     + (lib.concatStringsSep "|" [
       # Need network
+      "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      # Use venv
+      "TestVenvSuccess"
     ]);
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     (python3.withPackages (
       ps: with ps; [
         setuptools
@@ -57,6 +64,9 @@ buildGoModule rec {
     homepage = "https://github.com/databricks/cli";
     changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
     license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [
+      kfollesdal
+      taranarmo
+    ];
   };
 }

@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.56.0";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7R6qMjwPtlpnsm6xej7jQntv9709//q4VVbatuzLuwk=";
+    tag = "v${version}";
+    hash = "sha256-zvm4IPtv2B5gw3r3/ZtWcAXF632100xl8VgxhthsKkY=";
   };
-  vendorHash = "sha256-QPFLHP4nyJqB7tVVk00J+V+1YXGSsRvCZ1aLEMg0kfc=";
+  vendorHash = "sha256-1jMMz661ND6MAbRk+FgdA8KtpsNdrNFM8OPBuJmS0Sk=";
 
   ldflags = [
     "-s"
@@ -60,6 +61,9 @@ buildGoModule rec {
       assertions. You can read more about Rego in 'How do I write policies' in
       the Open Policy Agent documentation.
     '';
-    maintainers = with maintainers; [ jk yurrriq ];
+    maintainers = with maintainers; [
+      jk
+      yurrriq
+    ];
   };
 }

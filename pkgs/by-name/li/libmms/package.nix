@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, glib, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmms";

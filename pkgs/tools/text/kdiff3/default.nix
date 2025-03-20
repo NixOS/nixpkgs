@@ -1,29 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, extra-cmake-modules
-, kdoctools
-, wrapQtAppsHook
-, boost
-, kcrash
-, kconfig
-, kinit
-, kparts
-, kiconthemes
+{
+  stdenv,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  wrapQtAppsHook,
+  boost,
+  kcrash,
+  kconfig,
+  kinit,
+  kparts,
+  kiconthemes,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdiff3";
-  version = "1.11.4";
+  version = "1.11.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rt573JqpZ1rukP0qNScFLtMbMJGNQuaQelksunzmp8M=";
+    hash = "sha256-Qg8Ys7lolpigXhAvikFxkEkHTaaPlslL4Y0bgpfutUU=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ boost kconfig kcrash kinit kparts kiconthemes ];
+  buildInputs = [
+    boost
+    kconfig
+    kcrash
+    kinit
+    kparts
+    kiconthemes
+  ];
 
   cmakeFlags = [ "-Wno-dev" ];
 

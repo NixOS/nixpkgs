@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ...
+}:
 
 stdenv.mkDerivation {
   pname = "tt-rss-plugin-ff-instagram";

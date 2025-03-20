@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   openjdk,
-  gradle,
+  gradle_8,
   wget,
   which,
   gnused,
@@ -14,6 +14,10 @@
   testers,
   nixosTests,
 }:
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
   # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)
@@ -56,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/NixOS/nixpkgs/pull/339197#discussion_r1747749061
   gradleUpdateTask = "pack";
   # The installer attempts to copy a final JAR to $HOME/.nextflow/...
-  gradleFlags = ["-Duser.home=\$TMPDIR"];
+  gradleFlags = [ "-Duser.home=\$TMPDIR" ];
   preBuild = ''
     # See Makefile (`make pack`)
     export BUILD_PACK=1

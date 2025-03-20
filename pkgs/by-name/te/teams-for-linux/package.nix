@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_32,
+  electron_34,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,16 +15,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.11.2";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fSZ94Px0NuxUZqc9cHE6czG/VzNsWp+UXllq7kEQvtI=";
+    tag = "v${version}";
+    hash = "sha256-m2zJoJBjbeTU+WlZeH8R84mYKsxpUxN93SKOIVCjoj4=";
   };
 
-  npmDepsHash = "sha256-MfPdOqxiMDsvxsS3yWukRokDitqWQpTpK407xVX461o=";
+  npmDepsHash = "sha256-TNX6QikNs/TI/Wt+eHIMwwORjjFIVAa1J/vHiOkHQXU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,7 +42,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_32.dist} electron-dist
+    cp -r ${electron_34.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -50,7 +50,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_32.version}
+        -c.electronVersion=${electron_34.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_32}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_34}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
@@ -80,7 +80,7 @@ buildNpmPackage rec {
           ]
         } \
         --add-flags "$out/share/teams-for-linux/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications

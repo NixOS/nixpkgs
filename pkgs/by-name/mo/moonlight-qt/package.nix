@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       azuwis
-      luc65r
       zmitchell
     ];
     platforms = lib.platforms.all;

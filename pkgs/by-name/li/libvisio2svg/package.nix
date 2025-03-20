@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, freetype
-, libemf2svg
-, librevenge
-, libvisio
-, libwmf
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  freetype,
+  libemf2svg,
+  librevenge,
+  libvisio,
+  libwmf,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kakwa";
-    repo = pname;
+    repo = "libvisio2svg";
     rev = version;
     sha256 = "14m37mmib1596c76j9w178jqhwxyih2sy5w5q9xglh8cmlfn1hfx";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libxml2 freetype librevenge libvisio libwmf libemf2svg ];
+  buildInputs = [
+    libxml2
+    freetype
+    librevenge
+    libvisio
+    libwmf
+    libemf2svg
+  ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, glibc, dns-root-data, nixosTests } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glibc,
+  dns-root-data,
+  nixosTests,
+}:
 
 let
   version = "1.05";
@@ -26,6 +33,9 @@ stdenv.mkDerivation {
     # To fix https://github.com/NixOS/nixpkgs/issues/119066.
     # Note that the NixOS test <nixpkgs/nixos/tests/tinydns.nix> tests for this.
     ./softlimit.patch
+
+    # Fix warnings introduced due to implicit type conversions and implicit function declarations
+    ./fix-warnings.patch
   ];
 
   postPatch = ''

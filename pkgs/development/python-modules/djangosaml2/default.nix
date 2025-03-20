@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "djangosaml2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rbmEJuG2mgozpCFOXZUJFxv8v52IRQeaeAKfeUDACeU=";
   };
 

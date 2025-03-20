@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, exempi
-, lcms2
-, libexif
-, libjpeg
-, librsvg
-, libxml2
-, libpeas
-, shared-mime-info
-, gtk3
-, mate-desktop
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  exempi,
+  lcms2,
+  libexif,
+  libjpeg,
+  librsvg,
+  libxml2,
+  libpeas,
+  shared-mime-info,
+  gtk3,
+  mate-desktop,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,12 @@ stdenv.mkDerivation rec {
     mate-desktop
     hicolor-icon-theme
   ];
+
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace-warn 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
 
   enableParallelBuilding = true;
 

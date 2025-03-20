@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, cxxtools
-, zlib
-, openssl
-, zip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  cxxtools,
+  zlib,
+  openssl,
+  zip,
 }:
 
 stdenv.mkDerivation rec {

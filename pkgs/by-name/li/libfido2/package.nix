@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, hidapi
-, libcbor
-, openssl
-, udev
-, zlib
-, withPcsclite ? true
-, pcsclite
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  hidapi,
+  libcbor,
+  openssl,
+  udev,
+  zlib,
+  withPcsclite ? true,
+  pcsclite,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,27 +23,42 @@ stdenv.mkDerivation rec {
     hash = "sha256-q6qxMY0h0mLs5Bb7inEy+pN0vaifb6UrhqmKL1cSth4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libcbor zlib ]
+  buildInputs =
+    [
+      libcbor
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ hidapi ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [ pcsclite ];
 
   propagatedBuildInputs = [ openssl ];
 
-  outputs = [ "out" "dev" "man" ];
-
-  cmakeFlags = [
-    "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DUSE_HIDAPI=1"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DNFC_LINUX=1"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [
-    "-DUSE_PCSC=1"
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
+
+  cmakeFlags =
+    [
+      "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DUSE_HIDAPI=1"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DNFC_LINUX=1"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [
+      "-DUSE_PCSC=1"
+    ];
 
   # causes possible redefinition of _FORTIFY_SOURCE?
   hardeningDisable = [ "fortify3" ];

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustc
-, openssl
-, udev
-, gtk3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustc,
+  openssl,
+  udev,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,17 +18,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "firmware-manager";
     rev = version;
     hash = "sha256-Q+LJJ4xK583fAcwuOFykt6GKT0rVJgmTt+zUX4o4Tm4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
-      "system76-firmware-1.0.51" = "sha256-+GPz7uKygGnFUptQEGYWkEdHgxBc65kLZqpwZqtwets=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-LooE5jU4G1QHYTa/sB95W6VJs7lY7sjHI9scUaZRmq4=";
   };
 
   postPatch = ''
@@ -53,7 +51,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical frontend for firmware management";
     homepage = "https://github.com/pop-os/firmware-manager";
-    license = with lib.licenses; [ gpl3Plus cc0 ];
+    license = with lib.licenses; [
+      gpl3Plus
+      cc0
+    ];
     mainProgram = "com.system76.FirmwareManager";
     maintainers = [ lib.maintainers.shlevy ];
     platforms = lib.platforms.linux;

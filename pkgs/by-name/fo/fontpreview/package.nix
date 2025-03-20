@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, xdotool, fzf, imagemagick, sxiv, getopt }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  xdotool,
+  fzf,
+  imagemagick,
+  sxiv,
+  getopt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fontpreview";
@@ -6,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sdushantha";
-    repo = pname;
+    repo = "fontpreview";
     rev = version;
     sha256 = "0g3i2k6n2yhp88rrcf0hp6ils7836db7hx73hw9qnpcbmckz0i4w";
   };
@@ -19,7 +29,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/fontpreview \
-      --prefix PATH : ${lib.makeBinPath [ xdotool fzf imagemagick sxiv getopt ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xdotool
+          fzf
+          imagemagick
+          sxiv
+          getopt
+        ]
+      }
   '';
 
   meta = with lib; {

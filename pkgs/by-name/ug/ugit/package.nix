@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Bhupesh-V";
     repo = "ugit";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WnEyS2JKH6rrsYOeGEwughWq2LKrHPSjio3TOI0Xm4g=";
   };
 

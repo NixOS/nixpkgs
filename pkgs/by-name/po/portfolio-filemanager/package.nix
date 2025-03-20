@@ -1,23 +1,24 @@
-{ lib
-, python3
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gettext
-, gobject-introspection
-, gtk3
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, nix-update-script
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "1.0.1";
+  version = "1.0.2";
 
   format = "other";
 
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-IbzAkHlD6duXkPJRSyD9HJ/JHP8+IR7vIGFp2ESbBug=";
+    hash = "sha256-v86pQbj5+SqdzsW0Ko5TW/12NsFVNSPyX6g0e+MdzHE=";
   };
 
   postPatch = ''
@@ -78,6 +79,9 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "dev.tchx84.Portfolio";
-    maintainers = with maintainers; [ dotlambda chuangzhu ];
+    maintainers = with maintainers; [
+      dotlambda
+      chuangzhu
+    ];
   };
 }

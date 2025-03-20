@@ -3,16 +3,14 @@
 , llvm_meta
 , release_version
 , version
-, patches ? []
 , src ? null
 , monorepoSrc ? null
 , runCommand
-, apple-sdk
-, apple-sdk_10_13
 , cmake
 , ninja
 , python3
 , libllvm
+, jq
 , libcxx
 , linuxHeaders
 , freebsd
@@ -27,9 +25,11 @@
 # In recent releases, the compiler-rt build seems to produce
 # many `libclang_rt*` libraries, but not a single unified
 # `libcompiler_rt` library, at least under certain configurations. Some
-# platforms stil expect this, however, so we symlink one into place.
+# platforms still expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
 , devExtraCmakeFlags ? []
+, getVersionFile
+, fetchpatch
 }:
 
 let
@@ -47,44 +47,104 @@ let
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
-  # Sanitizers require 10.13 or newer. Instead of disabling them for most x86_64-darwin users,
-  # build them with a newer SDK and the default (10.12) deployment target.
-  apple-sdk' =
-    if lib.versionOlder (lib.getVersion apple-sdk) "10.13" then
-      apple-sdk_10_13.override { enableBootstrap = true; }
-    else
-      apple-sdk.override { enableBootstrap = true; };
-
   src' = if monorepoSrc != null then
-    runCommand "${baseName}-src-${version}" {} (''
+    runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
     '' + ''
       cp -r ${monorepoSrc}/${baseName} "$out"
     '') else src;
-
-  preConfigure = lib.optionalString (!haveLibc) ''
-    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-  '';
 in
 
-stdenv.mkDerivation ({
-  inherit pname version patches;
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = src';
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src'.name}/${baseName}";
+  sourceRoot = "${src'.name}/${baseName}";
+
+  patches =
+    lib.optional (lib.versionOlder release_version "15") (
+      getVersionFile "compiler-rt/codesign.patch"
+    ) # Revert compiler-rt commit that makes codesign mandatory
+    ++ [
+      (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
+    ]
+    ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
+      # fixes the parallel build on aarch64 darwin
+      name = "fix-symlink-race-aarch64-darwin.patch";
+      url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
+      relative = "compiler-rt";
+      hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
+    })
+    ++ lib.optional (
+      lib.versions.major release_version == "12"
+      || (
+        lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18"
+      )
+    ) (getVersionFile "compiler-rt/gnu-install-dirs.patch")
+    ++
+      lib.optional
+        (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+        (fetchpatch {
+          name = "cfi_startproc-after-label.patch";
+          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+          stripLen = 1;
+          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
+        })
+      ++ [
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        (getVersionFile "compiler-rt/normalize-var.patch")
+      ]
+      ++
+        lib.optional
+          (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+          # Prevent a compilation error on darwin
+          (getVersionFile "compiler-rt/darwin-targetconditionals.patch")
+      # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
+      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ./darwin-plistbuddy-workaround.patch
+      ]
+      ++
+        lib.optional (lib.versions.major release_version == "15")
+          # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+          ./armv7l-15.patch
+      ++ lib.optionals (lib.versionOlder release_version "15") [
+        ./darwin-plistbuddy-workaround.patch
+        (getVersionFile "compiler-rt/armv7l.patch")
+        # Fix build on armv6l
+        ./armv6-mcr-dmb.patch
+        ./armv6-sync-ops-no-thumb.patch
+      ]
+      ++
+        lib.optionals
+          (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
+          [
+            # Fix build on armv6l
+            ./armv6-scudo-no-yield.patch
+          ]
+      ++ [
+        # Fix build on armv6l
+        ./armv6-no-ldrexd-strexd.patch
+      ]
+      ++ lib.optionals (lib.versionAtLeast release_version "13") [
+        (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
+      ]
+      ++ lib.optional (lib.versions.major release_version == "19") (fetchpatch {
+        url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
+        hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
+        relative = "compiler-rt";
+      });
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python3 libllvm.dev ];
+    ++ [ python3 libllvm.dev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
-    # Adding the bootstrap SDK to `buildInputs` on static builds  propagates it, breaking `xcrun`.
-    # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   env = {
     NIX_CFLAGS_COMPILE = toString ([
@@ -149,8 +209,6 @@ stdenv.mkDerivation ({
     # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
     "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
@@ -166,22 +224,22 @@ stdenv.mkDerivation ({
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
+      --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versions.major release_version == "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
-      --replace "<stdlib.h>" "<stddef.h>"
+      --replace-fail "<stdlib.h>" "<stddef.h>"
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
-      --replace "#include <stdlib.h>" ""
+      --replace-fail "#include <stdlib.h>" ""
   '' + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
     # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
     # see description above for why we're nuking assert.h normally but that doesn't work here.
     # instead, we add the freebsd.include dependency explicitly
     ''
     substituteInPlace lib/builtins/clear_cache.c \
-      --replace "#include <assert.h>" ""
-    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
+    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
+      --replace-fail "#include <assert.h>" ""
   '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
     # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
     # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
@@ -197,7 +255,16 @@ stdenv.mkDerivation ({
       --replace-fail 'find_program(CODESIGN codesign)' ""
   '';
 
-  # Hack around weird upsream RPATH bug
+  preConfigure = lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
+  '';
+
+  # Hack around weird upstream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
@@ -235,8 +302,8 @@ stdenv.mkDerivation ({
       # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
       # https://reviews.llvm.org/D43106#1019077
       (stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang)
-      # emutls wants `<pthread.h>` which isn't avaiable (without exeprimental WASM threads proposal).
+      # emutls wants `<pthread.h>` which isn't available (without experimental WASM threads proposal).
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-} // (if lib.versionOlder release_version "16" then { inherit preConfigure; } else {}))
+}

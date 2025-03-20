@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, installShellFiles
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mac-fdisk";
   version = "0.1.16";
 

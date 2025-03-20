@@ -43,7 +43,7 @@
   libXtst,
   libxcb,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -51,6 +51,7 @@
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
+  pipewire,
   python3,
   runCommand,
   libunity,
@@ -61,8 +62,14 @@
   openasar,
   withVencord ? false,
   vencord,
+  withMoonlight ? false,
+  moonlight,
   withTTS ? true,
 }:
+
+assert lib.assertMsg (
+  !(withMoonlight && withVencord)
+) "discord: Moonlight and Vencord can not be enabled at the same time";
 
 let
   disableBreakingUpdates =
@@ -100,7 +107,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nss
     wrapGAppsHook3
     makeShellWrapper
@@ -114,7 +121,7 @@ stdenv.mkDerivation rec {
       systemd
       libpulseaudio
       libdrm
-      mesa
+      libgbm
       stdenv.cc.cc
       alsa-lib
       atk
@@ -146,6 +153,7 @@ stdenv.mkDerivation rec {
       nspr
       libxcb
       pango
+      pipewire
       libXScrnSaver
       libappindicator-gtk3
       libdbusmenu
@@ -166,7 +174,7 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
@@ -193,6 +201,12 @@ stdenv.mkDerivation rec {
       mkdir $out/opt/${binaryName}/resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
+    ''
+    + lib.strings.optionalString withMoonlight ''
+      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+      mkdir $out/opt/${binaryName}/resources/app
+      echo '{"name":"discord","main":"injector.js","private": true}' > $out/opt/${binaryName}/resources/app/package.json
+      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
     '';
 
   desktopItem = makeDesktopItem {
@@ -206,6 +220,7 @@ stdenv.mkDerivation rec {
       "InstantMessaging"
     ];
     mimeTypes = [ "x-scheme-handler/discord" ];
+    startupWMClass = "discord";
   };
 
   passthru = {

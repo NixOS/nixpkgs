@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchFromGitea,
-  substituteAll,
-  fetchpatch,
+  replaceVars,
   colord,
   setuptools,
   pikepdf,
@@ -16,7 +14,7 @@
   mupdf-headless,
   netpbm,
   numpy,
-  poppler_utils,
+  poppler-utils,
   pytestCheckHook,
   runCommand,
   scipy,
@@ -24,22 +22,19 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.5.1";
-  disabled = isPy27;
-
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitea {
     domain = "gitlab.mister-muffin.de";
     owner = "josch";
     repo = "img2pdf";
-    rev = version;
-    hash = "sha256-mrNTc37GrHTc7NW0sYI1FlAOlnvXum02867enqHsAEQ=";
+    tag = version;
+    hash = "sha256-/nxXgGsnj5ktxUYt9X8/9tJzXgoU8idTjVgLh+8jol8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./default-icc-profile.patch;
+    (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
@@ -49,16 +44,11 @@ buildPythonPackage rec {
             cp ${colord}/share/color/icc/colord/sRGB.icc $out
           '';
     })
-    (fetchpatch {
-      # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
-      url = "https://salsa.debian.org/debian/img2pdf/-/raw/4a7dbda0f473f7c5ffcaaf68ea4ad3f435e0920d/debian/patches/fix_tests.patch";
-      hash = "sha256-A1zK6yINhS+dvyckZjqoSO1XJRTaf4OXFdq5ufUrBs8=";
-    })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pikepdf
     pillow
   ];
@@ -76,7 +66,7 @@ buildPythonPackage rec {
     mupdf-headless
     netpbm
     numpy
-    poppler_utils
+    poppler-utils
     pytestCheckHook
     scipy
   ];
@@ -87,18 +77,20 @@ buildPythonPackage rec {
 
   disabledTests = [
     # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
-    "test_miff_cmyk16"
+    "test_jpg_cmyk"
+    "test_miff_cmyk8"
+    "test_tiff_cmyk8"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];
 
-  meta = with lib; {
-    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.rev}/CHANGES.rst";
+  meta = {
+    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.tag}/CHANGES.rst";
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "img2pdf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       veprbl
       dotlambda
     ];

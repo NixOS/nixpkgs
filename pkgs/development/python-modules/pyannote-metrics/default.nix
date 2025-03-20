@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V4qyaCaFsoikfFILm2sccf6m7lqJSDTdLxS1sr/LXAY=";
   };
 

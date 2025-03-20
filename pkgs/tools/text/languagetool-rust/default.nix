@@ -1,29 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "languagetool-rust";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YsVK72q+A9T00u9bXIUfGDhwQl5kiLMec6onbp9YKkg=";
+    hash = "sha256-8YgSxAF4DA1r7ylj6rx+fGubvT7MeiRQeowuiu0GWwQ=";
   };
 
-  cargoHash = "sha256-Yit6zWWEcH5LXpcvy9EXUvRNz+JsyW10fauSNBf1BoU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MIGoGEd/N2qlcawYRLMuac4SexHEMJnOS+FbPFJIsso=";
 
   buildFeatures = [ "full" ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   checkFlags = [

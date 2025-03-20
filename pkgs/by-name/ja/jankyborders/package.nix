@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   fetchFromGitHub,
   pkg-config,
   testers,
@@ -9,21 +8,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "JankyBorders";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "JankyBorders";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DX1d228UCOI+JU+RxenhiGyn3AiqpsGe0aCtr091szs=";
+    hash = "sha256-PUyq3m244QyY7e8+/YeAMOxMcAz3gsyM1Mg/kgjGVgU=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  buildInputs = [
-    apple-sdk_11
   ];
 
   installPhase = ''

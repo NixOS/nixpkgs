@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, installShellFiles, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  installShellFiles,
+  openssl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashmq";
-  version = "1.17.3";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "halfgaar";
     repo = "FlashMQ";
-    rev = "v${version}";
-    hash = "sha256-AL3jkmz+LLg8apyMkemQugFrZpn5f1sJEskjEiZ5/PQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/nSNWmSR16V1+nXOMIx+TtxtNS9Xk3BJSY4ps+6TwG8=";
   };
 
-  nativeBuildInputs = [ cmake installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
   buildInputs = [ openssl ];
 
@@ -24,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast light-weight MQTT broker/server";
     mainProgram = "flashmq";
     homepage = "https://www.flashmq.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
-}
+})

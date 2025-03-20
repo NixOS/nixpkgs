@@ -1,24 +1,31 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "keep-sorted";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
-    rev = "v${version}";
-    hash = "sha256-xvSEREEOiwft3fPN+xtdMCh+z3PknjJ962Nb+pw715U=";
+    tag = "v${version}";
+    hash = "sha256-ROvj7w8YMq6+ntx0SWi+HfN4sO6d7RjKWwlb/9gfz8w=";
   };
 
   vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";
 
-  CGO_ENABLED = "0";
+  # Inject version string instead of reading version from buildinfo.
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'readVersion())' '"v${version}")'
+  '';
+
+  env.CGO_ENABLED = "0";
 
   ldflags = [ "-s" ];
 
@@ -26,6 +33,10 @@ buildGo123Module rec {
     # Test tries to find files using git in init func.
     rm goldens/*_test.go
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "genext2fs";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bestouff";
-    repo = pname;
+    repo = "genext2fs";
     rev = "v${version}";
     sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };

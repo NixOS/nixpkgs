@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, file, zlib, libgnurx
-, updateAutotoolsGnuConfigScriptsHook
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+  zlib,
+  libgnurx,
+  updateAutotoolsGnuConfigScriptsHook,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -10,31 +16,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.45";
+  version = "5.46";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
+    hash = "sha256-ycx3x8VgxUMTXtxVWvYJ1WGdvvARmX6YjOQKPXXYYIg=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  patches = [
-    # Upstream patch to fix 32-bit tests.
-    # Will be included in 5.46+ releases.
-    ./32-bit-time_t.patch
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
 
   strictDeps = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ]
-    ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;

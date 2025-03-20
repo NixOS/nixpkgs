@@ -1,49 +1,56 @@
-{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
-, jre
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
-  version = "3.3.3312";
+  version = "3.3.3316";
 
   src = fetchzip {
     url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
     stripRoot = false;
-    hash = "sha256-mvup4yMfFfzL2iLMj9vlFFrJT0wLmeadNEnf2QO53H0=";
+    hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  installPhase = let
+  installPhase =
+    let
 
-    desktopItem = makeDesktopItem {
-      name = "ganttproject";
-      exec = "ganttproject";
-      icon = "ganttproject";
-      desktopName = "GanttProject";
-      genericName = "Shedule and manage projects";
-      comment = meta.description;
-      categories = [ "Office" ];
-    };
+      desktopItem = makeDesktopItem {
+        name = "ganttproject";
+        exec = "ganttproject";
+        icon = "ganttproject";
+        desktopName = "GanttProject";
+        genericName = "Shedule and manage projects";
+        comment = meta.description;
+        categories = [ "Office" ];
+      };
 
-    javaOptions = [
-      "-Dawt.useSystemAAFontSettings=on"
-    ];
+      javaOptions = [
+        "-Dawt.useSystemAAFontSettings=on"
+      ];
 
-  in ''
-    mkdir -pv "$out/share/ganttproject"
-    cp -rv *  "$out/share/ganttproject"
+    in
+    ''
+      mkdir -pv "$out/share/ganttproject"
+      cp -rv *  "$out/share/ganttproject"
 
-    mkdir -pv "$out/bin"
-    wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}" \
-      --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
+      mkdir -pv "$out/bin"
+      wrapProgram "$out/share/ganttproject/ganttproject" \
+        --set JAVA_HOME "${jre}" \
+        --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
-    mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
+      mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
-    cp -rv "${desktopItem}/share/applications" "$out/share"
-  '';
+      cp -rv "${desktopItem}/share/applications" "$out/share"
+    '';
 
   meta = with lib; {
     description = "Project scheduling and management";

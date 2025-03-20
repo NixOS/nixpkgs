@@ -1,21 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rbenv";
-  version = "1.2.0";
+  version = "1.3.2";
 
   nativeBuildInputs = [ installShellFiles ];
 
   src = fetchFromGitHub {
     owner = "rbenv";
     repo = "rbenv";
-    rev = "v${version}";
-    sha256 = "sha256-m/Yy5EK8pLTBFcsgKCrNvQrPFFIlYklXXZbjN4Nmm9c=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vkwYl+cV5laDfevAHfju5G+STA3Y+wcMBtW1NWzJ4po=";
   };
 
   postPatch = ''
-     patchShebangs src/configure
-     pushd src
+    patchShebangs src/configure
+    pushd src
   '';
 
   installPhase = ''
@@ -24,19 +29,20 @@ stdenv.mkDerivation rec {
     mv libexec $out
     ln -s $out/libexec/rbenv $out/bin/rbenv
 
-    installShellCompletion completions/rbenv.{bash,zsh}
+    installShellCompletion --zsh completions/_rbenv
+    installShellCompletion --bash completions/rbenv.bash
   '';
 
-  meta = with lib; {
-    description = "Groom your app’s Ruby environment";
-    mainProgram = "rbenv";
+  meta = {
+    description = "Version manager tool for the Ruby programming language on Unix-like systems";
     longDescription = ''
       Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.
       Put rbenv to work with Bundler for painless Ruby upgrades and bulletproof deployments.
     '';
     homepage = "https://github.com/rbenv/rbenv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fzakaria ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fzakaria ];
+    mainProgram = "rbenv";
+    platforms = lib.platforms.all;
   };
-}
+})

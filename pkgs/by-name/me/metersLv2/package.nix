@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, lv2
-, libGLU
-, libGL
-, gtk2
-, cairo
-, pango
-, fftwFloat
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  lv2,
+  libGLU,
+  libGL,
+  gtk2,
+  cairo,
+  pango,
+  fftwFloat,
+  libjack2,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,16 @@ stdenv.mkDerivation rec {
   robtkVersion = "0.7.5";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ lv2 libGLU libGL gtk2 cairo pango fftwFloat libjack2 ];
+  buildInputs = [
+    lv2
+    libGLU
+    libGL
+    gtk2
+    cairo
+    pango
+    fftwFloat
+    libjack2
+  ];
 
   src = fetchFromGitHub {
     owner = "x42";

@@ -1,26 +1,27 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fuse
-, makeWrapper
-, openssl
-, pandoc
-, pkg-config
-, libfido2
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fuse,
+  makeWrapper,
+  openssl,
+  pandoc,
+  pkg-config,
+  libfido2,
 }:
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "2.4.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lStaMj2f8lQZx2E42o4ikPmFQzydlN3PFKwFvUx37SI=";
+    sha256 = "sha256-H3J+1a4Y6/BqgU7D9j/PNtP6Ci3EjrtO/ADx3GpJMgI=";
   };
 
-  vendorHash = "sha256-ir7FR7ndbPhzUOCVPrYO0SEe03wDFIP74I4X6HJxtE8=";
+  vendorHash = "sha256-WfTJ8TuFupEa391XQMDl3hKTjrmRHJqvYb1haAGHW/U=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,7 +39,11 @@ buildGoModule rec {
     "-X main.BuildDate=unknown"
   ];
 
-  subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
+  subPackages = [
+    "."
+    "gocryptfs-xray"
+    "contrib/statfs"
+  ];
 
   postBuild = ''
     pushd Documentation/
@@ -62,7 +67,11 @@ buildGoModule rec {
     description = "Encrypted overlay filesystem written in Go";
     license = licenses.mit;
     homepage = "https://nuetzlich.net/gocryptfs/";
-    maintainers = with maintainers; [ flokli offline prusnak ];
+    maintainers = with maintainers; [
+      flokli
+      offline
+      prusnak
+    ];
     platforms = platforms.unix;
   };
 }

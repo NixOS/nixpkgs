@@ -1,22 +1,24 @@
-{ installShellFiles
-, lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
+{
+  installShellFiles,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "steamguard-cli";
-  version = "0.14.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "dyc3";
-    repo = pname;
+    repo = "steamguard-cli";
     rev = "v${version}";
-    hash = "sha256-SrMg/4bTAvk+2fLck8SJBMQ3bELu1OBB7pDZmk+rCbA=";
+    hash = "sha256-gPw0D5/XpT1bRYgG6GgDSP47Pa6MR3qzKhVwB4MrLKU=";
   };
 
-  cargoHash = "sha256-MSN0xQj6IfOjI0qQqVBaGhh0BQJa4z24El2rGLlFBSM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uu+Ngz5hfH1Pg2KcumpHW3BDggBGJgRh0W06a6fPrfg=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -32,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dyc3/steamguard-cli";
     license = with licenses; [ gpl3Only ];
     mainProgram = "steamguard";
-    maintainers = with maintainers; [ surfaceflinger ];
+    maintainers = with maintainers; [
+      surfaceflinger
+      sigmasquadron
+    ];
     platforms = platforms.linux;
   };
 }

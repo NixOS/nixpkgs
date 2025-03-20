@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fparser";
   version = "unstable-2015-09-25";
 

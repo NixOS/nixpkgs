@@ -15,7 +15,6 @@ host_cxx = meson.get_compiler('cpp')
 
 
 # pam = cc.find_library('pam')
-libbsd = dependency('libbsd-overlay', required : false)
 libedit = dependency('libedit')
 libresolv = host_cc.find_library('resolv')
 libsbuf = host_cc.find_library('sbuf')
@@ -259,7 +258,6 @@ endforeach
 
 executable(
     'lockf',
-    dependencies : [ libbsd ],
     install : true,
     sources : [ 'lockf/lockf.c' ],
 )
@@ -415,7 +413,6 @@ install_man('who/who.1')
 
 executable(
     'xargs',
-    dependencies : [ libbsd ],
     include_directories : 'xargs',
     install : true,
     sources : [

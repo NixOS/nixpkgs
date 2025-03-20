@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "gast";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zrbxW8qWhCY6tObP+/WDReoCnlCpMEzQucX2inpRTL4=";
   };
 

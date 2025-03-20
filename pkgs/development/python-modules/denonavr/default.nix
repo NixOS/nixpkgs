@@ -6,7 +6,6 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  fetchpatch2,
   ftfy,
   httpx,
   netifaces,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,17 +27,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ol-iver";
     repo = "denonavr";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/K2pz3B4H205grDeuMWZmEeA4wJqKhP0XdpmbqFguTM=";
+    tag = version;
+    hash = "sha256-9nY1z6CX8uha/m3OOUyadrKmpbUsgL16CB2ySElOTck=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "pytest-httpx-compat.patch";
-      url = "https://github.com/ol-iver/denonavr/commit/5320aadae91135a8c208c83d82688ddf26eb6498.patch";
-      hash = "sha256-F9R5GJ1XK3lHWLY+OgzKu3+xCosK3nX4EII9J1jhlys=";
-    })
-  ];
 
   pythonRelaxDeps = [ "defusedxml" ];
 
@@ -67,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ol-iver/denonavr";
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

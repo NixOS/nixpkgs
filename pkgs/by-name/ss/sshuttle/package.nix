@@ -1,38 +1,42 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, sphinx
-, coreutils
-, iptables
-, nettools
-, openssh
-, procps
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  sphinx,
+  coreutils,
+  iptables,
+  nettools,
+  openssh,
+  procps,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.1.2";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
-    rev = "v${version}";
-    hash = "sha256-7jiDTjtL4FiQ4GimSPtUDKPUA29l22a7XILN/s4/DQY=";
+    tag = "v${version}";
+    hash = "sha256-6RNH2S4GXlAWBQSSmgHFcpYECYJoQtZVScrhLMM0gEk=";
   };
 
-  patches = [ ./sudo.patch ];
+  build-system = [ python3Packages.poetry-core ];
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    python3Packages.setuptools-scm
     sphinx
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytest-cov-stub pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   postBuild = ''
     make man -C docs
@@ -42,10 +46,22 @@ python3Packages.buildPythonApplication rec {
     installManPage docs/_build/man/*
 
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.hostPlatform.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${
+        lib.makeBinPath (
+          [
+            coreutils
+            openssh
+            procps
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            iptables
+            nettools
+          ]
+        )
+      }" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transparent proxy server that works as a poor man's VPN";
     mainProgram = "sshuttle";
     longDescription = ''
@@ -54,8 +70,11 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     homepage = "https://github.com/sshuttle/sshuttle";
-    changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ domenkozar carlosdagos ];
+    changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      domenkozar
+      carlosdagos
+    ];
   };
 }

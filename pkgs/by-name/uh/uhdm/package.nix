@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, capnproto
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  capnproto,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "UHDM";
   # When updating this package, also consider updating science/logic/surelog
-  version = "1.83";
+  version = "1.84-unstable-2024-11-12";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "UHDM";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-va8qAzsg589C6rLmG1uIMDr4X30qpBgRO1ZVKdEs5ok=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    # After we're back on a stable tag, use v${finalAttrs.version}
+    rev = "7d90dd0e68759775d0c86885d991925096b5b496";
+    hash = "sha256-msdtBAlOXwYJd0HhWmVo8oMJ6h8OUmy0ILxV1MV52PE=";
+    fetchSubmodules = false; # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
@@ -42,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Universal Hardware Data Model";
     homepage = "https://github.com/chipsalliance/UHDM";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthuszagh ];
+    maintainers = with lib.maintainers; [
+      matthuszagh
+      hzeller
+    ];
     platforms = lib.platforms.all;
   };
 })

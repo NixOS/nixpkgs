@@ -1,30 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "sqldef";
-  version = "0.17.20";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "k0kubun";
+    owner = "sqldef";
     repo = "sqldef";
     rev = "v${version}";
-    hash = "sha256-r175nhzPLoU4CBjEiktsQIuQTgRJ64uW1MhDKHEDR+4=";
+    hash = "sha256-eg2iy0vQyg7ZyTejgmJEKD1s6b2ikk7gMFIEudn2PZs=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-reYZUuZTNeNFrbrDQPVXwx+UuBGdEmTdSowbneZc/No=";
+  vendorHash = "sha256-AKYmE/nysDYyYsqfFleOpWw8DEp/587XI/NA1gv20BU=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   # The test requires a running database
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Idempotent SQL schema management tool";
-    license = with licenses; [ mit /* for everything except parser */ asl20 /* for parser */ ];
-    homepage = "https://github.com/k0kubun/sqldef";
-    changelog = "https://github.com/k0kubun/sqldef/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ kgtkr ];
+    license = with lib.licenses; [
+      mit # for everything except parser
+      asl20 # for parser
+    ];
+    homepage = "https://github.com/sqldef/sqldef";
+    changelog = "https://github.com/sqldef/sqldef/blob/v${version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ kgtkr ];
   };
 }

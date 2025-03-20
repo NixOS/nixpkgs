@@ -27,7 +27,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  buildInputs = lib.optional stdenv.isDarwin apple-sdk_12;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12;
 
   passthru.tests.version = testers.testVersion {
     inherit version;

@@ -1,10 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchNpmDeps
-, fetchPypi
-, nodejs
-, npmHooks
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchPypi,
+  fetchpatch,
+  nodejs,
+  npmHooks,
+  python3,
 }:
 
 let
@@ -30,13 +32,23 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lektor";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # fix for case-insensitive filesystems
     postFetch = ''
       rm -f $out/tests/demo-project/content/icc-profile-test/{LICENSE,license}.txt
     '';
     hash = "sha256-y0/fYuiIB/O5tsYKjzOPnCafOIZCn4Z5OITPMcnHd/M=";
   };
+
+  patches = [
+    # Fixes test_thumbnail.py with Pillow 11.0
+    # see lektor/lektor #1202
+    (fetchpatch {
+      name = "lektor-pillow-11.patch";
+      url = "https://github.com/lektor/lektor/commit/af99ea4265e05227d7452977949475196a58edfa.patch";
+      hash = "sha256-PmSmX9Ku5rAzN2FzLwvXYeUqN683opLRt9J35w56cfg=";
+    })
+  ];
 
   npmDeps = fetchNpmDeps {
     src = "${src}/${npmRoot}";

@@ -1,16 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cmake
-, pkg-config
-, libdrm
-, libGL
-, atkmm
-, pcre
-, gtkmm4
-, pugixml
-, mesa
-, pciutils
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  gettext,
+  glib,
+  pkg-config,
+  libdrm,
+  libGL,
+  atkmm,
+  pcre,
+  gtkmm4,
+  pugixml,
+  libgbm,
+  pciutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +23,29 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
-    repo = pname;
+    repo = "adriconf";
     rev = "v${version}";
     sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm4 pugixml mesa pciutils ];
+  nativeBuildInputs = [
+    cmake
+    gettext # msgfmt
+    glib # glib-compile-resources
+    pkg-config
+  ];
+  buildInputs = [
+    libdrm
+    libGL
+    atkmm
+    pcre
+    gtkmm4
+    pugixml
+    libgbm
+    pciutils
+  ];
 
+  # tries to download googletest
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 
   postInstall = ''

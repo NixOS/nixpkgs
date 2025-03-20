@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
-, gst_all_1
-, wrapGAppsHook3
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  gst_all_1,
+  wrapGAppsHook3,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,12 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

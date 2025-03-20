@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, bubblewrap
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  bubblewrap,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ElKowar";
-    repo = pname;
+    repo = "pipr";
     rev = "v${version}";
     sha256 = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
   };
 
-  cargoHash = "sha256-SLOiX8z8LuQ9VA/lg0lOhqs85MGs0vmeP74cS6sgghI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SRIv/dZcyKm2E7c5/LtMCDnh+SDqPhJ01GZtkj0RgA0=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

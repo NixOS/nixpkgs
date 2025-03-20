@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, less
-, libiconv
-, installShellFiles
-, makeWrapper
-, apple-sdk_11
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  less,
+  installShellFiles,
+  makeWrapper,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
     rev = "v${version}";
-    hash = "sha256-1RjlJEmY/jMf0IYQbrWrT1CHFyiqgarOl72u9xjjQiQ=";
+    hash = "sha256-82IhLhw0TdaMh21phBxcUZ5JI5xOXb0DrwnBmPwyfAQ=";
   };
-  cargoHash = "sha256-b7wNWdKQ4QLeCf7bNZRfzT9hD/D/oDglU7Xyb65IrGY=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EnEc+B62dK3q6in8yn5wdeVmBw8XMkP8YKpCN7lCPnc=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv apple-sdk_11 ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    makeWrapper
+  ];
+
+  buildInputs = [
+    zlib
+  ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -73,8 +80,16 @@ rustPlatform.buildRustPackage rec {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "bat";
-    maintainers = with maintainers; [ dywedir zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [
+      dywedir
+      zowoq
+      SuperSandro2000
+      sigmasquadron
+    ];
   };
 }

@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchsvn
-# jdk8 is needed for building, but the game runs on newer jres as well
-, jdk8
-, jre
-, ant
-, stripJavaArchivesHook
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  # jdk8 is needed for building, but the game runs on newer jres as well
+  jdk8,
+  jre,
+  ant,
+  stripJavaArchivesHook,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nixosTests,
 }:
 
 let
@@ -25,7 +27,8 @@ let
     icon = "domination";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "domination";
   version = "1.3.1";
 
@@ -105,7 +108,7 @@ in stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl3Plus;
     mainProgram = "domination";

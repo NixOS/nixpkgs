@@ -1,23 +1,25 @@
-{ lib
-, buildDotnetModule
-, writeShellScript
-, glibc
-, gtk3
-, libappindicator
-, webkitgtk_4_0
-, e2fsprogs
-, libnotify
-, libgit2
-, openssl
-, xdelta
-, file
-, openjdk
-, patchelf
-, fetchFromGitHub
-, buildFHSEnv
-, glib-networking
-, wrapGAppsHook3
-, gsettings-desktop-schemas
+{
+  lib,
+  buildDotnetModule,
+  writeShellScript,
+  glibc,
+  gtk3,
+  libappindicator,
+  webkitgtk_4_0,
+  e2fsprogs,
+  libnotify,
+  libgit2,
+  openssl,
+  xdelta,
+  file,
+  openjdk,
+  patchelf,
+  fetchFromGitHub,
+  buildFHSEnv,
+  glib-networking,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  dotnetCorePackages,
 }:
 let
   am2r-run = buildFHSEnv {
@@ -25,7 +27,8 @@ let
 
     multiArch = true;
 
-    multiPkgs = pkgs: with pkgs; [
+    multiPkgs =
+      pkgs: with pkgs; [
         (lib.getLib stdenv.cc.cc)
         xorg.libX11
         xorg.libXext
@@ -54,9 +57,10 @@ buildDotnetModule {
     hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "AM2RLauncher.Gtk";
 
   runtimeDeps = [
@@ -72,16 +76,37 @@ buildDotnetModule {
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = [ gtk3 gsettings-desktop-schemas glib-networking ];
+  buildInputs = [
+    gtk3
+    gsettings-desktop-schemas
+    glib-networking
+  ];
 
-  patches = [ ./am2r-run-binary.patch ];
+  patches = [
+    ./am2r-run-binary.patch
+    ./dotnet-8-upgrade.patch
+  ];
 
-  dotnetFlags = [ ''-p:DefineConstants="NOAPPIMAGE;NOAUTOUPDATE;PATCHOPENSSL"'' ];
+  dotnetFlags = [
+    ''-p:DefineConstants="NOAPPIMAGE;NOAUTOUPDATE;PATCHOPENSSL"''
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.escapeShellArg (
+      lib.makeBinPath [
+        am2r-run
+        xdelta
+        file
+        openjdk
+        patchelf
+      ]
+    ))
+  ];
 
   postFixup = ''
-    wrapProgram $out/bin/AM2RLauncher.Gtk \
-      --prefix PATH : ${lib.makeBinPath [ am2r-run xdelta file openjdk patchelf ]} \
-
     mkdir -p $out/share/icons
     install -Dm644 $src/AM2RLauncher/distribution/linux/AM2RLauncher.png $out/share/icons/AM2RLauncher.png
     install -Dm644 $src/AM2RLauncher/distribution/linux/AM2RLauncher.desktop $out/share/applications/AM2RLauncher.desktop

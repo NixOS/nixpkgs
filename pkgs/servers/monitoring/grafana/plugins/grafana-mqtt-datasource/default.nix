@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "grafana-mqtt-datasource";
   version = "1.1.0-beta.2";
   zipHash = {

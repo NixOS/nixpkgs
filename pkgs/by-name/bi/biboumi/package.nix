@@ -1,5 +1,29 @@
-{ lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn
-, libiconv, botan2, systemd, pkg-config, udns, python3Packages } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  cmake,
+  libuuid,
+  expat,
+  libiconv,
+  botan2,
+  systemd,
+  pkg-config,
+  python3Packages,
+  withIDN ? true,
+  libidn,
+  withPostgreSQL ? false,
+  libpq,
+  withSQLite ? true,
+  sqlite,
+  withUDNS ? true,
+  udns,
+}:
+
+assert lib.assertMsg (
+  withPostgreSQL || withSQLite
+) "At least one Biboumi database provider required";
 
 let
   louiz_catch = fetchgit {
@@ -19,10 +43,28 @@ stdenv.mkDerivation rec {
 
   patches = [ ./catch.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config python3Packages.sphinx ];
-  buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd udns ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3Packages.sphinx
+  ];
+  buildInputs =
+    [
+      libuuid
+      expat
+      libiconv
+      systemd
+      botan2
+    ]
+    ++ lib.optional withIDN libidn
+    ++ lib.optional withPostgreSQL libpq
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withUDNS udns;
 
-  buildFlags = [ "all" "man" ];
+  buildFlags = [
+    "all"
+    "man"
+  ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi

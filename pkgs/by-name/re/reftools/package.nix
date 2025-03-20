@@ -1,9 +1,10 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "reftools";
   version = "unstable-2021-02-13";
 

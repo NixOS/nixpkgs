@@ -1,31 +1,39 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch2
-, pkg-config
-, meson
-, ninja
-, gobject-introspection
-, python3
-, libyaml
-, rpm
-, file
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, glib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  meson,
+  ninja,
+  gobject-introspection,
+  python3,
+  libyaml,
+  rpm,
+  file,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
   version = "2.15.0";
 
-  outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "fedora-modularity";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "libmodulemd";
+    rev = "libmodulemd-${version}";
     sha256 = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
   };
 

@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -18,12 +19,14 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 
   passthru.tests = {
-    smoke-test = nixosTests.acme;
+    smoke-test-http = nixosTests.acme.http01-builtin;
+    smoke-test-dns = nixosTests.acme.dns01;
   };
 
   meta = {

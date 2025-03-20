@@ -1,10 +1,14 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.29.2";
+  version = "0.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -12,8 +16,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Z/v/a0zENH8K1NHCZViLBbc8gma5rTMBm8hatHhu878=";
+    tag = version;
+    hash = "sha256-qaNSL7ZPEWJ8Zc/XPEWtUJYQnUJ7jNdla1I0d6+GReM=";
   };
 
   propagatedBuildInputs = [

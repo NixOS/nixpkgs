@@ -1,6 +1,11 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   options = with lib; {
@@ -27,9 +32,6 @@
     # This should not contain packages that are broken or can't build, since it
     # will break this expression
     #
-    # Currently broken packages:
-    # - contour
-    #
     # can be generated with:
     # lib.attrNames (lib.filterAttrs
     #  (_: drv: (builtins.tryEval (lib.isDerivation drv && drv ? terminfo)).value)
@@ -39,7 +41,9 @@
         with pkgs.pkgsBuildBuild;
         [
           alacritty
+          contour
           foot
+          ghostty
           kitty
           mtm
           rio
@@ -72,12 +76,18 @@
       export TERM=$TERM
     '';
 
-    security.sudo.extraConfig = lib.mkIf config.security.sudo.keepTerminfo ''
+    security =
+      let
+        extraConfig = ''
 
-      # Keep terminfo database for root and %wheel.
-      Defaults:root,%wheel env_keep+=TERMINFO_DIRS
-      Defaults:root,%wheel env_keep+=TERMINFO
-    '';
-
+          # Keep terminfo database for root and %wheel.
+          Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+          Defaults:root,%wheel env_keep+=TERMINFO
+        '';
+      in
+      lib.mkIf config.security.sudo.keepTerminfo {
+        sudo = { inherit extraConfig; };
+        sudo-rs = { inherit extraConfig; };
+      };
   };
 }

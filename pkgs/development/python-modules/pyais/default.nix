@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyais";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "M0r13n";
     repo = "pyais";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aIpIeDJGMfNVzeXY8GaPOYKam2HxcdHgSOhOoGmGDoc=";
+    tag = "v${version}";
+    hash = "sha256-rL2loTPNdCvhy/n3PTJOGjFxJX5yG+thXJBOqUDrjkU=";
   };
 
   build-system = [ setuptools ];

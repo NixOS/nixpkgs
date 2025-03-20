@@ -15,12 +15,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samarium-lang";
     repo = "samarium";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sOkJ67B8LaIA2cwCHaFnc16lMG8uaegBJCzF6Li77vk=";
   };
 
   build-system = [ poetry-core ];
-  dependencies = [ crossandra dahlia ];
+  dependencies = [
+    crossandra
+    dahlia
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";

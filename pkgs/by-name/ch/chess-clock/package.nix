@@ -1,16 +1,18 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitLab
-, gobject-introspection
-, gsound
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gobject-introspection,
+  gsound,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "chess-clock";
     rev = "v${version}";
     hash = "sha256-XDOCHFZC3s3b/4kD1ZkhWar3kozW3vXc0pk7O6oQfiE=";
   };
@@ -38,16 +40,22 @@ stdenv.mkDerivation rec {
     gsound
     gtk4
     libadwaita
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Time games of over-the-board chess";
     homepage = "https://gitlab.gnome.org/World/chess-clock";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "chess-clock";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = lib.teams.gnome-circle.members;
   };
 }

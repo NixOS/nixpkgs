@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, jdk_headless
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+  jdk_headless,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
-    repo = pname;
+    repo = "fbjni";
     rev = "v${version}";
     sha256 = "sha256-97KqfFWtR3VJe2s0D60L3dsIDm4kMa0hpkKoZSAEoVY=";
   };

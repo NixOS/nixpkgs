@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchurl, readline }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  autoreconfHook,
+}:
 
 let
   version = "1.5c";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zssh";
   inherit version;
 
@@ -11,6 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "06z73iq59lz8ibjrgs7d3xl39vh9yld1988yx8khssch4pw41s52";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ readline ];
 
   patches = [
@@ -24,9 +32,13 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
+  postPatch = ''
+    sed -i 1i'#include <pty.h>' openpty.c
+  '';
+
   # The makefile does not create the directories
   postBuild = ''
-    install -dm755 "$out"/{bin,man/man1}
+    install -dm755 "$out"/{bin,share/man/man1}
   '';
 
   meta = {

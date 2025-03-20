@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, makeBinaryWrapper
-, pkg-config
-, pciutils
-, libusb1
-, fuse
-, busybox
-, pv
-, withBfbInstall ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  makeBinaryWrapper,
+  pkg-config,
+  pciutils,
+  libusb1,
+  fuse,
+  busybox,
+  pv,
+  withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.1.5";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = pname;
+    repo = "rshim-user-space";
     rev = "rshim-${version}";
-    hash = "sha256-moU6XxBVSAZiiR/usFfxse2CHk6+003Jb9t62szk1fk=";
+    hash = "sha256-z0Uk520vsBERbeVtxBqXPXSWhO0sLD5GCQy1dQsJdEg=";
   };
 
   nativeBuildInputs = [
@@ -44,16 +45,23 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  installPhase = ''
-    mkdir -p "$out"/bin
-    cp -a src/rshim "$out"/bin/
-  '' + lib.optionalString withBfbInstall ''
-    cp -a scripts/bfb-install "$out"/bin/
-  '';
+  installPhase =
+    ''
+      mkdir -p "$out"/bin
+      cp -a src/rshim "$out"/bin/
+    ''
+    + lib.optionalString withBfbInstall ''
+      cp -a scripts/bfb-install "$out"/bin/
+    '';
 
   postFixup = lib.optionalString withBfbInstall ''
     wrapProgram $out/bin/bfb-install \
-      --set PATH ${lib.makeBinPath [ busybox pv ]}
+      --set PATH ${
+        lib.makeBinPath [
+          busybox
+          pv
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -68,6 +76,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mellanox/rshim-user-space";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nikstur ];
+    maintainers = with maintainers; [
+      thillux
+    ];
   };
 }

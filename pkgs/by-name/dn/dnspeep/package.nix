@@ -6,17 +6,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jvns";
-    repo = pname;
+    repo = "dnspeep";
     rev = "v${version}";
     sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pcap-0.8.1" = "sha256-baoHK3Q+5Qp9ccGqDGd5K5q87c5JufpNJHRdBin0zto=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tZlh7+END6oOy3uWOrjle+nwqFhMU6bbXmr4hdt6gqY=";
 
   LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
   LIBPCAP_VER = libpcap.version;

@@ -1,31 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, xapp
-, circle-flags
-, gettext
-, gobject-introspection
-, mpv
-, python3
-, wrapGAppsHook3
-, yt-dlp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  xapp,
+  circle-flags,
+  gettext,
+  gobject-introspection,
+  mpv,
+  python3,
+  wrapGAppsHook3,
+  yt-dlp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "4.6";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-wDzHCrZTbfIb9dpRoh5qYKQNjONOv34FYdOr4svOLEw=";
+    hash = "sha256-mM6NeDtRoPUSQ/smtvpYJ3qqeqiPHquP96ChJgSJWL0=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./libmpv-path.patch;
+    (replaceVars ./libmpv-path.patch {
       libmpv = "${lib.getLib mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
@@ -90,7 +90,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/hypnotix";
     changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      bobby285271
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "hypnotix";
   };

@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  python3,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpt2tc";
   version = "2021-04-24";
 
@@ -18,7 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ numpy tensorflow ]))
+    (python3.withPackages (
+      p: with p; [
+        numpy
+        tensorflow
+      ]
+    ))
   ];
 
   installPhase = ''

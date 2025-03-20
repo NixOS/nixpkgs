@@ -4,37 +4,32 @@
   fetchurl,
   autoreconfHook,
   cups,
-  rpm,
-  cpio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.20";
+  version = "1.2.27";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
-    # and retreive the download link for source package for x86 CPU
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/35/74/81cbf34af8c0fa4c59b4c1f4600173dfda822ee4/epson-inkjet-printer-escpr2-1.2.20-1.src.rpm";
-    sha256 = "sha256-HBKAcHVOV+xO6IpFS1EyYyn4Ri4e5btBp/e50f3RoTA=";
+    # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/77/53/1540531c6f47c62d3846d9a8943b1ecec7f825a1/epson-inkjet-printer-escpr2-1.2.27-1.tar.gz";
+    hash = "sha256-h1RaqkN+hdVGVy0ancqfYoeNp/TTfJYy5oRxhPizO2Q=";
   };
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    rpm2cpio $src | cpio -idmv
-    tar xvf ${pname}-${version}-1.tar.gz
-    cd ${pname}-${version}
-
-    runHook postUnpack
-  '';
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoreconfHook
-    rpm
-    cpio
+  ];
+
+  patches = [
+    # Fixes "implicit declaration of function" errors
+    # source of patch: https://aur.archlinux.org/packages/epson-inkjet-printer-escpr2
+    (fetchurl {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=575d1b959063044f233cca099caceec8e6d5c02f";
+      sha256 = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
+    })
   ];
 
   configureFlags = [
@@ -42,7 +37,7 @@ stdenv.mkDerivation rec {
     "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''
@@ -51,12 +46,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma9e
       ma27
       shawn8901
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

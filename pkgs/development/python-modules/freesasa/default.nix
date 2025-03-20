@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "freesasa";
     repo = "freesasa-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/7ymItwXOemY0+IL0k6rWnJI8fAwTFjNXzTV+uf9x9A=";
   };
 

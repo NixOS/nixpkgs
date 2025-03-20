@@ -6,19 +6,19 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.64.0";
+  version = "3.70.1";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-N2m3U0HjwQtm7loqYfEl7kstqljXC8evp6GEh+Cd9Hs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FIqEVChYxtFqD9RcOttSk1QTPzG3HUBZmFI0wWY2BTQ=";
   };
 
   # Upstream doesn't provide a composer.lock.
   # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-cOKfvNjFl9QKwPZp81IHaRurRhmXgbydhdTWYknlGBM=";
+  vendorHash = "sha256-4MrmdAiBruOF68KVrsnDPTKe9hrHvUmzfvyrG6rt7L0=";
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";

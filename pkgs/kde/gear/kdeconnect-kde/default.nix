@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   sshfs,
   qtconnectivity,
   qtmultimedia,
@@ -15,8 +15,7 @@ mkKdeDerivation {
   pname = "kdeconnect-kde";
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-sshfs-path.patch;
+    (replaceVars ./hardcode-sshfs-path.patch {
       sshfs = lib.getExe sshfs;
     })
   ];

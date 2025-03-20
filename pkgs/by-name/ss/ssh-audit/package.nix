@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = "ssh-audit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sjYKQpn37zH3xpuIiZAjCn0DyLqqoQDwuz7PKDfkeTM=";
   };
 

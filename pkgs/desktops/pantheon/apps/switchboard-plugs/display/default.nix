@@ -1,30 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, granite7
-, gtk4
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  glib,
+  granite7,
+  gtk4,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XeBctwLCeDM4AoHbqk6olc6rosBQDQ4uFm1Vv0stFVA=";
+    sha256 = "sha256-uSEixgakYmh+rheDVF9kYs43C+vjfzuz1SNfwV3+RIU=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config

@@ -1,22 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, automaticcomponenttoolkit
-, pkg-config, libzip, gtest, openssl, libuuid, libossp_uuid }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  automaticcomponenttoolkit,
+  pkg-config,
+  fast-float,
+  libzip,
+  gtest,
+  openssl,
+  libuuid,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WMTTYYgpCIM86a6Jw8iah/YVXN9T5youzEieWL/d+Bc=";
+    repo = "lib3mf";
+    tag = "v${version}";
+    hash = "sha256-XEwrJINiNpI2+1wXxczirci8VJsUVs5iDUAMS6jWuNk=";
   };
 
-  patches = [ ./upgrade-to-cpp-14.patch ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
-
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
@@ -27,28 +45,45 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libzip gtest openssl
-  ] ++ (if stdenv.hostPlatform.isDarwin then [ libossp_uuid ] else [ libuuid ]);
+    libzip
+    gtest
+    openssl
+    zlib
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
 
   postPatch = ''
-    # This lets us build the tests properly on aarch64-darwin.
-    substituteInPlace CMakeLists.txt \
-      --replace 'SET(CMAKE_OSX_ARCHITECTURES "x86_64")' ""
-
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
     sed -i 's,libdir=''${\(exec_\)\?prefix}/,libdir=,' lib3mf.pc.in
 
     # replace bundled binaries
-    for i in AutomaticComponentToolkit/bin/act.*; do
-      ln -sf ${automaticcomponenttoolkit}/bin/act $i
-    done
+    rm -r AutomaticComponentToolkit
+    ln -s ${automaticcomponenttoolkit}/bin AutomaticComponentToolkit
+
+    # unvendor Libraries
+    rm -r Libraries/{fast_float,googletest,libressl,libzip,zlib}
+
+    cat <<"EOF" >> Tests/CPP_Bindings/CMakeLists.txt
+    find_package(GTest REQUIRED)
+    target_link_libraries(''${TESTNAME} PRIVATE GTest::gtest)
+    EOF
+
+    mkdir Libraries/fast_float
+    ln -s ${lib.getInclude fast-float}/include/fast_float Libraries/fast_float/Include
+
+    # functions are no longer in openssl, remove them from test cleanup function
+    substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \
+      --replace-warn "RAND_cleanup();" "" \
+      --replace-warn "EVP_cleanup();" "" \
+      --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
   '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

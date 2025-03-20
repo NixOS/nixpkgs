@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  cmake,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vgmtools";
   version = "0.1-unstable-2023-08-27";
 
@@ -27,7 +28,9 @@ stdenv.mkDerivation rec {
 
   # Some targets are not enabled by default
   makeFlags = [
-    "all" "optdac" "optvgm32"
+    "all"
+    "optdac"
+    "optvgm32"
   ];
 
   passthru.updateScript = unstableGitUpdater {

@@ -8,7 +8,9 @@ in
       type = types.attrTag {
         int = types.int;
       };
-      default = { int = 1; };
+      default = {
+        int = 1;
+      };
     };
   };
 }

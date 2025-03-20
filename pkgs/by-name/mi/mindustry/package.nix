@@ -6,7 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jdk17,
   zenity,
 
@@ -43,6 +43,8 @@ let
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
@@ -281,6 +283,8 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin
-    broken = enableClient && stdenv.hostPlatform.isDarwin;
+    broken =
+      enableClient
+      && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64));
   };
 }

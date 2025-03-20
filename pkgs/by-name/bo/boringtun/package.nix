@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "boringtun";
@@ -6,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cloudflare";
-    repo = pname;
+    repo = "boringtun";
     rev = "boringtun-cli-${version}";
     sha256 = "sha256-PY7yqBNR4CYh8Y/vk4TYxxJnnv0eig8sjXp4dR4CX04=";
   };
 
-  cargoHash = "sha256-WFKlfuZGVU5KA57ZYjsIrIwE4B5TeaU5IKt9BNEnWyY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9qvX6P/DquQDlt6wOzI5ZQXQzNil1cD7KiuegDXtrQ0=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 

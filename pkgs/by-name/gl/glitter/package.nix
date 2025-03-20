@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, git }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gitMinimal,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "glitter";
@@ -6,15 +11,16 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "milo123459";
-    repo = pname;
+    repo = "glitter";
     rev = "v${version}";
     hash = "sha256-dImQLC7owPf2EB5COO5vjN3a6k7gJ88D2hMSUW2/wn4=";
   };
 
-  cargoHash = "sha256-7JQcY3HCG3UQ0Mfz/+ZZ0axGEpQoH410FT72tjHW7EE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gHwweWKRnRJRfVMxnIFkafbN9Sl+UTnnYRQF7QD3nCc=";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # tests require it to be in a git repository
@@ -23,7 +29,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  checkFlags = [ "--skip" "runs_correctly" ];
+  checkFlags = [
+    "--skip"
+    "runs_correctly"
+  ];
 
   meta = with lib; {
     description = "Git wrapper that allows you to compress multiple commands into one";

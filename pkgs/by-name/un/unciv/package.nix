@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, libGL
-, libpulseaudio
-, libXxf86vm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  libGL,
+  libpulseaudio,
+  libXxf86vm,
 }:
 let
-  version = "4.14.5-patch1";
+  version = "4.15.16";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -26,11 +27,13 @@ let
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    libpulseaudio
-    libXxf86vm
-  ]);
+  envLibPath = lib.makeLibraryPath (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libpulseaudio
+      libXxf86vm
+    ]
+  );
 
 in
 stdenv.mkDerivation rec {
@@ -39,12 +42,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-NJFv6gdNms+qcouqR/NILnT+l6z0+vOU4bGT6FqaIUw=";
+    hash = "sha256-dqnQJzA2OkIlcM7TORqnFyaA5CvQ+MmFOO5iH6My+Jo=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

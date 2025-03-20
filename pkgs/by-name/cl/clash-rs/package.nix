@@ -7,42 +7,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clash-rs";
-  version = "0.7.0";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
-    rev = "v${version}";
-    hash = "sha256-0deMVI51XHTCrnLTycqDsaY5Lq+wx14uMUlkG5OViNA=";
+    tag = "v${version}";
+    hash = "sha256-c4XF0F2ifTvbXTMGiJc1EaGTlS/X5ilZTpXe01uHs4Y=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boringtun-0.6.0" = "sha256-HBNo53b+CpCGmTXZYH4NBBvNmekyaBKAk1pSRzZdavg=";
-      "netstack-lwip-0.3.4" = "sha256-lcauDyaw5gAaECRcGNXQDHbWmnyxil18qWFkZ/p/C50=";
-      "rustls-0.23.12" = "sha256-grt94JG44MljRQRooVZbXL4h4XLI1/KoIdwGv03MoIU=";
-      "tokio-rustls-0.26.0" = "sha256-Bmi36j8hbR4kkY/xnHbluaInk+YH5/eTln0VYfHulGA=";
-      "tracing-oslog-0.2.0" = "sha256-JYaCslbVOgsyBhjeBkplPWcjSgFccjr4s6OAGIUu5kg=";
-      "tuic-1.3.1" = "sha256-WMd+O2UEu0AEI+gNeQtdBhEgIB8LPanoIpMcDAUUWrM=";
-      "tun-0.6.1" = "sha256-j4yQSu4Mw7DBFak8vJGQomYq81+pfaeEDdN4NNBve+E=";
-      "unix-udp-sock-0.7.0" = "sha256-TekBfaxecFPpOfq7PVjLHwc0uIp3yJGV/Cgav5VfKaA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZSwNlknpZ0zKj+sklmO14Ey5DPZ0Wk9xxMiXwIiuRd0=";
+
+  nativeInstallCheckInputs = [
+    protobuf
+    versionCheckHook
+  ];
 
   env = {
-    PROTOC = "${protobuf}/bin/protoc";
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
   };
-
-  doInstallCheck = true;
-
-  dontCargoCheck = true; # test failed
-
-  versionCheckProgramArg = "--version";
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildFeatures = [
     "shadowsocks"
@@ -50,12 +35,22 @@ rustPlatform.buildRustPackage rec {
     "onion"
   ];
 
+  doCheck = false; # test failed
+
+  postInstall = ''
+    # Align with upstream
+    ln -s "$out/bin/clash-rs" "$out/bin/clash"
+  '';
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
   meta = {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
-    mainProgram = "clash-rs";
+    mainProgram = "clash";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,4 +1,9 @@
-{ buildDunePackage, logs, lwt, metrics }:
+{
+  buildDunePackage,
+  logs,
+  lwt,
+  metrics,
+}:
 
 buildDunePackage {
   pname = "metrics-lwt";
@@ -7,7 +12,11 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ logs lwt metrics ];
+  propagatedBuildInputs = [
+    logs
+    lwt
+    metrics
+  ];
 
   meta = metrics.meta // {
     description = "Lwt backend for the Metrics library";

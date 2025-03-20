@@ -3,11 +3,8 @@ let
   cfg = config.services.hickory-dns;
   toml = pkgs.formats.toml { };
 
-  configFile = toml.generate "hickory-dns.toml" (
-    lib.filterAttrsRecursive (_: v: v != null) cfg.settings
-  );
-
   zoneType = lib.types.submodule ({ config, ... }: {
+    freeformType = toml.type;
     options = with lib; {
       zone = mkOption {
         type = types.str;
@@ -82,6 +79,22 @@ in
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
         '';
       };
+      configFile = mkOption {
+        type = types.path;
+        default = toml.generate "hickory-dns.toml" (
+          lib.filterAttrsRecursive (_: v: v != null) cfg.settings
+        );
+        defaultText = lib.literalExpression ''
+          let toml = pkgs.formats.toml { }; in toml.generate "hickory-dns.toml" cfg.settings
+        '';
+        description = ''
+          Path to an existing toml file to configure hickory-dns with.
+
+          This can usually be left unspecified, in which case it will be
+          generated from the values in `settings`.
+          If manually specified, then the options in `settings` are ignored.
+        '';
+      };
       settings = mkOption {
         description = ''
           Settings for hickory-dns. The options enumerated here are not exhaustive.
@@ -142,7 +155,7 @@ in
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${lib.getExe cfg.package} --config ${configFile} ${flagsStr}
+          ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";

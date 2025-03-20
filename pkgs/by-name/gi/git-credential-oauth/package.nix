@@ -1,14 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.13.3";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vs+PRFyvzn25nM6oO4VybXkTr1frmSspA2isSXLJFQo=";
+    hash = "sha256-u5lTl0vZLf8P6k/W4I4qhiUPrIEsynEP0rbQt8pIEWM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

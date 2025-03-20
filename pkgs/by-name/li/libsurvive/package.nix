@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libglut
-, lapack
-, libusb1
-, blas
-, zlib
-, eigen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libglut,
+  lapack,
+  libusb1,
+  blas,
+  zlib,
+  eigen,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +18,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cntools";
-    repo = pname;
+    repo = "libsurvive";
     rev = "v${version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
     hash = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     libglut

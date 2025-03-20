@@ -8,24 +8,19 @@
 
 buildDotnetModule rec {
   pname = "garnet";
-  version = "1.0.36";
+  version = "1.0.58";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iWfRj1PN54TXiNMSYYNq0rjA50ag0lyEJdDFw0cMv4g=";
+    tag = "v${version}";
+    hash = "sha256-PP1Dko7/3Yx3evEyTRhHA85m6XztQiUt307LVZsCx64=";
   };
 
   projectFile = "main/GarnetServer/GarnetServer.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_6_0
-      sdk_8_0
-    ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetBuildFlags = [

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "awsiotsdk";
-  version = "1.22.0";
+  version = "1.22.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python-v2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2ZMNG+6yshEvjEpyN6uV62m11LZUrUHAzpRbm1foif0=";
+    tag = "v${version}";
+    hash = "sha256-vqx/OgQ/hgH6ULBI1I9+fD4CswQZDzfdNlhImbnQiKg=";
   };
 
   pythonRelaxDeps = [ "awscrt" ];

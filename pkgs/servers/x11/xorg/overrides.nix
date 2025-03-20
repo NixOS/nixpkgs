@@ -7,7 +7,7 @@
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg, windows
+  xorg, windows, libgbm, mesa-gl-headers, dri-pkgconfig-stub
 }:
 
 let
@@ -269,15 +269,6 @@ self: super:
     outputs = [ "out" "dev" "devdoc" ];
   });
 
-  luit = super.luit.overrideAttrs (attrs: {
-    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-    # Once the bug is fixed upstream, this can be removed.
-    configureFlags = [ "--disable-selective-werror" ];
-
-    buildInputs = attrs.buildInputs ++ [libiconv];
-    meta = attrs.meta // { mainProgram = "luit"; };
-  });
-
   libICE = super.libICE.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
   });
@@ -460,7 +451,7 @@ self: super:
   transset = addMainProgram super.transset { };
 
   utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ automake autoconf libtool ];
+    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [] ++ [ automake autoconf libtool ];
   });
 
   viewres = addMainProgram super.viewres { };
@@ -584,8 +575,13 @@ self: super:
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      buildPackages.xorg.utilmacros # For xorg-utils.m4 macros
+      buildPackages.xorg.xorgserver # For xorg-server.m4 macros
+    ];
+    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
   xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
@@ -608,7 +604,6 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
@@ -717,7 +712,7 @@ self: super:
     '';
   in
     xorg.xkeyboardconfig.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ automake ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch   = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
@@ -796,7 +791,7 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
+        buildInputs = commonBuildInputs ++ [ libdrm libgbm mesa-gl-headers dri-pkgconfig-stub ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
@@ -882,6 +877,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-libunwind" # libunwind on darwin is missing unw_strerror
           "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"
@@ -1014,17 +1010,17 @@ self: super:
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2021-01-15";
+    name = "xf86-video-intel-2024-05-06";
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
       group = "xorg";
       owner = "driver";
       repo = "xf86-video-intel";
-      rev = "31486f40f8e8f8923ca0799aea84b58799754564";
-      sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
+      rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
+      sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
     patches = [ ./use_crocus_and_iris.patch ];
 
@@ -1124,15 +1120,6 @@ self: super:
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
-  xtrans = super.xtrans.overrideAttrs (attrs: {
-    patches = [
-      # https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/merge_requests/22
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/commit/ae99ac32f61e0db92a45179579030a23fe1b5770.patch";
-        hash = "sha256-QnTTcZPd9QaHS5up4Ne7iuNL/OBu+DnzXprovWnW4cw=";
-      })
-    ];
-  });
   xwd = addMainProgram super.xwd { };
   xwininfo = addMainProgram super.xwininfo { };
   xwud = addMainProgram super.xwud { };

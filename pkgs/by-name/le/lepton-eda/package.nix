@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, pkg-config
-, makeWrapper
-, texinfo
-, fetchurl
-, autoreconfHook
-, guile
-, flex
-, gtk3
-, glib
-, gtksheet
-, gettext
-, gawk
-, shared-mime-info
-, groff
-, libstroke
+{
+  stdenv,
+  lib,
+  pkg-config,
+  makeWrapper,
+  texinfo,
+  fetchurl,
+  autoreconfHook,
+  guile,
+  flex,
+  gtk3,
+  glib,
+  gtksheet,
+  gettext,
+  gawk,
+  shared-mime-info,
+  groff,
+  libstroke,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-X9yNuosNR1Jf3gYWQZeOnKdxzJLld29Sn9XYsPGWYYI=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper texinfo autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    texinfo
+    autoreconfHook
+  ];
 
-  propagatedBuildInputs = [ guile flex gtk3 glib gtksheet gettext gawk shared-mime-info groff libstroke ];
+  propagatedBuildInputs = [
+    guile
+    flex
+    gtk3
+    glib
+    gtksheet
+    gettext
+    gawk
+    shared-mime-info
+    groff
+    libstroke
+  ];
 
   configureFlags = [
     "--disable-update-xdg-database"

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "python-socks";
-  version = "2.5.2";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6.2";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "python-socks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8qh7ohErK10RlVh4Zi1jBVmafWkGmLcGZsTDqE3dldY=";
+    tag = "v${version}";
+    hash = "sha256-7BfdyQDfRIPSC3Iv+cDcR0VFHX+l1OPRMElzHGL2x3M=";
   };
 
   build-system = [ setuptools ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "python_socks" ];
 
   meta = with lib; {
-    changelog = "https://github.com/romis2012/python-socks/releases/tag/v${version}";
+    changelog = "https://github.com/romis2012/python-socks/releases/tag/${src.tag}";
     description = "Core proxy client (SOCKS4, SOCKS5, HTTP) functionality for Python";
     homepage = "https://github.com/romis2012/python-socks";
     license = licenses.asl20;

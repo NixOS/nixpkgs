@@ -1,12 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, boost, cairo, libGL, lv2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  boost,
+  cairo,
+  libGL,
+  lv2,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "string-machine";
   version = "unstable-2020-01-20";
 
   src = fetchFromGitHub {
     owner = "jpcima";
-    repo = pname;
+    repo = "string-machine";
     rev = "188082dd0beb9a3c341035604841c53675fe66c4";
     sha256 = "0l9xrzp3f0hk6h320qh250a0n1nbd6qhjmab21sjmrlb4ngy672v";
     fetchSubmodules = true;
@@ -29,7 +39,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    boost cairo libGL lv2
+    boost
+    cairo
+    libGL
+    lv2
   ];
 
   makeFlags = [

@@ -1,6 +1,12 @@
-{ buildDunePackage, fetchFromGitHub, lib, printbox-text, reason }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  printbox-text,
+  reason,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "reperf";
   version = "1.5.1";
 

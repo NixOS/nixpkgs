@@ -1,64 +1,63 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, stdenv
-, pkg-config
-, openssl
-, rust-jemalloc-sys
-, nix-update-script
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  stdenv,
+  pkg-config,
+  openssl,
+  rust-jemalloc-sys,
+  nix-update-script,
+  Security,
+  SystemConfiguration,
+  rust-jemalloc-sys-unprefixed,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.12.1";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
+    tag = "v${version}";
+    hash = "sha256-77BuXTrQPtg7lus4WXukYSrJllR9hBMqn8+xAaq96z8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tar-0.4.41" = "sha256-32n96yoGbDzhgVZvISLGwxHuv7PGtxde5ma/YlsR1Gg=";
-      "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
-    };
-  };
+  useFetchCargoVendor = true;
 
-  buildInputs = [
-    openssl
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
+  cargoHash = "sha256-r+UilkSsV875j7tNkGJxuR/XC8Y1Fk4nqHYah9Z9q9c=";
+
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+    pkg-config
   ];
 
-  nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
+  buildInputs =
+    [
+      openssl
+      rust-jemalloc-sys
+      rust-jemalloc-sys-unprefixed
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
-  env = {
-    # Needed to get openssl-sys to use pkg-config.
-    OPENSSL_NO_VENDOR = 1;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-faligned-allocation";
-  };
+  # Needed to get openssl-sys to use pkg-config.
+  env.OPENSSL_NO_VENDOR = 1;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Vector Search Engine for the next generation of AI applications";
     longDescription = ''
       Expects a config file at config/config.yaml with content similar to
       https://github.com/qdrant/qdrant/blob/master/config/config.yaml
     '';
     homepage = "https://github.com/qdrant/qdrant";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

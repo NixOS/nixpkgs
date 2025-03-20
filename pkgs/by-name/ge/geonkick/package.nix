@@ -1,20 +1,43 @@
-{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, libsndfile, rapidjson
-, libjack2, lv2, libX11, cairo, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  libsndfile,
+  rapidjson,
+  libjack2,
+  lv2,
+  libX11,
+  cairo,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "3.5.0";
+  version = "3.5.2";
 
   src = fetchFromGitLab {
     owner = "Geonkick-Synthesizer";
-    repo = pname;
+    repo = "geonkick";
     rev = "v${version}";
-    hash = "sha256-bqdqAr4NX5WZ6zp0Kq7GFHiy/JkBvDvzuZz7jxtru0Q=";
+    hash = "sha256-QtBzrYW/yYnWSXyHV63gKzgdAR5kamij9Z0g+15CTPg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libsndfile rapidjson libjack2 lv2 libX11 cairo openssl ];
+  buildInputs = [
+    libsndfile
+    rapidjson
+    libjack2
+    lv2
+    libX11
+    cairo
+    openssl
+  ];
 
   # Without this, the lv2 ends up in
   # /nix/store/$HASH/nix/store/$HASH/lib/lv2

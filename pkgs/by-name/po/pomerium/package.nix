@@ -1,27 +1,33 @@
-{ buildGo123Module
-, fetchFromGitHub
-, lib
-, envoy
-, mkYarnPackage
-, fetchYarnDeps
-, nixosTests
-, pomerium-cli
+{
+  buildGo123Module,
+  fetchFromGitHub,
+  lib,
+  envoy,
+  mkYarnPackage,
+  fetchYarnDeps,
+  nixosTests,
+  pomerium-cli,
 }:
 
 let
-  inherit (lib) concatStringsSep concatMap id mapAttrsToList;
+  inherit (lib)
+    concatStringsSep
+    concatMap
+    id
+    mapAttrsToList
+    ;
 in
 buildGo123Module rec {
   pname = "pomerium";
-  version = "0.27.2";
+  version = "0.28.0";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-t1j5usgr/SO3Ev3JpCJWb3Ys8wgZUTGQVb6mo0oIsEc=";
+    hash = "sha256-Uj/mVklFRaoDNQjCFS5NW/AhSU+7V1XxPiZBAUuly7s=";
   };
 
-  vendorHash = "sha256-nTEFSLP0/GUVgtujVG6lQIxnj6DOEifc0MVh9CNxt8s=";
+  vendorHash = "sha256-s6EZUZoGNBpy5RaLAPiCCCVFli+YzZ0PHJ/aH3s4APA=";
 
   ui = mkYarnPackage {
     inherit version;
@@ -57,30 +63,32 @@ buildGo123Module rec {
     ./0001-envoy-allow-specification-of-external-binary.patch
   ];
 
-  ldflags = let
-    # Set a variety of useful meta variables for stamping the build with.
-    setVars = {
-      "github.com/pomerium/pomerium/internal/version" = {
-        Version = "v${version}";
-        BuildMeta = "nixpkgs";
-        ProjectName = "pomerium";
-        ProjectURL = "github.com/pomerium/pomerium";
+  ldflags =
+    let
+      # Set a variety of useful meta variables for stamping the build with.
+      setVars = {
+        "github.com/pomerium/pomerium/internal/version" = {
+          Version = "v${version}";
+          BuildMeta = "nixpkgs";
+          ProjectName = "pomerium";
+          ProjectURL = "github.com/pomerium/pomerium";
+        };
+        "github.com/pomerium/pomerium/pkg/envoy" = {
+          OverrideEnvoyPath = "${envoy}/bin/envoy";
+        };
       };
-      "github.com/pomerium/pomerium/pkg/envoy" = {
-        OverrideEnvoyPath = "${envoy}/bin/envoy";
-      };
-    };
-    concatStringsSpace = list: concatStringsSep " " list;
-    mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
-    varFlags = concatStringsSpace (
-      mapAttrsToFlatList (package: packageVars:
-        mapAttrsToList (variable: value:
-          "-X ${package}.${variable}=${value}"
-        ) packageVars
-      ) setVars);
-  in [
-    "${varFlags}"
-  ];
+      concatStringsSpace = list: concatStringsSep " " list;
+      mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+      varFlags = concatStringsSpace (
+        mapAttrsToFlatList (
+          package: packageVars:
+          mapAttrsToList (variable: value: "-X ${package}.${variable}=${value}") packageVars
+        ) setVars
+      );
+    in
+    [
+      "${varFlags}"
+    ];
 
   preBuild = ''
     # Replace embedded envoy with nothing.
@@ -124,7 +132,13 @@ buildGo123Module rec {
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb devusb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      lukegb
+      devusb
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

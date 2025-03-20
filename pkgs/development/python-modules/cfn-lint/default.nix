@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.18.1";
+  version = "1.27.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e06ytX1scIsmw/SezIVVnGn0day1l6kQ/wb05E8O7h0=";
+    tag = "v${version}";
+    hash = "sha256-UUbIDThzjlypwHvAv6ry2ppBTQp3/4EXRnn570/s0Xo=";
   };
 
   build-system = [ setuptools ];
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
-    changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };

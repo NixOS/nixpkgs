@@ -1,4 +1,10 @@
-{ lib, stdenv, zig, libyuv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  zig,
+  libyuv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "backlight-auto";
   version = "0.0.1";

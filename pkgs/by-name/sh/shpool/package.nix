@@ -18,13 +18,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pSSMC4pUtB38c6UNOj+Ma/Y1jcSfm33QV1B4tA/MyKY=";
   };
 
-
   postPatch = ''
     substituteInPlace systemd/shpool.service \
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  cargoHash = "sha256-NUo9Y/c4Wm3d8lbhdHEqu9Zp7tX8giq2wnYwz8SMTXo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JDMgYd9mKsLdqc8rpDg3ymgFj/ntpBBF5fSDb2cLOJs=";
 
   buildInputs = [
     linux-pam

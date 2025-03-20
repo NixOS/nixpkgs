@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, patsh
-, hostname
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  patsh,
+  hostname,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aurora";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "rmate";
+    tag = "v${version}";
     hash = "sha256-fmK6h9bqZ0zO3HWfZvPdYuZ6i/0HZ1CA3FUnkS+E9ns=";
   };
 

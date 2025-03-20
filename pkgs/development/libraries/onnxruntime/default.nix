@@ -2,8 +2,9 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , Foundation
-, abseil-cpp_202401
+, abseil-cpp_202407
 , cmake
 , cpuinfo
 , eigen
@@ -11,9 +12,9 @@
 , gbenchmark
 , glibcLocales
 , gtest
+, howard-hinnant-date
 , libpng
 , nlohmann_json
-, nsync
 , pkg-config
 , python3Packages
 , re2
@@ -29,34 +30,33 @@
 
 
 let
-  version = "1.18.1";
+  version = "1.21.0";
 
-  abseil-cpp = abseil-cpp_202401;
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "onnxruntime";
+    tag = "v${version}";
+    hash = "sha256-BaHXpK6Ek+gsld7v+OBM+C3FjrPiyMQYP1liv7mEjho=";
+    fetchSubmodules = true;
+  };
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
-  howard-hinnant-date = fetchFromGitHub {
-    owner = "HowardHinnant";
-    repo = "date";
-    rev = "v3.0.1";
-    sha256 = "sha256-ZSjeJKAcT7mPym/4ViDvIR9nFMQEBCSUtPEuMO27Z+I=";
-  };
-
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
-    rev = "boost-1.82.0";
+    tag = "boost-1.82.0";
     hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
   safeint = fetchFromGitHub {
     owner = "dcleblanc";
     repo = "safeint";
-    rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
-    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+    tag = "3.0.28";
+    hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
   pytorch_clog = effectiveStdenv.mkDerivation {
@@ -77,45 +77,37 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v1.16.1";
-    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
+    tag = "v1.17.0";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
    cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "v3.1.0";
-    hash = "sha256-mpaiCxiYR1WaSSkcEPTzvcREenJWklD+HRdTT5/pD54=";
- };
-in
-effectiveStdenv.mkDerivation rec {
-  pname = "onnxruntime";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "onnxruntime";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+zWtbLKekGhwdBU3bm1u2F7rYejQ62epE+HcHj05/8A=";
-    fetchSubmodules = true;
+    tag = "v3.5.1";
+    hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
   };
 
-  patches = [
-    # If you stumble on these patches trying to update onnxruntime, check
-    # `git blame` and ping the introducers.
+  dlpack = fetchFromGitHub {
+    owner = "dmlc";
+    repo = "dlpack";
+    tag = "v0.6";
+    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+  };
 
-    # Context: we want the upstream to
-    # - always try find_package first (FIND_PACKAGE_ARGS),
-    # - use MakeAvailable instead of the low-level Populate,
-    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./0001-eigen-allow-dependency-injection.patch
-    # Incorporate a patch that has landed upstream which exposes new
-    # 'abseil-cpp' libraries & modifies the 're2' CMakeLists to fix a
-    # configuration error that around missing 'gmock' exports.
-    #
-    # TODO: Check if it can be dropped after 1.19.0
-    # https://github.com/microsoft/onnxruntime/commit/b522df0ae477e59f60acbe6c92c8a64eda96cace
-    ./update-re2.patch
+in
+
+effectiveStdenv.mkDerivation rec {
+  pname = "onnxruntime";
+  inherit src version;
+
+  patches = [
+    # drop with the next update
+    # https://github.com/microsoft/onnxruntime/pull/23939
+    (fetchpatch {
+      url = "https://github.com/microsoft/onnxruntime/commit/55553703eaa8cd01d2b01cc21171a0ea515c888a.patch";
+      hash = "sha256-gL1rMNUcteKcjLmdJ+0r67rvNrC31bAyKYx4aeseWkM=";
+    })
   ] ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
@@ -135,12 +127,14 @@ effectiveStdenv.mkDerivation rec {
     wheel
   ]) ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    cudaPackages.cudnn-frontend
   ];
 
   buildInputs = [
     cpuinfo
     eigen
     glibcLocales
+    howard-hinnant-date
     libpng
     nlohmann_json
     microsoft-gsl
@@ -185,16 +179,16 @@ effectiveStdenv.mkDerivation rec {
     "-DABSL_ENABLE_INSTALL=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202407.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_DLPACK=${dlpack}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
     "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
     "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
+    # fails to find protoc on darwin, so specify it
+    "-DONNX_CUSTOM_PROTOC_EXECUTABLE=${protobuf_21}/bin/protoc"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
@@ -211,11 +205,7 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=deprecated-declarations"
-      "-Wno-error=deprecated-pragma"
-      "-Wno-error=unused-but-set-variable"
-    ];
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
@@ -226,6 +216,12 @@ effectiveStdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+    echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
+
+    # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
+    substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
+      "GetRuntimePath() const { return PathString(); }" \
+      "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
   '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc

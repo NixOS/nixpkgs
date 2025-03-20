@@ -7,17 +7,20 @@
   coreutils,
   findutils,
   zenity,
+  unzip,
+  cabextract,
+  libnotify,
   fetchFromGitHub,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "lug-helper";
-  version = "3.0.1";
+  version = "3.7";
   src = fetchFromGitHub {
     owner = "starcitizen-lug";
     repo = "lug-helper";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-GL+pPyj3Qz+wmJD59kfGz80LufotPq2KdaLQCkQnCFg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2z8Le65DQk121jTM3UP25V3Xzq+KUve5XJQmNaQ2IGg=";
   };
 
   buildInputs = [
@@ -55,14 +58,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           coreutils
           findutils
           zenity
+          cabextract
+          unzip
+          libnotify
         ]
-      }
+      } \
+      --prefix XDG_DATA_DIRS : "$out"
 
   '';
   passthru.updateScript = nix-update-script { };
   meta = {
     description = "Script to manage and optimize Star Citizen on Linux";
     homepage = "https://github.com/starcitizen-lug/lug-helper";
+    changelog = "https://github.com/starcitizen-lug/lug-helper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fuzen ];
     platforms = lib.platforms.linux;

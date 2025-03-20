@@ -1,21 +1,22 @@
-{ lib
-, maven
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.4.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MDC0flAD56cXLiLNytbjp0au1NACugFNEpHxbucZO4U=";
+    tag = version;
+    hash = "sha256-/61AE+ywJo4ANBE+JYsS/tXJuwSuNnvB2JQIR43Gig4=";
   };
 
-  mvnHash = "sha256-kwKL37LCv4rQYc4bYdyP1tOaovJ8pSp7p52nuk10z/U=";
+  mvnHash = "sha256-Tj+W0Dqr0FQijqYSzeAmYnbKtPZQGqry62PAZuaiGbI=";
 
   doCheck = false; # Requires networking
 

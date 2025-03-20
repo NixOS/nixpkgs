@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "incremental";
-      rev = "refs/tags/incremental-${version}";
+      tag = "incremental-${version}";
       hash = "sha256-5MlIKUaBUwLTet23Rjd2Opf5e54LcHuZDowcGon0lOE=";
     };
 

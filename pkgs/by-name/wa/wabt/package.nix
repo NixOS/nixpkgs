@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wabt";
-  version = "1.0.36";
+  version = "1.0.37";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     rev = version;
-    hash = "sha256-CswVvL6yxTf0ju/UPvEGMgTuNZ8mumSIcnVbYVfy178=";
+    hash = "sha256-Ejr+FxaYRDI01apHhKTs11iwcv72a8ZxyPmVetEvadU=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-DCMAKE_PROJECT_VERSION=${version}"
+  ];
 
   meta = with lib; {
     description = "WebAssembly Binary Toolkit";

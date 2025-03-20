@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, substituteAll
-, python3Packages
-, gst_all_1
-, wrapGAppsHook3
-, gobject-introspection
-, gtk3
-, libwnck
-, keybinder3
-, intltool
-, libcanberra-gtk3
-, libappindicator-gtk3
-, libpulseaudio
-, libgudev
+{
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  python3Packages,
+  gst_all_1,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk3,
+  libwnck,
+  keybinder3,
+  intltool,
+  libcanberra-gtk3,
+  libappindicator-gtk3,
+  libpulseaudio,
+  libgudev,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "kazam";
   version = "unstable-2021-06-22";
 
@@ -26,7 +27,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1jk6khwgdv3nmagdgp5ivz3156pl0ljhf7b6i4b52w1h5ywsg9ah";
   };
 
-  nativeBuildInputs = [ gobject-introspection python3Packages.distutils-extra intltool wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    gobject-introspection
+    python3Packages.distutils-extra
+    intltool
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -38,12 +44,17 @@ python3Packages.buildPythonApplication rec {
     libgudev
   ];
 
-  propagatedBuildInputs = with python3Packages; [ pygobject3 pyxdg pycairo dbus-python xlib ];
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3
+    pyxdg
+    pycairo
+    dbus-python
+    xlib
+  ];
 
   patches = [
     # Fix paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libcanberra = libcanberra-gtk3;
       inherit libpulseaudio;
     })

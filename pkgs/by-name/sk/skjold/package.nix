@@ -12,14 +12,13 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "twu";
     repo = "skjold";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/ltaRs2WZXbrG3cVez+QIwupJrsV550TjOALbHX9Z0I=";
   };
 
   pythonRelaxDeps = [ "packaging" ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
 
   dependencies = with python3.pkgs; [
     click

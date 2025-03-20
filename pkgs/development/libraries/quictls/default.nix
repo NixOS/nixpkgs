@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     ../openssl/3.0/openssl-disable-kernel-detection.patch
 
     (if stdenv.hostPlatform.isDarwin
-    then ../openssl/3.3/use-etc-ssl-certs-darwin.patch
-    else ../openssl/3.3/use-etc-ssl-certs.patch)
+    then ../openssl/3.4/use-etc-ssl-certs-darwin.patch
+    else ../openssl/3.4/use-etc-ssl-certs.patch)
   ];
 
   postPatch = ''
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     # This avoids conflicts between man pages of openssl subcommands (for
     # example 'ts' and 'err') man pages and their equivalent top-level
     # command in other packages (respectively man-pages and moreutils).
-    # This is done in ubuntu and archlinux, and possiibly many other distros.
+    # This is done in ubuntu and archlinux, and possibly many other distros.
     "MANSUFFIX=ssl"
   ];
 

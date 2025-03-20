@@ -1,9 +1,31 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config
-, libjack2, gettext, intltool, guile, lilypond
-, glib, libxml2, librsvg, libsndfile, aubio
-, gtk3, gtksourceview, evince, fluidsynth, rubberband
-, autoreconfHook, gtk-doc
-, portaudio, portmidi, fftw, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libjack2,
+  gettext,
+  intltool,
+  guile,
+  lilypond,
+  glib,
+  libxml2,
+  librsvg,
+  libsndfile,
+  aubio,
+  gtk3,
+  gtksourceview,
+  evince,
+  fluidsynth,
+  rubberband,
+  autoreconfHook,
+  gtk-doc,
+  portaudio,
+  portmidi,
+  fftw,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "denemo";
@@ -28,8 +50,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libjack2 guile lilypond glib libxml2 librsvg libsndfile
-    aubio gtk3 gtksourceview evince fluidsynth rubberband portaudio fftw portmidi
+    libjack2
+    guile
+    lilypond
+    glib
+    libxml2
+    librsvg
+    libsndfile
+    aubio
+    gtk3
+    gtksourceview
+    evince
+    fluidsynth
+    rubberband
+    portaudio
+    fftw
+    portmidi
   ];
 
   preFixup = ''
@@ -47,11 +83,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software used with lilypond";
     homepage = "http://denemo.org";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.olynch ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.olynch ];
+    # sffile.c:38:10: error: implicit declaration of function 'isprint' [-Wimplicit-function-declaration]
+    # sffile.c:54:10: error: type defaults to 'int' in declaration of 'initialized' [-Wimplicit-int]
+    broken = true;
   };
 }

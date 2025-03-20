@@ -1,19 +1,19 @@
 {
-  version = "796s";
+  version = "810";
   x86_64-linux = {
     name = "x86_64";
-    hash = "sha256-fAuBeKrkz/b7rT4939/489nTAhS7XfK0nU6cjQmAom8=";
+    hash = "sha256-cnax7D4T5On356mZrd/waH62IXP6BNSJtCM0rw0RnDo=";
   };
   i686-linux = {
     name = "i386";
-    hash = "sha256-OhNYEeaRl1kp16TmsPXrXwx+CZoqcA/qbMwUKZeONfI=";
+    hash = "sha256-ERpzSVK7IxriDTH1wkLsiioqV99fRkMIlg0Pd+V+h7g=";
   };
   aarch64-linux = {
     name = "arm64";
-    hash = "sha256-1OnvTNUF590xgUg/j1dPzMO15XEZuT5vl+uE6o4s5mE=";
+    hash = "sha256-l+mxhK85GnGLKspXeEy2JOJ+fA8DVIr36tLVCBp7MhU=";
   };
   armv7l-linux = {
     name = "arm";
-    hash = "sha256-ynXD7ykuKBLsoiJc+mBTnkXsreeclDvxR5M9ZsrQDxw=";
+    hash = "sha256-DFIaIq57HQbpur2vep1pO/VDOo913b17x3eWhq4wL40=";
   };
 }

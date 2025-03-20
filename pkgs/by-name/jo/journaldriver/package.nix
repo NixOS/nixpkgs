@@ -1,9 +1,17 @@
-{ lib, fetchgit, rustPlatform, pkg-config, openssl, systemd }:
+{
+  lib,
+  fetchgit,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  systemd,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "journaldriver";
   version = "5656.0.0";
-  cargoHash = "sha256-uNzgH9UM2DuC+dBn5N9tC1/AosUP6C+RkGLOh6c+u0s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ycnmLHKWRwKbdY1LZJ+BSwGfXfYJCWbbbFcqfBj3y/Y=";
 
   src = fetchgit {
     url = "https://code.tvl.fyi/depot.git:/ops/journaldriver.git";
@@ -14,7 +22,10 @@ rustPlatform.buildRustPackage rec {
     rev = "4e191353228197ce548d63cb9955e53661244f9c";
   };
 
-  buildInputs = [ openssl systemd ];
+  buildInputs = [
+    openssl
+    systemd
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "betamaxpy";
     repo = "betamax_matchers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BV9DOfZLDAZIr2E75l988QxFWWvazBL9VttxGFIez1M=";
   };
 

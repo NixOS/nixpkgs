@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doctest
-, nlohmann_json
-, libuuid
-, xtl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doctest,
+  nlohmann_json,
+  libuuid,
+  xtl,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = pname;
+    repo = "xeus";
     rev = version;
     sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
   };

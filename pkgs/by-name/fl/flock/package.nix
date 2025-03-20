@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, ronn }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  ronn,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flock";
@@ -6,12 +13,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "discoteq";
-    repo = pname;
+    repo = "flock";
     rev = "v${version}";
     sha256 = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ronn ];
+  nativeBuildInputs = [
+    autoreconfHook
+    ronn
+  ];
 
   patches = [
     (fetchpatch {

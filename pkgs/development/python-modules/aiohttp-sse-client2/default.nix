@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "compat-fork";
     repo = "aiohttp-sse-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uF39gpOYzNotVVYQShUoiuvYAhSRex2T1NfuhgwSCR4=";
   };
 

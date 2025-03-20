@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchgit, python3, perl }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  python3,
+  perl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnulib";
   version = "20241001";
 

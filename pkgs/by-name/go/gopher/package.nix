@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gopher";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jgoerzen";
-    repo = pname;
+    repo = "gopher";
     rev = "release/${version}";
     sha256 = "1j6xh5l8v231d4mwl9gj1c34dc0jmazz6zg1qqfxmqr9y609jq3h";
   };

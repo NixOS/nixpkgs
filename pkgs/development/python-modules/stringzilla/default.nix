@@ -1,42 +1,34 @@
 {
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
   lib,
   numpy,
   pytest-repeat,
   pytestCheckHook,
-  rustPlatform,
-  rustc,
   setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.10.7";
+  version = "3.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-36W7/PL8nRty8cHuMoTr73tQ4uvtjkwP9lyzNLCuhv0=";
+    tag = "v${version}";
+    hash = "sha256-ER2qaHIW6lmHHZjCIg1PZo1Hpra8vQWTfOk+KTO9GrU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-qa03Jd0MMtDwkp2E81MacRMbzD/O7E29BT0tc2OjLiY=";
-  };
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # error: unsupported option '-mfloat-abi=' for target 'aarch64-apple-darwin'
+    substituteInPlace setup.py \
+      --replace-fail '"-mfloat-abi=hard",' ""
+  '';
 
   build-system = [
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
   ];
 
   pythonImportsCheck = [ "stringzilla" ];
@@ -50,7 +42,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "scripts/test.py" ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
     homepage = "https://github.com/ashvardanian/stringzilla";
     license = lib.licenses.asl20;

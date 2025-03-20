@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.6.2.post1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JW1hebcoBMMEirJkJ5Cquh23p9Gv3RU5AxPbXUcwPK4=";
+    tag = "v${version}";
+    hash = "sha256-XhYgZx4zc2utWIzT6lvGNyGn6MyTxhsiaFa3/h4XQjM=";
   };
 
   pythonRelaxDeps = [
@@ -133,10 +133,12 @@ buildPythonPackage rec {
     # flaky
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
+    # tries to pin the string of a traceback, doesn't account for ansi colors
+    "test_state_with_invalid_yield"
   ];
 
   disabledTestPaths = [
-    "benchmarks/"
+    "tests/benchmarks/"
     "tests/integration/"
   ];
 
@@ -145,7 +147,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "reflex";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, autoconf
-, automake
-, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
 }:
 
 stdenv.mkDerivation {

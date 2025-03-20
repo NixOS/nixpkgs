@@ -1,49 +1,66 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, glib
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, nixosTests
-, xz
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  shared-mime-info,
+  nixosTests,
+  xz,
+  zstd,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.20";
+  version = "0.3.21";
 
-  outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
+  outputs =
+    [
+      "out"
+      "lib"
+      "dev"
+      "installedTests"
+    ]
+    ++ lib.optionals withIntrospection [
+      "devdoc"
+    ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    hash = "sha256-X1sOUaqafppEjlcq2jYFo+BXxNX1d+vLizSQM+x/pvg=";
+    hash = "sha256-+gs1GqDVnt0uf/0vjUj+c9CRnUtaYfngBsjSs4ZwVXs=";
   };
 
   patches = [
     ./installed-tests-path.patch
   ];
 
-  nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
-    gobject-introspection
-    gtk-doc
-    meson
-    ninja
-    pkg-config
-    python3
-    shared-mime-info
-  ];
+  nativeBuildInputs =
+    [
+      docbook_xml_dtd_43
+      docbook-xsl-nons
+      meson
+      ninja
+      pkg-config
+      python3
+      shared-mime-info
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gtk-doc
+    ];
 
   buildInputs = [
     glib
@@ -53,7 +70,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--libexecdir=${placeholder "out"}/libexec"
-    "-Dgtkdoc=true"
+    (lib.mesonBool "gtkdoc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 

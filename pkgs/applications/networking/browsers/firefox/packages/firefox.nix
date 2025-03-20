@@ -9,10 +9,10 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "132.0.2";
+  version = "136.0.2";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "9ea95d9fb1a941ac5a5b50da67e224f3ccf8c401f26cb61bb74ad7f4e1e8706d469c4b6325714f2cb9cdf50c32710377d6bca18dd65b55db2c39ef2b27a57fae";
+    sha512 = "50dfbedb6bd513a3c6cf90558d7c6993cc78558cccc69fcc882f8e54eb8e8bec9779dce6fb7211c1a0234ac4a189438c5fa55ee9d0d06fcbae5cf44778af2ef1";
   };
 
   meta = {
@@ -24,7 +24,6 @@ buildMozillaMach rec {
       hexa
     ];
     platforms = lib.platforms.unix;
-    badPlatforms = lib.platforms.darwin;
     broken = stdenv.buildPlatform.is32bit;
     # since Firefox 60, build on 32-bit platforms fails with "out of memory".
     # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
@@ -35,7 +34,7 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox;
   };
-  updateScript = callPackage ./update.nix {
+  updateScript = callPackage ../update.nix {
     attrPath = "firefox-unwrapped";
   };
 }

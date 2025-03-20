@@ -6,14 +6,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "b3sum";
-  version = "1.5.4";
+  version = "1.6.1";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-+aC6yyQ9IcdliYqteB/UTMqwGNCWW0LZWYfMxnaPMm0=";
+    hash = "sha256-tl5rIDLLMOrZimkBuUl4NQfry17mFF/vdCCP/Atb9fQ=";
   };
 
-  cargoHash = "sha256-2E6SU4fMHj0NCIMrn0YNfkllZrFwCLn1wGJfzBPqtKQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0CezqiuqEvPa46uUEW2HhUuvB7TZb0YUNBnW/IwTlc8=";
 
   meta = {
     description = "BLAKE3 cryptographic hash function";

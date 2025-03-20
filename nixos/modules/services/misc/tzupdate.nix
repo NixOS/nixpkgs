@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.tzupdate;
 in {
   options.services.tzupdate = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable the tzupdate timezone updating service. This provides
@@ -17,7 +14,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # We need to have imperative time zone management for this to work.
     # This will give users an error if they have set an explicit time
     # zone, which is better than silently overriding it.
@@ -31,7 +28,11 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
-        timedatectl set-timezone $(${lib.getExe pkgs.tzupdate} --print-only)
+        timezone="$(${lib.getExe pkgs.tzupdate} --print-only)"
+        if [[ -n "$timezone" ]]; then
+          echo "Setting timezone to '$timezone'"
+          timedatectl set-timezone "$timezone"
+        fi
       '';
 
       serviceConfig = {

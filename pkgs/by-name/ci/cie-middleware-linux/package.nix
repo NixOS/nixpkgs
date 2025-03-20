@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, stripJavaArchivesHook
-, meson
-, ninja
-, pkg-config
-, gradle_8
-, curl
-, cryptopp
-, fontconfig
-, jre
-, libxml2
-, openssl
-, pcsclite
-, podofo
-, ghostscript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  stripJavaArchivesHook,
+  meson,
+  ninja,
+  pkg-config,
+  gradle_8,
+  curl,
+  cryptopp,
+  fontconfig,
+  jre,
+  libxml2,
+  openssl,
+  pcsclite,
+  podofo,
+  ghostscript,
 }:
 
 let
   pname = "cie-middleware-linux";
-  version = "1.5.2";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
-    repo = pname;
+    repo = "cie-middleware-linux";
     rev = version;
-    sha256 = "sha256-M3Xwg3G2ZZhPRV7uhFVXQPyvuuY4zI5Z+D/Dt26KVM0=";
+    sha256 = "sha256-2P/1hQTmeQ6qE7RgAeLOZTszcLcIpa2XX1S2ahXRHcc=";
   };
 
   gradle = gradle_8;
@@ -79,7 +80,8 @@ stdenv.mkDerivation {
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jre}"
-    "--build-file" "cie-java/build.gradle"
+    "--build-file"
+    "cie-java/build.gradle"
   ];
 
   gradleBuildTask = "standalone";

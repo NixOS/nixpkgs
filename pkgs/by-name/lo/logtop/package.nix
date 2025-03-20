@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, uthash, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  uthash,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "logtop";
@@ -7,12 +14,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     rev = "logtop-${version}";
     owner = "JulienPalard";
-    repo  ="logtop";
+    repo = "logtop";
     sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses uthash ];
+  buildInputs = [
+    ncurses
+    uthash
+  ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "DESTDIR=$(out)" ];

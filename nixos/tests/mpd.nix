@@ -99,7 +99,7 @@ import ./make-test-python.nix (
             musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
           })
           {
-            hardware.pulseaudio = {
+            services.pulseaudio = {
               enable = true;
               systemWide = true;
               tcp.enable = true;

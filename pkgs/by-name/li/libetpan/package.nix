@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
-, autoconf, automake, libtool, openssl, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  libtool,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +21,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-lukeWURNsRPTuFk2q2XVnwkKz5Y+PRiPba5GPQCw6jw=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     # The following patches are security and/or reliability fixes.
@@ -84,7 +95,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+  ];
 
   buildInputs = [ openssl ];
 

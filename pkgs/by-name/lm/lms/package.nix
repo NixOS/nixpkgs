@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.60.0";
+  version = "3.62.1";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-sLs73356BaFbKtyQc4cTFm7Wp/UemH8J+tkajXAA0do=";
+    hash = "sha256-LzDEK17Gh/r3tXGRItQfOeTCD9yGcRzIYMBX77MuwAU=";
   };
 
   strictDeps = true;
@@ -68,11 +68,26 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
   '';
 
   meta = {

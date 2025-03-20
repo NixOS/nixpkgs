@@ -1,27 +1,32 @@
-{ lib, buildGo123Module, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
+buildGoModule rec {
 
-buildGo123Module rec {
   pname = "gotemplate";
-  version = "3.9.2";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "coveooss";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7FJejArGpnmkAzbN+2BOcewLdlcsh8QblOOZjFu+uSA=";
+    repo = "gotemplate";
+    tag = "v${version}";
+    hash = "sha256-XcSlQ0Gw+EW2sJK+M2Sp9pcSSy2wsdRZ3MeFewhx7nw=";
   };
 
-  vendorHash = "sha256-378oodyQG50l7qkTO5Ryt1NjFBbYW2n9by+ALNfTggI=";
+  vendorHash = "sha256-iNH0YmmZ/Qlc7WDoIbORd+uVg0rbQVKL6hX7YvbL0BE=";
 
   # This is the value reported when running `gotemplate --version`,
   # see https://github.com/coveooss/gotemplate/issues/262
   ldflags = [ "-X main.version=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for go text/template";
     mainProgram = "gotemplate";
     changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ giorgiga ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.giorgiga ];
   };
+
 }

@@ -1,53 +1,59 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, xorg
-, gtk2
-, sqlite
-, openal
-, cairo
-, libGLU
-, SDL2
-, freealut
-, libglvnd
-, pipewire
-, libpulseaudio
-, dotnet-runtime_7
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  xorg,
+  gtk2,
+  sqlite,
+  openal,
+  cairo,
+  libGLU,
+  SDL2,
+  freealut,
+  libglvnd,
+  pipewire,
+  libpulseaudio,
+  dotnet-runtime_7,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.19.8";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-R6J+ACYDQpOzJZFBizsQGOexR7lMyeoZqz9TnWxfwyM=";
+    hash = "sha256-Hgp2u/y2uPnJhAmPpwof76/woFGz4ISUXU+FIRMjMuQ=";
   };
 
-
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [ dotnet-runtime_7 ];
 
-  runtimeLibs = lib.makeLibraryPath ([
-    gtk2
-    sqlite
-    openal
-    cairo
-    libGLU
-    SDL2
-    freealut
-    libglvnd
-    pipewire
-    libpulseaudio
-  ] ++ (with xorg; [
-    libX11
-    libXi
-    libXcursor
-  ]));
+  runtimeLibs = lib.makeLibraryPath (
+    [
+      gtk2
+      sqlite
+      openal
+      cairo
+      libGLU
+      SDL2
+      freealut
+      libglvnd
+      pipewire
+      libpulseaudio
+    ]
+    ++ (with xorg; [
+      libX11
+      libXi
+      libXcursor
+    ])
+  );
 
   desktopItems = [
     (makeDesktopItem {
@@ -71,24 +77,30 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = ''
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --add-flags $out/share/vintagestory/Vintagestory.dll
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --add-flags $out/share/vintagestory/VintagestoryServer.dll
-  '' + ''
-    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-      local filename="$(basename -- "$file")"
-      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-    done
-  '';
+  preFixup =
+    ''
+      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+        --add-flags $out/share/vintagestory/Vintagestory.dll
+      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+        --add-flags $out/share/vintagestory/VintagestoryServer.dll
+    ''
+    + ''
+      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+        local filename="$(basename -- "$file")"
+        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+      done
+    '';
 
   meta = with lib; {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ artturin gigglesquid ];
+    maintainers = with maintainers; [
+      artturin
+      gigglesquid
+      niraethm
+    ];
   };
 }

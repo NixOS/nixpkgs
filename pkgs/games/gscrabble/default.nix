@@ -1,6 +1,14 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gtk3, wrapGAppsHook3, gst_all_1, gobject-introspection
-, python3Packages, adwaita-icon-theme }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gtk3,
+  wrapGAppsHook3,
+  gst_all_1,
+  gobject-introspection,
+  python3Packages,
+  adwaita-icon-theme,
+}:
 
 buildPythonApplication {
   pname = "gscrabble";
@@ -15,14 +23,24 @@ buildPythonApplication {
 
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-
-  buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    adwaita-icon-theme gtk3
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];
+  buildInputs = with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    adwaita-icon-theme
+    gtk3
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    gst-python
+    pygobject3
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -31,7 +49,7 @@ buildPythonApplication {
   '';
 
   meta = with lib; {
-    # Fails to build, propably incompatible with latest Python
+    # Fails to build, probably incompatible with latest Python
     # error: Multiple top-level packages discovered in a flat-layout
     # https://github.com/RaaH/gscrabble/issues/13
     broken = true;

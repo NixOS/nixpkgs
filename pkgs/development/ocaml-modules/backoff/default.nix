@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchurl, alcotest}:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "backoff";

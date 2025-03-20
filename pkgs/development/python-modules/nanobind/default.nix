@@ -25,14 +25,14 @@
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.1.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AO/EHx2TlXidalhPb+xuUchaek4ki7fDExu2foBgUp0=";
+    tag = "v${version}";
+    hash = "sha256-sH+qZHd9OKDxl2yTAeDh4xLwW64k6nIToyLfd3cR6kE=";
     fetchSubmodules = true;
   };
 
@@ -46,9 +46,17 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ eigen ];
+
   dontUseCmakeBuildDir = true;
 
   preCheck = ''
+    # TODO: added 2.2.0, re-enable on next bump
+    # https://github.com/wjakob/nanobind/issues/754
+    # "generated stubs do not match their references"
+    # > -import tensorflow.python.framework.ops
+    # > +import tensorflow
+    rm tests/test_ndarray_ext.pyi.ref
+
     # build tests
     make -j $NIX_BUILD_CORES
   '';
@@ -68,7 +76,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
-    changelog = "https://github.com/wjakob/nanobind/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/wjakob/nanobind/blob/${src.tag}/docs/changelog.rst";
     description = "Tiny and efficient C++/Python bindings";
     longDescription = ''
       nanobind is a small binding library that exposes C++ types in Python and

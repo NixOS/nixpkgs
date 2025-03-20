@@ -1,75 +1,88 @@
 {
   lib,
   buildPythonPackage,
-  environs,
   fetchFromGitHub,
+
+  # build-system
   gitpython,
-  grpcio,
-  grpcio-testing,
-  minio,
-  mmh3,
-  pandas,
-  pyarrow,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  scikit-learn,
+  setuptools,
   setuptools-scm,
+
+  # dependencies
+  grpcio,
+  # milvus-lite, (unpackaged)
+  pandas,
+  protobuf,
+  python-dotenv,
   ujson,
-  wheel,
+
+  # tests
+  grpcio-testing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.3.6";
+  version = "2.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "milvus-io";
     repo = "pymilvus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-K7k3MTOEm9+HDwMps9C8Al0Jmp1ptJw3pN1LEBOUz0U=";
+    tag = "v${version}";
+    hash = "sha256-b1ABYyjZ0nsNckJwrN94idLIsl77QxQ2812vn6Vu908=";
   };
 
+  build-system = [
+    gitpython
+    setuptools
+    setuptools-scm
+  ];
+
   pythonRelaxDeps = [
-    "environs"
     "grpcio"
   ];
 
-  nativeBuildInputs = [
-    gitpython
-    setuptools-scm
-    wheel
+  pythonRemoveDeps = [
+    "milvus-lite"
   ];
 
-  propagatedBuildInputs = [
-    environs
+  dependencies = [
     grpcio
-    minio
-    mmh3
+    # milvus-lite
     pandas
-    pyarrow
-    requests
+    protobuf
+    python-dotenv
+    setuptools
     ujson
   ];
 
   nativeCheckInputs = [
     grpcio-testing
     pytestCheckHook
-    scikit-learn
+    # scikit-learn
   ];
 
   pythonImportsCheck = [ "pymilvus" ];
 
-  disabledTests = [ "test_get_commit" ];
+  disabledTests = [
+    # Tries to read .git
+    "test_get_commit"
 
-  meta = with lib; {
+    # milvus-lite is not packaged
+    "test_milvus_lite"
+  ];
+
+  disabledTestPaths = [
+    # pymilvus.exceptions.MilvusException: <MilvusException: (code=2, message=Fail connecting to server on localhost:19530, illegal connection params or server unavailable)>
+    "examples/test_bitmap_index.py"
+  ];
+
+  meta = {
     description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
-    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

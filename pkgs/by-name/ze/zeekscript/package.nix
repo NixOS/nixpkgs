@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,7 +36,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/zeek/zeekscript";
     changelog = "https://github.com/zeek/zeekscript/blob/v${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab tobim ];
+    maintainers = with maintainers; [
+      fab
+      tobim
+    ];
     # Incompatible with tree-sitter > 0.21.
     broken = true;
   };

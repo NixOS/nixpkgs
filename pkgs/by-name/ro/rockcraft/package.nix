@@ -4,27 +4,23 @@
   fetchFromGitHub,
   dpkg,
   nix-update-script,
+  testers,
+  rockcraft,
+  cacert,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.6.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
-    rev = "1d87e33cf207b3a2f16eb125743ec11546fa0cb1";
-    hash = "sha256-QnW3BMu4Tuvj8PCt5eYJbNMiojXpyJ1uza6hpMxxSOE=";
+    rev = version;
+    hash = "sha256-cgNKMxQrD9/OfmY5YEnpbNDstDdXqc/wdfCb4HvsgNM=";
   };
 
-  postPatch = ''
-    substituteInPlace rockcraft/__init__.py \
-      --replace-fail "dev" "${version}"
-
-    substituteInPlace rockcraft/utils.py \
-      --replace-fail "distutils.util" "setuptools.dist"
-  '';
-
+  pyproject = true;
   build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
@@ -32,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     craft-archives
     craft-platforms
     spdx-lookup
+    tabulate
   ];
 
   nativeCheckInputs =
@@ -50,9 +47,20 @@ python3Packages.buildPythonApplication rec {
     export HOME="$(pwd)/check-phase"
   '';
 
-  disabledTests = [ "test_expand_extensions" ];
+  disabledTests = [
+    "test_project_all_platforms_invalid"
+    "test_run_init_flask"
+    "test_run_init_django"
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = rockcraft;
+      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) rockcraft --version";
+      version = "rockcraft ${version}";
+    };
+  };
 
   meta = {
     mainProgram = "rockcraft";

@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, ronn
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  ronn,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
-  cargoHash = "sha256-8cH8QrnkfPF0Di7+Ns/P/8cFe0jej/v7m4fkkfTFdvs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DXSHaiiIRdyrlX4UYPFD3aTAv65k3x/PU2VW047odH0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,11 +31,16 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
-  cargoBuildFlags = [ "--bin" "httplz" ];
+  cargoBuildFlags = [
+    "--bin"
+    "httplz"
+  ];
 
   postInstall = ''
     sed -E 's/http(`| |\(|$)/httplz\1/g' http.md > httplz.1.ronn

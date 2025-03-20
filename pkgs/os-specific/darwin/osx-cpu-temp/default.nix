@@ -1,12 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  IOKit,
 }:
 
 stdenv.mkDerivation rec {
   pname = "osx-cpu-temp";
   version = "unstable-2020-12-04";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     name = "osx-cpu-temp-source";
     owner = "lavoiesl";
     repo = pname;

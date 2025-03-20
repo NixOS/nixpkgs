@@ -1,18 +1,34 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook3,
+{
+  lib,
+  fetchurl,
+  perlPackages,
+  wrapGAppsHook3,
   # libs
-  librsvg, sane-backends, sane-frontends,
+  librsvg,
+  sane-backends,
+  sane-frontends,
   # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+  imagemagick,
+  libtiff,
+  djvulibre,
+  poppler-utils,
+  ghostscript,
+  unpaper,
+  pdftk,
   # test dependencies
-  xvfb-run, liberation_ttf, file, tesseract }:
+  xvfb-run,
+  liberation_ttf,
+  file,
+  tesseract3,
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.13.3";
+  version = "2.13.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-QAs6fsQDe9+nKM/OAVZUHB034K72jHsKoA2LY2JQa8Y=";
+    hash = "sha256-4HcTkVJBscBb8AxeN6orMQFVR0w4hFfkGhxQOzP3mWk=";
   };
 
   patches = [
@@ -23,8 +39,12 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs =
-    [ librsvg sane-backends sane-frontends ] ++
-    (with perlPackages; [
+    [
+      librsvg
+      sane-backends
+      sane-frontends
+    ]
+    ++ (with perlPackages; [
       Gtk3
       Gtk3ImageView
       Gtk3SimpleList
@@ -55,16 +75,18 @@ perlPackages.buildPerlPackage rec {
       SubOverride
     ]);
 
-  postPatch = let
-    fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
-  in ''
-    # Required for the program to properly load its SVG assets
-    substituteInPlace bin/gscan2pdf \
-      --replace "/usr/share" "$out/share"
+  postPatch =
+    let
+      fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
+    in
+    ''
+      # Required for the program to properly load its SVG assets
+      substituteInPlace bin/gscan2pdf \
+        --replace "/usr/share" "$out/share"
 
-    # Substitute the non-free Helvetica font in the tests
-    sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
-  '';
+      # Substitute the non-free Helvetica font in the tests
+      sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
+    '';
 
   postInstall = ''
     # Remove impurity
@@ -76,7 +98,7 @@ perlPackages.buildPerlPackage rec {
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \
-      --prefix PATH : "${poppler_utils}/bin" \
+      --prefix PATH : "${poppler-utils}/bin" \
       --prefix PATH : "${ghostscript}/bin" \
       --prefix PATH : "${unpaper}/bin" \
       --prefix PATH : "${pdftk}/bin"
@@ -86,23 +108,28 @@ perlPackages.buildPerlPackage rec {
 
   installTargets = [ "install" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeCheckInputs = [
-    imagemagick
-    libtiff
-    djvulibre
-    poppler_utils
-    ghostscript
-    unpaper
-    pdftk
+  nativeCheckInputs =
+    [
+      imagemagick
+      libtiff
+      djvulibre
+      poppler-utils
+      ghostscript
+      unpaper
+      pdftk
 
-    xvfb-run
-    file
-    tesseract # tests are expecting tesseract 3.x precisely
-  ] ++ (with perlPackages; [
-    TestPod
-  ]);
+      xvfb-run
+      file
+      tesseract3 # tests are expecting tesseract 3.x precisely
+    ]
+    ++ (with perlPackages; [
+      TestPod
+    ]);
 
   checkPhase = ''
     # Temporarily disable a dubiously failing test:
@@ -134,7 +161,7 @@ perlPackages.buildPerlPackage rec {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
     mainProgram = "gscan2pdf";
   };
 }

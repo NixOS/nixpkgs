@@ -1,86 +1,73 @@
-{ lib
-, fetchFromGitLab
-, installShellFiles
-, libsodium
-, pkg-config
-, protobuf
-, rustPlatform
-, fetchYarnDeps
-, fixup-yarn-lock
-, stdenv
-, yarn
-, nodejs
+{
+  lib,
+  fetchFromGitea,
+  fetchNpmDeps,
+  installShellFiles,
+  pkg-config,
+  rustPlatform,
+  npmHooks,
+  stdenv,
+  nodejs,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ratman";
-  version = "0.4.0";
+  version = "0.7.0";
 
-  src = fetchFromGitLab {
-    domain = "git.irde.st";
-    owner = "we";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "irdest";
     repo = "irdest";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-ZZ7idZ67xvQFmQJqIFU/l77YU+yDQOqNthX5NR/l4k8=";
+    rev = "${version}";
+    sha256 = "sha256-OuKUZSvIUekhbe1LoEFBL8+sU2KLXBsp1JCEEuxkUlk=";
   };
 
-  cargoHash = "sha256-Nsux0QblBtzlhLEgfKYvkQrOz8+oVd2pqT3CL8TnQEc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H1XE+khN6sU9WTM87foEQRTK0u5fgDZvoG3//hvd464=";
 
-  nativeBuildInputs = [ protobuf pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  cargoBuildFlags = [ "--all-features" "-p" "ratman" ];
+  buildInputs = [ udev ];
+
+  cargoBuildFlags = [
+    "-p"
+    "ratmand"
+    "-p"
+    "ratman-tools"
+  ];
   cargoTestFlags = cargoBuildFlags;
-
-  buildInputs = [ libsodium ];
-
-  postInstall = ''
-    installManPage docs/man/ratmand.1
-  '';
-
-  SODIUM_USE_PKG_CONFIG = 1;
 
   dashboard = stdenv.mkDerivation rec {
     pname = "ratman-dashboard";
     inherit version src;
     sourceRoot = "${src.name}/ratman/dashboard";
 
-    yarnDeps = fetchYarnDeps {
-      yarnLock = src + "/ratman/dashboard/yarn.lock";
-      sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
+    npmDeps = fetchNpmDeps {
+      name = "${pname}-${version}-npm-deps";
+      src = "${src}/ratman/dashboard";
+      hash = "sha256-47L4V/Vf8DK3q63MYw3x22+rzIN3UPD0N/REmXh5h3w=";
     };
 
-    nativeBuildInputs = [ yarn nodejs fixup-yarn-lock ];
+    nativeBuildInputs = [
+      nodejs
+      npmHooks.npmConfigHook
+      npmHooks.npmBuildHook
+    ];
 
-    outputs = [ "out" "dist" ];
-
-    buildPhase = ''
-      # Yarn writes temporary files to $HOME. Copied from mkYarnModules.
-      export HOME=$NIX_BUILD_TOP/yarn_home
-
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnDeps}
-
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock yarn.lock
-
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-
-      patchShebangs node_modules/
-
-      # Build into `./dist/`, suppress formatting.
-      yarn --offline build | cat
-    '';
+    npmBuildScript = "build";
 
     installPhase = ''
-      cp -R . $out
-
-      mv $out/dist $dist
-      ln -s $dist $out/dist
+      mkdir $out
+      cp -r dist/* $out/
     '';
   };
 
   prePatch = ''
-    cp -r ${dashboard.dist} ratman/dashboard/dist
+    cp -r ${dashboard} ratman/dashboard/dist
   '';
 
   meta = with lib; {

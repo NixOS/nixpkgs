@@ -1,4 +1,11 @@
-{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nodejs,
+  runtimeShell,
+}:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
@@ -7,18 +14,18 @@
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.11.6";
+  version = "3.12.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    hash = "sha256-jHACiSTZHNHj61kN8zEjGb3NpkhRJrJ7Mp0pNmJXDXY=";
+    hash = "sha256-twB2V5iecLEMTrp+prFmDoJvcGLVQlLJ+DTSl/9V8S8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-h4i27yNnVU+h5/oboAq6S4+dqjkvJ6TFqtljM3ffgTI=";
+    hash = "sha256-TcsWApSR48OUIcQGko3XIaFCp22vFJbHcxrdFxUyRZU=";
   };
 
   packageJSON = ./package.json;

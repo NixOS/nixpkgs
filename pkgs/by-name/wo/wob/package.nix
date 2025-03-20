@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, inih
-, meson
-, ninja
-, pkg-config
-, cmocka
-, scdoc
-, wayland-scanner
-, wayland
-, wayland-protocols
-, libseccomp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  inih,
+  meson,
+  ninja,
+  pkg-config,
+  cmocka,
+  scdoc,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  libseccomp,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "francma";
-    repo = pname;
+    repo = "wob";
     rev = version;
     sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
   };
@@ -28,9 +29,19 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     pkg-config
   ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ cmocka inih wayland wayland-protocols ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+  buildInputs = [
+    cmocka
+    inih
+    wayland
+    wayland-protocols
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 

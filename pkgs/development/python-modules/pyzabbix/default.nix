@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukecyca";
     repo = "pyzabbix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2yCbxPUlbTrtjD9eKmkw0fKnjiwPzmjIo5vKGv4aerU=";
   };
 

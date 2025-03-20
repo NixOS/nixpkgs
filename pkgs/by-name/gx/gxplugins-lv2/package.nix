@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  xorgproto,
+  cairo,
+  lv2,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "GxPlugins.lv2";
@@ -6,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brummer10";
-    repo = pname;
+    repo = "GxPlugins.lv2";
     rev = "v${version}";
     hash = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
     fetchSubmodules = true;
@@ -14,7 +23,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 xorgproto cairo lv2
+    xorg.libX11
+    xorgproto
+    cairo
+    lv2
   ];
 
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];

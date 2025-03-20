@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uutf,
+}:
 
 let
   pname = "otfm";
@@ -16,7 +25,12 @@ stdenv.mkDerivation {
     hash = "sha256-02U23mYTy0ZJgSObDoyygPTGEMC4/Zge5bux4wshaEE=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ uutf ];

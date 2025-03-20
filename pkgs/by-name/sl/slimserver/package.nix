@@ -33,13 +33,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.5.2";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-262SHaxt5ow3nJtNVk10sbiPUfDb/U+Ab97DRjkJZFI=";
+    hash = "sha256-BIWTsF9SVGBkFaZF/QYFsgATglaORhnFT/2/qRe4emg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,6 +51,7 @@ perlPackages.buildPerlPackage rec {
       ArchiveZip
       AsyncUtil
       AudioScan
+      CarpAssert
       CarpClan
       CGI
       ClassAccessor
@@ -151,6 +152,7 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     cp -r . $out
     wrapProgram $out/slimserver.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
+    chmod +x $out/scanner.pl
     wrapProgram $out/scanner.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
     mkdir $out/bin
     ln -s $out/slimserver.pl $out/bin/slimserver
@@ -168,7 +170,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     homepage = "https://lyrion.org/";
-    changelog = "https://github.com/LMS-Community/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
+    changelog = "https://lyrion.org/getting-started/changelog-lms${lib.versions.major version}";
     description = "Lyrion Music Server (formerly Logitech Media Server) is open-source server software which controls a wide range of Squeezebox audio players";
     # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/LMS-Community/slimserver/blob/public/8.3/License.txt

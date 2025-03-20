@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "configparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6B1I/kS60opMDpCzy2tnlnV65Qo500G0zPHP1I5TDWA=";
+    tag = "v${version}";
+    hash = "sha256-ZPoHnmD0YjY3+dUW1NKDJjNOVrUFNOjQyMqamOsS2RQ=";
   };
 
   nativeBuildInputs = [

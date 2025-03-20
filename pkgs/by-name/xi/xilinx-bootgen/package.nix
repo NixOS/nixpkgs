@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   openssl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xilinx-bootgen";
-  version = "xilinx_v2024.1";
+  version = "xilinx_v2024.2";
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
     rev = finalAttrs.version;
-    hash = "sha256-/gNAqjwfaD2NWxs2536XGv8g2IyRcQRHzgLcnCr4a34=";
+    hash = "sha256-t165nTG4IkI3WrcS3ZryINmAOVzfctxg5zY3oqmNtLw=";
   };
 
   buildInputs = [ openssl ];
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     install -Dm755 bootgen $out/bin/bootgen
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generate Boot Images for Xilinx Zynq and ZU+ SoCs";
@@ -37,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Xilinx/bootgen";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.flokli lib.maintainers.jmbaur ];
+    maintainers = [
+      lib.maintainers.flokli
+      lib.maintainers.jmbaur
+    ];
     mainProgram = "bootgen";
   };
 })

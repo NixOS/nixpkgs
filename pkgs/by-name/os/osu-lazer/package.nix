@@ -16,21 +16,22 @@
   xorg,
   udev,
   vulkan-loader,
+  nativeWayland ? false,
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1009.1";
+  version = "2025.316.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    rev = version;
-    hash = "sha256-odWTLvx41miFgn4O/EDzwm2pfWKxj4B1ieSfNS0hrW8=";
+    tag = version;
+    hash = "sha256-EbuJ3LrfW+JtNqFx9HSR5xWDZdXP72NXvKC05ek7zhc=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -69,10 +70,11 @@ buildDotnetModule rec {
     runHook preFixup
 
     wrapProgram $out/bin/osu! \
+      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
+      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
@@ -86,7 +88,7 @@ buildDotnetModule rec {
       desktopName = "osu!";
       name = "osu";
       exec = "osu!";
-      icon = "osu!";
+      icon = "osu";
       comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
       type = "Application";
       categories = [ "Game" ];
@@ -106,6 +108,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
+      Guanran928
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";

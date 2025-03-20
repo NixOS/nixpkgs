@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "facedancer";
-  version = "3.0.4";
+  version = "3.1.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "facedancer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Cl6cohelJkpr2Nokfwwm7GQIg7ZipPL3v44JVWsHUNI=";
+    tag = version;
+    hash = "sha256-u1fvrfjk79R16MUuYx8m63EkgHJiMmAksaduk4lVnTw=";
   };
 
   postPatch = ''

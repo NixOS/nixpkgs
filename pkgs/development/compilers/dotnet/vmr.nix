@@ -2,7 +2,6 @@
   clangStdenv,
   lib,
   fetchurl,
-  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -24,9 +23,11 @@
   python3,
   xmlstarlet,
   nodejs,
+  cpio,
   callPackage,
   unzip,
   yq,
+  installShellFiles,
 
   baseName ? "dotnet",
   bootstrapSdk,
@@ -56,12 +57,6 @@ let
 
   _icu = if isDarwin then darwin.ICU else icu;
 
-  # error NU1903: Package 'System.Text.Json' 8.0.4 has a known high severity vulnerability,
-  disableNU1903 = fetchpatch {
-    url = "https://github.com/dotnet/sdk/pull/44028.patch";
-    hash = "sha256-r6AOhXhwT8ar3aS0r5CA9sPiBsp3pnnPIVO+5l5CUGM=";
-  };
-
 in
 stdenv.mkDerivation rec {
   pname = "${baseName}-vmr";
@@ -90,9 +85,13 @@ stdenv.mkDerivation rec {
       xmlstarlet
       unzip
       yq
+      installShellFiles
     ]
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      cpio
     ]
     ++ lib.optionals isDarwin [
       getconf
@@ -100,7 +99,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      # this gets copied into the tree, but we still want the hooks to run
+      # this gets copied into the tree, but we still need the sandbox profile
       bootstrapSdk
       # the propagated build inputs in llvm.dev break swift compilation
       llvm.out
@@ -147,7 +146,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
@@ -227,10 +226,6 @@ stdenv.mkDerivation rec {
         -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
         src/aspnetcore/eng/DotNetBuild.props
 
-      # patch is from sdk repo where vmr bits are in src/SourceBuild/content
-      patch -p4 < ${disableNU1903}
-    ''
-    + lib.optionalString (lib.versionAtLeast version "9") ''
       # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
       substituteInPlace \
         src/aspnetcore/eng/Dependencies.props \
@@ -291,7 +286,10 @@ stdenv.mkDerivation rec {
 
         substituteInPlace \
           src/runtime/src/installer/managed/Microsoft.NET.HostModel/HostModelUtils.cs \
-          src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \
+      ''
+      + lib.optionalString (lib.versionAtLeast version "10") "  src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Codesign.cs \\\n"
+      + lib.optionalString (lib.versionOlder version "10") "  src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \\\n"
+      + ''
           --replace-fail '/usr/bin/codesign' '${sigtool}/bin/codesign'
 
         # fix: strip: error: unknown argument '-n'
@@ -305,6 +303,15 @@ stdenv.mkDerivation rec {
           -s //Project -t elem -n PropertyGroup \
           -s \$prev -t elem -n SkipInstallerBuild -v true \
           src/runtime/Directory.Build.props
+      ''
+      + lib.optionalString (lib.versionAtLeast version "10") ''
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n SkipInstallerBuild -v true \
+          src/aspnetcore/Directory.Build.props
+      ''
+      + ''
 
         # stop passing -sdk without a path
         # stop using xcrun
@@ -316,19 +323,21 @@ stdenv.mkDerivation rec {
           --replace-fail ' -sdk ''${CMAKE_OSX_SYSROOT}' "" \
           --replace-fail 'xcrun swiftc' 'swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
       ''
-      + lib.optionalString (lib.versionAtLeast version "9") ''
-        # fix: strip: error: unknown argument '-n'
-        substituteInPlace \
-          src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
-          src/runtime/src/native/managed/native-library.targets \
-          --replace-fail ' -no_code_signature_warning' ""
+      + lib.optionalString (lib.versionAtLeast version "9") (
+        ''
+          # fix: strip: error: unknown argument '-n'
+          substituteInPlace \
+            src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
+            src/runtime/src/native/managed/native-library.targets \
+            --replace-fail ' -no_code_signature_warning' ""
 
-        # ld: library not found for -ld_classic
-        substituteInPlace \
-          src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
-          src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \
-          --replace-fail 'Include="-ld_classic"' ""
-      ''
+          # ld: library not found for -ld_classic
+          substituteInPlace \
+            src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+        ''
+        + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
+        + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
+      )
       + lib.optionalString (lib.versionOlder version "9") ''
         # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
         # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll
@@ -361,9 +370,10 @@ stdenv.mkDerivation rec {
 
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk} .dotnet
+      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
       chmod -R +w .dotnet
 
+      export HOME=$(mktemp -d)
       ${prepScript} $prepFlags
 
       runHook postConfigure
@@ -418,6 +428,11 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   installPhase =
     let
       assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
@@ -447,8 +462,15 @@ stdenv.mkDerivation rec {
           # TODO: should we fix executable flags here? see dotnetInstallHook
       done
 
+      installManPage src/sdk/documentation/manpages/sdk/*
+
       runHook postInstall
     '';
+
+  ${if stdenv.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
+    mkdir -p "$out"/nix-support
+    echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
+  '';
 
   # dotnet cli is in the root, so we need to strip from there
   # TODO: should we install in $out/share/dotnet?
@@ -481,5 +503,8 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    # build deadlocks intermittently on rosetta
+    # https://github.com/dotnet/runtime/issues/111628
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

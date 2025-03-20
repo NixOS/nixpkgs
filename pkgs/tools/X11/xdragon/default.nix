@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdragon";
@@ -20,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Simple drag-and-drop source/sink for X (called dragon in upstream)";
+    description = "Simple drag-and-drop source/sink for X or Wayland (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
     license = licenses.gpl3;
     maintainers = with maintainers; [ das_j ];

@@ -1,5 +1,12 @@
-{ config, lib, pkgs, ... }:
-let kernelVersion = config.boot.kernelPackages.kernel.version; in
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  kernelVersion = config.boot.kernelPackages.kernel.version;
+in
 
 {
 
@@ -16,7 +23,6 @@ let kernelVersion = config.boot.kernelPackages.kernel.version; in
     };
 
   };
-
 
   ###### implementation
 

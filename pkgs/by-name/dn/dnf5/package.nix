@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  appstream,
   cmake,
   createrepo_c,
   doxygen,
@@ -20,7 +22,7 @@
   libyaml,
   pcre2,
   rpm,
-  sdbus-cpp,
+  sdbus-cpp_2,
   sphinx,
   sqlite,
   systemd,
@@ -32,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.7.0";
+  version = "5.2.11.0";
 
   outputs = [
     "out"
@@ -42,9 +44,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
-    rev = finalAttrs.version;
-    hash = "sha256-gKPC8nrEoayOGGrO+pk164w1xRuhrx74JcxJ1JDhOug=";
+    tag = finalAttrs.version;
+    hash = "sha256-89zJ2ORHPqy6qgmMdOSyPEcgxtEYE4CPnmRp7FfNj8Y=";
   };
+
+  patches = [
+    # Only define systemd constants when WITH_SYSTEMD is enabled
+    (fetchpatch {
+      name = "0001-offline-only-define-systemd-constants.patch";
+      url = "https://github.com/rpm-software-management/dnf5/commit/f75894eea0892917d80e8f0bf3f9f6c8db0ac400.patch";
+      hash = "sha256-4eBeBTzhOTUDtiOlfiddh7gJ8AoiMty4FSTlLtdymos=";
+    })
+  ];
 
   nativeBuildInputs =
     [
@@ -63,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]);
 
   buildInputs = [
+    appstream
     cppunit
     fmt
     json_c
@@ -74,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     pcre2.dev
     rpm
-    sdbus-cpp
+    sdbus-cpp_2
     sqlite
     systemd
     toml11

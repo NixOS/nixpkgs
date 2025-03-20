@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -30,24 +31,19 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.6.3";
+  version = "1.7.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-L/7oErXu0U2G20pFfEReSKAK3P1BseybnPHazA7w6cM=";
+    tag = version;
+    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
   };
 
-  pythonRelaxDeps = [
-    "docstring-parser"
-    "jiter"
-    "pydantic"
-    "tenacity"
-  ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -82,6 +78,10 @@ buildPythonPackage rec {
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
+
+    # Checks magic values and this fails on Python 3.13
+    "test_raw_base64_autodetect_jpeg"
+    "test_raw_base64_autodetect_png"
   ];
 
   disabledTestPaths = [
@@ -91,10 +91,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

@@ -1,25 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gettext
-, libxml2
-, glib
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  libxml2,
+  glib,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "shared-mime-info";
   version = "2.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
+    repo = "shared-mime-info";
     rev = version;
     hash = "sha256-5eyMkfSBUOD7p8woIYTgz5C/L8uQMXyr0fhL0l23VMA=";
   };

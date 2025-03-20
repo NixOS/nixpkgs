@@ -49,14 +49,14 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "29Aug2024_update1";
+  version = "29Aug2024_update2";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-B2oMs9bVYO+G3yL1DGJVK/INIfANMDREV7AtC4kH3H8=";
+    hash = "sha256-xhFLsK3CQFIfajdwkpz593KTUGwcIWX1bLIPClDe/V8=";
   };
   preConfigure = ''
     cd cmake
@@ -70,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    # Remove these at some point - perhaps after release 23.11. See discussion at:
-    # https://github.com/NixOS/nixpkgs/pull/238771#discussion_r1235459961
-    mpi = throw "`lammps-mpi.passthru.mpi` was removed in favor of `extraBuildInputs`";
     inherit packages;
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
@@ -84,13 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
     ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
 
-  buildInputs = [
-    fftw
-    libpng
-    blas
-    lapack
-    gzip
-  ] ++ lib.optionals packages.PYTHON [ python3 ] ++ extraBuildInputs;
+  buildInputs =
+    [
+      fftw
+      libpng
+      blas
+      lapack
+      gzip
+    ]
+    ++ lib.optionals packages.PYTHON [ python3 ]
+    ++ extraBuildInputs;
 
   postInstall = ''
     # For backwards compatibility

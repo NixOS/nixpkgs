@@ -1,17 +1,44 @@
-{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg, fox_1_6, gdal,
-  git, gl2ps, gpp , gtest, jdk, libGL, libGLU, libX11, libjpeg,
-  libpng, libtiff, libxcrypt, openscenegraph , proj, python3,
-  python3Packages, stdenv, swig, xercesc, xorg, zlib }:
+{
+  lib,
+  bzip2,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  ffmpeg,
+  fox_1_6,
+  gdal,
+  git,
+  gl2ps,
+  gpp,
+  gtest,
+  jdk,
+  libGL,
+  libGLU,
+  libX11,
+  libjpeg,
+  libpng,
+  libtiff,
+  libxcrypt,
+  openscenegraph,
+  proj,
+  python3,
+  python3Packages,
+  stdenv,
+  swig,
+  xercesc,
+  xorg,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
-    rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-VST3ZJuDQBWf+YoN0kPyLrlXWmJABubUFDsKEMxfxHY=";
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-4HL5wi6LfUe4/v7ObeiDCTyWV8ChRlRXDFb5OBRmjuI=";
     fetchSubmodules = true;
   };
 
@@ -21,37 +48,39 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs = [
-    bzip2
-    eigen
-    ffmpeg
-    fox_1_6
-    gdal
-    gl2ps
-    gpp
-    gtest
-    jdk
-    libGL
-    libGLU
-    libjpeg
-    libpng
-    libtiff
-    libxcrypt
-    openscenegraph
-    proj
-    python3Packages.setuptools
-    xercesc
-    zlib
-    python3
-  ] ++ (with xorg; [
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+  buildInputs =
+    [
+      bzip2
+      eigen
+      ffmpeg
+      fox_1_6
+      gdal
+      gl2ps
+      gpp
+      gtest
+      jdk
+      libGL
+      libGLU
+      libjpeg
+      libpng
+      libtiff
+      libxcrypt
+      openscenegraph
+      proj
+      python3Packages.setuptools
+      xercesc
+      zlib
+      python3
+    ]
+    ++ (with xorg; [
+      libX11
+      libXcursor
+      libXext
+      libXfixes
+      libXft
+      libXrandr
+      libXrender
+    ]);
 
   meta = with lib; {
     description = "SUMO traffic simulator";

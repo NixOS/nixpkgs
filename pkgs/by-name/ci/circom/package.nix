@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "circom";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "iden3";
     repo = "circom";
     rev = "v${version}";
-    hash = "sha256-jaBtBFvGRTRImXQNM+FXr23XQqC5V7hRa9SZAgB/K4c=";
+    hash = "sha256-BSInX4owuamRWnlKL1yJJOyzRIiE55TIzCk2TdX7aOQ=";
   };
 
-  cargoHash = "sha256-KmUTlzRRmtD9vKJmh0MSUQxN8gz4qnp9fLs5Z0Lmypw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dkgLp6BKuublS97iRXYzbT4ztbWBD5IDMz9rDY9XgcA=";
   doCheck = false;
 
   meta = with lib; {

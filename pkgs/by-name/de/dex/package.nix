@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, sphinx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  sphinx,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jceb";
-    repo = pname;
+    repo = "dex";
     rev = "v${version}";
     sha256 = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
   };
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ sphinx ];
   buildInputs = [ python3 ];
-  makeFlags = [ "PREFIX=$(out)" "VERSION=$(version)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=$(version)"
+  ];
 
   meta = with lib; {
     description = "Program to generate and execute DesktopEntry files of the Application type";

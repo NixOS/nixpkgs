@@ -1,12 +1,16 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "jbrowse";
-  version = "2.16.0";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-Nf+Dp1XVXgY1+iih7/cvzxnfCKdgHz5kpefdMucrlIA=";
+    sha256 = "sha256-WpAaI07gfUmW1a2OlEtFAJMDdmvUCTEQIvGQQ1o/URc=";
   };
 
   appimageContents = appimageTools.extractType2 {

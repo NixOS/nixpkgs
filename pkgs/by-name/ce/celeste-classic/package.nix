@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, autoPatchelfHook
-, SDL2
-, practiceMod ? false
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  autoPatchelfHook,
+  SDL2,
+  practiceMod ? false,
 }:
 
 let

@@ -1,16 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitea
-, pkg-config
-, stdenv
-, openssl
-, libiconv
-, sqlite
-, Security
-, SystemConfiguration
-, CoreFoundation
-, installShellFiles
-, asciidoctor }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  stdenv,
+  openssl,
+  libiconv,
+  sqlite,
+  Security,
+  SystemConfiguration,
+  CoreFoundation,
+  installShellFiles,
+  asciidoctor,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
@@ -24,24 +26,38 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QBc0avci232UIxzTKlS0pjL7cCuvwAFgw6dSwdtYAtU=";
   };
 
-  cargoHash = "sha256-jnDS9tIJ387A2P9oUSYB3tXrXjwwVmQ26erIIlHBkao=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NQXXR6b1XZDihVoRNFJLXtMNjlzOIzkc4rthwx0A7AE=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
-
-  buildInputs = [ sqlite ] ++ (if stdenv.hostPlatform.isDarwin then [
-    libiconv
-    Security
-    SystemConfiguration
-    CoreFoundation
-  ] else [
-    openssl
-  ]);
-
-  buildFeatures = [
-    "shell_completion"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "systemd"
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    asciidoctor
   ];
+
+  buildInputs =
+    [ sqlite ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        [
+          libiconv
+          Security
+          SystemConfiguration
+          CoreFoundation
+        ]
+      else
+        [
+          openssl
+        ]
+    );
+
+  buildFeatures =
+    [
+      "shell_completion"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "systemd"
+    ];
 
   postInstall = ''
     installShellCompletion \

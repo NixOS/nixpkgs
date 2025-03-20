@@ -1,15 +1,16 @@
-{ lib
-, writeScript
-, fetchFromGitHub
-, substituteAll
-, inkscape
-, pdflatex
-, lualatex
-, python3
-, wrapGAppsHook3
-, gobject-introspection
-, gtk3
-, gtksourceview3
+{
+  lib,
+  writeScript,
+  fetchFromGitHub,
+  replaceVars,
+  inkscape,
+  pdflatex,
+  lualatex,
+  python3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk3,
+  gtksourceview3,
 }:
 
 let
@@ -20,20 +21,19 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
+    tag = version;
+    sha256 = "sha256-u0oNAauCUHNObE5Hp/X9hHcEP2wmLhcxH2aas3Mg5RY=";
   };
 
   patches = [
     # Make sure we can point directly to pdflatex in the extension,
     # instead of relying on the PATH (which might not have it)
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit pdflatex lualatex;
     })
 
@@ -58,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.lxml
     python3.pkgs.cssselect
     python3.pkgs.numpy
+    python3.pkgs.tinycss2
   ];
 
   # strictDeps do not play nicely with introspection setup hooks.

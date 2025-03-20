@@ -5,11 +5,11 @@
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchFromGitHub,
+  fetchgit,
   imagemagick,
   lib,
-  runCommand,
   xdg-utils,
+  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -24,14 +24,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.3";
+  version = "0.8.2";
 
-  src = fetchFromGitHub {
-    owner = "Nexus-Mods";
-    repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+  src = fetchgit {
+    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-qRo+s1Wf6WXR1kFqvGA6n+Bsp6qTzpK8/W9fuiaA+Yo=";
     fetchSubmodules = true;
-    hash = "sha256-6oygXJEiTqb0xe7mKRUsZgghfTqrllCRXJy6IDeqJQI=";
+    fetchLFS = true;
   };
 
   enableParallelBuilding = false;
@@ -56,15 +56,21 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+    # Bump StrawberryShake so we can drop .NET 8
+    # See https://github.com/Nexus-Mods/NexusMods.App/pull/2830
+    substituteInPlace Directory.Packages.props \
+      --replace-fail 'Include="StrawberryShake.Server" Version="14.1.0"' \
+                     'Include="StrawberryShake.Server" Version="15.0.3"'
   '';
 
   makeWrapperArgs = [
@@ -90,7 +96,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -103,7 +109,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.3/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"
@@ -125,42 +131,22 @@ buildDotnetModule (finalAttrs: {
 
   disabledTests =
     [
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+      # Fails attempting to download game hashes DB from github:
+      # HttpRequestException : Resource temporarily unavailable (github.com:443)
+      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
 
-      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
-      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
+      # Fails attempting to fetch SMAPI version data from github:
+      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
 
-  passthru = {
-    tests =
-      let
-        runTest =
-          name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
-      in
-      {
-        serve = runTest "serve" ''
-          NexusMods.App
-        '';
-        help = runTest "help" ''
-          NexusMods.App --help
-        '';
-        associate-nxm = runTest "associate-nxm" ''
-          NexusMods.App associate-nxm
-        '';
-        list-tools = runTest "list-tools" ''
-          NexusMods.App list-tools
-        '';
-      };
-    updateScript = ./update.bash;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "NexusMods.App";

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, catch2_3
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  catch2_3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
-  version = "3.1.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "rapidfuzz-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0ZMK9WVMflgGD4uEKp7/SvWXCByYQtPU9gSJsNEqTbM=";
+    hash = "sha256-AuH0Vq0Le5T9vDCpEviEjfNpwJFnFtqj/taFJy+YoMY=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      /** `python3Packages.levenshtein` crucially depends on `rapidfuzz-cpp` */
+      /**
+        `python3Packages.levenshtein` crucially depends on `rapidfuzz-cpp`
+      */
       inherit (python3Packages) levenshtein;
     };
   };

@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, glib
-, libxml2
-, openconnect
-, intltool
-, pkg-config
-, networkmanager
-, gcr
-, libsecret
-, file
-, gtk3
-, webkitgtk_4_1
-, libnma
-, libnma-gtk4
-, gtk4
-, withGnome ? true
-, gnome
-, kmod
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  glib,
+  libxml2,
+  openconnect,
+  intltool,
+  pkg-config,
+  networkmanager,
+  gcr,
+  libsecret,
+  file,
+  gtk3,
+  webkitgtk_4_1,
+  libnma,
+  libnma-gtk4,
+  gtk4,
+  withGnome ? true,
+  gnome,
+  kmod,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,28 +32,29 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit kmod openconnect;
     })
   ];
 
-  buildInputs = [
-    glib
-    libxml2
-    openconnect
-    networkmanager
-    webkitgtk_4_1 # required, for SSO
-  ] ++ lib.optionals withGnome [
-    gtk3
-    libnma
-    libnma-gtk4
-    gtk4
-    gcr
-    libsecret
-  ];
+  buildInputs =
+    [
+      libxml2
+      openconnect
+      networkmanager
+      webkitgtk_4_1 # required, for SSO
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      libnma
+      libnma-gtk4
+      gtk4
+      gcr
+      libsecret
+    ];
 
   nativeBuildInputs = [
+    glib
     intltool
     pkg-config
     file

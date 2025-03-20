@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pipewire
-, wireplumber
-, makeWrapper
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pipewire,
+  wireplumber,
+  makeWrapper,
 }:
 let
   version = "2.2.0";
@@ -19,7 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ZHbisG9pdctkwfD1S3kxMZhBqPw0Ni5Q9qQG4RssnSw=";
   };
 
-  cargoHash = "sha256-TWuyU1+F3zEcFFd8ZeZmL3IvpKLLv3zimZ2WFVYFqyo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OYFRiPAhiGbA7aNy3c4I0Tc39BNmFuP68YoBviMfbak=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,4 +40,3 @@ rustPlatform.buildRustPackage {
     platforms = platforms.linux;
   };
 }
-

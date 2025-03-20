@@ -1,15 +1,30 @@
-{ fetchurl, lib, stdenv, perl, openssh, rsync, logger }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  openssh,
+  rsync,
+  logger,
+  versionCheckHook,
+  nix-update-script,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsnapshot";
-  version = "1.4.5";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://rsnapshot.org/downloads/rsnapshot-${version}.tar.gz";
-    sha256 = "sha256-ELdeAcolUR6CZqrNSVUxl1rRqK1VYha2pXx20CizgkI=";
+    url = "https://github.com/rsnapshot/rsnapshot/releases/download/${finalAttrs.version}/rsnapshot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-j2r4BG7msCk7JjidCMtpUMf33f/8H3Tu/LCHvUnUT2I=";
   };
 
-  propagatedBuildInputs = [perl openssh rsync logger];
+  propagatedBuildInputs = [
+    perl
+    openssh
+    rsync
+    logger
+  ];
 
   configureFlags = [ "--sysconfdir=/etc --prefix=/" ];
   makeFlags = [ "DESTDIR=$(out)" ];
@@ -19,10 +34,22 @@ stdenv.mkDerivation rec {
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Filesystem snapshot utility for making backups of local and remote systems";
     homepage = "https://rsnapshot.org/";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ liberodark ];
+    platforms = lib.platforms.linux;
+    mainProgram = "rsnapshot";
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   setuptools,
@@ -21,19 +22,23 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.7.6";
-  format = "pyproject";
+  version = "1.7.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gRq4LS9NvPL98N0Jk09Z0GfoHS09o3zM284BEWS+NW4=";
+    tag = "v${version}";
+    hash = "sha256-6PwfFU1f/osEamSX9kxpOl2wDnrQk5qq1kHi2BgSHes=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'sphinx >=1.3.1'" ""
+      --replace-fail "'sphinx >=1.3.1'," "" \
+      --replace-fail "'twine >=4.0']" "]"
   '';
 
   nativeBuildInputs = [

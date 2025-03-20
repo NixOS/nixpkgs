@@ -2,31 +2,23 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
-  darwin,
   stu,
   testers,
 }:
-let
-  version = "0.6.4";
-in
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "stu";
-  inherit version;
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "stu";
     rev = "v${version}";
-    hash = "sha256-iLfUJXunQjS/dFB+sTtZRvsxHRMh5o6JYM3eCucEhQA=";
+    hash = "sha256-gZaSSKlKTtOb/zxVwj0PFk1BqDDswyKv+fIHDn/4n3I=";
   };
 
-  cargoHash = "sha256-eja2wE822IckT9pj6TqqKh3NUyUox+VlhGb+lTvCW1Y=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreGraphics
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hi3plLDMMft9jEo9whZrSBvZjLjezeWRmocQF0MlsfY=";
 
   passthru.tests.version = testers.testVersion { package = stu; };
 

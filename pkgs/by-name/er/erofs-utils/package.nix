@@ -9,15 +9,15 @@
   lz4,
   xz,
   zlib,
+  zstd,
   libselinux,
   fuseSupport ? stdenv.hostPlatform.isLinux,
   selinuxSupport ? false,
-  lzmaSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "erofs-utils";
-  version = "1.8.2";
+  version = "1.8.5";
   outputs = [
     "out"
     "man"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZLb/fomfYkgCg87mN4fzfw+cS+emvHoj1zSqqHOmz/Q=";
+    hash = "sha256-zYYRJw6chv4GL2RxA8pq2p7XEORDD91ZYNUUd3kZIA0=";
   };
 
   nativeBuildInputs = [
@@ -37,16 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
       lz4
       zlib
+      xz
+      zstd
     ]
     ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals lzmaSupport [ xz ];
+    ++ lib.optionals selinuxSupport [ libselinux ];
 
   configureFlags =
     [ "MAX_BLOCK_SIZE=4096" ]
     ++ lib.optional fuseSupport "--enable-fuse"
-    ++ lib.optional selinuxSupport "--with-selinux"
-    ++ lib.optional lzmaSupport "--enable-lzma";
+    ++ lib.optional selinuxSupport "--with-selinux";
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";

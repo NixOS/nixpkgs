@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hashcat-utils";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hashcat";
-    repo = pname;
+    repo = "hashcat-utils";
     rev = "v${version}";
     sha256 = "0wgc6wv7i6cs95rgzzx3zqm14xxbjyajvcqylz8w97d8kk4x4wjr";
   };

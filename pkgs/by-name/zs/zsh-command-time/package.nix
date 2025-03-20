@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 # To make use of this plugin, need to add
 #   programs.zsh.interactiveShellInit = ''
@@ -9,14 +13,14 @@
 #   '';
 
 stdenv.mkDerivation {
-  version = "2018-04-30";
+  version = "2020-11-15";
   pname = "zsh-command-time";
 
   src = fetchFromGitHub {
     owner = "popstas";
     repo = "zsh-command-time";
-    rev = "afb4a4c9ae7ce64ca9d4f334a79a25e46daad0aa";
-    sha256 = "1bvyjgz6bhgg1nwr56r50p6fblgah6yiql55pgm5abnn2h876fjq";
+    rev = "803d26eef526bff1494d1a584e46a6e08d25d918";
+    hash = "sha256-ndHVFcz+XmUW0zwFq7pBXygdRKyPLjDZNmTelhd5bv8=";
   };
 
   strictDeps = true;
@@ -31,5 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/popstas/zsh-command-time";
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ lassulus ];
   };
 }

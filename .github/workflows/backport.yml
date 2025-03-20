@@ -1,33 +1,41 @@
-name: Backport
-on:
-  pull_request_target:
-    types: [closed, labeled]
-
 # WARNING:
 # When extending this action, be aware that $GITHUB_TOKEN allows write access to
 # the GitHub repository. This means that it should not evaluate user input in a
 # way that allows code injection.
 
-permissions:
-  contents: read
+name: Backport
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
+
+permissions: {}
 
 jobs:
   backport:
-    permissions:
-      contents: write # for korthout/backport-action to create branch
-      pull-requests: write # for korthout/backport-action to create PR to backport
     name: Backport Pull Request
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
+      # Use a GitHub App to create the PR so that CI gets triggered
+      # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
+      - uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ steps.app-token.outputs.token }}
+
       - name: Create backport PRs
-        uses: korthout/backport-action@bd410d37cdcae80be6d969823ff5a225fe5c833f # v3.0.2
+        uses: korthout/backport-action@436145e922f9561fc5ea157ff406f21af2d6b363 # v3.2.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'
+          github_token: ${{ steps.app-token.outputs.token }}
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 

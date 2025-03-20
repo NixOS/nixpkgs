@@ -12,9 +12,6 @@
   isodate,
   pyparsing,
 
-  # propagates <3.8
-  importlib-metadata,
-
   # extras: networkx
   networkx,
 
@@ -24,31 +21,29 @@
   # tests
   pip,
   pytest-cov-stub,
-  pytest7CheckHook,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.0.0";
-  format = "pyproject";
+  version = "7.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-VCjvgXMun1Hs+gPeqjzLXbIX1NBQ5aMLz0aWlwsm0iY=";
+    repo = "rdflib";
+    tag = version;
+    hash = "sha256-1ACQ7M+oAoAYXeTnC8osoECOvE8XkGwW/s89Voqed5A=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    isodate
-    html5lib
+  dependencies = [
     pyparsing
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ isodate ];
 
   optional-dependencies = {
     html = [ html5lib ];
@@ -57,13 +52,15 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pip
-    pytest-cov-stub
-    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    pytest7CheckHook
-    setuptools
-  ] ++ optional-dependencies.networkx ++ optional-dependencies.html;
+  nativeCheckInputs =
+    [
+      pip
+      pytest-cov-stub
+      pytestCheckHook
+      setuptools
+    ]
+    ++ optional-dependencies.networkx
+    ++ optional-dependencies.html;
 
   pytestFlagsArray = [
     # requires network access

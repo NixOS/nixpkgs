@@ -3,25 +3,22 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  apple-sdk_11,
-  stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pizauth";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
-    rev = "refs/tags/pizauth-${version}";
-    hash = "sha256-9NezG644oCLTWHTdUaUpJbuwkJu3at/IGNH3FSxl/DI=";
+    tag = "pizauth-${version}";
+    hash = "sha256-lvG50Ej0ius4gHEsyMKOXLD20700mc4iWJxHK5DvYJc=";
   };
 
-  cargoHash = "sha256-Lp5ovkQKShgT7EFvQ+5KE3eQWJEQAL68Bk1d+wUo+bc=";
-
-  # pizauth cannot be built with default apple-sdk_10 on x86_64-darwin, pin to 11
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WyQIk74AKfsv0noafCGMRS6o+Lq6CeP99AFSdYq+QHg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +26,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd pizauth \
       --bash share/bash/completion.bash
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";

@@ -1,23 +1,34 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.30995";
+  version = "0.1.31425";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DSgpyQ9luC7RSFq/TbJplQzEKJEDdGIPHsFX3LuzqaQ=";
+    sha256 = "sha256-UrJnUkzlmQMUJqiKC7OqfKC2X5cnWj3Ns42YUdbYc3E=";
   };
 
-  vendorHash = "sha256-60edYYhbSPiJWmuQXXEt+xCnSxsHf8Q38RgyWwdP6vQ=";
+  vendorHash = "sha256-kK5q9hZg4N8LFfaA7PhAxBepH1Wor3xRoy/d3YPGrmI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
+  ];
 
   postInstall = ''
     mv $out/bin/circleci-cli $out/bin/circleci

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, glib-networking
-, libxml2
-, gtk3
-, libsoup
-, tzdata
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  glib-networking,
+  libxml2,
+  gtk3,
+  libsoup_2_4,
+  tzdata,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
     tzdata
   ];
 

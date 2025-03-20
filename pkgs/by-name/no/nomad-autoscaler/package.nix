@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, buildEnv }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  buildEnv,
+}:
 
 let
   package = buildGoModule rec {
@@ -98,14 +103,24 @@ let
     };
   };
 
-  plugins = let
-      plugins = builtins.filter (n: !(lib.elem n [ "out" "bin" ])) package.outputs;
-    in lib.genAttrs plugins (output: package.${output});
+  plugins =
+    let
+      plugins = builtins.filter (
+        n:
+        !(lib.elem n [
+          "out"
+          "bin"
+        ])
+      ) package.outputs;
+    in
+    lib.genAttrs plugins (output: package.${output});
 
   # Intended to be used as: (nomad-autoscaler.withPlugins (ps: [ ps.aws_asg ps.nomad_target ])
-  withPlugins = f: buildEnv {
-    name = "nomad-autoscaler-env";
-    paths = [ package.bin ] ++ f plugins;
-  };
+  withPlugins =
+    f:
+    buildEnv {
+      name = "nomad-autoscaler-env";
+      paths = [ package.bin ] ++ f plugins;
+    };
 in
-  package
+package

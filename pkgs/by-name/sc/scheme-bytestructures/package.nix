@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  guile,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,14 +13,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
-    repo = pname;
+    repo = "scheme-bytestructures";
     rev = "v${version}";
     sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook guile pkg-config
+    autoreconfHook
+    guile
+    pkg-config
   ];
   buildInputs = [
     guile

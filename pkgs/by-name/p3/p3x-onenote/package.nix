@@ -8,7 +8,7 @@
 
 let
   pname = "p3x-onenote";
-  version = "2024.10.110";
+  version = "2025.4.124";
 
   plat =
     {
@@ -20,9 +20,9 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-rBoSdbZhOnpX7mr7Uz5XuO5PB4PKcNMPQP9NqCwiIBc=";
-      armv7l-linux = "sha256-8XZ3dpYgHCpo5HjDF4R+U5bO6Fidsf0PlEhOoRB1JA0=";
-      x86_64-linux = "sha256-vn9XCKC68AzxvmjxoH4MynwUG+U/g0JmLjANDFS5kNI=";
+      aarch64-linux = "sha256-SHQEMXyXwaarWJHPDJkkEJNYpHuN093VZn7+qCgsqHI=";
+      armv7l-linux = "sha256-k++Xfg0/DeGjLlLsdSQGSLs67DVJJmE8FjoS5ycB7UE=";
+      x86_64-linux = "sha256-A2DGoMj8ET2tXN+uqjwwMwCH7ZmeqZVPKx3CHdcl34I=";
     }
     .${stdenv.hostPlatform.system};
 
@@ -35,7 +35,7 @@ let
     inherit pname version src;
   };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''

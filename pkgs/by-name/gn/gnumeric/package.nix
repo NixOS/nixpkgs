@@ -1,34 +1,76 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome, adwaita-icon-theme, wrapGAppsHook3, gtk3, bison, python3Packages
-, itstool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  pkg-config,
+  intltool,
+  libxml2,
+  perlPackages,
+  goffice,
+  gnome,
+  adwaita-icon-theme,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  bison,
+  python3Packages,
+  itstool,
 }:
 
 let
   inherit (python3Packages) python pygobject3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.57";
+  version = "1.12.59";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r/ULG2I0DCT8z0U9X60+f7c/S8SzT340tsPS2a9qHk8=";
+    url = "mirror://gnome/sources/gnumeric/${lib.versions.majorMinor finalAttrs.version}/gnumeric-${finalAttrs.version}.tar.xz";
+    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
   };
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    intltool
+    bison
+    itstool
+    glib # glib-compile-resources
+    libxml2 # xmllint
+    python.pythonOnBuildForHost
+    wrapGAppsHook3
+  ];
 
   # ToDo: optional libgda, introspection?
-  buildInputs = [
-    goffice gtk3 adwaita-icon-theme
-    python pygobject3
-  ] ++ (with perlPackages; [ perl XMLParser ]);
+  # TODO: fix Perl plugin when cross-compiling
+  buildInputs =
+    [
+      goffice
+      gtk3
+      adwaita-icon-theme
+      python
+      pygobject3
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ]);
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnumeric";
       versionPolicy = "odd-unstable";
     };
   };
@@ -38,7 +80,6 @@ in stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
-    broken = with stdenv; isDarwin && isAarch64;
     maintainers = [ maintainers.vcunat ];
   };
-}
+})

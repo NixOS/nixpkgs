@@ -1,8 +1,46 @@
-{lib, stdenv, fetchFromGitHub, fuse, bison, flex, openssl, python3, ncurses, readline,
- autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  bison,
+  flex,
+  openssl,
+  python3,
+  ncurses,
+  readline,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  zlib,
+  libaio,
+  libxml2,
+  acl,
+  sqlite,
+  liburcu,
+  liburing,
+  attr,
+  makeWrapper,
+  coreutils,
+  gnused,
+  gnugrep,
+  which,
+  openssh,
+  gawk,
+  findutils,
+  util-linux,
+  lvm2,
+  btrfs-progs,
+  e2fsprogs,
+  xfsprogs,
+  systemd,
+  rsync,
+  getent,
+  rpcsvc-proto,
+  libtirpc,
+  gperftools,
+  nixosTests,
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -14,9 +52,20 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse openssl ncurses readline
-    zlib libaio libxml2
-    acl sqlite liburcu attr util-linux libtirpc gperftools
+    fuse
+    openssl
+    ncurses
+    readline
+    zlib
+    libaio
+    libxml2
+    acl
+    sqlite
+    liburcu
+    attr
+    util-linux
+    libtirpc
+    gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -53,13 +102,14 @@ let
     which # which
     xfsprogs # xfs_info
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "glusterfs";
   version = "11.1";
 
   src = fetchFromGitHub {
     owner = "gluster";
-    repo = pname;
+    repo = "glusterfs";
     rev = "v${version}";
     sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };
@@ -109,7 +159,22 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config bison flex makeWrapper rpcsvc-proto ];
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    bison
+    flex
+    makeWrapper
+    rpcsvc-proto
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

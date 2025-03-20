@@ -1,7 +1,16 @@
-{ stdenv, lib, python3Packages, fetchFromGitHub, gtk3, gobject-introspection, ffmpeg, wrapGAppsHook3 }:
+{
+  stdenv,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gtk3,
+  gobject-introspection,
+  ffmpeg,
+  wrapGAppsHook3,
+}:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "gnomecast";
   version = "unstable-2022-04-23";
 

@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   torch,
+  apple-sdk_13,
   buildPythonPackage,
+  darwinMinVersionHook,
   fetchFromGitHub,
 
   # nativeBuildInputs
@@ -34,7 +37,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BXvi4LoO2LZtNSE8lvFzcN4H2nN2fRg5/s7KRci7rMM=";
   };
 
@@ -44,11 +47,20 @@ buildPythonPackage {
     which
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [
-    libjpeg_turbo
-    libpng
-    torch.cxxdev
-  ];
+  buildInputs =
+    [
+      libjpeg_turbo
+      libpng
+      torch.cxxdev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # This should match the SDK used by `torch` above
+      apple-sdk_13
+
+      # error: unknown type name 'MPSGraphCompilationDescriptor'; did you mean 'MPSGraphExecutionDescriptor'?
+      # https://developer.apple.com/documentation/metalperformanceshadersgraph/mpsgraphcompilationdescriptor/
+      (darwinMinVersionHook "12.0")
+    ];
 
   dependencies = [
     numpy

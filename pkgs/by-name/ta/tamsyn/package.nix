@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchurl, fontforge, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fontforge,
+  xorg,
+}:
 
 let
   version = "1.11";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "tamsyn-font";
   inherit version;
 
   src = fetchurl {
     url = "http://www.fial.com/~scott/tamsyn-font/download/tamsyn-font-${version}.tar.gz";
     sha256 = "0kpjzdj8sv5871b8827mjgj9dswk75h94jj5iia2bds18ih1pglp";
-   };
+  };
 
-  nativeBuildInputs = [ fontforge xorg.mkfontscale ];
+  nativeBuildInputs = [
+    fontforge
+    xorg.mkfontscale
+  ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1
@@ -48,4 +58,3 @@ in stdenv.mkDerivation {
     maintainers = [ maintainers.rps ];
   };
 }
-

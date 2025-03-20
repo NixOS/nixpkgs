@@ -8,6 +8,7 @@
   fetchPypi,
   filelock,
   git,
+  git-annex,
   nibabel,
   nipype,
   pydicom,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.2.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qrDYl6hB8BPJz3VKl7jklDaAafsCf1M+3VgFbnGxCTU=";
+    hash = "sha256-z7HaouhNuFX16RSY4gsF8gQJIJfmSiBVUANwMM113ds=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     dcm2niix
     pytestCheckHook
     git
+    git-annex
   ];
 
   preCheck = ''

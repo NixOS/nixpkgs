@@ -1,30 +1,31 @@
-{ stdenv, lib, fetchFromGitHub
-, runCommand
-, which
-, python3
-, help2man
-, makeWrapper
-, ethtool
-, inetutils
-, iperf
-, iproute2
-, nettools
-, socat
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommand,
+  which,
+  python3,
+  help2man,
+  makeWrapper,
+  ethtool,
+  inetutils,
+  iperf,
+  iproute2,
+  nettools,
+  socat,
 }:
 
 let
-  pyEnv = python3.withPackages(ps: [
+  pyEnv = python3.withPackages (ps: [
     ps.setuptools
     ps.packaging
     ps.distutils
   ]);
 
-  telnet = runCommand "inetutils-telnet"
-    { }
-    ''
-      mkdir -p "$out/bin"
-      ln -s "${inetutils}"/bin/telnet "$out/bin"
-    '';
+  telnet = runCommand "inetutils-telnet" { } ''
+    mkdir -p "$out/bin"
+    ln -s "${inetutils}"/bin/telnet "$out/bin"
+  '';
 
   generatedPath = lib.makeSearchPath "bin" [
     iperf
@@ -42,7 +43,10 @@ stdenv.mkDerivation rec {
   pname = "mininet";
   version = "2.3.1b4";
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "mininet";
@@ -55,11 +59,21 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   pythonPath = [ python3.pkgs.setuptools ];
-  nativeBuildInputs = [ help2man makeWrapper python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    help2man
+    makeWrapper
+    python3.pkgs.wrapPython
+  ];
 
-  propagatedBuildInputs = [ pyEnv which ];
+  propagatedBuildInputs = [
+    pyEnv
+    which
+  ];
 
-  installTargets = [ "install-mnexec" "install-manpages" ];
+  installTargets = [
+    "install-mnexec"
+    "install-manpages"
+  ];
 
   preInstall = ''
     mkdir -p $out $py
@@ -79,7 +93,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-
 
   meta = with lib; {
     description = "Emulator for rapid prototyping of Software Defined Networks";

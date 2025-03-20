@@ -9,7 +9,6 @@
 , clang
 , cmake
 , curl
-, darwin
 , dbus
 , dbus-glib
 , fontconfig
@@ -34,7 +33,7 @@
 , openssl
 , pango
 , pkg-config
-, postgresql
+, libpq
 , protobuf
 , python3
 , rdkafka
@@ -47,9 +46,6 @@
 , ...
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-in
 {
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
@@ -71,8 +67,7 @@ in
   };
 
   cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
+    buildInputs = [ openssl zlib curl ];
   };
 
   libz-sys = attrs: {
@@ -259,7 +254,7 @@ in
 
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   prost-build = attr: {
@@ -278,10 +273,6 @@ in
   rink = attrs: {
     buildInputs = [ gmp ];
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
-  };
-
-  security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {
@@ -317,10 +308,6 @@ in
   sequoia-tool = attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
-  };
-
-  serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   servo-fontconfig-sys = attrs: {
@@ -359,14 +346,14 @@ in
   };
 
   # Assumes it can run Command::new(env::var("CARGO")).arg("locate-project")
-  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L244
+  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L242
   proc-macro-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
-    prePatch = (attrs.prePatch or "") + ''
+    postPatch = (attrs.postPatch or "") + ''
       substituteInPlace \
         src/lib.rs \
         --replace-fail \
-        'env::var("CARGO").map_err(|_| Error::CargoEnvVariableNotSet)?' \
-        '"${lib.getBin buildPackages.cargo}/bin/cargo"'
+        'env::var("CARGO")' \
+        'Ok::<_, core::convert::Infallible>("${lib.getBin buildPackages.cargo}/bin/cargo")'
     '';
   };
 }

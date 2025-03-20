@@ -15,7 +15,7 @@
 
   # tests
   pytest-django,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/flavors/django-graphiql-debug-toolbar/commit/2b42fdb1bc40109d9bb0ae1fb4d2163d13904724.patch";
       hash = "sha256-ywTLqXlAxA2DCacrJOqmB7jSzfpeuGTX2ETu0fKmhq4=";
-     })
+    })
   ];
 
   build-system = [ poetry-core ];

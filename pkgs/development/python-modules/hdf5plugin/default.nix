@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6lEU8ZGJKazDqloel5QcaXAbNGzV1fAbAjYC/hFUOdI=";
   };
 

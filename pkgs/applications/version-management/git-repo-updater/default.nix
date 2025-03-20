@@ -1,8 +1,9 @@
-{ lib
-, buildPythonApplication
-, colorama
-, fetchPypi
-, gitpython
+{
+  lib,
+  buildPythonApplication,
+  colorama,
+  fetchPypi,
+  gitpython,
 }:
 
 buildPythonApplication rec {
@@ -26,7 +27,7 @@ buildPythonApplication rec {
     description = "Easily update multiple Git repositories at once";
     homepage = "https://github.com/earwig/git-repo-updater";
     license = licenses.mit;
-    maintainers = with maintainers; [bdesham ];
+    maintainers = with maintainers; [ bdesham ];
     mainProgram = "gitup";
   };
 }

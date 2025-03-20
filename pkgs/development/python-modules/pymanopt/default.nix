@@ -1,67 +1,72 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   numpy,
   scipy,
-  torch,
+
+  # tests
   autograd,
+  jax,
   matplotlib,
   pytestCheckHook,
-  setuptools-scm,
+  tensorflow,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.2.0-unstable-2024-07-10";
+  version = "2.2.1";
   pyproject = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "2.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "1de3b6f47258820fdc072fceaeaa763b9fd263b0";
-    hash = "sha256-j/fVeMgoLLBgRYFtSj2ZyNJb8iuWlnn2/YpBqUoCAFk=";
+    tag = version;
+    hash = "sha256-LOEulticgCWZBCf3qj5KFBHt0lMd4H85368IhG3DQ4g=";
   };
 
   preConfigure = ''
-    substituteInPlace pyproject.toml --replace-fail "\"pip==22.3.1\"," ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pip==22.3.1",' ""
   '';
 
   build-system = [
     setuptools-scm
   ];
+
   dependencies = [
     numpy
     scipy
-    torch
-  ];
-  nativeCheckInputs = [
-    autograd
-    matplotlib
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    substituteInPlace "tests/conftest.py" \
-      --replace-fail "import tensorflow as tf" ""
-    substituteInPlace "tests/conftest.py" \
-      --replace-fail "tf.random.set_seed(seed)" ""
-  '';
-
-  disabledTestPaths = [
-    "tests/test_examples.py"
-    "tests/backends/test_tensorflow.py"
-    "tests/backends/test_jax.py"
-    "tests/test_problem.py"
   ];
 
   pythonImportsCheck = [ "pymanopt" ];
 
+  nativeCheckInputs = [
+    autograd
+    jax
+    matplotlib
+    pytestCheckHook
+    tensorflow
+    torch
+  ];
+
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
+    # FloatingPointError: divide by zero encountered in det
+    "--deselect=tests/manifolds/test_positive_definite.py::TestMultiSpecialHermitianPositiveDefiniteManifold::test_retraction"
+    "--deselect=tests/manifolds/test_positive_definite.py::TestSingleSpecialHermitianPositiveDefiniteManifold::test_retraction"
+  ];
+
   meta = {
     description = "Python toolbox for optimization on Riemannian manifolds with support for automatic differentiation";
     homepage = "https://www.pymanopt.org/";
+    changelog = "https://github.com/pymanopt/pymanopt/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
   };

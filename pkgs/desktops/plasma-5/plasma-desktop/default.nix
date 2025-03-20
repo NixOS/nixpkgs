@@ -1,62 +1,63 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wayland-scanner
-, boost
-, fontconfig
-, ibus
-, libXcursor
-, libXft
-, libcanberra_kde
-, libpulseaudio
-, libxkbfile
-, xf86inputevdev
-, xf86inputsynaptics
-, xinput
-, xkeyboard_config
-, xorgserver
-, util-linux
-, wayland
-, wayland-protocols
-, accounts-qt
-, qtdeclarative
-, qtquickcontrols
-, qtquickcontrols2
-, qtsvg
-, qtx11extras
-, attica
-, baloo
-, kaccounts-integration
-, kactivities
-, kactivities-stats
-, kauth
-, kcmutils
-, kdbusaddons
-, kdeclarative
-, kded
-, kdelibs4support
-, kemoticons
-, kglobalaccel
-, ki18n
-, kitemmodels
-, knewstuff
-, knotifications
-, knotifyconfig
-, kpeople
-, krunner
-, kscreenlocker
-, kwallet
-, kwin
-, phonon
-, plasma-framework
-, plasma-workspace
-, qqc2-desktop-style
-, xf86inputlibinput
-, glib
-, gsettings-desktop-schemas
-, runCommandLocal
-, makeWrapper
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wayland-scanner,
+  boost,
+  fontconfig,
+  ibus,
+  libXcursor,
+  libXft,
+  libcanberra_kde,
+  libpulseaudio,
+  libxkbfile,
+  xf86inputevdev,
+  xf86inputsynaptics,
+  xinput,
+  xkeyboard_config,
+  xorgserver,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  accounts-qt,
+  qtdeclarative,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qtsvg,
+  qtx11extras,
+  attica,
+  baloo,
+  kaccounts-integration,
+  kactivities,
+  kactivities-stats,
+  kauth,
+  kcmutils,
+  kdbusaddons,
+  kdeclarative,
+  kded,
+  kdelibs4support,
+  kemoticons,
+  kglobalaccel,
+  ki18n,
+  kitemmodels,
+  knewstuff,
+  knotifications,
+  knotifyconfig,
+  kpeople,
+  krunner,
+  kscreenlocker,
+  kwallet,
+  kwin,
+  phonon,
+  plasma-framework,
+  plasma-workspace,
+  qqc2-desktop-style,
+  xf86inputlibinput,
+  glib,
+  gsettings-desktop-schemas,
+  runCommandLocal,
+  makeWrapper,
 }:
 let
   # run gsettings with desktop schemas for using in "kcm_access" kcm
@@ -68,7 +69,11 @@ let
 in
 mkDerivation {
   pname = "plasma-desktop";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wayland-scanner
+  ];
   buildInputs = [
     boost
     fontconfig
@@ -129,11 +134,10 @@ mkDerivation {
     ./kcm-access.patch
     ./no-discover-shortcut.patch
   ];
-  CXXFLAGS =
-    [
-      ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/bin/hwclock\"''
-      ''-DNIXPKGS_GSETTINGS=\"${gsettings-wrapper}/bin/gsettings\"''
-    ];
+  CXXFLAGS = [
+    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/bin/hwclock\"''
+    ''-DNIXPKGS_GSETTINGS=\"${gsettings-wrapper}/bin/gsettings\"''
+  ];
   postInstall = ''
     # Display ~/Desktop contents on the desktop by default.
     sed -i "''${!outputBin}/share/plasma/shells/org.kde.plasma.desktop/contents/defaults" \

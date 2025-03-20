@@ -1,14 +1,16 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libimobiledevice
-, libusb1
-, avahi
-, clang
-, git
-}: let
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libimobiledevice,
+  libusb1,
+  avahi,
+  clang,
+  git,
+}:
+let
 
   libgeneral = clangStdenv.mkDerivation rec {
     pname = "libgeneral";
@@ -51,6 +53,9 @@ clangStdenv.mkDerivation rec {
   postPatch = ''
     # Checking for libgeneral version still fails
     sed -i 's/libgeneral >= $LIBGENERAL_MINVERS_STR/libgeneral/' configure.ac
+
+    # Otherwise, it will complain about no matching function for call to 'find'
+    sed -i 1i'#include <algorithm>' usbmuxd2/Muxer.cpp
   '';
 
   nativeBuildInputs = [

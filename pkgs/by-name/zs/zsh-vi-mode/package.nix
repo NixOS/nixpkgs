@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zsh-vi-mode";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jeffreytse";
-    repo = pname;
+    repo = "zsh-vi-mode";
     rev = "v${version}";
     sha256 = "sha256-xbchXJTFWeABTwq6h4KWLh+EvydDrDzcY9AQVK65RS8=";
   };
@@ -15,8 +19,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/${pname}
-    cp *.zsh $out/share/${pname}/
+    mkdir -p $out/share/zsh-vi-mode
+    cp *.zsh $out/share/zsh-vi-mode/
   '';
 
   meta = with lib; {

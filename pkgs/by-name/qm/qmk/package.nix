@@ -1,53 +1,58 @@
-{ lib
-, python3
-, fetchPypi
-, pkgsCross
-, avrdude
-, dfu-programmer
-, dfu-util
-, wb32-dfu-updater
-, gcc-arm-embedded
-, gnumake
-, teensy-loader-cli
+{
+  lib,
+  python3,
+  fetchPypi,
+  pkgsCross,
+  avrdude,
+  dfu-programmer,
+  dfu-util,
+  wb32-dfu-updater,
+  gcc-arm-embedded,
+  gnumake,
+  teensy-loader-cli,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.5";
+  version = "1.1.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lv48dSIwxrokuHGcO26FpWRL+PfQ3SN3V+2pt7fmCxE=";
+    hash = "sha256-3ENs26vy+M7G261FPeODK+AbrI5+nBkHXCmGbuIqi1A=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    dotty-dict
-    hid
-    hjson
-    jsonschema
-    milc
-    pygments
-    pyserial
-    pyusb
-    pillow
-  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
-    avrdude
-    dfu-programmer
-    dfu-util
-    wb32-dfu-updater
-    teensy-loader-cli
-    gcc-arm-embedded
-    gnumake
-    pkgsCross.avr.buildPackages.binutils
-    pkgsCross.avr.buildPackages.binutils.bintools
-    pkgsCross.avr.buildPackages.gcc8
-    pkgsCross.avr.libcCross
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      dotty-dict
+      hid
+      hjson
+      jsonschema
+      milc
+      pygments
+      pyserial
+      pyusb
+      pillow
+    ]
+    ++ [
+      # Binaries need to be in the path so this is in propagatedBuildInputs
+      avrdude
+      dfu-programmer
+      dfu-util
+      wb32-dfu-updater
+      teensy-loader-cli
+      gcc-arm-embedded
+      gnumake
+      pkgsCross.avr.buildPackages.binutils
+      pkgsCross.avr.buildPackages.binutils.bintools
+      pkgsCross.avr.buildPackages.gcc
+      pkgsCross.avr.libcCross
+    ];
 
   # no tests implemented
   doCheck = false;
@@ -70,7 +75,10 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ekleog ];
+    maintainers = with maintainers; [
+      bhipple
+      ekleog
+    ];
     mainProgram = "qmk";
   };
 }

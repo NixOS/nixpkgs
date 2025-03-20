@@ -30,7 +30,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i6bhqfYo+gFTf3dqOBSQqGN4WPqbUR05StdwZvrVckI=";
   };
 

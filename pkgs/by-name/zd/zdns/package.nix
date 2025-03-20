@@ -1,26 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "zdns";
-  version = "2023-04-09-unstable";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = pname;
-    rev = "ac6c7f30a7f5e11f87779f5275adeed117227cd6";
-    hash = "sha256-que2uzIH8GybU6Ekumg/MjgBHSmFCF+T7PWye+25kaY=";
+    tag = "v${version}";
+    hash = "sha256-ypjUJbTQ0ntLXNRiA96BqDn/SgcbjVe9dd9zmmSqAic=";
   };
 
-  vendorHash = "sha256-daMPk1TKrUXXqCb4WVkrUIJsBL7uzXLJnxWNbHQ/Im4=";
+  vendorHash = "sha256-Q7W+G/yA/EvHqvDUl3T5BoP+K5ZTcLFLSaWw4TPMH2U=";
 
-  meta = with lib; {
+  preCheck = ''
+    # Tests require network access
+    substituteInPlace src/cli/worker_manager_test.go \
+      --replace-fail "TestConvertNameServerStringToNameServer" "SkipTestConvertNameServerStringToNameServer"
+  '';
+
+  meta = {
     description = "CLI DNS lookup tool";
     mainProgram = "zdns";
     homepage = "https://github.com/zmap/zdns";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

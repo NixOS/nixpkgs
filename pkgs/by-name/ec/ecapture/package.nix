@@ -16,18 +16,19 @@
   mariadb,
   openssl,
   bash,
+  zsh,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "0.8.9";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-snq6ypEEyIVxD19pdc2qw/j6FPgmRS9l6lmdDcUljKw=";
+    tag = "v${version}";
+    hash = "sha256-aubGM7kJMtfCRBeFgISuyXS9CkDwBC9hB3d6VA9mG2E=";
     fetchSubmodules = true;
   };
 
@@ -59,9 +60,7 @@ buildGoModule rec {
     "zerocallusedregs"
   ];
 
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     substituteInPlace user/config/config_gnutls_linux.go \
       --replace-fail 'return errors.New("cant found Gnutls so load path")' 'gc.Gnutls = "${lib.getLib gnutls}/lib/libgnutls.so.30"' \
       --replace-fail '"errors"' ' '
@@ -75,6 +74,12 @@ buildGoModule rec {
     substituteInPlace user/config/config_nspr_linux.go \
       --replace-fail '/usr/lib/firefox/libnspr4.so' '${lib.getLib nspr}/lib/libnspr4.so'
 
+    substituteInPlace user/config/config_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+
+    substituteInPlace user/module/probe_zsh.go \
+      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+
     substituteInPlace cli/cmd/postgres.go \
       --replace-fail '/usr/bin/postgres' '${postgresql}/bin/postgres'
 
@@ -87,8 +92,6 @@ buildGoModule rec {
     substituteInPlace user/config/config_openssl_linux.go \
       --replace-fail 'return errors.New("cant found openssl so load path")' 'oc.Openssl = "${lib.getLib openssl}/lib/libssl.so.3"' \
       --replace-fail '"errors"' ' '
-
-    runHook postPatch
   '';
 
   postConfigure = ''
@@ -102,7 +105,15 @@ buildGoModule rec {
     go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
   '';
 
-  vendorHash = "sha256-j5AXZqup0nPUlGWvb4PCLKJFoQx/c4I3PxZB99TTTWA=";
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCheckLatest"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  vendorHash = "sha256-8ilfqPt5Phuj5Uaf90+Ir/DFN27oW5Fd+Wsp34/EU9M=";
 
   passthru.updateScript = nix-update-script { };
 

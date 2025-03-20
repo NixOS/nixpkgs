@@ -1,4 +1,9 @@
-{ lib, ruby, buildRubyGem, bundlerEnv }:
+{
+  lib,
+  ruby,
+  buildRubyGem,
+  bundlerEnv,
+}:
 let
   deps = bundlerEnv rec {
     inherit ruby;

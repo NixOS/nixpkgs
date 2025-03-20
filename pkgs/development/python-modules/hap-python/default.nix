@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mBjVUfNHuGSeLRisqu9ALpTDwpxHir+6X0scq+HrzxA=";
   };
 

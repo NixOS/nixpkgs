@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mt-st";
@@ -9,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "b552775326a327cdcc076c431c5cbc4f4e235ac7c41aa931ad83f94cccb9f6de";
   };
 
-  installFlags = [ "PREFIX=$(out)" "EXEC_PREFIX=$(out)" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "EXEC_PREFIX=$(out)"
+  ];
 
   meta = {
     description = "Magnetic Tape control tools for Linux";

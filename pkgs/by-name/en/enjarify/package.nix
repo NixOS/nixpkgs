@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "enjarify";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "enjarify";
     rev = version;
     sha256 = "sha256-VDBC5n2jWLNJsilX+PV1smL5JeBDj23jYFRwdObXwYs=";
   };

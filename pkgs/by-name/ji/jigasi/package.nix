@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, dpkg, jdk11, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jdk11,
+  nixosTests,
+}:
 
 let
   pname = "jigasi";
@@ -14,8 +21,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ dpkg ];
 
   dontBuild = true;
-
-  unpackCmd = "dpkg-deb -x $src debcontents";
 
   installPhase = ''
     runHook preInstall

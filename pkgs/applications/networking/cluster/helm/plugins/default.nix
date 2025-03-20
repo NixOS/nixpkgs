@@ -5,6 +5,8 @@
 
   helm-diff = callPackage ./helm-diff.nix { };
 
+  helm-dt = callPackage ./helm-dt.nix { };
+
   helm-git = callPackage ./helm-git.nix { };
 
   helm-mapkubeapis = callPackage ./helm-mapkubeapis.nix { };

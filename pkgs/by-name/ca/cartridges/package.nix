@@ -11,6 +11,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -18,14 +19,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.10.1";
+  version = "2.11.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uwU0jW5+33hiqpuG83r0GVfANl6ltDLa3s4s0IJHRoQ=";
+    tag = "v${version}";
+    hash = "sha256-2w7qHTEaRnVDRa0e39Dg9H7pjhgM2UATe8pGYncYILE=";
   };
 
   strictDeps = true;
@@ -69,6 +70,10 @@ python3Packages.buildPythonApplication rec {
     mesonCheckPhase
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "GTK4 + Libadwaita game launcher";
     longDescription = ''
@@ -80,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Cartridges/";
     changelog = "https://github.com/kra-mo/cartridges/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = lib.teams.gnome-circle.members;
     mainProgram = "cartridges";
     platforms = lib.platforms.linux;
   };

@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "texture-synthesis";
@@ -6,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "embarkstudios";
-    repo = pname;
+    repo = "texture-synthesis";
     rev = version;
     sha256 = "0n1wbxcnxb7x5xwakxdzq7kg1fn0c48i520j03p7wvm5x97vm5h4";
   };
@@ -24,7 +29,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "texture-synthesis";
   };

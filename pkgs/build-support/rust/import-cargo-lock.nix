@@ -49,6 +49,10 @@ let
 
   parsedLockFile = builtins.fromTOML lockFileContents;
 
+  # lockfile v1 and v2 don't have the `version` key, so assume v2
+  # we can implement more fine-grained detection later, if needed
+  lockFileVersion = parsedLockFile.version or 2;
+
   packages = parsedLockFile.package;
 
   # There is no source attribute for the source package itself. But
@@ -191,7 +195,7 @@ let
         echo Found crate ${pkg.name} at $crateCargoTOML
         tree=$(dirname $crateCargoTOML)
 
-        cp -prvL "$tree/" $out
+        ${python3Packages.python.interpreter} -c 'import sys, shutil; shutil.copytree(sys.argv[1], sys.argv[2], ignore_dangling_symlinks=True)' "$tree" "$out"
         chmod u+w $out
 
         if grep -q workspace "$out/Cargo.toml"; then
@@ -202,11 +206,20 @@ let
         # Cargo is happy with empty metadata.
         printf '{"files":{},"package":null}' > "$out/.cargo-checksum.json"
 
+        ${lib.optionalString (gitParts ? type) ''
+          gitPartsValue=${lib.escapeShellArg gitParts.value}
+          # starting with lockfile version v4 the git source url contains encoded query parameters
+          # our regex parser does not know how to unescape them to get the actual value, so we do it here
+          ${lib.optionalString (lockFileVersion >= 4) ''
+            gitPartsValue=$(${lib.getExe python3Packages.python} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
+          ''}
+        ''}
+
         # Set up configuration for the vendor directory.
         cat > $out/.cargo-config <<EOF
-        [source."${gitParts.url}${lib.optionalString (gitParts ? type) "?${gitParts.type}=${gitParts.value}"}"]
+        [source."${pkg.source}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
+        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"$gitPartsValue\""}
         replace-with = "vendored-sources"
         EOF
       ''

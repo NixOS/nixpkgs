@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,
@@ -16,10 +15,6 @@ python.pkgs.buildPythonApplication rec {
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'fastapi-slim' 'fastapi'
-  '';
 
   pythonRelaxDeps = [
     "pillow"

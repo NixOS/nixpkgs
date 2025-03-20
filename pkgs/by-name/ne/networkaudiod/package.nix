@@ -1,9 +1,10 @@
-{ stdenv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
-, alsa-lib
+{
+  stdenv,
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  lib,
+  alsa-lib,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -13,22 +14,27 @@ stdenv.mkDerivation rec {
   pname = "networkaudiod";
   version = "4.1.1-46";
 
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_amd64.deb";
-      sha256 = "sha256-un5VcCnvCCS/KWtW991Rt9vz3flYilERmRNooEsKCkA=";
-    };
-    aarch64-linux = fetchurl {
-      url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_arm64.deb";
-      sha256 = "sha256-fjSCWX9VYhVJ43N2kSqd5gfTtDJ1UiH4j5PJ9I5Skag=";
-    };
-  }.${system} or throwSystem;
+  src =
+    {
+      x86_64-linux = fetchurl {
+        url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_amd64.deb";
+        sha256 = "sha256-un5VcCnvCCS/KWtW991Rt9vz3flYilERmRNooEsKCkA=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_arm64.deb";
+        sha256 = "sha256-fjSCWX9VYhVJ43N2kSqd5gfTtDJ1UiH4j5PJ9I5Skag=";
+      };
+    }
+    .${system} or throwSystem;
 
   unpackPhase = ''
     dpkg -x $src .
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+  ];
 
   buildInputs = [
     alsa-lib

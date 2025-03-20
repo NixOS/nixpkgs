@@ -1,27 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cpp-utilities
-, zlib
-, isocodes
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cpp-utilities,
+  zlib,
+  isocodes,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tagparser";
-  version = "12.3.1";
+  version = "12.4.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "tagparser";
     rev = "v${version}";
-    hash = "sha256-ihrtUd9R8Tdkuv0kdIZNzBDrhwmsC3LNDsmoCroSMPM=";
+    hash = "sha256-wVdE1lgSQsH4g10/lxa8bZlYT141Vd7gRhefxyz8kRM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    cpp-utilities zlib
+    cpp-utilities
+    zlib
   ];
 
   cmakeFlags = [
@@ -36,4 +38,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

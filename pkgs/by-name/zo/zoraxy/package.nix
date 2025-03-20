@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "zoraxy";
-  version = "3.1.1";
+  version = "3.1.8";
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZjsBGtY6M5jIXylzg4k8U4krwqx5d5VuMiVHAeUIbXY=";
+    tag = "v${version}";
+    hash = "sha256-0BJuomRz/ZnvHQXPZBBrVv1nk2UFPGGdjsZ/FpUAtwk=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-p2nczUMT3FfYX32yvbR0H5FyHV2v9I18yvn0lwUwy+A=";
+  vendorHash = "sha256-gqDgM+xyvzrpQEQz0fju8GEtQhJOaL6FeuwYxgeSRmo=";
 
   checkFlags =
     let
@@ -27,6 +27,8 @@ buildGoModule rec {
         "TestReplaceLocationHostRelative"
         "TestHandleTraceRoute"
         "TestHandlePing"
+        "TestListTable"
+        "TestWriteAndRead"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

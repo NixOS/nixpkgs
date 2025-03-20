@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "nmap-formatter";
-  version = "3.0.1";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2XbqpvtlNAYrgtaMnFklYRoHCj3nkltEZlwbZzvfdFU=";
+    hash = "sha256-eWrFeADjPUioKuGcC3f/y2ocBwOHa5KN81YjF2dbgoc=";
   };
 
-  vendorHash = "sha256-PKoe4rpwPy3omfRRhN70iEJJ/sHliIwxPUHGxRJqrf4=";
+  vendorHash = "sha256-zYXT5+TLx+Z9WtgDabaUqBdRiaa+tyeQYwENfnv8ARo=";
 
   meta = with lib; {
     description = "Tool that allows you to convert nmap output";

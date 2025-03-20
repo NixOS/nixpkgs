@@ -1,18 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, findutils, getopt, gnugrep, gnused, sops }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  findutils,
+  getopt,
+  gnugrep,
+  gnused,
+  sops,
+}:
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s76XIB7s92zSzG8GGsJJuTG3cwbGHL7oc1x30k/WoOU=";
+    hash = "sha256-5vsUyeQH/kCaHo7aze1xA1NVLXrxpFB19P708ikKTpg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ getopt sops ];
+  buildInputs = [
+    getopt
+    sops
+  ];
 
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
@@ -29,7 +43,16 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/${pname} plugin.yaml
     cp -r scripts/* $out/${pname}/scripts
     wrapProgram $out/${pname}/scripts/run.sh \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils getopt gnugrep gnused sops ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            findutils
+            getopt
+            gnugrep
+            gnused
+            sops
+          ]
+        }
 
     runHook postInstall
   '';

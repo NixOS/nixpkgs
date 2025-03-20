@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,14 +19,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0c0MsjrHRitg+5VEHB9/iSuiqcPztF+2inDZa9fQpwU=";
   };
 
-  cargoHash = "sha256-q8s6HAJhKnMhsgZk5plR+ar3CpLKNqjrD14roDWLwfo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CuCVofzKd/VPBTZY+ubk5wP9akt9kQLyi221fg7yt3M=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                  darwin.apple_sdk.frameworks.SystemConfiguration
-                ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 
@@ -34,6 +37,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "scryer-prolog";
     homepage = "https://github.com/mthom/scryer-prolog";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ malbarbo wkral ];
+    maintainers = with maintainers; [
+      malbarbo
+      wkral
+    ];
   };
 }

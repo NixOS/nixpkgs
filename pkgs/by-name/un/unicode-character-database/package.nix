@@ -1,6 +1,8 @@
-{ lib, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation rec {

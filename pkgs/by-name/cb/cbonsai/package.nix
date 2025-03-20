@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitLab, ncurses, pkg-config, nix-update-script, scdoc }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  ncurses,
+  pkg-config,
+  nix-update-script,
+  scdoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cbonsai";
@@ -6,12 +14,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "jallbrit";
-    repo = pname;
+    repo = "cbonsai";
     rev = "v${version}";
     hash = "sha256-XFK6DiIb8CzVubTnEMkqRW8xZkX/SWjUsrfS+I7LOs8=";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

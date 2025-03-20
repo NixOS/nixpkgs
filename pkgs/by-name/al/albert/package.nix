@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.26.6";
+  version = "0.27.5";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Z4YgqqtJPYMzpnMt74TX2Hi0AEMyhRc2QHSVuwuaxfE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rdBNh9TICeOpglaJ5OJbE/f4W/UPqCkhp8H/H2OBTRM=";
     fetchSubmodules = true;
   };
 

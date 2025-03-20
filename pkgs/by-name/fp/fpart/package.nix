@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, fts }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  fts,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fpart";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
     rev = "fpart-${version}";
-    sha256 = "sha256-kAvGLd5W633fRS+qVD/yclreFfcauyLygQGtzv7AP24=";
+    sha256 = "sha256-BQGSKDSuK2iB0o2v8I+XOwhYtU/0QtMevt4pgIfRhNQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

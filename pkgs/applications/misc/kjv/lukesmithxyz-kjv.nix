@@ -1,10 +1,11 @@
-{ lib
-, gawk
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  gawk,
+  stdenv,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lukesmithxyz-bible-kjv";
   version = "unstable-2022-06-01";
 

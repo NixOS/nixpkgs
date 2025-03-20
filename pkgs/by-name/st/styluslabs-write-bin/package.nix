@@ -1,4 +1,13 @@
-{ stdenv, lib, libsForQt5, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
+{
+  stdenv,
+  lib,
+  libsForQt5,
+  libglvnd,
+  libX11,
+  libXi,
+  fetchurl,
+  makeDesktopItem,
+}:
 let
   desktopItem = makeDesktopItem {
     name = "Write";
@@ -7,7 +16,10 @@ let
     icon = "write_stylus";
     desktopName = "Write";
     genericName = "Write";
-    categories = [ "Office" "Graphics" ];
+    categories = [
+      "Office"
+      "Graphics"
+    ];
   };
 in
 stdenv.mkDerivation rec {
@@ -35,21 +47,23 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
   '';
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      libsForQt5.qtbase # libQt5PrintSupport.so.5
-      libsForQt5.qtsvg  # libQt5Svg.so.5
-      (lib.getLib stdenv.cc.cc)  # libstdc++.so.6
-      libglvnd          # libGL.so.1
-      libX11            # libX11.so.6
-      libXi             # libXi.so.6
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/Write/Write
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libsForQt5.qtbase # libQt5PrintSupport.so.5
+        libsForQt5.qtsvg # libQt5Svg.so.5
+        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+        libglvnd # libGL.so.1
+        libX11 # libX11.so.6
+        libXi # libXi.so.6
+      ];
+    in
+    ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/Write/Write
+    '';
 
   meta = with lib; {
     homepage = "http://www.styluslabs.com/";
@@ -57,6 +71,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ oyren lukts30 atemu ];
+    maintainers = with maintainers; [
+      oyren
+      lukts30
+      atemu
+    ];
   };
 }

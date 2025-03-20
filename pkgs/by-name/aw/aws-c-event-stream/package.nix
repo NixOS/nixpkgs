@@ -1,20 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, aws-c-io, aws-checksums, nix, s2n-tls, libexecinfo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-io,
+  aws-checksums,
+  nix,
+  s2n-tls,
+  libexecinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
-  version = "0.4.3";
+  # nixpkgs-update: no auto update
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
+    repo = "aws-c-event-stream";
     rev = "v${version}";
-    hash = "sha256-xLgPFy+wFtUe3GawICrAHyji+mkfxC2jw7lsL+p7pl4=";
+    hash = "sha256-lg1qS/u5Fi8nt/tv2ekd8dgQ7rlrF3DrRxqidAoEywY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-cal aws-c-common aws-c-io aws-checksums s2n-tls ]
-    ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
+  buildInputs = [
+    aws-c-cal
+    aws-c-common
+    aws-c-io
+    aws-checksums
+    s2n-tls
+  ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"

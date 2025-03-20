@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch,
-  libX11, libXinerama, libXrandr, libXpm, libXft, imlib2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libX11,
+  libXinerama,
+  libXrandr,
+  libXpm,
+  libXft,
+  imlib2,
+}:
 stdenv.mkDerivation {
   pname = "wmfs";
 

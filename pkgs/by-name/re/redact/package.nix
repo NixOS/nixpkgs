@@ -21,7 +21,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     install -Dm444 ${appimageContents}/redact.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/redact.png -t $out/share/icons/hicolor/512x512/apps/redact.png
     substituteInPlace $out/share/applications/redact.desktop \

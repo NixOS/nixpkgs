@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  autocommand,
   more-itertools,
   beautifulsoup4,
   mechanize,
@@ -27,31 +27,29 @@
   cherrypy,
   importlib-resources,
   pyparsing,
-  requests-mock,
+  pytest-responses,
   nettools,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-net";
-  version = "10.2.0";
-
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  version = "10.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.net";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-z9+gz6Sos0uluU5icXJN9OMmWFErVrJXBvoBcKv6Wwg=";
+    tag = "v${version}";
+    hash = "sha256-yZbiCGUZqJQdV3/vtNLs+B9ZDin2PH0agR4kYvB5HxA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    autocommand
     more-itertools
     beautifulsoup4
     mechanize
@@ -77,23 +75,18 @@ buildPythonPackage rec {
     cherrypy
     importlib-resources
     pyparsing
-    requests-mock
+    pytest-responses
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
 
   disabledTestPaths = [
-    # doesn't actually contain tests
-    "fabfile.py"
     # require networking
+    "jaraco/net/icmp.py"
     "jaraco/net/ntp.py"
     "jaraco/net/scanner.py"
-    "tests/test_cookies.py"
   ];
 
-  # cherrypy does not support Python 3.11
-  doCheck = pythonOlder "3.11";
-
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.net/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/jaraco.net/blob/${src.tag}/NEWS.rst";
     description = "Networking tools by jaraco";
     homepage = "https://github.com/jaraco/jaraco.net";
     license = lib.licenses.mit;

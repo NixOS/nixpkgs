@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nsh";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nuta";
-    repo = pname;
+    repo = "nsh";
     rev = "v${version}";
     sha256 = "1479wv8h5l2b0cwp27vpybq50nyvszhjxmn76n2bz3fchr0lrcbp";
   };
 
-  cargoHash = "sha256-47Nis3ygGAS8Zi+FiWAXNZxWsT0gkPSleSVpWz3Jss8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kbHNFVu5OIg/eKefhsYRGvlXFduB0aBVflPV9hkM4Ec=";
 
   doCheck = false;
 
@@ -20,7 +25,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
-    license = [ licenses.cc0 /* or */ licenses.mit ];
+    license = [
+      licenses.cc0 # or
+      licenses.mit
+    ];
     maintainers = with maintainers; [ cafkafk ];
   };
 

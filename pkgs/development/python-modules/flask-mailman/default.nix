@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "waynerv";
     repo = "flask-mailman";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0kD3rxFDJ7FcmBLVju75z1nf6U/7XfjiLD/oM/VP4jQ=";
   };
 

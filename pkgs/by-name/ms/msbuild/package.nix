@@ -2,7 +2,7 @@
 
 let
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
 
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";
@@ -14,7 +14,7 @@ let
   mkPackage = attrs: stdenv.mkDerivation (finalAttrs:
     dotnetCorePackages.addNuGetDeps
       {
-        nugetDeps = ./deps.nix;
+        nugetDeps = ./deps.json;
         overrideFetchAttrs = a: {
           dontBuild = false;
         };
@@ -72,7 +72,7 @@ mkPackage rec {
     # The provided libhostfxr.dylib is for x86_64-darwin, so we remove it
     rm artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/libhostfxr.dylib
 
-    ln -s $(find ${dotnet-sdk} -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
 
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
@@ -82,7 +82,7 @@ mkPackage rec {
     echo "#!${stdenv.shell}" > mono/build/extract_and_copy_hostfxr.sh
 
     mkdir -p mono/dotnet-overlay/msbuild-bin
-    cp ${dotnet-sdk}/sdk/*/{Microsoft.NETCoreSdk.BundledVersions.props,RuntimeIdentifierGraph.json} mono/dotnet-overlay/msbuild-bin
+    cp ${dotnet-sdk.unwrapped}/share/dotnet/sdk/*/{Microsoft.NETCoreSdk.BundledVersions.props,RuntimeIdentifierGraph.json} mono/dotnet-overlay/msbuild-bin
 
     # DisableNerdbankVersioning https://gitter.im/Microsoft/msbuild/archives/2018/06/27?at=5b33dbc4ce3b0f268d489bfa
     # TODO there are some (many?) failing tests
@@ -99,7 +99,7 @@ mkPackage rec {
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
-    ln -s $(find ${dotnet-sdk} -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk.unwrapped}/share/dotnet -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kubespy";
@@ -17,7 +22,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-X" "github.com/pulumi/kubespy/version.Version=${version}" ];
+  ldflags = [
+    "-X"
+    "github.com/pulumi/kubespy/version.Version=${version}"
+  ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -31,6 +39,6 @@ buildGoModule rec {
     mainProgram = "kubespy";
     homepage = "https://github.com/pulumi/kubespy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
   };
 }

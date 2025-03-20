@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,7 @@ buildGoModule rec {
     description = "Utility program to manipulate influxdb api tokens for declarative setups";
     homepage = "https://github.com/oddlama/influxdb2-token-manipulator";
     license = licenses.mit;
-    maintainers = with maintainers; [oddlama];
+    maintainers = with maintainers; [ oddlama ];
     mainProgram = "influxdb2-token-manipulator";
   };
 }

@@ -17,13 +17,13 @@
 let
   data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
-    version = "2.48.2";
+    version = "2.52.3";
 
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-KMj+aS+xd96pt1NhqL3CBKj83ZfiX2npmJtwUFa00qU=";
+      hash = "sha256-hwluSZGYRMN32dSLIe8Cs6l6R84V5fNCuHYtoc7+b00=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -70,6 +70,7 @@ stdenv.mkDerivation {
     qtbase
     luajit
     luajit.pkgs.lua-curl
+    luajit.pkgs.luautf8
   ];
 
   installPhase = ''

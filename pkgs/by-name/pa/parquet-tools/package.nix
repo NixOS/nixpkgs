@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  addBinToPathHook,
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "parquet-tools";
   version = "0.2.16";
 
@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ktrueda";
     repo = "parquet-tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mV66R5ejfzH1IasmoyAWAH5vzrnLVVhOqKBMfWKIVY0=";
   };
 
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tests/test_inspect.py \
-      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${pyarrow.version}" \
+      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${python3Packages.pyarrow.version}" \
       --replace "serialized_size: 2222" "serialized_size: 2221" \
       --replace "format_version: 1.0" "format_version: 2.6"
   '';
@@ -37,11 +37,11 @@ buildPythonApplication rec {
     "thrift"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     boto3
     colorama
     halo
@@ -51,16 +51,16 @@ buildPythonApplication rec {
     thrift
   ];
 
-  # TestGetMetaData.test_inspect shells out to `parquet-tools` CLI entrypoint
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
-  nativeCheckInputs = [
-    moto
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      moto
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   disabledTests = [
     # test file is 2 bytes bigger than expected

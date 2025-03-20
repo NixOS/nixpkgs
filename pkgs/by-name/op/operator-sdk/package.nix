@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, go
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  go,
+  fetchFromGitHub,
+  makeWrapper,
 }:
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.37.0";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ANG9KpyEO+fpjelYU+HNTkbg2S0vFNyPzPRFjcLoLOI=";
+    tag = "v${version}";
+    hash = "sha256-+lgpwpLkqpAZ0aScM62gk4l/h44auB7ixhW3ZoT7m64=";
   };
 
-  vendorHash = "sha256-pr3WTUZetps/Gof8lttN2beomiobVPCgX0j9V77g5sI=";
+  vendorHash = "sha256-3CtVl3HWUcbXp/U/pTqoCol4kmJqtLsTlcAijGHENtI=";
 
   nativeBuildInputs = [
     makeWrapper

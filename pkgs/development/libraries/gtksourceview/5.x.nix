@@ -1,36 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, pcre2
-, gtk4
-, pango
-, fribidi
-, vala
-, gi-docgen
-, libxml2
-, perl
-, gettext
-, gnome
-, gobject-introspection
-, dbus
-, xvfb-run
-, shared-mime-info
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  pcre2,
+  gtk4,
+  pango,
+  fribidi,
+  vala,
+  gi-docgen,
+  libxml2,
+  perl,
+  gettext,
+  gnome,
+  gobject-introspection,
+  dbus,
+  xvfb-run,
+  shared-mime-info,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.14.1";
+  version = "5.14.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AJhi6HuSnaWnJOzgefAfjO4p50eXoeysNJ9YwVo8vFg=";
+    hash = "sha256-Gm04emgHX4rv1OdSz0hxd8SmgjsU/4pDSYaFiurvYmQ=";
   };
 
   patches = [
@@ -39,9 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Since this is not generally true with Nix, let’s add $out/share unconditionally.
     ./4.x-nix_share_path.patch
   ];
-
-  # The 10.12 SDK used by x86_64-darwin requires defining `_POSIX_C_SOURCE` to use `strnlen`.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "-D_POSIX_C_SOURCE=200809L";
 
   nativeBuildInputs = [
     meson

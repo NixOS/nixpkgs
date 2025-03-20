@@ -12,12 +12,12 @@
 
 let
   pname = "uhk-agent";
-  version = "4.1.0";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-5VzUSuq+yc8HXSILMg24w/hbwasf4jq0H0wte9Mw+nY=";
+    sha256 = "sha256-zBDk6eRLMsQVBNuCejstozaxxBboZBhu4X+Ms0buoLU=";
   };
 
   appimageContents = appimageTools.extract {
@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/opt/${pname}/app.asar.unpacked" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 

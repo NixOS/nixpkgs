@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, pxz
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  pxz,
+  xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pxz";
   version = "4.999.9beta";
 

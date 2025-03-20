@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libopus }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libopus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libopusenc";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ffb0vhlymlsq70pxsjj0ksz77yfm2x0a1x8q50kxmnkm1hxp642";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
 

@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, libevent
-, libgrapheme
-, libressl
-, ncurses
-, autoreconfHook
-, buildPackages
-, memstreamHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  libevent,
+  libgrapheme,
+  libressl,
+  ncurses,
+  autoreconfHook,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "omar-polo";
-    repo = pname;
+    repo = "telescope";
     rev = version;
     hash = "sha256-MVZ/pvDAETacQiEMEXM0gYM20LXqNiHtMfFGqS1vipY=";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libgrapheme
     libressl
     ncurses
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin memstreamHook;
+  ];
 
   configureFlags = [
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"

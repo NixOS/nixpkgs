@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, substituteAll
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, libical
-, granite7
-, gtk4
-, libxml2
-, switchboard
-, tzdata
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  replaceVars,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  libical,
+  granite7,
+  gettext,
+  gtk4,
+  libxml2,
+  switchboard,
+  tzdata,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +31,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       tzdata = tzdata;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja

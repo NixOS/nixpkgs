@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 buildGoModule rec {
   pname = "docopts";
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "docopt";
     repo = "docopts";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
   };
 

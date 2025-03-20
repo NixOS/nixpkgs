@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, zlib
-, ninja
-, meson
-, pkg-config
-, cmake
-, libpng
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  zlib,
+  ninja,
+  meson,
+  pkg-config,
+  cmake,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "randy408";
-    repo = pname;
+    repo = "libspng";
     rev = "v${version}";
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
     "-Ddev_build=true"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 

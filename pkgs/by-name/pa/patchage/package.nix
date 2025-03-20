@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, alsa-lib
-, boost
-, dbus-glib
-, ganv
-, glibmm
-, gtkmm2
-, libjack2
-, pkg-config
-, python3
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  alsa-lib,
+  boost,
+  dbus-glib,
+  ganv,
+  glibmm,
+  gtkmm2,
+  libjack2,
+  pkg-config,
+  python3,
+  wafHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "drobilla";
-    repo = pname;
+    repo = "patchage";
     rev = "v${version}";
     hash = "sha256-LzN6RyF/VT4LUVeR0904BnLuNMFZjFTDu9oDIKYG2Yo=";
     fetchSubmodules = true;

@@ -7,30 +7,30 @@
   isodate,
   requests,
   requests-oauthlib,
+  pytest-cov-stub,
   pytestCheckHook,
   responses,
 }:
+
 buildPythonPackage rec {
   pname = "python-youtube";
-  version = "0.9.6";
-  format = "pyproject";
+  version = "0.9.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sns-sdks";
     repo = "python-youtube";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IuVnXVe54D0g+7S+AuTGtBlwcmxHpkk1e9Vt8laEV2c=";
+    tag = "v${version}";
+    hash = "sha256-dK0le/7/hpavrHbk4DaXoIxPHUUJuWuxHIWMZKC4eSM=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=pyyoutube" "" \
-      --replace "--cov-report xml" ""
-  '';
+  pythonRelaxDeps = [
+    "requests-oauthlib"
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dataclasses-json
     isodate
     requests
@@ -42,13 +42,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     responses
+    pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python wrapper around for YouTube Data API";
     homepage = "https://github.com/sns-sdks/python-youtube";
-    changelog = "https://github.com/sns-sdks/python-youtube/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    changelog = "https://github.com/sns-sdks/python-youtube/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

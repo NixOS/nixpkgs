@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = "asyncio-dgram";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Eb/9JtgPT2yOlfnn5Ox8M0kcQhSlRCuX8+Rq6amki8Q=";
+    tag = "v${version}";
+    hash = "sha256-9aO3xFmoR74uZSzxBPRVvz0QSW15TAdWEszLBX8AUR4=";
   };
 
   build-system = [ setuptools ];

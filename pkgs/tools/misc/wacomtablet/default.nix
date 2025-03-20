@@ -1,5 +1,13 @@
-{ lib, mkDerivation, fetchurl, fetchpatch, extra-cmake-modules, qtx11extras,
-  plasma-workspace, libwacom, xf86_input_wacom
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qtx11extras,
+  plasma-workspace,
+  libwacom,
+  xf86_input_wacom,
 }:
 
 mkDerivation rec {
@@ -18,8 +26,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    qtx11extras plasma-workspace
-    libwacom xf86_input_wacom
+    qtx11extras
+    plasma-workspace
+    libwacom
+    xf86_input_wacom
   ];
 
   meta = {

@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpng,
+  libjpeg,
+  giflib,
+  perl,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "metapixel";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "schani";
-    repo = pname;
+    repo = "metapixel";
     rev = "98ee9daa093b6c334941242e63f90b1c2876eb4f";
     fetchSubmodules = true;
     sha256 = "0r7n3a6bvcxkbpda4mwmrpicii09iql5z69nkjqygkwxw7ny3309";
@@ -15,7 +24,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "metapixel" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng libjpeg giflib perl ];
+  buildInputs = [
+    libpng
+    libjpeg
+    giflib
+    perl
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

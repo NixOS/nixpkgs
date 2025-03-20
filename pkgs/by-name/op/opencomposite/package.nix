@@ -5,33 +5,36 @@
   jsoncpp,
   lib,
   libGL,
+  nix-update-script,
+  openxr-loader,
   python3,
   stdenv,
-  unstableGitUpdater,
   vulkan-headers,
   vulkan-loader,
   xorg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencomposite";
-  version = "0-unstable-2024-10-28";
+  version = "1.0.1473";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "e162c7e9be2521a357fba4bee13af85437a1027b";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-+suq0gV8zRDhF3ApnzQCC/5st59VniU6v7TcDdght6Q=";
+    hash = "sha256-kwu8eM/rQBcZfs91loh7QAB46a01F9n5Xm1DmMd53MQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     glm
     jsoncpp
     libGL
-    python3
     vulkan-headers
     vulkan-loader
     xorg.libX11
@@ -51,15 +54,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-    branch = "openxr";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
     homepage = "https://gitlab.com/znixian/OpenOVR";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ Scrumplex ];
+    # This can realistically only work on systems that support OpenXR Loader
+    inherit (openxr-loader.meta) platforms;
   };
-}
+})

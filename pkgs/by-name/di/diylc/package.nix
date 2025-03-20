@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  bash,
+  jre8,
+}:
 
 let
   pname = "diylc";
@@ -27,10 +35,13 @@ let
     comment = "Multi platform circuit layout and schematic drawing tool";
     exec = "diylc";
     icon = "diylc_icon";
-    categories = [ "Development" "Electronics" ];
+    categories = [
+      "Development"
+      "Electronics"
+    ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;

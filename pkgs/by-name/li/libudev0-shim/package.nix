@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, udev }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  udev,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libudev0-shim";

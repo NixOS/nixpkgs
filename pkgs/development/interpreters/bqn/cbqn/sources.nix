@@ -7,19 +7,20 @@
 }:
 
 {
-  cbqn = let
-    self = {
-      pname = "cbqn";
-      version = "0.8.0";
+  cbqn =
+    let
+      self = {
+        pname = "cbqn";
+        version = "0.8.0";
 
-      src = fetchFromGitHub {
-        owner = "dzaima";
-        repo = "CBQN";
-        rev = "v${self.version}";
-        hash = "sha256-vmd7CX0jgozysmjKK0p5GM4Qd3vY71q1kcKwfr+6fkw=";
+        src = fetchFromGitHub {
+          owner = "dzaima";
+          repo = "CBQN";
+          rev = "v${self.version}";
+          hash = "sha256-vmd7CX0jgozysmjKK0p5GM4Qd3vY71q1kcKwfr+6fkw=";
+        };
       };
-    };
-  in
+    in
     self;
 
   cbqn-bytecode = {

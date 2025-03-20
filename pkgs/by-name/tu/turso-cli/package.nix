@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "turso-cli";
-  version = "0.97.2";
+  version = "0.99.1";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-6Ci1QESSN6wNpUAQoWtTyHWrGaI/3xs/jGCSkJsYC8o=";
+    hash = "sha256-4gcG23Tdkl+UO4MQ7A9s8GweOlwVSDHAY+WNVyBvNqE=";
   };
 
   vendorHash = "sha256-tBO21IgUczwMgrEyV7scV3YTY898lYHASaLeXqvBopU=";
@@ -43,6 +43,10 @@ buildGoModule rec {
     homepage = "https://turso.tech";
     mainProgram = "turso";
     license = licenses.mit;
-    maintainers = with maintainers; [ zestsystem kashw2 fryuni ];
+    maintainers = with maintainers; [
+      zestsystem
+      kashw2
+      fryuni
+    ];
   };
 }

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libdvdread, libdvdcss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdread,
+  libdvdcss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vobcopy";
@@ -9,8 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "01l1yihbd73srzghzzx5dgfg3yfb5kml5dix52mq0snhjp8h89c9";
   };
 
-  buildInputs = [libdvdread libdvdcss];
-  makeFlags   = [ "DESTDIR=$(out)" "PREFIX=/" ];
+  buildInputs = [
+    libdvdread
+    libdvdcss
+  ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX=/"
+  ];
 
   meta = {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";

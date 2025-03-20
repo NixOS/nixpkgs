@@ -1,17 +1,29 @@
-{ stdenv, fetchFromGitHub, lib, makeWrapper, rustPlatform, wget, libiconv, withFzf ? true, fzf }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  rustPlatform,
+  wget,
+  libiconv,
+  withFzf ? true,
+  fzf,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.23.0";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
-    rev = "v${version}";
-    sha256 = "sha256-pqBTrHBvsuosyQqCnSiI3+pOe2J6XeIQ8dai+kTVFjc=";
+    tag = "v${version}";
+    hash = "sha256-zvqxVu147u/m/4B3fhbuQ46txGMrlgQv9d4GGiR8SoQ=";
   };
 
-  cargoHash = "sha256-dx13p+kEyqhyaF8ejJLWsgW3IpEvS9nlIHhjxOpp4d8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tQCm8KMVWo6KiKVOMDitHtDXwYGM7INXcT+7fEEiIiI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -20,20 +32,22 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/navi \
       --prefix PATH : "$out/bin" \
-      --prefix PATH : ${lib.makeBinPath([ wget ] ++ lib.optionals withFzf [ fzf ])}
+      --prefix PATH : ${lib.makeBinPath ([ wget ] ++ lib.optionals withFzf [ fzf ])}
   '';
 
   checkFlags = [
     # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
     "--skip=test_parse_variable_line"
-   ];
+  ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interactive cheatsheet tool for the command-line and application launchers";
     homepage = "https://github.com/denisidoro/navi";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "navi";
-    maintainers = with maintainers; [ cust0dian ];
+    maintainers = with lib.maintainers; [ cust0dian ];
   };
 }

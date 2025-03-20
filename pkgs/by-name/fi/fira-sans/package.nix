@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -8,7 +9,9 @@ stdenvNoCC.mkDerivation rec {
   version = "4.301";
 
   src = fetchzip {
-    url = "https://bboxtype.com/downloads/Fira/Download_Folder_FiraSans_${lib.replaceStrings ["."] [""] version}.zip";
+    url = "https://bboxtype.com/downloads/Fira/Download_Folder_FiraSans_${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }.zip";
     hash = "sha256-WBt3oqPK7ACqMhilYkyFx9Ek2ugwdCDFZN+8HLRnGRs";
     stripRoot = false;
   };

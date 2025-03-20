@@ -1,14 +1,21 @@
-{ lib, stdenv, gnome-shell, fetchFromGitHub, xprop, glib }:
+{
+  lib,
+  stdenv,
+  gnome-shell,
+  fetchFromGitHub,
+  xprop,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-unite";
-  version = "80";
+  version = "81";
 
   src = fetchFromGitHub {
     owner = "hardpixel";
     repo = "unite-shell";
     rev = "v${version}";
-    hash = "sha256-mK5EoGlfJ6JGQkKuYFg1wxwyL5p+woIlJfkj9UWozio=";
+    hash = "sha256-VGanUhZ1Lh0L7lMThR1PzSoRHU8AOSIIqUOpjNUULk8=";
   };
 
   passthru = {

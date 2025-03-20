@@ -1,21 +1,22 @@
-{ lib
-, cmake
-, cppzmq
-, curl
-, fetchFromGitHub
-, glm
-, gtkmm3
-, libarchive
-, libepoxy
-, libgit2
-, librsvg
-, libuuid
-, meson
-, ninja
-, opencascade-occt_7_6
-, pkg-config
-, podofo
-, sqlite
+{
+  lib,
+  cmake,
+  cppzmq,
+  curl,
+  fetchFromGitHub,
+  glm,
+  gtkmm3,
+  libarchive,
+  libepoxy,
+  libgit2,
+  librsvg,
+  libuuid,
+  meson,
+  ninja,
+  opencascade-occt_7_6,
+  pkg-config,
+  podofo,
+  sqlite,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -54,13 +55,22 @@ rec {
     sqlite
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-fpermissive"
+    ];
+  };
+
   CASROOT = opencascade-occt;
 
-  meta = with lib; {
+  meta = {
     description = "Free EDA software to develop printed circuit boards";
     homepage = "https://horizon-eda.org";
-    maintainers = with maintainers; [ guserav jue89 ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      guserav
+      jue89
+    ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

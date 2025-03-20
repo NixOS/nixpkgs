@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbaseencode";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
-    repo = pname;
+    repo = "libbaseencode";
     rev = "v${version}";
     sha256 = "sha256-WiE+ZMX4oZieER1pu43aSWytkxfkQdX+S3JI98XPpL4=";
   };

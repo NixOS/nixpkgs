@@ -1,12 +1,13 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, flit
-, aiohttp
-, beautifulsoup4
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  flit,
+  aiohttp,
+  beautifulsoup4,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
   format = "pyproject";

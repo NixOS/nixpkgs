@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tboox";
-    repo = pname;
+    repo = "tbox";
     rev = "v${version}";
     hash = "sha256-cwpZ7F8WzT/46HrckHe0Aug2mxirCkNA68aCxg/FcsE=";
   };
@@ -34,4 +35,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rewine ];
   };
 }
-

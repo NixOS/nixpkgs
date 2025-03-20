@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rsClock";
@@ -6,18 +10,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "valebes";
-    repo = pname;
+    repo = "rsClock";
     rev = "v${version}";
     sha256 = "sha256-z+WGi1Jl+YkdAc4Nu818vi+OXg54GfAM6PbWYkgptpo=";
   };
 
-  cargoHash = "sha256-/uAxIV7eroJNGsLl4T/6RskoTIWKu5Cgmv48eMkDZQw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Dt3TCqQWwBcQ/6ZGhsMS7aA0jsvxRrdYkKSwynOlad8=";
 
   meta = with lib; {
     description = "Simple terminal clock written in Rust";
     homepage = "https://github.com/valebes/rsClock";
     license = licenses.mit;
-    maintainers = with maintainers; [valebes];
+    maintainers = with maintainers; [ valebes ];
     mainProgram = "rsclock";
   };
 }

@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  bash,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-prezto";
-  version = "0-unstable-2024-06-03";
+  version = "0-unstable-2025-01-10";
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "9195b66161b196238cbd52a8a4abd027bdaf5f73";
-    sha256 = "wN/86uFBahUWl9RnKvdf88zVxou7B8Kh7/s3JfMye0g=";
+    rev = "6e564503f1c5e6ddba2bcf5d9065e5872ca207d2";
+    sha256 = "hYuYjSQtt00pU3eqrzN8Crk40NEtCCj1G6XUL89F4xU=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/zsh-prezto
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Configuration framework for Zsh";

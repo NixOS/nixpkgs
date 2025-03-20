@@ -1,34 +1,36 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, watchman
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  watchman,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rs-git-fsmonitor";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jgavris";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "021vdk5i7yyrnh4apn0gnsh6ycnx15wm3g2jrfsg7fycnq8167wc";
+    repo = "rs-git-fsmonitor";
+    tag = "v${version}";
+    hash = "sha256-+5nR+/09HmFk3mq2B8NTeBT50aBG85yXEdeO6BhStVw=";
   };
 
-  cargoHash = "sha256-Vi8PUy6Qgp03SghtCneDxwE8vbt7uGClfOCayDq0pUM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WkqJSbtaJxaagJMsdFiVozi1SkrfxXyM9bdZeimwJag=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  fixupPhase = ''
-    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}" ;
+  postFixup = ''
+    wrapProgram $out/bin/rs-git-fsmonitor --prefix PATH ":" "${lib.makeBinPath [ watchman ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast git core.fsmonitor hook written in Rust";
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nilscc ];
     mainProgram = "rs-git-fsmonitor";
   };
 }

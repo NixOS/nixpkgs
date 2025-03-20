@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, readline, perl, libharu, libX11, libpng, libXt, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  perl,
+  libharu,
+  libX11,
+  libpng,
+  libXt,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "emboss";
@@ -9,9 +20,20 @@ stdenv.mkDerivation rec {
     sha256 = "7184a763d39ad96bb598bfd531628a34aa53e474db9e7cac4416c2a40ab10c6e";
   };
 
-  buildInputs = [ readline perl libharu libpng libX11 libXt zlib ];
+  buildInputs = [
+    readline
+    perl
+    libharu
+    libpng
+    libX11
+    libXt
+    zlib
+  ];
 
-  configureFlags = [ "--with-hpdf=${libharu}" "--with-pngdriver=${zlib}" ];
+  configureFlags = [
+    "--with-hpdf=${libharu}"
+    "--with-pngdriver=${zlib}"
+  ];
 
   postConfigure = ''
     sed -i 's@$(bindir)/embossupdate@true@' Makefile

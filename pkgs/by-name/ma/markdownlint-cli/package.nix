@@ -1,20 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "markdownlint-cli";
-  version = "0.42.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "igorshubovych";
     repo = "markdownlint-cli";
     rev = "v${version}";
-    hash = "sha256-bT/6bRzpXa86e6T0bJSUm624dbRAux4qgmCc+lOtl3c=";
+    hash = "sha256-1CQVj2iFywimK9sBJ60u9xH5qm/stEOA0yAHcUSAdY8=";
   };
 
-  npmDepsHash = "sha256-g2+kieF+cq8olfQ5rElNNvp5NYJcg+eTNWnMxSXqlKk=";
+  npmDepsHash = "sha256-iRK+8wyqHmP6vluDVBs3L4IpnZVvVfEfKDit+9YFU4g=";
 
   dontNpmBuild = true;
 

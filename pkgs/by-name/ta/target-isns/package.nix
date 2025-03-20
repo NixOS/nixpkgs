@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch } :
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "target-isns";
@@ -6,13 +12,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
-    repo = pname;
+    repo = "target-isns";
     rev = "v${version}";
     sha256 = "1b6jjalvvkkjyjbg1pcgk8vmvc6xzzksyjnh2pfi45bbpya4zxim";
   };
 
   patches = [
-    # fix absoulute paths
+    # fix absolute paths
     ./install_prefix_path.patch
 
     # fix gcc 10 compiler warning, remove with next update

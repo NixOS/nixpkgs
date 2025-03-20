@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoconf
-, automake
-, pkg-config
-, utf8cpp
-, libtool
-, libxml2
-, icu
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  pkg-config,
+  utf8cpp,
+  libtool,
+  libxml2,
+  icu,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3lHXKtwQSrMGQEGOGr27e3kB2qKkTFZcEzeAnIm89Rg=";
   };
 

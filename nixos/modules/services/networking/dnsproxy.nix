@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -11,7 +16,8 @@ let
     mkIf
     mkOption
     mkPackageOption
-    types;
+    types
+    ;
 
   cfg = config.services.dnsproxy;
 
@@ -72,7 +78,10 @@ in
   config = mkIf cfg.enable {
     systemd.services.dnsproxy = {
       description = "Simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support";
-      after = [ "network.target" "nss-lookup.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
@@ -89,13 +98,19 @@ in
         ProtectHostname = true;
         ProtectKernelLogs = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
       };
     };
   };

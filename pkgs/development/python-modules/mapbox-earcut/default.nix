@@ -2,33 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  numpy,
-  pybind11,
-  pytestCheckHook,
-  setuptools,
   pythonOlder,
+
+  # build-system
+  cmake,
+  ninja,
+  pybind11,
+  scikit-build-core,
+
+  # dependencies
+  numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "1.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xR+nO5xdoDUhWZM19DOid3lsEXBood5NofQ0SezJ9OE=";
+    tag = "v${version}";
+    hash = "sha256-2dUZ78yWSudjozV2zIRNQgUeaNrkL+NXnF51q4T+dRU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     pybind11
+    scikit-build-core
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
-    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/v${version}";
+    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
     license = licenses.isc;
     description = "Mapbox-earcut fast triangulation of 2D-polygons";
     longDescription = ''

@@ -13,6 +13,7 @@
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, adwaita-icon-theme, wrapGAppsHook3, makeDesktopItem, copyDesktopItems
 , csdp ? null
+, rocq-core  # for versions >= 9.0 that are transition shims on top of Rocq
 , version, coq-version ? null
 }@args:
 let
@@ -59,6 +60,8 @@ let
    "8.19.1".sha256   = "sha256-kmZ8Uk8jpzjOd67aAPp3C+vU2oNaBw9pr7+Uixcgg94=";
    "8.19.2".sha256   = "sha256-q+i07JsMZp83Gqav6v1jxsgPLN7sPvp5/oszVnavmz0=";
    "8.20.0".sha256   = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
+   "8.20.1".sha256   = "sha256-nRaLODPG4E3gUDzGrCK40vhl4+VhPyd+/fXFK/HC3Ig=";
+   "9.0.0".sha256    = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -92,6 +95,7 @@ let
 self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
+  exact-version = args.version;
 
   passthru = {
     inherit coq-version;
@@ -228,16 +232,37 @@ self = stdenv.mkDerivation {
     mainProgram = "coqide";
   };
 }; in
-if coqAtLeast "8.17" then self.overrideAttrs(_: {
+if coqAtLeast "8.21" then self.overrideAttrs(o: {
+  # coq-core is now a shim for rocq
+  propagatedBuildInputs = o.propagatedBuildInputs
+    ++ [ (rocq-core.override { version = o.exact-version; }) ];
   buildPhase = ''
     runHook preBuild
-    make dunestrap
-    dune build -p coq-core,coq-stdlib,coq,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    dune build -p coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core coq-stdlib coq coqide-server${lib.optionalString buildIde " coqide"}
+    dune install --prefix $out coq-core coqide-server${lib.optionalString buildIde " rocqide"}
+    # coq and rocq are now in different directories, which sometimes confuses coq_makefile
+    # which expects both in the same /nix/store/.../bin/ directory
+    # adding symlinks to content it
+    ROCQBIN=$(dirname ''$(command -v rocq))
+    for b in csdpcert ocamllibdep rocq rocq.byte rocqchk votour ; do
+      ln -s ''${ROCQBIN}/''${b} $out/bin/
+    done
+    runHook postInstall
+  '';
+}) else if coqAtLeast "8.17" then self.overrideAttrs(_: {
+  buildPhase = ''
+    runHook preBuild
+    make dunestrap
+    dune build -p coq-core,coq-stdlib,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix $out coq-core coq-stdlib coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

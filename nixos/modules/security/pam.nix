@@ -1191,7 +1191,7 @@ in
 
       control = lib.mkOption {
         default = "sufficient";
-        type = lib.types.enum [ "required" "requisite" "sufficient" "lib.optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1219,7 +1219,10 @@ in
           be changed using {option}`security.pam.u2f.authFile` option.
 
           File format is:
-          `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
+          ```
+          <username1>:<KeyHandle1>,<UserKey1>,<CoseType1>,<Options1>:<KeyHandle2>,<UserKey2>,<CoseType2>,<Options2>:...
+          <username2>:<KeyHandle1>,<UserKey1>,<CoseType1>,<Options1>:<KeyHandle2>,<UserKey2>,<CoseType2>,<Options2>:...
+          ```
           This file can be generated using {command}`pamu2fcfg` command.
 
           More information can be found [here](https://developers.yubico.com/pam-u2f/).
@@ -1480,7 +1483,7 @@ in
           the YubiCloud.
 
           Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
-          Challenge-Response configurations. See the man-page ykpamcfg(1) for further
+          Challenge-Response configurations. See the man-page {manpage}`ykpamcfg(1)` for further
           details on how to configure offline Challenge-Response validation.
 
           More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
@@ -1668,13 +1671,11 @@ in
         (lib.concatMap lib.attrValues)
         (lib.filter (rule: rule.enable))
         (lib.catAttrs "modulePath")
-        # TODO(@uninsane): replace this warning + lib.filter with just an assertion
-        (map (modulePath: lib.warnIfNot
+        (map (modulePath: lib.throwIfNot
           (lib.hasPrefix "/" modulePath)
-          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
+          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
           modulePath
         ))
-        (lib.filter (lib.hasPrefix "/"))
         lib.unique
         (map (module: "mr ${module},"))
         concatLines

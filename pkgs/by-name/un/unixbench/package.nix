@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, pandoc
-, installShellFiles
-, perl
-, xorg
-, libGLX
-, coreutils
-, unixtools
-, runtimeShell
-, targetPackages
-, gnugrep
-, gawk
-, withGL? true
-, withX11perf? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  pandoc,
+  installShellFiles,
+  perl,
+  xorg,
+  libGLX,
+  coreutils,
+  unixtools,
+  runtimeShell,
+  targetPackages,
+  gnugrep,
+  gawk,
+  withGL ? true,
+  withX11perf ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,28 +48,34 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [ perl ] ++ lib.optionals withGL [
-    xorg.libX11
-    xorg.libXext
-    libGLX
-  ];
+  buildInputs =
+    [ perl ]
+    ++ lib.optionals withGL [
+      xorg.libX11
+      xorg.libXext
+      libGLX
+    ];
 
-  runtimeDependencies = [
-    coreutils
-    unixtools.nettools
-    unixtools.locale
-    targetPackages.stdenv.cc
-    gnugrep
-    gawk
-  ] ++ lib.optionals withX11perf [
-    xorg.x11perf
-  ];
+  runtimeDependencies =
+    [
+      coreutils
+      unixtools.nettools
+      unixtools.locale
+      targetPackages.stdenv.cc
+      gnugrep
+      gawk
+    ]
+    ++ lib.optionals withX11perf [
+      xorg.x11perf
+    ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optionals withGL [
-    "GRAPHIC_TESTS=defined"
-  ];
+  makeFlags =
+    [
+      "CC=${stdenv.cc.targetPrefix}cc"
+    ]
+    ++ lib.optionals withGL [
+      "GRAPHIC_TESTS=defined"
+    ];
 
   installPhase = ''
     runHook preInstall

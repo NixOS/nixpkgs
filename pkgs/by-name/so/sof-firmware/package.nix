@@ -1,15 +1,16 @@
-{ lib
-, fetchurl
-, stdenvNoCC
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "2024.09";
+  version = "2025.01";
 
   src = fetchurl {
     url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
-    sha256 = "sha256-6kfZn4E1kAjQdhi8oQPPePgthOlAv+lBoor+B8jLxiA=";
+    sha256 = "sha256-NNVl23V6MkUBBjF8xR84v2eWLg/It/fHLm45/YnpkmM=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed
@@ -30,8 +31,15 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/thesofproject/sof-bin/releases/tag/v${version}";
     description = "Sound Open Firmware";
     homepage = "https://www.sofproject.org/";
-    license = with licenses; [ bsd3 isc ];
-    maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
+    license = with licenses; [
+      bsd3
+      isc
+    ];
+    maintainers = with maintainers; [
+      lblasc
+      evenbrenden
+      hmenke
+    ];
     platforms = with platforms; linux;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

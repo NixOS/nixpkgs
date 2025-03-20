@@ -4,12 +4,10 @@
 , autoreconfHook
 , libassuan
 , libgpg-error
-, libiconv
 , makeBinaryWrapper
 , texinfo
 , common-updater-scripts
 , writers
-, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +29,8 @@ stdenv.mkDerivation rec {
     cp -r ${./mac/Main.nib} macosx/Main.nib
     cp -r ${./mac/Pinentry.nib} macosx/Pinentry.nib
     chmod -R u+w macosx/*.nib
+    # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
+    cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
   '';
 
   # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
@@ -38,10 +38,15 @@ stdenv.mkDerivation rec {
     (allow process-exec (literal "/usr/libexec/PlistBuddy"))
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook makeBinaryWrapper texinfo ];
-  buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
 
-  configureFlags = [ "--enable-maintainer-mode" "--disable-ncurses" ];
+  configureFlags = [
+    "--enable-maintainer-mode"
+    "--disable-ncurses"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+  ];
 
   installPhase = ''
     mkdir -p $out/Applications $out/bin

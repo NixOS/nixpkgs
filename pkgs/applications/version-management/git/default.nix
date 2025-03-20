@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, buildPackages
+{ fetchurl, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
@@ -30,7 +30,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.47.0";
+  version = "2.48.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-HOEU2ohwQnG0PgJ8UeBNk5n4yI6e91Qtrnrrrn2HvE4=";
+    hash = "sha256-HF1UX13B61HpXSxQ2Y/fiLGja6H6MOmuXVOFxgJPgq0=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -60,15 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./installCheck-path.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
-  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isDarwin) [
-    # Needed to workaround an issue in macOS where gitk shows a empty window
-    # https://github.com/Homebrew/homebrew-core/issues/68798
-    # https://github.com/git/git/pull/944
-    (fetchpatch {
-      name = "gitk_check_main_window_visibility_before_waiting_for_it_to_show.patch";
-      url = "https://github.com/git/git/commit/1db62e44b7ec93b6654271ef34065b31496cd02e.patch";
-      hash = "sha256-ntvnrYFFsJ1Ebzc6vM9/AMFLHMS1THts73PIOG5DkQo=";
-    })
   ];
 
   postPatch = ''
@@ -138,15 +129,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  postBuild = ''
-    make -C contrib/subtree
-  '' + (lib.optionalString perlSupport ''
+  postBuild = lib.optionalString withManual ''
+    # Need to build the main Git documentation before building the
+    # contrib/subtree documentation, as the latter depends on the
+    # asciidoc.conf file created by the former.
+    make -C Documentation
+  '' + ''
+    make -C contrib/subtree all ${lib.optionalString withManual "doc"}
+  '' + lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
-  '') + (lib.optionalString osxkeychainSupport ''
+  '' + lib.optionalString osxkeychainSupport ''
     make -C contrib/credential/osxkeychain
-  '') + (lib.optionalString withLibsecret ''
+  '' + lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret
-  '');
+  '';
 
 
   ## Install
@@ -156,15 +152,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
 
-  preInstall = (lib.optionalString osxkeychainSupport ''
+  preInstall = lib.optionalString osxkeychainSupport ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
-  '') + (lib.optionalString withLibsecret ''
+  '' + lib.optionalString withLibsecret ''
     mkdir -p $out/bin
     ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
     rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
-  '');
+  '';
 
   postInstall =
     ''
@@ -283,6 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
        done
      '')
    + lib.optionalString osxkeychainSupport ''
+    ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
     # enable git-credential-osxkeychain on darwin if desired (default)
     mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF

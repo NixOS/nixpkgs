@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DoFqHKTu4CvgDYPT4vbwNvSZ/lNTdAF+wlHOOIBJKUw=";
   };
 
-  cargoHash = "sha256-mgg6yzjRZsDbnK19nhNmy2I95tPWD4NmGCXtI957D0M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-w/d/MMd5JNQMRUxRaH4Tpf4Dzh14eykG+zzuM/YrU40=";
 
   nativeBuildInputs = [
     cmake
@@ -43,8 +44,10 @@ rustPlatform.buildRustPackage rec {
   # error: `log_error` isn't a valid `#[macro_export]` argument
   # note: `#[deny(invalid_macro_export_arguments)]` implied by `#[deny(warnings)]`
   postPatch = ''
-    substituteInPlace src/lib.rs \
-      --replace '#![deny(' '#![warn('
+    shopt -s globstar
+    substituteInPlace **/*.rs \
+      --replace-quiet '#![deny(warnings)]' ""
+    shopt -u globstar
   '';
 
   # TODO export TREMOR_PATH($out/lib) variable

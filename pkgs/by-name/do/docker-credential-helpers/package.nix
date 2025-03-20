@@ -1,14 +1,23 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, libsecret, testers, docker-credential-helpers }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libsecret,
+  testers,
+  docker-credential-helpers,
+}:
 
 buildGoModule rec {
   pname = "docker-credential-helpers";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LFXSfb4JnlacSZVnIf+5/A+KefARYadEGDzGtcSDJBw=";
+    sha256 = "sha256-B5w322Jh6HPaLOKTnGgWPVnkkLnIeyIR+lKDc+uCLHk=";
   };
 
   vendorHash = null;
@@ -25,7 +34,17 @@ buildGoModule rec {
 
   buildPhase =
     let
-      cmds = if stdenv.hostPlatform.isDarwin then [ "osxkeychain" "pass" ] else [ "secretservice" "pass" ];
+      cmds =
+        if stdenv.hostPlatform.isDarwin then
+          [
+            "osxkeychain"
+            "pass"
+          ]
+        else
+          [
+            "secretservice"
+            "pass"
+          ];
     in
     ''
       for cmd in ${builtins.toString cmds}; do
@@ -42,12 +61,15 @@ buildGoModule rec {
     command = "docker-credential-pass version";
   };
 
-  meta = with lib; {
-    description = "Suite of programs to use native stores to keep Docker credentials safe";
-    homepage = "https://github.com/docker/docker-credential-helpers";
-    license = licenses.mit;
-    maintainers = [ ];
-  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    mainProgram = "docker-credential-osxkeychain";
-  };
+  meta =
+    with lib;
+    {
+      description = "Suite of programs to use native stores to keep Docker credentials safe";
+      homepage = "https://github.com/docker/docker-credential-helpers";
+      license = licenses.mit;
+      maintainers = [ ];
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      mainProgram = "docker-credential-osxkeychain";
+    };
 }

@@ -1,18 +1,39 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitLab,
+  perl,
+  buildPackages,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.7.7";
   pname = "taktuk";
 
+  nativeBuildInputs = [
+    autoreconfHook
+    perl # pod2man pod2html
+  ];
+
   buildInputs = [ perl ];
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33412/${pname}-${version}.tar.gz";
-    sha256 = "0w0h3ynlcxvq2nzm8hkj20g0805ww3vkw53g0qwj7wvp7p3gcvnr";
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "taktuk";
+    repo = "taktuk";
+    rev = "dcd763e389a414f540b43674cbc63752176f1ce3"; # does not tag releases
+    hash = "sha256-CerOBn1VDiKFLaW2WXv6wLxfcqy1H3dlF70lrequbog=";
   };
 
   preBuild = ''
-      substituteInPlace ./taktuk --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace ./taktuk --replace-fail "/usr/bin/perl" "${lib.getExe buildPackages.perl}"
+  '';
+
+  enableParallelBuilding = true;
+
+  preFixup = ''
+    substituteInPlace ./taktuk --replace-fail "${lib.getExe buildPackages.perl}" "/usr/bin/env perl"
   '';
 
   meta = {
@@ -26,10 +47,10 @@ stdenv.mkDerivation rec {
       network to transport commands and perform I/Os multiplexing. It doesn't
       require any specific software on the nodes thanks to a self-propagation
       algorithm.'';
-    homepage = "http://taktuk.gforge.inria.fr/";
+    homepage = "https://taktuk.gitlabpages.inria.fr/";
+    changelog = "https://gitlab.inria.fr/taktuk/taktuk/-/blob/HEAD/ChangeLog";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
 }
-

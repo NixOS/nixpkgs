@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.bosun;
 
   configFile = pkgs.writeText "bosun.conf" ''
-    ${optionalString (cfg.opentsdbHost !=null) "tsdbHost = ${cfg.opentsdbHost}"}
-    ${optionalString (cfg.influxHost !=null) "influxHost = ${cfg.influxHost}"}
+    ${lib.optionalString (cfg.opentsdbHost != null) "tsdbHost = ${cfg.opentsdbHost}"}
+    ${lib.optionalString (cfg.influxHost != null) "influxHost = ${cfg.influxHost}"}
     httpListen = ${cfg.listenAddress}
     stateFile = ${cfg.stateFile}
     ledisDir = ${cfg.ledisDir}
@@ -16,34 +18,35 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   options = {
 
     services.bosun = {
 
-      enable = mkEnableOption "bosun";
+      enable = lib.mkEnableOption "bosun";
 
-      package = mkPackageOption pkgs "bosun" { };
+      package = lib.mkPackageOption pkgs "bosun" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "bosun";
         description = ''
           User account under which bosun runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "bosun";
         description = ''
           Group account under which bosun runs.
         '';
       };
 
-      opentsdbHost = mkOption {
-        type = types.nullOr types.str;
+      opentsdbHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "localhost:4242";
         description = ''
           Host and port of the OpenTSDB database that stores bosun data.
@@ -51,49 +54,49 @@ in {
         '';
       };
 
-      influxHost = mkOption {
-        type = types.nullOr types.str;
+      influxHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "localhost:8086";
         description = ''
-           Host and port of the influxdb database.
+          Host and port of the influxdb database.
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = ":8070";
         description = ''
           The host address and port that bosun's web interface will listen on.
         '';
       };
 
-      stateFile = mkOption {
-        type = types.path;
+      stateFile = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/bosun/bosun.state";
         description = ''
           Path to bosun's state file.
         '';
       };
 
-      ledisDir = mkOption {
-        type = types.path;
+      ledisDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/bosun/ledis_data";
         description = ''
           Path to bosun's ledis data dir
         '';
       };
 
-      checkFrequency = mkOption {
-        type = types.str;
+      checkFrequency = lib.mkOption {
+        type = lib.types.str;
         default = "5m";
         description = ''
           Bosun's check frequency
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration options for Bosun. You should describe your
@@ -101,7 +104,7 @@ in {
           option.
 
           A detailed description of the supported syntax can be found at-spi2-atk
-          https://bosun.org/configuration.html
+          <https://bosun.org/configuration.html>
         '';
       };
 
@@ -109,7 +112,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.bosun = {
       description = "bosun metrics collector (part of Bosun)";

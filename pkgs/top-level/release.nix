@@ -12,7 +12,7 @@
 , system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
+, supportedSystems ? import ../../ci/supportedSystems.nix
   # The platform triples for which we build bootstrap tools.
 , bootstrapConfigs ? [
     "aarch64-apple-darwin"
@@ -28,15 +28,20 @@
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-, nixpkgsArgs ? { config = {
-    allowUnfree = false;
-    inHydra = true;
-    # Exceptional unsafe packages that we still build and distribute,
-    # so users choosing to allow don't have to rebuild them every time.
-    permittedInsecurePackages = [
-      "olm-3.2.16" # see PR #347899
-    ];
-  }; }
+, nixpkgsArgs ? {
+    config = {
+      allowUnfree = false;
+      inHydra = true;
+      # Exceptional unsafe packages that we still build and distribute,
+      # so users choosing to allow don't have to rebuild them every time.
+      permittedInsecurePackages = [
+        "olm-3.2.16" # see PR #347899
+        "kanidm_1_4-1.4.6"
+      ];
+    };
+
+    __allowFileset = false;
+  }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
   # and `release-lib.packagePlatforms`.  Generally, it causes the
@@ -215,8 +220,6 @@ let
               TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
 
               jobs.tests.cc-wrapper.default.x86_64-linux
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
 
               # broken see issue #40038
 
@@ -248,8 +251,6 @@ let
               jobs.darwin.linux-builder.x86_64-darwin
               /*
               jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
@@ -321,8 +322,9 @@ let
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
   jobs = let
-    packagePlatforms = if attrNamesOnly then id else release-lib.packagePlatforms;
-    packageJobs = {
+    packagePlatforms = release-lib.recursiveMapPackages
+      (if attrNamesOnly then id else release-lib.getPlatforms);
+    packageJobs = packagePlatforms pkgs // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       # Build selected packages (HLS) for multiple Haskell compilers to rebuild
@@ -343,6 +345,7 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsLLVMLibc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
@@ -363,8 +366,8 @@ let
     };
     mapTestOn-packages =
       if attrNamesOnly
-      then pkgs // packageJobs
-      else mapTestOn ((packagePlatforms pkgs) // packageJobs);
+      then packageJobs
+      else mapTestOn packageJobs;
   in
     unionOfDisjoint nonPackageJobs mapTestOn-packages;
 

@@ -1,10 +1,12 @@
 {
+  bash,
   buildDotnetModule,
+  coreutils,
   darwin,
   dotnetCorePackages,
   fetchFromGitHub,
   fetchpatch,
-  git,
+  gitMinimal,
   glibc,
   glibcLocales,
   lib,
@@ -21,15 +23,15 @@
 # Node.js runtimes supported by upstream
 assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.320.0";
+  version = "2.322.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-mVi/Z89R2nbxQAyEkpbcaU3Pc3wK6989QojHew9ad4g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2HbV1evqZZxyJintJG7kDrBjLFN06nDfR5NRvkw3nTM=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -50,7 +52,7 @@ buildDotnetModule rec {
       git config user.name "root"
       git add .
       git commit -m "Initial commit"
-      git checkout -b v${version}
+      git checkout -b v${finalAttrs.version}
     )
     mkdir -p $TMPDIR/bin
     cat > $TMPDIR/bin/git <<EOF
@@ -80,23 +82,20 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
+    # Fix source path discovery in tests
+    ./patches/test-getsrcpath.patch
   ];
 
-  postPatch =
-    ''
-      # Ignore changes to src/Runner.Sdk/BuildConstants.cs
-      substituteInPlace src/dir.proj \
-        --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                  'true'
-    ''
-    + lib.optionalString (nodeRuntimes == [ "node20" ]) ''
-      substituteInPlace src/Runner.Common/Util/NodeUtil.cs \
-        --replace-fail '_defaultNodeVersion = "node16"' '_defaultNodeVersion = "node20"'
-    '';
+  postPatch = ''
+    # Ignore changes to src/Runner.Sdk/BuildConstants.cs
+    substituteInPlace src/dir.proj \
+      --replace-fail 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                     'true'
+  '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
   LOCALE_ARCHIVE = lib.optionalString (
-    !DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
   ) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
@@ -106,23 +105,28 @@ buildDotnetModule rec {
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
-      -p:RunnerVersion="${version}" \
+      -p:RunnerVersion="${finalAttrs.version}" \
       src/dir.proj
   '';
 
   nativeBuildInputs =
     [
       which
-      git
+      gitMinimal
+      # needed for `uname`
+      coreutils
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       darwin.autoSignDarwinBinariesHook
     ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    bash
+  ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
@@ -138,7 +142,7 @@ buildDotnetModule rec {
     "src/Runner.Sdk/Runner.Sdk.csproj"
     "src/Runner.Plugins/Runner.Plugins.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   doCheck = true;
 
@@ -200,14 +204,12 @@ buildDotnetModule rec {
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     ]
-    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+    ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
       "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
       "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    ]
-    ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
 
@@ -241,7 +243,7 @@ buildDotnetModule rec {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace $out/lib/github-runner/config.sh \
         --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-        --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+        --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${finalAttrs.dotnet-runtime}/share/dotnet/shared/Microsoft.NETCore.App/${finalAttrs.dotnet-runtime.version}/' \
         --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
     ''
     + ''
@@ -307,7 +309,7 @@ buildDotnetModule rec {
     $out/bin/Runner.Listener --help >/dev/null
 
     version=$($out/bin/Runner.Listener --version)
-    if [[ "$version" != "${version}" ]]; then
+    if [[ "$version" != "${finalAttrs.version}" ]]; then
       printf 'Unexpected version %s' "$version"
       exit 1
     fi
@@ -345,4 +347,4 @@ buildDotnetModule rec {
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

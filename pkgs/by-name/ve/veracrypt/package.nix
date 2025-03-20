@@ -8,7 +8,7 @@
   fuse,
   wxGTK32,
   lvm2,
-  substituteAll,
+  replaceVars,
   e2fsprogs,
   exfat,
   ntfs3g,
@@ -19,16 +19,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.15";
+  version = "1.26.20";
 
   src = fetchurl {
     url = "https://launchpad.net/veracrypt/trunk/${finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
-    hash = "sha256-upcCUDDiG5sjMbfrCJcBFjwyr0t+BFNfM1uvjXSnSRY=";
+    hash = "sha256-qhVmQPigzEPuPe3aO8g3lR3HRPLEvdhaXfZAZ4IosRY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       ext2 = "${e2fsprogs}/bin/mkfs.ext2";
       ext3 = "${e2fsprogs}/bin/mkfs.ext3";
       ext4 = "${e2fsprogs}/bin/mkfs.ext4";
@@ -36,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
       ntfs = "${ntfs3g}/bin/mkfs.ntfs";
       btrfs = "${btrfs-progs}/bin/mkfs.btrfs";
     })
+
+    # https://github.com/veracrypt/VeraCrypt/commit/2cca2e1dafa405addc3af8724baf8563f352ac1c
+    ./nix-system-paths.patch
   ];
 
   sourceRoot = "src";

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/XxUSsW8Bowks7P+d6iTlklyMIfTb2otXva/VtRVAkM=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "atom";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3Xk4CM8Cnkc0lIdjJUYs/6UTqqpPALrUa3DpKD40og8=";
   };
 

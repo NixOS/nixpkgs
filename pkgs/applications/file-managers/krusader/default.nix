@@ -1,16 +1,17 @@
-{ mkDerivation
-, lib
-, fetchurl
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook3
-, karchive
-, kconfig
-, kcrash
-, kguiaddons
-, kinit
-, kparts
-, kwindowsystem
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook3,
+  karchive,
+  kconfig,
+  kcrash,
+  kguiaddons,
+  kinit,
+  kparts,
+  kwindowsystem,
 }:
 
 mkDerivation rec {

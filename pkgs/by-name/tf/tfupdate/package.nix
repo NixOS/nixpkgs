@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "tfupdate";
@@ -23,6 +27,9 @@ buildGoModule rec {
     homepage = "https://github.com/minamijoyo/tfupdate";
     changelog = "https://github.com/minamijoyo/tfupdate/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Intuinewin qjoly ];
+    maintainers = with maintainers; [
+      Intuinewin
+      qjoly
+    ];
   };
 }

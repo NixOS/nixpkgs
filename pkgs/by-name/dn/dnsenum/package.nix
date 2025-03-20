@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dnsenum";
@@ -6,13 +13,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fwaeytens";
-    repo = pname;
+    repo = "dnsenum";
     rev = version;
     sha256 = "1bg1ljv6klic13wq4r53bg6inhc74kqwm3w210865b1v1n8wj60v";
   };
 
   propagatedBuildInputs = with perlPackages; [
-    perl NetDNS NetIP NetNetmask StringRandom XMLWriter NetWhoisIP WWWMechanize
+    perl
+    NetDNS
+    NetIP
+    NetNetmask
+    StringRandom
+    XMLWriter
+    NetWhoisIP
+    WWWMechanize
   ];
   nativeBuildInputs = [ makeWrapper ];
 

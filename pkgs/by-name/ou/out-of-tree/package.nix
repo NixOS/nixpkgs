@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchgit, qemu, podman, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  qemu,
+  podman,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "out-of-tree";
@@ -7,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
     hash = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
   };
@@ -18,7 +25,12 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \
-      --prefix PATH : "${lib.makeBinPath [ qemu podman ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          qemu
+          podman
+        ]
+      }"
   '';
 
   meta = with lib; {

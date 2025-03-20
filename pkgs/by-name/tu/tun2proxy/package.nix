@@ -1,32 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tun2proxy";
-  version = "0.6.0";
+  version = "0.7.6";
 
-  src = fetchFromGitHub {
-    owner = "tun2proxy";
-    repo = "tun2proxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LY7vVD85GVFqARYOBDeb4fS6rL2PwPXYXIAJtwm2goo=";
+  src = fetchCrate {
+    pname = "tun2proxy";
+    inherit version;
+    hash = "sha256-hAZZ9pSoIgAb4JYhi9mGHMD4CIjnxVJU00PDsQe6OLY=";
   };
 
-  cargoHash = "sha256-o/zQjWR9qNs0XVL/dcRiMHgj+8Xvl6vVl/Yw5iLhroI=";
-
-  cargoPatches = [
-    ./Cargo.lock.patch
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A/hBV/koIR7gLIZVCoaRk5DI11NZ5HI+xn6qkU+fxaI=";
 
   meta = {
     homepage = "https://github.com/tun2proxy/tun2proxy";
     description = "Tunnel (TUN) interface for SOCKS and HTTP proxies";
     changelog = "https://github.com/tun2proxy/tun2proxy/releases/tag/v${version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
     mainProgram = "tun2proxy-bin";
     maintainers = with lib.maintainers; [ mksafavi ];
   };

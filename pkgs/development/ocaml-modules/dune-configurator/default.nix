@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, dune_3, csexp }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  csexp,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-configurator";
 
   inherit (dune_3) src version patches;

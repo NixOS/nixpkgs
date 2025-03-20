@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rpm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jimjag";
-    repo = pname;
+    repo = "epm";
     rev = "v${version}";
     hash = "sha256-o4B5lWBeve+U70FDgF1DrtNrXxaEY4etkPpwbqF7fmc=";
   };

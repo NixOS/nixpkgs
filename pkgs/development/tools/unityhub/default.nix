@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, buildFHSEnv
-, extraPkgs ? pkgs: [ ]
-, extraLibs ? pkgs: [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  buildFHSEnv,
+  extraPkgs ? pkgs: [ ],
+  extraLibs ? pkgs: [ ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.10.0";
+  version = "3.11.1";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-9dm6tVQ5nsDC8X2clrT4cAl8jg4wLwcihE4bnFgdU+A=";
+    sha256 = "sha256-1JRV8hohI+UoNYtpuU3HChUOpOFT6ZWEak96s0NmSJU=";
   };
 
   nativeBuildInputs = [
@@ -23,84 +24,94 @@ stdenv.mkDerivation rec {
   ];
 
   fhsEnv = buildFHSEnv {
-    name = "${pname}-fhs-env";
+    pname = "${pname}-fhs-env";
+    inherit version;
     runScript = "";
 
-    targetPkgs = pkgs: with pkgs; [
-      # Unity Hub binary dependencies
-      xorg.libXrandr
-      xdg-utils
+    targetPkgs =
+      pkgs:
+      with pkgs;
+      [
+        # Unity Hub binary dependencies
+        xorg.libXrandr
+        xdg-utils
 
-      # GTK filepicker
-      gsettings-desktop-schemas
-      hicolor-icon-theme
+        # GTK filepicker
+        gsettings-desktop-schemas
+        hicolor-icon-theme
 
-      # Bug Reporter dependencies
-      fontconfig
-      freetype
-      lsb-release
-    ] ++ extraPkgs pkgs;
+        # Bug Reporter dependencies
+        fontconfig
+        freetype
+        lsb-release
+      ]
+      ++ extraPkgs pkgs;
 
-    multiPkgs = pkgs: with pkgs; [
-      # Unity Hub ldd dependencies
-      cups
-      gtk3
-      expat
-      libxkbcommon
-      lttng-ust_2_12
-      krb5
-      alsa-lib
-      nss
-      libdrm
-      mesa
-      nspr
-      atk
-      dbus
-      at-spi2-core
-      pango
-      xorg.libXcomposite
-      xorg.libXext
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libxcb
-      xorg.libxshmfence
-      xorg.libXScrnSaver
-      xorg.libXtst
+    multiPkgs =
+      pkgs:
+      with pkgs;
+      [
+        # Unity Hub ldd dependencies
+        cups
+        gtk3
+        expat
+        libxkbcommon
+        lttng-ust_2_12
+        krb5
+        alsa-lib
+        nss
+        libdrm
+        libgbm
+        nspr
+        atk
+        dbus
+        at-spi2-core
+        pango
+        xorg.libXcomposite
+        xorg.libXext
+        xorg.libXdamage
+        xorg.libXfixes
+        xorg.libxcb
+        xorg.libxshmfence
+        xorg.libXScrnSaver
+        xorg.libXtst
 
-      # Unity Hub additional dependencies
-      libva
-      openssl
-      cairo
-      libnotify
-      libuuid
-      libsecret
-      udev
-      libappindicator
-      wayland
-      cpio
-      icu
-      libpulseaudio
+        # Unity Hub additional dependencies
+        libva
+        openssl
+        cairo
+        libnotify
+        libuuid
+        libsecret
+        udev
+        libappindicator
+        wayland
+        cpio
+        icu
+        libpulseaudio
 
-      # Unity Editor dependencies
-      libglvnd # provides ligbl
-      xorg.libX11
-      xorg.libXcursor
-      glib
-      gdk-pixbuf
-      libxml2
-      zlib
-      clang
-      git # for git-based packages in unity package manager
+        # Unity Editor dependencies
+        libglvnd # provides ligbl
+        xorg.libX11
+        xorg.libXcursor
+        glib
+        gdk-pixbuf
+        libxml2
+        zlib
+        clang
+        git # for git-based packages in unity package manager
 
-      # Unity Editor 2019 specific dependencies
-      xorg.libXi
-      xorg.libXrender
-      gnome2.GConf
-      libcap
+        # Unity Editor 2019 specific dependencies
+        xorg.libXi
+        xorg.libXrender
+        gnome2.GConf
+        libcap
 
-      # Unity Editor 6000 specific dependencies
-      harfbuzz
-    ] ++ extraLibs pkgs;
+        # Unity Editor 6000 specific dependencies
+        harfbuzz
+        vulkan-loader
+      ]
+      ++ extraLibs pkgs;
   };
 
   unpackCmd = "dpkg -x $curSrc src";
@@ -139,7 +150,10 @@ stdenv.mkDerivation rec {
     downloadPage = "https://unity.com/unity-hub";
     changelog = "https://unity.com/unity-hub/release-notes";
     license = licenses.unfree;
-    maintainers = with maintainers; [ tesq0 huantian ];
+    maintainers = with maintainers; [
+      tesq0
+      huantian
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

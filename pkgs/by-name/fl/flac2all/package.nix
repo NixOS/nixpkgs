@@ -1,4 +1,13 @@
-{ python3Packages, fetchPypi, lib, flac, lame, opusTools, vorbis-tools, ffmpeg }:
+{
+  python3Packages,
+  fetchPypi,
+  lib,
+  flac,
+  lame,
+  opusTools,
+  vorbis-tools,
+  ffmpeg,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
@@ -20,20 +29,25 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/flac2all \
-      --set PATH ${lib.makeBinPath [
-        # Hard requirements
-        flac
-        lame
-        # Optional deps depending on encoding types
-        opusTools
-        vorbis-tools
-        ffmpeg
-      ]}
+      --set PATH ${
+        lib.makeBinPath [
+          # Hard requirements
+          flac
+          lame
+          # Optional deps depending on encoding types
+          opusTools
+          vorbis-tools
+          ffmpeg
+        ]
+      }
   '';
 
   # Has no standard tests, so we verify a few imports instead.
   doCheck = false;
-  pythonImportsCheck = [ "flac2all_pkg.vorbis" "flac2all_pkg.mp3" ];
+  pythonImportsCheck = [
+    "flac2all_pkg.vorbis"
+    "flac2all_pkg.mp3"
+  ];
 
   meta = with lib; {
     description = "Multi process, clustered, FLAC to multi codec audio converter with tagging support";

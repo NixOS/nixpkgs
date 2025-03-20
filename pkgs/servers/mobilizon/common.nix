@@ -1,13 +1,14 @@
-{ fetchFromGitLab }: rec {
+{ fetchFromGitLab }:
+rec {
 
   pname = "mobilizon";
-  version = "4.1.0";
+  version = "5.1.2";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "framasoft";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-aS57126Nhz/QvouSyZ9wUu78/eoCYbRwyncUUmO1Dv8=";
+    tag = version;
+    sha256 = "sha256-5xHLk5/ogtRN3mfJPP1/gIVlALerT9KEUHjLA2Ou3aM=";
   };
 }

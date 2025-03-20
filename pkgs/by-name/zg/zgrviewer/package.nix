@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  unzip,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.0";
   pname = "zgrviewer";
@@ -7,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yg2rck81sqqrgfi5kn6c1bz42dr7d0zqpcsdjhicssi1y159f23";
   };
   nativeBuildInputs = [ unzip ];
-  buildInputs = [jre];
+  buildInputs = [ jre ];
   buildPhase = "";
   installPhase = ''
     mkdir -p "$out"/{bin,share/java/zvtm/plugins,share/doc/zvtm}
@@ -22,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     # Quicker to unpack locally than load Hydra
-    hydraPlatforms = [];
-    maintainers = with lib.maintainers; [raskin];
+    hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [ raskin ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, glib
-, pkg-config
-, rustc
-, wrapGAppsHook3
-, gdk-pixbuf
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  glib,
+  pkg-config,
+  rustc,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +23,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-sWQNav7odvX+peDglLHd7Jrmvhm5ddFBLBla0WK7wcE=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dbus-udisks2-0.3.0" = "sha256-VtwUUXVPyqvcOtphBH42CkRmW5jI+br9oDJ9wY40hsE=";
-      "iso9660-0.1.1" = "sha256-CXgvQvNbUWuNDpw92djkK1PZ2GbGj5KSNzkjAsNEDrU=";
-      "pbr-1.1.1" = "sha256-KfzPhDiFj6jm1GASXnSoppkHrzoHst7v7cSNTDC/2FM=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-KWVX5eOewARccI+ukNfEn8Wc3He1lWXjm9E/Dl0LuM4=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +51,10 @@ stdenv.mkDerivation rec {
     description = "Multiple USB File Flasher";
     homepage = "https://github.com/pop-os/popsicle";
     changelog = "https://github.com/pop-os/popsicle/releases/tag/${version}";
-    maintainers = with maintainers; [ _13r0ck figsoda ];
+    maintainers = with maintainers; [
+      _13r0ck
+      figsoda
+    ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

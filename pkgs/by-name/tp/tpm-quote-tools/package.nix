@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, trousers, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  trousers,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tpm-quote-tools";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 
-  buildInputs = [ trousers openssl ];
+  buildInputs = [
+    trousers
+    openssl
+  ];
 
   postFixup = ''
     patchelf \
@@ -24,9 +33,9 @@ stdenv.mkDerivation rec {
       for TPM based attestation using the TPM quote mechanism.  The manual
       page for tpm_quote_tools provides a usage overview.
     '';
-    homepage    = "http://tpmquotetools.sourceforge.net/";
-    license     = licenses.bsd3;
+    homepage = "http://tpmquotetools.sourceforge.net/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ak ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

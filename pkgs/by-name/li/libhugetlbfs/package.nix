@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libhugetlbfs";
@@ -9,7 +14,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-1QHfqRyOrREGlno9OCnyunOMP6wKZcs1jtKrOHDdxe8=";
   };
 
-  outputs = [ "bin" "dev" "man" "doc" "lib" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "man"
+    "doc"
+    "lib"
+    "out"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -18,24 +30,32 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  makeFlags = [
-    "BUILDTYPE=NATIVEONLY"
-    "PREFIX=$(out)"
-    "HEADERDIR=$(dev)/include"
-    "LIBDIR32=$(lib)/$(LIB32)"
-    "LIBDIR64=$(lib)/$(LIB64)"
-    "EXEDIR=$(bin)/bin"
-    "DOCDIR=$(doc)/share/doc/libhugetlbfs"
-    "MANDIR=$(man)/share/man"
-  ] ++ lib.optionals (stdenv.buildPlatform.system != stdenv.hostPlatform.system) [
-    # The ARCH logic defaults to querying `uname`, which will return build platform arch
-    "ARCH=${stdenv.hostPlatform.uname.processor}"
-  ];
+  makeFlags =
+    [
+      "BUILDTYPE=NATIVEONLY"
+      "PREFIX=$(out)"
+      "HEADERDIR=$(dev)/include"
+      "LIBDIR32=$(lib)/$(LIB32)"
+      "LIBDIR64=$(lib)/$(LIB64)"
+      "EXEDIR=$(bin)/bin"
+      "DOCDIR=$(doc)/share/doc/libhugetlbfs"
+      "MANDIR=$(man)/share/man"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.system != stdenv.hostPlatform.system) [
+      # The ARCH logic defaults to querying `uname`, which will return build platform arch
+      "ARCH=${stdenv.hostPlatform.uname.processor}"
+    ];
 
   # Default target builds tests as well, and the tests want a static
   # libc.
-  buildFlags = [ "libs" "tools" ];
-  installTargets = [ "install" "install-docs" ];
+  buildFlags = [
+    "libs"
+    "tools"
+  ];
+  installTargets = [
+    "install"
+    "install-docs"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/libhugetlbfs/libhugetlbfs";

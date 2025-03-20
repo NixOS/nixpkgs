@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gtk3
-, librsvg
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk3,
+  librsvg,
+  libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "inklingreader";
   version = "unstable-2017-09-07";
 

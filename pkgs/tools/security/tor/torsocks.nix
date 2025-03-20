@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, autoreconfHook
-, libcap
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  autoreconfHook,
+  libcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,16 +36,18 @@ stdenv.mkDerivation rec {
     ./torsocks-gethostbyaddr-darwin.patch
   ];
 
-  postPatch = ''
-    # Patch torify_app()
-    sed -i \
-      -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
-      src/bin/torsocks.in
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    sed -i \
-      -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
-      src/bin/torsocks.in
-  '';
+  postPatch =
+    ''
+      # Patch torify_app()
+      sed -i \
+        -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
+        src/bin/torsocks.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      sed -i \
+        -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
+        src/bin/torsocks.in
+    '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -52,11 +55,11 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check-recursive";
 
   meta = {
-    description      = "Wrapper to safely torify applications";
+    description = "Wrapper to safely torify applications";
     mainProgram = "torsocks";
-    homepage         = "https://gitlab.torproject.org/tpo/core/torsocks";
-    license          = lib.licenses.gpl2Plus;
-    platforms        = lib.platforms.unix;
-    maintainers      = with lib.maintainers; [ thoughtpolice ];
+    homepage = "https://gitlab.torproject.org/tpo/core/torsocks";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

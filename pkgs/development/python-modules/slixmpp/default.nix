@@ -8,20 +8,20 @@
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  substituteAll,
+  replaceVars,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.5";
+  version = "1.8.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dePwrUhVX39ckijnBmwdQ1izPWQLT753PsNLA7f66aM=";
+    hash = "sha256-YK/Kp8laD7nn8RWctwRkpVWIBterrinNMeP8iD+biws=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-gnupg-path.patch;
+    (replaceVars ./hardcode-gnupg-path.patch {
       inherit gnupg;
     })
   ];

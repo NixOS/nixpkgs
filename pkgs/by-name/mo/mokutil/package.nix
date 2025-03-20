@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, openssl
-, efivar
-, keyutils
-, libxcrypt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  efivar,
+  keyutils,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lcp";
-    repo = pname;
+    repo = "mokutil";
     rev = version;
     sha256 = "sha256-DO3S1O0AKoI8gssnUyBTRj5lDNs6hhisc/5dTIqmbzM=";
   };

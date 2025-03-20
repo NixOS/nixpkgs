@@ -7,40 +7,28 @@
   apr,
   aprutil,
   bash,
-  e2fsprogs,
-  expat,
   gcc,
-  neon,
-  glibcLocales,
-  openssl,
   pycxx,
   subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.22";
-  format = "other";
+  version = "1.9.23";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
-    hash = "sha256-KfLg9tuuKpXxJoniD002kDXGCTwOZ9jurCoPrWMRo7g=";
+    hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
   };
 
   patches = [ ./replace-python-first.patch ];
 
-  buildInputs =
-    [
-      bash
-      subversion
-      apr
-      aprutil
-      expat
-      neon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
+  buildInputs = [
+    subversion
+    apr
+    aprutil
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
@@ -55,8 +43,6 @@ buildPythonPackage rec {
       --svn-lib-dir=${subversion.out}/lib \
       --svn-bin-dir=${subversion.out}/bin
   '';
-
-  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck

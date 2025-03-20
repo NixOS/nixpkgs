@@ -1,57 +1,68 @@
-{ lib, stdenv, fetchFromGitHub, writeText, elixir }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  elixir,
+}:
 
 let
-  shell = drv: stdenv.mkDerivation {
-    name = "interactive-shell-${drv.name}";
-    buildInputs = [ drv ];
-  };
-
-  pkg = self: stdenv.mkDerivation rec {
-    pname = "hex";
-    version = "2.1.1";
-
-    src = fetchFromGitHub {
-      owner = "hexpm";
-      repo = "hex";
-      rev = "v${version}";
-      sha256 = "sha256-pEfd2BqkVwZVbnka98MafJ/NRn94BHh+wM0i2Q5duTo=";
+  shell =
+    drv:
+    stdenv.mkDerivation {
+      name = "interactive-shell-${drv.name}";
+      buildInputs = [ drv ];
     };
 
-    setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
-    '';
+  pkg =
+    self:
+    stdenv.mkDerivation rec {
+      pname = "hex";
+      version = "2.1.1";
 
-    dontStrip = true;
+      src = fetchFromGitHub {
+        owner = "hexpm";
+        repo = "hex";
+        rev = "v${version}";
+        sha256 = "sha256-pEfd2BqkVwZVbnka98MafJ/NRn94BHh+wM0i2Q5duTo=";
+      };
 
-    buildInputs = [ elixir ];
+      setupHook = writeText "setupHook.sh" ''
+        addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      '';
 
-    buildPhase = ''
-      runHook preBuild
-      export HEX_OFFLINE=1
-      export HEX_HOME=./
-      export MIX_ENV=prod
-      mix compile
-      runHook postBuild
-    '';
+      dontStrip = true;
 
-    installPhase = ''
-      runHook preInstall
+      buildInputs = [ elixir ];
 
-      mkdir -p $out/lib/erlang/lib
-      cp -r ./_build/prod/lib/hex $out/lib/erlang/lib/
+      buildPhase = ''
+        runHook preBuild
+        export HEX_OFFLINE=1
+        export HEX_HOME=./
+        export MIX_ENV=prod
+        mix compile
+        runHook postBuild
+      '';
 
-      runHook postInstall
-    '';
+      installPhase = ''
+        runHook preInstall
 
-    meta = {
-      description = "Package manager for the Erlang VM https://hex.pm";
-      license = lib.licenses.mit;
-      homepage = "https://github.com/hexpm/hex";
-      maintainers = with lib.maintainers; [ ericbmerritt ];
+        mkdir -p $out/lib/erlang/lib
+        cp -r ./_build/prod/lib/hex $out/lib/erlang/lib/
+
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "Package manager for the Erlang VM https://hex.pm";
+        license = lib.licenses.mit;
+        homepage = "https://github.com/hexpm/hex";
+        maintainers = with lib.maintainers; [ ericbmerritt ];
+      };
+
+      passthru = {
+        env = shell self;
+      };
     };
-
-    passthru = {
-      env = shell self;
-    };
-};
-in lib.fix pkg
+in
+lib.fix pkg

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbernhard";
     repo = "pysignalclirestapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LGP/Oo4FCvOq3LuUZRYFkK2JV1kEu3MeCDgnYo+91o4=";
   };
 

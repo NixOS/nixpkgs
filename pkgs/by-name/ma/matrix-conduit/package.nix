@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, sqlite
-, stdenv
-, darwin
-, nixosTests
-, rocksdb
-, rust-jemalloc-sys
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  sqlite,
+  stdenv,
+  darwin,
+  nixosTests,
+  rocksdb,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,14 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mQLfRAun2G/LDnw3jyFGJbOqpxh2PL8IGzFELRfAgAI=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ruma-0.10.1" = "sha256-VmIZ24vULpm6lF24OFZdsI5JG+XqVPpUWM/R64X17jo=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-r7fOzTug0cKQUGrpXDn1JKb6/lLQDgnA3/colmldA4c=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''
@@ -41,13 +36,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    sqlite
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      sqlite
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
@@ -65,7 +62,10 @@ rustPlatform.buildRustPackage rec {
     description = "Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn pimeys ];
+    maintainers = with maintainers; [
+      pstn
+      pimeys
+    ];
     mainProgram = "conduit";
   };
 }

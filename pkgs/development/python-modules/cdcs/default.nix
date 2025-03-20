@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
   };
 

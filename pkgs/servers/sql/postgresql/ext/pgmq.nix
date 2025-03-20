@@ -1,20 +1,20 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pgmq";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "tembo-io";
     repo = "pgmq";
-    rev = "v${version}";
-    hash = "sha256-z+8/BqIlHwlMnuIzMz6eylmYbSmhtsNt7TJf/CxbdVw=";
+    tag = "v${version}";
+    hash = "sha256-iFIHkqL9w7Bw1dxmmL1i0D5Xxq+ljFLf24M9vHArwvE=";
   };
 
   sourceRoot = "${src.name}/pgmq-extension";

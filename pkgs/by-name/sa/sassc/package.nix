@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libsass }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libsass,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sassc";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
+    repo = "sassc";
     rev = version;
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };
@@ -26,7 +32,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sass/sassc/";
     license = licenses.mit;
     mainProgram = "sassc";
-    maintainers = with maintainers; [ codyopel pjones ];
+    maintainers = with maintainers; [
+      codyopel
+      pjones
+    ];
     platforms = platforms.unix;
   };
 }

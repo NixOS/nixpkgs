@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, vips
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  vips,
 }:
 
 buildGoModule rec {
@@ -46,7 +47,10 @@ buildGoModule rec {
     changelog = "https://github.com/h2non/${pname}/releases/tag/v${version}";
     description = "Fast, simple, scalable, Docker-ready HTTP microservice for high-level image processing";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda urandom ];
+    maintainers = with maintainers; [
+      dotlambda
+      urandom
+    ];
     mainProgram = "imaginary";
   };
 }

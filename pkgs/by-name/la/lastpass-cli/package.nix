@@ -1,29 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, asciidoc
-, cmake
-, docbook_xsl
-, pkg-config
-, bash-completion
-, openssl
-, curl
-, libxml2
-, libxslt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  asciidoc,
+  cmake,
+  docbook_xsl,
+  pkg-config,
+  bash-completion,
+  openssl,
+  curl,
+  libxml2,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lastpass-cli";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "lastpass";
-    repo = pname;
+    repo = "lastpass-cli";
     rev = "v${version}";
-    sha256 = "sha256-F/E8Y9aSkx5fhra+ppVsO/NXP28RF+QoGBzUccTfjRQ=";
+    sha256 = "sha256-Q0ZG5Ehg29STLeAerMoLfzjaH9JyPk7269RgiPmDJV8=";
   };
 
-  nativeBuildInputs = [ asciidoc cmake docbook_xsl pkg-config ];
+  nativeBuildInputs = [
+    asciidoc
+    cmake
+    docbook_xsl
+    pkg-config
+  ];
 
   buildInputs = [
     bash-completion
@@ -33,7 +39,10 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  installTargets = [ "install" "install-doc" ];
+  installTargets = [
+    "install"
+    "install-doc"
+  ];
 
   postInstall = ''
     install -Dm644 -T ../contrib/lpass_zsh_completion $out/share/zsh/site-functions/_lpass

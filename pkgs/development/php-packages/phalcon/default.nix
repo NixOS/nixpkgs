@@ -9,19 +9,23 @@
 
 buildPecl rec {
   pname = "phalcon";
-  version = "5.8.0";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
     rev = "v${version}";
-    hash = "sha256-Jgl/sBWgP4N4rYloaGn78T6XWF/yTYYCsSC9Q6gD6Wg=";
+    hash = "sha256-S+y0HIAFAVpWfeH2yvbYzbCd1iSyae3x1syuLQL3Ago=";
   };
 
   internalDeps = [
     php.extensions.session
     php.extensions.pdo
   ];
+
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre2 ];

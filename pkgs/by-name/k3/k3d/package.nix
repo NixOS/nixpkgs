@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, k3sVersion ? null
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  k3sVersion ? null,
 }:
 
 let
@@ -15,13 +16,13 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
-  version = "5.7.4";
+  version = "5.8.3";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-z+7yeX0ea/6+4aWbA5NYW/HzvVcJiSkewOvo+oXp9bE=";
+    tag = "v${version}";
+    hash = "sha256-UBiDDZf/UtgPGRV9WUnoC32wc64nthBpBheEYOTp6Hk=";
   };
 
   vendorHash = "sha256-lFmIRtkUiohva2Vtg4AqHaB5McVOWW5+SFShkNqYVZ8=";
@@ -29,16 +30,26 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [ "tools" "docgen" ];
+  excludedPackages = [
+    "tools"
+    "docgen"
+  ];
 
   ldflags =
-    let t = "github.com/k3d-io/k3d/v${lib.versions.major version}/version"; in
-    [ "-s" "-w" "-X ${t}.Version=v${version}" ] ++ lib.optionals k3sVersionSet [ "-X ${t}.K3sVersion=v${k3sVersion}" ];
+    let
+      t = "github.com/k3d-io/k3d/v${lib.versions.major version}/version";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.Version=v${version}"
+    ]
+    ++ lib.optionals k3sVersionSet [ "-X ${t}.K3sVersion=v${k3sVersion}" ];
 
   preCheck = ''
     # skip test that uses networking
     substituteInPlace version/version_test.go \
-      --replace "TestGetK3sVersion" "SkipGetK3sVersion"
+      --replace-fail "TestGetK3sVersion" "SkipGetK3sVersion"
   '';
 
   postInstall = ''
@@ -70,7 +81,13 @@ buildGoModule rec {
       multi-node k3s cluster on a single machine using docker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
+    maintainers = with maintainers; [
+      kuznero
+      jlesquembre
+      ngerstle
+      jk
+      ricochet
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

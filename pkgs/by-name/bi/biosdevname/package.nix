@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, pciutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  zlib,
+  pciutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "biosdevname";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib pciutils ];
+  buildInputs = [
+    zlib
+    pciutils
+  ];
 
   # Don't install /lib/udev/rules.d/*-biosdevname.rules
   patches = [ ./makefile.patch ];
@@ -22,7 +32,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Udev helper for naming devices per BIOS names";
     license = licenses.gpl2Only;
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ ];
     mainProgram = "biosdevname";
   };

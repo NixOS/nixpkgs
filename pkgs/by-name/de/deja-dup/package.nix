@@ -1,41 +1,44 @@
-{ lib, stdenv
-, fetchFromGitLab
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, desktop-file-utils
-, glib
-, gtk4
-, coreutils
-, libsoup_3
-, libsecret
-, libadwaita
-, wrapGAppsHook4
-, libgpg-error
-, json-glib
-, duplicity
-, rclone
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  glib,
+  glib-networking,
+  gtk4,
+  coreutils,
+  libsoup_3,
+  libsecret,
+  libadwaita,
+  wrapGAppsHook4,
+  libgpg-error,
+  json-glib,
+  duplicity,
+  rclone,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "46.1";
+  version = "47.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-tKVY0wewBDx0AMzmTdko8vGg5bNGfYohgcSDg5Oky30=";
+    hash = "sha256-MjZ+NkNAzwEnC9R48Q5Cb3+c5jM7ooOv7+5TQ6Xo4LM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils;
     })
   ];
@@ -54,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsoup_3
     glib
+    glib-networking
     gtk4
     libsecret
     libadwaita
@@ -73,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Simple backup tool";
     longDescription = ''
@@ -82,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
     mainProgram = "deja-dup";
   };

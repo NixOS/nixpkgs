@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "certsync";
   version = "1.5-unstable-2024-03-08";
   pyproject = true;

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, bash
-, bashInteractive
-, util-linux
-, setuptools
-, distro
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  bash,
+  bashInteractive,
+  util-linux,
+  setuptools,
+  distro,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bash ];
-  propagatedBuildInputs = [ setuptools distro ];
+  propagatedBuildInputs = [
+    setuptools
+    distro
+  ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do

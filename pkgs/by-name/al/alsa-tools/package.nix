@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, fltk13
-, gtk2
-, gtk3
-, makeWrapper
-, pkg-config
-, psmisc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  fltk13,
+  gtk2,
+  gtk3,
+  makeWrapper,
+  pkg-config,
+  psmisc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -108,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA Tools";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

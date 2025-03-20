@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "power-profiles-daemon";
-  version = "0.23";
+  version = "0.30";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = finalAttrs.version;
-    hash = "sha256-kX8adu+GXxkaHtARUKp51K3Jf9xO+l12vctsJzIavyM=";
+    hash = "sha256-iQUhA46BEln8pyIBxM/MY7An8BzfiFjxZdR/tUIj4S4=";
   };
 
   nativeBuildInputs =

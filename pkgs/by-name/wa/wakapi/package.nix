@@ -2,9 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
 }:
 let
-  version = "2.12.2";
+  version = "2.13.1";
 in
 buildGoModule {
   pname = "wakapi";
@@ -13,11 +15,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "muety";
     repo = "wakapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6wlFgIof4uzQ3phd7paHZ6Sezp0Dfj8qFzsudFKfNdU=";
+    tag = version;
+    hash = "sha256-zasMqEvSqylJWKjS5TKYKmGJnGfCUEOq2UvsVUeizBw=";
   };
 
-  vendorHash = "sha256-q5o88fwc1S14ZwGyDS9aFtJMfPZ4pmMjffmeXODhajg=";
+  vendorHash = "sha256-b2FOdCXmSgFzdXLnxt/V7+cuESWXVXVRmT53DgLwZYI=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -29,6 +31,11 @@ buildGoModule {
     "-s"
     "-w"
   ];
+
+  passthru = {
+    nixos = nixosTests.wakapi;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://wakapi.dev/";

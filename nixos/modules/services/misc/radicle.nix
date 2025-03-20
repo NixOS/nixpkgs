@@ -45,6 +45,7 @@ let
         BindReadOnlyPaths = [
           "${cfg.configFile}:${env.RAD_HOME}/config.json"
           "${if lib.types.path.check cfg.publicKey then cfg.publicKey else pkgs.writeText "radicle.pub" cfg.publicKey}:${env.RAD_HOME}/keys/radicle.pub"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
         ];
         KillMode = "process";
         StateDirectory = [ "radicle" ];
@@ -57,7 +58,6 @@ let
       {
         BindReadOnlyPaths = [
           "-/etc/resolv.conf"
-          "/etc/ssl/certs/ca-certificates.crt"
           "/run/systemd"
         ];
         AmbientCapabilities = "";

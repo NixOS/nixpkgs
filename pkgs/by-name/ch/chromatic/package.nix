@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libxml2
-, libadwaita
-, portaudio
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libxml2,
+  libadwaita,
+  portaudio,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,11 +33,11 @@ stdenv.mkDerivation rec {
     ./rustc_serialize_update.patch
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
     patches = [ ./rustc_serialize_update.patch ];
-    hash = "sha256-1Zb0J2tO/gIifDymmoXxZf6RNV8foE9QiQqZcrHrWzE=";
+    hash = "sha256-9fdOOkxs4L0sYZIRT9wbgp169mQc2IyFRZlAcOHcOcg=";
   };
 
   nativeBuildInputs = [

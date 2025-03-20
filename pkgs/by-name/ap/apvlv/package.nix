@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "naihe2010";
     repo = "apvlv";
-    rev = "refs/tags/v0.5.0-final";
+    tag = "v0.5.0-final";
     hash = "sha256-5Wbv3dXieymhhPmEKQu8X/38WsDA1T/IBPoMXdpzcaA=";
   };
 
@@ -106,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
       with Vim-like behaviour.
     '';
     mainProgram = "apvlv";
-    maintainers = with lib.maintainers; [ ardumont anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      ardumont
+      anthonyroussel
+    ];
     platforms = lib.platforms.linux;
   };
 })

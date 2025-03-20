@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, parted
-, systemd
-, argp-standalone
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  parted,
+  systemd,
+  argp-standalone,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AltraMayor";
-    repo = pname;
+    repo = "f3";
     rev = "v${version}";
     sha256 = "17l5vspfcgfbkqg7bakp3gql29yb05gzawm8n3im30ilzdr53678";
   };
@@ -26,13 +27,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd parted ]
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      systemd
+      parted
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];
 
   buildFlags = [
     "all" # f3read, f3write
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "extra"; # f3brew, f3fix, f3probe
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "extra"; # f3brew, f3fix, f3probe
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
@@ -40,18 +44,20 @@ stdenv.mkDerivation rec {
 
   installTargets = [
     "install"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "install-extra";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "install-extra";
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr
-    install -Dm444 -t $out/share/doc/${pname} LICENSE README.rst
+    install -Dm444 -t $out/share/doc/f3 LICENSE README.rst
   '';
 
   meta = with lib; {
     description = "Fight Flash Fraud";
     homepage = "https://fight-flash-fraud.readthedocs.io/en/stable/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ makefu evils ];
+    maintainers = with maintainers; [
+      makefu
+      evils
+    ];
   };
 }

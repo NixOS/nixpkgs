@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.27.1";
+  version = "1.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2QF59YzveW4OJmueEs9v4qk+sONVQ/XgXhsT8nswNyo=";
+    tag = "v${version}";
+    hash = "sha256-WgxGS54OMv6JRsB9IRmKzQIPeoVcvpl28V5vvvEQ6WU=";
   };
 
   pythonRelaxDeps = [
@@ -44,7 +44,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     aiohttp

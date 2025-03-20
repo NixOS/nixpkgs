@@ -1,4 +1,15 @@
-{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
+{
+  lib,
+  clangStdenv,
+  stdenv,
+  cmake,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+  netcoredbg,
+  testers,
+}:
 let
   pname = "netcoredbg";
   build = "1031";
@@ -26,7 +37,10 @@ let
   unmanaged = clangStdenv.mkDerivation {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake dotnet-sdk ];
+    nativeBuildInputs = [
+      cmake
+      dotnet-sdk
+    ];
 
     hardeningDisable = [ "strictoverflow" ];
 
@@ -36,16 +50,22 @@ let
 
     cmakeFlags = [
       "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}"
+      "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
       "-DBUILD_MANAGED=0"
     ];
   };
 
   managed = buildDotnetModule {
-    inherit pname version src dotnet-sdk;
+    inherit
+      pname
+      version
+      src
+      dotnet-sdk
+      ;
+    dotnet-runtime = null;
 
     projectFile = "src/managed/ManagedPart.csproj";
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
 
     # include platform-specific dbgshim binary in nugetDeps
     dotnetFlags = [ "-p:UseDbgShimDependency=true" ];
@@ -87,6 +107,9 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "netcoredbg";
-    maintainers = with maintainers; [ leo60228 konradmalik ];
+    maintainers = with maintainers; [
+      leo60228
+      konradmalik
+    ];
   };
 }

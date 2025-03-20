@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -30,10 +31,19 @@ let
           hash = "sha256-3BbQeCaAhlz9h5GnhficNubJHu4kTpnCDM4oKzlti0w=";
         };
         doCheck = false;
+        dependencies =
+          with self;
+          [
+            requests
+            requests-oauthlib
+            six
+          ]
+          ++ requests.optional-dependencies.socks;
       };
     };
   };
-in py.pkgs.buildPythonApplication rec {
+in
+py.pkgs.buildPythonApplication {
   pname = "ioccheck";
   version = "unstable-2021-09-29";
   pyproject = true;

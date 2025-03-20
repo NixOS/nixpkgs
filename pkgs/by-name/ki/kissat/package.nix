@@ -1,21 +1,32 @@
-{ lib, stdenv, fetchFromGitHub
-, drat-trim, p7zip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  drat-trim,
+  p7zip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-+y9TlSEgnMTtRT9F6OBSle9OqGfljChcHOFJ5lgwjyk=";
+    sha256 = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeCheckInputs = [ drat-trim p7zip ];
+  nativeCheckInputs = [
+    drat-trim
+    p7zip
+  ];
   doCheck = true;
 
   # 'make test' assumes that /etc/passwd is not writable.

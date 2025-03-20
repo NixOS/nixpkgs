@@ -1,33 +1,38 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto";
-  version = "2.138";
+  version = "3.011";
 
   src = fetchzip {
-    url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
+    url = "https://github.com/googlefonts/roboto-3-classic/releases/download/v${finalAttrs.version}/Roboto_v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-ue3PUZinBpcYgSho1Zrw1KHl7gc/GlN1GhWFk6g5QXE=";
+    hash = "sha256-Ko5x4zn/bhrFLuYktaAsqsWUsIOMfnxK8rZ4UiqK8ds=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 unhinted/static/*.ttf -t $out/share/fonts/truetype
 
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://github.com/google/roboto";
-    description = "Roboto family of fonts";
+    homepage = "https://github.com/googlefonts/roboto-3-classic";
+    description = "This is a variable version of Roboto intended to be a 1:1 match with the official non-variable release from Google";
     longDescription = ''
-      Google’s signature family of fonts, the default font on Android and
-      Chrome OS, and the recommended font for Google’s visual language,
-      Material Design.
+      This is not an official Google project, but was enabled with generous
+      funding by Google Fonts, who contracted Type Network. The Roboto family of
+      instances contained 6 weights and two widths of normal, along with italic
+      of the regular width.
     '';
-    license = lib.licenses.asl20;
+    license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

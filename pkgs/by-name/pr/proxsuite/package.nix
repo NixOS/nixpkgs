@@ -73,6 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=missing-template-arg-list-after-template-kw"
+    ]
+  );
+
   # Fontconfig error: No writable cache directories
   preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
 

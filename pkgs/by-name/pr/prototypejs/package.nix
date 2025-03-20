@@ -1,7 +1,8 @@
 { lib, fetchurl, ... }:
 let
   version = "1.7.3.0";
-in fetchurl {
+in
+fetchurl {
   name = "prototype-${version}.js";
   url = "https://ajax.googleapis.com/ajax/libs/prototype/${version}/prototype.js";
   sha256 = "0q43vvrsb22h4jvavs1gk3v4ps61yx9k85b5n6q9mxivhmxprg26";

@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, sfml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "simplenes";
   version = "unstable-2019-03-13";
 

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libgcrypt }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcotp";
@@ -6,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
-    repo = pname;
+    repo = "libcotp";
     rev = "v${version}";
     sha256 = "sha256-Ol/vWaXcbDcy+d8V//fK4SYUpnYmwuYJxkO3/+kqgdM=";
   };
@@ -17,7 +24,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libgcrypt ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "C library that generates TOTP and HOTP";

@@ -1,23 +1,27 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
   pname = "gossa";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pldubouilh";
     repo = "gossa";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-vonhVxXbYI/5Gl9ZwI8+a3YXSjoqLVic1twykiy+e34=";
+    hash = "sha256-FGlUj0BJ8KeCfvdN9+NG4rqtaUIxgpqQ+09Ie1/TpAQ=";
   };
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Tests require a socket connection to be created.
   doCheck = false;

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   bison,
   cmake,
   pkg-config,
@@ -50,11 +51,11 @@ assert !(withJemalloc && withTcmalloc);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.4.0-1";
+  version = "8.4.3-3";
 
   src = fetchurl {
     url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-76PXXqTNBVsD7RX2vhp7RyESiFpJL0h0zG9ucNfy3uQ=";
+    hash = "sha256-37W0b8zYKErToJBU+aYtCmQjorcDtvuG0YbOwJzuZgo=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -160,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       moveToOutput "lib/*.a" $static
       so=${stdenv.hostPlatform.extensions.sharedLibrary}
-      ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+      ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
       wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
         lib.makeBinPath [
@@ -204,7 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests.percona-server = nixosTests.mysql.percona-server_8_4;
+    tests.percona-server =
+      nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
+    updateScript = gitUpdater {
+      url = "https://github.com/percona/percona-server";
+      rev-prefix = "Percona-Server-";
+      allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+    };
   };
 
   meta = with lib; {

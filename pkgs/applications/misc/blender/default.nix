@@ -72,10 +72,13 @@
   python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
+  shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
   tbb,
+  vulkan-headers,
+  vulkan-loader,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -85,11 +88,14 @@
 }:
 
 let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openUsdSupport = !stdenv.hostPlatform.isDarwin;
+  vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
@@ -106,22 +112,22 @@ let
   };
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.3";
+  version = "4.3.2";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-58wgduTHGfuYohaPjNuAnLFrpXOosEYOk5gJvbxTlQk=";
+      hash = "sha256-LCU2JpQbvQ+W/jC+H8J2suh+X5sTLOG9TcE2EeHqVh4=";
     })
     (fetchgit {
       name = "assets";
       url = "https://projects.blender.org/blender/blender-assets.git";
       rev = "v${finalAttrs.version}";
       fetchLFS = true;
-      hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
+      hash = "sha256-B/UibETNBEUAO1pLCY6wR/Mmdk2o9YyNs6z6pV8dBJI=";
     })
   ];
 
@@ -171,10 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
       "-DPYTHON_LIBPATH=${python3}/lib"
       "-DPYTHON_LIBRARY=${python3.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python3.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python3.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
+      "-DWITH_ASSERT_ABORT=OFF"
       "-DWITH_BUILDINFO=OFF"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
@@ -325,7 +332,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional spaceNavSupport libspnav;
+    ++ lib.optional spaceNavSupport libspnav
+    ++ lib.optionals vulkanSupport [
+      shaderc
+      vulkan-headers
+      vulkan-loader
+    ];
 
   pythonPath =
     let
@@ -333,7 +345,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       ps.materialx
-      ps.numpy
+      ps.numpy_1
       ps.requests
       ps.zstandard
     ]

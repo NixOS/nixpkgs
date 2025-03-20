@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg, mesa, libsndfile, libsamplerate }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjack2,
+  libGL,
+  pkg-config,
+  xorg,
+  libsndfile,
+  libsamplerate,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ninjas2";
@@ -6,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "clearly-broken-software";
-    repo = pname;
+    repo = "ninjas2";
     rev = "v${version}";
     sha256 = "1kwp6pmnfar2ip9693gprfbcfscklgri1k1ycimxzlqr61nkd2k9";
     fetchSubmodules = true;
@@ -18,7 +28,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libjack2 xorg.libX11 libGL mesa libsndfile libsamplerate
+    libjack2
+    xorg.libX11
+    libGL
+    libsndfile
+    libsamplerate
   ];
 
   installPhase = ''

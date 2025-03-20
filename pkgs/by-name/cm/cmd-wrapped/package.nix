@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tIvwJo33Jz9cPq6o4Ytc3VqkxEaxt0W9Fd8CNp+7vAE=";
   };
 
-  cargoHash = "sha256-pAlAWG9Dfqhhvl7uVvzr4nx481seIwwzBg+5SSsje84=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pv+LTHMLJh4LxKmvF6aJLZlDf97ZHI8gzn7vP+quNhc=";
 
   meta = with lib; {
     description = "Find out what the past year looks like in commandline";

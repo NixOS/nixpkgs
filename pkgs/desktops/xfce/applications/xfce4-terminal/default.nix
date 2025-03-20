@@ -1,26 +1,27 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, gtk-layer-shell
-, libX11
-, libxfce4ui
-, vte
-, xfconf
-, pcre2
-, libxslt
-, docbook_xml_dtd_45
-, docbook_xsl
-, nixosTests
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  gtk-layer-shell,
+  libX11,
+  libxfce4ui,
+  vte,
+  xfconf,
+  pcre2,
+  libxslt,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  nixosTests,
 }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "1.1.3";
+  version = "1.1.4";
   odd-unstable = false;
 
-  sha256 = "sha256-CUIQf22Lmb6MNPd2wk8LlHFNUhdIoC1gzVV6RDP2PfY=";
+  sha256 = "sha256-WrmffY8kC9tBorvtEb8q6DmHKX5d7HnvbxtBbpy4LJs=";
 
   nativeBuildInputs = [
     libxslt

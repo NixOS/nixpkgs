@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  dbus,
+  sqlite,
+  file,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-fFtjQFkNB5vn9nlFJI6nRdqxB9PmOGl3ySZ5LG2tgPg=";
   };
 
-  cargoHash = "sha256-0V2ftZmuKXRhOFWCroYOxQqW3NFh9Uuwcg0CM1sFlcQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tu+PJeGm8u5TSuoPBhaO4k6PkmI9JduuLlaQjvBv05E=";
 
   nativeBuildInputs = [
     pkg-config

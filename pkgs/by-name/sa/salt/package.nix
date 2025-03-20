@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, python3
-, fetchPypi
-, openssl
+{
+  lib,
+  stdenv,
+  python3,
+  fetchpatch,
+  fetchPypi,
+  openssl,
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-, extraInputs ? []
+  extraInputs ? [ ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,6 +22,11 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./fix-libcrypto-loading.patch
+    (fetchpatch {
+      name = "urllib.patch";
+      url = "https://src.fedoraproject.org/rpms/salt/raw/1c6e7b7a88fb81902f5fcee32e04fa80713b81f8/f/urllib.patch";
+      hash = "sha256-yldIurafduOAYpf2X0PcTQyyNjz5KKl/N7J2OTEF/c0=";
+    })
   ];
 
   postPatch = ''
@@ -37,21 +44,24 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    jmespath
-    looseversion
-    markupsafe
-    msgpack
-    packaging
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-    tornado
-  ] ++ extraInputs;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      distro
+      jinja2
+      jmespath
+      looseversion
+      markupsafe
+      msgpack
+      packaging
+      psutil
+      pycryptodomex
+      pyyaml
+      pyzmq
+      requests
+      tornado
+    ]
+    ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";

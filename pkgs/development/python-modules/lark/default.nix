@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
   };
 

@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, iter
-, containers
-, mdx
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  iter,
+  containers,
+  mdx,
 }:
 
 buildDunePackage rec {

@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LwyUaU4m9fk+mG8FBfkbj9nBvd8KokwlV7cE7EBwk0Q=";
   };
 
-  cargoHash = "sha256-7yFdoXK9Nyg1uT0mtiXs6evOu1U1quxL7iMMMyxqxqk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ug79p75Oa5lsd9COWO2aIx3jN7de1QZggMFiOPAN5kQ=";
 
   meta = with lib; {
     description = "Tool to detect open source licenses from texts";

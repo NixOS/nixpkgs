@@ -1,8 +1,16 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo, ocp-indent, cmdliner, re }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cppo,
+  ocp-indent,
+  cmdliner,
+  re,
+}:
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.6";
+  version = "1.3.7";
 
   minimalOCamlVersion = "4.08";
 
@@ -10,11 +18,14 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    hash = "sha256-EgRpC58NBVFO1w0xx11CnonatU2H7bECsEk6Y4c/odY=";
+    hash = "sha256-FbkVJRbFNSho/E59QMUoGK+TrdnnacmykJWWG2JVDVA=";
   };
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ cmdliner re ];
+  buildInputs = [
+    cmdliner
+    re
+  ];
 
   propagatedBuildInputs = [ ocp-indent ];
 

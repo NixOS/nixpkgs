@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "goimports-reviser";
-  version = "3.6.5";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
     rev = "v${version}";
-    hash = "sha256-46s6A1sGqoJR3XihaCkVCxTpManl330mMcJ8hv66zDc=";
+    hash = "sha256-73EU2LaOq5AfMssYJShhQLbZjrK4qbERn9SRomMMsHA=";
   };
   vendorHash = "sha256-z+FeAXPXKi653im2X2WOP1R9gRl/x7UBnndoEXoxdwA=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "." ];
 

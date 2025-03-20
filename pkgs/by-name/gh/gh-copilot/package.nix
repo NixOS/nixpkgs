@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -9,26 +10,26 @@ let
   systemToPlatform = {
     "x86_64-linux" = {
       name = "linux-amd64";
-      hash = "sha256-uEG9wvoUyX54rcsZI2dgSfEy9d/FMfjf4+kn5wJoojY=";
+      hash = "sha256-KIiwIv0VzJf0GVkuDsevEah48hv4VybLuBhy4dJvggo=";
     };
     "aarch64-linux" = {
       name = "linux-arm64";
-      hash = "sha256-r0Vo9lZygIEQeSqPv1ix/NK347wqoCkaIL635qeP5ok=";
+      hash = "sha256-hNXDIB7r3Hdo7g2pPZKAYYrOaBJmAq7UKc+ZnRnVeoA=";
     };
     "x86_64-darwin" = {
       name = "darwin-amd64";
-      hash = "sha256-Hu7A/M5JvwFaA5AmO1WO65D7KD3dYTGnNb0A5CqAPH0=";
+      hash = "sha256-1tN734huSBzke8j8H/dyFS90LsWGFuGtLdYdrLbGeOs=";
     };
     "aarch64-darwin" = {
       name = "darwin-arm64";
-      hash = "sha256-d6db1YOmo7If/2PTkgScsTaMqZZNZl6OL/qpgYfCa3s=";
+      hash = "sha256-lGhgND1E4jWZmoAaPXcxNlew9eqWOrMHAYVnpFnqeio=";
     };
   };
   platform = systemToPlatform.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gh-copilot";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     name = "gh-copilot";
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/github/gh-copilot/releases/tag/v${finalAttrs.version}";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   makeBinaryWrapper,
   makeWrapper,
   makeDesktopItem,
@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HlT7ddlrMHG1qOCqdaYjuWhJD+5FF1Nkv2sfXLWd07o=";
+    hash = "sha256-z2MKnCWDWUczoz39zzBYRB6wiSU1SRRHLpeUZeJqbLc=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-BOVjbaDbZw6H6X8o945M0Bx6fqnRQjFBviOLkTYVJ1I=";
+    hash = "sha256-xn3yE2S6hfCijV+Edx3PYgGro8eF76/GqarOIRj9Tbg=";
   };
 
   nativeBuildInputs =
@@ -69,11 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches =
-    [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemVencord (substituteAll {
-      inherit vencord;
-      src = ./use_system_vencord.patch;
-    });
+    [
+      ./disable_update_checking.patch
+      ./fix_read_only_settings.patch
+    ]
+    ++ lib.optional withSystemVencord (
+      replaceVars ./use_system_vencord.patch {
+        inherit vencord;
+      }
+    );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -137,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/Vesktop.app/Contents/MacOS/Vesktop $out/bin/vesktop

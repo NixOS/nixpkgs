@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, meson
-, ninja
-, pkg-config
-, wrapQtAppsHook
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapQtAppsHook
+    meson
+    ninja
+    pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

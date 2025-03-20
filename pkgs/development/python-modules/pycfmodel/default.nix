@@ -11,22 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iCjOSwW6rdG3H4e/B/um+QioP45nOr9OcPAwXxZs3mU=";
+    tag = "v${version}";
+    hash = "sha256-mFO3T5FmVLAXPmLJsueCDdCLoFfBwQwryxfEtkLz1rM=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [ pydantic ];
 
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     "test_loose_ip"
     "test_extra_fields_not_allowed_s3_bucket"
     "test_raise_error_if_invalid_fields_in_resource"
-    ""
   ];
 
   pythonImportsCheck = [ "pycfmodel" ];

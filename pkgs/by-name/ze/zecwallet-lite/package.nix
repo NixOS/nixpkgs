@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "zecwallet-lite";
@@ -10,8 +14,10 @@ appimageTools.wrapType2 rec {
   };
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       install -m 444 -D ${contents}/zecwallet-lite.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/zecwallet-lite.desktop \
         --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
@@ -22,7 +28,7 @@ appimageTools.wrapType2 rec {
     description = "Fully featured shielded wallet for Zcash";
     homepage = "https://www.zecwallet.co/";
     license = licenses.mit;
-    maintainers = with maintainers; [ colinsane ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "zecwallet-lite";
   };

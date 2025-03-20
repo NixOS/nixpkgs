@@ -1,4 +1,11 @@
-{ config, lib, pkgs, ... }: with lib; let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+let
   cfg = config.services.icingaweb2;
   fpm = config.services.phpfpm.pools.${poolName};
   poolName = "icingaweb2";
@@ -8,7 +15,8 @@
       module_path = "${pkgs.icingaweb2}/modules";
     };
   };
-in {
+in
+{
   meta.maintainers = teams.helsinki-systems.members;
 
   options.services.icingaweb2 = with types; {
@@ -18,8 +26,8 @@ in {
       type = str;
       default = poolName;
       description = ''
-         Name of existing PHP-FPM pool that is used to run Icingaweb2.
-         If not specified, a pool will automatically created with default values.
+        Name of existing PHP-FPM pool that is used to run Icingaweb2.
+        If not specified, a pool will automatically created with default values.
       '';
     };
 
@@ -58,7 +66,7 @@ in {
 
     modulePackages = mkOption {
       type = attrsOf package;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;
@@ -178,7 +186,11 @@ in {
       ${poolName} = {
         user = "icingaweb2";
         phpEnv = {
-          ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths));
+          ICINGAWEB_LIBDIR = toString (
+            pkgs.linkFarm "icingaweb2-libdir" (
+              mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths
+            )
+          );
         };
         phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
         phpOptions = ''
@@ -233,11 +245,19 @@ in {
     };
 
     # /etc/icingaweb2
-    environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
-    in {}
+    environment.etc =
+      let
+        doModule =
+          name:
+          optionalAttrs (cfg.modules.${name}.enable) {
+            "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}";
+          };
+      in
+      { }
       # Module packages
-      // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
+      // (mapAttrs' (
+        k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
+      ) cfg.modulePackages)
       # Built-in modules
       // doModule "doc"
       // doModule "migrate"
@@ -245,14 +265,24 @@ in {
       // doModule "test"
       // doModule "translation"
       # Configs
-      // optionalAttrs (cfg.generalConfig != null) { "icingaweb2/config.ini".text = generators.toINI {} (defaultConfig // cfg.generalConfig); }
-      // optionalAttrs (cfg.resources != null) { "icingaweb2/resources.ini".text = generators.toINI {} cfg.resources; }
-      // optionalAttrs (cfg.authentications != null) { "icingaweb2/authentication.ini".text = generators.toINI {} cfg.authentications; }
-      // optionalAttrs (cfg.groupBackends != null) { "icingaweb2/groups.ini".text = generators.toINI {} cfg.groupBackends; }
-      // optionalAttrs (cfg.roles != null) { "icingaweb2/roles.ini".text = generators.toINI {} cfg.roles; };
+      // optionalAttrs (cfg.generalConfig != null) {
+        "icingaweb2/config.ini".text = generators.toINI { } (defaultConfig // cfg.generalConfig);
+      }
+      // optionalAttrs (cfg.resources != null) {
+        "icingaweb2/resources.ini".text = generators.toINI { } cfg.resources;
+      }
+      // optionalAttrs (cfg.authentications != null) {
+        "icingaweb2/authentication.ini".text = generators.toINI { } cfg.authentications;
+      }
+      // optionalAttrs (cfg.groupBackends != null) {
+        "icingaweb2/groups.ini".text = generators.toINI { } cfg.groupBackends;
+      }
+      // optionalAttrs (cfg.roles != null) {
+        "icingaweb2/roles.ini".text = generators.toINI { } cfg.roles;
+      };
 
     # User and group
-    users.groups.icingaweb2 = {};
+    users.groups.icingaweb2 = { };
     users.users.icingaweb2 = {
       description = "Icingaweb2 service user";
       group = "icingaweb2";

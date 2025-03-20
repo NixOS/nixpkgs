@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  coreutils,
 
-, perl
-, pkg-config
+  perl,
+  pkg-config,
 
-, json_c
-, libaio
-, liburcu
-, linuxHeaders
-, lvm2
-, readline
-, systemd
-, util-linuxMinimal
+  json_c,
+  libaio,
+  liburcu,
+  linuxHeaders,
+  lvm2,
+  readline,
+  systemd,
+  util-linuxMinimal,
 
-, cmocka
-, nixosTests
+  cmocka,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
   };
 
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     systemd
     util-linuxMinimal # for libmount
   ];
+  strictDeps = true;
 
   makeFlags = [
     "LIB=lib"
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     # skip test attempting to access /sys/dev/block
     substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
-  nativeCheckInputs = [ cmocka ];
+  checkInputs = [ cmocka ];
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 

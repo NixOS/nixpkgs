@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, faad2, fftwFloat, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  faad2,
+  fftwFloat,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,8 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/library";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ faad2 fftwFloat zlib ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    faad2
+    fftwFloat
+    zlib
+  ];
 
   meta = with lib; {
     description = "DAB/DAB+ decoding library";

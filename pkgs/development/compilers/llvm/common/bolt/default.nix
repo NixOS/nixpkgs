@@ -8,20 +8,22 @@
   cmake,
   libxml2,
   libllvm,
+  ninja,
   libclang,
   version,
   python3,
   buildLlvmTools,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bolt";
-  inherit version patches;
+  inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { } (
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir $out
     ''
@@ -32,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
       cp -r ${monorepoSrc}/third-party "$out"
 
-      # tablegen stuff, probably not the best way but it works...
+      # BOLT re-runs tablegen against LLVM sources, so needs them available.
       cp -r ${monorepoSrc}/llvm/ "$out"
       chmod -R +w $out/llvm
     ''
@@ -40,22 +42,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 
+  patches = lib.optionals (lib.versions.major release_version == "19") [
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
+      hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5909979869edca359bcbca74042c2939d900680e.patch";
+      hash = "sha256-l4rQHYbblEADBXaZIdqTG0sZzH4fEQvYiqhLYNZDMa8=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
+    ninja
     python3
   ];
 
   buildInputs = [
     libllvm
-    libclang
     libxml2
   ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.llvm}/bin/llvm-tblgen")
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+  ] ++ devExtraCmakeFlags;
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..

@@ -39,11 +39,7 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPower
-              || stdenv.targetPlatform.isSparc
-              || stdenv.targetPlatform.isAarch64
-              || stdenv.targetPlatform.isGhcjs)
+, useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; })
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -169,16 +165,16 @@
 
       patches =
         let
-          # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
           enableHyperlinkedSource =
-            lib.versionAtLeast version "9.8" ||
-            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+            # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+            # 9.8 and 9.10 don't run into this problem for some reason
+            || (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.11");
         in
-        [
-          # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-          (if lib.versionAtLeast version "9.8"
-           then ./docs-sphinx-7-ghc98.patch
-           else ./docs-sphinx-7.patch )
+
+        # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+        lib.optionals (lib.versionOlder version "9.8") [
+           ./docs-sphinx-7.patch
         ]
         ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
           (fetchpatch {
@@ -207,12 +203,16 @@
            then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
            else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
-        # Prevents passing --hyperlinked-source to haddock. This is a custom
-        # workaround as we wait for this to be configurable via userSettings or
-        # similar. https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+        # Prevents passing --hyperlinked-source to haddock. Note that this can
+        # be configured via a user defined flavour now. Unfortunately, it is
+        # impossible to import an existing flavour in UserSettings, so patching
+        # the defaults is actually simpler and less maintenance intensive
+        # compared to keeping an entire flavour definition in sync with upstream
+        # manually. See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625
         ++ lib.optionals (!enableHyperlinkedSource) [
-          # TODO(@sternenseemann): Doesn't apply for GHC >= 9.8
-          ../../tools/haskell/hadrian/disable-hyperlinked-source.patch
+          (if lib.versionOlder version "9.8"
+           then ../../tools/haskell/hadrian/disable-hyperlinked-source-pre-9.8.patch
+           else ../../tools/haskell/hadrian/disable-hyperlinked-source-extra-args.patch)
         ]
         # Incorrect bounds on Cabal in hadrian
         # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
@@ -614,16 +614,12 @@ stdenv.mkDerivation ({
 
   checkTarget = "test";
 
-  hardeningDisable =
-    [ "format" ]
-    # In nixpkgs, musl based builds currently enable `pie` hardening by default
-    # (see `defaultHardeningFlags` in `make-derivation.nix`).
-    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+  # GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+  # See:
+  # * https://github.com/NixOS/nixpkgs/issues/129247
+  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+  hardeningDisable = [ "format" "pie" ];
 
   # big-parallel allows us to build with more than 2 cores on
   # Hydra which already warrants a significant speedup

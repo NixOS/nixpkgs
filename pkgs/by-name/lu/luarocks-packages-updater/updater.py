@@ -17,13 +17,32 @@ import textwrap
 from dataclasses import dataclass
 from multiprocessing.dummy import Pool
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 import pluginupdate
 from pluginupdate import FetchConfig, update_plugins
 
+
+class ColoredFormatter(logging.Formatter):
+    # Define color codes
+    COLORS = {
+        "DEBUG": "\033[94m",  # Blue
+        "INFO": "\033[92m",  # Green
+        "WARNING": "\033[93m",  # Yellow
+        "ERROR": "\033[91m",  # Red
+        "CRITICAL": "\033[95m",  # Magenta
+    }
+    RESET = "\033[0m"
+
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelname, self.RESET)
+        record.msg = f"{log_color}{record.msg}{self.RESET}"
+        return super().format(record)
+
+
+handler = logging.StreamHandler()
+handler.setFormatter(ColoredFormatter("%(levelname)s: %(message)s"))
 log = logging.getLogger()
-log.addHandler(logging.StreamHandler())
+log.handlers = [handler]
 
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent  # type: ignore
 
@@ -49,18 +68,18 @@ class LuaPlugin:
     """Name of the plugin, as seen on luarocks.org"""
     rockspec: str
     """Full URI towards the rockspec"""
-    ref: Optional[str]
+    ref: str | None
     """git reference (branch name/tag)"""
-    version: Optional[str]
+    version: str | None
     """Set it to pin a package """
-    server: Optional[str]
+    server: str | None
     """luarocks.org registers packages under different manifests.
     Its value can be 'http://luarocks.org/dev'
     """
-    luaversion: Optional[str]
+    luaversion: str | None
     """lua version if a package is available only for a specific lua version"""
-    maintainers: Optional[str]
-    """ Optional string listing maintainers separated by spaces"""
+    maintainers: str | None
+    """Optional string listing maintainers separated by spaces"""
 
     @property
     def normalized_name(self) -> str:
@@ -77,7 +96,7 @@ class LuaEditor(pluginupdate.Editor):
     def get_current_plugins(self):
         return []
 
-    def load_plugin_spec(self, input_file) -> List[LuaPlugin]:
+    def load_plugin_spec(self, input_file) -> list[LuaPlugin]:
         luaPackages = []
         csvfilename = input_file
         log.info("Loading package descriptions from %s", csvfilename)
@@ -95,7 +114,7 @@ class LuaEditor(pluginupdate.Editor):
     def update(self, args):
         update_plugins(self, args)
 
-    def generate_nix(self, results: List[Tuple[LuaPlugin, str]], outfilename: str):
+    def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
@@ -121,7 +140,16 @@ class LuaEditor(pluginupdate.Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+    def get_update(
+        self,
+        input_file: str,
+        output_file: str,
+        config: FetchConfig,
+        # TODO: implement support for adding/updating individual plugins
+        to_update: list[str] | None,
+    ):
+        if to_update is not None:
+            raise NotImplementedError("For now, lua updater doesn't support updating individual packages.")
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
@@ -134,7 +162,15 @@ class LuaEditor(pluginupdate.Editor):
             finally:
                 pass
 
-            self.generate_nix(results, outfile)
+            successful_results = [(plug, nix_expr) for plug, nix_expr, error in results if nix_expr is not None]
+            errors = [(plug, error) for plug, nix_expr, error in results if error is not None]
+
+            self.generate_nix(successful_results, output_file)
+
+            if errors:
+                log.error("The following plugins failed to update:")
+                for plug, error in errors:
+                    log.error("%s: %s", plug.name, error)
 
             redirects = {}
             return redirects
@@ -163,39 +199,43 @@ def generate_pkg_nix(plug: LuaPlugin):
     """
     log.debug("Generating nix expression for %s", plug.name)
 
-    cmd = ["luarocks", "nix"]
+    try:
+        cmd = ["luarocks", "nix"]
 
-    if plug.maintainers:
-        cmd.append(f"--maintainers={plug.maintainers}")
+        if plug.maintainers:
+            cmd.append(f"--maintainers={plug.maintainers}")
 
-    if plug.rockspec != "":
-        if plug.ref or plug.version:
-            msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
-            log.warning(msg)
+        if plug.rockspec != "":
+            if plug.ref or plug.version:
+                msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
+                log.warning(msg)
 
-        log.debug("Updating from rockspec %s", plug.rockspec)
-        cmd.append(plug.rockspec)
+            log.debug("Updating from rockspec %s", plug.rockspec)
+            cmd.append(plug.rockspec)
 
-    # update the plugin from luarocks
-    else:
-        cmd.append(plug.name)
-        if plug.version and plug.version != "src":
-            cmd.append(plug.version)
+        # update the plugin from luarocks
+        else:
+            cmd.append(plug.name)
+            if plug.version and plug.version != "src":
+                cmd.append(plug.version)
 
-    if plug.server != "src" and plug.server:
-        cmd.append(f"--only-server={plug.server}")
+        if plug.server != "src" and plug.server:
+            cmd.append(f"--only-server={plug.server}")
 
-    if plug.luaversion:
-        cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace(".", "")
-        if luaver := os.getenv(f"LUA_{luaver}"):
-            cmd.append(f"--lua-dir={luaver}")
+        if plug.luaversion:
+            cmd.append(f"--lua-version={plug.luaversion}")
+            luaver = plug.luaversion.replace(".", "")
+            if luaver := os.getenv(f"LUA_{luaver}"):
+                cmd.append(f"--lua-dir={luaver}")
 
-    log.debug("running %s", " ".join(cmd))
+        log.debug("running %s", " ".join(cmd))
 
-    output = subprocess.check_output(cmd, text=True)
-    output = "callPackage(" + output.strip() + ") {};\n\n"
-    return (plug, output)
+        output = subprocess.check_output(cmd, text=True)
+        output = "callPackage(" + output.strip() + ") {};\n\n"
+        return (plug, output, None)
+    except subprocess.CalledProcessError as e:
+        log.error("Failed to generate nix expression for %s: %s", plug.name, e)
+        return (plug, None, str(e))
 
 
 def main():

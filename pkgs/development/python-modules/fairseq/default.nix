@@ -58,6 +58,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "hydra-core"
     "omegaconf"
+    "torchaudio"
   ];
 
   propagatedBuildInputs = [

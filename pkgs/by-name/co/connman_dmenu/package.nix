@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, connman, dmenu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  connman,
+  dmenu,
+}:
 
 stdenv.mkDerivation {
   pname = "connman_dmenu";
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
     hash = "sha256-05MjFg+8rliYIAdOOHmP7DQhOTeYn5ZoCpZEdQeKLhg=";
   };
 
-  buildInputs = [ connman dmenu ];
+  buildInputs = [
+    connman
+    dmenu
+  ];
 
   dontBuild = true;
 

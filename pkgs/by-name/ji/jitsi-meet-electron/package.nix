@@ -1,54 +1,64 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, libpng
-, libX11
-, libXi
-, libXtst
-, zlib
-, darwin
-, electron
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  libpng,
+  libX11,
+  libXi,
+  libXtst,
+  zlib,
+  darwin,
+  electron,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Carbon CoreFoundation ApplicationServices OpenGL;
+  inherit (darwin.apple_sdk.frameworks)
+    Carbon
+    CoreFoundation
+    ApplicationServices
+    OpenGL
+    ;
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2024.6.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
+    hash = "sha256-o65UPPyGgmFe8+HANmnyVgPITk8gY7uvIzx7QZUluBU=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
   # robotjs node-gyp dependencies
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libpng
-    libX11
-    libXi
-    libXtst
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    CoreFoundation
-    ApplicationServices
-    OpenGL
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libpng
+      libX11
+      libXi
+      libXtst
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreFoundation
+      ApplicationServices
+      OpenGL
+    ];
 
-  npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
+  npmDepsHash = "sha256-16yWCI408tkkzvrx2fBPSNSUa9dRej9LrnNpqobwfl8=";
 
   makeCacheWritable = true;
 
@@ -81,6 +91,8 @@ buildNpmPackage rec {
         -c.electronVersion=${electron.version}
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   installPhase = ''
     runHook preInstall
 
@@ -90,7 +102,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
           --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --set-default ELECTRON_IS_DEV 0 \
           --inherit-argv0
 
@@ -113,7 +125,13 @@ buildNpmPackage rec {
       icon = "jitsi-meet-electron";
       desktopName = "Jitsi Meet";
       comment = meta.description;
-      categories = [ "VideoConference" "AudioVideo" "Audio" "Video" "Network" ];
+      categories = [
+        "VideoConference"
+        "AudioVideo"
+        "Audio"
+        "Video"
+        "Network"
+      ];
       mimeTypes = [ "x-scheme-handler/jitsi-meet" ];
       terminal = false;
     })

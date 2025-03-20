@@ -1,6 +1,16 @@
-{ fetchFromGitHub, lib, stdenv, pkg-config, libao, json_c, libgcrypt, ffmpeg, curl }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  pkg-config,
+  libao,
+  json_c,
+  libgcrypt,
+  ffmpeg,
+  curl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pianobar";
   version = "2022.04.01-unstable-2024-08-16";
 
@@ -13,7 +23,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libao json_c libgcrypt ffmpeg curl
+    libao
+    json_c
+    libgcrypt
+    ffmpeg
+    curl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

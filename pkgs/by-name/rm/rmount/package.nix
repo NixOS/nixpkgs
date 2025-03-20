@@ -1,8 +1,17 @@
-{ lib, stdenv, nmap, jq, cifs-utils, sshfs, fetchFromGitHub, makeWrapper }:
+{
+  lib,
+  stdenv,
+  nmap,
+  jq,
+  cifs-utils,
+  sshfs,
+  fetchFromGitHub,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
 
-  pname   = "rmount";
+  pname = "rmount";
   version = "1.1.0";
 
   src = fetchFromGitHub {
@@ -19,7 +28,14 @@ stdenv.mkDerivation rec {
     install -D ${src}/rmount.bash $out/bin/rmount
     install -D ${src}/config.json $out/share/config.json
 
-    wrapProgram $out/bin/rmount --prefix PATH : ${lib.makeBinPath [ nmap jq cifs-utils sshfs ]}
+    wrapProgram $out/bin/rmount --prefix PATH : ${
+      lib.makeBinPath [
+        nmap
+        jq
+        cifs-utils
+        sshfs
+      ]
+    }
   '';
 
   meta = with lib; {

@@ -3,33 +3,30 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
+  tbb_2022_0,
+  useTBB ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.5.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-WatbhExS0j2neYsrfbNhYxrckLiXHwQBjctuowtQW+U=";
+    tag = finalAttrs.version;
+    hash = "sha256-08D5hnU3I0VJ+RM/TNk2LxsEAvOLuO52+08zlKssXbc=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
 
-  patches = [
-    # Fix pkg-config for absolute CMAKE_INSTALL_*DIR
-    (fetchpatch {
-      url = "https://github.com/BLAKE3-team/BLAKE3/commit/aa3e8ec32a389461babde3789d6ac50ee3c38662.patch";
-      hash = "sha256-V8o85EnRoqYvatqYwdr7h2TBwSOSlKrqfJWPPkQhU+c=";
-      stripLen = 1;
-    })
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  nativeBuildInputs = [
-    cmake
+  buildInputs = lib.optionals useTBB [ tbb_2022_0 ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   meta = {
@@ -39,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       cc0
     ];
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      silvanshade
+    ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,4 +1,11 @@
-{ lib, fetchurl, buildDunePackage, ocaml, alcotest, ppxlib }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  alcotest,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "ppx_blob";

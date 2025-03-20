@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runCommand,
   rustPlatform,
   makeWrapper,
   llvmPackages,
@@ -13,7 +12,6 @@
   python3,
   pkg-config,
   libsecret,
-  darwin,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -33,91 +31,39 @@ let
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub runCommand llvmPackages; });
+  lldb = (import ./lldb.nix { inherit fetchFromGitHub llvmPackages; });
 
-  adapter = rustPlatform.buildRustPackage {
-    pname = "${pname}-adapter";
-    inherit version src;
+  adapter = (
+    import ./adapter.nix {
+      inherit
+        lib
+        lldb
+        makeWrapper
+        rustPlatform
+        stdenv
 
-    cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
+        pname
+        src
+        version
+        ;
+    }
+  );
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
+  nodeDeps = (
+    import ./node_deps.nix {
+      inherit
+        buildNpmPackage
+        libsecret
+        pkg-config
+        python3
 
-    nativeBuildInputs = [ makeWrapper ];
+        pname
+        src
+        version
+        ;
+    }
+  );
 
-    env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
-
-    buildAndTestSubdir = "adapter";
-
-    buildFeatures = [ "weak-linkage" ];
-
-    cargoBuildFlags = [
-      "--lib"
-      "--bin=codelldb"
-    ];
-
-    postFixup = ''
-      mkdir -p $out/share/{adapter,formatters}
-      # codelldb expects libcodelldb.so to be in the same
-      # directory as the executable, and can't find it in $out/lib.
-      # To make codelldb executable as a standalone,
-      # we put all files in $out/share, and then wrap the binary in $out/bin.
-      mv $out/bin/* $out/share/adapter
-      cp $out/lib/* $out/share/adapter
-      cp -r adapter/scripts $out/share/adapter
-      cp -t $out/share/formatters formatters/*.py
-      ln -s ${lib.getLib lldb} $out/share/lldb
-      makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
-        --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
-    '';
-
-    patches = [ ./adapter-output-shared_object.patch ];
-
-    # Tests are linked to liblldb but it is not available here.
-    doCheck = false;
-  };
-
-  nodeDeps = buildNpmPackage {
-    pname = "${pname}-node-deps";
-    inherit version src;
-
-    npmDepsHash = "sha256-fMKGi+AJTMlWl7SQtZ21hUwOLgqlFYDhwLvEergQLfI=";
-
-    nativeBuildInputs = [
-      python3
-      pkg-config
-    ];
-
-    buildInputs =
-      [ libsecret ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with darwin.apple_sdk.frameworks;
-        [
-          Security
-          AppKit
-        ]
-      );
-
-    dontNpmBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib
-      cp -r node_modules $out/lib
-
-      runHook postInstall
-    '';
-  };
-
-  # debugservers on macOS require the 'com.apple.security.cs.debugger'
-  # entitlement which nixpkgs' lldb-server does not yet provide; see
-  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
-  lldbServer =
-    if stdenv.hostPlatform.isDarwin then
-      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-    else
-      "${lldb.out}/bin/lldb-server";
 in
 stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -133,17 +79,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     nodejs
     unzip
-    makeWrapper
   ];
 
-  patches = [ ./cmake-build-extension-only.patch ];
+  patches = [ ./patches/cmake-build-extension-only.patch ];
 
   postPatch = ''
     # temporary patch for forgotten version updates
     substituteInPlace CMakeLists.txt \
-      --replace "1.9.2" ${version}
+      --replace-fail "1.9.2" ${version}
   '';
 
   postConfigure =
@@ -176,7 +122,7 @@ stdenv.mkDerivation {
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
+      --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -199,7 +145,7 @@ stdenv.mkDerivation {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.nigelgbanks ];
+    maintainers = [ lib.maintainers.r4v3n6101 ];
     platforms = lib.platforms.all;
   };
 }

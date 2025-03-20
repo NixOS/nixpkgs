@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  zlib,
+  lzo,
+  bzip2,
+  lz4,
+  nasm,
+  perl,
+}:
 
 let
   inherit (stdenv.hostPlatform) isx86;
@@ -9,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ckolivas";
-    repo = pname;
+    repo = "lrzip";
     rev = "v${version}";
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
@@ -23,9 +34,17 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace "-f elf64" "-f macho64"
   '';
 
-  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals isx86 [ nasm ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ] ++ lib.optionals isx86 [ nasm ];
 
-  buildInputs = [ zlib lzo bzip2 lz4 ];
+  buildInputs = [
+    zlib
+    lzo
+    bzip2
+    lz4
+  ];
 
   configureFlags = lib.optionals (!isx86) [
     "--disable-asm"

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, rocksdb_8_3
-, rapidjson
-, pkg-config
-, fetchFromGitHub
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  rocksdb_8_3,
+  rapidjson,
+  pkg-config,
+  fetchFromGitHub,
+  zlib,
 }:
 
 let
@@ -16,14 +17,21 @@ stdenv.mkDerivation rec {
   version = "4.2.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "sortmerna";
     owner = "biocore";
     rev = "v${version}";
     sha256 = "0r91viylzr069jm7kpcgb45kagvf8sqcj5zc1af4arl9sgfs1f3j";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib rocksdb rapidjson ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    zlib
+    rocksdb
+    rapidjson
+  ];
 
   cmakeFlags = [
     "-DPORTABLE=off"

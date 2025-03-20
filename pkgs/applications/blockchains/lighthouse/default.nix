@@ -5,10 +5,8 @@
 , lib
 , lighthouse
 , nix-update-script
-, nodePackages
 , openssl
 , pkg-config
-, postgresql
 , protobuf
 , rustPlatform
 , rust-jemalloc-sys
@@ -21,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "5.3.0";
+  version = "6.0.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -31,26 +29,15 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-wIj+YabyUrgLjWCfjCAH/Xb8jUG6ss+5SwnE2M82a+4=";
+    hash = "sha256-8jHNm/MGpHGOt52rLMXLMWIVn8AXqnpAr+Wvk7DH6gc=";
   };
 
   patches = [
     ./use-system-sqlite.patch
-    ./fix-dep-lazy_static.patch
   ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmdbx-0.1.4" = "sha256-ONp4uPkVCN84MObjXorCZuSjnM6uFSMXK1vdJiX074o=";
-      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "quick-protobuf-0.8.1" = "sha256-dgePLYCeoEZz5DGaLifhf3gEIPaL7XB0QT9wRKY8LJg=";
-    };
-  };
+  cargoHash = "sha256-Opkz3EVKw0M4LeWMsn1NlSw/Fg7cWVqnDJRRTPYYlLo=";
+  useFetchCargoVendor = true;
 
   buildFeatures = [ "modern" "gnosis" ];
 
@@ -128,11 +115,6 @@ rustPlatform.buildRustPackage rec {
     "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
-  ];
-
-  nativeCheckInputs = [
-    nodePackages.ganache
-    postgresql
   ];
 
   passthru = {

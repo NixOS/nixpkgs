@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPackages
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "diffoci";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "diffoci";
     rev = "v${version}";
-    hash = "sha256-ZVWnfg5uWYuqsNd4X6t1gWBGMfdcirSp7QZZDhqAfaI=";
+    hash = "sha256-rCSLHlHUWS0wEnN8R2v1h+kQ7K62VQPfZmySHGSFZlQ=";
   };
 
-  vendorHash = "sha256-qb4HvK4UbJbtP/ypeptV/MMbhOu5UZDaGartq/RGpDM=";
+  vendorHash = "sha256-udVigglpCgdYzJe9vdGZiQepZeOplQjqKB4Za8a+u6k=";
 
   ldflags = [
     "-s"
@@ -29,7 +30,11 @@ buildGoModule rec {
 
   postInstall =
     let
-      diffoci = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.diffoci;
+      diffoci =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.diffoci;
     in
     ''
       installShellCompletion --cmd trivy \

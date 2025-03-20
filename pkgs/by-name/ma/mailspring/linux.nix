@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, pname
-, version
-, meta
-, fetchurl
-, autoPatchelfHook
-, alsa-lib
-, coreutils
-, db
-, dpkg
-, glib
-, gtk3
-, wrapGAppsHook3
-, libkrb5
-, libsecret
-, nss
-, openssl
-, udev
-, xorg
-, mesa
-, libdrm
-, libappindicator
+{
+  stdenv,
+  lib,
+  pname,
+  version,
+  meta,
+  fetchurl,
+  autoPatchelfHook,
+  alsa-lib,
+  coreutils,
+  db,
+  dpkg,
+  glib,
+  gtk3,
+  wrapGAppsHook3,
+  libkrb5,
+  libsecret,
+  nss,
+  openssl,
+  udev,
+  xorg,
+  libgbm,
+  libdrm,
+  libappindicator,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${finalAttrs.version}/mailspring-${finalAttrs.version}-amd64.deb";
-    hash = "sha256-2F5k8zRRI6x1EQ0k8wvIq1Q3Lnrn2ROp/Mq+H7Vqzlc=";
+    hash = "sha256-+glQaz36mKMtnNeyHH4brZmzYe9SHCtccO6CIJpTH2k=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libXtst
     xorg.libxshmfence
-    mesa
+    libgbm
     libdrm
   ];
 
@@ -85,8 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = /* sh */ ''
-    substituteInPlace $out/share/applications/Mailspring.desktop \
-      --replace-fail Exec=mailspring Exec=$out/bin/mailspring
-  '';
+  postFixup = # sh
+    ''
+      substituteInPlace $out/share/applications/Mailspring.desktop \
+        --replace-fail Exec=mailspring Exec=$out/bin/mailspring
+    '';
 })

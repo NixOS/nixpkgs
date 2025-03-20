@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "fingerprintx";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "fingerprintx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o0u6UOrdzORnTgfOlc0kSQ5diDtNHjjbwfuyvPoHHKs=";
+    tag = "v${version}";
+    hash = "sha256-kbSP/nSdCrcEYVvLVawjZ2RDvTGv5JsHEIXXcPLA1ng=";
   };
 
-  vendorHash = "sha256-TMy6FwAFlo+ARvm+RiRqly0xIk4lBCXuZrtdnNSMSxw=";
+  vendorHash = "sha256-1KSNvK2ylqWjfhxMY+NQFoDahPgqGb12nA4oGqqoFIA=";
 
   ldflags = [
     "-s"

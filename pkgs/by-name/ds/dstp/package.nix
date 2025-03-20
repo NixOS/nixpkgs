@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "dstp";
-  version = "0.4.0";
+  version = "0.4.23";
 
   src = fetchFromGitHub {
     owner = "ycd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YvuUgHHa8Egk+bbSI0SH0i3YrKWRbzjAckNG32RBRXw=";
+    sha256 = "sha256-QODp9IbIc2Z7N/xfRd0UV9r8t6RndOjdGe9hQXJyiN0=";
   };
 
-  vendorHash = "sha256-qNH71MPKOC0ld7xxppjZrHSTJ6t8E0LljM1OzT7pM9g=";
+  vendorHash = "sha256-EE3xSRu7zAuQjaXCdTD924K6OamEkdxHYEaM0rW/O+o=";
 
   # Tests require network connection, but is not allowed by nix
   doCheck = false;

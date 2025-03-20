@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation {
   pname = "tegaki-zinnia-japanese";
@@ -14,7 +19,7 @@ stdenv.mkDerivation {
     homepage = "http://tegaki.org/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = [ ];
   };
 
   nativeBuildInputs = [ unzip ];

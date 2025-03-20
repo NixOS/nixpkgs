@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Changaco";
     repo = "python-${pname}";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
   };
 

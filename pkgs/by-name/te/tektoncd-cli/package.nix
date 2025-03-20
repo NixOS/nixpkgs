@@ -1,19 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.38.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-FZbuYKYT/LJ9php66N2RYGGYDJxDI9fWfIZAI8X+iRk=";
+    sha256 = "sha256-LcYd8v6+at/GqlEV2Qkj5g+WNiTBfnQuhDtpP7lmnuk=";
   };
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -61,7 +70,11 @@ buildGoModule rec {
       Pipelines.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
+    maintainers = with maintainers; [
+      jk
+      mstrangfeld
+      vdemeester
+    ];
     mainProgram = "tkn";
   };
 }

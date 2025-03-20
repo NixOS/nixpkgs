@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.2.1";
+  version = "11.3.1";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,7 +28,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-UVX56yNZSAbUejiQ0AIn00r7R+fUW1DEjZmCr1iYwV4=";
+    hash = "sha256-2VOuEOLFDHMuN/xqhSofeCMVvCvLI7CGFq21qdwQetA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -64,7 +64,7 @@ let
     echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
 
     # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    tee -a Ghidra/Debug/Debugger-{isf,rmi-trace}/build.gradle <<HERE
     protobuf {
       protoc {
         path = '${protobuf}/bin/protoc'
@@ -72,6 +72,9 @@ let
     }
     HERE
   '';
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {

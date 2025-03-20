@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
   # passthru.tests
-, tmux
-, fcft
-, arrow-cpp
+  tmux,
+  fcft,
+  arrow-cpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "utf8proc";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
-    repo = pname;
+    repo = "utf8proc";
     rev = "v${version}";
-    sha256 = "sha256-Sgh8vTbclUV+lFZdR29PtNUy8F+9L/OAXk647B+l2mg=";
+    hash = "sha256-wmtMo6eBK/xxxkIeJfh5Yb293po9cKK+7WjqNPoxM9g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -34,6 +38,9 @@ stdenv.mkDerivation rec {
     homepage = "https://juliastrings.github.io/utf8proc/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.ftrvxmtrx maintainers.sternenseemann ];
+    maintainers = [
+      maintainers.ftrvxmtrx
+      maintainers.sternenseemann
+    ];
   };
 }

@@ -26,7 +26,7 @@
   libudev0-shim,
   libdrm,
   makeWrapper,
-  mesa,
+  libgbm,
   noto-fonts-cjk-sans,
   nspr,
   nss,
@@ -66,11 +66,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "8.2.0";
+    version = "8.3.1";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-sKjPxrPdnEX/EuZMQJP+PN/Mi1MRV3psK8Jje7V/ecI=";
+      hash = "sha256-6eoXLOLshHpn3eaEx57ll66nD+gs1LZUET0CSm4od5c=";
     };
 
     nativeBuildInputs = [
@@ -99,7 +99,7 @@ let
       libdrm
       nspr
       nss
-      mesa # libgbm
+      libgbm
       qt5.qtbase
       qt5.qtdeclarative
       qt5.qtsvg
@@ -119,10 +119,6 @@ let
     ];
 
     dontWrapQtApps = true;
-
-    unpackPhase = ''
-      dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
-    '';
 
     installPhase = ''
       runHook preInstall

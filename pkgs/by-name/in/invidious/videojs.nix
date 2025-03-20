@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, cacert
-, crystal
-, openssl
-, pkg-config
-, invidious
-, versions
+{
+  stdenvNoCC,
+  cacert,
+  crystal,
+  openssl,
+  pkg-config,
+  invidious,
+  versions,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,7 +15,12 @@ stdenvNoCC.mkDerivation {
 
   builder = ./videojs.sh;
 
-  nativeBuildInputs = [ cacert crystal openssl pkg-config ];
+  nativeBuildInputs = [
+    cacert
+    crystal
+    openssl
+    pkg-config
+  ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

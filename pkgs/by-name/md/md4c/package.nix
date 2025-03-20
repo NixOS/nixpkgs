@@ -1,8 +1,9 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, pkg-config
-, stdenv
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2/wi7nJugR8X2J9FjXJF1UDnbsozGoO7iR295/KSJng=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so prefix and
@@ -64,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/mity/md4c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "md2html";
     platforms = lib.platforms.all;
   };

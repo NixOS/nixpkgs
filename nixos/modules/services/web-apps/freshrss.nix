@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.services.freshrss;
+  webserver = config.services.${cfg.webserver};
 
   extension-env = pkgs.buildEnv {
     name = "freshrss-extensions";
@@ -10,6 +11,7 @@ let
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
+  } // lib.optionalAttrs (cfg.extensions != []) {
     THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
   };
 in
@@ -128,13 +130,25 @@ in
       example = "/mnt/freshrss";
     };
 
+    webserver = mkOption {
+      type = types.enum [ "nginx" "caddy" ];
+      default = "nginx";
+      description = ''
+        Whether to use nginx or caddy for virtual host management.
+
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
+
+        Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+        See [](#opt-services.caddy.virtualHosts) for further information.
+      '';
+    };
+
     virtualHost = mkOption {
-      type = types.nullOr types.str;
+      type = types.str;
       default = "freshrss";
       description = ''
-        Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
-        You may need to configure the virtualhost further through services.nginx.virtualHosts.<virtualhost>,
-        for example to enable SSL.
+        Name of the caddy/nginx virtualhost to use and setup.
       '';
     };
 
@@ -203,15 +217,28 @@ in
           '';
         }
       ];
+
+      # Set up a Caddy virtual host.
+      services.caddy = mkIf (cfg.webserver == "caddy") {
+        enable = true;
+        virtualHosts.${cfg.virtualHost}.extraConfig = ''
+          root * ${config.services.freshrss.package}/p
+          php_fastcgi unix/${config.services.phpfpm.pools.freshrss.socket} {
+            env FRESHRSS_DATA_PATH ${config.services.freshrss.dataDir}
+          }
+          file_server
+        '';
+      };
+
       # Set up a Nginx virtual host.
-      services.nginx = mkIf (cfg.virtualHost != null) {
+      services.nginx = mkIf (cfg.webserver == "nginx") {
         enable = true;
         virtualHosts.${cfg.virtualHost} = {
           root = "${cfg.package}/p";
 
           # php files handling
           # this regex is mandatory because of the API
-          locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
+          locations."~ ^.+?\\.php(/.*)?$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
             # By default, the variable PATH_INFO is not set under PHP-FPM
@@ -236,8 +263,8 @@ in
         ${cfg.pool} = {
           user = "freshrss";
           settings = {
-            "listen.owner" = "nginx";
-            "listen.group" = "nginx";
+            "listen.owner" = webserver.user;
+            "listen.group" = webserver.group;
             "listen.mode" = "0600";
             "pm" = "dynamic";
             "pm.max_children" = 32;

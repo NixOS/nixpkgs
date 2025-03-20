@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, curl, zeromq, czmq, libsodium }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  curl,
+  zeromq,
+  czmq,
+  libsodium,
+}:
 
 stdenv.mkDerivation rec {
   pname = "prime-server";
@@ -13,8 +22,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ curl zeromq czmq libsodium ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    zeromq
+    czmq
+    libsodium
+  ];
 
   # https://github.com/kevinkreiser/prime_server/issues/95
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=unused-variable" ];

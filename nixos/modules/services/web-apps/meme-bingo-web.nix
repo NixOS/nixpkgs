@@ -1,10 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types literalExpression;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    literalExpression
+    ;
 
   cfg = config.services.meme-bingo-web;
-in {
+in
+{
   options = {
     services.meme-bingo-web = {
       enable = mkEnableOption ''
@@ -23,6 +36,14 @@ in {
         default = "http://localhost:41678/";
         example = "https://bingo.example.com/";
       };
+      address = mkOption {
+        description = ''
+          The address the webserver will bind to.
+        '';
+        type = types.str;
+        default = "localhost";
+        example = "::";
+      };
       port = mkOption {
         description = ''
           Port to be used for the web server.
@@ -31,16 +52,22 @@ in {
         default = 41678;
         example = 21035;
       };
+      openFirewall = mkEnableOption ''
+        Opens the specified port in the firewall.
+      '';
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.meme-bingo-web = {
       description = "A web app for playing meme bingos";
       wantedBy = [ "multi-user.target" ];
 
       environment = {
         MEME_BINGO_BASE = cfg.baseUrl;
+        MEME_BINGO_ADDRESS = cfg.address;
         MEME_BINGO_PORT = toString cfg.port;
       };
       path = [ cfg.package ];
@@ -59,7 +86,13 @@ in {
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "/dev/random" ];
-        InaccessiblePaths = [ "/dev/shm" "/sys" ];
+        InaccessiblePaths = [
+          "/dev/shm"
+          "/sys"
+          "/run/dbus"
+          "/run/user"
+          "/run/nscd"
+        ];
         LockPersonality = true;
         PrivateDevices = true;
         PrivateUsers = true;
@@ -73,17 +106,29 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        RestrictFilesystems = [ "@basic-api" "~sysfs" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictFilesystems = [
+          "@basic-api"
+          "~sysfs"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
         UMask = "0077";
         RestrictSUIDSGID = true;
         RemoveIPC = true;
         NoNewPrivileges = true;
         MemoryDenyWriteExecute = true;
+        ExecPaths = [ "/nix/store" ];
+        NoExecPaths = [ "/" ];
       };
     };
   };

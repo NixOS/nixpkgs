@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "sra-tools";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-WVPiAz3EFYuhBnl7BsEjJ2BTi1wAownEunVM4sdLaj8=";
   };
 

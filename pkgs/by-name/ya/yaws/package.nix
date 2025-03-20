@@ -1,4 +1,12 @@
-{lib, stdenv, fetchFromGitHub, erlang, pam, perl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  erlang,
+  pam,
+  perl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yaws";
@@ -14,7 +22,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ erlang pam perl ];
+  buildInputs = [
+    erlang
+    pam
+    perl
+  ];
 
   postInstall = ''
     sed -i "s#which #type -P #" $out/bin/yaws

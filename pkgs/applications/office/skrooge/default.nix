@@ -1,27 +1,72 @@
-{ mkDerivation, lib, fetchurl,
-  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee, qtxmlpatterns,
-  kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
-  kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
-  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  qtwebengine,
+  qtscript,
+  grantlee,
+  qtxmlpatterns,
+  kxmlgui,
+  kwallet,
+  kparts,
+  kdoctools,
+  kjobwidgets,
+  kdesignerplugin,
+  kiconthemes,
+  knewstuff,
+  sqlcipher,
+  qca-qt5,
+  kactivities,
+  karchive,
+  kguiaddons,
+  knotifyconfig,
+  krunner,
+  kwindowsystem,
+  libofx,
+  shared-mime-info,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
   pname = "skrooge";
-  version = "2.31.0";
+  version = "25.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
-    hash = "sha256-S90sUKJkUwgPAGlIuyN05a5DoehTFpFOnVLMF8Ac+HI=";
+    hash = "sha256-t8A9egotR2XoMBo5uoH2RBPEo3H6nPSJS5Oi4MkSVww=";
   };
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules kdoctools shared-mime-info
+    cmake
+    extra-cmake-modules
+    kdoctools
+    shared-mime-info
   ];
 
   buildInputs = [
-    qtwebengine qtscript grantlee kxmlgui kwallet kparts qtxmlpatterns
-    kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
-    kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
+    qtwebengine
+    qtscript
+    grantlee
+    kxmlgui
+    kwallet
+    kparts
+    qtxmlpatterns
+    kjobwidgets
+    kdesignerplugin
+    kiconthemes
+    knewstuff
+    sqlcipher
+    qca-qt5
+    kactivities
+    karchive
+    kguiaddons
+    knotifyconfig
+    krunner
+    kwindowsystem
+    libofx
+    qtquickcontrols2
   ];
 
   # SKG_DESIGNER must be used to generate the needed library for QtDesigner.

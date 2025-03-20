@@ -10,32 +10,32 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  apple-sdk_11,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "4.0.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tN+7bEkiG+RTViPqRHSk1u4KnO9KgLIMKNtNhYtk4nA=";
+    hash = "sha256-nd98gv2jro4k3s2hM47eZuHJmIPbk3Edj7lB6qLYwoI=";
   };
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  build-system = [ setuptools ];
 
   optional-dependencies.watchmedo = [ pyyaml ];
 
-  nativeCheckInputs = [
-    eventlet
-    flaky
-    pytest-cov-stub
-    pytest-timeout
-    pytestCheckHook
-  ] ++ optional-dependencies.watchmedo;
+  nativeCheckInputs =
+    [
+      flaky
+      pytest-cov-stub
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.watchmedo
+    ++ lib.optionals (pythonOlder "3.13") [ eventlet ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     [
       "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
       "--deselect=tests/test_emitter.py::test_close"
+      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
+      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # FileCreationEvent != FileDeletionEvent

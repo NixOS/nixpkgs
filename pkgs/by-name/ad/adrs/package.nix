@@ -1,25 +1,30 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "adrs";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "joshrotenberg";
     repo = "adrs";
     rev = "v${version}";
-    hash = "sha256-a1vxo2Zw2fvCJeGaatNqf2h74t7pvWppYS2l2gbCF5k=";
+    hash = "sha256-C9Kg7xY3Q0xsd2DlUcc3OM+/hyzmwz55oi6Ul3K7zkM=";
   };
 
-  cargoHash = "sha256-eVADcCXf6hl9o9pApp3inU7kZAKA3k5mM3+vy7cq5u8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ep1Y2PDNesaDzEc2JNoKZjFSay1utZiNR5eQYhdqiUU=";
 
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";
     homepage = "https://github.com/joshrotenberg/adrs";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "adrs";
   };

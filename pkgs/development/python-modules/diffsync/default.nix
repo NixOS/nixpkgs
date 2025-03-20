@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-T3kcZcRm28WeXZTXBBCpaMxjgB0KmqvWO4gdILH5hCA=";
   };
 

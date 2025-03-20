@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libjack2, zita-resampler }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjack2,
+  zita-resampler,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4.8";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EBF2oL1AfKt7/9Mm6NaIbBtlshK8M/LvuXsD+SbEeQc=";
   };
 
-  buildInputs = [ libjack2 zita-resampler ];
+  buildInputs = [
+    libjack2
+    zita-resampler
+  ];
 
   preConfigure = ''
     cd ./source/
@@ -20,7 +29,6 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)"
     "SUFFIX=''"
   ];
-
 
   meta = with lib; {
     description = "command line Jack clients to transmit full quality multichannel audio over a local IP network";

@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   pkg = pkgs.haste-server;
   cfg = config.services.haste-server;
 
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 in
 {
   options.services.haste-server = {
@@ -77,7 +82,10 @@ in
         ExecStart = "${pkg}/bin/haste-server ${format.generate "config.json" cfg.settings}";
       };
 
-      path = with pkgs; [ pkg coreutils ];
+      path = with pkgs; [
+        pkg
+        coreutils
+      ];
     };
   };
 }

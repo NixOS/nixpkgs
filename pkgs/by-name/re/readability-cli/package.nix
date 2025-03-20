@@ -1,4 +1,9 @@
-{ lib, buildNpmPackage, fetchFromGitLab, installShellFiles }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitLab,
+  installShellFiles,
+}:
 
 buildNpmPackage rec {
   pname = "readability-cli";
@@ -6,7 +11,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitLab {
     owner = "gardenappl";
-    repo = pname;
+    repo = "readability-cli";
     rev = "v${version}";
     hash = "sha256-pvAp3ZJ8/FPhrSMC8B4U1m5zuBNRP/HcsXkrW6QYgSQ=";
   };

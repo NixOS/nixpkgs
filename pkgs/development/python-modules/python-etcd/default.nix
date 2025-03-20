@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,7 +10,6 @@
   etcd_3_4,
   mock,
   pyopenssl,
-  stdenv,
 }:
 
 buildPythonPackage {
@@ -48,9 +48,20 @@ buildPythonPackage {
     done
   '';
 
-  meta = with lib; {
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Seems to be failing because of network restrictions
+    # AttributeError: Can't get local object 'TestWatch.test_watch_indexed_generator.<locals>.watch_value'
+    "test_watch"
+    "test_watch_generator"
+    "test_watch_indexed"
+    "test_watch_indexed_generator"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

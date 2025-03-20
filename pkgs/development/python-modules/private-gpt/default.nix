@@ -8,6 +8,7 @@
   poetry-core,
 
   # dependencies
+  cryptography,
   docx2txt,
   fastapi,
   injector,
@@ -16,7 +17,6 @@
   python-multipart,
   pyyaml,
   transformers,
-  uvicorn,
   watchdog,
 
   # optional-dependencies
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zylon-ai";
     repo = "private-gpt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IYTysU3W/NrtBuLe3ZJkztVSK+gzjkGIg0qcBYzB3bs=";
   };
 
@@ -48,9 +48,11 @@ buildPythonPackage rec {
     "llama-index-core"
     "llama-index-readers-file"
     "python-multipart"
+    "watchdog"
   ];
 
   dependencies = [
+    cryptography
     docx2txt
     fastapi
     injector
@@ -59,7 +61,6 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     transformers
-    uvicorn
     watchdog
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 

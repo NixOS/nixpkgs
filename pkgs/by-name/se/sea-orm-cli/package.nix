@@ -1,31 +1,45 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sea-orm-cli";
-  version = "1.0.1";
+  version = "1.1.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-b1Nlt3vsLDajTiIW9Vn51Tv9gXja8/ZZBD62iZjh3KY=";
+    hash = "sha256-/Wer+3uNWk9p/l1uVpMLEXrDQ/PB+rcpWPi6tuhucSo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [ openssl ];
 
-  cargoHash = "sha256-ZGM+Y67ycBiukgEBUq+WiA1OUCGahya591gM6CGwzMQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9o8HT5GNeqGQqzrDhSzzwoeo//MYV1YPec98j8UMHv4=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    mainProgram = "sea-orm-cli";
     homepage = "https://www.sea-ql.org/SeaORM";
-    description = " Command line utility for SeaORM";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ traxys ];
+    description = "Command line utility for SeaORM";
+    license = with lib.licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

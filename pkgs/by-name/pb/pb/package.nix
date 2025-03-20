@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, pb }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pb";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KedO/ngAlabuf3/NPKhutnzLphz6/VxJ+XJvADIP3PQ=";
+    repo = "pb";
+    tag = "v${version}";
+    hash = "sha256-OXxLHi7v/xJZVvxHZvJ0eH4MYrlLFxDAMT9CVG2mWTM=";
   };
 
-  vendorHash = "sha256-RAb2OvN3DF54fsVI5tRtNp1BYwB2qfYome7tj8zxxCY=";
+  vendorHash = "sha256-N6m0qvj65Ls3yQmVGw0AklsO1zs1KHdi/Y6FZRghnCs=";
 
   ldflags = [
     "-s"
@@ -21,17 +25,14 @@ buildGoModule rec {
 
   tags = [ "kqueue" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pb;
-    command = "pb version";
-  };
+  # Version test has been removed since it requires network access.
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/parseablehq/pb";
     changelog = "https://github.com/parseablehq/pb/releases/tag/v${version}";
     description = "CLI client for Parseable server";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "pb";
   };
 }

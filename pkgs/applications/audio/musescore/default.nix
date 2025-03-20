@@ -1,48 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, wrapGAppsHook3
-, wrapQtAppsHook
-, pkg-config
-, ninja
-, alsa-lib
-, alsa-plugins
-, freetype
-, libjack2
-, lame
-, libogg
-, libpulseaudio
-, libsndfile
-, libvorbis
-, portaudio
-, portmidi
-, qtbase
-, qtdeclarative
-, flac
-, libopusenc
-, libopus
-, tinyxml-2
-, qt5compat
-, qtwayland
-, qtsvg
-, qtscxml
-, qtnetworkauth
-, qttools
-, nixosTests
-, apple-sdk_11
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  pkg-config,
+  ninja,
+  alsa-lib,
+  alsa-plugins,
+  freetype,
+  libjack2,
+  lame,
+  libogg,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  portaudio,
+  portmidi,
+  qtbase,
+  qtdeclarative,
+  flac,
+  libopusenc,
+  libopus,
+  tinyxml-2,
+  qt5compat,
+  qtwayland,
+  qtsvg,
+  qtscxml,
+  qtnetworkauth,
+  qttools,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.3";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bHpPhav9JBPkwJA9o+IFHRWbvxWnGkD1wHBHS4XJ/YE=";
+    sha256 = "sha256-7sD9AAuuDT0+VycKLL19DYdmuSLmt0Uy2NmoKQ1+c3A=";
   };
 
   cmakeFlags = [
@@ -65,16 +64,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    [
+      # MuseScore JACK backend loads libjack at runtime.
+      "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libjack2 ]
+      }"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default QT_QPA_PLATFORM xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -82,49 +86,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-    cmake
-    qttools
-    pkg-config
-    ninja
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
-    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      wrapQtAppsHook
+      cmake
+      qttools
+      pkg-config
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+      # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    libjack2
-    freetype
-    lame
-    libogg
-    libpulseaudio
-    libsndfile
-    libvorbis
-    portaudio
-    portmidi
-    flac
-    libopusenc
-    libopus
-    tinyxml-2
-    qtbase
-    qtdeclarative
-    qt5compat
-    qtsvg
-    qtscxml
-    qtnetworkauth
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    qtwayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
+  buildInputs =
+    [
+      libjack2
+      freetype
+      lame
+      libogg
+      libpulseaudio
+      libsndfile
+      libvorbis
+      portaudio
+      portmidi
+      flac
+      libopusenc
+      libopus
+      tinyxml-2
+      qtbase
+      qtdeclarative
+      qt5compat
+      qtsvg
+      qtscxml
+      qtnetworkauth
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      qtwayland
+    ];
 
-  postInstall = ''
-    # Remove unneeded bundled libraries and headers
-    rm -r $out/{include,lib}
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
@@ -163,7 +166,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever doronbehar orivej ];
+    maintainers = with maintainers; [
+      vandenoever
+      doronbehar
+      orivej
+    ];
     mainProgram = "mscore";
     platforms = platforms.unix;
   };

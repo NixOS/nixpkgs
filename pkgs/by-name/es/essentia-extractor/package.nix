@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 let
   arch_table = {
     "x86_64-linux" = "linux-x86_64";
@@ -34,7 +38,10 @@ stdenv.mkDerivation rec {
     description = "AcousticBrainz audio feature extractor";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ lovesegfault ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     mainProgram = "streaming_extractor_music";
   };
 }

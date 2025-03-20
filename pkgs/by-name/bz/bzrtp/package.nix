@@ -1,9 +1,10 @@
-{ bctoolbox
-, cmake
-, fetchFromGitLab
-, sqlite
-, lib
-, stdenv
+{
+  bctoolbox,
+  cmake,
+  fetchFromGitLab,
+  sqlite,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +15,15 @@ stdenv.mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "bzrtp";
     rev = version;
     hash = "sha256-sLvvQhJ9uVt/dx57xs9ftY/ETi46xmyGDH8372zpqj8=";
   };
 
-  buildInputs = [ bctoolbox sqlite ];
+  buildInputs = [
+    bctoolbox
+    sqlite
+  ];
   nativeBuildInputs = [ cmake ];
 
   # Do not build static libraries

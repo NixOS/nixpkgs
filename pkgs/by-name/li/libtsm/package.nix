@@ -1,26 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, libxkbcommon, pkg-config, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxkbcommon,
+  pkg-config,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libtsm";
-  version = "4.0.2";
+  version = "4.0.2-unstable-2023-12-24";
 
   src = fetchFromGitHub {
     owner = "Aetf";
     repo = "libtsm";
-    rev = "v${version}";
-    sha256 = "sha256-BYMRPjGRVSnYzkdbxypkuE0YkeVLPJ32iGZ1b0R6wto=";
+    rev = "69922bde02c7af83b4d48a414cc6036af7388626";
+    sha256 = "sha256-Rug3OWSbbiIivItULPNNptClIZ/PrXdQeUypAAxrUY8=";
   };
 
   buildInputs = [ libxkbcommon ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  # https://github.com/Aetf/libtsm/issues/20
-  postPatch = ''
-    substituteInPlace etc/libtsm.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "Terminal-emulator State Machine";

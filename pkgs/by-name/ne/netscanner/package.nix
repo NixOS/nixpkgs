@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, iw
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  iw,
 }:
 let
   pname = "netscanner";
-  version = "0.6.0";
+  version = "0.6.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,15 +17,16 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "Chleba";
     repo = "netscanner";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p7ajWY/eGWHPosxFXOKs2YeMAny+/PJ68IAU2NNgm0w=";
+    tag = "v${version}";
+    hash = "sha256-/8UhnJ4ZPaJ+CQPCeKr1uH0Iw6A4/DARiSukK6+ZZeY=";
   };
 
-  cargoHash = "sha256-F6titbFM0zsbbwZKcSx3U4cknea83TCITiGm7rPXmFE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i+btU1ovqPGzhXi8IPZonSAdlpcbMPrWSbL7COKou9M=";
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \
-      --prefix PATH : "${lib.makeBinPath [iw]}"
+      --prefix PATH : "${lib.makeBinPath [ iw ]}"
   '';
 
   meta = {

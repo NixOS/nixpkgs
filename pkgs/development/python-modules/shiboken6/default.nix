@@ -31,15 +31,18 @@ stdenv'.mkDerivation (finalAttrs: {
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.libclang
-    python.pkgs.qt6.qtbase
-    python.pkgs.qt6.darwinVersionInputs
-    python.pkgs.ninja
-    python.pkgs.packaging
-    python.pkgs.setuptools
-  ];
+  buildInputs =
+    [
+      llvmPackages.llvm
+      llvmPackages.libclang
+      python.pkgs.qt6.qtbase
+      python.pkgs.ninja
+      python.pkgs.packaging
+      python.pkgs.setuptools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      python.pkgs.qt6.darwinVersionInputs
+    ];
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
@@ -66,7 +69,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

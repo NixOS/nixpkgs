@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config
-, dbus, libconfuse, libjpeg, sane-backends, systemd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dbus,
+  libconfuse,
+  libjpeg,
+  sane-backends,
+  systemd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "scanbd";
@@ -11,18 +20,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus libconfuse libjpeg sane-backends systemd ];
-
-  configureFlags = [
-    "--disable-Werror"
-    "--enable-udev"
-    "--with-scanbdconfdir=/etc/scanbd"
-    "--with-systemdsystemunitdir=$out/lib/systemd/system"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # AC_FUNC_MALLOC is broken on cross builds.
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
+  buildInputs = [
+    dbus
+    libconfuse
+    libjpeg
+    sane-backends
+    systemd
   ];
+
+  configureFlags =
+    [
+      "--disable-Werror"
+      "--enable-udev"
+      "--with-scanbdconfdir=/etc/scanbd"
+      "--with-systemdsystemunitdir=$out/lib/systemd/system"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # AC_FUNC_MALLOC is broken on cross builds.
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
 
   enableParallelBuilding = true;
 

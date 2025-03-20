@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NxrhZmRbkQNj2K4b6Em4cAdssJRdwEKbdGy8EThN4JY=";
   };
 

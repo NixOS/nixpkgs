@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ounit
-, angstrom, stringext
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ounit,
+  angstrom,
+  stringext,
 }:
 
 buildDunePackage rec {
@@ -15,7 +20,10 @@ buildDunePackage rec {
   };
 
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ angstrom stringext ];
+  propagatedBuildInputs = [
+    angstrom
+    stringext
+  ];
   doCheck = true;
 
   meta = {

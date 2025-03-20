@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, libpcap, pkg-config, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+  pkg-config,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
@@ -13,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform.isStatic) [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   nativeCheckInputs = [ perl ];
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opendatakosovo";
     repo = "cyrillic-transliteration";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t8UTOmjGqjmxU7+Po0/HmOPWAvcgZibaUC9dMlttA/0=";
   };
 

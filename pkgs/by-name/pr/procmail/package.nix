@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "procmail";
@@ -21,33 +27,37 @@ stdenv.mkDerivation rec {
 
   # getline is defined differently in glibc now. So rename it.
   # Without the .PHONY target "make install" won't install anything on Darwin.
-  postPatch = ''
-    sed -i Makefile \
-      -e "s%^RM.*$%#%" \
-      -e "s%^BASENAME.*%\BASENAME=$out%" \
-      -e "s%^LIBS=.*%LIBS=-lm%"
-    sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
-    sed -e "3i\
-    .PHONY: install
-    " -i Makefile
-  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    substituteInPlace src/Makefile.0 \
-      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
-    sed -e '3i\
-    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
-    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
-    ' -i src/autoconf
-  '';
+  postPatch =
+    ''
+      sed -i Makefile \
+        -e "s%^RM.*$%#%" \
+        -e "s%^BASENAME.*%\BASENAME=$out%" \
+        -e "s%^LIBS=.*%LIBS=-lm%"
+      sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
+      sed -e "3i\
+      .PHONY: install
+      " -i Makefile
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace src/Makefile.0 \
+        --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+      sed -e '3i\
+      _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+      _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+      ' -i src/autoconf
+    '';
 
   # default target is binaries + manpages; manpages don't cross compile without more work.
   makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
-  installTargets = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "install.bin" ];
+  installTargets = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "install.bin"
+  ];
 
   meta = with lib; {
     description = "Mail processing and filtering utility";
     homepage = "https://github.com/BuGlessRB/procmail/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

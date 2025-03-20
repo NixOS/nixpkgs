@@ -1,4 +1,10 @@
-{ config, pkgs, lib, options, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.firefox-syncserver;
@@ -9,69 +15,71 @@ let
   dbIsLocal = cfg.database.host == "localhost";
   dbURL = "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}";
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   settings = {
     human_logs = true;
     syncstorage = {
       database_url = dbURL;
     };
-    tokenserver = {
-      node_type = "mysql";
-      database_url = dbURL;
-      fxa_email_domain = "api.accounts.firefox.com";
-      fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
-      run_migrations = true;
-      # if JWK caching is not enabled the token server must verify tokens
-      # using the fxa api, on a thread pool with a static size.
-      additional_blocking_threads_for_fxa_requests = 10;
-    } // lib.optionalAttrs cfg.singleNode.enable {
-      # Single-node mode is likely to be used on small instances with little
-      # capacity. The default value (0.1) can only ever release capacity when
-      # accounts are removed if the total capacity is 10 or larger to begin
-      # with.
-      # https://github.com/mozilla-services/syncstorage-rs/issues/1313#issuecomment-1145293375
-      node_capacity_release_rate = 1;
-    };
+    tokenserver =
+      {
+        node_type = "mysql";
+        database_url = dbURL;
+        fxa_email_domain = "api.accounts.firefox.com";
+        fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
+        run_migrations = true;
+        # if JWK caching is not enabled the token server must verify tokens
+        # using the fxa api, on a thread pool with a static size.
+        additional_blocking_threads_for_fxa_requests = 10;
+      }
+      // lib.optionalAttrs cfg.singleNode.enable {
+        # Single-node mode is likely to be used on small instances with little
+        # capacity. The default value (0.1) can only ever release capacity when
+        # accounts are removed if the total capacity is 10 or larger to begin
+        # with.
+        # https://github.com/mozilla-services/syncstorage-rs/issues/1313#issuecomment-1145293375
+        node_capacity_release_rate = 1;
+      };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
   setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
-        set -euo pipefail
-        shopt -s inherit_errexit
+    set -euo pipefail
+    shopt -s inherit_errexit
 
-        schema_configured() {
-          mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
-        }
+    schema_configured() {
+      mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
+    }
 
-        update_config() {
-          mysql ${cfg.database.name} <<"EOF"
-            BEGIN;
+    update_config() {
+      mysql ${cfg.database.name} <<"EOF"
+        BEGIN;
 
-            INSERT INTO `services` (`id`, `service`, `pattern`)
-              VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
-              ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
-            INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-                                 `capacity`, `downed`, `backoff`)
-              VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
-              0, ${toString cfg.singleNode.capacity}, 0, 0)
-              ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+        INSERT INTO `services` (`id`, `service`, `pattern`)
+          VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+          ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+        INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
+                             `capacity`, `downed`, `backoff`)
+          VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+          0, ${toString cfg.singleNode.capacity}, 0, 0)
+          ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
 
-            COMMIT;
-        EOF
-        }
+        COMMIT;
+    EOF
+    }
 
 
-        for (( try = 0; try < 60; try++ )); do
-          if ! schema_configured; then
-            sleep 2
-          else
-            update_config
-            exit 0
-          fi
-        done
+    for (( try = 0; try < 60; try++ )); do
+      if ! schema_configured; then
+        sleep 2
+      else
+        update_config
+        exit 0
+      fi
+    done
 
-        echo "Single-node setup failed"
-        exit 1
-      '';
+    echo "Single-node setup failed"
+    exit 1
+  '';
 in
 
 {
@@ -240,12 +248,14 @@ in
     services.mysql = lib.mkIf cfg.database.createLocally {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [{
-        name = cfg.database.user;
-        ensurePermissions = {
-          "${cfg.database.name}.*" = "all privileges";
-        };
-      }];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "all privileges";
+          };
+        }
+      ];
     };
 
     systemd.services.firefox-syncserver = {
@@ -279,7 +289,11 @@ in
         ProtectHostname = true;
         LockPersonality = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictRealtime = true;
         ProtectSystem = "strict";
         ProtectProc = "invisible";
@@ -287,7 +301,10 @@ in
         ProtectHome = true;
         PrivateUsers = true;
         PrivateTmp = true;
-        SystemCallFilter = [ "@system-service" "~ @privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~ @privileged @resources"
+        ];
         UMask = "0077";
       };
     };

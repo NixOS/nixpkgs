@@ -1,27 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, glib
-, jansson
-, udev
-, libgudev
-, libusb1
-, libdrm
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  jansson,
+  udev,
+  libgudev,
+  libusb1,
+  libdrm,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-4U/igqtgw2rwyuhEkV1pWYPIyNZEt2N6hlXJ9bDUyRw=";
+    hash = "sha256-7Qx58cWCafSRuNyhcdSSuf7xM0JzcOG6UFiWa5K5VS4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     glib
@@ -46,4 +50,3 @@ stdenv.mkDerivation rec {
     mainProgram = "ddcutil";
   };
 }
-

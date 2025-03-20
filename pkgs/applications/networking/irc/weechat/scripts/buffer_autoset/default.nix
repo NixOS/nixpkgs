@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 
 stdenv.mkDerivation {
   pname = "buffer_autoset";

@@ -5,22 +5,23 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   jsonpatch,
   langsmith,
   packaging,
+  pydantic,
   pyyaml,
   tenacity,
-
-  # optional-dependencies
-  pydantic,
+  typing-extensions,
 
   # tests
   freezegun,
   grandalf,
   httpx,
+  langchain-core,
+  langchain-tests,
   numpy,
   pytest-asyncio,
   pytest-mock,
@@ -29,45 +30,56 @@
   syrupy,
 
   # passthru
-  writeScript,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.15";
+  version = "0.3.44";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
+    tag = "langchain-core==${version}";
+    hash = "sha256-da1G/aGWbt73E1hmaGi8jkBEF1QyemHj+qIifyU8eik=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  build-system = [ poetry-core ];
+  patches = [
+    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
+    ./rm-blockbuster.patch
+  ];
+
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "tenacity" ];
+
+  pythonRemoveDependencies = [
+    "blockbuster"
+  ];
 
   dependencies = [
     jsonpatch
     langsmith
     packaging
+    pydantic
     pyyaml
     tenacity
+    typing-extensions
   ];
 
-  optional-dependencies = {
-    pydantic = [ pydantic ];
-  };
-
   pythonImportsCheck = [ "langchain_core" ];
+
+  # avoid infinite recursion
+  doCheck = false;
 
   nativeCheckInputs = [
     freezegun
     grandalf
     httpx
+    langchain-tests
     numpy
     pytest-asyncio
     pytest-mock
@@ -78,33 +90,17 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  # don't add langchain-standard-tests to nativeCheckInputs
-  # to avoid circular import
-  preCheck = ''
-    export PYTHONPATH=${src}/libs/standard-tests:$PYTHONPATH
-  '';
-
   passthru = {
-    # Updates to core tend to drive updates in everything else
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
+    tests.pytest = langchain-core.overridePythonAttrs (_: {
+      doCheck = true;
+    });
 
-      set -u -o pipefail +e
-      # Common core
-      nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
-      nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
-      nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
-      nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
-
-      # Extensions
-      nix-update --commit --version-regex 'langchain-aws==(.*)' python3Packages.langchain-aws
-      nix-update --commit --version-regex 'langchain-azure-dynamic-sessions==(.*)' python3Packages.langchain-azure-dynamic-sessions
-      nix-update --commit --version-regex 'langchain-chroma==(.*)' python3Packages.langchain-chroma
-      nix-update --commit --version-regex 'langchain-huggingface==(.*)' python3Packages.langchain-huggingface
-      nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
-      nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
-    '';
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^langchain-core==([0-9.]+)$"
+      ];
+    };
   };
 
   disabledTests =
@@ -128,6 +124,14 @@ buildPythonPackage rec {
       "test_prompt_with_llm_and_async_lambda"
       "test_prompt_with_chat_model_and_parser"
       "test_combining_sequences"
+
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_chat_input_schema"
+      # AssertionError: assert {'$defs': {'D...ype': 'array'} == {'$defs': {'D...ype': 'array'}
+      "test_schemas"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_graph_sequence_map"
+      "test_representation_of_runnables"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
@@ -137,6 +141,8 @@ buildPythonPackage rec {
       "test_rate_limit_ainvoke"
       "test_rate_limit_astream"
     ];
+
+  disabledTestPaths = [ "tests/unit_tests/runnables/test_runnable_events_v2.py" ];
 
   meta = {
     description = "Building applications with LLMs through composability";

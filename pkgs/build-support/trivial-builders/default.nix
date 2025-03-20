@@ -3,7 +3,11 @@
 let
   inherit (lib)
     optionalAttrs
+    optionalString
+    hasPrefix
     warn
+    map
+    isList
     ;
 in
 
@@ -269,6 +273,12 @@ rec {
          Type: AttrSet
        */
       derivationArgs ? { },
+      /*
+         Whether to inherit the current `$PATH` in the script.
+
+         Type: Bool
+      */
+      inheritPath ? true
     }:
     writeTextFile {
       inherit name meta passthru derivationArgs;
@@ -289,7 +299,7 @@ rec {
             runtimeEnv))
       + lib.optionalString (runtimeInputs != [ ]) ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
       '' + ''
 
         ${text}
@@ -299,7 +309,7 @@ rec {
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
           excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
@@ -462,6 +472,29 @@ rec {
     ...
 
 
+    To create a directory structure from a specific subdirectory of input `paths` instead of their full trees,
+    you can either append the subdirectory path to each input path, or use the `stripPrefix` argument to
+    remove the common prefix during linking.
+
+    Example:
+
+
+    # create symlinks of tmpfiles.d rules from multiple packages
+    symlinkJoin { name = "tmpfiles.d"; paths = [ pkgs.lvm2 pkgs.nix ]; stripPrefix = "/lib/tmpfiles.d"; }
+
+
+    This creates a derivation with a directory structure like the following:
+
+
+    /nix/store/m5s775yicb763hfa133jwml5hwmwzv14-tmpfiles.d
+    |-- lvm2.conf -> /nix/store/k6js0l5f0zpvrhay49579fj939j77p2w-lvm2-2.03.29/lib/tmpfiles.d/lvm2.conf
+    `-- nix-daemon.conf -> /nix/store/z4v2s3s3y79fmabhps5hakb3c5dwaj5a-nix-1.33.7/lib/tmpfiles.d/nix-daemon.conf
+
+
+    By default, packages that don't contain the specified subdirectory are silently skipped.
+    Set `failOnMissing = true` to make the build fail if any input package is missing the subdirectory
+    (this is the default behavior when not using stripPrefix).
+
     symlinkJoin and linkFarm are similar functions, but they output
     derivations with different structure.
 
@@ -484,15 +517,29 @@ rec {
           "symlinkJoin requires either a `name` OR `pname` and `version`";
         "${args_.pname}-${args_.version}"
     , paths
+    , stripPrefix ? ""
     , preferLocalBuild ? true
     , allowSubstitutes ? false
     , postBuild ? ""
+    , failOnMissing ? stripPrefix == ""
     , ...
     }:
+    assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+      stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+      Ensure that the path starts with / and specifies path to the subdirectory.
+    '';
+
     let
-      args = removeAttrs args_ [ "name" "postBuild" ]
+      mapPaths = f: paths: map (path:
+        if path == null then null
+        else if isList path then mapPaths f path
+        else f path
+      ) paths;
+      args = removeAttrs args_ [ "name" "postBuild" "stripPrefix" "paths" "failOnMissing" ]
         // {
         inherit preferLocalBuild allowSubstitutes;
+        paths = mapPaths (path: "${path}${stripPrefix}") paths;
         passAsFile = [ "paths" ];
       }; # pass the defaults
     in
@@ -500,7 +547,7 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
+          ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${optionalString (!failOnMissing) "; fi"}
         done
         ${postBuild}
       '';
@@ -607,7 +654,6 @@ rec {
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
-    , deps ? [ ]
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
@@ -625,11 +671,7 @@ rec {
         __structuredAttrs = false;
         inherit meta;
         inherit depsTargetTargetPropagated;
-        propagatedBuildInputs =
-          # remove list conditionals before 23.11
-          lib.warnIf (!lib.isList deps) "'deps' argument to makeSetupHook must be a list. content of deps: ${toString deps}"
-            (lib.warnIf (deps != [ ]) "'deps' argument to makeSetupHook is deprecated and will be removed in release 23.11., Please use propagatedBuildInputs instead. content of deps: ${toString deps}"
-              propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ]));
+        inherit propagatedBuildInputs;
         strictDeps = true;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
@@ -645,13 +687,8 @@ rec {
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
-
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
-  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
-  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
-  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
-    "writeReferencesToFile is deprecated in favour of writeClosure"
-    (path: writeClosure [ path ]);
+  # Remove after 25.05 branch-off
+  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
@@ -729,7 +766,7 @@ rec {
           (name: value:
             {
               inherit value;
-              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\.drv" name);
+              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
             })
           derivations;
       # The syntax of output paths differs between outputs named `out`

@@ -2,29 +2,26 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , lib
-, substituteAll
+, replaceVars
   # Dependencies
 , boehmgc
 , coreutils
 , git
 , gmp
 , hostname
-, libatomic_ops
 , libevent
 , libiconv
 , libxml2
 , libyaml
 , libffi
-, llvmPackages_13
 , llvmPackages_15
 , llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
-, pcre
 , pkg-config
+, installShellFiles
 , readline
 , tzdata
 , which
@@ -49,8 +46,6 @@ let
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
       "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
-    else if arch == archs.x86_64-darwin && lib.versionOlder version "1.2.0" then
-      "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-darwin-x86_64.tar.gz"
     else
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
@@ -94,20 +89,10 @@ let
       };
 
       patches = [
-          (substituteAll {
-            src = ./tzdata.patch;
+          (replaceVars ./tzdata.patch {
             inherit tzdata;
           })
-        ]
-        ++ lib.optionals (lib.versionOlder version "1.2.0") [
-        # add support for DWARF5 debuginfo, fixes builds on recent compilers
-        # the PR is 8 commits from 2019, so just fetch the whole thing
-        # and hope it doesn't change
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
-          sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
-        })
-      ];
+        ];
 
       outputs = [ "out" "lib" "bin" ];
 
@@ -145,10 +130,6 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
-        # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
-        substituteInPlace spec/compiler/loader/unix_spec.cr \
-          --replace 'it "parses file paths"' 'pending "parses file paths"'
       '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
@@ -166,10 +147,10 @@ let
 
 
       strictDeps = true;
-      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm installShellFiles ];
       buildInputs = [
         boehmgc
-        (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
+        pcre2
         libevent
         libyaml
         zlib
@@ -187,9 +168,6 @@ let
 
       FLAGS = [
         "--single-module" # needed for deterministic builds
-      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
-        # ffi is only used by the interpreter and its spec are broken on < 1.6.1
-        "-Dwithout_ffi"
       ];
 
       # This makes sure we don't keep depending on the previous version of
@@ -218,15 +196,18 @@ let
         cp -r docs/* $out/share/doc/crystal/api/
         cp -r samples $out/share/doc/crystal/
 
-        install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
-        install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+        installShellCompletion --cmd ${finalAttrs.meta.mainProgram} etc/completion.*
 
-        install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+        installManPage man/crystal.1
 
         install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
         mkdir -p $out
         ln -s $bin/bin $out/bin
+        ln -s $bin/share/bash-completion $out/share/bash-completion
+        ln -s $bin/share/zsh $out/share/zsh
+        # fish completion was introduced in 1.6.0
+        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall
@@ -260,16 +241,6 @@ let
     });
 in
 rec {
-  binaryCrystal_1_2 = genericBinary {
-    version = "1.2.2";
-    sha256s = {
-      x86_64-linux = "sha256-sW5nhihW/6Dkq95i3vJNWs2D1CtQhujhxVbgQCAas6E=";
-      aarch64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      x86_64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      aarch64-linux = "sha256-QgPKUDFyodqY1+b85AybSpbbr0RmfISdNpB08Wf34jo=";
-    };
-  };
-
   binaryCrystal_1_10 = genericBinary {
     version = "1.10.1";
     sha256s = {
@@ -280,35 +251,6 @@ rec {
     };
   };
 
-  crystal_1_2 = generic {
-    version = "1.2.2";
-    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
-    extraBuildInputs = [ libatomic_ops ];
-  };
-
-  crystal_1_7 = generic {
-    version = "1.7.3";
-    sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
-  };
-
-  crystal_1_8 = generic {
-    version = "1.8.2";
-    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_15;
-  };
-
-  crystal_1_9 = generic {
-    version = "1.9.2";
-    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_15;
-  };
-
   crystal_1_11 = generic {
     version = "1.11.2";
     sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
@@ -316,21 +258,21 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal_1_12 = generic {
-    version = "1.12.1";
-    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
-  };
-
   crystal_1_14 = generic {
-    version = "1.14.0";
-    sha256 = "sha256-ayMF5yinHVOUaZxhlmqxb/iiGJHmloeYuKcnrPmxo9Y=";
+    version = "1.14.1";
+    sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_18;
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
+  crystal_1_15 = generic {
+    version = "1.15.1";
+    sha256 = "sha256-L/Q8yZdDq/wn4kJ+zpLfi4pxznAtgjxTCbLnEiCC2K0=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false;
+  };
 
-  crystal = crystal_1_14;
+  crystal = crystal_1_15;
 }

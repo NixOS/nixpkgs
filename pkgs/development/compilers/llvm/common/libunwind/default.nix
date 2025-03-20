@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , release_version
-, patches ? []
 , src ? null
 , llvm_meta
 , version
@@ -13,11 +12,12 @@
 , libcxx
 , enableShared ? !stdenv.hostPlatform.isStatic
 , devExtraCmakeFlags ? []
+, getVersionFile
 }:
 let
   pname = "libunwind";
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -33,12 +33,11 @@ let
       cp -r ${monorepoSrc}/runtimes "$out"
     '') else src;
 
-  hasPatches = builtins.length patches > 0;
+  patches = lib.optional (lib.versionOlder release_version "17") (
+    getVersionFile "libunwind/gnu-install-dirs.patch"
+  );
 
-  postUnpack = lib.optionalString (lib.versions.major release_version == "12") ''
-    ln -s ${libcxx.src}/libcxx .
-    ln -s ${libcxx.src}/llvm .
-  '';
+  hasPatches = builtins.length patches > 0;
 
   prePatch = lib.optionalString (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18")) ''
     cd ../${pname}
@@ -60,8 +59,8 @@ stdenv.mkDerivation (rec {
   src = src';
 
   sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else if lib.versionAtLeast release_version "15" then "${src.name}/runtimes"
+    if lib.versionAtLeast release_version "15"
+    then "${src.name}/runtimes"
     else "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
@@ -72,6 +71,9 @@ stdenv.mkDerivation (rec {
 
   cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
     ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+    ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
+      "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    ]
     ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
@@ -85,7 +87,6 @@ stdenv.mkDerivation (rec {
       dependency of other runtimes.
     '';
   };
-} // (if postUnpack != "" then { inherit postUnpack; } else {})
-  // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
+} // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
   // (if prePatch != "" then { inherit prePatch; } else {})
   // (if postPatch != "" then { inherit postPatch; } else {}))

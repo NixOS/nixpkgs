@@ -1,37 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  utf8cpp,
+  zlib,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taglib";
-  version = "1.13.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QX0EpHGT36UsgIfRf5iALnwxe0jjLpZvCTbk8vSMFF4=";
+    hash = "sha256-3cJwCo2nUSRYkk8H8dzyg7UswNPhjfhyQ704Fn9yNV8=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [
+    zlib
+    utf8cpp
+  ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    # Workaround unconditional ${prefix} until upstream is fixed:
-    #   https://github.com/taglib/taglib/issues/1098
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://taglib.org/";
     description = "Library for reading and editing audio file metadata";
     mainProgram = "taglib-config";
@@ -41,8 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
       files, Ogg Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC,
       Speex, WavPack, TrueAudio, WAV, AIFF, MP4 and ASF files.
     '';
-    license = with licenses; [ lgpl3 mpl11 ];
-    maintainers = with maintainers; [ ttuegel ];
-    pkgConfigModules = [ "taglib" "taglib_c" ];
+    license = with lib.licenses; [
+      lgpl21Only
+      mpl11
+    ];
+    maintainers = with lib.maintainers; [ ttuegel ];
+    pkgConfigModules = [
+      "taglib"
+      "taglib_c"
+    ];
+    platforms = lib.platforms.all;
   };
 })

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, libxml2, ncurses, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libxml2,
+  ncurses,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tiptop";
@@ -28,8 +37,14 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace -lcurses -lncurses
   '';
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ libxml2 ncurses ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
+  buildInputs = [
+    libxml2
+    ncurses
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
@@ -41,4 +56,3 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 }
-

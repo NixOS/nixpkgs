@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom-rs";
@@ -10,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-R1zj+TFXoolonIFa1zJDd7CdrORfzAPlxJoJVYe9xdc=";
   };
 
-  cargoHash = "sha256-7xD65ookkK09XwCBH6fXqmWRYlmvpwAocojBg/dHzUI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ULMW/1kvq5GeMUMUTQprwcXwnRMDCbow8P6jNwSXHQ8=";
 
   meta = with lib; {
     description = "Fantastic (maybe) CLI for translating between bottom and human-readable text";

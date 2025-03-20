@@ -1,6 +1,20 @@
-{ lib, stdenv, writeScript, fetchFromGitHub
-, libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
-, enableGlfw ? false, glfw, runtimeShell }:
+{
+  lib,
+  stdenv,
+  writeScript,
+  fetchFromGitHub,
+  libGL,
+  libX11,
+  libXext,
+  python3,
+  libXrandr,
+  libXrender,
+  libpulseaudio,
+  libXcomposite,
+  enableGlfw ? false,
+  glfw,
+  runtimeShell,
+}:
 
 let
   inherit (lib) optional makeLibraryPath;
@@ -20,72 +34,72 @@ let
     esac
   '';
 in
-  stdenv.mkDerivation rec {
-    pname = "glava";
-    version = "1.6.3";
+stdenv.mkDerivation rec {
+  pname = "glava";
+  version = "1.6.3";
 
-    src = fetchFromGitHub {
-      owner = "wacossusca34";
-      repo = "glava";
-      rev = "v${version}";
-      sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
-    };
+  src = fetchFromGitHub {
+    owner = "wacossusca34";
+    repo = "glava";
+    rev = "v${version}";
+    sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
+  };
 
-    buildInputs = [
-      libX11
-      libXext
-      libXrandr
-      libXrender
-      libpulseaudio
-      libXcomposite
-    ] ++ optional enableGlfw glfw;
+  buildInputs = [
+    libX11
+    libXext
+    libXrandr
+    libXrender
+    libpulseaudio
+    libXcomposite
+  ] ++ optional enableGlfw glfw;
 
-    nativeBuildInputs = [
-      python3
-    ];
+  nativeBuildInputs = [
+    python3
+  ];
 
-    preConfigure = ''
-      for f in $(find -type f);do
-        substituteInPlace $f \
-          --replace /etc/xdg $out/etc/xdg
-      done
+  preConfigure = ''
+    for f in $(find -type f);do
+      substituteInPlace $f \
+        --replace /etc/xdg $out/etc/xdg
+    done
 
-      substituteInPlace Makefile \
-        --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
+    substituteInPlace Makefile \
+      --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
 
-      substituteInPlace Makefile \
-        --replace 'unknown' 'v${version}'
+    substituteInPlace Makefile \
+      --replace 'unknown' 'v${version}'
+  '';
+
+  makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
+
+  installFlags = [
+    "DESTDIR=$(out)"
+  ];
+
+  fixupPhase = ''
+    mkdir -p $out/bin
+    mv $out/usr/bin/glava $out/bin/.glava-unwrapped
+    rm -rf $out/usr
+
+    patchelf \
+      --set-rpath "$(patchelf --print-rpath $out/bin/.glava-unwrapped):${makeLibraryPath [ libGL ]}" \
+      $out/bin/.glava-unwrapped
+
+    substitute ${wrapperScript} $out/bin/glava --subst-var out
+    chmod +x $out/bin/glava
+  '';
+
+  meta = with lib; {
+    description = ''
+      OpenGL audio spectrum visualizer
     '';
-
-    makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
-
-    installFlags = [
-      "DESTDIR=$(out)"
+    mainProgram = "glava";
+    homepage = "https://github.com/wacossusca34/glava";
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      eadwu
     ];
-
-    fixupPhase = ''
-      mkdir -p $out/bin
-      mv $out/usr/bin/glava $out/bin/.glava-unwrapped
-      rm -rf $out/usr
-
-      patchelf \
-        --set-rpath "$(patchelf --print-rpath $out/bin/.glava-unwrapped):${makeLibraryPath [ libGL ]}" \
-        $out/bin/.glava-unwrapped
-
-      substitute ${wrapperScript} $out/bin/glava --subst-var out
-      chmod +x $out/bin/glava
-    '';
-
-    meta = with lib; {
-      description = ''
-        OpenGL audio spectrum visualizer
-      '';
-      mainProgram = "glava";
-      homepage = "https://github.com/wacossusca34/glava";
-      platforms = platforms.linux;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [
-        eadwu
-      ];
-    };
-  }
+  };
+}

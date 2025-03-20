@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libgpiod
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libgpiod,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o0S4NtgQ/Rlpmkk8pTocmP0N+5F7BX8lUsczOKjujwk=";
+    repo = "gcfflasher";
+    tag = "v${version}";
+    hash = "sha256-z7FsxTAsAmjz76NxbqZuecN1ywAZYHhgcPfOe6y5QNQ=";
   };
 
   nativeBuildInputs = [

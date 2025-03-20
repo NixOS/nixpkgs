@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gnulib, perl, autoconf, automake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gnulib,
+  perl,
+  autoconf,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lbzip2";
@@ -22,8 +31,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ gnulib perl ];
-  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [
+    gnulib
+    perl
+  ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
 
   preConfigure = ''
     substituteInPlace configure.ac --replace 'AC_PREREQ([2.63])' 'AC_PREREQ(2.64)'

@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext, copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gccmakedep,
+  imake,
+  libXt,
+  libXaw,
+  libXpm,
+  libXext,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xcruiser";
@@ -9,8 +21,17 @@ stdenv.mkDerivation rec {
     sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
   };
 
-  nativeBuildInputs = [ gccmakedep imake copyDesktopItems ];
-  buildInputs = [ libXt libXaw libXpm libXext ];
+  nativeBuildInputs = [
+    gccmakedep
+    imake
+    copyDesktopItems
+  ];
+  buildInputs = [
+    libXt
+    libXaw
+    libXpm
+    libXext
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"

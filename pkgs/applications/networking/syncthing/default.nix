@@ -13,16 +13,16 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.28.0";
+      version = "1.29.3";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "refs/tags/v${version}";
-        hash = "sha256-JW78n/3hssH600uXn4YLxcIJylPbSpEZICtKmqfqamI=";
+        tag = "v${version}";
+        hash = "sha256-dTDrKLAUfZ+12JX6P6cWRs1ArWnDRmfhNAh0ZTTWpYU=";
       };
 
-      vendorHash = "sha256-9/PfiOSCInduQXZ47KbrD3ca9O0Zt+TP7XoX+HjwQgs=";
+      vendorHash = "sha256-/t+TIW66A6jKZvDtp/WcldqdkP5PtC6eP/R4Fspywxc=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -89,6 +89,8 @@ in
         mandir="$out/share/man/man$mantype"
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
+
+      install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
 
     '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}

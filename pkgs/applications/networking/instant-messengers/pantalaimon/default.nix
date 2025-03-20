@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, nixosTests
-, enableDbusUi ? true
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+  enableDbusUi ? true,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,30 +22,34 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
-  build-system = [
-    installShellFiles
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  build-system =
+    [
+      installShellFiles
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   pythonRelaxDeps = [
     "matrix-nio"
   ];
 
-  dependencies = with python3Packages; [
-    aiohttp
-    appdirs
-    attrs
-    cachetools
-    click
-    janus
-    keyring
-    logbook
-    (matrix-nio.override { withOlm = true; })
-    peewee
-    prompt-toolkit
-  ]
-  ++ lib.optionals enableDbusUi optional-dependencies.ui;
+  dependencies =
+    with python3Packages;
+    [
+      aiohttp
+      appdirs
+      attrs
+      cachetools
+      click
+      janus
+      keyring
+      logbook
+      (matrix-nio.override { withOlm = true; })
+      peewee
+      prompt-toolkit
+    ]
+    ++ lib.optionals enableDbusUi optional-dependencies.ui;
 
   optional-dependencies.ui = with python3Packages; [
     dbus-python
@@ -53,13 +58,15 @@ python3Packages.buildPythonApplication rec {
     pydbus
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    aioresponses
-    faker
-    pytest-aiohttp
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      aioresponses
+      faker
+      pytest-aiohttp
+      pytestCheckHook
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   nativeBuildInputs = lib.optionals enableDbusUi [
     wrapGAppsHook3

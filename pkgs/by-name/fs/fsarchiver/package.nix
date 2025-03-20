@@ -1,11 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, zlib, bzip2, lzo, lz4, zstd, xz
-, libgcrypt, e2fsprogs, util-linux, libgpg-error }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  zlib,
+  bzip2,
+  lzo,
+  lz4,
+  zstd,
+  xz,
+  libgcrypt,
+  e2fsprogs,
+  util-linux,
+  libgpg-error,
+}:
 
 let
-  version = "0.8.7";
+  version = "0.8.8";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "fsarchiver";
   inherit version;
 
@@ -13,16 +28,26 @@ in stdenv.mkDerivation {
     owner = "fdupoux";
     repo = "fsarchiver";
     rev = version;
-    sha256 = "sha256-1ZIqFgB05gV1L7P/AIL4qfYT4cNMp75QElEM64BXyO8=";
+    sha256 = "sha256-bEwNqPQRpjfOVTUog9wsZfS5yQ7Z21pHolPRLlbzHAA=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
   ];
 
   buildInputs = [
-    zlib bzip2 xz lzo lz4 zstd xz
-    libgcrypt e2fsprogs util-linux libgpg-error
+    zlib
+    bzip2
+    xz
+    lzo
+    lz4
+    zstd
+    xz
+    libgcrypt
+    e2fsprogs
+    util-linux
+    libgpg-error
   ];
 
   meta = with lib; {

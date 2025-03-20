@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       atemu
     ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
-    broken = !stdenv.isLinux;
+    broken = !stdenv.hostPlatform.isLinux;
     mainProgram = "Write";
   };
 })

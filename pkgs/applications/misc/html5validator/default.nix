@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, openjdk
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  openjdk,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,15 +13,17 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "svenkreiss";
     repo = "html5validator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
 
-  propagatedBuildInputs = [
-    openjdk
-  ] ++ (with python3.pkgs; [
-    pyyaml
-  ]);
+  propagatedBuildInputs =
+    [
+      openjdk
+    ]
+    ++ (with python3.pkgs; [
+      pyyaml
+    ]);
 
   nativeCheckInputs = with python3.pkgs; [
     hacking

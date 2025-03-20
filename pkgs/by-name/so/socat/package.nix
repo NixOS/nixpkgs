@@ -1,20 +1,21 @@
-{ lib
-, fetchurl
-, nettools
-, openssl
-, readline
-, stdenv
-, which
-, buildPackages
+{
+  lib,
+  fetchurl,
+  nettools,
+  openssl,
+  readline,
+  stdenv,
+  which,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "socat";
-  version = "1.8.0.1";
+  version = "1.8.0.3";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${pname}-${version}.tar.bz2";
-    hash = "sha256-aig1Zdt8+GKSxvcFBMWKuwPimIit7tWmxfNFfoA8G4E=";
+    hash = "sha256-AesBc2HZW7OmlB6EC1nkRjo/q/kt9BVO0CsWou1qAJU=";
   };
 
   postPatch = ''
@@ -24,13 +25,27 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
-  buildInputs = [ openssl readline ];
+  configureFlags =
+    lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--disable-posixmq"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "--disable-dccp"
+    ];
+
+  buildInputs = [
+    openssl
+    readline
+  ];
 
   hardeningEnable = [ "pie" ];
 
   enableParallelBuilding = true;
 
-  nativeCheckInputs = [ which nettools ];
+  nativeCheckInputs = [
+    which
+    nettools
+  ];
   doCheck = false; # fails a bunch, hangs
 
   passthru.tests = lib.optionalAttrs stdenv.buildPlatform.isLinux {

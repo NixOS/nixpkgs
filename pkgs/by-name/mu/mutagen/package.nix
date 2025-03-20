@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchzip,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "mutagen";
@@ -28,9 +34,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
+  subPackages = [
+    "cmd/mutagen"
+    "cmd/mutagen-agent"
+  ];
 
-  tags = [ "mutagencli" "mutagenagent" ];
+  tags = [
+    "mutagencli"
+    "mutagenagent"
+  ];
 
   postInstall = ''
     install -d $out/libexec

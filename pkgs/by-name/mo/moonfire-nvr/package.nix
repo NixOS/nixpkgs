@@ -1,62 +1,75 @@
-{ lib
-, stdenv
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, ncurses
-, sqlite
-, testers
-, moonfire-nvr
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  sqlite,
+  testers,
+  moonfire-nvr,
+  darwin,
+  nodejs,
+  pnpm_9,
 }:
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.7";
+  version = "0.7.20";
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
-    rev = "v${version}";
-    hash = "sha256-+7VahlS+NgaO2knP+xqdlZnNEfjz8yyF/VmjWf77KXI=";
+    tag = "v${version}";
+    hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
   };
-  ui = buildNpmPackage {
+  ui = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
     pname = "${pname}-ui";
     sourceRoot = "${src.name}/ui";
-    npmDepsHash = "sha256-IpZWgMo6Y3vRn9h495ifMB3tQxobLeTLC0xXS1vrKLA=";
+    nativeBuildInputs = [
+      nodejs
+      pnpm_9.configHook
+    ];
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      sourceRoot = "${finalAttrs.src.name}/ui";
+      hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
+    };
     installPhase = ''
       runHook preInstall
 
-      cp -r build $out
+      cp -r public $out
 
       runHook postInstall
     '';
-  };
-in rustPlatform.buildRustPackage {
+  });
+in
+rustPlatform.buildRustPackage {
   inherit pname version src;
 
   sourceRoot = "${src.name}/server";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "coded-0.2.0-pre" = "sha256-ICDvLFCsiPCzAzf3nrRhH/McNPVQz1+uVOmj6Uc5teg=";
-      "hashlink-0.8.1" = "sha256-h7DEapTVy0SSTaOV9rCkdH3em4A9+PS0k1QQh1+0P4c=";
-      "mp4-0.9.2" = "sha256-mJZJDzD8Ep9c+4QusyBtRoqAArHK9SLdFxG1AR7JydE=";
-    };
-  };
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
+
+  env.VERSION = "v${version}";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-  ]);
+  buildInputs =
+    [
+      ncurses
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+      ]
+    );
 
   postInstall = ''
     mkdir -p $out/lib/ui
@@ -74,12 +87,12 @@ in rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Moonfire NVR, a security camera network video recorder";
     homepage = "https://github.com/scottlamb/moonfire-nvr";
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "moonfire-nvr";
   };
 }

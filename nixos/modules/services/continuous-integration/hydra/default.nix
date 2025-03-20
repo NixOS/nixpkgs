@@ -515,12 +515,12 @@ in
           ''
             set -eou pipefail
             compression=$(sed -nr 's/compress_build_logs_compression = ()/\1/p' ${baseDir}/hydra.conf)
-            if [[ $compression == "" ]]; then
-              compression="bzip2"
+            if [[ $compression == "" || $compression == bzip2 ]]; then
+              compressionCmd=(bzip2)
             elif [[ $compression == zstd ]]; then
-              compression="zstd --rm"
+              compressionCmd=(zstd --rm)
             fi
-            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "$compression" --force --quiet
+            find ${baseDir}/build-logs -ignore_readdir_race -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "''${compressionCmd[@]}" --force --quiet
           '';
         startAt = "Sun 01:45";
         serviceConfig.Slice = "system-hydra.slice";

@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +25,8 @@ stdenv.mkDerivation rec {
     (if withSystemd then "--enable-journal" else "--disable-journal")
     "--enable-man-pages"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
   meta = with lib; {
     homepage = "http://www.liblogging.org/";

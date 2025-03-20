@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, mono
-, glib
-, pango
-, gtk3
-, libxml2
-, monoDLLFixer
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  mono,
+  glib,
+  pango,
+  gtk3,
+  libxml2,
+  monoDLLFixer,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +22,22 @@ stdenv.mkDerivation rec {
     sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
   };
 
+  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
+  postConfigure = ''
+    substituteInPlace libtool \
+      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
+  '';
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    mono glib pango gtk3
+    mono
+    glib
+    pango
+    gtk3
     libxml2
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   patches = [
     # Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling against newer versions of mono.

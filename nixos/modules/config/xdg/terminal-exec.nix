@@ -7,7 +7,13 @@
 
 let
   cfg = config.xdg.terminal-exec;
-  inherit (lib) mkIf mkEnableOption mkOption mkPackageOption types;
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    types
+    ;
 in
 {
   meta.maintainers = with lib.maintainers; [ Cryolitia ];
@@ -30,7 +36,10 @@ in
         '';
         example = {
           default = [ "kitty.desktop" ];
-          GNOME = [ "com.raggesilver.BlackBox.desktop" "org.gnome.Terminal.desktop" ];
+          GNOME = [
+            "com.raggesilver.BlackBox.desktop"
+            "org.gnome.Terminal.desktop"
+          ];
         };
       };
     };

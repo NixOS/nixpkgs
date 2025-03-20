@@ -29,6 +29,7 @@ let
     ];
 
     preConfigure = ''
+      sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
       patchShebangs --build .
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in

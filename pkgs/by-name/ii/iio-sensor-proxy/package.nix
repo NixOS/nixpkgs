@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, glib
-, cmake
-, libxml2
-, meson
-, ninja
-, pkg-config
-, libgudev
-, systemd
-, polkit
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  cmake,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  libgudev,
+  systemd,
+  polkit,
 }:
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
-    repo = pname;
+    repo = "iio-sensor-proxy";
     rev = version;
-    hash = "sha256-pFu+nJzj45s7yIKoLWLeiv2AT5vLf6JpdWWQ0JZfnvY=";
+    hash = "sha256-X4vJ9zvMyYY9G7cslHMvXoexV/+39c9KctJBc+Ne114=";
   };
 
   postPatch = ''

@@ -1,28 +1,32 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, curl
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  curl,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-public-api";
-  version = "0.40.0";
+  version = "0.44.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-FXScN4xOaJOiEm9NV66wsfGOj7up1DPzLK7lMofXL2g=";
+    hash = "sha256-Rdwn3izKSy5733KJw3OyGsBJ55xdxg9+MuI8ZNdei3s=";
   };
 
-  cargoHash = "sha256-v7K62jMGNwIo1XbkWpIXuoNkaRGRAqvZ/c9wdKfY+Xs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-11Y9BTtprv7EmBx7hsV8UnGDWmogj9azHOCAc/JdY7o=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ curl openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [
+    curl
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Tests fail
   doCheck = false;
@@ -36,4 +40,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

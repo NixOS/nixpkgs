@@ -1,4 +1,10 @@
-{ lib, newScope, fetchFromGitHub, unzip, stdenvNoCC }:
+{
+  lib,
+  newScope,
+  fetchFromGitHub,
+  unzip,
+  stdenvNoCC,
+}:
 let
   base = {
     version = "unstable-2023-01-26";
@@ -10,7 +16,8 @@ let
       maintainers = with maintainers; [ mbalatsko ];
     };
   };
-  makeSeabornDataPackage = {pname, hash}:
+  makeSeabornDataPackage =
+    { pname, hash }:
     let
       src = fetchFromGitHub {
         owner = "mwaskom";
@@ -20,18 +27,21 @@ let
         sparseCheckout = [ "${pname}.csv" ];
       };
     in
-    stdenvNoCC.mkDerivation (base // {
-      inherit pname src;
-      version = base.version;
-      installPhase = ''
-        runHook preInstall
+    stdenvNoCC.mkDerivation (
+      base
+      // {
+        inherit pname src;
+        version = base.version;
+        installPhase = ''
+          runHook preInstall
 
-        mkdir -p $out
-        cp ${pname}.csv $out/${pname}.csv
+          mkdir -p $out
+          cp ${pname}.csv $out/${pname}.csv
 
-        runHook postInstall
-      '';
-    });
+          runHook postInstall
+        '';
+      }
+    );
 in
 lib.makeScope newScope (self: {
   exercise = makeSeabornDataPackage ({

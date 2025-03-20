@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "globe-cli";
@@ -9,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Np1f/mSMIMZU3hE0Fur8bOHhOH3rZyroGiVAqfiIs7g=";
   };
 
-  cargoHash = "sha256-qoCOYk7hyjMx07l48IkxE6zsG58NkF72E3OvoZHz5d0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pcmxtkj3+sS0TytQjrfQLc6qm2JUxtp82VNyvybl9vU=";
 
   meta = with lib; {
     description = "Display an interactive ASCII globe in your terminal";

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, ghq
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitMinimal,
+  ghq,
 }:
 
 buildGoModule rec {
@@ -21,12 +22,14 @@ buildGoModule rec {
   doCheck = false;
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     ghq
   ];
 
   ldflags = [
-    "-s" "-w" "-X=main.Version=${version}"
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
   ];
 
   doInstallCheck = true;

@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, libX11, libXft, freetype, patches ? [ ],
-  extraLibs ? [ ] }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libX11,
+  libXft,
+  freetype,
+  patches ? [ ],
+  extraLibs ? [ ],
+}:
 
 stdenv.mkDerivation rec {
   pname = "herbe";
@@ -7,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dudik";
-    repo = pname;
+    repo = "herbe";
     rev = version;
     sha256 = "0358i5jmmlsvy2j85ij7m1k4ar2jr5lsv7y1c58dlf9710h186cv";
   };
@@ -18,7 +26,11 @@ stdenv.mkDerivation rec {
     sed -i 's_/usr/include/freetype2_${freetype.dev}/include/freetype2_' Makefile
   '';
 
-  buildInputs = [ libX11 libXft freetype ] ++ extraLibs;
+  buildInputs = [
+    libX11
+    libXft
+    freetype
+  ] ++ extraLibs;
 
   makeFlags = [ "PREFIX=$(out)" ];
 

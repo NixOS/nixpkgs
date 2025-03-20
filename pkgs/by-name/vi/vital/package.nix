@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, fetchzip
-, autoPatchelfHook
-, makeBinaryWrapper
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoPatchelfHook,
+  makeBinaryWrapper,
 
-, alsa-lib
-, libjack2
-, curl
-, xorg
-, libGL
-, freetype
+  alsa-lib,
+  libjack2,
+  curl,
+  xorg,
+  libGL,
+  freetype,
+  zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.5";
 
   src = fetchzip {
-    url = "https://builds.vital.audio/VitalAudio/vital/${builtins.replaceStrings ["."] ["_"] finalAttrs.version}/VitalInstaller.zip";
+    url = "https://builds.vital.audio/VitalAudio/vital/${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/VitalInstaller.zip";
     hash = "sha256-hCwXSUiBB0YpQ1oN6adLprwAoel6f72tBG5fEb61OCI=";
   };
 
@@ -49,17 +53,29 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     wrapProgram $out/bin/Vital \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl libjack2 ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          curl
+          libjack2
+        ]
+      }" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          zenity
+        ]
+      }"
 
     runHook postInstall
   '';
-
 
   meta = with lib; {
     description = "Spectral warping wavetable synth";
     homepage = "https://vital.audio/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ unfree gpl3Plus ];
+    license = with licenses; [
+      unfree
+      gpl3Plus
+    ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ PowerUser64 ];
     mainProgram = "Vital";

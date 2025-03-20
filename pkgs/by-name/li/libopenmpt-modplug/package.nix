@@ -1,16 +1,20 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, pkg-config
-, libopenmpt
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libopenmpt,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt-modplug";
   version = "0.8.9.0-openmpt1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt-modplug/libopenmpt-modplug-${version}.tar.gz";

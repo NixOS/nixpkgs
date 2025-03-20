@@ -1,23 +1,24 @@
-{ cctools
-, buildNpmPackage
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
+{
+  cctools,
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+  python3,
+  stdenv,
 }:
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "24.1.2";
+  version = "24.2.3";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-YeTKW7Aq7VLCD8FabnqDTcgvSeHNa96ZT8KQ4KNrrw4=";
+    hash = "sha256-DoOnrgS6g4Qie1v7AVyaJgseG/z7rZX8FwXyvokOy0Y=";
   };
 
-  npmDepsHash = "sha256-pyTfdVdaHi8oABhI6GoHi6HusTUMEyngGAR2Tw5bF2c=";
+  npmDepsHash = "sha256-K/7Wk5yDwY7b/MDuBC/PwNzOgt9PPhUXrQZRmkZu+gE=";
 
   dontNpmBuild = true;
 

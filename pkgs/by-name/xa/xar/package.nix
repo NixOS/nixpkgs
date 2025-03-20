@@ -68,11 +68,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # For some reason libxml2 package headers are in subdirectory and thus aren’t
-  # picked up by stdenv’s C compiler wrapper (see ccWrapper_addCVars). This
-  # doesn’t really belong here and either should be part of libxml2 package or
-  # libxml2 in Nixpkgs can just fix their header paths.
-  env.NIX_CFLAGS_COMPILE = "-isystem ${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # For some reason libxml2 package headers are in subdirectory and thus aren’t
+      # picked up by stdenv’s C compiler wrapper (see ccWrapper_addCVars). This
+      # doesn’t really belong here and either should be part of libxml2 package or
+      # libxml2 in Nixpkgs can just fix their header paths.
+      "-isystem ${libxml2.dev}/include/libxml2"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      # fix build on GCC 14
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+    ]
+  );
 
   buildInputs =
     [
@@ -84,7 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
       xz
       e2fsprogs
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux acl ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+    ++ lib.optional stdenv.hostPlatform.isLinux acl
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let

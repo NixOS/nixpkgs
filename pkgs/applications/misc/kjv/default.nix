@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  readline,
+}:
 
 let
   patchPrefix = "https://web.archive.org/web/20220422205751/https://github.com/samuelgrf/kjv/commit/";
@@ -25,7 +31,10 @@ stdenv.mkDerivation {
     hash = "sha256-Z6myd9Xn23pYizG+IZVDrP988pYU06QIcpqXtWTcPiw=";
   };
 
-  patches = [ add-apocrypha add-install-target ];
+  patches = [
+    add-apocrypha
+    add-install-target
+  ];
 
   buildInputs = [ readline ];
 
@@ -35,7 +44,10 @@ stdenv.mkDerivation {
     description = "Bible, King James Version";
     homepage = "https://github.com/bontibon/kjv";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ jtobin cafkafk ];
+    maintainers = with maintainers; [
+      jtobin
+      cafkafk
+    ];
     mainProgram = "kjv";
   };
 }

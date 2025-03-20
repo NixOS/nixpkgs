@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nat-n";
     repo = "poethepoet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-um17UHFLX7zLQXLWbYnEnaLUwMgFSxdGt85fjMBEhjQ=";
   };
 
@@ -35,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Task runner that works well with poetry";
     homepage = "https://github.com/nat-n/poethepoet";
-    changelog = "https://github.com/nat-n/poethepoet/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/nat-n/poethepoet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "poe";

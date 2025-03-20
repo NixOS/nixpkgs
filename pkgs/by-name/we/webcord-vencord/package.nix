@@ -2,7 +2,7 @@
   # allow overriding electron
   electron,
   webcord,
-  substituteAll,
+  replaceVars,
   lib,
   vencord-web-extension,
 }:
@@ -12,8 +12,7 @@
   pname = "webcord-vencord";
 
   patches = (old.patches or [ ]) ++ [
-    (substituteAll {
-      src = ./add-extension.patch;
+    (replaceVars ./add-extension.patch {
       vencord = vencord-web-extension;
     })
   ];

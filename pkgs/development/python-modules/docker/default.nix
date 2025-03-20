@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
+    ssh = [ paramiko ];
     tls = [];
     websockets = [ websocket-client ];
   };

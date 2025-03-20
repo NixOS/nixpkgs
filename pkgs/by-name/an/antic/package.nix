@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, mpir
-, gmp
-, mpfr
-, flint
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpir,
+  gmp,
+  mpfr,
+  flint,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +14,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "flintlib";
-    repo = pname;
+    repo = "antic";
     rev = "v${version}";
     sha256 = "sha256-bQ2VvCS+lGro5qxs+qBz3RpUenxQTmTr+lm9BFZWYts=";
   };
 
-  buildInputs = [ mpir gmp mpfr flint ];
+  buildInputs = [
+    mpir
+    gmp
+    mpfr
+    flint
+  ];
 
   configureFlags = [
     "--with-gmp=${gmp}"

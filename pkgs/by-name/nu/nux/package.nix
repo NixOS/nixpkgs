@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  asciidoctor,
+  installShellFiles,
 }:
 
 let
@@ -19,9 +20,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-k3HRaWN8/MTZRGWBxI8RRK0tcSYBbSLs3vHkUdLGTc8";
   };
 
-  cargoHash = "sha256-wfUr3dcdALMEgJ6CaXhK4Gqk6xflCnov9tELA63drV4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iemfLIiT2BOsf0Q4X8fmEHmgHMd0WQk1t2rmRUuF5pY=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
   postInstall = ''
     installManPage $releaseDir/build/nux-*/out/nux.1

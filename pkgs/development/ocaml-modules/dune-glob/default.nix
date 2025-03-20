@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  dune-private-libs,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-glob";
   inherit (dune_3) src version;
 

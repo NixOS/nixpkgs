@@ -39,7 +39,7 @@
   libXScrnSaver,
   libxshmfence,
   libXtst,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -93,6 +93,9 @@
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
   undmg,
+
+  # For QT support
+  qt6,
 }:
 
 let
@@ -142,7 +145,7 @@ let
       libXScrnSaver
       libxshmfence
       libXtst
-      mesa
+      libgbm
       nspr
       nss
       opusWithCustomModes
@@ -162,15 +165,17 @@ let
     ++ [
       gtk3
       gtk4
+      qt6.qtbase
+      qt6.qtwayland
     ];
 
   linux = stdenv.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "131.0.6778.69";
+    version = "134.0.6998.88";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-7aE6RZE5kB3DaJFUDdc2Ter8SsZZM0JzYmKn1hF1BUs=";
+      hash = "sha256-31V+2z0k2Nyv+VV9gHM7Qq+2YmaFIA0/NKO29SgGXK0=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -243,12 +248,15 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
+        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -266,11 +274,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "131.0.6778.70";
+    version = "134.0.6998.89";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/acwi7l3xj4g6lag6mccophfiv2aa_131.0.6778.70/GoogleChrome-131.0.6778.70.dmg";
-      hash = "sha256-Gikqdh9g3FAnWBLrxMtbomKceIaMsz/GnguiEUpKJW0=";
+      url = "http://dl.google.com/release2/chrome/daasbcyt2x75rfu6bduujtyzfu_134.0.6998.89/GoogleChrome-134.0.6998.89.dmg";
+      hash = "sha256-SG/U+yffEX3F5ThlQbxgY66ocPWzfe5M7lw943gvDVw=";
     };
 
     dontPatch = true;

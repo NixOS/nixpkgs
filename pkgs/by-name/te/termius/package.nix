@@ -1,22 +1,23 @@
-{ autoPatchelfHook
-, squashfsTools
-, alsa-lib
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, libsecret
-, mesa
-, udev
-, wrapGAppsHook3
-, writeScript
+{
+  autoPatchelfHook,
+  squashfsTools,
+  alsa-lib,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  lib,
+  libsecret,
+  libgbm,
+  udev,
+  wrapGAppsHook3,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.7.2";
-  revision = "205";
+  version = "9.16.0";
+  revision = "217";
 
   src = fetchurl {
     # find the latest version with
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-LihbkFIFpulewNIHl1oiXJF1npuqNLvVjN8CAmDDf46PAXdpaiMMluHWIJ4NljAACh6d4Uw6m2pKgEDfFN1y6g==";
+    hash = "sha512-N/CCY3IRup2RCnLrMRNsM0drmiKnwfSpbNi6RTf/rp2Z95S8AJUV7rjGQzl/Wi9KgmYOdIes708N4Zn2rGl+Lg==";
   };
 
   desktopItem = makeDesktopItem {
@@ -45,12 +46,17 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    squashfsTools
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     alsa-lib
     libsecret
-    mesa
+    libgbm
   ];
 
   unpackPhase = ''
@@ -107,7 +113,11 @@ stdenv.mkDerivation rec {
     downloadPage = "https://termius.com/linux/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ Br1ght0ne th0rgal ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      th0rgal
+      Rishik-Y
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "termius-app";
   };

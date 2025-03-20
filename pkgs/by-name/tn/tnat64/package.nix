@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tnat64";
@@ -6,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "andrewshadura";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "tnat64";
+    rev = "tnat64-${version}";
     sha256 = "191j1fpr3bw6fk48npl99z7iq6m1g33f15xk5cay1gnk5f46i2j6";
   };
 

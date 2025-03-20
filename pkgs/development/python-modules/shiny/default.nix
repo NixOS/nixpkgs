@@ -2,44 +2,66 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
 
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   appdirs,
   asgiref,
   click,
   htmltools,
+  libsass,
   linkify-it-py,
   markdown-it-py,
   mdit-py-plugins,
+  narwhals,
+  orjson,
+  packaging,
+  prompt-toolkit,
   python-multipart,
   questionary,
   starlette,
+  typing-extensions,
   uvicorn,
   watchfiles,
   websockets,
 
-  pytestCheckHook,
+  # tests
+  anthropic,
+  cacert,
+  google-generativeai,
+  langchain-core,
+  ollama,
+  openai,
+  pandas,
+  polars,
   pytest-asyncio,
   pytest-playwright,
-  pytest-xdist,
-  pytest-timeout,
   pytest-rerunfailures,
-  pandas,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "0.10.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s1j9bMAapO0iRXsuNxiwlNaVv2EoWcl9U7WnHwQe9n8=";
+    tag = "v${version}";
+    hash = "sha256-YCPHjelGPYYo23Vzxy5+8Kn9fVlSZy1Qva7zp93+nzg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   dependencies = [
     appdirs
     asgiref
@@ -48,30 +70,61 @@ buildPythonPackage rec {
     linkify-it-py
     markdown-it-py
     mdit-py-plugins
+    narwhals
+    orjson
+    packaging
+    prompt-toolkit
     python-multipart
     questionary
+    setuptools
     starlette
+    typing-extensions
     uvicorn
     watchfiles
     websockets
   ];
 
+  optional-dependencies = {
+    theme = [
+      libsass
+      # FIXME package brand-yml
+    ];
+  };
+
   pythonImportsCheck = [ "shiny" ];
+
   nativeCheckInputs = [
-    pytestCheckHook
+    anthropic
+    google-generativeai
+    langchain-core
+    ollama
+    openai
+    pandas
+    polars
     pytest-asyncio
     pytest-playwright
-    pytest-xdist
-    pytest-timeout
     pytest-rerunfailures
-    pandas
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  disabledTests = [
+    # Requires unpackaged brand-yml
+    "test_theme_from_brand_base_case_compiles"
+    # ValueError: A tokenizer is required to impose `token_limits` on messages
+    "test_chat_message_trimming"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.rev}/CHANGELOG.md";
     description = "Build fast, beautiful web applications in Python";
-    license = lib.licenses.mit;
     homepage = "https://shiny.posit.co/py";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

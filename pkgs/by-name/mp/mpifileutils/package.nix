@@ -1,31 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, mpi
-, attr
-, dtcmp
-, libarchive
-, libcircle
-, bzip2
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  mpi,
+  attr,
+  dtcmp,
+  libarchive,
+  libcircle,
+  bzip2,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mpifileutils";
-  version = "0.11.1";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "mpifileutils";
     rev = "v${version}";
-    hash = "sha256-3nls82awMMCwlfafsOy3AY8OvT9sE+BvvsDOY14YvQc=";
+    hash = "sha256-WnjStOLWP/VsZyl2wPqR1Q+YqlJQRCQ4R50uOyqkWuM=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     attr
     dtcmp

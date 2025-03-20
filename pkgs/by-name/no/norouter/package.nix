@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -33,7 +34,7 @@ buildGoModule rec {
     description = "Tool to handle unprivileged networking by using multiple loopback addresses";
     homepage = "https://github.com/norouter/norouter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
     mainProgram = "norouter";
   };
 }

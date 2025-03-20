@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, fsrx }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  fsrx,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fsrx";
@@ -6,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "thatvegandev";
-    repo = pname;
+    repo = "fsrx";
     rev = "v${version}";
     sha256 = "sha256-hzfpjunP20WCt3erYu7AO7A3nz+UMKdFzWUA5jASbVA=";
   };
 
-  cargoHash = "sha256-bRStmz2sJnhCKpvoQfc/ZP9B2ZdNHYNEHd+wZErdS1Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hOE05t3gjul7uOt14vr5hAmGHTPgxJk7EOKJhZ4XgCo=";
 
   passthru = {
     tests.version = testers.testVersion {

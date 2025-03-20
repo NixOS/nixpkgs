@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdsh";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "mdsh";
     rev = "v${version}";
-    hash = "sha256-vN8nFhbZgJIhFuFET9IOmdxT7uBKq/9X+TO9lZsDw6g=";
+    hash = "sha256-MCudMeiqEbzOL9m50hccvogAUBaUeILm/Hu4nH04GXU=";
   };
 
-  cargoHash = "sha256-0D1RSUJw7fszc9d4nrp+zCzr9l0xF4Ed8DbK5/O5bEY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-73wlW8Zat3/crJIcfqZ/9mCPxGDXH+A+3jvYZBHDjUk=";
 
   meta = with lib; {
     description = "Markdown shell pre-processor";

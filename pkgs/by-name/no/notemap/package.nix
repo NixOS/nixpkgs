@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchzip
-, pkg-config
-, libressl
-, memstreamHook
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  libressl,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libressl
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    memstreamHook
   ];
 
   meta = {

@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -8,7 +14,12 @@ let
   defaultBackend = options.virtualisation.oci-containers.backend.default;
 
   containerOptions =
-    { ... }: {
+    { name, ... }:
+    {
+
+      config = {
+        podman = mkIf (cfg.backend == "podman") { };
+      };
 
       options = {
 
@@ -52,6 +63,13 @@ let
           example = literalExpression "pkgs.dockerTools.streamLayeredImage {...};";
         };
 
+        serviceName = mkOption {
+          type = types.str;
+          default = "${cfg.backend}-${name}";
+          defaultText = "<backend>-<name>";
+          description = "Systemd service name that manages the container";
+        };
+
         login = {
 
           username = mkOption {
@@ -77,8 +95,8 @@ let
         };
 
         cmd = mkOption {
-          type =  with types; listOf str;
-          default = [];
+          type = with types; listOf str;
+          default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
           example = literalExpression ''
             ["--port=9000"]
@@ -87,7 +105,7 @@ let
 
         labels = mkOption {
           type = with types; attrsOf str;
-          default = {};
+          default = { };
           description = "Labels to attach to the container at runtime.";
           example = literalExpression ''
             {
@@ -105,26 +123,26 @@ let
 
         environment = mkOption {
           type = with types; attrsOf str;
-          default = {};
+          default = { };
           description = "Environment variables to set for this container.";
           example = literalExpression ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
             }
-        '';
+          '';
         };
 
         environmentFiles = mkOption {
           type = with types; listOf path;
-          default = [];
+          default = [ ];
           description = "Environment files for this container.";
           example = literalExpression ''
             [
               /path/to/.env
               /path/to/.env.secret
             ]
-        '';
+          '';
         };
 
         log-driver = mkOption {
@@ -141,13 +159,13 @@ let
             [Docker engine documentation](https://docs.docker.com/engine/logging/configure/)
 
             For Podman:
-            Refer to the docker-run(1) man page.
+            Refer to the {manpage}`docker-run(1)` man page.
           '';
         };
 
         ports = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Network ports to publish from the container to the outer host.
 
@@ -194,7 +212,7 @@ let
 
         volumes = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             List of volumes to attach to this container.
 
@@ -222,7 +240,7 @@ let
 
         dependsOn = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
@@ -247,14 +265,17 @@ let
 
         preRunExtraOptions = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = "Extra options for {command}`${defaultBackend}` that go before the `run` argument.";
-          example = [ "--runtime" "runsc" ];
+          example = [
+            "--runtime"
+            "runsc"
+          ];
         };
 
         extraOptions = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = "Extra options for {command}`${defaultBackend} run`.";
           example = literalExpression ''
             ["--network=host"]
@@ -262,177 +283,368 @@ let
         };
 
         autoStart = mkOption {
-          type = types.bool;
+          type = with types; bool;
           default = true;
           description = ''
             When enabled, the container is automatically started on boot.
             If this option is set to false, the container has to be started on-demand via its service.
           '';
         };
+
+        podman = mkOption {
+          type = types.nullOr (
+            types.submodule {
+              options = {
+                sdnotify = mkOption {
+                  default = "conmon";
+                  type = types.enum [
+                    "conmon"
+                    "healthy"
+                    "container"
+                  ];
+                  description = ''
+                    Determines how `podman` should notify systemd that the unit is ready. There are
+                    [three options](https://docs.podman.io/en/latest/markdown/podman-run.1.html#sdnotify-container-conmon-healthy-ignore):
+
+                    * `conmon`: marks the unit as ready when the container has started.
+                    * `healthy`: marks the unit as ready when the [container's healthcheck](https://docs.podman.io/en/stable/markdown/podman-healthcheck-run.1.html) passes.
+                    * `container`: `NOTIFY_SOCKET` is passed into the container and the process inside the container needs to indicate on its own that it's ready.
+                  '';
+                };
+                user = mkOption {
+                  default = "root";
+                  type = types.str;
+                  description = ''
+                    The user under which the container should run.
+                  '';
+                };
+              };
+            }
+          );
+          default = null;
+          description = ''
+            Podman-specific settings in OCI containers. These must be null when using
+            the `docker` backend.
+          '';
+        };
+
+        pull = mkOption {
+          type =
+            with types;
+            enum [
+              "always"
+              "missing"
+              "never"
+              "newer"
+            ];
+          default = "missing";
+          description = ''
+            Image pull policy for the container. Must be one of: always, missing, never, newer
+          '';
+        };
+
+        capabilities = mkOption {
+          type = with types; lazyAttrsOf (nullOr bool);
+          default = { };
+          description = ''
+            Capabilities to configure for the container.
+            When set to true, capability is added to the container.
+            When set to false, capability is dropped from the container.
+            When null, default runtime settings apply.
+          '';
+          example = literalExpression ''
+            {
+              SYS_ADMIN = true;
+              SYS_WRITE = false;
+            {
+          '';
+        };
+
+        devices = mkOption {
+          type = with types; listOf str;
+          default = [ ];
+          description = ''
+            List of devices to attach to this container.
+          '';
+          example = literalExpression ''
+            [
+              "/dev/dri:/dev/dri"
+            ]
+          '';
+        };
+
+        privileged = mkOption {
+          type = with types; bool;
+          default = false;
+          description = ''
+            Give extended privileges to the container
+          '';
+        };
+
+        autoRemoveOnStop = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Automatically remove the container when it is stopped or killed
+          '';
+        };
+
+        networks = mkOption {
+          type = with types; listOf str;
+          default = [ ];
+          description = ''
+            Networks to attach the container to
+          '';
+        };
       };
     };
 
-  isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
+  isValidLogin =
+    login: login.username != null && login.passwordFile != null && login.registry != null;
 
-  mkService = name: container: let
-    dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
-    escapedName = escapeShellArg name;
-    preStartScript = pkgs.writeShellApplication {
-      name = "pre-start";
-      runtimeInputs = [ ];
-      text = ''
-        ${cfg.backend} rm -f ${name} || true
-        ${optionalString (isValidLogin container.login) ''
-          # try logging in, if it fails, check if image exists locally
-          ${cfg.backend} login \
-          ${container.login.registry} \
-          --username ${container.login.username} \
-          --password-stdin < ${container.login.passwordFile} \
-          || ${cfg.backend} image inspect ${container.image} >/dev/null \
-          || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
-        ''}
-        ${optionalString (container.imageFile != null) ''
-          ${cfg.backend} load -i ${container.imageFile}
-        ''}
-        ${optionalString (container.imageStream != null) ''
-          ${container.imageStream} | ${cfg.backend} load
-        ''}
-        ${optionalString (cfg.backend == "podman") ''
-          rm -f /run/podman-${escapedName}.ctr-id
-        ''}
-      '';
+  mkService =
+    name: container:
+    let
+      dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+      escapedName = escapeShellArg name;
+      preStartScript = pkgs.writeShellApplication {
+        name = "pre-start";
+        runtimeInputs = [ ];
+        text = ''
+          ${cfg.backend} rm -f ${name} || true
+          ${optionalString (isValidLogin container.login) ''
+            # try logging in, if it fails, check if image exists locally
+            ${cfg.backend} login \
+            ${container.login.registry} \
+            --username ${container.login.username} \
+            --password-stdin < ${container.login.passwordFile} \
+            || ${cfg.backend} image inspect ${container.image} >/dev/null \
+            || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
+          ''}
+          ${optionalString (container.imageFile != null) ''
+            ${cfg.backend} load -i ${container.imageFile}
+          ''}
+          ${optionalString (container.imageStream != null) ''
+            ${container.imageStream} | ${cfg.backend} load
+          ''}
+          ${optionalString (cfg.backend == "podman") ''
+            rm -f /run/${escapedName}/ctr-id
+          ''}
+        '';
+      };
+
+      effectiveUser = container.podman.user or "root";
+      dependOnLingerService =
+        cfg.backend == "podman" && effectiveUser != "root" && config.users.users.${effectiveUser}.linger;
+    in
+    {
+      wantedBy = [ ] ++ optional (container.autoStart) "multi-user.target";
+      wants =
+        lib.optional (container.imageFile == null && container.imageStream == null) "network-online.target"
+        ++ lib.optional dependOnLingerService "linger-users.service";
+      after =
+        lib.optionals (cfg.backend == "docker") [
+          "docker.service"
+          "docker.socket"
+        ]
+        # if imageFile or imageStream is not set, the service needs the network to download the image from the registry
+        ++ lib.optionals (container.imageFile == null && container.imageStream == null) [
+          "network-online.target"
+        ]
+        ++ dependsOn
+        ++ lib.optional dependOnLingerService "linger-users.service";
+      requires = dependsOn;
+      environment = lib.mkMerge [
+        proxy_env
+        (mkIf (cfg.backend == "podman" && container.podman.user != "root") {
+          HOME = config.users.users.${container.podman.user}.home;
+        })
+      ];
+
+      path =
+        if cfg.backend == "docker" then
+          [ config.virtualisation.docker.package ]
+        else if cfg.backend == "podman" then
+          [ config.virtualisation.podman.package ]
+        else
+          throw "Unhandled backend: ${cfg.backend}";
+
+      script = concatStringsSep " \\\n  " (
+        [
+          "exec ${cfg.backend} "
+        ]
+        ++ map escapeShellArg container.preRunExtraOptions
+        ++ [
+          "run"
+          "--name=${escapedName}"
+          "--log-driver=${container.log-driver}"
+        ]
+        ++ optional (container.entrypoint != null) "--entrypoint=${escapeShellArg container.entrypoint}"
+        ++ optional (container.hostname != null) "--hostname=${escapeShellArg container.hostname}"
+        ++ lib.optionals (cfg.backend == "podman") [
+          "--cidfile=/run/${escapedName}/ctr-id"
+          "--cgroups=enabled"
+          "--sdnotify=${container.podman.sdnotify}"
+          "-d"
+          "--replace"
+        ]
+        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+        ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
+        ++ map (p: "-p ${escapeShellArg p}") container.ports
+        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+        ++ map (v: "-v ${escapeShellArg v}") container.volumes
+        ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
+        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+        ++ optional (container.privileged) "--privileged"
+        ++ optional (container.autoRemoveOnStop) "--rm"
+        ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (
+          filterAttrs (_: v: v == true) container.capabilities
+        )
+        ++ mapAttrsToList (k: _: "--cap-drop=${escapeShellArg k}") (
+          filterAttrs (_: v: v == false) container.capabilities
+        )
+        ++ map (d: "--device=${escapeShellArg d}") container.devices
+        ++ map (n: "--network=${escapeShellArg n}") container.networks
+        ++ [ "--pull ${escapeShellArg container.pull}" ]
+        ++ map escapeShellArg container.extraOptions
+        ++ [ container.image ]
+        ++ map escapeShellArg container.cmd
+      );
+
+      preStop =
+        if cfg.backend == "podman" then
+          "podman stop --ignore --cidfile=/run/${escapedName}/ctr-id"
+        else
+          "${cfg.backend} stop ${name} || true";
+
+      postStop =
+        if cfg.backend == "podman" then
+          "podman rm -f --ignore --cidfile=/run/${escapedName}/ctr-id"
+        else
+          "${cfg.backend} rm -f ${name} || true";
+
+      serviceConfig =
+        {
+          ### There is no generalized way of supporting `reload` for docker
+          ### containers. Some containers may respond well to SIGHUP sent to their
+          ### init process, but it is not guaranteed; some apps have other reload
+          ### mechanisms, some don't have a reload signal at all, and some docker
+          ### images just have broken signal handling.  The best compromise in this
+          ### case is probably to leave ExecReload undefined, so `systemctl reload`
+          ### will at least result in an error instead of potentially undefined
+          ### behaviour.
+          ###
+          ### Advanced users can still override this part of the unit to implement
+          ### a custom reload handler, since the result of all this is a normal
+          ### systemd service from the perspective of the NixOS module system.
+          ###
+          # ExecReload = ...;
+          ###
+          ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
+          TimeoutStartSec = 0;
+          TimeoutStopSec = 120;
+          Restart = "always";
+        }
+        // optionalAttrs (cfg.backend == "podman") {
+          Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+          Type = "notify";
+          NotifyAccess = "all";
+          Delegate = mkIf (container.podman.sdnotify == "healthy") true;
+          User = effectiveUser;
+          RuntimeDirectory = escapedName;
+        };
     };
-  in {
-    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    wants = lib.optional (container.imageFile == null && container.imageStream == null)  "network-online.target";
-    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
-            # if imageFile or imageStream is not set, the service needs the network to download the image from the registry
-            ++ lib.optionals (container.imageFile == null && container.imageStream == null) [ "network-online.target" ]
-            ++ dependsOn;
-    requires = dependsOn;
-    environment = proxy_env;
 
-    path =
-      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
-      else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
-      else throw "Unhandled backend: ${cfg.backend}";
-
-    script = concatStringsSep " \\\n  " ([
-      "exec ${cfg.backend} "
-    ]  ++ map escapeShellArg container.preRunExtraOptions ++ [
-      "run"
-      "--rm"
-      "--name=${escapedName}"
-      "--log-driver=${container.log-driver}"
-    ] ++ optional (container.entrypoint != null)
-      "--entrypoint=${escapeShellArg container.entrypoint}"
-      ++ optional (container.hostname != null)
-      "--hostname=${escapeShellArg container.hostname}"
-      ++ lib.optionals (cfg.backend == "podman") [
-        "--cidfile=/run/podman-${escapedName}.ctr-id"
-        "--cgroups=no-conmon"
-        "--sdnotify=conmon"
-        "-d"
-        "--replace"
-      ] ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-      ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
-      ++ map (p: "-p ${escapeShellArg p}") container.ports
-      ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-      ++ map (v: "-v ${escapeShellArg v}") container.volumes
-      ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
-      ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-      ++ map escapeShellArg container.extraOptions
-      ++ [container.image]
-      ++ map escapeShellArg container.cmd
-    );
-
-    preStop = if cfg.backend == "podman"
-      then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "${cfg.backend} stop ${name} || true";
-
-    postStop = if cfg.backend == "podman"
-      then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "${cfg.backend} rm -f ${name} || true";
-
-    serviceConfig = {
-      ### There is no generalized way of supporting `reload` for docker
-      ### containers. Some containers may respond well to SIGHUP sent to their
-      ### init process, but it is not guaranteed; some apps have other reload
-      ### mechanisms, some don't have a reload signal at all, and some docker
-      ### images just have broken signal handling.  The best compromise in this
-      ### case is probably to leave ExecReload undefined, so `systemctl reload`
-      ### will at least result in an error instead of potentially undefined
-      ### behaviour.
-      ###
-      ### Advanced users can still override this part of the unit to implement
-      ### a custom reload handler, since the result of all this is a normal
-      ### systemd service from the perspective of the NixOS module system.
-      ###
-      # ExecReload = ...;
-      ###
-      ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
-      TimeoutStartSec = 0;
-      TimeoutStopSec = 120;
-      Restart = "always";
-    } // optionalAttrs (cfg.backend == "podman") {
-      Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
-      Type="notify";
-      NotifyAccess="all";
-    };
-  };
-
-in {
+in
+{
   imports = [
-    (
-      lib.mkChangedOptionModule
-      [ "docker-containers"  ]
-      [ "virtualisation" "oci-containers" ]
-      (oldcfg: {
-        backend = "docker";
-        containers = lib.mapAttrs (n: v: builtins.removeAttrs (v // {
-          extraOptions = v.extraDockerOptions or [];
-        }) [ "extraDockerOptions" ]) oldcfg.docker-containers;
-      })
-    )
+    (lib.mkChangedOptionModule [ "docker-containers" ] [ "virtualisation" "oci-containers" ] (oldcfg: {
+      backend = "docker";
+      containers = lib.mapAttrs (
+        n: v:
+        builtins.removeAttrs (
+          v
+          // {
+            extraOptions = v.extraDockerOptions or [ ];
+          }
+        ) [ "extraDockerOptions" ]
+      ) oldcfg.docker-containers;
+    }))
   ];
 
   options.virtualisation.oci-containers = {
 
     backend = mkOption {
-      type = types.enum [ "podman" "docker" ];
+      type = types.enum [
+        "podman"
+        "docker"
+      ];
       default = if versionAtLeast config.system.stateVersion "22.05" then "podman" else "docker";
       description = "The underlying Docker implementation to use.";
     };
 
     containers = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf (types.submodule containerOptions);
       description = "OCI (Docker) containers to run as systemd services.";
     };
 
   };
 
-  config = lib.mkIf (cfg.containers != {}) (lib.mkMerge [
-    {
-      systemd.services = mapAttrs' (n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)) cfg.containers;
+  config = lib.mkIf (cfg.containers != { }) (
+    lib.mkMerge [
+      {
+        systemd.services = mapAttrs' (n: v: nameValuePair v.serviceName (mkService n v)) cfg.containers;
 
-      assertions =
-        let
-          toAssertion = _: { imageFile, imageStream, ... }:
-            { assertion = imageFile == null || imageStream == null;
+        assertions =
+          let
+            toAssertions =
+              name:
+              {
+                imageFile,
+                imageStream,
+                podman,
+                ...
+              }:
+              [
+                {
+                  assertion = imageFile == null || imageStream == null;
 
-              message = "You can only define one of imageFile and imageStream";
-            };
+                  message = "virtualisation.oci-containers.containers.${name}: You can only define one of imageFile and imageStream";
+                }
+                {
+                  assertion = cfg.backend == "docker" -> podman == null;
+                  message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
+                }
+              ];
+          in
+          concatMap (name: toAssertions name cfg.containers.${name}) (lib.attrNames cfg.containers);
 
-        in
-          lib.mapAttrsToList toAssertion cfg.containers;
-    }
-    (lib.mkIf (cfg.backend == "podman") {
-      virtualisation.podman.enable = true;
-    })
-    (lib.mkIf (cfg.backend == "docker") {
-      virtualisation.docker.enable = true;
-    })
-  ]);
-
+        warnings = mkIf (cfg.backend == "podman") (
+          lib.foldlAttrs (
+            warnings: name:
+            { podman, ... }:
+            let
+              inherit (config.users.users.${podman.user}) linger;
+            in
+            warnings
+            ++ lib.optional (podman.user != "root" && linger && podman.sdnotify == "conmon") ''
+              Podman container ${name} is configured as rootless (user ${podman.user})
+              with `--sdnotify=conmon`, but lingering for this user is turned on.
+            ''
+            ++ lib.optional (podman.user != "root" && !linger && podman.sdnotify == "healthy") ''
+              Podman container ${name} is configured as rootless (user ${podman.user})
+              with `--sdnotify=healthy`, but lingering for this user is turned off.
+            ''
+          ) [ ] cfg.containers
+        );
+      }
+      (lib.mkIf (cfg.backend == "podman") {
+        virtualisation.podman.enable = true;
+      })
+      (lib.mkIf (cfg.backend == "docker") {
+        virtualisation.docker.enable = true;
+      })
+    ]
+  );
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastgron";

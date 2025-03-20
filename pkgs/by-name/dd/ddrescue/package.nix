@@ -1,14 +1,17 @@
-{ lib, stdenv
-, fetchurl, lzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lzip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddrescue";
-  version = "1.28";
+  version = "1.29";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/ddrescue-${version}.tar.lz";
-    sha256 = "sha256-ZibAenyhzB0DytCVhSLFJ5sVYiLTLDQugRF8/vrrEME=";
+    sha256 = "sha256-AaQUMnhTs5+6L9Ds4w977i6djI6OsxQxhSSt9aYAOaM=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -47,6 +50,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ domenkozar fpletz ];
+    maintainers = with maintainers; [
+      domenkozar
+      fpletz
+    ];
   };
 }

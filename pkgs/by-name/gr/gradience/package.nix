@@ -1,26 +1,27 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook4
-, meson
-, ninja
-, pkg-config
-, glib
-, glib-networking
-, desktop-file-utils
-, gettext
-, librsvg
-, blueprint-compiler
-, python3Packages
-, sassc
-, appstream-glib
-, libadwaita
-, libportal
-, libportal-gtk4
-, libsoup_3
-, gobject-introspection
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  glib-networking,
+  desktop-file-utils,
+  gettext,
+  librsvg,
+  blueprint-compiler,
+  python3Packages,
+  sassc,
+  appstream-glib,
+  libadwaita,
+  libportal,
+  libportal-gtk4,
+  libsoup_3,
+  gobject-introspection,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "gradience";
   version = "0.4.1";
 

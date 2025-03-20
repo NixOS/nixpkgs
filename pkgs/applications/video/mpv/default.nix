@@ -39,7 +39,7 @@
   libxkbcommon,
   lua,
   makeWrapper,
-  mesa,
+  libgbm,
   meson,
   mujs,
   ninja,
@@ -129,6 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   ];
 
+  # Ensure we reference 'lib' (not 'out') of Swift.
+  # TODO: Remove this once the Swift wrapper doesn’t include these.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
+  '';
+
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
     (lib.mesonBool "libmpv" true)
@@ -181,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals dvdnavSupport [
       libdvdnav
@@ -276,7 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     wrapper = callPackage ./wrapper.nix { };
-    scripts = callPackage ./scripts { };
+    scripts = callPackage ./scripts.nix { };
 
     tests = {
       inherit (nixosTests) mpv;
@@ -300,7 +306,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       fpletz
       globin
       ma27

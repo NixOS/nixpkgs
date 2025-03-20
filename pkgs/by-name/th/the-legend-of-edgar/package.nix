@@ -1,26 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, gettext
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  gettext,
+  libpng,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-legend-of-edgar";
-  version = "1.36-unstable-2023-07-11";
+  version = "1.37";
 
   src = fetchFromGitHub {
     owner = "riksweeney";
     repo = "edgar";
-    rev = "8344b385b65e8226455c7e88bd5aca57caa3c520";
-    hash = "sha256-dOLKMsyQkVZ7gBiURfr/tFbu3xSqei8A/M2HSZgAFnI=";
+    rev = finalAttrs.version;
+    hash = "sha256-hhzDNnoQCwHOwknABTz4a9AQ7MkU9vayi2tZvJtK1PQ=";
   };
+
+  patches = [
+    # Fix _FORTIFY_SOURCE startup crash:
+    #   https://github.com/riksweeney/edgar/pull/67
+    (fetchpatch {
+      url = "https://github.com/riksweeney/edgar/commit/cec80a04d765fd2f6563d1cf060ad5000f9efe0a.patch";
+      hash = "sha256-RJpIt7M3c989nXkWRTY+dIUGqqttyTTGx8s5u/iTWX4=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -45,9 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "BIN_DIR=${placeholder "out"}/bin/"
   ];
 
-  hardeningDisable = [
-    "fortify"
-  ];
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";
@@ -66,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl1Plus;
     mainProgram = "edgar";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

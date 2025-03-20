@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cpupower-gui;
-in {
+in
+{
   options = {
     services.cpupower-gui = {
       enable = lib.mkOption {

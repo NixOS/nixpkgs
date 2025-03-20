@@ -1,14 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.23.1";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    hash = "sha256-+qC5fFBuQchz1dMP5AezWkkD2anZshN1wIteKce0Ecw=";
+    hash = "sha256-QAFCJ5oQYHDXrNLptRdAWzzbX6J9XVgnmsB3eZ3Lko8=";
   };
 
   vendorHash = null;

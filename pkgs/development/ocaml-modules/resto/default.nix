@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  uri,
+}:
 
 buildDunePackage rec {
   pname = "resto";

@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lzbench";
-  version = "1.8.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "inikep";
-    repo = pname;
+    repo = "lzbench";
     rev = "v${version}";
-    sha256 = "19zlvcjb1qg4fx30rrp6m650660y35736j8szvdxmqh9ipkisyia";
+    sha256 = "sha256-946AcnD9z60Oihm2pseS8D5j6pGdYeCxmhTLNcW9Mmc=";
   };
 
   enableParallelBuilding = true;

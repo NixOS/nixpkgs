@@ -1,6 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, barcode, gnome, gnome-common, autoreconfHook
-, gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
-, intltool, itstool, makeWrapper, pkg-config, yelp-tools, qrencode
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  barcode,
+  gnome,
+  gnome-common,
+  autoreconfHook,
+  gtk3,
+  gtk-doc,
+  libxml2,
+  librsvg,
+  libtool,
+  libe-book,
+  gsettings-desktop-schemas,
+  intltool,
+  itstool,
+  makeWrapper,
+  pkg-config,
+  yelp-tools,
+  qrencode,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +41,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper intltool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    makeWrapper
+    intltool
+  ];
   buildInputs = [
-    barcode gtk3 gtk-doc yelp-tools
-    gnome-common gsettings-desktop-schemas
-    itstool libxml2 librsvg libe-book libtool qrencode
+    barcode
+    gtk3
+    gtk-doc
+    yelp-tools
+    gnome-common
+    gsettings-desktop-schemas
+    itstool
+    libxml2
+    librsvg
+    libe-book
+    libtool
+    qrencode
   ];
 
   preFixup = ''
@@ -44,7 +77,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Create labels and business cards";
     homepage = "https://github.com/jimevins/glabels";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     platforms = platforms.unix;
     maintainers = [ maintainers.nico202 ];
   };

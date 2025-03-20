@@ -1,12 +1,13 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, blueprint-compiler
-, chromaprint
-, glib
-, gtk4
-, libadwaita
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  blueprint-compiler,
+  chromaprint,
+  glib,
+  gtk4,
+  libadwaita,
 }:
 
 let
@@ -27,15 +28,15 @@ buildDotnetModule rec {
   projectFile = "NickvisionTagger.GNOME/NickvisionTagger.GNOME.csproj";
   dotnet-sdk = dotnet.sdk;
   dotnet-runtime = dotnet.runtime;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [
     blueprint-compiler
-    libadwaita
   ];
 
   buildInputs = [
     chromaprint
+    libadwaita
   ];
 
   runtimeDeps = [
@@ -59,6 +60,9 @@ buildDotnetModule rec {
     mainProgram = "NickvisionTagger.GNOME";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ratcornu ];
+    maintainers = with maintainers; [
+      zendo
+      ratcornu
+    ];
   };
 }

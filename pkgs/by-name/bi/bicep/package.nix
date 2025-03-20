@@ -5,30 +5,43 @@
   fetchFromGitHub,
   dotnetCorePackages,
   mono,
+  jq,
 }:
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.30.23";
+  version = "0.33.93";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-EQMSqEvBdOEnntv2glVp19LsjC4Zvh5U0zx0h3n8Okc=";
+    hash = "sha256-5XrFIgblr2WIMBPoVwRZ6X2dokbXw+nS8J7WzhHEzpU=";
   };
+
+  patches = [
+    ./0001-Revert-Bump-Grpc.Tools-from-2.68.1-to-2.69.0-16097.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+    # Upstream uses rollForward = disable, which pins to an *exact* .NET SDK version.
+    jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
+    mv global.json.tmp global.json
   '';
 
-  projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
+  projectFile = [
+    "src/Bicep.Cli/Bicep.Cli.csproj"
+    "src/Bicep.LangServer/Bicep.LangServer.csproj"
+  ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  nativeBuildInputs = [ jq ];
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 

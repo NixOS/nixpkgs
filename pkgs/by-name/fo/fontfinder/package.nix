@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook3
-, gdk-pixbuf
-, gtk3
-, libsoup_3
-, webkitgtk_4_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +24,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-C4KqEdqToVnPXFPWvNkl/md9L2W4NxRd5jvZ4E7CtfA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-PXO8E41KHPNOR527gs2vM3J9JMG0PWi8Eg/13UCkr3U=";
+    hash = "sha256-g6PRGHrkHA0JTekKaQs+8mtyOCj99m0zPbgP8AnP7GU=";
   };
 
   nativeBuildInputs = [

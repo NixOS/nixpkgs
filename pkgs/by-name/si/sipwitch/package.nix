@@ -1,4 +1,14 @@
-{ fetchurl, lib, stdenv, pkg-config, ucommon, libosip, libexosip, gnutls, zlib }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  ucommon,
+  libosip,
+  libexosip,
+  gnutls,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sipwitch";
@@ -10,7 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ucommon libosip libexosip gnutls zlib ];
+  buildInputs = [
+    ucommon
+    libosip
+    libexosip
+    gnutls
+    zlib
+  ];
 
   preConfigure = ''
     export configureFlags="--sysconfdir=$out/etc"

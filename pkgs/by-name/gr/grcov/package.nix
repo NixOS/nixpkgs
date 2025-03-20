@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "grcov";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-1t+hzB9sSApLScCkjBnLk9i2dsoEwZmWCFukEOvHhZI=";
   };
 
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
-  cargoHash = "sha256-zbraeXyuXgif46tRFQpEZVZ6bInrgKbrqRArmjFIgU8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WOVIlUBPiZyBFfl3hwfN63jSxd3vysRY9VKUqk0lCc8=";
 
   # tests do not find grcov path correctly
   checkFlags =

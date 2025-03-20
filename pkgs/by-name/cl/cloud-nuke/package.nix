@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeBinaryWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeBinaryWrapper,
 }:
 
 buildGoModule rec {
   pname = "cloud-nuke";
-  version = "0.37.2";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EAN2O4DisHEQ5ID96BtZXQHz0eQFDSu/0r0WO+Ihleo=";
+    tag = "v${version}";
+    hash = "sha256-r9/5A1f6GSDgF5/GM4UKxoCYUsc5xsZpTwDGDUySDfQ=";
   };
 
-  vendorHash = "sha256-Rw3wSGDorCcAz/8BKmLsy0AVQ922W7FrvRYDgZj2blg=";
+  vendorHash = "sha256-AiPy/lmqrNeDWM7/pXmzHCbSWZdqdXnZNATlyi6oAGc=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

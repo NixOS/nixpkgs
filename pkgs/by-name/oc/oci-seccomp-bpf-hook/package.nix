@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, bcc
-, libseccomp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  bcc,
+  libseccomp,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,10 @@ buildGoModule rec {
   };
   vendorHash = null;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   nativeBuildInputs = [
     go-md2man
     installShellFiles

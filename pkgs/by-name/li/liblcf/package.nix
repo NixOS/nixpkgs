@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, expat
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  expat,
+  icu74,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     expat
-    icu
+    icu74
   ];
 
   enableParallelBuilding = true;

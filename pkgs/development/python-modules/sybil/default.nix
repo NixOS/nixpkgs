@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplistix";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
   };
 

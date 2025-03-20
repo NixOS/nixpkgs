@@ -1,11 +1,36 @@
-{ lib, stdenv, fetchFromGitLab, gitUpdater, meson, mesonEmulatorHook, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
-, libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  glib,
+  check,
+  python3,
+  vala,
+  gtk-doc,
+  glibcLocales,
+  libxml2,
+  libxslt,
+  pkg-config,
+  sqlite,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gobject-introspection,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
   version = "1.27";
 
-  outputs = [ "out" "dev" "devdoc" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "py"
+  ];
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
@@ -14,20 +39,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-mLhcwp8rhCGSB1K6rTWT0tuiINzgwULwXINfCbgPKEg=";
   };
 
-  nativeBuildInputs = [
-    check
-    docbook_xml_dtd_43
-    docbook_xsl
-    glibcLocales
-    gobject-introspection
-    gtk-doc
-    meson
-    ninja
-    pkg-config
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      check
+      docbook_xml_dtd_43
+      docbook_xsl
+      glibcLocales
+      gobject-introspection
+      gtk-doc
+      meson
+      ninja
+      pkg-config
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib

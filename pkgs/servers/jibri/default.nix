@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, dpkg, jdk11_headless, makeWrapper, writeText, xorg, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jdk11_headless,
+  makeWrapper,
+  writeText,
+  xorg,
+  nixosTests,
+}:
 
 let
   xorgModulePaths = writeText "module-paths" ''
@@ -13,14 +23,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jibri";
-  version = "8.0-169-g1258814";
+  version = "8.0-177-g3325e37";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "MAZJq2v25XQE6nbaAHSuxeoZOBwlOxCOIJkzxQVlKog=";
+    sha256 = "35Bwc+T/l0Z3lBdoUF0obS8fiGiD2ICNMR20rtruf48=";
   };
 
   dontBuild = true;
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,24 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "storj-uplink";
-  version = "1.116.5";
+  version = "1.124.4";
 
   src = fetchFromGitHub {
     owner = "storj";
     repo = "storj";
     rev = "v${version}";
-    hash = "sha256-vQftcQU7WUDfVFKYswtpEHbSyReIcWF83vEQrEbzbHk=";
+    hash = "sha256-3VrmFSE5YdZYxcEoWtEgonQz7ZERLfF12zcPExNToVs=";
   };
 
   subPackages = [ "cmd/uplink" ];
 
-  vendorHash = "sha256-4wkgQQGbQi9ZcBaExRQysL6r/rJZez9z7keaJReuAeg=";
+  vendorHash = "sha256-d/ddvixerg30JZtQGNWycUR93Qeaha89W8unKUFPkDg=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Command-line tool for Storj";

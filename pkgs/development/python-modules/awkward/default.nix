@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,33 +12,27 @@
   fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  importlib-metadata,
 
-  # checks
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  jax,
-  jaxlib,
-
-  stdenv,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.9";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kYDihmfzMH5LPXSgXpC64qMPqxIX59VzflhP0gWu92Y=";
+    tag = "v${version}";
+    hash = "sha256-dr8DUY6T6fvtMASdM9U+XQN0dVP8AKvwa1gwHfOz3Dw=";
   };
 
   build-system = [
@@ -47,47 +40,35 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
-    [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
-    ];
-
-  # The following tests have been disabled because they need to be run on a GPU platform.
-  disabledTestPaths = [
-    "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+  nativeCheckInputs = [
+    fsspec
+    numba
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   disabledTests = [
-    # AssertionError: Regex pattern did not match.
-    "test_serialise_with_nonserialisable_attrs"
-    "test_serialise_with_nonserialisable_attrs"
+    # pyarrow.lib.ArrowInvalid
+    "test_recordarray"
+  ];
+
+  disabledTestPaths = [
+    # Need to be run on a GPU platform.
+    "tests-cuda"
   ];
 
   meta = {

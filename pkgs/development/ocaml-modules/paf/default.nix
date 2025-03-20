@@ -1,40 +1,39 @@
-{ buildDunePackage
-, lib
-, fetchurl
-, mirage-time
-, h2
-, tls-mirage
-, mimic
-, ke
-, bigstringaf
-, faraday
-, tls
-, lwt
-, logs
-, fmt
-, mirage-crypto-rng
-, tcpip
-, mirage-time-unix
-, ptime
-, uri
-, alcotest-lwt
-, cstruct
-, httpaf
+{
+  buildDunePackage,
+  lib,
+  fetchurl,
+  h1,
+  h2,
+  tls-mirage,
+  mimic,
+  ke,
+  bigstringaf,
+  faraday,
+  tls,
+  lwt,
+  logs,
+  fmt,
+  mirage-crypto-rng,
+  tcpip,
+  ptime,
+  uri,
+  alcotest-lwt,
+  cstruct,
 }:
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    hash = "sha256-w2lGs+DYY08BUKumWFxPFTLQKvdRPu7H1FdQOIjDQyE=";
+    hash = "sha256-0q07gZpzUyDoWlA4m/P+EGSvvVKAZ7RwVkpOziqzG2M=";
   };
 
   minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
-    mirage-time
+    h1
     h2
     tls-mirage
     mimic
@@ -44,7 +43,6 @@ buildDunePackage rec {
     tls
     cstruct
     tcpip
-    httpaf
   ];
 
   doCheck = true;
@@ -53,7 +51,6 @@ buildDunePackage rec {
     logs
     fmt
     mirage-crypto-rng
-    mirage-time-unix
     ptime
     uri
     alcotest-lwt

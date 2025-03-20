@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stepreduce";
   version = "unstable-2020-04-30";
 

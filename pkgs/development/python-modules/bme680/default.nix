@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pimoroni";
     repo = "bme680-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ep0dnok/ycEoUAnOK4QmdqdO0r4ttzSoqHDl7aPengE=";
   };
 

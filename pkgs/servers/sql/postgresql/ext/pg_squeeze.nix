@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestExtension, buildPostgresqlExtension }:
+{
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  stdenv,
+}:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_squeeze";
-  version = "1.7.0";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "REL" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+    tag = "REL1_7_0";
     hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
   };
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=REL(.*)" ]; };
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
     postgresqlExtraSettings = ''
@@ -30,11 +41,11 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension for automatic bloat cleanup";
     homepage = "https://github.com/cybertec-postgresql/pg_squeeze";
     changelog = "https://github.com/cybertec-postgresql/pg_squeeze/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

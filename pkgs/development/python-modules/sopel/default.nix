@@ -15,18 +15,19 @@
   sqlalchemy,
   xmltodict,
   importlib-metadata,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "8.0.0";
+  version = "8.0.1";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-juLJp0Et5qMZwBZzw0e4tKg1cBYqAsH8KUzqNoIP70U=";
+    hash = "sha256-Z9Tcn2lb5a7c6aVbhPjuO6trrZQwSBA1iaMiDzpe+DA=";
   };
 
   build-system = [ setuptools ];
@@ -46,11 +47,15 @@ buildPythonPackage rec {
     sqlalchemy
     xmltodict
     importlib-metadata
+    packaging
   ];
 
   pythonRemoveDeps = [ "sopel-help" ];
 
-  pythonRelaxDeps = [ "sqlalchemy" ];
+  pythonRelaxDeps = [
+    "sqlalchemy"
+    "xmltodict"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -78,5 +83,6 @@ buildPythonPackage rec {
     homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
+    mainProgram = "sopel";
   };
 }

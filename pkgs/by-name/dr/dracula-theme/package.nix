@@ -1,8 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater, gtk-engine-murrine }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  gtk-engine-murrine,
+}:
 
 let
   themeName = "Dracula";
-  version = "4.0.0-unstable-2024-10-03";
+  version = "4.0.0-unstable-2025-03-13";
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
@@ -11,8 +17,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "b5b7f3aed7060e14b848ca449a1d575c872f4e73";
-    hash = "sha256-hsWyvmxEBJKdNem+eYbGF+UBopP3p90SdFNP7wBuE74=";
+    rev = "fc59294cf67110f6487f5fd06d3c845ffffdf1a9";
+    hash = "sha256-hFiYb1KqYvH66OIhmIUP3DfkSkuYgE78ihjkEaAY7LM=";
   };
 
   propagatedUserEnvPkgs = [

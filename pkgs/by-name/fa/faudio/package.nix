@@ -1,19 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+}:
 
 #TODO: tests
 
 stdenv.mkDerivation rec {
   pname = "faudio";
-  version = "24.11";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
     rev = version;
-    sha256 = "sha256-fmJh2DZNAjqqTDFt5b2HZ5oeS7VkvPy1a8gr59OQSUo=";
+    sha256 = "sha256-nPU225LLQYN0D1LUsp9XGm2bCcB5WLpD3TcGDiWCe0c=";
   };
 
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ SDL2 ];
 

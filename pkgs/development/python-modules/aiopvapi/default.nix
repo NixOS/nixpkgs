@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WtTqtVr1oL86dpsAIK55pbXWU4X/cajVLlggd6hfM4c=";
   };
 

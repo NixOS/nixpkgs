@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, nixosTests
-, cmake
-, gsettings-qt
-, lomiri-ui-extras
-, lomiri-ui-toolkit
-, pkg-config
-, qmltermwidget
-, qtbase
-, qtdeclarative
-, qtsystems
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  gsettings-qt,
+  lomiri-ui-extras,
+  lomiri-ui-toolkit,
+  pkg-config,
+  qmltermwidget,
+  qtbase,
+  qtdeclarative,
+  qtsystems,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    tests.vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
+    tests = {
+      # The way the test works sometimes causes segfaults in qtfeedback
+      # https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/issues/117
+      # vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
+      inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
+    };
     updateScript = gitUpdater {
       rev-prefix = "v";
     };

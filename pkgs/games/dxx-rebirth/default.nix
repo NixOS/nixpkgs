@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, scons
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, libGLU
-, libGL
-, libpng
-, physfs
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  scons,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  libGLU,
+  libGL,
+  libpng,
+  physfs,
+  unstableGitUpdater,
 }:
 
 let
@@ -20,20 +22,31 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dxx-rebirth";
-  version = "0.60.0-beta2-unstable-2024-08-11";
+  version = "0.60.0-beta2-unstable-2025-01-12";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "bd3c033bdf1faa4606086dcae0436531fb2e7e5c";
-    hash = "sha256-imNHJ55Wp3YueMsNVvb7Z51EyESZnPdtzAOp2TWfdqc=";
+    rev = "f3a2afc43880899d570d97bf4e3392f325870116";
+    hash = "sha256-GH3mRsBa+xZpbPGSNPgZcx8JNsSihkRMtmJ7GmlAbpg=";
   };
 
-  nativeBuildInputs = [ pkg-config scons ];
+  nativeBuildInputs = [
+    pkg-config
+    scons
+  ];
 
-  buildInputs = [ libGLU libGL libpng physfs SDL2 SDL2_image SDL2_mixer ];
+  buildInputs = [
+    libGLU
+    libGL
+    libpng
+    physfs
+    SDL2
+    SDL2_image
+    SDL2_mixer
+  ];
 
   enableParallelBuilding = true;
 
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Source Port of the Descent 1 and 2 engines";

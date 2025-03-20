@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, bison, flac, flex, id3v2, vorbis-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flac,
+  flex,
+  id3v2,
+  vorbis-tools,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,14 +16,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "svend";
-    repo = pname;
+    repo = "cuetools";
     rev = version;
     sha256 = "02ksv1ahf1v4cr2xbclsfv5x17m9ivzbssb5r8xjm97yh8a7spa3";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ bison flac flex id3v2 vorbis-tools ];
+  buildInputs = [
+    bison
+    flac
+    flex
+    id3v2
+    vorbis-tools
+  ];
 
   postInstall = ''
     # add link for compatibility with Debian-based distros, which package `cuetag.sh` as `cuetag`
@@ -26,7 +40,10 @@ stdenv.mkDerivation rec {
     description = "Set of utilities for working with cue files and toc files";
     homepage = "https://github.com/svend/cuetools";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ codyopel jcumming ];
+    maintainers = with maintainers; [
+      codyopel
+      jcumming
+    ];
     platforms = platforms.all;
   };
 }

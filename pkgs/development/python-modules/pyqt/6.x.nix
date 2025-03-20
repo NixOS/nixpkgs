@@ -2,11 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchurl,
+  fetchPypi,
   pkg-config,
   dbus,
   lndir,
-  setuptools,
   dbus-python,
   sip,
   pyqt6-sip,
@@ -25,24 +24,37 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.8.0.dev2410141303";
-  format = "pyproject";
+  version = "6.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  # This is dangerous, how can we get web archive to archive the URL?
-  src = fetchurl {
-    url = "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz";
-    hash = "sha256-eHYqj22us07uFkErJD2d0y0wueZxtQTwTFW9cI7yoK4=";
+  src = fetchPypi {
+    pname = "PyQt6";
+    inherit version;
+    hash = "sha256-bYYo3kwqBQ8LdEYuTJy5f4Ob9v+rvKkXEXIv+ygVcNk=";
   };
 
   patches = [
     # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
-    # FIXME: make a version for PyQt6?
-    # ./pyqt5-fix-dbus-mainloop-support.patch
+    ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+    # Fix build with Qt 6.8.2
+    # See: https://gitlab.archlinux.org/archlinux/packaging/packages/pyqt6/-/blob/main/qt-6.8.2.patch
+    # FIXME: remove when merged upstream
+    ./pyqt6-qt-6.8.2.patch
+  ];
+
+  build-system = [
+    sip
+    pyqt-builder
+  ];
+
+  dependencies = [
+    pyqt6-sip
+    dbus-python
   ];
 
   # be more verbose
@@ -53,11 +65,8 @@ buildPythonPackage rec {
     verbose = true
     EOF
 
-    # pythonRelaxDeps doesn't work and the wanted versions are not released AFAIK
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"' \
-      --replace-fail "sip >=6.9, <7" "sip >=6.8.6, <7" \
-      --replace-fail 'PyQt-builder >=1.17, <2' "PyQt-builder >=1.16, <2"
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
   '';
 
   enableParallelBuilding = true;
@@ -83,7 +92,6 @@ buildPythonPackage rec {
     [
       pkg-config
       lndir
-      sip
       qtbase
       qtsvg
       qtdeclarative
@@ -104,7 +112,6 @@ buildPythonPackage rec {
       qtbase
       qtsvg
       qtdeclarative
-      pyqt-builder
       qtquick3d
       qtquicktimeline
     ]
@@ -113,13 +120,8 @@ buildPythonPackage rec {
     ++ lib.optional withLocation qtlocation;
 
   propagatedBuildInputs =
-    [
-      dbus-python
-      pyqt6-sip
-      setuptools
-    ]
     # ld: library not found for -lcups
-    ++ lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
+    lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;

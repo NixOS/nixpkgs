@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, asciidoc
-, libxslt
-, libxml2
-, docbook_xml_dtd_45
-, docbook_xsl
-, libarchive
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  asciidoc,
+  libxslt,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libarchive,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pixz";
   version = "1.0.7";
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
   buildInputs = [
     libtool
     asciidoc
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = pname;
+    repo = "pixz";
     rev = "v${version}";
     sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };

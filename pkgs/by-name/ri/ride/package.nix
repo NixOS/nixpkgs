@@ -12,7 +12,6 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -22,11 +21,11 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Dyalog";
     repo = "ride";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
   };
 
-  npmDepsHash = "sha256-h+48/9h7/cD8woyA0UCLtzKuE9jCrfpDk6IeoDWnYik=";
+  npmDepsHash = "sha256-C8puCz/w5xkaR4QVXXOdoO8n4gNZrRWMcB9/f1DcuMc=";
 
   patches = [
     # Adds support for electron versions >=28
@@ -40,6 +39,9 @@ buildNpmPackage rec {
     (replaceVars ./mk.patch {
       inherit version;
     })
+
+    # would not build with nodejs_22 and above without this
+    ./update-nan.patch
   ];
 
   postPatch = ''
@@ -69,8 +71,6 @@ buildNpmPackage rec {
     zip
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -108,7 +108,7 @@ buildNpmPackage rec {
       cp -r locales resources{,.pak} $out/share/ride
       makeShellWrapper ${lib.getExe electron} $out/bin/ride \
           --add-flags $out/share/ride/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

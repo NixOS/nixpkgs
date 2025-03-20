@@ -8,8 +8,7 @@
   makeWrapper,
 
   # buildInputs
-  apple-sdk_11,
-  darwinMinVersionHook,
+  fmt,
   rsync,
 
   versionCheckHook,
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.13.0";
+  version = "3.13.9";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-V8iqMmf9uVwWvFqEYPlc7WhPnPmKMlJuhve81kf3yQg=";
+    tag = finalAttrs.version;
+    hash = "sha256-zttTtMAeBsHBqgDm3CAvp54Tp2bfQUhk5/lKgKWUeJY=";
     fetchSubmodules = true;
   };
 
@@ -33,12 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # aligned_alloc
-    apple-sdk_11
-    (darwinMinVersionHook "10.15")
-    rsync
-  ];
+  buildInputs =
+    [
+      fmt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rsync
+    ];
+
+  env.NIX_LDFLAGS = "-lfmt";
 
   postPatch =
     ''
@@ -46,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
       # this feature is not used in lua-language-server
       substituteInPlace 3rd/bee.lua/test/test.lua \
         --replace-fail 'require "test_filewatch"' ""
+
+      # use nixpkgs fmt library
+      for d in 3rd/bee.lua 3rd/luamake/bee.lua
+      do
+        rm -r $d/3rd/fmt/*
+        touch $d/3rd/fmt/format.cc
+        substituteInPlace $d/bee/nonstd/format.h $d/bee/nonstd/print.h \
+          --replace-fail "include <3rd/fmt/fmt" "include <fmt"
+      done
 
       # flaky tests on linux
       # https://github.com/LuaLS/lua-language-server/issues/2926

@@ -1,32 +1,37 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
 }:
 
 buildNpmPackage rec {
   pname = "pairdrop";
-  version = "1.7.6";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "schlagmichdoch";
     repo = "PairDrop";
     rev = "v${version}";
-    hash = "sha256-AOFATOCLf2KigeqoUzIfNngyeDesNrThRzxFvqtsXBs=";
+    hash = "sha256-LvrBIdBjb4M2LidEJVCdK2uYydsJY+Cr5eXdfbS46dk=";
   };
 
-  npmDepsHash = "sha256-3nKjmC5eizoV/mrKDBhsSlVQxEHyIsWR6KHFwZhBugI=";
+  npmDepsHash = "sha256-Ovi5RzWPCVk6LkZ33Anb8abkyu+IrEaCXE/etBgsHYU=";
 
   dontNpmBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/lib
-    cp -r * $out/lib
+    mkdir -p $out/bin $out/libexec/pairdrop
+    cp -r * $out/libexec/pairdrop
 
-    makeWrapper ${nodejs}/bin/node "$out/bin/pairdrop" --add-flags "index.js public --rate-limit --auto-restart"
-    wrapProgram $out/bin/pairdrop --chdir "$out/lib"
+    # https://github.com/schlagmichdoch/PairDrop/blob/v1.10.10/.dockerignore
+    rm -rf $out/libexec/pairdrop/{.github,dev,docs,licenses,pairdrop-cli,*.md,*.yml,Dockerfile,rtc_config_example.json,turnserver_example.conf}
+
+    makeWrapper ${nodejs}/bin/node "$out/bin/pairdrop" \
+      --add-flags "server/index.js" \
+      --chdir "$out/libexec/pairdrop"
 
     runHook postInstall
   '';
@@ -40,6 +45,9 @@ buildNpmPackage rec {
     '';
     homepage = "https://github.com/schlagmichdoch/PairDrop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [
+      diogotcorreia
+      dit7ya
+    ];
   };
 }

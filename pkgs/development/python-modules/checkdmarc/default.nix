@@ -6,17 +6,20 @@
   expiringdict,
   fetchFromGitHub,
   hatchling,
+  pem,
   publicsuffixlist,
   pyleri,
+  pyopenssl,
   pytestCheckHook,
   pythonOlder,
   requests,
   timeout-decorator,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "5.5.0";
+  version = "5.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,20 +27,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-skQqLWBEmfyiW2DsRRbj3Lfj52QZca0zKenFC7LltjM=";
+    tag = version;
+    hash = "sha256-mdEfVfqK277A8QUc8rpLxS2pfdyg4Z5XqWpWkh9mFLk=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  pythonRelaxDeps = [ "xmltodict" ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     cryptography
     dnspython
     expiringdict
+    pem
     publicsuffixlist
     pyleri
+    pyopenssl
     requests
     timeout-decorator
+    xmltodict
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -48,6 +56,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "testBIMI"
     "testDMARCPctLessThan100Warning"
     "testSPFMissingARecord"
     "testSPFMissingMXRecord"
@@ -60,7 +69,7 @@ buildPythonPackage rec {
     description = "Parser for SPF and DMARC DNS records";
     mainProgram = "checkdmarc";
     homepage = "https://github.com/domainaware/checkdmarc";
-    changelog = "https://github.com/domainaware/checkdmarc/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

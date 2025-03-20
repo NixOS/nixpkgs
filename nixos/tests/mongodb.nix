@@ -1,49 +1,37 @@
-# This test start mongodb, runs a query using mongo shell
+# This test starts mongodb and runs a query using mongo shell
+{ config, lib, ... }:
+let
+  # required for test execution on darwin
+  pkgs = config.node.pkgs;
+  testQuery = pkgs.writeScript "nixtest.js" ''
+    db.greetings.insertOne({ "greeting": "hello" });
+    print(db.greetings.findOne().greeting);
+  '';
+  mongoshExe = lib.getExe pkgs.mongosh;
+in
+{
+  name = "mongodb";
+  meta.maintainers = with pkgs.lib.maintainers; [
+    bluescreen303
+    offline
+    phile314
+    niklaskorz
+  ];
 
-import ./make-test-python.nix ({ pkgs, ... }:
-  let
-    testQuery = pkgs.writeScript "nixtest.js" ''
-      db.greetings.insert({ "greeting": "hello" });
-      print(db.greetings.findOne().greeting);
-    '';
+  nodes.mongodb = {
+    services.mongodb.enable = true;
+  };
 
-    runMongoDBTest = pkg: ''
-      node.execute("(rm -rf data || true) && mkdir data")
-      node.execute(
-          "${pkg}/bin/mongod --fork --logpath logs --dbpath data"
-      )
-      node.wait_for_open_port(27017)
+  testScript = ''
+    start_all()
 
-      assert "hello" in node.succeed(
-          "${pkg}/bin/mongo ${testQuery}"
-      )
+    with subtest("start mongodb"):
+        mongodb.wait_for_unit("mongodb.service")
+        mongodb.wait_for_open_port(27017)
 
-      node.execute(
-          "${pkg}/bin/mongod --shutdown --dbpath data"
-      )
-      node.wait_for_closed_port(27017)
-    '';
-
-  in {
-    name = "mongodb";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ bluescreen303 offline phile314 ];
-    };
-
-    nodes = {
-      node = {...}: {
-        environment.systemPackages = with pkgs; [
-          # remember to update mongodb.passthru.tests if you change this
-          mongodb-7_0
-        ];
-      };
-    };
-
-    testScript = ''
-      node.start()
-    ''
-      + runMongoDBTest pkgs.mongodb-7_0
-      + ''
-        node.shutdown()
-      '';
-  })
+    with subtest("insert and find a document"):
+        result = mongodb.succeed("${mongoshExe} ${testQuery}")
+        print("Test output:", result)
+        assert result.strip() == "hello"
+  '';
+}

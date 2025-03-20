@@ -1,20 +1,22 @@
-{ lib, stdenv
-, autoreconfHook
-, gengetopt
-, pkg-config
-, fetchFromGitLab
-, pari
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  gengetopt,
+  pkg-config,
+  fetchFromGitLab,
+  pari,
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5";
+  version = "2.1.0";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
-    repo = pname;
-    rev = version;
-    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    repo = "lcalc";
+    tag = version;
+    hash = "sha256-v+7Uh6tPOfb3E9dqxx//RqD22XM4S/8ejS2v+D5G5pE=";
   };
 
   nativeBuildInputs = [

@@ -1,6 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libev, libnl, libpcap }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libev,
+  libnl,
+  libpcap,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "owl";
   version = "unstable-2022-01-30";
 
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libev libnl libpcap ];
+  buildInputs = [
+    libev
+    libnl
+    libpcap
+  ];
 
   meta = with lib; {
     description = "Open Apple Wireless Direct Link (AWDL) implementation written in C";

@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, xdg-desktop-portal
-, gtk3
-, gnome-settings-daemon
-, gnome-desktop
-, glib
-, wrapGAppsHook3
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  xdg-desktop-portal,
+  gtk3,
+  gnome-settings-daemon,
+  gnome-desktop,
+  glib,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "xdg-desktop-portal-gtk";
     rev = finalAttrs.version;
-    sha256 = "sha256-uXVjKsqoIjqJilJq8ERRzEqGKbkzc+Zl6y+37CAcYro=";
+    sha256 = "sha256-L9kt3HAoEezYARH5JekyXhxf9Xkbzy1U2srXD7Yg/a8=";
   };
 
   nativeBuildInputs = [

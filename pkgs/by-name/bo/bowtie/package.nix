@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bowtie";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
-    repo = pname;
+    repo = "bowtie";
     rev = "v${version}";
     sha256 = "sha256-mWItmrTMPst/NnzSpxxTHcBztDqHPCza9yOsZPwp7G4=";
   };

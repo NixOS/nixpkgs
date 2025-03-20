@@ -7,7 +7,6 @@
   cu2qu,
   defcon,
   fetchPypi,
-  fetchpatch2,
   fontmath,
   fonttools,
   pytestCheckHook,
@@ -20,23 +19,15 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.3.0";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lw5mLcVw1NFT1c/AOcMyo2a8aGOyxFG+ZAU6Ggnssko=";
+    hash = "sha256-KRLkYmNSAL0s6G18ATxUa451mXinVYvDxe6zbYh3kU4=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # update syrupy snapshots
-      url = "https://github.com/googlefonts/ufo2ft/commit/7a3edb2e4202cf388e3ffe31b5b3783dbb392db2.patch";
-      hash = "sha256-YEgUgrtgH3PBZlt+xoJme+oPRuDMwq7M/4cJ3JbeuyU=";
-    })
-  ];
 
   build-system = [
     setuptools-scm
@@ -44,17 +35,20 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  dependencies = [
-    cu2qu
-    fontmath
-    fonttools
-    defcon
-    compreffor
-    booleanoperations
-    cffsubr
-    ufolib2
-    skia-pathops
-  ] ++ fonttools.optional-dependencies.lxml ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      cu2qu
+      fontmath
+      fonttools
+      defcon
+      compreffor
+      booleanoperations
+      cffsubr
+      ufolib2
+      skia-pathops
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
     pytestCheckHook

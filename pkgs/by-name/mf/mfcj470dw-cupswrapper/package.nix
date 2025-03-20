@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, mfcj470dwlpr, makeWrapper, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mfcj470dwlpr,
+  makeWrapper,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
@@ -14,7 +21,11 @@ stdenv.mkDerivation rec {
     bash # shebang
   ];
 
-  makeFlags = [ "-C" "brcupsconfpt1" "all" ];
+  makeFlags = [
+    "-C"
+    "brcupsconfpt1"
+    "all"
+  ];
 
   postPatch = ''
     WRAPPER=cupswrapper/cupswrappermfcj470dw

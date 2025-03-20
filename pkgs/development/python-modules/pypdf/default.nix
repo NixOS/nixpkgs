@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    rev = "refs/tags/${version}";
+    tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
     hash = "sha256-ziJTYl7MQUCE8US0yeiq6BPDVbBsxWhti0NyiDnKtfE=";

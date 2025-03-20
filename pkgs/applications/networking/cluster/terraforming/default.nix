@@ -1,4 +1,9 @@
-{ lib, bundlerApp, bundlerUpdateScript, ruby }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  ruby,
+}:
 
 bundlerApp rec {
   inherit ruby;
@@ -13,8 +18,8 @@ bundlerApp rec {
     inherit (ruby.meta) platforms;
 
     description = "Export existing AWS resources to Terraform style (tf, tfstate)";
-    homepage    = "https://github.com/dtan4/terraforming";
-    license     = with licenses; mit;
+    homepage = "https://github.com/dtan4/terraforming";
+    license = with licenses; mit;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

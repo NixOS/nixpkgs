@@ -1,15 +1,20 @@
-{ lib, stdenv, dotnetfx }:
-{ name
-, src
-, baseDir ? "."
-, slnFile
-, targets ? "ReBuild"
-, verbosity ? "detailed"
-, options ? "/p:Configuration=Debug;Platform=Win32"
-, assemblyInputs ? []
-, preBuild ? ""
-, modifyPublicMain ? false
-, mainClassFile ? null
+{
+  lib,
+  stdenv,
+  dotnetfx,
+}:
+{
+  name,
+  src,
+  baseDir ? ".",
+  slnFile,
+  targets ? "ReBuild",
+  verbosity ? "detailed",
+  options ? "/p:Configuration=Debug;Platform=Win32",
+  assemblyInputs ? [ ],
+  preBuild ? "",
+  modifyPublicMain ? false,
+  mainClassFile ? null,
 }:
 
 assert modifyPublicMain -> mainClassFile != null;

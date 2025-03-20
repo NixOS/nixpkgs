@@ -1,30 +1,29 @@
-{ lib
-, callPackage
-, nixosTests
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, rpmextract
-, libxcrypt-legacy
-, zlib
-, lvm2  # LVM image backup and restore functions (optional)
-, acl  # EXT2/EXT3/XFS ACL support (optional)
-, gnugrep
-, procps
-, jdk  # Java GUI (needed for `enableGui`)
-, buildEnv
-, makeWrapper
-, enableGui ? false  # enables Java GUI `dsmj`
-# path to `dsm.sys` configuration files
-, dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
-, dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
+{
+  lib,
+  callPackage,
+  nixosTests,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  rpmextract,
+  libxcrypt-legacy,
+  zlib,
+  lvm2, # LVM image backup and restore functions (optional)
+  acl, # EXT2/EXT3/XFS ACL support (optional)
+  gnugrep,
+  procps,
+  jdk, # Java GUI (needed for `enableGui`)
+  buildEnv,
+  makeWrapper,
+  enableGui ? false, # enables Java GUI `dsmj`
+  # path to `dsm.sys` configuration files
+  dsmSysCli ? "/etc/tsm-client/cli.dsm.sys",
+  dsmSysApi ? "/etc/tsm-client/api.dsm.sys",
 }:
-
 
 # For an explanation of optional packages
 # (features provided by them, version limits), see
-# https://www.ibm.com/support/pages/node/660813#Version%208.1
-
+# https://web.archive.org/web/20240118051918/https://www.ibm.com/support/pages/node/660813#Version%208.1
 
 # IBM Tivoli Storage Manager Client uses a system-wide
 # client system-options file `dsm.sys` and expects it
@@ -45,28 +44,13 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.24?topic=solaris-set-api-environment-variables
-
-
-# The newest version of TSM client should be discoverable by
-# going to the `downloadPage` (see `meta` below).
-# Find the "Backup-archive client" table on that page.
-# Look for "Download Documents" of the latest release.
-# Follow the "Download Information" link.
-# Look for the "Linux x86_64 ..." rows in the table at
-# the bottom of the page and follow their "HTTPS" links (one
-# link per row -- each link might point to the latest release).
-# In the directory listings to show up,
-# check the big `.tar` file.
-#
-# (as of 2023-07-01)
-
+# https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=solaris-set-api-environment-variables
 
 let
 
   meta = {
     homepage = "https://www.ibm.com/products/storage-protect";
-    downloadPage = "https://www.ibm.com/support/pages/ibm-storage-protect-downloads-latest-fix-packs-and-interim-fixes";
+    downloadPage = "https://www.ibm.com/support/fixcentral/swg/selectFixes?product=ibm/StorageSoftware/IBM+Spectrum+Protect";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -89,25 +73,28 @@ let
   };
 
   passthru.tests = {
-    test-cli = callPackage ./test-cli.nix {};
+    test-cli = callPackage ./test-cli.nix { };
     test-gui = nixosTests.tsm-client-gui;
   };
 
-  mkSrcUrl = version:
+  mkSrcUrl =
+    version:
     let
       major = lib.versions.major version;
       minor = lib.versions.minor version;
       patch = lib.versions.patch version;
       fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
     in
-      "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
+    "https://public.dhe.ibm.com/storage/tivoli-storage-management/${
+      if fixup == "0" then "maintenance" else "patches"
+    }/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     name = "tsm-client-${finalAttrs.version}-unwrapped";
-    version = "8.1.24.0";
+    version = "8.1.25.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-TqTDE2oJK/Wu/MNYUCqxmOE6asAqDLz4GtdcFZuKqvfT8pJUCYKz9yjRPIrM3u2XfLH0wDq+Q8ER4ui680mswA==";
+      hash = "sha512-OPNjSMnWJ/8Ogy9O0wG0H4cEbYiOwyCVzkWhpG00v/Vm0LDxLzPteMnMOyH8L1egIDhy7lmQYSzI/EC4WWUDDA==";
     };
     inherit meta passthru;
 
@@ -144,37 +131,36 @@ let
       runHook postInstall
     '';
 
-    # fix relative symlinks after `/usr` was moved up one level,
-    # fix absolute symlinks pointing to `/opt`
+    # fix symlinks pointing to `..../opt/....`
     preFixup = ''
-      for link in $out/lib{,64}/* $out/bin/*
+      for link in $(find $out -type l -lname '*../opt*')
       do
-        target=$(readlink "$link")
-        if [ "$(cut -b -6 <<< "$target")" != "../../" ]
-        then
-          echo "cannot fix this symlink: $link -> $target"
-          exit 1
-        fi
-        ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
-      done
-      for link in $(find $out -type l -lname '/opt/*')
-      do
-        ln --symbolic --force --no-target-directory "$out$(readlink "$link")" "$link"
+        ln --symbolic --force --no-target-directory "$(readlink "$link" | sed 's|../opt|opt|')" "$link"
       done
     '';
   });
 
-  binPath = lib.makeBinPath ([ acl gnugrep procps ]
-    ++ lib.optional enableGui jdk);
+  binPath = lib.makeBinPath (
+    [
+      acl
+      gnugrep
+      procps
+    ]
+    ++ lib.optional enableGui jdk
+  );
 
 in
 
 buildEnv {
   name = "tsm-client-${unwrapped.version}";
-  meta = meta // lib.attrsets.optionalAttrs enableGui {
-    mainProgram = "dsmj";
+  meta =
+    meta
+    // lib.attrsets.optionalAttrs enableGui {
+      mainProgram = "dsmj";
+    };
+  passthru = passthru // {
+    inherit unwrapped;
   };
-  passthru = passthru // { inherit unwrapped; };
   paths = [ unwrapped ];
   nativeBuildInputs = [ makeWrapper ];
   pathsToLink = [

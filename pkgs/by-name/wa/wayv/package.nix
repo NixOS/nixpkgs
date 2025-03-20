@@ -1,11 +1,17 @@
-{lib, stdenv, fetchFromGitHub, fetchpatch, libX11}:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libX11,
+}:
+stdenv.mkDerivation {
   pname = "wayv";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "mikemb";
-    repo = pname;
+    repo = "wayv";
     rev = "b716877603250f690f08b593bf30fd5e8a93a872";
     sha256 = "046dvaq6na1fyxz5nrjg13aaz6ific9wbygck0dknqqfmmjrsv3b";
   };
@@ -33,8 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Gesture control for X11";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/mikemb/wayV";
     mainProgram = "wayv";

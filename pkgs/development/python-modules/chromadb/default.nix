@@ -52,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.18";
+  version = "0.5.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,14 +60,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kJzBwUaA46HenwTn24AMy0xfgVmBtubJUujDS5/kYXs=";
+    tag = version;
+    hash = "sha256-DQHkgCHtrn9xi7Kp7TZ5NP1EtFtTH5QOvne9PUvxsWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-iW68C3Vp9C1gR7hF2x4VhBIKWX9wlnT8jPj+zMRUC7w=";
+    hash = "sha256-ZtCTg8qNCiqlH7RsZxaWUNAoazdgmXP2GtpjDpRdvbk=";
   };
 
   pythonRelaxDeps = [

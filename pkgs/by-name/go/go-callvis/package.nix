@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "go-callvis";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ofabry";
     repo = "go-callvis";
     rev = "v${version}";
-    hash = "sha256-PIzmnqlK+uFtzZW4H0xpP5c+X30hFvOjQydvreJn4xM=";
+    hash = "sha256-gCQjxJH03QAg6MZx5NJUJR6tKP02ThIa5BGN6A/0ejM=";
   };
 
-  vendorHash = "sha256-AfbUxA5C5dH70+vqC+1RGaTt7S0FL9CBcxel0ifmHKs=";
+  vendorHash = "sha256-IS8lkDBy7Y/qAaDxmWRfrVQEF9OFo7VofqSNgNTEQQw=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Build errors in github.com/goccy/go-graphviz/internal/ccall when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]

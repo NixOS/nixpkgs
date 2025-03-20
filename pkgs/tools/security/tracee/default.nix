@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 
-, clang
-, pkg-config
+  clang,
+  pkg-config,
 
-, zlib
-, elfutils
-, libbpf
+  zlib,
+  elfutils,
+  libbpf,
 
-, nixosTests
-, testers
-, tracee
-, makeWrapper
+  nixosTests,
+  testers,
+  tracee,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,7 @@ buildGoModule rec {
     owner = "aquasecurity";
     repo = pname;
     # project has branches and tags of the same name
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OnOayDxisvDd802kDKGctaQc5LyoyFfdfvC+2JpRjHY=";
   };
   vendorHash = "sha256-26sAKTJQ7Rf5KRlu7j5XiZVr6CkAC6fm60Pam7KH0uA=";
@@ -40,8 +41,15 @@ buildGoModule rec {
   # needed to build bpf libs
   hardeningDisable = [ "stackprotector" ];
 
-  nativeBuildInputs = [ pkg-config clang ];
-  buildInputs = [ elfutils libbpf zlib ];
+  nativeBuildInputs = [
+    pkg-config
+    clang
+  ];
+  buildInputs = [
+    elfutils
+    libbpf
+    zlib
+  ];
 
   makeFlags = [
     "VERSION=v${version}"
@@ -62,7 +70,11 @@ buildGoModule rec {
   # see passthru.tests.integration
   doCheck = false;
 
-  outputs = [ "out" "lib" "share" ];
+  outputs = [
+    "out"
+    "lib"
+    "share"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -105,7 +117,13 @@ buildGoModule rec {
       gpl2Plus
     ];
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    outputsToInstall = [ "out" "share" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    outputsToInstall = [
+      "out"
+      "share"
+    ];
   };
 }

@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, devspace
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  devspace,
 }:
 
 buildGoModule rec {
   pname = "devspace";
-  version = "6.3.14";
+  version = "6.3.15";
 
   src = fetchFromGitHub {
     owner = "devspace-sh";
     repo = "devspace";
     rev = "v${version}";
-    hash = "sha256-Qdx7x42QKfyEu2PB350mek2MwYO/ClFAwKC9UHftaKE=";
+    hash = "sha256-aD7A9GGFnX1w5MehmhqYE+wEREASyKFxusE5GFFgwbs=";
   };
 
   vendorHash = null;
@@ -24,7 +25,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  # Check are disable since they requiered a working K8S cluster
+  # Check are disable since they required a working K8S cluster
   # TODO: add a nixosTest to be able to perform the package check
   doCheck = false;
 

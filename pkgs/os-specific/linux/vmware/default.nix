@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  gnugrep,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vmware-modules";
   version = "workstation-17.6.1-unstable-2024-10-12-${kernel.version}";
 
@@ -42,6 +49,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     broken = (kernel.kernelOlder "5.5" && kernel.isHardened);
-    maintainers = with maintainers; [ deinferno vifino ];
+    maintainers = with maintainers; [
+      deinferno
+      vifino
+    ];
   };
 }

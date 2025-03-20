@@ -8,6 +8,7 @@
   glib-networking,
   gobject-introspection,
   pipewire,
+  nixosTests,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -29,13 +30,27 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
-    gst-plugins-rs
+    # Required patches for the Spotify plugin (https://github.com/mopidy/mopidy-spotify/releases/tag/v5.0.0a3)
+    (gst-plugins-rs.overrideAttrs (
+      newAttrs: oldAttrs: {
+        cargoDeps = oldAttrs.cargoDeps.overrideAttrs (oldAttrs': {
+          vendorStaging = oldAttrs'.vendorStaging.overrideAttrs {
+            inherit (newAttrs) patches;
+            outputHash = "sha256-CegT8h+CJ6axipAD6E9drtrPJ9izRy/UCW14rbva5XA=";
+          };
+        });
+
+        # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/1801/
+        patches = oldAttrs.patches or [ ] ++ [
+          ./spotify-access-token-auth.patch
+        ];
+      }
+    ))
+    pipewire
   ];
 
   propagatedBuildInputs =
-    [
-      gobject-introspection
-    ]
+    [ gobject-introspection ]
     ++ (
       with pythonPackages;
       [
@@ -49,18 +64,14 @@ pythonPackages.buildPythonApplication rec {
       ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
     );
 
-  propagatedNativeBuildInputs = [
-    gobject-introspection
-  ];
+  propagatedNativeBuildInputs = [ gobject-introspection ];
 
   # There are no tests
   doCheck = false;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${pipewire}/lib/gstreamer-1.0"
-    )
-  '';
+  passthru.tests = {
+    inherit (nixosTests) mopidy;
+  };
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";

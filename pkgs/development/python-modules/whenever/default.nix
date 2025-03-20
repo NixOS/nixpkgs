@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.6.12";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,13 +28,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fvLqdjbTuQ732qeVUu1f3dXXlFOuP9FGexEt4gZe0aI=";
+    tag = version;
+    hash = "sha256-L0U02hJ6UBG/HtwWQE7xuy+yR8+RErykJNXqo0huyzk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-KWB0PRYKiGNBUKYZn8bCHUjh+oFe818PgKtPdNy1CZA=";
+    hash = "sha256-LUzb2cTnJIlL9USAJv8eZ56TpWuoUjYepRps6SV+mBo=";
   };
 
   build-system = [

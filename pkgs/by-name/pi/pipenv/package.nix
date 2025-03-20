@@ -1,47 +1,56 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, installShellFiles
-, pipenv
-, runCommand
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  installShellFiles,
+  pipenv,
+  runCommand,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 with python3.pkgs;
 
 let
 
-  runtimeDeps = ps: with ps; [
-    certifi
-    setuptools
-    pip
-    virtualenv
-    virtualenv-clone
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAndroid [
-    pyjnius
-  ];
+  runtimeDeps =
+    ps:
+    with ps;
+    [
+      certifi
+      setuptools
+      pip
+      virtualenv
+      virtualenv-clone
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAndroid [
+      pyjnius
+    ];
 
   pythonEnv = python3.withPackages runtimeDeps;
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "pipenv";
-  version = "2024.2.0";
-  format = "pyproject";
+  version = "2024.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5gq1kXVNAMH/AeovpUStcZffXN4GfXj3wJ7lW4qebRM=";
+    tag = "v${version}";
+    hash = "sha256-w6EG3lh9U/qwwuVXBRT5SWdzdQzf2ggFnP+ADTA1IyM=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
 
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     installShellFiles
-    setuptools
-    wheel
   ];
 
   postPatch = ''
@@ -55,17 +64,17 @@ in buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
 
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
-
   nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-xdist
+    pytest-cov-stub
     pytz
     requests
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   disabledTests = [
     # this test wants access to the internet
@@ -78,7 +87,7 @@ in buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" {} ''
+    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" { } ''
       export PIPENV_VENV_IN_PROJECT=1
 
       # "pipenv install" should be able to create a venv
@@ -98,10 +107,11 @@ in buildPythonApplication rec {
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Development Workflow for Humans";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ berdario ];
+    mainProgram = "pipenv";
   };
 }

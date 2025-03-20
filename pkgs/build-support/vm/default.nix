@@ -5,8 +5,7 @@
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos"
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "virtiofs" "crc32c_generic" ]
 }:
 
 let
@@ -89,10 +88,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        out=*)
-          set -- $(IFS==; echo $o)
-          export out=$2
-          ;;
       esac
     done
 
@@ -128,7 +123,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
+    mount -t virtiofs store /fs${storeDir}
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -137,7 +132,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
+    mount -t virtiofs xchg /fs/tmp/xchg
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -154,7 +149,7 @@ rec {
     fi
 
     echo "starting stage 2 ($command)"
-    exec switch_root /fs $command $out
+    exec switch_root /fs $command
   '';
 
 
@@ -169,18 +164,21 @@ rec {
 
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
+    set -euo pipefail
     source /tmp/xchg/saved-env
-
-    # Set the system time from the hardware clock.  Works around an
-    # apparent KVM > 1.5.2 bug.
-    ${util-linux}/bin/hwclock -s
+    if [ -f /tmp/xchg/.attrs.sh ]; then
+      source /tmp/xchg/.attrs.sh
+      export NIX_ATTRS_JSON_FILE=/tmp/xchg/.attrs.json
+      export NIX_ATTRS_SH_FILE=/tmp/xchg/.attrs.sh
+    fi
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
-    out="$1"
     cd "$NIX_BUILD_TOP"
+
+    source $stdenv/setup
 
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
@@ -203,7 +201,9 @@ rec {
     if test -n "$origBuilder" -a ! -e /.debug; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
-      $origBuilder $origArgs
+      declare -a argsArray=()
+      concatTo argsArray origArgs
+      "$origBuilder" "''${argsArray[@]}"
       echo $? > /tmp/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
@@ -222,47 +222,58 @@ rec {
     ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+      -chardev socket,id=store,path=virtio-store.sock \
+      -device vhost-user-fs-pci,chardev=store,tag=store \
+      -chardev socket,id=xchg,path=virtio-xchg.sock \
+      -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
-    export > saved-env
+    ${coreutils}/bin/mkdir xchg
+    export > xchg/saved-env
 
-    PATH=${coreutils}/bin
-    mkdir xchg
-    mv saved-env xchg/
+    if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
+      ${coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+      source "$NIX_ATTRS_SH_FILE"
+    fi
+    source $stdenv/setup
 
     eval "$preVM"
 
     if [ "$enableParallelBuilding" = 1 ]; then
+      QEMU_NR_VCPUS=0
       if [ ''${NIX_BUILD_CORES:-0} = 0 ]; then
-        QEMU_OPTS+=" -smp cpus=$(nproc)"
+        QEMU_NR_VCPUS="$(nproc)"
       else
-        QEMU_OPTS+=" -smp cpus=$NIX_BUILD_CORES"
+        QEMU_NR_VCPUS="$NIX_BUILD_CORES"
       fi
+      # qemu only supports 255 vCPUs (see error from `qemu-system-x86_64 -smp 256`)
+      if [ "$QEMU_NR_VCPUS" -gt 255 ]; then
+        QEMU_NR_VCPUS=255
+      fi
+      QEMU_OPTS+=" -smp cpus=$QEMU_NR_VCPUS"
     fi
 
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
-    cat > ./run-vm <<EOF
+    ${coreutils}/bin/cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    TMPDIR=$TMPDIR
-    cd $TMPDIR
+    # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
+    # Since we are running in a sandbox already, the difference between seccomp and none is minimal
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
     ${qemuCommand}
     EOF
 
-    mkdir -p -m 0700 $out
-
-    chmod +x ./run-vm
+    ${coreutils}/bin/chmod +x ./run-vm
     source ./run-vm
 
     if ! test -e xchg/in-vm-exit; then
@@ -270,7 +281,7 @@ rec {
       exit 1
     fi
 
-    exitCode="$(cat xchg/in-vm-exit)"
+    exitCode="$(${coreutils}/bin/cat xchg/in-vm-exit)"
     if [ "$exitCode" != "0" ]; then
       exit "$exitCode"
     fi
@@ -339,7 +350,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
-    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
@@ -449,6 +460,8 @@ rec {
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt${storeDir}
         ${util-linux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
+        # Some programs may require devices in /dev to be available (e.g. /dev/random)
+        ${util-linux}/bin/mount -o bind /dev /mnt/dev
 
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
@@ -487,7 +500,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
+        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp /mnt/dev ${lib.optionalString unifiedSystemDir "/mnt/proc"}
         ${util-linux}/bin/umount /mnt
       '';
 
@@ -722,7 +735,7 @@ rec {
     {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix"
-      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg pkgs.nixfmt-rfc-style ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -740,6 +753,7 @@ rec {
 
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
+      nixfmt $out
     '';
 
 
@@ -1013,6 +1027,23 @@ rec {
           (fetchurl {
             url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
             sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu2404x86_64 = {
+      name = "ubuntu-24.04-noble-amd64";
+      fullName = "Ubuntu 24.04 Noble (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/noble/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-KmoZnhAxpcJ5yzRmRtWUmT81scA91KgqqgMjmA3ZJFE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/noble/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-upBX+huRQ4zIodJoCNAMhTif4QHQwUliVN+XI2QFWZo=";
           })
         ];
       urlPrefix = "mirror://ubuntu";

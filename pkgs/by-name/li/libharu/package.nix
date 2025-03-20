@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, libpng }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  libpng,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libharu";
@@ -6,13 +13,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libharu";
-    repo = pname;
+    repo = "libharu";
     rev = "v${version}";
     hash = "sha256-tw/E79Cg/8kIei6NUu1W+mP0sUDCm8KTB7ZjzxsqpeM=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib libpng ];
+  buildInputs = [
+    zlib
+    libpng
+  ];
 
   meta = {
     description = "Cross platform, open source library for generating PDF files";

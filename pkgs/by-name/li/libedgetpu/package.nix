@@ -43,6 +43,12 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    # Use dedicated group for coral devices
+    substituteInPlace debian/edgetpu-accelerator.rules \
+      --replace-fail "plugdev" "coral"
+  '';
+
   makeFlags = [
     "-f"
     "makefile_build/Makefile"

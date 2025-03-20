@@ -1,29 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, protobuf_25
-, zlib
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  protobuf_25,
+  zlib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "protobuf-c";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
+    tag = "v${version}";
+    hash = "sha256-usfONVSq0/V9GRrBx9RwO/hCrVJ8d17mvAgTKpKUssQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ protobuf_25 zlib ];
+  buildInputs = [
+    protobuf_25
+    zlib
+  ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf_25;
 

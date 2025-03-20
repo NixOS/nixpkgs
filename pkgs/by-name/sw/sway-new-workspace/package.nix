@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -9,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nzig";
-    repo = pname;
+    repo = "sway-new-workspace";
     rev = version;
     hash = "sha256-CoSfpsaGqNNR5jdAQys3nQxshI0NXXr8MacUnSTKFNo=";
   };
 
-  cargoHash = "sha256-uGjNneIfhI49gGnH/MPTzXWjBJPdnAFggZZQfovBxDM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Gxqg0FqIU7e1oZ1inCe/xN3IXyQkMAt3yfbAfhfxy1o=";
 
   meta = with lib; {
     description = "Command to create new Sway workpaces";

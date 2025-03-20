@@ -17,22 +17,21 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.14";
+  version = "0.12.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nZzsBxPRmqHTaYVogWsdaGbzwBsVr08qcvAekk3O4FM=";
+    tag = "v${version}";
+    hash = "sha256-gR8nZnD/+foKTCNtxzPIitw4HyR0hwN9YeZg/0kIAco=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     hishel
@@ -76,7 +75,7 @@ buildPythonPackage rec {
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/v${version}";
+    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };

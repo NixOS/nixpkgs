@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, mosquitto
-, curl
-, openssl
-, lmdb
-, lua
-, libsodium
-, libuuid
-, libconfig
-, testers
-, owntracks-recorder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  mosquitto,
+  curl,
+  openssl,
+  lmdb,
+  lua,
+  libsodium,
+  libuuid,
+  libconfig,
+  testers,
+  owntracks-recorder,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";
-  version = "0.9.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
     rev = finalAttrs.version;
-    hash = "sha256-6oCWzTiQgpp75xojd2ZFsrg+Kd5/gex1BPQVOWHfMuk=";
+    hash = "sha256-E4hdsUAg8NHjmUrlr8cskezib4qMv+wF32cThe2/kBc=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace config.mk \
       --replace "INSTALLDIR = /usr/local" "INSTALLDIR = $out" \
+      --replace "DOCROOT = /var/spool/owntracks/recorder/htdocs" "DOCROOT = $out/htdocs" \
       --replace "WITH_LUA ?= no" "WITH_LUA ?= yes" \
       --replace "WITH_ENCRYPT ?= no" "WITH_ENCRYPT ?= yes"
 
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -m 0755 ot-recorder $out/bin
     install -m 0755 ocat $out/bin
+
+    cp -r docroot $out/htdocs
 
     runHook postInstall
   '';

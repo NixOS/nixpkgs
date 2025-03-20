@@ -8,6 +8,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  email-validator,
   fastapi,
   fastapi-sso,
   fetchFromGitHub,
@@ -32,12 +33,14 @@
   rq,
   tiktoken,
   tokenizers,
+  uvloop,
   uvicorn,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.51.2";
+  version = "1.63.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jC5BiD4JFfsiyNOSlY6rH6l3Dk6AKKXJ8+Q6MTGYTpM=";
+    tag = "v${version}-stable";
+    hash = "sha256-j2RfuVffmWoeAAVcT579S9pU06haKEYYa7FcpMzu9uA=";
   };
 
   build-system = [ poetry-core ];
@@ -54,6 +57,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
+    email-validator
     importlib-metadata
     jinja2
     jsonschema
@@ -78,6 +82,7 @@ buildPythonPackage rec {
       python-multipart
       pyyaml
       rq
+      uvloop
       uvicorn
     ];
     extra_proxy = [
@@ -95,12 +100,16 @@ buildPythonPackage rec {
   # access network
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) litellm;
+  };
+
+  meta = {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

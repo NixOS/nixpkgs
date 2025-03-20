@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
+    tag = "v${version}";
+    hash = "sha256-H+A6203XMM7MaIdwtjQScyOBRJNpTx9NsSMIoov8hg8=";
   };
 
   build-system = [ setuptools ];
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
-    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/v${version}";
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

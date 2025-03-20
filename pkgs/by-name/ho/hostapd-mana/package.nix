@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libnl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libnl,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sensepost";
-    repo = pname;
+    repo = "hostapd-mana";
     rev = version;
     hash = "sha256-co5LMJAUYSdcvhLv1gfjDvdVqdSXgjtFoiQ7+KxR07M=";
   };
@@ -27,7 +28,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libnl openssl ];
+  buildInputs = [
+    libnl
+    openssl
+  ];
 
   extraConfig = ''
     CONFIG_DRIVER_WIRED=y

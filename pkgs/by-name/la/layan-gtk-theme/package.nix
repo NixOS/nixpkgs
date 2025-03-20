@@ -1,7 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gtk-engine-murrine
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gtk-engine-murrine,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "layan-gtk-theme";
     rev = version;
     sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
   };

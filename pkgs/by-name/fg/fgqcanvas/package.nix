@@ -1,12 +1,13 @@
-{ fetchgit
-, pkg-config
-, stdenv
-, lib
-# Package dependencies
-, qt5
+{
+  fetchgit,
+  pkg-config,
+  stdenv,
+  lib,
+  # Package dependencies
+  qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fgqcanvas";
   version = "0-unstable-2024-02-11";
 

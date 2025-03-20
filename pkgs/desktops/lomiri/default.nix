@@ -15,11 +15,14 @@ let
       #### Core Apps
       lomiri = callPackage ./applications/lomiri { };
       lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
+      lomiri-calendar-app = callPackage ./applications/lomiri-calendar-app { };
       lomiri-camera-app = callPackage ./applications/lomiri-camera-app { };
       lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
       lomiri-docviewer-app = callPackage ./applications/lomiri-docviewer-app { };
       lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
+      lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
+      lomiri-music-app = callPackage ./applications/lomiri-music-app { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
@@ -58,18 +61,20 @@ let
       biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
-      history-service = callPackage ./services/history-service { };
       lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
+      lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
+      lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
       mediascanner2 = callPackage ./services/mediascanner2 { };
-      telephony-service = callPackage ./services/telephony-service { };
     };
 in
 lib.makeScope libsForQt5.newScope packages
 // lib.optionalAttrs config.allowAliases {
-  content-hub = lib.warn "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
-  lomiri-system-settings-security-privacy = lib.warn "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
+  content-hub = lib.warnOnInstantiate "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
+  history-service = lib.warnOnInstantiate "`history-service` was renamed to `lomiri-history-service`." pkgs.lomiri.lomiri-history-service; # Added on 2024-11-11
+  lomiri-system-settings-security-privacy = lib.warnOnInstantiate "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
+  telephony-service = lib.warnOnInstantiate "`telephony-service` was renamed to `lomiri-telephony-service`." pkgs.lomiri.lomiri-telephony-service; # Adder on 2025-01-15
 }

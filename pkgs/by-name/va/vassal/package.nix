@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, glib
-, jre
-, makeWrapper
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchzip,
+  glib,
+  jre,
+  makeWrapper,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,15 +43,18 @@ stdenv.mkDerivation rec {
   '';
 
   # Don't move doc to share/, VASSAL expects it to be in the root
-  forceShare = [ "man" "info" ];
+  forceShare = [
+    "man"
+    "info"
+  ];
 
   meta = with lib; {
-      description = "Free, open-source boardgame engine";
-      homepage = "https://vassalengine.org/";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.lgpl21Only;
-      maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.unix;
-      mainProgram = "vassal";
+    description = "Free, open-source boardgame engine";
+    homepage = "https://vassalengine.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ tvestelind ];
+    platforms = platforms.unix;
+    mainProgram = "vassal";
   };
 }

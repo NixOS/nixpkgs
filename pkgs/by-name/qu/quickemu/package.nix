@@ -13,7 +13,7 @@
   pciutils,
   procps,
   python3,
-  qemu_full,
+  qemu,
   socat,
   spice-gtk,
   swtpm,
@@ -40,7 +40,7 @@ let
       pciutils
       procps
       python3
-      qemu_full
+      (qemu.override { smbdSupport = true; })
       socat
       swtpm
       util-linux
@@ -57,13 +57,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.6";
+  version = "4.9.7";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = finalAttrs.version;
-    hash = "sha256-VaA39QNZNaomvSBMzJMjYN0KOTwWw2798KE8VnM+1so=";
+    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
   };
 
   postPatch = ''
@@ -84,12 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    installManPage docs/quickget.1 docs/quickemu.1 docs/quickemu_conf.1
-    install -Dm755 -t "$out/bin" chunkcheck quickemu quickget quickreport windowskey
+    installManPage docs/quickget.1 docs/quickemu.1 docs/quickemu_conf.5
+    install -Dm755 -t "$out/bin" chunkcheck quickemu quickget quickreport
 
     # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
     # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
-    for f in chunkcheck quickget quickemu quickreport windowskey; do
+    for f in chunkcheck quickget quickemu quickreport; do
       wrapProgram $out/bin/$f \
         --prefix PATH : "${lib.makeBinPath runtimePaths}" \
         --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"

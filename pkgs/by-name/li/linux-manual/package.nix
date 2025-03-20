@@ -1,13 +1,21 @@
-{ lib, stdenv, perl, linuxPackages_latest }:
+{
+  lib,
+  stdenv,
+  linuxPackages_latest,
+  perl,
+  man,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "linux-manual";
   inherit (linuxPackages_latest.kernel) version src;
 
   nativeBuildInputs = [ perl ];
+  nativeInstallCheckInputs = [ man ];
 
   dontConfigure = true;
   dontBuild = true;
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs --build \
@@ -16,25 +24,37 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mandir=$out/share/man/man9
-    mkdir -p $mandir
+    runHook preInstall
 
-    KBUILD_BUILD_TIMESTAMP=$(stat -c %Y Makefile) \
+    export mandir="$out/share/man/man9"
+    mkdir -p "$mandir"
+
+    KBUILD_BUILD_TIMESTAMP="$(date -u -d "@$SOURCE_DATE_EPOCH")" \
     grep -F -l -Z \
       --exclude-dir Documentation \
       --exclude-dir tools \
       -R '/**' \
-      | xargs -0 -n 256 -P $NIX_BUILD_CORES \
-        $SHELL -c '{ scripts/kernel-doc -man "$@" || :; } \
-          | scripts/split-man.pl '$mandir kernel-doc
+      | xargs -0 -n 256 -P "$NIX_BUILD_CORES" \
+        "$SHELL" -c '{ scripts/kernel-doc -man "$@" || :; } \
+          | scripts/split-man.pl "$mandir"' kernel-doc
 
-    test -f $mandir/kmalloc.9
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Check for well‐known man page
+    man -M "$out/share/man" -P cat 9 kmalloc >/dev/null
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
     homepage = "https://kernel.org/";
     description = "Linux kernel API manual pages";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.linux;
   };
 }

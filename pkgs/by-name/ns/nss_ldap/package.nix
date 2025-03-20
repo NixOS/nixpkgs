@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, openldap, perl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openldap,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nss_ldap";

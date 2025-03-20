@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graspologic-org";
     repo = "graspologic-native";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fgiBUzYBerYX59uj+I0Yret94vA+FpQK+MckskCBqj4=";
   };
 

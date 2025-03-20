@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gtk3
-, intltool
-, libintl
-, pkg-config
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk3,
+  intltool,
+  libintl,
+  pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "http://lxde.sourceforge.net/";
+    homepage = "https://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
     longDescription = ''

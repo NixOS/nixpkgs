@@ -12,7 +12,6 @@
   jinja2,
   logbook,
   mashumaro,
-  minimal-snowplow-tracker,
   networkx,
   packaging,
   pathspec,
@@ -23,13 +22,14 @@
   pyyaml,
   requests,
   setuptools,
+  snowplow-tracker,
   sqlparse,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.8";
+  version = "1.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-M9O9jLjIr9kolkye5RwaS2jK6dpncEOo1rtxY7WXS7U=";
+    tag = "v${version}";
+    hash = "sha256-kCYQgWR9eMI7d7tM6c73dTFOyvcdmjHflTA1JdRJvvM=";
   };
 
   sourceRoot = "${src.name}/core";
@@ -72,7 +72,6 @@ buildPythonPackage rec {
     jinja2
     logbook
     mashumaro
-    minimal-snowplow-tracker
     networkx
     packaging
     pathspec
@@ -80,6 +79,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
+    snowplow-tracker
     sqlparse
     typing-extensions
   ] ++ mashumaro.optional-dependencies.msgpack;
@@ -110,7 +110,7 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       mausch

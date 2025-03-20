@@ -1,42 +1,49 @@
-{ lib
-, stdenv
-, fetchurl
-, nixosTests
-, bash-completion
-, glib
-, polkit
-, pkg-config
-, gettext
-, gusb
-, lcms2
-, sqlite
-, udev
-, systemd
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, dbus
-, gobject-introspection
-, argyllcms
-, meson
-, mesonEmulatorHook
-, ninja
-, vala
-, libgudev
-, wrapGAppsNoGuiHook
-, shared-mime-info
-, sane-backends
-, docbook_xsl
-, docbook_xsl_ns
-, docbook_xml_dtd_412
-, gtk-doc
-, libxslt
-, enableDaemon ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  bash-completion,
+  glib,
+  polkit,
+  pkg-config,
+  gettext,
+  gusb,
+  lcms2,
+  sqlite,
+  udev,
+  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  dbus,
+  gobject-introspection,
+  argyllcms,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  vala,
+  libgudev,
+  wrapGAppsNoGuiHook,
+  shared-mime-info,
+  sane-backends,
+  docbook_xsl,
+  docbook_xsl_ns,
+  docbook_xml_dtd_412,
+  gtk-doc,
+  libxslt,
+  enableDaemon ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "colord";
   version = "1.4.6";
 
-  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
@@ -69,40 +76,45 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "udev_rules" (lib.elem "udev" udev.meta.pkgConfigModules))
   ];
 
-  nativeBuildInputs = [
-    docbook_xml_dtd_412
-    docbook_xsl
-    docbook_xsl_ns
-    gettext
-    gobject-introspection
-    gtk-doc
-    libxslt
-    meson
-    ninja
-    pkg-config
-    shared-mime-info
-    vala
-    wrapGAppsNoGuiHook
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      docbook_xml_dtd_412
+      docbook_xsl
+      docbook_xsl_ns
+      gettext
+      gobject-introspection
+      gtk-doc
+      libxslt
+      meson
+      ninja
+      pkg-config
+      shared-mime-info
+      vala
+      wrapGAppsNoGuiHook
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    argyllcms
-    bash-completion
-    dbus
-    glib
-    gusb
-    lcms2
-    libgudev
-    sane-backends
-    sqlite
-    udev
-  ] ++ lib.optionals enableSystemd [
-    systemd
-  ] ++ lib.optionals enableDaemon [
-    polkit
-  ];
+  buildInputs =
+    [
+      argyllcms
+      bash-completion
+      dbus
+      glib
+      gusb
+      lcms2
+      libgudev
+      sane-backends
+      sqlite
+      udev
+    ]
+    ++ lib.optionals enableSystemd [
+      systemd
+    ]
+    ++ lib.optionals enableDaemon [
+      polkit
+    ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas

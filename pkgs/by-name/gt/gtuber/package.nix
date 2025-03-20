@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation {
   pname = "gtuber";
-  version = "0-unstable-2024-10-11";
+  version = "0-unstable-2025-01-19";
 
   src = fetchFromGitHub {
     owner = "Rafostar";
     repo = "gtuber";
-    rev = "468bf02a8adcf69b1bd6dd7b5dbcdcc0bfdb6922";
-    hash = "sha256-pEiHqcxkrxZRD9xW/R9DNDdp5foxaHK2SAuzmPNegaY=";
+    rev = "446e26668a4e01fc2ca9c261a7f1c281577e566d";
+    hash = "sha256-5Z6sID7Alm4FWl1qCQV1w5DmGsmor2vbnZUJi3Is650=";
   };
 
   nativeBuildInputs = [

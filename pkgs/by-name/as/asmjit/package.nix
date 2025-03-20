@@ -1,19 +1,20 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  lib,
 }:
 
 stdenv.mkDerivation {
   pname = "asmjit";
-  version = "unstable-2023-04-28";
+  version = "unstable-2025-02-12";
 
   src = fetchFromGitHub {
     owner = "asmjit";
     repo = "asmjit";
-    rev = "3577608cab0bc509f856ebf6e41b2f9d9f71acc4";
-    hash = "sha256-EIfSruaM2Z64XOYAeEaf/wFy6/7UO6Sth487R1Q0yhI=";
+    rev = "029075b84bf0161a761beb63e6eda519a29020db";
+    hash = "sha256-/9F1rFNPwJUrVOVeK9sIA+Q7UrqQpQy8T6g4ywcoJc8=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://asmjit.com/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ nikstur ];
+    maintainers = with maintainers; [ thillux ];
   };
 }

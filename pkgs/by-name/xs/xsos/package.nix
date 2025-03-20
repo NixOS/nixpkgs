@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, dmidecode
-, ethtool
-, pciutils
-, multipath-tools
-, iproute2
-, sysvinit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  dmidecode,
+  ethtool,
+  pciutils,
+  multipath-tools,
+  iproute2,
+  sysvinit,
 }:
 let
   binPath = [
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VEOY422/+4veMlN9HOtPB/THDiFLNnRfbUJpKjc/cqE=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -47,7 +51,10 @@ stdenv.mkDerivation rec {
     mainProgram = "xsos";
     homepage = "https://github.com/ryran/xsos";
     license = licenses.gpl3;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = [ maintainers.nixinator ];
   };
 }

@@ -11,6 +11,7 @@
   orjson,
   poetry-core,
   pycryptodomex,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -26,17 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7/4Ea8IiRPxhgMiazSylYZAmznqIula2yCEUAyIHBBg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
-
 
   pythonRelaxDeps = [ "pycryptodomex" ];
 
@@ -52,7 +47,10 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "xiaomi_ble" ];
 
@@ -60,7 +58,7 @@ buildPythonPackage rec {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
     changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

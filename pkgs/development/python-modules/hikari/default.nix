@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/A3D3nG1lSCQU92dM+6YroxWlGKrv47ntkZaJZTAJUA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
@@ -34,7 +34,6 @@ buildPythonPackage rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
 
   propagatedBuildInputs = [
     aiohttp
@@ -64,6 +63,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace hikari/_about.py \
       --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
+    # XXX: Remove once pytest-asyncio is updated to 0.24+
+    substituteInPlace pyproject.toml \
+      --replace-fail "asyncio_default_fixture_loop_scope = \"func\"" ""
   '';
 
   meta = {
@@ -71,6 +73,9 @@ buildPythonPackage rec {
     homepage = "https://www.hikari-py.dev/";
     changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
+    maintainers = with lib.maintainers; [
+      tomodachi94
+      sigmanificient
+    ];
   };
 }

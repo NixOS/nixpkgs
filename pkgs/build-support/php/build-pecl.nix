@@ -41,7 +41,9 @@ stdenv.mkDerivation (
 
     inherit src;
 
+    strictDeps = true;
     nativeBuildInputs = [
+      php
       autoreconfHook
       re2c
     ] ++ nativeBuildInputs;

@@ -9,13 +9,13 @@
 # https://gitlab.com/ente76/guillotine/-/issues/17
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-guillotine";
-  version = "24";
+  version = "25";
 
   src = fetchFromGitLab {
     owner = "ente76";
     repo = "guillotine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eNhK3h9luPGXHR3lPkfu/mUN9+ixma64rbCk0cjF4Fc=";
+    hash = "sha256-HEk1owolLIea4kymoVVeviZ1Ms0kSuHWUda+u+uIh0A=";
   };
 
   nativeBuildInputs = [ glib ];

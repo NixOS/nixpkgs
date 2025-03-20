@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bdf2sfd";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fcambus";
-    repo = pname;
+    repo = "bdf2sfd";
     rev = version;
     sha256 = "sha256-+CPULpy3mqZv0QaXS4kKYWKjifibtcQt7unKGOUTSV0=";
   };

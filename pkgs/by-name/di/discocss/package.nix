@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, discordAlias ? false
-, discord
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  discordAlias ? false,
+  discord,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mlvzk";
-    repo = pname;
+    repo = "discocss";
     rev = "v${version}";
     sha256 = "sha256-of7OMgbuwebnFmbefGD1/dOhyTX1Hy7TccnWSRCweW0=";
   };
@@ -21,15 +22,17 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    install -Dm755 discocss $out/bin/discocss
-  '' + lib.optionalString discordAlias ''
-    wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
-    ln -s $out/bin/discocss $out/bin/Discord
-    ln -s $out/bin/discocss $out/bin/discord
-    mkdir -p $out/share
-    ln -s ${discord}/share/* $out/share
-  '';
+  installPhase =
+    ''
+      install -Dm755 discocss $out/bin/discocss
+    ''
+    + lib.optionalString discordAlias ''
+      wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
+      ln -s $out/bin/discocss $out/bin/Discord
+      ln -s $out/bin/discocss $out/bin/discord
+      mkdir -p $out/share
+      ln -s ${discord}/share/* $out/share
+    '';
 
   meta = with lib; {
     description = "Tiny Discord css-injector";

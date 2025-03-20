@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, dbus-glib
-, audacious
-, gtk2
-, gsl
-, libaudclient
-, libmpdclient
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dbus-glib,
+  audacious,
+  gtk2,
+  gsl,
+  libaudclient,
+  libmpdclient,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,30 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, which, pkg-config
-, libjpeg
-, ocamlPackages
-, awscli2, bubblewrap, curl, ffmpeg, yt-dlp
-, runtimePackages ? [ awscli2 bubblewrap curl ffmpeg yt-dlp ]
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  fetchpatch,
+  which,
+  pkg-config,
+  libjpeg,
+  ocamlPackages,
+  awscli2,
+  bubblewrap,
+  curl,
+  ffmpeg,
+  yt-dlp,
+  runtimePackages ? [
+    awscli2
+    bubblewrap
+    curl
+    ffmpeg
+    yt-dlp
+  ],
 }:
 
 let
   pname = "liquidsoap";
-  version = "2.2.5";
+  version = "2.3.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -16,12 +33,24 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o3P7oTizO2l2WkB4LormZ/Ses5jZOpgQ1r1zB1Y3Bjs=";
+    hash = "sha256-wNOENkIQw8LWfceI24aa8Ja3ZkePgTIGdIpGgqs/3Ss=";
   };
+
+  patches = [
+    # Compatibility with saturn_lockfree 0.5.0
+    (fetchpatch {
+      url = "https://github.com/savonet/liquidsoap/commit/3d6d2d9cd1c7750f2e97449516235a692b28bf56.patch";
+      includes = [ "src/*" ];
+      hash = "sha256-pmC3gwmkv+Hat61aulNkTKS4xMz+4D94OCMtzhzNfT4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/lang/dune \
       --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+    # Compatibility with camlimages 5.0.5
+    substituteInPlace src/core/dune \
+      --replace-warn camlimages.all_formats camlimages.core
   '';
 
   dontConfigure = true;
@@ -72,7 +101,7 @@ stdenv.mkDerivation {
     ocamlPackages.duppy
     ocamlPackages.mm
     ocamlPackages.ocurl
-    ocamlPackages.ocaml_pcre
+    ocamlPackages.re
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
@@ -80,10 +109,13 @@ stdenv.mkDerivation {
     ocamlPackages.magic-mime
     ocamlPackages.menhir # liquidsoap-lang
     ocamlPackages.menhirLib
+    ocamlPackages.mem_usage
     ocamlPackages.metadata
     ocamlPackages.dune-build-info
     ocamlPackages.re
+    ocamlPackages.saturn_lockfree # liquidsoap-lang
     ocamlPackages.sedlex # liquidsoap-lang
+    ocamlPackages.ppx_hash # liquidsoap-lang
     ocamlPackages.ppx_string
 
     # Recommended dependencies
@@ -136,8 +168,11 @@ stdenv.mkDerivation {
     mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
-    maintainers = with lib.maintainers; [ dandellion ehmry ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      ehmry
+    ];
     license = lib.licenses.gpl2Plus;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

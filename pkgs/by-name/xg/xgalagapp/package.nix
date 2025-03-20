@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXpm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXpm,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xgalaga++";
   version = "0.9";
   src = fetchurl {
-    url    = "https://marc.mongenet.ch/OSS/XGalaga/xgalaga++_${version}.tar.gz";
+    url = "https://marc.mongenet.ch/OSS/XGalaga/xgalaga++_${version}.tar.gz";
     sha256 = "sha256-yNtLuYCMHLvQAVM7CDGPardrh3q27TE9l31qhUbMf8k=";
   };
 

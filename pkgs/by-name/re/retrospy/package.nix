@@ -1,19 +1,20 @@
-{ buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, copyDesktopItems
-, makeDesktopItem
-, lib
-, runCommandLocal
+{
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  copyDesktopItems,
+  makeDesktopItem,
+  lib,
+  runCommandLocal,
 }:
 let
-  version = "6.6";
+  version = "6.8.3";
 
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
     rev = "v${version}";
-    hash = "sha256-vYhFpmP9CmZz/lqNwNAvpf7pQnhKR/pdetPJqorUtMY=";
+    hash = "sha256-NuLfFSRGOIB6h4b5XZ7Qs8y5L+fqozQfMr8q0xZAurQ=";
   };
 
   executables = [
@@ -25,7 +26,9 @@ let
 
   retrospy-icons = runCommandLocal "retrospy-icons" { } ''
     mkdir -p $out/share/retrospy
-    ${builtins.concatStringsSep "\n" (map (e: "cp ${src}/${e}.ico $out/share/retrospy/${e}.ico") executables)}
+    ${builtins.concatStringsSep "\n" (
+      map (e: "cp ${src}/${e}.ico $out/share/retrospy/${e}.ico") executables
+    )}
   '';
 in
 buildDotnetModule {
@@ -48,22 +51,23 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   inherit executables;
 
   passthru.updateScript = ./update.sh;
 
-  desktopItems = map
-    (e: (makeDesktopItem {
+  desktopItems = map (
+    e:
+    (makeDesktopItem {
       name = e;
       exec = e;
       icon = "${retrospy-icons}/share/retrospy/${e}.ico";
       desktopName = "${e}";
       categories = [ "Utility" ];
       startupWMClass = e;
-    }))
-    executables;
+    })
+  ) executables;
 
   meta = {
     description = "Live controller viewer for Nintendo consoles as well as many other retro consoles and computers";
@@ -72,6 +76,6 @@ buildDotnetModule {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.naxdy ];
     platforms = lib.platforms.linux;
+    mainProgram = "RetroSpy";
   };
 }
-

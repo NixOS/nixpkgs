@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tox-node";
@@ -13,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "tox_node";
 
-  cargoHash = "sha256-L5IvYA32W8cTnuWjeljge5X+LZ912ugtcvEKXLqYZ+k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UNvhls6qY1u9STr8PsgcUfFYRDTlqvxB3M57j/fdkH8=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -22,7 +28,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tox-rs/tox";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ suhr kurnevsky ];
+    maintainers = with maintainers; [
+      suhr
+      kurnevsky
+    ];
     mainProgram = "tox-node";
   };
 }

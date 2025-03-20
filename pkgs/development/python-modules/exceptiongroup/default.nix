@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "exceptiongroup";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k88+9FpB/aBun73SnsN6GsBceSUekT8Ig1XBt3hO4ok=";
   };
 

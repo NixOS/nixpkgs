@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K60xIQ6TWPYlsR6YjIquey5Ioaw4oAId59CPlQNK4yk=";
   };
 

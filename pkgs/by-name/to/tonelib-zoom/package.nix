@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
-, webkitgtk_4_0
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {

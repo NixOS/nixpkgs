@@ -1,53 +1,49 @@
-{stdenv
-,lib
-, cmake
-, pkg-config
-, fetchFromGitHub
-, qtbase
-, qttools
-, kwidgetsaddons
-, kwindowsystem
-, fmt
-, libpsl
-, cxxopts
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  fmt,
+  libpsl,
+  cxxopts,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tremotesf";
-  version = "2.6.0";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "equeim";
     repo = "tremotesf2";
-    rev = finalAttrs.version;
-    hash = "sha256-9iV4UsKZWaIxhqtRZXTFHgjOKVFJE2bCJOD2O/qL+DY=";
+    tag = finalAttrs.version;
+    hash = "sha256-LJ73ZynofPOMS5rSohJSY94vSQvGfNiNFRyGu6LPfU0=";
     # We need this for src/libtremotesf
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    qtbase
-    qttools
-    fmt
-    libpsl
-    kwidgetsaddons
-    kwindowsystem
-    cxxopts
-  ];
-
   nativeBuildInputs = [
     cmake
     pkg-config
+    kdePackages.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [ wrapQtAppsHook ];
+  buildInputs = [
+    kdePackages.qtbase
+    kdePackages.qttools
+    fmt
+    libpsl
+    kdePackages.kwidgetsaddons
+    kdePackages.kwindowsystem
+    cxxopts
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote GUI for transmission-daemon";
     mainProgram = "tremotesf";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/equeim/tremotesf2";
-    maintainers = with maintainers; [ sochotnicky ];
+    maintainers = with lib.maintainers; [ sochotnicky ];
   };
 })

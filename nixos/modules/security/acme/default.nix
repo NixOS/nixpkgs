@@ -15,6 +15,9 @@ let
   mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
 
+  # Lockdir is acme-setup.service's RuntimeDirectory.
+  # Since that service is a oneshot with RemainAfterExit,
+  # the folder will exist during all renewal services.
   lockdir = "/run/acme/";
   concurrencyLockfiles = map (n: "${toString n}.lock") (lib.range 1 cfg.maxConcurrentRenewals);
   # Assign elements of `baseList` to each element of `needAssignmentList`, until the latter is exhausted.
@@ -87,6 +90,8 @@ let
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
+      "AF_UNIX"
+      "AF_NETLINK"
     ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
@@ -102,38 +107,17 @@ let
     ];
   };
 
-  # In order to avoid race conditions creating the CA for selfsigned certs,
-  # we have a separate service which will create the necessary files.
-  selfsignCAService = {
-    description = "Generate self-signed certificate authority";
-
-    path = with pkgs; [ minica ];
-
-    unitConfig = {
-      ConditionPathExists = "!/var/lib/acme/.minica/key.pem";
-      StartLimitIntervalSec = 0;
-    };
-
-    serviceConfig = commonServiceConfig // {
-      StateDirectory = "acme/.minica";
-      BindPaths = "/var/lib/acme/.minica:/tmp/ca";
-      UMask = "0077";
-    };
-
-    # Working directory will be /tmp
-    script = ''
-      minica \
-        --ca-key ca/key.pem \
-        --ca-cert ca/cert.pem \
-        --domains selfsigned.local
-    '';
-  };
-
   # Ensures that directories which are shared across all certs
   # exist and have the correct user and group, since group
   # is configurable on a per-cert basis.
-  userMigrationService = let
-    script = with builtins; ''
+  # writeShellScriptBin is used as it produces a nicer binary name, which
+  # journalctl will show when the service is running.
+  privilegedSetupScript = pkgs.writeShellScriptBin "acme-setup-privileged" (
+    ''
+      ${lib.optionalString cfg.defaults.enableDebugLogs "set -x"}
+      set -euo pipefail
+      cd /var/lib/acme
+      chmod -R u=rwX,g=,o= .lego/accounts
       chown -R ${user} .lego/accounts
     '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (cert: data: ''
       for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
@@ -142,43 +126,58 @@ let
           chown -R ${user}:${data.group} "$fixpath"
         fi
       done
-    '') certConfigs));
-  in {
-    description = "Fix owner and group of all ACME certificates";
+    '') certConfigs))
+  );
 
-    serviceConfig = commonServiceConfig // {
-      # We don't want this to run every time a renewal happens
-      RemainAfterExit = true;
+  # This is defined with lib.mkMerge so that we can separate the config per function.
+  setupService = lib.mkMerge [
+    {
+      description = "Set up the ACME certificate renewal infrastructure";
+      script = lib.mkBefore ''
+        ${lib.optionalString cfg.defaults.enableDebugLogs "set -x"}
+        set -euo pipefail
+      '';
+      serviceConfig = commonServiceConfig // {
+        # This script runs with elevated privileges, denoted by the +
+        # ExecStartPre is used instead of ExecStart so that the `script` continues to work.
+        ExecStartPre = "+${lib.getExe privilegedSetupScript}";
 
-      # StateDirectory entries are a cleaner, service-level mechanism
-      # for dealing with persistent service data
-      StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
-      StateDirectoryMode = 755;
-      WorkingDirectory = "/var/lib/acme";
+        # We don't want this to run every time a renewal happens
+        RemainAfterExit = true;
 
-      # Run the start script as root
-      ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
-    };
-  };
-  lockfilePrepareService = {
-    description = "Manage lock files for acme services";
+        # StateDirectory entries are a cleaner, service-level mechanism
+        # for dealing with persistent service data
+        StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
+        StateDirectoryMode = "0755";
 
-    # ensure all required lock files exist, but none more
-    script = ''
-      GLOBIGNORE="${lib.concatStringsSep ":" concurrencyLockfiles}"
-      rm -f -- *
-      unset GLOBIGNORE
+        # Creates ${lockdir}. Earlier RemainAfterExit=true means
+        # it does not get deleted immediately.
+        RuntimeDirectory = "acme";
+        RuntimeDirectoryMode = "0700";
 
-      xargs touch <<< "${toString concurrencyLockfiles}"
-    '';
+        # Generally, we don't write anything that should be group accessible.
+        # Group varies for most ACME units, and setup files are only used
+        # under the acme user.
+        UMask = "0077";
+      };
+    }
 
-    serviceConfig = commonServiceConfig // {
-      # We don't want this to run every time a renewal happens
-      RemainAfterExit = true;
-      WorkingDirectory = lockdir;
-    };
-  };
-
+    # Avoid race conditions creating the CA for selfsigned certs
+    (lib.mkIf cfg.preliminarySelfsigned {
+      path = [ pkgs.minica ];
+      # Working directory will be /tmp
+      script = ''
+        test -e ca/key.pem || minica \
+          --ca-key ca/key.pem \
+          --ca-cert ca/cert.pem \
+          --domains selfsigned.local
+      '';
+      serviceConfig = {
+        StateDirectory = [ "acme/.minica" ];
+        BindPaths = "/var/lib/acme/.minica:/tmp/ca";
+      };
+    })
+  ];
 
   certToConfig = cert: data: let
     acmeServer = data.server;
@@ -284,10 +283,10 @@ let
 
     selfsignService = lockfileName: {
       description = "Generate self-signed certificate for ${cert}";
-      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
-      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      after = [ "acme-setup.service" ];
+      requires = [ "acme-setup.service" ];
 
-      path = with pkgs; [ minica ];
+      path = [ pkgs.minica ];
 
       unitConfig = {
         ConditionPathExists = "!/var/lib/acme/${cert}/key.pem";
@@ -332,8 +331,9 @@ let
 
     renewService = lockfileName: {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
-      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      after = [ "network.target" "network-online.target" "acme-setup.service" "nss-lookup.target" ] ++ selfsignedDeps;
+      wants = [ "network-online.target" ] ++ selfsignedDeps;
+      requires = [ "acme-setup.service" ];
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = lib.optionals (!config.boot.isContainer) [ "multi-user.target" ];
@@ -482,6 +482,9 @@ let
         # By default group will have no access to the cert files.
         # This chmod will fix that.
         chmod 640 out/*
+
+        # Also ensure safer permissions on the account directory.
+        chmod -R u=rwX,g=,o= accounts/.
       '';
     };
   };
@@ -596,6 +599,17 @@ let
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
           at <https://go-acme.github.io/lego/usage/cli/options/>.
+        '';
+      };
+
+      listenHTTP = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        inherit (defaultAndText "listenHTTP" null) default defaultText;
+        example = ":1360";
+        description = ''
+          Interface and port to listen on to solve HTTP challenges
+          in the form `[INTERFACE]:PORT`.
+          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
@@ -741,20 +755,6 @@ let
         '';
         description = ''
           A list of extra domain names, which are included in the one certificate to be issued.
-        '';
-      };
-
-      # This setting must be different for each configured certificate, otherwise
-      # two or more renewals may fail to bind to the address. Hence, it is not in
-      # the inheritableOpts.
-      listenHTTP = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        example = ":1360";
-        description = ''
-          Interface and port to listen on to solve HTTP challenges
-          in the form [INTERFACE]:PORT.
-          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
@@ -965,17 +965,12 @@ in {
 
       users.users.acme = {
         home = "/var/lib/acme";
+        homeMode = "755";
         group = "acme";
         isSystemUser = true;
       };
 
       users.groups.acme = {};
-
-      # for lock files, still use tmpfiles as they should better reside in /run
-      systemd.tmpfiles.rules = [
-        "d ${lockdir} 0700 ${user} - - -"
-        "Z ${lockdir} 0700 ${user} - - -"
-      ];
 
       systemd.services = let
         renewServiceFunctions = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-${cert}" conf.renewService) certConfigs;
@@ -987,12 +982,9 @@ in {
           then roundRobinApplyAttrs selfsignServiceFunctions concurrencyLockfiles
           else lib.mapAttrs (_: f: f null) selfsignServiceFunctions;
         in
-        { "acme-fixperms" = userMigrationService; }
-        // (lib.optionalAttrs (cfg.maxConcurrentRenewals > 0) {"acme-lockfiles" = lockfilePrepareService; })
+        { acme-setup = setupService; }
         // renewServices
-        // (lib.optionalAttrs (cfg.preliminarySelfsigned) ({
-        "acme-selfsigned-ca" = selfsignCAService;
-      } // selfsignServices));
+        // lib.optionalAttrs cfg.preliminarySelfsigned selfsignServices;
 
       systemd.timers = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 
@@ -1014,11 +1006,13 @@ in {
         # systemd clean --what=state is used to delete the account, so long as the user
         # then runs one of the cert services, there won't be any issues.
         accountTargets = lib.mapAttrs' (hash: confs: let
-          leader = "acme-${(builtins.head confs).cert}.service";
-          dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
+          dnsConfs = builtins.filter (conf: cfg.certs.${conf.cert}.dnsProvider != null) confs;
+          leaderConf = if dnsConfs != [ ] then builtins.head dnsConfs else builtins.head confs;
+          leader = "acme-${leaderConf.cert}.service";
+          followers = map (conf: "acme-${conf.cert}.service") (builtins.filter (conf: conf != leaderConf) confs);
         in lib.nameValuePair "acme-account-${hash}" {
-          requiredBy = dependantServices;
-          before = dependantServices;
+          requiredBy = followers;
+          before = followers;
           requires = [ leader ];
           after = [ leader ];
         }) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));

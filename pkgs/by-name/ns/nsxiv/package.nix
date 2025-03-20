@@ -1,28 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, giflib
-, imlib2
-, libXft
-, libexif
-, libwebp
-, libinotify-kqueue
-, conf ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  giflib,
+  imlib2,
+  libXft,
+  libexif,
+  libwebp,
+  libinotify-kqueue,
+  conf ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UWaet7hVtgfuWTiNY4VcsMWTfS6L9r5w1fb/0dWz8SI=";
+    hash = "sha256-H1s+pLpHTmoDssdudtAq6Ru0jwZZ55/qamEVgtHTGfk=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   buildInputs = [
     giflib
@@ -64,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${finalAttrs.src.rev}/etc/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
   };
 })

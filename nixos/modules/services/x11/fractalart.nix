@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.fractalart;
-in {
+in
+{
   options.services.fractalart = {
     enable = mkOption {
       type = types.bool;
@@ -30,7 +36,7 @@ in {
     environment.systemPackages = [ pkgs.haskellPackages.FractalArt ];
     services.xserver.displayManager.sessionCommands =
       "${pkgs.haskellPackages.FractalArt}/bin/FractalArt --no-bg -f .background-image"
-        + optionalString (cfg.width  != null) " -w ${toString cfg.width}"
-        + optionalString (cfg.height != null) " -h ${toString cfg.height}";
+      + optionalString (cfg.width != null) " -w ${toString cfg.width}"
+      + optionalString (cfg.height != null) " -h ${toString cfg.height}";
   };
 }

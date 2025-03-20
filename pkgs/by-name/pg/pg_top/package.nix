@@ -1,30 +1,45 @@
-{ lib, stdenv, fetchurl, ncurses, postgresql }:
+{
+  cmake,
+  fetchurl,
+  lib,
+  libbsd,
+  ncurses,
+  libpq,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
-  version = "3.7.0";
+  version = "4.1.1";
 
   src = fetchurl {
-    url = "https://pgfoundry.org/frs/download.php/1781/pg_top-${version}.tar.gz";
-    sha256 = "17xrv0l58rv3an06gkajzw0gg6v810xx6vl137an1iykmhvfh7h2";
+    url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
+    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
   };
 
-  buildInputs = [ ncurses postgresql ];
+  buildInputs = [
+    libbsd
+    libpq
+    ncurses
+  ];
+
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "'top' like tool for PostgreSQL";
     longDescription = ''
       pg_top allows you to:
        * View currently running SQL statement of a process.
-       * View query plan of a currently running SQL statement.
+       * View query plan of a currently running SELECT statement.
        * View locks held by a process.
-       * View user table statistics.
-       * View user index statistics.
+       * View I/O statistics per process.
+       * View replication statistics for downstream nodes.
     '';
 
-    homepage = "http://ptop.projects.postgresql.org/";
+    homepage = "https://pg_top.gitlab.io";
+    changelog = "https://gitlab.com/pg_top/pg_top/-/blob/main/HISTORY.rst";
     platforms = platforms.linux;
-    license = licenses.free; # see commands.c
+    license = licenses.bsd3;
     mainProgram = "pg_top";
   };
 }

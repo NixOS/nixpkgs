@@ -27,15 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    freetype
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
-  ];
+  buildInputs =
+    [
+      SDL2
+      freetype
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libobjc
+    ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -43,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/markuskimius/SDL2_Pango";
     description = "Library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ rardiol ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ rardiol ]);
     inherit (SDL2.meta) platforms;
   };
 })

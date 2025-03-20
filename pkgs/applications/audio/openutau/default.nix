@@ -6,6 +6,8 @@
 , dbus
 , fontconfig
 , portaudio
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 buildDotnetModule rec {
@@ -19,15 +21,30 @@ buildDotnetModule rec {
     hash = "sha256-HE0KxPKU7tYZbYiCL8sm6I/NZiX0MJktt+5d6qB1A2E=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "openutau";
+      desktopName = "OpenUtau";
+      startupWMClass = "openutau";
+      icon = "openutau";
+      genericName = "Utau";
+      comment = "Open source UTAU successor";
+      exec = "OpenUtau";
+      categories = [ "Music" ];
+    })
+  ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/OpenUtau.Core.csproj]
   # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/OpenUtau.Core.deps.json' because it is being used by another process. [[...]/OpenUtau.Core.csproj]
   enableParallelBuilding = false;
 
   projectFile = "OpenUtau.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "OpenUtau" ];
 
@@ -41,11 +58,11 @@ buildDotnetModule rec {
   # socket cannot bind to localhost on darwin for tests
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  # net7.0 replacement needed until upstream bumps to dotnet 7
+  # net8.0 replacement needed until upstream bumps to dotnet 8
   postPatch = ''
     substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
       '<TargetFramework>net6.0</TargetFramework>' \
-      '<TargetFramework>net7.0</TargetFramework>'
+      '<TargetFramework>net8.0</TargetFramework>'
 
     substituteInPlace OpenUtau/Program.cs --replace \
       '/usr/bin/fc-match' \
@@ -58,9 +75,16 @@ buildDotnetModule rec {
          else if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then "linux-arm64"
          else if stdenv.hostPlatform.isDarwin then "osx"
          else null;
-  in lib.optionalString (runtime != null) ''
-    cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
-  '';
+    shouldInstallResampler = lib.optionalString (runtime != null) ''
+      cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
+    '';
+    shouldInstallDesktopItem = lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg
+    '';
+    in ''
+      ${shouldInstallResampler}
+      ${shouldInstallDesktopItem}
+    '';
 
   passthru.updateScript = ./update.sh;
 
@@ -74,12 +98,7 @@ buildDotnetModule rec {
       # some deps and worldline resampler
       binaryNativeCode
     ];
-    license = with licenses; [
-      # dotnet code and worldline resampler binary
-      mit
-      # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
-      unfreeRedistributable
-    ];
+    license = licenses.mit;
     maintainers = [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "OpenUtau";

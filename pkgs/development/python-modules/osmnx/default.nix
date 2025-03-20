@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.9.3";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Tn800wFoPi5VkZmu9wUVM+EmCj/xxU2EJ6iwnA1VKXo=";
+    tag = "v${version}";
+    hash = "sha256-5IvohqEYYvFqAKOYreEsEKjzfJaqShYck2xCSQXXfyQ=";
   };
 
   build-system = [ hatchling ];

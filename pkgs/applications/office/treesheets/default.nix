@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, wrapGAppsHook3
-, makeWrapper
-, wxGTK
-, Cocoa
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  wrapGAppsHook3,
+  makeWrapper,
+  wxGTK32,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "0-unstable-2024-09-08";
+  version = "0-unstable-2025-03-03";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "8db448f67710194d64211ac467ffd2d456854432";
-    hash = "sha256-SM62ymN5HXRiyXayoWQaGXLCGEDbHcKMJdPLXDv5dv8=";
+    rev = "a09352dabf6c491eed411bca5e613ba58142debc";
+    hash = "sha256-3lO8bsdluj24EMikvSQ7qOciHmIlKVxR3GWAG/SfUFM=";
   };
 
   nativeBuildInputs = [
@@ -29,19 +29,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
+    wxGTK32
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${
+    builtins.replaceStrings [ "unstable-" ] [ "" ] version
+  }\"";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shopt -s extglob
-    mkdir -p $out/{share/treesheets,bin}
-    mv $out/!(share) $out/share/treesheets
-    makeWrapper $out/{share/treesheets,bin}/treesheets \
-      --chdir $out/share/treesheets
+    mkdir -p $out/{Applications,bin}
+    mv $out/TreeSheets.app $out/Applications
+    makeWrapper $out/Applications/TreeSheets.app/Contents/MacOS/TreeSheets $out/bin/TreeSheets
   '';
 
   passthru = {
@@ -52,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free Form Data Organizer";
-    mainProgram = "treesheets";
+    mainProgram = "TreeSheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,

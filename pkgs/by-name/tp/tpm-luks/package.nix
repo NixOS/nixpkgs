@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gawk,
+  trousers,
+  cryptsetup,
+  openssl,
+}:
 
 stdenv.mkDerivation {
   pname = "tpm-luks";
@@ -17,7 +26,12 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ gawk trousers cryptsetup openssl ];
+  buildInputs = [
+    gawk
+    trousers
+    cryptsetup
+    openssl
+  ];
 
   installPhase = ''
     mkdir -p $out
@@ -34,4 +48,3 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
   };
 }
-

@@ -1,19 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, zsh, ncurses, nix-update-script }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  zsh,
+  ncurses,
+  autoconf,
+  nix-update-script,
+}:
 
 let
-  INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
-in stdenv.mkDerivation rec {
+  INSTALL_PATH = "${placeholder "out"}/share/fzf-tab";
+in
+stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "v${version}";
-    hash = "sha256-Qv8zAiMtrr67CbLRrFjGaPzFZcOiMVEFLg1Z+N6VMhg=";
+    hash = "sha256-q26XVS/LcyZPRqDNwKKA9exgBByE0muyuNb0Bbar2lY=";
   };
 
   strictDeps = true;
+  nativeBuildInputs = [ autoconf ];
   buildInputs = [ ncurses ];
 
   # https://github.com/Aloxaf/fzf-tab/issues/337
@@ -36,6 +46,8 @@ in stdenv.mkDerivation rec {
 
     pushd zsh-${zsh.version}
 
+    # Apply patches from zsh
+    ${lib.concatStringsSep "\n" (map (patch: "patch -p1 -i ${patch}") zsh.patches)}
 
     if [[ ! -f ./configure ]]; then
       ./Util/preconfig
@@ -85,7 +97,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Aloxaf/fzf-tab";
     description = "Replace zsh's default completion selection menu with fzf!";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vonfry ];
+    maintainers = with lib.maintainers; [ diredocks ];
     platforms = lib.platforms.unix;
   };
 }

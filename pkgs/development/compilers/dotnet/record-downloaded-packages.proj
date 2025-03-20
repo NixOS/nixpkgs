@@ -6,7 +6,7 @@
       <_NuGetToNixPackageCache Include="$(ProjectDirectory)artifacts/source-build/self/package-cache/"/>
     </ItemGroup>
     <Exec
-      Command="nuget-to-nix '@(_NuGetToNixPackageCache)' >'$(ProjectDirectory)deps.nix' 2>'$(ProjectDirectory)deps.out'"
+      Command="nuget-to-json '@(_NuGetToNixPackageCache)' >'$(ProjectDirectory)deps.json'"
       WorkingDirectory="$(ProjectDirectory)"
       Condition="Exists('%(Identity)')"/>
   </Target>

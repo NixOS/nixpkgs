@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gucci }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gucci,
+}:
 
 buildGoModule rec {
   pname = "gucci";
@@ -7,13 +13,17 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-bwPQQtaPHby96C5ZHZhBTok+m8GPPS40U1CUPVYqCa4=";
   };
 
   vendorHash = "sha256-/4OnbtxxhXQnmSV6UbjgzXdL7szhL9rKiG5BR8FsyqI=";
 
-  ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.AppVersion=${version}"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = gucci;

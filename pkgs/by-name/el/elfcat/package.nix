@@ -1,17 +1,22 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "elfcat";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "ruslashev";
-    repo = pname;
+    repo = "elfcat";
     rev = version;
-    sha256 = "sha256-NzFKNCCPWBj/fhaEJF34nyeyvLMeQwIcQgTlYc6mgYo=";
+    sha256 = "sha256-lmoOwxRGXcInoFb2YDawLKaebkcUftzpPZ1iTXbl++c=";
   };
 
-  cargoHash = "sha256-Dc+SuLwbLFcNSr9RiNSc7dgisBOvOUEIDR8dFAkC/O0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3rqxST7dcp/2+B7DiY92C75P0vQyN2KY3DigBEZ1W1w=";
 
   meta = with lib; {
     description = "ELF visualizer, generates HTML files from ELF binaries";

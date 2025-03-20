@@ -2,23 +2,27 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "nuclei";
-  version = "3.3.5";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-L8HOuPENnyM56ac1dqJRCYzqN9wRnGt4RoF8BZji0Z0=";
+    tag = "v${version}";
+    hash = "sha256-5+alARFuxwJlPYki5TU+4GdaJhBEYXbXH0BrCj2/aic=";
   };
 
-  vendorHash = "sha256-ZGFzZ/WpiVChtvMJQH3lR4k2it1KF0QwrMQchQz5XYw=";
+  vendorHash = "sha256-l3733hg11+Qg4h68DnXoD8LyYiB+iFyZyKggpCAsx7Q=";
+
   proxyVendor = true; # hash mismatch between Linux and Darwin
 
   subPackages = [ "cmd/nuclei/" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-w"
@@ -27,6 +31,10 @@ buildGoModule rec {
 
   # Test files are not part of the release tarball
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "Tool for configurable targeted scanning";

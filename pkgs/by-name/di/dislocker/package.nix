@@ -1,12 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, mbedtls_2
-, fuse
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  mbedtls_2,
+  fuse,
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "dislocker";
@@ -32,14 +33,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ fuse mbedtls_2 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    fuse
+    mbedtls_2
+  ];
 
   meta = with lib; {
     description = "Read BitLocker encrypted partitions in Linux";
-    homepage    = "https://github.com/aorimn/dislocker";
-    license     = licenses.gpl2Plus;
+    homepage = "https://github.com/aorimn/dislocker";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ elitak ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

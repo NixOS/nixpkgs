@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "celery";
     repo = "django-celery-beat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XWcmKQXNw8eoGkld77E3rHpR9ofa1i2qO/JI8Hnpi9M=";
   };
 

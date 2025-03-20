@@ -43,6 +43,8 @@ makeScopeWithSplicing' {
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
+      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
+
       tumbler = callPackage ./core/tumbler { };
 
       xfce4-panel = callPackage ./core/xfce4-panel { };
@@ -61,11 +63,7 @@ makeScopeWithSplicing' {
 
       xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
 
-      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools {
-        mkXfceDerivation = self.mkXfceDerivation.override {
-          xfce4-dev-tools = null;
-        };
-      };
+      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools { };
 
       #### APPLICATIONS
 

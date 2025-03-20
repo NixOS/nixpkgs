@@ -5,7 +5,7 @@
   pytestCheckHook,
   pycparser,
   psutil,
-  dotnet-sdk,
+  dotnet-sdk_6,
   buildDotnetModule,
   clr-loader,
   setuptools,
@@ -13,12 +13,12 @@
 
 let
   pname = "pythonnet";
-  version = "3.0.4";
+  version = "3.0.5";
   src = fetchFromGitHub {
     owner = "pythonnet";
     repo = "pythonnet";
-    rev = "v${version}";
-    hash = "sha256-QdgcBFQDFxmFxuXsDlHcu+L/VWw2aKfyWDqPrawyhOs=";
+    tag = "v${version}";
+    hash = "sha256-3LBrV/cQrXFKMFE1rCalDsPZ3rOY7RczqXoryMoVi14=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -27,7 +27,8 @@ let
     inherit pname version src;
     projectFile = "src/runtime/Python.Runtime.csproj";
     testProjectFile = "src/testing/Python.Test.csproj";
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
+    dotnet-sdk = dotnet-sdk_6;
   };
 in
 buildPythonPackage {
@@ -44,7 +45,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     setuptools
-    dotnet-sdk
+    dotnet-sdk_6
   ];
 
   propagatedBuildInputs = [
@@ -68,7 +69,7 @@ buildPythonPackage {
   meta = with lib; {
     description = ".NET integration for Python";
     homepage = "https://pythonnet.github.io";
-    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/v${version}";
+    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/${src.tag}";
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];

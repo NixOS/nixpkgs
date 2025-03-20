@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbr";
     repo = "simplekv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-seUGDj2q84+AjDFM1pxMLlHbe9uBgEhmqA96UHjnCmo=";
   };
 

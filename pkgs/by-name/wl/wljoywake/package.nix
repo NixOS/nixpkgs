@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 let

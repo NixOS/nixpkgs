@@ -1,4 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, boost, lua }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  boost,
+  lua,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ boost lua ];
+  buildInputs = [
+    boost
+    lua
+  ];
 
   postPatch = ''
     # avoid timestamp non-determinism with '-n'

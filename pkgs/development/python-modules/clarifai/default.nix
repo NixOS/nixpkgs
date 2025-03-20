@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   clarifai-grpc,
+  clarifai-protocol,
+  click,
   fetchFromGitHub,
+  fsspec,
   inquirerpy,
   numpy,
   pillow,
@@ -20,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.8.6";
+  version = "11.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,12 +31,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/fHNRFtxyNa9VdEi5wQ+YA+9mFv3ZpRFJQnWkuxQd5I=";
+    tag = version;
+    hash = "sha256-JLZGVVrvGVUWr7WCTu2alVl+4GuYqLWP2dodgxYbmgc=";
   };
 
   pythonRelaxDeps = [
-    "clarifai-grpc"
+    "fsspec"
     "schema"
   ];
 
@@ -41,6 +44,9 @@ buildPythonPackage rec {
 
   dependencies = [
     clarifai-grpc
+    clarifai-protocol
+    click
+    fsspec
     inquirerpy
     numpy
     pillow
@@ -71,16 +77,21 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require network access and API key
+    "tests/cli/test_compute_orchestration.py"
+    "tests/runners/test_anymodel.py"
+    "tests/runners/test_download_checkpoints.py"
+    "tests/runners/test_runners.py"
+    "tests/runners/test_textmodel.py"
+    "tests/runners/test_url_fetcher.py"
     "tests/test_app.py"
     "tests/test_data_upload.py"
     "tests/test_eval.py"
     "tests/test_model_predict.py"
     "tests/test_model_train.py"
+    "tests/test_rag.py"
     "tests/test_search.py"
     "tests/workflow/test_create_delete.py"
     "tests/workflow/test_predict.py"
-    "tests/test_rag.py"
-    "clarifai/models/model_serving/repo_build/static_files/base_test.py"
   ];
 
   pythonImportsCheck = [ "clarifai" ];
@@ -88,7 +99,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
-    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
+    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
     mainProgram = "clarifai";

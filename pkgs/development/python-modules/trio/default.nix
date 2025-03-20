@@ -18,7 +18,6 @@
 
   # tests
   astor,
-  coreutils,
   jedi,
   pyopenssl,
   pytestCheckHook,
@@ -36,7 +35,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.26.2";
+  version = "0.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,8 +43,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Vlm6lEMKKfwmhbeefPjxm3vz1zFRUEGOCHXLcZKQcIo=";
+    tag = "v${version}";
+    hash = "sha256-ru5Q7YHpnA/hLwh2Og5Hp3z6XJCv/BHHW0S26N1oTJ0=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +76,11 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [
     "getnameinfo"
@@ -96,7 +100,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
+    changelog = "https://github.com/python-trio/trio/blob/${src.tag}/docs/source/history.rst";
     description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [

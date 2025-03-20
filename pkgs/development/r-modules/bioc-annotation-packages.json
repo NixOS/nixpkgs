@@ -1,6 +1,6 @@
 {
   "extraArgs": {
-    "biocVersion": "3.19"
+    "biocVersion": "3.20"
   },
   "packages": {
     "AHCytoBands": {
@@ -11,8 +11,8 @@
     },
     "AHEnsDbs": {
       "name": "AHEnsDbs",
-      "version": "1.5.1",
-      "sha256": "02gvrlfld6y03gcw7931fplm220dhnhh12xljb0xm6f3inl0vwa6",
+      "version": "1.6.0",
+      "sha256": "1l62703d0czlysvxggvzsqfn1cgjgim7vd0wgzav70vj572z2bs5",
       "depends": ["AnnotationHubData", "ensembldb"]
     },
     "AHLRBaseDbs": {
@@ -401,14 +401,14 @@
     },
     "BSgenome_Hsapiens_UCSC_hg17": {
       "name": "BSgenome.Hsapiens.UCSC.hg17",
-      "version": "1.3.1000",
-      "sha256": "1q8p0zp5xpp22znwnygl3jhc159db4q3kkpj5wfij5a6z19zs1w3",
+      "version": "1.3.1001",
+      "sha256": "10vxkdr7vjbyginq5dnw6199l6kwvis45dhl9khh4aywv9l0ky0x",
       "depends": ["BSgenome"]
     },
     "BSgenome_Hsapiens_UCSC_hg17_masked": {
       "name": "BSgenome.Hsapiens.UCSC.hg17.masked",
-      "version": "1.3.99",
-      "sha256": "1pg39kmbmnync0xxdbgsn6gpz78hfbzd7iffidpv8mfk734srwzn",
+      "version": "1.3.999",
+      "sha256": "0mycmcp6j0zl3nw8fwypc94i9v1ii910myyr2ipawxi3yb3ch136",
       "depends": ["BSgenome", "BSgenome_Hsapiens_UCSC_hg17"]
     },
     "BSgenome_Hsapiens_UCSC_hg18": {
@@ -881,8 +881,8 @@
     },
     "GO_db": {
       "name": "GO.db",
-      "version": "3.19.1",
-      "sha256": "199vk4y069yik7fn25pp73nkhs1vaw9km9rcmm1cirncwm2n0vhg",
+      "version": "3.20.0",
+      "sha256": "1p0hw5j6a7q7pgp7l40rs27ci16n6jpyd39irhrpys94hqrqx5pz",
       "depends": ["AnnotationDbi"]
     },
     "GeneSummary": {
@@ -893,8 +893,8 @@
     },
     "GenomeInfoDbData": {
       "name": "GenomeInfoDbData",
-      "version": "1.2.12",
-      "sha256": "0md3jl5bz4d2wkvf4yra7rydf5dgykrijrdqwwxc7f77l30nsmgp",
+      "version": "1.2.13",
+      "sha256": "0kh7yxk8aqadv9xdnvrp2ysa1xxxgjqkj83w3bw1w9k55r1kr8si",
       "depends": []
     },
     "GenomicState": {
@@ -905,9 +905,9 @@
     },
     "HDO_db": {
       "name": "HDO.db",
-      "version": "0.99.1",
-      "sha256": "14ngyxailmxrbxqqi9m7mchqcvchmbg7zm34i8a927b20s6z4z61",
-      "depends": ["AnnotationDbi"]
+      "version": "1.0.0",
+      "sha256": "0h026xkncm8nc1q8z7qk3nlw445rf3dncaf20b80x7xfl2nm3f84",
+      "depends": ["AnnotationDbi", "DBI"]
     },
     "HPO_db": {
       "name": "HPO.db",
@@ -1035,6 +1035,18 @@
       "sha256": "1z4b15x8cai27cqhl2lhl02nx0lv8q5c1774vdvvdajx2hivn77l",
       "depends": ["minfi"]
     },
+    "IlluminaHumanMethylationMSAanno_ilm10a1_hg38": {
+      "name": "IlluminaHumanMethylationMSAanno.ilm10a1.hg38",
+      "version": "0.1.0",
+      "sha256": "07vzgmzf4sshva1xchxfzvks7qd6png63vzi2vvawalsbh7nmibw",
+      "depends": ["minfi"]
+    },
+    "IlluminaHumanMethylationMSAmanifest": {
+      "name": "IlluminaHumanMethylationMSAmanifest",
+      "version": "0.1.0",
+      "sha256": "01q7i5a2zc9pby9ivsqq8pdp80732akq4g8d594h9dn6qgm0znz3",
+      "depends": ["minfi"]
+    },
     "JASPAR2018": {
       "name": "JASPAR2018",
       "version": "1.1.1",
@@ -1085,8 +1097,8 @@
     },
     "MPO_db": {
       "name": "MPO.db",
-      "version": "0.99.7",
-      "sha256": "0x1rcikg189akbd71yh0p02482km9hry6i69s2srdf5mlgqficvl",
+      "version": "0.99.8",
+      "sha256": "1aaz4s8ydcqxx5qwfqxxs7fc20bjbdjxzg700gwd59kjgk6ijm92",
       "depends": ["AnnotationDbi", "AnnotationHub", "BiocFileCache", "DBI"]
     },
     "MafDb_1Kgenomes_phase1_GRCh38": {
@@ -1173,12 +1185,6 @@
       "sha256": "0y42ncmilijdxsgqsmskz7gff3il3fdf2kpflknmz1z9kybzaday",
       "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "IRanges", "S4Vectors"]
     },
-    "MafH5_gnomAD_v3_1_2_GRCh38": {
-      "name": "MafH5.gnomAD.v3.1.2.GRCh38",
-      "version": "3.15.1",
-      "sha256": "1q9hlva814sjfz8vm9bzw7xzppbcfy5qq7nnz9w742yr59cjb6mp",
-      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "S4Vectors", "rhdf5"]
-    },
     "MafH5_gnomAD_v4_0_GRCh38": {
       "name": "MafH5.gnomAD.v4.0.GRCh38",
       "version": "3.19.0",
@@ -1229,8 +1235,8 @@
     },
     "Orthology_eg_db": {
       "name": "Orthology.eg.db",
-      "version": "3.19.1",
-      "sha256": "1zg50j46kka5y0mfgqw3vh5xibd3yk7ay051dnci6mgd7v9gns5w",
+      "version": "3.20.0",
+      "sha256": "0876srbhjg872v46373p4bjy9kxpyqncbysc577bn2zf7miaxsal",
       "depends": ["AnnotationDbi"]
     },
     "PANTHER_db": {
@@ -1241,8 +1247,8 @@
     },
     "PFAM_db": {
       "name": "PFAM.db",
-      "version": "3.19.1",
-      "sha256": "0jjba22p8x4cfnihsa3gah3amdr4yrqpfm0zfr990jcjkvf94wvk",
+      "version": "3.20.0",
+      "sha256": "0ibhdvb7vc2s70n6dq13357y9fgvkg0bdjxcq13n9rqajk6bmaw6",
       "depends": ["AnnotationDbi"]
     },
     "POCRCannotation_db": {
@@ -1358,6 +1364,12 @@
       "version": "0.99.10",
       "sha256": "1qk4frv4hn3pfwbhqd92r8d59ksvgzs9399w4ca7knmij6zzl73p",
       "depends": ["AnnotationDbi", "DBI", "org_Hs_eg_db"]
+    },
+    "TENET_AnnotationHub": {
+      "name": "TENET.AnnotationHub",
+      "version": "0.99.4",
+      "sha256": "0kfdwxbxi4y773nknpd712wz3zcqbigkycnsrrd40jp04my91mpm",
+      "depends": ["AnnotationHub", "GenomicRanges"]
     },
     "TxDb_Athaliana_BioMart_plantsmart22": {
       "name": "TxDb.Athaliana.BioMart.plantsmart22",
@@ -1505,8 +1517,8 @@
     },
     "TxDb_Hsapiens_UCSC_hg38_knownGene": {
       "name": "TxDb.Hsapiens.UCSC.hg38.knownGene",
-      "version": "3.18.0",
-      "sha256": "0ak6acjll2djamakpn60ks47lfs2y0r8xwhjazj6fvch34xkc2d5",
+      "version": "3.20.0",
+      "sha256": "15qmd51wcjhwzg3w1s13ky39km0waypwzipvr4cisvhvkbr7sqn4",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Hsapiens_UCSC_hg38_refGene": {
@@ -1547,8 +1559,8 @@
     },
     "TxDb_Mmusculus_UCSC_mm39_knownGene": {
       "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
-      "version": "3.18.0",
-      "sha256": "061rfyddq15sz684jchvwxww1ipi94xljcgwbz4a92k8i9cnysva",
+      "version": "3.20.0",
+      "sha256": "1bvq9msb9z7j82gf37lfgxjl24qbvs7ydndil3c110jzaja2yn00",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Mmusculus_UCSC_mm39_refGene": {
@@ -1703,14 +1715,14 @@
     },
     "anopheles_db0": {
       "name": "anopheles.db0",
-      "version": "3.19.1",
-      "sha256": "190yjnl86b6vm2xmdfm43hn5xy7jsf83rwd103v537y4qhxdy0yq",
+      "version": "3.20.0",
+      "sha256": "07vfxbvw41w7600xv70bnh37wxxwsbkkhihypmibprxmwibf7dvp",
       "depends": ["AnnotationDbi"]
     },
     "arabidopsis_db0": {
       "name": "arabidopsis.db0",
-      "version": "3.19.1",
-      "sha256": "1fi4akbk7yc6drkdwp0dfaxdn5axg1c5qp9b445318zszdylxbd3",
+      "version": "3.20.0",
+      "sha256": "15rcqa844plk5hg1pagry4ybhbcq41n3lccqprmvvlxw5xsrhkv4",
       "depends": ["AnnotationDbi"]
     },
     "ath1121501_db": {
@@ -1757,8 +1769,8 @@
     },
     "bovine_db0": {
       "name": "bovine.db0",
-      "version": "3.19.1",
-      "sha256": "1qyhzbr81r302xnzg76njwj3b88rrbk02qsxsrg7728qwpwd412v",
+      "version": "3.20.0",
+      "sha256": "0z6g9kn85v88mm94qm4j0m6081qjqqrdwnxgz8j0i85cyw2l730q",
       "depends": ["AnnotationDbi"]
     },
     "bovinecdf": {
@@ -1811,8 +1823,8 @@
     },
     "canine_db0": {
       "name": "canine.db0",
-      "version": "3.19.1",
-      "sha256": "0qagfxza04zncjrd97b0mrqrd5jchifv1pxbzv3npdp0801yym2f",
+      "version": "3.20.0",
+      "sha256": "1lllajhmmics9jvdympy8fx54wdan9ipcmwpq5sfm3ncm5bh10bj",
       "depends": ["AnnotationDbi"]
     },
     "canine2_db": {
@@ -1871,8 +1883,8 @@
     },
     "chicken_db0": {
       "name": "chicken.db0",
-      "version": "3.19.1",
-      "sha256": "1qba9s4fmh17b3g6z6jfb2cdby0mhc80xjj0r9a2wvd8qlm5gyw1",
+      "version": "3.20.0",
+      "sha256": "0s8ag58f5xfcyvhx6cgg95dmkgdllvmz4s5vd24g4rn1l4ikvrw9",
       "depends": ["AnnotationDbi"]
     },
     "chickencdf": {
@@ -1889,8 +1901,8 @@
     },
     "chimp_db0": {
       "name": "chimp.db0",
-      "version": "3.19.1",
-      "sha256": "1vsb2235k00jxmff9i7lbc3kmiqkz5xvm21bzhryql7kgy5i64yf",
+      "version": "3.20.0",
+      "sha256": "1jx6cl4l226yp3fjd1md034bdmif8yg0f1bjivsqbb6mxrvdypa1",
       "depends": ["AnnotationDbi"]
     },
     "chromhmmData": {
@@ -2033,14 +2045,14 @@
     },
     "ecoliK12_db0": {
       "name": "ecoliK12.db0",
-      "version": "3.19.1",
-      "sha256": "0fi0cxl5hj5mx2z2r0j86qf3bfx1dz8abn86maim9b1l89whvqwd",
+      "version": "3.20.0",
+      "sha256": "168byg9z4chby69cxkgmih3q5bad9shcmhmcn5b27qqyg737r29f",
       "depends": ["AnnotationDbi"]
     },
     "ecoliSakai_db0": {
       "name": "ecoliSakai.db0",
-      "version": "3.19.1",
-      "sha256": "1kqpmmddqyfjx2y2kbp53mv1vazbjhpwl3crpx2iq0q1b2ynb63f",
+      "version": "3.20.0",
+      "sha256": "0nmjqxmic1crpy2rhjn86ls68j2w1x67sbc8q5j42zm75crb752k",
       "depends": ["AnnotationDbi"]
     },
     "ecoliasv2cdf": {
@@ -2081,8 +2093,8 @@
     },
     "fly_db0": {
       "name": "fly.db0",
-      "version": "3.19.1",
-      "sha256": "0726vpqc092mq9j23ghvy5yjg3v6fm26fynlad5k4wshyfw1szxk",
+      "version": "3.20.0",
+      "sha256": "0nsxzbxg284jg9gd9fnn55qhsw7lbsnywwyh5dp9ssmmhwf746ix",
       "depends": ["AnnotationDbi"]
     },
     "geneplast_data": {
@@ -2879,8 +2891,8 @@
     },
     "human_db0": {
       "name": "human.db0",
-      "version": "3.19.1",
-      "sha256": "006q28yvh8l5h7pa9qdhcvjd9049bzg1v5nnvphivwn186hv47ww",
+      "version": "3.20.0",
+      "sha256": "0l4nlgnwwxrizbywzd1n3nq0p98l32hm93kk250l6hwh9jacmi6b",
       "depends": ["AnnotationDbi"]
     },
     "human1mduov3bCrlmm": {
@@ -3107,8 +3119,8 @@
     },
     "malaria_db0": {
       "name": "malaria.db0",
-      "version": "3.19.1",
-      "sha256": "0gyx0s801pzhcaa0hqbcj69hjgz63b6d764wiflpdg90c79db2is",
+      "version": "3.20.0",
+      "sha256": "1m2s9pa0xhcgvxxz240chl3qscdy7bsk8f6wf27svws6h4d0zvrc",
       "depends": ["AnnotationDbi"]
     },
     "medicagocdf": {
@@ -3437,8 +3449,8 @@
     },
     "mouse_db0": {
       "name": "mouse.db0",
-      "version": "3.19.1",
-      "sha256": "00payj4mc0z5s5iv8ai8w1vg2j68xi12qbg4yxcyjc69vslcgpv0",
+      "version": "3.20.0",
+      "sha256": "1xx66q0mgylyapflczrnmci933byb24b6psiqybx2a8zd2mw9i87",
       "depends": ["AnnotationDbi"]
     },
     "mouse4302_db": {
@@ -3665,80 +3677,80 @@
     },
     "org_Ag_eg_db": {
       "name": "org.Ag.eg.db",
-      "version": "3.19.1",
-      "sha256": "1j8aaraq4wrj633kwfldycsshyygx1k5bvacpha5qg6g7c00bb79",
+      "version": "3.20.0",
+      "sha256": "0r5flj8h3w0hxacwdk4hq54r0dvjnj6fyv31m22x7ld7c466awf0",
       "depends": ["AnnotationDbi"]
     },
     "org_At_tair_db": {
       "name": "org.At.tair.db",
-      "version": "3.19.1",
-      "sha256": "0g4b2h08z4fy2wq9nskgp3h5vffs9zk3xx1ax1l86wl16ji2591x",
+      "version": "3.20.0",
+      "sha256": "01cchwj03hq8jng0xaxwc96ibbmrrai26hnp61g8bxlfgnn5zh4k",
       "depends": ["AnnotationDbi"]
     },
     "org_Bt_eg_db": {
       "name": "org.Bt.eg.db",
-      "version": "3.19.1",
-      "sha256": "0rbbjv47fadc6jgpqrimsd91f35fw6sw8d805vf61nx5xhbl3lpc",
+      "version": "3.20.0",
+      "sha256": "0ryfpblhpqzkww1xb63k2c5ki8xh73as8fwl8f8kvsy4x7axfr5g",
       "depends": ["AnnotationDbi"]
     },
     "org_Ce_eg_db": {
       "name": "org.Ce.eg.db",
-      "version": "3.19.1",
-      "sha256": "0vg6nw4qzj8janmkv6k2z471m3l4xnd1h232h0w5i53b20c7p6ys",
+      "version": "3.20.0",
+      "sha256": "1r7fzzrqcas23bxcd55ppflx0ls1biifis3qj36iv5gwhhwimq3i",
       "depends": ["AnnotationDbi"]
     },
     "org_Cf_eg_db": {
       "name": "org.Cf.eg.db",
-      "version": "3.19.1",
-      "sha256": "07grx4zgba2q4xgs9x7j3ryy12xkl32mzzgfgivxq68xg7ipj2fk",
+      "version": "3.20.0",
+      "sha256": "0sf7lyh16mbh1h986dkbdci5rmkvg1rj80far1grcd2hwpdgaq7s",
       "depends": ["AnnotationDbi"]
     },
     "org_Dm_eg_db": {
       "name": "org.Dm.eg.db",
-      "version": "3.19.1",
-      "sha256": "1sqw38z73sgq66x8qrb5xw0jxyimy7l1hs2iwm7xq9ylzrjw3yj0",
+      "version": "3.20.0",
+      "sha256": "1v21rx7kpdi30898jbnvg1cd3xgghvqhkiipkasn5wjz22z1lqna",
       "depends": ["AnnotationDbi"]
     },
     "org_Dr_eg_db": {
       "name": "org.Dr.eg.db",
-      "version": "3.19.1",
-      "sha256": "041hp3xhkiwh8vb4zq5kwvrsmp8paqlri6gaj1qy0a5zjlkw0fl6",
+      "version": "3.20.0",
+      "sha256": "0ayva6p2qav16s4nvngxqi8zwl4ylrl5riww3lwc2dql0kkgbvrs",
       "depends": ["AnnotationDbi"]
     },
     "org_EcK12_eg_db": {
       "name": "org.EcK12.eg.db",
-      "version": "3.19.1",
-      "sha256": "1af2yrbpn58z34jq39qmmwprzsffgxbrs84dsxny4rksa8k6j70s",
+      "version": "3.20.0",
+      "sha256": "0qd6ppvcpsprbw8c9rp3fx5i8cs6gv0n4mqwxwjs1421p19m1bqd",
       "depends": ["AnnotationDbi"]
     },
     "org_EcSakai_eg_db": {
       "name": "org.EcSakai.eg.db",
-      "version": "3.19.1",
-      "sha256": "02wbh31iqdywy0gqj43l9faijxagsa3fcgcx7y8mafwpgd7aqr7m",
+      "version": "3.20.0",
+      "sha256": "1dqs6lkjlyy32pg3qiv6ll1mqbs4h0j0wkkn1zwdnban6migv1y2",
       "depends": ["AnnotationDbi"]
     },
     "org_Gg_eg_db": {
       "name": "org.Gg.eg.db",
-      "version": "3.19.1",
-      "sha256": "0fnxscjps85jmd683212hsp6rs5f4bybcxj8xfqggi4l87fkzng0",
+      "version": "3.20.0",
+      "sha256": "1v22p36gxjs4fjc4zamaj4h10qvhknvz22chlnjqn4lisifpg325",
       "depends": ["AnnotationDbi"]
     },
     "org_Hs_eg_db": {
       "name": "org.Hs.eg.db",
-      "version": "3.19.1",
-      "sha256": "1xrbf0zmik1j70i6bg5wqvfwz4vcf3vgypan36r1lv6lspsfychr",
+      "version": "3.20.0",
+      "sha256": "1gykdrfkzvx83bkpbggsnk8gd0w9xh5g071r3ngykjh5x36w6dlc",
       "depends": ["AnnotationDbi"]
     },
     "org_Mm_eg_db": {
       "name": "org.Mm.eg.db",
-      "version": "3.19.1",
-      "sha256": "12d8lrf6bxvqzfxzdbxqmjcywy2myhwhi99kxdwpijsczxxfikj7",
+      "version": "3.20.0",
+      "sha256": "1wlc34qq0hv9fmdw810jc26gyf7ibicy8rsbll4is7bp2i1hxk47",
       "depends": ["AnnotationDbi"]
     },
     "org_Mmu_eg_db": {
       "name": "org.Mmu.eg.db",
-      "version": "3.19.1",
-      "sha256": "0fz2rrw52nsa2mnl3gmx3ap9zjj0w37zyzwnvxzhmi6wmamr1nk4",
+      "version": "3.20.0",
+      "sha256": "0qpzslrjd77s4zgv68pmkm2kbbrb0h8ginzp9wppsnb58qvbz4nv",
       "depends": ["AnnotationDbi"]
     },
     "org_Mxanthus_db": {
@@ -3749,38 +3761,38 @@
     },
     "org_Pf_plasmo_db": {
       "name": "org.Pf.plasmo.db",
-      "version": "3.19.1",
-      "sha256": "1klkhazb4rbmnpp3ywj266202740p1c0xsi6dlz84r2cxsrvw1kn",
+      "version": "3.20.0",
+      "sha256": "1n8xs8l9ggg18x8gkhf6pr0ic6sgdf63gbfrm6w5ixzmwdfazq90",
       "depends": ["AnnotationDbi"]
     },
     "org_Pt_eg_db": {
       "name": "org.Pt.eg.db",
-      "version": "3.19.1",
-      "sha256": "1l17ys29ms7iiyflhbk47nvy069rrjpz2f1b5cbfklpr0lzy583b",
+      "version": "3.20.0",
+      "sha256": "05hkhwjh5r18wpk60vwk06bfra6fwrnrr0jshc71hzr6cc15jqfk",
       "depends": ["AnnotationDbi"]
     },
     "org_Rn_eg_db": {
       "name": "org.Rn.eg.db",
-      "version": "3.19.1",
-      "sha256": "0bq42q2j4jddzi2s4lzhmzplbhkd2drw6545ffhcpi4r7ryrzqkn",
+      "version": "3.20.0",
+      "sha256": "009c22ry5nnklzdc5dywnf8lq41cj3141yr5vw1kgifys6lanj01",
       "depends": ["AnnotationDbi"]
     },
     "org_Sc_sgd_db": {
       "name": "org.Sc.sgd.db",
-      "version": "3.19.1",
-      "sha256": "1sbjwyf0ibivdhhxsaljgqa4lqp3hcf8gcrlcm2vd78bfm5cm7bg",
+      "version": "3.20.0",
+      "sha256": "0p7mvra93l21pb14qbvqjg7pwl6n572d8a3k15v9fsafikd07v8a",
       "depends": ["AnnotationDbi"]
     },
     "org_Ss_eg_db": {
       "name": "org.Ss.eg.db",
-      "version": "3.19.1",
-      "sha256": "0cdql2zvgsrirpby6vahkfxqwnfpbs1hmfl55j8i4n4dv184cbhf",
+      "version": "3.20.0",
+      "sha256": "0ls2w86r06rwdvmgsv54fksp0wk9nk0a88xaljx85d2x0x5vfkwj",
       "depends": ["AnnotationDbi"]
     },
     "org_Xl_eg_db": {
       "name": "org.Xl.eg.db",
-      "version": "3.19.1",
-      "sha256": "0xl3xg4sa5fc7ms6c61pq633y45p2ayh8l02ws1k2yadcmykajrh",
+      "version": "3.20.0",
+      "sha256": "0g20n9c1rrh82w809sisrwm05jzldzqyzvmjj5rfv23i158rjhc2",
       "depends": ["AnnotationDbi"]
     },
     "paeg1acdf": {
@@ -4859,8 +4871,8 @@
     },
     "pig_db0": {
       "name": "pig.db0",
-      "version": "3.19.1",
-      "sha256": "10s39hcyia1w2wik2yxlalnli8a3bw8siqbrnmfyh0hx50plhhmv",
+      "version": "3.20.0",
+      "sha256": "0mlc62dj7im85czy9idqfld510d3dfygqm03sx9s8lksb0ib0g7n",
       "depends": ["AnnotationDbi"]
     },
     "plasmodiumanophelescdf": {
@@ -5039,8 +5051,8 @@
     },
     "rat_db0": {
       "name": "rat.db0",
-      "version": "3.19.1",
-      "sha256": "0vl2an3b00h94z1ba29fz83q04p4n641qs4xgp53zz3jg8lgm4si",
+      "version": "3.20.0",
+      "sha256": "0515r25qj1gca0rr2cydn3rzwxrifbfpx354chj94rl0xz2ppk3n",
       "depends": ["AnnotationDbi"]
     },
     "rat2302_db": {
@@ -5087,8 +5099,8 @@
     },
     "reactome_db": {
       "name": "reactome.db",
-      "version": "1.88.0",
-      "sha256": "1fwbf53vklhvqa6n6pijb8xqyv2pap1hskkirnm5c42wmd6g4ql7",
+      "version": "1.89.0",
+      "sha256": "1r4h9wdm3h99b9w18kihma8n9hprxqp1il5k43cfrf191l6wic38",
       "depends": ["AnnotationDbi"]
     },
     "rgu34a_db": {
@@ -5171,8 +5183,8 @@
     },
     "rhesus_db0": {
       "name": "rhesus.db0",
-      "version": "3.19.1",
-      "sha256": "1687fgxx9rj1ghjg7vhmli360algh6piwafdsi4l347sl1yhklcd",
+      "version": "3.20.0",
+      "sha256": "09b8lqna4vp92dwjs6cqw71kfb7w31zaph6x47l2aq0phn0zr0q4",
       "depends": ["AnnotationDbi"]
     },
     "rhesuscdf": {
@@ -5411,14 +5423,14 @@
     },
     "worm_db0": {
       "name": "worm.db0",
-      "version": "3.19.1",
-      "sha256": "1v24lpw3kfzlzq577vqpqy5bypwfkw1khag7smpq9bgv8dmfcx8r",
+      "version": "3.20.0",
+      "sha256": "1r5man0ad7gkl0444ys7r60jiandb93i6d23g4vx5p31a2ih07jj",
       "depends": ["AnnotationDbi"]
     },
     "xenopus_db0": {
       "name": "xenopus.db0",
-      "version": "3.19.1",
-      "sha256": "1d6bhq0ppgm087zkh4nmm3qx6f2mp0lblhzvayc6fqyzrzanvjiy",
+      "version": "3.20.0",
+      "sha256": "1pk2i3rl421hs79s6rzaxlha6x41ggq2k3salm73p3f4xymzrpc6",
       "depends": ["AnnotationDbi"]
     },
     "xenopuslaeviscdf": {
@@ -5489,8 +5501,8 @@
     },
     "yeast_db0": {
       "name": "yeast.db0",
-      "version": "3.19.1",
-      "sha256": "00zbg60zn0yzmfdm017al4hbncrlsdfb5syj8mfxha3522q1114h",
+      "version": "3.20.0",
+      "sha256": "0wvk457jlw05g28f158bd49ymri13x0mbbr6gif8msrj78zkdi3j",
       "depends": ["AnnotationDbi"]
     },
     "yeast2_db": {
@@ -5543,8 +5555,8 @@
     },
     "zebrafish_db0": {
       "name": "zebrafish.db0",
-      "version": "3.19.1",
-      "sha256": "1bg35zyxdvdhv0a1l5v61z6g0vz2h2ikad4lyv4akrmwndcrxijy",
+      "version": "3.20.0",
+      "sha256": "08w5hcpq71gfwzai0niyxd27pay2755nywqxjh5kxb8l050kpjnf",
       "depends": ["AnnotationDbi"]
     },
     "zebrafishcdf": {
@@ -5558,6 +5570,20 @@
       "version": "2.18.0",
       "sha256": "1pb8z2rdhq11hq391xyi236scyafbp56kbhhwsnha36yygz5drw0",
       "depends": ["AnnotationDbi"]
+    },
+    "IlluminaHumanMethylation450k_db": {
+      "name": "IlluminaHumanMethylation450k.db",
+      "version": "2.0.9",
+      "sha256": "1zmm65qnm95w9c8z30c9vncca451npbhhnlkpkpp894svsakxziz",
+      "depends": ["AnnotationDbi", "org_Hs_eg_db"],
+      "broken": true
+    },
+    "KEGG_db": {
+      "name": "KEGG.db",
+      "version": "3.2.2",
+      "sha256": "074dn5fy8b8p6mwb2l058sn9a3vy2j8isc5fv9vnmn0p9h0aqhi4",
+      "depends": ["AnnotationDbi"],
+      "broken": true
     },
     "LRBase_Ath_eg_db": {
       "name": "LRBase.Ath.eg.db",
@@ -5643,6 +5669,41 @@
       "depends": ["LRBaseDbi", "RSQLite"],
       "broken": true
     },
+    "MafDb_ALL_wgs_phase1_release_v3_20101123": {
+      "name": "MafDb.ALL.wgs.phase1.release.v3.20101123",
+      "version": "3.2.0",
+      "sha256": "1zd2hpp9f4ilajsx6xpimgiqzkxhc3lyhanr4n4gv0d3cdkxa1mb",
+      "depends": ["AnnotationDbi", "Biobase", "Biostrings", "GenomicRanges", "IRanges", "RSQLite", "Rsamtools", "VariantAnnotation", "VariantFiltering"],
+      "broken": true
+    },
+    "MafDb_ALL_wgs_phase3_release_v5a_20130502": {
+      "name": "MafDb.ALL.wgs.phase3.release.v5a.20130502",
+      "version": "3.2.0",
+      "sha256": "06bdbrjqh0gc7sypp94v0bwq4cfbz8vnq6z3g36w8906ziss6a8j",
+      "depends": ["AnnotationDbi", "Biobase", "Biostrings", "GenomicRanges", "IRanges", "RSQLite", "Rsamtools", "VariantAnnotation", "VariantFiltering"],
+      "broken": true
+    },
+    "MafDb_ALL_wgs_phase3_release_v5b_20130502": {
+      "name": "MafDb.ALL.wgs.phase3.release.v5b.20130502",
+      "version": "3.2.0",
+      "sha256": "1cc2aphc98nip100jfxy39clknrnpn5z838f1b8fb542whypikn7",
+      "depends": ["AnnotationDbi", "Biobase", "Biostrings", "GenomicRanges", "IRanges", "RSQLite", "Rsamtools", "VariantAnnotation", "VariantFiltering"],
+      "broken": true
+    },
+    "MafDb_ESP6500SI_V2_SSA137": {
+      "name": "MafDb.ESP6500SI.V2.SSA137",
+      "version": "3.2.0",
+      "sha256": "1dykp9bz1srb144yimkyagfhigr5dzg8ybxa5fsn3sr99p31va69",
+      "depends": ["AnnotationDbi", "Biobase", "Biostrings", "GenomicRanges", "IRanges", "RSQLite", "Rsamtools", "VariantAnnotation", "VariantFiltering"],
+      "broken": true
+    },
+    "MafDb_ExAC_r0_3_sites": {
+      "name": "MafDb.ExAC.r0.3.sites",
+      "version": "3.2.0",
+      "sha256": "1qb3zwlkqaw2p5faajjahpp6g8wp02gd733kw9kim9xddjvjba14",
+      "depends": ["AnnotationDbi", "Biobase", "Biostrings", "GenomicRanges", "IRanges", "RSQLite", "Rsamtools", "VariantAnnotation", "VariantFiltering"],
+      "broken": true
+    },
     "MafDb_gnomAD_r3_0_GRCh38": {
       "name": "MafDb.gnomAD.r3.0.GRCh38",
       "version": "3.13.0",
@@ -5664,227 +5725,241 @@
       "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "rhdf5", "S4Vectors"],
       "broken": true
     },
+    "MafH5_gnomAD_v3_1_2_GRCh38": {
+      "name": "MafH5.gnomAD.v3.1.2.GRCh38",
+      "version": "3.15.1",
+      "sha256": "1q9hlva814sjfz8vm9bzw7xzppbcfy5qq7nnz9w742yr59cjb6mp",
+      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "S4Vectors", "rhdf5"],
+      "broken": true
+    },
     "MeSH_AOR_db": {
       "name": "MeSH.AOR.db",
-      "version": "1.15.1",
-      "sha256": "1d33krs3xs0pa14gm7haiaglnlx5z41m6gx92gg8ckfpblyz49q2",
+      "version": "1.5.0",
+      "sha256": "07mcj2lrrgnazzk4kgnzriyrny6mv1n0bpyi2s4vkv58xxm2n04k",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Aca_eg_db": {
       "name": "MeSH.Aca.eg.db",
-      "version": "1.15.1",
-      "sha256": "195hs3x0sfs4s5kry452r0fhnq19ayv82j4dr1394zr104r17kb1",
+      "version": "1.5.0",
+      "sha256": "0jp07lnlxmb05cs0j3zr4spnlnqbh846j08ic7nhcl1bgzh652dp",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Aga_PEST_eg_db": {
       "name": "MeSH.Aga.PEST.eg.db",
-      "version": "1.15.1",
-      "sha256": "1kyjhnfv3b0jxdali2v1wdqd1zkl9vsf2z9ba6dkhlm1hghsnv63",
+      "version": "1.5.0",
+      "sha256": "0rf2sr7sv2vpszi5wssznx25crx1ad4nbjj3w9whvhn2bzprksw3",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ame_eg_db": {
       "name": "MeSH.Ame.eg.db",
-      "version": "1.15.1",
-      "sha256": "1szzcnf5fwaqpj2ra2b1xics971lwg3rnzdria8j3yl705zxnl3g",
+      "version": "1.5.0",
+      "sha256": "0ggh4r8vrah8ln14hhvn3rxcv8xxjv8g72pw4l6rrxcwqbicy2pq",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Aml_eg_db": {
       "name": "MeSH.Aml.eg.db",
-      "version": "1.15.1",
-      "sha256": "1pgfhm5qhm9d7s0sr4iij7272m2i6y9di51r137mrmpc5fcc1mmx",
+      "version": "1.5.0",
+      "sha256": "1x6rap57yzshli4vx4ljv3n8pmrd4xy3lblcpl4nd3319hnl9nfy",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ana_eg_db": {
       "name": "MeSH.Ana.eg.db",
-      "version": "1.15.1",
-      "sha256": "117sz11lg3kl90v7bkai3acyvcxjggar8fpgyac99369pinkqikp",
+      "version": "1.5.0",
+      "sha256": "0iz8aq9sxy485csm3fib3p5mvsnv81kq5d6a1jsnqqhh629c6pf3",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ani_FGSC_eg_db": {
       "name": "MeSH.Ani.FGSC.eg.db",
-      "version": "1.15.1",
-      "sha256": "1hwhvm7ip3kjdb31glasixqzwja37352x70id18n2bfbjgq4x3r2",
+      "version": "1.5.0",
+      "sha256": "0dqnnmm668ahychvksbfsk21v7p51ac3qz8n9nff608z8nrry67p",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ath_eg_db": {
       "name": "MeSH.Ath.eg.db",
-      "version": "1.15.1",
-      "sha256": "12dmbr6aynxyfg0cv5jrshj27rmk89apbpsg1zxf7cmqkkvq8bcv",
+      "version": "1.5.0",
+      "sha256": "0qka863lgsbyv4xny6h1d9xjgckyvbzw4hrd59ykk5j6bjar3zvq",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Bfl_eg_db": {
       "name": "MeSH.Bfl.eg.db",
-      "version": "1.15.1",
-      "sha256": "1y6r6hillawafxgxvkcffg8bx125ra6b4f9cclcz1n3qzqfnjj0s",
+      "version": "1.5.0",
+      "sha256": "0wbrqgxqzvv7s1ak4axkh5x7wl0wlgl9zds2xm1675w5li40j6dv",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Bsu_168_eg_db": {
       "name": "MeSH.Bsu.168.eg.db",
-      "version": "1.15.1",
-      "sha256": "0d363769blvq0hm3yzbff007sn3sq8fb4gay8qgrcj2jrnnd4wp4",
+      "version": "1.5.0",
+      "sha256": "0va8mqhxq7r02bjyi2pyr0y4zhl6jn8lq8367qbzs4bfbj7y2w44",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Bsu_TUB10_eg_db": {
+      "name": "MeSH.Bsu.TUB10.eg.db",
+      "version": "1.5.0",
+      "sha256": "1igsl86sgwmxwy4j1igp5a355rff4jm9pia1hv59s9c6nni5xdfc",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Bta_eg_db": {
       "name": "MeSH.Bta.eg.db",
-      "version": "1.15.1",
-      "sha256": "0g9m2y209gl6nyn05j4fznnh21raz8xwj1if7zb1aixxzykqi313",
+      "version": "1.5.0",
+      "sha256": "1v8vmyhdw625s9gl6wfrfbq653mxjhsxayjgm0m9m0h3rkw6nadw",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cal_SC5314_eg_db": {
       "name": "MeSH.Cal.SC5314.eg.db",
-      "version": "1.15.1",
-      "sha256": "1z3id2838fd14x9nib931cmjb0x339hq1izdr3gq8kc4yfvl40r5",
+      "version": "1.5.0",
+      "sha256": "03lxs5hkbfqw6wdgdsdspblj6a7pwyqny8ypw72rl6gs0m1jha25",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cbr_eg_db": {
       "name": "MeSH.Cbr.eg.db",
-      "version": "1.15.1",
-      "sha256": "0fbg3sv5addw9ad586nyh0vbwfdnjzwqnqxa8jz8plpmjn043wl0",
+      "version": "1.5.0",
+      "sha256": "1jfn1qdx7dzqi5hwgcz02g5sc0wnqmgc1rm0n3d6mapzz286jl3q",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cel_eg_db": {
       "name": "MeSH.Cel.eg.db",
-      "version": "1.15.1",
-      "sha256": "19hp0f0vqlzdqbn9qs839b8sflbcww02k7fzsmyzpqd38kvhwf2w",
+      "version": "1.5.0",
+      "sha256": "171243fbgalpa5fjfqprj8gvg04wrcn1x8l465mzw8jj4y58pc60",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cfa_eg_db": {
       "name": "MeSH.Cfa.eg.db",
-      "version": "1.15.1",
-      "sha256": "19jjdp5cq1pisgk7nxwi8cdzjk44bbh02fjy027f50i6dnj75i7i",
+      "version": "1.5.0",
+      "sha256": "1gcnrynfnjapwdk13xk2x5g2jphk16ycp04qhwxp2qn53pgrj15k",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cin_eg_db": {
       "name": "MeSH.Cin.eg.db",
-      "version": "1.15.1",
-      "sha256": "0y53q8q1ca93ri6msnjzj3m6rqangidfvvchirgk9pa4k67dh534",
+      "version": "1.5.0",
+      "sha256": "0fdfslzh69rln2yj8hvb0igg3hmvn58pmkzfg0wpr3cc2y51jjvq",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cja_eg_db": {
       "name": "MeSH.Cja.eg.db",
-      "version": "1.15.1",
-      "sha256": "0jsbncm9ggi63fjng8nl08bhzajgjrckfq2ngqbcnmf8p1gzg60a",
+      "version": "1.5.0",
+      "sha256": "0m1z665crgj2q00bcz9m9gb0i55fca19agfpdd1b3nyiqil5fwqs",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cpo_eg_db": {
       "name": "MeSH.Cpo.eg.db",
-      "version": "1.15.1",
-      "sha256": "1w47fmy9akwxxsvdx7d1s0qdzafxyghl6lh33cy5jcb4bj525635",
+      "version": "1.5.0",
+      "sha256": "1xxlvi78mwjgqigrbxg0zas39i6j9c8ih6yh2s1xvmfm9mdg8v0j",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Cre_eg_db": {
       "name": "MeSH.Cre.eg.db",
-      "version": "1.15.1",
-      "sha256": "0bq8r70vv55shfgdx94qiympk0vf9rf7xr467bps82ks0kklzr7v",
+      "version": "1.5.0",
+      "sha256": "0s8w895f3l43v68s5wipggk4lq31cxsvlz7p6rfplj3chqkb4z2c",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dan_eg_db": {
       "name": "MeSH.Dan.eg.db",
-      "version": "1.15.1",
-      "sha256": "1k5dfwm5fn4zghaphsjs0f7jzjcdcay1afm2c09qyh7xv9m1cpry",
+      "version": "1.5.0",
+      "sha256": "0ra8hqg6w6w8w5wib4qa3py6bk961v47bmr47c9f5zbmp2n4ghwn",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dda_3937_eg_db": {
       "name": "MeSH.Dda.3937.eg.db",
-      "version": "1.15.1",
-      "sha256": "0idh5djnz1wwxp09xpjwac4dhz6kvwp1l0j92195b0xwv4n11pzk",
+      "version": "1.5.0",
+      "sha256": "0y1hcpbf3ddby76i19x933l4hz92a6v03k1cpyqipf1x8gdlkm1z",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ddi_AX4_eg_db": {
       "name": "MeSH.Ddi.AX4.eg.db",
-      "version": "1.15.1",
-      "sha256": "0aprxgrlz7hnk31fr6vqpprahjn07r48dnva9gszgyp740mx1m1d",
+      "version": "1.5.0",
+      "sha256": "1dlnxpp0ad5n0k43sy3jaz8ak9qxrmy57zg5bsxp65c04fgr3j9j",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Der_eg_db": {
       "name": "MeSH.Der.eg.db",
-      "version": "1.15.1",
-      "sha256": "0wbv1f5bsb3xl8rj1qndb0n77rmg2s9m5nl2f95naqaf3hfypsmd",
+      "version": "1.5.0",
+      "sha256": "0zllh66mbh20z402wv31993g06q4ap41f5fc7karkf17fbxz7nsl",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dgr_eg_db": {
       "name": "MeSH.Dgr.eg.db",
-      "version": "1.15.1",
-      "sha256": "07zzwf4aqpkvjmbbvzc6bq662frxblsx4l0ljna70gr4xb218swl",
+      "version": "1.5.0",
+      "sha256": "1lhqac659i3hys4r90r5y9k5m48r6ai2f3kir5v2046b8y5gbdx9",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dme_eg_db": {
       "name": "MeSH.Dme.eg.db",
-      "version": "1.15.1",
-      "sha256": "1fls5b3w6n2n9vy4fsvri74f6r2qmlrx8vlrgqmb7plxdp35q0jw",
+      "version": "1.5.0",
+      "sha256": "03fq4zj3d8ag5k05g9jvfll99dir9cnl04lkaw9n3h0q28hrsjg2",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dmo_eg_db": {
       "name": "MeSH.Dmo.eg.db",
-      "version": "1.15.1",
-      "sha256": "0fphjwbxnymf30ccppjyfgwz0pv5n1lwzm7h05lppk7a7f8ys665",
+      "version": "1.5.0",
+      "sha256": "0zh1awvf8v4axzqhazf8rqb8srp8sas3raiackw2z1niq89l0jw9",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dpe_eg_db": {
       "name": "MeSH.Dpe.eg.db",
-      "version": "1.15.1",
-      "sha256": "0921dxba9crqml8in0hwnwlzcqvjhhi94mllbmksp8cwka48rzs8",
+      "version": "1.5.0",
+      "sha256": "0myhby94b2i2sp4fzm5wa7j102admbp3lkdzyjwwbq6sw7hznb47",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dre_eg_db": {
       "name": "MeSH.Dre.eg.db",
-      "version": "1.15.1",
-      "sha256": "087pcpbskgc59c04bn3201d4agy9vsma0r1wsf60zxr3l491yn6v",
+      "version": "1.5.0",
+      "sha256": "1bxrfqh2pwkxdqs9vzvcwh5k1whik45bsmnbkr5c9yaryz8g801y",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dse_eg_db": {
       "name": "MeSH.Dse.eg.db",
-      "version": "1.15.1",
-      "sha256": "0drqyd131l7vr9v899hjvva4d5mmv7fbhmflgz49i2iy3360xz32",
+      "version": "1.5.0",
+      "sha256": "0qp2zqm2z998sx3gzkam0h5f38bblkvwb0jsvxckdr1n7j0ld3bz",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dsi_eg_db": {
       "name": "MeSH.Dsi.eg.db",
-      "version": "1.15.1",
-      "sha256": "0i3j3392d690xkg7cfzqnw0s09q8mpiq2wfpifkk0hbxnc5aahwd",
+      "version": "1.5.0",
+      "sha256": "0l675bqgmk455jx2iwzc3rn3v3a125grc0w6g1j25agbar8fznln",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dvi_eg_db": {
       "name": "MeSH.Dvi.eg.db",
-      "version": "1.15.1",
-      "sha256": "168jy0v39j2fpy59s3dpz0xs3axmnc7kb1dv88b5j1xccymkd3gl",
+      "version": "1.5.0",
+      "sha256": "190rfd5y5rrjphsc0dhnsms4bx2dkzs8m2ljv5rj1ygwhx78smz6",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Dya_eg_db": {
       "name": "MeSH.Dya.eg.db",
-      "version": "1.15.1",
-      "sha256": "1ibbh07nczp75f0x2mnq5mnli6fgg7mn2aqk434l3iwjx686mcpj",
+      "version": "1.5.0",
+      "sha256": "1ci0s1hklzaxc5h0wbfx21llqawi5n9bl0fddpiwwqma8mpy07k5",
       "depends": ["MeSHDbi"],
       "broken": true
     },
@@ -5895,311 +5970,437 @@
       "depends": ["MeSHDbi"],
       "broken": true
     },
+    "MeSH_Eco_55989_eg_db": {
+      "name": "MeSH.Eco.55989.eg.db",
+      "version": "1.4.0",
+      "sha256": "1r9q1vk8p9ah28k6gc2dlglwyi1i0y5zaxmzcrkxyw04pfzn41f7",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_CFT073_eg_db": {
+      "name": "MeSH.Eco.CFT073.eg.db",
+      "version": "1.4.0",
+      "sha256": "0r7hlxd5k9n9shq3wj5ldqj00apvx4bv8h38v2i4adv29s5x7973",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_ED1a_eg_db": {
+      "name": "MeSH.Eco.ED1a.eg.db",
+      "version": "1.5.0",
+      "sha256": "0qaciqrisxq7nhib661ha3ixwl2gpc3040dxiw7n4hy87bxa17g4",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_HS_eg_db": {
+      "name": "MeSH.Eco.HS.eg.db",
+      "version": "1.4.0",
+      "sha256": "0gyrfjyp3k5jbcg92qzz4fjpmk9m4i0v7q2yvja73sni6976g9ca",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_IAI1_eg_db": {
+      "name": "MeSH.Eco.IAI1.eg.db",
+      "version": "1.4.0",
+      "sha256": "16mxh182ij25qgfk14dzzpvaac7fqcnzx58j5m6hfrz3wvgh9jrq",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_IAI39_eg_db": {
+      "name": "MeSH.Eco.IAI39.eg.db",
+      "version": "1.5.0",
+      "sha256": "0cgyb709k0894m5f8gzsfx0215mf058dwmpi41rm4xbv98ww9x2p",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_K12_DH10B_eg_db": {
+      "name": "MeSH.Eco.K12.DH10B.eg.db",
+      "version": "1.4.0",
+      "sha256": "00y5qlqrsjl941iaqln4m5jvskc2a6kildys881ml92f14cmgs07",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
     "MeSH_Eco_K12_MG1655_eg_db": {
       "name": "MeSH.Eco.K12.MG1655.eg.db",
-      "version": "1.15.1",
-      "sha256": "0p3gf9hwr3hrzlczwr7lhwxnl46iqfz66dvz38h7c02bjlpjjdjd",
+      "version": "1.5.0",
+      "sha256": "1az1si0pkd9jngddvd5b37k0h5y5p2mkis9z1y6w9g3kp2z5b3wy",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_O127_H6_E2348_69_eg_db": {
+      "name": "MeSH.Eco.O127.H6.E2348.69.eg.db",
+      "version": "1.4.0",
+      "sha256": "1as23bz0yylgf24sy84xm46bblvkacp84kjr2g8c9if1vll2x2dg",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_O157_H7_EDL933_eg_db": {
+      "name": "MeSH.Eco.O157.H7.EDL933.eg.db",
+      "version": "1.4.0",
+      "sha256": "0qnnp2a2v3nv1br1lg2km0p96q1knwa1fx95cg4wp38nc5g0jcc9",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Eco_O157_H7_Sakai_eg_db": {
       "name": "MeSH.Eco.O157.H7.Sakai.eg.db",
-      "version": "1.15.1",
-      "sha256": "0wda4hkzwfvkn51fchzpwgc5p9964yyfjg8bpvk2331zx9lsvgs2",
+      "version": "1.5.0",
+      "sha256": "12x6fp6h45ixxisib2x16rvx5xv57xfh9pcrwpprrj8sy2pv2gbb",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_S88_eg_db": {
+      "name": "MeSH.Eco.S88.eg.db",
+      "version": "1.4.0",
+      "sha256": "15k44ricv7vi7sbw5s2nckm6jwbfzrrjp8ck06ydjp9q70hfzmhy",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eco_UMN026_eg_db": {
+      "name": "MeSH.Eco.UMN026.eg.db",
+      "version": "1.5.0",
+      "sha256": "1a6f5xz5zc609k27fivaav5dg9kmz9wyrmjm4cz194ac36zj57q7",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Eqc_eg_db": {
+      "name": "MeSH.Eqc.eg.db",
+      "version": "1.5.0",
+      "sha256": "02lp2sdgbz8a50l0s8mfw7halgdg2sc00sxc6k2dr7his3clhnby",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Gga_eg_db": {
       "name": "MeSH.Gga.eg.db",
-      "version": "1.15.1",
-      "sha256": "0d72haww3zi1x06qllwnlsrwkwivn6z8ws9nkrnb24vn3saxv41b",
+      "version": "1.5.0",
+      "sha256": "1i8vlkis021cw5ym0f74rgpcml8x8wcsjvaynpadpvfkyra49946",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Gma_eg_db": {
       "name": "MeSH.Gma.eg.db",
-      "version": "1.15.1",
-      "sha256": "1xbwkxn351yhjbc529y4fkj366a3pnk1b8s3h1ys5w8czz3szfn3",
+      "version": "1.5.0",
+      "sha256": "1awwmbmrgi5jpsa6xys4aqd8c4vjcfy0d1fbs918v8dha9ksy202",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Hsa_eg_db": {
       "name": "MeSH.Hsa.eg.db",
-      "version": "1.15.1",
-      "sha256": "1cgfwp8hk40af0d5rzi3vsmvx22jp1nwsgyld1mzkry2i8ilbzyj",
+      "version": "1.5.0",
+      "sha256": "13cpchm3lyc259r739k1kcljmjpr31l7wp9zgiliyqc1l7hw279k",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Laf_eg_db": {
       "name": "MeSH.Laf.eg.db",
-      "version": "1.15.1",
-      "sha256": "1r2bnakd47gq95s47rywhak7csz77zphml0zfrchi189kh01prg4",
+      "version": "1.5.0",
+      "sha256": "09sbzwqh1bi0bbdxbin107nbqw9vch09vsr2d2pq3z5q3bdz52sh",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Lma_eg_db": {
       "name": "MeSH.Lma.eg.db",
-      "version": "1.15.1",
-      "sha256": "1x3rjw2hvzxaq68abyh8b9bw1zizkrqxj6pgd5d6ggcl8l0x1fnz",
+      "version": "1.5.0",
+      "sha256": "0f71ywvjsc2ly8l7lrxm6nrkrnm2vlkbmnm0bi22yqwvr5q5gm4q",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mdo_eg_db": {
       "name": "MeSH.Mdo.eg.db",
-      "version": "1.15.1",
-      "sha256": "156dc2vssa8x0a0985fhyx7h5vaw4d3ingz0s09181ai9fxqc1jx",
+      "version": "1.5.0",
+      "sha256": "1l3yfi4vx3yzw8i85ymy0fj1k1q66gyv4fjl5mbq5nlz8g6r19y0",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mes_eg_db": {
       "name": "MeSH.Mes.eg.db",
-      "version": "1.15.1",
-      "sha256": "0a3gdmpp9y6s6aw7lyh7j25dahgmkb0azg7g57073fqwhgivs2mx",
+      "version": "1.5.0",
+      "sha256": "01mr5crin0ak57gdm1p36m3066a2x2m81g74minf2ijghpnb67q5",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mga_eg_db": {
       "name": "MeSH.Mga.eg.db",
-      "version": "1.15.1",
-      "sha256": "1gil8g9h8qyd0b4qmqrk7dakvjqwlychzld0wv20z7hipqas975d",
+      "version": "1.5.0",
+      "sha256": "0icm9jnyi46bp5knsxmb1fv2fghimrmwskq9p5yzgm1jhr43qgjd",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Miy_eg_db": {
       "name": "MeSH.Miy.eg.db",
-      "version": "1.15.1",
-      "sha256": "1p1f6vk1f360zx4wkzcyczi4p4x6mgf4pfrvhslz4kn6xg0cnm73",
+      "version": "1.5.0",
+      "sha256": "0d3y2837n0k74mn2bv75x3f3bm1xlzfh728221vfhyj9xzbs6131",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mml_eg_db": {
       "name": "MeSH.Mml.eg.db",
-      "version": "1.15.1",
-      "sha256": "16372gs4nh9cr18xy4nzssjmdarxbkx7c6208s4vx6232mbc1azl",
+      "version": "1.5.0",
+      "sha256": "04ba79mky8m6wiiwi0fkcz9c6gfk1c81pypz77258qwbi98p6y32",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mmu_eg_db": {
       "name": "MeSH.Mmu.eg.db",
-      "version": "1.15.1",
-      "sha256": "1557vn9sy1a2picwj27gkajqp8qlqza0yqf69czimd1myskdicps",
+      "version": "1.5.0",
+      "sha256": "0ligmwg9f6qs99ngnk81imlp6n48cw5jjnqklaw8dcy8ph016vhf",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Mtr_eg_db": {
       "name": "MeSH.Mtr.eg.db",
-      "version": "1.15.1",
-      "sha256": "1gi2v9x0jja6ambdljp9m11g6yhd3wcfcjblgx58i42ix5h5mviw",
+      "version": "1.5.0",
+      "sha256": "187bw5svsbssyjm3rdy9lh5wp5r0wkspxska80hqf26swbjl4ymm",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Nle_eg_db": {
       "name": "MeSH.Nle.eg.db",
-      "version": "1.15.1",
-      "sha256": "1vplci90jb1cihwbxqkynqk9frr7j09gh80q020dhm24f3rwlfqk",
+      "version": "1.5.0",
+      "sha256": "1gairkwy29jg949i270ndzsa6f9zwcs7i61lj6w26piz6hcjgv28",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Oan_eg_db": {
       "name": "MeSH.Oan.eg.db",
-      "version": "1.15.1",
-      "sha256": "1fmwfmws100qmg3wy25qg0s36nk81rwf6b1csvqg4vfy9p0r2pdw",
+      "version": "1.5.0",
+      "sha256": "1wk2mfd1qg1ycfqsd0v5zp470cb49vczsarar8wfkly5mvl561m4",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ocu_eg_db": {
       "name": "MeSH.Ocu.eg.db",
-      "version": "1.15.1",
-      "sha256": "019ydfl6dqymn8yk2n101rdrmyv82ypcbvwmslimdhnlk3bzrj3a",
+      "version": "1.5.0",
+      "sha256": "12xkw4s3ycr9fpz2q36rcg3mhvzplmg8fmigcigd5vg0g5029wi8",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Oni_eg_db": {
       "name": "MeSH.Oni.eg.db",
-      "version": "1.15.1",
-      "sha256": "1jadbca3c3xw24p8zvrd3q7ijjrrfjxkf1bw08ay3a9gazqyv0rh",
+      "version": "1.5.0",
+      "sha256": "0jwrkhdfykm71cn1smzzp5wjph04v687lvk0hyazd1hb5wwhwkyi",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Osa_eg_db": {
       "name": "MeSH.Osa.eg.db",
-      "version": "1.15.1",
-      "sha256": "028lw4xjd1v7afp1l0xizswciy1hxhllrf9ij328si5a0kb3dxwc",
+      "version": "1.5.0",
+      "sha256": "105qz16b2l2sbr1r8if3bkc6w0cll7lhg67j09l8a9y9f4ddwa65",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_PCR_db": {
       "name": "MeSH.PCR.db",
-      "version": "1.15.1",
-      "sha256": "1hdk3s3ixh1haqp70ww547cbnwhllk6fhc4fgriidw0jivbkawx1",
+      "version": "1.5.0",
+      "sha256": "03hrggzl4j29k9fvvhzhbil506k02lmnpl3rm63m3x35416g7wsj",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Pab_eg_db": {
       "name": "MeSH.Pab.eg.db",
-      "version": "1.15.1",
-      "sha256": "00hy436bbk7jza00dv2xgnbji3k72x405n88pgd8d9rgj7cmqvjp",
+      "version": "1.5.0",
+      "sha256": "0kd4cz233y4kld8gb3qhnv5bjm9jpfngkc5d6y4bk91jkq1d4g3a",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Pae_PAO1_eg_db": {
       "name": "MeSH.Pae.PAO1.eg.db",
-      "version": "1.15.1",
-      "sha256": "04pprh5m431cpk4whfsiqb8fglda82jk4d06nhlz9k9nd5x9np82",
+      "version": "1.5.0",
+      "sha256": "0cm5ja8l1mkvzpv68gg4aimy68kxzpppps50iwhxc191h2dxkl4r",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Pfa_3D7_eg_db": {
       "name": "MeSH.Pfa.3D7.eg.db",
-      "version": "1.15.1",
-      "sha256": "1a0q8xyhfvjvdsxq5hgh255q3rg823l1b8nyswnkai3sl3hq3szd",
+      "version": "1.5.0",
+      "sha256": "1l793h8x3bhm8nydxf517gi8b9paf0plw6i3kmi84gwczvywffqq",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Pto_eg_db": {
       "name": "MeSH.Pto.eg.db",
-      "version": "1.15.1",
-      "sha256": "0z4l55029lrmvysj26vn97c690yyhji46axvxsdjvzwp8llhwy3m",
+      "version": "1.5.0",
+      "sha256": "1g131cjhlxjppvrjdcl1rwz8856f110a467lyp1kk0pvd2d0xhvz",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ptr_eg_db": {
       "name": "MeSH.Ptr.eg.db",
-      "version": "1.15.1",
-      "sha256": "1h1ci6y0hjii1r6gp24y2m7qqn8d0r954swbc9crb0i2mfak7l1a",
+      "version": "1.5.0",
+      "sha256": "0z7ypnmi68spzr4dv98lswj5wna0rwnwvmbw1g6ihi25vd26cd37",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Rno_eg_db": {
       "name": "MeSH.Rno.eg.db",
-      "version": "1.15.1",
-      "sha256": "1rfxbfz72xazay0rszhjvxxqry532dx72kkp5vd0pi44536kly49",
+      "version": "1.5.0",
+      "sha256": "1hzwrc6l41psr1f3zjm71b87rf5bjzwskkanfv1rx87ynq1h2m81",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Sau_USA300TCH1516_eg_db": {
+      "name": "MeSH.Sau.USA300TCH1516.eg.db",
+      "version": "1.4.0",
+      "sha256": "109kvsdqvra8x392l82djbd46l8z4hv4z92785ivgdcnchsdjq7p",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Sce_S288c_eg_db": {
       "name": "MeSH.Sce.S288c.eg.db",
-      "version": "1.15.1",
-      "sha256": "100fcybyv4lsnxj23ndchhn25i2bfppk6w0y2lfnrla1vn8p5nnp",
+      "version": "1.5.0",
+      "sha256": "07xvrvhyb0gfq2fx47prkcax46csrb3c2rmvik6lbm17h0ah55x4",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Sco_A32_eg_db": {
       "name": "MeSH.Sco.A32.eg.db",
-      "version": "1.15.1",
-      "sha256": "1y5nh82hbwh7higzg0fv4rkvxl2p988w7aznygaq5z3g1q15l9sp",
+      "version": "1.5.0",
+      "sha256": "0y9afs85yqgyz9701fpwkz3y3wabwks56m1ar3qv8zap6s124fh7",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Sil_eg_db": {
       "name": "MeSH.Sil.eg.db",
-      "version": "1.15.1",
-      "sha256": "09vj1ix13kxyb330s69nnig07a7cwyz7nasvv5kv83cnc27df92m",
+      "version": "1.5.0",
+      "sha256": "02p6g63rcfnx6db91njw33qrzbr4nra9ddwbwg23jz1vhqlxcv5a",
+      "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "MeSH_Spo_972h_eg_db": {
+      "name": "MeSH.Spo.972h.eg.db",
+      "version": "1.5.0",
+      "sha256": "083pg2bc56s52rkv7mvbziq0hjrfndwja32jd31pxdd0cjdv3c3q",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Spu_eg_db": {
       "name": "MeSH.Spu.eg.db",
-      "version": "1.15.1",
-      "sha256": "0gmpcabxs0d61krhyllyrb92x0xgr67jv2wc8qbjv8m8vpiynnxh",
+      "version": "1.5.0",
+      "sha256": "1vx6h5pv7hygmgrd5wjdcx576bvr23xfhh4aba3a2jzsjwvg0c9c",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Ssc_eg_db": {
       "name": "MeSH.Ssc.eg.db",
-      "version": "1.15.1",
-      "sha256": "05ybk27chnxf3mqvngfzlrmnlpjdraqzd0qcsj6zmhsyx6j20qh5",
+      "version": "1.5.0",
+      "sha256": "0c8ijwz4vcwcbf18jsf2z3wxis09h9wrsb9fki5wspgjc486lz9n",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Syn_eg_db": {
       "name": "MeSH.Syn.eg.db",
-      "version": "1.15.1",
-      "sha256": "1rkc9gv9an0zan04qalmyvry380yhf2vx8scfvck9jwkq5x05w97",
+      "version": "1.5.0",
+      "sha256": "03sd73jipya5zqdzqxd6iwnmwmxkqp1mz9hg2bzmfnx3jz3fd5sv",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Tbr_9274_eg_db": {
       "name": "MeSH.Tbr.9274.eg.db",
-      "version": "1.15.1",
-      "sha256": "1nak2sz25l8mc3f60h84519wm7lb8iamj9116mbf4b6ybdp0k4gd",
+      "version": "1.5.0",
+      "sha256": "05fandy9ig1arahaag0wa09gwz8g4g7bpyns0jchmw88044jvgqs",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Tgo_ME49_eg_db": {
       "name": "MeSH.Tgo.ME49.eg.db",
-      "version": "1.15.1",
-      "sha256": "16j9wiv0lgik94yp7vqgcc5lykjynn07sbvvq2llcyvr6n3l3gwy",
+      "version": "1.5.0",
+      "sha256": "03bysvpymrq4n4xa48hksm9vayww6gvjpncnb4q5891azja3drpr",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Tgu_eg_db": {
       "name": "MeSH.Tgu.eg.db",
-      "version": "1.15.1",
-      "sha256": "0j0ygcrfx2df2q597wkkiqg9264n2v7bsh3kfvra9ma3wdxqlipd",
+      "version": "1.5.0",
+      "sha256": "0vdxabqli7z2cpdq015jhaddzsxh23k7x0pzc28k8aqbp84czb89",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Vvi_eg_db": {
       "name": "MeSH.Vvi.eg.db",
-      "version": "1.15.1",
-      "sha256": "0dnhjs43v9q42w82km5vvs8p8zniljvskiv946psy2z8l27q6srj",
+      "version": "1.5.0",
+      "sha256": "0cyn8lflhb8n4fkh7sm0ky9q5n640cwxks22a54x16bvr7bb7f1k",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Xla_eg_db": {
       "name": "MeSH.Xla.eg.db",
-      "version": "1.15.1",
-      "sha256": "1n3kmkqgb8nnm13jrhn6dzpjcqgddf7k68vsm52bkg7dh3dfcn8v",
+      "version": "1.5.0",
+      "sha256": "04ihvbp7dlb4fb68snlq0imh3igfhacjsqjnjnwnm1xqgynzn6f6",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Xtr_eg_db": {
       "name": "MeSH.Xtr.eg.db",
-      "version": "1.15.1",
-      "sha256": "19waylyzyga4zqygar6509gq36a8z36fbpz55msb0zsin24s0y82",
+      "version": "1.5.0",
+      "sha256": "09g6wh866n2xbdy4xmglbk361zwiyywgxwbzndm8yd1xdkzc4myw",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_Zma_eg_db": {
       "name": "MeSH.Zma.eg.db",
-      "version": "1.15.1",
-      "sha256": "0plldymwirg8hyj9yv5jw4ldrlnvf5dx60gymb8rgmmxvrmhay66",
+      "version": "1.5.0",
+      "sha256": "00vm12fgmlw79bpkfbc4yrwvf8c6daw3fkxysag6qpjfsjrbdhlg",
       "depends": ["MeSHDbi"],
       "broken": true
     },
     "MeSH_db": {
       "name": "MeSH.db",
-      "version": "1.15.1",
-      "sha256": "0ixlxcakcc9f6d3dzxfdda4nh5gnivqvbi9dw7c85c0145dgnpzx",
+      "version": "1.5.0",
+      "sha256": "1r6iyc1066g7bgil9d0dk5s23bz3bv7idn7k18kbgzm2j3dm9m5g",
       "depends": ["MeSHDbi"],
+      "broken": true
+    },
+    "SNPlocs_Hsapiens_dbSNP_20090506": {
+      "name": "SNPlocs.Hsapiens.dbSNP.20090506",
+      "version": "0.99.9",
+      "sha256": "10943wbc56mz8ywcd71ndbdz7h3a9a17mzfdvj237wsgp62arfh6",
+      "depends": ["BSgenome", "GenomicRanges", "IRanges"],
+      "broken": true
+    },
+    "SNPlocs_Hsapiens_dbSNP_20100427": {
+      "name": "SNPlocs.Hsapiens.dbSNP.20100427",
+      "version": "0.99.7",
+      "sha256": "16m15sqxnczb399bcy7nll804h4955f6w8mag5jlda6h11yh732z",
+      "depends": ["GenomicRanges", "IRanges", "S4Vectors"],
       "broken": true
     },
     "SNPlocs_Hsapiens_dbSNP_20101109": {
       "name": "SNPlocs.Hsapiens.dbSNP.20101109",
-      "version": "0.99.9",
-      "sha256": "1qxsaq2wai1rqbidz005frjw8r8m2ia9cd87ziw8i66a798rzima",
+      "version": "0.99.7",
+      "sha256": "1r1gvx563gv1lidi099yw7lvf8c0983yck9yf8r8iypiz1d4az73",
+      "depends": ["GenomicRanges", "IRanges", "S4Vectors"],
+      "broken": true
+    },
+    "SNPlocs_Hsapiens_dbSNP_20110815": {
+      "name": "SNPlocs.Hsapiens.dbSNP.20110815",
+      "version": "0.99.7",
+      "sha256": "0nvpa44xy7zb9q63max1q0pmfibh976blmnirryxcca20j41f8ic",
+      "depends": ["GenomicRanges", "IRanges", "S4Vectors"],
+      "broken": true
+    },
+    "SNPlocs_Hsapiens_dbSNP_20111119": {
+      "name": "SNPlocs.Hsapiens.dbSNP.20111119",
+      "version": "0.99.7",
+      "sha256": "1znblqzb1hx5yjs2g387l3az8dga51si5blpwngvs0zbbdypgww8",
       "depends": ["GenomicRanges", "IRanges", "S4Vectors"],
       "broken": true
     },
     "SNPlocs_Hsapiens_dbSNP_20120608": {
       "name": "SNPlocs.Hsapiens.dbSNP.20120608",
-      "version": "0.99.13",
-      "sha256": "123n3rwkq8c8gqwhbwpsvis2x1xp137hchg9y7sv7l1givb6n2kf",
+      "version": "0.99.10",
+      "sha256": "10crnx5jk2790h936j515jgdf2mirzzmlnvn6pbp81fd5imkvdpd",
       "depends": ["BSgenome", "GenomicRanges", "IRanges"],
       "broken": true
     },
     "SNPlocs_Hsapiens_dbSNP141_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP141.GRCh38",
-      "version": "0.99.12",
-      "sha256": "1hfqbf03jd2r7ybb19rl3czrjb4h4vjqlrrilfqc8yymy7myvqqb",
-      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"],
+      "version": "0.99.10",
+      "sha256": "1a8ic2naa6bqc1fcylxc81j51xmc249fn40nk4yrvpjz59d6h381",
+      "depends": ["BSgenome", "GenomicRanges", "IRanges", "S4Vectors"],
       "broken": true
     },
     "SNPlocs_Hsapiens_dbSNP142_GRCh37": {
       "name": "SNPlocs.Hsapiens.dbSNP142.GRCh37",
-      "version": "0.99.6",
-      "sha256": "17ql8fsali09dx1vv9178ya7zx901vwq4bnjrs35fjrjdvx6yvfd",
+      "version": "0.99.5",
+      "sha256": "13kmgfwzwmbrwd2g24a3cbp634jih7jigzhzq55bzzf3js48h3n3",
       "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges"],
       "broken": true
     },
@@ -6212,9 +6413,177 @@
     },
     "XtraSNPlocs_Hsapiens_dbSNP141_GRCh38": {
       "name": "XtraSNPlocs.Hsapiens.dbSNP141.GRCh38",
-      "version": "0.99.13",
-      "sha256": "1fidmrf0xr7wwd4v1y7x2wwyplplbs1z8jqpfdjpc8aclcy38m3f",
+      "version": "0.99.12",
+      "sha256": "0a27y0ngg760y5wwcja4dpd7cjd8h5zg1s2b3a1r54s21k65zny3",
       "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"],
+      "broken": true
+    },
+    "gahgu133a_db": {
+      "name": "gahgu133a.db",
+      "version": "2.2.0",
+      "sha256": "1ikyvj1gi39qbakpn5wl0823ljavng1k33zvpf2k24jdhdw927qb",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu133acdf": {
+      "name": "gahgu133acdf",
+      "version": "2.2.1",
+      "sha256": "0hvd4iwj2fjiqp1jzbz68i1w6jn77nrsih316jlj85bhb35f7cyv",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu133aprobe": {
+      "name": "gahgu133aprobe",
+      "version": "2.2.1",
+      "sha256": "108lki2bg55ysh485shxxsz1imm26g5a3grgcmxbfs4pgna3g4h0",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu133b_db": {
+      "name": "gahgu133b.db",
+      "version": "2.2.0",
+      "sha256": "06hyjnr387wk40jjdk8gzqpfp4afjzva9fky3l4qs249ycy4snic",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu133bcdf": {
+      "name": "gahgu133bcdf",
+      "version": "2.2.1",
+      "sha256": "0qbqirflzjy0is3m9zca1660aszxf947fa7d26baw6vm2b37qg4q",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu133bprobe": {
+      "name": "gahgu133bprobe",
+      "version": "2.2.1",
+      "sha256": "1i8wcnp8434f6zxib86yhpm904clwg907x1hgjfsgy4viqa4jbqv",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu133plus2_db": {
+      "name": "gahgu133plus2.db",
+      "version": "2.2.0",
+      "sha256": "1p48q1zqrjdvv6qq5br9v24fpryp2zy3z079nkgrgr4d2brvhab8",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu133plus2cdf": {
+      "name": "gahgu133plus2cdf",
+      "version": "2.2.1",
+      "sha256": "1fmv6rrjbii1g5grcvgl13w814mbqqyqyav0wi82d30v4ijz58g9",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu133plus2probe": {
+      "name": "gahgu133plus2probe",
+      "version": "2.2.1",
+      "sha256": "0r3vizwmvy0jmsqbplagkincj5xs71dk7csgwwv4arx80kbl9l9l",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95av2_db": {
+      "name": "gahgu95av2.db",
+      "version": "2.2.0",
+      "sha256": "1c1hc79rjisx7jd7sdlr2d1lnk621y8azshriia12b5z0l5j9m4h",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95av2cdf": {
+      "name": "gahgu95av2cdf",
+      "version": "2.2.1",
+      "sha256": "1ckcjlb4v9x9zynf5w1h5fgmdr4ck22h9bjfwz3n184v48wgi39r",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu95av2probe": {
+      "name": "gahgu95av2probe",
+      "version": "2.2.1",
+      "sha256": "033zk49kp4r5in6yk3za8ll5wrchiklfrzc10c8lgqhpm6y8y5k2",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95b_db": {
+      "name": "gahgu95b.db",
+      "version": "2.2.0",
+      "sha256": "0v4lpbqqhm6mvpm0biykcq0ym1rb968zcwp9rg1lv6zka5arj9fq",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95bcdf": {
+      "name": "gahgu95bcdf",
+      "version": "2.2.1",
+      "sha256": "1f8yp4g3cjbl11x0wajln7bms3jhy6cbyh0bggm38gbb18gws4wg",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu95bprobe": {
+      "name": "gahgu95bprobe",
+      "version": "2.2.1",
+      "sha256": "1lr91f57ym3lxz5bi9xm3g63vskw5js991h5zk4c2i2npi0x22gm",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95c_db": {
+      "name": "gahgu95c.db",
+      "version": "2.2.0",
+      "sha256": "1psjf511agrv7nma4wa39jgd82z82df42d5g8jvwjrm2wb6l2v4l",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95ccdf": {
+      "name": "gahgu95ccdf",
+      "version": "2.2.1",
+      "sha256": "1lcal0y48vhafikkrn744l1gxrnlhkh7jmmhb7pglc9ldh7x9azh",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu95cprobe": {
+      "name": "gahgu95cprobe",
+      "version": "2.2.1",
+      "sha256": "155vnch85m6ph7av8j4ylrqajm3vc2v623qpkixqh06l4fy59pck",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95d_db": {
+      "name": "gahgu95d.db",
+      "version": "2.2.0",
+      "sha256": "0k0ricb8cl3xh93nq8rr3206w18b91ca67992cc5b2fbaf8lxlba",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95dcdf": {
+      "name": "gahgu95dcdf",
+      "version": "2.2.1",
+      "sha256": "181h5i9ywpn6vwdvcd2sq5yxkx41h09plgqsdfigw5w7816524k6",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu95dprobe": {
+      "name": "gahgu95dprobe",
+      "version": "2.2.1",
+      "sha256": "0znll2h3cm1sbyzjk121fxizs4qv5jd80kslr5zhdd73dkdlzlbm",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95e_db": {
+      "name": "gahgu95e.db",
+      "version": "2.2.0",
+      "sha256": "1qbsshgvzfavpjrawn3lbl0pcfwl0g7n8vr1109gvax6gj00la7n",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "gahgu95ecdf": {
+      "name": "gahgu95ecdf",
+      "version": "2.2.1",
+      "sha256": "1bsh380h7ai4l6j8jjz8yzfdwgxyhpnqm5fnb6mgma76xbiwab4b",
+      "depends": [],
+      "broken": true
+    },
+    "gahgu95eprobe": {
+      "name": "gahgu95eprobe",
+      "version": "2.2.1",
+      "sha256": "0c4zx8d7qsb3xhy0prfh7l6xbklgpxbbznqhq9mmgjb8qh5g9ygz",
+      "depends": ["AnnotationDbi"],
       "broken": true
     },
     "greengenes13_5MgDb": {
@@ -6222,6 +6591,111 @@
       "version": "2.0.0",
       "sha256": "0j4pd653vlfpd9gq6gi459lra8xhyknjrzadkx9d3zjy0hcwpj7r",
       "depends": [],
+      "broken": true
+    },
+    "hom_At_inp_db": {
+      "name": "hom.At.inp.db",
+      "version": "3.1.2",
+      "sha256": "1ka9ssjfxml9sz9k83bs6icbkkyz581svh0pwpvpifzg79qapzwi",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Ce_inp_db": {
+      "name": "hom.Ce.inp.db",
+      "version": "3.1.2",
+      "sha256": "1iw2xy8yfx1khxy4fkilfq6ms0m9l4q8lz4y0y50fvsh8iiygy98",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Dm_inp_db": {
+      "name": "hom.Dm.inp.db",
+      "version": "3.1.2",
+      "sha256": "0akg9ay7rgb3j5ckjmv4q9gvnnfhyfaad1phfr1j8zmkdr50x4kw",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Dr_inp_db": {
+      "name": "hom.Dr.inp.db",
+      "version": "3.1.2",
+      "sha256": "1x4iikf8b5awmg1m9x9wn2fzwsqq93l8yibrkc4r7x7dvm005yg7",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Hs_inp_db": {
+      "name": "hom.Hs.inp.db",
+      "version": "3.1.2",
+      "sha256": "0fixdcc80a3vb735pqafzva5cw02ygkf5pfy1ncws3f84s3p3zld",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Mm_inp_db": {
+      "name": "hom.Mm.inp.db",
+      "version": "3.1.2",
+      "sha256": "034b9wiis7w7zj3647s0fh1jspyfn654yf0lm5ymp65sww965cxh",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Rn_inp_db": {
+      "name": "hom.Rn.inp.db",
+      "version": "3.1.2",
+      "sha256": "02smfm88y72dgmj2kna9v7sbcg5dxr8b4sqgy6i8b3zw3a6776yp",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hom_Sc_inp_db": {
+      "name": "hom.Sc.inp.db",
+      "version": "3.1.2",
+      "sha256": "0l9nly3k7jnf6g1qnwyw22ga1hdyjdvn3hrlway8pb9rv7279bil",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "hta20stprobeset_db": {
+      "name": "hta20stprobeset.db",
+      "version": "8.3.0",
+      "sha256": "05blv54srnw7yrs8x32syzk1xdksrl8gswk837m7qjgciq8hazcn",
+      "depends": ["AnnotationDbi", "org_Hs_eg_db"],
+      "broken": true
+    },
+    "hta20sttranscriptcluster_db": {
+      "name": "hta20sttranscriptcluster.db",
+      "version": "8.3.1",
+      "sha256": "0ana9fg3ms22m394w8qbfvfy663l0r163w0qfwh5ir59rs4bpalf",
+      "depends": ["AnnotationDbi", "org_Hs_eg_db"],
+      "broken": true
+    },
+    "mta10stprobeset_db": {
+      "name": "mta10stprobeset.db",
+      "version": "8.4.0",
+      "sha256": "1chc4ld5g8dmy33vrvprx08yp2vasmr4x6m8bswhfyigzf6n3d6w",
+      "depends": ["AnnotationDbi", "org_Mm_eg_db"],
+      "broken": true
+    },
+    "mta10sttranscriptcluster_db": {
+      "name": "mta10sttranscriptcluster.db",
+      "version": "8.4.0",
+      "sha256": "0f890nbnc27hnfazdyyypb3k6sla1ipijb8fvfqfld40nm1is978",
+      "depends": ["AnnotationDbi", "org_Mm_eg_db"],
+      "broken": true
+    },
+    "org_Hs_ipi_db": {
+      "name": "org.Hs.ipi.db",
+      "version": "1.3.0",
+      "sha256": "06nkcjcavzwgnxzmbj05i4dapszf2wq7m5s0g8d6hm7kxz5wxddy",
+      "depends": ["AnnotationDbi", "PAnnBuilder"],
+      "broken": true
+    },
+    "org_Sco_eg_db": {
+      "name": "org.Sco.eg.db",
+      "version": "2.4.2",
+      "sha256": "1ppjl55059gk9jbh8c8xbsn2jlqz1hm650vm9gxnbd8hpnk63vgz",
+      "depends": ["AnnotationDbi"],
+      "broken": true
+    },
+    "org_Tgondii_eg_db": {
+      "name": "org.Tgondii.eg.db",
+      "version": "1.0",
+      "sha256": "1vq3qbk6jswfffj5lfwsic71h8ga7a6gqf6wfa7qcda3gvfhnwlc",
+      "depends": ["AnnotationDbi"],
       "broken": true
     },
     "ribosomaldatabaseproject11_5MgDb": {

@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
 
   name = "sickbeard";
@@ -17,53 +20,52 @@ in
 
   options = {
     services.sickbeard = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the sickbeard server.";
       };
-      package = mkPackageOption pkgs "sickbeard" {
+      package = lib.mkPackageOption pkgs "sickbeard" {
         example = "sickrage";
         extraDescription = ''
           Enable `pkgs.sickrage` or `pkgs.sickgear`
           as an alternative to SickBeard
         '';
       };
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/${name}";
         description = "Path where to store data files.";
       };
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.dataDir}/config.ini";
-        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
         description = "Path to config file.";
       };
-      port = mkOption {
-        type = types.ints.u16;
+      port = lib.mkOption {
+        type = lib.types.ints.u16;
         default = 8081;
         description = "Port to bind to.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "User to run the service as";
       };
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "Group to run the service as";
       };
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) {
+    users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
         uid = config.ids.uids.sickbeard;
         group = cfg.group;
@@ -73,13 +75,13 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
+    users.groups = lib.optionalAttrs (cfg.group == name) {
       ${name}.gid = config.ids.gids.sickbeard;
     };
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {

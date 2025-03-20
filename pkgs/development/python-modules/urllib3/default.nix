@@ -14,10 +14,8 @@
   pysocks,
 
   # tests
-  backports-zoneinfo,
   pytestCheckHook,
   pytest-timeout,
-  pythonOlder,
   tornado,
   trustme,
 }:
@@ -25,12 +23,12 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.3";
+    version = "2.3.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-59gUqB2tgebK8uyf3tsoTsyccwdrYmVFR8xkzNyuJuk=";
+      hash = "sha256-+MVEmzzwhhZ5zn4FA8e0S17Jgb7A0dN5WgfxupbwIE0=";
     };
 
     build-system = [
@@ -43,15 +41,12 @@ let
       socks = [ pysocks ];
     };
 
-    nativeCheckInputs =
-      [
-        pytest-timeout
-        pytestCheckHook
-        tornado
-        trustme
-      ]
-      ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
-      ++ lib.flatten (builtins.attrValues optional-dependencies);
+    nativeCheckInputs = [
+      pytest-timeout
+      pytestCheckHook
+      tornado
+      trustme
+    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

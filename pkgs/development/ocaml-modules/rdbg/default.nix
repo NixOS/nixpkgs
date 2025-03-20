@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, num, lutils, ounit}:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  num,
+  lutils,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "rdbg";

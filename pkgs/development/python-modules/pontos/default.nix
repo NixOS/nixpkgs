@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "24.9.0";
+  version = "25.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CgO88I2M8RGpYyJchXZtqxIBjNaULSqnDgfFCUQDFUw=";
+    tag = "v${version}";
+    hash = "sha256-gxmNOrvV007nSwP2TNDCnB0CPspeWMt9ohnT4u8EzPw=";
   };
 
   build-system = [ poetry-core ];
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

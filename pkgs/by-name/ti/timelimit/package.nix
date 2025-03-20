@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "timelimit";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "timelimit";
-    repo = pname;
+    repo = "timelimit";
     rev = "release/${version}";
     hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
   };

@@ -14,6 +14,7 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
+  patchesFn ? lib.id,
   # Allows passthrough to packages via newScope in ./common/default.nix.
   # This makes it possible to do
   # `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
@@ -22,17 +23,19 @@
 }@packageSetArgs:
 let
   versions = {
+    "12.0.1".officialRelease.sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
     "13.0.1".officialRelease.sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
     "14.0.6".officialRelease.sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
     "15.0.7".officialRelease.sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.3".officialRelease.sha256 = "sha256-NUx01eJNsYMlk+8mtlf10isIqhK8zBmqaOTjuFqMNRQ=";
-    "20.0.0-git".gitRelease = {
-      rev = "0e8555d4dbfdfeddc01dc2ecf9a9b6e804f7b645";
-      rev-version = "20.0.0-unstable-2024-10-07";
-      sha256 = "sha256-Rn8TkTUJKGFZ7uM1RiFOHIDTfpwEhLDpDh1zxVtTYG8=";
+    "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
+    "20.1.1".officialRelease.sha256 = "sha256-hDFYi5wAUDQ8xfjvbGFi05KdawrN9lwrrSC8AcTpCEE=";
+    "21.0.0-git".gitRelease = {
+      rev = "4fde8c341f9166e6ec6dff6e7704be175e382f5b";
+      rev-version = "21.0.0-unstable-2025-03-16";
+      sha256 = "sha256-LOQdDYbWvPfUxaR7G3UFQlGzmwaUxHuLDOXgixKB18g=";
     };
   } // llvmVersions;
 
@@ -63,13 +66,16 @@ let
             inherit (stdenvAdapters) overrideCC;
             buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
             targetLlvmLibraries =
-              targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+              # Allow overriding targetLlvmLibraries; this enables custom runtime builds.
+              packageSetArgs.targetLlvmLibraries or targetPackages."llvmPackages_${attrName}".libraries
+                or llvmPackages."${attrName}".libraries;
             targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
             inherit
               officialRelease
               gitRelease
               monorepoSrc
               version
+              patchesFn
               ;
           }
           // packageSetArgs # Allow overrides.

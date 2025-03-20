@@ -1,5 +1,18 @@
-{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, wrapQtAppsHook,
-karchive, kcoreaddons, kcrash, kiconthemes, kwidgetsaddons, solid, qgpgme }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  karchive,
+  kcoreaddons,
+  kcrash,
+  kiconthemes,
+  kwidgetsaddons,
+  solid,
+  qgpgme,
+}:
 mkDerivation rec {
   pname = "isoimagewriter";
   version = "1.0.0";
@@ -9,7 +22,11 @@ mkDerivation rec {
     hash = "sha256-ppAiMD7Bvra3tPDWjlnkGZ08mGh2fLnrI8bdGZngal0=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
   buildInputs = [
     karchive
     kcoreaddons

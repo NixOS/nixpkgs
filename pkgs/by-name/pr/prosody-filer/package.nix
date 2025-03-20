@@ -1,6 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "prosody-filer";
   version = "unstable-2021-05-24";
 

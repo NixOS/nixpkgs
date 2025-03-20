@@ -1,22 +1,23 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, libopus
-, openssl
-, zlib
-, libsodium
-, pkg-config
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libopus,
+  openssl,
+  zlib,
+  libsodium,
+  pkg-config,
+  lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";
-  version = "10.0.32";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
     owner = "brainboxdotcc";
     repo = "DPP";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pr7u4x4xdyydEQcNROjfkoV/ODqixugcTuCWMGeixC8=";
+    hash = "sha256-DHsHmAvL22aC4g5MzY2x793IKB9XHCDrNabQwIbfZn8=";
   };
 
   nativeBuildInputs = [

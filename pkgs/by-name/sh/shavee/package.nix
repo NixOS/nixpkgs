@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pam
-, pkg-config
-, openssl
-, zlib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pam,
+  pkg-config,
+  openssl,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-41wJ3QBZdmCl7v/6JetXhzH2zF7tsKYMKZY1cKhByX8=";
   };
 
-  cargoHash = "sha256-tnIqhZpqdy8pV4L6KF5v19ufpWRpMX5gTPlWWbwB3RU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IGMEl/iK25WMkkLgbT7pCfppAf3GCvyBk1NrqMDtbUA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-   # these tests require network access
+  # these tests require network access
   checkFlags = [
     "--skip=filehash::tests::remote_file_hash"
     "--skip=filehash::tests::get_filehash_unit_test"

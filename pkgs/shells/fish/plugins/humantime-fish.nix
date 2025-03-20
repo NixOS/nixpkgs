@@ -1,10 +1,10 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
-, fishtape
-,
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  fishtape,
 }:
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "humantime-fish";
   version = "1.0.0-unstable-2022-04-08";
 

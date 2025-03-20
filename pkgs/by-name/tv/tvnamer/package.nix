@@ -1,12 +1,13 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
   python' = python3.override {
     self = python';
-    packageOverrides = final: prev: rec {
+    packageOverrides = final: prev: {
       # tvdb_api v3.1.0 has a hard requirement on requests-cache < 0.6
       requests-cache = prev.requests-cache.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.2";

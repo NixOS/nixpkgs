@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, flex, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnuchess";

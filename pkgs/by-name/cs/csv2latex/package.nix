@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "csv2latex";
@@ -10,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-  mkdir -p $out/bin
-  make PREFIX=$out install
+    mkdir -p $out/bin
+    make PREFIX=$out install
   '';
 
   meta = with lib; {

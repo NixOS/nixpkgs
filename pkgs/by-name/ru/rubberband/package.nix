@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
-  version = "3.3.0";
+  version = "4.0.0";
 
   src = fetchurl {
-    url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
-    hash = "sha256-2e+J4rjvn4WxOsPC+uww4grPLJ86nIxFzmN/K8leV2w=";
+    url = "https://breakfastquay.com/files/releases/rubberband-${version}.tar.bz2";
+    hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];

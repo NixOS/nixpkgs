@@ -10,11 +10,12 @@
   setuptools,
   typing-extensions,
   z3-solver,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.128";
+  version = "9.2.146";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "claripy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YP2Cphf57iyZXrdseZhUkzrkop0+jCRu98ckurxS1UU=";
+    tag = "v${version}";
+    hash = "sha256-ZGagpKzbJBuBo3E7qYNQCBid0S/JB9fenikwksdM99Y=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -44,6 +45,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "claripy" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Python abstraction layer for constraint solvers";

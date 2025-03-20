@@ -1,28 +1,33 @@
-{ callPackage
-, runCommand
-, lib
-, fetchurl
-, perl
-, postgresql
-, nixosTests
-, ...
+{
+  callPackage,
+  runCommand,
+  lib,
+  fetchurl,
+  perl,
+  libpq,
+  nixosTests,
+  withPostgres ? true,
+  ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
-  nginxVersion = "1.25.3";
-  version = "${nginxVersion}.2";
+  nginxVersion = "1.27.1";
+  version = "${nginxVersion}.1";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-LVZAIrBuM7Rfflz68eXcVx041hgDr5+idU3/81PCjZw=";
+    sha256 = "sha256-ebBx4nvcFD1fQB0Nv1BN5EIAcNhnU4xe3CVG0DUf1cA=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.
   # This allows updating the patch destination, as openresty has
   # nginx source code in a different folder.
-  fixPatch = patch:
-    let name = patch.name or (builtins.baseNameOf patch); in
+  fixPatch =
+    patch:
+    let
+      name = patch.name or (builtins.baseNameOf patch);
+    in
     runCommand "openresty-${name}" { src = patch; } ''
       substitute $src $out \
         --replace "a/" "a/bundle/nginx-${nginxVersion}/" \
@@ -31,13 +36,17 @@ callPackage ../nginx/generic.nix args rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ postgresql ];
+  buildInputs = [ libpq ];
 
   postPatch = ''
+    substituteInPlace bundle/nginx-${nginxVersion}/src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+
     patchShebangs configure bundle/
   '';
 
-  configureFlags = [ "--with-http_postgres_module" ];
+  configureFlags = lib.optional withPostgres [ "--with-http_postgres_module" ];
 
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.ROLLING $out/bin/luajit-openresty
@@ -56,6 +65,9 @@ callPackage ../nginx/generic.nix args rec {
     homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ thoughtpolice lblasc ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      lblasc
+    ];
   };
 }

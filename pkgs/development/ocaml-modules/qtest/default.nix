@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, qcheck }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  qcheck,
+}:
 
 buildDunePackage rec {
   pname = "qtest";

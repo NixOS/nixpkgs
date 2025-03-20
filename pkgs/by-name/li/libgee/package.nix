@@ -1,23 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, autoconf
-, vala
-, pkg-config
-, glib
-, gobject-introspection
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoconf,
+  vala,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgee";
-  version = "0.20.6";
+  version = "0.20.8";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgee/${lib.versions.majorMinor finalAttrs.version}/libgee-${finalAttrs.version}.tar.xz";
-    sha256 = "G/g09eENYMxhJNdO08HdONpkZ4f794ciILi0Bo5HbU0=";
+    sha256 = "GJgVrBQ9iYZxk7DFK33DHzqhCKFfBNa13KK2rfrQsO4=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
-    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
-    PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
-  } // lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
+  env =
+    {
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+      PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
+      PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
 
   passthru = {
     updateScript = gnome.updateScript {

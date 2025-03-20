@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gdk-pixbuf, libGL, mesa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gdk-pixbuf,
+  libGL,
+  libgbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blur-effect";
@@ -6,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sonald";
-    repo = pname;
+    repo = "blur-effect";
     rev = version;
     sha256 = "0cjw7iz0p7x1bi4vmwrivfidry5wlkgfgdl9wly88cm3z9ib98jj";
   };
@@ -19,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf
     libGL
-    mesa
+    libgbm
   ];
 
   meta = with lib; {

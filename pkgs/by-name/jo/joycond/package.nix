@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevdev, udev, acl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libevdev,
+  udev,
+  acl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "joycond";
   version = "unstable-2021-07-30";
 
@@ -11,8 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libevdev udev ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libevdev
+    udev
+  ];
 
   # CMake has hardcoded install paths
   installPhase = ''

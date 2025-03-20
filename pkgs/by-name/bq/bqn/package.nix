@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, nodejs
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -55,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mlochbaum/BQN/";
     description = "Original BQN implementation in Javascript";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (nodejs.meta) platforms;
   };
 })

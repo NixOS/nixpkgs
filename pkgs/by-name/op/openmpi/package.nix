@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   removeReferencesTo,
   gfortran,
   perl,
@@ -40,12 +41,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.5";
+  version = "5.0.6";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-ZYjVfApL0pmiQQP04ZYFGynotV+9pJ4R1bPTIDCjJ3Y=";
+    sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
   };
+
+  patches = [
+    # This patch can be removed with the next openmpi update (>5.0.6)
+    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
+    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
+    (fetchpatch {
+      name = "fix-singletons-session-dir";
+      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
+      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./
@@ -73,18 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
     SOURCE_DATE_EPOCH = "0";
   };
 
-  outputs =
-    [ "out" ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "man"
-      "dev"
-    ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   buildInputs =
     [
       zlib
       libevent
       hwloc
+      prrte
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libnl
@@ -92,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       pmix
       ucx
       ucc
-      prrte
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
@@ -119,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-pmix=${lib.getDev pmix}"
     "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
-    (lib.withFeatureAs stdenv.hostPlatform.isLinux "prrte" (lib.getBin prrte))
+    (lib.withFeatureAs true "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
@@ -140,14 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
       # The file names we need to iterate are a combination of ${p}${s}, and there
       # are 7x3 such options. We use lib.mapCartesianProduct to iterate them all.
       fileNamesToIterate = {
-        p = [
-          "mpi"
-          "shmem"
-          "osh"
-        ];
+        p =
+          [
+            "mpi"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "shmem"
+            "osh"
+          ];
         s =
           [
-            "CC"
             "c++"
             "cxx"
             "cc"
@@ -156,7 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
             "f77"
             "f90"
             "fort"
-          ];
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
       };
       wrapperDataSubstitutions =
         {
@@ -164,12 +178,16 @@ stdenv.mkDerivation (finalAttrs: {
           # compiler=_ line that should be replaced by a compiler=#2 string, where
           # #2 is the 2nd value in the list.
           "cc" = [
-            "gcc"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
+            # "$CC" is expanded by the executing shell in the substituteInPlace
+            # commands to the name of the compiler ("clang" for Darwin and
+            # "gcc" for Linux)
+            "$CC"
+            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
           ];
           "c++" = [
-            "g++"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
+            # Same as with $CC
+            "$CXX"
+            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
           ];
         }
         // lib.optionalAttrs fortranSupport {
@@ -186,8 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
       wrapperDataFileNames = {
         part1 = [
           "mpi"
-          "shmem"
-        ];
+        ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
@@ -214,12 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
-          # From some reason the Darwin build doesn't include some of these
-          # wrapperDataSubstitutions strings and even some of the files. Hence
-          # we currently don't perform these substitutions on other platforms,
-          # until a Darwin user will care enough about this cross platform
-          # related substitution.
-          lib.optionalString stdenv.hostPlatform.isLinux ''
+          ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
@@ -238,19 +250,16 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  postFixup =
-    lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
-    ''
-    + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+  postFixup = ''
+    remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+    remove-references-to -t "''${!outputDev}" $out/bin/mpirun
+    remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
-      # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
-      wrapProgram "''${!outputDev}/bin/opal_wrapper" \
-        --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
-        --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
-    '';
+    # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
+    wrapProgram "''${!outputDev}/bin/opal_wrapper" \
+      --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
+      --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
+  '';
 
   doCheck = true;
 

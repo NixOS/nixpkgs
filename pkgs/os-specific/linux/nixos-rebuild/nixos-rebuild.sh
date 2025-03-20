@@ -29,6 +29,7 @@ upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
 specialisation=
+imageVariant=
 buildHost=
 targetHost=
 remoteSudo=
@@ -52,7 +53,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
+      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|build-image|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         if [ "$i" = list-generations ]; then
             buildNix=
@@ -141,7 +142,7 @@ while [ "$#" -gt 0 ]; do
         fi
         if [ "$1" != system ]; then
             profile="/nix/var/nix/profiles/system-profiles/$1"
-            mkdir -p -m 0755 "$(dirname "$profile")"
+            (umask 022 && mkdir -p "$(dirname "$profile")")
         fi
         shift 1
         ;;
@@ -151,6 +152,14 @@ while [ "$#" -gt 0 ]; do
             exit 1
         fi
         specialisation="$1"
+        shift 1
+        ;;
+      --image-variant)
+        if [ -z "$1" ]; then
+            log "$0: ‘--image-variant’ requires an argument"
+            exit 1
+        fi
+        imageVariant="$1"
         shift 1
         ;;
       --build-host)
@@ -306,6 +315,10 @@ nixBuild() {
                 ;;
             esac
         done
+
+        if [[ -z $buildingAttribute ]]; then
+            instArgs+=("$buildFile")
+        fi
 
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
@@ -815,6 +828,43 @@ if [ -z "$rollback" ]; then
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
+    elif [ "$action" = build-image ]; then
+        if [[ -z $buildingAttribute ]]; then
+            variants="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "let
+                    value = import \"$(realpath $buildFile)\";
+                    set = if builtins.isFunction value then value {} else value;
+                in builtins.mapAttrs (n: v: v.passthru.filePath) set.${attr:+$attr.}config.system.build.images" \
+                "${extraBuildFlags[@]}"
+            )"
+        elif [[ -z $flake ]]; then
+            variants="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
+                "${extraBuildFlags[@]}"
+            )"
+        else
+            variants="$(
+                runCmd nix "${flakeFlags[@]}" eval --json \
+                "$flake#$flakeAttr.config.system.build.images" \
+                --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+            )"
+        fi
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" > /dev/null; then
+            echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
+            echo "$variants" | jq -r '. | keys | join ("\n")'
+            exit 1
+        fi
+        imageName="$(echo "$variants" | jq -r --arg variant "$imageVariant" ".[\$variant]")"
+
+        if [[ -z $buildingAttribute ]]; then
+            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}")"
+        elif [[ -z $flake ]]; then
+            pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A config.system.build.images.${imageVariant} -k "${extraBuildFlags[@]}")"
+        else
+            pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
+        fi
     else
         showSyntax
     fi
@@ -899,7 +949,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     if ! targetHostSudoCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
+    else
+        echo -n "Done. The new configuration is " >&2
+        echo "$pathToConfig"
     fi
+elif [[ "$action" = build ]]; then
+    echo -n "Done. The new configuration is " >&2
+    echo "$pathToConfig"
 fi
 
 
@@ -908,4 +964,9 @@ if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
 
 Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
+fi
+
+if [[ "$action" = build-image ]]; then
+    echo -n "Done.  The disk image can be found in " >&2
+    echo "${pathToConfig}/${imageName}"
 fi

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IMCMlGt5/G4PRz525ZomsovU55vBnGhHndBtC7ym6lc=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     paramiko
     lxml
     six
-  ] ++ paramiko.optional-dependencies.ed25519;
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

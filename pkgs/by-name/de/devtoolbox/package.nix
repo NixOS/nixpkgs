@@ -14,18 +14,26 @@
   webkitgtk_6_0,
   gcr_4,
   gdk-pixbuf,
+  autoPatchelfHook,
+  appstream,
+  libxml2,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "devtoolbox";
-  version = "1.2";
+  version = "1.2.3";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "devtoolbox";
-    rev = "v${version}";
-    hash = "sha256-tSH7H2Y/+8EpuM4+Fa0iL/pSJSVtFDXlO2w/xwpzps0=";
+    tag = "v${version}";
+    hash = "sha256-Ns2utC/qiwzEJJkdqwpx320k3srj5OJi8K+u5fI1LwE=";
   };
+
+  postPatch = ''
+    substituteInPlace src/views/reverse_cron.py \
+      --replace-fail '"\D"' 'r"\D"'
+  '';
 
   nativeBuildInputs = [
     meson
@@ -35,6 +43,9 @@ python3Packages.buildPythonApplication rec {
     blueprint-compiler
     wrapGAppsHook4
     desktop-file-utils
+    autoPatchelfHook
+    appstream
+    libxml2
   ];
 
   buildInputs = [
@@ -76,6 +87,8 @@ python3Packages.buildPythonApplication rec {
   # Contains an unusable devtoolbox-run-script
   postInstall = ''
     rm -r $out/devtoolbox
+    ln -s $out/share/locale/zh_Hant $out/share/locale/zh_TW
+    ln -s $out/share/locale/zh_Hans $out/share/locale/zh_CN
   '';
 
   preFixup = ''
@@ -109,10 +122,7 @@ python3Packages.buildPythonApplication rec {
       unlicense
     ];
     mainProgram = "devtoolbox";
-    maintainers = with lib.maintainers; [
-      aleksana
-      aucub
-    ];
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
 }

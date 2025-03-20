@@ -3,39 +3,37 @@
   stdenv,
   fetchFromGitLab,
   kernel,
+  kernelModuleMakeFlags,
   kmod,
   pahole,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.9.0";
+  version = "4.12.1";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b0ogwUA9k5NKyTyJUigt/EN1V8Q+8Tc6I+y6isBcet0=";
+    hash = "sha256-ZsfPs8VvvgguyNLSVi6n5hs0OzNwiK3bkooQ267mKtA=";
   };
 
   buildInputs = [ pahole ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  # kernel makeFlags contain O=$$(buildRoot), that upstream passes through to make and causes build failure, so we filter it out here
-  makeFlags =
-    (lib.filter (flag: lib.head (lib.strings.splitString "=" flag) != "O") kernel.makeFlags)
-    ++ [
-      "KERNELRELEASE=${kernel.modDirVersion}"
-      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      "INSTALL_MOD_PATH=${placeholder "out"}"
-    ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KERNELRELEASE=${kernel.modDirVersion}"
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   meta = {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
     description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
     homepage = "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Drivers for several platform devices for TUXEDO notebooks:
       - Driver for Fn-keys
@@ -49,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       blanky0230
       keksgesicht
       xaverdh
+      XBagon
     ];
     platforms = lib.platforms.linux;
   };

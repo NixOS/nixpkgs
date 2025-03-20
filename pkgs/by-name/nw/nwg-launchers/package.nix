@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, gtkmm3
-, meson
-, ninja
-, nlohmann_json
-, pkg-config
-, swaylock
-, makeWrapper
-, gtk-layer-shell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtkmm3,
+  meson,
+  ninja,
+  nlohmann_json,
+  pkg-config,
+  swaylock,
+  makeWrapper,
+  gtk-layer-shell,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
-    repo = pname;
+    repo = "nwg-launchers";
     rev = "v${version}";
     sha256 = "sha256-+waoJHU/QrVH7o9qfwdvFTFJzTGLcV9CeYPn3XHEAkM=";
   };

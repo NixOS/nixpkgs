@@ -38,6 +38,10 @@ default-package-overrides:
   - xmonad-contrib < 0.18.1
   # 2024-11-01: no release version of http2/3 supports http-semantics >= 0.3.0 at the moment
   - http-semantics < 0.3.0
+  # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
+  - diagrams-input < 0.1.4
+  # 2024-12-31: last version that's compatible with GHC < 9.9
+  - htree < 0.2.0.0
 
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
@@ -61,6 +65,9 @@ extra-packages:
   - ghc-lib == 9.8.*                    # 2024-05-19: preserve for GHC 9.8
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
   - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
+  - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
+  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for ghc-syntax-highlighter == 0.0.12.0
+  - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
   - happy == 1.19.12                    # for ghcjs
@@ -109,6 +116,7 @@ extra-packages:
   - tls < 2.1.0                         # 2024-07-19: requested by darcs == 2.18.3
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
+  - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
 
 package-maintainers:
   abbradar:
@@ -200,6 +208,7 @@ package-maintainers:
     - patat
     - svgcairo
   danielrolls:
+    - aws-spend-summary
     - byte-count-reader
     - shellify
     - specup
@@ -270,8 +279,6 @@ package-maintainers:
     - total
     - turtle
     - typed-spreadsheet
-  gebner:
-    - wstunnel
   gridaphobe:
     - located-base
   iblech:
@@ -436,9 +443,6 @@ package-maintainers:
     - ttn-client
     - update-nix-fetchgit
     - zre
-  srid:
-    - ema
-    - emanote
   sternenseemann:
     # also maintain upstream package
     - cabal2nix

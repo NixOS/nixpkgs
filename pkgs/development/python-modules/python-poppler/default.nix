@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportCheck = [ "poppler" ];
+  pythonImportsCheck = [ "poppler" ];
 
   meta = {
     description = "Python binding to poppler-cpp";

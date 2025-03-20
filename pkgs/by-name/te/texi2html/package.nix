@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, perl, gettext, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gettext,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "texi2html";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ gettext perl ];
+  nativeBuildInputs = [
+    gettext
+    perl
+  ];
   buildInputs = [ perl ];
 
   postPatch = ''

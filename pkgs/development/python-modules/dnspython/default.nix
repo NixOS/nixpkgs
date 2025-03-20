@@ -60,6 +60,12 @@ buildPythonPackage rec {
     "test_misc_good_WKS_text"
   ];
 
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
+
   pythonImportsCheck = [ "dns" ];
 
   meta = with lib; {

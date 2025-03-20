@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, findutils
-, gawk
-, gnugrep
-, gnused
-, makeWrapper
-, mktemp
-, openssl
-, which
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  mktemp,
+  openssl,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Matty9191";
-    repo = pname;
+    repo = "ssl-cert-check";
     rev = "4056ceeab5abc0e39f4e0ea40cd54147253a3369";
     sha256 = "07k2n4l68hykraxvy030djc208z8rqff3kc7wy4ib9g6qj7s4mif";
   };

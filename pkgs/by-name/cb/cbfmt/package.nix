@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, testers, cbfmt }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  cbfmt,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cbfmt";
@@ -6,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "lukas-reineke";
-    repo = pname;
+    repo = "cbfmt";
     rev = "v${version}";
     sha256 = "sha256-/ZvL1ZHXcmE1n+hHvJeSqmnI9nSHJ+zM9lLNx0VQfIE=";
   };
 
-  cargoHash = "sha256-6oZCpjQ8t/QLFhEtF7td8KGI/kFE04pg7OELutsrJKo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C1FpwC1JsKOkS59xAcwqpmZ2g7rr+HHRdADURLs+9co=";
 
   passthru.tests.version = testers.testVersion {
     package = cbfmt;

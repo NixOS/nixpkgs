@@ -25,18 +25,18 @@ let
   world_feed_integration_tests_data = fetchFromGitHub {
     owner = "organicmaps";
     repo = "world_feed_integration_tests_data";
-    rev = "3b66e59eaae85ebc583ce20baa3bdf27811349c4";
-    hash = "sha256-wOZKqwYxJLllyxCr44rAcropKhohLUIVCtsR5tz9TRw=";
+    rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
+    hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2024.09.08-7";
+  version = "2025.03.02-7";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
-    rev = "${version}-android";
-    hash = "sha256-X1dmk1IBjqM2AUVkvSDNZyVtV5Ens9ninZvMvsRc334=";
+    tag = "${finalAttrs.version}-android";
+    hash = "sha256-5WX+YDgu8Ll5+rZWWxfbNW0pBFz+2XWkw/ahM14Ml08=";
     fetchSubmodules = true;
   };
 
@@ -45,13 +45,13 @@ in stdenv.mkDerivation rec {
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
+    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] finalAttrs.version}" > tools/unix/version.sh
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
 
     # Prefetch test data, or the build system will try to fetch it with git.
-    ln -s ${world_feed_integration_tests_data} data/world_feed_integration_tests_data
+    ln -s ${world_feed_integration_tests_data} data/test_data/world_feed_integration_tests_data
   '';
 
   nativeBuildInputs = [
@@ -99,4 +99,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "OMaps";
   };
-}
+})

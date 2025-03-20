@@ -7,7 +7,6 @@
   sqlite,
   zlib,
   stdenv,
-  clang,
   darwin,
 }:
 
@@ -18,20 +17,15 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MCHPR";
     repo = "MCHPRS";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Jm9ZsqCKOIxZsXQbCluYu7MgOD7hXYljcv/URaNVUW0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "hematite-nbt-0.5.2" = "sha256-ohhsMlRLFNesccxhqn0GAiVswcdMldD3gv0AXcviHU8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YDfyixNfJsKigf3W5265CWl4ETQDeBHYpquBoFoj4Tw=";
 
   nativeBuildInputs = [
     pkg-config
-    clang
     rustPlatform.bindgenHook
   ];
 

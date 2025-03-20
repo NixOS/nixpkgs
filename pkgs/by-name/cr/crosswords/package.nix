@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, isocodes
-, json-glib
-, libipuz
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  isocodes,
+  json-glib,
+  libipuz,
 }:
 
 stdenv.mkDerivation rec {

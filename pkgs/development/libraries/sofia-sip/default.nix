@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, glib, openssl, pkg-config, autoreconfHook, SystemConfiguration }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  glib,
+  openssl,
+  pkg-config,
+  autoreconfHook,
+  SystemConfiguration,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sofia-sip";
@@ -11,8 +21,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7QmK2UxEO5lC0KBDWB3bwKTy0Nc7WrdTLjoQYzezoaY=";
   };
 
-  buildInputs = [ glib openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin SystemConfiguration;
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  patches = [
+    # Fix build with gcc 14 from https://github.com/freeswitch/sofia-sip/pull/249
+    (fetchpatch2 {
+      name = "sofia-sip-fix-incompatible-pointer-type.patch";
+      url = "https://github.com/freeswitch/sofia-sip/commit/46b02f0655af0a9594e805f09a8ee99278f84777.diff";
+      hash = "sha256-4uZVtKnXG+BPW8byjd7tu4uEZo9SYq9EzTEvMwG0Bak=";
+    })
+  ];
+
+  buildInputs = [
+    glib
+    openssl
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin SystemConfiguration;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "Open-source SIP User-Agent library, compliant with the IETF RFC3261 specification";

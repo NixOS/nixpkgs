@@ -1,5 +1,21 @@
-{ lib, fetchurl, stdenv, runtimeShell, SDL2, freealut, SDL2_image, openal, physfs
-, zlib, libGLU, libGL, glew, tinyxml-2, copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  runtimeShell,
+  SDL2,
+  freealut,
+  SDL2_image,
+  openal,
+  physfs,
+  zlib,
+  libGLU,
+  libGL,
+  glew,
+  tinyxml-2,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trigger-rally";
@@ -31,9 +47,12 @@ stdenv.mkDerivation rec {
     cd src
 
     sed s,lSDL2main,lSDL2, -i GNUmakefile
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL2.dev}/include/SDL2"
-    export makeFlags="$makeFlags prefix=$out"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getInclude SDL2}/include/SDL2"
   '';
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
   enableParallelBuilding = true;
 
@@ -56,7 +75,10 @@ stdenv.mkDerivation rec {
       icon = "trigger";
       desktopName = "Trigger";
       comment = "Fast-paced 3D single-player rally racing game";
-      categories = [ "Game" "ActionGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 

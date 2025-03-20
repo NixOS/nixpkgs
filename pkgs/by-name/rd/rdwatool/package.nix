@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "rdwatool";
   version = "1.2-unstable-2023-11-27";
   pyproject = true;

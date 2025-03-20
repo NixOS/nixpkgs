@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "crocoddyl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
+    hash = "sha256-oWcclzzuswiR1SaQJd6GnMltJ2vgt7AgJPT0FJzD1Gs=";
   };
 
   outputs = [
@@ -59,11 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.scipy
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-    (lib.cmakeBool "BUILD_EXAMPLES" pythonSupport)
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+      (lib.cmakeBool "BUILD_EXAMPLES" pythonSupport)
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ref. https://github.com/stack-of-tasks/pinocchio/issues/2563
+      # remove this for crocoddyl >= 3.0.0
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;test_pybinds_*")
+    ];
 
   prePatch = ''
     substituteInPlace \

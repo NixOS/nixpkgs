@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, czmq
-, libusb1
-, ncurses
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  czmq,
+  libusb1,
+  ncurses,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {

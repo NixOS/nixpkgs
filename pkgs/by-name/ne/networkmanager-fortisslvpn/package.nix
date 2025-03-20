@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, substituteAll
+, replaceVars
 , openfortivpn
 , autoreconfHook
 , gettext
@@ -30,18 +30,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit openfortivpn;
     })
     ./support-ppp-2.5.0.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
     gettext
     pkg-config
     file
+    glib
   ];
 
   buildInputs = [

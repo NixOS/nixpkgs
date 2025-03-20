@@ -1,16 +1,18 @@
-{ lib
-, SDL2
-, cmake
-, darwin
-, fetchFromGitHub
-, libGLU
-, libiconv
-, mesa
-, pkg-config
-, stdenv
-# Boolean flags
-, libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
-, openglSupport ? libGLSupported
+{
+  lib,
+  sdl2-compat,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  libGLU,
+  libiconv,
+  libX11,
+  mesa,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
+  openglSupport ? libGLSupported,
 }:
 
 let
@@ -28,25 +30,55 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
-  propagatedBuildInputs = [ SDL2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
+  buildInputs =
+    [
+      libX11
+      sdl2-compat
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Cocoa
+    ]
     ++ lib.optionals openglSupport [ libGLU ];
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    # allow as a drop in replacement for SDL
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $out/lib/pkgconfig/sdl12_compat.pc $out/lib/pkgconfig/sdl.pc
+  '';
+
+  # The setup hook scans paths of buildInputs to find SDL related packages and
+  # adds their include and library paths to environment variables. The sdl-config
+  # is patched to use these variables to produce correct flags for compiler.
+  patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
 
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
-        ${if stdenv.hostPlatform.isDarwin then ''
-          install_name_tool ${lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [x]} ") finalAttrs.propagatedBuildInputs} "$lib"
-        '' else ''
-          patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.propagatedBuildInputs}" "$lib"
-        ''}
+        ${
+          if stdenv.hostPlatform.isDarwin then
+            ''
+              install_name_tool ${
+                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
+              } "$lib"
+            ''
+          else
+            ''
+              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
+            ''
+        }
       fi
     done
   '';

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "drat-trim";
@@ -7,16 +12,29 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
-    rev = "refs/tags/v05.22.2023";
+    tag = "v05.22.2023";
     hash = "sha256-sV3A0f1TLSaTIdAtT6y8rU3ZS2UqEePJYSf3UySOlSA=";
   };
+
+  patches = [
+    # gcc-14 build fix: https://github.com/marijnheule/drat-trim/pull/40
+    (fetchpatch {
+      name = "gcc-14-fix.patch";
+      url = "https://github.com/marijnheule/drat-trim/commit/8186a7dc083a3951ba87e5ff35d36f1ea2c03f0d.patch";
+      hash = "sha256-jgsOYcRYD2VGdOrXW9D8Jh80Nqd+Kp3d2IU+bNK1yGg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile --replace gcc cc
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin drat-trim lrat-check
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -27,7 +27,7 @@ let
   '';
 
   sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
-    exec ${cfg.package}/bin/sojuctl --config ${configFile} "$@"
+    exec ${lib.getExe' cfg.package "sojuctl"} --config ${cfg.configFile} "$@"
   '';
 in
 {
@@ -107,7 +107,18 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Lines added verbatim to the configuration file.";
+      description = "Lines added verbatim to the generated configuration file.";
+    };
+
+    configFile = mkOption {
+      type = types.path;
+      default = configFile;
+      defaultText = "Config file generated from other options.";
+      description = ''
+        Path to config file. If this option is set, it will override any
+        configuration done using other options, including {option}`extraConfig`.
+      '';
+      example = literalExpression "./soju.conf";
     };
   };
 
@@ -131,10 +142,11 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      documentation = [ "man:soju(1)" ];
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
+        ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
       };

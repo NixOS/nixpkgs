@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, intltool
-, pkg-config
-, networkmanager
-, strongswanNM
-, gtk3
-, gtk4
-, libsecret
-, libnma
-, libnma-gtk4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  intltool,
+  pkg-config,
+  networkmanager,
+  strongswanNM,
+  gtk3,
+  gtk4,
+  libsecret,
+  libnma,
+  libnma-gtk4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-strongswan";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
-    sha256 = "bbyA9qCboM9hBKMXhJWXgEFN13Fl4pY6zWZXwowlRMI=";
+    sha256 = "sha256-IMb5vOVGvMHeO1h5AJM1gCgSBMluhn1nYA1b8zC4EbY=";
   };
 
   nativeBuildInputs = [

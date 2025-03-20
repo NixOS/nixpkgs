@@ -1,32 +1,43 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, dbus
-, protobuf
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  dbus,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pbpctrl";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "qzed";
-    repo = "${pname}";
+    repo = "pbpctrl";
     rev = "v${version}";
-    hash = "sha256-V7wfEXJ0tVQNsi1OFU1Dk2d9ImsNFRriGutpJzh2tV8=";
+    hash = "sha256-u5I3Hs00JDPRBwThYTEmNiZj/zPVfHyyrt4E68d13do=";
   };
 
-  cargoHash = "sha256-8D+WD5bOxoUhw4a7SUr+D2gn1NA7OkmoCcALO9HY8Qk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0kh9bwiTVWuDviDw6IY5EGj+2k2WsyCCeo+r7CdBftE=";
 
-  nativeBuildInputs = [ pkg-config protobuf ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
   buildInputs = [ dbus ];
 
   meta = with lib; {
     description = "Control Google Pixel Buds Pro from the Linux command line";
     homepage = "https://github.com/qzed/pbpctrl";
-    license = with licenses; [ asl20 mit ];
-    maintainers = [ maintainers.vanilla ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      vanilla
+      cafkafk
+    ];
     platforms = platforms.linux;
     mainProgram = "pbpctrl";
   };

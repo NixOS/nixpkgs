@@ -1,88 +1,94 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
-  name = "keepassxc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
-    timeout = 1800;
-  };
-
-  nodes.machine = { ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
   {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
-
-    services.xserver.enable = true;
-
-    # for better OCR
-    environment.etc."icewm/prefoverride".text = ''
-      ColorActiveTitleBar = "rgb:FF/FF/FF"
-    '';
-
-    # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
-    qt = {
-      enable = true;
-      platformTheme = "gnome";
-      style = "adwaita-dark";
+    name = "keepassxc";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ turion ];
+      timeout = 1800;
     };
 
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = with pkgs; [
-      keepassxc
-      xdotool
-    ];
-  };
+    nodes.machine =
+      { ... }:
 
-  enableOCR = true;
+      {
+        imports = [
+          ./common/user-account.nix
+          ./common/x11.nix
+        ];
 
-  testScript = { nodes, ... }: let
-    aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2 &");'';
-    in ''
-    with subtest("Ensure X starts"):
-        start_all()
-        machine.wait_for_x()
+        services.xserver.enable = true;
 
-    with subtest("Can create database and entry with CLI"):
-        ${aliceDo "keepassxc-cli db-create --set-key-file foo.keyfile foo.kdbx"}
-        ${aliceDo "keepassxc-cli add --no-password -k foo.keyfile foo.kdbx bar"}
+        # for better OCR
+        environment.etc."icewm/prefoverride".text = ''
+          ColorActiveTitleBar = "rgb:FF/FF/FF"
+        '';
 
-    with subtest("Ensure KeePassXC starts"):
-        # start KeePassXC window
-        ${aliceDo "keepassxc >&2 &"}
+        # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
+        qt = {
+          enable = true;
+          platformTheme = "gnome";
+          style = "adwaita-dark";
+        };
 
-        machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
-        machine.screenshot("KeePassXC")
+        test-support.displayManager.auto.user = "alice";
+        environment.systemPackages = with pkgs; [
+          keepassxc
+          xdotool
+        ];
+      };
 
-    with subtest("Can open existing database"):
-        machine.send_key("ctrl-o")
-        machine.sleep(5)
-        # Regression #163482: keepassxc did not crash
-        machine.succeed("ps -e | grep keepassxc")
-        machine.wait_for_text("Open database")
-        machine.send_key("ret")
+    enableOCR = true;
 
-        # Wait for the enter password screen to appear.
-        machine.wait_for_text("/home/alice/foo.kdbx")
+    testScript =
+      { nodes, ... }:
+      let
+        aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2 &");'';
+      in
+      ''
+        with subtest("Ensure X starts"):
+            start_all()
+            machine.wait_for_x()
 
-        # Click on "I have key file" button to open keyfile dialog
-        machine.send_key("tab")
-        machine.send_key("tab")
-        machine.send_key("tab")
-        machine.send_key("ret")
+        with subtest("Can create database and entry with CLI"):
+            ${aliceDo "keepassxc-cli db-create --set-key-file foo.keyfile foo.kdbx"}
+            ${aliceDo "keepassxc-cli add --no-password -k foo.keyfile foo.kdbx bar"}
 
-        # Select keyfile
-        machine.wait_for_text("Select key file")
-        machine.send_chars("/home/alice/foo.keyfile")
-        machine.send_key("ret")
+        with subtest("Ensure KeePassXC starts"):
+            # start KeePassXC window
+            ${aliceDo "keepassxc >&2 &"}
 
-        # Open database
-        machine.wait_for_text("foo.kdbx \\[Locked] - KeePassXC")
-        machine.send_key("ret")
+            machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
+            machine.screenshot("KeePassXC")
 
-        # Database is unlocked (doesn't have "[Locked]" in the title anymore)
-        machine.wait_for_text("foo.kdbx - KeePassXC")
-  '';
-})
+        with subtest("Can open existing database"):
+            machine.send_key("ctrl-o")
+            machine.sleep(5)
+            # Regression #163482: keepassxc did not crash
+            machine.succeed("ps -e | grep keepassxc")
+            machine.wait_for_text("Open database")
+            machine.send_key("ret")
+
+            # Wait for the enter password screen to appear.
+            machine.wait_for_text("/home/alice/foo.kdbx")
+
+            # Click on "I have key file" button to open keyfile dialog
+            machine.send_key("tab")
+            machine.send_key("tab")
+            machine.send_key("tab")
+            machine.send_key("ret")
+
+            # Select keyfile
+            machine.wait_for_text("Select key file")
+            machine.send_chars("/home/alice/foo.keyfile")
+            machine.send_key("ret")
+
+            # Open database
+            machine.wait_for_text("foo.kdbx \\[Locked] - KeePassXC")
+            machine.send_key("ret")
+
+            # Database is unlocked (doesn't have "[Locked]" in the title anymore)
+            machine.wait_for_text("foo.kdbx - KeePassXC")
+      '';
+  }
+)

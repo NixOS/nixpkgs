@@ -1,42 +1,47 @@
-{ lib
-, fetchFromGitHub
-, meerk40t-camera
-, python3Packages
-, gtk3
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  meerk40t-camera,
+  python3Packages,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.9.4000";
+  version = "0.9.7020";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ceDnnHdmJ6VOrM9pSxjeKQ748E8fsIqSQ36qFpXc9Ac=";
+    tag = version;
+    hash = "sha256-mdl/zW53OM3MtyFoWbTI1yGY2yW72mglO5djHqKx4Fw=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   # prevent double wrapping
   dontWrapGApps = true;
 
   # https://github.com/meerk40t/meerk40t/blob/main/setup.py
-  propagatedBuildInputs = with python3Packages; [
-    meerk40t-camera
-    numpy
-    pyserial
-    pyusb
-    setuptools
-    wxpython
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      meerk40t-camera
+      numpy
+      pyserial
+      pyusb
+      setuptools
+      wxpython
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     cam = [
@@ -72,7 +77,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${version}";
+    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${src.tag}";
     description = "MeerK40t LaserCutter Software";
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";

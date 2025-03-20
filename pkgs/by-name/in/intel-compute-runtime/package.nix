@@ -1,28 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, intel-gmmlib
-, intel-graphics-compiler
-, level-zero
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  intel-gmmlib,
+  intel-graphics-compiler,
+  level-zero,
+  libva,
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "24.39.31294.12";
+  version = "24.52.32224.5";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    hash = "sha256-7GNtAo20DgxAxYSPt6Nh92nuuaS9tzsQGH+sLnsvBKU=";
+    hash = "sha256-Unoh33bZFsMCqJ2hWEYVEdMF2V/aSIDynThz1pUyM7Q=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
+  buildInputs = [
+    intel-gmmlib
+    intel-graphics-compiler
+    libva
+    level-zero
+  ];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
@@ -32,7 +41,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  outputs = [ "out" "drivers" ];
+  outputs = [
+    "out"
+    "drivers"
+  ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -46,17 +58,27 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath ${lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc ]} \
+    patchelf --set-rpath ${
+      lib.makeLibraryPath [
+        intel-gmmlib
+        intel-graphics-compiler
+        libva
+        stdenv.cc.cc
+      ]
+    } \
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
   meta = with lib; {
-    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+    description = "Intel Graphics Compute Runtime oneAPI Level Zero and  OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
     changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, datree
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  datree,
 }:
 
 buildGoModule rec {
@@ -13,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W1eX7eUMdPGbHA/f08xkG2EUeZmaunEAQn7/LRBe2nk=";
   };
 
@@ -54,6 +55,9 @@ buildGoModule rec {
     homepage = "https://datree.io/";
     changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ azahi jceb ];
+    maintainers = with maintainers; [
+      azahi
+      jceb
+    ];
   };
 }

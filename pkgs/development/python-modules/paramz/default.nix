@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sods";
     repo = "paramz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SWmx70G5mm3eUmH2UIEmg5C7u9VDHiFw5aYCIr8UjPs=";
   };
 

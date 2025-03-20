@@ -6,7 +6,7 @@
   fetchFromGitHub,
   fetchPypi,
   python3,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   nixosTests,
   # To include additional plugins, pass them here as an overlay.
@@ -34,6 +34,7 @@ let
           flask = super.flask.overridePythonAttrs (oldAttrs: rec {
             version = "2.2.5";
             format = "setuptools";
+            pyproject = null;
             src = fetchPypi {
               pname = "Flask";
               inherit version;
@@ -51,6 +52,12 @@ let
             build-system = [ self.setuptools ];
             doCheck = false; # DeprecationWarnings
           });
+          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: {
+            doCheck = false; # fails in current overlay
+          });
+          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: {
+            doCheck = false; # fails in current overlay
+          });
 
           netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
             version = "0.9.0";
@@ -67,13 +74,13 @@ let
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FileCheck";
-          version = "2024.3.27";
+          version = "2024.11.12";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
             rev = version;
-            sha256 = "sha256-2MK9whPpgwQC+WPbPf628Ocjz6t8HKozblP7dmjD7RQ=";
+            sha256 = "sha256-Y7yvImnYahmrf5GC4c8Ki8IsOZ8r9I4uk8mYBhEQZ28=";
           };
           doCheck = false;
         };
@@ -193,14 +200,12 @@ let
 
           patches = [
             # substitute pip and let it find out, that it can't write anywhere
-            (substituteAll {
-              src = ./pip-path.patch;
+            (replaceVars ./pip-path.patch {
               pip = "${self.pip}/bin/pip";
             })
 
             # hardcore path to ffmpeg and hide related settings
-            (substituteAll {
-              src = ./ffmpeg-path.patch;
+            (replaceVars ./ffmpeg-path.patch {
               ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
             })
           ];
@@ -227,9 +232,9 @@ let
             in
             ''
               sed -r -i \
-                ${
-                  lib.concatStringsSep "\n" (map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints)
-                }
+                ${lib.concatStringsSep "\n" (
+                  map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints
+                )}
                 setup.py
             '';
 
@@ -263,7 +268,6 @@ let
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
               abbradar
-              gebner
               WhittlesJr
               gador
             ];

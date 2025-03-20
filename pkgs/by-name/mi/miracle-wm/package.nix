@@ -2,11 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
   cmake,
+  coreutils,
+  dbus,
   glib,
   glm,
   gtest,
@@ -16,39 +17,32 @@
   libnotify,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
+  makeWrapper,
   mir,
   nlohmann_json,
   pcre2,
   pkg-config,
+  systemd,
   wayland,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.3.7";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "mattkae";
+    owner = "miracle-wm-org";
     repo = "miracle-wm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-31S7Mfz3LIOAmDUl6jbr3kSP2BdLaM0M4xMZ8FHhLH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LPcVLpskpmHc8EzdNqMT6BnbY8Le/BVojpXPIqy6tGI=";
   };
-
-  patches = [
-    # Remove when https://github.com/mattkae/miracle-wm/pull/211 merged & in release
-    (fetchpatch {
-      name = "0001-miracle-wm-Dont-ignore-PKG_CONFIG_PATH.patch";
-      url = "https://github.com/mattkae/miracle-wm/commit/a9fe6ed1e7dc605f72e18cdc2d19afb3c187be3a.patch";
-      hash = "sha256-zzOwqUjyZGYIy/3BvOiedfCubrqaeglvsAzTXyq3wYU=";
-    })
-  ];
 
   postPatch =
     ''
-      substituteInPlace session/usr/local/share/wayland-sessions/miracle-wm.desktop.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/miracle-wm' 'miracle-wm'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}'
     ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
       substituteInPlace CMakeLists.txt \
@@ -62,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
   ];
 
@@ -75,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libuuid
     libxkbcommon
-    mesa # gbm.h
+    libgbm
     mir
     nlohmann_json
     pcre2
@@ -84,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [ gtest ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -95,25 +94,38 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  postFixup = ''
+    patchShebangs $out/libexec/miracle-wm-session-setup
+    wrapProgram $out/libexec/miracle-wm-session-setup \
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          coreutils # cat
+          dbus # dbus-update-activation-environment
+          systemd # systemctl
+        ]
+      }"
+  '';
+
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     providedSessions = [ "miracle-wm" ];
     tests.vm = nixosTests.miracle-wm;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiling Wayland compositor based on Mir";
     longDescription = ''
       miracle-wm is a Wayland compositor based on Mir. It features a tiling window manager at its core, very much in
       the style of i3 and sway. The intention is to build a compositor that is flashier and more feature-rich than
       either of those compositors, like swayfx.
 
-      See the user guide for info on how to use miracle-wm: https://github.com/mattkae/miracle-wm/blob/v${finalAttrs.version}/USERGUIDE.md
+      See the user guide for info on how to use miracle-wm: https://wiki.miracle-wm.org/v${finalAttrs.version}/
     '';
     homepage = "https://github.com/mattkae/miracle-wm";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

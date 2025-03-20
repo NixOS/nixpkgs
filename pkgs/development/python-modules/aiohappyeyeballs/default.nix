@@ -10,7 +10,7 @@
   # optional-dependencies
   furo,
   myst-parser,
-  sphinx-autobuild,
+  sphinx,
   sphinxHook,
 
   # tests
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.4.2";
+  version = "2.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZHxAup3Qf+ejW5Lz9ucuiWAQAwSG0Rf5giPSwk9A0ww=";
+    tag = "v${version}";
+    hash = "sha256-qTbneCb8XsZ+/Tg7JfFT/q67g7vzd11riZn5lI44Ei8=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     docs = [
       furo
       myst-parser
-      sphinx-autobuild
+      sphinx
       sphinxHook
     ];
   };

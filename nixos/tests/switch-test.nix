@@ -1,6 +1,7 @@
 # Test configuration switching.
+{ lib, pkgs, ...}:
 
-import ./make-test-python.nix ({ lib, pkgs, ng, ...} : let
+let
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -48,8 +49,6 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
-      system.switch.enableNg = ng;
-
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
@@ -612,6 +611,16 @@ in {
     other = {
       system.switch.enable = true;
       users.mutableUsers = true;
+      system.preSwitchChecks.succeeds = ''
+        config="$1"
+        action="$2"
+        echo "this should succeed (config: $config, action: $action)"
+        [ "$action" == "check" ] || [ "$action" == "test" ]
+      '';
+      specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
+        echo this will fail
+        false
+      '';
     };
   };
 
@@ -684,6 +693,11 @@ in {
 
     boot_loader_text = "Warning: do not know how to make this configuration bootable; please enable a boot loader."
 
+    with subtest("pre-switch checks"):
+        machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
+        out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
+        assert_contains(out, "this will fail")
+
     with subtest("actions"):
         # boot action
         out = switch_to_specialisation("${machine}", "simpleService", action="boot")
@@ -717,6 +731,23 @@ in {
         machine.succeed("echo ${dbusService} > /run/nixos/start-list")
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
         assert_contains(out, "starting the following units: ${dbusService}\n")
+
+    with subtest("aborts on already locked lock file"):
+        (exitcode, _) = machine.execute(
+            'flock -x --nb /run/nixos/switch-to-configuration.lock -c "${otherSystem}/bin/switch-to-configuration test"',
+            timeout=5
+        )
+        # See man timeout, exit codes above 124 come from the timeout command
+        # We want to make sure that stc actually exited with an error code,
+        # if instead we hit the timeout, then it means that stc hangs, which is
+        # what we don't want
+        # TODO: We cannot match on the exact exit code since it's not consistent between
+        # stc and stc-ng, since errno/last_os_error is not a very stable interface,
+        # we should probably get rid of that in stc-ng once we got rid of the
+        # perl implementation
+        assert exitcode < 124, \
+          "switch-to-configuration did not abort as expected, " + \
+          f"probably it timed out instead (exit code: {exitcode}), 124 means timeout"
 
     with subtest("fstab mounts"):
         switch_to_specialisation("${machine}", "")
@@ -1446,4 +1477,4 @@ in {
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
   '';
-})
+}

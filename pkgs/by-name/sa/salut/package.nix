@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, fontconfig
-, libxkbcommon
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  fontconfig,
+  libxkbcommon,
+  wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "salut";
   version = "unstable-2022-12-17";
 

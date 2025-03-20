@@ -9,6 +9,7 @@
   pytest-vcr,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   pythonOlder,
   requests,
   vcrpy,
@@ -16,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.50.1";
+  version = "0.51.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V51NtUvW75GMUlAhftsVuAt7EVgrjiT85DcCdow/Li0=";
+    hash = "sha256-MnlTT4Ma4LSuLYzkLvA4tKs45mfX7W/3Q3mC16DPUlA=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -48,11 +49,16 @@ buildPythonPackage rec {
     "tests/integration/api/test_*.py"
   ];
 
-  disabledTests = [
-    "test_default_settings_set"
-    # https://github.com/DataDog/datadogpy/issues/746
-    "TestDogshell"
-  ];
+  disabledTests =
+    [
+      "test_default_settings_set"
+      # https://github.com/DataDog/datadogpy/issues/746
+      "TestDogshell"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/DataDog/datadogpy/issues/880
+      "test_timed_coroutine"
+    ];
 
   pythonImportsCheck = [ "datadog" ];
 

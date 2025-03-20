@@ -1,25 +1,31 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, zlib
-, openssl
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "ps3-disc-dumper";
-  version = "3.2.3";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "v${version}";
-    sha256 = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
+    tag = "v${version}";
+    hash = "sha256-FtKFX7w60lAt7aMg/KNumFGESluYZf1/vzjdkLctkqs=";
   };
 
-  selfContainedBuild = true;
-
-  projectFile = "UI.Console/UI.Console.csproj";
-  nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnetRestoreFlags = [ "-p:Configuration=${buildType}" ];
+  buildType = "Linux";
+  projectFile = "UI.Avalonia/UI.Avalonia.csproj";
+  nugetDeps = ./deps.json;
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
@@ -32,12 +38,17 @@ buildDotnetModule rec {
     openssl
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/13xforever/ps3-disc-dumper";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Handy utility to make decrypted PS3 disc dumps";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evanjs ];
-    platforms = [ "x86_64-linux" ];
+    homepage = "https://github.com/13xforever/ps3-disc-dumper";
+    license = lib.licenses.mit;
     mainProgram = "ps3-disc-dumper";
+    maintainers = with lib.maintainers; [
+      evanjs
+      gepbird
+    ];
+    platforms = [ "x86_64-linux" ];
   };
 }

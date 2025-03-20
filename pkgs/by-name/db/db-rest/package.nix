@@ -1,24 +1,25 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs_18
-, nix-update-script
-, nixosTests
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs_18,
+  nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage rec {
   pname = "db-rest";
-  version = "6.0.5";
+  version = "6.0.6";
 
   nodejs = nodejs_18;
 
   src = fetchFromGitHub {
     owner = "derhuerst";
-    repo = pname;
+    repo = "db-rest";
     rev = version;
-    hash = "sha256-jMHqJ1whGPz2ti7gn8SPz6o7Fm4oMF6hYjB4wsjKAEU=";
+    hash = "sha256-Rwy36hi5p/EDLBbfi1M0DEKD+2/eiJsqo0r2Et/3Oa4=";
   };
 
-  npmDepsHash = "sha256-rXBIpar5L6fGpDlphr1PqRNxARSccV7Gi+uTNlCqh7I=";
+  npmDepsHash = "sha256-Drwmnu23PvrT/cw42hl+mu/S/Dn5nzybWGCDCUF7+R8=";
 
   preConfigure = ''
     patchShebangs ./build/index.js

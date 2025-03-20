@@ -13,26 +13,27 @@
   qt6integration,
   qt6platform-plugins,
   dde-tray-loader,
+  dde-application-manager,
   wayland,
   wayland-protocols,
+  treeland-protocols,
   yaml-cpp,
   xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "1.0.2";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
     rev = finalAttrs.version;
-    hash = "sha256-I3z6HL1h3qmLfOrwhyLhtSz3og4kHcAdlHJx4+SgPRo=";
+    hash = "sha256-Gko1fFut5zWH/L6X5hEe5OZBjRIbKWIrrjjhh2wrsCg=";
   };
 
   patches = [
     ./fix-path-for-nixos.diff
-    ./fix-dock-can-not-show-with-qt6_8.diff
   ];
 
   postPatch = ''
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dde-tray-loader
+    dde-application-manager
     dtk6declarative
     dtk6widget
     dde-qt-dbus-factory
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6integration
     wayland
     wayland-protocols
+    treeland-protocols
     yaml-cpp
     xorg.libXcursor
     xorg.libXres

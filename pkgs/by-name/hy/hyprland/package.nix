@@ -13,7 +13,10 @@
   cairo,
   epoll-shim,
   git,
+  glaze,
   hyprcursor,
+  hyprgraphics,
+  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
@@ -23,11 +26,12 @@
   libinput,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   pango,
   pciutils,
   pkgconf,
   python3,
+  re2,
   systemd,
   tomlplusplus,
   wayland,
@@ -82,14 +86,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.45.0";
+  version = "0.47.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-//Ib7gXCA8jq8c+QGTTIO0oH0rUYYBXGp8sqpI1jlhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dSKR1VpjpdJVZ5dmLgIvAu3K+DYrSbohZkqxSQhjw8U=";
   };
 
   postPatch = ''
@@ -98,6 +102,10 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+
+    substituteInPlace protocols/meson.build --replace-fail \
+      "wayland_scanner = dependency('wayland-scanner')" \
+      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -136,8 +144,10 @@ customStdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
+      glaze
       git
       hyprcursor.dev
+      hyprgraphics
       hyprlang
       hyprutils
       libGL
@@ -145,9 +155,10 @@ customStdenv.mkDerivation (finalAttrs: {
       libinput
       libuuid
       libxkbcommon
-      mesa
+      libgbm
       pango
       pciutils
+      re2
       tomlplusplus
       wayland
       wayland-protocols
@@ -168,6 +179,7 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
+  strictDeps = true;
 
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {
@@ -188,6 +200,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
+            hyprland-qtutils
             pciutils
             pkgconf
           ]
@@ -204,12 +217,7 @@ customStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-      khaneliman
-      wozeparrot
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };

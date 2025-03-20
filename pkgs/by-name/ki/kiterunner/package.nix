@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,9 @@ buildGoModule rec {
   vendorHash = "sha256-fgtDP6X84iPO2Tcwq5jl8700PDKixJlIihgNaPX/n9k=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}"
   ];
 
   subPackages = [ "./cmd/kiterunner" ];

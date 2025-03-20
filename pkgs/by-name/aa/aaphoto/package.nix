@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jasper
-, libpng
-, libjpeg
-, zlib
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jasper,
+  libpng,
+  libjpeg,
+  zlib,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
       one-by-one.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "aaphoto";
   };

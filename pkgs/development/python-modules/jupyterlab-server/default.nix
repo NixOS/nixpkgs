@@ -79,16 +79,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "jupyterlab_server"
-    "jupyterlab_server.pytest_plugin"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = lib.teams.jupyter.members;
   };
 }

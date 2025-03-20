@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtquickcontrols2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtquickcontrols2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

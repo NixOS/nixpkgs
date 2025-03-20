@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
-  version = "1.24.1";
+  version = "1.29.5";
 
   src = fetchurl {
     url = "https://proton.me/download/pass/linux/x64/proton-pass_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-NtSZ3TSF3nBD+mEU6+uW2x8nqv0dz3jpankyTjJ8xvE=";
+    hash = "sha256-Ws9cZDzM72tmC2+7WI5e+hm0h9o/VD44DsCnEQ6pt6g=";
   };
 
   dontConfigure = true;
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/proton-pass \
       --add-flags $out/share/proton-pass/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0

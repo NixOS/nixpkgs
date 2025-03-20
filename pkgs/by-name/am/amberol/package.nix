@@ -18,6 +18,7 @@
   gst_all_1,
   libadwaita,
   dbus,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FK0TJFjknEFraY8T+PQ/ABiid36kEYIEhekgyx0y3aI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "amberol-${version}";
-    hash = "sha256-9YRd1iOh+l+Jy8eSwJP6pxonEofBkMpFqb+JAAFDbCA=";
+    hash = "sha256-OsQMiye/sUsnmfx2V49ZUMGS/HQH9m9i5/qvho0jTD8=";
   };
 
   postPatch = ''
@@ -72,10 +73,14 @@ stdenv.mkDerivation rec {
       gst-libav
     ]);
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ];
+    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "amberol";

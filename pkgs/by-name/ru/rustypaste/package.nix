@@ -1,17 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
+    repo = "rustypaste";
     rev = "v${version}";
-    sha256 = "sha256-C/ndU09+yQTXEUWDO3u9Bl5M3x3aaRHVuWpomUAa/B8=";
+    sha256 = "sha256-Kv6hmqqGY9SssiT/MYmYCZ71N8CHFTT7K4q7eMdQTQU=";
   };
 
-  cargoHash = "sha256-b9KZzevaTl52pduN4gkF8k6yqgDcE8x5sOwmPxzYfWA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-g7HoDPNP6DeV6NlC/F5KxBVMMgLw6zvVmOUe6yndRMQ=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -32,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/rustypaste";
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda seqizz ];
+    maintainers = with maintainers; [
+      figsoda
+      seqizz
+    ];
     mainProgram = "rustypaste";
   };
 }

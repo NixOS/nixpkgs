@@ -3,65 +3,44 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
   makeWrapper,
   writeScriptBin,
-  which,
-  nix-update-script,
   versionCheckHook,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.70";
+  version = "0.0.82";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jj9r5npClLY9mhDHFI92825RYvwn6m9KlngfFL0bqCw=";
+    tag = "v${version}";
+    hash = "sha256-cSMHd3j3xslSR/v4KZ5LUwxPPR/b+okwrT54gUyLXXw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustpython-ast-0.4.0" = "sha256-RChZlXzdzyLp0Lb/LTLbWfbUzPDhmWkf0uVobflCKRk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JrDj88JjQon2rtywa/PqnS1pTxTLigPHNnqQS/tO9RA=";
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     python3
     makeWrapper
+    writableTmpDirAsHomeHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
   postInstall = ''
     mkdir -p $out/lib
     cp -r $HOME/.erg/ $out/lib/erg
   '';
-
-  nativeCheckInputs = [ which ];
-
-  checkFlags =
-    [
-      # this test causes stack overflow
-      # > thread 'exec_import' has overflowed its stack
-      "--skip=exec_import"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # Dict({Str..Obj: Int}) does not implement Iterable(Str..Obj..Obj) and Indexable({"a"}..Obj, Int)
-      # https://github.com/mtshiba/pylyzer/issues/114
-      "--skip=exec_casting"
-    ];
 
   postFixup = ''
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg

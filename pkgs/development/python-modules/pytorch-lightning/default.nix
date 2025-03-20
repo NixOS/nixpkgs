@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
-    rev = "refs/tags/${version}";
-    hash = "sha256-FngD3nYTGVEjS1VrXAVps2/B8VlS7BZMDAsmIDtAyW0=";
+    tag = version;
+    hash = "sha256-vGs+byt+/9tIMNYc2VmyN5vhj21ZFnaYsg4v2zeKzEM=";
   };
 
   preConfigure = ''
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
-    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tbenst ];
   };

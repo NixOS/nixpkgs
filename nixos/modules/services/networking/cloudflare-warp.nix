@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cloudflare-warp;
 in
@@ -64,7 +69,10 @@ in
         {
           Type = "simple";
           ExecStart = "${cfg.package}/bin/warp-svc";
-          ReadWritePaths = [ "${cfg.rootDir}" "/etc/resolv.conf" ];
+          ReadWritePaths = [
+            "${cfg.rootDir}"
+            "/etc/resolv.conf"
+          ];
           CapabilityBoundingSet = caps;
           AmbientCapabilities = caps;
           Restart = "always";

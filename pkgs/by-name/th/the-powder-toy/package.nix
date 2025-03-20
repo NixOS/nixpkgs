@@ -13,25 +13,27 @@
   meson,
   ninja,
   pkg-config,
+  python3,
   SDL2,
   stdenv,
   zlib,
 }:
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "98.2.365";
+  version = "99.3.384";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S2aUa25EnUfX6ShW6D+wHrsTLxTcCFcZ/uLE9EWGu4Q=";
+    tag = "v${version}";
+    hash = "sha256-vlswHNkjyxM9sZT+mwiCMfNbdAbhYyx06w+ZLfaPaEQ=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    python3
   ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [

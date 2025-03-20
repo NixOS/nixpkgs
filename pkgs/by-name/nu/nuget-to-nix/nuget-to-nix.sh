@@ -1,4 +1,5 @@
 #!@runtimeShell@
+# shellcheck shell=bash
 
 set -euo pipefail
 shopt -s nullglob
@@ -8,101 +9,57 @@ export PATH="@binPath@:$PATH"
 # used for glob ordering of package names
 export LC_ALL=C
 
+>&2 echo "WARNING: nuget-to-nix has deprecated in favor of nuget-to-json."
+
 if [ $# -eq 0 ]; then
-  >&2 echo "Usage: $0 <packages directory> [path to a file with a list of excluded packages] > deps.nix"
-  exit 1
+    >&2 echo "Usage:"
+    >&2 echo "  $0 <packages directory> [path to a file with a list of excluded packages] > deps.nix"
+    >&2 echo "  $0 --convert deps.json > deps.nix"
+    exit 1
 fi
 
-pkgs=$1
-tmp=$(realpath "$(mktemp -td nuget-to-nix.XXXXXX)")
-trap 'rm -r "$tmp"' EXIT
-
-excluded_list=$(realpath "${2:-/dev/null}")
-
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
-wait "$!"
-
-declare -a remote_sources
-declare -A base_addresses
-
-for index in "${sources[@]}"; do
-    if [[ -d "$index" ]]; then
-        continue
+jsonDeps=
+if [ "$1" == "--convert" ]; then
+    if [ ! -e "$2" ]; then
+        echo "File not found."
+        exit 1
     fi
 
-    remote_sources+=($index)
-
-    base_address=$(
-    curl --compressed --netrc -fsL "$index" | \
-      jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
-    if [[ ! "$base_address" == */ ]]; then
-      base_address="$base_address/"
+    if IFS='' read -r -d '' jsonDeps <"$2"; then
+        echo "Null bytes found in file." >&2
+        exit 1
     fi
-    base_addresses[$index]="$base_address"
-done
-
-echo "{ fetchNuGet }: ["
-
-cd "$pkgs"
-for package in *; do
-  [[ -d "$package" ]] || continue
-  cd "$package"
-  for version in *; do
-    id=$(xmlstarlet sel -t -v /_:package/_:metadata/_:id "$version"/*.nuspec)
-
-    if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
-      continue
+else
+    if ! jsonDeps=$(nuget-to-json "$@"); then
+        echo "nuget-to-json failed."
+        exit 1
     fi
+fi
 
-    # packages in the nix store should have an empty metadata file
-    used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
-    found=false
+# pkgs/by-name/az/azure-functions-core-tools/deps.json
+IFS='' readarray -d '' depsParts < <(jq 'map([.pname, .version, .sha256, .hash, .url]) | flatten[]' --raw-output0 <<<"$jsonDeps")
+index=0
 
-    if [[ -z "$used_source" || -d "$used_source" ]]; then
-      continue
-    fi
+echo '{ fetchNuGet }: ['
 
-    for source in "${remote_sources[@]}"; do
-      url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
-      if [[ "$source" == "$used_source" ]]; then
-        hash="$(nix-hash --type sha256 --flat --sri "$version/$package.$version".nupkg)"
-        found=true
-        break
-      else
-        if hash=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
-          hash="$(nix-hash --to-sri --type sha256 "$hash")"
-          # If multiple remote sources are enabled, nuget will try them all
-          # concurrently and use the one that responds first. We always use the
-          # first source that has the package.
-          echo "$package $version is available at $url, but was restored from $used_source" 1>&2
-          found=true
-          break
-        else
-          if ! grep -q 'HTTP error 404' "$tmp/error"; then
-            cat "$tmp/error" 1>&2
-            exit 1
-          fi
-        fi
-      fi
-    done
+while [ "$index" -lt "${#depsParts[@]}" ]; do
+    pname="${depsParts[index]}"
+    version="${depsParts[++index]}"
+    sha256="${depsParts[++index]}"
+    hash="${depsParts[++index]}"
+    url="${depsParts[++index]}"
+    ((++index)) # Go to next pname
 
-    if [[ $found = false ]]; then
-      echo "couldn't find $package $version" >&2
-      exit 1
-    fi
-
-    if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
+    echo -n "  (fetchNuGet { pname = \"$pname\"; version = \"$version\"; "
+    if [ "$sha256" != null ]; then
+        echo -n "sha256 = \"$sha256\"; "
     else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
+        echo -n "hash = \"$hash\"; "
     fi
-  done
-  cd ..
+    if [ "$url" != "null" ]; then
+        echo -n "url = \"$url\"; "
+    fi
+    echo '})'
 done
 
-cat << EOL
-]
-EOL
+echo ']'

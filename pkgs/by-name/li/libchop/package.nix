@@ -1,6 +1,21 @@
-{ fetchurl, lib, stdenv, zlib, bzip2, libgcrypt
-, gdbm, gperf, tdb, gnutls, db, libuuid
-, lzo, pkg-config, guile, rpcsvc-proto, libtirpc
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zlib,
+  bzip2,
+  libgcrypt,
+  gdbm,
+  gperf,
+  tdb,
+  gnutls,
+  db,
+  libuuid,
+  lzo,
+  pkg-config,
+  guile,
+  rpcsvc-proto,
+  libtirpc,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,20 +27,34 @@ stdenv.mkDerivation rec {
     sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 
-  patches = [ ./gets-undeclared.patch ./size_t.patch ./0001-Fix-RPC-compilation-when-using-libtirpc-rather-than-.patch ];
+  patches = [
+    ./gets-undeclared.patch
+    ./size_t.patch
+    ./0001-Fix-RPC-compilation-when-using-libtirpc-rather-than-.patch
+  ];
 
-  nativeBuildInputs = [ pkg-config gperf rpcsvc-proto ];
+  nativeBuildInputs = [
+    pkg-config
+    gperf
+    rpcsvc-proto
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  buildInputs =
-    [ zlib bzip2 lzo
-      libgcrypt
-      gdbm db tdb
-      gnutls libuuid
-      guile libtirpc
-    ];
+  buildInputs = [
+    zlib
+    bzip2
+    lzo
+    libgcrypt
+    gdbm
+    db
+    tdb
+    gnutls
+    libuuid
+    guile
+    libtirpc
+  ];
 
   doCheck = false;
 

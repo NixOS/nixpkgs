@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, bombardier
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  bombardier,
 }:
 
 buildGoModule rec {
   pname = "bombardier";
-  version = "1.2.6";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "codesenberg";
     repo = "bombardier";
     rev = "v${version}";
-    hash = "sha256-sJ5+nxfyWSN6dFlA4INaqa3UHTY7huYkZhaTidMJFAs=";
+    hash = "sha256-FoaiUky0WcipkGN8KIpSd+iizinlqtHC5lskvNCnx/Y=";
   };
 
-  vendorHash = "sha256-SxW/87l1w86H5cxEhiF/Fj8SxJ/uAfhtc7I1DVvIilk=";
+  vendorHash = "sha256-SezGoDM4xzOj1y/qmvlngYKOVdJnxBD4l9LPVErevUI=";
 
   subPackages = [
     "."

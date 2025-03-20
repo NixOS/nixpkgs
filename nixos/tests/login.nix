@@ -1,17 +1,23 @@
-import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    latestKernel ? false,
+    ...
+  }:
 
-{
-  name = "login";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
-
-  nodes.machine =
-    { pkgs, lib, ... }:
-    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+  {
+    name = "login";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-  testScript = ''
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
+        boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+      };
+
+    testScript = ''
       machine.start(allow_reboot = True)
 
       machine.wait_for_unit("multi-user.target")
@@ -63,5 +69,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           assert boot_id2 != ""
 
           assert boot_id1 != boot_id2
-  '';
-})
+    '';
+  }
+)

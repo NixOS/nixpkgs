@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
-, curl
-, espeak
-, file
-, gtk3
-, gtkdatabox
-, intltool
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  curl,
+  espeak,
+  file,
+  gtk3,
+  gtkdatabox,
+  intltool,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +21,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 
-  nativeBuildInputs = [ intltool makeWrapper pkg-config ];
-  buildInputs = [ curl gtk3 gtkdatabox ];
+  nativeBuildInputs = [
+    intltool
+    makeWrapper
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    gtk3
+    gtkdatabox
+  ];
 
   postPatch = ''
     substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
@@ -53,6 +63,9 @@ stdenv.mkDerivation rec {
     changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mimame davidak ];
+    maintainers = with maintainers; [
+      mimame
+      davidak
+    ];
   };
 }

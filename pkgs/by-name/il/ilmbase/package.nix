@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, buildPackages
-, cmake
-, openexr
+{
+  stdenv,
+  lib,
+  buildPackages,
+  cmake,
+  openexr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ilmbase";
   version = lib.getVersion openexr;
 
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
   # the ilmbase package into openexr in the future.
   inherit (openexr) src patches;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];

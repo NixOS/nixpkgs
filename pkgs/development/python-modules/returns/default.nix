@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "0.24.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4ZP/wvPgqQQec/BaXuL9r7BEc2G+LztMdFul0NeEJTc=";
+    tag = version;
+    hash = "sha256-qmBxW1XxUlFpAqf2t2ix01TN5NSxOtnYqLyE5ovZU58=";
   };
 
   postPatch = ''

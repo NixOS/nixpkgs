@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "xarray-einstats";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XvxsyH8cwsA9B36uhM1Pr5XaNd0d0/nEamA4axdJe24=";
   };
 

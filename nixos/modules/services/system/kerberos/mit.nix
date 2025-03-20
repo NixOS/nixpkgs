@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... } :
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mapAttrs;
@@ -6,25 +11,46 @@ let
   package = config.security.krb5.package;
   PIDFile = "/run/kdc.pid";
 
-  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } { enableKdcACLEntries = true; };
+  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } {
+    enableKdcACLEntries = true;
+  };
 
   aclMap = {
-    add = "a"; cpw = "c"; delete = "d"; get = "i"; list = "l"; modify = "m";
-    all = "*";
+    add = "a";
+    cpw = "c";
+    delete = "d";
+    get-keys = "e";
+    get = "i";
+    list = "l";
+    modify = "m";
+    all = "x";
   };
 
   aclConfigs = lib.pipe cfg.settings.realms [
-    (mapAttrs (name: { acl, ... }: lib.concatMapStringsSep "\n" (
-      { principal, access, target, ... }: let
-        access_code = map (a: aclMap.${a}) (lib.toList access);
-      in "${principal} ${lib.concatStrings access_code} ${target}"
-    ) acl))
+    (mapAttrs (
+      name:
+      { acl, ... }:
+      lib.concatMapStringsSep "\n" (
+        {
+          principal,
+          access,
+          target,
+          ...
+        }:
+        let
+          access_code = map (a: aclMap.${a}) (lib.toList access);
+        in
+        "${principal} ${lib.concatStrings access_code} ${target}"
+      ) acl
+    ))
 
-    (lib.concatMapAttrs (name: text: {
-      ${name} = {
-        acl_file = pkgs.writeText "${name}.acl" text;
-      };
-    }))
+    (lib.concatMapAttrs (
+      name: text: {
+        ${name} = {
+          acl_file = pkgs.writeText "${name}.acl" text;
+        };
+      }
+    ))
   ];
 
   finalConfig = cfg.settings // {

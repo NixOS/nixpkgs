@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "emikulic";
-    repo = pname;
+    repo = "darkhttpd";
     rev = "v${version}";
     sha256 = "sha256-dcNoGU08tu950PlwSghoZwGSaSbP8NJ5qhWUi3bAtZY=";
   };
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm555 -t $out/bin darkhttpd
-    install -Dm444 -t $out/share/doc/${pname} README.md
-    head -n 18 darkhttpd.c > $out/share/doc/${pname}/LICENSE
+    install -Dm444 -t $out/share/doc/darkhttpd README.md
+    head -n 18 darkhttpd.c > $out/share/doc/darkhttpd/LICENSE
     runHook postInstall
   '';
 

@@ -91,7 +91,8 @@ in
 
     ipv6 = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = config.networking.enableIPv6;
+      defaultText = lib.literalExpression "config.networking.enableIPv6";
       description = "Whether to use IPv6.";
     };
 
@@ -304,6 +305,12 @@ in
       description = "Avahi mDNS/DNS-SD Stack";
       wantedBy = [ "multi-user.target" ];
       requires = [ "avahi-daemon.socket" ];
+      documentation = [
+        "man:avahi-daemon(8)"
+        "man:avahi-daemon.conf(5)"
+        "man:avahi.hosts(5)"
+        "man:avahi.service(5)"
+      ];
 
       # Make NSS modules visible so that `avahi_nss_support ()' can
       # return a sensible value.

@@ -1,10 +1,11 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
-, makeBinaryWrapper
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeBinaryWrapper,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "cddl";
 
   gemfile = ./Gemfile;
@@ -33,9 +34,13 @@ bundlerApp rec {
 
   meta = with lib; {
     description = "Parser, generator, and validator for CDDL";
-    homepage    = "https://rubygems.org/gems/cddl";
-    license     = with licenses; mit;
-    maintainers = with maintainers; [ fdns nicknovitski amesgen ];
-    platforms   = platforms.unix;
+    homepage = "https://rubygems.org/gems/cddl";
+    license = with licenses; mit;
+    maintainers = with maintainers; [
+      fdns
+      nicknovitski
+      amesgen
+    ];
+    platforms = platforms.unix;
   };
 }

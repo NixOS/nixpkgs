@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -9,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "theryangeary";
-    repo = pname;
+    repo = "choose";
     rev = "v${version}";
     sha256 = "sha256-ojmib9yri/Yj1VSwwssbXv+ThnZjUXLTmOpfPGdGFaU=";
   };
 
-  cargoHash = "sha256-PnY1yk9SvAvpsQ/QzTQuuBmvbEfd3yKcNcTU8LZVhsE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SecWDujJu68K1LMQJQ55LeW51Ag/aCt1YKcdWeRp22c=";
 
   meta = with lib; {
     description = "Human-friendly and fast alternative to cut and (sometimes) awk";

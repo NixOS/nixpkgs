@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, unzip, txt2tags }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  txt2tags,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libixp";
   version = "unstable-2022-04-04";
 
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = ''
-   sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
+    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
   nativeBuildInputs = [ unzip ];

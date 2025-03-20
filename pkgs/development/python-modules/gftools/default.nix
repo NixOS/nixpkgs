@@ -61,14 +61,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.74";
+  version = "0.9.79";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AIE2b2BgW4LYtnS76t4vu6B2POmqKgMzLLqRs9K40Gg=";
+    tag = "v${version}";
+    hash = "sha256-u1GnV+2Mg/I7plD6v2uk2pc44JHKzB3sHn9YjhrmIeo=";
   };
 
   postPatch = ''
@@ -126,47 +126,50 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    absl-py
-    afdko
-    axisregistry
-    babelfont
-    beautifulsoup4
-    brotli
-    bumpfontversion
-    font-v
-    fontfeatures
-    fontmake
-    fonttools
-    gflanguages
-    gfsubsets
-    glyphsets
-    glyphslib
-    jinja2
-    nanoemoji
-    networkx
-    ninja
-    ots-python
-    packaging
-    pillow
-    protobuf
-    pygit2
-    pygithub
-    pyyaml
-    requests
-    rich
-    ruamel-yaml
-    setuptools
-    skia-pathops
-    statmake
-    strictyaml
-    tabulate
-    ttfautohint-py
-    ufomerge
-    unidecode
-    vharfbuzz
-    vttlib
-  ] ++ fonttools.optional-dependencies.ufo ++ fontmake.optional-dependencies.json;
+  dependencies =
+    [
+      absl-py
+      afdko
+      axisregistry
+      babelfont
+      beautifulsoup4
+      brotli
+      bumpfontversion
+      font-v
+      fontfeatures
+      fontmake
+      fonttools
+      gflanguages
+      gfsubsets
+      glyphsets
+      glyphslib
+      jinja2
+      nanoemoji
+      networkx
+      ninja
+      ots-python
+      packaging
+      pillow
+      protobuf
+      pygit2
+      pygithub
+      pyyaml
+      requests
+      rich
+      ruamel-yaml
+      setuptools
+      skia-pathops
+      statmake
+      strictyaml
+      tabulate
+      ttfautohint-py
+      ufomerge
+      unidecode
+      vharfbuzz
+      vttlib
+    ]
+    ++ fonttools.optional-dependencies.ufo
+    ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [
@@ -183,7 +186,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Wants none exsiting module
+    # Wants none existing module
     "bin/test_args.py"
     # Requires internet
     "tests/push/test_items.py"
@@ -201,7 +204,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Misc tools for working with the Google Fonts library";
     homepage = "https://github.com/googlefonts/gftools";
-    changelog = "https://github.com/googlefonts/gftools/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/gftools/releases/tag/${src.tag}";
     license = licenses.asl20;
     mainProgram = "gftools";
     maintainers = with maintainers; [ jopejoe1 ];

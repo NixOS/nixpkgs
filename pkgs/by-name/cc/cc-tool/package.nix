@@ -1,24 +1,32 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boost
-, libusb1
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boost,
+  libusb1,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cc-tool";
   version = "unstable-2020-05-19";
 
   src = fetchFromGitHub {
     owner = "dashesy";
-    repo = pname;
+    repo = "cc-tool";
     rev = "19e707eafaaddee8b996ad27a9f3e1aafcb900d2";
     hash = "sha256:1f78j498fdd36xbci57jkgh25gq14g3b6xmp76imdpar0jkpyljv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ boost libusb1 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    boost
+    libusb1
+  ];
 
   postPatch = ''
     substituteInPlace udev/90-cc-debugger.rules \

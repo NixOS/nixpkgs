@@ -1,28 +1,32 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "gomi";
-  version = "1.1.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "b4b4r07";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YsR2KU5Np6xQHkjM8KAoDp/XZ/9DkwBlMbu2IX5OQlk=";
+    repo = "gomi";
+    tag = "v${version}";
+    hash = "sha256-FZCvUG6lQH8CFivV/hbIgGQx4FCk1UtreiWXTQVi4+4=";
   };
 
-  vendorHash = "sha256-n31LUfdgbLQ/KmcFi8LdqmDHXgzbSCc+dnustGvc5SY=";
+  vendorHash = "sha256-8aw81DKBmgNsQzgtHCsUkok5e5+LeAC8BUijwKVT/0s=";
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for UNIX rm command";
     homepage = "https://github.com/b4b4r07/gomi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mimame
+      ozkutuk
+    ];
     mainProgram = "gomi";
   };
 }

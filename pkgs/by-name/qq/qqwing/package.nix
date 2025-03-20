@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stephenostermiller";
     repo = "qqwing";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MYHPANQk4aUuDqUNxWPbqw45vweZ2bBcUcMTyEjcAOM=";
   };
 

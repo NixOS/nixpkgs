@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, ronn, git, cmocka }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  ronn,
+  git,
+  cmocka,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blogc";
@@ -6,14 +15,21 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "blogc";
-    repo = pname;
+    repo = "blogc";
     rev = "v${version}";
     sha256 = "sha256-YAwGgV5Vllz8JlIASbGIkdRzpciQbgPiXl5DjiSEJyE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ ronn git cmocka ];
+  buildInputs = [
+    ronn
+    git
+    cmocka
+  ];
 
   configureFlags = [
     "--enable-git-receiver"

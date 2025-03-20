@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, gettext
-, flex
-, perl
-, pkg-config
-, pcsclite
-, libusb1
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  flex,
+  perl,
+  pkg-config,
+  pcsclite,
+  libusb1,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "acshk";
-    repo = pname;
+    repo = "acsccid";
     rev = "v${version}";
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
@@ -34,12 +35,14 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs = [
-    pcsclite
-    libusb1
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      pcsclite
+      libusb1
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   configureFlags = [
     "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"

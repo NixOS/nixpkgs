@@ -1,5 +1,5 @@
 diff --git a/src/sage_docbuild/builders.py b/src/sage_docbuild/builders.py
-index 871cc4705a2..4b718136b91 100644
+index ab39d93c280..e6501c083d5 100644
 --- a/src/sage_docbuild/builders.py
 +++ b/src/sage_docbuild/builders.py
 @@ -106,31 +106,6 @@ def builder_helper(type):
@@ -48,13 +48,13 @@ index 871cc4705a2..4b718136b91 100644
              if build_options.ABORT_ON_ERROR:
                  raise
 diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
-index 5621fe9e456..b1b91ce7b2c 100644
+index 62b2d3cb112..aa7dc07741b 100644
 --- a/src/sage_docbuild/sphinxbuild.py
 +++ b/src/sage_docbuild/sphinxbuild.py
-@@ -323,3 +323,8 @@ def runsphinx():
-         sys.stderr = saved_stderr
-         sys.stdout.flush()
-         sys.stderr.flush()
+@@ -331,3 +331,8 @@ def runsphinx():
+ 
+     if not sys.warnoptions:
+         warnings.filters = original_filters[:]
 +
 +if __name__ == '__main__':
 +    import sys

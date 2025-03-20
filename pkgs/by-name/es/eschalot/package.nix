@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eschalot";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ReclaimYourPrivacy";
-    repo = pname;
+    repo = "eschalot";
     rev = "a45bad5b9a3e4939340ddd8a751ceffa3c0db76a";
     sha256 = "1wbi0azc2b57nmmx6c1wmvng70d9ph1s83yhnl5lxaaqaj85h22g";
   };

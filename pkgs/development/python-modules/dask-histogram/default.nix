@@ -10,6 +10,7 @@
   # dependencies
   boost-histogram,
   dask,
+  dask-awkward,
 
   # tests
   pytestCheckHook,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dask-histogram";
-  version = "2024.9.1";
+  version = "2025.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
-    rev = "refs/tags/${version}";
-    hash = "sha256-k+hD5y9K6Jsm++H+IAWJ/Z3wlCN4fV8RIcyAnvOvem0=";
+    tag = version;
+    hash = "sha256-5Ec/qzVc/7LDG6SJym1e76BbxmbVjKKQHckwtTs1+6M=";
   };
 
   build-system = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     boost-histogram
     dask
+    dask-awkward
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -1,12 +1,17 @@
-{ stdenv, lib, perlPackages, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tes3cmd";
   version = "0.40-pre-release-2";
 
   src = fetchFromGitHub {
     owner = "john-moonsugar";
-    repo = pname;
+    repo = "tes3cmd";
     rev = "f72e9ed9dd18e8545dd0dc2a4056c250cf505790";
     sha256 = "01zqplp8yb0xnl54963n0zkz66rf3hn2x3i255jlhdhx1c43jba7";
   };

@@ -1,24 +1,29 @@
-{ fetchFromGitHub
-, installShellFiles
-, lib
-, rustPlatform
-, scdoc
+{
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  rustPlatform,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uair";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "metent";
-    repo = pname;
+    repo = "uair";
     rev = "v${version}";
-    hash = "sha256-s6st4rBuviH1DACui3dakRt90z3TphIS4ptMN3eHpr8=";
+    hash = "sha256-VytbtTQch8O5hCg3L3ANNOfFOyiQY1V7DvGMEKr1R04=";
   };
 
-  cargoHash = "sha256-n7Kaha22Rh/5AGoHUiAxnaZvHtZ+rPsmLHiUYfA0YPE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5/CvyN/uOMIEhOg7uqon6bQd5EQDPVrfi7XnJF9mZyg=";
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   preFixup = ''
     scdoc < docs/uair.1.scd > docs/uair.1

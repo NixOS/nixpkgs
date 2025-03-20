@@ -32,7 +32,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "snorkel-team";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
   };
 

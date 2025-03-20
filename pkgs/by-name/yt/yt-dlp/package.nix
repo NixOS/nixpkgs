@@ -17,13 +17,13 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.11.4";
+  version = "2025.2.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-7SBMG2G8Vj4TREd2bRqzQxc1QHmeE+u5U+iHzn3PaGU=";
+    hash = "sha256-8zynbfLk2zGIDy/kCNRPUFjZ8TUBWxPlBhDfvngkW+o=";
   };
 
   build-system = with python3Packages; [
@@ -75,6 +75,14 @@ python3Packages.buildPythonApplication rec {
   # Requires network
   doCheck = false;
 
+  # curl-cffi 0.7.2 and 0.7.3 are broken, but 0.7.4 is fixed
+  # https://github.com/lexiforest/curl_cffi/issues/394
+  postPatch = ''
+    substituteInPlace yt_dlp/networking/_curlcffi.py \
+      --replace-fail "(0, 7, 0) <= curl_cffi_version < (0, 7, 2)" \
+        "((0, 7, 0) <= curl_cffi_version < (0, 7, 2)) or curl_cffi_version >= (0, 7, 4)"
+  '';
+
   postInstall = lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
@@ -98,8 +106,8 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [
-      mkg20001
       SuperSandro2000
+      donteatoreo
     ];
     mainProgram = "yt-dlp";
   };

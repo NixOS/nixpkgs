@@ -1,18 +1,19 @@
-{ buildFHSEnv
-, dbus
-, fetchzip
-, fontconfig
-, freetype
-, glib
-, lib
-, libGL
-, xkeyboard_config
-, xorg
-, zlib
+{
+  buildFHSEnv,
+  dbus,
+  fetchzip,
+  fontconfig,
+  freetype,
+  glib,
+  lib,
+  libGL,
+  xkeyboard_config,
+  xorg,
+  zlib,
 }:
 
 let
-  name = "kingstvis";
+  pname = "kingstvis";
   version = "3.6.1";
   src = fetchzip {
     url = "http://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
@@ -21,24 +22,26 @@ let
 in
 
 buildFHSEnv {
-  inherit name;
+  inherit pname version;
 
-  targetPkgs = pkgs: (with pkgs; [
-    dbus
-    fontconfig
-    freetype
-    glib
-    libGL
-    xkeyboard_config
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.libxcb
-    zlib
-  ]);
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      dbus
+      fontconfig
+      freetype
+      glib
+      libGL
+      xkeyboard_config
+      xorg.libICE
+      xorg.libSM
+      xorg.libX11
+      xorg.libXext
+      xorg.libXi
+      xorg.libXrender
+      xorg.libxcb
+      zlib
+    ]);
 
   extraInstallCommands = ''
     install -Dvm644 ${src}/Driver/99-Kingst.rules \

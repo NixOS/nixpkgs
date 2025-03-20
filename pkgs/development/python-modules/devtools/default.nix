@@ -21,9 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0' \
+  '';
 
   nativeBuildInputs = [ hatchling ];
 
@@ -45,6 +50,7 @@ buildPythonPackage rec {
     "test_multiple_not_verbose"
     # Sensitive to interpreter output
     "test_simple"
+    "test_expr_render"
   ];
 
   disabledTestPaths = [

@@ -486,7 +486,7 @@ def _update_package(path, target):
     if fetcher == "fetchFromGitHub":
         # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
         # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
-        regex = r"(rev\s+=\s+[^;]*;)"
+        regex = r"((?:rev|tag)\s+=\s+[^;]*;)"
         regex = re.compile(regex)
         matches = regex.findall(text)
         n = len(matches)
@@ -496,9 +496,15 @@ def _update_package(path, target):
         else:
             # forcefully rewrite rev, incase tagging conventions changed for a release
             match = matches[0]
-            text = text.replace(match, f'rev = "refs/tags/{prefix}${{version}}";')
+            text = text.replace(match, f'tag = "{prefix}${{version}}";')
             # incase there's no prefix, just rewrite without interpolation
             text = text.replace('"${version}";', "version;")
+
+            # update changelog to reference the src.tag
+            if result := re.search("changelog = \"[^\"]+\";", text):
+                cl_old = result[0]
+                cl_new = re.sub(r"v?\$\{(version|src.rev)\}", "${src.tag}", cl_old)
+                text = text.replace(cl_old, cl_new)
 
     with open(path, "w") as f:
         f.write(text)

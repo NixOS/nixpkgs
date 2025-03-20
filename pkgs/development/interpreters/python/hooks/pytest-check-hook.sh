@@ -1,56 +1,42 @@
 # Setup hook for pytest
+# shellcheck shell=bash
+
 echo "Sourcing pytest-check-hook"
-
-declare -ar disabledTests
-declare -a disabledTestPaths
-
-function _concatSep {
-    local result
-    local sep="$1"
-    local -n arr=$2
-    for index in ${!arr[*]}; do
-        if [ $index -eq 0 ]; then
-            result="${arr[index]}"
-        else
-            result+=" $sep ${arr[index]}"
-        fi
-    done
-    echo "$result"
-}
-
-function _pytestComputeDisabledTestsString() {
-    declare -a tests
-    local tests=($1)
-    local prefix="not "
-    prefixed=("${tests[@]/#/$prefix}")
-    result=$(_concatSep "and" prefixed)
-    echo "$result"
-}
 
 function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
     runHook preCheck
 
     # Compose arguments
-    args=" -m pytest"
-    if [ -n "$disabledTests" ]; then
-        disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
-        args+=" -k \""$disabledTestsString"\""
+    local -a flagsArray=(-m pytest)
+    if [ -n "${disabledTests[*]-}" ]; then
+        disabledTestsString="not $(concatStringsSep " and not " disabledTests)"
+        flagsArray+=(-k "$disabledTestsString")
     fi
 
-    if [ -n "${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
-
-    for path in ${disabledTestPaths[@]}; do
-        if [ ! -e "$path" ]; then
-            echo "Disabled tests path \"$path\" does not exist. Aborting"
-            exit 1
-        fi
-        args+=" --ignore=\"$path\""
+    local -a _pathsArray=()
+    concatTo _pathsArray disabledTestPaths
+    for path in "${_pathsArray[@]}"; do
+        # Check if every path glob matches at least one path
+        @pythonCheckInterpreter@ <(cat <<EOF
+import glob
+import sys
+path_glob=sys.argv[1]
+if not len(path_glob):
+    sys.exit('Got an empty disabled tests path glob. Aborting')
+if next(glob.iglob(path_glob), None) is None:
+    sys.exit('Disabled tests path glob "{}" does not match any paths. Aborting'.format(path_glob))
+EOF
+        ) "$path"
+        flagsArray+=("--ignore-glob=$path")
     done
-    args+=" ${pytestFlagsArray[@]}"
-    eval "@pythonCheckInterpreter@ $args"
+
+    # Compatibility layer to the obsolete pytestFlagsArray
+    eval "flagsArray+=(${pytestFlagsArray[*]-})"
+
+    concatTo flagsArray pytestFlags
+    echoCmd 'pytest flags' "${flagsArray[@]}"
+    @pythonCheckInterpreter@ "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"

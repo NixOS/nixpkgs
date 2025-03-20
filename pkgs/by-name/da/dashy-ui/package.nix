@@ -5,7 +5,11 @@
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
-  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  prefetch-yarn-deps,
+  nodejs_20,
+  nodejs-slim_20,
   yq-go,
   settings ? { },
 }:
@@ -30,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   # the way the client parses things
   # - Instead, we use `yq-go` to convert it to yaml
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
-  postYarnConfigHook = lib.optional (settings != { }) ''
+  preBuild = lib.optional (settings != { }) ''
     echo "Writing settings override..."
     yq --output-format yml '${builtins.toFile "conf.json" ''${builtins.toJSON settings}''}' > user-data/conf.yml
     yarn validate-config --offline
@@ -41,9 +45,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    yarnConfigHook
+    # This is required to fully pin the NodeJS version, since yarn*Hooks pull in the latest LTS in nixpkgs
+    # The yarn override is the only one technically required (fixup-yarn-lock and prefetch-yarn-deps' node version doesn't affect the end result),
+    # but they've been overridden for the sake of consistency/in case future updates to dashy/node would cause issues with differing major versions
+    (yarnConfigHook.override {
+      fixup-yarn-lock = fixup-yarn-lock.override {
+        nodejs-slim = nodejs-slim_20;
+      };
+      prefetch-yarn-deps = prefetch-yarn-deps.override {
+        nodejs-slim = nodejs-slim_20;
+      };
+      yarn = yarn.override {
+        nodejs = nodejs_20;
+      };
+    })
     yarnBuildHook
-    nodejs
+    nodejs_20
     # For yaml parsing
     yq-go
   ];

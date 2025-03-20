@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  setuptools,
+  setuptools-scm,
   simplejson,
   tabledata,
   tcolorpy,
@@ -24,21 +24,21 @@
 
 buildPythonPackage rec {
   pname = "pytablewriter";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
+    repo = "pytablewriter";
+    tag = "v${version}";
+    hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dataproperty
     mbstrdecoder
     pathvalidate
@@ -103,11 +103,11 @@ buildPythonPackage rec {
     "test/writer/test_elasticsearch_writer.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
-    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
   };
 }

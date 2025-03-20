@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, gettext, pkg-config, libidn2, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  perl,
+  gettext,
+  pkg-config,
+  libidn2,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   version = "5.5.23";
@@ -24,8 +34,15 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [ perl gettext pkg-config ];
-  buildInputs = [ libidn2 libiconv ];
+  nativeBuildInputs = [
+    perl
+    gettext
+    pkg-config
+  ];
+  buildInputs = [
+    libidn2
+    libiconv
+  ];
 
   preConfigure = ''
     for i in Makefile po/Makefile; do

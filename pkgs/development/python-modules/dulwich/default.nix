@@ -4,7 +4,6 @@
   buildPythonPackage,
   fastimport,
   fetchFromGitHub,
-  fetchpatch2,
   gevent,
   geventhttpclient,
   git,
@@ -12,7 +11,7 @@
   gnupg,
   gpgme,
   paramiko,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   setuptools-rust,
@@ -20,17 +19,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.22.5";
   pname = "dulwich";
-  format = "setuptools";
+  version = "0.22.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    rev = "refs/tags/dulwich-${version}";
-    hash = "sha256-/YqC7y8PU+H2qjPqqzdw6iSSSElK709izLTcs9qbt1I=";
+    tag = "dulwich-${version}";
+    hash = "sha256-T0Tmu5sblTkqiak9U4ltkGbWw8ZE91pTlhPVMRi5Pxk=";
   };
 
   build-system = [
@@ -52,23 +51,25 @@ buildPythonPackage rec {
     paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs =
-    [
-      gevent
-      geventhttpclient
-      git
-      glibcLocales
-      unittestCheckHook
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
+    "test_file_win"
+  ];
+
+  disabledTestPaths = [
     # requires swift config file
-    rm tests/contrib/test_swift_smoke.py
-
-    # ImportError: attempted relative import beyond top-level package
-    rm tests/test_greenthreads.py
-  '';
+    "tests/contrib/test_swift_smoke.py"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -81,7 +82,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
     license = with licenses; [
       asl20
       gpl2Plus

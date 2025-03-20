@@ -34,12 +34,12 @@
 , which
 , icu
 , boost
-, jdk17
+, jdk21
 , ant
 , cups
 , xorg
 , fontforge
-, jre17_minimal
+, jre21_minimal
 , openssl
 , gperf
 , cppunit
@@ -113,7 +113,7 @@
 , kwindowsystem ? null
 , variant ? "fresh"
 , symlinkJoin
-, postgresql
+, libpq
 , makeFontsConf
 , amiri
 , caladea
@@ -177,7 +177,7 @@ let
     ];
   };
 
-  jre' = jre17_minimal.override {
+  jre' = jre21_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
@@ -298,7 +298,7 @@ in stdenv.mkDerivation (finalAttrs: {
     bison
     fontforge
     gdb
-    jdk17
+    jdk21
     libtool
     pkg-config
   ];
@@ -395,7 +395,7 @@ in stdenv.mkDerivation (finalAttrs: {
     pam
     perl
     poppler
-    postgresql
+    libpq
     python311
     sane-backends
     unixODBC
@@ -461,7 +461,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-ant-home=${getLib ant}/lib/ant"
+    "--with-ant-home=${ant.home}"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -527,6 +527,8 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ (if variant == "fresh" then [
     "--with-system-rhino"
     "--with-rhino-jar=${rhino}/share/java/js.jar"
+
+    "--without-system-java-websocket"
   ] else [
     # our Rhino is too new for older versions
     "--without-system-rhino"
@@ -656,15 +658,15 @@ in stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://wiki.documentfoundation.org/ReleaseNotes/${lib.versions.majorMinor version}";
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
     # at least one jar in dependencies
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = with lib.licenses; [ mpl20 lgpl3Plus asl20 ];
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     mainProgram = "libreoffice";
   };
 })

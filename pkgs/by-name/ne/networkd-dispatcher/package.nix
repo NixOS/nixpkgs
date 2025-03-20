@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, python3Packages
-, asciidoc
-, wrapGAppsNoGuiHook
-, iw
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  python3Packages,
+  asciidoc,
+  wrapGAppsNoGuiHook,
+  iw,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "craftyguy";
-    repo = pname;
+    repo = "networkd-dispatcher";
     rev = version;
     hash = "sha256-yO9/HlUkaQmW/n9N3vboHw//YMzBjxIHA2zAxgZNEv0=";
   };
@@ -35,8 +36,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix paths in systemd unit file
     substituteInPlace networkd-dispatcher.service \
-      --replace "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher" \
-      --replace "/etc/conf.d" "$out/etc/conf.d"
+      --replace "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher"
     # Remove conditions on existing rules path
     sed -i '/ConditionPathExistsGlob/g' networkd-dispatcher.service
   '';

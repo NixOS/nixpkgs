@@ -1,12 +1,18 @@
-{ lib, fetchurl, appimageTools, makeWrapper, imagemagick }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  imagemagick,
+}:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.89.1";
+  version = "2.104.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-PPoQnXDVf6Q6QPVE41guJL1vu7rW7mZdpRZjRME3Ue8=";
+    hash = "sha256-RZweB6zE4POJRyvUXMC2nPyyIsZrTc2KkrxuZtmdZYY=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -25,7 +31,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ledger-live-desktop_512.png $out/share/icons/hicolor/512x512/apps/ledger-live-desktop.png
 
     wrapProgram "$out/bin/${pname}" \
-       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
@@ -35,7 +41,13 @@ appimageTools.wrapType2 rec {
     description = "App for Ledger hardware wallets";
     homepage = "https://www.ledger.com/ledger-live/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
+    maintainers = with maintainers; [
+      andresilva
+      thedavidmeister
+      nyanloutre
+      RaghavSood
+      th0rgal
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ledger-live-desktop";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

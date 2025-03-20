@@ -1,33 +1,32 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook3
-, kconfig
-, kcrash
-, kinit
-, kpmcore
-, polkit-qt
-, cryptsetup
-, lvm2
-, mdadm
-, smartmontools
-, systemdMinimal
-, util-linux
-, btrfs-progs
-, dosfstools
-, e2fsprogs
-, exfat
-, f2fs-tools
-, fatresize
-, jfsutils
-, nilfs-utils
-, ntfs3g
-, reiser4progs
-, reiserfsprogs
-, udftools
-, xfsprogs
-, zfs
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook3,
+  kconfig,
+  kcrash,
+  kinit,
+  kpmcore,
+  polkit-qt,
+  cryptsetup,
+  lvm2,
+  mdadm,
+  smartmontools,
+  systemdMinimal,
+  util-linux,
+  btrfs-progs,
+  dosfstools,
+  e2fsprogs,
+  exfat,
+  f2fs-tools,
+  fatresize,
+  jfsutils,
+  nilfs-utils,
+  ntfs3g,
+  udftools,
+  xfsprogs,
+  zfs,
 }:
 
 let
@@ -53,8 +52,7 @@ let
     jfsutils
     nilfs-utils
     ntfs3g
-    reiser4progs
-    reiserfsprogs
+    # reiser{4,fs}progs intentionally omitted due to filesystem removal from Linux.
     udftools
     xfsprogs
     zfs
@@ -66,9 +64,19 @@ in
 mkDerivation {
   pname = "partitionmanager";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook3
+  ];
 
-  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
+  propagatedBuildInputs = [
+    kconfig
+    kcrash
+    kinit
+    kpmcore
+    polkit-qt
+  ];
 
   dontWrapGApps = true;
   preFixup = ''
@@ -87,13 +95,22 @@ mkDerivation {
     longDescription = ''
       KDE Partition Manager is a utility to help you manage the disks, partitions, and file systems on your computer.
       It allows you to easily create, copy, move, delete, back up, restore, and resize them without losing data.
-      It supports a large number of file systems, including ext2/3/4, btrfs, reiserfs, NTFS, FAT16/32, JFS, XFS and more.
+      It supports a large number of file systems, including ext2/3/4, btrfs, NTFS, FAT16/32, JFS, XFS and more.
 
       To install on NixOS, use the option `programs.partition-manager.enable = true`.
     '';
-    license = with licenses; [ cc-by-40 cc0 gpl3Plus lgpl3Plus mit ];
+    license = with licenses; [
+      cc-by-40
+      cc0
+      gpl3Plus
+      lgpl3Plus
+      mit
+    ];
     homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
-    maintainers = with maintainers; [ peterhoeg oxalica ];
+    maintainers = with maintainers; [
+      peterhoeg
+      oxalica
+    ];
     mainProgram = "partitionmanager";
   };
 }

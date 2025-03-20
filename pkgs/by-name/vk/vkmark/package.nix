@@ -1,37 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, vulkan-headers
-, vulkan-loader
-, mesa
-, wayland-protocols
-, wayland
-, glm
-, assimp
-, libxcb
-, xcbutilwm
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  vulkan-headers,
+  vulkan-loader,
+  libgbm,
+  wayland-protocols,
+  wayland,
+  glm,
+  assimp,
+  libxcb,
+  xcbutilwm,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkmark";
-  version = "2017.08-unstable-2023-04-12";
+  version = "2025.01";
 
   src = fetchFromGitHub {
     owner = "vkmark";
     repo = "vkmark";
-    rev = "ab6e6f34077722d5ae33f6bd40b18ef9c0e99a15";
-    sha256 = "sha256-X1Y2U1aJymKrv3crJLN7tvXHG2W+w0W5gB2g00y4yvc=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "vulkan_dep.get_pkgconfig_variable('prefix')" "'${vulkan-headers}'"
+  '';
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [
     vulkan-headers
     vulkan-loader
-    mesa
+    libgbm
     glm
     assimp
     libxcb
@@ -40,14 +50,14 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible Vulkan benchmarking suite";
     homepage = "https://github.com/vkmark/vkmark";
-    license = with licenses; [ lgpl21Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ muscaln ];
+    license = with lib.licenses; [ lgpl21Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ muscaln ];
     mainProgram = "vkmark";
   };
-}
+})

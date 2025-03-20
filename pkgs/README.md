@@ -36,7 +36,7 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
-This is section describes a general framework of understanding and exceptions might apply.
+This section describes a general framework of understanding and exceptions might apply.
 
 Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
 
@@ -73,21 +73,21 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](./by-name/he/hello/package.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
-   - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
+   - GNU cpio: [`pkgs/by-name/cp/cpio/package.nix`](./by-name/cp/cpio/package.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
    - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
 
-   - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
+   - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](./by-name/jd/jdiskreport/package.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the `postFixup` phase uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
@@ -337,7 +337,7 @@ In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The attribute name used for the package in the [`pkgs/by-name` structure](./pkgs/by-name/README.md) or in [`all-packages.nix`](./pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./by-name/README.md) or in [`all-packages.nix`](./top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
@@ -399,6 +399,8 @@ Because every version of a package in Nixpkgs creates a potential maintenance bu
 If there is only one version of a package, its Nix expression should be named (e.g) `pkgs/by-name/xy/xyz/package.nix`. If there are multiple versions, this should be reflected in the attribute name. If you wish to share code between the Nix expressions of each version, you cannot rely upon `pkgs/by-name`'s automatic attribute creation, and must create the attributes yourself in `all-packages.nix`. See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/README.md#recommendation-for-new-packages-with-multiple-versions).
 
 ## Meta attributes
+
+The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -492,7 +494,14 @@ Examples going from bad to best practices:
 Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
 When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
 
-Patches already merged upstream or published elsewhere should be retrieved using `fetchpatch`.
+> [!Note]
+> The version of the package does not need to be changed just because a patch is applied. Declarative package installations don't depend on the version, while imperative `nix-env` installations can use [`upgrade --eq/leq/--always`](https://nix.dev/manual/nix/2.25/command-ref/nix-env/upgrade#flags).
+>
+> See [Versioning](#versioning) for details on package versioning.
+
+### Fetching patches
+
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
 
 ```nix
 {
@@ -506,15 +515,22 @@ Patches already merged upstream or published elsewhere should be retrieved using
 }
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository.
-In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, only do this for patches that are unique to `nixpkgs` or that have been proposed upstream but are not merged yet, cannot be easily fetched or have a high chance to disappear in the future due to unstable or unreliable URLs.
-The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
-
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+
+### Vendoring patches
+
+In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
+
+- solves problems unique to packaging in Nixpkgs
+- is already proposed upstream but not merged yet
+- cannot be fetched easily
+- has a high chance to disappear in the future due to unstable or unreliable URLs
+
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
 {
-  patches = [ ./0001-changes.patch ];
+  patches = [ ./0001-add-missing-include.patch ];
 }
 ```
 
@@ -715,7 +731,7 @@ $ nix-build -A phoronix-test-suite.tests
 
 Here are examples of package tests:
 
-- [Jasmin compile test](development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
@@ -900,7 +916,7 @@ Reviewing process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.

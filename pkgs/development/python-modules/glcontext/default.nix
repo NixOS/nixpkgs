@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "glcontext";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GC2sb6xQjg99xLcXSynLOOyyqNwCHZwZqrs9RZh99pY=";
   };
 

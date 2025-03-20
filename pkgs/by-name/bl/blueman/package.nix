@@ -1,35 +1,71 @@
-{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
-, adwaita-icon-theme, librsvg, wrapGAppsHook3, gobject-introspection
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio }:
+{
+  config,
+  stdenv,
+  lib,
+  fetchurl,
+  intltool,
+  pkg-config,
+  python3Packages,
+  bluez,
+  gtk3,
+  obex_data_server,
+  xdg-utils,
+  dnsmasq,
+  dhcpcd,
+  iproute2,
+  adwaita-icon-theme,
+  librsvg,
+  wrapGAppsHook3,
+  gobject-introspection,
+  networkmanager,
+  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  procps,
+}:
 
 let
   pythonPackages = python3Packages;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vfxJkJdCy3koj4oR1vZmt1wnE7kcCF5tDdMpQ0eT/oU=";
+    sha256 = "sha256-00+RVMjGiH0VZ50Sl0SSKscvanHLK8z7ZmL4ykRuhfA=";
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkg-config pythonPackages.cython
-    pythonPackages.wrapPython wrapGAppsHook3
+    gobject-introspection
+    intltool
+    pkg-config
+    pythonPackages.cython
+    pythonPackages.wrapPython
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  adwaita-icon-theme networkmanager ]
-                ++ pythonPath
-                ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs =
+    [
+      bluez
+      gtk3
+      pythonPackages.python
+      librsvg
+      adwaita-icon-theme
+      networkmanager
+      procps
+    ]
+    ++ pythonPath
+    ++ lib.optional withPulseAudio libpulseaudio;
 
   postPatch = lib.optionalString withPulseAudio ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
   '';
 
-  pythonPath = with pythonPackages; [ pygobject3 pycairo ];
+  pythonPath = with pythonPackages; [
+    pygobject3
+    pycairo
+  ];
 
   propagatedUserEnvPkgs = [ obex_data_server ];
 
@@ -42,7 +78,13 @@ in stdenv.mkDerivation rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcpcd iproute2 ]}"
+    "--prefix PATH ':' ${
+      lib.makeBinPath [
+        dnsmasq
+        dhcpcd
+        iproute2
+      ]
+    }"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 

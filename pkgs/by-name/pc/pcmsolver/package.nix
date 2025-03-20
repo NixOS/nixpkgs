@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl, gfortran, python3
-, boost, eigen, zlib
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  gfortran,
+  python3,
+  boost,
+  eigen,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcmsolver";
   version = "1.3.0";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "PCMSolver";
-    repo = pname;
+    repo = "pcmsolver";
     rev = "v${version}";
-    sha256= "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
+    sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
   };
 
   # Glibc 2.34 changed SIGSTKSZ to a dynamic value, which breaks
@@ -32,6 +41,9 @@ stdenv.mkDerivation rec {
     eigen
     zlib
   ];
+
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-std=c++14";
 
   cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 

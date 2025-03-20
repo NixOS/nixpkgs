@@ -1,10 +1,12 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "pinnwand";
   version = "1.6.0";
   pyproject = true;
@@ -12,7 +14,7 @@ with python3.pkgs; buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oB7Dd1iVzGqr+5nG7BfZuwOQUgUnmg6ptQDZPGH7P5E=";
   };
 
@@ -60,4 +62,3 @@ with python3.pkgs; buildPythonApplication rec {
     platforms = platforms.linux;
   };
 }
-

@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.10.2";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XkOdW6ewout69A1ovth1iQR36nRtkdsbDI9CWibSHXs=";
+    hash = "sha256-M19JX+a1dFq05UZmPJyhkhxDwNBRQTPE8mdKbCER+4M=";
   };
 
-  vendorHash = "sha256-4Sa8/mVD7t4uR8Wq4n+fvot7LZfraphFobrG6rteQeI=";
+  vendorHash = "sha256-hdPkiF1HHuIl6KbilPre6tAqSnYPhYhrxBEj3Ayy2AY=";
 
   meta = with lib; {
     description = "CLI habit tracking for geeks";

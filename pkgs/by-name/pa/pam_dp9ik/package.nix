@@ -1,8 +1,9 @@
-{ lib
-, tlsclient
-, stdenv
-, pkg-config
-, pam
+{
+  lib,
+  tlsclient,
+  stdenv,
+  pkg-config,
+  pam,
 }:
 
 stdenv.mkDerivation {

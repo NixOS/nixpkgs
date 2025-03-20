@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3, glm, meshoptimizer, SDL2, ninja }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+  libX11,
+  glew,
+  python3,
+  glm,
+  meshoptimizer,
+  SDL2,
+  ninja,
+}:
 
 let
   version = {
-    seriousproton = "2024.08.09";
-    emptyepsilon = "2024.08.09";
-    basis-universal = "v1_15_update2";
+    seriousproton = "2024.12.08";
+    emptyepsilon = "2024.12.08";
+    basis-universal = "1.15_final";
   };
 
   basis-universal = fetchFromGitHub {
     owner = "BinomialLLC";
     repo = "basis_universal";
-    rev = version.basis-universal;
-    hash = "sha256-2snzq/SnhWHIgSbUUgh24B6tka7EfkGO+nwKEObRkU4=";
+    tag = version.basis-universal;
+    hash = "sha256-pKvfVvdbPIdzdSOklicThS7xwt4i3/21bE6wg9f8kHY=";
   };
 
   serious-proton = stdenv.mkDerivation {
@@ -21,12 +34,17 @@ let
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
-      rev = "EE-${version.seriousproton}";
-      hash = "sha256-B7BUe5rtN/eABJwkuSyn+h1lIHuV/tZUNcGXTyaWIr4=";
+      tag = "EE-${version.seriousproton}";
+      hash = "sha256-k1YCB7EJIL+kdlHEU4cJjmLZZAZyxIPU0XlSn2t4C90=";
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ sfml libX11 glm SDL2 ];
+    buildInputs = [
+      sfml
+      libX11
+      glm
+      SDL2
+    ];
 
     cmakeFlags = [
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BASIS" "${basis-universal}")
@@ -51,12 +69,21 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
-    rev = "EE-${version.emptyepsilon}";
-    hash = "sha256-DxaasUyJa8n0ha8RqAfEnqCVELs5Or0zvIOgcK75TnU=";
+    tag = "EE-${version.emptyepsilon}";
+    hash = "sha256-JsHFwbt4VGsgaZz9uxEmwzZGfkYTNsIZTKkpvCCmI48=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python3 glm SDL2 ninja ];
+  buildInputs = [
+    serious-proton
+    sfml
+    glew
+    libX11
+    python3
+    glm
+    SDL2
+    ninja
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "SERIOUS_PROTON_DIR" "${serious-proton.src}")
@@ -77,7 +104,10 @@ stdenv.mkDerivation {
     mainProgram = "EmptyEpsilon";
     homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ma27 ];
+    maintainers = with maintainers; [
+      fpletz
+      ma27
+    ];
     platforms = platforms.linux;
   };
 }

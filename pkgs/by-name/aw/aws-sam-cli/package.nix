@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.127.0";
+  version = "1.134.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5/zXvO5xrNkhPCei4O/nMXA/e18VNrED2lpBbflaJLQ=";
+    tag = "v${version}";
+    hash = "sha256-CuXJHKHFE1HOs3fQPofWPJI1/+mtkXBGEmO7bIQD5lA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

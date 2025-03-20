@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uftp";
@@ -11,7 +16,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patchPhase = ''
     substituteInPlace makefile --replace gcc cc

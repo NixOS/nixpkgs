@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmrivas86";
     repo = "django-json-widget";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GY6rYY//n8kkWCJZk6OY+EOBv62ocNovNmE/ai8VCn4=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
-  pythonImportCheck = [ "django_json_widget" ];
+  pythonImportsCheck = [ "django_json_widget" ];
 
   meta = {
     description = "Alternative widget that makes it easy to edit the jsonfield field of django";

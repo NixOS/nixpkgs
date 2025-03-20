@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, glib
-, cairo
-, pango
-, atk
-, gdk-pixbuf
-, gtk4
-, wrapGAppsHook4
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  cairo,
+  pango,
+  atk,
+  gdk-pixbuf,
+  gtk4,
+  wrapGAppsHook4,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,23 +25,29 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LkXGKDFKaY+mg53ZEO4h2br/4eRle/QbSQJTVEMpAoY=";
   };
 
-  cargoHash = "sha256-WJR1BogNnQoZeOt5yBFzjYNZS8OmE84R1FbQpHTb7V0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0VlhBd1GpmynNflssizg+Y9D8Hr40rT7OzOSP4AmhxY=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-    cairo
-    pango
-    atk
-    gdk-pixbuf
-    gtk4
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Foundation
-  ]);
+  buildInputs =
+    [
+      glib
+      cairo
+      pango
+      atk
+      gdk-pixbuf
+      gtk4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Foundation
+      ]
+    );
 
   postInstall = ''
     install -m 444 \

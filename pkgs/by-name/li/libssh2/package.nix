@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, openssl
-, zlib
-, windows
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  zlib,
+  windows,
 
-# for passthru.tests
-, aria2
-, curl
-, libgit2
-, mc
-, vlc
+  # for passthru.tests
+  aria2,
+  curl,
+  libgit2,
+  mc,
+  vlc,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +29,22 @@ stdenv.mkDerivation rec {
     substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
   '';
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
-  buildInputs = [ zlib ]
-    ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   passthru.tests = {
-    inherit aria2 libgit2 mc vlc;
+    inherit
+      aria2
+      libgit2
+      mc
+      vlc
+      ;
     curl = (curl.override { scpSupport = true; }).tests.withCheck;
   };
 

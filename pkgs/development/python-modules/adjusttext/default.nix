@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Phlya";
     repo = "adjusttext";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WMWT2os3ADQOc1ogoCFKBEWnb6/CxgtiWmY45bYomks=";
   };
 

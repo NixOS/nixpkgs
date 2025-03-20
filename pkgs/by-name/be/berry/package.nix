@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "berry";
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (libX11.meta) platforms;
   };
 })

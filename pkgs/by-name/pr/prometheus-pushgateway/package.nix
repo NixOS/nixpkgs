@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, testers, prometheus-pushgateway }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+  prometheus-pushgateway,
+}:
 
 buildGoModule rec {
   pname = "pushgateway";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${version}";
-    sha256 = "sha256-Avp5hWRdkM/vCz6B/b7uOrnYjFrN5UkE7siK0+ANO1Q=";
+    sha256 = "sha256-VIqk5GxI5qFnsjeq6FL1UUd7lX3VLLhTcPlo4j8oL/c=";
   };
 
-  vendorHash = "sha256-cyZ/LzKB3UlyqzID9f6I4niwJ/sPIm2htVOn3Ik2HAY=";
+  vendorHash = "sha256-PXJkjRg699tu/WPrFkekmAbGwPPHoUXaiYfxuju9Dwk=";
 
   ldflags = [
     "-s"

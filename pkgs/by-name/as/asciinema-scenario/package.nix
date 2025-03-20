@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fnX5CIYLdFqi04PQPVIAYDGn+xXi016l8pPcIrYIhmQ=";
   };
 
-  cargoHash = "sha256-8I3mPSJ5aXvQ88nh0SWyuTq9JSTktS2lQPrXlcvD66c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D9CSw05OFaWvBzGSEQmH8ao6gY/0OhQQ5gFkL1TVeO4=";
 
   meta = with lib; {
     description = "Create asciinema videos from a text file";

@@ -5,30 +5,29 @@
 , nixosTests
 , rustPlatform
 , rustc
-, wasm-bindgen-cli
+, wasm-bindgen-cli_0_2_95
 , wasm-pack
 , which
 }:
 
 let
 
-  commonDerivationAttrs = {
+  commonDerivationAttrs = rec {
     pname = "lldap";
-    version = "0.5.1-unstable-2024-10-30";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "143eb70bee92e8225028ea00b69735a28e8c088d";
-      hash = "sha256-6XGKz/OKHd80yX9a4rlvc9RZjBB6ao+jiO5Vlcc0ohE=";
+      rev = "v${version}";
+      hash = "sha256-iQ+Vv9kx/pWHoa/WZChBK+FD2r1avzWWz57bnnzRjUg=";
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
-        "lber-0.4.3" = "sha256-ff0C4uOAohbwHIFt6c0iGQwPDUTJhO3vHlSUDK/yEbY=";
-        "opaque-ke-0.6.1" = "sha256-99gaDv7eIcYChmvOKQ4yXuaGVzo2Q6BcgSQOzsLF+fM=";
+        "lber-0.4.3" = "sha256-smElQyP8aWlV+/GvaTAx+BJWRtzQuis4XOUCOgebEF4=";
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
     };
@@ -39,7 +38,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-cli binaryen which rustc rustc.llvmPackages.lld
+      wasm-pack wasm-bindgen-cli_0_2_95 binaryen which rustc rustc.llvmPackages.lld
     ];
 
     buildPhase = ''

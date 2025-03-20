@@ -1,21 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aardvark-dns";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "aardvark-dns";
     rev = "v${version}";
-    hash = "sha256-1I0YcnHGxblfSWlx5bbR4v3UXxKPnYQ90AKnUny2vDg=";
+    hash = "sha256-mWaB1E/n/N2Tb5bqrMJX2XfPvZBCG+dxar3kGCHgv0I=";
   };
 
-  cargoHash = "sha256-vZHFZL3dwFVyLfifpUq4uaqaUac7Itimf2pJGZ4qWMM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-t9qfPz4Jy1RueiDEY2fB3Y1uty0i/Wf0ElsR+nSVF5g=";
 
   passthru.tests = { inherit (nixosTests) podman; };
 

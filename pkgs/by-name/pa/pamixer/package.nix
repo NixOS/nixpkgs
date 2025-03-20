@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cxxopts
-, libpulseaudio
-, meson
-, ninja
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cxxopts,
+  libpulseaudio,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-LbRhsW2MiTYWSH6X9Pz9XdJdH9Na0QCO8CFmlzZmDjQ=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
 
-  buildInputs = [ boost cxxopts libpulseaudio ];
+  buildInputs = [
+    boost
+    cxxopts
+    libpulseaudio
+  ];
 
   meta = with lib; {
     description = "Pulseaudio command line mixer";

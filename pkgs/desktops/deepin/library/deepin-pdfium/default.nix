@@ -2,9 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  freetype,
+  icu,
   libsForQt5,
   pkg-config,
   libchardet,
+  libjpeg,
   lcms2,
   openjpeg,
 }:
@@ -28,13 +31,16 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   buildInputs = [
+    freetype
+    icu
     libchardet
+    libjpeg
     lcms2
     openjpeg
   ];
 
   meta = with lib; {
-    description = "development library for pdf on deepin";
+    description = "Development library for PDF on deepin";
     homepage = "https://github.com/linuxdeepin/deepin-pdfium";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

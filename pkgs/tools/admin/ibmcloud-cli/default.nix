@@ -16,18 +16,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibmcloud-cli";
-  version = "2.27.0";
+  version = "2.30.0";
 
   src = fetchurl {
     url = "https://download.clis.cloud.ibm.com/ibm-cloud-cli/${finalAttrs.version}/binaries/IBM_Cloud_CLI_${finalAttrs.version}_${platform}.tgz";
     sha256 = {
-      "x86_64-darwin"     = "0af5f110e094e7bf710c86d1e35af23ebbbc9ad8a4baf2a67895354b415618f6";
-      "aarch64-darwin"    = "1175977597102282cf7c1fd017ec4bdbc041ce367360204852d0798846cd21e4";
-      "x86_64-linux"      = "3c024bcb27519c8ed916ebc0266248249c127bbe93c343807e07d707cf159bb1";
-      "aarch64-linux"     = "bd2a6a3c4428061f17ac8b801b27d9700bf333284294e2834c34b4237f530256";
-      "i686-linux"        = "40dc32b2a76541847fd55b5b587105c90956468baf14016e4628bb8a2a3d73fa";
-      "powerpc64le-linux" = "e758a60d7de32f4dfc8c944edb8e45bbed41de2fcb1e12bcf6b4e2b35d09f9d5";
-      "s390x-linux"       = "dbee26a3c4be2dcaad28b110e309283c141d55ac923b9d0420ac62b25c8eb9c0";
+      "x86_64-darwin"     = "5d4d16f35c034aa336e28b5685684146ec5773a6d7f456ed0d0e5d686adf4b25";
+      "aarch64-darwin"    = "d563b8a4214da4360756bd18283b68c118139b5d3dd1b1d31c7ab7e61349e126";
+      "x86_64-linux"      = "e6c874702851f16a3c21570020da85122a0ec0ca7e9dd75091684df1030d7295";
+      "aarch64-linux"     = "6904c9de54845adcd08eb9906567493b68ad3f4cbba9d1121f63d9df2dd47185";
+      "i686-linux"        = "bc6be9a65a6942e158ab202a2d1c89c4294b5cebf60841f4ac1d21064052e7e7";
+      "powerpc64le-linux" = "271a0aa9c0a1dc2c84772fba33c9c6b97588d35eccf6757de6974c433b6e7874";
+      "s390x-linux"       = "e8ec8adaaae2eab091500c257c7b18acf5e9556b4910df8290600bd7f723fdc1";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -D ibmcloud $out/bin/ibmcloud
     mkdir -p $out/share/ibmcloud
-    cp CF_CLI_Notices.txt CF_CLI_SLC_Notices.txt LICENSE NOTICE $out/share/ibmcloud
+    cp LICENSE NOTICE $out/share/ibmcloud
     export HOME=$(mktemp -d)
     installShellCompletion --cmd ibmcloud --bash <($out/bin/ibmcloud --generate-bash-completion)
 

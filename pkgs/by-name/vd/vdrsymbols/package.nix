@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "vdrsymbols";
@@ -27,6 +31,9 @@ stdenvNoCC.mkDerivation rec {
     # Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved.
     # DejaVu changes are in public domain
     # See https://dejavu-fonts.github.io/License.html for details
-    license = with licenses; [ bitstreamVera publicDomain ];
+    license = with licenses; [
+      bitstreamVera
+      publicDomain
+    ];
   };
 }

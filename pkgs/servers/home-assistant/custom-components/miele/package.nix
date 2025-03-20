@@ -5,19 +5,20 @@
   flatdict,
   pymiele,
 }:
+
 buildHomeAssistantComponent rec {
   owner = "astrandb";
   domain = "miele";
-  version = "2024.8.1";
+  version = "2025.1.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XwaOQJvosCUXMZYrKX7sMWJIrMx36RhuVYUq163vvNg=";
+    tag = "v${version}";
+    hash = "sha256-TShy2q3gKqTgRU3u4Wp7zQjzhEogqUVip8EkH8XIYw8=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     flatdict
     pymiele
   ];
@@ -29,7 +30,7 @@ buildHomeAssistantComponent rec {
     changelog = "https://github.com/astrandb/miele/releases/tag/v${version}";
     description = "Modern integration for Miele devices in Home Assistant";
     homepage = "https://github.com/astrandb/miele";
-    maintainers = with maintainers; [jamiemagee];
+    maintainers = with maintainers; [ jamiemagee ];
     license = licenses.mit;
   };
 }

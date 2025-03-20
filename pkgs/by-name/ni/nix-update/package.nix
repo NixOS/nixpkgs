@@ -11,14 +11,14 @@
 let
   self = python3Packages.buildPythonApplication {
     pname = "nix-update";
-    version = "1.6.0";
+    version = "1.10.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "nix-update";
-      rev = "refs/tags/${self.version}";
-      hash = "sha256-CpvLZ5cXNkIbAZjO1HebFaOiLyeesnkQxJ95V0anaII=";
+      tag = self.version;
+      hash = "sha256-fGs/EdCEoDA9N5gPtHU6CaDZo9e/aqW6pm6atsjK7PI=";
     };
 
     build-system = [ python3Packages.setuptools ];
@@ -47,8 +47,8 @@ let
     };
 
     meta = {
-      homepage = "https://github.com/Mic92/nix-update/";
       description = "Swiss-knife for updating nix packages";
+      homepage = "https://github.com/Mic92/nix-update/";
       changelog = "https://github.com/Mic92/nix-update/releases/tag/${self.version}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

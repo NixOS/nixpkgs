@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
-, gtk_engines
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  gtk_engines,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "rose-pine-gtk-theme";
-  version = "unstable-2022-09-01";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "rose-pine";
     repo = "gtk";
-    rev = "7a4c40989fd42fd8d4a797f460c79fc4a085c304";
-    sha256 = "0q74wjyrsjyym770i3sqs071bvanwmm727xzv50wk6kzvpyqgi67";
+    tag = "v${version}";
+    hash = "sha256-vCWs+TOVURl18EdbJr5QAHfB+JX9lYJ3TPO6IklKeFE=";
   };
 
   buildInputs = [
@@ -48,6 +49,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/rose-pine/gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [romildo the-argus];
+    maintainers = with maintainers; [
+      romildo
+      the-argus
+    ];
   };
 }

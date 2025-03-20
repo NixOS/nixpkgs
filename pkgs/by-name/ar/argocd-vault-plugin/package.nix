@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, testers
-, argocd-vault-plugin
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  argocd-vault-plugin,
 }:
 
 buildGoModule rec {

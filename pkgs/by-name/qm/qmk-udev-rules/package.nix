@@ -1,32 +1,38 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 ## Usage
 # In NixOS, set hardware.keyboard.qmk.enable = true;
 
 stdenv.mkDerivation rec {
   pname = "qmk-udev-rules";
-  version = "0.23.3";
+  version = "0.27.13";
 
   src = fetchFromGitHub {
     owner = "qmk";
     repo = "qmk_firmware";
-    rev = version;
-    hash = "sha256-dFc6S9x7sBYZAQn0coZJpmGz66Fx0l4rrexjyB4k0zA=";
+    tag = version;
+    hash = "sha256-Zs508OQ0RYCg0f9wqR+VXUmVvhP/jCA3piwRq2ZpR84=";
   };
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
+
     install -D util/udev/50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qmk/qmk_firmware";
     description = "Official QMK udev rules list";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ekleog ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ekleog ];
   };
 }

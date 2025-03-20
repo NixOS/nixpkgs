@@ -1,6 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "fritzbox-exporter";
   version = "unstable-2021-04-13";
 
@@ -22,6 +27,10 @@ buildGoModule rec {
     mainProgram = "exporter";
     homepage = "https://github.com/mxschmitt/fritzbox_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bachp flokli sbruder ];
+    maintainers = with maintainers; [
+      bachp
+      flokli
+      sbruder
+    ];
   };
 }

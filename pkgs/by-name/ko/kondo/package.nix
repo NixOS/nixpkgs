@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
@@ -6,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "tbillington";
-    repo = pname;
+    repo = "kondo";
     rev = "v${version}";
     hash = "sha256-OqOmOujnyLTqwzNvLWudQi+xa5v37JTtyUXaItnpnfs=";
   };
 
-  cargoHash = "sha256-WF4GHj/5VYrTUh1E3t29zbpSLjJ6g7RWVpLYqg9msZg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jmN7mtQ3CXfyeYrYD+JBE6ppln8+VJRBzygmczo8M04=";
 
   nativeBuildInputs = [ installShellFiles ];
 

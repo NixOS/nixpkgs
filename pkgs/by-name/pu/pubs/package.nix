@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
@@ -76,6 +77,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pubs/pubs";
     changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gebner dotlambda ];
+    maintainers = with maintainers; [
+      dotlambda
+    ];
   };
 }

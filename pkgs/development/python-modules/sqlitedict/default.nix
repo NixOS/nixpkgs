@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "sqlitedict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
   };
 

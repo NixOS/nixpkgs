@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  xorgproto,
+  cairo,
+  lv2,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "GxMatchEQ.lv2";
@@ -6,14 +15,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brummer10";
-    repo = pname;
+    repo = "GxMatchEQ.lv2";
     rev = "V${version}";
     sha256 = "0azdmgzqwjn26nx38iw13666a1i4y2bv39wk89pf6ihdi46klf72";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 xorgproto cairo lv2
+    xorg.libX11
+    xorgproto
+    cairo
+    lv2
   ];
 
   # error: format not a string literal and no format arguments [-Werror=format-security]

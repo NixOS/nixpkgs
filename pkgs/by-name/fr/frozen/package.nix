@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "frozen";
   # pin to a newer release if frozen releases again, see cesanta/frozen#72
   version = "unstable-2021-02-23";
@@ -17,13 +18,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-BpuYK9fbWSpeF8iPT8ImrV3CKKaA5RQ2W0ZQ03TciR0=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   # frozen has a simple Makefile and a GN BUILD file as building scripts.
   # Since it has only two source files, the best course of action to support
   # cross compilation is to create a small meson.build file.
   # Relevant upstream issue: https://github.com/cesanta/frozen/pull/71
-  # We also remove the GN BUILD file to prevent conflicts on case-insesitive
+  # We also remove the GN BUILD file to prevent conflicts on case-insensitive
   # file systems.
   preConfigure = ''
     rm BUILD

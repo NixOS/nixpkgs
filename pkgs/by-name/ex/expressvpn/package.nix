@@ -1,19 +1,23 @@
-{ autoPatchelfHook
-, buildFHSEnv
-, dpkg
-, fetchurl
-, inotify-tools
-, lib
-, stdenvNoCC
-, sysctl
-, writeScript
+{
+  autoPatchelfHook,
+  buildFHSEnv,
+  dpkg,
+  fetchurl,
+  inotify-tools,
+  lib,
+  stdenvNoCC,
+  sysctl,
+  writeScript,
 }:
 
 let
   pname = "expressvpn";
   clientVersion = "3.52.0";
   clientBuild = "2";
-  version = lib.strings.concatStringsSep "." [ clientVersion clientBuild ];
+  version = lib.strings.concatStringsSep "." [
+    clientVersion
+    clientBuild
+  ];
 
   expressvpnBase = stdenvNoCC.mkDerivation {
     inherit pname version;
@@ -23,7 +27,10 @@ let
       hash = "sha256-cDZ9R+MA3FXEto518bH4/c1X4W9XxgTvXns7zisylew=";
     };
 
-    nativeBuildInputs = [ dpkg autoPatchelfHook ];
+    nativeBuildInputs = [
+      dpkg
+      autoPatchelfHook
+    ];
 
     dontConfigure = true;
     dontBuild = true;
@@ -42,13 +49,21 @@ let
   };
 
   expressvpndFHS = buildFHSEnv {
-    name = "expressvpnd";
+    inherit version;
+    pname = "expressvpnd";
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
     # Since it's running in an FHS environment, it has no effect on actual resolv.conf.
     # Hence, place a watcher that updates host resolv.conf when FHS resolv.conf changes.
+
+    # Mount the host's resolv.conf to the container's /etc/resolv.conf
     runScript = writeScript "${pname}-wrapper" ''
-      cp /host/etc/resolv.conf /etc/resolv.conf;
+      mkdir -p /host/etc
+      [ -e /host/etc/resolv.conf ] || touch /host/etc/resolv.conf
+      mount --bind /etc/resolv.conf /host/etc/resolv.conf
+      mount -o remount,rw /host/etc/resolv.conf
+      trap "umount /host/etc/resolv.conf" EXIT
+
       while inotifywait /etc 2>/dev/null;
       do
         cp /etc/resolv.conf /host/etc/resolv.conf;
@@ -66,11 +81,12 @@ let
     # The expressvpnd binary also uses hard-coded paths to the other binaries and files
     # it ships with, hence the FHS environment.
 
-    targetPkgs = pkgs: with pkgs; [
-      expressvpnBase
-      inotify-tools
-      iproute2
-    ];
+    targetPkgs =
+      pkgs: with pkgs; [
+        expressvpnBase
+        inotify-tools
+        iproute2
+      ];
   };
 in
 stdenvNoCC.mkDerivation {

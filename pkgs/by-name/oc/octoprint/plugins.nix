@@ -11,7 +11,7 @@ let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "octoprint-plugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
     # none of the following have tests
     doCheck = false;
   });
@@ -111,7 +111,7 @@ in
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -252,13 +252,13 @@ in
 
   mqtt = buildPlugin rec {
     pname = "mqtt";
-    version = "0.8.10";
+    version = "0.8.16";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-MQTT";
       rev = version;
-      sha256 = "sha256-nvEUvN/SdUE1tQkLbxMkZ8xxeUIZiNNirIfWLeH1Kfg=";
+      sha256 = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
     };
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
@@ -384,19 +384,19 @@ in
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
   prusaslicerthumbnails = buildPlugin rec {
     pname = "prusaslicerthumbnails";
-    version = "1.0.7";
+    version = "1.0.8";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-PrusaSlicerThumbnails";
       rev = version;
-      sha256 = "sha256-waNCTjAZwdBfhHyJCG2La7KTnJ8MDVuX1JLetFB5bS4=";
+      sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
     propagatedBuildInputs = with super; [ psutil  ];
@@ -433,7 +433,7 @@ in
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -589,7 +589,7 @@ in
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = with maintainers; [ ];
     };
   };
 

@@ -1,4 +1,8 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
 buildNpmPackage rec {
   pname = "osmtogeojson";
@@ -6,7 +10,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "tyrasd";
-    repo = pname;
+    repo = "osmtogeojson";
     rev = version;
     hash = "sha256-T6d/KQQGoXHgV0iNhOms8d9zfjYMfnBNwPLShrEkHG4=";
   };

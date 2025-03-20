@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   version = "9.2";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";
-    repo = pname;
+    repo = "tab";
     rev = version;
     hash = "sha256-UOXfnpzYMKDdp8EeBo2HsVPGn61hkCqHe8olX9KAgOU=";
   };
@@ -34,9 +39,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Programming language/shell calculator";
     mainProgram = "tab";
-    homepage    = "https://tab-lang.xyz";
-    license     = licenses.boost;
+    homepage = "https://tab-lang.xyz";
+    license = licenses.boost;
     maintainers = with maintainers; [ mstarzyk ];
-    platforms   = with platforms; unix;
+    platforms = with platforms; unix;
   };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, writeScript }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  writeScript,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "i.ming";

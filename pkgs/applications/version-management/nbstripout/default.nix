@@ -1,44 +1,55 @@
-{ lib
-, python3
-, fetchPypi
-, coreutils
-, git
-, mercurial
+{
+  lib,
+  python3,
+  fetchPypi,
+  fetchFromGitHub,
+  coreutils,
+  gitMinimal,
+  mercurial,
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.6.1";
+  version = "0.8.1";
   pname = "nbstripout";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kGW83RSIs4bk88CB/8HUj0UTovjYv00NmiggjF2v6dM=";
+    hash = "sha256-6qyLa05yno3+Hl3ywPi6RKvFoXplRI8EgBQfgL4jC7E=";
   };
 
-  # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
-  # force using the echo binary
-  postPatch = ''
-    substituteInPlace tests/test-git.t --replace "echo" "${coreutils}/bin/echo"
-  '';
+  testAssets = fetchFromGitHub {
+    owner = "kynan";
+    repo = "nbstripout";
+    rev = "${version}";
+    hash = "sha256-OSJLrWkYQIhcdyofS3Bo39ppsU6K3A4546UKB8Q1GGg=";
+  };
 
   propagatedBuildInputs = with python3.pkgs; [
-    ipython
     nbformat
   ];
 
-  nativeCheckInputs = [
-    coreutils
-    git
-    mercurial
-  ] ++ (with python3.pkgs; [
-    pytest-cram
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      coreutils
+      gitMinimal
+      mercurial
+    ]
+    ++ (with python3.pkgs; [
+      pytestCheckHook
+    ]);
+
+  checkInputs = [
+    testAssets
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
     git config --global init.defaultBranch main
+
+    cp -r --no-preserve=mode,ownership ${testAssets}/tests/e2e_notebooks $TMPDIR/e2e_notebooks
+    chmod -R +w $TMPDIR/e2e_notebooks
+    substituteInPlace tests/test_end_to_end.py --replace "tests/e2e_notebooks" "$TMPDIR/e2e_notebooks"
   '';
 
   meta = {

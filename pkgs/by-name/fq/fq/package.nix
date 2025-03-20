@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fq
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fq,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "fq";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
     rev = "v${version}";
-    hash = "sha256-bHyLEJiSM42arZiM1VVKga6wp3Q3EAMgUrFnh3hbk9M=";
+    hash = "sha256-I3mVAPNWjRHG0td1ulzGOthiNybfWLx1HgwPjFfBHCo=";
   };
 
-  vendorHash = "sha256-in+c8Wl7ffXAqMvs+3K6dzAd5ePqBpRaxU2iM81moQM=";
+  vendorHash = "sha256-p2cvv983gYTvyLPYIGVsk6N7yUzBpiPzgJ3sMRNWPTo=";
 
   ldflags = [
     "-s"

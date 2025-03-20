@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildDunePackage, cppo, ppx_deriving
-, ppxlib, dune-configurator
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cppo,
+  ppx_deriving,
+  ppxlib,
+  dune-configurator,
 }:
 
 buildDunePackage rec {
@@ -14,7 +20,10 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ ppxlib dune-configurator ];
+  buildInputs = [
+    ppxlib
+    dune-configurator
+  ];
   propagatedBuildInputs = [ ppx_deriving ];
 
   meta = with lib; {

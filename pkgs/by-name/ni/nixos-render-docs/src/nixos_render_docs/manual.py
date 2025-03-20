@@ -16,6 +16,7 @@ from . import md, options
 from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
+from .redirects import Redirects
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -216,14 +217,16 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
     _in_dir: Path
     _html_params: HTMLParameters
+    _redirects: Redirects | None
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 in_dir: Path, base_path: Path):
+                 redirects: Redirects | None, in_dir: Path, base_path: Path):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
         self._in_dir = in_dir
         self._base_path = base_path.absolute()
         self._html_params = html_params
+        self._redirects = redirects
 
     def _pull_image(self, src: str) -> str:
         src_path = Path(src)
@@ -306,6 +309,14 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 '   <hr />',
                 '  </div>',
             ])
+
+        scripts = self._html_params.scripts
+        if self._redirects:
+            redirects_path = f'{self._base_path}/{toc.target.path.split('.html')[0]}-redirects.js'
+            with open(redirects_path, 'w') as file:
+                file.write(self._redirects.get_redirect_script(toc.target.path))
+            scripts.append(redirects_path)
+
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
@@ -317,7 +328,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
                      for style in self._html_params.stylesheets)),
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
-                     for script in self._html_params.scripts)),
+                     for script in scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
@@ -501,6 +512,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     _revision: str
     _html_params: HTMLParameters
     _manpage_urls: Mapping[str, str]
+    _redirects: Redirects | None
     _xref_targets: dict[str, XrefTarget]
     _redirection_targets: set[str]
     _appendix_count: int = 0
@@ -509,9 +521,9 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         self._appendix_count += 1
         return _to_base26(self._appendix_count - 1)
 
-    def __init__(self, revision: str, html_params: HTMLParameters, manpage_urls: Mapping[str, str]):
+    def __init__(self, revision: str, html_params: HTMLParameters, manpage_urls: Mapping[str, str], redirects: Redirects | None = None):
         super().__init__()
-        self._revision, self._html_params, self._manpage_urls = revision, html_params, manpage_urls
+        self._revision, self._html_params, self._manpage_urls, self._redirects = revision, html_params, manpage_urls, redirects
         self._xref_targets = {}
         self._redirection_targets = set()
         # renderer not set on purpose since it has a dependency on the output path!
@@ -519,7 +531,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def convert(self, infile: Path, outfile: Path) -> None:
         self._renderer = ManualHTMLRenderer(
             'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
-            infile.parent, outfile.parent)
+            self._redirects, infile.parent, outfile.parent)
         super().convert(infile, outfile)
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
@@ -670,7 +682,14 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 )
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
-
+        if self._redirects:
+            self._redirects.validate(self._xref_targets)
+            server_redirects = self._redirects.get_server_redirects()
+            with open(outfile.parent / '_redirects', 'w') as server_redirects_file:
+                formatted_server_redirects = []
+                for from_path, to_path in server_redirects.items():
+                    formatted_server_redirects.append(f"{from_path} {to_path} 301")
+                server_redirects_file.write("\n".join(formatted_server_redirects))
 
 
 def _build_cli_html(p: argparse.ArgumentParser) -> None:
@@ -683,16 +702,22 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--chunk-toc-depth', default=1, type=int)
     p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('--media-dir', default="media", type=Path)
+    p.add_argument('--redirects', type=Path)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
 def _run_cli_html(args: argparse.Namespace) -> None:
-    with open(args.manpage_urls, 'r') as manpage_urls:
+    with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
+        redirects = None
+        if args.redirects:
+            with open(args.redirects) as raw_redirects:
+                redirects = Redirects(json.load(raw_redirects), redirects_script.read())
+
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
                            args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
-            json.load(manpage_urls))
+            json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
 def build_cli(p: argparse.ArgumentParser) -> None:

@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, fetchpatch
-, mirage-crypto-rng
-, mtime
-, gluon
-, randomconv
-, rio
-, telemetry
-, tls
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fetchpatch,
+  mirage-crypto-rng,
+  mtime,
+  gluon,
+  randomconv,
+  rio,
+  telemetry,
+  tls,
 }:
 
 buildDunePackage rec {

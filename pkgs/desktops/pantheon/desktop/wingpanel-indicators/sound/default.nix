@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gnome-settings-daemon
-, gtk3
-, granite
-, wingpanel
-, libnotify
-, pulseaudio
-, libcanberra-gtk3
-, libgee
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gnome-settings-daemon,
+  gtk3,
+  granite,
+  wingpanel,
+  libnotify,
+  pulseaudio,
+  libcanberra-gtk3,
+  libgee,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5VJnRFjyiy+CIOrwabmgWjVF4Jh0lfkhPUoGXivnbtY=";
+    sha256 = "sha256-oWgq8rgdK81QsN/LhVUk6YgKYG4pFjVfu00t974n+i8=";
   };
 
   nativeBuildInputs = [

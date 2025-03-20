@@ -1,38 +1,42 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, xz
-, zstd
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  bzip2,
+  xz,
+  zstd,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.10.7";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-bQYKOo11zVIXNHdoD60oEdzSSYeLKppPJBen6wdrXq8=";
+    hash = "sha256-EAJUscywbxYucqZEJ147FiNOHTO5umAwm5YHKC0g6yw=";
   };
 
-  cargoHash = "sha256-Tr++ui715adP1taqj+Sms2yO3hF5SZl7zCrAkPYlSdY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jOrnfJUxyrBfAKW/khc3w5eFauuCjN6c5GMns1eGUag=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    xz
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      bzip2
+      xz
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -44,8 +48,14 @@ rustPlatform.buildRustPackage rec {
     "zstd-thin"
   ];
 
-  cargoBuildFlags = [ "-p" "cargo-binstall" ];
-  cargoTestFlags = [ "-p" "cargo-binstall" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-binstall"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "cargo-binstall"
+  ];
 
   checkFlags = [
     # requires internet access

@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, fftwFloat, libsamplerate
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftwFloat,
+  libsamplerate,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,10 +14,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jketterl";
-    repo = pname;
+    repo = "csdr";
     rev = version;
     sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
+
+  postPatch = ''
+    # function is not defined in any headers but used in libcsdr.c
+    echo "int errhead();" >> src/predefined.h
+  '';
 
   nativeBuildInputs = [
     cmake

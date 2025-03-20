@@ -1,28 +1,40 @@
-{ lib, stdenv, fetchFromSourcehut, wayland, wayland-scanner }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  wayland,
+  wayland-scanner,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttr: {
   pname = "wlopm";
-  version = "0.1.0";
+  version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = "wlopm";
-    rev = "v${version}";
-    sha256 = "sha256-kcUJVB5jP2qZ1YgJDEBsyn5AgwhRxQmzOrk0gKj1MeM=";
+    rev = "v${finalAttr.version}";
+    hash = "sha256-GrcV51mUZUaiiYhko8ysaTieJoZDcunLn1yG5k+TpQQ=";
   };
 
   strictDeps = true;
+
   nativeBuildInputs = [ wayland-scanner ];
+
   buildInputs = [ wayland ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  preInstall = ''
+    mkdir -p $out/share/bash-completion/completions
+  '';
+
+  meta = {
     description = "Simple client implementing zwlr-output-power-management-v1";
     homepage = "https://git.sr.ht/~leon_plickat/wlopm";
     mainProgram = "wlopm";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ arjan-s ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ arjan-s ];
+    platforms = lib.platforms.linux;
   };
-}
+})

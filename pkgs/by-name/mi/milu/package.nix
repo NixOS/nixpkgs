@@ -1,32 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, glib, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  pkg-config,
+  glib,
+  llvm,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation {
   pname = "milu-nightly";
   version = "2016-05-09";
 
   src = fetchFromGitHub {
-    sha256 = "14cglw04cliwlpvw7qrs6rfm5sv6qa558d7iby5ng3wdjcwx43nk";
-    rev = "b5f2521859c0319d321ad3c1ad793b826ab5f6e1";
-    repo = "Milu";
     owner = "yuejia";
+    repo = "Milu";
+    rev = "b5f2521859c0319d321ad3c1ad793b826ab5f6e1";
+    hash = "sha256-0w7SOZONj2eLX/E0VIrCZutSXTY648P3pTxSRgCnj5E=";
   };
 
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
-    sed -i 's#/usr/bin/##g' Makefile
+    substituteInPlace Makefile \
+      --replace-fail /usr/bin/ "" \
+      --replace-fail bin/milu $out/bin/milu
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/milu $out/bin
-  '';
-
-  nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [
-     glib
-     llvmPackages.libclang
+  nativeBuildInputs = [
+    pkg-config
+    unzip
   ];
+
+  buildInputs = [
+    glib
+    llvm.dev
+    llvmPackages.libclang
+  ];
+
+  preBuild = ''
+    mkdir -p $out/bin
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+    "-Wno-error=int-conversion"
+  ];
+
+  # `make all` already installs the binaries
+  dontInstall = true;
 
   meta = {
     description = "Higher Order Mutation Testing Tool for C and C++ programs";
@@ -37,4 +61,3 @@ stdenv.mkDerivation {
     mainProgram = "milu";
   };
 }
-

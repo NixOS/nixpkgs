@@ -1,23 +1,23 @@
 {
-  alsa-lib
-, fetchFromGitHub
-, gtk3
-, lib
-, libpulseaudio
-, pkg-config
-, stdenv
-, wrapGAppsHook3
+  alsa-lib,
+  fetchFromGitHub,
+  gtk3,
+  lib,
+  libpulseaudio,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.22";
+  version = "6.4.25";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bKWjazCCOIJm+VCAcnQGj3s0bbN4Ahx3RMNuLxZENXA=";
+    hash = "sha256-jTMXSVxhzaHF7zNr0/EWBDm3fIawTF4v6zuAcx/woeQ=";
   };
 
   nativeBuildInputs = [

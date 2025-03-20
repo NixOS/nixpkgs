@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, importlib-metadata
-, mergedeep
-, platformdirs
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  importlib-metadata,
+  mergedeep,
+  platformdirs,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mkdocs_get_deps" ];
 

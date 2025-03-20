@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "stookwijzer";
-  version = "1.5.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "stookwijzer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QZyuzOAz/VAThgZdhOGeOLvC+2wtp1mgCXzIekBm/Xs=";
+    tag = "v${version}";
+    hash = "sha256-T4u3KuKWAXRkHbjPt4qkiisnLjx9JMD0DW6enOlu69g=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/fwestenberg/stookwijzer/releases/tag/v${version}";
+    changelog = "https://github.com/fwestenberg/stookwijzer/releases/tag/${src.tag}";
     description = "Python package for the Stookwijzer API";
     homepage = "https://github.com/fwestenberg/stookwijzer";
     license = lib.licenses.mit;

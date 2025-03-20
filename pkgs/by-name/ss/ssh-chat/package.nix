@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "ssh-chat";
@@ -18,6 +22,6 @@ buildGoModule rec {
     mainProgram = "ssh-chat";
     homepage = "https://github.com/shazow/ssh-chat";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
   };
 }

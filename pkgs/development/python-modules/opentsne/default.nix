@@ -22,7 +22,7 @@ let
     src = fetchFromGitHub {
       owner = "pavlin-policar";
       repo = "openTSNE";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-e1YXF9cdguzcEW0KanIHYlZQiUc+FH8IVOaPshAswco=";
     };
 

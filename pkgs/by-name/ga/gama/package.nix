@@ -1,4 +1,13 @@
-{ stdenv, fetchurl, lib, expat, octave, libxml2, texinfo, zip }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  expat,
+  octave,
+  libxml2,
+  texinfo,
+  zip,
+}:
 stdenv.mkDerivation rec {
   pname = "gama";
   version = "2.28";
@@ -10,14 +19,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat ];
 
-  nativeBuildInputs = [ texinfo zip ];
+  nativeBuildInputs = [
+    texinfo
+    zip
+  ];
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-include sstream";
 
-  nativeCheckInputs = [ octave libxml2 ];
+  nativeCheckInputs = [
+    octave
+    libxml2
+  ];
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Tools for adjustment of geodetic networks";
     homepage = "https://www.gnu.org/software/gama/";
     license = licenses.gpl3Plus;

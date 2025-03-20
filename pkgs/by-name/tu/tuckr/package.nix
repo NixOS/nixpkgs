@@ -1,17 +1,22 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tuckr";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
     rev = version;
-    hash = "sha256-JxXFz7ijCQktpYrwBA8ajvZj3gRloO/cAOo4wskF70o=";
+    hash = "sha256-0ZPBJ2MNeoGCvYW6HswVZ5SyjZpdR21lp9ebceIhsfw=";
   };
 
-  cargoHash = "sha256-mGBsQd3yiwuAH3KHtAsLx0ai3ui2EUaf9SW+czvo9vE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vgwO1N7FuqZaY+ShkQHmCEYwiKZRkkqDNAU7SnTg1rw=";
 
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 

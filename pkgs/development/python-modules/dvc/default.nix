@@ -1,9 +1,11 @@
 {
   lib,
-  appdirs,
+  attrs,
   buildPythonPackage,
+  celery,
   colorama,
   configobj,
+  dulwich,
   distro,
   dpath,
   dvc-azure,
@@ -12,14 +14,18 @@
   dvc-gs,
   dvc-hdfs,
   dvc-http,
+  dvc-oss,
   dvc-render,
   dvc-s3,
   dvc-ssh,
   dvc-studio-client,
   dvc-task,
+  dvc-webdav,
+  dvc-webhdfs,
   fetchFromGitHub,
   flatten-dict,
   flufl-lock,
+  fsspec,
   funcy,
   grandalf,
   gto,
@@ -27,7 +33,9 @@
   importlib-metadata,
   importlib-resources,
   iterative-telemetry,
+  kombu,
   networkx,
+  omegaconf,
   packaging,
   pathspec,
   platformdirs,
@@ -57,16 +65,16 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.56.0";
+  version = "3.59.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9TV+YQ9UFgqr3IoM0indUYa48O+mhfNxzAI56UtB3+Y=";
+    tag = version;
+    hash = "sha256-WmOWqG2qPi1eP3khj+ryQZBNED1S1+WDHdkuhF2o7Lg=";
   };
 
   pythonRelaxDeps = [
@@ -83,14 +91,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-
   dependencies =
     [
-      appdirs
+      attrs
+      celery
       colorama
       configobj
       distro
       dpath
+      dulwich
       dvc-data
       dvc-http
       dvc-render
@@ -98,12 +107,15 @@ buildPythonPackage rec {
       dvc-task
       flatten-dict
       flufl-lock
+      fsspec
       funcy
       grandalf
       gto
       hydra-core
       iterative-telemetry
+      kombu
       networkx
+      omegaconf
       packaging
       pathspec
       platformdirs
@@ -127,17 +139,20 @@ buildPythonPackage rec {
     ++ lib.optionals enableGoogle optional-dependencies.gs
     ++ lib.optionals enableAWS optional-dependencies.s3
     ++ lib.optionals enableAzure optional-dependencies.azure
-    ++ lib.optionals enableSSH optional-dependencies.ssh
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+    ++ lib.optionals enableSSH optional-dependencies.ssh;
 
   optional-dependencies = {
     azure = [ dvc-azure ];
     gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];
     hdfs = [ dvc-hdfs ];
+    oss = [ dvc-oss ];
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
+    ssh_gssapi = [ dvc-ssh ] ++ dvc-ssh.optional-dependencies.gssapi;
+    webdav = [ dvc-webdav ];
+    webhdfs = [ dvc-webhdfs ];
+    webhdfs_kerberos = [ dvc-webhdfs ] ++ dvc-webhdfs.optional-dependencies.kerberos;
   };
 
   # Tests require access to real cloud services
@@ -151,7 +166,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
-    changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       cmcdragonkai

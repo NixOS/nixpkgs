@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "singularityhub";
     repo = "singularity-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PNMzqnKb691wcd8aGSleqHOcsUrahl8e0r5s5ek5GmQ=";
   };
 

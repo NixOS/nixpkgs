@@ -1,4 +1,8 @@
-{ lib, flutter, fetchFromGitHub }:
+{
+  lib,
+  flutter,
+  fetchFromGitHub,
+}:
 flutter.buildFlutterApplication rec {
   pname = "expidus-file-manager";
   version = "0.2.1";
@@ -44,7 +48,10 @@ flutter.buildFlutterApplication rec {
     homepage = "https://expidusos.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "expidus-file-manager";
   };
 }

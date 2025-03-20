@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libpng,
+  gd,
+  geoip,
+  db,
+}:
 
 stdenv.mkDerivation rec {
   pname = "webalizer";
@@ -15,13 +24,18 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "MANDIR=\${out}/share/man/man1" ];
 
-  preConfigure =
-    ''
-      substituteInPlace ./configure \
-        --replace "--static" ""
-    '';
+  preConfigure = ''
+    substituteInPlace ./configure \
+      --replace "--static" ""
+  '';
 
-  buildInputs = [ zlib libpng gd geoip db ];
+  buildInputs = [
+    zlib
+    libpng
+    gd
+    geoip
+    db
+  ];
 
   configureFlags = [
     "--enable-dns"

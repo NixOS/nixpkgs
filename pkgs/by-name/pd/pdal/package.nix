@@ -17,7 +17,7 @@
 , libxml2
 , openscenegraph
 , pkg-config
-, postgresql
+, libpq
 , proj
 , sqlite
 , tiledb
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.1";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    hash = "sha256-aRWVBCMGr/FX3g8tF7PP3sarN2DHx7AG3vvGAkQTuAM=";
+    hash = "sha256-52v7oDmvq820mJ91XAZI1rQEwssWcHagcd2QNVV6zPA=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     laszip
     libgeotiff
     libtiff
-    (libxml2.override { enableHttp = true; })
+    libxml2
     openscenegraph
-    postgresql
+    libpq
     proj
     sqlite
     tiledb

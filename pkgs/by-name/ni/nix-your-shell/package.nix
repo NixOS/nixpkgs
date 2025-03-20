@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FjGjLq/4qeZz9foA7pfz1hiXvsdmbnzB3BpiTESLE1c=";
   };
 
-  cargoHash = "sha256-2NgN2/dr48ogkcjOq6UE4jDQBeewceWzdpRlXqi744s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zQpK13iudyWDZbpAN8zm9kKmz8qy3yt8JxT4lwq4YF0=";
 
   meta = {
     mainProgram = "nix-your-shell";

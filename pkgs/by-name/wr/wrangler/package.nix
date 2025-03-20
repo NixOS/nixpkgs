@@ -10,6 +10,7 @@
   llvmPackages,
   musl,
   xorg,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
@@ -27,12 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
   };
 
+  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
+
   buildInputs =
     [
       llvmPackages.libcxx
       llvmPackages.libunwind
     ]
-    ++ lib.optionals (stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       musl # not used, but requires extra work to remove
       xorg.libX11 # for the clipboardy package
     ];
@@ -43,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       nodejs
       pnpm_9.configHook
     ]
-    ++ lib.optionals (stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       autoPatchelfHook
     ];
 

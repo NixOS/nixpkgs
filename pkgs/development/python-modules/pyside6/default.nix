@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   cmake,
   cups,
   ninja,
@@ -94,19 +93,18 @@ stdenv.mkDerivation (finalAttrs: {
     pythonImportsCheckHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  buildInputs =
-    python.pkgs.qt6.darwinVersionInputs
-    ++ (
-      if stdenv.hostPlatform.isLinux then
-        # qtwebengine fails under darwin
-        # see https://github.com/NixOS/nixpkgs/pull/312987
-        packages ++ [ python.pkgs.qt6.qtwebengine ]
-      else
-        [
-          qt_linked
-          cups
-        ]
-    );
+  buildInputs = (
+    if stdenv.hostPlatform.isLinux then
+      # qtwebengine fails under darwin
+      # see https://github.com/NixOS/nixpkgs/pull/312987
+      packages ++ [ python.pkgs.qt6.qtwebengine ]
+    else
+      python.pkgs.qt6.darwinVersionInputs
+      ++ [
+        qt_linked
+        cups
+      ]
+  );
 
   propagatedBuildInputs = [ shiboken6 ];
 
@@ -131,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -15,13 +15,13 @@ in
 
 buildDunePackage rec {
   pname = "opam-publish";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
-    repo = pname;
+    repo = "opam-publish";
     rev = version;
-    hash = "sha256-7TIBLHpLVzI8Ex01wiQqVPllMZuiiUQsbuGtsNmrW3Q=";
+    hash = "sha256-HjMba80c4vOEm9p7r0cfFBf3y0XoFf986XjTDCPzn38=";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/ocaml-opam/${pname}";
+    homepage = "https://github.com/ocaml-opam/opam-publish";
     description = "Tool to ease contributions to opam repositories";
     mainProgram = "opam-publish";
     license = with licenses; [ lgpl21Only ocamlLgplLinkingException ];

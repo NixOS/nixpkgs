@@ -1,33 +1,37 @@
-{ fetchFromGitLab
-, lib
-, stdenv
-, autoreconfHook
-, gtk-doc
-, pkg-config
-, intltool
-, gettext
-, glib
-, libxml2
-, zlib
-, bzip2
-, perl
-, gdk-pixbuf
-, libiconv
-, libintl
-, gnome
+{
+  fetchFromGitLab,
+  lib,
+  stdenv,
+  autoreconfHook,
+  gtk-doc,
+  pkg-config,
+  intltool,
+  gettext,
+  glib,
+  libxml2,
+  zlib,
+  bzip2,
+  perl,
+  gdk-pixbuf,
+  libiconv,
+  libintl,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
   version = "1.14.53";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgsf";
-    rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "LIBGSF_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-vC/6QEoV6FvFxQ0YlMkBbTmAtqbkvgZf+9BU8epi8yo=";
   };
 

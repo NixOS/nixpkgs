@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, gettext
-, glib
-, gjs
-, ninja
-, gtk4
-, webkitgtk_6_0
-, gsettings-desktop-schemas
-, wrapGAppsHook4
-, desktop-file-utils
-, gobject-introspection
-, glib-networking
-, pkg-config
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  gettext,
+  glib,
+  gjs,
+  ninja,
+  gtk4,
+  webkitgtk_6_0,
+  gsettings-desktop-schemas,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gobject-introspection,
+  glib-networking,
+  pkg-config,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "foliate";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = "foliate";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uKxybt8ZZuk2tWSJLKC7Tgw78EfMMgI99VExfgOdHwA=";
+    tag = version;
+    hash = "sha256-NU4lM+J5Tpd9Fl+eVbBy7WnCQ6LJ7oeWVkBxp6euTHU=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +55,10 @@ stdenv.mkDerivation rec {
     homepage = "https://johnfactotum.github.io/foliate";
     changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      onny
+      aleksana
+    ];
     mainProgram = "foliate";
   };
 }

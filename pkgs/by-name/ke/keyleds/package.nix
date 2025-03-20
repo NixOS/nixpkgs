@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libuv
-, libX11
-, libXi
-, libyaml
-, luajit
-, udev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libuv,
+  libX11,
+  libXi,
+  libyaml,
+  luajit,
+  udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "keyleds";
   version = "unstable-2021-04-08";
 
   src = fetchFromGitHub {
     owner = "keyleds";
-    repo = pname;
+    repo = "keyleds";
     rev = "171361654a64b570d747c2d196acb2da4b8dc293";
     sha256 = "sha256-mojgHMT0gni0Po0hiZqQ8eMzqfwUipXue1uqpionihw=";
   };

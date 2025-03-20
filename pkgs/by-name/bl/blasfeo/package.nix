@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blasfeo";
-  version = "0.1.3";
+  version = "0.1.4.2";
 
   src = fetchFromGitHub {
     owner = "giaf";
     repo = "blasfeo";
     rev = finalAttrs.version;
-    hash = "sha256-e8InqyUMWRdL4CBHUOtrZkuabaTLiNPMNPRCnWzWkQ4=";
+    hash = "sha256-p1pxqJ38h6RKXMg1t+2RHlfmRKPuM18pbUarUx/w9lw=";
   };
 
   nativeBuildInputs = [ cmake ];

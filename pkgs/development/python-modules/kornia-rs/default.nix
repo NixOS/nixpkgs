@@ -6,7 +6,7 @@
   rustPlatform,
   cmake,
   nasm,
-  substituteAll,
+  replaceVars,
   libiconv,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7toCMaHzFAzm6gThVLBxKLgQVgFJatdJseDlfdeS8RE=";
   };
 
@@ -36,8 +36,7 @@ buildPythonPackage rec {
 
   # The path dependency doesn't vendor the dependencies correctly, so get kornia-rs from crates instead.
   patches = [
-    (substituteAll {
-      src = ./kornia-rs-from-crates.patch;
+    (replaceVars ./kornia-rs-from-crates.patch {
       inherit version;
     })
   ];

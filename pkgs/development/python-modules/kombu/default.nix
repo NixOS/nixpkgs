@@ -4,7 +4,6 @@
   azure-identity,
   azure-servicebus,
   azure-storage-queue,
-  backports-zoneinfo,
   boto3,
   buildPythonPackage,
   confluent-kafka,
@@ -65,7 +64,7 @@ buildPythonPackage rec {
     ];
     azureservicebus = [ azure-servicebus ];
     confluentkafka = [ confluent-kafka ];
-    # pyro4 doesn't suppport Python 3.11
+    # pyro4 doesn't support Python 3.11
     #pyro = [
     #  pyro4
     #];

@@ -15,7 +15,7 @@
   qtbase,
   qtsvg,
   xdg-utils,
-  substituteAll,
+  replaceVars,
   buildNpmPackage,
 }:
 
@@ -55,6 +55,7 @@ rec {
       description = "Watches keyboard and mouse activity to determine if you are AFK or not (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-afk";
       maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-watcher-afk";
       license = licenses.mpl20;
     };
   };
@@ -83,6 +84,7 @@ rec {
       description = "Cross-platform window watcher (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-window";
       maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-watcher-window";
       license = licenses.mpl20;
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
@@ -95,7 +97,10 @@ rec {
     src = "${sources}/aw-qt";
 
     pyproject = true;
-    build-system = [ python3Packages.poetry-core ];
+    build-system = [
+      python3Packages.poetry-core
+      python3Packages.setuptools
+    ];
 
     dependencies = with python3Packages; [
       aw-core
@@ -141,6 +146,7 @@ rec {
       description = "Tray icon that manages ActivityWatch processes, built with Qt";
       homepage = "https://github.com/ActivityWatch/aw-qt";
       maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-qt";
       license = licenses.mpl20;
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
@@ -170,6 +176,7 @@ rec {
       description = "Desktop notification service for ActivityWatch";
       homepage = "https://github.com/ActivityWatch/aw-notify";
       maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-notify";
       license = licenses.mpl20;
     };
   };
@@ -180,12 +187,12 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoHash = "sha256-2KnfLNVw48VVQ1Ec8MS2MaiA3BpGeFd/uIrJRHhaJR8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
 
     patches = [
       # Override version string with hardcoded value as it may be outdated upstream.
-      (substituteAll {
-        src = ./override-version.patch;
+      (replaceVars ./override-version.patch {
         version = sources.rev;
       })
     ];
@@ -230,8 +237,7 @@ rec {
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
-      (substituteAll {
-        src = ./commit-hash.patch;
+      (replaceVars ./commit-hash.patch {
         commit_hash = sources.rev;
       })
     ];

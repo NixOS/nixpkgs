@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "toot";
-  version = "0.45.0";
+  version = "0.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "toot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xBpqB81LSOq+eGVwEL6fAxBR8UXCduf5syzCdwydW4Q=";
+    tag = version;
+    hash = "sha256-cdlLZL3XZDgEXbac3Kgm9o61SOpoZzWD6C1DDwj6eNo=";
   };
 
   nativeCheckInputs = with python3Packages; [ pytest ];
@@ -48,6 +48,7 @@ python3Packages.buildPythonApplication rec {
     description = "Mastodon CLI interface";
     mainProgram = "toot";
     homepage = "https://github.com/ihabunek/toot";
+    changelog = "https://github.com/ihabunek/toot/blob/refs/tags/${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       matthiasbeyer

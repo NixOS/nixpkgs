@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.9.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-3KS/KN6/RO+PxoxbCVryymnTyWcmfXuCoc9E+asdU/E=";
+    hash = "sha256-LXuURq+MSSkd8+VzhltX2VqKsU3PWcQLMQTqqS5oLMg=";
   };
 
-  cargoHash = "sha256-9MnYSmMhLn31aHwooo8W/1Rp7N5P6Tar7Ft2iXRVnh0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nA24qjxo1C0t4twTv2/Uu05ELiSzYLrnsRgAIFKsIxg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

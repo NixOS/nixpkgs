@@ -1,18 +1,23 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, jack2
-, libpulseaudio
-, sndio
-, speexdsp
-, AudioUnit
-, CoreAudio
-, CoreServices
-, lazyLoad ? !stdenv.hostPlatform.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  jack2,
+  libpulseaudio,
+  sndio,
+  speexdsp,
+  AudioUnit,
+  CoreAudio,
+  CoreServices,
+  lazyLoad ? !stdenv.hostPlatform.isDarwin,
 }:
 
-assert lib.assertMsg (stdenv.hostPlatform.isDarwin -> !lazyLoad) "cubeb: lazyLoad is inert on Darwin";
+assert lib.assertMsg (
+  stdenv.hostPlatform.isDarwin -> !lazyLoad
+) "cubeb: lazyLoad is inert on Darwin";
 
 let
   backendLibs = [
@@ -22,7 +27,8 @@ let
     sndio
   ];
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "cubeb";
   version = "unstable-2022-10-18";
 
@@ -38,10 +44,18 @@ in stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [ speexdsp ] ++ (
-    if stdenv.hostPlatform.isDarwin then [ AudioUnit CoreAudio CoreServices ]
-    else backendLibs
-  );
+  buildInputs =
+    [ speexdsp ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        [
+          AudioUnit
+          CoreAudio
+          CoreServices
+        ]
+      else
+        backendLibs
+    );
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

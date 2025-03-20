@@ -1,8 +1,9 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, qtquick3d
-, qtquicktimeline
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  qtquick3d,
+  qtquicktimeline,
 }:
 
 qtModule {

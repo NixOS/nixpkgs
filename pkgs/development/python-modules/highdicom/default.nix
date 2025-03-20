@@ -10,6 +10,9 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
+  setuptools,
+  typing-extensions,
 }:
 
 let
@@ -22,32 +25,41 @@ let
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.22.0";
+  version = "0.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
+    tag = "v${version}";
+    hash = "sha256-1LRXJkltRLtPJ/NrFZVyjTusXfmcEVOTFEuq0gOI+yQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     pillow
     pillow-jpls
     pydicom
+    typing-extensions
   ];
 
   optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # broken on aarch64-linux
+      pylibjpeg-openjpeg
     ];
   };
+
+  pythonRemoveDeps = [
+    "pyjpegls" # not directly used
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
@@ -55,6 +67,21 @@ buildPythonPackage rec {
     mkdir -p $HOME/.pydicom/
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';
+
+  disabledTests = [
+    # require pyjpegls
+    "test_jpegls_monochrome"
+    "test_jpegls_rgb"
+    "test_jpeglsnearlossless_monochrome"
+    "test_jpeglsnearlossless_rgb"
+    "test_multi_frame_sm_image_ushort_encapsulated_jpegls"
+    "test_monochrome_jpegls"
+    "test_monochrome_jpegls_near_lossless"
+    "test_rgb_jpegls"
+    "test_construction_autotile"
+    "test_pixel_types_fractional"
+    "test_pixel_types_labelmap"
+  ];
 
   pythonImportsCheck = [
     "highdicom"
@@ -67,6 +94,9 @@ buildPythonPackage rec {
     "highdicom.sr"
     "highdicom.sc"
   ];
+
+  # updates the wrong fetcher
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "High-level DICOM abstractions for Python";

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, curl
-, mpv
-, yajl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  curl,
+  mpv,
+  yajl,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Aanok";
-    repo = pname;
+    repo = "jftui";
     rev = "v${version}";
     sha256 = "sha256-w5DK9B3D3/9VExAQktigVPim33VfpoQPHUZefAS3pWQ=";
   };

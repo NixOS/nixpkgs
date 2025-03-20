@@ -1,37 +1,30 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, installShellFiles
-, darwin
-, testers
-, pixi
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  libgit2,
+  openssl,
+  buildPackages,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.34.0";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
-    rev = "v${version}";
-    hash = "sha256-pXJna0WuosQ21u+ImIc70OaG63xVODLaWFkuYqxUc/Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ixA/vgnLF7sStooD0zkaTUoTIK1flQuqsruZVc9HbEI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async_zip-0.0.17" = "sha256-3k9rc4yHWhqsCUJ17K55F8aQoCKdVamrWAn6IDWo3Ss=";
-      "cache-key-0.0.1" = "sha256-JEGcX4dT/cVLb07n2Y0nai17jW0tXpV18qaYVnoEpew=";
-      "pubgrub-0.2.1" = "sha256-pU+F6hwqy+r6tz5OBoB6gU0+vdH6F3ikUaPrcvYRX2c=";
-      "reqwest-middleware-0.3.3" = "sha256-csQN7jZTifliSTsOm6YrjPVgsXBOfelY7LkHD1HkNGQ=";
-      "tl-0.7.8" = "sha256-F06zVeSZA4adT6AzLzz1i9uxpI1b8P1h+05fFfjm3GQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CJ4FCKYZQe0uCJo7XPzTPHViW3gDrJkacWczBkfctWY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,9 +34,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk_11_0.frameworks; [ CoreFoundation IOKit SystemConfiguration Security ]
-  );
+  ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -53,22 +44,36 @@ rustPlatform.buildRustPackage rec {
   # As the version is updated, the number of failed tests continues to grow.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd pixi \
-      --bash <($out/bin/pixi completion --shell bash) \
-      --fish <($out/bin/pixi completion --shell fish) \
-      --zsh <($out/bin/pixi completion --shell zsh)
-  '';
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd pixi \
+        --bash <(${emulator} $out/bin/pixi completion --shell bash) \
+        --fish <(${emulator} $out/bin/pixi completion --shell fish) \
+        --zsh <(${emulator} $out/bin/pixi completion --shell zsh)
+    ''
+  );
 
-  passthru.tests.version = testers.testVersion {
-    package = pixi;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aaronjheng edmundmiller ];
+    changelog = "https://pixi.sh/latest/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      aaronjheng
+      edmundmiller
+      xiaoxiangmoe
+    ];
     mainProgram = "pixi";
   };
-}
+})

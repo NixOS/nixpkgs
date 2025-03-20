@@ -1,21 +1,58 @@
-{ lib, stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  openssl,
+  flex,
+  bison,
+  less,
+  miscfiles,
+  fetchpatch,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bsd-games";
   version = "2.17";
 
   src = fetchurl {
-    url = "mirror://ibiblioPubLinux/games/${pname}-${version}.tar.gz";
+    url = "mirror://ibiblioPubLinux/games/bsd-games-${finalAttrs.version}.tar.gz";
     hash = "sha256-Bm+SSu9sHF6pRvWI428wMCH138CTlEc48CXY7bxv/2A=";
   };
 
-  buildInputs = [ ncurses openssl flex bison ];
+  buildInputs = [
+    ncurses
+    openssl
+    flex
+    bison
+  ];
 
   patches = [
-    # Remove UTMPX support on Makefrag file
-    (fetchurl {
+    # Follow All patches from http://t2sde.org/packages/bsd-games.html
+    # May be removed in the next version
+    (fetchpatch {
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/delay_output-sym.patch";
+      hash = "sha256-qbtp2cJVmEuxbTgpXM2gRHSNLE25OCmNxK+aeBBPRBw=";
+    })
+    (fetchpatch {
       url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
-      sha256 = "1k3qp3jj0dksjr4dnppv6dvkwslrgk9c7p2n9vipqildpxgqp7w2";
+      hash = "sha256-oioJ5M7DAUVzX8k998p2h/APn8azw9Z8txmBuly2ouw=";
+    })
+    (fetchpatch {
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-gcc43.patch";
+      hash = "sha256-9pkJmEOmM5vd/5nm3AlsbJNX0oX1kCtFrmciGpStvlA=";
+    })
+    (fetchpatch {
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-glibc.patch";
+      hash = "sha256-yNL88XORTXl2qSYTlYCYDN2G++TzBxywBpYdK+ufwrA=";
+    })
+    (fetchpatch {
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix.patch";
+      hash = "sha256-UFXvtfVzJLRWvzbv0gaoVdt0vZOUj4UWWqoCZL/BDqE=";
+    })
+    (fetchpatch {
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/postfix-bsd.patch";
+      hash = "sha256-Noqq+FpSJb3heejGGHyLYYkHB3fC4qCv/p1XMfEGdx8=";
     })
   ];
 
@@ -44,7 +81,7 @@ stdenv.mkDerivation rec {
     bsd_games_cfg_pager=${less}
     EOF
 
-    sed -e s/getline/bsdgames_local_getline/g -i $(grep getline -rl .)
+    sed -e '/sigpause/d' -i hunt/hunt/otto.c
   '';
 
   postConfigure = ''
@@ -52,6 +89,7 @@ stdenv.mkDerivation rec {
        -e "s,-o root -g root, ," \
        -e "s,-o root -g games, ," \
        -e "s,.*chown.*,true," \
+       -e 's/install -c -m 2755/install -Dm755/' \
        -e 's/INSTALL_VARDATA.*/INSTALL_VARDATA := true/' \
        -e 's/INSTALL_HACKDIR.*/INSTALL_HACKDIR := true/' \
        -e 's/INSTALL_DM.*/INSTALL_DM := true/' \
@@ -59,11 +97,15 @@ stdenv.mkDerivation rec {
        Makeconfig install-man
   '';
 
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
+
   meta = {
     homepage = "http://www.t2-project.org/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
-}
+})

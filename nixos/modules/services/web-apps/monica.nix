@@ -296,7 +296,7 @@ in {
       DB_USERNAME = db.user;
       MAIL_DRIVER = mail.driver;
       MAIL_FROM_NAME = mail.fromName;
-      MAIL_FROM = mail.from;
+      MAIL_FROM_ADDRESS = mail.from;
       MAIL_HOST = mail.host;
       MAIL_PORT = mail.port;
       MAIL_USERNAME = mail.user;
@@ -355,10 +355,10 @@ in {
               index = "index.php";
               tryFiles = "$uri $uri/ /index.php?$query_string";
             };
-            "~ \.php$".extraConfig = ''
+            "~ \\.php$".extraConfig = ''
               fastcgi_pass unix:${config.services.phpfpm.pools."monica".socket};
             '';
-            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+            "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
               extraConfig = "expires 365d;";
             };
           };

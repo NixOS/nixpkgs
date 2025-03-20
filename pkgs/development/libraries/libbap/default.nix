@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, ctypes-foreign, autoreconfHook,
-  which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bap,
+  ocaml,
+  findlib,
+  ctypes,
+  ctypes-foreign,
+  autoreconfHook,
+  which,
+}:
 
 stdenv.mkDerivation {
   pname = "libbap";
@@ -12,8 +22,17 @@ stdenv.mkDerivation {
     hash = "sha256-la47HR+i99ueDEWR91YIXGdKflpE1E0qmmJjeowmGSI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
-  buildInputs = [ bap ctypes ctypes-foreign ];
+  nativeBuildInputs = [
+    autoreconfHook
+    which
+    ocaml
+    findlib
+  ];
+  buildInputs = [
+    bap
+    ctypes
+    ctypes-foreign
+  ];
 
   preInstall = ''
     mkdir -p $out/lib

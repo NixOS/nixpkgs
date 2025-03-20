@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, mpv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  mpv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ff2mpv";
@@ -6,12 +12,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "woodruffw";
-    repo = pname;
+    repo = "ff2mpv";
     rev = "v${version}";
     hash = "sha256-Xx18EX/MxLrnwZGwMFZJxJURUpjU2P01CQue5XbZ3fw=";
   };
 
-  buildInputs = [ python3 mpv ];
+  buildInputs = [
+    python3
+    mpv
+  ];
 
   postPatch = ''
     patchShebangs .

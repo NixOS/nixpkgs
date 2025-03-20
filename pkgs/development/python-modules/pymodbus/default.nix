@@ -8,6 +8,7 @@
   pygments,
   pyserial,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.7.2";
+  version = "3.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,14 +29,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y+WNXYqKkr8WQUNSmcWNRjF6yWkxD+l6++K1fiBOHek=";
+    tag = "v${version}";
+    hash = "sha256-0jS18oCVX+WvGvaIlug3Wbf4oJUmspGYlcmJQR0MXhI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html " ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -52,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     redis

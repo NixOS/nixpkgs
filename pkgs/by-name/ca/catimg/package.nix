@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "catimg";
@@ -6,12 +11,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "posva";
-    repo = pname;
+    repo = "catimg";
     rev = version;
     sha256 = "0a2dswbv4xddb2l2d55hc43lzvjwrjs5z9am7v6i0p0mi2fmc89s";
   };
 
   nativeBuildInputs = [ cmake ];
+  env = lib.optionalAttrs (stdenv.hostPlatform.libc == "glibc") {
+    CFLAGS = "-D_DEFAULT_SOURCE";
+  };
 
   meta = with lib; {
     license = licenses.mit;

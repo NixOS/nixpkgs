@@ -3,6 +3,7 @@
   symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -25,7 +26,7 @@
 
 let
   # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probbly not required,
+  # Some of those dependencies are probably not required,
   # but it breaks when the store path is different between torch and torchaudio
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";
@@ -82,11 +83,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BRn4EZ7bIujGA6b/tdMu9yDqJNEaf/f1Kj45aLHC/JI=";
   };
 
-  patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
+  patches = [
+    ./0001-setup.py-propagate-cmakeFlags.patch
+
+    # fix missing FLT_MAX symbol (dropped in CUDA 12.5)
+    # https://github.com/pytorch/audio/pull/3811
+    # drop after update to torchaudio 2.6.0
+    (fetchpatch {
+      url = "https://github.com/pytorch/audio/commit/7797f83e1d66ff78872763e1da3a5fb2f0534c40.patch";
+      hash = "sha256-mHFCWuHhveyUP9cN0Kn6GXZsC3njTcM2ONVaB/qK1zU=";
+    })
+  ];
 
   postPatch =
     ''

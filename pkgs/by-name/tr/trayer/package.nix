@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gdk-pixbuf,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trayer";
@@ -17,7 +24,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gdk-pixbuf gtk2 ];
+  buildInputs = [
+    gdk-pixbuf
+    gtk2
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -30,4 +40,3 @@ stdenv.mkDerivation rec {
     mainProgram = "trayer";
   };
 }
-

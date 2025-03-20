@@ -1,21 +1,21 @@
 {
   lib,
-  fetchFromGitHub,
   php,
+  fetchFromGitHub,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "deployer";
-  version = "7.4.0";
+  version = "7.5.12";
 
   src = fetchFromGitHub {
     owner = "deployphp";
     repo = "deployer";
-    rev = "v${finalAttrs.version}^";
-    hash = "sha256-nSrW4o0Tb8H056AAjjMzbsAVvWY2z1pdWmPFZDpDr1k=";
+    rev = "7b108897baa94b8ac438c821ec1fb815d95eba77";
+    hash = "sha256-wtkixHexsJNKsLnnlHssh0IzxwWYMPKDcaf/D0zUNKk=";
   };
 
-  vendorHash = "sha256-pUZoQV1CVErnsSu6jVNOJROqBZZ4xymKXm25GW67HmM=";
+  vendorHash = "sha256-0uBI30n31W0eDVA9/W366O0Qo2jWZBqEL+YbJx4J7P0=";
 
   meta = {
     changelog = "https://github.com/deployphp/deployer/releases/tag/v${finalAttrs.version}";

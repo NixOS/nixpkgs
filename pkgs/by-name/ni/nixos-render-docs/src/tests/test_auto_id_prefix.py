@@ -3,6 +3,7 @@ from pathlib import Path
 from markdown_it.token import Token
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
 from nixos_render_docs.md import Converter
+from nixos_render_docs.redirects import Redirects
 
 auto_id_prefix="TEST_PREFIX"
 def set_prefix(token: Token, ident: str) -> None:

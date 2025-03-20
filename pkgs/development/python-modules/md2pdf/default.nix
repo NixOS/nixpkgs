@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmaupetit";
     repo = "md2pdf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9B1vVfcBHk+xdE2Xouu95j3Hp4xm9d5DgPv2zKwCvHY=";
   };
 

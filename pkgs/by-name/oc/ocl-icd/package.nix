@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ruby
-, opencl-headers
-, autoreconfHook
-, windows
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  opencl-headers,
+  autoreconfHook,
+  windows,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +24,7 @@ stdenv.mkDerivation rec {
     ruby
   ];
 
-  buildInputs = [ opencl-headers ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.dlfcn ];
+  buildInputs = [ opencl-headers ] ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.dlfcn ];
 
   configureFlags = [
     "--enable-custom-vendordir=/run/opengl-driver/etc/OpenCL/vendors"
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
     mainProgram = "cllayerinfo";
-    homepage    = "https://github.com/OCL-dev/ocl-icd";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/OCL-dev/ocl-icd";
+    license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ r-burns ];
   };

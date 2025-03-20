@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, imake, gccmakedep, libXt, libXext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  gccmakedep,
+  libXt,
+  libXext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xearth";
@@ -6,16 +14,33 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://xearth.org/${pname}-${version}.tar.gz";
-    sha256 = "bcb1407cc35b3f6dd3606b2c6072273b6a912cbd9ed1ae22fb2d26694541309c";
+    hash = "sha256-vLFAfMNbP23TYGssYHInO2qRLL2e0a4i+y0maUVBMJw=";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libXt libXext ];
+  postPatch = "sed -i '48i #include <stdlib.h>' gifout.c";
 
-  installFlags = [ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1"];
-  installTargets = [ "install" "install.man" ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    libXt
+    libXext
+  ];
+
+  installFlags = [
+    "DESTDIR=$(out)/"
+    "BINDIR=bin"
+    "MANDIR=man/man1"
+  ];
+
+  installTargets = [
+    "install"
+    "install.man"
+  ];
+
+  meta = {
     description = "sets the X root window to an image of the Earth";
     mainProgram = "xearth";
     homepage = "https://xearth.org";
@@ -24,13 +49,12 @@ stdenv.mkDerivation rec {
       correctly shaded for the current position of the Sun.
       By default, xearth updates the displayed image every  five  minutes.
     '';
-    maintainers = [ maintainers.mafo ];
-    license  = {
+    maintainers = with lib.maintainers; [ mafo ];
+    license = {
       fullName = "xearth license";
       url = "https://xearth.org/copyright.html";
       free = true;
     };
-    platforms=platforms.unix;
+    platforms = lib.platforms.unix;
   };
-
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, unstableGitUpdater
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  unstableGitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,12 +13,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "emil-e";
-    repo  = "rapidcheck";
-    rev   = "ff6af6fc683159deb51c543b065eba14dfcf329b";
+    repo = "rapidcheck";
+    rev = "ff6af6fc683159deb51c543b065eba14dfcf329b";
     hash = "sha256-Ixz5RpY0n8Un/Pv4XoTfbs40+70iyMbkQUjDqoLaWOg=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
 

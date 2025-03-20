@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, berglas }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  berglas,
+}:
 
 let
   skipTests = {
@@ -13,30 +19,32 @@ let
     update = "Update";
   };
 
-  skipTestsCommand =
-    builtins.foldl' (acc: goFileName:
-      let testName = builtins.getAttr goFileName skipTests; in
-      ''
-        ${acc}
-        substituteInPlace pkg/berglas/${goFileName}_test.go \
-          --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
-          --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
-      ''
-    ) "" (builtins.attrNames skipTests);
+  skipTestsCommand = builtins.foldl' (
+    acc: goFileName:
+    let
+      testName = builtins.getAttr goFileName skipTests;
+    in
+    ''
+      ${acc}
+      substituteInPlace pkg/berglas/${goFileName}_test.go \
+        --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
+        --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
+    ''
+  ) "" (builtins.attrNames skipTests);
 in
 
 buildGoModule rec {
   pname = "berglas";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aTUMEn/QkPzvAyUvMxyqLl6KWFHs+dQK0VDqYv36AGM=";
+    sha256 = "sha256-bW8D8g4FPx0i4iPP7Pvm0UpaJFNsECR3kuHEZn8NLx0=";
   };
 
-  vendorHash = "sha256-n/NOAmOOoZMFZGreUGNgrZ3XGbhmI52KtgakcJ/SJIc=";
+  vendorHash = "sha256-+ncl/6BJ7J2cby29I1IvkUgbiyDP+co/+Cyyh/V8A1I=";
 
   ldflags = [
     "-s"

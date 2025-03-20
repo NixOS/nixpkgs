@@ -1,14 +1,15 @@
-{ deadbeef
-, fetchFromGitHub
-, fftw
-, glib
-, gtk3
-, lib
-, pkg-config
-, stdenv
+{
+  deadbeef,
+  fetchFromGitHub,
+  fftw,
+  glib,
+  gtk3,
+  lib,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "deadbeef-musical-spectrum-plugin";
   version = "unstable-2020-07-01";
 
@@ -20,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ deadbeef fftw glib gtk3 ];
+  buildInputs = [
+    deadbeef
+    fftw
+    glib
+    gtk3
+  ];
   makeFlags = [ "gtk3" ];
 
   installPhase = ''

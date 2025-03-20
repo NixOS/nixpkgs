@@ -10,8 +10,8 @@
   # buildInputs
   openssl,
   stdenv,
-  darwin,
 
+  buildPackages,
   versionCheckHook,
 
   # passthru
@@ -20,22 +20,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.42.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
-    rev = "refs/tags/${version}";
-    hash = "sha256-f+yVuyoer0bn38iYR94TUKRT5VzQHDZQyowtas+QOK0=";
+    tag = version;
+    hash = "sha256-K9xad5Odza0Oxz49yMJjqpfh3cCgmWnbAlv069fHV6Q=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-ydNdg6VI+Z5wXe2bEzRtavw0rsrcJkdsJ5DvXhbaDE4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+gFa8hruXIweFm24XvfhqXZxNLAYKVNX+xBSCdAk54A=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -46,23 +41,20 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk;
-      [
-        frameworks.CoreServices
-        frameworks.SystemConfiguration
-        Libsystem
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd rye \
-      --bash <($out/bin/rye self completion -s bash) \
-      --fish <($out/bin/rye self completion -s fish) \
-      --zsh <($out/bin/rye self completion -s zsh)
-  '';
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd rye \
+        --bash <(${emulator} $out/bin/rye self completion -s bash) \
+        --fish <(${emulator} $out/bin/rye self completion -s fish) \
+        --zsh <(${emulator} $out/bin/rye self completion -s zsh)
+    '';
 
   checkFlags = [
     "--skip=utils::test_is_inside_git_work_tree"

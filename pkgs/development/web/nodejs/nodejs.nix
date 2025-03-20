@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, http-parser, icu, bash
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, sqlite, http-parser, icu, bash
 , ninja, pkgconf, unixtools, runCommand, buildPackages
 , testers
 # for `.pkgs` attribute
@@ -97,8 +97,15 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedHttpParser = !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
+  useSharedSQLite = lib.versionAtLeast version "22.5";
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
+  sharedLibDeps = {
+    inherit openssl zlib libuv;
+  } // (lib.optionalAttrs useSharedHttpParser {
+    inherit http-parser;
+  }) // (lib.optionalAttrs useSharedSQLite {
+    inherit sqlite;
+  });
 
   copyLibHeaders =
     map
@@ -141,17 +148,14 @@ let
       # Note: do not set TERM=dumb environment variable globally, it is used in
       # test-ci-js test suite to skip tests that otherwise run fine.
       NINJA = "TERM=dumb ninja";
-    } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
-      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300 -Wno-macro-redefined";
     };
 
     # NB: technically, we do not need bash in build inputs since all scripts are
     # wrappers over the corresponding JS scripts. There are some packages though
     # that use bash wrappers, e.g. polaris-web.
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ zlib libuv openssl http-parser icu bash ];
+      ++ [ zlib libuv openssl http-parser icu bash ]
+      ++ lib.optionals useSharedSQLite [ sqlite ];
 
     nativeBuildInputs =
       [
@@ -291,6 +295,7 @@ let
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
       "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
+        # Tests don't work in sandbox.
         "test-child-process-exec-env"
         "test-child-process-uid-gid"
         "test-fs-write-stream-eagain"
@@ -321,6 +326,9 @@ let
         "test-watch-mode-files_watcher"
       ] ++ lib.optionals (!lib.versionAtLeast version "22") [
         "test-tls-multi-key"
+      ] ++ lib.optionals stdenv.hostPlatform.is32bit [
+        # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+        "test-fs-utimes-y2K38"
       ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
         # Disable tests that don’t work under macOS sandbox.
         "test-macos-app-sandbox"

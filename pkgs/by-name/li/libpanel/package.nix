@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpanel";
   version = "1.8.1";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor finalAttrs.version}/libpanel-${finalAttrs.version}.tar.xz";
     hash = "sha256-uHuPqbeXaMxwQkN5PwFYoECh5G03uYiRiFRaf33Kpvs=";
   };
 
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  mesonFlags = [ (lib.mesonBool "install-examples" true) ];
+  mesonFlags = [
+    (lib.mesonBool "install-examples" true)
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -59,7 +61,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = pname; };
+    updateScript = gnome.updateScript {
+      packageName = "libpanel";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {
@@ -70,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

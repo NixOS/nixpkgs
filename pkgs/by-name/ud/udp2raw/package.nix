@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, iptables
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  iptables,
 }:
 
 stdenv.mkDerivation rec {

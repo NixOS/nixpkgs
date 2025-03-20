@@ -26,11 +26,12 @@ makeScopeWithSplicing' {
     gnatcoll-core     = self.callPackage ../development/ada-modules/gnatcoll/core.nix { };
 
     # gnatcoll-bindings repository
+    gnatcoll-cpp      = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "cpp"; };
     gnatcoll-gmp      = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "gmp"; };
     gnatcoll-iconv    = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "iconv"; };
     gnatcoll-lzma     = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "lzma"; };
     gnatcoll-omp      = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "omp"; };
-    gnatcoll-python3  = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "python3"; python3 = pkgs.python39; };
+    gnatcoll-python3  = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "python3"; python3 = pkgs.python312; };
     gnatcoll-readline = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "readline"; };
     gnatcoll-syslog   = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "syslog"; };
     gnatcoll-zlib     = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "zlib"; };

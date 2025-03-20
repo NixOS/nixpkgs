@@ -64,7 +64,7 @@ let
 
       buildTargets =
         [ "cli" ]
-        ++ lib.optionals finalAttrs.doCheck [ "tests" ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
         ++ lib.optionals (!static) [ "shared" ];
 
@@ -79,12 +79,10 @@ let
           "--with-bzip2"
           "--with-zlib"
           "--with-rst2man"
+          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
         ]
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "--cpu=aarch64"
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           "--enable-modules=jitter_rng"
@@ -126,8 +124,6 @@ in
   botan3 = common {
     version = "3.6.1";
     hash = "sha256-fLhXXYjSMsdxdHadf54ku0REQWBYWYbuvWbnScuakIk=";
-    # this patch fixes build errors on MacOS with SDK 10.12, recheck to remove this again
-    patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./botan3-macos.patch ];
   };
 
   botan2 = common {

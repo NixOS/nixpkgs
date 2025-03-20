@@ -27,7 +27,7 @@
 , libsecret
 , libuuid
 , libxkbcommon
-, mesa
+, libgbm
 , nss
 , pango
 , systemd
@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.16.0";
+  version = "5.18.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-gDinm7kILm4SKlWmaJ1grwRuketGs/aWlJfNEF+AIRo=";
+    sha256 = "sha256-R5Xw9uIptVPYEZ73TtdWarQNtn8nhAUN+zA5tnzTaCU=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook3 ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     pango
     systemd
-    mesa # for libgbm
+    libgbm
     nss
     libuuid
     libdrm
@@ -92,8 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies =
     [ (lib.getLib systemd) libnotify libdbusmenu xdg-utils ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   installPhase = ''
     runHook preInstall
 
@@ -108,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
       --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"

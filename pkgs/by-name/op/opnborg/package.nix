@@ -2,24 +2,27 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "opnborg";
-  version = "0.1.24";
+  version = "0.1.66";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "opnborg";
     rev = "v${version}";
-    hash = "sha256-lJPu1Ixx1BUWrZ+h6AuxLyVMScKAmcp+sK2duOxC9e0=";
+    hash = "sha256-7WYDkAHhCrVghNd+77XfwF1WwYJ8azt0Twn4d/rDjU8=";
   };
 
-  vendorHash = "sha256-REXJryUcu+/AdVx1aK0nJ98Wq/EdhrZqL24kC1wK6mc=";
+  vendorHash = "sha256-i9MDtaR5uTrIhpliCyK/WMZqT69TyPVLQI9AGHCWavU=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/opnborg/releases/tag/v${version}";

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-update curl coreutils jq common-updater-scripts nix-prefetch
+#!nix-shell -i bash -p bash nix-update curl coreutils jq
+# shellcheck shell=bash
 
 # adapted from pkgs/by-name/ya/yazi-unwrapped/update.sh
 
@@ -28,17 +29,12 @@ if [[ "$oldVersion" == "$latestVersion" ]]; then
     exit 0
 fi
 
-echo "Updating viddy"
+echo "Updating viddy $oldVersion -> $latestVersion"
 
-# Version
-update-source-version viddy "${latestVersion}"
+# nix-prefetch broken due to ninja finalAttrs.src.rev
+nix-update viddy --version "$latestVersion"
 
-pushd "$SCRIPT_DIR"
 # Build date
-sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' package.nix
+sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' "$SCRIPT_DIR/package.nix"
 
-# Hashes
-# https://github.com/msteen/nix-prefetch/issues/51
-cargoHash=$(nix-prefetch --option extra-experimental-features flakes "{ sha256 }: (import $NIXPKGS_DIR {}).viddy.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
-sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' package.nix
-popd
+

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.95";
+  version = "0.2.105";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tschamm";
     repo = "boschshcpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5kPC6UxqysJEHNWDoXhg7oo/hQSKICuqWmOdjlljoLs=";
+    tag = version;
+    hash = "sha256-aouZryqn2qMdfqTFXP49UUY0X1HzQCldLQUBfnlUfHI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     getmac
     requests

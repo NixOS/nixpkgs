@@ -3,15 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  fetchpatch,
+  dbus,
   openssl,
-  sqlite,
-  stdenv,
-  darwin,
+  perl,
+  cacert,
   nix-update-script,
 }:
 let
-  version = "0.4.0";
+  version = "0.6.0";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -21,34 +20,23 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-Se0f5jfYBmvemrYRKduDr1yT3fB2wfQP1fDpa/qrYlI=";
+    hash = "sha256-L5KZaBJDG0z6NUGPJfbOkKCp1xQEzqfJ9GREx189VqU=";
   };
 
-  patches = [
-    # apply patches to fix failing tests <https://github.com/josueBarretogit/manga-tui/pull/56>
-    (fetchpatch {
-      url = "https://github.com/josueBarretogit/manga-tui/commit/131a5208e6a3d74a9ad852baab75334e4a1ebf34.patch";
-      hash = "sha256-RIliZcaRVUOb33Cl+uBkMH4b34S1JpvnPGv+QCFQZ58=";
-    })
-    ./0001-fix-remove-flaky-test.patch
-  ];
-
-  cargoHash = "sha256-IufJPCvUEWR5p4PrFlaiQPW9wyIFj/Pd/JHki69L6Es=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gmG/gDozYizwjcm3SGs2m8oLiuWp6oxJPOB3FlHfW+4=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    dbus
+    (lib.getDev openssl)
+  ];
+
+  checkInputs = [
+    perl
+    cacert
+  ];
 
   meta = {
     description = "Terminal-based manga reader and downloader with image support";

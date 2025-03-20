@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "15five";
     repo = "django-scim2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-larDh4f9/xVr11/n/WfkJ2Tx45DMQqyK3ZzkWAvzeig=";
   };
 

@@ -1,10 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kbst";
   version = "0.2.1";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "kbst";
     repo = "kbst";
     rev = "v${version}";
@@ -14,9 +18,12 @@ buildGoModule rec {
   vendorHash = "sha256-+FY6KGX606CfTVKM1HeHxCm9PkaqfnT5XeOEXUX3Q5I=";
 
   ldflags =
-    let package_url = "github.com/kbst/kbst"; in
+    let
+      package_url = "github.com/kbst/kbst";
+    in
     [
-      "-s" "-w"
+      "-s"
+      "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
       "-X ${package_url}.gitCommit=${src.rev}"

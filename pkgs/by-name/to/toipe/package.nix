@@ -1,4 +1,8 @@
-{ lib, fetchCrate, rustPlatform }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "toipe";
@@ -9,12 +13,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-L4JemOxpynGYsA8FgHnMv/hrogLSRaaiIzDjxzZDqjM=";
   };
 
-  cargoHash = "sha256-ShJ7dbd3oNo3qZJ5+ut+NfLF9j8kPPZy9yC2zl/s56k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bBkHqcPWE6jkqvUZ28ukUidET9XkRQ9t9bfTpHC5Jyo=";
 
   meta = with lib; {
     description = "Trusty terminal typing tester";
     homepage = "https://github.com/Samyak2/toipe";
     license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier samyak ];
+    maintainers = with maintainers; [
+      loicreynier
+      samyak
+    ];
   };
 }

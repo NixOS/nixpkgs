@@ -9,7 +9,9 @@ let
         ln --symbolic ${pkgs.writeShellApplication { inherit name text; }}/bin/${name} $out/${name}
       '';
     in
-    pkgs.runCommandLocal "buildkite-agent-hooks" { } ''
+    pkgs.runCommand "buildkite-agent-hooks" {
+      preferLocalBuild = true;
+    } ''
       mkdir $out
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkHookEntry hooks)}
     '';

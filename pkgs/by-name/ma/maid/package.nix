@@ -1,7 +1,8 @@
-{ bundlerApp
-, bundlerUpdateScript
-, callPackage
-, lib
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  callPackage,
+  lib,
 }:
 
 bundlerApp {

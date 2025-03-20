@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, riot
-, tty
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  riot,
+  tty,
 }:
 
 buildDunePackage rec {

@@ -1,18 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libllvm,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pprof";
-  version = "0-unstable-2024-09-25";
+  version = "0-unstable-2025-03-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "fa3061bff0bcf0d611f07dbdba73665bd2bbac97";
-    hash = "sha256-wUHCbgmJI3YTettVVrLnRPIexaHuAQDmbnHXPTLBBYM=";
+    rev = "9094ed2288e75ea6574fce30e1474932a96bb048";
+    hash = "sha256-pvjKxBHIL1wq24Hsq3UOtYh+MEH4G1dOSz4lEyiTPRc=";
   };
+
+  nativeCheckInputs = [
+    libllvm
+  ];
 
   postPatch = ''
     rm -rf browsertests   # somewhat independent module to ignore.

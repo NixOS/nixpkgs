@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, vala
-, pkg-config
-, python3
-, glib
-, gtk3
-, meson
-, ninja
-, libgee
-, pantheon
-, desktop-file-utils
-, xorg
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  vala,
+  pkg-config,
+  python3,
+  glib,
+  gtk3,
+  meson,
+  ninja,
+  libgee,
+  pantheon,
+  desktop-file-utils,
+  xorg,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
-    repo = pname;
+    repo = "ideogram";
     rev = version;
     sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };

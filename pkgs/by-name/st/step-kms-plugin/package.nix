@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, pcsclite
-, softhsm
-, opensc
-, yubihsm-shell
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  pcsclite,
+  softhsm,
+  opensc,
+  yubihsm-shell,
 }:
 
 buildGoModule rec {
   pname = "step-kms-plugin";
-  version = "0.11.6";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PaOe24rXu6e8jhjwpuQquPQidQDSxI1WOAMYJSLjbSI=";
+    hash = "sha256-6+5xZGzLsXu+283aOCeRmzxvjsk5PXTpbszVYuSSuGA=";
   };
 
-  vendorHash = "sha256-N8Wy4DHxP6yQOfWDmyVPSi9eHj8G01SSIxQmqKujRgo=";
+  vendorHash = "sha256-S8T2GMFOVYqG2+8jdDRNJfAN057HagUA3HR0/UBpBR0=";
 
   proxyVendor = true;
 

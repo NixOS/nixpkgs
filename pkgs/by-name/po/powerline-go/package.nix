@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "powerline-go";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "justjanne";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3IeyxAc+FRcVsL9AiVr6Jku5f5y3MTT9SXwVQW9MkNo=";
+    hash = "sha256-DLw/6jnJo0IAh0/Y21mfCLP4GgTFlUGvuwyWJwhzYFU=";
   };
 
   vendorHash = "sha256-W7Lf9s689oJy4U5sQlkLt3INJwtvzU2pot3EFimp7Jw=";

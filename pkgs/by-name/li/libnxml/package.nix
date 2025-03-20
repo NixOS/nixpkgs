@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bakulf";
     repo = "libnxml";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-6KI1bsfDgGJ4x8Wv7fcwCKm5AILa3jLnV53JY1g9B+M=";
   };
 

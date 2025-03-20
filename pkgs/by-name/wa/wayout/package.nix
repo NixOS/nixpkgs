@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromSourcehut
+{
+  lib,
+  rustPlatform,
+  fetchFromSourcehut,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -9,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~shinyzenith";
-    repo = pname;
+    repo = "wayout";
     rev = version;
     sha256 = "sha256-EzRetxx0NojhBlBPwhQ7p9rGXDUBlocVqxcEVGIF3+0=";
   };
 
-  cargoHash = "sha256-QlxXbfeWJdCythYRRLSpJbTzKkwrL4kmAfyL3tRt194=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RiM9d/aOCnV0t13QQO1fdw+QPGMoF/EjIDA2uttjXcQ=";
 
   meta = with lib; {
     description = "Simple output management tool for wlroots based compositors implementing";

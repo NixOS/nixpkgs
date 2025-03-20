@@ -1,29 +1,24 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   testers,
   weaver,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "weaver";
-  version = "0.10.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     rev = "v${version}";
-    hash = "sha256-hSoMt+4D1bpENBD9NmuVBLDUOJkau5Sk2OHS5RyDRYQ=";
+    hash = "sha256-kfBWI+1f39oSSKYflXfXnBTc96OZch7o5HWfOgOfuxs=";
   };
 
-  cargoHash = "sha256-4rHDulSsFvKly5M5bo1AtEAl280N/hxhznTngCxw36Y=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk_11_0.frameworks; [ SystemConfiguration ]
-  );
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KK6Cp6viQPp9cSxs1dP1tf/bIMgkKiaKPE6VytyHyZA=";
 
   checkFlags = [
     # Skip tests requiring network

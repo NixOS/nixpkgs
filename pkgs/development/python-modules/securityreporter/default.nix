@@ -20,9 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fpsvjbPE6iaOmLxykGSkCjkhFTmb8xhXa8pDrWN66KM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   build-system = [ poetry-core ];
 

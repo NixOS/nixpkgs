@@ -1,40 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, testers
-, uasm
+{
+  lib,
+  gcc13Stdenv,
+  fetchFromGitHub,
+  testers,
+  uasm,
 }:
 
+let
+  stdenv = gcc13Stdenv;
+in
 stdenv.mkDerivation rec {
   pname = "uasm";
-  version = "2.56.2";
+  version = "2.57";
 
   src = fetchFromGitHub {
     owner = "Terraspace";
-    repo = pname;
-    # Specifying only the tag results in the following error during download:
-    # the given path has multiple possibilities: #<Git::Ref:0x00007f618689c378>, #<Git::Ref:0x00007f618689c1e8>
-    # Probably because upstream has both a tag and a branch with the same name
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QiRBscY6zefeLDDVhS/+j9yIJ+5QhgkDQh1CLl/CslM=";
+    repo = "uasm";
+    tag = "v${version}r";
+    hash = "sha256-HaiK2ogE71zwgfhWL7fesMrNZYnh8TV/kE3ZIS0l85w=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-v2_55-compilation-on-macos.patch";
-      url = "https://github.com/Terraspace/UASM/commit/b50c430cc3083c7f32e288a9f64fe1cafb03091d.patch";
-      sha256 = "sha256-FGFB282LSEKtGD1cIRH+Qi5bye5Gx4xb0Ty4J03xjCU";
-    })
-  ];
 
   enableParallelBuilding = true;
 
   makefile =
-    if stdenv.hostPlatform.isDarwin then
-      "ClangOSX64.mak"
+    if gcc13Stdenv.hostPlatform.isDarwin then
+      "Makefile-OSX-Clang-64.mak"
     else
-      "gccLinux64.mak";
+      "Makefile-Linux-GCC-64.mak";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -60,5 +52,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;
+    broken = stdenv.isDarwin;
   };
 }

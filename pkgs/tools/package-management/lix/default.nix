@@ -4,7 +4,7 @@
   boehmgc,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
+  rustPlatform,
   Security,
 
   storeDir ? "/nix/store",
@@ -54,18 +54,44 @@ lib.makeExtensible (self: {
   buildLix = common;
 
   lix_2_90 = (
-    common {
+    common rec {
       version = "2.90.0";
-      hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
-      docCargoHash = "sha256-vSf9MyD2XzofZlbzsmh6NP69G+LiX72GX4Um9UJp3dc=";
+
+      src = fetchFromGitHub {
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
+      };
+
+      docCargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-doc-${version}";
+        inherit src;
+        allowGitDependencies = false;
+        sourceRoot = "${src.name or src}/lix-doc";
+        hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
+      };
     }
   );
 
   lix_2_91 = (
-    common {
+    common rec {
       version = "2.91.1";
-      hash = "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=";
-      docCargoHash = "sha256-F6Ld0HfRvW9r5zn8eMTP6djnV/jvwjYQet4Ghp2T90k=";
+
+      src = fetchFromGitHub {
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=";
+      };
+
+      docCargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-doc-${version}";
+        inherit src;
+        allowGitDependencies = false;
+        sourceRoot = "${src.name or src}/lix-doc";
+        hash = "sha256-U820gvcbQIBaFr2OWPidfFIDXycDFGgXX1NpWDDqENs=";
+      };
     }
   );
 

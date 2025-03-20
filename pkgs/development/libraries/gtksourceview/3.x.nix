@@ -1,18 +1,37 @@
-{ lib, stdenv, fetchurl, pkg-config, atk, cairo, glib, gtk3, pango, vala
-, libxml2, perl, intltool, gettext, gobject-introspection, dbus, xvfb-run, shared-mime-info
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  atk,
+  cairo,
+  glib,
+  gtk3,
+  pango,
+  vala,
+  libxml2,
+  perl,
+  intltool,
+  gettext,
+  gobject-introspection,
+  dbus,
+  xvfb-run,
+  shared-mime-info,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "3.24.11";
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zbpj283b5ycz767hqz5kdq02wzsga65pp4fykvhg8xj6x50f6v9";
-  };
+  src =
+    let
+      inherit (finalAttrs) pname version;
+    in
+    fetchurl {
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      sha256 = "1zbpj283b5ycz767hqz5kdq02wzsga65pp4fykvhg8xj6x50f6v9";
+    };
 
   propagatedBuildInputs = [
     # Required by gtksourceview-3.0.pc
@@ -21,13 +40,32 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config intltool perl gobject-introspection vala ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    perl
+    gobject-introspection
+    vala
+  ];
 
-  nativeCheckInputs = [ xvfb-run dbus ];
+  nativeCheckInputs = [
+    xvfb-run
+    dbus
+  ];
 
-  buildInputs = [ atk cairo glib pango libxml2 gettext ];
+  buildInputs = [
+    atk
+    cairo
+    glib
+    pango
+    libxml2
+    gettext
+  ];
 
   preBuild = ''
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"

@@ -27,16 +27,17 @@ let
 
   self = buildRustPackage' {
     pname = "czkawka";
-    version = "8.0.0";
+    version = "9.0.0";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
-      rev = "refs/tags/${self.version}";
-      hash = "sha256-Uxko2TRIjqQvd7n9C+P7oMUrm3YY5j7TVzvijEjDwOM=";
+      tag = self.version;
+      hash = "sha256-ePiHDfQ1QC3nff8uWE0ggiTuulBomuoZ3ta0redUYXY=";
     };
 
-    cargoHash = "sha256-DR2JU+QcGWliNoRMjSjJns7FsicpNAX5gTariFuQ/dw=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-Djvb5Hen6XPm6aJuwa6cGPojz9+kXXidysr3URDwDFM=";
 
     nativeBuildInputs = [
       gobject-introspection
@@ -105,7 +106,6 @@ let
       license = with lib.licenses; [ mit ];
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         yanganto
         _0x4A6F
       ];

@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "miniscript";
   version = "unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "sipa";
-    repo = pname;
+    repo = "miniscript";
     rev = "6806dfb15a1fafabf7dd28aae3c9d2bc49db01f1";
     sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };
 
-    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Replace hardcoded g++ with c++ so clang can be used
     # on darwin
     substituteInPlace Makefile \

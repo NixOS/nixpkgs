@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +12,11 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
+    maintainers = with maintainers; [
+      cole-h
+      grahamc
+      raitobezarius
+    ];
     doc = ./external.md;
   };
 

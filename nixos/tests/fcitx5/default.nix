@@ -160,7 +160,7 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
-            assert file_content == "☺一下한कか\n"
+            assert file_content == "☺一下한कか\n", f'output does not match input:\n{file_content}'
       ''
   ;
 })

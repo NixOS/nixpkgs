@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, netpbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  netpbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jwilk";
-    repo = pname;
+    repo = "fbcat";
     rev = version;
     sha256 = "sha256-ORzcd8XGy2BfwuPK5UX+K5Z+FYkb+tdg/gHl3zHjvbk=";
   };
@@ -33,4 +34,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

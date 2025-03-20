@@ -1,9 +1,19 @@
-{ stdenv, lib, fetchzip, dpkg, autoPatchelfHook, cups }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  dpkg,
+  autoPatchelfHook,
+  cups,
+}:
 let
   debPlatform =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "i386"
-         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "amd64"
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      "i386"
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation rec {
   pname = "fxlinuxprint";
@@ -15,7 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
   buildInputs = [ cups ];
 
   sourceRoot = ".";

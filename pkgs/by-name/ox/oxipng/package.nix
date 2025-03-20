@@ -1,17 +1,29 @@
-{ lib, stdenv, fetchCrate, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
-  version = "9.1.2";
+  version = "9.1.4";
   pname = "oxipng";
 
-  src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-uP4wLqL0c/dLiczumsq+Ad5ljNvi85RwoYS24fg8kFo=";
+  # do not use fetchCrate (only repository includes tests)
+  src = fetchFromGitHub {
+    owner = "shssoichiro";
+    repo = "oxipng";
+    tag = "v${version}";
+    hash = "sha256-cwujBgvGdNvD8vKp3+jNxcxkw/+M2FooNgsw+RejyrM=";
   };
 
-  cargoHash = "sha256-LZ3YIosDpjDYVACWQsr/0XhgX4fyo8CyZG58WfLSzCs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Z0otTCFwtGuSC1XBM3jcgGDFPZuMzQikZaYCnR+S6Us=";
 
-  doCheck = !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
+  # don't require qemu for aarch64-linux tests
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";

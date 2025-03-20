@@ -31,7 +31,7 @@
 , libpulseaudio
 , libuuid
 , libxshmfence
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -51,14 +51,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "114.0.5282.102";
+  version = "117.0.5408.93";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-PBbozIdA+cfEzGIyL1P+25FZtrnd7ldctOtZYomKd/8=";
+    hash = "sha256-1Qi1Suh5gDJXFOnI3sjmLCNrNFDqV9n1sTh3rFrRBro=";
   };
-
-  unpackPhase = "dpkg-deb -x $src .";
 
   nativeBuildInputs = [
     dpkg
@@ -98,7 +96,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango

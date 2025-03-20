@@ -1,4 +1,21 @@
-{ fetchurl, lib, stdenv, libconfuse, yajl, alsa-lib, libpulseaudio, libnl, meson, ninja, perl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libconfuse,
+  yajl,
+  alsa-lib,
+  libpulseaudio,
+  libnl,
+  meson,
+  ninja,
+  perl,
+  pkg-config,
+  asciidoc,
+  xmlto,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3status";
@@ -9,8 +26,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
   };
 
-  nativeBuildInputs = [ meson ninja perl pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
-  buildInputs = [ libconfuse yajl alsa-lib libpulseaudio libnl ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    perl
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+  ];
+  buildInputs = [
+    libconfuse
+    yajl
+    alsa-lib
+    libpulseaudio
+    libnl
+  ];
 
   meta = {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";

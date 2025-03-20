@@ -1,28 +1,67 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script
-, vala, meson, ninja, pkg-config, pantheon, gettext, wrapGAppsHook3, python3, desktop-file-utils
-, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  pantheon,
+  gettext,
+  wrapGAppsHook3,
+  python3,
+  desktop-file-utils,
+  gtk3,
+  glib,
+  libgee,
+  libgda5,
+  gtksourceview,
+  libxml2,
+  libsecret,
+  libssh2,
+}:
 
 let
-  sqlGda = libgda.override {
+  sqlGda = libgda5.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sequeler";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = pname;
+    repo = "sequeler";
     rev = "v${version}";
     sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config vala gettext wrapGAppsHook3 python3 desktop-file-utils ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    vala
+    gettext
+    wrapGAppsHook3
+    python3
+    desktop-file-utils
+  ];
 
-  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
+  buildInputs = [
+    gtk3
+    glib
+    pantheon.granite
+    libgee
+    sqlGda
+    gtksourceview
+    libxml2
+    libsecret
+    libssh2
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

@@ -1,14 +1,15 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, mate-polkit
-, mate-notification-daemon
-, wayfire
-, wayfirePlugins
-, gitUpdater
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  mate-polkit,
+  mate-notification-daemon,
+  wayfire,
+  wayfirePlugins,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {

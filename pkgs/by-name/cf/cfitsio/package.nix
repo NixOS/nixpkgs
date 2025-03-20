@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, bzip2
-, curl
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  bzip2,
+  curl,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xbreak hjones2199 ];
+    maintainers = with lib.maintainers; [
+      xbreak
+      hjones2199
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

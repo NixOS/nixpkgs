@@ -1,4 +1,12 @@
-{ stdenvNoCC, fetchurl, dpkg, lib, qt5, autoPatchelfHook, SDL2 }:
+{
+  stdenvNoCC,
+  fetchurl,
+  dpkg,
+  lib,
+  qt5,
+  autoPatchelfHook,
+  SDL2,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gamepad-tool";
@@ -9,12 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-ZuB0TOyT2B5QkU1o5h3/8PL85tBq06hlz5YclRanD88=";
   };
 
-  nativeBuildInputs = [ dpkg qt5.wrapQtAppsHook autoPatchelfHook ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
+  nativeBuildInputs = [
+    dpkg
+    qt5.wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   dontBuild = true;
 
@@ -31,8 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r usr/share/icons $out/share/icons
     substitute usr/share/applications/gamepad-tool-debian.desktop \
       $out/share/applications/gamepad-tool.desktop \
-      --replace "Exec=gamepad-tool" "Exec=$out/bin/gamepad-tool" \
-      --replace "/usr/share/icons/hicolor/256x256/apps/gamepad-tool.png" "$out/share/icons/hicolor/256x256/apps/gamepad-tool.png"
+      --replace-fail "/usr/share/icons/hicolor/256x256/apps/gamepad-tool.png" "gamepad-tool"
     runHook postInstall
   '';
 

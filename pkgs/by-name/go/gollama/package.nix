@@ -7,16 +7,21 @@
 
 buildGoModule rec {
   pname = "gollama";
-  version = "1.27.17";
+  version = "1.28.5";
 
   src = fetchFromGitHub {
     owner = "sammcj";
     repo = "gollama";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/KemOJwVHdb2BJnV53EVvbuE+0s3WOj4kzcox8hRZ6w=";
+    tag = "v${version}";
+    hash = "sha256-7wCBflX34prZJl4HhZUU2a2qHxaBs1fMKHpwE0vX1GE=";
   };
 
-  vendorHash = "sha256-MbadjPW9Oq3lRVa+Qcq4GXaZnBL0n6qLh5I2hJ0XhaY=";
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'Version = "1.28.0"' 'Version = "${version}"'
+  '';
+
+  vendorHash = "sha256-Y5yg54em+vqoWXxS3JVQVPEM+fLXgoblmY+48WpxSCQ=";
 
   doCheck = false;
 
@@ -25,7 +30,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  nativeInputChecks = [
+  # FIXME: error when running `env -i gollama`:
+  # "Error initializing logging: $HOME is not defined"
+  doInstallCheck = false;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
 

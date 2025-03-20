@@ -1,5 +1,3 @@
-name: Codeowners v2
-
 # This workflow depends on two GitHub Apps with the following permissions:
 # - For checking code owners:
 #   - Permissions:
@@ -19,12 +17,15 @@ name: Codeowners v2
 #
 # This split is done because checking code owners requires handling untrusted PR input,
 # while requesting code owners requires PR write access, and those shouldn't be mixed.
+#
+# Note that the latter is also used for ./eval.yml requesting reviewers.
+
+name: Codeowners v2
 
 on:
   pull_request_target:
     types: [opened, ready_for_review, synchronize, reopened, edited]
 
-# We don't need any default GitHub token
 permissions: {}
 
 env:
@@ -33,72 +34,78 @@ env:
   DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
 
 jobs:
+  get-merge-commit:
+    if: github.repository_owner == 'NixOS'
+    uses: ./.github/workflows/get-merge-commit.yml
+
   # Check that code owners is valid
   check:
     name: Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    needs: get-merge-commit
+    if: github.repository_owner == 'NixOS' && needs.get-merge-commit.outputs.mergedSha
     steps:
-    - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
-    - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
-      if: github.repository_owner == 'NixOS'
-      with:
-        # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
-        name: nixpkgs-ci
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR itself.
-    # We later build and run code from the base branch with access to secrets,
-    # so it's important this is not the PRs code.
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        path: base
+      # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR itself.
+      # We later build and run code from the base branch with access to secrets,
+      # so it's important this is not the PRs code.
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: base
 
-    - name: Build codeowners validator
-      run: nix-build base/ci -A codeownersValidator
+      - name: Build codeowners validator
+        run: nix-build base/ci -A codeownersValidator
 
-    - uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
-      id: app-token
-      with:
-        app-id: ${{ vars.OWNER_RO_APP_ID }}
-        private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
+      - uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_RO_APP_ID }}
+          private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
 
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        ref: refs/pull/${{ github.event.number }}/merge
-        path: pr
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          path: pr
 
-    - name: Validate codeowners
-      run: result/bin/codeowners-validator
-      env:
-        OWNERS_FILE: pr/${{ env.OWNERS_FILE }}
-        GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
-        REPOSITORY_PATH: pr
-        OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
-        # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
-        EXPERIMENTAL_CHECKS: "avoid-shadowing"
+      - name: Validate codeowners
+        run: result/bin/codeowners-validator
+        env:
+          OWNERS_FILE: pr/${{ env.OWNERS_FILE }}
+          GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY_PATH: pr
+          OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
+          # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
+          EXPERIMENTAL_CHECKS: "avoid-shadowing"
 
   # Request reviews from code owners
   request:
     name: Request
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    if: github.repository_owner == 'NixOS'
     steps:
-    - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
-    # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
-    # This is intentional, because we need to request the review of owners as declared in the base branch.
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
+      # This is intentional, because we need to request the review of owners as declared in the base branch.
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-    - uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
-      id: app-token
-      with:
-        app-id: ${{ vars.OWNER_APP_ID }}
-        private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+      - uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_APP_ID }}
+          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
 
-    - name: Build review request package
-      run: nix-build ci -A requestReviews
+      - name: Build review request package
+        run: nix-build ci -A requestReviews
 
-    - name: Request reviews
-      run: result/bin/request-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
-      env:
-        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - name: Request reviews
+        run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}

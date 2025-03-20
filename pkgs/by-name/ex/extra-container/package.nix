@@ -1,14 +1,21 @@
-{ stdenv, lib, nixos-container, openssh, glibcLocales, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  nixos-container,
+  openssh,
+  glibcLocales,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
-    repo = pname;
+    repo = "extra-container";
     rev = version;
-    hash = "sha256-/5wPv962ZHvZoZMOr4nMz7qcvbzlExRYS2nrnay/PU8=";
+    hash = "sha256-vgh3TqfkFdnPxREBedw4MQehIDc3N8YyxBOB45n+AvU=";
   };
 
   buildCommand = ''

@@ -1,14 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libXrandr, libXinerama, libXext, libXcursor, freetype, alsa-lib, libjack2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  freetype,
+  alsa-lib,
+  libjack2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stochas";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
-    repo = pname;
+    repo = "stochas";
     rev = "v${version}";
-    hash = "sha256-GrYzsyezunFLFVzBfYCbNC53K695eYto9338iAALiSk=";
+    hash = "sha256-Gp49cWvUkwz4xAq5sA1nUO+amRC39iWeUemQJyv6hTs=";
     fetchSubmodules = true;
   };
 
@@ -17,10 +31,20 @@ stdenv.mkDerivation rec {
       lib/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h # gcc12
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
-    libX11 libXrandr libXinerama libXext libXcursor freetype alsa-lib libjack2
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    freetype
+    alsa-lib
+    libjack2
   ];
 
   installPhase = ''

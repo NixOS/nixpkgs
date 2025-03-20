@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boalang";
     repo = "api-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
   };
 

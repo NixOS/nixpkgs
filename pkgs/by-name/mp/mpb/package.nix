@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "mpb";
+    tag = "v${version}";
     hash = "sha256-+2cMjZSGdfngtGoAeZRPRPBDvflTEIOWO8Se0W6jv9k=";
   };
 
@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     guile
     perl
   ];
+
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   enableParallelBuilding = true;
 

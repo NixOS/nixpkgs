@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "google-java-format";
-  version = "1.24.0";
+  version = "1.25.2";
 
   src = fetchurl {
     url = "https://github.com/google/google-java-format/releases/download/v${version}/google-java-format-${version}-all-deps.jar";
-    sha256 = "sha256-gS+AX1gRJGDt8BvyAqjmHQ/R81wNT6vVQiBkB3bsV6E=";
+    sha256 = "sha256-JRV3l6CpcsIpC1vHFTDE961kZFgCXjSEQSpuWpuMmqY=";
   };
 
   dontUnpack = true;

@@ -1,6 +1,7 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -17,7 +18,7 @@ bundlerApp {
       grep etc.).
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   passthru.updateScript = bundlerUpdateScript "pru";

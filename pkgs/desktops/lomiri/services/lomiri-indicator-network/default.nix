@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -34,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
-    rev = finalAttrs.version;
-    hash = "sha256-9AQCWCZFbt4XcmKsjoTXJlWOm02/kBhpPxbHRtftNFM=";
+    tag = finalAttrs.version;
+    hash = "sha256-pN5M5VKRyo6csmI/vrmp/bonnap3oEdPuHAUJ1PjdOs=";
   };
 
   outputs = [
@@ -50,13 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Move to new lomiri-indicators target
-    # Remove when version > 1.0.2
-    (fetchpatch {
-      name = "0001-lomiri-indicator-network-lomiri-indicators-target.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/b1e1f7da4b298964eba3caea37b1dace7a6182e9.patch";
-      hash = "sha256-pZKpEn2OJtB1pG/U+6IjtPGiOchRDhdbBHEZbTW7Lx0=";
-    })
+    ./1001-test-secret-agent-Make-GetServerInformation-not-leak-into-tests.patch
   ];
 
   postPatch = ''
@@ -64,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace data/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir DEFINE_VARIABLES datadir=''${CMAKE_INSTALL_FULL_SYSCONFDIR})' \
       --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+
+    # Fix typo
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/merge_requests/131 merged & in release
+    substituteInPlace src/indicator/nmofono/wwan/modem.cpp \
+      --replace-fail 'if (m_isManaged = managed)' 'if (m_isManaged == managed)'
   '';
 
   strictDeps = true;
@@ -113,9 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # Multiple tests spin up & speak to D-Bus, avoid cross-talk causing failures
+  enableParallelChecking = false;
+
   postInstall = ''
     substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
-      --replace '/bin/false' '${lib.getExe' coreutils "false"}'
+      --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}'
   '';
 
   passthru = {

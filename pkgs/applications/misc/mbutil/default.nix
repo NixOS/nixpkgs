@@ -14,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "mbutil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxAF49NluEI/cZMUv1dlQBpUh1jfZ6KUVkYAmFAWphk=";
   };
 

@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, wayland-scanner
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cosmic-protocols";
   version = "0-unstable-2024-07-31";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-protocols";
     rev = "de2fead49d6af3a221db153642e4d7c2235aafc4";
     hash = "sha256-qgo8FMKo/uCbhUjfykRRN8KSavbyhZpu82M8npLcIPI=";
   };
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-protocols";
     description = "Additional wayland-protocols used by the COSMIC desktop environment";
-    license = [ licenses.mit licenses.gpl3Only ];
+    license = [
+      licenses.mit
+      licenses.gpl3Only
+    ];
     maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };

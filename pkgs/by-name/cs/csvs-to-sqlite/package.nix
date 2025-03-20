@@ -1,6 +1,12 @@
-{ lib, python3, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
   format = "setuptools";

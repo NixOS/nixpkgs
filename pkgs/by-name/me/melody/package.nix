@@ -1,16 +1,21 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "melody";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchCrate {
     pname = "melody_cli";
     inherit version;
-    hash = "sha256-sJVZ4dRP6mAx9g7iqwI3L2cMa5x4qQuzKWPXvOOq6q8=";
+    hash = "sha256-u+d16jc7GqT2aK2HzP+OXFUBkVodwcW+20sKqmxzYhk=";
   };
 
-  cargoHash = "sha256-8UWz+gYUxf2UNWZCnhQlGiSX6kPsHPlYcdl7wD3Rchs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TNW36FLK1E6uoDICfGN5ZmTX8V9ndSqyif7tbBqvqDI=";
 
   meta = with lib; {
     description = "Language that compiles to regular expressions";

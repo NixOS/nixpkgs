@@ -1,28 +1,30 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, nix-update-script
-, runCommand
-, dieHook
-, nixosTests
-, testers
-, scaphandre
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  runCommand,
+  dieHook,
+  nixosTests,
+  testers,
+  scaphandre,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "scaphandre";
-  version = "0.5.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "hubblo-org";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
+    hash = "sha256-I+cECdpLoIj4yuWXfirwHlcn0Hkm9NxPqo/EqFiBObw=";
   };
 
-  cargoHash = "sha256-Vdkq9ShbHWepvIgHPjhKY+LmhjS+Pl84QelgEpen7Qs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OIoQ2r/T0ZglF1pe25ND8xe/BEWgP9JbWytJp4k7yyg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     runHook preCheck
 
     # Work around to pass test due to non existing path
-    # https://github.com/hubblo-org/scaphandre/blob/v0.5.0/src/sensors/powercap_rapl.rs#L29
+    # https://github.com/hubblo-org/scaphandre/blob/v1.0.2/src/sensors/powercap_rapl.rs#L29
     export SCAPHANDRE_POWERCAP_PATH="$(mktemp -d)/scaphandre"
 
     mkdir -p "$SCAPHANDRE_POWERCAP_PATH"
@@ -42,15 +44,19 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      stdout = self: runCommand "${pname}-test" {
-        buildInputs = [
-          self
-          dieHook
-        ];
-      } ''
-        ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
-        [ -s $out ]
-      '';
+      stdout =
+        self:
+        runCommand "${pname}-test"
+          {
+            buildInputs = [
+              self
+              dieHook
+            ];
+          }
+          ''
+            ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
+            [ -s $out ]
+          '';
       vm = nixosTests.scaphandre;
       version = testers.testVersion {
         inherit version;

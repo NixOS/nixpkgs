@@ -1,8 +1,9 @@
-{ lib
-, fetchpatch
-, fetchFromGitHub
-, fetchPypi
-, python3
+{
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  fetchPypi,
+  python3,
 }:
 
 let
@@ -18,10 +19,10 @@ let
         src = fetchFromGitHub {
           owner = "tweepy";
           repo = "tweepy";
-          rev = "v${version}";
-          sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
+          tag = "v${version}";
+          hash = "sha256-3BbQeCaAhlz9h5GnhficNubJHu4kTpnCDM4oKzlti0w=";
         };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        dependencies = oldAttrs.dependencies ++ [
           super.six
           super.requests.optional-dependencies.socks
         ];
@@ -35,13 +36,29 @@ with py.pkgs;
 buildPythonPackage rec {
   pname = "turses";
   version = "0.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
+    hash = "sha256-RqYVQdGs0TOFYaGYswEQgbkfEYQVwIsRFETNskaFs5Y=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [
+  pythonRelaxDeps = [
+    "urwid"
+    "future"
+    "tweepy"
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/test_config.py \
+      --replace-fail "config.generate_config_file.assert_called_once()" "assert config.generate_config_file.call_count == 1"
+    substituteInPlace tests/test_meta.py \
+      --replace-fail "self.observer.update.assert_called_once()" "assert self.observer.update.call_count == 1"
+  '';
+
+  build-system = with py.pkgs; [ setuptools ];
+
+  dependencies = with py.pkgs; [
     urwid
     tweepy
     future
@@ -68,17 +85,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "urwid==1.3.0" "urwid" \
-      --replace "future==0.14.3" "future" \
-      --replace "tweepy==3.3.0" "tweepy"
-    substituteInPlace tests/test_config.py \
-      --replace "config.generate_config_file.assert_called_once()" "assert config.generate_config_file.call_count == 1"
-    substituteInPlace tests/test_meta.py \
-      --replace "self.observer.update.assert_called_once()" "assert self.observer.update.call_count == 1"
-  '';
-
   checkPhase = ''
     TMP_TURSES=`echo turses-$RANDOM`
     mkdir $TMP_TURSES
@@ -88,10 +94,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Twitter client for the console";
-    mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
+    changelog = "https://github.com/louipc/turses/blob/v${version}/HISTORY.rst";
     license = licenses.gpl3Only;
     maintainers = [ ];
+    mainProgram = "turses";
     platforms = platforms.unix;
   };
 }

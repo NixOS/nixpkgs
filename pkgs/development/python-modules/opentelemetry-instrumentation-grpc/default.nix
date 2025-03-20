@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchpatch2,
   pythonOlder,
   hatchling,
   opentelemetry-api,
@@ -21,16 +20,6 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.8";
 
-  patches = [
-    (fetchpatch2 {
-      name = "grpcio-compatibility.patch";
-      url = "https://github.com/open-telemetry/opentelemetry-python-contrib/commit/1c8d8ef5368c15d27c0973ce80787fd94c7b3176.patch";
-      includes = [ "src/opentelemetry/instrumentation/grpc/grpcext/_interceptor.py" ];
-      stripLen = 2;
-      hash = "sha256-FH/VubT93kwh7nWQyPfECTIayMqWIjQYSEY5TER+4vY=";
-    })
-  ];
-
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 
   build-system = [ hatchling ];
@@ -46,11 +35,19 @@ buildPythonPackage {
     instruments = [ grpcio ];
   };
 
+  env = {
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
+
   nativeCheckInputs = [
     opentelemetry-test-utils
     grpcio
     pytestCheckHook
   ];
+
+  preBuild = ''
+    export TMPDIR=$(mktemp -d)
+  '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Failed to bind to address

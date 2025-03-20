@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cudd";
   version = "3.0.0";
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nekmo";
     repo = "proxy-db";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NdbvK2sJKKoWNYsuBaCMWtKEvuMhgyKXcKZXQgTC4bY=";
   };
 

@@ -1,50 +1,51 @@
-{ lib
-, stdenv
-, fetchurl
-, vulkan-headers
-, vulkan-tools
-, vulkan-loader
-, glslang
-, glfw
-, libjpeg
-, pkg-config
-, rsync
-, cmake
-, clang
-, llvm
-, llvmPackages
-, pugixml
-, freetype
-, exiv2
-, ffmpeg
-, libvorbis
-, libmad
-, testers
-, vkdt
-, xxd
-, alsa-lib
-, cargo
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vulkan-headers,
+  vulkan-tools,
+  vulkan-loader,
+  glslang,
+  glfw,
+  libjpeg,
+  pkg-config,
+  rsync,
+  cmake,
+  clang,
+  llvm,
+  llvmPackages,
+  pugixml,
+  freetype,
+  exiv2,
+  ffmpeg,
+  libvorbis,
+  libmad,
+  testers,
+  vkdt,
+  xxd,
+  alsa-lib,
+  cargo,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-LXUTDwUjlfyhtXkYW4Zivqt8vyctoz+ID5AQ7gg+d9A=";
+    hash = "sha256-+oVPZRI01IxMSPXOjvUXJutYXftQM7GxwVLG8wqoaY4=";
+  };
+
+  cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version;
+    inherit src cargoRoot;
+    hash = "sha256-DTC9I4y01bofjgjuGn5asyxhin1yrO6JlASGZtq8z60=";
   };
 
   strictDeps = true;
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rawler-0.6.3" = "sha256-EJ0uWc3pp7ixRxDIdTIVVaT2ph3P2IvuK+ecBSB5HYw=";
-    };
-  };
-  cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
 
   nativeBuildInputs = [
     cargo
@@ -77,7 +78,10 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "prefix="
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = vkdt;

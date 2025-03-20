@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, payload ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  payload ? null,
+}:
 
 stdenv.mkDerivation {
   pname = "riscv-pk";
@@ -20,8 +26,7 @@ stdenv.mkDerivation {
 
   configureScript = "../configure";
 
-  configureFlags = lib.optional (payload != null)
-    "--with-payload=${payload}";
+  configureFlags = lib.optional (payload != null) "--with-payload=${payload}";
 
   hardeningDisable = [ "all" ];
 

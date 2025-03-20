@@ -1,67 +1,70 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, wrapGAppsHook3
-, atk
-, at-spi2-atk
-, at-spi2-core
-, alsa-lib
-, cairo
-, cups
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gtk3
-, freetype
-, fontconfig
-, nss
-, nspr
-, pango
-, udev
-, libsecret
-, libuuid
-, libX11
-, libxcb
-, libXi
-, libXcursor
-, libXdamage
-, libXrandr
-, libXcomposite
-, libXext
-, libXfixes
-, libXrender
-, libXtst
-, libXScrnSaver
-, libxkbcommon
-, libdrm
-, mesa
-# It's unknown which version of openssl that postman expects but it seems that
-# OpenSSL 3+ seems to work fine (cf.
-# https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
-# around OpenSSL stuff then try changing this dependency version.
-, openssl
-, xorg
-, pname
-, version
-, meta
-, copyDesktopItems
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  atk,
+  at-spi2-atk,
+  at-spi2-core,
+  alsa-lib,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  freetype,
+  fontconfig,
+  nss,
+  nspr,
+  pango,
+  udev,
+  libsecret,
+  libuuid,
+  libX11,
+  libxcb,
+  libXi,
+  libXcursor,
+  libXdamage,
+  libXrandr,
+  libXcomposite,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXtst,
+  libXScrnSaver,
+  libxkbcommon,
+  libdrm,
+  libgbm,
+  # It's unknown which version of openssl that postman expects but it seems that
+  # OpenSSL 3+ seems to work fine (cf.
+  # https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
+  # around OpenSSL stuff then try changing this dependency version.
+  openssl,
+  xorg,
+  pname,
+  version,
+  meta,
+  copyDesktopItems,
+  makeWrapper,
 }:
 
 let
-  dist = {
-    aarch64-linux = {
-      arch = "arm64";
-      sha256 = "sha256-yq2J5KRv/NJDaQG7e7RKyzbJqKWRolSU9X6khHxlrNo=";
-    };
+  dist =
+    {
+      aarch64-linux = {
+        arch = "arm64";
+        sha256 = "sha256-JKE6riUJXAiCwT0yp5ncoExiRAnFmuefmPkwWmvRjV4=";
+      };
 
-    x86_64-linux = {
-      arch = "64";
-      sha256 = "sha256-fAaxrLZSXGBYr4Vu0Cz2pZwXivSTkaIF5wL217cB9qM=";
-    };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      x86_64-linux = {
+        arch = "64";
+        sha256 = "sha256-w7R4IsWMtW37BwGHBY9UweMR6PaZpkya401ARGeR1wY=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
 stdenv.mkDerivation rec {
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   desktopItems = [
-      (makeDesktopItem {
+    (makeDesktopItem {
       name = "postman";
       exec = "postman %U";
       icon = "postman";
@@ -102,7 +105,7 @@ stdenv.mkDerivation rec {
     gtk3
     freetype
     fontconfig
-    mesa
+    libgbm
     nss
     nspr
     pango
@@ -126,7 +129,10 @@ stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -139,7 +145,7 @@ stdenv.mkDerivation rec {
 
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
 
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/postman.png

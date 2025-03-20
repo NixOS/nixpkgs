@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, autoconf, automake, pkg-config, intltool, pango }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  intltool,
+  pango,
+}:
 
 stdenv.mkDerivation rec {
   pname = "paps";
@@ -7,12 +15,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dov";
-    repo = pname;
+    repo = "paps";
     rev = "v${version}";
     sha256 = "129wpm2ayxs6qfh2761d4x9c034ivb2bcmmcnl56qs4448qb9495";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config intltool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    intltool
+  ];
   buildInputs = [ pango ];
 
   preConfigure = ''

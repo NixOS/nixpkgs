@@ -1,17 +1,36 @@
-{ mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
-, kinit, karchive, kcrash, kcmutils, kconfigwidgets, knewstuff, kparts
-, qca-qt5, shared-mime-info }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  qtscript,
+  kconfig,
+  kinit,
+  karchive,
+  kcrash,
+  kcmutils,
+  kconfigwidgets,
+  knewstuff,
+  kparts,
+  qca-qt5,
+  shared-mime-info,
+}:
 
 mkDerivation rec {
   pname = "okteta";
-  version = "0.26.18";
+  version = "0.26.20";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xAlhZtQuIRtvMaHflCr89lHH6ocqIRAECwHdRa+/imM=";
+    sha256 = "sha256-lKGjIeNxdBqmlsXvZTe8BnRirt+VrxwX/9CCQVVUuow=";
   };
 
-  nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    qtscript
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [ shared-mime-info ];
 
   propagatedBuildInputs = [
@@ -26,13 +45,19 @@ mkDerivation rec {
     kcrash
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     license = licenses.gpl2;
     description = "Hex editor";
     homepage = "https://apps.kde.org/okteta/";
-    maintainers = with maintainers; [ peterhoeg bkchr ];
+    maintainers = with maintainers; [
+      peterhoeg
+      bkchr
+    ];
     platforms = platforms.linux;
   };
 }

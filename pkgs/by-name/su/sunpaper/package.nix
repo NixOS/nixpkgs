@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, sunwait
-, wallutils
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  sunwait,
+  wallutils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

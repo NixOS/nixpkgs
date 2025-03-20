@@ -8,17 +8,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-rc.5";
+  version = "2.0.2";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
   pythonRelaxDeps = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QaApCkZtHjvGB6FOfic9wEH7rUlukwmxnrDaHkbvyJo=";
+    tag = "v${version}";
+    hash = "sha256-msq74sGnUHkaf+e6SFYAtu9nzcXnr+PU21g2O7uR5M0=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -42,12 +41,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "yutto" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Bilibili downloader";

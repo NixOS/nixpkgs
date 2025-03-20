@@ -1,11 +1,12 @@
 {
   lib,
   aiohttp,
+  aresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   netifaces,
-  pytest-aiohttp,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   urllib3,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.13.7";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,9 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pydaikin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pLr878LbflRlHzDjarwDLQFHbRZjRvlAZEqP1tfVBNA=";
+    tag = "v${version}";
+    hash = "sha256-AyW9hQC8fF5T+E1FXhLemVvWggeEpZok5OVhzcZh9G0=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -36,11 +39,10 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  doCheck = false; # tests fail and upstream does not seem to run them either
-
   nativeCheckInputs = [
+    aresponses
     freezegun
-    pytest-aiohttp
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -49,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Daikin HVAC appliances interface";
     homepage = "https://github.com/fredrike/pydaikin";
-    changelog = "https://github.com/fredrike/pydaikin/releases/tag/v${version}";
+    changelog = "https://github.com/fredrike/pydaikin/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "pydaikin";

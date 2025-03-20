@@ -1,23 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "aws-nuke";
-  version = "2.25.0";
+  version = "3.48.2";
 
   src = fetchFromGitHub {
-    owner = "rebuy-de";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Yc9GXdcSKPvwddh+QU2/pBC0XIqA53wpd0VNKOqppbU=";
+    owner = "ekristen";
+    repo = "aws-nuke";
+    tag = "v${version}";
+    hash = "sha256-1uNZy4XN2hscsvPGWO/dDRToX94lo9HZpU4AKsZ4ATU=";
   };
 
-  vendorHash = "sha256-FZ92JoyPYysYhl7iQZ8X32BDyNKL1UbOgq7EhHyqb5A=";
-
-  nativeBuildInputs = [ installShellFiles ];
+  vendorHash = "sha256-YLk560F2YBwWsWFhQ8KsUuW/kIAlWBkihynREppQ+40=";
 
   overrideModAttrs = _: {
     preBuild = ''
@@ -25,25 +27,48 @@ buildGoModule rec {
     '';
   };
 
-  doCheck = false;
-
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
+  ];
 
-  postInstall = ''
+  nativeBuildInputs = [ installShellFiles ];
+
+  doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd aws-nuke \
       --bash <($out/bin/aws-nuke completion bash) \
       --fish <($out/bin/aws-nuke completion fish) \
       --zsh <($out/bin/aws-nuke completion zsh)
   '';
 
-  meta = with lib; {
-    description = "Nuke a whole AWS account and delete all its resources";
-    homepage = "https://github.com/rebuy-de/aws-nuke";
-    changelog = "https://github.com/rebuy-de/aws-nuke/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ grahamc ];
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = "--version";
+
+  postInstallCheck = ''
+    $out/bin/aws-nuke resource-types | grep "IAMUser"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Remove all the resources from an AWS account";
+    homepage = "https://github.com/ekristen/aws-nuke";
+    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
+    # fork/exec exe/mockgen: exec format error
+    # resources/autoscaling_mock_test.go:1: running "../mocks/generate_mocks.sh": exit status 1
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

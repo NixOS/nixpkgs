@@ -1,4 +1,14 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, pam, openssl, perl }:
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchFromGitHub,
+  fetchDebianPatch,
+  pam,
+  openssl,
+  perl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_ssh_agent_auth";
@@ -18,14 +28,50 @@ stdenv.mkDerivation rec {
     sha256 = "ETFpIaWQnlYG8ZuDG2dNjUJddlvibB4ukHquTFn3NZM=";
   };
 
-  buildInputs = [ pam openssl perl ];
-
-  patches = [
-    # Allow multiple colon-separated authorized keys files to be
-    # specified in the file= option.
-    ./multiple-key-files.patch
-    ./edcsa-crash-fix.patch
+  # Required because of fix-configure.patch
+  nativeBuildInputs = [
+    autoreconfHook
   ];
+
+  buildInputs = [
+    pam
+    openssl
+    perl
+  ];
+
+  patches =
+    let
+      fetchDebianPatch' =
+        args:
+        fetchDebianPatch (
+          {
+            pname = "pam-ssh-agent-auth";
+            version = "0.10.3";
+            debianRevision = "11";
+          }
+          // args
+        );
+    in
+    [
+      # Allow multiple colon-separated authorized keys files to be
+      # specified in the file= option.
+      ./multiple-key-files.patch
+      ./edcsa-crash-fix.patch
+
+      # Patch configure to remove implicit function declaration errors under gcc14
+      # Requires autoreconfHook
+      (fetchDebianPatch' {
+        patch = "fix-configure.patch";
+        hash = "sha256-ymXv2o/NpFeVQ6r0hvJEeMpvs5Ht9jq4RSw8ssv43FY=";
+      })
+
+      # Avoided incompatible pointer passing to fix GCC 14 build errors. Add missing 'const', cast to expected pointer type (DSA_SIG) and avoid
+      # pointer to pointer when pointer is required.
+      (fetchDebianPatch' {
+        patch = "1000-gcc-14.patch";
+        hash = "sha256-EvdaIhrfKZ1mB7qvNiGx/hYdthStgnhK7xvJEhhAFDQ=";
+      })
+    ];
 
   configureFlags = [
     # It's not clear to me why this is necessary, but without it, you see:

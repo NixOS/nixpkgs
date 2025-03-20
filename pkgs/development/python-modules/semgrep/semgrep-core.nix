@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchPypi, unzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchPypi,
+  unzip,
+}:
 
 let
   common = import ./common.nix { inherit lib; };
@@ -20,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
       inherit version;
       format = "wheel";
       dist = python;
-      python = "cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311";
+      python = "cp39.cp310.cp311.py39.py310.py311";
       inherit (data) platform hash;
     };
 

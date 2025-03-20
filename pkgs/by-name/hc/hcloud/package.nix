@@ -1,27 +1,30 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.48.0";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fD+aEt3jakfdrh68Ok0SiehOy3Sg+B+3HUGO8gSSxTQ=";
+    tag = "v${version}";
+    hash = "sha256-5Gm9lXf1+l9pA/XNUi3uCuI1nvAX9cxRm+f0osMTE7Q=";
   };
 
-  vendorHash = "sha256-QO7K7nwFIYyJ5wGwuACWxzVf8mSX7JMsrbWqm6g5RCs=";
+  vendorHash = "sha256-FStOZN/7Zq/iLXesu5yPr59tPx+1xWAfhnrClJir7ss=";
 
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/hetznercloud/cli/internal/version.Version=${version}"
   ];
+
+  subPackages = [ "cmd/hcloud" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,6 +41,9 @@ buildGoModule rec {
     mainProgram = "hcloud";
     homepage = "https://github.com/hetznercloud/cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ zauberpony techknowlogick ];
+    maintainers = with maintainers; [
+      zauberpony
+      techknowlogick
+    ];
   };
 }

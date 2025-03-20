@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "usort";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iezq2K+Rw0djyOoFm7tguw/vkkDSyrPZIfZPmaZvFpM=";
   };
 

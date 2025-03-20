@@ -1,26 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-INLXVruiaK5yv5old0NOWFcg9y13M6Dm7bBMmcPFY1I=";
+    hash = "sha256-gFkrUqG3GXPAg9Zqv7Wr3axQ30axYGXw8bo+P1kmSJM=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    IOKit
-  ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      IOKit
+    ]
+  );
 
-  cargoHash = "sha256-JXDM97uGuGh3qHK3Gh8Nd/YSZq/Kcj81PpufJJMqQQI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-izJRaxJhLvk064JB3hlzN50V7ZWmv/X1pbL0lRCZV60=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 

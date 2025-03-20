@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, pkg-config
-, fetchFromGitHub
-, libusb1
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  libusb1,
 }:
 
 # IMPORTANT: You need permissions to access the stlink usb devices.

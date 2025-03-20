@@ -1,17 +1,17 @@
-{ writeTextFile
-, pari_data
-, pari
-, singular
-, maxima
-, graphs
-, elliptic_curves
-, polytopes_db
-, gap
-, combinatorial_designs
-, jmol
-, mathjax
-, three
-, cysignals
+{
+  writeTextFile,
+  pari_data,
+  pari,
+  singular,
+  maxima,
+  graphs,
+  elliptic_curves,
+  polytopes_db,
+  gap,
+  combinatorial_designs,
+  mathjax,
+  three,
+  cysignals,
 }:
 
 # A bash script setting various environment variables to tell sage where
@@ -36,8 +36,6 @@ writeTextFile rec {
     export ECLDIR='${maxima.lisp-compiler}/lib/${maxima.lisp-compiler.pname}-${maxima.lisp-compiler.version}/'
     export COMBINATORIAL_DESIGN_DATA_DIR="${combinatorial_designs}/share/combinatorial_designs"
     export CREMONA_MINI_DATA_DIR="${elliptic_curves}/share/cremona"
-    export JMOL_DIR="${jmol}/share/jmol" # point to the directory that contains JmolData.jar
-    export JSMOL_DIR="${jmol}/share/jsmol"
     export MATHJAX_DIR="${mathjax}/lib/node_modules/mathjax"
     export THREEJS_DIR="${three}/lib/node_modules/three"
     export SAGE_INCLUDE_DIRECTORIES="${cysignals}/${cysignals.pythonModule.sitePackages}"

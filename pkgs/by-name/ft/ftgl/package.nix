@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, libglut
-, freetype
-, libGL
-, libGLU
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  libglut,
+  freetype,
+  libGL,
+  libGLU,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
       rendering modes.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

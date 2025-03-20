@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
-, openssl
-, c-ares
-, readline
-, icu
-, git
-, gbenchmark
-, nghttp2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  openssl,
+  c-ares,
+  readline,
+  icu,
+  git,
+  gbenchmark,
+  nghttp2,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tarantool";
-    repo = pname;
+    repo = "tarantool";
     rev = version;
     hash = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
     fetchSubmodules = true;

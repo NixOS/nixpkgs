@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, qttools
-, wrapQtAppsHook
+  cmake,
+  qttools,
+  wrapQtAppsHook,
 
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qt5compat ? null # qt6 only
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, qtwayland
-, quazip
+  curl,
+  ffmpeg,
+  libmediainfo,
+  libzen,
+  qt5compat ? null, # qt6 only
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qtsvg,
+  qtwayland,
+  quazip,
 }:
 let
   qtVersion = lib.versions.major qtbase.version;
@@ -39,21 +40,22 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    curl
-    ffmpeg
-    libmediainfo
-    libzen
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    qtsvg
-    qtwayland
-    quazip
-  ] ++ lib.optionals (qtVersion == "6") [
-    qt5compat
-  ];
-
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      libmediainfo
+      libzen
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      qtsvg
+      qtwayland
+      quazip
+    ]
+    ++ lib.optionals (qtVersion == "6") [
+      qt5compat
+    ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"

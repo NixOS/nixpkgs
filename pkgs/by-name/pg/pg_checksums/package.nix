@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxslt,
+  docbook_xsl,
+  postgresql,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pg_checksums";
@@ -6,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "credativ";
-    repo = pname;
+    repo = "pg_checksums";
     rev = version;
     sha256 = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
   };
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ postgresql ];
 
-  buildFlags = [ "all" "man" ];
+  buildFlags = [
+    "all"
+    "man"
+  ];
 
   preConfigure = ''
     substituteInPlace doc/stylesheet-man.xsl \

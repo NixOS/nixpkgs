@@ -1,35 +1,45 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
+let
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
-  keyFile = "${cfg.keyPath}/${cfg.selector}.private";
+  args =
+    [
+      "-f"
+      "-l"
+      "-p"
+      cfg.socket
+      "-d"
+      cfg.domains
+      "-k"
+      "${cfg.keyPath}/${cfg.selector}.private"
+      "-s"
+      cfg.selector
+    ]
+    ++ lib.optionals (cfg.configFile != null) [
+      "-x"
+      cfg.configFile
+    ];
 
-  args = [ "-f" "-l"
-           "-p" cfg.socket
-           "-d" cfg.domains
-           "-k" keyFile
-           "-s" cfg.selector
-         ] ++ lib.optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
-
-in {
+  configFile = pkgs.writeText "opendkim.conf" (
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings)
+  );
+in
+{
   imports = [
     (lib.mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.opendkim = {
-
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the OpenDKIM sender authentication system.";
-      };
+      enable = lib.mkEnableOption "OpenDKIM sender authentication system";
 
       socket = lib.mkOption {
         type = lib.types.str;
@@ -55,7 +65,7 @@ in {
         defaultText = lib.literalExpression ''"csl:''${config.networking.hostName}"'';
         example = "csl:example.com,mydomain.net";
         description = ''
-          Local domains set (see `opendkim(8)` for more information on datasets).
+          Local domains set (see {manpage}`opendkim(8)` for more information on datasets).
           Messages from them are signed, not verified.
         '';
       };
@@ -74,21 +84,26 @@ in {
         description = "Selector to use when signing.";
       };
 
+      # TODO: deprecate this?
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Additional opendkim configuration.";
+        description = "Additional opendkim configuration as a file.";
       };
 
+      settings = lib.mkOption {
+        type =
+          with lib.types;
+          submodule {
+            freeformType = attrsOf str;
+          };
+        default = { };
+        description = "Additional opendkim configuration";
+      };
     };
-
   };
 
-
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     users.users = lib.optionalAttrs (cfg.user == "opendkim") {
       opendkim = {
         group = cfg.group;
@@ -100,7 +115,14 @@ in {
       opendkim.gid = config.ids.gids.opendkim;
     };
 
-    environment.systemPackages = [ pkgs.opendkim ];
+    environment = {
+      etc = lib.mkIf (cfg.settings != { }) {
+        "opendkim/opendkim.conf".source = configFile;
+      };
+      systemPackages = [ pkgs.opendkim ];
+    };
+
+    services.opendkim.configFile = lib.mkIf (cfg.settings != { }) configFile;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
@@ -131,7 +153,7 @@ in {
         StateDirectoryMode = "0700";
         ReadWritePaths = [ cfg.keyPath ];
 
-        AmbientCapabilities = [];
+        AmbientCapabilities = [ ];
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
@@ -150,15 +172,20 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6 AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6 AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
         UMask = "0077";
       };
     };
-
   };
 }

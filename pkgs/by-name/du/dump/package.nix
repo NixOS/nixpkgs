@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dump";
-  version = "0.4b47";
+  version = "0.4b48";
 
   src = fetchurl {
     url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
-    sha256 = "sha256-0CGs3k+77T2T662YFCL2cfSNZrKeyI196DZC7Pv/T9A=";
+    sha256 = "sha256-qT6WPMIMXUfq2dedK0OeDV12gV7ewlFpEVUckOYOxRk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dump.sourceforge.io/";
     description = "Linux Ext2 filesystem dump/restore utilities";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ falsifian ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

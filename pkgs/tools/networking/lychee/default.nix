@@ -1,32 +1,37 @@
-{ callPackage
-, lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, SystemConfiguration
-, testers
+{
+  callPackage,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.16.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "lychee-v${version}";
-    hash = "sha256-H8iNgyLnzgfUPEVPlDosb6l99efrzM+/RIQ7X7nh4Ks=";
+    hash = "sha256-aT7kVN2KM90M193h4Xng6+v69roW0J4GLd+29BzALhI=";
   };
 
-  cargoHash = "sha256-cvEAy0Tx892dsd4zeh5D0fy4hoNBaZ2Q++IStbMbUhY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TKKhT4AhV2uzXOHRnKHiZJusNoCWUliKmKvDw+Aeqnc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ openssl ];
+
+  cargoTestFlags = [
+    # don't run doctests since they tend to use the network
+    "--lib"
+    "--bins"
+    "--tests"
+  ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -55,12 +60,18 @@ rustPlatform.buildRustPackage rec {
     network = testers.runNixOSTest ./tests/network.nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ totoroot tuxinaut ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      totoroot
+      tuxinaut
+    ];
     mainProgram = "lychee";
   };
 }

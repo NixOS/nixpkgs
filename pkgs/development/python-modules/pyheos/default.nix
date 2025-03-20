@@ -5,18 +5,19 @@
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pyheos";
-  version = "0.7.4";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vz81FepXWcCdlY1v7ozp+/l+XpYb91mNmRiLKwjrC4A=";
+    tag = version;
+    hash = "sha256-1Jv1889RSjuediG5RGRcNdr1OmlOhpzqodgjnNmE2RY=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   disabledTests = [
@@ -33,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyheos" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/andrewsayre/pyheos/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/andrewsayre/pyheos/releases/tag/${src.tag}";
     description = "Async python library for controlling HEOS devices through the HEOS CLI Protocol";
     homepage = "https://github.com/andrewsayre/pyheos";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

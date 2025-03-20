@@ -1,21 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, gnome-icon-theme
-, adwaita-icon-theme
-, gtk-engine-murrine
-, gtk3
-, hicolor-icon-theme
-, humanity-icon-theme
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome-icon-theme,
+  adwaita-icon-theme,
+  gtk-engine-murrine,
+  gtk3,
+  hicolor-icon-theme,
+  humanity-icon-theme,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ubuntu-themes";
-  version = "20.10";
+  version = "24.04";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.orig.tar.gz";
-    sha256 = "00frn2dd4kjhlmwkasrx4a820fwrg8f8hmiwh51m63bpj00vwn0r";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/ubuntu-themes/${version}-0ubuntu1/ubuntu-themes_${version}.orig.tar.gz";
+    hash = "sha256-/SMwwDaSUe86SXNe7U9Sh7SzzlC4yOXVA+urAIxeDxk=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +51,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons
     cp -a LoginIcons        $out/share/icons
-    cp -a suru-icons        $out/share/icons
     cp -a ubuntu-mobile     $out/share/icons
     cp -a ubuntu-mono-dark  $out/share/icons
     cp -a ubuntu-mono-light $out/share/icons
-
-    mv $out/share/icons/{suru-icons,suru}
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
@@ -66,11 +65,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  dontCheckForBrokenSymlinks = true;
+
+  meta = {
     description = "Ubuntu monochrome and Suru icon themes, Ambiance and Radiance themes, and Ubuntu artwork";
     homepage = "https://launchpad.net/ubuntu-themes";
-    license = with licenses; [ cc-by-sa-40 gpl3 ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = with lib.licenses; [
+      cc-by-sa-40
+      gpl3
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

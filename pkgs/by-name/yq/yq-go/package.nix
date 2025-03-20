@@ -1,21 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, runCommand, yq-go }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  runCommand,
+  yq-go,
+}:
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.44.3";
+  version = "4.45.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    hash = "sha256-bQNa19K4wO2XoSecyfOQKTfHFTxkji1U42bL4k1G7Gg=";
+    hash = "sha256-AsTDbeRMb6QJE89Z0NGooyTY3xZpWFoWkT7dofsu0DI=";
   };
 
-  vendorHash = "sha256-LsunMHKtyAkTAJhqURoAhIIyW//d37ZW4trr+x/Cd8U=";
+  vendorHash = "sha256-d4dwhZYzEuyh1zJQ2xU0WkygHjoVLoCBrDKuAHUzu1w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yq \
       --bash <($out/bin/yq shell-completion bash) \
       --fish <($out/bin/yq shell-completion fish) \
@@ -35,6 +43,9 @@ buildGoModule rec {
     changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
     mainProgram = "yq";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ lewo SuperSandro2000 ];
+    maintainers = with maintainers; [
+      lewo
+      SuperSandro2000
+    ];
   };
 }

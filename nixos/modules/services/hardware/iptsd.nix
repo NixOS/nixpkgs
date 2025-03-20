@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.iptsd;
   format = pkgs.formats.ini { };
   configFile = format.generate "iptsd.conf" cfg.config;
-in {
+in
+{
   options.services.iptsd = {
     enable = lib.mkEnableOption "the userspace daemon for Intel Precise Touch & Stylus";
 

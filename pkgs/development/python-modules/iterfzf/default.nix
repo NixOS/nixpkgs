@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "iterfzf";
-  version = "1.4.0.54.3";
+  version = "1.5.0.60.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DvEFCHK+1TA/TTXG//hvXXbRclBkelonA3QsB4h7eRM=";
+    tag = version;
+    hash = "sha256-9WN49tY9wWBVQGXCpvNQlRaRCZWSfV4xrZPoIOVjK9g=";
   };
 
   postPatch = ''

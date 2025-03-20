@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "monsoon";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5aV4/JEtaUEtE/csvch/JooeWNLpysqrI2hwVWMJhnI=";
+    tag = "v${version}";
+    hash = "sha256-efVwOon499DUJ17g6aQveMd2g544Ck+/P7VttYnR+No=";
   };
 
-  vendorHash = "sha256-gdoOBW5MD94RiKINVtTDvBQRZaJ9tlgu0eh7MxuMezg=";
+  vendorHash = "sha256-i96VDKNRNrkrkg2yBd+muXIQK0vZCGIoQrZsq+kBMsk=";
 
   # Tests fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

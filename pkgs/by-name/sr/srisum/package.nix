@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-Nw3uTGOcz1ivAm9X+PnOdNA937wuK3vtJQ0iJHlHVdw=";
   };
-  cargoHash = "sha256-q6FGykY+HmU3/jMaGRO36OlYGVLG9mU8yZ8j/Shux3s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J++aj925krYvOTzcuVZSEk+eYupL0M7o407fd1dCjeA=";
 
   doInstallCheck = true;
 

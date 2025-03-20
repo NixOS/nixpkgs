@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, eigen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "spectra";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "yixuan";
-    repo = pname;
+    repo = "spectra";
     rev = "v${version}";
-    sha256 = "sha256-HaJmMo4jYmO/j53/nHrL3bvdQMAvp4Nuhhe8Yc7pL88=";
+    sha256 = "sha256-ut6nEOpzIoFy+IUWQy9x2pJ4+sA0d/Dt8WaNq5AFCFg=";
   };
 
   nativeBuildInputs = [ cmake ];

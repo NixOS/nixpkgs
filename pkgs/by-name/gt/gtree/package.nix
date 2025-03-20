@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, gtree
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gtree,
 }:
 
 buildGoModule rec {
   pname = "gtree";
-  version = "1.10.12";
+  version = "1.10.14";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     rev = "v${version}";
-    hash = "sha256-dtKT2T8GNcR5ux1whFrXgJ08XHJWS76M/wmAtBHDLUI=";
+    hash = "sha256-c9ocRHvcu8rSgJ0Hc7E9ObsMHZtN/qvif4APUzqpjro=";
   };
 
-  vendorHash = "sha256-wiPHK5RjMBMLHx3Vv2zWoZc1wWJ1IVxu8dIbO9fPaPQ=";
+  vendorHash = "sha256-jZlR29OUefVKx3vxigvHbsIWsZbMPNAIPEa+qoU2oo0=";
 
   subPackages = [
     "cmd/gtree"

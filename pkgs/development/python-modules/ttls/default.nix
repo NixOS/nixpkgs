@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschlyter";
     repo = "ttls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-itGXZbQZ+HYpiwySLeGN3mPy3fgsxx0A9byOxIVpRBc=";
   };
 

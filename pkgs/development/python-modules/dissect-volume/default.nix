@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IhG2FZdCmYrGxHc2i+ERhphxP/uGgOY67epHEWnQXb0=";
+    tag = version;
+    hash = "sha256-uTbXvJ8lP4ir9rTToDGYXD837Z1fzi+Eh6cASg+jxdc=";
   };
 
   build-system = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
+    "test_vinum"
   ];
 
   meta = with lib; {

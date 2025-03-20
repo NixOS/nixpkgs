@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, json_c
-, libpcap
-, libtool
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  json_c,
+  libpcap,
+  libtool,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndpi";
-  version = "4.10";
+  version = "4.12";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-iXqvDMJsOXcg9YkqKFgInLLfH6j/HEp4bEaIl6dpVtc=";
+    tag = finalAttrs.version;
+    hash = "sha256-jdyKvM/Tb9pRWQPxpB/UQOOKamWrTS24Ofc3M5M1Zso=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.ntop.org/products/deep-packet-inspection/ndpi/";
     changelog = "https://github.com/ntop/nDPI/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [ lgpl3Plus bsd3 ];
+    license = with licenses; [
+      lgpl3Plus
+      bsd3
+    ];
     maintainers = with maintainers; [ takikawa ];
     mainProgram = "ndpiReader";
     platforms = with platforms; unix;

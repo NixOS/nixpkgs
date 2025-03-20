@@ -1,26 +1,27 @@
-{ blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, lib
-, libadwaita
-, libportal-gtk4
-, meson
-, ninja
-, python3Packages
-, wrapGAppsHook4
+{
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  lib,
+  libadwaita,
+  libportal-gtk4,
+  meson,
+  ninja,
+  python3Packages,
+  wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "adwsteamgtk";
-  version = "0.6.11";
+  version = "0.8.0";
   # built with meson, not a python format
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "AdwSteamGtk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f7+2gTpG5Ntgq+U2AkQihzSTrO+oMsLWxgxe4dVyz8A=";
+    tag = "v${version}";
+    hash = "sha256-n+BNqa+SHB1V1INHooc0VpeqZ2Dy1Byt7mrbJc2MXts=";
   };
 
   buildInputs = [

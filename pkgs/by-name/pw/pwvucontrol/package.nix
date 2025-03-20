@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchFromGitLab
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, pango
-, pipewire
-, wireplumber
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  fetchpatch,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  pango,
+  pipewire,
+  wireplumber,
 }:
 
 let
@@ -27,27 +29,32 @@ let
       domain = "gitlab.freedesktop.org";
       owner = "pipewire";
       repo = "wireplumber";
-      rev = version;
+      tag = version;
       hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/f4f495ee212c46611303dec9cd18996830d7f721.patch";
+        hash = "sha256-dxVlXFGyNvWKZBrZniFatPPnK+38pFGig7LGAsc6Ydc=";
+      })
+    ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-v8xANTbaIPIAPoukP8rcVzM6NHNpS2Ej/nfdmg3Vgvg=";
+    tag = finalAttrs.version;
+    hash = "sha256-fmEXVUz3SerVgWijT/CAoelSUzq861AkBVjP5qwS0ao=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "wireplumber-0.1.0" = "sha256-ocagwmjyhfx6n/9xKxF2vhylqy2HunKQRx3eMo6m/l4=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-oQSH4P9WxvkXZ53KM5ZoRAZyQFt60Zz7guBbgT1iiBk=";
   };
 
   nativeBuildInputs = [

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {

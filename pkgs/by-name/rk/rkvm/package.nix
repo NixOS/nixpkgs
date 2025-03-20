@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libevdev
-, openssl
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libevdev,
+  openssl,
+  makeWrapper,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,14 +15,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "htrefil";
-    repo = pname;
+    repo = "rkvm";
     rev = version;
     hash = "sha256-pGCoNmGOeV7ND4kcRjlJZbEMnmKQhlCtyjMoWIwVZrM=";
   };
 
-  cargoHash = "sha256-aq8Ky29jXY0cW5s0E4NDs29DY8RIA0Fvy2R72WPAYsk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2vioqALLeLFFmdZPwdTXCWJJkpQMWdi7KQ7mxO0Sviw=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+    makeWrapper
+  ];
   buildInputs = [ libevdev ];
 
   postInstall = ''

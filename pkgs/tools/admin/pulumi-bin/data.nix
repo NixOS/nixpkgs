@@ -1,160 +1,160 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.138.0";
+  version = "3.156.0";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.138.0-linux-x64.tar.gz";
-        sha256 = "1n3fzpm4anr0cim3dc4f1hg1gld4ka46rj9yydgy0pi8cgi5w900";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.156.0-linux-x64.tar.gz";
+        sha256 = "1bglydw2avadb9y70ycqf7y2qrx4i4f9phqsqxi3izxi973x50kg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.27.0-linux-amd64.tar.gz";
-        sha256 = "15vi8xlbyabh18krag5q6xqawr71miirbja9cpln6iyhw48wx954";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.36.0-linux-amd64.tar.gz";
+        sha256 = "1g7yzfpa03j05nyddyhgnna01mcxhln4sgfplgam5qg67h58m546";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v7.5.0-linux-amd64.tar.gz";
-        sha256 = "0l5fy9gcmzb11q6sp7yqssfan2i804l2ck2rhfihb07kmdrgn4sh";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v8.0.0-linux-amd64.tar.gz";
+        sha256 = "1xbwvb15zgxf0vvrpdp5p0jk09kzz3f1hn15k0b3bqjal7dp51qz";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.65.0-linux-amd64.tar.gz";
-        sha256 = "0zwkjckwlgq9iczf4ypxy7h33mn8bkbskqw3m4jvn5jhjqc5m5sd";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.75.0-linux-amd64.tar.gz";
+        sha256 = "0mfr4yj59b2l8bch0dbbmznd3b2rwvsjvp2jyzlq6jpb1sfyj3cr";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.3.4-linux-amd64.tar.gz";
-        sha256 = "1r11ms8b7ckgzl0kw6n9bpgw7mcj9fn3c18h08hwhlw5ypixsxvn";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.8.0-linux-amd64.tar.gz";
+        sha256 = "1kyljbg6lkc9mr6j493rjk5mnrh3ldgc8qjxmn8y3nzbc2xmcs65";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.8.3-linux-amd64.tar.gz";
-        sha256 = "1xck3a9q5ayki3gs57z85hqwhr86apji91v843mxrrv5bxjir0v1";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.16.0-linux-amd64.tar.gz";
+        sha256 = "13v1g69fy1fhg36xni6kvj37v1lxnw6kggqnzysnif9lq6p8sha7";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.58.0-linux-amd64.tar.gz";
-        sha256 = "10grspac80kvn8wx4is72yfpgfv2aywcd60irs0jqnigb4pncm9q";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.72.0-linux-amd64.tar.gz";
+        sha256 = "0zjiw385mi1w42jnqm8bzjdvqbx4ws5iscjp5aaykn21nvsw57ly";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.8.0-linux-amd64.tar.gz";
-        sha256 = "0jifqlik321s67n77dr92ba9pmpj895z29b2klwi7iidgb3grn81";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.2.0-linux-amd64.tar.gz";
+        sha256 = "1fa45kzn755md2m98c8305hwqq7w414cvnbllvvdvqji2qmikh2d";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.0.1-linux-amd64.tar.gz";
-        sha256 = "00r0ngvlqfmc2fydb9qc5r5s0rkws4r96i7wvrmmxsxhigc2g9w5";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.7.0-linux-amd64.tar.gz";
+        sha256 = "0c2rzijzfkb3kw4r4yi4hwaqmnxcz0smb0lxyqs05xzgijf74jgx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.4.0-linux-amd64.tar.gz";
-        sha256 = "18v0fn2lcqbvqydz7lj6k1ybdkfrnjwycg7m41x4nymqy66b86rz";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.21.0-linux-amd64.tar.gz";
+        sha256 = "18f8fap5zjrjqzmblxgpwffkqj82bhj3pl6vrmj7nlmj4q2r4i88";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.42.0-linux-amd64.tar.gz";
-        sha256 = "09lfkvc7hr8k09hv53qgizkrxpr7q9l4nwm6778pfbz5hmgarga8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.49.1-linux-amd64.tar.gz";
+        sha256 = "1cxwnbms0dyf3a828apfr6x6j3aqwbzwf9gnvmxq7p3kvqzrc7mv";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.2-linux-amd64.tar.gz";
-        sha256 = "053bw7fy26w89mmr850jwwi81kx94d1i2vmymdwh28fjvkldq32j";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.4-linux-amd64.tar.gz";
+        sha256 = "1093zzn3yv85bxwf60ig1fh1jdl8zqzql2bmkjs9hk1cxh7wfll3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.34.1-linux-amd64.tar.gz";
-        sha256 = "0aazshisk8ap83zvj2jgjhxv6841zyf8v582f5gag4bag2fifywf";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.46.0-linux-amd64.tar.gz";
+        sha256 = "17y7zzffz4zzx5169kqzw490p5y59aqrlahmc6jfizhwri49pyi9";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.34.0-linux-amd64.tar.gz";
-        sha256 = "1vi1gh191w51w57ykivcfy2glnkc4mxk3azrp2bhrhc4qvz5x8nm";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.40.1-linux-amd64.tar.gz";
+        sha256 = "1hh4842j022brzbjxylvpnl251fq09si5wxx3k6hf16izh1abz03";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.5.7-linux-amd64.tar.gz";
-        sha256 = "1pjn8xayzbns74wjf29wc3inydzbb48dhdg2gh8swzzynwkh779r";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.6.1-linux-amd64.tar.gz";
+        sha256 = "1vl5rabc9als8iy9rybslkbm4kkzwbbbg0gpp9hiksfrn8cyqv67";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-amd64.tar.gz";
         sha256 = "0hnardid0kbzy65dmn7vz8ddy5hq78nf2871zz6srf2hfyiv7qa4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.12.2-linux-amd64.tar.gz";
-        sha256 = "164mg37hjqc4jaiii4c0zlvrnflk4xk013wli1mvxpr2651iijqf";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.14.0-linux-amd64.tar.gz";
+        sha256 = "191j823pngyicvgvkjfik9n0nsws2zsqqzykzsad74w59i9cr90c";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.8.0-linux-amd64.tar.gz";
-        sha256 = "0yvlhng7sih84gnzw8gpz9x2rcxvxs9y00x551xw6n35ljxb9izl";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.22.0-linux-amd64.tar.gz";
+        sha256 = "07mq1ly7kz89m2gixk21npz3sanv0qwcvwp6j10y2b9cxqw4kl98";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.3.2-linux-amd64.tar.gz";
-        sha256 = "0vrrbvr2n2f2jlmqb81snhf0xacz4r1ym7cqs5gnkx9swb427qgp";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.7.0-linux-amd64.tar.gz";
+        sha256 = "0c75qc3n3a2awjbi2fkxm8x2xvy3wv26v4fcpachfp9zr0gqig7q";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.5.0-linux-amd64.tar.gz";
-        sha256 = "040yp3fjdnaxmqrkby519mjl858k4r9waf6czg0rf8bikbq648ij";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.9.0-linux-amd64.tar.gz";
+        sha256 = "0pg9h6d54x7l04z3zci15xja9jr3nk0rb5z0yk7l8llf295mx7cn";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.32.0-linux-amd64.tar.gz";
         sha256 = "1zra1ck64gs4nwqf62ksfmpbx24lxw6vsgi47j4v8q051m89fgq3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.20.5-linux-amd64.tar.gz";
-        sha256 = "1ippk47y3018rvl05bwhcjwhd942fmiam1w0s2ys3l3jky2n1pvs";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.22.0-linux-amd64.tar.gz";
+        sha256 = "0riqjjr2hrki0i9swf0k7njmpqrbwp5c7lpw8dif4g5ni6alwz8y";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.18.3-linux-amd64.tar.gz";
-        sha256 = "0l1n44p3kc0j3my60h4iaz5qqynwynwr6asvls71y5dshbs6nh6q";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.22.0-linux-amd64.tar.gz";
+        sha256 = "18vphhjrs6s3hc2zjcxydry9g3zx69rwl3739m84zcn42ws9d3xx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.29.0-linux-amd64.tar.gz";
-        sha256 = "19vxhsms1q3591wyd3hlzffkkrg2bjqmxz5iyf35pgxb7yr22qhv";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.35.0-linux-amd64.tar.gz";
+        sha256 = "0n4xpx7nfk2r7pgbaxp6h81hdbqa29b3xnbw8jqkivvvyfgrnqbz";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.6-linux-amd64.tar.gz";
-        sha256 = "17zsq2qhkhlikjvil4rwcarydkdx3v8w95s414mcvgsfyrj91j46";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.8-linux-amd64.tar.gz";
+        sha256 = "0991xkdk0jb87q7gjjb34765k8ing9qbm4zhp8ymsqkhhq7h363i";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.7-linux-amd64.tar.gz";
-        sha256 = "0vq7q9jnr3ikbvnf7n8vp1264c0ff2w6nfrs1lmfvn1jzr831hw3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.9-linux-amd64.tar.gz";
+        sha256 = "0v4sfah9qvphg8v7p2nwv9x33jis48y2xf1nnlc5lnidqqpfmdkr";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.1-linux-amd64.tar.gz";
-        sha256 = "0jp5dbjr4f8r51y0nkv62r3rxl476lb6aqkkhr2n56gakfz1rbn7";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.3-linux-amd64.tar.gz";
+        sha256 = "07jg8jd99s75ias1f97inyqb5mag7ypf2jhnqyhcl49sjiswmqrx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.13.0-linux-amd64.tar.gz";
-        sha256 = "197ycb1z2rqnkqxa0fvslx86r02hcxwr43gpyprdvhi4vf0spm0n";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.15.0-linux-amd64.tar.gz";
+        sha256 = "1nxl6zjnsrgscvv2jn7q12b8fcdx701lqxywiblkf85p64w4f882";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.16.7-linux-amd64.tar.gz";
-        sha256 = "0v1khy2xjjv0abxqjam5diiiwli0dhbjkpf85li6l4ay7g19c9m0";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.18.0-linux-amd64.tar.gz";
+        sha256 = "16scgz83rih511isyq7ycnm4gm94zvf6hgd86kic5s1q20lf86k9";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v0.60.0-linux-amd64.tar.gz";
-        sha256 = "088bfkpsq0zyazpzyxmji9brxyirxw12adc3pl9f5nc044p5c5zx";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v1.1.3-linux-amd64.tar.gz";
+        sha256 = "1ikw64y55dzhdc49mq3qy4gq2zfbvv3551295mygrz11zrjrmfzp";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.98.0-linux-amd64.tar.gz";
-        sha256 = "07kfn511wl3n2q4w1rzfyk1vrpgmf14m0bqci0zq0pdpblsknb39";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.113.0-linux-amd64.tar.gz";
+        sha256 = "1dbr2w0s8z6lqdx4p56jr7crf97sznr3gxq4j13rpa03bi2kj0q8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v0.23.7-linux-amd64.tar.gz";
-        sha256 = "15knw6fhdzhmws9ixzvbvgqwnzbryf91zbbkqrywi3yz1zc6mhg1";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v1.0.6-linux-amd64.tar.gz";
+        sha256 = "159ppzhqqy9hlcr4l8sfjlazrm1fmicfc9cg6h1lwz19gfxjr1v8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.17.4-linux-amd64.tar.gz";
-        sha256 = "1qp0s4j5amjx1if1sz8f2hjim8g58i1wdd74nkdadya1qi6nyhw6";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.18.0-linux-amd64.tar.gz";
+        sha256 = "0nb6riv0j194xnj9kl8w2fsl3gbm0ah1zly974qmcdq3swkij5cp";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.0.9-linux-amd64.tar.gz";
-        sha256 = "0k39k15k1rzcrw1k30683b8zhfp41r90zi6mlzivbbnszdjgnbml";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.1.0-linux-amd64.tar.gz";
+        sha256 = "0ncs34kakpbn2a3qyzqqg4ff53iijd82wxj8x6zw6rnlhxkb9rxv";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.3.2-linux-amd64.tar.gz";
-        sha256 = "0dijwdpr3ldqqarmrd8hnvgf1ifrk5krfh1a76mv8fcg16gqz2xn";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.6.0-linux-amd64.tar.gz";
+        sha256 = "0z64m3fw592cclxa70jv6zhqw26sfi4mngff4bh3jk0m4chahb6a";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.4-linux-amd64.tar.gz";
-        sha256 = "1syqjpkn1nz05hlw3i09sjwrk81l42p61g09ml9afyc9pslkqhcl";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.6-linux-amd64.tar.gz";
+        sha256 = "13v3vz76skral2lhv7ph9yb6im8zsiavis6qss6jzx8pdw8gq6a4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.12.1-linux-amd64.tar.gz";
-        sha256 = "06lfqaxgmgyi88f77qkv0114pn41wwwjc4z0z4zf3pp72kmvi3il";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.13.1-linux-amd64.tar.gz";
+        sha256 = "0h5pca5kgyjwdj9m8fd0wmygxhvjm6r5wss00wprad383mwp3s7v";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.6-linux-amd64.tar.gz";
-        sha256 = "1l2r5lbzm7wnx78im67rij8nlsm9ailxdl9m27ikmqsw6zfxjskc";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.8-linux-amd64.tar.gz";
+        sha256 = "0bj4lc7g74vlsv4rqqj9ymbpbc3fdxn483wp1m6y838b3kd69hns";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-yandex-v0.13.0-linux-amd64.tar.gz";
@@ -163,156 +163,156 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.138.0-darwin-x64.tar.gz";
-        sha256 = "1zk5hs48dcn95z2ij1xg0lkyi8rka6xza1zj9aj2mhgyjx20xgkg";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.156.0-darwin-x64.tar.gz";
+        sha256 = "1jxjdrgg6q7l8ijr2lyx0ckqj2wrmgs8pgzh9khasc6l3sppvnbm";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.27.0-darwin-amd64.tar.gz";
-        sha256 = "067jp4s0cb9mih1a7dqwspj6lx2ylalnld0kcjf3b0cqka1fbvgf";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.36.0-darwin-amd64.tar.gz";
+        sha256 = "02cln6xy3hvjxf8247n1xp2agx80qjibyhrnxqsb09n09g0i5vcc";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v7.5.0-darwin-amd64.tar.gz";
-        sha256 = "1ld0qnckwm6fkrr531vs5ay7krhpznhgk1193g231l0b0hb9lm3w";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v8.0.0-darwin-amd64.tar.gz";
+        sha256 = "1vrywndkhhr3k2ckpy7rxm910mq70ks1r36dnfa10pb53hhl1ngp";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.65.0-darwin-amd64.tar.gz";
-        sha256 = "0rz2hyqbdfbsh1lfslmnd4vvnh3pm5s5ij093vaif02k0f84ckvj";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.75.0-darwin-amd64.tar.gz";
+        sha256 = "18y8vr13dcpwg9mdwfn2mh5bww782wx7j8wxvv8j0xnv6ikwgaxm";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.3.4-darwin-amd64.tar.gz";
-        sha256 = "1bp73yp7s7r9kgr1al4bi5z283slqplxzr086jb5mdnl1nhxrqz9";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.8.0-darwin-amd64.tar.gz";
+        sha256 = "10zkqc02lpf9k0brykyngsasi189w167f6v24cp8sl1agbdcqb9f";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.8.3-darwin-amd64.tar.gz";
-        sha256 = "1v65z6zifyx4lhzw34qbm5nsgkj0ca903gxiv6l2d2im411l65wn";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.16.0-darwin-amd64.tar.gz";
+        sha256 = "13lmgwfic3m4ii4nwfbv4yl2nwihkd0yy7144chnvzm7815z19y2";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.58.0-darwin-amd64.tar.gz";
-        sha256 = "1vivk1j7rniv4kip4mkdd0849hxlkmclwp8kf2f3jv3nh2g344xz";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.72.0-darwin-amd64.tar.gz";
+        sha256 = "194r75zdjgk4zjk2kdclvlqmh4sjzj1ivv5kgg795kzg3s3gb57q";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.8.0-darwin-amd64.tar.gz";
-        sha256 = "1py5sbh2lgh9qd4jzvygqgykhwr0r9y705qzflpy1jfdvidmxyir";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.2.0-darwin-amd64.tar.gz";
+        sha256 = "0znbyyh84ygbscm7db10bbzhma23kxy8aqpcnf5hd0l1fvphyw4h";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.0.1-darwin-amd64.tar.gz";
-        sha256 = "11gfaxk8vgk95crb45g43r8gyg43azq7qk3wzk7kn7vyvzdkq0l6";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.7.0-darwin-amd64.tar.gz";
+        sha256 = "05fabrw15x9rsyib1lxvwd78kcy241hfqdbqgpilf83isavf6s8y";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.4.0-darwin-amd64.tar.gz";
-        sha256 = "0kimrzah7zkvg3by7icmfpw7x3c06wnii6pqh94sfc2dbrv2vwgh";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.21.0-darwin-amd64.tar.gz";
+        sha256 = "1kzx16rv67ck7pnlyrmq7407bq41agfwxn7c70l0wsnp5y2l6zwj";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.42.0-darwin-amd64.tar.gz";
-        sha256 = "0yvaw55yqjgjwlys9x6k6p0i5sgjgx005lpdf3q7s2hj1afng4f7";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.49.1-darwin-amd64.tar.gz";
+        sha256 = "03gbylbr6d5h7mmiw5g96nxlg8snw12zgj45dmfbx65v1qxkvn7q";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.2-darwin-amd64.tar.gz";
-        sha256 = "1fayqzcyda8q0fr96gqbi2y6r9ykx8agb57wnqffhl06ay6kgji4";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.4-darwin-amd64.tar.gz";
+        sha256 = "1f064fmzyr1d1axl6vdggh1jp6p1akqiy7jbywwzy0rcqipqd2mr";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.34.1-darwin-amd64.tar.gz";
-        sha256 = "02130bdma9zhmc3jizgmdfnly5bddajxv5qcl0kxp7xs7r37vl3p";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.46.0-darwin-amd64.tar.gz";
+        sha256 = "129z21fz7k61ysbcbwa21951lpagkj5pfg6d1a2shy0m641ls0w4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.34.0-darwin-amd64.tar.gz";
-        sha256 = "143s973jb47ig91nnpqqivld5c51949dmqiw20hsj49as07v2sx3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.40.1-darwin-amd64.tar.gz";
+        sha256 = "15yxznjdbbjbgc6lqr90mmv7g3pn7g007f3sql6vs4dsx5llwk7a";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.5.7-darwin-amd64.tar.gz";
-        sha256 = "0ipi6z8gwrlqaxxqililmw626h68gwzp1w3bhhf9rzka4p0pdw4k";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.6.1-darwin-amd64.tar.gz";
+        sha256 = "077ajfnaz994akfw18vpk4a35b7426xg95vw793hl87xa7r3f75z";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-darwin-amd64.tar.gz";
         sha256 = "1m5lh59h7nck1flzxs9m4n0ag0klk3jmnpf7hc509vffxs89xnjq";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.12.2-darwin-amd64.tar.gz";
-        sha256 = "0ndvsfd2dhrg18kvia8kj5xxr2cxsfxq9xnj30z6nx29jmxy5404";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.14.0-darwin-amd64.tar.gz";
+        sha256 = "0qqzfdibgwzgnv79as3l6k8hh4nviq2i0xsgzsvjkklzf2szyh8k";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.8.0-darwin-amd64.tar.gz";
-        sha256 = "1m8wzlqszs0nxxpxm9vk1sc0sp80grkv4xs72ypr7z415manny0y";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.22.0-darwin-amd64.tar.gz";
+        sha256 = "0fic5bmvk2ba14h3rhvnpmzz2h6r0x73pg71bxpm88jsyqf2s51l";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.3.2-darwin-amd64.tar.gz";
-        sha256 = "0pyjavhsblvfigaz80j5lh1dmlj3g42r4v6b92bjw45392dfh9v7";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.7.0-darwin-amd64.tar.gz";
+        sha256 = "02yi7iwhf07sa84aaysmag91bnp3h1f3fcix7zphr9hr7vn85igk";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.5.0-darwin-amd64.tar.gz";
-        sha256 = "0z7nay0808bb5apm3l72cpy47mzhr5zfh4h10wmm9sh0aqis39vq";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.9.0-darwin-amd64.tar.gz";
+        sha256 = "0n14mmfnqp2y8r00i6rczr16fiqfijppxl9icsg8j01gypl02whi";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.32.0-darwin-amd64.tar.gz";
         sha256 = "0ddd0pgpyywq291r9q8w6bn41r2px595017iihx4n2cnb1c4v6d5";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.20.5-darwin-amd64.tar.gz";
-        sha256 = "0l1cndf2bcdc2492dm76sfad1m6xcbhqh4vkxahckflpy296pqmn";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.22.0-darwin-amd64.tar.gz";
+        sha256 = "1k40h7gihhb4fg2bhnd7qp58kpr5lrkasfw07xcwqvq90y0nxy9i";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.18.3-darwin-amd64.tar.gz";
-        sha256 = "0drbapilf6rafxjhrlzczzmgxs0ra1xirafx9qi8v7ghcsp8z98m";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.22.0-darwin-amd64.tar.gz";
+        sha256 = "11qk1w019kwdm0h2n2kprwlnjmn0cs52h4i57ibby3gwvi5q1h34";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.29.0-darwin-amd64.tar.gz";
-        sha256 = "1xbcyy309rb6lf9xdq0nh9k0a8318kc8bc2wc45lvgnhqriqxj9x";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.35.0-darwin-amd64.tar.gz";
+        sha256 = "00mkk32zfzvpifqmk7w12p27mnx88gxxl8rq47zn25hbmxa4wmvp";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.6-darwin-amd64.tar.gz";
-        sha256 = "027dp8cqyqjvp1rsg2mxsfsbr7bn4gkkx8i7x4gc3w2qs7icp3z9";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.8-darwin-amd64.tar.gz";
+        sha256 = "120zpffjxa0fywlrsxx6ymzmvrk6wr3lph6l9sm6dhd9ik6810li";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.7-darwin-amd64.tar.gz";
-        sha256 = "1wvnpgmjr7qqjzx0pclrb3gmbdw5wpqdmsac7f9rc1i25xhjv2f3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.9-darwin-amd64.tar.gz";
+        sha256 = "0dl22mjxiaxzasd58cnb9rrxnqlkx84bhkyd7pk0jys7ra375r44";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.1-darwin-amd64.tar.gz";
-        sha256 = "15057d3s3d7rwy3lwjlrr25ahrqhkpwla2pn58bkcwxfm6kkfrch";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.3-darwin-amd64.tar.gz";
+        sha256 = "14fllfabpb8xliwsl4psdqaffvk86i1yi59aigax1f3zz0y73705";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.13.0-darwin-amd64.tar.gz";
-        sha256 = "0hi24fbpxaqqmpx63f6yjvlm7cb2l8ic1hqi4r35yi8az8fgjf41";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.15.0-darwin-amd64.tar.gz";
+        sha256 = "0qjs9412cx7wfzk4kcsm2z54w4mvzssm7c95f01v2slib9rq58nb";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.16.7-darwin-amd64.tar.gz";
-        sha256 = "0lyb9bxsmv5zxryjnil4wh490xngwn1hq8aka2sazr02jsrql098";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.18.0-darwin-amd64.tar.gz";
+        sha256 = "0gkazxwkmb5317amaqb3h34ras7b2vxblaybz2llp47w4qnvq834";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v0.60.0-darwin-amd64.tar.gz";
-        sha256 = "0haii3k9b99qxd0apw9smks1zamq5y69vfiyzn7ylvcj42xnc2aq";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v1.1.3-darwin-amd64.tar.gz";
+        sha256 = "1ahmp1za19qf6gg2nmgqxqr0xg24pavx9q8gf917gmmj4gx4b2ws";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.98.0-darwin-amd64.tar.gz";
-        sha256 = "01b1xp2i4sjp7mfxdwdvjdn86plc0q8ys771y7psjr7zhg16hcki";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.113.0-darwin-amd64.tar.gz";
+        sha256 = "0rkv66dp3b40waayys6a43wngirkwc1lmib00rp18jvgfivbzhsg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v0.23.7-darwin-amd64.tar.gz";
-        sha256 = "0ydwz5gwlsm4jqi1994px58y2fkcylrvg4x8axj3774v5dw37s71";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v1.0.6-darwin-amd64.tar.gz";
+        sha256 = "1nd1v56v104v4is93shy5dq0r9vqw8jq5qzkw4yy64dnvmj8sdkz";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.17.4-darwin-amd64.tar.gz";
-        sha256 = "0rdzdji3dd1xipl37r09sa6dwmf14lsgkkkagn17nd6axhbqypg0";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.18.0-darwin-amd64.tar.gz";
+        sha256 = "0b30h8537cg4bl43h09f96xx31dapl6j77kvx9sh5p776pf1vfk4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.0.9-darwin-amd64.tar.gz";
-        sha256 = "1llbp6mda1ibd557d84mg9ck891y1jxdx11i33vav3ndnf2xnw8g";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.1.0-darwin-amd64.tar.gz";
+        sha256 = "15sgjk6b7n4alq1ga6kzqn6gicqaph83k2jjrlb2392mzxvd7fcn";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.3.2-darwin-amd64.tar.gz";
-        sha256 = "1qxks12cca3h054ykr0v9wr4lx2a4bh3qwps5b7nwwxslq0zq93c";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.6.0-darwin-amd64.tar.gz";
+        sha256 = "1cjx4nah8yharhhd5j46iglcafghmghq0n0wbkhclqqfac0hf2p6";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.4-darwin-amd64.tar.gz";
-        sha256 = "04sl6rivgprh65c459b6xazpb1dbzimvczwj62jpra275qgbl0p8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.6-darwin-amd64.tar.gz";
+        sha256 = "1w3wqx96qv0m7n0grr5sr4qdwrj56cghl3rg2hg75cx5yj00677y";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.12.1-darwin-amd64.tar.gz";
-        sha256 = "09jy2mibhs3rkas7shqdpx25sh6i9jv4laxm5hks3300dhvqsjmf";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.13.1-darwin-amd64.tar.gz";
+        sha256 = "1risgn050qs9yb0r7wx9z1xfw4ai50b5f6fzqchmaw4wpqj83j4h";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.6-darwin-amd64.tar.gz";
-        sha256 = "0fx83vhc2rjhi26v7nlngc3nmhnnxspbyz7m1031snh3wjaynicd";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.8-darwin-amd64.tar.gz";
+        sha256 = "1hrkfl5nqazcf7k6aazi4n8p1d2965ffqfl9wgv6cmzpabwbmc01";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-yandex-v0.13.0-darwin-amd64.tar.gz";
@@ -321,156 +321,156 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.138.0-linux-arm64.tar.gz";
-        sha256 = "0v2nf32b4rpxrqvv2m9l3i37fpdlf7ac9dip2wv66jg31fw0clch";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.156.0-linux-arm64.tar.gz";
+        sha256 = "1anlb0irvcwa7vzyzja9g19g9mjjgix2nyhc1qxm4rrv1212r7wg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.27.0-linux-arm64.tar.gz";
-        sha256 = "0ya6x26yvg0jgnk3rvkkv8pipb2xqk54la7icsjn128689zn24hh";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.36.0-linux-arm64.tar.gz";
+        sha256 = "0m0nf85gxypbp8gc1r1s1q6w5864r7w34d0g42j7nnnwzkp0iy59";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v7.5.0-linux-arm64.tar.gz";
-        sha256 = "1h465gwiwrc7b7nq5s7x98gdhnrz08ng5ymzjsc0qam46dasgpwl";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v8.0.0-linux-arm64.tar.gz";
+        sha256 = "1166ih4sk9ya1m0sdvhvh8xhzmx8dpmzfg8l8jfn2i2af4w1iij2";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.65.0-linux-arm64.tar.gz";
-        sha256 = "0kz5m7f75xna9vmimssw0kv0fijy89m2qjw3j642l7c027kgp2rk";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.75.0-linux-arm64.tar.gz";
+        sha256 = "17vzdi28awlplgmyv6zsb5ccya8yqii3j6wz742wd47w666lkbq9";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.3.4-linux-arm64.tar.gz";
-        sha256 = "11jlilbm61jsgphm33pcg1mk3xfilx18dvyahvnxpg08vmlm0rzj";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.8.0-linux-arm64.tar.gz";
+        sha256 = "0a07fhkjivn8r2qfc4ads89a6s9fh3dm0n49iwj8j6zfnbwl2kdz";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.8.3-linux-arm64.tar.gz";
-        sha256 = "05cxa3xpdypkj64m9hv7c0yrgv20vn25dsbrn8j5wrn4fbfxpgay";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.16.0-linux-arm64.tar.gz";
+        sha256 = "1jsm83rh3ngv5g5l0r5b6mcwz7gn3wnb91nkwqdgmz0cjdczc1hs";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.58.0-linux-arm64.tar.gz";
-        sha256 = "1zgkacw0j2y1ri2i4vvb34kd6abkjkdid135hqncdgi1bvwhjy9i";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.72.0-linux-arm64.tar.gz";
+        sha256 = "1p89pfql0v4v1z01mcvhh1cmn40iqplwvp3ld8d51p5iy8zs2h5l";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.8.0-linux-arm64.tar.gz";
-        sha256 = "1l83vpxcgi3jpbj5qc8yaxpf1yaiqhqcijhmhcqwinfwrzhnk67w";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.2.0-linux-arm64.tar.gz";
+        sha256 = "0n53hh16ggv1cmj21hy0hqn92lvfnqdan57l0a7lqwx5r433mlrg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.0.1-linux-arm64.tar.gz";
-        sha256 = "127jimzckvk4jd3k7fn9a7pi7i8z5069xnpa4dv02fchpw0hwpi6";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.7.0-linux-arm64.tar.gz";
+        sha256 = "0fyhx0zvibb5msgiw0k8f8n9a957n6lbpkpg9kbp5ylhsjafi5ry";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.4.0-linux-arm64.tar.gz";
-        sha256 = "0vmnqjwlp649m8vv7cnch6rs4a5snd8c7ccn6vvi53n6j59w496g";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.21.0-linux-arm64.tar.gz";
+        sha256 = "1nipp4f4q61fwnr4wh99hc9an5qb572rfj0kbjw5pn9fhgy86nc4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.42.0-linux-arm64.tar.gz";
-        sha256 = "0v1cngb503pjcxrs71g170nsy86bp6b71nxdazphy0vnlczbdizx";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.49.1-linux-arm64.tar.gz";
+        sha256 = "1v27xjbbpw4cvabxqg0yhb3z568q76n7qqly7s0inqzy6mqixpjs";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.2-linux-arm64.tar.gz";
-        sha256 = "0g41nc7c5szg8a7hyqf0apji6pm9v5zk389y3ajdz8116a4p83v2";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.4-linux-arm64.tar.gz";
+        sha256 = "0lybz7g4zv08ycnpfwck1n2lsw98h75paamgdq7ha271yn1k58yx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.34.1-linux-arm64.tar.gz";
-        sha256 = "0f2c1lp0pyc9wvnqqg633822m466vwiqfgf4swv46kad4gbsqyq9";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.46.0-linux-arm64.tar.gz";
+        sha256 = "05jwskvxm8z9ypplb2w4jpavnnr5lav6202a89lk0pz8gyzxpjnq";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.34.0-linux-arm64.tar.gz";
-        sha256 = "0glsidkn34qxc763mvv1amhfx7bd9v2p1ic9if88sbj82apx70wb";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.40.1-linux-arm64.tar.gz";
+        sha256 = "1xjj834i2chr8lgh0zn94gapavlapgfc37f710lz5liq1w7di33j";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.5.7-linux-arm64.tar.gz";
-        sha256 = "1495h4lrg9xm39cg7cfjkp70l6icdl0z71xgakmfbilrdzpg16wj";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.6.1-linux-arm64.tar.gz";
+        sha256 = "0qqb8gdqy5kf1m21zpz0gvxy3gz045y7bgi6ykxki7py713j48bc";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-arm64.tar.gz";
         sha256 = "111pia2f5xwkwaqs6p90ri29l5b3ivmahsa1bji4fwyyjyp22h4r";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.12.2-linux-arm64.tar.gz";
-        sha256 = "1p4nk58ac3hs98zgdfpn8gj7fdfzmkfr2hhbw2qrsk0c2j1p7i5c";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.14.0-linux-arm64.tar.gz";
+        sha256 = "1dyg5k7giny2d26yw222kahdnbfwmhr8d1nkrn3i1ycqsb1g573j";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.8.0-linux-arm64.tar.gz";
-        sha256 = "1gbc8lscbm7vh1cq79lpjm2wj0dp8k0r1qdq41r9a23315cbc10h";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.22.0-linux-arm64.tar.gz";
+        sha256 = "14cd8sd3p6q0kl63ldzpkp2xlwaanfq1kq91yaliy4cd80x01wn5";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.3.2-linux-arm64.tar.gz";
-        sha256 = "0mv5hbi1lwp9z8bl1ygq7rkzcqxn0m12n6rfb0bkav8r64r0gp07";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.7.0-linux-arm64.tar.gz";
+        sha256 = "1szmjdrpvayqs5bzmf32gazcsq66q5ys3p3rn54x9302aap13dmy";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.5.0-linux-arm64.tar.gz";
-        sha256 = "12ds15ksk7acx2cs004vabz0hmydrql43nbg26yadzr4vzl1ih7y";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.9.0-linux-arm64.tar.gz";
+        sha256 = "17fq5bdy3agx2ff88pwffqnz50psgwwj1zh12n90zfqc2jvz2w5z";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.32.0-linux-arm64.tar.gz";
         sha256 = "0d8m2krbzxjhfm82dgf8p4vm3kk9gk98l798q4ayjrddqqb4mxq4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.20.5-linux-arm64.tar.gz";
-        sha256 = "02iqynwshdz4jnwna2y3nnba6lpiwckd1r56wdlf0ar3nhjimlv8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.22.0-linux-arm64.tar.gz";
+        sha256 = "1m87drk1jdf9lnavfb6yq2mgai87p212yqx2rxn2dqgc88gn023d";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.18.3-linux-arm64.tar.gz";
-        sha256 = "0cmzvh8mlx1zaglhqv84zfnb21b2k59d44msqn05g5qjyjqqai3g";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.22.0-linux-arm64.tar.gz";
+        sha256 = "1lyd3prgyjqndc2y2b2r92b45v930zvqizc658m6z4nm7rfk2gjq";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.29.0-linux-arm64.tar.gz";
-        sha256 = "1vs4agfvkq29pl8gkqw99959l6hc4mr6fflc62r185c51s0b0kll";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.35.0-linux-arm64.tar.gz";
+        sha256 = "1gk04fg3hfn7bcz1rbq6kn424wyifd94n3zy0n286bpwn3p0lba4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.6-linux-arm64.tar.gz";
-        sha256 = "0sxg42qhaz36pnms0q2f15hchp2nmx30l40ylbsjbnf646ln0pkp";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.8-linux-arm64.tar.gz";
+        sha256 = "1d8vl712v82azbjdi8j7s69h839ni7pdgg96273s7cfx276x5nq3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.7-linux-arm64.tar.gz";
-        sha256 = "1p6c3bf5k9a55jw48n5asnbb9wsa75mjy8f3pkfsn584y7c820cl";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.9-linux-arm64.tar.gz";
+        sha256 = "0qx0drh92m5k5q3mc104jv0zcg5xyx16fbc9vrgr1m07axr5x5cf";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.1-linux-arm64.tar.gz";
-        sha256 = "0sxhhzszpq2y7290ndlw3pj5h8rrdz556npmbly4v5q2yhcqfdw8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.3-linux-arm64.tar.gz";
+        sha256 = "0s05pdxscpq5n6i744pcrgvws8fy96mv80k6g2vb3gn25dw247b8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.13.0-linux-arm64.tar.gz";
-        sha256 = "0qrgrb2ax7ix0ipmmgz1r3g0sh859h6l3vwzqsb9drddg1dm1bwf";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.15.0-linux-arm64.tar.gz";
+        sha256 = "081yn86f4g2x47ziw6b7b17kzdi11pkmiinihqzf541n9knnf24p";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.16.7-linux-arm64.tar.gz";
-        sha256 = "1gi918if5waxpn1y83knfd3b9v2wlswbxsq8hd2vynfq669l9cbg";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.18.0-linux-arm64.tar.gz";
+        sha256 = "14y4jwzlxq0icjw7b3drfgv0kg2a9xl691r59388k9d193yh31n3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v0.60.0-linux-arm64.tar.gz";
-        sha256 = "0lgr2a1rvdn2qnzb889s039f5cw77syrhgnprc6c2z59r60spv3i";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v1.1.3-linux-arm64.tar.gz";
+        sha256 = "1p7aahp9zfk5qhiw2h6wf11is4xnz6j7f1dcm69xli8x0wjib9kc";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.98.0-linux-arm64.tar.gz";
-        sha256 = "1w1f570hkq2r7m0wxazc3jy7r5p0aj5kyp52y1qc2l0asd07yfp3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.113.0-linux-arm64.tar.gz";
+        sha256 = "04vnh940689k7dfd3k0ihwznjnypb5bxjyyfih1g9i0wb3bfrqrn";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v0.23.7-linux-arm64.tar.gz";
-        sha256 = "0yxabd2yw754kapgf4llmrxai0l3knlw8ixal16aw66hqpv72b7c";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v1.0.6-linux-arm64.tar.gz";
+        sha256 = "1zcq19kj8yazn2nj973w2jsd1sxx1k86j6qwjx9p94jvp432pvnr";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.17.4-linux-arm64.tar.gz";
-        sha256 = "19fh2y6g5y2icdh8akjcji1r7pij05ykar0njg2q862iljw69z4p";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.18.0-linux-arm64.tar.gz";
+        sha256 = "15ms5y3yh66bw9zp368gx08j29jajmhghbwa6dmhpkds52dmwsds";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.0.9-linux-arm64.tar.gz";
-        sha256 = "0scga9q0vjc4xcl7yirxmv1ghzykrziacninmv6fl7zsf41f5rvs";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.1.0-linux-arm64.tar.gz";
+        sha256 = "1a0vsy6jlqwi716y6hqiggf0sjiligsgkq4d65aaq7i289xvkrrx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.3.2-linux-arm64.tar.gz";
-        sha256 = "1brj3f8975hmgisalzs6byfxxklmj0hw446459zglv24f25ygwic";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.6.0-linux-arm64.tar.gz";
+        sha256 = "1fw9m6r7yqmkjp94zyvr56qxsavnadargknav74srrngnzi8q2pg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.4-linux-arm64.tar.gz";
-        sha256 = "1rd21jdkc5q291b5gr6wlx6z5gcsk1b4fh1bqy5pc21pmg4a28bj";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.6-linux-arm64.tar.gz";
+        sha256 = "0a0x7h17qxhh0wwn5b3a3p4caqjghax6y37hcxxxjy33r03l4ba4";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.12.1-linux-arm64.tar.gz";
-        sha256 = "0zjq5rjs408j0xwqcp73avji21dbk0sgnaa3rpsfr83lmisjkbm9";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.13.1-linux-arm64.tar.gz";
+        sha256 = "1wkcrvyw9r0j4vy3nmgsypzak8ld2750rc3cd88m0q9qi22vi6hm";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.6-linux-arm64.tar.gz";
-        sha256 = "0hrq59isybs86i4lanf1fahsgc827raxnx30kqkdfclnzx1ln922";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.8-linux-arm64.tar.gz";
+        sha256 = "0pwxqlgsxn0fpq21p4rk7lsb2rlvig2paszwpvyzpfpzksn66mvm";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-yandex-v0.13.0-linux-arm64.tar.gz";
@@ -479,156 +479,156 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.138.0-darwin-arm64.tar.gz";
-        sha256 = "1nlhg2f5abis1vfm0qv65hffmmw94nq2yjfhzisyr7ljwjzly7i6";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.156.0-darwin-arm64.tar.gz";
+        sha256 = "0fdd7vxqagk2p28g13a8pb46245j6c035m6wdrvaaw10sk5y6j4b";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.27.0-darwin-arm64.tar.gz";
-        sha256 = "0xbmbssvyj2wbqmyyaksvd50cqy3xkic4d3pf0mngskh0n8cni58";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.36.0-darwin-arm64.tar.gz";
+        sha256 = "04cfnfwr6l6psfgmj3z0mv5qlsz2n4w5rwwfzkb80jc82l99mz84";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v7.5.0-darwin-arm64.tar.gz";
-        sha256 = "0p5brsbvvjf3kw9wz829b6fxzprbiwzh0w7sx342zsj6xpia3d7b";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-akamai-v8.0.0-darwin-arm64.tar.gz";
+        sha256 = "0spsr6asi7vhml7fwplidzjphkr01zifmb61aj11hxwmpkldhwz8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.65.0-darwin-arm64.tar.gz";
-        sha256 = "12ydys1i139n5p86x7cfxx1y41128dcn00hfw7l762sc7v1hzn6a";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-alicloud-v3.75.0-darwin-arm64.tar.gz";
+        sha256 = "0c4krcnw4kh8wxrvrcfv0j2i276zmsbxiiiph19m3263ddi6i99x";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.3.4-darwin-arm64.tar.gz";
-        sha256 = "1v1k1sj1a08g19dj68zs6jrsdwvxzwvbffsvd2isimbwp8dslgf0";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-artifactory-v8.8.0-darwin-arm64.tar.gz";
+        sha256 = "01glc6mn5k6qyk65qkzhbmkrhlwzlmdkvx8d8mkgm7fprdwaxfv0";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.8.3-darwin-arm64.tar.gz";
-        sha256 = "11xqpvvziw51wi41rrhwsc8x8lwl185dajlmrbmwd1z5xkp9q9sm";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v3.16.0-darwin-arm64.tar.gz";
+        sha256 = "0v6gp882pnbli7cr8p7m7chp3jckgqnwsc0c7v4an81srkjmq1vr";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.58.0-darwin-arm64.tar.gz";
-        sha256 = "0qvjwafs1fidjhnq5qnl7fi3hhc3rmbwgxyav48632dyfqvb9g63";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aws-v6.72.0-darwin-arm64.tar.gz";
+        sha256 = "032zhnjn7ag84nvmgpcdnqyi4zm58hx8yj7zdxk0jrg236iz81q0";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.8.0-darwin-arm64.tar.gz";
-        sha256 = "0cv3haz33qfc5dfi9wh5i1cd097xj22i23kwys74vawh4jv72mfz";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.2.0-darwin-arm64.tar.gz";
+        sha256 = "0zsvaz2shh35lw5c4sqvg39wrfsqk514z2nd9jzvjrnbwmwps6zd";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuread-v6.0.1-darwin-arm64.tar.gz";
-        sha256 = "0fqkcnznp08ikx7acvjnzyv601qy2z9b4896mwswycayn3w6cnd3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.7.0-darwin-arm64.tar.gz";
+        sha256 = "0mmpf4ggzhimm6mhf2p0jydc78wm7wqbm180g6066dd84izi9dsi";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azuredevops-v3.4.0-darwin-arm64.tar.gz";
-        sha256 = "0a2frvzi2rv9jhsnmmyn81sc6gvf8kfr2hb84kppkk3v1277614y";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-azure-v6.21.0-darwin-arm64.tar.gz";
+        sha256 = "1f9vd95jw2s3yvssnv5xx5l4fzhklyb11rlhvl42cccfgndj7g6j";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.42.0-darwin-arm64.tar.gz";
-        sha256 = "0azm53lv2g66ddcni14zykqwml50zynxmi16p282xwiwiksaxqpl";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-cloudflare-v5.49.1-darwin-arm64.tar.gz";
+        sha256 = "1kpwxfav3395khvy8ga0j12m572791krgmklby4sarfjgg0b6j3z";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.2-darwin-arm64.tar.gz";
-        sha256 = "1mx299c36v4q419bjpvhmvkm0bfbia7d0v9ilpyzcxqy68y2irzp";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v3.12.4-darwin-arm64.tar.gz";
+        sha256 = "01sqq37yghlk0772j1vd3l124a2fcwkkz3fb8lsilk33gwb7hjgk";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.34.1-darwin-arm64.tar.gz";
-        sha256 = "1sffzffwp914977wpbs85r0a34fq3ww2b51pq7x0fbkp6gh86c2f";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v4.46.0-darwin-arm64.tar.gz";
+        sha256 = "1zn6ksbpvvxsap9hv13j77rlgycv2ndgcpxxfdhl7j87z2cd1vhw";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.34.0-darwin-arm64.tar.gz";
-        sha256 = "0h011iq2rfzbwhknk6id6j6dbyif191yqd3z09ai7r5b37g8dxh2";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-digitalocean-v4.40.1-darwin-arm64.tar.gz";
+        sha256 = "07a7c6a05qj55vvw70pbglgln2a04khwkykp8l8ls3k3pa9l65v7";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.5.7-darwin-arm64.tar.gz";
-        sha256 = "121af32kxbb4jh65d333qbjwvy80z7vv3dnsajp3g1fi48l02jd6";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.6.1-darwin-arm64.tar.gz";
+        sha256 = "0fcpqyadmnfdx1l9sk0ggygvzakq1l4vf97qh9mdagg1yg0b5y6l";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-darwin-arm64.tar.gz";
         sha256 = "12bzicm43l7yvh02v5fx3z8v46l9i7a9f677735xi5rjbmd2an4c";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.12.2-darwin-arm64.tar.gz";
-        sha256 = "1mqym6db5rz8s2p4zlzlmrrsjsid0dfwl3lwqwyakqnrqf8hmky8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-fastly-v8.14.0-darwin-arm64.tar.gz";
+        sha256 = "17cm719jsh6rc7lwd64kg7qdlxlclvwrky9598f85kbvnv6n0xa8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.8.0-darwin-arm64.tar.gz";
-        sha256 = "12p9jbyvs3cf0s8xidm58s4296sp50ai942xhm7gam3gs7licgv2";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gcp-v8.22.0-darwin-arm64.tar.gz";
+        sha256 = "0ba1hcndfn5ppr0sn5iliqqpspjakd3mqk49pcrg01jlf57106xh";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.3.2-darwin-arm64.tar.gz";
-        sha256 = "06lnmwikkb2jzwbazqi9ca9mpyyxh2m85k3sy0cvfh8inyxy30yr";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-github-v6.7.0-darwin-arm64.tar.gz";
+        sha256 = "02lff0ij3gv7bi4qplcnpq8r29836ma1rzi0h3ydk44qm8kvl9l7";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.5.0-darwin-arm64.tar.gz";
-        sha256 = "1rkm44mcd5icw3f96fnkw2lyq772lx2n2yg56yf5a2a7l4ssmiy5";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-gitlab-v8.9.0-darwin-arm64.tar.gz";
+        sha256 = "1jccv854pg966krqvwjcbidpn9gp4ss0260lckijl1il7a04wyaj";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-google-native-v0.32.0-darwin-arm64.tar.gz";
         sha256 = "0caz4kgnnrmdr7n571xc7yqscac9jnjwwpjzbnvx4ib6a91wvsdn";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.20.5-darwin-arm64.tar.gz";
-        sha256 = "0lzhv6x2fqdrwlvi6s2ryab40c8nvy83xwza7iwksagdx6jpp3nj";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-hcloud-v1.22.0-darwin-arm64.tar.gz";
+        sha256 = "1w4h5k72kn91xgcpbv5x4d0jmhzn6siwzbashhsvxyghnvq9c86v";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.18.3-darwin-arm64.tar.gz";
-        sha256 = "0hbs1v63z9mj4yxbbpd8m84hzraz5fqqqmkmx65bjf5kp355pmpn";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-kubernetes-v4.22.0-darwin-arm64.tar.gz";
+        sha256 = "1m48xndn893bx79a3pxbpxr33wkdkzhknpd91bn5jprj6djzbg6d";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.29.0-darwin-arm64.tar.gz";
-        sha256 = "02y0645k5zdx7ww9g1nsb6a79k9hzz79vb1dbfpjy2bn0mjaqxd3";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-linode-v4.35.0-darwin-arm64.tar.gz";
+        sha256 = "0gkcwim8ymhjnm4ng80mxn66cf66hl259nf1p3gk00521y73vmkh";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.6-darwin-arm64.tar.gz";
-        sha256 = "00v34mcnida3nbjv64mqdavqy8qcm467kyzl8sj6afmaz4f5x1xg";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mailgun-v3.5.8-darwin-arm64.tar.gz";
+        sha256 = "1rl99l5bvc5yhy5z3millws7xzdlcypwxyvhmy6k1lqx200pwm13";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.7-darwin-arm64.tar.gz";
-        sha256 = "0rblryyw9yby42p6h4y1xkymy114crk1753zd3cc7jdn6yih938b";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-mysql-v3.2.9-darwin-arm64.tar.gz";
+        sha256 = "06vpfyxrxx1syzy01qq1ii3d0f734vpyrlvqb93nyprbhckrlsvx";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.1-darwin-arm64.tar.gz";
-        sha256 = "1rqcal6qnmic987hv8dag55ngixxmyrkrg9zf8fwlv21v5jybj8s";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-openstack-v5.0.3-darwin-arm64.tar.gz";
+        sha256 = "196q5r38hssgdi6zfag6yfm3h2wvlqc57xbhca3kjfbri1cyl9ic";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.13.0-darwin-arm64.tar.gz";
-        sha256 = "157idpir8w8jxayp6dhd0a9x1kmsrqi93zm45bbn9lggfxn6vnwx";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-postgresql-v3.15.0-darwin-arm64.tar.gz";
+        sha256 = "145i3v6x1nh4fwas3cjy21556cll0i6fr5pwf953wfx5f2anqk59";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.16.7-darwin-arm64.tar.gz";
-        sha256 = "0cpg87gs14p55lb7575jspsb5vym0mdskhw998vmh9sdxbj94aci";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-random-v4.18.0-darwin-arm64.tar.gz";
+        sha256 = "1aqlwj0v0x2ipjvalzry8g4g5y28pm52q8mriirmimml0vavlib8";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v0.60.0-darwin-arm64.tar.gz";
-        sha256 = "0z83d07daabjcizsj83zapc74ifi177n1fm98qw95mid9njficm1";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-snowflake-v1.1.3-darwin-arm64.tar.gz";
+        sha256 = "1sayvk6h8g2n5g9zb0drsqpibzlsm9k0zp4dvkcgf68iw32fpzxz";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.98.0-darwin-arm64.tar.gz";
-        sha256 = "122052mcg8jwjmirbn1d8mg5f9imi32anwhzgrck4020g31m2zm7";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-spotinst-v3.113.0-darwin-arm64.tar.gz";
+        sha256 = "0kpbxsb5v6m8qddjhza30vcmvr1w8mm2by2a0rq156vczwk98rl3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v0.23.7-darwin-arm64.tar.gz";
-        sha256 = "109xy189w8m5s7i48fx9781494pygy46cz64sji7mml9a3i6gg30";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-sumologic-v1.0.6-darwin-arm64.tar.gz";
+        sha256 = "0bl6dprip8dd25yd12z5ckalgfn27jz9gbxr77ag1hikl631fgpg";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.17.4-darwin-arm64.tar.gz";
-        sha256 = "1fw3azy7z4k39q0mpwbq0p2yvyf7plr7hxgpi747j2zz3s1v7iwa";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tailscale-v0.18.0-darwin-arm64.tar.gz";
+        sha256 = "0i8l2kdpif76qblqalv407sy42ihnzwbdyyfa814c552f9av5ii2";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.0.9-darwin-arm64.tar.gz";
-        sha256 = "019kvnzazk7aw5fcxf1219pgdn4kb0rp5xs42zi80bfvvc16ilin";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-tls-v5.1.0-darwin-arm64.tar.gz";
+        sha256 = "09c1lg1p86wlgr8manrbm566gmwf31z0sw1ryszsnp569bdg5ikf";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.3.2-darwin-arm64.tar.gz";
-        sha256 = "0j1b57p8hzs7l04h3im3sbkh2wc3x5av1vv37p9nypkaq0h0rwn9";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vault-v6.6.0-darwin-arm64.tar.gz";
+        sha256 = "1bdiq2m0gr3jamwaz9jlc4sx3x5g29pwk1l790830v1zqh2kx7x3";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.4-darwin-arm64.tar.gz";
-        sha256 = "0v77jnip6d0vgbcf6qm23415kb8www6faj7bigdwhckk4i69lc4b";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.10.6-darwin-arm64.tar.gz";
+        sha256 = "1jdgx5621xmhqcyfm4p85wbp23clv0ws2klk4dgfxkaqf27xhwva";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.12.1-darwin-arm64.tar.gz";
-        sha256 = "15fwan0110mj72ggrzls0z6azhmmwvr6db1g0hjb5ysgnmrfx12w";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.13.1-darwin-arm64.tar.gz";
+        sha256 = "0xw51rfh9vv0dbdzkjz6yrhj86f691cdg40ax085zk0g31x2g1cm";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.6-darwin-arm64.tar.gz";
-        sha256 = "1n387d84a3airf6w2lq62ija3ff86vpzgvm1qjzcdndbb9ymmr4c";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-wavefront-v3.1.8-darwin-arm64.tar.gz";
+        sha256 = "1mmnn6my6v0mj28fqgiymdwfjsmj3rcb1nf7aj92kp3m38a0gcjs";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-yandex-v0.13.0-darwin-arm64.tar.gz";

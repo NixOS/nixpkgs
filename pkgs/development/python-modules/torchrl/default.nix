@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -37,7 +38,7 @@
   tensorboard,
   wandb,
 
-  # checks
+  # tests
   imageio,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -47,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.5.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uDpOdOuHTqKFKspHOpl84kD9adEKZjvO2GnYuL27H5c=";
+    tag = "v${version}";
+    hash = "sha256-hcCZSASAp9jbOhbFLJndridYn76R99K+LxRxQl3uaxM=";
   };
 
   build-system = [
@@ -132,42 +133,52 @@ buildPythonPackage rec {
     ++ optional-dependencies.gym-continuous
     ++ optional-dependencies.rendering;
 
-  disabledTests = [
-    # torchrl is incompatible with gymnasium>=1.0
-    # https://github.com/pytorch/rl/discussions/2483
-    "test_resetting_strategies"
-    "test_torchrl_to_gym"
+  disabledTests =
+    [
+      # torchrl is incompatible with gymnasium>=1.0
+      # https://github.com/pytorch/rl/discussions/2483
+      "test_resetting_strategies"
+      "test_torchrl_to_gym"
 
-    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
-    "test_vecenvs_env"
+      # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
+      "test_vecenvs_env"
 
-    # ValueError: Can't write images with one color channel.
-    "test_log_video"
+      # ValueError: Can't write images with one color channel.
+      "test_log_video"
 
-    # Those tests require the ALE environments (provided by unpackaged shimmy)
-    "test_collector_env_reset"
-    "test_gym"
-    "test_gym_fake_td"
-    "test_recorder"
-    "test_recorder_load"
-    "test_rollout"
-    "test_parallel_trans_env_check"
-    "test_serial_trans_env_check"
-    "test_single_trans_env_check"
-    "test_td_creation_from_spec"
-    "test_trans_parallel_env_check"
-    "test_trans_serial_env_check"
-    "test_transform_env"
+      # Those tests require the ALE environments (provided by unpackaged shimmy)
+      "test_collector_env_reset"
+      "test_gym"
+      "test_gym_fake_td"
+      "test_recorder"
+      "test_recorder_load"
+      "test_rollout"
+      "test_parallel_trans_env_check"
+      "test_serial_trans_env_check"
+      "test_single_trans_env_check"
+      "test_td_creation_from_spec"
+      "test_trans_parallel_env_check"
+      "test_trans_serial_env_check"
+      "test_transform_env"
 
-    # undeterministic
-    "test_distributed_collector_updatepolicy"
-    "test_timeit"
+      # undeterministic
+      "test_distributed_collector_updatepolicy"
+      "test_timeit"
 
-    # On a 24 threads system
-    # assert torch.get_num_threads() == max(1, init_threads - 3)
-    # AssertionError: assert 23 == 21
-    "test_auto_num_threads"
-  ];
+      # On a 24 threads system
+      # assert torch.get_num_threads() == max(1, init_threads - 3)
+      # AssertionError: assert 23 == 21
+      "test_auto_num_threads"
+
+      # Flaky (hangs indefinitely on some CPUs)
+      "test_gae_multidim"
+      "test_gae_param_as_tensor"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Flaky
+      # AssertionError: assert tensor([51.]) == ((5 * 11) + 2)
+      "test_vecnorm_parallel_auto"
+    ];
 
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
@@ -175,5 +186,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # torhcrl is not compatible with our current version of gymnasium (>=1.0)
+    # https://github.com/pytorch/rl/pull/2473
+    broken = true;
   };
 }

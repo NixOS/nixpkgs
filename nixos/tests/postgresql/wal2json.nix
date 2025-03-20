@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -17,7 +18,7 @@ let
           inherit package;
           enable = true;
           enableJIT = lib.hasInfix "-jit-" package.name;
-          extraPlugins = with package.pkgs; [ wal2json ];
+          extensions = with package.pkgs; [ wal2json ];
           settings = {
             wal_level = "logical";
             max_replication_slots = "10";
@@ -43,11 +44,7 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.wal2json.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.wal2json.meta.broken;
+}

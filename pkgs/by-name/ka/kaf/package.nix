@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kaf";
-  version = "0.2.8";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "birdayz";
     repo = "kaf";
     rev = "v${version}";
-    hash = "sha256-12xPBBLV0jtQQI/inNlWTFBZtYBF0GF1GoD1kv1/thQ=";
+    hash = "sha256-SKQg3BCwvVwjZUkTjrMlSrfa8tu2VC8+ckMZpBJhnZE=";
   };
 
-  vendorHash = "sha256-otKz8ECSb2N3vwU5c1+u7zGvXU4iRvQWWggw9WwG78c=";
+  vendorHash = "sha256-1QcQeeYQFsStK27NVdyCAb1Y40lyifBf0dlSgzocG3Y=";
 
   # Many tests require a running Kafka instance
   doCheck = false;

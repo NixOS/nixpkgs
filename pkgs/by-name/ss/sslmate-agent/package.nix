@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sslmate-agent";
@@ -13,10 +19,6 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
   ];
-
-  unpackCmd = ''
-    dpkg-deb -x ${src} ./sslmate-agent-${pname}
-  '';
 
   installPhase = ''
     runHook preInstall

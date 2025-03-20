@@ -3,25 +3,28 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialindex";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "libspatialindex";
     repo = "libspatialindex";
     rev = finalAttrs.version;
-    hash = "sha256-hZyAXz1ddRStjZeqDf4lYkV/g0JLqLy7+GrSUh75k20=";
+    hash = "sha256-a2CzRLHdQMnVhHZhwYsye4X644r8gp1m6vU2CJpSRpU=";
   };
+
+  patches = [
+    ./no-rpath-for-darwin.diff
+  ];
 
   postPatch = ''
     patchShebangs test/
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
@@ -36,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change "@rpath/libspatialindex.7.dylib" "$out/lib/libspatialindex.7.dylib" $out/lib/libspatialindex_c.dylib
-  '';
 
   meta = {
     description = "Extensible spatial index library in C++";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, go-md2man }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  go-md2man,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";

@@ -1,15 +1,16 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 let
   pname = "cozydrive";
-  version = "3.40.0";
+  version = "3.42.0";
 
   src = fetchurl {
     url = "https://github.com/cozy-labs/cozy-desktop/releases/download/v${version}/Cozy-Drive-${version}-x86_64.AppImage";
-    sha256 = "sha256-bKYtuFgKmZj8fFEh/O9HXGm+GQTEbjpe+KsMW5nX1ek=";
+    sha256 = "sha256-1MsRxLp+IZAoj9yqo5n0N1kfRYmYR2tjIjnlbRPrKH4=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 

@@ -13,25 +13,24 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.34.2";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
-    rev = "v${version}";
-    hash = "sha256-ydb80+FP2IsobvCZiIKzbErAJNakVoSoYrhddmPmYkc=";
+    tag = "v${version}";
+    hash = "sha256-WPbiQWfGE4rFxb/Xazxm+nu+RINLTQk7PnrLuY6giX0=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ODE8GLIgdUEOiniki8jzkHfU5TKHWoIIbjGJjNzMZCI=";
+  npmDepsHash = "sha256-SIx2qIWqR1K9K2eUHo5tADdz4vk5ySdSWDBAjBFIVVc=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -43,16 +42,11 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    [
-      pixman
-      cairo
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-      apple-sdk_11
-    ];
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -69,6 +63,10 @@ buildNpmPackage rec {
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+
+    # disable telemetry
+    substituteInPlace packages/bruno-app/src/providers/App/index.js \
+      --replace-fail "useTelemetry({ version });" ""
   '';
 
   postConfigure = ''
@@ -81,9 +79,12 @@ buildNpmPackage rec {
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
   preBuild = ''
-    substituteInPlace node_modules/canvas/binding.gyp \
-      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-    npm rebuild
+    # upstream keeps removing and adding back canvas, only patch it when it is present
+    if [[ -e node_modules/canvas/binding.gyp ]]; then
+      substituteInPlace node_modules/canvas/binding.gyp \
+        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+      npm rebuild
+    fi
   '';
 
   buildPhase = ''
@@ -137,7 +138,6 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -153,7 +153,7 @@ buildNpmPackage rec {
 
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 

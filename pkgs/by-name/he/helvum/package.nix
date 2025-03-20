@@ -1,19 +1,19 @@
-{ lib
-, cargo
-, clang
-, desktop-file-utils
-, fetchFromGitLab
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pipewire
-, pkg-config
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitLab,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,19 +23,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
-    repo = pname;
+    repo = "helvum";
     rev = version;
     hash = "sha256-9vlzLPpyZ9qtCEbCDvYhWDcV+8T63ukdos1l2U6fD+E=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Xebm3XlsO6kBoMnxJsOk/3SO7avVoaGqi2CVWBRzr88=";
+    hash = "sha256-rwhhbEaUg7IiszmJUFh4vQV7cYyyh3tqr1z4QgmwIDY=";
   };
 
   nativeBuildInputs = [
-    clang
     meson
     ninja
     pkg-config

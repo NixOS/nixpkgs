@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "bitwarden-menu";
-  version = "0.4.3";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bitwarden_menu";
     inherit version;
-    hash = "sha256-tuIolWvQ/vKSJr6oUTL7ZLPgdkYsIZods5yQNNfWbWY=";
+    hash = "sha256-vUlNqSVdGhfN5WjDjf1ub32Y2WoBndIdFzfCNwo5+Vg=";
   };
 
   nativeBuildInputs = with python3Packages; [

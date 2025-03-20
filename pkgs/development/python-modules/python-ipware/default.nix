@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-ipware";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S8/HbRztYGzrpLQRTHcvO7Zv3mNn/0+y5PNBYLpd++E=";
   };
 

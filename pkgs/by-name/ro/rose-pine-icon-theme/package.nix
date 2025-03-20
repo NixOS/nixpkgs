@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gtk3
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "rose-pine-icon-theme";
   version = "unstable-2022-09-01";
 
@@ -42,6 +43,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/rose-pine/gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [romildo the-argus];
+    maintainers = with maintainers; [
+      romildo
+      the-argus
+    ];
   };
 }

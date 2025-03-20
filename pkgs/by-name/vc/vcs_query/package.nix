@@ -1,4 +1,9 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vcs_query";
@@ -11,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "05va0na9yxkpqhm9v0x3k58148qcf2bbcv5bnmj7vn9r7fwyjrlx";
   };
 
-  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    python3
+    python3.pkgs.wrapPython
+  ];
 
   dontBuild = true;
 

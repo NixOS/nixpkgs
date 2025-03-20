@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, viu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  viu,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uwufetch";
@@ -6,26 +12,28 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
-    repo = pname;
+    repo = "uwufetch";
     rev = version;
     hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
-  postPatch = ''
-    substituteInPlace uwufetch.c \
-      --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
-      --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
-      --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
-    # fix command_path for package manager (nix-store)
-    substituteInPlace fetch.c \
-      --replace "/usr/bin" "/run/current-system/sw/bin"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "local/bin" "bin" \
-      --replace "local/lib" "lib" \
-      --replace "local/include" "include" \
-      --replace "local/share" "share"
-  '';
+  postPatch =
+    ''
+      substituteInPlace uwufetch.c \
+        --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
+        --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
+        --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
+      # fix command_path for package manager (nix-store)
+      substituteInPlace fetch.c \
+        --replace "/usr/bin" "/run/current-system/sw/bin"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace Makefile \
+        --replace "local/bin" "bin" \
+        --replace "local/lib" "lib" \
+        --replace "local/include" "include" \
+        --replace "local/share" "share"
+    '';
 
   nativeBuildInputs = [ makeWrapper ];
 

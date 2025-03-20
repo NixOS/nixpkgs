@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
   pythonOlder,
@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.5.2";
+  version = "4.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FlsS8omMPo3smaLtBexcg+r6L8gVC6jDD4s6YvaTQz8=";
+  src = fetchFromGitHub {
+    owner = "mikedh";
+    repo = "trimesh";
+    tag = version;
+    hash = "sha256-kkIGAeWFrgOIbvBnZFRQue7Fh7REKF/CHgJLBEZliLM=";
   };
 
   build-system = [ setuptools ];
@@ -39,14 +41,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trimesh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimesh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     mainProgram = "trimesh";
-    maintainers = with maintainers; [
-      gebner
+    maintainers = with lib.maintainers; [
       pbsds
     ];
   };

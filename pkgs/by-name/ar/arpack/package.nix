@@ -1,54 +1,68 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake, ninja
 , gfortran, blas, lapack, eigen
 , useMpi ? false
 , mpi
-, openssh
+, mpiCheckPhaseHook
 , igraph
+, useAccel ? false #use Accelerate framework on darwin
 }:
 
 # MPI version can only be built with LP64 interface.
 # See https://github.com/opencollab/arpack-ng#readme
 assert useMpi -> !blas.isILP64;
+assert useAccel -> stdenv.hostPlatform.isDarwin;
 
-stdenv.mkDerivation rec {
-  pname = "arpack";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "arpack${lib.optionalString useMpi "-mpi"}";
   version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "opencollab";
     repo = "arpack-ng";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    blas
-    lapack
+  nativeBuildInputs = [ cmake gfortran ninja ];
+  buildInputs = [
     eigen
-  ] ++ lib.optional useMpi mpi;
+  ] ++ lib.optionals (!useAccel) (assert (blas.isILP64 == lapack.isILP64); [
+    blas lapack
+  ]) ++ lib.optional useMpi mpi;
 
-  nativeCheckInputs = lib.optional useMpi openssh;
+  nativeCheckInputs = lib.optional useMpi mpiCheckPhaseHook;
+  checkInputs =
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    # which occurs due to an mpi test linking with `-flat_namespace`
+    # can remove once `-flat_namespace` is removed or
+    # https://github.com/NixOS/nixpkgs/pull/370526 is merged
+    lib.optional (useMpi && stdenv.hostPlatform.isDarwin) gfortran.cc;
 
+  # a couple tests fail when run in parallel
   doCheck = true;
+  enableParallelChecking = false;
+
+  env = lib.optionalAttrs useAccel {
+    # Without these flags some tests will fail / segfault when using Accelerate
+    # framework. They were pulled from the CI Workflow
+    # https://github.com/opencollab/arpack-ng/blob/804fa3149a0f773064198a8e883bd021832157ca/.github/workflows/jobs.yml#L184-L192
+    FFLAGS = "-ff2c -fno-second-underscore";
+  };
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
-    "-DMPI=${if useMpi then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+    (lib.cmakeBool "EIGEN" true)
+    (lib.cmakeBool "EXAMPLES" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ICB" true)
+    (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
+    (lib.cmakeBool "MPI" useMpi)
+    (lib.cmakeBool "TESTS" finalAttrs.finalPackage.doCheck)
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
   ];
 
-  preCheck = ''
-    # Prevent tests from using all cores
-    export OMP_NUM_THREADS=2
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
-  '';
-
   passthru = {
-    inherit (blas) isILP64;
+    isILP64 = !useAccel && blas.isILP64;
     tests = {
       inherit igraph;
     };
@@ -56,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
-    changelog = "https://github.com/opencollab/arpack-ng/blob/${src.rev}/CHANGES";
+    changelog = "https://github.com/opencollab/arpack-ng/blob/${finalAttrs.version}/CHANGES";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.
@@ -65,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ttuegel dotlambda ];
     platforms = lib.platforms.unix;
   };
-}
+})

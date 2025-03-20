@@ -22,7 +22,7 @@
 
 let
   pname = "ansible";
-  version = "10.4.0";
+  version = "11.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XBIEiDGmaQ/IZd/gPcirYcO6CLXQGySaFrJHrZmmC8A=";
+    hash = "sha256-XFbXubyf2F+iDxT0gB6ImkWnq4O7EXdq11no+mdRCtQ=";
   };
 
   postPatch = ''

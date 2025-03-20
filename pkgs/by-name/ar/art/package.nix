@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, cmake
-, pkg-config
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, lerc
-, libxkbcommon
-, libepoxy
-, libXtst
-, wrapGAppsHook3
-, pixman
-, libpthreadstubs
-, gtkmm3
-, libXau
-, libXdmcp
-, lcms2
-, libraw
-, libiptcdata
-, fftw
-, expat
-, pcre2
-, libsigcxx
-, lensfun
-, librsvg
-, libcanberra-gtk3
-, exiv2
-, exiftool
-, mimalloc
-, openexr_3
-, ilmbase
-, opencolorio
-, color-transformation-language
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  cmake,
+  pkg-config,
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  lerc,
+  libxkbcommon,
+  libepoxy,
+  libXtst,
+  wrapGAppsHook3,
+  pixman,
+  libpthreadstubs,
+  gtkmm3,
+  libXau,
+  libXdmcp,
+  lcms2,
+  libraw,
+  libiptcdata,
+  fftw,
+  expat,
+  pcre2,
+  libsigcxx,
+  lensfun,
+  librsvg,
+  libcanberra-gtk3,
+  exiv2,
+  exiftool,
+  mimalloc,
+  openexr_3,
+  ilmbase,
+  opencolorio,
+  color-transformation-language,
 }:
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchFromBitbucket {
     owner = "agriggio";
     repo = "art";
     rev = version;
-    hash = "sha256-uvdqU509ri6CKCEGA8Ln5tMp0pe3r/bcJefbeZGjocE=";
+    hash = "sha256-TpjmmDeXuxnlvCimsq6mZZk15VOVU3WGrPd3vmcIClI=";
   };
 
   nativeBuildInputs = [

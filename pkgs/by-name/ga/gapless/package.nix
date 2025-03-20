@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, desktop-file-utils
-, gitUpdater
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  desktop-file-utils,
+  gitUpdater,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gapless";
-  version = "4.0";
+  version = "4.3.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t9YthW8HZz2kXYPvidVRy7GVB2cRGEOCrXZtIpW65MA=";
+    hash = "sha256-zLjpYGZR/o76onSjwfpHEx26vd8rUa/1PXL+DuC8C2o=";
   };
 
   nativeBuildInputs = [
@@ -35,15 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gtk4
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      gtk4
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

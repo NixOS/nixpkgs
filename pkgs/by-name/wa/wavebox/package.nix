@@ -41,7 +41,7 @@
   libkrb5,
   libdrm,
   libglvnd,
-  mesa,
+  libgbm,
   libxkbcommon,
   pipewire,
   wayland,
@@ -140,7 +140,7 @@ let
       libkrb5
       libdrm
       libglvnd
-      mesa
+      libgbm
       coreutils
       libxkbcommon
       pipewire
@@ -156,11 +156,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wavebox";
-  version = "10.129.32-2";
+  version = "10.133.4-2";
 
   src = fetchurl {
     url = "https://download.wavebox.app/stable/linux/deb/amd64/wavebox_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-MaVmiD+XwQLZVVTEZTn/2Kme5pCHXpgQ9bgJRsfrlU0=";
+    hash = "sha256-E7Hvz8HrWLTs7H6wPVN89PVTPWL0T+DjpnIGS17xw2s=";
   };
 
   nativeBuildInputs = [
@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set CHROME_WRAPPER "wavebox" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     for elf in $out/share/wavebox.io/wavebox/{wavebox,chrome-sandbox,chrome_crashpad_handler}; do

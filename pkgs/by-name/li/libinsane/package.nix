@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, fetchFromGitLab
-, pkg-config
-, glib
-, docbook_xsl
-, sane-backends
-, gobject-introspection
-, vala
-, gtk-doc
-, valgrind
-, doxygen
-, cunit
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  fetchFromGitLab,
+  pkg-config,
+  glib,
+  docbook_xsl,
+  sane-backends,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  valgrind,
+  doxygen,
+  cunit,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libinsane";
   version = "1.0.10";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -30,11 +35,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja doxygen gtk-doc docbook_xsl gobject-introspection vala ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    doxygen
+    gtk-doc
+    docbook_xsl
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs = [ sane-backends glib ];
+  buildInputs = [
+    sane-backends
+    glib
+  ];
 
-  nativeCheckInputs = [ cunit valgrind ];
+  nativeCheckInputs = [
+    cunit
+    valgrind
+  ];
 
   doCheck = true;
 

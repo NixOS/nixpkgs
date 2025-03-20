@@ -1,26 +1,30 @@
-{ lib, stdenv
-, fetchurl, unzip
-, hdf5
-, bzip2
-, libzip
-, zstd
-, szipSupport ? false
-, szip
-, libxml2
-, m4
-, curl # for DAP
-, removeReferencesTo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  hdf5,
+  bzip2,
+  libzip,
+  zstd,
+  szipSupport ? false,
+  szip,
+  libxml2,
+  m4,
+  curl, # for DAP
+  removeReferencesTo,
 }:
 
 let
   inherit (hdf5) mpiSupport mpi;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.2";
+  version = "4.9.3";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
-    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
+    hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
   };
 
   postPatch = ''
@@ -36,7 +40,11 @@ in stdenv.mkDerivation rec {
       --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
-  nativeBuildInputs = [ m4 removeReferencesTo ];
+  nativeBuildInputs = [
+    m4
+    removeReferencesTo
+    libxml2 # xml2-config
+  ];
 
   buildInputs = [
     curl
@@ -48,6 +56,8 @@ in stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optional szipSupport szip;
 
+  strictDeps = true;
+
   passthru = {
     inherit mpiSupport mpi;
   };
@@ -57,14 +67,18 @@ in stdenv.mkDerivation rec {
     # tracked upstream here: https://github.com/Unidata/netcdf-c/issues/2715
     lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
-  configureFlags = [
+  configureFlags =
+    [
       "--enable-netcdf-4"
       "--enable-dap"
       "--enable-shared"
       "--disable-dap-remote-tests"
       "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
-  ]
-  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${lib.getDev mpi}/bin/mpicc" ]);
+    ]
+    ++ (lib.optionals mpiSupport [
+      "--enable-parallel-tests"
+      "CC=${lib.getDev mpi}/bin/mpicc"
+    ]);
 
   enableParallelBuilding = true;
 

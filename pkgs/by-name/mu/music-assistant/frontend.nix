@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "music-assistant-frontend";
-  version = "2.8.13";
+  version = "2.12.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bbNIYVFASAdeF1c+Nrcb92wMEBhrCMI8NdQvYhGvbLI=";
+    hash = "sha256-aa400lMs6zxC5QhZS27gFUWpRanyC3sFi815iDEiSPk=";
   };
 
   postPatch = ''

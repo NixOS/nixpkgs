@@ -1,25 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-screenshot";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-screenshot";
     rev = "epoch-${version}";
-    hash = "sha256-+yHpRbK+AWnpcGrC5U0wKbt0u8tm3CFGjKTCDQpb3G0=";
+    hash = "sha256-/sGYF+XWmPraNGlBVUcN/nokDB9JwWViEAL9gVH3ZaI=";
   };
 
-  cargoHash = "sha256-fzIVyxzNknEjGJoR9sgXkY+gyuTC0T4Sy513X8umbWA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1r0Uwcf4kpHCgWqrUYZELsVXGDzbtbmu/WFeX53fBiQ=";
 
-  nativeBuildInputs = [ just pkg-config ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+  ];
 
   dontUseJustBuild = true;
 

@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   setuptools-scm,
@@ -27,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mJ7QOJGJrcR+3NJgHS6rGL82bnSwf14oc+AhMjxKFLs=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "hvplot";
+    tag = "v${version}";
+    hash = "sha256-3zACW2RDRhdGi5RBPOVQJJHT78DwcgHaCHp27gIEnjA=";
   };
 
   build-system = [
@@ -60,7 +59,20 @@ buildPythonPackage rec {
     plotly
   ];
 
+  disabledTests = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "test_dask_dataframe_patched"
+    "test_dask_series_patched"
+  ];
+
   disabledTestPaths = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "hvplot/tests/plotting/testcore.py"
+    "hvplot/tests/testcharts.py"
+    "hvplot/tests/testgeowithoutgv.py"
+
     # All of the following below require xarray.tutorial files that require
     # downloading files from the internet (not possible in the sandbox).
     "hvplot/tests/testgeo.py"
@@ -68,6 +80,12 @@ buildPythonPackage rec {
     "hvplot/tests/testui.py"
     "hvplot/tests/testutil.py"
   ];
+
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  preCheck = ''
+    export MPLBACKEND=agg
+  '';
 
   pythonImportsCheck = [ "hvplot.pandas" ];
 

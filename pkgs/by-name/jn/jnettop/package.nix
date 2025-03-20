@@ -1,4 +1,14 @@
-{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+  autoconf,
+  libpcap,
+  ncurses,
+  pkg-config,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jnettop";
@@ -9,8 +19,15 @@ stdenv.mkDerivation rec {
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf ];
-  buildInputs = [ libpcap ncurses glib ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+  ];
+  buildInputs = [
+    libpcap
+    ncurses
+    glib
+  ];
 
   patches = [
     ./no-dns-resolution.patch

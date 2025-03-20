@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, gst_all_1
-, libnotify
-, libayatana-appindicator
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  gst_all_1,
+  libnotify,
+  libayatana-appindicator,
 }:
 
 stdenv.mkDerivation rec {

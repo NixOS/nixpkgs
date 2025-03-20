@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook, popt, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  popt,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnatspec";

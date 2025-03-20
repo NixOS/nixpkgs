@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, pkg-config
-, fetchFromGitHub
-, file
-, iniparser
-, ffmpeg
-, libnotify
-, libmpdclient
-, discount
-, systemd
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  file,
+  iniparser,
+  ffmpeg,
+  libnotify,
+  libmpdclient,
+  discount,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

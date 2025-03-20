@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromSourcehut, pkg-config, libusb1 }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  libusb1,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wch-isp";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~jmaselbas";
-    repo = pname;
+    repo = "wch-isp";
     rev = "v${version}";
     hash = "sha256-JB7cvZPzRhYJ8T3QJkguHOzZFrLOft5rRz0F0sVav/k=";
   };
@@ -14,8 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
-  installTargets = [ "install" "install-rules" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
+  installTargets = [
+    "install"
+    "install-rules"
+  ];
 
   meta = {
     description = "Firmware programmer for WCH microcontrollers over USB";

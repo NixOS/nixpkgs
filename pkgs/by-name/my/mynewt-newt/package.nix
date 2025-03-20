@@ -19,10 +19,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
-  # https://github.com/shirou/gopsutil/issues/976
-  CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
-
   meta = with lib; {
     homepage = "https://mynewt.apache.org/";
     description = "Build and package management tool for embedded development";

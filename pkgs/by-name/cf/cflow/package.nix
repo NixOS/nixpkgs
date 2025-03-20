@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, gettext, emacs }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  emacs,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cflow";
@@ -15,12 +21,11 @@ stdenv.mkDerivation rec {
                 "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 
-  buildInputs = [ gettext ] ++
+  buildInputs =
+    [ gettext ]
+    ++
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
-    lib.optional
-      (! (lib.lists.any (x: stdenv.hostPlatform.system == x)
-              [ "i686-cygwin" ]))
-      emacs;
+    lib.optional (!(lib.lists.any (x: stdenv.hostPlatform.system == x) [ "i686-cygwin" ])) emacs;
 
   doCheck = true;
 

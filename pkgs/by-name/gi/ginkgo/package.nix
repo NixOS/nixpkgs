@@ -1,20 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, ginkgo }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  ginkgo,
+}:
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "2.21.0";
+  version = "2.23.1";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-9WvBdcl65WTwzFKTPYTg6ufhIBuqx+T99ng7UePSNHU=";
+    sha256 = "sha256-yQnkKh5RXzUIff4gSKDo79GZuRvjkT1vK0IUbvKdVjk=";
   };
-  vendorHash = "sha256-tjHBnkFlkP7n0/c9bz/nUzWerPzVQ+12cKijG1Jzti8=";
+  vendorHash = "sha256-uqpib3k5PtQOsndic0GV1rYBeVlY5Tpg931yHfU6dWI=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
-  excludedPackages = [ "integration" "types" ];
+  excludedPackages = [
+    "integration"
+    "types"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -40,6 +49,9 @@ buildGoModule rec {
       integration tests, acceptance test, performance tests, etc.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ saschagrunert jk ];
+    maintainers = with maintainers; [
+      saschagrunert
+      jk
+    ];
   };
 }

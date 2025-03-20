@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, pkg-config
-, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libp11";
-  version = "0.4.12";
+  version = "0.4.13";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
     rev = "${pname}-${version}";
-    sha256 = "sha256-Xqjl12xT30ZXWYzPWNN3jWY9pxojhd7Kq0OC7rABt4M=";
+    sha256 = "sha256-teYXlPtCt6ifQDArbCJWGrYl9pdr6V7HVpU4HXTPIco=";
   };
 
   configureFlags = [
     "--with-enginesdir=${placeholder "out"}/lib/engines"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    libtool
+  ];
 
   buildInputs = [ openssl ];
 

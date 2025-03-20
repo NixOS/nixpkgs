@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitLab
-, rustPlatform
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -9,11 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "dlalic";
-    repo = pname;
+    repo = "gitlab-clippy";
     rev = version;
     hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
-  cargoHash = "sha256-ztPbI+ncMNMKnIxUksxgz8GHQpLZ7SVWdC4QJWh18Wk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-O3Pey0XwZITePTiVHrG5EVZpIp96sRWjUf1vzZ/JnCw=";
 
   # TODO re-add theses tests once they get fixed in upstream
   checkFlags = [

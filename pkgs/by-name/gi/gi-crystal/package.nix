@@ -1,23 +1,27 @@
-{ lib
-, fetchFromGitHub
-, crystal
-, gobject-introspection
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  gobject-introspection,
+  gitUpdater,
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";
-  version = "0.22.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "gi-crystal";
     rev = "v${version}";
-    hash = "sha256-JfBbKqobikpTGMryeO86zZ46EbOHybem+Cc5FZEL6i4=";
+    hash = "sha256-0LsYREn4zWLQYUTpNWJhLLHWmg7UQzxOoQiAMmw3ZXQ=";
   };
 
   # Make sure gi-crystal picks up the name of the so or dylib and not the leading nix store path
   # when the package name happens to start with “lib”.
-  patches = [ ./src.patch ./store-friendly-library-name.patch ];
+  patches = [
+    ./src.patch
+    ./store-friendly-library-name.patch
+  ];
 
   nativeBuildInputs = [ gobject-introspection ];
   buildTargets = [ "generator" ];
@@ -37,7 +41,6 @@ crystal.buildCrystalPackage rec {
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
-
 
   meta = with lib; {
     description = "GI Crystal is a binding generator used to generate Crystal bindings for GObject based libraries using GObject Introspection";

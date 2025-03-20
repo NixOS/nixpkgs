@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, ghostscript}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ghostscript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lout";
@@ -6,14 +11,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "william8000";
-    repo = pname;
+    repo = "lout";
     rev = version;
     hash = "sha256-YUFrlM7BnDlG1rUV90yBvWG6lOKW5qKxs/xdq6I/kI0=";
   };
 
   buildInputs = [ ghostscript ];
 
-  makeFlags = [ "PREFIX=$(out)/" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "PREFIX=$(out)/"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = {
     description = "Document layout system similar in style to LaTeX";

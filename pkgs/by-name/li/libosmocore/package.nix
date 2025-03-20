@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gnutls
-, libmnl
-, liburing
-, libusb1
-, lksctp-tools
-, pcsclite
-, pkg-config
-, python3
-, talloc
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gnutls,
+  libmnl,
+  liburing,
+  libusb1,
+  lksctp-tools,
+  pcsclite,
+  pkg-config,
+  python3,
+  talloc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-qP5vGBgPs5y3InE3qgkVHiZgH3AW3mNyLIixgARAVRc=";
+    hash = "sha256-W5XLiIgevGtHRjrRTx/7rnPYacOAW9QJW0rocyWgFt4=";
   };
 
   postPatch = ''

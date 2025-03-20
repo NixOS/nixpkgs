@@ -1,10 +1,9 @@
 {
   lib,
+  aiohttp-retry,
   asyncssh,
   buildPythonPackage,
   dulwich,
-  dvc-http,
-  dvc-objects,
   fetchFromGitHub,
   fsspec,
   funcy,
@@ -15,21 +14,21 @@
   pythonOlder,
   setuptools,
   setuptools-scm,
-  shortuuid,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.3.8";
+  version = "3.3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8fx4yZcdOb32x5eo04ixpMe3Mh21LwqzNKVRVEnjfQo=";
+    tag = version;
+    hash = "sha256-BiLxILHbq5Q8iIE2yMBNlnqqFMoRe9z+Bn/FMaA7gtI=";
   };
 
   build-system = [
@@ -38,17 +37,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp-retry
     asyncssh
     dulwich
-    dvc-http
-    dvc-objects
     fsspec
     funcy
     gitpython
     pathspec
     pygit2
     pygtrie
-    shortuuid
+    tqdm
   ];
 
   # Requires a running Docker instance

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
 
@@ -94,6 +94,8 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # argparse output changed
+      "test_naked_invocation"
       # Test is flaky
       "test_stdin_read_warning"
       # httpbin compatibility issues

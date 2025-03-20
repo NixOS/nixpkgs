@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, libGL, lv2, libjack2, mesa, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  cairo,
+  libGL,
+  lv2,
+  libjack2,
+  libgbm,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stone-phaser";
@@ -6,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jpcima";
-    repo = pname;
+    repo = "stone-phaser";
     rev = "v${version}";
     sha256 = "180b32z8h9zi8p0q55r1dzxfckamnngm52zjypjjvvy7qdj3mfcd";
     fetchSubmodules = true;
@@ -14,7 +25,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 cairo libGL lv2 libjack2 mesa
+    xorg.libX11
+    cairo
+    libGL
+    lv2
+    libjack2
+    libgbm
   ];
 
   postPatch = ''

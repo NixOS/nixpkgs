@@ -1,67 +1,94 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter327,
+  runCommand,
+  butterfly,
+  yq,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  pdfium-binaries,
   stdenv,
-  fetchzip,
+  replaceVars,
 }:
-let
+
+flutter327.buildFlutterApplication rec {
   pname = "butterfly";
-  version = "2.2.1";
+  version = "2.2.4";
+
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
-    rev = "v${version}";
-    hash = "sha256-TV7C0v3y9G44Df/x1ST8D0c0QqNBuuhzPBMKUyf/iwo=";
+    tag = "v${version}";
+    hash = "sha256-lf1CCpLd7eM4iJvTsR2AI6xGCQ2NJ1mlYkR0hW03SRA=";
   };
-  pdfium-binaries = fetchzip {
-    url = "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/5200/pdfium-linux-x64.tgz";
-    hash = "sha256-AJop6gKjF/DPgItuPQsWpgngxiqVNeqBbhHZz3aQ1n0=";
-    stripRoot = false;
-  };
-in
-flutter.buildFlutterApplication {
-  inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   sourceRoot = "${src.name}/app";
 
   customSourceBuilders = {
+    # unofficial printing
     printing =
       { version, src, ... }:
       stdenv.mkDerivation rec {
         pname = "printing";
         inherit version src;
         inherit (src) passthru;
-        patches = [ ./printing.patch ];
+
+        patches = [
+          (replaceVars ./printing.patch {
+            inherit pdfium-binaries;
+          })
+        ];
+
+        dontBuild = true;
+
         installPhase = ''
           runHook preInstall
-          mkdir $out
-          cp -a ./* $out/
+
+          cp -r . $out
+
           runHook postInstall
         '';
       };
   };
 
-  env.PDFIUM_DIR = "${pdfium-binaries}";
-
   gitHashes = {
     dart_leap = "sha256-eEyUqdVToybQoDwdmz47H0f3/5zRdJzmPv1d/5mTOgA=";
-    lw_file_system = "sha256-CPBwaDTK57SKcaD4IzjIL4cWixEDK9sv3zCDeNfFpw0=";
+    lw_file_system = "sha256-0LLSADBWq19liQLtJIJEuTEqmeyIWP61zRRjjpdV6SM=";
     flutter_secure_storage_web = "sha256-ULYXcFjz9gKMjw1Q1KAmX2J7EcE8CbW0MN/EnwmaoQY=";
-    networker = "sha256-8ol5YRim4dLpgR30DXbgHzq+VDk1sPLIi+AxUtwOls8=";
-    lw_file_system_api = "sha256-OOLbqKLvgHUJf3LiiQoHJS6kngnWtHPhswM69sX5fwE=";
-    lw_sysapi = "sha256-9hCAYB5tqYKQPHGa7+Zma6fE8Ei08RvyL9d65FMuI+I=";
-    flex_color_scheme = "sha256-MYEiiltevfz0gDag3yS/ZjeVaJyl1JMS8zvgI0k4Y0k=";
-    material_leap = "sha256-pQ+OvecHaav5QI+Hf7+DDcXYM3JMwogseMzce1ULveY=";
-    networker_socket = "sha256-+h5FXqPhB6VJ269WPoqKk+/1cE+p7UbLvDwnXrJh+CE=";
+    networker = "sha256-1b8soPRbHOGAb2wpsfw/uETnAlaCJZyLmynVRDX9Y8s=";
+    lw_file_system_api = "sha256-ctz9+HEWGV47XUWa+RInS2gHnkrJQqgafnrbI8m3Yfo=";
+    lw_sysapi = "sha256-OYVHBiAshYKRH/6BEcY+BXm9VIfSAFnFBOBWlQIO5Tc=";
+    material_leap = "sha256-MF0wN4JsmKVzwwWjBKqY0DaLLdUuY0abyLF1VilTslM=";
+    networker_socket = "sha256-8LRyo5HzreUMGh5j39vL+Gqzxp4MN/jhHYpDxbFV0Ao=";
     perfect_freehand = "sha256-dMJ8CyhoQWbBRvUQyzPc7vdAhCzcAl1X7CcaT3u6dWo=";
+    pdf = "sha256-cIBSgePv5LIFRbc7IIx1fSVJceGEmzdZzDkOiD1z92E=";
+    pdf_widget_wrapper = "sha256-hXDFdgyu2DvIqwVBvk6TVDW+FdlMGAn5v5JZKQwp8fA=";
+    reorderable_grid = "sha256-g30DSPL/gsk0r8c2ecoKU4f1P3BF15zLnBVO6RXvDGQ=";
+    printing = "sha256-0JdMld1TN2EtJVQSuYdSIfi/q96roVUJEAY8dWK9xCM=";
   };
 
   postInstall = ''
     cp -r linux/debian/usr/share $out/share
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (butterfly) src;
+        }
+        ''
+          cat $src/app/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Powerful, minimalistic, cross-platform, opensource note-taking app";
@@ -70,13 +97,12 @@ flutter.buildFlutterApplication {
     license = with lib.licenses; [
       agpl3Plus
       cc-by-sa-40
-      asl20 # pdfium-binaries
+      asl20
     ];
-    maintainers = with lib.maintainers; [ aucub ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryNativeCode # pdfium-binaries
+    maintainers = with lib.maintainers; [ ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
     ];
   };
 }

@@ -1,34 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, testers
-, cmake
-, glib
-, gobject-introspection
-, gtest
-, intltool
-, lomiri
-, pkg-config
-, systemd
-, vala
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  cmake,
+  glib,
+  gobject-introspection,
+  gtest,
+  intltool,
+  lomiri,
+  pkg-config,
+  systemd,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-common";
-  version = "0.9.10";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-common";
-    rev = finalAttrs.version;
-    hash = "sha256-qi3xsnZjqSz3I7O+xPxDnI91qDIA0XFJ3tCQQF84vIg=";
+    tag = finalAttrs.version;
+    hash = "sha256-o5datBxGaGnvNvz8hvPY14DvjiFJdB7k93MumXuol0I=";
   };
 
   postPatch = ''
     # Queries via pkg_get_variable, can't override prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'set(SYSTEMD_USER_UNIT_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)'
+      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
   '';
 
   strictDeps = true;
@@ -53,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-DENABLE_LOMIRI_FEATURES=ON"
-    "-DGSETTINGS_LOCALINSTALL=ON"
-    "-DGSETTINGS_COMPILE=ON"
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" true)
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -66,12 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common functions for Ayatana System Indicators";
     homepage = "https://github.com/AyatanaIndicators/libayatana-common";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/AyatanaIndicators/libayatana-common/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "libayatana-common"
     ];

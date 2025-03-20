@@ -1,5 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
-    repo = pname;
+    repo = "convimg";
     rev = "v${version}";
     hash = "sha256-5insJ391Usef8GF3Yh74PEqE534zitQg9udFRPcz69g=";
     fetchSubmodules = true;
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mateoconlechuga/convimg";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ clevor ];
     platforms = platforms.linux;
     mainProgram = "convimg";
   };

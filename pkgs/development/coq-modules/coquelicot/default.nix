@@ -1,19 +1,51 @@
-{ lib, mkCoqDerivation, autoconf,
-  coq, ssreflect, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  autoconf,
+  coq,
+  stdlib,
+  ssreflect,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "coquelicot";
   owner = "coquelicot";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.12" "8.20"; out = "3.4.2"; }
-    { case = range "8.12" "8.18"; out = "3.4.0"; }
-    { case = range "8.12" "8.17"; out = "3.3.0"; }
-    { case = range "8.8" "8.16"; out = "3.2.0"; }
-    { case = range "8.8" "8.13"; out = "3.1.0"; }
-    { case = range "8.5" "8.9";  out = "3.0.2"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.12" "9.0";
+        out = "3.4.3";
+      }
+      {
+        case = range "8.12" "8.20";
+        out = "3.4.2";
+      }
+      {
+        case = range "8.12" "8.18";
+        out = "3.4.0";
+      }
+      {
+        case = range "8.12" "8.17";
+        out = "3.3.0";
+      }
+      {
+        case = range "8.8" "8.16";
+        out = "3.2.0";
+      }
+      {
+        case = range "8.8" "8.13";
+        out = "3.1.0";
+      }
+      {
+        case = range "8.5" "8.9";
+        out = "3.0.2";
+      }
+    ] null;
+  release."3.4.3".sha256 = "sha256-bzzAIENU2OYTtmdBU9Xw8zyBvz9vqTiqjWSm7RnXXRA=";
   release."3.4.2".sha256 = "sha256-aBTF8ZKu67Rb3ryCqFyejUXf/65KgG8i5je/ZMFSrj4=";
   release."3.4.1".sha256 = "sha256-REhvIBl3EaL8CQqI34Gn7Xjf9NhPI3nrUAO26pSLbm0=";
   release."3.4.0".sha256 = "sha256-LIj2SwTvVBxSAO58VYCQix/uxQQe8ey6hqFOSh3PNcg=";
@@ -25,10 +57,10 @@ mkCoqDerivation {
   releaseRev = v: "coquelicot-${v}";
 
   nativeBuildInputs = [ autoconf ];
-  propagatedBuildInputs = [ ssreflect ];
+  propagatedBuildInputs = [ stdlib ssreflect ];
   useMelquiondRemake.logpath = "Coquelicot";
 
-  meta =  with lib; {
+  meta = with lib; {
     homepage = "http://coquelicot.saclay.inria.fr/";
     description = "Coq library for Reals";
     license = licenses.lgpl3;

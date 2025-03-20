@@ -139,6 +139,8 @@ self: super: ({
     '' + (oldAttrs.preCompileBuildDriver or "");
   }) super.llvm-hs;
 
+  sym = markBroken super.sym;
+
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
   yesod-core = super.yesod-core.overrideAttrs (drv: {
@@ -306,13 +308,6 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
-  # network requires `IP_RECVTOS`, which was added in 10.15.
-  network =
-    if lib.versionOlder (lib.getVersion pkgs.apple-sdk) "10.15" then
-      addBuildDepend pkgs.apple-sdk_10_15 super.network
-    else
-      super.network;
-
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -336,6 +331,22 @@ self: super: ({
 
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
+
+  http-streams = super.http-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams = super.io-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams-haproxy = super.io-streams-haproxy.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
 
   snap = super.snap.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
@@ -372,6 +383,10 @@ self: super: ({
         "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
     '';
   }) super.di-core;
+
+  # Require /usr/bin/security which breaks sandbox
+  http-reverse-proxy = dontCheck super.http-reverse-proxy;
+  servant-auth-server = dontCheck super.servant-auth-server;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 

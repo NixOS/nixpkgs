@@ -1,25 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, libxcb }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxcb,
+  xcb-util-cursor,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wmutils-libwm";
-  version = "1.0";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "wmutils";
     repo = "libwm";
-    rev = "v${version}";
-    sha256 = "1lpbqrilhffpzc0b7vnp08jr1wr96lndwc7y0ck8hlbzlvm662l0";
+    tag = "v${version}";
+    hash = "sha256-ROWRgTn33c5gH4ZdkwZ05rRg/Z9e2NppAQSNExSGZ4s=";
   };
 
-  buildInputs = [ libxcb ];
+  buildInputs = [
+    libxcb
+    xcb-util-cursor
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small library for X window manipulation";
     homepage = "https://github.com/wmutils/libwm";
-    license = licenses.isc;
-    maintainers = with maintainers; [ bhougland ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ bhougland ];
+    platforms = lib.platforms.unix;
   };
 }

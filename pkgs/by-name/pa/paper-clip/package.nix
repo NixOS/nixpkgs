@@ -1,17 +1,19 @@
-{ lib
-, desktop-file-utils
-, exempi
-, fetchFromGitHub
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, poppler
-, stdenv
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  exempi,
+  fetchFromGitHub,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  poppler,
+  stdenv,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-Jdsx5ZhujP0SgEtr4NMbXsTkMYrkQj7Vs+SSYziWpiw=";
   };
+
+  # Remove these patches after the version is bumped past 5.5.1
+  patches = [
+    ./document-Copy-using-SubprocessLauncher-instead-of-GFile-API.patch
+    ./vala-Solve-Vala-errors-at-C-compile-time.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -42,13 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     changelog = "https://github.com/Diego-Ivan/Paper-Clip/releases/tag/v${finalAttrs.version}";
     description = "Edit PDF document metadata";
     homepage = "https://github.com/Diego-Ivan/Paper-Clip";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pdf-metadata-editor";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome-circle.members;
+    platforms = lib.platforms.linux;
   };
 })

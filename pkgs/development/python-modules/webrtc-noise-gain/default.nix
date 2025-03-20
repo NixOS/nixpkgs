@@ -24,9 +24,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
+
+  postPatch = with stdenv.hostPlatform.uname; ''
+    # Configure the correct host platform for cross builds
+    substituteInPlace setup.py --replace-fail \
+      "system = platform.system().lower()" \
+      'system = "${lib.toLower system}"'
+    substituteInPlace setup.py --replace-fail \
+      "machine = platform.machine().lower()" \
+      'machine = "${lib.toLower processor}"'
+  '';
 
   nativeBuildInputs = [
     pybind11

@@ -1,4 +1,14 @@
-{ lib, fetchurl, buildDunePackage, astring, asetmap, fmt, re, lwt, alcotest }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  astring,
+  asetmap,
+  fmt,
+  re,
+  lwt,
+  alcotest,
+}:
 
 buildDunePackage rec {
   pname = "prometheus";

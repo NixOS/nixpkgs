@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, bluez
-, pkg-config
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  bluez,
+  pkg-config,
+  gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cwiid";
   version = "unstable-2010-02-21";
 
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   NIX_LDFLAGS = "-lbluetooth";
 
   postInstall = ''

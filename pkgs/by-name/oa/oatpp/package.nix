@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "oatpp";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "oatpp";
     repo = "oatpp";
     rev = version;
-    sha256 = "sha256-k6RPg53z9iTrrKZXOm5Ga9qxI32mHgB+4d6y+IUvJC0=";
+    sha256 = "sha256-pTQ0DD4naE9m+6FfCVGg/i3WpNbtaR+38yyqjqN0uH0=";
   };
 
   nativeBuildInputs = [ cmake ];

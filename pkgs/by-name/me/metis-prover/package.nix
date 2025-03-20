@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, perl, mlton }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  mlton,
+}:
 
 stdenv.mkDerivation {
   pname = "metis-prover";
@@ -27,7 +33,7 @@ stdenv.mkDerivation {
     mainProgram = "metis";
     homepage = "https://www.gilith.com/research/metis/";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

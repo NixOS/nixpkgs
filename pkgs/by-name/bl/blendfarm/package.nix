@@ -54,6 +54,19 @@ buildDotnetModule rec {
     hash = "sha256-2w2tdl5n0IFTuthY97NYMeyRe2r72jaKFfoNSjWQMM4=";
   };
 
+  patches = [
+    # https://github.com/LogicReinc/LogicReinc.BlendFarm/pull/121
+    ./fix-nixos-crashing-on-runtime.patch
+    # https://github.com/LogicReinc/LogicReinc.BlendFarm/pull/122
+    ./rename-evee-to-eevee_next.patch
+    # Fixes the error with net8 update:
+    # "The referenced project is a non self-contained executable.
+    # A non self-contained executable cannot be referenced by a self-contained executable"
+    ./fix-references.patch
+    # Update project files to net8
+    ./net8.patch
+  ];
+
   nativeBuildInputs =
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
@@ -86,15 +99,15 @@ buildDotnetModule rec {
     "liblzma.so.5"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = [
     "LogicReinc.BlendFarm.Client/LogicReinc.BlendFarm.Client.csproj"
     "LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj"
     "LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [
     "LogicReinc.BlendFarm"
     "LogicReinc.BlendFarm.Server"

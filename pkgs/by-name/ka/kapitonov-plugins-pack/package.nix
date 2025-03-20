@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, ladspa-sdk, libxcb, lv2, xcbutilwm, xorg
-, zita-convolver, zita-resampler
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust,
+  meson,
+  ninja,
+  pkg-config,
+  boost,
+  cairo,
+  fftw,
+  ladspa-sdk,
+  libxcb,
+  lv2,
+  xcbutilwm,
+  xorg,
+  zita-convolver,
+  zita-resampler,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kapitonov-plugins-pack";
@@ -9,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "olegkapitonov";
-    repo = pname;
+    repo = "kapitonov-plugins-pack";
     rev = version;
     sha256 = "1mxi7b1vrzg25x85lqk8c77iziqrqyz18mqkfjlz09sxp5wfs9w4";
   };

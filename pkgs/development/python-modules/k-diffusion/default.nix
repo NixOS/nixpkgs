@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crowsonkb";
     repo = "k-diffusion";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x/UHzobQv5ov0luUHqC8OA5YbtF+aWL39/SQtzTm0RM=";
   };
 

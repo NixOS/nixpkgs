@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "shellspec";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "shellspec";
-    repo = pname;
+    repo = "shellspec";
     rev = version;
     sha256 = "1ib5qp29f2fmivwnv6hq35qhvdxz42xgjlkvy0i3qn758riyqf46";
   };
@@ -24,11 +29,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   meta = with lib; {
-    description =
-      "A full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells";
+    description = "A full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells";
     homepage = "https://shellspec.info/";
-    changelog =
-      "https://github.com/shellspec/shellspec/releases/tag/${version}";
+    changelog = "https://github.com/shellspec/shellspec/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
     platforms = platforms.unix;

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.37";
+  version = "0.0.52";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PY4TJIG5NtJdQuQYmoZG3NgcH3WfCkpkcoJTbJ5jdr0=";
+    tag = version;
+    hash = "sha256-tGVRlYUoXS3uEAis9NE3gYBjbY5KzMvx8+J67BgU3kI=";
   };
 
   postPatch = ''
@@ -104,11 +104,6 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
-
-  pytestFlagsArray = [
-    "-v"
-    "--timeout=5"
-  ];
 
   meta = with lib; {
     description = "Zigbee Home Automation";

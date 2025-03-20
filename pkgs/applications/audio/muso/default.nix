@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook3, CoreServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  wrapGAppsHook3,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-09DWUER0ZWQuwfE3sjov2GjJNI7coE3D3E5iUy9mlSE=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   preConfigure = ''
@@ -26,7 +35,8 @@ rustPlatform.buildRustPackage rec {
     cp share/* $out/share/muso/
   '';
 
-  cargoHash = "sha256-+UVUejKCfjC6zdW315wmu7f3A5GmnoQ3rIk8SK6LIRI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L0ZQoz9J5Hxg98puk1RbKuybLboIoOsy5qqGnvEPi1U=";
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

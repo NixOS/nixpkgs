@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -24,7 +25,7 @@ let
             inherit package;
             enable = true;
             enableJIT = lib.hasInfix "-jit-" package.name;
-            extraPlugins =
+            extensions =
               ps: with ps; [
                 pgjwt
                 pgtap
@@ -48,11 +49,7 @@ let
         '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.pgjwt.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.pgjwt.meta.broken;
+}

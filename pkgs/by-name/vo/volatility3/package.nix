@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
-  version = "2.7.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-elTUAvSe91TqpsTXg08SPKaVr6iM7FKcBaVNunv+HfU=";
+    tag = "v${version}";
+    hash = "sha256-X2cTZaEUQm7bE0k2ve4vKj0k1N6zeLXfDzhWm32diVY=";
   };
 
   build-system = with python3.pkgs; [

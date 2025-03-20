@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "videolabs";
-    repo = pname;
+    repo = "libmicrodns";
     rev = version;
     sha256 = "05vgka45c1frnv4q7pbz0bggsn5xaykh4xpklh9yb6d6qj7dbx0b";
   };

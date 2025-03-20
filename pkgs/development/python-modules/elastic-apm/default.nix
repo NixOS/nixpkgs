@@ -40,14 +40,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S1Ebo9AWN+Mf3OFwxNTiR/AZtje3gNiYkZnVqGb7D4c=";
   };
 
   pythonRelaxDeps = [ "wrapt" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     aiohttp

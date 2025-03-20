@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "shekyan";
-    repo = pname;
+    repo = "slowhttptest";
     rev = "v${version}";
     sha256 = "sha256-rIvd3LykVAbDXtFWZ1EQ+QKeALzqwK6pq7In0BsCOFo=";
   };

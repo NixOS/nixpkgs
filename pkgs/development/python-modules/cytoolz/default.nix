@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-60U7MBghUvmRelGJt9mQRrbOkM34rrD+/0smg+YA3v0=";
+    hash = "sha256-icwxYbieG7Ptdjb3TtLlWYT9NVFpBPyHjK4hbkKyx9Y=";
   };
 
   nativeBuildInputs = [

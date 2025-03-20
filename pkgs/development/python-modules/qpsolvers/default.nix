@@ -17,6 +17,8 @@
   quadprog,
   scs,
   highspy,
+  piqp,
+  proxsuite,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/yIFLxy2gjEFg/J9A5pcbrVmq4A3Tz2efEAntH0Twk8=";
   };
 
@@ -49,8 +51,8 @@ buildPythonPackage rec {
     highs = [ highspy ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
-    # piqp = [ piqp ];
-    # proxqp = [ proxsuite ];
+    piqp = [ piqp ];
+    proxqp = [ proxsuite ];
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
@@ -60,9 +62,12 @@ buildPythonPackage rec {
         clarabel
         cvxopt
         daqp
-        osqp # piqp proxqp qpalm
         ecos
         highs
+        osqp
+        piqp
+        proxqp
+        # qpalm
         quadprog
         scs
       ];

@@ -5,19 +5,19 @@
 
 buildGoModule rec {
   pname = "jq-lsp";
-  version = "0.1.4";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ueSf32C4BznDKBQD0OIJKZhrwLq1xpn6WWEnsqoWkl8=";
+    tag = "v${version}";
+    hash = "sha256-jnHM3VSfi0KioNmXlkjVIlV7/7bKipEvpnV+z13+59Y=";
   };
 
   vendorHash = "sha256-8sZGnoP7l09ZzLJqq8TUCquTOPF0qiwZcFhojUnnEIY=";
 
   # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

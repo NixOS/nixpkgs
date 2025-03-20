@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, jemalloc, nodejs }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  jemalloc,
+  nodejs,
+}:
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "24.0.4";
+  version = "24.1.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-VtOa+MfhNMbzqiDJY5KYwo2OCgu+4sn18M+dujzwi0g=";
+    sha256 = "sha256-Cev0jaFxOu+SoFnBnb2Zlb+z0Su7erluLjizyYmkBLg=";
   };
 
-  vendorHash = "sha256-pX5jRVh4cSuPK3cpDVyvt/gTHcFgG9hE3H96TuMYxKk=";
+  vendorHash = "sha256-l+9A///gk1xNAW3xQ974LQnQ4M+Zf4RJCL7QmnuWiMg=";
 
   doCheck = false;
 
@@ -27,7 +34,10 @@ buildGoModule rec {
 
   # todo those dependencies are required in the makefile, but verify how they are used
   # actually
-  buildInputs = [ jemalloc nodejs ];
+  buildInputs = [
+    jemalloc
+    nodejs
+  ];
 
   subPackages = [ "dgraph" ];
 

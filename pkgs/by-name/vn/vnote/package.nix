@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vnote";
     changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

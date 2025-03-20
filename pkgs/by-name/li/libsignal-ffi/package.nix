@@ -22,14 +22,14 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.58.3";
+  version = "0.66.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
-    rev = "v${version}";
-    hash = "sha256-21NOPLhI7xh2A8idLxWXiZLV5l8+vfHF8/DilgWTXi4=";
+    tag = "v${version}";
+    hash = "sha256-V7w+77X1a2Uga/RUCqppY3THbAktaPN+DLrze4UwfHM=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -40,15 +40,10 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
+  env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  # The Cargo.lock contains git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boring-4.9.0" = "sha256-RSpaMzMUXp+WuqqDwLErP5yLT0YhYGoOUWCuSt4jR3I=";
-      "curve25519-dalek-4.1.3" = "sha256-bPh7eEgcZnq9C3wmSnnYv0C4aAP+7pnwk9Io29GrI4A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-a3Xb37gFs7GWk8/9cFdaC9tsYCv/MQGJ78r5YCQ0DOo=";
 
   cargoBuildFlags = [
     "-p"

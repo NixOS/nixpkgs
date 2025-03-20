@@ -5,18 +5,19 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cnsprcy";
   version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~xaos";
-    repo = pname;
+    repo = "cnsprcy";
     rev = "v0.2.0";
     hash = "sha256-f+DauSU4bT3EljY8/ig7jLnUgyDPEo2NSBQcPN0iKx0=";
   };
 
-  cargoHash = "sha256-e9+nMz/FCtd5pnHSHA1RenWzrgIHyCf5eEDO4xMxGHk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lPTufjKOXMvPy+cP1UyVCTfRXkOmzZqDR6yraIgk+Dg=";
 
   RUSTC_BOOTSTRAP = true;
 

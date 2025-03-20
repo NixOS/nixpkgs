@@ -1,22 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true, buildPostgresqlExtension }:
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libkrb5,
+  nixosTests,
+  openssl,
+  postgresql,
+  postgresqlBuildExtension,
+  stdenv,
 
-buildPostgresqlExtension rec {
+  enableUnfree ? true,
+}:
+
+postgresqlBuildExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.14.2";
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl libkrb5 ];
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
-    rev = version;
-    hash = "sha256-gJViEWHtIczvIiQKuvvuwCfWJMxAYoBhCHhD75no6r0=";
+    tag = version;
+    hash = "sha256-8E5oEEsyu247WtmR20xRO/SAI6KXYSVCrU0qta6iUB8=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
-    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    openssl
+    libkrb5
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SEND_TELEMETRY_DEFAULT" false)
+    (lib.cmakeBool "REGRESS_CHECKS" false)
+    (lib.cmakeBool "TAP_CHECKS" false)
+    (lib.cmakeBool "APACHE_ONLY" (!enableUnfree))
+  ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
@@ -34,18 +52,13 @@ buildPostgresqlExtension rec {
 
   passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
     changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
-    license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "13" ||
-      # timescaledb supports PostgreSQL 17 from 2.17.0 on:
-      # https://github.com/timescale/timescaledb/releases/tag/2.17.0
-      # We can't upgrade to it, yet, because this would imply dropping support for
-      # PostgreSQL 13, which is a breaking change.
-      (versionAtLeast postgresql.version "17" && version == "2.14.2");
+    license = with lib.licenses; if enableUnfree then tsl else asl20;
+    broken = lib.versionOlder postgresql.version "14";
   };
 }

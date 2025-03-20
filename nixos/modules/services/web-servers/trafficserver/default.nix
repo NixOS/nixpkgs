@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,18 +12,24 @@ let
   user = config.users.users.trafficserver.name;
   group = config.users.groups.trafficserver.name;
 
-  getManualUrl = name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
+  getManualUrl =
+    name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
 
   yaml = pkgs.formats.yaml { };
 
-  mkYamlConf = name: cfg:
-    if cfg != null then {
-      "trafficserver/${name}.yaml".source = yaml.generate "${name}.yaml" cfg;
-    } else {
-      "trafficserver/${name}.yaml".text = "";
-    };
+  mkYamlConf =
+    name: cfg:
+    if cfg != null then
+      {
+        "trafficserver/${name}.yaml".source = yaml.generate "${name}.yaml" cfg;
+      }
+    else
+      {
+        "trafficserver/${name}.yaml".text = "";
+      };
 
-  mkRecordLines = path: value:
+  mkRecordLines =
+    path: value:
     if isAttrs value then
       lib.mapAttrsToList (n: v: mkRecordLines (path ++ [ n ]) v) value
     else if isInt value then
@@ -120,7 +131,8 @@ in
         documentation](${getManualUrl "plugin.config"}) for more details.
       '';
 
-      type = with types;
+      type =
+        with types;
         listOf (submodule {
           options.path = mkOption {
             type = str;
@@ -140,14 +152,25 @@ in
     };
 
     records = mkOption {
-      type = with types;
-        let valueType = (attrsOf (oneOf [ int float str valueType ])) // {
-          description = "Traffic Server records value";
-        };
+      type =
+        with types;
+        let
+          valueType =
+            (attrsOf (oneOf [
+              int
+              float
+              str
+              valueType
+            ]))
+            // {
+              description = "Traffic Server records value";
+            };
         in
         valueType;
       default = { };
-      example = { proxy.config.proxy_name = "my_server"; };
+      example = {
+        proxy.config.proxy_name = "my_server";
+      };
       description = ''
         List of configurable variables used by Traffic Server.
 
@@ -255,21 +278,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc = {
-      "trafficserver/cache.config".text = cfg.cache;
-      "trafficserver/hosting.config".text = cfg.hosting;
-      "trafficserver/parent.config".text = cfg.parent;
-      "trafficserver/plugin.config".text = mkPluginConfig cfg.plugins;
-      "trafficserver/records.config".text = mkRecordsConfig cfg.records;
-      "trafficserver/remap.config".text = cfg.remap;
-      "trafficserver/splitdns.config".text = cfg.splitDns;
-      "trafficserver/ssl_multicert.config".text = cfg.sslMulticert;
-      "trafficserver/storage.config".text = cfg.storage;
-      "trafficserver/volume.config".text = cfg.volume;
-    } // (mkYamlConf "ip_allow" cfg.ipAllow)
-    // (mkYamlConf "logging" cfg.logging)
-    // (mkYamlConf "sni" cfg.sni)
-    // (mkYamlConf "strategies" cfg.strategies);
+    environment.etc =
+      {
+        "trafficserver/cache.config".text = cfg.cache;
+        "trafficserver/hosting.config".text = cfg.hosting;
+        "trafficserver/parent.config".text = cfg.parent;
+        "trafficserver/plugin.config".text = mkPluginConfig cfg.plugins;
+        "trafficserver/records.config".text = mkRecordsConfig cfg.records;
+        "trafficserver/remap.config".text = cfg.remap;
+        "trafficserver/splitdns.config".text = cfg.splitDns;
+        "trafficserver/ssl_multicert.config".text = cfg.sslMulticert;
+        "trafficserver/storage.config".text = cfg.storage;
+        "trafficserver/volume.config".text = cfg.volume;
+      }
+      // (mkYamlConf "ip_allow" cfg.ipAllow)
+      // (mkYamlConf "logging" cfg.logging)
+      // (mkYamlConf "sni" cfg.sni)
+      // (mkYamlConf "strategies" cfg.strategies);
 
     environment.systemPackages = [ pkgs.trafficserver ];
     systemd.packages = [ pkgs.trafficserver ];

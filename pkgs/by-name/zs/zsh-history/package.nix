@@ -1,6 +1,12 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  nixosTests,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "zsh-history";
   version = "2019-12-10";
 

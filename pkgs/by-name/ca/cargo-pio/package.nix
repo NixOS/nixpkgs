@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-pio";
@@ -13,14 +14,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YH2CPb3uBlPncd+KkP25xhCVvDB7HDxJuSqWOJ1LT3k=";
   };
 
-  cargoHash = "sha256-41ZDe7yP4C9JcX5trcDxcqdgZ+SnhDIIq51hM0Viv9w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/WBhgPyd5hR3DBYvV8pd7uZb6FeD3yiDe3wOKtyFRG8=";
 
   buildAndTestSubdir = "cargo-pio";
 
   meta = with lib; {
     description = "Build Rust embedded projects with PlatformIO";
     homepage = "https://github.com/esp-rs/embuild/tree/master/cargo-pio";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ dannixon ];
     mainProgram = "cargo-pio";
   };

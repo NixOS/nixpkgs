@@ -1,17 +1,37 @@
-{ fetchurl, lib, stdenv, makeWrapper, buildEnv
-, pkg-config, gnupg
-, xapian, gmime3, sfsexp, talloc, zlib
-, doxygen, perl, texinfo
-, pythonPackages
-, emacs
-, ruby
-, testers
-, gitUpdater
-, which, dtach, openssl, bash, gdb, man, git
-, withEmacs ? true
-, withRuby ? true
-, withSfsexp ? true # also installs notmuch-git, which requires sexp-support
-, withVim ? true
+{
+  fetchpatch,
+  fetchurl,
+  lib,
+  stdenv,
+  makeWrapper,
+  buildEnv,
+  pkg-config,
+  gnupg,
+  xapian,
+  gmime3,
+  sfsexp,
+  talloc,
+  zlib,
+  doxygen,
+  perl,
+  texinfo,
+  pythonPackages,
+  emacs,
+  ruby,
+  testers,
+  gitUpdater,
+  which,
+  dtach,
+  openssl,
+  bash,
+  gdb,
+  man,
+  git,
+  withEmacs ? true,
+  withRuby ? true,
+  withSfsexp ? true, # also installs notmuch-git, which requires sexp-support
+  # TODO upstream: it takes too long ! 800 ms here
+  withVim ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,44 +43,63 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mvRsyA2li0MByiuu/MJaQNES0DFVB+YywPPw8IMo0FQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    doxygen                   # (optional) api docs
-    pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
-    texinfo                   # (optional) documentation -> doc/INSTALL
-    pythonPackages.cffi
-  ] ++ lib.optional withEmacs emacs
+  nativeBuildInputs =
+    [
+      pkg-config
+      doxygen # (optional) api docs
+      pythonPackages.sphinx # (optional) documentation -> doc/INSTALL
+      texinfo # (optional) documentation -> doc/INSTALL
+      pythonPackages.cffi
+    ]
+    ++ lib.optional withEmacs emacs
     ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp makeWrapper;
 
-  buildInputs = [
-    gnupg                     # undefined dependencies
-    xapian gmime3 talloc zlib  # dependencies described in INSTALL
-    perl
-    pythonPackages.python
-  ] ++ lib.optional withRuby ruby
+  buildInputs =
+    [
+      gnupg # undefined dependencies
+      xapian
+      gmime3
+      talloc
+      zlib # dependencies described in INSTALL
+      perl
+      pythonPackages.python
+    ]
+    ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp sfsexp;
 
-  postPatch = ''
-    patchShebangs configure test/
+  patches = [
+    (fetchpatch {
+      name = "add-workaround-for-Emacs-30-pp-changes.patch";
+      url = "https://git.notmuchmail.org/git?p=notmuch;a=patch;h=e3d4721b1ba4836c7646e057b50123fe994652eb";
+      hash = "sha256-phfNSOlTajTmaf+DjtdmBAWSm+2tUbrQEChInUlwn5k=";
+    })
+  ];
 
-    substituteInPlace lib/Makefile.local \
-      --replace '-install_name $(libdir)' "-install_name $out/lib"
+  postPatch =
+    ''
+      patchShebangs configure test/
 
-    # do not override CFLAGS of the Makefile created by mkmf
-    substituteInPlace bindings/Makefile.local \
-      --replace 'CFLAGS="$(CFLAGS) -pipe -fno-plt -fPIC"' ""
-  '' + lib.optionalString withEmacs ''
-    substituteInPlace emacs/notmuch-emacs-mua \
-      --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
-      --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
-  '';
+      substituteInPlace lib/Makefile.local \
+        --replace '-install_name $(libdir)' "-install_name $out/lib"
 
-  configureFlags = [
-    "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
-    "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
-    "--infodir=${placeholder "info"}/share/info"
-  ] ++ lib.optional (!withEmacs) "--without-emacs"
+      # do not override CFLAGS of the Makefile created by mkmf
+      substituteInPlace bindings/Makefile.local \
+        --replace 'CFLAGS="$(CFLAGS) -pipe -fno-plt -fPIC"' ""
+    ''
+    + lib.optionalString withEmacs ''
+      substituteInPlace emacs/notmuch-emacs-mua \
+        --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
+        --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
+    '';
+
+  configureFlags =
+    [
+      "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+      "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
+      "--infodir=${placeholder "info"}/share/info"
+    ]
+    ++ lib.optional (!withEmacs) "--without-emacs"
     ++ lib.optional withEmacs "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ lib.optional (!withRuby) "--without-ruby";
 
@@ -75,8 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp bindings/python-cffi/_notmuch_config.py ${placeholder "bindingconfig"}/
   '';
 
-  outputs = [ "out" "man" "info" "bindingconfig" ]
-    ++ lib.optional withEmacs "emacs";
+  outputs =
+    [
+      "out"
+      "man"
+      "info"
+      "bindingconfig"
+    ]
+    ++ lib.optional withEmacs "emacs"
+    ++ lib.optional withVim "vim";
 
   # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
   # passes if notmuch-git can be executed, so we need to patch its shebang.
@@ -107,54 +153,70 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin && (lib.versionAtLeast gmime3.version "3.0.3");
   checkTarget = "test";
-  nativeCheckInputs = [
-    which dtach openssl bash
-    gdb man
-  ]
-  # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
-  # built without sexp-support
-  ++ lib.optional withEmacs emacs
-  ++ lib.optional withSfsexp git;
+  nativeCheckInputs =
+    [
+      which
+      dtach
+      openssl
+      bash
+      gdb
+      man
+    ]
+    # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
+    # built without sexp-support
+    ++ lib.optional withEmacs emacs
+    ++ lib.optional withSfsexp git;
 
-  installTargets = [ "install" "install-man" "install-info" ];
+  installTargets = [
+    "install"
+    "install-man"
+    "install-info"
+  ];
 
-  postInstall = lib.optionalString withEmacs ''
-    moveToOutput bin/notmuch-emacs-mua $emacs
-  '' + lib.optionalString withRuby ''
-    make -C bindings/ruby install \
-      vendordir=$out/lib/ruby \
-      SHELL=$SHELL \
-      $makeFlags "''${makeFlagsArray[@]}" \
-      $installFlags "''${installFlagsArray[@]}"
-  ''
-  # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
-  # sexp-support, so there is no point in installing if we're building without it.
-  + lib.optionalString withSfsexp ''
-    cp notmuch-git $out/bin/notmuch-git
-    wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
-  '' + lib.optionalString withVim ''
-    make -C vim DESTDIR="$out/share/vim-plugins/notmuch" prefix="" install
-    mkdir -p $out/share/nvim
-    ln -s $out/share/vim-plugins/notmuch $out/share/nvim/site
-  '' + lib.optionalString (withVim && withRuby) ''
-    PLUG=$out/share/vim-plugins/notmuch/plugin/notmuch.vim
-    cat >> $PLUG << EOF
-      let \$GEM_PATH=\$GEM_PATH . ":${finalAttrs.passthru.gemEnv}/${ruby.gemPath}"
-      let \$RUBYLIB=\$RUBYLIB . ":$out/${ruby.libPath}/${ruby.system}"
-      if has('nvim')
-    EOF
-    for gem in ${finalAttrs.passthru.gemEnv}/${ruby.gemPath}/gems/*/lib; do
-      echo "ruby \$LOAD_PATH.unshift('$gem')" >> $PLUG
-    done
-    echo 'endif' >> $PLUG
-  '';
+  postInstall =
+    lib.optionalString withEmacs ''
+      moveToOutput bin/notmuch-emacs-mua $emacs
+    ''
+    + lib.optionalString withRuby ''
+      make -C bindings/ruby install \
+        vendordir=$out/lib/ruby \
+        SHELL=$SHELL \
+        $makeFlags "''${makeFlagsArray[@]}" \
+        $installFlags "''${installFlagsArray[@]}"
+    ''
+    # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
+    # sexp-support, so there is no point in installing if we're building without it.
+    + lib.optionalString withSfsexp ''
+      cp notmuch-git $out/bin/notmuch-git
+      wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
+    ''
+    + lib.optionalString withVim ''
+      make -C vim DESTDIR="$vim/share/vim-plugins/notmuch" prefix="" install
+      mkdir -p $vim/share/nvim
+      ln -s $vim/share/vim-plugins/notmuch $vim/share/nvim/site
+    ''
+    + lib.optionalString (withVim && withRuby) ''
+      PLUG=$vim/share/vim-plugins/notmuch/plugin/notmuch.vim
+      cat >> $PLUG << EOF
+        let \$GEM_PATH=\$GEM_PATH . ":${finalAttrs.passthru.gemEnv}/${ruby.gemPath}"
+        let \$RUBYLIB=\$RUBYLIB . ":$vim/${ruby.libPath}/${ruby.system}"
+        if has('nvim')
+      EOF
+      for gem in ${finalAttrs.passthru.gemEnv}/${ruby.gemPath}/gems/*/lib; do
+        echo "ruby \$LOAD_PATH.unshift('$gem')" >> $PLUG
+      done
+      echo 'endif' >> $PLUG
+    '';
 
   passthru = {
     pythonSourceRoot = "notmuch-${finalAttrs.version}/bindings/python";
     gemEnv = buildEnv {
       name = "notmuch-vim-gems";
       paths = with ruby.gems; [ mail ];
-      pathsToLink = [ "/lib" "/nix-support" ];
+      pathsToLink = [
+        "/lib"
+        "/nix-support"
+      ];
     };
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
@@ -166,11 +228,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Mail indexer";
-    homepage    = "https://notmuchmail.org/";
-    changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
-    license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ flokli puckipedia ];
-    platforms   = platforms.unix;
+    homepage = "https://notmuchmail.org/";
+    changelog = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      flokli
+      puckipedia
+    ];
+    platforms = platforms.unix;
     mainProgram = "notmuch";
   };
 })

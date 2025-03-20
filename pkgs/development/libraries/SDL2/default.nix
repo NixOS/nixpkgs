@@ -3,8 +3,10 @@
   stdenv,
   config,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   pkg-config,
+  mesa,
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
   libGL,
@@ -27,7 +29,7 @@
   wayland-scanner,
   drmSupport ? false,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   dbus,
@@ -69,13 +71,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.6";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-ij9/VhSacUaPbMGX1hx2nz0n8b1tDb1PnC7IO9TlNhE=";
+    hash = "sha256-BdyMlttrDwQMoz+bO6bfU3bh0xKnT8yQF6nb6OGRbHw=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -90,6 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
     # but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./find-headers.patch
+    # https://github.com/libsdl-org/SDL/issues/12224
+    (fetchpatch {
+      url = "https://github.com/libsdl-org/SDL/commit/9e079fe9c7931738ed63d257b1d7fb8a07b66824.diff";
+      hash = "sha256-G8gAivCtw5zuPVI9wvEq2oIo/NxFdnPqyLwrmHG1EJ4=";
+    })
   ];
 
   postPatch = ''
@@ -146,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ];
 
   buildInputs =

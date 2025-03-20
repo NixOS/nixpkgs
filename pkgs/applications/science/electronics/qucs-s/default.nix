@@ -4,6 +4,7 @@
 , flex
 , bison
 , qtbase
+, qtcharts
 , qttools
 , qtsvg
 , qtwayland
@@ -13,24 +14,50 @@
 , gperf
 , adms
 , ngspice
-, kernels ? [ ngspice ]
+, qucsator-rf
+, kernels ? [ ngspice qucsator-rf ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "24.1.0";
+  version = "25.1.1";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "sha256-ei9CPlJg+Kfjh7vu5VnT6DNLmmnA8wZ2A1jXnm//Fgo=";
+    hash = "sha256-H/iLCCX1fMozs/G8erX7cia7wRLjvLxofuiu6pGVJ58=";
   };
 
-  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
-  buildInputs = [ qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
+  postPatch = ''
+    # Workaround a CMake bug (we don't generally do distributable bundles in nixpkgs anyway):
+    #   warning: cannot resolve item '/usr/lib/libSystem.B.dylib'
+    #
+    #   possible problems:
+    #       need more directories?
+    #           need to use InstallRequiredSystemLibraries?
+    #               run in install tree instead of build tree?
+    for filename in \
+      qucs/CMakeLists.txt \
+      qucs-transcalc/CMakeLists.txt \
+      qucs-attenuator/CMakeLists.txt \
+      qucs-s-spar-viewer/CMakeLists.txt \
+      ; do
+      substituteInPlace "$filename" \
+        --replace-fail 'fixup_bundle(' 'message(\"nixpkgs will not fixup_bundle: \" '
+    done
+  '';
 
-  # Make custom kernels avaible from qucs-s
+  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
+  buildInputs = [ qtbase qttools qtcharts qtsvg gperf adms ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland libX11 ]
+    ++ kernels;
+
+  cmakeFlags = [
+    "-DWITH_QT6=ON"
+  ];
+
+  # Make custom kernels available from qucs-s
   qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
 
   QTDIR = qtbase.dev;
@@ -48,7 +75,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mazurel kashw2 ];
-    platforms = with platforms; linux;
+    mainProgram = "qucs-s";
+    maintainers = with maintainers; [ mazurel kashw2 thomaslepoix ];
+    platforms = with platforms; unix;
   };
 }

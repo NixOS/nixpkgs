@@ -1,39 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, gettext
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, zint
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  gettext,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  zint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "pablo-s";
     repo = "passes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RfoqIyqc9zwrWZ5RLhQl+6vTccbCTwtDcMlnWPCDOag=";
+    hash = "sha256-e6nHCOrb2PX47REr7sy80n1aTdMZ0c2QZlIIib4vll8=";
   };
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace /app/lib ${zint}/lib
-    substituteInPlace src/view/window.blp \
-      --replace reveal_flap reveal-flap
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-    patchShebangs build-aux/meson/postinstall.py
+      --replace-fail /app/lib ${zint}/lib
   '';
 
   strictDeps = true;
@@ -46,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pp: [pp.pygobject3]))
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
     wrapGAppsHook4
   ];
 

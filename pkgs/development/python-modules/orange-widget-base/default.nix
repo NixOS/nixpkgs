@@ -1,8 +1,10 @@
 {
   lib,
+  gitUpdater,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  setuptools,
+  fetchFromGitHub,
   pyqt5,
   pyqtwebengine,
   matplotlib,
@@ -17,15 +19,19 @@
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.24.0";
-  format = "setuptools";
+  version = "4.25.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2cBg7s4+qMrb2G4sMk5yednOzJCNheHIQ3lty4KAg18=";
+  src = fetchFromGitHub {
+    owner = "biolab";
+    repo = "orange-widget-base";
+    tag = version;
+    hash = "sha256-ENP3Xyubsx7Q2w4cTQCsZuvC0cbm3KwaoDGbF0fk3dg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     orange-canvas-core
     pyqt5
@@ -52,6 +58,8 @@ buildPythonPackage rec {
     "orangewidget/report/tests/test_report.py"
     "orangewidget/tests/test_widget.py"
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";

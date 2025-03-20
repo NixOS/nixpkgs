@@ -1,28 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, ncurses
-, libxcrypt
-, utmp
-, pam ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  ncurses,
+  libxcrypt,
+  utmp,
+  pam ? null,
 }:
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "4.9.1";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/screen/screen-${version}.tar.gz";
-    hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
+    hash = "sha256-8Eo50AoOXHyGpVM4gIkDCCrV301z3xov00JZdq7ZSXE=";
   };
 
   configureFlags = [
     "--enable-telnet"
     "--enable-pam"
-    "--with-sys-screenrc=/etc/screenrc"
-    "--enable-colors256"
-    "--enable-rxvt_osc"
+  ];
+
+  # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU) "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
+
+  patches = [
+    # GNU Screen 5.0 uses strncpy incorrectly in SendCmdMessage
+    # This causes issues detected when using -D_FORTIFY_SOURCE=3
+    # e.g. https://savannah.gnu.org/bugs/index.php?66215
+    ./buffer-overflow-SendCmdMessage.patch
   ];
 
   nativeBuildInputs = [
@@ -31,10 +39,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libxcrypt
-  ] ++ lib.optional stdenv.hostPlatform.isLinux pam
-    ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
+    pam
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
 
-  doCheck = true;
+  # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";

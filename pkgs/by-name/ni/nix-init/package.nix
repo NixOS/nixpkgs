@@ -1,20 +1,22 @@
-{ lib
-, writeText
-, rustPlatform
-, fetchFromGitHub
-, curl
-, installShellFiles
-, pkg-config
-, bzip2
-, libgit2
-, openssl
-, zlib
-, zstd
-, stdenv
-, darwin
-, spdx-license-list-data
-, nix
-, nurl
+{
+  lib,
+  writeText,
+  rustPlatform,
+  fetchFromGitHub,
+  curl,
+  installShellFiles,
+  pkg-config,
+  bzip2,
+  libgit2,
+  openssl,
+  zlib,
+  zstd,
+  stdenv,
+  spdx-license-list-data,
+  nix,
+  nurl,
+  testers,
+  nix-init,
 }:
 
 let
@@ -34,10 +36,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes."cargo-0.82.0" = "sha256-1G14vLW3FhLxOWGxuHXcWgb+XXS1vOOyQYKVbrJWlmI=";
-  };
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-kk/SaP/ZtSorSSewAdf0Bq7tiMhB5dZb8v9MlsaUa0M=";
 
   nativeBuildInputs = [
     curl
@@ -52,10 +53,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   buildNoDefaultFeatures = true;
@@ -83,10 +80,15 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    LIBGIT2_NO_VENDOR = 1;
+    # FIXME: our libgit2 is currently too new
+    # LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  passthru.tests.version = testers.testVersion {
+    package = nix-init;
   };
 
   meta = with lib; {

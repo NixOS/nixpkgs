@@ -5,22 +5,21 @@
 # Note that other tests verify that amazon-init can treat user-data as a nixos
 # configuration expression.
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{
+  lib,
+  ...
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
-
-makeTest {
+{
   name = "amazon-init";
-  meta = with maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ urbas ];
   };
-  nodes.machine = { lib, pkgs, ... }:
-  {
-    imports = [ ../modules/profiles/headless.nix ../modules/virtualisation/amazon-init.nix ];
+  nodes.machine = {
+    imports = [
+      ../modules/profiles/headless.nix
+      ../modules/virtualisation/amazon-init.nix
+    ];
     services.openssh.enable = true;
     system.switch.enable = true;
     networking.hostName = "";

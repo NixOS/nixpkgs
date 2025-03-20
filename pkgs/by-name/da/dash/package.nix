@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPackages
-, pkg-config
-, fetchurl
-, libedit
-, runCommand
-, dash
+{
+  lib,
+  stdenv,
+  buildPackages,
+  pkg-config,
+  fetchurl,
+  libedit,
+  runCommand,
+  dash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = platforms.unix;
-    license = with licenses; [ bsd3 gpl2Plus ];
+    license = with licenses; [
+      bsd3
+      gpl2Plus
+    ];
     mainProgram = "dash";
   };
 })

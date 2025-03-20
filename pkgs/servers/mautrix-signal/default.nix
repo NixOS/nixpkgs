@@ -3,7 +3,6 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   olm,
   libsignal-ffi,
   versionCheckHook,
@@ -15,24 +14,19 @@
   withGoolm ? false,
 }:
 
+let
+  cppStdLib = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "v${version}";
-    hash = "sha256-KGIlLGGVaySRrHt6P2AlnDEew/ERyrDYyN2lOz3318M=";
+    tag = "v${version}";
+    hash = "sha256-/x71et9lqx8VTOz6G4R5Rz54vjZT7CzXy72m9Mc6pUI=";
   };
-
-  patches = [
-    # fixes broken media uploads, will be included in the next release
-    (fetchpatch {
-      url = "https://github.com/mautrix/signal/commit/b09995a892c9930628e1669532d9c1283a4938c8.patch";
-      hash = "sha256-M8TvCLZG5MbD/Bkpo4cxQf/19dPfbGzMyIPn9utPLco=";
-    })
-  ];
 
   buildInputs =
     (lib.optional (!withGoolm) olm)
@@ -45,9 +39,9 @@ buildGoModule rec {
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
+  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
-  vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
+  vendorHash = "sha256-nulCcnnQD3cgk4ntWeUwY/+izTxhJCLV0XJRx1h8emY=";
 
   doCheck = true;
   preCheck =
@@ -57,7 +51,7 @@ buildGoModule rec {
     ''
     + (lib.optionalString (!withGoolm) ''
       # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="-lstdc++"
+      export CGO_LDFLAGS="${cppStdLib}"
     '');
 
   postCheck = ''

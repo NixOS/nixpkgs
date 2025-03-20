@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ministat";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.decadent.org.uk/git/ministat.git";
-    rev = "refs/tags/debian/${version}";
+    tag = "debian/${version}";
     sha256 = "1p4g0yqgsy4hiqhr8gqp8d38zxzrss5qz70s0bw3i2pg4w668k6f";
   };
 

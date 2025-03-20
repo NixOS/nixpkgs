@@ -1,21 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  git,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "golink";
-  version = "0-unstable-2024-01-26";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "golink";
-    # https://github.com/tailscale/golink/issues/104
-    rev = "d9de913fb174ec2569a15b6e2dbe5cb6e4a0a853";
-    hash = "sha256-w6jRbajEQkOrBqxDnQreSmSB5DNL9flWjloShiIBM+M=";
+    tag = "v${version}";
+    hash = "sha256-cIml0ewF5j2cQySLHkMmV1rl7cVH8wuoPFeFDCARi1A=";
   };
 
-  vendorHash = "sha256-R/o3csZC/M9nm0k5STL7AhbG5J4LtdxqKaVjM/9ggW8=";
+  vendorHash = "sha256-QIAkmqXWH3X2dIoWyVcqFXVHBwzyv1dNPfdkzD5LuSE=";
+
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   ldflags = [
     "-s"

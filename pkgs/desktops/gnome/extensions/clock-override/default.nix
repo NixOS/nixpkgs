@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, gnome-shell, gettext, glib }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  gnome-shell,
+  gettext,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clock-override";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "clock-override";
   };
 
-  nativeBuildInputs = [ gettext glib ];
+  nativeBuildInputs = [
+    gettext
+    glib
+  ];
 
   buildPhase = ''
     runHook preBuild

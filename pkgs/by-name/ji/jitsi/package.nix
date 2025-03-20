@@ -1,9 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, makeDesktopItem, unzip, ant, jdk8
-# Optional, Jitsi still runs without, but you may pass null:
-, alsa-lib, dbus, gtk2, libpulseaudio, openssl, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeDesktopItem,
+  unzip,
+  ant,
+  jdk8,
+  # Optional, Jitsi still runs without, but you may pass null:
+  alsa-lib,
+  dbus,
+  gtk2,
+  libpulseaudio,
+  openssl,
+  xorg,
 }:
 
-let jdk = jdk8; in
+let
+  jdk = jdk8;
+in
 stdenv.mkDerivation rec {
   pname = "jitsi";
   version = "2.11.5633";
@@ -11,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi";
-    rev = "refs/tags/${lib.versions.patch version}";
+    tag = lib.versions.patch version;
     hash = "sha256-CN4o0VfHdoUteI2wyJ2hFJ9UsQ2wWUzcvrLMbR/l36M=";
   };
 
@@ -27,7 +41,7 @@ stdenv.mkDerivation rec {
   };
 
   libPath = lib.makeLibraryPath ([
-    stdenv.cc.cc  # For libstdc++.
+    stdenv.cc.cc # For libstdc++.
     alsa-lib
     dbus
     gtk2
@@ -40,7 +54,10 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ ant jdk ];
+  buildInputs = [
+    ant
+    jdk
+  ];
 
   buildPhase = "ant make";
 

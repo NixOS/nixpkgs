@@ -1,49 +1,35 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   cython,
-  hypothesis,
   numpy,
+
+  # tests
+  hypothesis,
   pytestCheckHook,
-  pythonOlder,
+
+  # passthru
   blis,
-  numpy_2,
+  numpy_1,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "1.0.1";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cython-blis";
-    rev = "refs/tags/release-v${version}";
-    hash = "sha256-8JaQgTda1EBiZdSrZtKwJ8e/aDENQ+dMmTiH/t1ax5I=";
+    tag = "release-v${version}";
+    hash = "sha256-krUqAEPxJXdlolSbV5R0ZqrWaFuXh7IxSeFTsCr6iss=";
   };
-
-  postPatch = ''
-    # The commit pinning numpy to version 2 doesn't have any functional changes:
-    # https://github.com/explosion/cython-blis/pull/108
-    # BLIS should thus work with numpy and numpy_2.
-    substituteInPlace pyproject.toml setup.py \
-      --replace-fail "numpy>=2.0.0,<3.0.0" numpy
-
-    # See https://github.com/numpy/numpy/issues/21079
-    # has no functional difference as the name is only used in log output
-    substituteInPlace blis/benchmark.py \
-      --replace-fail 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
-  '';
-
-  preCheck = ''
-    # remove src module, so tests use the installed module instead
-    rm -rf ./blis
-  '';
 
   build-system = [
     setuptools
@@ -51,19 +37,40 @@ buildPythonPackage rec {
     numpy
   ];
 
+  env =
+    # Fallback to generic architectures when necessary:
+    # https://github.com/explosion/cython-blis?tab=readme-ov-file#building-blis-for-alternative-architectures
+    lib.optionalAttrs
+      (
+        # error: [Errno 2] No such file or directory: '/build/source/blis/_src/make/linux-cortexa57.jsonl'
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+
+        # clang: error: unknown argument '-mavx512pf'; did you mean '-mavx512f'?
+        # Patching blis/_src/config/knl/make_defs.mk to remove the said flag does not work
+        || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+      )
+      {
+        BLIS_ARCH = "generic";
+      };
+
   dependencies = [ numpy ];
+
+  pythonImportsCheck = [ "blis" ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "blis" ];
+  # remove src module, so tests use the installed module instead
+  preCheck = ''
+    rm -rf ./blis
+  '';
 
   passthru = {
     tests = {
-      numpy_2 = blis.overridePythonAttrs (old: {
-        numpy = numpy_2;
+      numpy_1 = blis.overridePythonAttrs (old: {
+        numpy = numpy_1;
       });
     };
     updateScript = gitUpdater {
@@ -71,11 +78,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
+  meta = {
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-${version}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

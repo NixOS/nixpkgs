@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.3-unstable-2023-05-08";
   pname = "httptunnel";
 
@@ -21,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Creates a bidirectional virtual data connection tunnelled in HTTP requests";
-    homepage    = "http://www.gnu.org/software/httptunnel/httptunnel.html";
-    license     = licenses.gpl2Only;
+    homepage = "http://www.gnu.org/software/httptunnel/httptunnel.html";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ koral ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

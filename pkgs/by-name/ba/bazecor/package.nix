@@ -6,12 +6,12 @@
 }:
 let
   pname = "bazecor";
-  version = "1.5.4";
+  version = "1.6.5";
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-gu3XPl4gKL+k9hX9OVJYGvG3R81c5lZauRJdUFrqtqk=";
+      hash = "sha256-TitZzTNfEnuU0clTsGKexrtbIcsqE1W9A1pJCefVA6U=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
@@ -19,7 +19,7 @@ let
       substituteInPlace \
         $out/usr/lib/bazecor/resources/app/.webpack/main/index.js \
         --replace-fail \
-          'checkUdev=()=>{try{if(c.default.existsSync(f))return c.default.readFileSync(f,"utf-8").trim()===d.trim()}catch(e){u.default.error(e)}return!1}' \
+          'checkUdev=()=>{try{if(l.default.existsSync(h))return l.default.readFileSync(h,"utf-8").trim()===f.trim()}catch(e){d.default.error(e)}return!1}' \
           'checkUdev=()=>{return 1}'
     '';
   };
@@ -41,7 +41,7 @@ appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/bazecor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
     install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps

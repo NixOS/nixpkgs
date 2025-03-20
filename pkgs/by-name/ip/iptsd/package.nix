@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, meson
-, ninja
-, pkg-config
-, cli11
-, eigen
-, hidrd
-, inih
-, microsoft-gsl
-, spdlog
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  cli11,
+  eigen,
+  hidrd,
+  inih,
+  microsoft-gsl,
+  spdlog,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3z3A9qywmsSW1tlJ6LePC5wudM/FITTAFyuPkbHlid0=";
   };
 
@@ -59,16 +60,19 @@ stdenv.mkDerivation rec {
     "-Dservice_manager=systemd"
     "-Dsample_config=false"
     "-Ddebug_tools="
-    "-Db_lto=false"  # plugin needed to handle lto object -> undefined reference to ...
+    "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/linux-surface/iptsd/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = licenses.gpl2Plus;
     mainProgram = "iptsd";
-    maintainers = with maintainers; [ tomberek dotlambda ];
+    maintainers = with maintainers; [
+      tomberek
+      dotlambda
+    ];
     platforms = platforms.linux;
   };
 }

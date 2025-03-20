@@ -1,3 +1,6 @@
+# This file is used by .github/workflows/labels.yml
+# This version uses `sync-labels: true`, meaning that a non-match will remove the label
+
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
@@ -176,13 +179,33 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - nixos/modules/programs/java.nix
+        # Distributions
+        - pkgs/development/compilers/adoptopenjdk-icedtea-web/**/*
+        - pkgs/development/compilers/corretto/**/*
         - pkgs/development/compilers/graalvm/**/*
         - pkgs/development/compilers/openjdk/**/*
+        - pkgs/by-name/op/openjfx/**/*
+        - pkgs/development/compilers/semeru-bin/**/*
         - pkgs/development/compilers/temurin-bin/**/*
         - pkgs/development/compilers/zulu/**/*
+        # Documentation
+        - doc/languages-frameworks/java.section.md
+        # Gradle
+        - doc/languages-frameworks/gradle.section.md
+        - pkgs/development/tools/build-managers/gradle/**/*
+        - pkgs/by-name/gr/gradle-completion/**/*
+        # Maven
+        - pkgs/by-name/ma/maven/**/*
+        - doc/languages-frameworks/maven.section.md
+        # Ant
+        - pkgs/by-name/an/ant/**/*
+        # javaPackages attrset
         - pkgs/development/java-modules/**/*
         - pkgs/top-level/java-packages.nix
+        # Maintainer tooling
+        - pkgs/by-name/ni/nixpkgs-openjdk-updater/**/*
+        # Misc
+        - nixos/modules/programs/java.nix
 
 "6.topic: jitsi":
   - any:
@@ -293,6 +316,7 @@
       - any-glob-to-any-file:
         - nixos/**/*
         - pkgs/by-name/sw/switch-to-configuration-ng/**/*
+        - pkgs/by-name/ni/nixos-rebuild-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: nixos-container":
@@ -308,6 +332,7 @@
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
         - pkgs/build-support/build-nim-package.nix
+        - pkgs/build-support/build-nim-sbom.nix
         - pkgs/by-name/ni/nim*
         - pkgs/top-level/nim-overrides.nix
 
@@ -365,18 +390,6 @@
         - pkgs/test/php/default.nix
         - pkgs/top-level/php-packages.nix
 
-"6.topic: policy discussion":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - .github/**/*
-        - CONTRIBUTING.md
-        - pkgs/README.md
-        - nixos/README.md
-        - maintainers/README.md
-        - lib/README.md
-        - doc/README.md
-
 "6.topic: printing":
   - any:
     - changed-files:
@@ -425,6 +438,7 @@
         - doc/languages-frameworks/ruby.section.md
         - pkgs/development/interpreters/ruby/**/*
         - pkgs/development/ruby-modules/**/*
+        - pkgs/top-level/ruby-packages.nix
 
 "6.topic: rust":
   - any:
@@ -461,6 +475,12 @@
         - pkgs/development/interpreters/tcl/*
         - pkgs/development/tcl-modules/**/*
         - pkgs/top-level/tcl-packages.nix
+
+"6.topic: teams":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+          - maintainers/team-list.nix
 
 "6.topic: TeX":
   - any:
@@ -548,13 +568,6 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/doc/manual/release-notes/**/*
-
-"8.has: documentation":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - doc/**/*
-        - nixos/doc/**/*
 
 "8.has: module (update)":
   - any:

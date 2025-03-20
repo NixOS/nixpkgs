@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "systemc";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "accellera-official";
-    repo = pname;
+    repo = "systemc";
     rev = version;
     sha256 = "sha256-ReYRKx7H9rxVhvY9gAdxrMu5nlsK2FcVIzfgvZroD/E=";
   };
@@ -23,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Language for System-level design, modeling and verification";
-    homepage    = "https://systemc.org/";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://systemc.org/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ amiloradovsky ];
   };
 }

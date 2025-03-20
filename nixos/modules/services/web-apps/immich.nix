@@ -20,7 +20,8 @@ let
     NoNewPrivileges = true;
     PrivateUsers = true;
     PrivateTmp = true;
-    PrivateDevices = true;
+    PrivateDevices = cfg.accelerationDevices == [ ];
+    DeviceAllow = mkIf (cfg.accelerationDevices != null) cfg.accelerationDevices;
     PrivateMounts = true;
     ProtectClock = true;
     ProtectControlGroups = true;
@@ -37,6 +38,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    UMask = "0077";
   };
   inherit (lib)
     types
@@ -160,6 +162,17 @@ in
       };
     };
 
+    accelerationDevices = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = [ ];
+      example = [ "/dev/dri/renderD128" ];
+      description = ''
+        A list of device paths to hardware acceleration devices that immich should
+        have access to. This is useful when transcoding media files.
+        The special value `[ ]` will disallow all devices using `PrivateDevices`. `null` will give access to all devices.
+      '';
+    };
+
     database = {
       enable =
         mkEnableOption "the postgresql database for use with immich. See {option}`services.postgresql`"
@@ -227,7 +240,7 @@ in
           ensureClauses.login = true;
         }
       ];
-      extraPlugins = ps: with ps; [ pgvecto-rs ];
+      extensions = ps: with ps; [ pgvecto-rs ];
       settings = {
         shared_preload_libraries = [ "vectors.so" ];
         search_path = "\"$user\", public, vectors";
@@ -350,6 +363,21 @@ in
         CacheDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
+      };
+    };
+
+    systemd.tmpfiles.settings = {
+      immich = {
+        # Redundant to the `UMask` service config setting on new installs, but installs made in
+        # early 24.11 created world-readable media storage by default, which is a privacy risk. This
+        # fixes those installs.
+        "${cfg.mediaLocation}" = {
+          e = {
+            user = cfg.user;
+            group = cfg.group;
+            mode = "0700";
+          };
+        };
       };
     };
 

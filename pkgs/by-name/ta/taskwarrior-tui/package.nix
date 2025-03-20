@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-8PFGlsm9B6qHRrY7YIPwknmGS+Peg5MWd0kMT173wIQ=";
   };
 
-  cargoHash = "sha256-Cd319GCvdh6S8OO2ylKs1H2+zO4Uq1tgNakghVD12BA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-y5tHZIsbHLU9acIUM/QUx1T0eLK/E/jR+XXys5JnGjU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

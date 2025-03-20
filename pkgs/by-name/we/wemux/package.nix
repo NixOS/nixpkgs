@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, tmux, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  tmux,
+  installShellFiles,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wemux";
   version = "unstable-2021-04-16";
 

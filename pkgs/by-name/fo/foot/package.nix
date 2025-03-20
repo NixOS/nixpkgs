@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, fetchurl
-, runCommand
-, fcft
-, freetype
-, pixman
-, libxkbcommon
-, fontconfig
-, wayland
-, meson
-, ninja
-, ncurses
-, scdoc
-, tllist
-, wayland-protocols
-, wayland-scanner
-, pkg-config
-, utf8proc
-, allowPgo ? !stdenv.hostPlatform.isMusl
-, python3  # for PGO
-# for clang stdenv check
-, foot
-, llvmPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  fetchurl,
+  runCommand,
+  fcft,
+  freetype,
+  pixman,
+  libxkbcommon,
+  fontconfig,
+  wayland,
+  meson,
+  ninja,
+  ncurses,
+  scdoc,
+  tllist,
+  wayland-protocols,
+  wayland-scanner,
+  pkg-config,
+  utf8proc,
+  allowPgo ? !stdenv.hostPlatform.isMusl,
+  python3, # for PGO
+  # for clang stdenv check
+  foot,
+  llvmPackages,
 }:
 
 let
-  version = "1.19.0";
+  version = "1.21.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -63,29 +64,34 @@ let
   '';
 
   compilerName =
-    if stdenv.cc.isClang
-    then "clang"
-    else if stdenv.cc.isGNU
-    then "gcc"
-    else "unknown";
+    if stdenv.cc.isClang then
+      "clang"
+    else if stdenv.cc.isGNU then
+      "gcc"
+    else
+      "unknown";
 
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#performance-optimized-pgo
-  pgoCflags = {
-    "clang" = "-O3 -Wno-ignored-optimization-argument";
-    "gcc" = "-O3";
-  }."${compilerName}";
+  pgoCflags =
+    {
+      "clang" = "-O3 -Wno-ignored-optimization-argument";
+      "gcc" = "-O3";
+    }
+    ."${compilerName}";
 
   # ar with lto support
-  ar = stdenv.cc.bintools.targetPrefix + {
-    "clang" = "llvm-ar";
-    "gcc" = "gcc-ar";
-    "unknown" = "ar";
-  }."${compilerName}";
+  ar =
+    stdenv.cc.bintools.targetPrefix
+    + {
+      "clang" = "llvm-ar";
+      "gcc" = "gcc-ar";
+      "unknown" = "ar";
+    }
+    ."${compilerName}";
 
   # PGO only makes sense if we are not cross compiling and
   # using a compiler which foot's PGO build supports (clang or gcc)
-  doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform)
-    && compilerName != "unknown";
+  doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform) && compilerName != "unknown";
 
   terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
@@ -98,7 +104,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     rev = version;
-    hash = "sha256-EY6VNrAxqA20RHLqfusbdxJPfEE7Fchi1W0noHfbxws=";
+    hash = "sha256:19hkw4g2l00wasmk5dn34rf3bhqh6zbwwhvz98bdcv90p761jws4";
   };
 
   separateDebugInfo = true;
@@ -107,16 +113,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    wayland-scanner
-    meson
-    ninja
-    ncurses
-    scdoc
-    pkg-config
-  ] ++ lib.optionals (compilerName == "clang") [
-    stdenv.cc.cc.libllvm.out
-  ];
+  nativeBuildInputs =
+    [
+      wayland-scanner
+      meson
+      ninja
+      ncurses
+      scdoc
+      pkg-config
+    ]
+    ++ lib.optionals (compilerName == "clang") [
+      stdenv.cc.cc.libllvm.out
+    ];
 
   buildInputs = [
     tllist
@@ -132,10 +140,7 @@ stdenv.mkDerivation {
 
   # recommended build flags for performance optimized foot builds
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
-  CFLAGS =
-    if !doPgo
-    then "-O3"
-    else pgoCflags;
+  CFLAGS = if !doPgo then "-O3" else pgoCflags;
 
   # ar with gcc plugins for lto objects
   preConfigure = ''
@@ -162,20 +167,22 @@ stdenv.mkDerivation {
 
   # build and run binary generating PGO profiles,
   # then reconfigure to build the normal foot binary utilizing PGO
-  preBuild = lib.optionalString doPgo ''
-    meson configure -Db_pgo=generate
-    ninja
-    # make sure there is _some_ profiling data on all binaries
-    meson test
-    ./footclient --version
-    ./foot --version
-    ./utils/xtgettcap
-    # generate pgo data of wayland independent code
-    ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
-    meson configure -Db_pgo=use
-  '' + lib.optionalString (doPgo && compilerName == "clang") ''
-    llvm-profdata merge default_*profraw --output=default.profdata
-  '';
+  preBuild =
+    lib.optionalString doPgo ''
+      meson configure -Db_pgo=generate
+      ninja
+      # make sure there is _some_ profiling data on all binaries
+      meson test
+      ./footclient --version
+      ./foot --version
+      ./utils/xtgettcap
+      # generate pgo data of wayland independent code
+      ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
+      meson configure -Db_pgo=use
+    ''
+    + lib.optionalString (doPgo && compilerName == "clang") ''
+      llvm-profdata merge default_*profraw --output=default.profdata
+    '';
 
   # Install example themes which can be added to foot.ini via the include
   # directive to a separate output to save a bit of space
@@ -187,7 +194,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  outputs = [ "out" "terminfo" "themes" ];
+  outputs = [
+    "out"
+    "terminfo"
+    "themes"
+  ];
 
   passthru.tests = {
     clang-default-compilation = foot.override {
@@ -211,7 +222,10 @@ stdenv.mkDerivation {
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "Fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann maintainers.abbe ];
+    maintainers = [
+      maintainers.sternenseemann
+      maintainers.abbe
+    ];
     platforms = platforms.linux;
     mainProgram = "foot";
   };

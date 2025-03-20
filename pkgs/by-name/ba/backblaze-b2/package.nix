@@ -1,23 +1,24 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, testers
-, backblaze-b2
-# executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
-, execName ? "backblaze-b2"
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  backblaze-b2,
+  # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+  execName ? "backblaze-b2",
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "4.0.1";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rZUWPSI7CrKOdEKdsSpekwBerbIMf2iiVrWkV8WrqSc=";
+    tag = "v${version}";
+    hash = "sha256-uWANUb7AV9ADWJ7Ut8qloEhgoXJ62yTSbXrCHVY1tFE=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -42,6 +43,8 @@ python3Packages.buildPythonApplication rec {
     packaging
     setuptools
   ];
+
+  pythonRelaxDeps = [ "phx-class-registry" ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
@@ -73,32 +76,35 @@ python3Packages.buildPythonApplication rec {
     "test_install_autocomplete"
   ];
 
-  postInstall = lib.optionalString (execName != "b2") ''
-    mv "$out/bin/b2" "$out/bin/${execName}"
-  ''
-  + ''
-    installShellCompletion --cmd ${execName} \
-      --bash <(register-python-argcomplete ${execName}) \
-      --zsh <(register-python-argcomplete ${execName})
-  '';
-
-  passthru.tests.version = (testers.testVersion {
-    package = backblaze-b2;
-    command = "${execName} version --short";
-  }).overrideAttrs (old: {
-    # workaround the error: Permission denied: '/homeless-shelter'
-    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
-    preHook = ''
-      export HOME=$(mktemp -d)
+  postInstall =
+    lib.optionalString (execName != "b2") ''
+      mv "$out/bin/b2" "$out/bin/${execName}"
+    ''
+    + ''
+      installShellCompletion --cmd ${execName} \
+        --bash <(register-python-argcomplete ${execName}) \
+        --zsh <(register-python-argcomplete ${execName})
     '';
-  });
+
+  passthru.tests.version =
+    (testers.testVersion {
+      package = backblaze-b2;
+      command = "${execName} version --short";
+    }).overrideAttrs
+      (old: {
+        # workaround the error: Permission denied: '/homeless-shelter'
+        # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+        preHook = ''
+          export HOME=$(mktemp -d)
+        '';
+      });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
-    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka tomhoule ];
+    maintainers = with maintainers; [ hrdinka ];
     mainProgram = "backblaze-b2";
   };
 }

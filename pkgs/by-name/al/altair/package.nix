@@ -1,12 +1,17 @@
-{ lib, appimageTools, makeWrapper, fetchurl }:
+{
+  lib,
+  appimageTools,
+  makeWrapper,
+  fetchurl,
+}:
 
 let
   pname = "altair";
-  version = "8.0.0";
+  version = "8.2.1";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-q3AkqhE0hD6+cCv5UeZ4uyUi6Adrmxv4jMGYN7Keias=";
+    sha256 = "sha256-DO4T/NgLSxZIxVK4oEz6QNsQJRacF8KRcwAvWToxIy8=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -18,7 +23,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \

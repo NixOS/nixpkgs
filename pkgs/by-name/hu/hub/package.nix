@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchpatch
-, fetchFromGitHub
-, git
-, groff
-, installShellFiles
-, makeWrapper
-, unixtools
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchpatch,
+  fetchFromGitHub,
+  git,
+  groff,
+  installShellFiles,
+  makeWrapper,
+  unixtools,
+  nixosTests,
 }:
 
 buildGoModule rec {

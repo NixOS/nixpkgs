@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XI6uf54sEJ0htfY43aF8/X1/OF9m6peHUGDS+2nK3xA=";
   };
 
-  cargoHash = "sha256-NZyO6oXmgTUszp2Vc9iVAnCvM78/BJ8IfpeTrsOMvlo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xf5lSwnD6ChpHaM7RQ/eti40iRZrNPpBsUn2QRzxecg=";
 
   meta = with lib; {
     description = "Lightweight command line tool to quickly navigate across folders";

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libaio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libaio,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,9 +10,9 @@ stdenv.mkDerivation rec {
   version = "1.0.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    owner = "stressapptest";
+    repo = "stressapptest";
+    tag = "v${version}";
     hash = "sha256-lZpF7PdUwKnV0ha6xkLvi7XYFZQ4Avy0ltlXxukuWjM=";
   };
 

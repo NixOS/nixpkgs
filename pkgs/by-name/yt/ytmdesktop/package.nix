@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.6";
+  version = "2.0.7";
 
   desktopItems = [
     (makeDesktopItem {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ytmdesktop/ytmdesktop/releases/download/v${finalAttrs.version}/youtube-music-desktop-app_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-uLTnVA9ooGlbtmUGoYtrT9IlOhTAJpEXMr1GSs3ae/8=";
+    hash = "sha256-bdP6vIAUoFYLvEvxtG69tBuL94EQQVwNyeuQibRMMbk=";
   };
 
   unpackPhase = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     asar extract resources/app.asar patched-asar
 
     # workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace patched-asar/.webpack/main/index.js \
+    substituteInPlace patched-asar/.vite/main/index.js \
       --replace-fail "process.resourcesPath" "'$out/lib/resources'"
 
     asar pack patched-asar resources/app.asar
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron_33} $out/bin/ytmdesktop \
       --add-flags $out/lib/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook preFixup
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";
     license = lib.licenses.gpl3Only;
-    mainProgram = finalAttrs.pname;
+    mainProgram = "ytmdesktop";
     maintainers = [ lib.maintainers.cjshearer ];
     inherit (electron_33.meta) platforms;
     # While the files we extract from the .deb are cross-platform (javascript), the installation

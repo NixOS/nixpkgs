@@ -1,16 +1,17 @@
-{ curl
-, fetchFromGitHub
-, freetype
-, lib
-, libGL
-, libjpeg
-, libogg
-, libvorbis
-, libX11
-, libXxf86vm
-, openal
-, pkg-config
-, stdenv
+{
+  curl,
+  fetchFromGitHub,
+  freetype,
+  lib,
+  libGL,
+  libjpeg,
+  libogg,
+  libvorbis,
+  libX11,
+  libXxf86vm,
+  openal,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

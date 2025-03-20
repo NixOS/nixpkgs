@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, freetype
-, fribidi
-, imlib2
-, libX11
-, libXext
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libXrender
-, pkg-config
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  freetype,
+  fribidi,
+  imlib2,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libXrender,
+  pkg-config,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bastard hacked offspring of Blackbox";
     homepage = "https://github.com/museoa/hackedbox/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     inherit (libX11.meta) platforms;
   };
 })

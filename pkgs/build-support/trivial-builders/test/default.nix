@@ -19,6 +19,7 @@ in
 recurseIntoAttrs {
   concat = callPackage ./concat-test.nix {};
   linkFarm = callPackage ./link-farm.nix {};
+  symlinkJoin = recurseIntoAttrs (callPackage ./symlink-join.nix {});
   overriding = callPackage ../test-overriding.nix {};
   inherit references;
   writeCBin = callPackage ./writeCBin.nix {};

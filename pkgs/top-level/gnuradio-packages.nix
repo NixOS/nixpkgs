@@ -35,18 +35,12 @@ in {
 
   ### Packages
 
+  bladeRF = callPackage ../development/gnuradio-modules/bladeRF/default.nix { };
+
+  lora_sdr = callPackage ../development/gnuradio-modules/lora_sdr/default.nix { };
+
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 
-  ais = callPackage ../development/gnuradio-modules/ais/default.nix { };
-
-  grnet = callPackage ../development/gnuradio-modules/grnet/default.nix { };
-
-  gsm = callPackage ../development/gnuradio-modules/gsm/default.nix { };
-
-  nacl = callPackage ../development/gnuradio-modules/nacl/default.nix { };
-
-  rds = callPackage ../development/gnuradio-modules/rds/default.nix { };
-
-  limesdr = callPackage ../development/gnuradio-modules/limesdr/default.nix { };
+  fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
 
 })

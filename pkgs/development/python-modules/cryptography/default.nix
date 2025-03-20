@@ -8,7 +8,7 @@
   certifi,
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
   libiconv,
   libxcrypt,
@@ -24,29 +24,28 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "43.0.1"; # Also update the hash in vectors.nix
+  version = "44.0.1"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ID6Sp1cW2M+0kdxHx54X0NkgfM/8vLNfWY++RjrjRE0=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "cryptography";
+    tag = version;
+    hash = "sha256-PM7InFrRY0ho8qcBcVqqcXV9eVP8fF0ma/y4C0gx1Ic=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-wiAHM0ucR1X7GunZX8V0Jk2Hsi+dVdGgDKqcYjSdD7Q=";
+    hash = "sha256-hjfSjmwd/mylVZKyXsj/pP2KvAGDpfthuT+w219HAiA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--benchmark-disable" ""
   '';
-
-  cargoRoot = "src/rust";
 
   build-system = [
     rustPlatform.cargoSetupHook

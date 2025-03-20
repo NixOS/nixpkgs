@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, withNg ? false, ... }: {
   name = "nixos-rebuild-install-bootloader";
 
   nodes = {
@@ -15,6 +15,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       system.includeBuildDependencies = true;
+      system.rebuild.enableNg = withNg;
 
       virtualisation = {
         cores = 2;
@@ -27,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript =
     let
-      configFile = pkgs.writeText "configuration.nix" ''
+      configFile = pkgs.writeText "configuration.nix" /* nix */ ''
         { lib, pkgs, ... }: {
           imports = [
             ./hardware-configuration.nix
@@ -40,12 +41,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             forceInstall = true;
           };
 
+          system.rebuild.enableNg = ${lib.boolToString withNg};
           documentation.enable = false;
         }
       '';
 
     in
-    ''
+    /* python */ ''
       machine.start()
       machine.succeed("udevadm settle")
       machine.wait_for_unit("multi-user.target")

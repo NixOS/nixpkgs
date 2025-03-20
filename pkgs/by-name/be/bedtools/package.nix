@@ -1,4 +1,12 @@
-{lib, stdenv, fetchFromGitHub, zlib, python3, bzip2, xz}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  python3,
+  bzip2,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
@@ -17,7 +25,11 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [ zlib bzip2 xz ];
+  buildInputs = [
+    zlib
+    bzip2
+    xz
+  ];
 
   cxx = if stdenv.cc.isClang then "clang++" else "g++";
   cc = if stdenv.cc.isClang then "clang" else "gcc";

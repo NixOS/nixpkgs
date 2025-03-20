@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eyeseast";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Sr0RbNVk87Zu01U7nkuPUSnl1bm6G72EZDP/eDn099s=";
   };
 

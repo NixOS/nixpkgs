@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, wayland-protocols
-, wayland-scanner
-, wayland
-, gtk4
-, gobject-introspection
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  wayland-protocols,
+  wayland-scanner,
+  wayland,
+  gtk4,
+  gobject-introspection,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
-  version = "1.0.4";
+  version = "1.1.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc";
 
   src = fetchFromGitHub {
     owner = "wmww";
     repo = "gtk4-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0Ya3NVTSO/urU8H+h6SVZBkcvdnqwr06rNWyBtwhQ8E=";
+    hash = "sha256-UGhFeaBBIfC4ToWdyoX+oUzLlqJsjF++9U7mtszE0y0=";
   };
 
   strictDeps = true;
@@ -45,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
-    wayland-protocols
   ];
 
   buildInputs = [
-    wayland
     gtk4
+    wayland
+    wayland-protocols
   ];
 
   mesonFlags = [

@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, nix-update-source, lib, python3
-, which, runtimeShell, pylint }:
+{
+  stdenv,
+  fetchFromGitHub,
+  nix-update-source,
+  lib,
+  python3,
+  which,
+  runtimeShell,
+  pylint,
+}:
 stdenv.mkDerivation rec {
   version = "0.9.2";
   src = fetchFromGitHub {
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     rev = "version-${version}";
   };
   pname = "gup";
-  nativeBuildInputs = [ python3 which pylint ];
+  nativeBuildInputs = [
+    python3
+    which
+    pylint
+  ];
   buildInputs = [ python3 ];
   strictDeps = true;
   buildPhase = "make python";

@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "protoc-gen-go";
-  version = "1.35.1";
+  version = "1.36.5";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-go";
     rev = "v${version}";
-    hash = "sha256-SYSGC7LtKHdGuEQnjTzqRo8NxyxYXs4nMMflztRwJok=";
+    hash = "sha256-fotgvzHRRCDWRyGM9nP+BFhE0vN5/0jQlb5moOhDAWc=";
   };
 
   vendorHash = "sha256-nGI/Bd6eMEoY0sBwWEtyhFowHVvwLKjbT4yfzFz6Z3E=";

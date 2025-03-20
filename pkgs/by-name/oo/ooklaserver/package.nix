@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
 }:
 let
   filenameMapping = {
@@ -17,7 +18,7 @@ let
     # OoklaServer-freebsd13_64.zip
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2.11.1.2";
   pname = "ooklaserver";
 

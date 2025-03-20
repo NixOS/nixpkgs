@@ -16,7 +16,10 @@
     config.allowUnfree = true;
   },
 
-  config ? pkgs.config
+  config ? pkgs.config,
+  # You probably need to set it to true to express consent.
+  licenseAccepted ?
+    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
 # Copy this file to your Android project.
@@ -37,7 +40,10 @@ let
 
     platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
     abis = [ "x86_64" ];
-    extras = ["extras;google;gcm"];
+    extras = [
+      "extras;google;gcm"
+      "extras;google;auto"
+    ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
@@ -54,9 +60,7 @@ let
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs;
-    # You probably need to uncomment below line to express consent.
-    # licenseAccepted = true;
+    inherit config pkgs licenseAccepted;
   };
 
   androidComposition = androidEnv.composeAndroidPackages {
@@ -118,7 +122,7 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [ androidSdk platformTools jdk ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -180,7 +184,9 @@ pkgs.mkShell rec {
         "system-images;android-32;google_apis_playstore;x86_64" \
         "system-images;android-33;google_apis_playstore;x86_64" \
         "system-images;android-34;google_apis;x86_64" \
-        "system-images;android-35;google_apis_playstore_ps16k;x86_64"
+        "system-images;android-35;google_apis;x86_64" \
+        "extras;google;gcm"
+        "extras;google;auto"
       )
 
       for package in "''${packages[@]}"; do

@@ -1,22 +1,35 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest, rapidjson }:
+{
+  stdenv,
+  lib,
+  rel,
+  addonDir,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pugixml,
+  glib,
+  nspr,
+  nss,
+  gtest,
+  rapidjson,
+}:
 let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
     repo = "Bento4";
-    rev = "1.6.0-641-${rel}";
-    sha256 = "sha256-vsFMDzH8JJecYw0qWKGCxnd/m5wn62mCKE2g2HwQhwI=";
+    tag = "1.6.0-641-3-${rel}";
+    hash = "sha256-ycWQvXgr1DQ3Wng73S8i6y6XmcUD/iN8OKfO1czgsnY=";
   };
 in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "21.4.6";
+  version = "21.5.9";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
-    rev = "${version}-${rel}";
-    sha256 = "sha256-ub4ep89datfr8aZLZAfoz7zhOizGFpzgp2PVON6Ptj8=";
+    tag = "${version}-${rel}";
+    hash = "sha256-OArvp/MgJGsRs3Z59JfgOkfwyhQ3ArC1yf37z7Y7khg=";
   };
 
   extraCMakeFlags = [
@@ -26,13 +39,25 @@ buildKodiBinaryAddon rec {
 
   extraNativeBuildInputs = [ gtest ];
 
-  extraBuildInputs = [ pugixml rapidjson ];
+  extraBuildInputs = [
+    pugixml
+    rapidjson
+  ];
 
-  extraRuntimeDependencies = [ glib nspr nss (lib.getLib stdenv.cc.cc) ];
+  extraRuntimeDependencies = [
+    glib
+    nspr
+    nss
+    (lib.getLib stdenv.cc.cc)
+  ];
 
-  extraInstallPhase = let n = namespace; in ''
-    ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
-  '';
+  extraInstallPhase =
+    let
+      n = namespace;
+    in
+    ''
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.adaptive";

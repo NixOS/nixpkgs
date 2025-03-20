@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, pkg-config, gtk2, synergy}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  synergy,
+}:
 
 stdenv.mkDerivation rec {
   pname = "quicksynergy";

@@ -1,13 +1,22 @@
-{ stdenv, lib, help2man, python3, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  help2man,
+  python3,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminal-colors";
   version = "3.0.2";
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "eikenb";
-    repo = pname;
+    repo = "terminal-colors";
     rev = "v${version}";
     hash = "sha256-KRoP/Reo5nDKJYG9zVTVpoYL7soAGMNk46vDoaLfnv4=";
   };

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, libyaml
-, testers
-, yx
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  libyaml,
+  testers,
+  yx,
 }:
 stdenv.mkDerivation rec {
   pname = "yx";

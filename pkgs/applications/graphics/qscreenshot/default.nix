@@ -1,13 +1,15 @@
-{ stdenv
-, lib
-, fetchgit
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, cmake }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qscreenshot";
   version = "unstable-2021-10-18";
 

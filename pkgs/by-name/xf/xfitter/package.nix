@@ -1,34 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, apfel
-, apfelgrid
-, applgrid
-, blas
-, ceres-solver
-, cmake
-, gfortran
-, gsl
-, lapack
-, lhapdf
-, libtirpc
-, libyaml
-, yaml-cpp
-, pkg-config
-, qcdnum
-, root
-, zlib
-, memorymappingHook, memstreamHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  apfel,
+  apfelgrid,
+  applgrid,
+  blas,
+  ceres-solver,
+  cmake,
+  gfortran,
+  gsl,
+  lapack,
+  lhapdf,
+  libtirpc,
+  libyaml,
+  yaml-cpp,
+  pkg-config,
+  qcdnum,
+  root,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xfitter";
   version = "2.2.0";
 
-  src = fetchurl {
-    name = "${pname}-${version}.tgz";
-    url = "https://www.xfitter.org/xFitter/xFitter/DownloadPage?action=AttachFile&do=get&target=${pname}-${version}.tgz";
-    sha256 = "sha256-ZHIQ5hOY+k0/wmpE0o4Po+RZ4MkVMk+bK1Rc6eqwwH0=";
+  src = fetchFromGitLab {
+    owner = "fitters";
+    repo = "xfitter";
+    rev = "refs/tags/2.2.0_Future_Freeze";
+    domain = "gitlab.cern.ch";
+    hash = "sha256-wanxgldvBEuAEOeVok3XgRVStcn9APd+Nj7vpRZUtGs=";
   };
 
   patches = [
@@ -36,15 +38,34 @@ stdenv.mkDerivation rec {
     ./0001-src-GetChisquare.f-use-correct-types-in-calls-to-DSY.patch
   ];
 
-  nativeBuildInputs = [ cmake gfortran pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    pkg-config
+  ];
   buildInputs =
-    [ apfel blas ceres-solver lhapdf lapack libyaml root qcdnum gsl yaml-cpp zlib ]
-    ++ lib.optionals ("5" == lib.versions.major root.version) [ apfelgrid applgrid ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook memstreamHook ]
-    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc
-    ;
+    [
+      apfel
+      blas
+      ceres-solver
+      lhapdf
+      lapack
+      libyaml
+      root
+      qcdnum
+      gsl
+      yaml-cpp
+      zlib
+    ]
+    ++ lib.optionals ("5" == lib.versions.major root.version) [
+      apfelgrid
+      applgrid
+    ]
+    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.libc == "glibc"
+  ) "-I${libtirpc.dev}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
   hardeningDisable = [ "format" ];
@@ -56,9 +77,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
-    license     = licenses.gpl3;
-    homepage    = "https://www.xfitter.org/xFitter";
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = "https://www.xfitter.org/xFitter";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

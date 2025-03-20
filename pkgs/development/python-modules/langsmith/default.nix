@@ -13,6 +13,7 @@
   pydantic,
   requests,
   requests-toolbelt,
+  zstandard,
 
   # tests
   anthropic,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.137";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nR3fb3MHBxFvI4qrsTpElLWTDUESZ8J78GsVoCGTIyQ=";
+    tag = "v${version}";
+    hash = "sha256-kiKauRYqKEJZaKjL2YgOCgMmuw3UgSQx9+xHOdylCAQ=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    zstandard
   ];
 
   nativeCheckInputs = [
@@ -84,7 +86,9 @@ buildPythonPackage rec {
     # due to circular import
     "tests/integration_tests/test_client.py"
     "tests/integration_tests/test_prompts.py"
+    "tests/unit_tests/evaluation/test_runner.py"
     "tests/unit_tests/test_client.py"
+    "tests/unit_tests/evaluation/test_runner.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
@@ -97,9 +101,12 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langsmith";
   };
 }

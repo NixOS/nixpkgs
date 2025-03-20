@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-auth";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "httpx_auth";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7azPyep+R55CdRwbdo20y4YNV47c8CwXgOj4q4t25oc=";
+    tag = "v${version}";
+    hash = "sha256-wrPKUAGBzzuWNtwYtTtqOhb1xqYgc83uxn4rjbfDPmo=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Authentication classes to be used with httpx";
     homepage = "https://github.com/Colin-b/httpx_auth";
-    changelog = "https://github.com/Colin-b/httpx_auth/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Colin-b/httpx_auth/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

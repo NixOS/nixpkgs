@@ -1,33 +1,39 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, curl
-, openssl
-, nix-update-script
-, testers
-, snac2
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  curl,
+  openssl,
+  nix-update-script,
+  testers,
+  snac2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "snac2";
-  version = "2.59";
+  version = "2.73";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "grunfink";
     repo = pname;
     rev = version;
-    hash = "sha256-CIn+/LC6z+2lnU8w3EzrBIBg94J9OnCxME2mZW65OwE=";
+    hash = "sha256-5LKDwp5f5BWhm+9uVBlv3mJpLLQ+ETP9lcRXlfD579Y=";
   };
 
-  buildInputs = [ curl openssl ];
+  buildInputs = [
+    curl
+    openssl
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Dst_mtim=st_mtimespec"
-    "-Dst_ctim=st_ctimespec"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Dst_mtim=st_mtimespec"
+      "-Dst_ctim=st_ctimespec"
+    ]
+  );
 
   passthru = {
     tests.version = testers.testVersion {

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, libexif
-, libfm-qt
-, lxqt-qtplugin
-, menu-cache
-, qtbase
-, wrapQtAppsHook
-, gitUpdater
-, extraQtStyles ? []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  libexif,
+  libfm-qt,
+  lxqt-qtplugin,
+  menu-cache,
+  qtbase,
+  wrapQtAppsHook,
+  gitUpdater,
+  extraQtStyles ? [ ],
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +37,7 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ]
-  ++ extraQtStyles;
+  ] ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 

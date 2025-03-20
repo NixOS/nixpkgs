@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MZFnNb8rJMu/nlH8rfnD//bhqPSkhyXucbTrwsRM9OY=";
   };
 
-  cargoHash = "sha256-DGroBBozAViibbIYbtqH2SxIGLqdtyJ9XKyz7O1L05g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2Vc0vCQJY2enwTAgaRgqLdCTtF5znrF3xaCTvF44XX0=";
 
   nativeBuildInputs = [ pkg-config ];
 

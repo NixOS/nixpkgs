@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, desktop-file-utils, gtk3, libpng, exiv2, lcms
-, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl, wrapGAppsHook3, webp-pixbuf-loader, gnome, librsvg}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  gtk3,
+  libpng,
+  exiv2,
+  lcms,
+  intltool,
+  gettext,
+  shared-mime-info,
+  glib,
+  gdk-pixbuf,
+  perl,
+  wrapGAppsHook3,
+  webp-pixbuf-loader,
+  gnome,
+  librsvg,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "viewnior-gtk3";
   version = "1.8-unstable-2023-11-23";
 
@@ -64,7 +85,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     homepage = "https://siyanpanayotov.com/project/viewnior/";
-    maintainers = with maintainers; [ smironov artturin ];
+    maintainers = with maintainers; [
+      smironov
+      artturin
+    ];
     platforms = platforms.gnu ++ platforms.linux;
     mainProgram = "viewnior";
   };

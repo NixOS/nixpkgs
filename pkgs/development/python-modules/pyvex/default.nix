@@ -3,6 +3,7 @@
   stdenv,
   bitstring,
   buildPythonPackage,
+  buildPackages,
   cffi,
   fetchPypi,
   pycparser,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.128";
+  version = "9.2.146";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ASo1hqxLsX4UkdhXLOArKBQdxws/maUjGb/HotAoxzw=";
+    hash = "sha256-JfKT7epFi9g/kfum7MrGOT2c2OaLkVj3b4hFZiQTDJE=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     cffi
     pycparser
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ cffi ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \

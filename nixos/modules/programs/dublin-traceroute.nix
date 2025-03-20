@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.dublin-traceroute;
 
-in {
+in
+{
   meta.maintainers = pkgs.dublin-traceroute.meta.maintainers;
 
   options = {

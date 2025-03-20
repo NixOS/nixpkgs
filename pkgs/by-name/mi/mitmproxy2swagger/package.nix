@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = "mitmproxy2swagger";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VHxqxee5sQWRS13V4SfY4LWaN0oxxWsNVDOEqUyKHfg=";
+    tag = version;
+    hash = "sha256-bQ9zjRsMrC/B118iP2hevj2hhSFD7FTnsCe6lUMwYSI=";
   };
 
   pythonRelaxDeps = [

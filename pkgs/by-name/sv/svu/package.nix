@@ -1,19 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, svu }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  svu,
+}:
 
 buildGoModule rec {
   pname = "svu";
-  version = "2.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-C5ATwRsi9hJBO9xFlyMDoxu97rJHwcKNToWhcmx6M6g=";
+    sha256 = "sha256-eZjwZBmc+rOk4nlsWPVmL7FXXmiJYTCSdeDl/CfZZQk=";
   };
 
-  vendorHash = "sha256-/FSvNoVDWAkQs09gMrqyoA0su52nlk/nSCYRAhQhbwQ=";
+  vendorHash = "sha256-lqE5S13VQ7WLow6tXcFOWcK/dw7LvvEDpgRTQ8aJGeg=";
 
-  ldflags = [ "-s" "-w" "-X=main.version=${version}" "-X=main.builtBy=nixpkgs" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.builtBy=nixpkgs"
+  ];
 
   # test assumes source directory to be a git repository
   postPatch = ''

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
   };
 

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, pkg-config
-, libiconv
-, darwin
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  libiconv,
+  darwin,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,23 +15,25 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "mccurdyc";
-    repo = pname;
+    repo = "gitrs";
     rev = version;
     hash = "sha256-+43XJroPNWmdUC6FDL84rZWrJm5fzuUXfpDkAMyVQQg=";
   };
 
-  cargoHash = "sha256-2TXm1JTs0Xkid91A5tdi6Kokm0K1NOPmlocwFXv48uw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uDDk1wztXdINPSVF6MvDy+lHIClMLp13HZSTpIgLypM=";
 
   nativeBuildInputs = [
     pkg-config # for openssl
   ];
 
-  buildInputs = [ openssl.dev ]
+  buildInputs =
+    [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   meta = with lib; {
     description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";

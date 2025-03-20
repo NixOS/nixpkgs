@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gettext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "enscript";
@@ -48,5 +53,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "enscript";
   };
 }

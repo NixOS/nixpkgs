@@ -1,14 +1,16 @@
-{lib, stdenv
-, fetchurl
-, fetchpatch
-, bzip2
-, zlib
-, newt
-, openssl
-, pkg-config
-, slang
-, libxcrypt
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  bzip2,
+  zlib,
+  newt,
+  openssl,
+  pkg-config,
+  slang,
+  libxcrypt,
+  autoreconfHook,
 }:
 stdenv.mkDerivation rec {
   pname = "partimage";
@@ -23,14 +25,26 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-ssl-headers=${openssl.dev}/include/openssl" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ bzip2 zlib newt newt openssl slang libxcrypt ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    bzip2
+    zlib
+    newt
+    newt
+    openssl
+    slang
+    libxcrypt
+  ];
 
   patches = [
     ./gentoos-zlib.patch
     (fetchpatch {
       name = "openssl-1.1.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-block/partimage/files/"
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-block/partimage/files/"
         + "partimage-0.6.9-openssl-1.1-compatibility.patch?id=3fe8e9910002b6523d995512a646b063565d0447";
       sha256 = "1hs0krxrncxq1w36bhad02yk8yx71zcfs35cw87c82sl2sfwasjg";
     })
@@ -44,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Opensource disk backup software";
     homepage = "https://www.partimage.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

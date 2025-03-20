@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, electron
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  electron,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,10 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
-
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+  nativeBuildInputs = [
+    makeWrapper
+    dpkg
+  ];
 
   installPhase = ''
     runHook preInstall
