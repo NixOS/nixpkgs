@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quake3hires";
-  version = "2020-01-20"; # Unknown version, used the date of web.archive.org capture.
+  version = "unstable-2020-01-20"; # Unknown version, used the date of web.archive.org capture.
 
   nativeBuildInputs = [
     libarchive
