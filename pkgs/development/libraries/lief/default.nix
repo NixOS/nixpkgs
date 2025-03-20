@@ -1,13 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  cmake,
+  ninja,
 }:
 
 let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ps.tomli ps.pip ps.setuptools ]);
+  pyEnv = python.withPackages (ps: [
+    ps.setuptools
+    ps.tomli
+    ps.pip
+    ps.setuptools
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "lief";
@@ -20,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3rLnT/zs7YrAYNc8I2EJevl98LHGcXFf7bVlJJfxqRc=";
   };
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +64,9 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ lassulus genericnerdyusername ];
+    maintainers = with maintainers; [
+      lassulus
+      genericnerdyusername
+    ];
   };
 }
