@@ -1,12 +1,15 @@
 {
   lib,
+  go_1_22,
   buildGo122Module,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  go = go_1_22;
+in
 buildGo122Module rec {
   pname = "sops";
   version = "3.9.4";
@@ -20,9 +23,11 @@ buildGo122Module rec {
 
   vendorHash = "sha256-wxmSj3QaFChGE+/2my7Oe2mhprwi404izUxteecyggY=";
 
+  # sops Makefile runs "go mod tidy" on fly to update go.mod
+  # it needs internet access so we need to modify it manually instead
   postPatch = ''
     substituteInPlace go.mod \
-      --replace-fail "go 1.22" "go 1.22.7"
+      --replace-fail "go 1.22" "go ${go.version}"
   '';
 
   subPackages = [ "cmd/sops" ];
