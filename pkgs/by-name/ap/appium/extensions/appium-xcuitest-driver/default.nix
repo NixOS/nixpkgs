@@ -3,15 +3,15 @@
 buildNpmPackage rec {
   pname = "appium-xcuitest-driver";
   packageName = pname;
-  version = "8.3.2";
+  version = "8.4.3";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W5zn9ovyoDo5vp606FNQ8LOlxGHaq/ZSnVSHfInLjU0=";
+    hash = "sha256-w2Uk4SjikU+kkEZfRA5pE49shOImTQWMktcUQwC/Ym8=";
   };
-  npmDepsHash = "sha256-KEdpDJ2xzerBlR8qfaMVxWbV7h2IniQCnNwVqzEKKdg=";
+  npmDepsHash = "sha256-bxM/HtKCJgmXA6dBhkiGT7r3TMfmVgO6JiqzMwH/ngs=";
 
   postPatch = ''
     # export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
