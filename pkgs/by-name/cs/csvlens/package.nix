@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "csvlens";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "YS-L";
     repo = "csvlens";
     tag = "v${version}";
-    hash = "sha256-JlyDw+VL/vpKTvvBlDIwVIovhKJX2pV4UTY47cLR1IE=";
+    hash = "sha256-kyUfpZaOpLP8nGrXH8t9cOutXFkZsmZnPmIu3t6uaWU=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nfw8mMauOTDCBh9O2ye96p8WXDFta4DXXb9kJVz7f3E=";
+  cargoHash = "sha256-lr1pqFodqgsKHRFGonXj0nG4elomiSMETulBdCLMR3w=";
 
   meta = with lib; {
     description = "Command line csv viewer";
