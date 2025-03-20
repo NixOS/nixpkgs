@@ -79,15 +79,12 @@ in {
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
-  # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src = if monorepoSrc != null then
     runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
-    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '' + ''
       cp -r ${monorepoSrc}/llvm "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/llvm/tools"
@@ -590,11 +587,8 @@ in {
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
       --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   '')
-  + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-$shortVersion.dylib
-  ''
   + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${if lib.versionOlder release_version "18" then "$shortVersion" else release_version}.dylib
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
     ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
