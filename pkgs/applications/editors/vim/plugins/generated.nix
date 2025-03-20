@@ -11165,14 +11165,14 @@ final: prev:
 
   obsidian-nvim = buildVimPlugin {
     pname = "obsidian.nvim";
-    version = "2024-08-01";
+    version = "2025-03-13";
     src = fetchFromGitHub {
-      owner = "epwalsh";
+      owner = "obsidian-nvim";
       repo = "obsidian.nvim";
-      rev = "14e0427bef6c55da0d63f9a313fd9941be3a2479";
-      sha256 = "15ycmhn48ryaqzch6w3w6llq2qgmjx8xwkb9dn0075z60dybpflr";
+      rev = "15b8c5fc730625a3f162817b13db144c5bba3a9f";
+      sha256 = "00amy1yg76ywic281pq4ycwjz1gxmqs14l35qf0ssp0vl8scq5gf";
     };
-    meta.homepage = "https://github.com/epwalsh/obsidian.nvim/";
+    meta.homepage = "https://github.com/obsidian-nvim/obsidian.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
