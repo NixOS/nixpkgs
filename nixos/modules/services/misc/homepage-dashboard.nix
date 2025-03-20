@@ -227,11 +227,11 @@ in
         Restart = "on-failure";
       };
 
+      # Related:
+      # * https://github.com/NixOS/nixpkgs/issues/346016 ("homepage-dashboard: cache dir is not cleared upon version upgrade")
+      # * https://github.com/gethomepage/homepage/discussions/4560 ("homepage NixOS package does not clear cache on upgrade leaving broken state")
+      # * https://github.com/vercel/next.js/discussions/58864 ("Feature Request: Allow configuration of cache dir")
       preStart = ''
-        # Related:
-        # * https://github.com/NixOS/nixpkgs/issues/346016 ("homepage-dashboard: cache dir is not cleared upon version upgrade")
-        # * https://github.com/gethomepage/homepage/discussions/4560 ("homepage NixOS package does not clear cache on upgrade leaving broken state")
-        # * https://github.com/vercel/next.js/discussions/58864 ("Feature Request: Allow configuration of cache dir")
         rm -rf "$NIXPKGS_HOMEPAGE_CACHE_DIR"/*
       '';
     };
