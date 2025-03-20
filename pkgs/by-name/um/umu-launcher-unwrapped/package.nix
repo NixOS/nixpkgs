@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatch,
   lib,
+  nix-update-script,
   python3Packages,
   rustPlatform,
   scdoc,
@@ -82,6 +83,8 @@ python3Packages.buildPythonPackage rec {
     # Fails with AssertionError: SystemExit not raised
     "test_parse_args_noopts"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unified launcher for Windows games on Linux using the Steam Linux Runtime and Tools";
