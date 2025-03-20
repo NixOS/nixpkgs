@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
   ];
 
+  # Remove warnings during the build
+  env.NIX_CFLAGS_COMPILE = "-Wno-builtin-macro-redefined";
+
   postInstall = ''
     mkdir -p $doc/share/doc/orthanc
     cp -r $src/OrthancServer/Resources/Samples $doc/share/doc/orthanc/Samples
