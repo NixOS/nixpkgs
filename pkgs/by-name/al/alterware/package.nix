@@ -1,20 +1,6 @@
-{ lib, fetchFromGitHub, rustPlatform, perl, }:
+{ lib, fetchFromGitHub, rustPlatform, perl }:
 
-with import (fetchTarball
-  "https://github.com/NixOS/nixpkgs/archive/b75693fb46bfaf09e662d09ec076c5a162efa9f6.tar.gz") {
-    overlays = [
-      (import (fetchTarball
-        "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
-    ];
-  };
-let
-  rustPlatform = makeRustPlatform {
-    cargo = rust-bin.stable.latest.minimal;
-    rustc = rust-bin.stable.latest.minimal;
-  };
-  # The above is needed until the rustc version is at least 1.78 in rustPlatform.buildRustPackage.
-
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "alterware";
   version = "0.10.2";
 
@@ -34,7 +20,7 @@ in rustPlatform.buildRustPackage rec {
     description = "Official launcher for AlterWare Call of Duty mods";
     homepage = "https://github.com/mxve/alterware-launcher";
     license = lib.licenses.gpl3Only;
-    maintainers = [ andrew-field ];
+    maintainers = with lib.maintainers; [ andrew-field ];
     mainProgram = "alterware";
   };
 }
