@@ -14,7 +14,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "solanum";
   version = "0-unstable-2025-02-25";
 

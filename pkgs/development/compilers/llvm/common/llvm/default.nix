@@ -177,6 +177,17 @@ stdenv.mkDerivation (finalAttrs: {
           }
         )
     ++
+      lib.optional (lib.versionAtLeast release_version "12" && lib.versionOlder release_version "19")
+        # Add missing include headers to build against gcc-15:
+        #   https://github.com/llvm/llvm-project/pull/101761
+        (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+            hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+            stripLen = 1;
+          }
+        )
+    ++
       lib.optional (lib.versionOlder release_version "16")
         # Fix musl build.
         (
@@ -502,12 +513,19 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ [
       "-DLLVM_TABLEGEN=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
     ];
+
+    triple =
+      if stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "20" then
+        # JIT tests expect the triple to use Darwin arch's naming for CPU architectures.
+        "${stdenv.hostPlatform.darwinArch}-apple-${stdenv.hostPlatform.darwinPlatform}"
+      else
+        stdenv.hostPlatform.config;
   in flagsForLlvmConfig ++ [
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_HOST_TRIPLE=${triple}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${triple}"
     "-DLLVM_ENABLE_DUMP=ON"
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
   ] ++ optionals (!finalAttrs.finalPackage.doCheck) [

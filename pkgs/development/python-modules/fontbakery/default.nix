@@ -29,7 +29,6 @@
   protobuf,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -51,8 +50,6 @@ buildPythonPackage rec {
   version = "0.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-NoUqR+u2GgjE+nj05AXvtprdWieT6XbGGcmOnEMolC4=";
@@ -62,6 +59,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "collidoscope"
+    "freetype-py"
     "protobuf"
     "vharfbuzz"
   ];
@@ -132,6 +130,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These require network access
+    "test_check_axes_match"
     "test_check_description_broken_links"
     "test_check_description_family_update"
     "test_check_metadata_designer_profiles"
@@ -158,6 +157,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "fontbakery";
     maintainers = with maintainers; [ danc86 ];
   };
 }

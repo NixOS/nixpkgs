@@ -8,7 +8,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xspim";
   version = "9.1.22";
 

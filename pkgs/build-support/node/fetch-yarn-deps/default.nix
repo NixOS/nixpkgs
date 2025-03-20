@@ -18,7 +18,7 @@
   makeSetupHook,
   cacert,
   callPackage,
-  nix,
+  nixForLinking,
 }:
 
 let
@@ -55,7 +55,7 @@ in
           lib.makeBinPath [
             coreutils
             nix-prefetch-git
-            nix
+            nixForLinking
           ]
         }
 

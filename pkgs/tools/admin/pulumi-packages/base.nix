@@ -35,7 +35,7 @@ let
     , ...
     }: python3Packages.callPackage
       ({ buildPythonPackage, pythonOlder, parver, pip, pulumi, semver, setuptools }:
-      buildPythonPackage rec {
+      buildPythonPackage {
         inherit pname meta src version;
         format = "pyproject";
 

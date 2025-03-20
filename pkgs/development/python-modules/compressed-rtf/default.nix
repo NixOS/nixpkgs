@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "compressed-rtf";
   version = "1.0.6-unstable-2023-10-15";
   pyproject = true;

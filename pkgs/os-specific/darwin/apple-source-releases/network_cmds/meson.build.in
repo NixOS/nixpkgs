@@ -4,7 +4,6 @@
 # Project settings
 project('network_cmds', 'c', version : '@version@')
 add_global_arguments(
-    '-DTARGET_OS_OSX=1', # Needed for static builds.
     # Many programs use old prototypes
     '-Wno-deprecated-non-prototype',
     # Suppresses suffixing symbols with '$UNIX2003', which causes link failures.
@@ -116,7 +115,6 @@ executable(
     c_args : [
         '-DUSE_BONDS',
         '-DUSE_VLANS',
-        '-DTARGET_OS_IPHONE=0', # Silence error related to undefined target macro
     ],
     install : true,
     sources : [

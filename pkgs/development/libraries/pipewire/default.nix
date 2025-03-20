@@ -34,6 +34,7 @@
   libdrm,
   gst_all_1,
   ffmpeg,
+  fftwFloat,
   bluez,
   sbc,
   libfreeaptx,
@@ -56,6 +57,7 @@
   ffadoSupport ? x11Support && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform,
   ffado,
   libselinux,
+  libebur128,
 }:
 
 let
@@ -67,7 +69,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.2.7";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -83,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-TV+2nz44a742bUfGnWt7zJAnO15eED5kAwyAgE5CQZ0=";
+    sha256 = "sha256-xhlRwodW79mD6Vj+NLvcWxuK9+W+4M5DeZUaU36OiQE=";
   };
 
   patches = [
@@ -112,10 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
       dbus
       fdk_aac
       ffmpeg
+      fftwFloat
       glib
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
       libcamera
+      libebur128
       libjack2
       libfreeaptx
       liblc3

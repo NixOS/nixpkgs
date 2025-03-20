@@ -6,14 +6,14 @@
   moreutils,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
   version = "4.2.5";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yLpDjHnt8ZwpT+KlmEtXMYgrpnbYlVzJ/MZMELVO/j8=";
   };
 
@@ -44,11 +44,11 @@ buildNpmPackage rec {
   meta = {
     description = "Frontend for GlitchTip";
     homepage = "https://glitchtip.com";
-    changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${version}";
+    changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       defelo
       felbinger
     ];
   };
-}
+})

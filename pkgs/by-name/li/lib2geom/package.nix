@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-D2GEOM_BUILD_SHARED=ON"
     # For cross compilation.
-    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

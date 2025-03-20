@@ -7,7 +7,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pim6sd";
   version = "unstable-2019-05-31";
 

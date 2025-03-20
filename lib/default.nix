@@ -156,6 +156,7 @@ let
       makeScope makeScopeWithSplicing makeScopeWithSplicing'
       extendMkDerivation;
     inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+    inherit (self.generators) mkLuaInline;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet licensesSpdx getLicenseFromSpdxId getLicenseFromSpdxIdOr

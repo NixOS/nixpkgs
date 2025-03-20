@@ -7,7 +7,7 @@
   SDL2,
   libvorbis,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "darkplaces";
   version = "unstable-2022-05-10";
 

@@ -107,6 +107,16 @@ let
         };
       });
 
+      brother = super.brother.overridePythonAttrs (rec {
+        version = "4.3.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "brother";
+          tag = version;
+          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
@@ -383,7 +393,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.1";
+  hassVersion = "2025.3.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -404,13 +414,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-tM23n0/98kzB7fqCNZ0+qREQnLxlc6oBmPAKv//TDNk=";
+    hash = "sha256-uWNK7izeaK5XZMNfDgq/npJ1PrmC/HYHvHc5NU7Rff8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-s+4l9FZQ5A0cvPXXypxzxzpMgrEnrgogzH/S7VwUZe4=";
+    hash = "sha256-axmqJRiOt5T8gr/eh7qXOQBMLrcR9ZSqLS8SlmTgkE8=";
   };
 
   build-system = with python.pkgs; [

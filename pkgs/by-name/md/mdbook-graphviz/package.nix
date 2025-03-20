@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dylanowen";
-    repo = pname;
+    repo = "mdbook-graphviz";
     # Upstream has rewritten tags before:
     # https://github.com/dylanowen/mdbook-graphviz/issues/180
     rev = "6e368ad745934fb9e10f224cfc0dc15d4f6fa114";

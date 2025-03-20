@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     libSM
   ];
   NIX_LDFLAGS = "-lm";
+  NIX_CFLAGS_COMPILE = " -fpermissive";
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

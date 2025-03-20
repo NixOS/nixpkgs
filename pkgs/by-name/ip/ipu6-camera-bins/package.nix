@@ -7,7 +7,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipu6-camera-bins";
   version = "unstable-2024-09-27";
 

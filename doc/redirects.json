@@ -62,6 +62,9 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -316,6 +319,30 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"

@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "starc";
-  version = "0.7.5";
+  version = "0.7.7";
 
   src = fetchurl {
     url = "https://github.com/story-apps/starc/releases/download/v${finalAttrs.version}/starc-setup.AppImage";
-    hash = "sha256-KAY04nXVyXnjKJxzh3Pvi50Vs0EPbLk0VgfZuz7MQR0=";
+    hash = "sha256-jjas5vx+emdc4OUjXFAGYkKrR6cgb9BlabVv17KAaIQ=";
   };
 
   dontUnpack = true;

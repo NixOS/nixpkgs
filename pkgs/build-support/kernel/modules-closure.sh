@@ -87,6 +87,15 @@ for module in $(< ~-/closure); do
     done || :
 done
 
+for path in $extraFirmwarePaths; do
+    mkdir -p $(dirname $out/lib/firmware/$path)
+    for name in "$path" "$path.xz" "$path.zst" ""; do
+        if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
+            break
+        fi
+    done
+done
+
 if test -e lib/firmware/edid ; then
     echo "lib/firmware/edid found, copying."
     mkdir -p "$out/lib/firmware"

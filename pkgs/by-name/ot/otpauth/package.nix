@@ -1,21 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo124Module,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "otpauth";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "dim13";
     repo = "otpauth";
     rev = "v${version}";
-    sha256 = "sha256-q6QQST3SDskEXd6X55A4VgOM8tZITUrpHfI/NV+NSwk=";
+    sha256 = "sha256-gxFhuFOSiyE7FLWqTZzKPZzXerwK2PWy7Z0zshAJ4Yg=";
   };
 
-  vendorHash = "sha256-lATdsuqSM2EaclhvNN9BmJ6NC2nghDfggRrwvRjF7us=";
+  vendorHash = "sha256-UXn+v8SAkEJ2tU3MudH2pDnLHBF4mzshHaovlzqm/fM=";
 
   meta = with lib; {
     description = "Google Authenticator migration decoder";

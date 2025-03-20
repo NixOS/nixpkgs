@@ -12,7 +12,7 @@ else
     pname = "memprof-limits";
     version = "0.2.1";
 
-    src = fetchFromGitLab rec {
+    src = fetchFromGitLab {
       owner = "gadmm";
       repo = pname;
       rev = "v${version}";

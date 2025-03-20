@@ -21,7 +21,7 @@ let
     (python3.withPackages (ps: [ ps.jmespath ]))
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bash-my-aws";
   version = "0-unstable-2025-01-22";
 

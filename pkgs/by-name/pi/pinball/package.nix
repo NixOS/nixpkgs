@@ -12,7 +12,7 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pinball";
   version = "0.3.20201218-unstable-2024-11-14";
 

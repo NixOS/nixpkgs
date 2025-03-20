@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "Reticulum";
     tag = version;
-    hash = "sha256-BnR+gVcV4ul/z6Yoj4KFisBqGK0HOHfsisTNqLPrgF8=";
+    hash = "sha256-50L+5WVsYaidz71rkGZny2KlCR3ZfPEQJEPI38MOBWA=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cryptography-based networking stack for wide-area networks";
     homepage = "https://reticulum.network";
-    changelog = "https://github.com/markqvist/Reticulum/blob/${version}/Changelog.md";
+    changelog = "https://github.com/markqvist/Reticulum/blob/${src.tag}/Changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab

@@ -8,19 +8,20 @@
   pkg-config,
   curl,
   openssl,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij";
-  version = "0.41.2";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
-    tag = "v${version}";
-    hash = "sha256-xdWfaXWmqFJuquE7n3moUjGuFqKB90OE6lqPuC3onOg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qvm8mRm/YYcuNX2Rv0tYjcIXjaF9dkwd7wpL++ho3t0=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nfk+4vf9toPwWcAgNtK9uy263g+j/Km1v8SJexlHhNg=";
+  cargoHash = "sha256-cAO8A/e6tkUY7pm/T4Riz4UPIc22oj5FFC6sQL1QIuc=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -47,9 +48,9 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  preCheck = ''
-    HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/zellij-org/zellij/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       therealansh
@@ -94,4 +95,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "zellij";
   };
-}
+})

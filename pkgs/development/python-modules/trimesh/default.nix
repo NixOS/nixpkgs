@@ -48,7 +48,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "trimesh";
     maintainers = with lib.maintainers; [
-      gebner
       pbsds
     ];
   };

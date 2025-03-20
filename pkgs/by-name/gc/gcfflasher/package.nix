@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
-    repo = pname;
+    repo = "gcfflasher";
     tag = "v${version}";
     hash = "sha256-z7FsxTAsAmjz76NxbqZuecN1ywAZYHhgcPfOe6y5QNQ=";
   };

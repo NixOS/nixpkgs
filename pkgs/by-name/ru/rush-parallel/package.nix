@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rush-parallel";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "rush";
     rev = "v${version}";
-    hash = "sha256-dhYW0wVniKVe2LfhNRIwLHvkk9vZ99kQX/6Yd7R+2h0=";
+    hash = "sha256-IV49d4Xu5QqpgqKH4y+yaOHDhhFQ2s4PuyeWHMawZTQ=";
   };
 
   vendorHash = "sha256-zCloMhjHNkPZHYX1e1nx072IYbWHFWam4Af0l0s8a6M=";

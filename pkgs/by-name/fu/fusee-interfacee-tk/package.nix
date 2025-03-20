@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nh-server";
-    repo = pname;
+    repo = "fusee-interfacee-tk";
     rev = "V${version}";
     sha256 = "0ngwbwsj999flprv14xvhk7lp51nprrvcnlbnbk6y4qx5casm5md";
   };

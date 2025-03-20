@@ -14,7 +14,7 @@
 let
   releaseVersion = "0.5.2";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "watchmate";
   version = "${releaseVersion}-unstable-2024-08-13";
 

@@ -113,7 +113,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Ericsson/codechecker";
     changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${version}";
     description = "Analyzer tooling, defect database and viewer extension for the Clang Static Analyzer and Clang Tidy";
-    license = licenses.asl20-llvm;
+    license = with licenses; [
+      asl20
+      llvm-exception
+    ];
     maintainers = with maintainers; [
       zebreus
       felixsinger

@@ -24,11 +24,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "keytar";
+  pname = "keytar-forked";
   inherit (pinData) version;
 
   src = fetchFromGitHub {
-    owner = "atom";
+    owner = "shiftkey";
     repo = "node-keytar";
     rev = "v${version}";
     hash = pinData.srcHash;

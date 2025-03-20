@@ -8,7 +8,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fanout";
   version = "unstable-2022-10-17-${kernel.version}";
 

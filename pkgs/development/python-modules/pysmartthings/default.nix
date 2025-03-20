@@ -1,8 +1,8 @@
 {
   lib,
   aiohttp,
+  aiohttp-sse-client2,
   aioresponses,
-  aiosseclient,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "2.7.0";
+  version = "2.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,14 +27,14 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = "pysmartthings";
     rev = "v${version}";
-    hash = "sha256-ocLJWefXGq2gk6EBi5cKP8kdNBkPiF4I4NXFAaIkAjs=";
+    hash = "sha256-2MBm0I9dBr2N5iorN9BSKecHLnvmiTmcsIuGjDIWIKQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    aiosseclient
+    aiohttp-sse-client2
     mashumaro
     orjson
     yarl

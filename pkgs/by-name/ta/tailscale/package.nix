@@ -49,6 +49,12 @@ buildGoModule {
       url = "https://github.com/tailscale/tailscale/commit/325ca13c4549c1af58273330744d160602218af9.patch";
       hash = "sha256-SMwqZiGNVflhPShlHP+7Gmn0v4b6Gr4VZGIF/oJAY8M=";
     })
+    # Fix build with Go 1.24
+    (fetchpatch {
+      url = "https://github.com/tailscale/tailscale/commit/836c01258de01a38fdd267957eeedab7faf0f4f2.patch";
+      includes = ["cmd/testwrapper/*" "cmd/tsconnect/*"];
+      hash = "sha256-e+IQB2nlJmJCzCTbASiqX2sXKmwVNXb+d87DdwTdJ+I=";
+    })
   ];
 
   vendorHash = "sha256-81UOjoC5GJqhNs4vWcQ2/B9FMaDWtl0rbuFXmxbu5dI=";

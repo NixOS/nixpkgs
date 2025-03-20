@@ -34,14 +34,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
     ];
-    hash = "sha256-rAdoH78e10JYLdXFIlasihztJxXNxb72HuxxSCfEzPE=";
+    hash = "sha256-KJTyIMuKNLymD/DsitN+Rgro7lgkY13fmkFNxsEUkWU=";
   };
 
   buildInputs =

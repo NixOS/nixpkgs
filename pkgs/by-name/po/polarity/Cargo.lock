@@ -1997,7 +1997,7 @@ dependencies = [
  "log",
  "lsp-server",
  "reqwest",
- "tower-lsp",
+ "tower-lsp-server",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-streams",
@@ -2014,7 +2014,7 @@ dependencies = [
  "miette",
  "miette_util",
  "printer",
- "tower-lsp",
+ "tower-lsp-server",
  "url",
 ]
 
@@ -2509,11 +2509,12 @@ dependencies = [
  "log",
  "lsp-server",
  "miette",
+ "parser",
  "printer",
  "termsize",
  "thiserror",
  "tokio",
- "tower-lsp",
+ "tower-lsp-server",
 ]
 
 [[package]]
@@ -2823,15 +2824,14 @@ dependencies = [
 
 [[package]]
 name = "ring"
-version = "0.17.8"
+version = "0.17.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c17fa4cb658e3583423e915b9f3acc01cceaee1860e33d59ebae66adc3a2dc0d"
+checksum = "70ac5d832aa16abd7d1def883a8545280c20a60f523a370aa3a9617c2b8550ee"
 dependencies = [
  "cc",
  "cfg-if",
  "getrandom 0.2.15",
  "libc",
- "spin",
  "untrusted",
  "windows-sys 0.52.0",
 ]
@@ -3089,12 +3089,6 @@ dependencies = [
  "libc",
  "windows-sys 0.52.0",
 ]
-
-[[package]]
-name = "spin"
-version = "0.9.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 
 [[package]]
 name = "stable_deref_trait"
@@ -3595,9 +3589,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "121c2a6cda46980bb0fcd1647ffaf6cd3fc79a013de288782836f6df9c48780e"
 
 [[package]]
-name = "tower-lsp"
-version = "0.20.0"
-source = "git+https://github.com/tower-lsp/tower-lsp?rev=19f5a87810ff4b643d2bc394e438450bd9c74365#19f5a87810ff4b643d2bc394e438450bd9c74365"
+name = "tower-lsp-server"
+version = "0.21.0"
+source = "git+https://github.com/tower-lsp-community/tower-lsp-server?rev=ae955f1d1c2a86bf675cc9bd0638e4c684864a6d#ae955f1d1c2a86bf675cc9bd0638e4c684864a6d"
 dependencies = [
  "async-codec-lite",
  "async-trait",
@@ -3611,14 +3605,14 @@ dependencies = [
  "serde",
  "serde_json",
  "tower",
- "tower-lsp-macros",
+ "tower-lsp-server-macros",
  "tracing",
 ]
 
 [[package]]
-name = "tower-lsp-macros"
+name = "tower-lsp-server-macros"
 version = "0.9.0"
-source = "git+https://github.com/tower-lsp/tower-lsp?rev=19f5a87810ff4b643d2bc394e438450bd9c74365#19f5a87810ff4b643d2bc394e438450bd9c74365"
+source = "git+https://github.com/tower-lsp-community/tower-lsp-server?rev=ae955f1d1c2a86bf675cc9bd0638e4c684864a6d#ae955f1d1c2a86bf675cc9bd0638e4c684864a6d"
 dependencies = [
  "proc-macro2",
  "quote",

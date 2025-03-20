@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "x90skysn3k";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "brutespray";
+    rev = "brutespray-${version}";
     sha256 = "sha256-O9HOsj0R6oHI7jjG4FBqbrSAQSVomgeD7tyPDNCNmIo=";
   };
 

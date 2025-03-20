@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-I1aL12SWwPk7jHosE0LEv5ksUxqGBgCXBxeIYqs1iDw=";
+    hash = "sha256-fCiTu6lKFqY7Yl9KfmhRZQIDg5sEkXkQ95kPfIDSGn8=";
   };
 
   patches = [

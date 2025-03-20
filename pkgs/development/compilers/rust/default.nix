@@ -13,7 +13,6 @@
 }:
 { stdenv, lib
 , newScope, callPackage
-, CoreFoundation, Security, SystemConfiguration
 , pkgsBuildBuild
 , pkgsBuildHost
 , pkgsBuildTarget
@@ -87,13 +86,11 @@ in
         sysroot = if fastCross then self.rustc-unwrapped else null;
       };
       rustfmt = self.callPackage ./rustfmt.nix {
-        inherit Security;
         inherit (self.buildRustPackages) rustc;
       };
       cargo = if (!fastCross) then self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
-        inherit CoreFoundation Security;
       } else self.callPackage ./cargo_cross.nix {};
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
@@ -102,7 +99,6 @@ in
         # buildPackages.clippy uses the cross compiler and supports
         # linting for the target platform.
         rustPlatform = makeRustPlatform self;
-        inherit Security;
       };
     });
   };

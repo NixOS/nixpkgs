@@ -63,6 +63,9 @@ import ./make-test-python.nix (
       check_scheduler("sdb", "mq-deadline")
       check_scheduler("nvme0n1", "kyber")
       check_scheduler("mmcblk0", "bfq")
+
+      machine.succeed("tmp=\"$(mktemp)\"; losetup /dev/loop0 \"$tmp\"")
+      check_scheduler("loop0", "none")
     '';
   }
 )
