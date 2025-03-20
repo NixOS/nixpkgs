@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     inih
     lua
     glib
+    bash-completion
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.IOKit ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    bash-completion
   ];
 
   meta = with lib; {
