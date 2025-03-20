@@ -9,6 +9,7 @@
   openpyxl,
   pandas,
   pdfminer-six,
+  pkgs,
   pypdf,
   setuptools,
   tabulate,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-l6fZBtaF5AWaSlSaY646UfCrcqPIJlV/hEPGWhGB3+Y=";
   };
+
+  patches = [ ./ghostscript.patch ];
+
+  postPatch = ''
+    substituteInPlace camelot/backends/ghostscript_backend.py \
+      --replace-fail 'find_library("gs")' '""' \
+      --replace-fail '@ghostscript@' ${lib.getExe pkgs.ghostscript_headless}
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
