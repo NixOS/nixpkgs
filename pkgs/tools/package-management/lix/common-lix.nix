@@ -3,6 +3,7 @@
   suffix ? "",
   version,
   src,
+  docSourceRoot,
   docCargoDeps,
   patches ? [ ],
   maintainers ? lib.teams.lix.members,
@@ -18,6 +19,7 @@
   busybox-sandbox-shell,
   bzip2,
   callPackage,
+  capnproto,
   curl,
   cmake,
   doxygen,
@@ -44,13 +46,14 @@
   python3,
   pkg-config,
   rapidcheck,
+  rustc,
   Security,
   sqlite,
   util-linuxMinimal,
   xz,
   nixosTests,
   lix-doc ? callPackage ./doc {
-    inherit src;
+    inherit src docSourceRoot;
     version = "${version}${suffix}";
     cargoDeps = docCargoDeps;
   },
@@ -71,7 +74,7 @@
 let
   isLegacyParser = lib.versionOlder version "2.91";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
@@ -100,7 +103,14 @@ stdenv.mkDerivation {
       meson
       ninja
       cmake
-      python3
+      # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
+      (python3.pythonOnBuildForHost.withPackages (p: [
+        p.pytest
+        p.pytest-xdist
+        p.python-frontmatter
+      ]))
+      rustc
+      capnproto
 
       # Tests
       git
@@ -134,6 +144,7 @@ stdenv.mkDerivation {
       rapidcheck
       toml11
       lix-doc
+      capnproto
     ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
@@ -199,6 +210,13 @@ stdenv.mkDerivation {
     ];
 
   ninjaFlags = [ "-v" ];
+
+  cargoDeps = docCargoDeps;
+
+  # Meson allows referencing a /usr/share/cargo/registry shaped thing for subproject sources.
+  # Turns out the Nix-generated Cargo dependencies are named the same as they
+  # would be in a Cargo registry cache.
+  MESON_PACKAGE_CACHE_DIR = finalAttrs.cargoDeps;
 
   postInstall =
     lib.optionalString enableDocumentation ''
@@ -299,4 +317,4 @@ stdenv.mkDerivation {
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
   };
-}
+})
