@@ -33,7 +33,7 @@ for (const extension of extensions) {
             installType: "local",
             installSpec: driverName,
             installPath: extension.path,
-            appiumVersion: `^${extension.manifest.peerDependencies.appium}`,
+            appiumVersion: `${extension.manifest.peerDependencies.appium}`,
             ...extension.manifest.appium,
             driverName: undefined,
         }
@@ -46,7 +46,7 @@ for (const extension of extensions) {
             installType: "local",
             installSpec: pluginName,
             installPath: extension.path,
-            appiumVersion: `^${extension.manifest.peerDependencies.appium}`,
+            appiumVersion: `${extension.manifest.peerDependencies.appium}`,
             ...extension.manifest.appium,
         }
     }
