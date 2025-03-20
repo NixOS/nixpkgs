@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
   };
 
-  patches = [ ./libxml2-2.12.0-compat.patch ];
+  patches = [ ./libxml2-2.12.0-compat.patch ./mysql-compat.patch ];
 
   sourceRoot = "${src.name}/src";
 
