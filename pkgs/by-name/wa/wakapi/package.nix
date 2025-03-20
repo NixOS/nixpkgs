@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 let
   version = "2.13.1";
@@ -29,6 +30,10 @@ buildGoModule {
     "-s"
     "-w"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://wakapi.dev/";
