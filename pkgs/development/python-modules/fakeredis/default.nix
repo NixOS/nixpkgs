@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   redis,
-  redis-server,
+  valkey,
   sortedcontainers,
 }:
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not slow'" ];
 
   preCheck = ''
-    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    ${lib.getExe' valkey "redis-server"} --port 6390 &
     REDIS_PID=$!
   '';
 

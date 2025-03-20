@@ -14,7 +14,7 @@
   # tests
   psutil,
   pytestCheckHook,
-  redis-server,
+  valkey,
   sentry-sdk,
 }:
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
+    ${valkey}/bin/redis-server &
   '';
 
   postCheck = ''

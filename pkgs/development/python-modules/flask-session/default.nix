@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    ${lib.getExe' pkgs.redis "redis-server"} &
+    ${lib.getExe' pkgs.valkey "redis-server"} &
     ${lib.getExe pkgs.memcached} &
   '';
 
