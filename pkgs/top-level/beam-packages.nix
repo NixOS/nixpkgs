@@ -3,7 +3,6 @@
   beam,
   callPackage,
   wxGTK32,
-  buildPackages,
   stdenv,
   wxSupport ? true,
   systemd,
@@ -38,21 +37,18 @@ in
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };
 
     erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };
 

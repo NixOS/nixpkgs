@@ -12,7 +12,6 @@
   openssl,
   perl,
   runtimeShell,
-  autoconf,
   openjdk11 ? null, # javacSupport
   unixODBC ? null, # odbcSupport
   libGL ? null,
@@ -121,7 +120,6 @@ stdenv.mkDerivation (
     LANG = "C.UTF-8";
 
     nativeBuildInputs = [
-      autoconf
       makeWrapper
       perl
       gnum4
@@ -160,10 +158,6 @@ stdenv.mkDerivation (
         substituteInPlace lib/os_mon/src/disksup.erl \
           --replace-fail '"sh ' '"${runtimeShell} '
       '';
-
-    preConfigure = ''
-      ./otp_build autoconf
-    '';
 
     configureFlags =
       [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
