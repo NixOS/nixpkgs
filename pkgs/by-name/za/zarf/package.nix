@@ -30,14 +30,13 @@ buildGoModule rec {
   preBuild = ''
     mkdir -p build/ui
     touch build/ui/index.html
-    export BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
     rm -rf hack/schema
   '';
 
   nativeCheckInputs = [ git ];
 
   checkPhase = ''
-    go test -failfast $(go list ./... | grep -v '^github.com/zarf-dev/zarf/src/test' | grep -v ^github.com/zarf-dev/zarf/src/internal/packager/images )
+    go test -failfast $(go list ./... | grep -v '^github.com/zarf-dev/zarf/src/test' | grep -v '^github.com/zarf-dev/zarf/src/internal/packager/images' )
   '';
 
   ldflags = [
@@ -68,7 +67,7 @@ buildGoModule rec {
     "-X"
     "k8s.io/component-base/version.gitCommit=46cec01b77565e9dd354e5965a0aa63e26b7bafe"
     "-X"
-    "k8s.io/component-base/version.buildDate=${buildDate}"
+    "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
