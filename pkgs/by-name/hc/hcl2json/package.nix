@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hcl2json";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LU74vm36NuA1ApJWtEf/ub3los6yVR8yiQTfM0Wnvyo=";
+    sha256 = "sha256-zd8+ZDuC+qBienADiTVhW8o+BH8spBTCDHIK2PwK3YY=";
   };
 
-  vendorHash = "sha256-nm+KvpcOUTR9Nm0eQtqCWxMiFTvL5xKLhsPaJlsVpkQ=";
+  vendorHash = "sha256-GMy6jGXAjykg+61RbPbQ9ZI0odhPls6uLhtw2sKLUmY=";
 
   subPackages = [ "." ];
 

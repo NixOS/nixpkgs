@@ -892,6 +892,10 @@ stdenv.mkDerivation (finalAttrs: {
       kbd
       ;
 
+    # Many TPM2-related units are only installed if this trio of features are
+    # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
+    withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
+
     tests =
       let
         # Some entries in the `nixosTests.systemd-*` set of attributes are collections of tests,
