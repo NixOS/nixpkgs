@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     freetype
+    fontconfig
     libpng
     libjpeg
     libwebp
@@ -60,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
   ]
   ++ lib.optionals withXorg [
-    fontconfig
     libxpm
   ];
 
