@@ -34,7 +34,10 @@ stdenv.mkDerivation {
       mit
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [
+      nyabinary
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
   };
 }
