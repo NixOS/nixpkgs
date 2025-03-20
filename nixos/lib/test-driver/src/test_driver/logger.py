@@ -213,7 +213,7 @@ class TerminalLogger(AbstractLogger):
         tic = time.time()
         yield
         toc = time.time()
-        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
+        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def info(self, *args, **kwargs) -> None:  # type: ignore
         self.log(*args, **kwargs)
