@@ -7,6 +7,7 @@
   # default to the 2 most used drivers
 , drivers ? with nodePackages; [ (callPackage ./extensions/appium-uiautomator2-driver {}) (callPackage ./extensions/appium-xcuitest-driver {}) ]
 , plugins ? []
+, extraPackages ? []
 , callPackage
 }:
 let
@@ -25,7 +26,9 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper nodejs ];
 
-  installPhase = ''
+  installPhase = let
+    binPath = lib.makeBinPath extraPackages;
+  in ''
     runHook preInstall
 
     mkdir -p $out/node_modules/.cache/appium
@@ -35,6 +38,7 @@ stdenvNoCC.mkDerivation {
     node ${./build-extensions-yaml.mjs} ${lib.concatStringsSep " " extensionPaths} > $out/node_modules/.cache/appium/extensions.yaml
 
     makeWrapper ${appium-unwrapped}/bin/appium $out/bin/appium \
+      --prefix PATH : ${lib.escapeShellArg binPath} \
       --set APPIUM_HOME $out
 
     runHook postInstall
