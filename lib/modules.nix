@@ -234,6 +234,27 @@ let
               within a configuration, but can be used in module imports.
             '';
           };
+
+          _module.freeformConfig = mkOption {
+            # Do not show this in the documentation
+            internal = true;
+            visible = false;
+            readOnly = true;
+            # We need a valid type here,
+            # ideally we'd only define this whole option, if there is a 'freeformType', however that is not possible due to technical limitations currently
+            type =
+              if declaredConfig._module.freeformType != null then
+                declaredConfig._module.freeformType
+              else
+                types.raw;
+            description = ''
+              Read-only version of the freeform definitions. This includes all definitions that don't have matching options if the freeformType is set.
+              Otherwise this is an empty attribute set.
+            '';
+            # It's currently(?) not possible to compute the option value normally, using the type.
+            # Instead, we set it directly here, without evaluating the merge result from the type.
+            apply = _value: freeformConfig;
+          };
         };
 
         config = {
@@ -242,6 +263,8 @@ let
             moduleType = type;
           };
           _module.specialArgs = specialArgs;
+
+          _module.freeformConfig = lib.mkMerge (map mkDefinition freeformDefs);
         };
       };
 
@@ -266,23 +289,19 @@ let
 
       options = merged.matchedOptions;
 
-      config =
+      freeformDefs = map (def: {
+        file = def.file;
+        value = setAttrByPath def.prefix def.value;
+      }) (merged.unmatchedDefns);
+
+      declaredConfig = mapAttrsRecursiveCond (v: !isOption v) (_: v: v.value) options;
+      freeformConfig =
         let
-
-          # For definitions that have an associated option
-          declaredConfig = mapAttrsRecursiveCond (v: !isOption v) (_: v: v.value) options;
-
-          # If freeformType is set, this is for definitions that don't have an associated option
-          freeformConfig =
-            let
-              defs = map (def: {
-                file = def.file;
-                value = setAttrByPath def.prefix def.value;
-              }) merged.unmatchedDefns;
-            in
-            if defs == [ ] then { } else declaredConfig._module.freeformType.merge prefix defs;
-
+          defs = freeformDefs;
         in
+        if defs == [ ] then { } else declaredConfig._module.freeformType.merge prefix defs;
+
+      config =
         if declaredConfig._module.freeformType == null then
           declaredConfig
         # Because all definitions that had an associated option ended in
@@ -652,11 +671,11 @@ let
         name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
       ) (functionArgs f);
 
-      # Note: we append in the opposite order such that we can add an error
-      # context on the explicit arguments of "args" too. This update
-      # operator is used to make the "args@{ ... }: with args.lib;" notation
-      # works.
     in
+    # Note: we append in the opposite order such that we can add an error
+    # context on the explicit arguments of "args" too. This update
+    # operator is used to make the "args@{ ... }: with args.lib;" notation
+    # works.
     f (args // extraArgs);
 
   /**
@@ -1095,7 +1114,7 @@ let
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
       let
-        # Process mkMerge and mkIf properties.
+        # Process properties
         defs' = concatMap (
           m:
           map (
