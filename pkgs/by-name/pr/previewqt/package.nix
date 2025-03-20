@@ -18,14 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "3.0";
+  version = "4.0";
 
   src = fetchFromGitLab {
-    name = "previewqt-sources-${finalAttrs.version}";
     owner = "lspies";
     repo = "previewqt";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cDtqgezKGgSdhw8x1mM4cZ0H3SfUPEyWP6rRD+kRwXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wzMo5igLTVxUo3E8X2mRbOTuhW3CS4fISgVntgPbZlY=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_FREEIMAGE" false)
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
