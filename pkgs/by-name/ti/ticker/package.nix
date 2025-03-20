@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  ticker,
+  testers,
 }:
 
 buildGoModule rec {
@@ -25,6 +27,12 @@ buildGoModule rec {
 
   # Tests require internet
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = ticker;
+    command = "ticker --version";
+    inherit version;
+  };
 
   meta = with lib; {
     description = "Terminal stock ticker with live updates and position tracking";
