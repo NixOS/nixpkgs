@@ -5176,14 +5176,14 @@ final: prev:
 
   git-worktree-nvim = buildVimPlugin {
     pname = "git-worktree.nvim";
-    version = "2023-11-07";
+    version = "2025-02-15";
     src = fetchFromGitHub {
-      owner = "ThePrimeagen";
+      owner = "polarmutex";
       repo = "git-worktree.nvim";
-      rev = "f247308e68dab9f1133759b05d944569ad054546";
-      sha256 = "0mspffvg2z5lx4ck96d2pnf1azy3s1zq720n6abnxzajadmnh47r";
+      rev = "3ad8c17a3d178ac19be925284389c14114638ebb";
+      sha256 = "057qh48vwiczqrwksrfk2lf24gs6cdl6fbsf3ay2yynd0jlqjyky";
     };
-    meta.homepage = "https://github.com/ThePrimeagen/git-worktree.nvim/";
+    meta.homepage = "https://github.com/polarmutex/git-worktree.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
