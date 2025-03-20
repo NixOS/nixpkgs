@@ -12624,7 +12624,7 @@ with pkgs;
     pinentry = pinentry-curses;
   };
 
-  blender = callPackage  ../applications/misc/blender {
+  blender = callPackage  ../by-name/bl/blender/package.nix {
     openexr = openexr_3;
     python3Packages = python311Packages;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
