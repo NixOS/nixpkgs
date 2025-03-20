@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polaris";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7VgDySL3LWEuf9ee+w3Wpv3WCNA7DBYFaMMmP7BE/rc=";
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Compile-time environment variables for where to find assets needed at runtime
-  env.POLARIS_WEB_DIR = "${web-assets}/share/polaris-web";
+  env.POLARIS_WEB_DIR = "${finalAttrs.web-assets}/share/polaris-web";
 
   preCheck = ''
     # 'Err' value: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "polaris";
   };
-}
+})

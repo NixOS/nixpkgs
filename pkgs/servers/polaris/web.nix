@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAtts: {
   pname = "polaris-web";
   version = "76";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
-    tag = "build-${version}";
+    tag = "build-${finalAtts.version}";
     hash = "sha256-mGsgW6lRqCt+K2RrF2s4zhvYzH94K+GEXGUCn5ngBTY=";
   };
 
@@ -34,4 +34,4 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };
-}
+})
