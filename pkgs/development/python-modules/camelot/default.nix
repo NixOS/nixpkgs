@@ -1,18 +1,18 @@
 {
-  lib,
   buildPythonPackage,
   chardet,
-  openpyxl,
   charset-normalizer,
-  fetchPypi,
-  pythonOlder,
-  pandas,
-  tabulate,
   click,
+  fetchPypi,
+  lib,
+  opencv4,
+  openpyxl,
+  pandas,
   pdfminer-six,
   pypdf,
-  opencv4,
+  pythonOlder,
   setuptools,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -30,15 +30,15 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    charset-normalizer
     chardet
-    pandas
-    tabulate
+    charset-normalizer
     click
-    pdfminer-six
-    openpyxl
-    pypdf
     opencv4
+    openpyxl
+    pandas
+    pdfminer-six
+    pypdf
+    tabulate
   ];
 
   doCheck = false;
