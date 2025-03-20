@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-dumper";
   version = "1.0.8";
   pyproject = true;
@@ -17,10 +17,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   build-system = [
-    python3.pkgs.setuptools
+    python3Packages.setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     beautifulsoup4
     dulwich
     pysocks
