@@ -1000,7 +1000,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa VideoToolbox;
   };
 
-  inherit (callPackage ../development/tools/genealogos { }) genealogos-cli genealogos-api;
+  genealogos-api = genealogos-cli.override {
+    crate = "api";
+  };
 
   # This is to workaround gfal2-python broken against Python 3.12 or later.
   # TODO: Remove these lines after solving the breakage.
