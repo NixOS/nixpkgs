@@ -834,6 +834,15 @@ rec {
         };
       };
 
+    # A value produced by `lib.mkLuaInline`
+    luaInline = mkOptionType {
+      name = "luaInline";
+      description = "inline lua";
+      descriptionClass = "noun";
+      check = x: x._type or null == "lua-inline";
+      merge = mergeEqualOption;
+    };
+
     uniq = unique { message = ""; };
 
     unique = { message }: type: mkOptionType rec {

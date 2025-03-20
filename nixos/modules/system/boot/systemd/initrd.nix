@@ -105,6 +105,7 @@ let
     kernel = config.system.modulesTree;
     firmware = config.hardware.firmware;
     allowMissing = false;
+    inherit (config.boot.initrd) extraFirmwarePaths;
   };
 
   initrdBinEnv = pkgs.buildEnv {
