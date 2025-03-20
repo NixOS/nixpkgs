@@ -15,6 +15,7 @@
   libavif,
   fontconfig,
   freetype,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -71,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gd-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://libgd.github.io/";
