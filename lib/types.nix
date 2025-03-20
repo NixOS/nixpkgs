@@ -650,7 +650,7 @@ rec {
         in
         {
           value = map (x: x.optionalValue.value or x.mergedValue) evals;
-          outOfBand.list = map (v: v.checkedAndMerged.outOfBand ) evals;
+          valueMeta.list = map (v: v.checkedAndMerged.valueMeta ) evals;
         };
       emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
@@ -750,7 +750,7 @@ rec {
               else
                 v.optionalValue.value
             ) evals;
-          outOfBand.attrs = mapAttrs (n: v: v.checkedAndMerged.outOfBand) evals;
+          valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
         };
 
       emptyValue = { value = {}; };
@@ -1058,7 +1058,7 @@ rec {
             };
           in {
             value = configuration.config;
-            outOfBand = configuration;
+            valueMeta = configuration;
           };
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules

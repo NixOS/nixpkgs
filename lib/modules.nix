@@ -930,7 +930,7 @@ let
         files = map (def: def.file) res.defsFinal;
         definitionsWithLocations = res.defsFinal;
         inherit (res) isDefined;
-        inherit (res.checkedAndMerged) outOfBand;
+        inherit (res.checkedAndMerged) valueMeta;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
       };
@@ -978,7 +978,7 @@ let
       else {
         # errors =
         value = mergedValue;
-        outOfBand = { };
+        valueMeta = { };
       };
 
     isDefined = defsFinal != [];
