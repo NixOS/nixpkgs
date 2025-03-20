@@ -9,6 +9,7 @@
   options.services.paretosecurity = {
     enable = lib.mkEnableOption "[ParetoSecurity](https://paretosecurity.com) [agent](https://github.com/ParetoSecurity/agent) and its root helper";
     package = lib.mkPackageOption pkgs "paretosecurity" { };
+    trayIcon = lib.mkEnableOption "tray icon for ParetoSecurity";
   };
 
   config = lib.mkIf config.services.paretosecurity.enable {
@@ -36,6 +37,13 @@
         ProtectHome = true;
         StandardOutput = "journal";
         StandardError = "journal";
+      };
+    };
+
+    systemd.user.services."paretosecurity-trayicon" = lib.mkIf config.services.paretosecurity.trayIcon {
+      wantedBy = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${config.services.paretosecurity.package}/bin/paretosecurity trayicon";
       };
     };
 
