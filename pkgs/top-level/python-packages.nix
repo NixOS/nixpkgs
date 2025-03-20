@@ -7331,6 +7331,8 @@ self: super: with self; {
     inherit (pkgs.__splicedPackages) laszip;
   };
 
+  lap = callPackage ../development/python-modules/lap { };
+
   latex2mathml = callPackage ../development/python-modules/latex2mathml { };
 
   latex2pydata = callPackage ../development/python-modules/latex2pydata { };
@@ -12346,6 +12348,8 @@ self: super: with self; {
   pyld = callPackage ../development/python-modules/pyld { };
 
   pyleri = callPackage ../development/python-modules/pyleri { };
+
+  pylette = callPackage ../development/python-modules/pylette { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 

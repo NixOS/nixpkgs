@@ -399,6 +399,10 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/development/compilers/ocaml   @ulrikstrid
 /pkgs/development/ocaml-modules     @ulrikstrid
 
+# ZFS
+/nixos/tests/zfs.nix        @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs @adamcstephens @amarshall
+
 # Zig
 /pkgs/development/compilers/zig @figsoda @RossComputerGuy
 /doc/hooks/zig.section.md       @figsoda @RossComputerGuy
