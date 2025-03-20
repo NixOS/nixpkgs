@@ -8,6 +8,7 @@
   coreutils,
   curl,
   xe,
+  tree-sitter,
 }:
 
 # Grammar list:
@@ -507,6 +508,7 @@ let
           curl = "${curl}/bin/curl";
           nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
           printf = "${coreutils}/bin/printf";
+          tree-sitter = "${lib.getExe tree-sitter}";
         };
         inherit
           knownTreeSitterOrgGrammarRepos
