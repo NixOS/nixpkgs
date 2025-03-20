@@ -483,7 +483,6 @@ in
     };
 
     networking.fqdn = mkOption {
-      readOnly = true;
       type = types.str;
       default = if (cfg.hostName != "" && cfg.domain != null)
         then "${cfg.hostName}.${cfg.domain}"
