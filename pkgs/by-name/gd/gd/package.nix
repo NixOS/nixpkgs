@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails 2 tests
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://libgd.github.io/";
