@@ -6,6 +6,7 @@
   libjpeg,
   libpng,
   jbigkit,
+  enableJBigKit ? !stdenv.isDarwin,
   flex,
   zlib,
   perl,
@@ -41,15 +42,17 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  buildInputs = [
-    zlib
-    perl
-    libpng
-    libjpeg
-    libxml2
-    libtiff
-    jbigkit
-  ] ++ lib.optional enableX11 libX11;
+  buildInputs =
+    [
+      zlib
+      perl
+      libpng
+      libjpeg
+      libxml2
+      libtiff
+    ]
+    ++ lib.optional enableJBigKit jbigkit
+    ++ lib.optional enableX11 libX11;
 
   strictDeps = true;
 
@@ -86,7 +89,11 @@ stdenv.mkDerivation {
       echo "TIFFLIB_NEEDS_JPEG = N" >> config.mk
       echo "TIFFLIB_NEEDS_Z = N" >> config.mk
       echo "JPEGLIB = libjpeg.so" >> config.mk
+    ''
+    + lib.optionalString enableJBigKit ''
       echo "JBIGLIB = libjbig.a" >> config.mk
+    ''
+    + ''
       # Insecure
       echo "JASPERLIB = NONE" >> config.mk
 
