@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./add-missing-include.patch
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
   sourceRoot = "${finalAttrs.src.name}/OrthancServer";
 
   nativeBuildInputs = [
@@ -97,6 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_UUID" true)
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
   ];
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/orthanc
+    cp -r $src/OrthancServer/Resources/Samples $doc/share/doc/orthanc/Samples
+    cp -r $src/OrthancServer/Plugins/Samples $doc/share/doc/orthanc/OrthancPluginSamples
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
