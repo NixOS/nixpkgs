@@ -377,10 +377,10 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/development/ocaml-modules     @ulrikstrid
 
 # ZFS
-pkgs/os-specific/linux/zfs/2_1.nix        @raitobezarius
-pkgs/os-specific/linux/zfs/generic.nix    @raitobezarius
-nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
-nixos/tests/zfs.nix                       @raitobezarius
+/nixos/modules/tasks/filesystems/zfs.nix  @adamcstephens @amarshall
+/nixos/tests/zfs.nix                      @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs               @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs/2_1.nix       @raitobezarius
 
 # Zig
 /pkgs/development/compilers/zig @figsoda
