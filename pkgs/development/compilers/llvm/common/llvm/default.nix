@@ -76,28 +76,29 @@ let
     in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
   else python3;
 in {
-  inherit pname version;
+  pname = "llvm";
+  inherit version;
 
   pname = "llvm";
 
   # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
-  src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+  src = if monorepoSrc != null then
+    runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
     '' + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/llvm "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
-      chmod u+w "$out/${pname}/tools"
-      cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
+      chmod u+w "$out/llvm/tools"
+      cp -r ${monorepoSrc}/polly "$out/llvm/tools"
     '' + lib.optionalString (lib.versionAtLeast release_version "21") ''
       cp -r ${monorepoSrc}/libc "$out"
     '') else src;
 
-  sourceRoot = "${finalAttrs.src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/llvm";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
