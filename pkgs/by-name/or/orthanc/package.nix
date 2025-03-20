@@ -23,6 +23,7 @@
   unzip,
   versionCheckHook,
   nixosTests,
+  orthanc-framework,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -120,8 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) orthanc;
+  passthru = {
+    framework = orthanc-framework;
+    tests = {
+      inherit (nixosTests) orthanc;
+    };
   };
 
   meta = {
