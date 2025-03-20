@@ -13,7 +13,7 @@ let
 in
 buildGoModule rec {
   pname = "zarf";
-  version = "0.49.1";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
@@ -34,10 +34,10 @@ buildGoModule rec {
     rm -rf hack/schema
   '';
 
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   checkPhase = ''
-    go test -failfast $(go list ./... | grep -v '^github.com/zarf-dev/zarf/src/test')
+    go test -failfast $(go list ./... | grep -v '^github.com/zarf-dev/zarf/src/test' | grep -v ^github.com/zarf-dev/zarf/src/internal/packager/images )
   '';
 
   ldflags = [
