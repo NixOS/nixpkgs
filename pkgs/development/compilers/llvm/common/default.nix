@@ -14,6 +14,7 @@
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
+  buildPackages,
   buildLlvmTools, # tools, but from the previous stage, for cross
   targetLlvmLibraries, # libraries, but from the next stage, for cross
   targetLlvm,
@@ -576,6 +577,13 @@ let
           # Use clang due to "gnu::naked" not working on aarch64.
           # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
           stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
+          cmake =
+            if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
+          python3 =
+            if stdenv.targetPlatform.libc == "llvm" then
+              buildPackages.python3Minimal
+            else
+              buildPackages.python3;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
