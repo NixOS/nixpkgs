@@ -8750,6 +8750,8 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
+  gamt  = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
+
   gcr = callPackage ../development/libraries/gcr { };
 
   gcr_4 = callPackage ../development/libraries/gcr/4.nix { };

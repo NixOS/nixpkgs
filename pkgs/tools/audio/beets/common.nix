@@ -82,17 +82,6 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   patches = [
-    (fetchpatch {
-      # Already on master. TODO: remove when updating to the next release
-      # Issue: https://github.com/beetbox/beets/issues/5527
-      # PR: https://github.com/beetbox/beets/pull/5650
-      name = "fix-im-backend";
-      url = "https://github.com/beetbox/beets/commit/1f938674015ee71431fe9bd97c2214f58473efd2.patch";
-      hash = "sha256-koCYeiUhk1ifo6CptOSu3p7Nz0FFUeiuArTknM/tpVQ=";
-      excludes = [
-        "docs/changelog.rst"
-      ];
-    })
   ] ++ extraPatches;
 
   build-system = [
@@ -112,6 +101,9 @@ python3Packages.buildPythonApplication {
       pyyaml
       unidecode
       typing-extensions
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
+      lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
@@ -159,6 +151,9 @@ python3Packages.buildPythonApplication {
       mock
       rarfile
       responses
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
+      requests-mock
     ]
     ++ [
       writableTmpDirAsHomeHook
