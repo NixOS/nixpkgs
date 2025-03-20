@@ -4,11 +4,13 @@
   charset-normalizer,
   click,
   fetchPypi,
+  ghostscript,
   lib,
   opencv4,
   openpyxl,
   pandas,
   pdfminer-six,
+  pkgs,
   pypdf,
   pythonOlder,
   setuptools,
@@ -27,12 +29,21 @@ buildPythonPackage rec {
     hash = "sha256-l6fZBtaF5AWaSlSaY646UfCrcqPIJlV/hEPGWhGB3+Y=";
   };
 
+  patches = [ ./ghostscript.patch ];
+
+  postPatch = ''
+    substituteInPlace camelot/backends/ghostscript_backend.py \
+      --replace-fail 'find_library("gs")' '""' \
+      --replace-fail '@ghostscript@' ${lib.getExe pkgs.ghostscript_headless}
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     chardet
     charset-normalizer
     click
+    ghostscript
     opencv4
     openpyxl
     pandas
