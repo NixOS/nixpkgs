@@ -12,27 +12,12 @@
   python,
   pydantic,
   pytest7CheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0_21,
   pytest-mock,
   typing-extensions,
   tomlkit,
   grpcio-tools,
 }:
-
-let
-  # using a older version of pytest-asyncio only for tests
-  # https://github.com/pytest-dev/pytest-asyncio/issues/928
-  pytest-asyncio_23_8 = (
-    pytest-asyncio.overridePythonAttrs (old: rec {
-      version = "0.23.8";
-      src = fetchFromGitHub {
-        inherit (old.src) owner repo;
-        tag = "v${version}";
-        hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
-      };
-    })
-  );
-in
 
 buildPythonPackage rec {
   pname = "betterproto";
@@ -70,7 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio_23_8
+    pytest-asyncio_0_21
     pytest-mock
     pytest7CheckHook
     tomlkit
