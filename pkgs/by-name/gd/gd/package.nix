@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = lib.licenses.free; # some custom license
+    license = lib.licenses.gd;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
