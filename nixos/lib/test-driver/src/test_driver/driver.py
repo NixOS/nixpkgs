@@ -159,6 +159,7 @@ class Driver:
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
             t=AssertionTester(),
+            dump=self.logger.dump,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -219,10 +220,9 @@ class Driver:
                     if lineno := frame.lineno:
                         self.logger.log_test_error(f"    {code[lineno - 1].strip()}")
 
-                self.logger.log_test_error("")  # blank line for readability
+                self.logger.log_test_error("\n")  # blank line for readability
                 exc_prefix = exc_type.__name__ if exc_type is not None else "Error"
-                for line in f"{exc_prefix}: {exc}".splitlines():
-                    self.logger.log_test_error(line)
+                self.logger.log_test_error(f"{exc_prefix}: {exc}")
 
                 sys.exit(1)
 

@@ -53,3 +53,4 @@ serial_stdout_off: Callable[[], None]
 serial_stdout_on: Callable[[], None]
 polling_condition: PollingConditionProtocol
 t: TestCase
+dump: Callable[[str], None]
