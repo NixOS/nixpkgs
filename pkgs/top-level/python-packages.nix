@@ -13522,6 +13522,8 @@ self: super: with self; {
 
   pyopengltk = callPackage ../development/python-modules/pyopengltk { };
 
+  pyopenjtalk = callPackage ../development/python-modules/pyopenjtalk { };
+
   pyopensprinkler = callPackage ../development/python-modules/pyopensprinkler { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
