@@ -6,7 +6,6 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
-, fetchpatch
 , file
 , flex
 , glslang
@@ -142,12 +141,6 @@ in stdenv.mkDerivation {
   patches = [
     ./opencl.patch
     ./system-gbm.patch
-    # Fix graphical corruption in FFXIV
-    # Remove when updating to 25.0.2
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/0ec174afd56fe48bcfa071d4b8ed704106f46f91.patch";
-      hash = "sha256-6A9AkCa+DeUO683hlsNTvSWGFJJ+zfqYA2BThaqCEoU=";
-    })
   ];
 
   postPatch = ''
