@@ -45,6 +45,10 @@ let
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
     hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0 (X11; Linux x86_64; rv:136.0)"
+    ];
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -238,6 +242,7 @@ python311Packages.buildPythonApplication {
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
+  plugin = if withPlugin then plugin else null;
   postInstall =
     ''
       for resolution in 16x16 32x32 64x64 128x128 256x256; do
@@ -247,7 +252,7 @@ python311Packages.buildPythonApplication {
       done
     ''
     + lib.optionalString withPlugin ''
-      sh ${plugin} --noexec --keep
+      sh $plugin --noexec --keep
       cd plugin_tmp
 
       cp plugin.spec $out/share/hplip/
