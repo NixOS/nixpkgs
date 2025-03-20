@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];
-  sourceRoot = "source/xar";
+  sourceRoot = "${finalAttrs.src.name}/xar";
 
   outputs = [
     "out"

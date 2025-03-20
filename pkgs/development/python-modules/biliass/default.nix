@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-IrzFjjMNuD5UgdccHxIxZoeZpM1PGtVQRTWHOocnmAU=";
   };
 
-  sourceRoot = "source/packages/biliass";
+  sourceRoot = "${src.name}/packages/biliass";
   cargoRoot = "rust";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
