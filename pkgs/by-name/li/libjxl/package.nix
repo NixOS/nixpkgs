@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    lcms2
     giflib
     gperftools # provides `libtcmalloc`
     gtest
@@ -93,6 +92,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     brotli
+    lcms2
     libhwy
   ];
 
