@@ -12,6 +12,7 @@
   libinput,
   pulseaudio,
   udev,
+  xkeyboard_config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,6 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target"
     "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
   ];
+
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(
+      --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
+      --set-default X11_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.extras.xml
+    )
+  '';
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-applets";
