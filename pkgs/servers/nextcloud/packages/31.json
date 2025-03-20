@@ -20,9 +20,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-MpWmWSyC6ZxzE8Xu+rjCxl9OhdmSydGMR+zcJyoH7uE=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.1.3/calendar-v5.1.3.tar.gz",
-    "version": "5.1.3",
+    "hash": "sha256-mAH/A5oiPwIh6K6bb9wd55CmqMoEAaKQVVr8zFNbXE8=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.2.0/calendar-v5.2.0.tar.gz",
+    "version": "5.2.0",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -140,10 +140,10 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-xotf3sAiP1sQNHfL+2kuE04YsbV4rGfDYDyZUkteGHY=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.0.3/groupfolders-v19.0.3.tar.gz",
-    "version": "19.0.3",
-    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
+    "hash": "sha256-lFIXNbBqdRHEvNFu2P68IF4v0+E4rFWLdRJYWm3RM/k=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.0.4/groupfolders-v19.0.4.tar.gz",
+    "version": "19.0.4",
+    "description": "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -190,9 +190,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-c/inKInFwLG7MdNcJPV7NzF1QNRgKNWyC+rjnza2/K8=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.2.6/mail-stable4.2.tar.gz",
-    "version": "4.2.6",
+    "hash": "sha256-EFhjy0LcJCsNHJy//rGwM1f3UkAGLNXzC6lz6k5JstY=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.3.1/mail-v4.3.1.tar.gz",
+    "version": "4.3.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [

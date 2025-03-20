@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2024.12.13";
+  version = "2025.02.24";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-iqIOwQIg6EB/m8FIoUzkvh1W0w4bKmS9zi4Z+5qlC+0=";
+    hash = "sha256-LkE4APp1r8mTofaTfOvrc8qRHQYRs3VQhRrdXKdBW/Q=";
   };
 
   build-system = [ pdm-backend ];

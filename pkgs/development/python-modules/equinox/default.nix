@@ -56,6 +56,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # Since jax 0.5.3:
+    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
+    # https://github.com/patrick-kidger/equinox/issues/979
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
     "test_filter"
