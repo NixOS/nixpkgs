@@ -205,6 +205,34 @@ way:
 }
 ```
 
+To print out values from the test script itself, e.g. for debugging or more detailed logs,
+it's recommended to use `dump(…)` instead of `print()` since this prefixes each line of the
+output to make it easier to spot between the other log output.
+
+For instance,
+
+```nix
+{
+  nodes.machine = {};
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    dump(machine.succeed("uname -a"))
+  '';
+};
+```
+
+will result in an output like this:
+
+```
+machine: must succeed: uname -a
+machine: (finished: must succeed: uname -a, in 0.02 seconds)
+(test-script) Linux machine 6.12.19 #1-NixOS SMP PREEMPT_DYNAMIC Thu Mar 13 12:02:20 UTC 2025 x86_64 GNU/Linux
+(finished: run the VM test script, in 14.40 seconds)
+test script finished in 14.49s
+cleanup
+```
+
 ## Failing tests early {#ssec-failing-tests-early}
 
 To fail tests early when certain invariants are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:

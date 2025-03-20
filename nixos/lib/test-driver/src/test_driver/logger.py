@@ -49,6 +49,10 @@ class AbstractLogger(ABC):
         pass
 
     @abstractmethod
+    def dump(self, *args, **kwargs) -> None:  # type:ignore
+        pass
+
+    @abstractmethod
     def log_serial(self, message: str, machine: str) -> None:
         pass
 
@@ -103,6 +107,9 @@ class JunitXMLLogger(AbstractLogger):
 
     def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
         self.error(*args, **kwargs)
+
+    def dump(self, *args, **kwargs) -> None:  # type:ignore
+        self.info(*args, **kwargs)
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
@@ -172,6 +179,10 @@ class CompositeLogger(AbstractLogger):
             logger.error(*args, **kwargs)
         sys.exit(1)
 
+    def dump(self, *args, **kwargs) -> None:  # type:ignore
+        for logger in self.logger_list:
+            logger.dump(*args, **kwargs)
+
     def print_serial_logs(self, enable: bool) -> None:
         for logger in self.logger_list:
             logger.print_serial_logs(enable)
@@ -236,7 +247,15 @@ class TerminalLogger(AbstractLogger):
     def log_test_error(self, *args, **kwargs) -> None:  # type: ignore
         prefix = Fore.RED + "!!! " + Style.RESET_ALL
         # NOTE: using `warning` instead of `error` to ensure it does not exit after printing the first log
-        self.warning(f"{prefix}{args[0]}", *args[1:], **kwargs)
+        self.__line_by_line_log(prefix, "warning", *args, **kwargs)
+
+    def dump(self, *args, **kwargs) -> None:  # type:ignore
+        prefix = Fore.BLUE + Style.DIM + "(test-script) " + Style.RESET_ALL
+        self.__line_by_line_log(prefix, "info", *args, **kwargs)
+
+    def __line_by_line_log(self, prefix: str, level: str, *args, **kwargs) -> None:  # type:ignore
+        for line in args[0].splitlines():
+            getattr(self, level)(f"{prefix}{line}", *args[1:], **kwargs)
 
 
 class XMLLogger(AbstractLogger):
@@ -286,6 +305,9 @@ class XMLLogger(AbstractLogger):
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
+
+    def dump(self, *args, **kwargs) -> None:  # type:ignore
+        self.log(*args, **kwargs)
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
