@@ -6,10 +6,10 @@
   };
   freeformType =
     let
-      a = lib.types.attrsOf (lib.types.submodule { options.bar = lib.mkOption { }; });
+      a = lib.types.attrsOf lib.types.anything;
     in
-    # modifying types like this breaks type merging.
-    # This test makes sure that type merging is not performed when only a single declaration exists.
+    # Modifying types like this is unsafe. Type merging or using a submodule type will discard those modifications.
+    # This test makes sure that type.merge can return definitions that don't intersect with the original definitions (unmatchedDefns).
     # Don't modify types in practice!
     a
     // {
