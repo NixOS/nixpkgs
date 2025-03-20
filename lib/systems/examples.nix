@@ -193,6 +193,10 @@ rec {
     config = "arm-none-eabi";
     libc = "newlib";
   };
+  arm-embedded-nano = {
+    config = "arm-none-eabi";
+    libc = "newlib-nano";
+  };
   armhf-embedded = {
     config = "arm-none-eabihf";
     libc = "newlib";
