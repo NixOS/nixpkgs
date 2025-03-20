@@ -1,14 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  perl,
-}:
+{ lib, fetchFromGitHub, rustPlatform, perl, }:
 
-with import <nixpkgs>
-{
+with import (fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.11") {
   overlays = [
-    (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
+    (import (fetchTarball
+      "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
   ];
 };
 let
@@ -16,10 +11,9 @@ let
     cargo = rust-bin.stable.latest.minimal;
     rustc = rust-bin.stable.latest.minimal;
   };
-in
-# The above is needed until the rustc version is at least 1.78 in rustPlatform.buildRustPackage.
+  # The above is needed until the rustc version is at least 1.78 in rustPlatform.buildRustPackage.
 
-rustPlatform.buildRustPackage rec {
+in rustPlatform.buildRustPackage rec {
   pname = "alterware";
   version = "0.10.2";
 
@@ -33,9 +27,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-E3TDgEogpd/YGZnQmre5igxZyZdKQtOx4O4IZEci5II=";
 
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   meta = {
     description = "Official launcher for AlterWare Call of Duty mods";
