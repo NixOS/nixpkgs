@@ -8742,10 +8742,7 @@ with pkgs;
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
 
-  makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
-    callPackage ../development/libraries/fontconfig/make-fonts-cache.nix {
-      inherit fontconfig fontDirectories;
-    };
+  makeFontsCache = callPackage ../development/libraries/fontconfig/make-fonts-cache.nix { };
 
   freenect = callPackage ../development/libraries/freenect {
     inherit (darwin.apple_sdk.frameworks) Cocoa GLUT;
