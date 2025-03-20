@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "typst";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     owner = "messense";
     repo = "typst-py";
     tag = "v${version}";
-    hash = "sha256-gQfuiS/A0ptdhyX0NhClvlHdn5shnp2WLJfAFkg6OXE=";
+    hash = "sha256-/nWEs+qeAvejGyjBVSATnUWMVb6AdiCGOE7VjuYl0PU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-+GAlr/LzK6xnxiIw0j0DFlsuMgJb6fXjWanK+7hcOWk=";
+    hash = "sha256-aeAEqO6vtcLdCRClqhJ3ooJY9jf70iUJDL/GDZw/UXs=";
   };
 
   build-system = [

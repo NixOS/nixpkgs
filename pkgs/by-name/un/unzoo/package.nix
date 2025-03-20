@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "museoa";
-    repo = pname;
+    repo = "unzoo";
     rev = version;
     hash = "sha256-oPq1I7EsvHaJ7anHbm/KWrYrxJkM79rLhgRfSAdoLtk=";
   };
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $doc/share/doc/${pname}
+    mkdir -p $out/bin $doc/share/doc/unzoo
     cp unzoo $out/bin
-    cp README.TXT $doc/share/doc/${pname}
+    cp README.TXT $doc/share/doc/unzoo
 
     runHook postInstall
   '';

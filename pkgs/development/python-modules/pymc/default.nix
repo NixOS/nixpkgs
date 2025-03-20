@@ -22,20 +22,15 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.21.0";
+  version = "5.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${version}";
-    hash = "sha256-Zn6Yyacq7k+Xzu2VwdvXl5IRZbgYUIiOkZ0Q87I/BXo=";
+    hash = "sha256-XwStIPjhCw3Vf8jAMG7x8uc/t4h1JYTDz4Lobv/nS1g=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail ', "pytest-cov"' ""
-  '';
 
   build-system = [
     setuptools

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   buildPackages,
-  gnu-efi,
   mtools,
   openssl,
   perl,
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.21.1-unstable-2025-01-10";
 
   nativeBuildInputs = [
-    gnu-efi
     mtools
     openssl
     perl
@@ -112,22 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = lib.attrNames targets;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
-      ) targets
-    )}
-
-    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
-    # let's provide it as a symlink to be compatible in this case.
-    ln -s undionly.kpxe $out/undionly.kpxe.0
-
-    runHook postInstall
-  '';
+      mkdir -p $out
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
+        ) targets
+      )}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+      # let's provide it as a symlink to be compatible in this case.
+      ln -s undionly.kpxe $out/undionly.kpxe.0
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   enableParallelBuilding = true;
 

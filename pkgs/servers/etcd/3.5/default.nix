@@ -33,7 +33,7 @@ let
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGoModule rec {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit

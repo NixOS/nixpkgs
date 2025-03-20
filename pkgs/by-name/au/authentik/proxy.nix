@@ -7,7 +7,7 @@ buildGoModule {
   pname = "authentik-proxy-outpost";
   inherit (authentik) version src;
 
-  vendorHash = "sha256-FyRTPs2xfostV2x03IjrxEYBSrsZwnuPn+oHyQq1Kq0=";
+  vendorHash = "sha256-aG/VqpmHJeGyF98aS0jgwEAq1R5c8VggeJxLWS9W8HY=";
 
   env.CGO_ENABLED = 0;
 

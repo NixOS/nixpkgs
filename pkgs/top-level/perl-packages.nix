@@ -4111,6 +4111,10 @@ with self; {
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     buildInputs = [ ModuleBuildXSUtil ];
+    #  src/compiler/util/Compiler_double_charactor_operator.cpp:9:54: error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=register";
+    };
     meta = {
       homepage = "https://github.com/goccy/p5-Compiler-Lexer";
       description = "Lexical Analyzer for Perl5";
@@ -5275,12 +5279,12 @@ with self; {
 
   CryptRandom = buildPerlPackage {
     pname = "Crypt-Random";
-    version = "1.54";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.54.tar.gz";
-      hash = "sha256-1m+OF+3Dh3zHl/3VneU045kGNvjxpecmBiFZr35n2sw=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-Random-1.57.tar.gz";
+      hash = "sha256-lQRnbAzgQRA636cCP4yGHECAYckCljQUwe27LYhydRU=";
     };
-    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
+    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare CryptURandom ];
     meta = {
       description = "Interface to /dev/random and /dev/urandom";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11352,6 +11356,7 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
+    nativeCheckInputs = [ GlibObjectIntrospection ];
     preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Currently failing on macOS
       rm t/overrides.t
@@ -15436,7 +15441,7 @@ with self; {
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
-    env.NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
     makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tgz" ];
     src = fetchurl {
@@ -19913,6 +19918,29 @@ with self; {
     };
   };
 
+  pacup = buildPerlPackage rec {
+    version = "3.3.11";
+    pname = "pacup";
+    src = fetchFromGitHub {
+      owner = "pacstall";
+      repo = pname;
+      tag = version;
+      hash = "sha256-gTL6t//xO6TeRG1Vt4Ld7hVChSTyprUtXQTSwTKzwz4=";
+    };
+    preBuild = ''
+      patchShebangs ./pacup
+    '';
+    buildInputs = [ pkgs.dpkg ];
+    propagatedBuildInputs = [ DataCompare Filechdir IPCSystemSimple ListMoreUtils JSON LWP TermProgressBar ];
+    outputs = [ "out" ];
+
+    meta = {
+      description = "maintainer helper tool to help maintainers update their pacscripts.";
+      homepage = "https://github.com/pacstall/pacup";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
   Pango = buildPerlPackage {
     pname = "Pango";
     version = "1.227";
@@ -22487,21 +22515,6 @@ with self; {
     };
   };
 
-  SearchXapian = buildPerlPackage {
-    pname = "Search-Xapian";
-    version = "1.2.25.5";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.5.tar.gz";
-      hash = "sha256-IE+9xxLWcR/6tmjB9M/AB7Y5qftkrX4ZyyD8EKkQuos=";
-    };
-    buildInputs = [ pkgs.xapian DevelLeak ];
-    meta = {
-      description = "Perl XS frontend to the Xapian C++ search library";
-      homepage = "https://xapian.org";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
@@ -24094,12 +24107,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "10.9.0";
+    version = "11.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v${version}";
-      hash = "sha256-g2HH9Ep5cAa4qXo9/MKJmxeive6oqHQEX9C8qY+u2g4=";
+      tag = "v${version}";
+      hash = "sha256-k1fpVLWbFgZOUvCPLN6EpYgSfpwig5mHiWMRo8iRvZc=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -28610,6 +28623,35 @@ with self; {
       description = "Perl extension for inclusive (1.0 and 1.1) and exclusive canonicalization of XML using libxml2";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  Xapian = buildPerlModule rec {
+    pname = "Xapian";
+    version = "1.4.27";
+    src = fetchurl {
+      url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
+      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+    };
+    buildInputs = [ pkgs.xapian ];
+    preConfigure = ''
+      # FIXME: doesn't work for cross
+      export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
+      export PERL_ARCH="$PERL_LIB/$(perl -MConfig -e 'print $Config{archname}')"
+    '';
+    configureFlags = [
+      "--with-perl"
+    ];
+    outputs = [ "out" ]; # no "devdoc"
+    # Use default phases
+    buildPhase = null;
+    checkPhase = null;
+    checkTarget = "check";
+    installPhase = null;
+    meta = {
+      description = "Bindings allowing Xapian to be used from Perl";
+      homepage = "https://xapian.org";
+      license = [ lib.licenses.gpl2Plus ];
     };
   };
 

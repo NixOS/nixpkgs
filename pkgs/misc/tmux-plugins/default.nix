@@ -48,7 +48,7 @@ let
       '';
     }));
 
-in rec {
+in {
   inherit mkTmuxPlugin;
 
   battery = mkTmuxPlugin {
@@ -336,6 +336,25 @@ in rec {
       license = licenses.gpl3;
       platforms = platforms.unix;
       maintainers = with maintainers; [ arnarg ];
+    };
+  };
+
+  kanagawa = mkTmuxPlugin rec {
+    pluginName = "kanagawa";
+    version = "0-unstable-2025-02-10";
+    src = fetchFromGitHub {
+      owner = "Nybkox";
+      repo = "tmux-kanagawa";
+      rev = "5440b9476627bf5f7f3526156a17ae0e3fd232dd";
+      hash = "sha256-sFL9/PMdPJxN7tgpc4YbUHW4PkCXlKmY7a7gi7PLcn8=";
+    };
+    meta = {
+      homepage = "https://github.com/Nybkox/tmux-kanagawa";
+      downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
+      description = "Feature packed kanagawa theme for tmux!";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
     };
   };
 
@@ -792,6 +811,44 @@ in rec {
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ thomasjm ];
+    };
+  };
+
+  tmux-sessionx = mkTmuxPlugin {
+    pluginName = "sessionx";
+    version = "0-unstable-2024-09-22";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-sessionx";
+      rev = "508359b8a6e2e242a9270292160624406be3bbca";
+      hash = "sha256-nbzn3qxMGRzxFnLBVrjqGl09++9YOK4QrLoYiHUS9jY=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postPatch = ''
+      substituteInPlace sessionx.tmux \
+        --replace-fail "\$CURRENT_DIR/scripts/sessionx.sh" "$out/share/tmux-plugins/sessionx/scripts/sessionx.sh"
+      substituteInPlace scripts/sessionx.sh \
+        --replace-fail "/tmux-sessionx/scripts/preview.sh" "$out/share/tmux-plugins/sessionx/scripts/preview.sh"
+      substituteInPlace scripts/sessionx.sh \
+        --replace-fail "/tmux-sessionx/scripts/reload_sessions.sh" "$out/share/tmux-plugins/sessionx/scripts/reload_sessions.sh"
+    '';
+    postInstall = ''
+      chmod +x $target/scripts/sessionx.sh
+      wrapProgram $target/scripts/sessionx.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ zoxide fzf gnugrep gnused coreutils ]}
+      chmod +x $target/scripts/preview.sh
+      wrapProgram $target/scripts/preview.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+      chmod +x $target/scripts/reload_sessions.sh
+      wrapProgram $target/scripts/reload_sessions.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+    '';
+    meta = {
+      description = "Tmux session manager, with preview, fuzzy finding, and MORE";
+      homepage = "https://github.com/omerxx/tmux-sessionx";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ okwilkins ];
+      platforms = lib.platforms.all;
     };
   };
 

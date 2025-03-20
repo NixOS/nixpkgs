@@ -7,13 +7,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "obelisk";
-  version = "0.7.0";
+  version = "0.8.0";
   duneVersion = "3";
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-M/pQvuS8hlpeqd6QBDTHQzqIVFIqGUfj0igVPW2Xwwc=";
+    sha256 = "sha256-neN1s9GG+GKTs1iksHGWKGvWQrZOLrXyj9XJw9XLiNQ=";
   };
 
   strictDeps = true;

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pypykatz";
-  version = "0.6.10";
+  version = "0.6.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0LjYIa8leoMs/hDWM2nLqH8R00ZAL6uOCyXHA/0AJY=";
+    hash = "sha256-yNw/o0Q97Hb8SNmAPX6/KfT1/YrQRoJZJ2XQhw9wRRg=";
   };
 
   propagatedBuildInputs = [

@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build-system
   setuptools,
   setuptools-scm,
 
+  # dependencies
   appdirs,
   asgiref,
   click,
@@ -26,41 +28,34 @@
   watchfiles,
   websockets,
 
+  # tests
   anthropic,
   cacert,
   google-generativeai,
   langchain-core,
   ollama,
   openai,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-playwright,
-  pytest-xdist,
-  pytest-timeout,
-  pytest-rerunfailures,
   pandas,
   polars,
+  pytest-asyncio,
+  pytest-playwright,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
     tag = "v${version}";
-    hash = "sha256-8bo2RHuIP7X7EaOlHd+2m4XU287owchAwiqPnpjKFjI=";
+    hash = "sha256-YCPHjelGPYYo23Vzxy5+8Kn9fVlSZy1Qva7zp93+nzg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-narwhals-test.patch";
-      url = "https://github.com/posit-dev/py-shiny/commit/184a9ebd81ff730439513f343576a68f8c1f6eb9.patch";
-      hash = "sha256-DsGnuHQXODzGwpe8ZUHeXGzRFxxduwxCRk82RJaYZg0=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -104,30 +99,32 @@ buildPythonPackage rec {
     langchain-core
     ollama
     openai
-    pytestCheckHook
-    pytest-asyncio
-    pytest-playwright
-    pytest-xdist
-    pytest-timeout
-    pytest-rerunfailures
     pandas
     polars
+    pytest-asyncio
+    pytest-playwright
+    pytest-rerunfailures
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   disabledTests = [
+    # Requires unpackaged brand-yml
+    "test_theme_from_brand_base_case_compiles"
     # ValueError: A tokenizer is required to impose `token_limits` on messages
     "test_chat_message_trimming"
-    # https://github.com/posit-dev/py-shiny/pull/1791
-    "test_as_ollama_message"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    changelog = "https://github.com/posit-dev/py-shiny/blob/${src.tag}/CHANGELOG.md";
     description = "Build fast, beautiful web applications in Python";
-    license = lib.licenses.mit;
     homepage = "https://shiny.posit.co/py";
+    changelog = "https://github.com/posit-dev/py-shiny/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   stdenv,
   autoreconfHook,
   pkg-config,
@@ -19,24 +18,27 @@ assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
+    hash = "sha256-4M2Kzy/tTpIZzpyubnXWywQh7Np5InT4sYkVG2v6wWs=";
   };
 
-  patches = [
-    # See https://github.com/htop-dev/htop/pull/1412
-    # Remove when updating to 3.4.0
-    (fetchpatch2 {
-      name = "htop-resolve-configuration-path.patch";
-      url = "https://github.com/htop-dev/htop/commit/0dac8e7d38ec3aeae901a987717b5177986197e4.patch";
-      hash = "sha256-Er1d/yV1fioYfEmXNlLO5ayAyXkyy+IaGSx1KWXvlv0=";
-    })
-  ];
+  # upstream removed pkg-config support and uses dlopen now
+  postPatch =
+    let
+      libnlPath = lib.getLib libnl;
+    in
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace configure.ac \
+        --replace-fail /usr/include/libnl3 ${lib.getDev libnl}/include/libnl3
+      substituteInPlace linux/LibNl.c \
+        --replace-fail libnl-3.so ${libnlPath}/lib/libnl-3.so \
+        --replace-fail libnl-genl-3.so ${libnlPath}/lib/libnl-genl-3.so
+    '';
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 

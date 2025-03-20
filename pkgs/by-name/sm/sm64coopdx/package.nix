@@ -36,13 +36,13 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ktdvzOUYSh6H49BVDovqYt5CGyvJi4UW6nJOOD/HGGU=";
+    hash = "sha256-QWxhu7wGIjOIJyqjqakUzhhF+WxQslZdX3aEWYdDZbw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -17,20 +17,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.38.1";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-VZRVmOJkNjZLpIG5oBIbDVJl8EZhOtBMywwJKdfD9Hc=";
+    hash = "sha256-WPbiQWfGE4rFxb/Xazxm+nu+RINLTQk7PnrLuY6giX0=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-qgg/dpkBAbOgBeGC0BiKQTyLsOOKwfsJD3fhs/cXYHo=";
+  npmDepsHash = "sha256-SIx2qIWqR1K9K2eUHo5tADdz4vk5ySdSWDBAjBFIVVc=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -66,7 +66,7 @@ buildNpmPackage rec {
 
     # disable telemetry
     substituteInPlace packages/bruno-app/src/providers/App/index.js \
-      --replace-fail "useTelemetry();" ""
+      --replace-fail "useTelemetry({ version });" ""
   '';
 
   postConfigure = ''

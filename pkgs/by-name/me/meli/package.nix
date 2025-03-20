@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
   rustPlatform,
 
   # native build inputs

@@ -35,7 +35,7 @@ let
     inherit pname version src;
   };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''

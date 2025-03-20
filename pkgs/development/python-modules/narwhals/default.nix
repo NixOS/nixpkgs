@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.26.0";
+  version = "1.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-tGxRJauYD0mCA66Rd2i8jJsuDLVgyk35F7HRMR1ZkQs=";
+    hash = "sha256-jqrrQRviWllzZQEnlOTZ6oJM3WYQ3YlDvareTTBcNl4=";
   };
 
   build-system = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/v${version}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

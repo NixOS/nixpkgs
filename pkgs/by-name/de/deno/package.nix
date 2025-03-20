@@ -20,21 +20,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${version}";
-    hash = "sha256-ogvrDDwiMmsTRRpXwlH5VWhtnrSkRZErfjj2lhirALQ=";
+    hash = "sha256-gcUd4N2rTVYprBxx5T2RjG+0uZ090KjXPswYzGU5+14=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eaB6e6DGWbQKVR+huHBUbXGjzrY/4xGYdu8tXp+6jBM=";
+  cargoHash = "sha256-V2dKiiTYAsUhq6Pr+z/ga3qtKI43mfzqgBDSAhcBVKo=";
 
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-    substituteInPlace ext/ffi/Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
+    substituteInPlace Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
   '';
 
   # uses zlib-ng but can't dynamically link yet

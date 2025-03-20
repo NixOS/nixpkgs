@@ -22,9 +22,9 @@
   withOpenSFX ? true,
   withOpenMSX ? true,
   withFluidSynth ? true,
-  audioDriver ? "alsa",
   fluidsynth,
   soundfont-fluid,
+  soundfont-name ? "FluidR3_GM2-2",
   libsndfile,
   flac,
   libogg,
@@ -34,10 +34,7 @@
   pulseaudio,
   alsa-lib,
   libjack2,
-  procps,
-  writeScriptBin,
   makeWrapper,
-  runtimeShell,
 }:
 
 let
@@ -55,13 +52,6 @@ let
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
     sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
-
-  playmidi = writeScriptBin "playmidi" ''
-    #!${runtimeShell}
-    trap "${procps}/bin/pkill fluidsynth" EXIT
-    ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
-  '';
-
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
@@ -119,33 +109,24 @@ stdenv.mkDerivation rec {
 
   prefixKey = "--prefix-dir=";
 
-  configureFlags = [
-    "--without-liblzo2"
-  ];
+  configureFlags = [ "--without-liblzo2" ];
 
-  postInstall = ''
-    ${lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
-    ''}
-
-    mkdir -p $out/share/games/openttd/data
-
-    ${lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/data
-    ''}
-
-    mkdir $out/share/games/openttd/baseset/openmsx
-
-    ${lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.tar $out/share/games/openttd/baseset/openmsx
-    ''}
-
-    ${lib.optionalString withFluidSynth ''
-      wrapProgram $out/bin/openttd \
-        --add-flags -m \
-        --add-flags extmidi:cmd=${playmidi}/bin/playmidi
-    ''}
+  postPatch = ''
+    substituteInPlace src/music/fluidsynth.cpp \
+      --replace-fail "/usr/share/soundfonts/default.sf2" \
+                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
   '';
+
+  postInstall =
+    lib.optionalString withOpenGFX ''
+      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+    ''
+    + lib.optionalString withOpenSFX ''
+      cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+    ''
+    + lib.optionalString withOpenMSX ''
+      tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
+    '';
 
   meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';

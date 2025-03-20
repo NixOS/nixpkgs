@@ -3,10 +3,12 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
   versionCheckHook,
   bacon,
+  buildPackages,
   nix-update-script,
 
   withSound ? false,
@@ -23,33 +25,48 @@ let
     ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.10.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    tag = "v${version}";
-    hash = "sha256-FU7hIMAJIXD/pJ9FZSPkO1CQhmmSWwaewGyogGdZoeI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M/9QzLRY0QhMSSadjxZArLhcM3S6yjLPdP6R9p/1cL4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+lk4YrJ7zI6t24y76kODfUok5Ibu3fFxpLIUQZQqgcw=";
+  cargoHash = "sha256-799hpVUj4RfF2ei19bE/+qOixk5/v7PPuxmmDC0Zkqw=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
   ];
 
-  nativeBuildInputs = lib.optionals withSound [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withSound [
+      pkg-config
+    ];
 
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  postInstall =
+    let
+      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd bacon \
+        --bash <(COMPLETE=bash ${bacon}) \
+        --fish <(COMPLETE=fish ${bacon}) \
+        --zsh <(COMPLETE=zsh ${bacon})
+    '';
 
   passthru = {
     tests = {
@@ -62,11 +79,11 @@ rustPlatform.buildRustPackage rec {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen
       matthiasbeyer
     ];
   };
-}
+})

@@ -46,6 +46,7 @@
   libxml2,
   llvmPackages_14,
   m17n_lib,
+  mailcap,
   mailutils,
   makeWrapper,
   motif,
@@ -127,6 +128,9 @@
   QuartzCore,
   UniformTypeIdentifiers,
   WebKit,
+
+  # test
+  callPackage,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -242,6 +246,14 @@ mkDerivation (finalAttrs: {
       for makefile_in in $(find . -name Makefile.in -print); do
         substituteInPlace $makefile_in --replace-warn /bin/pwd pwd
       done
+    ''
+
+    ''
+      substituteInPlace lisp/net/mailcap.el \
+        --replace-fail '"/etc/mime.types"' \
+                       '"/etc/mime.types" "${mailcap}/etc/mime.types"' \
+        --replace-fail '("/etc/mailcap" system)' \
+                       '("/etc/mailcap" system) ("${mailcap}/etc/mailcap" system)'
     ''
 
     ""
@@ -448,10 +460,13 @@ mkDerivation (finalAttrs: {
       NATIVE_FULL_AOT = "1";
       LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
     }
-    // lib.optionalAttrs (variant == "macport") {
-      # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
-      # See https://github.com/NixOS/nixpkgs/issues/127902
-      NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
+    // {
+      NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+        # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+        # See https://github.com/NixOS/nixpkgs/issues/127902
+        (lib.optionalString (variant == "macport") "-include ${./macport_noescape_noop.h}")
+        (lib.optionalString stdenv.hostPlatform.isDarwin "-DFD_SETSIZE=10000 -DDARWIN_UNLIMITED_SELECT")
+      ];
     };
 
   enableParallelBuilding = true;
@@ -515,10 +530,18 @@ mkDerivation (finalAttrs: {
     inherit withTreeSitter;
     inherit withXwidgets;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
-    tests = { inherit (nixosTests) emacs-daemon; };
+    tests = {
+      inherit (nixosTests) emacs-daemon;
+      withPackages = callPackage ./build-support/wrapper-test.nix {
+        emacs = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = meta // {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
+      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
+    ];
   };
 })

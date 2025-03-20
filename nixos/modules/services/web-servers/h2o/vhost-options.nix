@@ -33,7 +33,18 @@ in
         "example.org"
       ];
       description = ''
-        Additional names of virtual hosts served by this virtual host configuration.
+        Additional names of virtual hosts served by this virtual host
+        configuration.
+      '';
+    };
+
+    host = mkOption {
+      type = types.nullOr types.nonEmptyStr;
+      default = null;
+      example = "127.0.0.1";
+      description = ''
+        Set the host address for this virtual host. If unset, the default is to
+        listen on all network interfaces.
       '';
     };
 
@@ -70,7 +81,7 @@ in
                 config.services.h2o.defaultTLSListenPort
               '';
               description = ''
-                Override the default TLS port for this virtual host.";
+                Override the default TLS port for this virtual host.
               '';
               example = 8443;
             };
@@ -105,11 +116,17 @@ in
                   options = {
                     key-file = mkOption {
                       type = types.path;
-                      description = "Path to key file";
+                      description = ''
+                        Path to key file. See
+                        <https://h2o.examp1e.net/configure/base_directives.html#key-file>.
+                      '';
                     };
                     certificate-file = mkOption {
                       type = types.path;
-                      description = "Path to certificate file";
+                      description = ''
+                        Path to certificate file. See
+                        <https://h2o.examp1e.net/configure/base_directives.html#certificate-file>.
+                      '';
                     };
                   };
                 }
@@ -139,7 +156,8 @@ in
               type = types.attrs;
               default = { };
               description = ''
-                Additional TLS/SSL-related configuration options.
+                Additional TLS/SSL-related configuration options. See
+                <https://h2o.examp1e.net/configure/base_directives.html#listen-ssl>.
               '';
               example =
                 literalExpression
@@ -205,7 +223,8 @@ in
       default = { };
       description = ''
         Attrset to be transformed into YAML for host config. Note that the HTTP
-        / TLS configurations will override these config values.
+        / TLS configurations will override these config values. See
+        <https://h2o.examp1e.net/configure/base_directives.html#hosts>.
       '';
     };
   };

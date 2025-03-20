@@ -15,15 +15,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2024-12-09";
+  version = "3.2.0-unstable-2025-03-12";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "32f4837e836fbb0b820d68c74c3278c925369b04";
-    hash = "sha256-d9fa/Zqbm/+WMRmO0hBW83PCTDgaVOAxyRuSTItr9Xs=";
+    rev = "3196e47d519c78b56a8d4b75ad7a280c92c91d23";
+    hash = "sha256-Zl/QmOJbY/lxoCYD6SpUHiiTTDOStUSn3+6xOuiGGBo=";
   };
 
   depsBuildBuild = [

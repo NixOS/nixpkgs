@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

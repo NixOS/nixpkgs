@@ -19,13 +19,13 @@
 
 flutter327.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.26.0";
+  version = "0.27.6";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-KmZ13QiZeZ6jljs2wibetbACfNODGJ47II8XcRAxoX4=";
+    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
   };
 
   sourceRoot = "${src.name}/client";

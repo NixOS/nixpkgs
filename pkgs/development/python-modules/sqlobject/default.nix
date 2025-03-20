@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "sqlobject";
     repo = "sqlobject";
     tag = version;
-    hash = "sha256-fxENuVTmp/EcDAdVqQWdtqtEW1mI+dfaImgWzGAaWfQ=";
+    hash = "sha256-KcpbGqNsR77kwbTLKwvwWpyLvF1UowIsKM7Kirs7Zw4=";
   };
 
   build-system = [ setuptools ];

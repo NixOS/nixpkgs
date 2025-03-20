@@ -36,7 +36,7 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
-This is section describes a general framework of understanding and exceptions might apply.
+This section describes a general framework of understanding and exceptions might apply.
 
 Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
 
@@ -399,6 +399,8 @@ Because every version of a package in Nixpkgs creates a potential maintenance bu
 If there is only one version of a package, its Nix expression should be named (e.g) `pkgs/by-name/xy/xyz/package.nix`. If there are multiple versions, this should be reflected in the attribute name. If you wish to share code between the Nix expressions of each version, you cannot rely upon `pkgs/by-name`'s automatic attribute creation, and must create the attributes yourself in `all-packages.nix`. See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/README.md#recommendation-for-new-packages-with-multiple-versions).
 
 ## Meta attributes
+
+The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.

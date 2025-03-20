@@ -9,13 +9,13 @@
   buildNpmPackage,
 }:
 let
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "sshx";
     tag = "v${version}";
-    hash = "sha256-AOmtN+NoBWuyCDe73dDWFmAWYEAxH8N5Vue1V87CZVU=";
+    hash = "sha256-+IHV+dJb/j1/tmdqDXo6bqhvj3nBQ7i4AsUeHFA3+NU=";
   };
 
   mkSshxPackage =
@@ -60,12 +60,12 @@ in
 {
   sshx = mkSshxPackage {
     pname = "sshx";
-    cargoHash = "sha256-S07xqDiINhOrr7G5EWpEzOrV3UYr74bGehgzRNBlJTo=";
+    cargoHash = "sha256-QftBUGDQvCSHoOBLnEzNOe1dMTpVTvMDXNp5qZr0C2M=";
   };
 
   sshx-server = mkSshxPackage rec {
     pname = "sshx-server";
-    cargoHash = "sha256-S07xqDiINhOrr7G5EWpEzOrV3UYr74bGehgzRNBlJTo=";
+    cargoHash = "sha256-QftBUGDQvCSHoOBLnEzNOe1dMTpVTvMDXNp5qZr0C2M=";
 
     postPatch = ''
       substituteInPlace crates/sshx-server/src/web.rs \
@@ -86,7 +86,7 @@ in
           --replace-fail 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'
       '';
 
-      npmDepsHash = "sha256-2cO0+ComNa4kDgo3SNGd1kPgKCE0/x9L9arAeHY0sQ4=";
+      npmDepsHash = "sha256-QdgNtQMjK229QzB5LbCry1hKVPon8IWUnj+v5L7ydfI=";
 
       installPhase = ''
         cp -r build $out

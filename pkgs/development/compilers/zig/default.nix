@@ -4,6 +4,7 @@
   llvmPackages_16,
   llvmPackages_17,
   llvmPackages_18,
+  llvmPackages_19,
   zigVersions ? { },
 }:
 let
@@ -19,6 +20,10 @@ let
     "0.13.0" = {
       llvmPackages = llvmPackages_18;
       hash = "sha256-5qSiTq+UWGOwjDVZMIrAt2cDKHkyNPBSAEjpRQUByFM=";
+    };
+    "0.14.0" = {
+      llvmPackages = llvmPackages_19;
+      hash = "sha256-VyteIp5ZRt6qNcZR68KmM7CvN2GYf8vj5hP+gHLkuVk=";
     };
   } // zigVersions;
 

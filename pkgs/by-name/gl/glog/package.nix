@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     substituteInPlace src/logging_unittest.cc \
       --replace-warn "/usr/bin/true" "${pkgsBuildHost.coreutils}/bin/true"
   '';

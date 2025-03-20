@@ -12,7 +12,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.16";
+  version = "6.1.18";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     tag = "v${version}";
-    hash = "sha256-hZgbLUk2Krynut5uD6GMxWA+95y8ONNUmv4kaAltumk=";
+    hash = "sha256-h9/xDWXCoGHQ9r2f/ZzAtwTAs4qzDrvVAQ2kuLS9Lk8=";
   };
 
   outputs = [
@@ -207,7 +207,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
+    changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
     description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";

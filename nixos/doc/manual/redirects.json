@@ -272,6 +272,9 @@
   "sec-x11-auto-login": [
     "index.html#sec-x11-auto-login"
   ],
+  "sec-x11-startx": [
+    "index.html#sec-x11-startx"
+  ],
   "sec-x11--graphics-cards-intel": [
     "index.html#sec-x11--graphics-cards-intel"
   ],
@@ -1289,6 +1292,12 @@
   "module-services-foundationdb-full-docs": [
     "index.html#module-services-foundationdb-full-docs"
   ],
+  "module-service-umurmur": [
+    "index.html#module-service-umurmur"
+  ],
+  "module-service-umurmur-quick-start": [
+    "index.html#module-service-umurmur-quick-start"
+  ],
   "module-borgbase": [
     "index.html#module-borgbase"
   ],
@@ -1582,6 +1591,9 @@
   ],
   "sec-option-types-string": [
     "index.html#sec-option-types-string"
+  ],
+  "sec-option-types-specialised": [
+    "index.html#sec-option-types-specialised"
   ],
   "sec-option-types-submodule": [
     "index.html#sec-option-types-submodule"

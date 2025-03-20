@@ -27,7 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-x91QVCDPjfC8rCVam/mrc8HP84ONa2/mJtSV64hrilc=";
   };
 
-  pythonRelaxDeps = [ "responses" ];
+  pythonRelaxDeps = [
+    "isodate"
+    "responses"
+  ];
 
   build-system = [
     poetry-core
@@ -52,7 +55,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with the Solcast API";
     homepage = "https://github.com/mcaulifn/solcast";
     changelog = "https://github.com/mcaulifn/solcast/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

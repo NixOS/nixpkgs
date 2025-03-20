@@ -59,7 +59,7 @@ let
     shell:
     if (shell != "fish") then
       ''
-        eval $(${getExe finalPackage} ${shell} --alias ${cfg.alias})
+        eval "$(${getExe finalPackage} ${shell} --alias ${cfg.alias})"
       ''
     else
       ''

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   python3,
 }:
@@ -26,14 +25,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "ssh-mitm";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
     tag = version;
-    hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
+    hash = "sha256-FmxVhYkPRZwS+zFwuId9nRGN832LRkgCNgDYb8Pg01U=";
   };
 
   build-system = [

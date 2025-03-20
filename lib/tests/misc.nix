@@ -537,6 +537,7 @@ runTests {
     expr =
       let goodPath =
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+          goodCAPath = "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab";
       in {
         storePath = isStorePath goodPath;
         storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
@@ -545,6 +546,12 @@ runTests {
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
         asPath = isStorePath (/. + goodPath);
         otherPath = isStorePath "/something/else";
+
+        caPath = isStorePath goodCAPath;
+        caPathAppendix = isStorePath
+          "${goodCAPath}/bin/python";
+        caAsPath = isStorePath (/. + goodCAPath);
+
         otherVals = {
           attrset = isStorePath {};
           list = isStorePath [];
@@ -557,6 +564,9 @@ runTests {
       storePathAppendix = false;
       nonAbsolute = false;
       asPath = true;
+      caPath = true;
+      caPathAppendix = false;
+      caAsPath = true;
       otherPath = false;
       otherVals = {
         attrset = false;
@@ -2520,6 +2530,21 @@ runTests {
   testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
+  };
+  testTypeFunctionToPropagateFunctionArgs = {
+    expr = lib.functionArgs ((types.functionTo types.null).merge [] [
+      {
+        value = {a, b ? false, ... }: null;
+      }
+      {
+        value = {b, c ? false, ... }: null;
+      }
+    ]);
+    expected = {
+      a = false;
+      b = false;
+      c = true;
+    };
   };
 
 # Meta

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pipenv-poetry-migrate";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     tag = "v${version}";
-    hash = "sha256-B13/QHHruZGkks1AKHLUw8h5FJkqaVjPHjiKH8vkV/8=";
+    hash = "sha256-kx03w02XUEMoPA8KKvyBGS81IHP3KFjKCVhAoyQ9j+I=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     description = "This is simple migration script, migrate pipenv to poetry";
     mainProgram = "pipenv-poetry-migrate";
     homepage = "https://github.com/yhino/pipenv-poetry-migrate";
-    changelog = "https://github.com/yhino/pipenv-poetry-migrate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/yhino/pipenv-poetry-migrate/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ gador ];
   };

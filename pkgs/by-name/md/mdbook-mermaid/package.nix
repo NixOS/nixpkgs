@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "badboy";
-    repo = pname;
+    repo = "mdbook-mermaid";
     tag = "v${version}";
     hash = "sha256-hqz2zUdDZjbe3nq4YpL68XJ64qpbjANag9S2uAM5nXg=";
   };

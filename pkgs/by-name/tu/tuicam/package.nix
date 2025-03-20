@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tuicam";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "hlsxx";
     repo = "tuicam";
     tag = "v${version}";
-    hash = "sha256-4Ae9SIhKNIdHReQbAwZbxErBA66Y7IxKj5M4kEFrplA=";
+    hash = "sha256-Ry64sd0OYGqbiVqveU05gsmf1c9kQy2QMN9Z5seMedc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Mvf5isXN8DQhL8fpYUn0seAFlqVeBF8apaL7RQqtjmU=";
+  cargoHash = "sha256-z+5fVSl9zFdOFNCCf49iVltAm+rZcJtLsz+zLCUlC6o=";
 
   nativeBuildInputs = [
     autoPatchelfHook

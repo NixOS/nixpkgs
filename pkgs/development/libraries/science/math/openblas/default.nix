@@ -128,6 +128,14 @@ let
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
     };
+
+    x86_64-freebsd = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
+      USE_OPENMP = true;
+    };
   };
 in
 

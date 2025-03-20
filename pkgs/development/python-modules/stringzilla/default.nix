@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.12.0";
+  version = "3.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-8RM850pd8gEgmbYg+jczAxkivumAV5PeCcruya+4sCs=";
+    hash = "sha256-ER2qaHIW6lmHHZjCIg1PZo1Hpra8vQWTfOk+KTO9GrU=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

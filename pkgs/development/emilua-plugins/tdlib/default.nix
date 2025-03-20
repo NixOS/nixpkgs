@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua-tdlib";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "tdlib";
     rev = "v${version}";
-    hash = "sha256-14jg71m1za+WW0PP9cg1XniCupl9/RXqeEP1SE+62Ng=";
+    hash = "sha256-dqbSECQLM664l2QrkEAfT65/NBI0ghj286dt7eaxcks=";
     fetchSubmodules = true;
   };
 

@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.239.1";
+  version = "2.242.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     tag = "v${version}";
-    hash = "sha256-cjKuxTocWzNintsD/7lKluOk1+1FADg6LM0+M59LEo0=";
+    hash = "sha256-86FnB/HJ43RxFuezzbNADUVsifV0+HHVR0yfb+aQZ8M=";
   };
 
   build-system = [
@@ -113,7 +113,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
-    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nequissimus ];
   };

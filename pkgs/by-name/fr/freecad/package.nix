@@ -202,7 +202,7 @@ freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner srounce ];
+    maintainers = with lib.maintainers; [ srounce ];
     platforms = lib.platforms.linux;
   };
 }))

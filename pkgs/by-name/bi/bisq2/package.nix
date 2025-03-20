@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   lib,
-  makeWrapper,
+  makeBinaryWrapper,
   runtimeShell,
   fetchurl,
   makeDesktopItem,
@@ -14,6 +14,7 @@
   tor,
   zip,
   gnupg,
+  coreutils,
 }:
 
 let
@@ -24,11 +25,6 @@ let
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
-      # This is just a comment to convince Nix that Tor is a
-      # runtime dependency; The Tor binary is in a *.jar file,
-      # whereas Nix only scans for hashes in uncompressed text.
-      # ${lib.getExe' tor "tor"}
-
       rm -fR $HOME/.local/share/Bisq2/tor
 
       exec "${lib.getExe jdk}" -Djpackage.app-version=@version@ -classpath @out@/lib/app/desktop-app-launcher.jar:@out@/lib/app/* ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
@@ -89,10 +85,9 @@ stdenvNoCC.mkDerivation rec {
     copyDesktopItems
     dpkg
     imagemagick
-    makeWrapper
+    makeBinaryWrapper
     zip
     gnupg
-    makeWrapper
   ];
 
   desktopItems = [
@@ -142,9 +137,21 @@ stdenvNoCC.mkDerivation rec {
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
+    wrapProgram $out/bin/bisq2 --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
+    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n

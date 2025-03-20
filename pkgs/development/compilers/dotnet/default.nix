@@ -41,6 +41,7 @@ let
             ./versions/7.0.nix
             ./versions/8.0.nix
             ./versions/9.0.nix
+            ./versions/10.0.nix
           ]
         );
 
@@ -87,6 +88,7 @@ let
 
         dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
         dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+        dotnet_10 = recurseIntoAttrs (callPackage ./10 { });
       }
     );
   };
@@ -157,6 +159,8 @@ pkgs
   # use binary SDK here to avoid downgrading feature band
   sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0_1xx = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
+  sdk_10_0_1xx =
+    if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_3xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_3xx-bin;
@@ -164,10 +168,14 @@ pkgs
   sdk_9_0_2xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_2xx-bin;
   sdk_8_0 = sdk_8_0_4xx;
   sdk_9_0 = sdk_9_0_2xx;
+  sdk_10_0 = sdk_10_0_1xx;
   sdk_8_0-source = sdk_8_0_1xx;
   sdk_9_0-source = sdk_9_0_1xx;
+  sdk_10_0-source = sdk_10_0_1xx;
   runtime_8_0 = sdk_8_0.runtime;
   runtime_9_0 = sdk_9_0.runtime;
+  runtime_10_0 = sdk_10_0.runtime;
   aspnetcore_8_0 = sdk_8_0.aspnetcore;
   aspnetcore_9_0 = sdk_9_0.aspnetcore;
+  aspnetcore_10_0 = sdk_10_0.aspnetcore;
 }

@@ -1,6 +1,5 @@
 {
   mkKdeDerivation,
-  fetchpatch,
   pkg-config,
   qtquick3d,
   qtsensors,

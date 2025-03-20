@@ -116,6 +116,7 @@ markdown,,,,,,
 mediator_lua,,,,,,
 middleclass,,,,,,
 mimetypes,,,,,,
+mini.test,,,,,,
 moonscript,https://raw.githubusercontent.com/leafo/moonscript/master/moonscript-dev-1.rockspec,,,,,arobyn
 mpack,,,,,,
 neorg,,,,,,GaetanLepage
@@ -127,7 +128,7 @@ nvim-nio,,,,,,mrcjkb
 nvim-web-devicons,,,,,,
 oil.nvim,,,,,,
 orgmode,,,,,,
-papis-nvim,,,,,,GaetanLepage
+papis.nvim,,,,,,GaetanLepage
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,

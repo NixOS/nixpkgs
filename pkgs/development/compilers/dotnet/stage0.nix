@@ -12,6 +12,7 @@
   xmlstarlet,
   patchNupkgs,
   symlinkJoin,
+  openssl,
 
   baseName ? "dotnet",
   releaseManifestFile,
@@ -82,6 +83,12 @@ let
             # artifacts.
             "-p:SkipErrorOnPrebuilts=true"
           ];
+
+        # https://github.com/dotnet/source-build/issues/4920
+        ${if stdenv.isLinux && lib.versionAtLeast old.version "10" then "postFixup" else null} = ''
+          find $out \( -name crossgen2 -or -name ilc \) -type f -print0 |
+            xargs -0 patchelf --add-needed libssl.so --add-rpath "${lib.makeLibraryPath [ openssl ]}"
+        '';
 
         passthru = old.passthru or { } // {
           fetch-deps =

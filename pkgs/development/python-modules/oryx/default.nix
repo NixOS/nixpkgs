@@ -114,5 +114,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/jax-ml/oryx/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # oryx seems to be incompatible with jax 0.5.1
+    # 237 additional test failures are resulting from the jax bump.
+    broken = true;
   };
 }

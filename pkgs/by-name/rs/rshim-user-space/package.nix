@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = pname;
+    repo = "rshim-user-space";
     rev = "rshim-${version}";
     hash = "sha256-z0Uk520vsBERbeVtxBqXPXSWhO0sLD5GCQy1dQsJdEg=";
   };

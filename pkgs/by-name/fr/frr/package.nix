@@ -86,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = finalAttrs.pname;
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    repo = "frr";
+    rev = "frr-${finalAttrs.version}";
     hash = "sha256-TWqW6kI5dDl6IW2Ql6eeySDSyxp0fPgcJOOX1JxjAxs=";
   };
 

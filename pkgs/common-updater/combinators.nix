@@ -169,18 +169,21 @@ rec {
 
     assert lib.assertMsg (lib.all validateFeatures scripts)
       "Combining update scripts with features enabled (other than “silent” scripts and an optional single script with “commit”) is currently unsupported.";
+
     assert lib.assertMsg (
       builtins.length (
         lib.unique (
-          builtins.map (
-            {
-              attrPath ? null,
-              ...
-            }:
-            attrPath
-          ) scripts
+          builtins.filter (attrPath: attrPath != null) (
+            builtins.map (
+              {
+                attrPath ? null,
+                ...
+              }:
+              attrPath
+            ) scripts
+          )
         )
-      ) == 1
+      ) <= 1
     ) "Combining update scripts with different attr paths is currently unsupported.";
 
     {

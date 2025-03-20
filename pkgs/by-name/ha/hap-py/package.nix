@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Illumina";
-    repo = pname;
+    repo = "hap.py";
     rev = "v${version}";
     hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
   };

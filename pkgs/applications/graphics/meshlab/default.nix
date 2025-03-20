@@ -28,6 +28,14 @@
   structuresynth,
 }:
 
+let
+  tinygltf-src = fetchFromGitHub {
+    owner = "syoyo";
+    repo = "tinygltf";
+    rev = "v2.6.3";
+    hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
+  };
+in
 mkDerivation rec {
   pname = "meshlab";
   version = "2023.12";
@@ -69,6 +77,8 @@ mkDerivation rec {
 
   preConfigure = ''
     substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+    substituteInPlace src/external/tinygltf.cmake \
+      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/tinygltf-2.6.3 ${tinygltf-src}
     substituteInPlace src/external/libigl.cmake \
       --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
     substituteInPlace src/external/nexus.cmake \

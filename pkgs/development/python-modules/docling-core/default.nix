@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.19.1";
+  version = "2.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-SBPk9DF9M1rY6YOqO1FOfnAcaGLQrJnMaBUG1JLWYFU=";
+    hash = "sha256-NYY1HuSksfu8mujvJHeXQxplp1DbZ6Zqh+pFkIyjBPM=";
   };
 
   build-system = [
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-core/blob/${src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/DS4SD/docling-core";
     license = lib.licenses.mit;

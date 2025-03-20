@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brummer10";
-    repo = pname;
+    repo = "GxPlugins.lv2";
     rev = "v${version}";
     hash = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
     fetchSubmodules = true;

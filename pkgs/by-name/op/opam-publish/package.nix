@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
-    repo = pname;
+    repo = "opam-publish";
     rev = version;
     hash = "sha256-HjMba80c4vOEm9p7r0cfFBf3y0XoFf986XjTDCPzn38=";
   };
@@ -35,7 +35,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/ocaml-opam/${pname}";
+    homepage = "https://github.com/ocaml-opam/opam-publish";
     description = "Tool to ease contributions to opam repositories";
     mainProgram = "opam-publish";
     license = with licenses; [ lgpl21Only ocamlLgplLinkingException ];

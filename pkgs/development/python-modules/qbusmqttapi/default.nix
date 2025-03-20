@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "qbusmqttapi";
-  version = "1.2.4";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qbus-iot";
     repo = "qbusmqttapi";
     tag = "v${version}";
-    hash = "sha256-daa+AwoOLJRaMzaUCai6pbYd8ux9v8NTR/mnsss/r4c=";
+    hash = "sha256-1Srp1FOnTw7TwE0OTY+q6R1d/M7/LH9leCUZMADE++Y=";
   };
 
   build-system = [ setuptools ];

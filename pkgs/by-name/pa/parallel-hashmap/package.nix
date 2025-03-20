@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parallel-hashmap";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "greg7mdp";
     repo = "parallel-hashmap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QDRy6YPoE34VpldN66V4mcF3PqK43RSlXThm+SzxRQ4=";
+    hash = "sha256-JiDhEpAQyyPXGkY9DYLvJ2XW1Bp3Ex1iMtbzNdra95g=";
   };
 
   postPatch = ''

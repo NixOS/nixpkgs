@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
-    repo = pname;
+    repo = "calcium";
     rev = version;
     sha256 = "sha256-Ony2FGMnWyNqD7adGeiDtysHNZ4ClMvQ1ijVPSHJmyc=";
   };

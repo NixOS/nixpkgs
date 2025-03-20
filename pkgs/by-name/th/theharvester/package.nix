@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = version;
-    hash = "sha256-B2pZBrWZqbtvcO0pnM57GFhrryYilLCBTMEmsKvyU/I=";
+    hash = "sha256-eO4jRyzMZQT4Fy1i1OHIf5UDqX8o1gmj6yHrIAxc0Mw=";
   };
 
   postPatch = ''
@@ -21,11 +21,11 @@ python3.pkgs.buildPythonApplication rec {
     sed -i 's/==.*//' requirements/base.txt
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRemoveDeps = [ "winloop" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiofiles
     aiohttp

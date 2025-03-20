@@ -32,6 +32,14 @@ buildPythonPackage rec {
     hash = "sha256-hor2qw+aTL7yhV53E/y5DUwyDEYJA8RPRS39xxa8xcw=";
   };
 
+  # Relax speed constraints on tests that can fail on busy builders
+  postPatch = ''
+    substituteInPlace tests/test_while_loop.py \
+      --replace-fail "speed < 0.1" "speed < 0.5" \
+      --replace-fail "speed < 0.5" "speed < 1" \
+      --replace-fail "speed < 1" "speed < 4" \
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [
@@ -46,6 +54,14 @@ buildPythonPackage rec {
     optax
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # Since jax 0.5.3:
+    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
+    # https://github.com/patrick-kidger/equinox/issues/979
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

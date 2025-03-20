@@ -92,14 +92,14 @@ in
 
   config = lib.mkIf cfg.enable {
     users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
-      tandoor-recipes = {
+      tandoor_recipes = {
         inherit (cfg) group;
         isSystemUser = true;
       };
     };
 
     users.groups = lib.mkIf (cfg.group == "tandoor_recipes") {
-      tandoor-recipes = { };
+      tandoor_recipes = { };
     };
 
     systemd.services.tandoor-recipes = {
@@ -118,9 +118,7 @@ in
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
-          "${
-            config.environment.etc."ssl/certs/ca-certificates.crt".source
-          }:/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"

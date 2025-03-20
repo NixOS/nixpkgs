@@ -6,19 +6,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "tidgi";
-  version = "0.9.6";
+  version = "0.12.1";
 
   src =
-    if stdenv.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}/TidGi-darwin-arm64-${version}.zip";
-        hash = "sha256-1Z9lxZZWrUVQEhBO/Kt2AS/uNs2XfihdL0iGrguPQ5g=";
-      }
-    else
-      fetchurl {
-        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}/TidGi-darwin-x64-${version}.zip";
-        hash = "sha256-5jHW/QrgzsGQfX4LvsRebdOJPzYTvhtC5mczxp2wPI8=";
+    {
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}-update/TidGi-darwin-x64-${version}.zip";
+        hash = "sha256-XZraotf6ewsrb2LBbZTTRMrT+B52NNWsZY/Qxju8hNw=";
       };
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${version}-update/TidGi-darwin-arm64-${version}.zip";
+        hash = "sha256-/fcMCS7k2LT0ELcrFPpiQ/WNJtxaJoYOLLhROHTgIdY=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
 

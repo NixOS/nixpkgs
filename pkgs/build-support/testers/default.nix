@@ -69,6 +69,10 @@
     fi
   '';
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
+  # or doc/build-helpers/testers.chapter.md
+  testEqualArrayOrMap = callPackage ./testEqualArrayOrMap { };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
   testVersion =
@@ -190,4 +194,6 @@
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
+
+  shfmt = callPackage ./shfmt { };
 }

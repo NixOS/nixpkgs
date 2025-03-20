@@ -47,7 +47,7 @@ rec {
 
   inherit (lib) mkOptionType;
   inherit (lib.types) nullOr oneOf coercedTo listOf nonEmptyListOf attrsOf either;
-  inherit (lib.types) bool int float str path;
+  inherit (lib.types) bool int float str path luaInline;
 
   json = {}: {
 
@@ -541,6 +541,66 @@ rec {
       '';
     };
 
+  lua =
+    {
+      asBindings ? false,
+      multiline ? true,
+      columnWidth ? 100,
+      indentWidth ? 2,
+      indentUsingTabs ? false,
+    }:
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              float
+              int
+              path
+              str
+              luaInline
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "lua value";
+              descriptionClass = "noun";
+            };
+        in
+        if asBindings then attrsOf valueType else valueType;
+      generate =
+        name: value:
+        pkgs.callPackage (
+          { runCommand, stylua }:
+          runCommand name
+            {
+              nativeBuildInputs = [ stylua ];
+              inherit columnWidth;
+              inherit indentWidth;
+              indentType = if indentUsingTabs then "Tabs" else "Spaces";
+              value = lib.generators.toLua { inherit asBindings multiline; } value;
+              passAsFile = [ "value" ];
+              preferLocalBuild = true;
+            }
+            ''
+              ${lib.optionalString (!asBindings) ''
+                echo -n 'return ' >> $out
+              ''}
+              cat $valuePath >> $out
+              stylua \
+                --no-editorconfig \
+                --line-endings Unix \
+                --column-width $columnWidth \
+                --indent-width $indentWidth \
+                --indent-type $indentType \
+                $out
+            ''
+        ) { };
+      # Alias for mkLuaInline
+      lib.mkRaw = lib.mkLuaInline;
+    };
+
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars = {}: {
@@ -620,7 +680,7 @@ rec {
                   import xmltodict
 
                   with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${toString withHeader}, pretty=True, indent=" " * 2))
+                      print(xmltodict.unparse(json.load(f), full_document=${if withHeader then "True" else "False"}, pretty=True, indent=" " * 2))
                 '';
                 passAsFile = [
                   "value"

@@ -15,10 +15,6 @@
 }:
 
 let
-  # ld64 uses `#embed` to embed `compile_stubs`, which is only implemented in Clang 19.
-  # This can be done unconditionally once the bootstrap tools have been updated.
-  hasEmbed = lib.versionAtLeast (lib.getVersion stdenv.cc) "19";
-
   # Copy the files from their original sources instead of using patches to reduce the size of the patch set in nixpkgs.
   otherSrcs = {
     # The last version of ld64 to have dyldinfo
@@ -55,31 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CVIyL2J9ISZnI4+r+wp4QtOb3+3Tmz2z2Z7/qeRqHS0=";
   };
 
-  patches =
-    [
-      # These patches are vendored from https://github.com/reckenrode/ld64/tree/ld64-951.9-nixpkgs.
-      # See their comments for more on what they do.
-      ./patches/0001-Always-use-write-instead-of-mmap.patch
-      ./patches/0003-Inline-missing-definitions-instead-of-using-private-.patch
-      ./patches/0004-Removed-unused-Blob-clone-method.patch
-      ./patches/0005-Use-std-atomics-and-std-mutex-for-portability.patch
-      ./patches/0006-Add-Meson-build-system.patch
-      ./patches/0007-Add-CrashReporterClient-header.patch
-      ./patches/0008-Provide-mach-compatibility-headers-based-on-LLVM-s-h.patch
-      ./patches/0009-Support-LTO-in-nixpkgs.patch
-      ./patches/0010-Add-vendored-libtapi-to-the-ld64-build.patch
-      ./patches/0011-Modify-vendored-libtapi-to-build-with-upstream-LLVM.patch
-      ./patches/0012-Move-libcodedirectory-to-its-own-subproject.patch
-      ./patches/0013-Set-the-version-string-in-the-build.patch
-      ./patches/0014-Replace-corecrypto-and-CommonCrypto-with-OpenSSL.patch
-      ./patches/0015-Add-libcd_is_blob_a_linker_signature-implementation.patch
-      ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
-      ./patches/0017-Fix-dyldinfo-build.patch
-      ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
-    ]
-    ++ lib.optionals (hasEmbed) [
-      ./patches/0002-Add-compile_stubs.h-using-Clang-s-embed-extension-fo.patch
-    ];
+  patches = [
+    # These patches are vendored from https://github.com/reckenrode/ld64/tree/ld64-951.9-nixpkgs.
+    # See their comments for more on what they do.
+    ./patches/0001-Always-use-write-instead-of-mmap.patch
+    ./patches/0002-Add-compile_stubs.h-using-Clang-s-embed-extension-fo.patch
+    ./patches/0003-Inline-missing-definitions-instead-of-using-private-.patch
+    ./patches/0004-Removed-unused-Blob-clone-method.patch
+    ./patches/0005-Use-std-atomics-and-std-mutex-for-portability.patch
+    ./patches/0006-Add-Meson-build-system.patch
+    ./patches/0007-Add-CrashReporterClient-header.patch
+    ./patches/0008-Provide-mach-compatibility-headers-based-on-LLVM-s-h.patch
+    ./patches/0009-Support-LTO-in-nixpkgs.patch
+    ./patches/0010-Add-vendored-libtapi-to-the-ld64-build.patch
+    ./patches/0011-Modify-vendored-libtapi-to-build-with-upstream-LLVM.patch
+    ./patches/0012-Move-libcodedirectory-to-its-own-subproject.patch
+    ./patches/0013-Set-the-version-string-in-the-build.patch
+    ./patches/0014-Replace-corecrypto-and-CommonCrypto-with-OpenSSL.patch
+    ./patches/0015-Add-libcd_is_blob_a_linker_signature-implementation.patch
+    ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
+    ./patches/0017-Fix-dyldinfo-build.patch
+    ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
+  ];
 
   prePatch = ''
     # Copy dyldinfo source files
@@ -104,16 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     for header in "''${tapiHeaders[@]}"; do
       cp ${libtapisrc}/include/tapi/$header subprojects/libtapi/tapi/$header
     done
-  '';
-
-  # Clang 16 doesn’t support C23, but the patchset expects a compiler that supports it. Only `#embed` is used, so stub
-  # out its usage and request an older C standard version. This can be dropped once the bootstrap tools are updated.
-  postPatch = lib.optionalString (!hasEmbed) ''
-    for meson_build in meson.build subprojects/libcodedirectory/meson.build subprojects/libtapi/meson.build; do
-      substituteInPlace $meson_build --replace-fail c23 c2x
-    done
-    echo '#pragma once' > src/ld/compile_stubs.h
-    echo 'static const char compile_stubs[] = "";' >> src/ld/compile_stubs.h
   '';
 
   xcodeHash = "sha256-qip/1eiGn8PdLThonhPq3oq2veN4E1zOiamDPBfTeNE=";

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-1qeqbV6Puk66JqmBCSSvLIQLJMsosVm6GrLVt+McWRw=";
+    hash = "sha256-SkjcqItBXIjcgublkUnfLlelxc7nW2rCyOBHlbYI6fA=";
   };
 
   nativeBuildInputs = [

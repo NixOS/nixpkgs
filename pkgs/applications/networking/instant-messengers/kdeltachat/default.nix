@@ -13,7 +13,7 @@
   qtwebengine,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kdeltachat";
   version = "unstable-2024-01-14";
 

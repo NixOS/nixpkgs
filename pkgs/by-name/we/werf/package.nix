@@ -1,25 +1,26 @@
 {
-  btrfs-progs,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
   lib,
   stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  btrfs-progs,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
   versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "2.24.0";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
-    rev = "v${version}";
-    hash = "sha256-IU9gVEG4MsUkdX4aJYKtd11WQLODU1IYAUyiuK+la40=";
+    tag = "v${version}";
+    hash = "sha256-eEdhAY3vN6hsgggakYpGFiVjR2BBGrg1UF18gFXc8g8=";
   };
 
-  vendorHash = "sha256-1HK90RqVvpuzkhbsLh0R6/CcdO/RrXRuOr3MBN0dcLU=";
+  vendorHash = "sha256-g+QZI0mfXSIU+iBnKzMeTGuF5UB1cwOixvRhcrBGrpE=";
 
   proxyVendor = true;
 
@@ -63,6 +64,8 @@ buildGoModule rec {
       "osusergo"
       "static_build"
     ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   preCheck =
     ''

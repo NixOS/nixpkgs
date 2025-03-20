@@ -363,7 +363,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Weither to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
+        Whether to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
   };

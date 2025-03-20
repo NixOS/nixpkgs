@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.9.7010";
+  version = "0.9.7020";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
     tag = version;
-    hash = "sha256-pH1sVY8YVpg4gHU8/K87QcR7bGKgblRp2HpgKkb3+NQ=";
+    hash = "sha256-mdl/zW53OM3MtyFoWbTI1yGY2yW72mglO5djHqKx4Fw=";
   };
 
   nativeBuildInputs =

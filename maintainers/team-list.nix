@@ -58,6 +58,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  apm = {
+    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
+    shortName = "apm employees";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      wolfgangwalther
+      DutchGerman
+    ];
+  };
+
   bazel = {
     members = [
       mboes
@@ -378,13 +388,14 @@ with lib.maintainers;
       piegames
       infinisil
       das_j
-      tomberek
       _0x4A6F
+      MattSturgeon
+      jfly
       # Not in the maintainer list
       # Sereja313
     ];
-    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
-    shortName = "Nix formatter team";
+    scope = "Nix formatting team: https://nixos.org/community/teams/formatting/";
+    shortName = "Nix formatting team";
   };
 
   freedesktop = {
@@ -433,6 +444,7 @@ with lib.maintainers;
     members = [
       globin
       krav
+      leona
       talyz
       yayayayaka
     ];
@@ -514,6 +526,7 @@ with lib.maintainers;
 
   home-assistant = {
     members = [
+      dotlambda
       fab
       hexa
     ];
@@ -536,7 +549,10 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [ akhilmhdh ];
+    members = [
+      akhilmhdh
+      mahyarmirrashed
+    ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };
@@ -831,7 +847,12 @@ with lib.maintainers;
   };
 
   neovim = {
-    members = [ ];
+    members = [
+      GaetanLepage
+      khaneliman
+      mrcjkb
+      perchun
+    ];
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";
@@ -997,8 +1018,9 @@ with lib.maintainers;
 
   rocm = {
     members = [
-      Madouura
       Flakebi
+      GZGavinZhao
+      LunNova
       mschwaig
     ];
     githubTeams = [ "rocm-maintainers" ];

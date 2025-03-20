@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   httpx,
@@ -23,19 +24,26 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.8";
+  version = "0.3.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-IZJo4EZFVKinBQdacM5xQ8ip3qTB64eqwZ9n+Z5mzWY=";
+    hash = "sha256-N209wUGdlHkOZynhSSE+ZHylL7cK+8H3PfZIG/wvMd0=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+    "numpy"
+  ];
 
   dependencies = [
     httpx
@@ -53,6 +61,13 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-tests==([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Build context-aware reasoning applications";

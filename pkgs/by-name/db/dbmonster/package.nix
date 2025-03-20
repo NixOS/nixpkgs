@@ -9,7 +9,7 @@
   wirelesstools,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "dbmonster";
   version = "unstable-2022-09-17";
   format = "other";

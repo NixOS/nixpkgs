@@ -26,7 +26,7 @@ in
       description = ''
         Whether to enable a user service for the Emacs daemon. Use `emacsclient` to connect to the
         daemon. If `true`, {var}`services.emacs.install` is
-        considered `true`, whatever its value.
+        considered `true`.
       '';
     };
 

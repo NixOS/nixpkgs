@@ -6,15 +6,14 @@
   vimUtils,
   nix-update-script,
   git,
-  replaceVars,
 }:
 let
-  version = "0.13.1";
+  version = "0.14.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-eOlTkWMzQTZPPKPKUxg8Q2PwkOhfaQdrMZkg9Ew8t/g=";
+    hash = "sha256-aY+bBP3DOdr+yA0HKKUBR/87g096NXH9h4EUrIJY92Y=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
@@ -42,10 +41,6 @@ vimUtils.buildVimPlugin {
       mkdir -p target/release
       ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
     '';
-
-  patches = [
-    (replaceVars ./force-version.patch { inherit (src) tag; })
-  ];
 
   passthru = {
     updateScript = nix-update-script {

@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.15.2";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AndJqk1VAUdC4pOTRzyfhdxmzJMskGF6pUiqPs3fIy4=";
+    hash = "sha256-BnBzbbyi9cdO6W59cnY13hnhH+tjrTryTp9XIcERwh4=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-/7JIeQZt3QsKrjujSucRLiHfhfSllK7FeumNA4eHqSY=";
+    hash = "sha256-2IQyXULgFoz0rFQ8SwERgMDzzo7pZ3DbqhwrWNYSwRo=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
     install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
     substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
-      --replace-fail "StartupWMClass=Heroic" "StartupWMClass=heroic" \
       --replace-fail "Exec=heroic-run" "Exec=heroic"
 
     runHook postInstall

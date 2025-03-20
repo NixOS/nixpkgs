@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

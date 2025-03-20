@@ -67,7 +67,7 @@ writeScript "update-${pname}" ''
     version = "$version";
     sources = [
   EOF
-  for arch in linux-x86_64 linux-i686; do
+  for arch in linux-x86_64 linux-i686 linux-aarch64; do
     # retriving a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
