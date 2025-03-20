@@ -27,18 +27,13 @@ let
         '';
       };
 
-      cargoLock = {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "nixtract-0.3.0" = "sha256-fXM6Gle4dt1iJgI6NuPl9l00i5sXGYkE+sUvFdps44s=";
-        };
-      };
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-R3HQXPpTtqgXfc7nLNdJp5zUMEpfccKWOQtS5Y786Jc=";
 
       cargoBuildFlags = [
         "-p"
         "genealogos-${crate}"
       ];
-      cargoTestFlags = cargoBuildFlags;
 
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ openssl ];
