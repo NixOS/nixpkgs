@@ -7,13 +7,13 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
   version = "1.17.1";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
   };
-}
+})
