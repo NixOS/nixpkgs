@@ -2,6 +2,7 @@
   channel,
   pname,
   version,
+  versionPrefix,
   sha256Hash,
 }:
 
@@ -51,7 +52,7 @@
 
 let
   drvName = "${pname}-${version}";
-  filename = "asfp-${version}-linux.deb";
+  filename = "asfp-${versionPrefix}-${version}-linux.deb";
 
   androidStudioForPlatform = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
@@ -67,7 +68,7 @@ let
     ];
 
     installPhase = ''
-      cp -r "./opt/${pname}/" $out
+      cp -r ./tmp/*/ $out
       wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
