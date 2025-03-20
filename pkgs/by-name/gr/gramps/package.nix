@@ -20,21 +20,16 @@
   ghostscript,
 }:
 
-let
-  inherit (python3Packages) buildPythonApplication pythonOlder;
-in
-buildPythonApplication rec {
-  version = "5.2.4";
+python3Packages.buildPythonApplication rec {
+  version = "6.0.0";
   pname = "gramps";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
+    hash = "sha256-7/KBvNNXCma4z8oebZVSN2HEHzG5MS/vuudlC5/i7VM=";
   };
 
   patches = [
@@ -44,12 +39,23 @@ buildPythonApplication rec {
     ./disable-gtk-warning-dialog.patch
   ];
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    berkeleydb
+    orjson
+    pyicu
+    pygobject3
+    pycairo
+  ];
+
   nativeBuildInputs = [
     wrapGAppsHook3
     intltool
     gettext
     gobject-introspection
-    python3Packages.setuptools
   ];
 
   nativeCheckInputs = [
@@ -75,13 +81,6 @@ buildPythonApplication rec {
     ++ lib.optional enableGraphviz graphviz
     # Ghostscript support
     ++ lib.optional enableGhostscript ghostscript;
-
-  propagatedBuildInputs = with python3Packages; [
-    berkeleydb
-    pyicu
-    pygobject3
-    pycairo
-  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
