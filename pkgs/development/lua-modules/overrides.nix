@@ -1057,10 +1057,13 @@ in
     ];
   });
 
-  tl = prev.tl.overrideAttrs ({
+  tl = prev.tl.overrideAttrs (oa: {
     preConfigure = ''
       rm luarocks.lock
     '';
+    meta = oa.meta // {
+      mainProgram = "tl";
+    };
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
