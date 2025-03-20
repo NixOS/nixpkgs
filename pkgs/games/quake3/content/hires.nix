@@ -6,7 +6,7 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quake3hires";
   version = "2020-01-20"; # Unknown version, used the date of web.archive.org capture.
 
@@ -50,16 +50,16 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     mkdir -p $out/baseq3
     install -Dm444 $src/xcsv_bq3hi-res.pk3 $out/baseq3/xcsv_bq3hi-res.pk3
-    install -Dm444 ${extra-pack-resolution} $out/baseq3/pak9hqq37test20181106.pk3
-    install -Dm444 ${quake3-live-sounds} $out/baseq3/quake3-live-sounds.pk3
+    install -Dm444 ${finalAttrs.extra-pack-resolution} $out/baseq3/pak9hqq37test20181106.pk3
+    install -Dm444 ${finalAttrs.quake3-live-sounds} $out/baseq3/quake3-live-sounds.pk3
 
-    bsdunzip ${hd-weapons}
+    bsdunzip ${finalAttrs.hd-weapons}
     install -Dm444 zzczhdwr1.pk3 $out/baseq3/zzczhdwr1.pk3
     # https://github.com/diegoulloao/ioquake3-mac-install takes only the first file, following his lead for now
     # install -Dm444 zzczhdwr2.pk3 $out/baseq3/zzczhdwr2.pk3
     # install -Dm444 zzczhdwr3.pk3 $out/baseq3/zzczhdwr3.pk3
 
-    install -Dm444 ${zpack-weapons} $out/baseq3/zpack-weapons.pk3
+    install -Dm444 ${finalAttrs.zpack-weapons} $out/baseq3/zpack-weapons.pk3
   '';
 
   preferLocalBuild = true;
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ rvolosatovs ];
   };
-}
+})
