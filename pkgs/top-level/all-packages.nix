@@ -7209,6 +7209,7 @@ with pkgs;
   racket-minimal = callPackage ../development/interpreters/racket/minimal.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
   };
+  racket-bin = callPackage ../development/interpreters/racket/bin.nix { };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
   moarvm = darwin.apple_sdk_11_0.callPackage ../development/interpreters/rakudo/moarvm.nix {
