@@ -6383,6 +6383,12 @@
     githubId = 108501;
     name = "David Pflug";
   };
+  dpk = {
+    email = "dpk@nonceword.org";
+    github = "dpk";
+    githubId = 378375;
+    name = "Daphne Preston-Kendal";
+  };
   dr460nf1r3 = {
     email = "root@dr460nf1r3.org";
     github = "dr460nf1r3";
