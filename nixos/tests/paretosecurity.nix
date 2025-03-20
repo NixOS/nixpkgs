@@ -3,20 +3,43 @@
   name = "paretosecurity";
   meta.maintainers = [ lib.maintainers.zupo ];
 
-  nodes.machine =
+  nodes.terminal =
     { config, pkgs, ... }:
     {
-      services.paretosecurity.enable = true;
+      imports = [ ./common/user-account.nix ];
 
-      users.users.alice = {
-        isNormalUser = true;
-      };
+      services.paretosecurity.enable = true;
     };
 
-  testScript = ''
-    machine.succeed(
-      "su -- alice -c 'paretosecurity check"
+  nodes.xfce =
+    { config, pkgs, ... }:
+    {
+      imports = [ ./common/user-account.nix ];
 
+      services.paretosecurity = {
+        enable = true;
+        trayIcon = true;
+      };
+
+      services.xserver.enable = true;
+      services.xserver.displayManager.lightdm.enable = true;
+      services.xserver.desktopManager.xfce.enable = true;
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
+      };
+
+      environment.systemPackages = [ pkgs.xdotool ];
+      environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
+
+    };
+
+  enableOCR = true;
+
+  testScript = ''
+    terminal.succeed(
+      "su -- alice -c 'paretosecurity check"
       # Disable some checks that need intricate test setup so that this test
       # remains simple and fast. Tests for all checks and edge cases available
       # at https://github.com/ParetoSecurity/agent/tree/main/test/integration
@@ -27,5 +50,11 @@
       + " --skip f962c423-fdf5-428a-a57a-827abc9b253e"  # Password manager installed
       + "'"
     )
+
+    xfce.wait_for_x()
+    xfce.succeed("xdotool mousemove 850 10")
+    xfce.wait_for_text("Pareto Security")
+    xfce.succeed("xdotool click 1")
+    xfce.wait_for_text("Run Checks")
   '';
 }
