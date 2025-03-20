@@ -143,7 +143,7 @@
     "hash": "sha256-yfTZjAsmv2wdMNNP1Tm0fmzSIlUwRfMraNPgFEHW238=",
     "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.10/groupfolders-v17.0.10.tar.gz",
     "version": "17.0.10",
-    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
+    "description": "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -190,9 +190,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-nx9trnOjtl/jd081DB8/5BjtDe6WVwcss0ynxyT/dEU=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.23/mail-v3.7.23.tar.gz",
-    "version": "3.7.23",
+    "hash": "sha256-4XLoP07M614QM2n86QvNlol3NVmrfQLBDLZCZ013Lsc=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.24/mail-stable3.7.tar.gz",
+    "version": "3.7.24",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
