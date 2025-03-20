@@ -28,7 +28,7 @@ let
     inherit version;
 
     inherit src;
-    sourceRoot = "source/ms-tools";
+    sourceRoot = "${src.name}/ms-tools";
     vendorHash = null; # dependencies are vendored in the release tarball
 
     buildInputs = [
