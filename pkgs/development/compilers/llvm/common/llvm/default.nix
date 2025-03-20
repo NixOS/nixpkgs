@@ -24,10 +24,6 @@
 , buildLlvmTools
 , updateAutotoolsGnuConfigScriptsHook
 , debugVersion ? false
-, doCheck ? !stdenv.hostPlatform.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
-  && (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
-  && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-  && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? stdenv.hostPlatform.isLinux /* PFM only supports Linux */
@@ -51,7 +47,10 @@ let
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
+in
 
+stdenv.mkDerivation (finalAttrs:
+let
   # Ordinarily we would just the `doCheck` and `checkDeps` functionality
   # `mkDerivation` gives us to manage our test dependencies (instead of breaking
   # out `doCheck` as a package level attribute).
@@ -69,7 +68,7 @@ let
   #
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
-  python = if doCheck && !isDarwinBootstrap then
+  python = if finalAttrs.finalPackage.doCheck && !isDarwinBootstrap then
     # Note that we _explicitly_ ask for a python interpreter for our host
     # platform here; the splicing that would ordinarily take care of this for
     # us does not seem to work once we use `withPackages`.
@@ -96,9 +95,7 @@ let
     '' + lib.optionalString (lib.versionAtLeast release_version "21") ''
       cp -r ${monorepoSrc}/libc "$out"
     '') else src;
-in
-
-stdenv.mkDerivation (finalAttrs: {
+in {
   inherit pname version;
 
   src = src';
@@ -281,9 +278,9 @@ stdenv.mkDerivation (finalAttrs: {
     # while this is not an autotools build, it still includes a config.guess
     # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
     updateAutotoolsGnuConfigScriptsHook
+    python
   ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python ]
     ++ optionals enableManpages [
     # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
     # splicing does *not* work with the latter. (TODO: fix)
@@ -609,7 +606,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '');
 
-  doCheck = !isDarwinBootstrap && doCheck;
+  doCheck = !isDarwinBootstrap && !stdenv.hostPlatform.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
+  && (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+  && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
+  && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   checkTarget = "check-all";
 
