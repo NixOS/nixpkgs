@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "openvmm";
-  version = "0-unstable-2024-10-19";
+  version = "0-unstable-2025-03-13";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "openvmm";
-    rev = "2e5acb8ab89b75d6ff59d537e9f21445d830386d";
-    hash = "sha256-Fi5hDFV2SfpqJjXSc7YwlNDnoL5TTgiqmFMt+ls2Uu4=";
+    rev = "047fde8a2b3eec17a46203fbc54ce7f3aa9b4dfd";
+    hash = "sha256-w6MxJVm5/ABU04MZUCSjzHVZLXQIsOVCIJZkHOfxQC0=";
   };
 
   separateDebugInfo = true;
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  cargoHash = "sha256-6ciIbLc/L54Rhhf/IOnv63vUlqoXPi087taw6MY80HA=";
+  cargoHash = "sha256-u0E09yFssd71wUS1BD766ztDImauu90T/jIWOb2v0mE=";
   useFetchCargoVendor = true;
 
   meta = with lib; {

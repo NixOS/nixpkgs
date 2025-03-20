@@ -709,9 +709,9 @@ with pkgs;
 
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
-  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
+  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false, extraFirmwarePaths ? [ ] }:
     callPackage ../build-support/kernel/modules-closure.nix {
-      inherit kernel firmware rootModules allowMissing;
+      inherit kernel firmware rootModules allowMissing extraFirmwarePaths;
     };
 
   mkBinaryCache = callPackage ../build-support/binary-cache { };
@@ -1000,6 +1000,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa VideoToolbox;
   };
 
+  inherit (callPackage ../development/tools/genealogos { }) genealogos-cli genealogos-api;
+
   # This is to workaround gfal2-python broken against Python 3.12 or later.
   # TODO: Remove these lines after solving the breakage.
   gfal2-util = callPackage ../by-name/gf/gfal2-util/package.nix (lib.optionalAttrs python3Packages.gfal2-python.meta.broken {
@@ -1189,9 +1191,7 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
-  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix {
-    buildGoModule = buildGo123Module;
-  };
+  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   gfold = callPackage ../applications/version-management/gfold { };
 
@@ -2814,15 +2814,6 @@ with pkgs;
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
-
-  netbird = callPackage ../tools/networking/netbird {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
-    buildGoModule = buildGo123Module;
-  };
-
-  netbird-ui = netbird.override {
-    ui = true;
-  };
 
   skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
 
@@ -17057,6 +17048,7 @@ with pkgs;
   };
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
+    z3_4_14
     z3_4_13
     z3_4_12
     z3_4_11

@@ -402,6 +402,31 @@ have a predefined type and string generator already declared under
     :   Outputs the given attribute set as an Elixir map, instead of the
         default Elixir keyword list
 
+`pkgs.formats.lua { asBindings ? false, multiline ? true, columnWidth ? 100, indentWidth ? 2, indentUsingTabs ? false }`
+
+:   A function taking an attribute set with values
+
+    `asBindings` (default `false`)
+
+    :   Whether to treat attributes as variable bindings
+
+    `multiline` (default `true`)
+
+    :   Whether to procude a multiline output. The output may still wrap across
+        multiple lines if it would otherwise exceed `columnWidth`.
+
+    `columnWidth` (default `100`)
+
+    :   The column width to use to attempt to wrap lines.
+
+    `indentWidth` (default `2`)
+
+    :   The width of a single indentation level.
+
+    `indentUsingTabs` (default `false`)
+
+    :   Whether the indentation should use tabs instead of spaces.
+
 `pkgs.formats.php { finalVariable }` []{#pkgs-formats-php}
 
 :   A function taking an attribute set with values

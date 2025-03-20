@@ -30,7 +30,7 @@
   syrupy,
 
   # passthru
-  writeScript,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -94,28 +94,13 @@ buildPythonPackage rec {
     tests.pytest = langchain-core.overridePythonAttrs (_: {
       doCheck = true;
     });
-    # Updates to core tend to drive updates in everything else
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
 
-      set -u -o pipefail +e
-      # Common core
-      nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
-      nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
-      nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
-      nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
-
-      # Extensions
-      nix-update --commit --version-regex 'langchain-aws==(.*)' python3Packages.langchain-aws
-      nix-update --commit --version-regex 'langchain-azure-dynamic-sessions==(.*)' python3Packages.langchain-azure-dynamic-sessions
-      nix-update --commit --version-regex 'langchain-chroma==(.*)' python3Packages.langchain-chroma
-      nix-update --commit --version-regex 'langchain-huggingface==(.*)' python3Packages.langchain-huggingface
-      nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
-      nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
-    '';
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^langchain-core==([0-9.]+)$"
+      ];
+    };
   };
 
   disabledTests =
