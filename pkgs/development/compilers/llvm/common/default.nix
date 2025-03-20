@@ -424,18 +424,14 @@ let
           libcxx = null;
           bintools = bintoolsNoLibc';
           extraPackages = [ ];
-          extraBuildCommands =
-            lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-nostartfiles" >> $out/nix-support/cc-cflags
-            ''
-            + mkExtraBuildCommands0 cc;
+          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
+          extraBuildCommands = mkExtraBuildCommands0 cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [ "-nostartfiles" ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
+          nixSupport.cc-cflags = lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
         }
       );
 
