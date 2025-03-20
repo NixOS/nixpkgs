@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, polaris-web
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  darwin,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7VgDySL3LWEuf9ee+w3Wpv3WCNA7DBYFaMMmP7BE/rc=";
   };
 
+  web-assets = callPackage ./web.nix { };
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-/YvLcawEBpF76evByQ0WMZ9dic5vFcsydbO/6TfN+ts=";
 
@@ -27,9 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Compile-time environment variables for where to find assets needed at runtime
-  env = {
-    POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
-  };
+  env.POLARIS_WEB_DIR = "${web-assets}/share/polaris-web";
 
   preCheck = ''
     # 'Err' value: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
@@ -46,7 +47,12 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.nixos = nixosTests.polaris;
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "web-assets"
+    ];
+  };
 
   meta = {
     description = "Self-host your music collection, and access it from any computer and mobile device";

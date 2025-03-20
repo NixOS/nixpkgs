@@ -4646,8 +4646,6 @@ with pkgs;
 
   polaris = callPackage ../servers/polaris { };
 
-  polaris-web = callPackage ../servers/polaris/web.nix { };
-
   projectlibre = callPackage ../applications/misc/projectlibre {
     jre = jre8;
     jdk = jdk8;
