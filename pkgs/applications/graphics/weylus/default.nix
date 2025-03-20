@@ -23,17 +23,19 @@
   Carbon,
   Cocoa,
   VideoToolbox,
+  libxkbcommon,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "weylus";
-  version = "unstable-2022-06-07";
+  version = "0.11.4-unstable-2025-02-24";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = pname;
-    rev = "b169a6be2bf3e8d105273d92f032cca5438de53a";
-    sha256 = "sha256-J9eVFIfmyBviVuT1MYKb5yoacbPqOAT3A8jahWv5qw8=";
+    rev = "5202806798ccca67c24da52ba51ee50b973b7089";
+    sha256 = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
   };
 
   buildInputs =
@@ -64,6 +66,8 @@ rustPlatform.buildRustPackage rec {
       xorg.libXv
       pango
       libdrm
+      libxkbcommon
+      wayland
     ];
 
   nativeBuildInputs =
@@ -79,12 +83,8 @@ rustPlatform.buildRustPackage rec {
       libtool
     ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "autopilot-0.4.0" = "sha256-1DRuhAAXaIADUmXlDVr8UNbI/Ab2PYdrx9Qh0j9rTX8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dLhlYOrLjoBSRGDJB0qTEIb+oGnp9X+ADHddpYITdl8=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
