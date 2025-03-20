@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   nix-update-script,
 }:
 let
@@ -32,6 +33,7 @@ buildGoModule {
   ];
 
   passthru = {
+    nixos = nixosTests.wakapi;
     updateScript = nix-update-script { };
   };
 
