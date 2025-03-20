@@ -15182,19 +15182,15 @@ with pkgs;
       quake3pointrelease
     ];
   };
-      quake3demodata
-    ];
-  };
-
   quake3demo-hires = quake3wrapper {
-    name = "quake3-demo-${lib.getVersion quake3demodata}";
-    description = "Demo of Quake 3 Arena, a classic first-person shooter";
+    pname = "quake3-demo";
     paks = [
-      quake3pointrelease
       quake3demodata
+      quake3pointrelease
       quake3hires
     ];
   };
+
 
   quake3demodata = callPackage ../games/quake3/content/demo.nix { };
 
