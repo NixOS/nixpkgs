@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "1.2.0";
+  version = "4693a2d74bc4f2b7c223beab3118a7db006db979";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
-    rev = "v${version}";
-    hash = "sha256-8vOlgqFt9kMTG8ENW9I24YNsrKdhwFnhvF3srdpm/zY=";
+    rev = "${version}";
+    hash = "sha256-gBrslfaOM6eyq8Z6wBdYI+n7VFeJ/IN+3on3dtvcMCU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-kTeDRZdwi7hSJbqhv6UJNdbmbDchzsogKn06iyswkHc=";
+  cargoHash = "sha256-tATxGaoF/+cUDywvlnW1N2sKo/FbKhJM7yUb74mxB5s=";
 
   nativeBuildInputs = [
     pkg-config
