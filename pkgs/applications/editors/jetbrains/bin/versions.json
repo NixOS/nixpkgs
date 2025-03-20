@@ -51,18 +51,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.tar.gz",
-      "version": "2024.3.4.1",
-      "sha256": "3eefea10391fdeaaf19ba6d00ee8c7f174a4feb5261394c4d3454d1cf0f5826b",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1.tar.gz",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "8a287528d830e6cdec2ded13c974c39a35b7555243c22d8b83113c96c26630aa",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.5.tar.gz",
+      "build_number": "243.26053.27"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2024.3.4.1",
-      "sha256": "e9b5b868e425aa1255d75f85028e7ba6275bb8aab88781e960c2c7c34f2173e8",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1.tar.gz",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "f8e8e864f4fedddf1d366a7db23fc4132192c3a6029c614a382186ff564a78a1",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.5.tar.gz",
+      "build_number": "243.26053.27"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -84,18 +84,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "c61dd7aa1b5f9c6f7a0943aeec79c56d0aa0f5ed29591b7eb3007169e2545621",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.4.tar.gz",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "e8d5aa2a05d35e3cb3cd186d446242c191d03b3d0556b160b6875a830c91cc2b",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.5.tar.gz",
+      "build_number": "243.26053.29"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "793bfdcbe38251678bc2fe07a026a594efa5af459137fb70dd786edb340c6430",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.4.tar.gz",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "dbfbdbd2627bcf5de85673151f3d3b79b12fa373d8c0d7942f40bba3aa397ea3",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.5.tar.gz",
+      "build_number": "243.26053.29"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -108,10 +108,10 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "9454aaf0877516b2047bc21517b5459860bdb4cbc797d66612760a336c011ee3",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.4.tar.gz",
-      "build_number": "243.25659.41"
+      "version": "2024.3.5",
+      "sha256": "e5fb7daa24307927cfd329340956b4cae1e0f3bb011841834519c4342428d38b",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.5.tar.gz",
+      "build_number": "243.26053.19"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
@@ -190,18 +190,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz",
-      "version": "2024.3.4.1",
-      "sha256": "8b6a175a671295fe5095904e4aab5e9b91ff699cb691c5d6f3faadb8b9fd1037",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1-aarch64.tar.gz",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "43b3ac68c07b611baa12bd70adc188b7be81d79b0b3a232aad582df2ffeb2598",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.27"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
-      "version": "2024.3.4.1",
-      "sha256": "a6245e6e1bef3062be5b06cf61bd2eb489e64c6c26f86040cb9c28e4c65e780b",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1-aarch64.tar.gz",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "0f072350137540672fd4de19768175164a2497290098321dfefaaaff0097f524",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.27"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -223,18 +223,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "6cd540a586692f8784e0889ad83ce497eaf3052a3a319b9d53fa9594572409ee",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "08fbe137d0153b92a639351e866c2218744517b6cfcf412abedfe1d6c9ad1bc4",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.29"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "d4755118db79ff68be149619a2e0b8d480dd56694de131228a7d5ebbd0f82240",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "53ce650a41fefb260a13cb96462857fc5abd98d7a02adf794cde7248e3cefbbb",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.29"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -247,10 +247,10 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "c63ca3230cecd887e9810500f466c51ee9d7430193f4feda315a6fdfc60c0447",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.41"
+      "version": "2024.3.5",
+      "sha256": "72a331a3c04a3d9f8bf30ad0b5009d4634f0fdcf5becd6a9a5cd00a5728cd9d1",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.19"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
@@ -329,18 +329,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.dmg",
-      "version": "2024.3.4.1",
-      "sha256": "bf4d88befcd445db19732d9c02d2db864196bbd6554fe4b54f80f8e1936e3993",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1.dmg",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "94640287fb84238d766a52681083807a087ef28b5c9b66d31f4a7ae06f2bcb8a",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.5.dmg",
+      "build_number": "243.26053.27"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
-      "version": "2024.3.4.1",
-      "sha256": "f4bf75679314b88aa6fe1c892175178498e3bc13583cb1380fa2cc12fab8acf1",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1.dmg",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "8b50dd9783c6f8dde229606a4e2d1d0e4ce95f0db33502053ed957fd532bcc35",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.5.dmg",
+      "build_number": "243.26053.27"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -362,18 +362,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "468914b3f03f8df651a9ac48df163b1fdee2b7f33ab64a71bed899da5427feab",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.4.dmg",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "25d01d39d7e5f1d658548dadee4cd4972f25d60a8c10da3cb482a99c8e3181d3",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.5.dmg",
+      "build_number": "243.26053.29"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "7441c8878953c6e46177d9a99d09b328f7c2d493b4f1967ea67276f2f8f9f025",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.4.dmg",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "d98e90eccec085c467a547a7ee31ab6611479ea991fe7b99e41e81f491cfeeff",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.5.dmg",
+      "build_number": "243.26053.29"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -386,10 +386,10 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "8cb255a6b66f77c5233cb2dd4c47cd4c8564c48cee3b1bb40128677a93cc39c8",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.4.dmg",
-      "build_number": "243.25659.41"
+      "version": "2024.3.5",
+      "sha256": "fb9f10ef6c0e5741bcd35abf148133002d92865899e4a98a276be64ff88b9688",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.5.dmg",
+      "build_number": "243.26053.19"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
@@ -468,18 +468,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.dmg",
-      "version": "2024.3.4.1",
-      "sha256": "5b8681be2c39c2bbbff143aea27161a5f69c72daf6e88d6f320867bbf7c51659",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.4.1-aarch64.dmg",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "b96b9fa3de829f0d5e98aa73766b3da4909186a464e3f8e7b8b3c975f1b0978b",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.27"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
-      "version": "2024.3.4.1",
-      "sha256": "ac323f3d011e826cc37d88d99585d28092703abfc464cabc3c033bb85ae86c65",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.4.1-aarch64.dmg",
-      "build_number": "243.25659.59"
+      "version": "2024.3.5",
+      "sha256": "8cf632fbb89e6dfbd2a536643450e6ae6671001348461260fe0132ed14ef3d0c",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.27"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -501,18 +501,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "b8f585ff95cfa31a97db3ba98ff84843455b0a89790ea4abbcc8da05c6fa6f4d",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "444edd06334a6b35964995b9af8ba998514eb1355f6035b905ec57e1a0ff7320",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.29"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "243d94467cfaeccbfcb21976d2bcf262beb31a9d52bb2cf8c6ab998987e4e49c",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.43"
+      "version": "2024.3.5",
+      "sha256": "d92332e6b120669f7f9aded84b82b6c7a64c2512537faf623122e7f2505bbab1",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.29"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -525,10 +525,10 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "7d93ff5df263a1526c0cb901e6df2abee547f9e9116f355cfc13a93a20b8ea4a",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.41"
+      "version": "2024.3.5",
+      "sha256": "e7f12eeb72b3421108b8aafb03c4603b74e6ac8922dc192f2a2d5bb5811d4d48",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.19"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
