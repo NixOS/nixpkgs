@@ -3,8 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  autoconf,
-  automake,
+  autoreconfHook,
   pkg-config,
   zlib,
   libpng,
@@ -44,8 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     pkg-config
   ];
 
