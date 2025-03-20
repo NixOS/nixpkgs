@@ -5,7 +5,6 @@
   qemu_pkg ? qemu_test,
   coreutils,
   imagemagick_light,
-  netpbm,
   qemu_test,
   socat,
   ruff,
@@ -37,7 +36,6 @@ python3Packages.buildPythonApplication {
   propagatedBuildInputs =
     [
       coreutils
-      netpbm
       qemu_pkg
       socat
       vde2
