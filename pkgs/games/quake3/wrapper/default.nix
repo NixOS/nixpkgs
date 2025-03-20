@@ -45,9 +45,9 @@ stdenv.mkDerivation {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications $out/bin
-      makeWrapper ${env}/bin/ioquake3* $out/bin/ioquake3 \
+      makeWrapper ${env}/bin/ioquake3 $out/bin/ioquake3 \
         --add-flags "+set fs_basepath ${env}"
-      makeWrapper ${env}/bin/ioq3ded* $out/bin/ioq3ded \
+      makeWrapper ${env}/bin/ioq3ded $out/bin/ioq3ded \
         --add-flags "+set fs_basepath ${env}"
 
       # Renaming application packages on darwin is not quite as simple as they internally
