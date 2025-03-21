@@ -27,10 +27,10 @@ in
       default = [ ];
       example = lib.literalExpression ''
         [
-                pkgs.libsForQt5.qtstyleplugin-kvantum
-                pkgs.breeze-qt5
-                pkgs.qtcurve
-              ];
+          pkgs.libsForQt5.qtstyleplugin-kvantum
+          pkgs.breeze-qt5
+          pkgs.qtcurve
+        ];
       '';
       description = ''
         Extra Qt styles that will be available to the
