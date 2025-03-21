@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, buildPackages
-, curl, openssl, zlib-ng, expat, perlPackages, python3, gettext, cpio
+, curl, openssl, zlib-ng, expat, perlPackages, python3, gettext
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ deterministic-host-uname gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [ curl openssl zlib-ng expat cpio (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv) bash ]
+  buildInputs = [ curl openssl zlib-ng expat (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv) bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
