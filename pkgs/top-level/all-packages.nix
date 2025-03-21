@@ -17872,7 +17872,7 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/wordpress {})
     wordpress wordpress_6_7;
 
-  wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
+  wordpressPackages = recurseIntoAttrs ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
     themes = lib.importJSON ../servers/web-apps/wordpress/packages/themes.json;
     languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
