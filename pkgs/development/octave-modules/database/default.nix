@@ -23,6 +23,10 @@ buildOctavePackage rec {
     libpq
   ];
 
+  nativeBuildInputs = [
+    libpq.pg_config
+  ];
+
   requiredOctavePackages = [
     struct
   ];

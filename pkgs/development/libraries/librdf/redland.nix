@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
-  ];
+  ] ++ lib.optional withPostgresql libpq.pg_config;
 
   buildInputs =
     [

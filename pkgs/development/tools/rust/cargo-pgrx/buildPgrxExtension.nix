@@ -93,7 +93,7 @@ let
   preBuildAndTest = ''
     export PGRX_HOME="$(mktemp -d)"
     export PGDATA="$PGRX_HOME/data-${pgrxPostgresMajor}/"
-    cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config
+    cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${postgresql.pg_config}/bin/pg_config
 
     # unix sockets work in sandbox, too.
     export PGHOST="$(mktemp -d)"
@@ -140,7 +140,7 @@ let
       PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
       cargo pgrx package \
-        --pg-config ${lib.getDev postgresql}/bin/pg_config \
+        --pg-config ${postgresql.pg_config}/bin/pg_config \
         ${maybeDebugFlag} \
         --features "${builtins.concatStringsSep " " buildFeatures}" \
         --out-dir "$out"

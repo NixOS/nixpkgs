@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     autoconf-archive
     yelp-tools
+    libpq.pg_config
   ];
 
   buildInputs =
