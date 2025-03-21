@@ -1,11 +1,4 @@
-{
-  lib,
-  nodejs,
-  buildNpmPackage,
-  fetchFromGitHub,
-  redocly,
-  testers,
-}:
+{ lib, nodejs, buildNpmPackage, fetchFromGitHub, redocly, testers, }:
 
 buildNpmPackage rec {
   pname = "redocly";
@@ -22,7 +15,7 @@ buildNpmPackage rec {
 
   npmBuildScript = "prepare";
 
-  nativeBuildInputs = [];
+  nativeBuildInputs = [ ];
 
   postBuild = ''
     npm --prefix packages/cli run copy-assets
@@ -50,15 +43,12 @@ buildNpmPackage rec {
     chmod +x $out/bin/redocly
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = redocly;
-    };
-  };
+  passthru = { tests.version = testers.testVersion { package = redocly; }; };
 
   meta = {
     changelog = "https://redocly.com/docs/cli/changelog/";
-    description = "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
+    description =
+      "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;
     mainProgram = "redocly";
