@@ -118,7 +118,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcv-rack";
   version = "2.6.0";
 
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-leI0wwhYiA8qktJFe6DuZjs6q5tMFQ4WFLD4Ivom5+E=";
   };
 
@@ -275,4 +275,4 @@ stdenv.mkDerivation rec {
     mainProgram = "Rack";
     platforms = platforms.linux;
   };
-}
+})
