@@ -9628,13 +9628,11 @@ with pkgs;
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
-  hunspell = callPackage ../development/libraries/hunspell { };
-
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
   hunspellDictsChromium = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries-chromium.nix {});
 
-  hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_24; };
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gtk-doc,
   meson,
   ninja,
@@ -42,6 +43,16 @@ stdenv.mkDerivation (
       }/${pname}-${version}.tar.xz";
       hash = "sha256-piubtCQl6ETMPW3d4EP/Odur7dFULrpXout5+FiJ1Fo=";
     };
+
+    patches = [
+      # Pull upstream fix to fix "out of memory" errors:
+      #   https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/595
+      (fetchpatch {
+        name = "fix-oom.patch";
+        url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/b9eed915f9a67380e7ef9d8746656455c43f67e2.patch";
+        hash = "sha256-iWYxMVeNpseClSTf7BfU9GBe+tJWc+DUJWTWE5MnGh4=";
+      })
+    ];
 
     outputs = [
       "out"
