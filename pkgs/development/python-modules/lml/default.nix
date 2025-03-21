@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "lml";
-  version = "0.1.0";
+  version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57a085a29bb7991d70d41c6c3144c560a8e35b4c1030ffb36d85fa058773bcc5";
+    sha256 = "sha256-jdWvtDZ6WT0c2yFEoFh0zZk49SZr67DJ4UEyAEI8DXQ=";
   };
 
   nativeCheckInputs = [
