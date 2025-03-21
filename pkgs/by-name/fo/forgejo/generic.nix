@@ -119,12 +119,11 @@ buildGoModule rec {
   checkFlags =
     let
       skippedTests = [
-        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
-        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
+        "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
