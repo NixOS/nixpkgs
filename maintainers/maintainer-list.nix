@@ -18629,6 +18629,12 @@
     githubId = 1640697;
     name = "Philipp Hausmann";
   };
+  philipp8101 = {
+    email = "philipp8101@gmail.com";
+    github = "philipp8101";
+    githubId = 26072474;
+    name = "philipp8101";
+  };
   Philipp-M = {
     email = "philipp@mildenberger.me";
     github = "Philipp-M";
