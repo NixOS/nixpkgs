@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  lap,
   matplotlib,
   opencv-python,
   pandas,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    lap
     matplotlib
     opencv-python
     pandas
