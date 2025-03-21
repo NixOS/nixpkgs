@@ -13,6 +13,7 @@
   daqp,
   ecos,
   gurobipy,
+  jaxopt,
   osqp,
   quadprog,
   scs,
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
     highs = [ highspy ];
+    jaxopt = [ jaxopt ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     piqp = [ piqp ];
