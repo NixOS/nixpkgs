@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     ''
       wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
     ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       $out/bin/restic generate \
         --bash-completion restic.bash \
         --fish-completion restic.fish \
