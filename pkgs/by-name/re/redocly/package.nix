@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
@@ -34,9 +35,18 @@ buildNpmPackage rec {
     cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
     cp -R packages/respect-core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/respect-core
 
-    mkdir $out/bin
-    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
-      $out/bin/redocly \
+    # Create a wrapper script to force the correct command name (Nodejs uses argv[1] for command name)
+    mkdir -p $out/bin
+    cat <<EOF > $out/bin/redocly
+    #!${lib.getBin pkgs.nodejs}/bin/node
+    // Override argv[1] to show "redocly" instead of "cli.js"
+    process.argv[1] = 'redocly';
+    require('$out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js');
+    EOF
+    chmod +x $out/bin/redocly
+
+    # Add telemetry and update notice flags
+    wrapProgram $out/bin/redocly \
       --set-default REDOCLY_TELEMETRY off \
       --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
   '';
