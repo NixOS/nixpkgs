@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
   click,
+  fetchFromGitHub,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
@@ -28,10 +28,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/click-contrib/click-option-group/issues/65
-  disabledTests = [ "test_missing_group_decl_first_api" ];
-
   pythonImportsCheck = [ "click_option_group" ];
+
+  disabledTests = [
+    # https://github.com/click-contrib/click-option-group/issues/65
+    "test_missing_group_decl_first_api"
+  ];
 
   meta = with lib; {
     description = "Option groups missing in Click";
