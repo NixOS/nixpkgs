@@ -9,6 +9,7 @@
   libX11,
   mesa,
   pkg-config,
+  pkg-config-unwrapped,
   stdenv,
   # Boolean flags
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
@@ -38,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
     ];
+
+  # re-export PKG_CHECK_MODULES m4 macro used by sdl.m4
+  propagatedNativeBuildInputs = [ pkg-config-unwrapped ];
 
   buildInputs =
     [
