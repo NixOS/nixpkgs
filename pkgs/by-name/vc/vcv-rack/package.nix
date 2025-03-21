@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  apple-sdk_13,
   cmake,
   copyDesktopItems,
   curl,
@@ -21,8 +22,10 @@
   libsamplerate,
   makeDesktopItem,
   makeWrapper,
+  openssl,
   pkg-config,
   rtmidi,
+  rsync,
   speexdsp,
   stdenv,
   wrapGAppsHook3,
@@ -85,8 +88,8 @@ let
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
-    hash = "sha256-mxdTjl/tOeNInzytyaQIQuHKmgueQSBU3veC7F+82DA=";
+    rev = "b453f192d22b1c951d71e8a73f28a37cd96a7b6c"; # tip of branch v2
+    hash = "sha256-Wr5G2wgCMIduMqFdIJUtkWQEbvihte/WZb/qUWXGE04=";
   };
   vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
@@ -104,17 +107,22 @@ let
       pkg-config
     ];
 
-    buildInputs = [
-      alsa-lib
-      libjack2
-      libpulseaudio
-    ];
+    buildInputs =
+      [
+        openssl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        libjack2
+        libpulseaudio
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin [ apple-sdk_13 ];
 
     cmakeFlags = [
-      (lib.cmakeBool "RTAUDIO_API_ALSA" true)
-      (lib.cmakeBool "RTAUDIO_API_PULSE" true)
-      (lib.cmakeBool "RTAUDIO_API_JACK" true)
-      (lib.cmakeBool "RTAUDIO_API_CORE" false)
+      (lib.cmakeBool "RTAUDIO_API_ALSA" stdenv.hostPlatform.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_PULSE" stdenv.hostPlatform.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_JACK" stdenv.hostPlatform.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_CORE" stdenv.hostPlatform.isDarwin)
     ];
   };
 in
@@ -151,70 +159,104 @@ stdenv.mkDerivation (finalAttrs: {
     ./rack-minimize-vendoring.patch
   ];
 
-  prePatch = ''
-    # As we can't use `make dep` to set up the dependencies (as explained
-    # above), we do it here manually
-    mkdir -p dep/include
+  prePatch =
+    ''
+      # As we can't use `make dep` to set up the dependencies (as explained
+      # above), we do it here manually
+      mkdir -p dep/include
 
-    cp -r ${pffft-source}/* dep/pffft
-    cp -r ${fuzzysearchdatabase-source}/* dep/fuzzysearchdatabase
-    cp -r ${nanovg-source}/* dep/nanovg
-    cp -r ${nanosvg-source}/* dep/nanosvg
-    cp -r ${osdialog-source}/* dep/osdialog
-    cp -r ${oui-blendish-source}/* dep/oui-blendish
-    cp -r ${simde-source}/* dep/simde
-    cp -r ${tinyexpr-source}/* dep/tinyexpr
+      cp -r ${pffft-source}/* dep/pffft
+      cp -r ${fuzzysearchdatabase-source}/* dep/fuzzysearchdatabase
+      cp -r ${nanovg-source}/* dep/nanovg
+      cp -r ${nanosvg-source}/* dep/nanosvg
+      cp -r ${osdialog-source}/* dep/osdialog
+      cp -r ${oui-blendish-source}/* dep/oui-blendish
+      cp -r ${simde-source}/* dep/simde
+      cp -r ${tinyexpr-source}/* dep/tinyexpr
 
-    cp dep/pffft/*.h dep/include
-    cp dep/fuzzysearchdatabase/src/*.hpp dep/include
-    cp dep/nanosvg/**/*.h dep/include
-    cp dep/nanovg/src/*.h dep/include
-    cp dep/osdialog/*.h dep/include
-    cp dep/oui-blendish/*.h dep/include
-    cp -r dep/simde/simde dep/include
-    cp dep/tinyexpr/tinyexpr.h dep/include
+      cp dep/pffft/*.h dep/include
+      cp dep/fuzzysearchdatabase/src/*.hpp dep/include
+      cp dep/nanosvg/**/*.h dep/include
+      cp dep/nanovg/src/*.h dep/include
+      cp dep/osdialog/*.h dep/include
+      cp dep/oui-blendish/*.h dep/include
+      cp -r dep/simde/simde dep/include
+      cp dep/tinyexpr/tinyexpr.h dep/include
 
-    # Build and dist the Fundamental plugins
-    cp -r ${fundamental-source} plugins/Fundamental/
-    chmod -R +rw plugins/Fundamental # will be used as build dir
-    substituteInPlace plugin.mk --replace-fail ":= all" ":= dist"
-    substituteInPlace plugins/Fundamental/src/Logic.cpp \
-      --replace-fail \
-        "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
-        "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
+      # Build and dist the Fundamental plugins
+      cp -r ${fundamental-source} plugins/Fundamental/
+      chmod -R +rw plugins/Fundamental # will be used as build dir
+      substituteInPlace plugin.mk --replace-fail ":= all" ":= dist"
+      substituteInPlace plugins/Fundamental/src/Logic.cpp \
+        --replace-fail \
+          "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
+          "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Fix reference to zenity
+      substituteInPlace dep/osdialog/osdialog_zenity.c \
+        --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # * Set VERSION from finalAttrs to avoid build using git to determine version
+      # * Darwin needs to build the dist target, which builds the .app container,
+      #   yet we want to exclude the documentation from dist target.
+      # * Replace path to Fundamental module with path to produced build artifact
+      #   to avoid downloading a pre-compiled version
+      substituteInPlace Makefile \
+        --replace-fail 'VERSION ?= $' 'VERSION ?= ${finalAttrs.version}#$' \
+        --replace-fail 'DIST_HTML :=' '#DIST_HTML :=' \
+        --replace-fail 'FUNDAMENTAL_FILENAME := Fundamental' 'FUNDAMENTAL_FILENAME := plugins/Fundamental/dist/Fundamental'
+      # Skip codesigning
+      substituteInPlace plugin.mk \
+        --replace-fail '$(CODESIGN)' '#$(CODESIGN)'
 
-    # Fix reference to zenity
-    substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
-  '';
+      # To support macOS drag & drop a custom glfw patch is needed
+      # (see https://github.com/glfw/glfw/pull/1579 for details).
+      # Since the patch does not apply cleanly on the current glfw contained in nixpkgs
+      # disable drag & drop functionality for the time being.
+      substituteInPlace adapters/standalone.cpp \
+        --replace-fail 'glfwGetOpenedFilenames()' 'NULL'
+    '';
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    imagemagick
-    jq
-    libicns
-    makeWrapper
-    pkg-config
-    wrapGAppsHook3
-  ];
-  buildInputs = [
-    alsa-lib
-    curl
-    ghc_filesystem
-    glew
-    glfw
-    zenity
-    gtk3-x11
-    jansson
-    libarchive
-    libjack2
-    libpulseaudio
-    libsamplerate
-    rtmidi
-    speexdsp
-    vcv-rtaudio
-    zstd
-  ];
+  nativeBuildInputs =
+    [
+      jq
+      makeWrapper
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      copyDesktopItems
+      libicns
+      imagemagick
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.isDarwin [ rsync ];
+
+  buildInputs =
+    [
+      curl
+      ghc_filesystem
+      glew
+      glfw
+      jansson
+      libarchive
+      libsamplerate
+      rtmidi
+      speexdsp
+      vcv-rtaudio
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      gtk3-x11
+      libjack2
+      libpulseaudio
+      zenity
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 ];
+
+  enableParallelBuilding = true;
 
   makeFlags =
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -225,37 +267,64 @@ stdenv.mkDerivation (finalAttrs: {
       "plugins"
     ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m755 -t $out/bin Rack
-    install -D -m755 -t $out/lib libRack.so
-
-    mkdir -p $out/share/vcv-rack
-    cp -r res cacert.pem Core.json template.vcv LICENSE-GPLv3.txt $out/share/vcv-rack
-    cp -r plugins/Fundamental/dist/Fundamental-*.vcvplugin $out/share/vcv-rack/Fundamental.vcvplugin
-
-    # Extract pngs from the Apple icon image and create
-    # the missing ones from the 1024x1024 image.
-    icns2png --extract icon.icns
-    for size in 16 24 32 48 64 128 256 512 1024; do
-      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
-      if [ ! -e icon_"$size"x"$size"x32.png ] ; then
-        convert -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
-      fi
-      install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
-    done;
-
-    runHook postInstall
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # To be able to use enableParallelBuilding = true
+    # the dist target needs run after the buildPhase as
+    # it depends on the all and plugin targets.
+    make "SED=sed -i" dist
   '';
+
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+
+      install -D -m755 -t $out/bin Rack
+      install -D -m755 -t $out/lib libRack.so
+
+      mkdir -p $out/share/vcv-rack
+      cp -r res cacert.pem Core.json template.vcv LICENSE-GPLv3.txt $out/share/vcv-rack
+      cp -r plugins/Fundamental/dist/Fundamental-*.vcvplugin $out/share/vcv-rack/Fundamental.vcvplugin
+
+      # Extract pngs from the Apple icon image and create
+      # the missing ones from the 1024x1024 image.
+      icns2png --extract icon.icns
+      for size in 16 24 32 48 64 128 256 512 1024; do
+        mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+        if [ ! -e icon_"$size"x"$size"x32.png ] ; then
+          convert -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
+        fi
+        install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
+      done;
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/{bin,Applications}
+      mv dist/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app' \
+        $out/Applications
+
+      # plugins/Fundamental/dist/Fundamental-*.vcvplugin
+      cp -r res cacert.pem Core.json template.vcv LICENSE-GPLv3.txt \
+        $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/Resources
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   dontWrapGApps = true;
-  postFixup = ''
-    # Wrap gApp and override the default global resource file directory
-    wrapProgram $out/bin/Rack \
-        "''${gappsWrapperArgs[@]}" \
-        --add-flags "-s $out/share/vcv-rack"
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Wrap gApp and override the default global resource file directory
+      wrapProgram $out/bin/Rack \
+          "''${gappsWrapperArgs[@]}" \
+          --add-flags "-s $out/share/vcv-rack"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper \
+        $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/MacOS/Rack \
+        $out/bin/${finalAttrs.meta.mainProgram} \
+        --add-flags "-s $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/Resources"
+    '';
 
   meta = with lib; {
     description = "Open-source virtual modular synthesizer";
@@ -273,6 +342,6 @@ stdenv.mkDerivation (finalAttrs: {
       ddelabru
     ];
     mainProgram = "Rack";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })
