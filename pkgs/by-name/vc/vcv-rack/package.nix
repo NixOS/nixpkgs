@@ -88,18 +88,18 @@ let
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "b453f192d22b1c951d71e8a73f28a37cd96a7b6c"; # tip of branch v2
-    hash = "sha256-Wr5G2wgCMIduMqFdIJUtkWQEbvihte/WZb/qUWXGE04=";
+    rev = "v2.6.1";
+    hash = "sha256-nsg0flfZUm2zGwHlXIwZKXvR6OF9NyXFipQ6IoVW2o8=";
   };
   vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
-    version = "5.1.0-unstable-2020-01-30";
+    version = "5.1.0-unstable-2022-11-22";
 
     src = fetchFromGitHub {
       owner = "VCVRack";
       repo = "rtaudio";
-      rev = "ece277bd839603648c80c8a5f145678e13bc23f3"; # tip of master branch
-      hash = "sha256-W3QvuOyOqI9P82IwGGHIjFbIgMwLREdwpvGUMxWg94U=";
+      rev = "22d64cdcb151e388791caceee8aa0011a6aa46e0"; # tip of master branch
+      hash = "sha256-BW5XwbsuwbbFDHXnQrUMM+1p7Zy7zjwdHHQFGo2XMv0=";
     };
 
     nativeBuildInputs = [
@@ -128,7 +128,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcv-rack";
-  version = "2.6.0";
+  version = "2.6.3";
 
   desktopItems = [
     (makeDesktopItem {
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "VCVRack";
     repo = "Rack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-leI0wwhYiA8qktJFe6DuZjs6q5tMFQ4WFLD4Ivom5+E=";
+    hash = "sha256-u9PSYjjuvsLX0r1MOAhPRc2fIBI4BY6bpo43j5XEX+M=";
   };
 
   patches = [
@@ -196,6 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix reference to zenity
       substituteInPlace dep/osdialog/osdialog_zenity.c \
         --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
+      # For some unknown reason __yield isn't available on aarch64-linux
+      substituteInPlace src/engine/Engine.cpp \
+        --replace-fail '__yield();' 'asm volatile("yield");'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # * Set VERSION from finalAttrs to avoid build using git to determine version
@@ -224,11 +227,12 @@ stdenv.mkDerivation (finalAttrs: {
       jq
       makeWrapper
       pkg-config
+      zstd
     ]
     ++ lib.optionals stdenv.isLinux [
       copyDesktopItems
-      libicns
       imagemagick
+      libicns
       wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.isDarwin [ rsync ];
