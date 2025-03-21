@@ -9,6 +9,7 @@
   fetchFromGitHub,
   fetchpatch,
   glpk,
+  highs,
   lib,
   pkg-config,
   protobuf,
@@ -22,33 +23,47 @@
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "9.9";
+  version = "9.11";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = "v${version}";
-    hash = "sha256-Ip2mKl+MuzOPaF1a2FTubqT0tA4gzDnD8dR7dLaHHo8=";
+    tag = "v${version}";
+    hash = "sha256-aRhUAs9Otvra7VPJvrf0fhDCGpYhOw1//BC4dFJ7/xI=";
   };
 
   patches = [
     (fetchpatch {
-      name = "0001-Allow-to-use-pybind11-system-packages.patch";
-      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Allow-to-use-pybind11-system-packages.patch?rev=18";
-      hash = "sha256-+hFgZt9G0EMpMMXA/qnHjOdk6+eIlgV6T0qu36s4Z/Y=";
+      name = "0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch?rev=19";
+      hash = "sha256-QHQ9E3mhTznJVKB+nP/9jct3uz+SPcOZ7w5tjOQ8iuk=";
     })
     (fetchpatch {
-      name = "0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch";
-      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch?rev=18";
-      hash = "sha256-vAjxUW1SjHRG2mpyjHjrAkyoix1BnGCxzvFDMzRp3Bk=";
+      name = "0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch?rev=19";
+      hash = "sha256-BNB3KlgjpWcZtb9e68Jkc/4xC4K0c+Iisw0eS6ltYXE=";
+    })
+    (fetchpatch {
+      name = "0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch?rev=19";
+      hash = "sha256-r38ZbRkEW1ZvJb0Uf56c0+HcnfouZZJeEYlIK7quSjQ=";
     })
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
   # cross-compiling. Instead, just tell it where to find protoc.
-  postPatch = ''
-    echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
-  '';
+  postPatch =
+    ''
+      echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
+    ''
+    # Patches from OpenSUSE:
+    # https://build.opensuse.org/projects/science/packages/google-or-tools/files/google-or-tools.spec?expand=1
+    + ''
+      sed -i -e '/CMAKE_DEPENDENT_OPTION(INSTALL_DOC/ s/BUILD_CXX AND BUILD_DOC/BUILD_CXX/' CMakeLists.txt
+      find . -iname \*CMakeLists.txt -exec sed -i -e 's/pybind11_native_proto_caster/pybind11_protobuf::pybind11_native_proto_caster/' '{}' \;
+      sed -i -e 's/TARGET pybind11_native_proto_caster/TARGET pybind11_protobuf::pybind11_native_proto_caster/' cmake/check_deps.cmake
+      sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
+    '';
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -101,8 +116,9 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [
     abseil-cpp
+    highs
     protobuf
-    (python.pkgs.protobuf4.override { protobuf = protobuf; })
+    (python.pkgs.protobuf.override { protobuf = protobuf; })
     python.pkgs.numpy
     python.pkgs.pandas
     python.pkgs.immutabledict
