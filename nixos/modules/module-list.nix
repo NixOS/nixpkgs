@@ -536,6 +536,7 @@
   ./services/databases/postgrest.nix
   ./services/databases/redis.nix
   ./services/databases/rethinkdb.nix
+  ./services/databases/spacetimedb.nix
   ./services/databases/surrealdb.nix
   ./services/databases/tigerbeetle.nix
   ./services/databases/victorialogs.nix

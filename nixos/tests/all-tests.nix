@@ -1368,6 +1368,7 @@ in
   sonarr = runTest ./sonarr.nix;
   sonic-server = runTest ./sonic-server.nix;
   spacecookie = runTest ./spacecookie.nix;
+  spacetimedb = handleTest ./spacetimedb.nix { };
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
   spiped = runTest ./spiped.nix;
   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;
