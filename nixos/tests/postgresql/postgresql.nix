@@ -54,7 +54,6 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             # TODO(@Ma27) split this off into its own VM test and move a few other
             # extension tests to use postgresqlTestExtension.
             extensions = ps: with ps; [ plv8 ];
