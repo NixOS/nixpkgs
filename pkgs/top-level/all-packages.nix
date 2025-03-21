@@ -15176,11 +15176,12 @@ with pkgs;
   quake3wrapper = callPackage ../games/quake3/wrapper { };
 
   quake3demo = quake3wrapper {
-    name = "quake3-demo-${lib.getVersion quake3demodata}";
     pname = "quake3-demo";
-    description = "Demo of Quake 3 Arena, a classic first-person shooter";
     paks = [
+      quake3demodata
       quake3pointrelease
+    ];
+  };
       quake3demodata
     ];
   };
