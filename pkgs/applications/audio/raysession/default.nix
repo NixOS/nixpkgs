@@ -24,6 +24,7 @@ buildPythonApplication rec {
     substituteInPlace Makefile --replace '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
     # Do not wrap an importable module with a shell script.
     chmod -x src/daemon/desktops_memory.py
+    chmod -x src/clients/jackpatch/main_loop.py
   '';
 
   format = "other";
