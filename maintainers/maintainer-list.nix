@@ -21434,6 +21434,11 @@
     github = "scvalex";
     githubId = 2588;
   };
+  sd234678 = {
+    name = "sd234678";
+    github = "sd234678";
+    githubId = 48051938;
+  };
   sdaqo = {
     name = "sdaqo";
     email = "sdaqo.dev@protonmail.com";
