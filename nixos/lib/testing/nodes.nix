@@ -13,6 +13,7 @@ let
     mapAttrs
     mkDefault
     mkIf
+    mkMerge
     mkOption
     mkForce
     optional
@@ -77,6 +78,14 @@ in
 {
 
   options = {
+    sshBackdoor = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to turn on the vsock-based SSH backdoor for all VMs.";
+      };
+    };
+
     node.type = mkOption {
       type = types.raw;
       default = baseOS.type;
@@ -172,10 +181,15 @@ in
 
     passthru.nodes = config.nodesCompat;
 
-    defaults = mkIf config.node.pkgsReadOnly {
-      nixpkgs.pkgs = config.node.pkgs;
-      imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
-    };
+    defaults = mkMerge [
+      (mkIf config.node.pkgsReadOnly {
+        nixpkgs.pkgs = config.node.pkgs;
+        imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
+      })
+      (mkIf config.sshBackdoor.enable {
+        testing.sshBackdoor.enable = true;
+      })
+    ];
 
   };
 }

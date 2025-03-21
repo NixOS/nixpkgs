@@ -87,6 +87,10 @@ in
       machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
 
+    sshBackdoor = {
+      enable = mkEnableOption "vsock-based ssh backdoor for the VM";
+    };
+
   };
 
   config = {
@@ -99,6 +103,18 @@ in
         '';
       }
     ];
+
+    services.openssh = mkIf config.testing.sshBackdoor.enable {
+      enable = true;
+      settings = {
+        PermitRootLogin = "yes";
+        PermitEmptyPasswords = "yes";
+      };
+    };
+
+    security.pam.services.sshd = mkIf config.testing.sshBackdoor.enable {
+      allowNullPassword = true;
+    };
 
     systemd.services.backdoor = lib.mkMerge [
       backdoorService
@@ -175,6 +191,10 @@ in
         #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
         package = lib.mkDefault pkgs.qemu_test;
+
+        options = mkIf config.testing.sshBackdoor.enable [
+          "-device vhost-vsock-pci,guest-cid=${toString (config.virtualisation.test.nodeNumber + 2)}"
+        ];
       };
     };
 
