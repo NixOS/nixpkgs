@@ -2618,8 +2618,9 @@ in
     checkInputs = with self; [
       # Optional pickers
       fzf-lua
-      telescope-nvim
       mini-nvim
+      snacks-nvim
+      telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
   };
