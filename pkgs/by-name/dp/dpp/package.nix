@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/brainboxdotcc/DPP/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xbz ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
