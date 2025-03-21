@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "4693a2d74bc4f2b7c223beab3118a7db006db979";
+  version = "aed58003b081dadf660642a62a8dcf708967aeca";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "${version}";
-    hash = "sha256-gBrslfaOM6eyq8Z6wBdYI+n7VFeJ/IN+3on3dtvcMCU=";
+    hash = "sha256-IBA2POfM7BMOxjUU0oIN5B/o3b0/z7kuEjpu+DwJyFk=";
   };
 
   useFetchCargoVendor = true;
