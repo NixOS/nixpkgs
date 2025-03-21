@@ -1205,6 +1205,7 @@ mapAliases {
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
+  platypus = throw "platypus is unmaintained and has not merged Python3 support"; # Added 2025-03-20
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
   pltScheme = racket; # just to be sure
