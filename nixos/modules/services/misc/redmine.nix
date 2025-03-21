@@ -488,6 +488,7 @@ in
         ${bundle} exec rake db:migrate
         ${bundle} exec rake redmine:plugins:migrate
         ${bundle} exec rake redmine:load_default_data
+        ${bundle} exec rake assets:precompile
       '';
 
       serviceConfig = {
