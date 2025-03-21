@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       qyliss
       nyabinary
+      HeitorAugustoLN
     ];
     platforms = lib.platforms.linux;
   };
