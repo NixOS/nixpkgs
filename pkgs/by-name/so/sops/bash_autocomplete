@@ -1,19 +1,33 @@
 #!/usr/bin/env bash
-# based on https://github.com/urfave/cli/blob/v2.3.0/autocomplete/bash_autocomplete
+# based on https://github.com/urfave/cli/blob/v3.0.0-beta1.01/autocomplete/bash_autocomplete
 
-_cli_bash_autocomplete() {
-    if [[ "${COMP_WORDS[0]}" != "source" ]]; then
-        local cur opts
-        COMPREPLY=()
-        cur="${COMP_WORDS[COMP_CWORD]}"
-        if [[ "$cur" == "-"* ]]; then
-            opts=$("${COMP_WORDS[@]:0:$COMP_CWORD}" "${cur}" --generate-bash-completion)
-        else
-            opts=$("${COMP_WORDS[@]:0:$COMP_CWORD}" --generate-bash-completion)
-        fi
-        IFS=$'\n' read -d '' -ra COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
-        return 0
-    fi
+# Macs have bash3 for which the bash-completion package doesn't include
+# _init_completion. This is a minimal version of that function.
+__sops_init_completion() {
+  COMPREPLY=()
+  _get_comp_words_by_ref "$@" cur prev words cword
 }
 
-complete -o bashdefault -o default -o nospace -F _cli_bash_autocomplete sops
+__sops_bash_autocomplete() {
+  if [[ "${COMP_WORDS[0]}" != "source" ]]; then
+    local cur opts base words
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    if declare -F _init_completion >/dev/null 2>&1; then
+      _init_completion -n "=:" || return
+    else
+      __sops_init_completion -n "=:" || return
+    fi
+    words=("${words[@]:0:$cword}")
+    if [[ "$cur" == "-"* ]]; then
+      requestComp="${words[*]} ${cur} --generate-bash-completion"
+    else
+      requestComp="${words[*]} --generate-bash-completion"
+    fi
+    opts=$(eval "${requestComp}" 2>/dev/null)
+    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+    return 0
+  fi
+}
+
+complete -o bashdefault -o default -o nospace -F __sops_bash_autocomplete sops

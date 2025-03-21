@@ -41,8 +41,9 @@ buildGo122Module rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installShellCompletion --cmd sops --bash ${./bash_autocomplete}
-    installShellCompletion --cmd sops --zsh ${./zsh_autocomplete}
+    installShellCompletion --cmd sops \
+      --bash ${./bash_autocomplete} \
+      --zsh ${./zsh_autocomplete}
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
