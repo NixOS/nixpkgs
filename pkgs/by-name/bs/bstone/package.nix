@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
-  version = "1.2.13";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-jK40/FdC11SWe2Vmh6cbNTxPeM1vrAveEtUWoiAh+jc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L07GfqeQPTWGQb+vOOXNgbYLYpxQ2OHFnCLWd4uSlBw=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/bin
-    mv $out/bstone* $out/bin
+    mkdir -p $out/{bin,share/bibendovsky/bstone}
+    mv $out/bstone $out/bin
+    mv $out/*.txt $out/share/bibendovsky/bstone
   '';
 
   meta = {
