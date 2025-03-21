@@ -12,9 +12,11 @@
   litellm,
   markdownify,
   mcp,
+  mcpadapt,
   openai,
   pandas,
   pillow,
+  pytest-datadir,
   pytestCheckHook,
   python-dotenv,
   rank-bm25,
@@ -30,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-6+fI5Zp2UyDgcCUXYT34zumDBqkIeW+TXnRNA+SFoxI=";
+    hash = "sha256-OgivL7L6IOqIEDHO3JUrxluMZoq768DD3hhUpIh1fac=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +70,7 @@ buildPythonPackage rec {
     litellm = [ litellm ];
     mcp = [
       mcp
-      # mcpadapt
+      mcpadapt
     ];
     # mlx-lm = [ mlx-lm ];
     openai = [ openai ];
@@ -98,6 +100,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ipython
+    pytest-datadir
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
