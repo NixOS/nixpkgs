@@ -1772,6 +1772,9 @@
   "sec-test-options-reference": [
     "index.html#sec-test-options-reference"
   ],
+  "test-opt-sshBackdoor.enable": [
+    "index.html#test-opt-sshBackdoor.enable"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
