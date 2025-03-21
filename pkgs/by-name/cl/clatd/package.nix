@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clatd";
-  version = "1.6";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "toreanderson";
     repo = "clatd";
     rev = "v${version}";
-    hash = "sha256-ZUGWQTXXgATy539NQxkZSvQA7HIWkIPsw1NJrz0xKEg=";
+    hash = "sha256-+Zr/z9iTSceqfgZ676mH+lQ1I5JHCdJuG53syPOixBA=";
   };
 
   strictDeps = true;
