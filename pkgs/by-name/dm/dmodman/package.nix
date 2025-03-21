@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, pkg-config
-, rustPlatform
-, nxmUrlHandler ? true
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  nxmUrlHandler ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
