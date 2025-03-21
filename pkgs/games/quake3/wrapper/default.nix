@@ -9,7 +9,6 @@
 
 {
   paks,
-  name ? (lib.head paks).name,
   pname ? (lib.head paks).pname,
   version ? (lib.head paks).version,
   description ? "",
@@ -27,7 +26,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "${name}-${ioquake3.name}";
+  pname = "${pname}-${ioquake3.name}";
+  inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -65,6 +65,12 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    inherit description;
+    inherit ((lib.head paks).meta)
+      description
+      longDescription
+      homepage
+      license
+      ;
+    inherit (ioquake3.meta) platforms;
   };
 }
