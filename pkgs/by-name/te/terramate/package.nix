@@ -22,6 +22,9 @@ buildGoModule rec {
 
   ldflags = [ "-extldflags" "-static" ];
 
+  # Needed for the tests to pass on macOS
+  __darwinAllowLocalNetworking = true;
+
   # Disable failing E2E tests preventing the package from building
   excludedPackages = [ "./e2etests/cloud" "./e2etests/core" ];
 
