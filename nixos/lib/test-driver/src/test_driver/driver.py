@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 from unittest import TestCase
 
-from test_driver.errors import RequestedAssertionFailed, TestScriptError
+from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
@@ -182,7 +182,11 @@ class Driver:
             symbols = self.test_symbols()  # call eagerly
             try:
                 exec(self.tests, symbols, None)
-            except TestScriptError:
+            except MachineError:
+                for line in traceback.format_exc().splitlines():
+                    self.logger.log_test_error(line)
+                sys.exit(1)
+            except RequestedAssertionFailed:
                 exc_type, exc, tb = sys.exc_info()
                 filtered = [
                     frame

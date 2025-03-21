@@ -1,23 +1,20 @@
-class TestScriptError(Exception):
+class MachineError(Exception):
     """
-    The base error class to indicate that the test script failed.
-    This (and its subclasses) get special treatment, i.e. only stack
-    frames from `testScript` are printed and the error gets prefixed
-    with `!!!` to make it easier to spot between other log-lines.
+    Exception that indicates an error that is NOT the user's fault,
+    i.e. something went wrong without the test being necessarily invalid,
+    such as failing OCR.
 
-    This class is used for errors that aren't an actual test failure,
-    but also not a bug in the driver, e.g. failing OCR.
+    To make it easier to spot, this exception (and its subclasses)
+    get a `!!!` prefix in the log output.
     """
 
 
-class RequestedAssertionFailed(TestScriptError):
+class RequestedAssertionFailed(AssertionError):
     """
-    Subclass of `TestScriptError` that gets special treatment.
+    Special assertion that gets thrown on an assertion error,
+    e.g. a failing `t.assertEqual(...)` or `machine.succeed(...)`.
 
-    Exception raised when a requested assertion fails,
-    e.g. `machine.succeed(...)` or `t.assertEqual(...)`.
-
-    This is separate from the base error class, to have a dedicated class name
-    that better represents this kind of failures.
-    (better readability in test output)
+    This gets special treatment in error reporting: i.e. it gets
+    `!!!` as prefix just as `MachineError`, but all stack frames that are
+    not from `testScript` also get removed.
     """

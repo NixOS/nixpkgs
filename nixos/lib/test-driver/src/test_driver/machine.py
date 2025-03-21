@@ -18,7 +18,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
-from test_driver.errors import RequestedAssertionFailed, TestScriptError
+from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 
 from .qmp import QMPSession
@@ -129,7 +129,7 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
     )
 
     if ret.returncode != 0:
-        raise TestScriptError(
+        raise MachineError(
             f"Image processing failed with exit code {ret.returncode}, stdout: {ret.stdout.decode()}, stderr: {ret.stderr.decode()}"
         )
 
@@ -140,7 +140,7 @@ def _perform_ocr_on_screenshot(
     screenshot_path: str, model_ids: Iterable[int]
 ) -> list[str]:
     if shutil.which("tesseract") is None:
-        raise TestScriptError("OCR requested but enableOCR is false")
+        raise MachineError("OCR requested but enableOCR is false")
 
     processed_image = _preprocess_screenshot(screenshot_path, negate=False)
     processed_negative = _preprocess_screenshot(screenshot_path, negate=True)
@@ -163,7 +163,7 @@ def _perform_ocr_on_screenshot(
                 capture_output=True,
             )
             if ret.returncode != 0:
-                raise TestScriptError(f"OCR failed with exit code {ret.returncode}")
+                raise MachineError(f"OCR failed with exit code {ret.returncode}")
             model_results.append(ret.stdout.decode("utf-8"))
 
     return model_results
@@ -922,7 +922,7 @@ class Machine:
             ret = subprocess.run(f"pnmtopng '{tmp}' > '{filename}'", shell=True)
             os.unlink(tmp)
             if ret.returncode != 0:
-                raise TestScriptError("Cannot convert screenshot")
+                raise MachineError("Cannot convert screenshot")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the
