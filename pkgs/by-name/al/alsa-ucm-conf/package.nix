@@ -5,6 +5,7 @@
   stdenvNoCC,
   coreutils,
   kmod,
+  alsa-lib,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,8 +41,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    tests = { inherit alsa-lib; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 
   meta = {
