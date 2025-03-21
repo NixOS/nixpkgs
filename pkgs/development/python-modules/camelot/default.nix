@@ -5,35 +5,37 @@
   click,
   fetchPypi,
   lib,
-  opencv4,
+  opencv-python-headless,
   openpyxl,
   pandas,
   pdfminer-six,
+  pillow,
   pkgs,
   pypdf,
+  pypdfium2,
   setuptools,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "camelot-py";
-  version = "0.11.0";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l6fZBtaF5AWaSlSaY646UfCrcqPIJlV/hEPGWhGB3+Y=";
+    pname = "camelot_py";
+    inherit version;
+    hash = "sha256-1D2Idm98NGKAP/EUZOfT0VqSI+hFly3ith73w/YtMgA=";
   };
 
   patches = [ ./ghostscript.patch ];
 
   postPatch = ''
     substituteInPlace camelot/backends/ghostscript_backend.py \
-      --replace-fail 'find_library("gs")' '""' \
       --replace-fail '@ghostscript@' ${lib.getExe pkgs.ghostscript_headless}
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [ "pypdf" ];
 
   build-system = [ setuptools ];
 
@@ -41,11 +43,13 @@ buildPythonPackage rec {
     chardet
     charset-normalizer
     click
-    opencv4
+    opencv-python-headless
     openpyxl
     pandas
     pdfminer-six
+    pillow
     pypdf
+    pypdfium2
     tabulate
   ];
 
