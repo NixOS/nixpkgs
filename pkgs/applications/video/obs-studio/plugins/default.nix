@@ -16,7 +16,7 @@
 
   obs-3d-effect = callPackage ./obs-3d-effect.nix { };
 
-  obs-advanced-masks = callPackage ./obs-advanced-masks { };
+  obs-advanced-masks = callPackage ./obs-advanced-masks.nix { };
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
