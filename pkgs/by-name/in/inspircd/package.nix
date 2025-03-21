@@ -159,6 +159,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
+  ]
+  ++ lib.optionals (lib.elem "pgsql" extraModules) [
+    libpq.pg_config
   ];
   buildInputs = extraInputs;
 
