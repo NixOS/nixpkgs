@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "mrvladus";
     repo = "Errands";
     tag = version;
-    hash = "sha256-zFI3+U40zzQL3lPPYwL/ekWA1ugOkORlJui4QT6pgQI=";
+    hash = "sha256-Gs3/DPMsoPTxH+fR7H3gPJr8ITrQDPlmw236vDnmBaA";
   };
 
   nativeBuildInputs = [
