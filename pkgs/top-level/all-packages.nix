@@ -2853,6 +2853,7 @@ with pkgs;
   interception-tools-plugins = recurseIntoAttrs {
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
     dual-function-keys = callPackage ../tools/inputmethods/interception-tools/dual-function-keys.nix { };
+    interception-k2k = callPackage ../tools/inputmethods/interception-tools/interception-k2k.nix { };
   };
 
   age-plugin-ledger = callPackage ../tools/security/age-plugin-ledger {
