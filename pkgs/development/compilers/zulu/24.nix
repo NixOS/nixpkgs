@@ -10,43 +10,43 @@ callPackage ./common.nix (
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        zuluVersion = "23.28.85";
-        jdkVersion = "23.0.0";
+        zuluVersion = "24.28.83";
+        jdkVersion = "24+36";
         hash =
           if enableJavaFX then
-            "sha256-HEQ0lxHsoyHG+ZWIlWsbkqMf/rauARafzWoiElRwekA="
+            "sha256-0EQ0lxHsoyHG+ZWIlWsbkqMf/rauARafzWoiElRwekA="
           else
-            "sha256-a1YPqBMaWkoruNFoSckLyx00LCOZNsowlSn2L3XCDJA=";
+            "sha256-01YPqBMaWkoruNFoSckLyx00LCOZNsowlSn2L3XCDJA=";
       };
 
       aarch64-linux = {
-        zuluVersion = "23.28.85";
-        jdkVersion = "23.0.0";
+        zuluVersion = "24.28.83";
+        jdkVersion = "24+36";
         hash =
           if enableJavaFX then
             throw "JavaFX is not available for aarch64-linux"
           else
-            "sha256-/i+ch7BMAwMQ1C4e3shp9BHuQ67vVXfmIK1YKs7L24M=";
+            "sha256-0i+ch7BMAwMQ1C4e3shp9BHuQ67vVXfmIK1YKs7L24M=";
       };
 
       x86_64-darwin = {
-        zuluVersion = "23.28.85";
-        jdkVersion = "23.0.0";
+        zuluVersion = "24.28.83";
+        jdkVersion = "24+36";
         hash =
           if enableJavaFX then
-            "sha256-1/YmLWA/men8jMjnhkZVMf2irf6Tc/5x7UECxqKJcL4="
+            "sha256-00YmLWA/men8jMjnhkZVMf2irf6Tc/5x7UECxqKJcL4="
           else
-            "sha256-rEr8M3KF9Z95gV8sHqi5lQD2RJjtssZx8Q8goy6danw=";
+            "sha256-0Er8M3KF9Z95gV8sHqi5lQD2RJjtssZx8Q8goy6danw=";
       };
 
       aarch64-darwin = {
-        zuluVersion = "23.28.85";
-        jdkVersion = "23.0.0";
+        zuluVersion = "24.28.83";
+        jdkVersion = "24+36";
         hash =
           if enableJavaFX then
-            "sha256-TumPJoHmvklMlcpF4PFY/Arcdc5fkX5z0xeIuNFxluQ="
+            "sha256-0umPJoHmvklMlcpF4PFY/Arcdc5fkX5z0xeIuNFxluQ="
           else
-            "sha256-gFvfJL0RQgIOATLTMdfa+fStUCrdHYC3rxy0j5eNVDc=";
+            "sha256-0FvfJL0RQgIOATLTMdfa+fStUCrdHYC3rxy0j5eNVDc=";
       };
     };
   }

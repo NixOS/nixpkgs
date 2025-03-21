@@ -19,7 +19,7 @@ buildFHSEnv {
     p: with p; [
       jar
 
-      openjdk23
+      openjdk24
       xorg.libX11
       at-spi2-atk
       cairo

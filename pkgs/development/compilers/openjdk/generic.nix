@@ -57,12 +57,12 @@
   enableJavaFX ? false,
   openjfx17,
   openjfx21,
-  openjfx23,
+  openjfx24,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
-      "23" = openjfx23;
+      "24" = openjfx24;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
@@ -75,14 +75,14 @@
   temurin-bin-11,
   temurin-bin-17,
   temurin-bin-21,
-  temurin-bin-23,
+  temurin-bin-24,
   jdk-bootstrap ?
     {
       "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
       "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
+      "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
     }
     .${featureVersion},
 }:
@@ -97,7 +97,7 @@ let
   atLeast11 = lib.versionAtLeast featureVersion "11";
   atLeast17 = lib.versionAtLeast featureVersion "17";
   atLeast21 = lib.versionAtLeast featureVersion "21";
-  atLeast23 = lib.versionAtLeast featureVersion "23";
+  atLeast24 = lib.versionAtLeast featureVersion "24";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -143,7 +143,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches =
     [
       (
-        if atLeast21 then
+        if atLeast24 then
+          ./24/patches/fix-java-home-jdk24.patch
+        else if atLeast21 then
           ./21/patches/fix-java-home-jdk21.patch
         else if atLeast11 then
           ./11/patches/fix-java-home-jdk10.patch
@@ -151,13 +153,15 @@ stdenv.mkDerivation (finalAttrs: {
           ./8/patches/fix-java-home-jdk8.patch
       )
       (
-        if atLeast11 then
+        if atLeast24 then
+          ./24/patches/read-truststore-from-env-jdk24.patch
+        else if atLeast11 then
           ./11/patches/read-truststore-from-env-jdk10.patch
         else
           ./8/patches/read-truststore-from-env-jdk8.patch
       )
     ]
-    ++ lib.optionals (!atLeast23) [
+    ++ lib.optionals (!atLeast24) [
       (
         if atLeast11 then
           ./11/patches/currency-date-range-jdk10.patch
@@ -191,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
           ./8/patches/fix-library-path-jdk8.patch
       )
     ]
-    ++ lib.optionals (atLeast17 && !atLeast23) [
+    ++ lib.optionals (atLeast17 && !atLeast24) [
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
       # so grab the work-around from
@@ -308,7 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optionals (!atLeast11) [ setJavaClassPath ];
 
-  nativeInstallCheckInputs = lib.optionals atLeast23 [
+  nativeInstallCheckInputs = lib.optionals atLeast24 [
     versionCheckHook
   ];
 
@@ -334,7 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
       "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
     ]
     ++ (
-      if atLeast23 then
+      if atLeast24 then
         [
           "--with-version-string=${version}"
           "--with-vendor-version-string=(nix)"
@@ -469,11 +473,11 @@ stdenv.mkDerivation (finalAttrs: {
       DISABLE_HOTSPOT_OS_VERSION_CHECK = "ok";
     };
 
-  ${if atLeast23 then "versionCheckProgram" else null} = "${placeholder "out"}/bin/java";
+  ${if atLeast24 then "versionCheckProgram" else null} = "${placeholder "out"}/bin/java";
 
   ${if !atLeast11 then "doCheck" else null} = false; # fails with "No rule to make target 'y'."
 
-  doInstallCheck = atLeast23;
+  doInstallCheck = atLeast24;
 
   ${if atLeast17 then "postPatch" else null} = ''
     chmod +x configure
@@ -635,7 +639,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (source) updateScript;
     }
     // (if atLeast11 then { inherit gtk3; } else { inherit gtk2; })
-    // lib.optionalAttrs (!atLeast23) {
+    // lib.optionalAttrs (!atLeast24) {
       inherit architecture;
     };
 
