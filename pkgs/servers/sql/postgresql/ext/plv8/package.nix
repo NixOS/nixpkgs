@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  jitSupport,
   lib,
   nodejs_20,
   perl,
@@ -140,6 +139,5 @@ postgresqlBuildExtension (finalAttrs: {
       "aarch64-linux"
     ];
     license = lib.licenses.postgresql;
-    broken = jitSupport;
   };
 })
