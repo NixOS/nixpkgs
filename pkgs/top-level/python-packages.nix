@@ -11906,6 +11906,8 @@ self: super: with self; {
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
+  pydantic-argparse-extensible = callPackage ../development/python-modules/pydantic-argparse-extensible { };
+
   pydantic-compat = callPackage ../development/python-modules/pydantic-compat { };
 
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
