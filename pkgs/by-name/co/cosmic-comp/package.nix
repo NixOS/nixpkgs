@@ -20,14 +20,14 @@
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
   version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-IbGMp+4nRg4v5yRvp3ujGx7+nJ6wJmly6dZBXbQAnr8=";
   };
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
     pkg-config
   ];
+
   buildInputs = [
     libglvnd
     libinput
@@ -65,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   makeFlags = [
-    "prefix=$(out)"
+    "prefix=${placeholder "out"}"
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
@@ -90,15 +91,15 @@ rustPlatform.buildRustPackage rec {
       wrapProgram $out/bin/cosmic-comp "''${wrapProgramArgs[@]}"
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-comp";
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       qyliss
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
