@@ -1051,7 +1051,7 @@ in {
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
-  scrutiny = handleTest ./scrutiny.nix {};
+  scrutiny = runTest ./scrutiny.nix;
   sddm = handleTest ./sddm.nix {};
   sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix {};
