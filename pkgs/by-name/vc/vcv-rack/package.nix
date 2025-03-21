@@ -156,6 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # N.B.: Loading modules may fail due to symbols used by the moodules
+    # not being found, to address this issue the libraries providing the
+    # symbols are re-exported when building on Darwin using -Wl,-reexport-l.
     ./rack-minimize-vendoring.patch
   ];
 
@@ -204,12 +207,16 @@ stdenv.mkDerivation (finalAttrs: {
       # * Set VERSION from finalAttrs to avoid build using git to determine version
       # * Darwin needs to build the dist target, which builds the .app container,
       #   yet we want to exclude the documentation from dist target.
+      # * Skip stripping the binary to avoid "unsupported load command" error, which
+      #   appears since several libraries are re-exported (see rack-minimize-vendoring.patch)
       # * Replace path to Fundamental module with path to produced build artifact
       #   to avoid downloading a pre-compiled version
       substituteInPlace Makefile \
         --replace-fail 'VERSION ?= $' 'VERSION ?= ${finalAttrs.version}#$' \
         --replace-fail 'DIST_HTML :=' '#DIST_HTML :=' \
+        --replace-fail '$(STRIP)' '#$(STRIP)' \
         --replace-fail 'FUNDAMENTAL_FILENAME := Fundamental' 'FUNDAMENTAL_FILENAME := plugins/Fundamental/dist/Fundamental'
+
       # Skip codesigning
       substituteInPlace plugin.mk \
         --replace-fail '$(CODESIGN)' '#$(CODESIGN)'
