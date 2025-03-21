@@ -10,6 +10,8 @@
 {
   paks,
   name ? (lib.head paks).name,
+  pname ? (lib.head paks).pname,
+  version ? (lib.head paks).version,
   description ? "",
 }:
 
@@ -36,18 +38,18 @@ stdenv.mkDerivation {
       # We add Mesa to the end of $LD_LIBRARY_PATH to provide fallback
       # software rendering. GCC is needed so that libgcc_s.so can be found
       # when Mesa is used.
-      makeWrapper ${env}/bin/ioquake3* $out/bin/quake3 \
+      makeWrapper ${env}/bin/ioquake3* $out/bin/${pname} \
         --suffix-each LD_LIBRARY_PATH ':' "${libPath}" \
         --add-flags "+set fs_basepath ${env} +set r_allowSoftwareGL 1"
 
-      makeWrapper ${env}/bin/ioq3ded* $out/bin/quake3-server \
+      makeWrapper ${env}/bin/ioq3ded* $out/bin/${pname}-server \
         --add-flags "+set fs_basepath ${env}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications $out/bin
-      makeWrapper ${env}/bin/ioquake3 $out/bin/ioquake3 \
+      makeWrapper ${env}/bin/ioquake3 $out/bin/${pname} \
         --add-flags "+set fs_basepath ${env}"
-      makeWrapper ${env}/bin/ioq3ded $out/bin/ioq3ded \
+      makeWrapper ${env}/bin/ioq3ded $out/bin/${pname}-server \
         --add-flags "+set fs_basepath ${env}"
 
       # Renaming application packages on darwin is not quite as simple as they internally
