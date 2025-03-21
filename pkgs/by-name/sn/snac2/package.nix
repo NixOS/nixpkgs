@@ -5,8 +5,7 @@
   curl,
   openssl,
   nix-update-script,
-  testers,
-  snac2,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/snac";
+  doInstallCheck = true;
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = snac2;
-      command = "${finalAttrs.meta.mainProgram} || true";
-    };
     updateScript = nix-update-script { };
   };
 
