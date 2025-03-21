@@ -660,11 +660,17 @@ stdenv.mkDerivation (
     depsTargetTarget = map lib.getDev (libDeps targetPlatform);
     depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
-    hadrianFlags = [
-      "--flavour=${ghcFlavour}"
-      "--bignum=${if enableNativeBignum then "native" else "gmp"}"
-      "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
-    ];
+    hadrianFlags =
+      [
+        "--flavour=${ghcFlavour}"
+        "--bignum=${if enableNativeBignum then "native" else "gmp"}"
+        "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "9.8") [
+        # In 9.14 this will be default with release flavour.
+        # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13444
+        "--hash-unit-ids"
+      ];
 
     buildPhase = ''
       runHook preBuild
