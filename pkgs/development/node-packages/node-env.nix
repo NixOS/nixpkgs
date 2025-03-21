@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{lib, stdenv, nodejs, pkgs, libtool, runCommand, writeTextFile, writeShellScript, ...}:
+{lib, stdenv, nodejs, pkgs, libtool, runCommand, writeTextFile, writeShellScript}:
 
 let
   inherit (nodejs) python;
