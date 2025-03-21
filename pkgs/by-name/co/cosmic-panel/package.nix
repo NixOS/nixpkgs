@@ -3,11 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  libcosmicAppHook,
   just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  wayland,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,13 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     just
-    pkg-config
-  ];
-
-  buildInputs = [
-    libglvnd
-    libxkbcommon
-    wayland
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
@@ -46,15 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
   ];
-
-  # Force linking to libEGL, which is always dlopen()ed.
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
-    map (a: "-C link-arg=${a}")
-      [
-        "-Wl,--push-state,--no-as-needed"
-        "-lEGL"
-        "-Wl,--pop-state"
-      ];
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-panel";
