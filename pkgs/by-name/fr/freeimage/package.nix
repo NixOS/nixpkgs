@@ -14,17 +14,16 @@
   jxrlib,
   pkg-config,
   fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeimage";
-  version = "unstable-2021-11-01";
+  version = "3.18.0-unstable-2024-04-18";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/freeimage/svn/";
-    rev = "1900";
-    sha256 = "rWoNlU/BWKZBPzRb1HqU6T0sT7aK6dpqKPe88+o/4sA=";
+    rev = "1911";
+    hash = "sha256-JznVZUYAbsN4FplnuXxCd/ITBhH7bfGKWXep2A6mius=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/FreeImage/trunk";
@@ -33,9 +32,23 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = ''
     rm -rf Source/Lib* Source/OpenEXR Source/ZLib
   '';
+
+  # Tell patch to work with trailing carriage returns
+  patchFlags = [
+    "-p1"
+    "--binary"
+  ];
+
   patches = [
     ./unbundle.diff
-    ./libtiff-4.4.0.diff
+    ./CVE-2020-24292.patch
+    ./CVE-2020-24293.patch
+    ./CVE-2020-24295.patch
+    ./CVE-2021-33367.patch
+    ./CVE-2021-40263.patch
+    ./CVE-2021-40266.patch
+    ./CVE-2023-47995.patch
+    ./CVE-2023-47997.patch
   ];
 
   postPatch =
@@ -58,10 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       fixDarwinDylibNames
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
     ];
+
   buildInputs = [
     libtiff
     libtiff.dev_private
@@ -107,18 +118,50 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
     knownVulnerabilities = [
-      "CVE-2021-33367"
-      "CVE-2021-40262"
-      "CVE-2021-40263"
-      "CVE-2021-40264"
-      "CVE-2021-40265"
-      "CVE-2021-40266"
-
-      "CVE-2023-47992"
-      "CVE-2023-47993"
-      "CVE-2023-47994"
-      "CVE-2023-47995"
+      "CVE-2024-31570"
+      "CVE-2024-28584"
+      "CVE-2024-28583"
+      "CVE-2024-28582"
+      "CVE-2024-28581"
+      "CVE-2024-28580"
+      "CVE-2024-28579"
+      "CVE-2024-28578"
+      "CVE-2024-28577"
+      "CVE-2024-28576"
+      "CVE-2024-28575"
+      "CVE-2024-28574"
+      "CVE-2024-28573"
+      "CVE-2024-28572"
+      "CVE-2024-28571"
+      "CVE-2024-28570"
+      "CVE-2024-28569"
+      "CVE-2024-28568"
+      "CVE-2024-28567"
+      "CVE-2024-28566"
+      "CVE-2024-28565"
+      "CVE-2024-28564"
+      "CVE-2024-28563"
+      "CVE-2024-28562"
+      "CVE-2024-9029"
+      # "CVE-2023-47997"
       "CVE-2023-47996"
+      # "CVE-2023-47995"
+      "CVE-2023-47994"
+      "CVE-2023-47993"
+      "CVE-2023-47992"
+      # "CVE-2021-40266"
+      "CVE-2021-40265"
+      "CVE-2021-40264"
+      # "CVE-2021-40263"
+      "CVE-2021-40262"
+      # "CVE-2021-33367"
+      # "CVE-2020-24295"
+      "CVE-2020-24294"
+      # "CVE-2020-24293"
+      # "CVE-2020-24292"
+      "CVE-2020-21426"
+      "CVE-2019-12214"
+      "CVE-2019-12212"
     ];
     maintainers = with lib.maintainers; [ l-as ];
     platforms = with lib.platforms; unix;
