@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = pname;
+      name = "vcv-rack";
       desktopName = "VCV Rack";
       genericName = "Eurorack simulator";
       comment = "Create music by patching together virtual synthesizer modules";
