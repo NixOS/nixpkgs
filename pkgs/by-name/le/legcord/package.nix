@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       wrmilling
       water-sucks
+      nyabinary
     ];
     platforms = [
       "x86_64-linux"
