@@ -31,9 +31,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/click-contrib/click-option-group/issues/65
-  disabledTests = [ "test_missing_group_decl_first_api" ];
-
   pythonImportsCheck = [ "click_option_group" ];
 
   disabledTests = [
