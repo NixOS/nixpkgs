@@ -492,7 +492,7 @@ in
     inherit runTest;
     forgejoPackage = pkgs.forgejo-lts;
   };
-  freenet = handleTest ./freenet.nix { };
+  freenet = runTest ./freenet.nix;
   freeswitch = handleTest ./freeswitch.nix { };
   freetube = discoverTests (import ./freetube.nix);
   freshrss = handleTest ./freshrss { };
