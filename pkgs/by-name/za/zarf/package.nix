@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  git
 }:
 
 let
@@ -19,10 +20,10 @@ buildGoModule rec {
     owner = "zarf-dev";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-cgg0tmjOlMELdtbPd/zKjOUsqbnpQ+aZx3rcS+7OKP0=";
+    hash = "sha256-E2kSUfMEqQjZxPQygcggt1nHZJ8OdSoehckwrTASfqQ=";
   };
 
-  vendorHash = "sha256-RfcOWLswzo0+/bCLO+QG75wn6mG/oW5PgP7IBpTIkH8=";
+  vendorHash = "sha256-W6aEFcOCtIO48UwKGDaA+t2XhtenMemMsk4nC+OzdSw=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -53,7 +54,7 @@ buildGoModule rec {
     "-X"
     "helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=32"
     "-X"
-    "k8s.io/component-base/version.gitVersion=v1.32.2"
+    "k8s.io/component-base/version.gitVersion=v1.32.3"
     "-X"
     "github.com/derailed/k9s/cmd.version=v0.40.5"
     "-X"
@@ -65,7 +66,7 @@ buildGoModule rec {
     "-X"
     "github.com/zarf-dev/zarf/src/cmd.helmVersion=v3.17.1"
     "-X"
-    "k8s.io/component-base/version.gitCommit=46cec01b77565e9dd354e5965a0aa63e26b7bafe"
+    "k8s.io/component-base/version.gitCommit=ab23aa4645f08bf237a8d4e57d21e5408f512a36"
     "-X"
     "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
