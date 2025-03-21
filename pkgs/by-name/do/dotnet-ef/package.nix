@@ -2,9 +2,9 @@
 
 buildDotnetGlobalTool {
   pname = "dotnet-ef";
-  version = "9.0.2";
+  version = "9.0.3";
 
-  nugetHash = "sha256-aevR1w8IDXrRLnrR5ax2BaAjGpjOWuBKJ9TzI43p7mc=";
+  nugetHash = "sha256-oRBN6Qh5PuVofmboqCpFJR3hUD+MruRYp4whjd9Yu9g=";
 
   meta = {
     description = "The Entity Framework Core tools help with design-time development tasks.";
