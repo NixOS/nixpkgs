@@ -50,14 +50,19 @@ import ../../make-test-python.nix (
         };
     };
 
-    testScript = # python
+    testScript =
+      let
+        portStr = builtins.toString port;
+      in
+      # python
       ''
         server.wait_for_unit("h2o.service")
+        server.wait_for_open_port(${portStr})
 
-        hello_world = server.succeed("curl --fail-with-body http://${domain}:${builtins.toString port}/hello_world")
+        hello_world = server.succeed("curl --fail-with-body http://${domain}:${portStr}/hello_world")
         assert "${sawatdi_chao_lok}" in hello_world
 
-        file_handler = server.succeed("curl --fail-with-body http://${domain}:${builtins.toString port}/file_handler")
+        file_handler = server.succeed("curl --fail-with-body http://${domain}:${portStr}/file_handler")
         assert "FILE_HANDLER" in file_handler
       '';
   }
