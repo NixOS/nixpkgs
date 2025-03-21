@@ -153,7 +153,11 @@ import ./make-test-python.nix (
 
     nodes = {
       machine = {
-        services.radicale.enable = true;
+        services.radicale = {
+          enable = true;
+          settings.auth.type = "none";
+        };
+
         services.xandikos = {
           enable = true;
           extraOptions = [ "--autocreate" ];
