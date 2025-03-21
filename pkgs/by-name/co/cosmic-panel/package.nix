@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
+  rustPlatform,
   fetchFromGitHub,
   just,
   pkg-config,
-  rustPlatform,
   libglvnd,
   libxkbcommon,
   wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-panel";
   version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-panel";
-    tag = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-nO7Y1SpwvfHhL0OSy7Ti+e8NPzfknW2SGs7IYoF1Jow=";
   };
 
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     just
     pkg-config
   ];
+
   buildInputs = [
     libglvnd
     libxkbcommon
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -54,15 +56,15 @@ rustPlatform.buildRustPackage rec {
         "-Wl,--pop-state"
       ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       qyliss
       nyabinary
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
