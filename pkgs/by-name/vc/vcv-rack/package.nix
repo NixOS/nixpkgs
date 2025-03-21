@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
+      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
   '';
 
   nativeBuildInputs = [
