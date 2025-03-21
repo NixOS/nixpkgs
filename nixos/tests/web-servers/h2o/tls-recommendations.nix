@@ -87,6 +87,7 @@ import ../../make-test-python.nix (
         curl_max_tls1_2_old_cipher ="curl -v --tlsv1.0 --tls-max 1.2 --ciphers 'ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256' 'https://${domain}:${portStr}/'"
 
         server_modern.wait_for_unit("h2o.service")
+        server_modern.wait_for_open_port(${portStr})
         modern_response = server_modern.succeed(curl_basic)
         assert "Hello, modern!" in modern_response
         modern_head = server_modern.succeed(curl_head)
@@ -94,6 +95,7 @@ import ../../make-test-python.nix (
         server_modern.fail(curl_max_tls1_2)
 
         server_intermediate.wait_for_unit("h2o.service")
+        server_intermediate.wait_for_open_port(${portStr})
         intermediate_response = server_intermediate.succeed(curl_basic)
         assert "Hello, intermediate!" in intermediate_response
         intermediate_head = server_modern.succeed(curl_head)
@@ -103,6 +105,7 @@ import ../../make-test-python.nix (
         server_intermediate.fail(curl_max_tls1_2_old_cipher)
 
         server_old.wait_for_unit("h2o.service")
+        server_old.wait_for_open_port(${portStr})
         old_response = server_old.succeed(curl_basic)
         assert "Hello, old!" in old_response
         old_head = server_modern.succeed(curl_head)
