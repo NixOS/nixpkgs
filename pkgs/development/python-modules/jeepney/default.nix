@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   pythonOlder,
@@ -28,19 +29,20 @@ buildPythonPackage rec {
   build-system = [ flit-core ];
 
   nativeCheckInputs = [
-    async-timeout
     dbus
     pytest
     pytest-trio
     pytest-asyncio
     testpath
     trio
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- pytest
+    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- pytest ${lib.optionalString stdenv.hostPlatform.isDarwin "--ignore=jeepney/io/tests"}
 
     runHook postCheck
   '';
