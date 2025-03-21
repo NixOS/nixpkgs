@@ -177,15 +177,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Build and dist the Fundamental plugins
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
-    substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugin.mk --replace-fail ":= all" ":= dist"
     substituteInPlace plugins/Fundamental/src/Logic.cpp \
-      --replace \
+      --replace-fail \
         "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
         "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
+      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
   '';
 
   nativeBuildInputs = [
