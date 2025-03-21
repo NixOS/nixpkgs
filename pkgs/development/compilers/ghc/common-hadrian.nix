@@ -287,11 +287,18 @@ let
     "${targetPlatform.config}-";
 
   hadrianSettings =
+    # unconditionally pass `--target` --
+    # this fixes the warning from: https://github.com/NixOS/nixpkgs/pull/379593
+    # this warning will eventually become an error.
+    [
+      "*.*.ghc.*.opts += -optc--target=${targetPlatform.config} -optcxx--target=${targetPlatform.config}"
+      "*.*.cc.c.opts += --target=${targetPlatform.config}"
+    ]
     # -fexternal-dynamic-refs apparently (because it's not clear from the
     # documentation) makes the GHC RTS able to load static libraries, which may
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
-    lib.optionals enableRelocatedStaticLibs [
+    ++ lib.optionals enableRelocatedStaticLibs [
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
@@ -508,6 +515,12 @@ stdenv.mkDerivation ({
     cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''
+  # fix the target name for aarch64-apple-darwin --
+  # GHC passes `arm64-apple-darwin` but this fails the check in cc-wrapper.
+  # see: https://github.com/NixOS/nixpkgs/pull/379593
+  + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
+    sed -i 's/arm64-apple-darwin/aarch64-apple-darwin/' llvm-targets
+  ''
   # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
   # preConfigure, so overrideAttrs can be used to modify it effectively.
   # hadrianSettings are passed via the command line so they are more visible
@@ -523,9 +536,7 @@ stdenv.mkDerivation ({
   # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
   ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
@@ -563,6 +574,13 @@ stdenv.mkDerivation ({
     "fp_cv_prog_ar_supports_dash_l=no"
   ] ++ lib.optionals enableUnregisterised [
     "--enable-unregisterised"
+    # ensure the LLVM target matches the target platform. GHC uses the wrong target
+    # name on `aarch64-darwin`, which causes problems with `cc-wrapper` thinking
+    # `clang` is being used as a cross-compiler.
+    # see: https://github.com/NixOS/nixpkgs/pull/379593
+  ] ++ lib.optionals useLLVM [
+    "LlvmTarget=${targetPlatform.config}"
+    "bootstrap_llvm_target=${targetPlatform.config}"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
