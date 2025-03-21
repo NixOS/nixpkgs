@@ -59,7 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Workspaces Epoch for the COSMIC Desktop Environment";
     mainProgram = "cosmic-workspaces";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [
+      nyabinary
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
   };
 })
