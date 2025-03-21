@@ -5904,6 +5904,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  houdini-nvim = buildVimPlugin {
+    pname = "houdini.nvim";
+    version = "2024-08-06";
+    src = fetchFromGitHub {
+      owner = "TheBlob42";
+      repo = "houdini.nvim";
+      rev = "1b7ec0a713a2aa9965848d8b93f66dc93716fd1c";
+      sha256 = "05np3p0lnsra6c6vx3h81vrba3nhwxrqb5l3qkdbx5bl58dds9bn";
+    };
+    meta.homepage = "https://github.com/TheBlob42/houdini.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   hover-nvim = buildVimPlugin {
     pname = "hover.nvim";
     version = "2024-12-11";

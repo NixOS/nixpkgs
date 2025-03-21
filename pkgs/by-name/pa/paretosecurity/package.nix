@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "paretosecurity";
-  version = "0.0.88";
+  version = "0.0.91";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = version;
-    hash = "sha256-UVnZhkajrc9q6AZvIU7oi931ugxkiVSPk1NugAERnek=";
+    hash = "sha256-/kGwV96Jp7U08jh/wPQMcoV48zQe9ixY7gpNdtFyOkk=";
   };
 
-  vendorHash = "sha256-HReQu23sHLaxc5N8h2vYv64ruJPmY4HM9whAEKV+3Eo=";
+  vendorHash = "sha256-kGrYoN0dGcSuQW47Y4LUFdHQYAoY74NOM1LLPdhmLhc=";
   proxyVendor = true;
 
   subPackages = [
@@ -53,7 +53,11 @@ buildGoModule rec {
       root helper, so that you can run the checker in userspace. Some checks
       require root permissions, and the checker asks the helper to run those.
 
-      Additionally, you can run `paretosecurity link` to configure the agent
+      Additionally, if you enable `services.paretosecurity.trayIcon`, you get a
+      little Vilfredo Pareto living in your systray showing your the current
+      status of checks.
+
+      Finally, you can run `paretosecurity link` to configure the agent
       to send the status of checks to https://dash.paretosecurity.com to make
       compliance people happy. No sending happens until your device is linked.
     '';
