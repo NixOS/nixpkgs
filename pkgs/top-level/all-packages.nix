@@ -15175,6 +15175,23 @@ with pkgs;
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
 
+  quake3arena = quake3wrapper {
+    pname = "quake3";
+    paks = [
+      quake3arenadata
+      quake3pointrelease
+    ];
+  };
+
+  quake3arena-hires = quake3wrapper {
+    pname = "quake3";
+    paks = [
+      quake3arenadata
+      quake3pointrelease
+      quake3hires
+    ];
+  };
+
   quake3demo = quake3wrapper {
     pname = "quake3-demo";
     paks = [
@@ -15182,6 +15199,7 @@ with pkgs;
       quake3pointrelease
     ];
   };
+
   quake3demo-hires = quake3wrapper {
     pname = "quake3-demo";
     paks = [
@@ -15191,6 +15209,7 @@ with pkgs;
     ];
   };
 
+  quake3arenadata = callPackage ../games/quake3/content/arena.nix { };
 
   quake3demodata = callPackage ../games/quake3/content/demo.nix { };
 
