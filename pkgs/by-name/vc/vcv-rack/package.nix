@@ -90,7 +90,7 @@ let
   };
   vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
-    version = "unstable-2020-01-30";
+    version = "5.1.0-unstable-2020-01-30";
 
     src = fetchFromGitHub {
       owner = "VCVRack";
