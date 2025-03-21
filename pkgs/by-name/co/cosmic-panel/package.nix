@@ -5,6 +5,7 @@
   fetchFromGitHub,
   libcosmicAppHook,
   just,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-panel";
