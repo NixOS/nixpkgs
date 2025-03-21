@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeimage";
-  version = "unstable-2024-04-18";
+  version = "3.18.0-unstable-2024-04-18";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/freeimage/svn/";
