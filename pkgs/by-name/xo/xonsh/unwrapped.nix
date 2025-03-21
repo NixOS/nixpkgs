@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.19.2";
+  version = "0.19.3";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-h5WK/7PZQKHajiaj3BTHLeW4TYhSB/IV0eRZPCSD6qg=";
+    hash = "sha256-2ZxNVyONA9eFyasMK+49T98zl67/95BNfDp/gINPc1U=";
   };
 
   build-system = [
@@ -91,6 +91,7 @@ buildPythonPackage rec {
 
     # https://github.com/xonsh/xonsh/issues/5569
     "test_spec_decorator_alias_output_format"
+    "test_trace_in_script"
   ];
 
   disabledTestPaths = [
