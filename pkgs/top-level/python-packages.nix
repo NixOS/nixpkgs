@@ -16106,6 +16106,8 @@ self: super: with self; {
 
   stringzilla = callPackage ../development/python-modules/stringzilla { };
 
+  strip-ansi = callPackage ../development/python-modules/strip-ansi { };
+
   stripe = callPackage ../development/python-modules/stripe { };
 
   striprtf = callPackage ../development/python-modules/striprtf { };
