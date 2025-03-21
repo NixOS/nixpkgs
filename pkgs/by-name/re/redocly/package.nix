@@ -1,9 +1,8 @@
 {
   lib,
-  pkgs,
+  nodejs,
   buildNpmPackage,
   fetchFromGitHub,
-  makeWrapper,
   redocly,
   testers,
 }:
@@ -23,7 +22,7 @@ buildNpmPackage rec {
 
   npmBuildScript = "prepare";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [];
 
   postBuild = ''
     npm --prefix packages/cli run copy-assets
@@ -38,17 +37,17 @@ buildNpmPackage rec {
     # Create a wrapper script to force the correct command name (Nodejs uses argv[1] for command name)
     mkdir -p $out/bin
     cat <<EOF > $out/bin/redocly
-    #!${lib.getBin pkgs.nodejs}/bin/node
+    #!${lib.getBin nodejs}/bin/node
     // Override argv[1] to show "redocly" instead of "cli.js"
     process.argv[1] = 'redocly';
+
+    // Set environment variables directly
+    process.env.REDOCLY_TELEMETRY = "off";
+    process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE = "true"
+
     require('$out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js');
     EOF
     chmod +x $out/bin/redocly
-
-    # Add telemetry and update notice flags
-    wrapProgram $out/bin/redocly \
-      --set-default REDOCLY_TELEMETRY off \
-      --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
   '';
 
   passthru = {
