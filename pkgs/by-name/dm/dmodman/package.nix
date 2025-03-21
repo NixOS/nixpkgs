@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
       --replace 'Exec=dmodman' "Exec=$out/bin/dmodman"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TUI downloader and update checker for Nexusmods.com";
     homepage = "https://github.com/dandels/dmodman";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "dmodman";
-    maintainers = [ maintainers.schnusch ];
+    maintainers = [ lib.maintainers.schnusch ];
   };
 }
