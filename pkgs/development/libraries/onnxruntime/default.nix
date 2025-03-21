@@ -81,7 +81,7 @@ let
     hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
-   cutlass = fetchFromGitHub {
+  cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v3.5.1";
@@ -95,8 +95,8 @@ let
     hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
   };
 
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
 in
-
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
@@ -128,6 +128,8 @@ effectiveStdenv.mkDerivation rec {
   ]) ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
     cudaPackages.cudnn-frontend
+  ] ++ lib.optionals isCudaJetson [
+    cudaPackages.autoAddCudaCompatRunpath
   ];
 
   buildInputs = [
