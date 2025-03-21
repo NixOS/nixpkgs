@@ -5,17 +5,16 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  kubernetes-helm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
   version = "3.17.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EMvKmnf4KfimjPYHoylij2kZVnvClK3Q/+offZvlO1I=";
   };
   vendorHash = "sha256-IX4zZnu8+cb2mJxQHOmZLUVxyqfWvbsRQR3q02Wpx6c=";
@@ -24,8 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
+    "-X helm.sh/helm/v3/internal/version.version=v${finalAttrs.version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -66,9 +65,9 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kubernetes-helm;
+    package = finalAttrs.finalPackage;
     command = "helm version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = with lib; {
@@ -85,4 +84,4 @@ buildGoModule rec {
       techknowlogick
     ];
   };
-}
+})
