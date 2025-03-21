@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, writeScript }:
 
 # libhdhomerun requires UDP port 65001 to be open in order to detect and communicate with tuners.
 # If your firewall is enabled, make sure to have something like:
@@ -30,6 +30,18 @@ stdenv.mkDerivation rec {
     cp *.h $out/include/hdhomerun
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeScript "update-libhdhomerun" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p ripgrep curl common-updater-scripts
+
+    set -eu -o pipefail
+
+    version="$(curl -o /dev/null -v -L \
+      "http://download.silicondust.com/hdhomerun/libhdhomerun.tgz" 2>&1 | \
+       rg '> GET.*libhdhomerun_(.*).tgz.*' -or '$1')"
+    update-source-version libhdhomerun "$version"
   '';
 
   meta = with lib; {
