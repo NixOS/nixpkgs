@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.29.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-Oa4R4R7Obg26DKWZkccqjIcrD35pBw1AYIPe2/KN8f4=";
+    hash = "sha256-1iyE0LYbVEleCdSw6fWvIHqCkWMEZrjK6tum+qytcCY=";
   };
 
-  npmDepsHash = "sha256-V0NklVsPRqRJ479nIMWqs/sXciXOm6LAlIh3YcPPDEc=";
+  npmDepsHash = "sha256-TIsVjdohsmvAAn9xQeeD5pu4CjXtYlD7bmKeDp113Lc=";
 
   npmBuildScript = "prepare";
 
@@ -29,9 +29,10 @@ buildNpmPackage rec {
   '';
 
   postInstall = ''
-    rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core}
+    rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core,respect-core}
     cp -R packages/cli $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli
     cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
+    cp -R packages/respect-core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/respect-core
 
     mkdir $out/bin
     makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
