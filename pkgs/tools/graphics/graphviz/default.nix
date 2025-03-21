@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gts
     pango
     bash
-  ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
+  ] ++ optionals withXorg (with xorg; [ libXrender ])
   ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
