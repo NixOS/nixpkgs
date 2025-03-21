@@ -482,39 +482,39 @@ rec {
   };
 
   sdk_9_0_2xx = buildNetSdk {
-    version = "9.0.201";
+    version = "9.0.202";
     srcs = {
       linux-arm = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/a2cf96fc-f298-41e2-9dc6-8c0861916597/d505f4b28a7765d7bea6d2883a7fe170/dotnet-sdk-9.0.201-linux-arm.tar.gz";
-        hash = "sha512-aBIYY1ghrUlYayCg7rA9Ap0V8s8seVB0vT4np3P5CheotrrJ30TggyM87PNiu/7n0Ma4OiSRfmlr3orX5S8RVQ==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/e41720b8-c635-4b25-bcb1-dcf307a917d6/fea66a31e0dec0411b3e123661f443fc/dotnet-sdk-9.0.202-linux-arm.tar.gz";
+        hash = "sha512-LohoPuOJS3JYHOOCnv0sxSFJaPB4Lhf1BKebyA7MMe/p1TYDA1ReRVN/mS9ayMR6rsjspeqKTvrN6XQt5sj/4A==";
       };
       linux-arm64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/6d91bd91-9bb6-4b3f-9256-83f8c982e817/9248655502cac509f9c738509913770c/dotnet-sdk-9.0.201-linux-arm64.tar.gz";
-        hash = "sha512-TreMdgg1XKJ4CZCTRZLElXntWfCYM3fEwsmaQJGXAmRkK4/uksZekbrrbGvCIGbWlYCF6s0ahQBVtS9tBENtWw==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/52daf653-e6d8-4915-aea1-9c2e2be169a5/9f3e289918eb9054770b69c0b100bb8f/dotnet-sdk-9.0.202-linux-arm64.tar.gz";
+        hash = "sha512-aRb9N5B8ZWO667XJ+CpnYdE9U6BEJFG65zrWKjanJ0R3EBei0/Zl7sqlx29qADbd1QPC4ZWo6jB5c6KSdIuH1Q==";
       };
       linux-x64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/82a7fc96-b53b-4af4-ac3a-ef0a6c9325d5/84e522c31482538cddf696d03c5b20af/dotnet-sdk-9.0.201-linux-x64.tar.gz";
-        hash = "sha512-k6gITvONqBDDyWUEwg6iAgprdVtzoZ96zGzXOotirOCt2hRFLRHmRY9z3H1Y/60i/NFR8RHSMgyyOhD9VNy3cg==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/c2220b38-c512-4447-b564-a18048d14327/965cdfe500a937c2d28bc9d2db45cd1f/dotnet-sdk-9.0.202-linux-x64.tar.gz";
+        hash = "sha512-DrUjAAI9nfZJSq372DgN3fhOLyF9RErZ/ogCkq+/N4vjcA1/vsoxNuyVliujVeRKv8n4pnnNDQjmj4XLAyDOcw==";
       };
       linux-musl-arm = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/905c96fd-1e89-4024-834f-dd2690ec6eab/6b3cec8a13b42bf55f65f65badf0b89f/dotnet-sdk-9.0.201-linux-musl-arm.tar.gz";
-        hash = "sha512-ONvoFPTs1SgfeCEFlmHuAmX7IZzeCF+s/M1Z6fs0DAOBhEkGTf6kYi3gwMbjkMoZeVFb3ne/MMvnquYUwc1PKw==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/c2399a26-a81c-4039-bc90-62a6ac27416e/25e7626b936ba69c2f0fcf1c5403f172/dotnet-sdk-9.0.202-linux-musl-arm.tar.gz";
+        hash = "sha512-OBlNZ0l9xy6/fVp+pnZGJNHFJKwmJhzoiKEK+UCrZhlzMGywC/iQmjaUIVwME0rpAZXm7hGBgEb5IOD/Zag2Yg==";
       };
       linux-musl-arm64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/26b8a5c2-b79c-425f-8356-d8f0d231bf45/0da5d6f19a28a5d07ebda7fe5a1ec536/dotnet-sdk-9.0.201-linux-musl-arm64.tar.gz";
-        hash = "sha512-DKnTE6zKGUcW/62/ck4yV3AEKOkrW9CSBV2d9jHNOiZ/PFe6dV115B+3sCeEgyG7Crbf7gN04OReVJkLNLxnqA==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/fc1b0d83-d63a-4469-b0a4-d36b3c2d7c65/c8522a9bf1a9e3c1c8ee3d1e65153641/dotnet-sdk-9.0.202-linux-musl-arm64.tar.gz";
+        hash = "sha512-IQcf9GhTtBVVacWnD9gYa4JQdZ2x15RRmOUjAjvjzQ6XBYSZSR8fLS13FWphkZtih8cN9VILTsASqp7BcoifbQ==";
       };
       linux-musl-x64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/1de65d68-6aaf-46dc-b103-5461e03b8d81/160ce3ce92da0cc3eaf465279b6b61f1/dotnet-sdk-9.0.201-linux-musl-x64.tar.gz";
-        hash = "sha512-dW/ohdWRYEDHeZXO7QLoUqk+7pRIn7JSHZYT2oCxoGbAVTUmxbPWwkvNAxwQ6YSK2A0nt1lF5GmZCeat/Tm6yw==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/c99de83d-6caa-4ec0-ae22-b542cef5833a/90ef16f45a552623155d86732478f958/dotnet-sdk-9.0.202-linux-musl-x64.tar.gz";
+        hash = "sha512-i2U40wVt2fIx2WTaotB61xQJtObrmR1AasHwdiYAEIVXNya6NSlLVPLoWW06d+AY1y6l307GH7t5+qBFEKSfow==";
       };
       osx-arm64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/2dfd9746-db33-464f-93f7-6101f0f85968/6d20c7591ed80ad5c8b8039860b4626d/dotnet-sdk-9.0.201-osx-arm64.tar.gz";
-        hash = "sha512-Il3C3Gfx/EHAUgnkmjFWUbIBlv8Ch/le4IPkyTLJDu17ePaCh6iJpB+z7RH0jQt19ihf0OgWEvmEtZz6c9Cnww==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/98cc1e45-e17c-4e63-afb1-86583dce24fe/948df23085579a4ce3f38620540eb088/dotnet-sdk-9.0.202-osx-arm64.tar.gz";
+        hash = "sha512-Y7rd4WFK6op1UfjlbEt7o3mxXzfmwAgTPiLAjfBgfquMPC8DBuRB6f5gwhZt7JUycqDL0VDrWwt32sWyh4gBFQ==";
       };
       osx-x64 = {
-        url = "https://download.visualstudio.microsoft.com/download/pr/abc40bfa-5976-482c-9143-e8ac8ed267dd/8ec0035953d18fcb07aa3bb033ca35a2/dotnet-sdk-9.0.201-osx-x64.tar.gz";
-        hash = "sha512-azGDM5p7T81pdXMfDEB5p/oaYYvPejNYOqNe2NvtXYQeXxfOEYQWwh/qcrq/q9D8LMBCZvNq+dbHvIxVIMtagQ==";
+        url = "https://download.visualstudio.microsoft.com/download/pr/bc0334a2-641c-4e60-b07b-b1f65c05da0f/f1e9820b1ad0ddf0104103cd5d4fe69b/dotnet-sdk-9.0.202-osx-x64.tar.gz";
+        hash = "sha512-+ke1cSRipwSu7TeiOZB0ER5vX2+wN3ypO/qpF3sx+VCM3X9JLV6iTgzTw6D7l3u7XlgqDr/YS6oOxNCnq9BRjQ==";
       };
     };
     inherit commonPackages hostPackages targetPackages;
