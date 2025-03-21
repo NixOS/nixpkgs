@@ -6904,12 +6904,6 @@ with pkgs;
     wxSupport = false;
     systemdSupport = false;
   };
-  beam_nodocs = callPackage ./beam-packages.nix {
-    beam = beam_nodocs;
-    wxSupport = false;
-    systemdSupport = false;
-    ex_docSupport = false;
-  };
 
   inherit (beam.interpreters)
     erlang erlang_28 erlang_27 erlang_26 erlang_25
@@ -8751,6 +8745,8 @@ with pkgs;
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
     protobuf = protobuf_21;
   };
+
+  gamt  = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
 
   gcr = callPackage ../development/libraries/gcr { };
 

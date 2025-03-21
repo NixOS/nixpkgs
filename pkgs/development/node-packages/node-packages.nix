@@ -54272,33 +54272,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  ijavascript = nodeEnv.buildNodePackage {
-    name = "ijavascript";
-    packageName = "ijavascript";
-    version = "5.2.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/ijavascript/-/ijavascript-5.2.1.tgz";
-      sha512 = "kH7hudp+S+8++ngjUXbiyHOhp3qa4oDVUkmf6p7+7s15PIBDv5zx878pxNRdGcWhYGy5TT683EOqeKMQw8jrFA==";
-    };
-    dependencies = [
-      sources."jmp-2.0.0"
-      sources."jp-kernel-2.0.0"
-      sources."nan-2.17.0"
-      sources."nel-1.3.0"
-      sources."node-gyp-build-4.8.4"
-      sources."uuid-3.4.0"
-      sources."zeromq-5.3.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "IJavascript is a Javascript kernel for the Jupyter notebook";
-      homepage = "https://n-riesco.github.io/ijavascript";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   imapnotify = nodeEnv.buildNodePackage {
     name = "imapnotify";
     packageName = "imapnotify";
@@ -58547,24 +58520,6 @@ in
     meta = {
       description = "Expose localhost to the world";
       homepage = "https://github.com/localtunnel/localtunnel#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  lodash = nodeEnv.buildNodePackage {
-    name = "lodash";
-    packageName = "lodash";
-    version = "4.17.21";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
-      sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Lodash modular utilities.";
-      homepage = "https://lodash.com/";
       license = "MIT";
     };
     production = true;

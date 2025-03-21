@@ -1161,9 +1161,9 @@ in
   };
 
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
+    # Optional dap integration
+    checkInputs = [ self.nvim-dap ];
     dependencies = [ self.plenary-nvim ];
-    # Optional nvim-dap module
-    nvimSkipModule = "flutter-tools.dap";
   };
 
   follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
@@ -2382,6 +2382,11 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
+    # Test module
+    nvimSkipModule = [ "nvim-highlight-colors.color.converters_spec" ];
+  };
+
   nvim-java = super.nvim-java.overrideAttrs {
     dependencies = with self; [
       lua-async
@@ -2613,8 +2618,9 @@ in
     checkInputs = with self; [
       # Optional pickers
       fzf-lua
-      telescope-nvim
       mini-nvim
+      snacks-nvim
+      telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
   };
