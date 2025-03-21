@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "elfx86exts";
   version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "pkgw";
-    repo = pname;
+    repo = "elfx86exts";
     rev = "26bf98cf1fc773196e594c48bfe808d7151076f6";
     hash = "sha256-xNmaKGbMN92CPIQQRbdmeePk5Wt9XcIsB/2vbk5NJzg=";
   };

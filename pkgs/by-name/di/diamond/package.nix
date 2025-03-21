@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diamond";
-  version = "2.1.10";
+  version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "sha256-rNwoHb2jbQwL1bnP5KsI/SsHNN9EeXzsGnMpFhXrc1o=";
+    sha256 = "sha256-X/6sOClMFGBYksMrVfM1Y7MM3NmBEiRpmLg4Rbatc+w=";
   };
 
   nativeBuildInputs = [ cmake ];

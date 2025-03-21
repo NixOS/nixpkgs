@@ -36,12 +36,8 @@ let
       (callPackage ./common/passthru-private-frameworks.nix { inherit sdkVersion; })
       (callPackage ./common/passthru-source-release-files.nix { inherit sdkVersion; })
       (callPackage ./common/remove-disallowed-packages.nix { })
+      (callPackage ./common/process-stubs.nix { })
     ]
-    # Only process stubs and convert them to tbd-v4 if jq is available. This can be made unconditional once
-    # the bootstrap tools have jq and llvm-readtapi.
-    ++ lib.optional (jq != null && lib.getName llvm != "bootstrap-stage0-llvm") (
-      callPackage ./common/process-stubs.nix { }
-    )
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })

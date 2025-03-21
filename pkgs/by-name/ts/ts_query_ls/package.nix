@@ -6,7 +6,7 @@
 }:
 let
   pname = "ts_query_ls";
-  version = "1.8.0";
+  version = "1.9.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage {
     owner = "ribru17";
     repo = "ts_query_ls";
     rev = "v${version}";
-    hash = "sha256-HSYPYiYoU8bcMJkq27gSDELLxL8uCU9bHvf1JQq9tVI=";
+    hash = "sha256-pjV5WRHcBZUFGr06YKlkZST0E47SNt5bxOM7my3TiF8=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-h1Qm4DSknSmeo7KKrdC8b7VNw/dzQ6fEgX4MWQcrAnk=";
+  cargoHash = "sha256-Tyw8IqaqHmxN//MNtrSuS0xLwh+xDjemquKouLIlsHQ=";
 
   meta = {
     description = "LSP implementation for Tree-sitter's query files";

@@ -6,24 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "anchor";
-  version = "0.30.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "coral-xyz";
     repo = "anchor";
     rev = "v${version}";
-    hash = "sha256-NL8ySfvnCGKu1PTU4PJKTQt+Vsbcj+F1YYDzu0mSUoY=";
+    hash = "sha256-rwf2PWHoUl8Rkmktb2u7veRrIcLT3syi7M2OZxdxjG4=";
     fetchSubmodules = true;
   };
 
-  cargoPatches = [ ./0001-update-time-rs.patch ];
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "serum_dex-0.4.0" = "sha256-Nzhh3OcAFE2LcbUgrA4zE2TnUMfV0dD4iH6fTi48GcI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ack2/WFrycfYHYVnZt0Q94WJdQrvLU/VZYm1KeqOjIQ=";
 
   checkFlags = [
     # the following test cases try to access network, skip them
@@ -37,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/coral-xyz/anchor";
     changelog = "https://github.com/coral-xyz/anchor/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ Denommus ];
     mainProgram = "anchor";
   };
 }

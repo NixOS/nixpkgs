@@ -14,7 +14,7 @@
   installShellFiles,
   xterm,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xvfb-run";
   version = "1+g87f6705";
 

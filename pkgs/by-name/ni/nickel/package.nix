@@ -1,10 +1,14 @@
 {
   lib,
+  boost,
   rustPlatform,
   fetchFromGitHub,
   python3,
   versionCheckHook,
+  pkg-config,
+  nix,
   nix-update-script,
+  enableNixImport ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,16 +30,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p nickel-lang-lsp"
   ];
 
-  nativeBuildInputs = [
-    python3
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals enableNixImport [
+      pkg-config
+    ];
+
+  buildInputs = lib.optionals enableNixImport [
+    nix
+    boost
   ];
+
+  buildFeatures = lib.optionals enableNixImport [ "nix-experimental" ];
 
   outputs = [
     "out"
     "nls"
   ];
 
-  # This fixes the way comrak is defined as a dependency, without the sed the build fails:
+  # This fixes the way comrak is defined as a dependency, without it the build fails:
   #
   # cargo metadata failure: error: Package `nickel-lang-core v0.10.0
   # (/build/source/core)` does not have feature `comrak`. It has an optional

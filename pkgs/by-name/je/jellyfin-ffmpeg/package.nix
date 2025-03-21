@@ -1,6 +1,5 @@
 { ffmpeg_7-full
 , fetchFromGitHub
-, fetchpatch
 , lib
 }:
 

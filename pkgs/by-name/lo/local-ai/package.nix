@@ -19,6 +19,7 @@
   makeWrapper,
   ncurses,
   which,
+  opencv,
 
   enable_upx ? true,
   upx,
@@ -45,12 +46,6 @@
   opencl-headers,
 
   with_vulkan ? false,
-
-  with_tinydream ? false, # do not compile with cublas
-  ncnn,
-
-  with_stablediffusion ? true,
-  opencv,
 
   with_tts ? true,
   onnxruntime,
@@ -86,45 +81,6 @@ let
     libcufft
     ;
 
-  go-llama = effectiveStdenv.mkDerivation {
-    name = "go-llama";
-    src = fetchFromGitHub {
-      owner = "go-skynet";
-      repo = "go-llama.cpp";
-      rev = "2b57a8ae43e4699d3dc5d1496a1ccd42922993be";
-      hash = "sha256-D6SEg5pPcswGyKAmF4QTJP6/Y1vjRr7m7REguag+too=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [
-      "libbinding.a"
-      "BUILD_TYPE=${BUILD_TYPE}"
-    ];
-
-    buildInputs =
-      [ ]
-      ++ lib.optionals with_cublas [
-        cuda_cccl
-        cuda_cudart
-        libcublas
-      ]
-      ++ lib.optionals with_clblas [
-        clblast
-        ocl-icd
-        opencl-headers
-      ]
-      ++ lib.optionals with_openblas [ openblas.dev ];
-
-    nativeBuildInputs = [ cmake ] ++ lib.optionals with_cublas [ cuda_nvcc ];
-
-    dontUseCmakeConfigure = true;
-
-    installPhase = ''
-      mkdir $out
-      tar cf - --exclude=build --exclude=CMakeFiles --exclude="*.o" . \
-        | tar xf - -C $out
-    '';
-  };
-
   llama-cpp-rpc =
     (llama-cpp-grpc.overrideAttrs (prev: {
       name = "llama-cpp-rpc";
@@ -151,8 +107,8 @@ let
         src = fetchFromGitHub {
           owner = "ggml-org";
           repo = "llama.cpp";
-          rev = "ba8a1f9c5b675459c55a83e3f97f10df3a66c788";
-          hash = "sha256-YunQh1760AcknBFwHc6uMZJ7V4OzEAKiwB9HBH1n4bc=";
+          rev = "300907b2110cc17b4337334dc397e05de2d8f5e0";
+          hash = "sha256-7jPgToZ8Xs+8DfXP5WFWZKhqFdYcZ9yFzWVKjvOttIA=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -325,66 +281,6 @@ let
     '';
   };
 
-  go-stable-diffusion = stdenv.mkDerivation {
-    name = "go-stable-diffusion";
-    src = fetchFromGitHub {
-      owner = "mudler";
-      repo = "go-stable-diffusion";
-      rev = "4a3cd6aeae6f66ee57eae9a0075f8c58c3a6a38f";
-      hash = "sha256-KXUvMP6cDyWib4rG0RmVRm3pgrdsfKXaH3k0v5/mTe8=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [ "libstablediffusion.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ opencv ];
-    env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
-    installPhase = ''
-      mkdir $out
-      tar cf - --exclude=CMakeFiles --exclude="*.o" --exclude="*.so" --exclude="*.so.*" . \
-        | tar xf - -C $out
-    '';
-  };
-
-  go-tiny-dream-ncnn = ncnn.overrideAttrs (self: {
-    name = "go-tiny-dream-ncnn";
-    inherit (go-tiny-dream) src;
-    sourceRoot = "${go-tiny-dream.src.name}/ncnn";
-    cmakeFlags = self.cmakeFlags ++ [
-      (lib.cmakeBool "NCNN_SHARED_LIB" false)
-      (lib.cmakeBool "NCNN_OPENMP" false)
-      (lib.cmakeBool "NCNN_VULKAN" false)
-      (lib.cmakeBool "NCNN_AVX" enable_avx)
-      (lib.cmakeBool "NCNN_AVX2" enable_avx2)
-      (lib.cmakeBool "NCNN_AVX512" enable_avx512)
-      (lib.cmakeBool "NCNN_FMA" enable_fma)
-      (lib.cmakeBool "NCNN_F16C" enable_f16c)
-    ];
-  });
-
-  go-tiny-dream = effectiveStdenv.mkDerivation {
-    name = "go-tiny-dream";
-    src = fetchFromGitHub {
-      owner = "M0Rf30";
-      repo = "go-tiny-dream";
-      rev = "c04fa463ace9d9a6464313aa5f9cd0f953b6c057";
-      hash = "sha256-uow3vbAI4F/fTGjYOKOLqTpKq7NgGYSZhGlEhn7h6s0=";
-      fetchSubmodules = true;
-    };
-    postUnpack = ''
-      rm -rf source/ncnn
-      mkdir -p source/ncnn/build/src
-      cp -r --no-preserve=mode ${go-tiny-dream-ncnn}/lib/. ${go-tiny-dream-ncnn}/include/. source/ncnn/build/src
-    '';
-    buildFlags = [ "libtinydream.a" ];
-    installPhase = ''
-      mkdir $out
-      tar cf - --exclude="*.o" . \
-        | tar xf - -C $out
-    '';
-    meta.broken = lib.versionOlder go-tiny-dream.stdenv.cc.version "13";
-  };
-
   bark = stdenv.mkDerivation {
     name = "bark";
     src = fetchFromGitHub {
@@ -409,8 +305,8 @@ let
     src = fetchFromGitHub {
       owner = "leejet";
       repo = "stable-diffusion.cpp";
-      rev = "dcf91f9e0f2cbf9da472ee2a556751ed4bab2d2a";
-      hash = "sha256-NHIjLZNfx9G6olp0VWBthuf7jIQC/qVRw6q9A6H866E=";
+      rev = "d46ed5e184b97c2018dc2e8105925bdb8775e02c";
+      hash = "sha256-5i2HjkdaQEmlUWeHucQyrS8zNS+xyB7Zj+1oA/xsv2k=";
       fetchSubmodules = true;
     };
     installPhase = ''
@@ -424,10 +320,7 @@ let
     buildInputs = [ opencv ];
   };
 
-  GO_TAGS =
-    lib.optional with_tinydream "tinydream"
-    ++ lib.optional with_tts "tts"
-    ++ lib.optional with_stablediffusion "stablediffusion";
+  GO_TAGS = lib.optional with_tts "tts";
 
   effectiveStdenv =
     if with_cublas then
@@ -438,12 +331,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.25.0";
+  version = "2.26.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-y0Pj74A2t5DpfI/tCEnV/w2zHLDZzXLJtgFLgng4MFw=";
+    hash = "sha256-eHylgEbPNQ8CVLlstkeQH6jqYOKfvel1uU5ro8DkLJs=";
   };
 
   prepare-sources =
@@ -452,14 +345,9 @@ let
     in
     ''
       mkdir sources
-      ${cp} ${go-llama} sources/go-llama.cpp
       ${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper
       ${cp} ${whisper-cpp.src} sources/whisper.cpp
       cp ${whisper-cpp}/lib/lib*.a sources/whisper.cpp
-      ${cp} ${
-        if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src
-      } sources/go-stable-diffusion
-      ${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream
       ${cp} ${bark} sources/bark.cpp
       ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
@@ -467,9 +355,9 @@ let
   self = buildGo123Module.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-5xWrPsQwmGIA2k8OFR9OH3BeCUvLETygViWEOIRgjB0=";
+    vendorHash = "sha256-6loR8bvt5BlijufUBVDpxNS/cVCMmbaCwEhYpJKwGys=";
 
-    env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
+    env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
 
     postPatch =
       ''
@@ -480,6 +368,9 @@ let
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
+
+        sed -i backend/go/image/stablediffusion-ggml/Makefile \
+          -e '/^libsd/ s,$, $(COMBINED_LIB),'
 
       ''
       + lib.optionalString with_cublas ''
@@ -500,6 +391,8 @@ let
         mkdir -p backend-assets/util
         cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
 
+        cp -r --no-preserve=mode,ownership ${stable-diffusion}/build backend/go/image/stablediffusion-ggml/build
+
         # avoid rebuild of prebuilt make targets
         touch backend-assets/grpc/* backend-assets/util/*
         find sources -name "lib*.a" -exec touch {} +
@@ -518,7 +411,6 @@ let
         opencl-headers
       ]
       ++ lib.optionals with_openblas [ openblas.dev ]
-      ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
     nativeBuildInputs =
@@ -563,6 +455,10 @@ let
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         SHELL=$SHELL
       )
+
+      # copy from Makefile:258
+      make -C backend/go/image/stablediffusion-ggml libsd.a
+
       concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
       echoCmd 'build flags' "''${flagsArray[@]}"
       make build "''${flagsArray[@]}"
@@ -611,17 +507,13 @@ let
 
     passthru.local-packages = {
       inherit
-        go-tiny-dream
-        go-llama
         go-piper
         llama-cpp-grpc
         whisper-cpp
-        go-tiny-dream-ncnn
         espeak-ng'
         piper-phonemize
         piper-tts'
         llama-cpp-rpc
-        go-stable-diffusion
         bark
         stable-diffusion
         ;
@@ -633,8 +525,6 @@ let
         with_openblas
         with_vulkan
         with_tts
-        with_stablediffusion
-        with_tinydream
         with_clblas
         ;
     };

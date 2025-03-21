@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru = {
+    shellPath = "/bin/brush";
+
     tests = {
       complete = testers.testEqualContents {
         assertion = "brushinfo performs to inspect completions";

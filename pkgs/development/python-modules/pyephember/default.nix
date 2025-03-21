@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyephember";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j3SftxXKs9EZwdio26W5U0y5owH4yTteS4RUmzkZkoE=";
+    hash = "sha256-/uMpaqgy6YbqBBFuMxAM8PukCD3/TUNN6wcBiihRi3Y=";
   };
 
   propagatedBuildInputs = [

@@ -10,13 +10,13 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x2x";
   version = "unstable-2023-04-30";
 
   src = fetchFromGitHub {
     owner = "dottedmag";
-    repo = pname;
+    repo = "x2x";
     rev = "53692798fa0e991e0dd67cdf8e8126158d543d08";
     hash = "sha256-FUl2z/Yz9uZlUu79LHdsXZ6hAwSlqwFV35N+GYDNvlQ=";
   };

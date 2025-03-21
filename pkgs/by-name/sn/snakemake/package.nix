@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.29.0";
+  version = "8.29.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${version}";
-    hash = "sha256-vGa0N5jbm+b4FH1rkvZI5yI005K0D5AP29JGK2wscps=";
+    hash = "sha256-69NsbfHF29l92gwO8If9vp8Cdjac3BnO+hbY3b2bZ8E=";
   };
 
   postPatch = ''
@@ -152,7 +152,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of

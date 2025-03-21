@@ -9,7 +9,7 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "alure2";
   version = "unstable-2020-02-06";
 

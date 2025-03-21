@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
-    repo = pname;
+    repo = "iio-sensor-proxy";
     rev = version;
     hash = "sha256-X4vJ9zvMyYY9G7cslHMvXoexV/+39c9KctJBc+Ne114=";
   };

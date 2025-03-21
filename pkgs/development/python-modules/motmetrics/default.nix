@@ -17,7 +17,7 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "motmetrics";
   version = "1.4.0-unstable-20240130";
   pyproject = true;

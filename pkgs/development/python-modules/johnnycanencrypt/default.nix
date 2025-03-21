@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     tag = "v${version}";
-    hash = "sha256-tbHW3x+vwFz0nqFGWvgxjhw8XH6/YKz1uagU339SZyk=";
+    hash = "sha256-9T8B6zG3zMOBMX9C+u34MGBAgQ8YR44CW2BTdO1CciI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2kgp3RD2QbxL/Xk4iljjJZ8yEfo2umFtcN5CEtheyw8=";
+    hash = "sha256-V1z16GKaSQVjp+stWir7kAO2wsnOYPdhKi4KzIKmKx8=";
   };
 
   build-system = with rustPlatform; [

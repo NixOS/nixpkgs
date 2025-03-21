@@ -87,7 +87,7 @@ let
   platformTools = androidComposition.platform-tools;
   jdk = pkgs.jdk;
 in
-pkgs.mkShell rec {
+pkgs.mkShell {
   name = "androidenv-example-without-emulator-demo";
   packages = [
     androidSdk

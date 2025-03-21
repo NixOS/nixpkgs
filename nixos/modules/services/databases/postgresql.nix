@@ -14,8 +14,11 @@ let
     const
     elem
     escapeShellArgs
+    filter
     filterAttrs
+    getAttr
     getName
+    hasPrefix
     isString
     literalExpression
     mapAttrs
@@ -31,6 +34,8 @@ let
     mkRemovedOptionModule
     mkRenamedOptionModule
     optionalString
+    pipe
+    sortProperties
     types
     versionAtLeast
     warn
@@ -121,6 +126,100 @@ in
         description = ''
           The postgresql package that will effectively be used in the system.
           It consists of the base package with plugins applied to it.
+        '';
+      };
+
+      systemCallFilter = mkOption {
+        type = types.attrsOf (
+          types.coercedTo types.bool (enable: { inherit enable; }) (
+            types.submodule (
+              { name, ... }:
+              {
+                options = {
+                  enable = mkEnableOption "${name} in postgresql's syscall filter";
+                  priority = mkOption {
+                    default =
+                      if hasPrefix "@" name then
+                        500
+                      else if hasPrefix "~@" name then
+                        1000
+                      else
+                        1500;
+                    defaultText = literalExpression ''
+                      if hasPrefix "@" name then 500 else if hasPrefix "~@" name then 1000 else 1500
+                    '';
+                    type = types.int;
+                    description = ''
+                      Set the priority of the system call filter setting. Later declarations
+                      override earlier ones, e.g.
+
+                      ```ini
+                      [Service]
+                      SystemCallFilter=~read write
+                      SystemCallFilter=write
+                      ```
+
+                      results in a service where _only_ `read` is not allowed.
+
+                      The ordering in the unit file is controlled by this option: the higher
+                      the number, the later it will be added to the filterset.
+
+                      By default, depending on the prefix a priority is assigned: usually, call-groups
+                      (starting with `@`) are used to allow/deny a larger set of syscalls and later
+                      on single syscalls are configured for exceptions. Hence, syscall groups
+                      and negative groups are placed before individual syscalls by default.
+                    '';
+                  };
+                };
+              }
+            )
+          )
+        );
+        defaultText = literalExpression ''
+          {
+            "@system-service" = true;
+            "~@privileged" = true;
+            "~@resources" = true;
+          }
+        '';
+        description = ''
+          Configures the syscall filter for `postgresql.service`. The keys are
+          declarations for `SystemCallFilter` as described in {manpage}`systemd.exec(5)`.
+
+          The value is a boolean: `true` adds the attribute name to the syscall filter-set,
+          `false` doesn't. This is done to allow downstream configurations to turn off
+          restrictions made here. E.g. with
+
+          ```nix
+          {
+            services.postgresql.systemCallFilter."~@resources" = false;
+          }
+          ```
+
+          it's possible to remove the restriction on `@resources` (keep in mind that
+          `@system-service` implies `@resources`).
+
+          As described in the section for [](#opt-services.postgresql.systemCallFilter._name_.priority),
+          the ordering matters. Hence, it's also possible to specify customizations with
+
+          ```nix
+          {
+            services.postgresql.systemCallFilter = {
+              "foobar" = { enable = true; priority = 23; };
+            };
+          }
+          ```
+
+          [](#opt-services.postgresql.systemCallFilter._name_.enable) is the flag whether
+          or not it will be added to the `SystemCallFilter` of `postgresql.service`.
+
+          Settings with a higher priority are added after filter settings with a lower
+          priority. Hence, syscall groups with a higher priority can discard declarations
+          with a lower priority.
+
+          By default, syscall groups (i.e. attribute names starting with `@`) are added
+          _before_ negated groups (i.e. `~@` as prefix) _before_ syscall names
+          and negations.
         '';
       };
 
@@ -439,7 +538,7 @@ in
             ]);
             options = {
               shared_preload_libraries = mkOption {
-                type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+                type = nullOr (coercedTo (listOf str) (concatStringsSep ",") commas);
                 default = null;
                 example = literalExpression ''[ "auto_explain" "anon" ]'';
                 description = ''
@@ -581,6 +680,21 @@ in
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '')
+    ];
+
+    services.postgresql.systemCallFilter = mkMerge [
+      (mapAttrs (const mkDefault) {
+        "@system-service" = true;
+        "~@privileged" = true;
+        "~@resources" = true;
+      })
+      (mkIf (any extensionInstalled [ "plv8" ]) {
+        "@pkey" = true;
+      })
+      (mkIf (any extensionInstalled [ "citus" ]) {
+        "getpriority" = true;
+        "setpriority" = true;
+      })
     ];
 
     users.users.postgres = {
@@ -727,16 +841,12 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter =
-            [
-              "@system-service"
-              "~@privileged @resources"
-            ]
-            ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ]
-            ++ lib.optionals (any extensionInstalled [ "citus" ]) [
-              "getpriority"
-              "setpriority"
-            ];
+          SystemCallFilter = pipe cfg.systemCallFilter [
+            (mapAttrsToList (name: v: v // { inherit name; }))
+            (filter (getAttr "enable"))
+            sortProperties
+            (map (getAttr "name"))
+          ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
         (mkIf (cfg.dataDir != "/var/lib/postgresql/${cfg.package.psqlSchema}") {

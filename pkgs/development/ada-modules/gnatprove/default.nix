@@ -65,7 +65,7 @@ let
     (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnatprove";
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 

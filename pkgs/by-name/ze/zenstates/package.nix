@@ -27,7 +27,7 @@
   fetchFromGitHub,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zenstates";
   version = "0.0.1";
 

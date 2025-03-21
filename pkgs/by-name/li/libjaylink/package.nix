@@ -1,8 +1,9 @@
 {
-  autoreconfHook,
   fetchFromGitLab,
   lib,
   libusb1,
+  meson,
+  ninja,
   nix-update-script,
   pkg-config,
   stdenv,
@@ -21,17 +22,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
+
   buildInputs = [ libusb1 ];
 
   postPatch = ''
-    patchShebangs autogen.sh
+    substituteInPlace contrib/60-libjaylink.rules \
+      --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'
   '';
 
   postInstall = ''
-    install -Dm644 contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
+    install -Dm644 ../contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
   '';
 
   passthru.updateScript = nix-update-script { };

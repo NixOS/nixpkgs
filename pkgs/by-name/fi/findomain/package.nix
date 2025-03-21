@@ -11,24 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "9.0.3";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "findomain";
-    repo = pname;
+    repo = "findomain";
     tag = version;
-    hash = "sha256-M6i62JI4HjaM0C2rSK8P5O19JeugFP5xIy1E6vE8KP4=";
+    hash = "sha256-5jbKDMULig6j3D5KEQQrHWtsc59x0Tj6n/7kwK/8IME=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fhc-0.7.1" = "sha256-gSAwpuVL+5vLkHTsh60qyza7IoxgUWBQcWl2N7md51s=";
-      "headless_chrome-0.9.0" = "sha256-0BMm0tmCbUL1BSdD6rJLG735FYJsmkSrPQBs2zWx414=";
-      "rusolver-0.9.1" = "sha256-84qe/A+FN8Q+r8tk0waOq+sBgnDpG9bwoQI+K5pE4Wc=";
-      "trust-dns-proto-0.20.4" = "sha256-+oAjyyTXbKir8e5kn8CUmQy5qmzQ47ryvBBdZtzj1TY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4+nRQ8HL4dQMCgeSOrgkaRj0E4HPAC3Nm82AEr1KWJo=";
 
   nativeBuildInputs = [
     installShellFiles

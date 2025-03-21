@@ -7,7 +7,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vgmtools";
   version = "0.1-unstable-2023-08-27";
 

@@ -7,13 +7,13 @@
   unstableGitUpdater,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "wayland-proxy-virtwl";
   version = "0-unstable-2025-01-07";
 
   src = fetchFromGitHub {
     owner = "talex5";
-    repo = pname;
+    repo = "wayland-proxy-virtwl";
     rev = "a49bb541a7b008e13be226b3aaf0c4bda795af26";
     sha256 = "sha256-lX/ccHV1E7iAuGqTig+fvcY22qyk4ZJui17nLotaWjw=";
   };

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
-  version = "5.9";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "sha256-p4BNwj269FdNXY2rHfJiv5AbB3YB4v+YHXQRXTNnFnE=";
+    sha256 = "sha256-bMX538yen9cINPCtgf7SUGGsNRJugMrveqXtChHzPkk=";
   };
 
   nativeBuildInputs = [

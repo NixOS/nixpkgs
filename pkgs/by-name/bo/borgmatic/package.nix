@@ -4,6 +4,7 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
+  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -14,13 +15,15 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.9.12";
+  version = "1.9.14";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c7FXJ4afbnHHDtVU7QcPM+g1i/IAGJwl1TTHx7eDcIs=";
+    hash = "sha256-w503lwXlKWlTsguzECUGmsbhvdJzTF4XK+Ib2KuD2DE=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-flutter.buildFlutterApplication rec {
+flutter.buildFlutterApplication {
   pname = "firmware-updater";
   version = "0-unstable-2024-20-11";
 

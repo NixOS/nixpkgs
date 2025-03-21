@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2025.1.3";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "cli-v${version}";
-    hash = "sha256-a8OQ/vQCJSjipLnuNWaWqnAJK+Str6FdHPBTbC04VxA=";
+    tag = "cli-v${version}";
+    hash = "sha256-Ls30yeqMDBA4HjQdnICJy0HVHm7VfZarsKUHn3KTatA=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-BoHwgv/1QiIfUPCJ3+ZHvbMelngRSEKlbkpBHRtnoP8=";
+  npmDepsHash = "sha256-V77I2ZzmcCo06vq76lGkRa+NmTEUe2urD0D1HQ/gBJA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -51,7 +51,7 @@ buildNpmPackage rec {
   npmFlags = [ "--legacy-peer-deps" ];
 
   npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    # we'll run npm rebuild manually later
     "--ignore-scripts"
   ];
 
@@ -60,6 +60,11 @@ buildNpmPackage rec {
     shopt -s globstar
     rm -r node_modules/**/prebuilds
     shopt -u globstar
+
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
+
+    npm rebuild --verbose
   '';
 
   postBuild = ''
@@ -89,12 +94,12 @@ buildNpmPackage rec {
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

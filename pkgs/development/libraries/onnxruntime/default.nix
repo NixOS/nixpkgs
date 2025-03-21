@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , Foundation
 , abseil-cpp_202407
 , cmake
@@ -14,7 +15,6 @@
 , howard-hinnant-date
 , libpng
 , nlohmann_json
-, nsync
 , pkg-config
 , python3Packages
 , re2
@@ -30,13 +30,13 @@
 
 
 let
-  version = "1.20.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
-    hash = "sha256-GTrRRNdqLUKCcWC9VdV/Oslszykn73dMXf66FLcHRVc=";
+    hash = "sha256-BaHXpK6Ek+gsld7v+OBM+C3FjrPiyMQYP1liv7mEjho=";
     fetchSubmodules = true;
   };
 
@@ -77,36 +77,37 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.16.1";
-    hash = "sha256-+NmWoZDXNJ8YQIWlUXV+czHyI8UtJedu2VG+1aR5L7s=";
-    # Apply backport of https://github.com/onnx/onnx/pull/6195 from 1.17.0
-    postFetch = ''
-      pushd $out
-      patch -p1 < ${src}/cmake/patches/onnx/onnx.patch
-      popd
-    '';
+    tag = "v1.17.0";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
-   cutlass = fetchFromGitHub {
+  cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v3.5.1";
     hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
- };
+  };
+
+  dlpack = fetchFromGitHub {
+    owner = "dmlc";
+    repo = "dlpack";
+    tag = "v0.6";
+    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+  };
+
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
   patches = [
-    # If you stumble on these patches trying to update onnxruntime, check
-    # `git blame` and ping the introducers.
-
-    # Context: we want the upstream to
-    # - always try find_package first (FIND_PACKAGE_ARGS),
-    # - use MakeAvailable instead of the low-level Populate,
-    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./eigen.patch
+    # drop with the next update
+    # https://github.com/microsoft/onnxruntime/pull/23939
+    (fetchpatch {
+      url = "https://github.com/microsoft/onnxruntime/commit/55553703eaa8cd01d2b01cc21171a0ea515c888a.patch";
+      hash = "sha256-gL1rMNUcteKcjLmdJ+0r67rvNrC31bAyKYx4aeseWkM=";
+    })
   ] ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
@@ -127,6 +128,8 @@ effectiveStdenv.mkDerivation rec {
   ]) ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
     cudaPackages.cudnn-frontend
+  ] ++ lib.optionals isCudaJetson [
+    cudaPackages.autoAddCudaCompatRunpath
   ];
 
   buildInputs = [
@@ -179,8 +182,8 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202407.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_DLPACK=${dlpack}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
     "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
     "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"

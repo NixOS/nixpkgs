@@ -64,7 +64,7 @@ let
     inherit meta;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nss-cacert";
   inherit version;
 

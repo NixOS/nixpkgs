@@ -9,7 +9,7 @@
   libxkbcommon,
   wayland-scanner,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlock";
   version = "0-unstable-2024-09-13";
 

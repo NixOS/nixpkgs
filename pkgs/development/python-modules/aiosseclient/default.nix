@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiosseclient";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ebraminio";
     repo = "aiosseclient";
     tag = version;
-    hash = "sha256-jXDZPVkCTVwcz1TCiPRGJZkq2KeqOglAZNY//LmLuNg=";
+    hash = "sha256-ynWqRQsCuog8myNleJDdp+omyujmNB1Ys7O6gU2AaUc=";
   };
 
   build-system = [ setuptools ];

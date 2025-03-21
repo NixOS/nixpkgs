@@ -9,7 +9,7 @@
 let
   rev = "b17ea39dc17e5514f33b3f5c34ede92bd16e208c";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mmh";
   version = "unstable-2020-08-21";
 

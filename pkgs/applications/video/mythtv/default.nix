@@ -43,13 +43,13 @@
 
 mkDerivation rec {
   pname = "mythtv";
-  version = "34.0";
+  version = "35.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
     rev = "v${version}";
-    hash = "sha256-6/TEoyYIRq6pufYzGOmO5DB05JuDo9lqRAYT5N5M/L4=";
+    hash = "sha256-ZhVlDX5I6SJEntVg30Iy/XxgsorDjFycAt2uksJMJps=";
   };
 
   patches = [

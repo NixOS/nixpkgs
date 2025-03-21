@@ -7,6 +7,7 @@
   vala,
   pkg-config,
   makeBinaryWrapper,
+  replaceVars,
 
   gtk4,
   libadwaita,
@@ -18,6 +19,7 @@
   mangohud,
   mesa-demos,
   vulkan-tools,
+  vkbasalt,
 
   nix-update-script,
 }:
@@ -31,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-NpNsYwktcce9R1LpoIL2vh5UzsgDqdPyS0D3mhM3F0w=";
   };
+
+  patches = [
+    (replaceVars ./fix-vkbasalt-path.patch {
+      vkbasalt = lib.getLib vkbasalt + "/lib/vkbasalt/libvkbasalt.so";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

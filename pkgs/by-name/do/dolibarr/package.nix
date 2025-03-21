@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
-  version = "20.0.4";
+  version = "21.0.0";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
     tag = finalAttrs.version;
-    hash = "sha256-CAVSW/OU8JW8zfu9pK8u2szvTJWPaQzEQcGriHi4s1E=";
+    hash = "sha256-OTYX9CZ1gQlAOsrWIMJwhH8QPDM2J3MM183/Tj18jHg=";
   };
 
   dontBuild = true;

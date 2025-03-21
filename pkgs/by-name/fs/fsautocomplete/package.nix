@@ -4,7 +4,6 @@
   fetchFromGitHub,
   dotnetCorePackages,
   testers,
-  _experimental-update-script-combinators,
   nix-update-script,
 }:
 
@@ -38,10 +37,7 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      finalAttrs.passthru.fetch-deps
-    ];
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

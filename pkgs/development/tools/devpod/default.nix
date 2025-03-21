@@ -104,12 +104,8 @@ rec {
 
       sourceRoot = "${src.name}/desktop/src-tauri";
 
-      cargoLock = {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "tauri-plugin-log-0.0.0" = "sha256-tM6oLJe/wwqDDNMKBeMa5nNVvsmi5b104xMOvtm974Y=";
-        };
-      };
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-HD9b7OWilltL5Ymj28zoZwv5TJV3HT3LyCdagMqLH6E=";
 
       # Workaround:
       #   The `tauri` dependency features on the `Cargo.toml` file does not match the allowlist defined under `tauri.conf.json`.

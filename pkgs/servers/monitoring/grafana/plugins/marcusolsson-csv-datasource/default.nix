@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "marcusolsson-csv-datasource";
   version = "0.6.19";
   zipHash = {

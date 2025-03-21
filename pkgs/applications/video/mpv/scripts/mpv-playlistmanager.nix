@@ -6,7 +6,7 @@
   yt-dlp,
 }:
 
-buildLua rec {
+buildLua {
   pname = "mpv-playlistmanager";
   version = "0-unstable-2025-02-23";
 

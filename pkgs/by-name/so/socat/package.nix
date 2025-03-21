@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socat";
-  version = "1.8.0.2";
+  version = "1.8.0.3";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${pname}-${version}.tar.bz2";
-    hash = "sha256-rcB6nCcjUnz2Vo0vuWVZeUz5wlSkvC7dNvfzeJ6fdiU=";
+    hash = "sha256-AesBc2HZW7OmlB6EC1nkRjo/q/kt9BVO0CsWou1qAJU=";
   };
 
   postPatch = ''
@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
-  configureFlags = lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "--disable-posixmq"
-  ];
+  configureFlags =
+    lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--disable-posixmq"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "--disable-dccp"
+    ];
 
   buildInputs = [
     openssl

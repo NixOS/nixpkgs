@@ -17,16 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-q4C4YAs8Q1jHA5P2OApkFZnYM4/aZGxnE8Pd6Hmwd1I=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ratatui-binary-data-widget-0.1.0" = "sha256-5HBqugXAb76+LDsDj+FjsyVqbLMNy503qUkZjWE6tRg=";
-    };
-  };
-
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pn4wmlMW8p6IAHrYjmvmZxNMjIJwJ2MYRsANz4D6xCU=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 

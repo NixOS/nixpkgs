@@ -40,8 +40,10 @@ For example, when upgrading from 1.4 -> 1.5
 
 Kanidm versions are supported for 30 days after the release of new versions. Following the example above, 1.5.x superseding 1.4.x in 30 days, do the following near the end of the 30 day window
 
-1. Update `pkgs/top-level/release.nix` and add `kanidm_1_4-1.4.6` to `permittedInsecurePackages`
-1. Update `pkgs/top-level/release.nix` and remove `kanidm_1_3-1.3.3` from `permittedInsecurePackages`
-1. Remove the third oldest release from `all-packages.nix`, e.g. 1.3.x continuing the example. Remove `kanidm_1_3` and `kanidmWithSecretProvisioning_1_3`
 1. Update `pkgs/by-name/ka/kanidm/1_4.nix` by adding `unsupported = true;`
-1. Open a PR and backport it to stable
+1. Update `pkgs/top-level/release.nix` and add `kanidm_1_4-1.4.6` to `permittedInsecurePackages`
+1. Create commit `kanidm_1_4: mark EOL`, this commit alone should be backported
+
+1. Remove the third oldest release from `all-packages.nix`, e.g. 1.3.x continuing the example. Remove `kanidm_1_3` and `kanidmWithSecretProvisioning_1_3`
+1. Update `pkgs/top-level/release.nix` and remove `kanidm_1_3-1.3.3` from `permittedInsecurePackages`
+1. Remove `pkgs/by-name/ka/kanidm/1_3.nix`

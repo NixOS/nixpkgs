@@ -11,7 +11,7 @@ let
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = pkgsBuildBuild.buildGoModule rec {
+  staticfiles = pkgsBuildBuild.buildGoModule {
     name = "staticfiles";
 
     src = fetchFromGitHub {

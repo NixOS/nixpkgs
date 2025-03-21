@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "manugarg";
-    repo = pname;
+    repo = "pacparser";
     rev = "v${version}";
     sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
   };
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse proxy auto-config (PAC) files";
     homepage = "https://pacparser.manugarg.com/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
     mainProgram = "pactester";
   };
 }

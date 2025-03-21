@@ -153,8 +153,10 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
-          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          env = old.env or { } // {
+            CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+            LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
+          };
         });
 
         # part of a larger package
@@ -242,7 +244,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/102
           #   - https://github.com/vedang/pdf-tools/issues/103
           #   - https://github.com/vedang/pdf-tools/issues/109
-          CXXFLAGS = "-std=c++17";
+          env = old.env or { } // { CXXFLAGS = "-std=c++17"; };
 
           nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
@@ -294,7 +296,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env = old.env or { } // { NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR"; };
           preConfigure = ''
             pushd server
           '';
@@ -850,6 +852,8 @@ let
           }
         );
 
+        brainfuck-mode = ignoreCompilationError super.brainfuck-mode; # elisp error
+
         bts = ignoreCompilationError super.bts; # elisp error
 
         bts-github = ignoreCompilationError super.bts-github; # elisp error
@@ -916,26 +920,31 @@ let
           }
         );
 
+        clojure-quick-repls = ignoreCompilationError super.clojure-quick-repls; # elisp error
+
         # https://github.com/atilaneves/cmake-ide/issues/176
         cmake-ide = addPackageRequires super.cmake-ide [ self.dash ];
 
         code-review = ignoreCompilationError super.code-review; # elisp error
 
-        codesearch = super.codesearch.overrideAttrs (
-          finalAttrs: previousAttrs: {
-            patches =
-              if lib.versionOlder finalAttrs.version "20240827.805" then
-                previousAttrs.patches or [ ]
-                ++ [
-                  (pkgs.fetchpatch {
-                    name = "remove-unused-dash.patch";
-                    url = "https://github.com/abingham/emacs-codesearch/commit/bd24a152ab6ea9f69443ae8e5b7351bb2f990fb6.patch";
-                    hash = "sha256-cCHY8Ak2fHuuhymjSF7w2MLPDJa84mBUdKg27mB9yto=";
-                  })
-                ]
-              else
-                previousAttrs.patches or null;
-          }
+        # elisp error
+        codesearch = ignoreCompilationError (
+          super.codesearch.overrideAttrs (
+            finalAttrs: previousAttrs: {
+              patches =
+                if lib.versionOlder finalAttrs.version "20240827.805" then
+                  previousAttrs.patches or [ ]
+                  ++ [
+                    (pkgs.fetchpatch {
+                      name = "remove-unused-dash.patch";
+                      url = "https://github.com/abingham/emacs-codesearch/commit/bd24a152ab6ea9f69443ae8e5b7351bb2f990fb6.patch";
+                      hash = "sha256-cCHY8Ak2fHuuhymjSF7w2MLPDJa84mBUdKg27mB9yto=";
+                    })
+                  ]
+                else
+                  previousAttrs.patches or null;
+            }
+          )
         );
 
         # https://github.com/hying-caritas/comint-intercept/issues/2
@@ -969,6 +978,9 @@ let
 
         # needs network during compilation
         consult-gh-forge = ignoreCompilationError (buildWithGit super.consult-gh-forge);
+
+        # needs network during compilation
+        consult-gh-with-pr-review = ignoreCompilationError super.consult-gh-with-pr-review;
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
@@ -1073,6 +1085,10 @@ let
         # depends on later-do which is not on any ELPA
         emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
         emms-player-mpv-jp-radios = ignoreCompilationError super.emms-player-mpv-jp-radios;
+
+        # missing optional dependencies
+        # https://github.com/isamert/empv.el/pull/96
+        empv = addPackageRequires super.empv [ self.hydra ];
 
         enotify = ignoreCompilationError super.enotify; # elisp error
 
@@ -1261,11 +1277,18 @@ let
         # https://github.com/duelinmarkers/insfactor.el/issues/7
         insfactor = addPackageRequires super.insfactor [ self.cider ];
 
+        iregister = super.iregister.overrideAttrs (old: {
+          recipe = "";
+          files = ''(:defaults (:exclude ".bump-version.el"))'';
+        });
+
         # https://github.com/wandersoncferreira/ivy-clojuredocs/issues/5
         ivy-clojuredocs = addPackageRequires super.ivy-clojuredocs [ self.parseedn ];
 
         # TODO report to upstream
         jack-connect = addPackageRequires super.jack-connect [ self.dash ];
+
+        javap-mode = ignoreCompilationError super.javap-mode; # elisp error
 
         jdee = ignoreCompilationError super.jdee; # elisp error
 
@@ -1294,6 +1317,8 @@ let
           }
         );
 
+        keystore-mode = ignoreCompilationError super.keystore-mode; # elisp error
+
         kite = ignoreCompilationError super.kite; # elisp error
 
         # missing optional dependencies
@@ -1310,6 +1335,8 @@ let
         # https://github.com/abo-abo/lispy/pull/683
         # missing optional dependencies
         lispy = addPackageRequires (mkHome super.lispy) [ self.indium ];
+
+        lsp-origami = ignoreCompilationError super.lsp-origami; # elisp error
 
         # missing optional dependencies
         magik-mode = addPackageRequires super.magik-mode [
@@ -1420,6 +1447,9 @@ let
 
         org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
 
+        # https://github.com/ichernyshovvv/org-timeblock/issues/65
+        org-timeblock = markBroken super.org-timeblock;
+
         org-trello = ignoreCompilationError super.org-trello; # elisp error
 
         # Requires xwidgets compiled into emacs, so mark this package
@@ -1479,6 +1509,8 @@ let
         # https://github.com/colonelpanic8/org-project-capture/issues/66
         org-projectile-helm = addPackageRequires super.org-projectile-helm [ self.helm-org ];
 
+        origami-predef = ignoreCompilationError super.origami-predef; # elisp error
+
         # https://github.com/DarwinAwardWinner/mac-pseudo-daemon/issues/9
         osx-pseudo-daemon = addPackageRequiresIfOlder super.osx-pseudo-daemon [ self.mac-pseudo-daemon ] "20240922.2024";
 
@@ -1530,6 +1562,10 @@ let
 
         rpm-spec-mode = ignoreCompilationError super.rpm-spec-mode; # elisp error
 
+        # missing optional dependencies
+        # https://github.com/emacs-rustic/rustic/pull/93
+        rustic = addPackageRequires super.rustic [ self.flycheck ];
+
         # https://github.com/emacsfodder/emacs-theme-sakura/issues/1
         sakura-theme = addPackageRequiresIfOlder super.sakura-theme [ self.autothemer ] "20240921.1028";
 
@@ -1552,6 +1588,8 @@ let
         semi = addPackageRequires super.semi [ self.bbdb-vcard ];
 
         shadchen = ignoreCompilationError super.shadchen; # elisp error
+
+        shampoo = ignoreCompilationError super.shampoo; # elisp error
 
         # missing optional dependencies and one of them (mew) is not on any ELPA
         shimbun = ignoreCompilationError (
@@ -1595,6 +1633,8 @@ let
         # missing optional dependencies
         suggest = addPackageRequires super.suggest [ self.shut-up ];
 
+        sx = ignoreCompilationError super.sx; # elisp error
+
         symex = ignoreCompilationError super.symex; # elisp error
 
         term-alert = mkHome super.term-alert;
@@ -1635,6 +1675,8 @@ let
         weechat-alert = ignoreCompilationError super.weechat-alert; # elisp error
 
         weibo = ignoreCompilationError super.weibo; # elisp error
+
+        workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
         xenops = mkHome super.xenops;
 

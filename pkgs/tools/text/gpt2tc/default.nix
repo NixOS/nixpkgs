@@ -6,7 +6,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpt2tc";
   version = "2021-04-24";
 

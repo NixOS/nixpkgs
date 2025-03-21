@@ -6,7 +6,7 @@
   pythonPackages,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-linkcheck";
   version = "unstable-2021-08-24";
   format = "setuptools";

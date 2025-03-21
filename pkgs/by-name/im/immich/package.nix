@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python3,
   nodejs,
   node-gyp,
@@ -166,6 +166,13 @@ buildNpmPackage' {
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
       --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+
+    # some part of the build wants to use un-prefixed binaries. let them.
+    mkdir -p $TMP/bin
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf
+    export PATH="$TMP/bin:$PATH"
   '';
 
   nativeBuildInputs = [
@@ -254,7 +261,7 @@ buildNpmPackage' {
       Scrumplex
       titaniumtown
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
 }

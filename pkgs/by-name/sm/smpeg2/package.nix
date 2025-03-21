@@ -10,7 +10,7 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smpeg2";
   version = "unstable-2022-05-26";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/smpeg2-config "$dev"
     wrapProgram $dev/bin/smpeg2-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL2.dev}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL2}/lib/pkgconfig"
   '';
 
   enableParallelBuilding = true;

@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
-    repo = pname;
+    repo = "tessen";
     rev = "v${version}";
     sha256 = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
