@@ -58,6 +58,18 @@ in
       vmWithBootLoader = lib.mkDefault config.virtualisation.vmVariantWithBootLoader.system.build.vm;
     };
 
+    virtualisation.vmVariant = {
+      options = {
+        virtualisation.vmVariant = lib.mkOption {
+          apply = _: throw "virtualisation.vmVariant*.virtualisation.vmVariant is not supported";
+        };
+        virtualisation.vmVariantWithBootLoader = lib.mkOption {
+          apply =
+            _: throw "virtualisation.vmVariant*.virtualisation.vmVariantWithBootloader is not supported";
+        };
+      };
+    };
+
   };
 
   # uses extendModules
