@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   libcosmicAppHook,
@@ -36,11 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
-    cp data/*.desktop $out/share/applications/
-    cp data/*.svg $out/share/icons/hicolor/scalable/apps/
-  '';
+  dontCargoInstall = true;
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-workspaces-epoch";
