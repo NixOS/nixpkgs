@@ -38,9 +38,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = lib.optionalString nxmUrlHandler ''
-    mkdir -p $out/share/applications
-    substitute dmodman.desktop $out/share/applications/dmodman.desktop \
-      --replace 'Exec=dmodman' "Exec=$out/bin/dmodman"
+    install -Dm 644 dmodman.desktop out/share/applications/
   '';
 
   meta = {
