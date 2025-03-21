@@ -15,7 +15,18 @@ import ./make-test-python.nix (
         }:
         {
           services = {
-            scrutiny.enable = true;
+            scrutiny = {
+              enable = true;
+              settings = {
+                notify.urls = [
+                  {
+                    _secret = pkgs.writeText "notify-script" "script://${pkgs.writeShellScript "touch-test-file" ''
+                      echo "HelloWorld" > /run/scrutiny/hello
+                    ''}";
+                  }
+                ];
+              };
+            };
             scrutiny.collector.enable = true;
           };
 
@@ -78,6 +89,12 @@ import ./make-test-python.nix (
 
       # Ensure the application is actually rendered by the Javascript
       machine.succeed("PYTHONUNBUFFERED=1 selenium-script")
+
+      # Test notification and genJqSecretsReplacementSnippet
+      machine.succeed("curl -X POST http://localhost:8080/api/health/notify")
+      machine.wait_for_file("/run/scrutiny/hello")
+      output = machine.succeed("cat /run/scrutiny/hello")
+      assert "HelloWorld" in output
     '';
   }
 )
