@@ -63,6 +63,35 @@ using:
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
 
+## SSH Access for test machines {#sec-nixos-test-ssh-access}
+
+An SSH-based backdoor to log into machines can be enabled with
+
+```nix
+{
+  name = "…";
+  nodes.machines = { /* … */ };
+  sshBackdoor.enable = true;
+}
+```
+
+This creates a [vsock socket](https://man7.org/linux/man-pages/man7/vsock.7.html)
+for each VM to log in with SSH. This configures root login with an empty password.
+
+When the VMs get started interactively with the test-driver, it's possible to
+connect to `machine` with
+
+```
+$ ssh vsock/3 -o User=root
+```
+
+The socket numbers correspond to the node number of the test VM, but start
+at three instead of one because that's the lowest possible
+vsock number.
+
+On non-NixOS systems you'll probably need to enable
+the SSH config from {manpage}`systemd-ssh-proxy(1)` yourself.
+
 ## Port forwarding to NixOS test VMs {#sec-nixos-test-port-forwarding}
 
 If your test has only a single VM, you may use e.g.
