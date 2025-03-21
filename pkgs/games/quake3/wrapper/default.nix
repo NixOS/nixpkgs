@@ -55,14 +55,12 @@ stdenv.mkDerivation {
       makeWrapper ${env}/bin/ioq3ded $out/bin/${pname}-server \
         --add-flags "${setBasepath}"
 
-      # Renaming application packages on darwin is not quite as simple as they internally
-      # refer to the old name in many places. So we shelve that for now.
-      cp -RL ${env}/Applications/ioquake3.app $out/Applications/
+      cp -RL ${env}/Applications/ioquake3.app/ $out/Applications/${pname}.app
       chmod -R +w $out/Applications/
 
-      wrapProgram $out/Applications/ioquake3.app/Contents/MacOS/ioquake3 \
+      wrapProgram $out/Applications/${pname}.app/Contents/MacOS/ioquake3 \
         --add-flags "${setBasepath}"
-      wrapProgram $out/Applications/ioquake3.app/Contents/MacOS/ioq3ded \
+      wrapProgram $out/Applications/${pname}.app/Contents/MacOS/ioq3ded \
         --add-flags "${setBasepath}"
     '';
 
