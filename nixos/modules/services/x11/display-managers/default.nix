@@ -33,9 +33,11 @@ let
   # xdg-autostart-generator work on sessions that are wrong, but this broke sessions
   # that do things right. So, preserve this behavior (with some extra steps) by matching
   # on XDG_CURRENT_DESKTOP and deliberately ignoring sessions we know can do the right thing.
+  # We also need to ignore sessions handled by UWSM, as those already do the right thing.
   fakeSession = action: ''
       session_is_systemd_aware=$(
         IFS=:
+        [ -n "$UWSM_FINALIZE_VARNAMES" ] && (echo "1"; exit)
         for i in $XDG_CURRENT_DESKTOP; do
           case $i in
             KDE|GNOME|Pantheon|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
