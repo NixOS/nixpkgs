@@ -127,6 +127,7 @@ mapAliases {
   inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
+  ijavascript = throw "ijavascript has been removed because it was broken"; # added 2025-03-18
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
@@ -141,6 +142,7 @@ mapAliases {
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
+  lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
