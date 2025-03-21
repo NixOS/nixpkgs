@@ -10431,8 +10431,6 @@ with pkgs;
     scheme = guile;
   };
 
-  snac2 = darwin.apple_sdk_11_0.callPackage ../servers/snac2 { };
-
   soapyairspy = callPackage ../applications/radio/soapyairspy {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
