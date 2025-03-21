@@ -1544,6 +1544,10 @@ let
 
     pbrt = callPackage ../development/ocaml-modules/pbrt { };
 
+    pcre2 = callPackage ../development/ocaml-modules/pcre2 {
+      inherit (pkgs) pcre2;
+    };
+
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 
     pecu = callPackage ../development/ocaml-modules/pecu { };
