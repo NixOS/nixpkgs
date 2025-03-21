@@ -17,7 +17,6 @@
   pyarrow,
 
   # tests
-  dask-histogram,
   distributed,
   hist,
   pandas,
@@ -27,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.2.0";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-hhAY2cPUOYnP86FGsLvxlMeoEwY+sTrjPMKyuZrO0/M=";
+    hash = "sha256-z4dRGNoqwIEOwaz5U0DqCh/chZtopiLNvvvfl0bJxxI=";
   };
 
   build-system = [
@@ -73,12 +72,6 @@ buildPythonPackage rec {
     "test_basic_root_works"
     # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
     "test_distance_behavior"
-  ];
-
-  disabledTestPaths = [
-    # TypeError: Blockwise.__init__() got an unexpected keyword argument 'dsk'
-    # https://github.com/dask-contrib/dask-awkward/issues/557
-    "tests/test_str.py"
   ];
 
   __darwinAllowLocalNetworking = true;
