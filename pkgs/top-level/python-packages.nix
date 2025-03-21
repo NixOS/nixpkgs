@@ -18396,7 +18396,7 @@ self: super: with self; {
 
   vtjp = callPackage ../development/python-modules/vtjp { };
 
-  vtk = toPythonModule (pkgs.vtk_9.override {
+  vtk = toPythonModule (pkgs.vtk_9_2.override {
     inherit python;
     enablePython = true;
   });
