@@ -8,7 +8,7 @@
   gbenchmark,
   graphviz,
   lib,
-  llvmPackages, # llvm/Support/Host.h required by casadi 3.6.5 and not available in llvm 18
+  llvmPackages,
   pinocchio,
   pkg-config,
   proxsuite-nlp,
@@ -36,13 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    graphviz
-    pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
-  buildInputs = [ fmt ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  nativeBuildInputs =
+    [
+      doxygen
+      cmake
+      graphviz
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.pythonImportsCheckHook
+    ];
+  buildInputs =
+    [ fmt ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
   propagatedBuildInputs =
     [ suitesparse ]
     ++ lib.optionals pythonSupport [
@@ -74,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
       # ignore one failing test for now
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;aligator-test-py-integrators")
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;aligator-test-py-rollout")
     ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
