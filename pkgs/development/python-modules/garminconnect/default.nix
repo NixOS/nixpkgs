@@ -23,7 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-V+i+e1McE9YFVuq2fuQtD3RKTHw9u3u0bZ2zCi9yZCM=";
   };
 
-  pythonRelaxDeps = [ "withings-sync" ];
+  pythonRelaxDeps = [
+    "garth"
+    "withings-sync"
+  ];
 
   build-system = [ pdm-backend ];
 
