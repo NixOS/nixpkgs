@@ -4138,6 +4138,8 @@ self: super: with self; {
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
+  ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
+
   eccodes = toPythonModule (pkgs.eccodes.override {
     enablePython = true;
     pythonPackages = self;
