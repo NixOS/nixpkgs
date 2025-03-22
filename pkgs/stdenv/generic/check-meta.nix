@@ -115,13 +115,30 @@ let
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
+  # Allow granular checks to allow only some unfree licenses
+  # Example:
+  # { ... }:
+  # {
+  #   allowUnfree = false;
+  #   allowUnfreeLicensePredicate = (license: licenses.faircode or false);
+  # }
+  allowUnfreeLicensePredicate = config.allowUnfreeLicensePredicate or (x: false);
+
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitly allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     hasUnfreeLicense attrs &&
     !allowUnfree &&
-    !allowUnfreePredicate attrs;
+    !allowUnfreePredicate attrs
+    && (
+      if isAttrs attrs.meta.license then
+        !allowUnfreeLicensePredicate attrs.meta.license
+      else if isString attrs.meta.license then
+        !allowUnfreeLicensePredicate { free = false; shortName = attrs.meta.license; }
+      else
+        any (license: !allowUnfreeLicensePredicate license) attrs.meta.license
+    );
 
   allowInsecureDefaultPredicate = x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
