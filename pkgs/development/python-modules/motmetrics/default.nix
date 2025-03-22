@@ -19,15 +19,15 @@
 
 buildPythonPackage {
   pname = "motmetrics";
-  version = "1.4.0-unstable-20240130";
+  version = "1.4.0-unstable-2025-01-14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-motmetrics";
     # latest release is not compatible with pandas 2.0
-    rev = "7210fcce0be1b76c96a62f6fe4ddbc90d944eacb";
-    hash = "sha256-7LKLHXWgW4QpivAgzvWl6qEG0auVvpiZ6bfDViCKsFY=";
+    rev = "c199b3e853d589af4b6a7d88f5bcc8b8802fc434";
+    hash = "sha256-DJ82nioW3jdIVo1B623BE8bBhVa1oMzYIkhhit4Z4dg=";
   };
 
   nativeBuildInputs = [ setuptools ];
