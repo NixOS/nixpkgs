@@ -5,20 +5,20 @@
 }:
 beamPackages.mixRelease rec {
   pname = "protoc-gen-elixir";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "elixir-protobuf";
     repo = "protobuf";
     tag = "v${version}";
-    hash = "sha256-TnuIlXYr36hx1sVktPHj4J4cJLCFK5F1xaX0V9/+ICQ=";
+    hash = "sha256-SbwjOFTyN3euMNXkuIP49zNqoXmD8611IXgqPwqfuFU=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version src;
     pname = "protoc-gen-elixir-deps";
 
-    hash = "sha256-lFfAfKAM4O+yIBXgdCA+EPe1XAOaTIjTfpOFjITpvQ4=";
+    hash = "sha256-T1uL3xXXmCkobJJhS3p6xMrJUyiim3AMwaG87/Ix7A8=";
   };
 
   postBuild = ''
