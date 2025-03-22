@@ -82,7 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
         ln -sv "$lib.${finalAttrs.version}" "$out/lib/$lib"
         ln -sv "$out/lib/$lib.${finalAttrs.version}" "$out/lib/$lib.0"
       done
-
+    ''
+    + ''
       runHook postInstall
     '';
 
