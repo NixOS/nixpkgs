@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://docs.qameta.io/allure/";
+    homepage = "https://allurereport.org/";
     description = "Allure Report is a flexible, lightweight multi-language test reporting tool";
     longDescription = ''
       Allure Report is a flexible, lightweight multi-language test reporting
