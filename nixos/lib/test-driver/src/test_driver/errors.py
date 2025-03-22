@@ -15,6 +15,6 @@ class RequestedAssertionFailed(AssertionError):
     e.g. a failing `t.assertEqual(...)` or `machine.succeed(...)`.
 
     This gets special treatment in error reporting: i.e. it gets
-    `!!!` as prefix just as `MachineError`, but all stack frames that are
-    not from `testScript` also get removed.
+    `!!!` as prefix just as `MachineError`, but only stack frames coming
+    from `testScript` will show up in logs.
     """
