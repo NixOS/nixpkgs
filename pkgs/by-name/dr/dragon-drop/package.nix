@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "xdragon";
+  pname = "dragon-drop";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -20,9 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 ];
 
+  makeFlags = [ "NAME=dragon-drop" ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
   postInstall = ''
-    ln -s $out/bin/dragon $out/bin/xdragon
+    ln -s $out/bin/dragon-drop $out/bin/xdragon
   '';
 
   meta = with lib; {
@@ -33,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       das_j
       taliyahwebb
     ];
-    mainProgram = "xdragon";
+    mainProgram = "dragon-drop";
   };
 })
