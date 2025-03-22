@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${version}.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erictapen ];
   };
