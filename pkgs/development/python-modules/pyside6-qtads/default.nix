@@ -1,8 +1,8 @@
 {
+  lib,
   buildPythonPackage,
   cmake-build-extension,
   fetchFromGitHub,
-  lib,
   pythonRelaxDepsHook,
   pyside6,
   qt6,
@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "pyside6-qtads";
-  version = "4.3.1.1";
+  version = "4.3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyside6_qtads";
-    rev = "v${version}";
-    hash = "sha256-WSthRtK9IaRDDFEtGMUsQwylD+iGdsZM2vkXBjt8+mI=";
+    tag = "v${version}";
+    hash = "sha256-02YUeD9PfcaYkvz9JX5FucsbG9Idk7OH24U+RXXEmvo=";
     fetchSubmodules = true;
   };
 
   # bypass the broken parts of their bespoke python script cmake plugin
   patches = [ ./find-nix-deps.patch ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail @shiboken6@ ${shiboken6} \
@@ -47,10 +48,6 @@ buildPythonPackage rec {
     qt6.qtquick3d
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   build-system = [
     cmake-build-extension
     setuptools
@@ -61,6 +58,8 @@ buildPythonPackage rec {
     pyside6
     shiboken6
   ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   # cmake-build-extension will configure
   dontUseCmakeConfigure = true;
@@ -74,6 +73,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to Qt Advanced Docking System for PySide6";
     homepage = "https://github.com/mborgerson/pyside6_qtads";
+    changelog = "https://github.com/mborgerson/pyside6_qtads/releases/tag/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
