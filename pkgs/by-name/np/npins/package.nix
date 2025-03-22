@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = passthru.mkSource sources.npins;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RUtWpZYaydXzF7gcROiIr04K7+Usq9iHAQwnv3ELqLI=";
+  cargoHash = "sha256-HnX7dkWLxa3DARXG8y9OVBRwvwgxwRIs4mWK3VNblG0=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
