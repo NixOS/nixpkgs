@@ -71,6 +71,7 @@ python3Packages.buildPythonApplication rec {
     cloudscraper
     python-telegram-bot
     boto3
+    libtorrent-rasterbar
   ];
 
   pythonImportsCheck = [
