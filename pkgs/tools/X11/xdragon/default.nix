@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple drag-and-drop source/sink for X or Wayland (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [
+      das_j
+      taliyahwebb
+    ];
     mainProgram = "xdragon";
   };
 })
