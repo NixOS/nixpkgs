@@ -257,8 +257,10 @@ let
     (enableFeature doCoverage "coverage")
     (enableFeature enableStaticLibraries "static")
     (enableFeature enableSharedExecutables "executable-dynamic")
-    (enableFeature doCheck "tests")
-    (enableFeature doBenchmark "benchmarks")
+    # "--enable-tests/--enable-benchmarks are incompatible with explicitly
+    # specifying a component to configure."
+    (enableFeature (doCheck && buildTarget == "") "tests")
+    (enableFeature (doBenchmark && buildTarget == "") "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
     (enableFeature enableDeadCodeElimination "split-sections")
@@ -573,7 +575,7 @@ stdenv.mkDerivation ({
     runHook preConfigure
 
     echo configureFlags: $configureFlags
-    ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+    ${setupCommand} configure ${buildTarget} $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
       if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
         echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -653,7 +655,9 @@ stdenv.mkDerivation ({
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
       if [ -d "$packageConfFile" ]; then
-        mv "$packageConfFile/"* "$packageConfDir"
+        for file in "$packageConfFile/"*; do
+          mv "$file" "$packageConfDir"
+        done
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do

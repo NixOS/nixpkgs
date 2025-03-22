@@ -63,9 +63,9 @@ in
     pkgs.runCommand "fail-doCheck-setBuildTarget"
       { result = testers.testBuildFailure (doCheck (setBuildTarget "exe:foo" drv)); }
       ''
-        echo Checking testBuildFailure.log:
-        grep -F 'Test suite sometest: FAIL' $result/testBuildFailure.log
-        grep -F '/build/src/dist/build/sometest/sometest: cannot execute: required file not found' $result/testBuildFailure.log
+        echo -n 'Checking testBuildFailure.log: '
+        grep --quiet --fixed-strings 'Error: Setup: No test suites enabled.' $result/testBuildFailure.log
+        echo OK
         touch "$out"
       '';
 }
