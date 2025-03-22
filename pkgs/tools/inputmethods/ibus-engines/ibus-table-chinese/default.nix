@@ -66,6 +66,11 @@ stdenv.mkDerivation {
     export HOME=$(mktemp -d)/ibus-table-chinese
   '';
 
+  # Fix missing share/ibus-table, see https://github.com/NixOS/nixpkgs/issues/392191
+  postInstall = ''
+    cp -r /build/source/share/ibus-table $out/share
+  '';
+
   postFixup = ''
     rm -rf $HOME
   '';
