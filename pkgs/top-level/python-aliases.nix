@@ -262,6 +262,7 @@ mapAliases ({
   gbulb = throw "gbulb has been removed as it is unmaintained and no longer compatible with PyGObject 3.50."; # added 2024-10-14
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
+  geeknote = throw "geeknote depends on the Python2-only library evernote"; # Added 2025-03-22
   GeoIP = geoip; # added 2023-02-19
   gigalixir = throw "gigalixir has been promoted to a top-level attribute name: `pkgs.gigalixir`"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
