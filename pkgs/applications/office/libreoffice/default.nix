@@ -351,6 +351,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (variant == "collabora") [
       ./fix-unpack-collabora.patch
+      ./skip-broken-sentence-breaking-rules.patch
     ];
 
   postPatch = ''
