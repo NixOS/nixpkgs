@@ -1,40 +1,47 @@
 {
-  stdenv,
   lib,
-  fetchurl,
+  stdenv,
   buildPythonPackage,
-  isPy3k,
-  astor,
-  gast,
-  google-pasta,
-  wrapt,
-  numpy,
-  six,
-  termcolor,
-  packaging,
-  protobuf,
-  absl-py,
-  grpcio,
-  mock,
-  scipy,
+  fetchurl,
+
+  # buildInputs
+  llvmPackages,
+
+  # build-system
   distutils,
   wheel,
+
+  # dependencies
   jax,
   ml-dtypes,
+  absl-py,
+  astor,
+  astunparse,
+  flatbuffers,
+  gast,
+  google-pasta,
+  grpcio,
+  h5py,
+  numpy,
   opt-einsum,
-  tensorflow-estimator-bin,
+  packaging,
+  protobuf,
+  scipy,
+  six,
   tensorboard,
+  tensorflow-estimator-bin,
+  termcolor,
+  typing-extensions,
+  wrapt,
+  isPy3k,
+  mock,
+
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   zlib,
   python,
   addDriverRunpath,
-  astunparse,
-  flatbuffers,
-  h5py,
-  llvmPackages,
-  typing-extensions,
 }:
 
 # We keep this binary build for three reasons:
@@ -68,37 +75,38 @@ buildPythonPackage rec {
 
   buildInputs = [ llvmPackages.openmp ];
 
-  dependencies = [
-    astunparse
-    flatbuffers
-    typing-extensions
+  build-system = [
     distutils
+    wheel
+  ];
+
+  nativeBuildInputs =
+    lib.optionals cudaSupport [ addDriverRunpath ]
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
+
+  dependencies = [
+    (if isCudaX64 then jax else ml-dtypes)
+    absl-py
+    astor
+    astunparse
+    distutils
+    flatbuffers
+    gast
+    google-pasta
+    grpcio
+    h5py
+    numpy
+    opt-einsum
     packaging
     protobuf
-    numpy
     scipy
-    (if isCudaX64 then jax else ml-dtypes)
-    termcolor
-    grpcio
     six
-    astor
-    absl-py
-    gast
-    opt-einsum
-    google-pasta
-    wrapt
-    tensorflow-estimator-bin
     tensorboard
-    h5py
+    tensorflow-estimator-bin
+    termcolor
+    typing-extensions
+    wrapt
   ] ++ lib.optional (!isPy3k) mock;
-
-  build-system =
-    [
-      distutils
-      wheel
-    ]
-    ++ lib.optionals cudaSupport [ addDriverRunpath ]
-    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
