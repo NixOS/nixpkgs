@@ -1,20 +1,22 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "angr-management";
-  version = "9.2.137";
+  version = "9.2.147";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr-management";
-    rev = "v${version}";
-    hash = "sha256-2ZKCTgQUcCSmg1/tm8n+3IfDw6Eey4reYgyWYlc7+4w=";
+    tag = "v${version}";
+    hash = "sha256-WPnrLgYae8rRwdhciGrc+z+OjYtkGFslODmBZx+3KPU=";
   };
+
+  pythonRelaxDeps = [ "binsync" ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -23,30 +25,31 @@ python3.pkgs.buildPythonApplication rec {
     (
       [
         # requirements from setup.cfg
+        angr
+        bidict
+        binsync
+        ipython
+        pyqodeng-angr
         pyside6
         pyside6-qtads
         qtawesome
         qtpy
-        angr
-        bidict
-        ipython
-        pyqodeng
         requests
-        tomlkit
-        thefuzz
-        binsync
         rpyc
+        thefuzz
+        tomlkit
         # requirements from setup.cfg -- vendorized qtconsole package
-        traitlets
-        jupyter-core
-        jupyter-client
-        pygments
         ipykernel
-        pyzmq
+        jupyter-client
+        jupyter-core
         packaging
+        pygments
+        pyzmq
+        traitlets
       ]
       ++ angr.optional-dependencies.AngrDB
       ++ requests.optional-dependencies.socks
+      ++ thefuzz.optional-dependencies.speedup
     );
 
   pythonImportsCheck = [ "angrmanagement" ];
@@ -54,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "The official angr GUI";
     homepage = "https://github.com/angr/angr-management";
+    changelog = "https://github.com/angr/angr-management/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
     mainProgram = "angr-management";
