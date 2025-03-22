@@ -6630,6 +6630,8 @@ self: super: with self; {
 
   inform = callPackage ../development/python-modules/inform { };
 
+  ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
