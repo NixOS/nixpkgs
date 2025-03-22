@@ -49,9 +49,9 @@ let
       }
     else if llvmMajor == "14" then
       {
-        version = "14.0.0+unstable-2024-07-15";
-        rev = "2823e7052b7999c10fff63bc8089e5aa205716f4";
-        hash = "sha256-8/4B74hYge6WiH7PzRGEgE3W7f9IkQ4VMmfkWKYA/l4=";
+        version = "14.0.0+unstable-2025-01-28";
+        rev = "9df26b6af308cb834a4013deb8094f386f29accd";
+        hash = "sha256-8VRQwXFbLcYgHtWKs73yuTsy2kkCgYgPqD+W/GPy1BM=";
       }
     else if llvmMajor == "11" then
       {
