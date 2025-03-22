@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "2.1.2";
+  version = "2.4.1";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-fuse";
     rev = "blobfuse2-${version}";
-    sha256 = "sha256-KzpD+6g1WwviydYE0v5pSH35zC41MrPlk5MitwAIgnE=";
+    sha256 = "sha256-QCrBsEh8o4GblCWNcJssm9c6uSQYVs+qrdzfmI9l278=";
   };
 in
 buildGoModule {
   pname = "blobfuse";
   inherit version src;
 
-  vendorHash = "sha256-+Z+mkTs/8qCtYcWZIMzsW9MQsC08KDJUHNbxyc6Ro5Y=";
+  vendorHash = "sha256-ZzpstCTABL9x5NM5tTiWZqOfI+BSKGZfb+ahbFUmcdo=";
 
   buildInputs = [ fuse3 ];
 
