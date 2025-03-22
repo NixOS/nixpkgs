@@ -14,8 +14,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "23.9.0";
-  sha256 = "c6b420bedbb049a6538c33af28abaf89011ccc879f0f0f81791675263c238f97";
+  version = "23.10.0";
+  sha256 = "b39e5fbd3debb8318ddea6af3e89b07dafb891421fb7ca99fbe19c99adabe5fd";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -54,6 +54,11 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/54d55f2337ebe04451da770935ad453accb147f9.patch?full_index=1";
       hash = "sha256-gmIyiSyNzC3pClL1SM2YicckWM+/2tsbV1xv2S3d5G0=";
+      revert = true;
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/8342183036400b32dc2f51f465b99e9f142adf20.patch?full_index=1";
+      hash = "sha256-PjpytNx9aQUj2D82+bXtPJc8ROoPEGQNSoUbYh3RSs0=";
       revert = true;
     })
     (fetchpatch2 {
