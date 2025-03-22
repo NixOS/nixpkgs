@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  python,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +20,17 @@ buildPythonPackage rec {
   };
 
   patches = [ ./no-invoke-git.patch ];
+
   postPatch = ''
     substituteInPlace ./setup.py --subst-var-by version ${version}
   '';
 
   build-system = [ setuptools ];
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
+
   preCheck = ''
-    python test_bridge_server.py &
+    ${python.interpreter} test_bridge_server.py &
   '';
 
   disabledTests = [
@@ -42,8 +43,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jfx_bridge" ];
 
   meta = {
-    description = "Base Python2/3 RPC bridge used for ghidra_bridge";
+    description = "Base Python RPC bridge used for ghidra_bridge";
     homepage = "https://github.com/justfoxing/jfx_bridge";
+    changelog = "https://github.com/justfoxing/jfx_bridge/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
