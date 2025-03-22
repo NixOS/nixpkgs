@@ -886,6 +886,7 @@ stdenv.mkDerivation (finalAttrs: {
       withKmod
       withLocaled
       withMachined
+      withNetworkd
       withPortabled
       withTimedated
       withTpm2Tss
