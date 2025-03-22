@@ -725,7 +725,7 @@ in {
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
   mopidy = handleTest ./mopidy.nix {};
-  morph-browser = handleTest ./morph-browser.nix { };
+  morph-browser = runTest ./morph-browser.nix;
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   moosefs = handleTest ./moosefs.nix {};
