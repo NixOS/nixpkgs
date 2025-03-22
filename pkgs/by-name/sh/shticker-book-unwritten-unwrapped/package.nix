@@ -4,19 +4,23 @@
   pkg-config,
   openssl,
   lib,
+
+  withSecretStore ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shticker-book-unwritten";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchCrate {
     inherit (finalAttrs) version;
     crateName = "shticker_book_unwritten";
-    hash = "sha256-jI2uL8tMUmjZ5jPkCV2jb98qtKwi9Ti4NVCPfuO3iB4=";
+    hash = "sha256-ncS0vn89PEYA7aRzXEfJMa2UR1EH31eka7BdksnGHtw=";
   };
 
-  cargoHash = "sha256-0eumZoAL8/nkeFS+sReCAYKHiXiqZHfdC/9Ao5U6/SQ=";
+  cargoHash = "sha256-6n3IsuLWnOef5bPm/i+BjWX+zQElBorr1qy/z+c+5jM=";
+
+  buildFeatures = lib.optionals withSecretStore [ "secret-store" ];
 
   nativeBuildInputs = [ pkg-config ];
 
