@@ -1406,6 +1406,8 @@ in
   sympa = runTest ./sympa.nix;
   syncthing = runTest ./syncthing/syncthing.nix;
   syncthing-folders = runTest ./syncthing/syncthing-folders.nix;
+  syncthing-guiPassword = runTest ./syncthing/syncthing-guiPassword.nix;
+  syncthing-guiPasswordFile = runTest ./syncthing/syncthing-guiPasswordFile.nix;
   syncthing-init = runTest ./syncthing/syncthing-init.nix;
   syncthing-many-devices = runTest ./syncthing/syncthing-many-devices.nix;
   syncthing-no-settings = runTest ./syncthing/syncthing-no-settings.nix;
