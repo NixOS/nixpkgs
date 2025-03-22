@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.35.1";
+  version = "1.36.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adrienverge";
     repo = "yamllint";
     tag = "v${version}";
-    hash = "sha256-+7Q2cPl4XElI2IfLAkteifFVTrGkj2IjZk7nPuc6eYM=";
+    hash = "sha256-AuU2bcGf5wdZAVmF9RxeastWDXnZbQLSb3GMsqKi7a4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Linter for YAML files";
     mainProgram = "yamllint";
     homepage = "https://github.com/adrienverge/yamllint";
-    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       mikefaille
