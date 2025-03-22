@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   accelerate,
   buildPythonPackage,
   docker,
@@ -106,22 +107,27 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smolagents" ];
 
-  disabledTests = [
-    # Missing dependencies
-    "test_ddgs_with_kwargs"
-    "test_e2b_executor_instantiation"
-    "test_flatten_messages_as_text_for_all_models"
-    "test_from_mcp"
-    "test_import_smolagents_without_extras"
-    "test_vision_web_browser_main"
-    # Tests require network access
-    "test_agent_type_output"
-    "test_can_import_sklearn_if_explicitly_authorized"
-    "test_transformers_message_no_tool"
-    "test_transformers_message_vl_no_tool"
-    "test_transformers_toolcalling_agent"
-    "test_visit_webpage"
-  ];
+  disabledTests =
+    [
+      # Missing dependencies
+      "test_ddgs_with_kwargs"
+      "test_e2b_executor_instantiation"
+      "test_flatten_messages_as_text_for_all_models"
+      "test_from_mcp"
+      "test_import_smolagents_without_extras"
+      "test_vision_web_browser_main"
+      # Tests require network access
+      "test_agent_type_output"
+      "test_can_import_sklearn_if_explicitly_authorized"
+      "test_transformers_message_no_tool"
+      "test_transformers_message_vl_no_tool"
+      "test_transformers_toolcalling_agent"
+      "test_visit_webpage"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Missing dependencies
+      "test_get_mlx"
+    ];
 
   meta = {
     description = "Barebones library for agents";
