@@ -734,8 +734,6 @@ with pkgs;
     callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
   ) patchRcPathBash patchRcPathCsh patchRcPathFish patchRcPathPosix;
 
-  pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
-
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
     ../build-support/setup-hooks/prune-libtool-files.sh;
 
@@ -10358,7 +10356,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  SDL = SDL1;
+  SDL = SDL_compat;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
@@ -10920,17 +10918,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_5_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_5_1 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_5_1;
+  sbcl_2_5_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -12349,6 +12347,7 @@ with pkgs;
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   util-linuxMinimal = util-linux.override {
+    cryptsetupSupport = false;
     nlsSupport = false;
     ncursesSupport = false;
     pamSupport = false;

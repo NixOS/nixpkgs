@@ -57,7 +57,6 @@ python3Packages.buildPythonApplication rec {
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
   dontWrapPythonPrograms = true;
   dontWrapGApps = true;
 

@@ -4293,8 +4293,6 @@ self: super: with self; {
 
   enturclient = callPackage ../development/python-modules/enturclient { };
 
-  enum34 = callPackage ../development/python-modules/enum34 { };
-
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
@@ -4565,9 +4563,7 @@ self: super: with self; {
 
   faker = callPackage ../development/python-modules/faker { };
 
-  fakeredis = callPackage ../development/python-modules/fakeredis {
-    redis-server = pkgs.redis;
-  };
+  fakeredis = callPackage ../development/python-modules/fakeredis { };
 
   falcon = callPackage ../development/python-modules/falcon { };
 
@@ -7919,9 +7915,7 @@ self: super: with self; {
 
   loguru-logging-intercept = callPackage ../development/python-modules/loguru-logging-intercept { };
 
-  logutils = callPackage ../development/python-modules/logutils {
-    redis-server = pkgs.redis;
-  };
+  logutils = callPackage ../development/python-modules/logutils { };
 
   logzero = callPackage ../development/python-modules/logzero { };
 
@@ -8602,9 +8596,7 @@ self: super: with self; {
 
   mobly = callPackage ../development/python-modules/mobly { };
 
-  mocket = callPackage ../development/python-modules/mocket {
-    redis-server = pkgs.redis;
-  };
+  mocket = callPackage ../development/python-modules/mocket { };
 
   mock = callPackage ../development/python-modules/mock { };
 
@@ -13887,8 +13879,6 @@ self: super: with self; {
 
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
-  pytzdata = callPackage ../development/python-modules/pytzdata { };
-
   pyu2f = callPackage ../development/python-modules/pyu2f { };
 
   pyudev = callPackage ../development/python-modules/pyudev {
@@ -14661,6 +14651,8 @@ self: super: with self; {
 
   roma = callPackage ../development/python-modules/roma { };
 
+  roman-numerals-py = callPackage ../development/python-modules/roman-numerals-py { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   romy = callPackage ../development/python-modules/romy { };
@@ -14713,9 +14705,7 @@ self: super: with self; {
 
   rpyc = callPackage ../development/python-modules/rpyc { };
 
-  rq = callPackage ../development/python-modules/rq {
-    redis-server = pkgs.redis;
-  };
+  rq = callPackage ../development/python-modules/rq { };
 
   rsa = callPackage ../development/python-modules/rsa { };
 
