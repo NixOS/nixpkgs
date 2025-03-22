@@ -9,27 +9,24 @@
 
   # build-system
   distutils,
-  wheel,
 
   # dependencies
-  jax,
   ml-dtypes,
   absl-py,
-  astor,
   astunparse,
   flatbuffers,
   gast,
   google-pasta,
   grpcio,
   h5py,
+  libclang,
   numpy,
   opt-einsum,
   packaging,
   protobuf,
-  scipy,
+  requests,
   six,
   tensorboard,
-  tensorflow-estimator-bin,
   termcolor,
   typing-extensions,
   wrapt,
@@ -57,7 +54,6 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 
   isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
-  isCudaX64 = cudaSupport && stdenv.hostPlatform.isx86_64;
 in
 buildPythonPackage rec {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
@@ -77,7 +73,6 @@ buildPythonPackage rec {
 
   build-system = [
     distutils
-    wheel
   ];
 
   nativeBuildInputs =
@@ -85,24 +80,22 @@ buildPythonPackage rec {
     ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
 
   dependencies = [
-    (if isCudaX64 then jax else ml-dtypes)
     absl-py
-    astor
     astunparse
-    distutils
     flatbuffers
     gast
     google-pasta
     grpcio
     h5py
+    libclang
+    ml-dtypes
     numpy
     opt-einsum
     packaging
     protobuf
-    scipy
+    requests
     six
     tensorboard
-    tensorflow-estimator-bin
     termcolor
     typing-extensions
     wrapt
