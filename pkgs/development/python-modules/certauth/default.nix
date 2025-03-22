@@ -5,6 +5,7 @@
   setuptools,
   pyopenssl,
   tldextract,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -24,11 +25,6 @@ buildPythonPackage {
     hash = "sha256-Rso5N0jb9k7bdorjPIUMNiZZPnzwbkxFNiTpsJ9pco0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "--cov certauth " ""
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -36,7 +32,10 @@ buildPythonPackage {
     tldextract
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "certauth" ];
 

@@ -12,6 +12,7 @@
   six,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -27,10 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-xCT3w0DDY73dtDL5jbssXM05Zlr44OOcy4vexgHyWiE=";
   };
 
-  postPatch = ''
-    sed -i '/--cov=/d' pyproject.toml
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -39,7 +36,10 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/click-contrib/click-repl";

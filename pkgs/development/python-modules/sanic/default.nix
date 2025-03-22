@@ -39,6 +39,9 @@ buildPythonPackage rec {
     hash = "sha256-17Nr0iNeZC1sHm0JETIufdMVqrhORts1WxCh8cukCKg=";
   };
 
+  # https://github.com/sanic-org/sanic/issues/3031
+  patches = [ ./websockets-14.2-compat.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [

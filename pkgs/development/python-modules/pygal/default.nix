@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  stdenv,
 
   # build-system
   setuptools,
@@ -53,6 +54,14 @@ buildPythonPackage rec {
   preCheck = ''
     # necessary on darwin to pass the testsuite
     export LANG=en_US.UTF-8
+  '';
+
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
+
+  postCheck = ''
+    export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
   '';
 
   meta = with lib; {
