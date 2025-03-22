@@ -16497,12 +16497,10 @@ with pkgs;
     yquake2-the-reckoning
     yquake2-all-games;
 
-  zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
+  zeroad-unwrapped = callPackage ../by-name/ze/zeroad-unwrapped/package.nix {
     wxGTK = wxGTK32;
     fmt = fmt_9;
-  });
-
-  zeroad = zeroadPackages.zeroad;
+  };
 
   ### DESKTOP ENVIRONMENTS
 
