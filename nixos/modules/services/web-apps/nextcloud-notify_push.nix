@@ -83,8 +83,12 @@ in
         description = "Push daemon for Nextcloud clients";
         documentation = [ "https://github.com/nextcloud/notify_push" ];
         after = [
+          "nextcloud-setup.service"
           "phpfpm-nextcloud.service"
           "redis-nextcloud.service"
+        ];
+        requires = [
+          "nextcloud-setup.service"
         ];
         wantedBy = [ "multi-user.target" ];
         environment = {
