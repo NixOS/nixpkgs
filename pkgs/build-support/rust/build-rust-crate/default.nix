@@ -286,10 +286,10 @@ crate_: lib.makeOverridable
       nativeBuildInputs = [ rust cargo jq ]
         ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
-        ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
-      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
-      dependencies = map lib.getLib dependencies_;
-      buildDependencies = map lib.getLib buildDependencies_;
+        ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_ ++ (map lib.getLib buildDependencies_);
+      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_ ++ (map lib.getLib dependencies_);
+      dependencies = dependencies_ ++ map lib.getLib dependencies_;
+      buildDependencies = buildDependencies_ ++ map lib.getLib buildDependencies_;
 
       completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
       completeBuildDeps = lib.unique (
