@@ -63,7 +63,7 @@ using:
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
 
-## SSH Access for test machines
+## SSH Access for test machines {#sec-nixos-test-ssh-access}
 
 An SSH-based backdoor to log into machines can be enabled with
 
