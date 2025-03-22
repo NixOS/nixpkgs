@@ -5,6 +5,7 @@
   fuse3,
   testers,
   blobfuse,
+  nix-update-script,
 }:
 
 let
@@ -28,7 +29,10 @@ buildGoModule {
   # https://github.com/NixOS/nixpkgs/pull/201196/files#diff-e669dbe391f8856f4564f26023fe147a7b720aeefe6869ab7a218f02a8247302R20
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion { package = blobfuse; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = blobfuse; };
+  };
 
   meta = with lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
