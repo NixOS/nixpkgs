@@ -8,4 +8,5 @@
   pauseVersion = "3.6";
   ccmVersion = "v1.31.2-0.20241016053446-0955fa330f90-build20241016";
   dockerizedVersion = "v1.31.6-rke2r1";
+  imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }

@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.177.11";
+  version = "0.178.5";
 
   outputs =
     [ "out" ]
@@ -110,20 +110,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cnzaW0paORio8AONtVVGUZWG+HsWte12aWK2qvfj8oI=";
+    hash = "sha256-YkoIOBoR5hMt99D1bJ1yWLv7C/rY6VKC5J/7c5SMUFs=";
   };
 
   patches = [
-    # Zed uses cargo-install to install cargo-about during the script execution.
-    # We provide cargo-about ourselves and can skip this step.
-    # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
-    # we also skip any crate for which the license cannot be determined.
-    ./0001-generate-licenses.patch
-
     # Upstream delegates linking on Linux to clang to make use of mold,
     # but builds fine with our standard linker.
     # This patch removes their linker override from the cargo config.
-    ./0002-linux-linker.patch
+    ./0001-linux-linker.patch
 
     # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
     "script/patches/use-cross-platform-livekit.patch"
@@ -136,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Hl5QWU9yKXedQFVd60Fz5O7B2e/YUqj3BLNmqC44UP0=";
+  cargoHash = "sha256-xJaiHngsm74RdcEUXaDrc/Hwy4ywZrEiJt7JYTc/NpM=";
 
   nativeBuildInputs =
     [
@@ -192,6 +186,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
 
   env = {
+    ALLOW_MISSING_LICENSES = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
