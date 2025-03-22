@@ -1,0 +1,10 @@
+--- a/tests/tools/ksvalidator.py
++++ b/tests/tools/ksvalidator.py
+@@ -26,6 +26,7 @@ class No_Parameters_TestCase(TestCase):
+         self.assertNotEqual(retval, 0)
+         self.assertTrue("usage:" in " ".join(messages))
+
++@unittest.skip('broken-path')
+ class Show_Param_Help_TestCase(TestCase):
+     """
+     Help with specified command line options should be printed
