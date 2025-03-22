@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , fetchpatch
 , git
-, postgresql
 , postgresqlTestHook
 , redis
 }:
@@ -85,7 +84,6 @@ py.pkgs.buildPythonPackage rec {
   nativeCheckInputs = [
     git
     redis
-    postgresql
     postgresqlTestHook
   ] ++ (with py.pkgs; [
     pytest-asyncio
@@ -139,6 +137,9 @@ py.pkgs.buildPythonPackage rec {
     email-validator
     jinja2
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
+
+  # Needed by redis in the darwin sandbox
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     redis-server &

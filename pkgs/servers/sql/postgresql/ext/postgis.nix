@@ -4,7 +4,6 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  file,
   gdalMinimal,
   geos,
   jitSupport,
@@ -82,7 +81,6 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
-  failureHook = "postgresqlStop";
 
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";

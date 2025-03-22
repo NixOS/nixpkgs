@@ -5,7 +5,6 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  postgresql,
   postgresqlTestHook,
 }:
 
@@ -41,7 +40,6 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     postgresqlTestHook
-    postgresql
   ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";

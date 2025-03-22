@@ -9,7 +9,6 @@
   pythonOlder,
   djangorestframework,
   # required for tests
-  postgresql,
   postgresqlTestHook,
   psycopg2,
   pytestCheckHook,
@@ -40,7 +39,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     djangorestframework
-    postgresql
     postgresqlTestHook
     psycopg2
     pytestCheckHook

@@ -4,13 +4,12 @@
 This hook starts a PostgreSQL server during the `checkPhase`. Example:
 
 ```nix
-{ stdenv, postgresql, postgresqlTestHook }:
+{ stdenv, postgresqlTestHook }:
 stdenv.mkDerivation {
 
   # ...
 
   nativeCheckInputs = [
-    postgresql
     postgresqlTestHook
   ];
 }

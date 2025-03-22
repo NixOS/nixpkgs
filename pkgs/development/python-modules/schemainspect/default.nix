@@ -11,7 +11,6 @@
   pytestCheckHook,
   pytest-xdist,
   pytest-sugar,
-  postgresql,
   postgresqlTestHook,
 }:
 buildPythonPackage rec {
@@ -48,7 +47,6 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-sugar
 
-    postgresql
     postgresqlTestHook
 
     sqlbag

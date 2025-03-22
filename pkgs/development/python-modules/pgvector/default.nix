@@ -13,7 +13,6 @@
   asyncpg,
   django,
   peewee,
-  postgresql,
   postgresqlTestHook,
   psycopg,
   psycopg2,
@@ -46,8 +45,9 @@ buildPythonPackage rec {
     peewee
     psycopg
     psycopg2
-    (postgresql.withPackages (p: with p; [ pgvector ]))
-    postgresqlTestHook
+    (postgresqlTestHook.override (old: {
+      postgresql = old.postgresql.withPackages (p: with p; [ pgvector ]);
+    }))
     pytest-asyncio
     pytestCheckHook
     scipy

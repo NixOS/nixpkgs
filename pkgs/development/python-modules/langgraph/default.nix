@@ -30,7 +30,6 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
-  postgresql,
   postgresqlTestHook,
 }:
 let
@@ -65,7 +64,6 @@ let
 
     nativeCheckInputs = [
       pytestCheckHook
-      postgresql
       postgresqlTestHook
     ];
 
@@ -133,7 +131,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    postgresql
     postgresqlTestHook
   ];
 

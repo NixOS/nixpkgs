@@ -27,10 +27,10 @@ postgresqlBuildExtension (finalAttrs: {
     dontUnpack = true;
     doCheck = true;
     nativeCheckInputs = [
-      postgresqlTestHook
-      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+      (postgresqlTestHook.override {
+        postgresql = postgresql.withPackages (_: [ finalAttrs.finalPackage ]);
+      })
     ];
-    failureHook = "postgresqlStop";
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     passAsFile = [ "sql" ];
     sql = ''

@@ -11,7 +11,6 @@
   postgresql,
   replaceVars,
   rustPlatform,
-  stdenv,
 }:
 
 let
