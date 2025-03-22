@@ -67,6 +67,8 @@ let
         tests = {
           inherit (nixosTests)
             syncthing
+            syncthing-guiPassword
+            syncthing-guiPasswordFile
             syncthing-init
             syncthing-many-devices
             syncthing-no-settings
