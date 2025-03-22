@@ -17701,7 +17701,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
+  xdragon = lowPrio (callPackage ../by-name/xd/xdragon/package.nix { });
 
   sail-riscv = callPackage ../applications/virtualization/sail-riscv {
     inherit (ocamlPackages) sail;
