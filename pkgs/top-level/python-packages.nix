@@ -6624,6 +6624,8 @@ self: super: with self; {
 
   ipython-genutils = callPackage ../development/python-modules/ipython-genutils { };
 
+  ipython-pygments-lexers = callPackage ../development/python-modules/ipython-pygments-lexers { };
+
   ipython = callPackage ../development/python-modules/ipython { };
 
   ipython-sql = callPackage ../development/python-modules/ipython-sql { };
