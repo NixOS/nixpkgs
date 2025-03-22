@@ -9,20 +9,22 @@
   pipewire,
   libpulseaudio,
   wayland,
+  udev,
+  vulkan-loader,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ashell";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = version;
-    hash = "sha256-a0yvmAq/4TDe+W1FLeLPSLppX81G6fdAOhzDmDJg3II=";
+    hash = "sha256-J97MRYYkNx8Ze4vcxZTDVOSQLCANyIBcDtqZEsEZ80w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Vh/+4iApi+03ZmMIDSXc9Mn408v3wC+WlNJsXNcva+Q=";
+  cargoHash = "sha256-XDcCCKq/NOzaKTDwVu0GCeGV70IlJ2TvD0w8ib+lEhg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,12 +35,14 @@ rustPlatform.buildRustPackage rec {
   runtimeDependencies = [
     wayland
     libGL
+    vulkan-loader
   ];
 
   buildInputs = [
     libpulseaudio
     libxkbcommon
     pipewire
+    udev
   ] ++ runtimeDependencies;
 
   meta = {
