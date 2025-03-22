@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "binsync";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "binsync";
     tag = "v${version}";
-    hash = "sha256-kwwFwCy02nidSQamexyqq3fByjQCJMIrW9jPPTdqL6c=";
+    hash = "sha256-f0pPuNTrZ5+iuJgtxLXJF89C9hKXwplhBA/olyhfsQ4=";
   };
 
   build-system = [ setuptools ];
