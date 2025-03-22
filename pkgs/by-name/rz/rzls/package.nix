@@ -7,17 +7,8 @@
 }:
 let
   pname = "rzls";
-  dotnet-sdk =
-    with dotnetCorePackages;
-    sdk_9_0
-    // {
-      inherit (sdk_8_0)
-        packages
-        targetPackages
-        ;
-    };
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
-
 in
 buildDotnetModule {
   inherit pname dotnet-sdk dotnet-runtime;
@@ -25,11 +16,11 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "razor";
-    rev = "2798396c3481573aa49f9c792179ebbb5e183dca";
-    hash = "sha256-tPROplLbKmWTbm0r3844zJX3mUQfIWv9jzjcflM5WJk=";
+    rev = "c0bd75d99369adcd5a2f7e1f1ac42bee8a3bf619";
+    hash = "sha256-0aIp9C8f5xSUsuC/wWe6k6Z2tlmFvEZVJdHXY66FolQ=";
   };
 
-  version = "9.0.0-preview.25156.2";
+  version = "9.0.0-preview.25161.2";
   projectFile = "src/Razor/src/rzls/rzls.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
