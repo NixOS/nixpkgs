@@ -2660,7 +2660,7 @@ self: super: with self; {
 
   configparser = callPackage ../development/python-modules/configparser { };
 
-  configshell = callPackage ../development/python-modules/configshell { };
+  configshell-fb = callPackage ../development/python-modules/configshell-fb { };
 
   configupdater = callPackage ../development/python-modules/configupdater { };
 
@@ -4137,6 +4137,8 @@ self: super: with self; {
   ebooklib = callPackage ../development/python-modules/ebooklib { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
+
+  ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
 
   eccodes = toPythonModule (pkgs.eccodes.override {
     enablePython = true;
@@ -8220,6 +8222,8 @@ self: super: with self; {
 
   mcp = callPackage ../development/python-modules/mcp { };
 
+  mcpadapt = callPackage ../development/python-modules/mcpadapt { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
@@ -11742,6 +11746,10 @@ self: super: with self; {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
+
+  pybind11-protobuf = callPackage ../development/python-modules/pybind11-protobuf { };
+
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
@@ -11897,6 +11905,8 @@ self: super: with self; {
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
+
+  pydantic-argparse-extensible = callPackage ../development/python-modules/pydantic-argparse-extensible { };
 
   pydantic-compat = callPackage ../development/python-modules/pydantic-compat { };
 
@@ -14725,7 +14735,7 @@ self: super: with self; {
     inherit (pkgs) libspatialindex;
   };
 
-  rtslib = callPackage ../development/python-modules/rtslib { };
+  rtslib-fb = callPackage ../development/python-modules/rtslib-fb { };
 
   rtsp-to-webrtc = callPackage ../development/python-modules/rtsp-to-webrtc { };
 
@@ -16089,6 +16099,8 @@ self: super: with self; {
   stringparser = callPackage ../development/python-modules/stringparser { };
 
   stringzilla = callPackage ../development/python-modules/stringzilla { };
+
+  strip-ansi = callPackage ../development/python-modules/strip-ansi { };
 
   stripe = callPackage ../development/python-modules/stripe { };
 

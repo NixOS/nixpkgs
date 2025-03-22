@@ -2416,13 +2416,6 @@ with pkgs;
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
 
-  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
-  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
-  maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
-  maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
-  maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
-  maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
-
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
   materialx = with python3Packages; toPythonApplication materialx;
@@ -3144,7 +3137,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.16";
+  elk7Version = "7.17.27";
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
@@ -4212,6 +4205,8 @@ with pkgs;
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
+
+  maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
@@ -16803,14 +16798,15 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
-    protobuf = protobuf_23;
-    # or-tools builds with -std=c++20, so abseil-cpp must
+    protobuf = protobuf_26.override {
+      abseil-cpp = abseil-cpp_202407;
+    };
+    # or-tools builds with -std=c++17, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp_202301.override {
+    abseil-cpp = abseil-cpp_202407.override {
       static = true;
-      cxxStandard = "20";
+      cxxStandard = "17";
     };
   };
 
