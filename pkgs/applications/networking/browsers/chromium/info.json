@@ -1,9 +1,9 @@
 {
   "chromium": {
-    "version": "134.0.6998.117",
+    "version": "134.0.6998.165",
     "chromedriver": {
-      "hash_darwin": "sha256-/o95v3X6mot2yReOEazoCNvfhuDm6xy/O1ksb0blWzU=",
-      "hash_darwin_aarch64": "sha256-9CFDVWt/UPg1mgP1lc7uVrzNV6Eiy8Ze/svoJNmT8Mw="
+      "hash_darwin": "sha256-yiURcjAoIksCZYJMTVygUtud+IQcKSDDDdGlXMHWtFY=",
+      "hash_darwin_aarch64": "sha256-pkZBqQL7UqT9BWRbrdnbVn+u3Obth1g+0B/PPnAJj40="
     },
     "deps": {
       "depot_tools": {
@@ -19,8 +19,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "cbb247b860ca6b9b18dfa791157e274eab8cad6e",
-        "hash": "sha256-StWP7bsmD5Byn9uLZz6mo/OTChUsW1Y0RhxuofsPLbY=",
+        "rev": "fd886e2cb29dd984c13deec032832dee68d8abe3",
+        "hash": "sha256-xD06hGSrccTGB6fUGw0b7RrGNBQjNmdGKPaRqhXVVOY=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -360,8 +360,8 @@
       },
       "src/third_party/icu": {
         "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
-        "rev": "bbccc2f6efc1b825de5f2c903c48be685cd0cf22",
-        "hash": "sha256-O9qrAt8lwNBg5LCVz+SfTe48uJx8onVYwn0LRXIhUvY="
+        "rev": "c9fb4b3a6fb54aa8c20a03bbcaa0a4a985ffd34b",
+        "hash": "sha256-Omv4sp9z44eINXtaE0+1TzIU1q2hWviANA79fmkF78U="
       },
       "src/third_party/jsoncpp/source": {
         "url": "https://chromium.googlesource.com/external/github.com/open-source-parsers/jsoncpp.git",
