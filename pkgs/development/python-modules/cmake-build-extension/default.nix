@@ -1,9 +1,9 @@
 {
+  lib,
   buildPythonPackage,
   cmake,
   fetchFromGitHub,
   gitpython,
-  lib,
   ninja,
   setuptools,
   setuptools-scm,
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "diegoferigo";
     repo = "cmake-build-extension";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-taAwxa7Sv+xc8xJRnNM6V7WPcL+TWZOkngwuqjAslzc=";
   };
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "cmake_build_extension" ];
+
   doPythonRuntimeDepsCheck = false;
 
   meta = {
