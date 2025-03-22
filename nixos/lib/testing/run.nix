@@ -51,11 +51,20 @@ in
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
+      nativeBuildInputs = [
+        hostPkgs.openssh
+        hostPkgs.inetutils
+      ];
+
       buildCommand = ''
         mkdir -p $out
 
         # effectively mute the XMLLogger
         export LOGFILE=/dev/null
+
+        ln -sf \
+          ${hostPkgs.systemd}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf \
+          ssh_config
 
         ${config.driver}/bin/nixos-test-driver -o $out
       '';

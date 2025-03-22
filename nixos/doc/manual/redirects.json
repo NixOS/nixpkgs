@@ -1946,6 +1946,12 @@
   "sec-test-the-test-framework": [
     "index.html#sec-test-the-test-framework"
   ],
+  "sec-nixos-test-ssh-access": [
+    "index.html#sec-nixos-test-ssh-access"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
+  ],
   "ch-testing-installer": [
     "index.html#ch-testing-installer"
   ],
