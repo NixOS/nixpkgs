@@ -101,7 +101,7 @@ python.pkgs.buildPythonApplication rec {
   preCheck = ''
     export HOME=$TMPDIR
     substituteInPlace tests/cli/test_run.py \
-      --replace-warn "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [

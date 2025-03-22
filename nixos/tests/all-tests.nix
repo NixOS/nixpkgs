@@ -433,6 +433,7 @@ in {
     imports = [ ./firefox.nix ] ;
     _module.args.firefoxPackage = pkgs.floorp;
   };
+  fluent-bit = handleTest ./fluent-bit.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
@@ -1051,7 +1052,7 @@ in {
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
-  scrutiny = handleTest ./scrutiny.nix {};
+  scrutiny = runTest ./scrutiny.nix;
   sddm = handleTest ./sddm.nix {};
   sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix {};
@@ -1275,6 +1276,7 @@ in {
   vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};
   vaultwarden = discoverTests (import ./vaultwarden.nix);
+  vdirsyncer = handleTest ./vdirsyncer.nix {};
   vector = handleTest ./vector {};
   velocity = runTest ./velocity.nix;
   vengi-tools = handleTest ./vengi-tools.nix {};

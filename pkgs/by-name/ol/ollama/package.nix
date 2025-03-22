@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   buildEnv,
   linkFarm,
@@ -43,15 +43,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.6.0";
-
-  buildGoModule = buildGo124Module;
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${version}";
-    hash = "sha256-xcnzLBrTbH5IRDZoUR0OoXslcTvml9d/jnQEM52Rmyg=";
+    hash = "sha256-ZQiBbVQbMYxC73DAPyWi6Yn/cPySpsPcTiCOHK3F35w=";
     fetchSubmodules = true;
   };
 

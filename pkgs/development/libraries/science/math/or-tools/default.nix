@@ -7,8 +7,9 @@
   eigen,
   ensureNewerSourcesForZipFilesHook,
   fetchFromGitHub,
-  replaceVars,
+  fetchpatch,
   glpk,
+  highs,
   lib,
   pkg-config,
   protobuf,
@@ -20,45 +21,54 @@
   zlib,
 }:
 
-let
-  pybind11_protobuf = fetchFromGitHub {
-    owner = "pybind";
-    repo = "pybind11_protobuf";
-    rev = "b713501f1da56d9b76c42f89efd00b97c26c9eac";
-    hash = "sha256-f6pzRWextH+7lm1xzyhx98wCIWH3lbhn59gSCcjsBVw=";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "9.7";
+  version = "9.11";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = "v${version}";
-    hash = "sha256-eHukf6TbY2dx7iEf8WfwfWsjDEubPtRO02ju0kHtASo=";
+    tag = "v${version}";
+    hash = "sha256-aRhUAs9Otvra7VPJvrf0fhDCGpYhOw1//BC4dFJ7/xI=";
   };
 
   patches = [
-    (replaceVars ./offline.patch {
-      pybind11_protobuf = "../../pybind11_protobuf";
+    (fetchpatch {
+      name = "0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch?rev=19";
+      hash = "sha256-QHQ9E3mhTznJVKB+nP/9jct3uz+SPcOZ7w5tjOQ8iuk=";
+    })
+    (fetchpatch {
+      name = "0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch?rev=19";
+      hash = "sha256-BNB3KlgjpWcZtb9e68Jkc/4xC4K0c+Iisw0eS6ltYXE=";
+    })
+    (fetchpatch {
+      name = "0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch";
+      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch?rev=19";
+      hash = "sha256-r38ZbRkEW1ZvJb0Uf56c0+HcnfouZZJeEYlIK7quSjQ=";
     })
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
   # cross-compiling. Instead, just tell it where to find protoc.
-  postPatch = ''
-    echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
-
-    cp -R ${pybind11_protobuf} pybind11_protobuf
-    chmod -R u+w pybind11_protobuf
-  '';
+  postPatch =
+    ''
+      echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
+    ''
+    # Patches from OpenSUSE:
+    # https://build.opensuse.org/projects/science/packages/google-or-tools/files/google-or-tools.spec?expand=1
+    + ''
+      sed -i -e '/CMAKE_DEPENDENT_OPTION(INSTALL_DOC/ s/BUILD_CXX AND BUILD_DOC/BUILD_CXX/' CMakeLists.txt
+      find . -iname \*CMakeLists.txt -exec sed -i -e 's/pybind11_native_proto_caster/pybind11_protobuf::pybind11_native_proto_caster/' '{}' \;
+      sed -i -e 's/TARGET pybind11_native_proto_caster/TARGET pybind11_protobuf::pybind11_native_proto_caster/' cmake/check_deps.cmake
+      sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
+    '';
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
     "-DBUILD_PYTHON=ON"
     "-DBUILD_pybind11=OFF"
-    "-DBUILD_pybind11_protobuf=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -95,6 +105,8 @@ stdenv.mkDerivation rec {
     glpk
     python.pkgs.absl-py
     python.pkgs.pybind11
+    python.pkgs.pybind11-abseil
+    python.pkgs.pybind11-protobuf
     python.pkgs.pytest
     python.pkgs.scipy
     python.pkgs.setuptools
@@ -104,21 +116,16 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [
     abseil-cpp
+    highs
     protobuf
-    (python.pkgs.protobuf4.override { protobuf = protobuf; })
+    (python.pkgs.protobuf.override { protobuf = protobuf; })
     python.pkgs.numpy
+    python.pkgs.pandas
+    python.pkgs.immutabledict
   ];
   nativeCheckInputs = [
     python.pkgs.matplotlib
-    python.pkgs.pandas
     python.pkgs.virtualenv
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # fatal error: 'python/google/protobuf/proto_api.h' file not found
-    "-I${protobuf.src}"
-    # fatal error: 'pybind11_protobuf/native_proto_caster.h' file not found
-    "-I${pybind11_protobuf}"
   ];
 
   # some tests fail on linux and hang on darwin
@@ -149,7 +156,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    mainProgram = "fzn-ortools";
+    mainProgram = "fzn-cp-sat";
     maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux ++ darwin;
   };

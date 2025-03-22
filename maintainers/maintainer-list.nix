@@ -13694,6 +13694,13 @@
     githubId = 10554636;
     name = "Braian A. Diez";
   };
+  linuxwhata = {
+    email = "linuxwhata@qq.com";
+    matrix = "@lwa:envs.net";
+    github = "linuxwhata";
+    githubId = 68576488;
+    name = "Zhou Ke";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
@@ -15155,6 +15162,13 @@
     github = "mcmtroffaes";
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
+  };
+  mcparland = {
+    email = "john@mcpar.land";
+    github = "mcpar-land";
+    githubId = 55669980;
+    name = "John McParland";
+    keys = [ { fingerprint = "39D2 171D D733 C718 DD21  285E B326 E14B 05D8 7A4E"; } ];
   };
   McSinyx = {
     email = "cnx@loang.net";
@@ -21594,6 +21608,12 @@
     github = "sepi";
     githubId = 529649;
     name = "Raffael Mancini";
+  };
+  sepiabrown = {
+    email = "bboxone@gmail.com";
+    github = "sepiabrown";
+    githubId = 35622998;
+    name = "Suwon Park";
   };
   seppeljordan = {
     email = "sebastian.jordan.mail@googlemail.com";
