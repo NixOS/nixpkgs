@@ -5577,7 +5577,6 @@ with pkgs;
     inherit (llvmPackages) lld stdenv;
   };
 
-  colmap = libsForQt5.callPackage ../by-name/co/colmap/package.nix { };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
   opensplatWithCuda = opensplat.override { cudaSupport = true; };
