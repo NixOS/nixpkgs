@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyqodeng-angr";
-  version = "0.0.11";
+  version = "0.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "pyqodeng";
     tag = "v${version}";
-    hash = "sha256-QA/h5CHGrv3HYIrRaJ1Eq+iXXmQ6dYbq2zixeO9rS1c=";
+    hash = "sha256-t4LcPVQfktAaTqTr9L2VDCEHbSO7qxCvUDz6rj0Zre4=";
   };
 
   postPatch = ''
