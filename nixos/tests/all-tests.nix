@@ -706,7 +706,7 @@ in {
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   miracle-wm = runTest ./miracle-wm.nix;
-  miriway = handleTest ./miriway.nix {};
+  miriway = runTest ./miriway.nix;
   misc = handleTest ./misc.nix {};
   misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
