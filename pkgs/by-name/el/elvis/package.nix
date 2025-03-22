@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace-fail '-lcurses' '-lncurses'
+      --replace-fail '-lcurses' '-lncurses' \
+      --replace-fail 'if [ -f /usr/include/sys/wait.h ]' 'if true'
   '';
 
   installPhase = ''
