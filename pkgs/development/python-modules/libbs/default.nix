@@ -5,6 +5,7 @@
   filelock,
   ghidra-bridge,
   jfx-bridge,
+  networkx,
   platformdirs,
   prompt-toolkit,
   psutil,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "libbs";
-  version = "2.8.0";
+  version = "2.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${version}";
-    hash = "sha256-YCLl5e/ecZQ6MZwQ9FRDtBHLwG5DltYSaH5q4Xy5D0M=";
+    hash = "sha256-hYRRmnxA6K7O6suaP1eGRnY89gok3JNNsL70XRGWYBU=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     filelock
     ghidra-bridge
     jfx-bridge
+    networkx
     platformdirs
     prompt-toolkit
     psutil
