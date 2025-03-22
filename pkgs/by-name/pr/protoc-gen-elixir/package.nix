@@ -2,6 +2,7 @@
   beamPackages,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 beamPackages.mixRelease rec {
   pname = "protoc-gen-elixir";
@@ -33,6 +34,8 @@ beamPackages.mixRelease rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A protoc plugin to generate Elixir code";
