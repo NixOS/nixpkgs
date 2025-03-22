@@ -4,11 +4,42 @@
   meta.maintainers = [ lib.maintainers.zupo ];
 
   nodes.terminal =
-    { config, pkgs, ... }:
+    { config, pkgs, lib, ... }:
+    let
+      # Create a patched version of the package that points to the local dashboard
+      # for easier testing
+      patchedPareto = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
+        postPatch = ''
+          substituteInPlace team/report.go \
+            --replace 'const reportURL = "https://dash.paretosecurity.com"' \
+                      'const reportURL = "http://dashboard"'
+        '';
+      });
+    in
     {
       imports = [ ./common/user-account.nix ];
 
-      services.paretosecurity.enable = true;
+      services.paretosecurity = {
+        enable = true;
+        package = patchedPareto;
+      };
+
+    };
+
+  nodes.dashboard =
+    { config, pkgs, ... }:
+    {
+      networking.firewall.allowedTCPPorts = [ 80 ];
+
+      services.nginx = {
+        enable = true;
+        virtualHosts."dashboard" = {
+          locations."/api/v1/team/".extraConfig = ''
+            add_header Content-Type application/json;
+            return 200 '{"message": "Linked device."}';
+          '';
+        };
+      };
     };
 
   nodes.xfce =
@@ -38,6 +69,14 @@
   enableOCR = true;
 
   testScript = ''
+    # start networking
+    for m in [terminal, dashboard]:
+      m.systemctl("start network-online.target")
+      m.wait_for_unit("network-online.target")
+
+    # paretosecurity expects .config to exist
+    terminal.succeed("su -- alice -c 'mkdir /home/alice/.config'")
+
     terminal.succeed(
       "su -- alice -c 'paretosecurity check"
       # Disable some checks that need intricate test setup so that this test
@@ -50,6 +89,15 @@
       + " --skip f962c423-fdf5-428a-a57a-827abc9b253e"  # Password manager installed
       + "'"
     )
+
+    terminal.succeed("su -- alice -c 'paretosecurity link"
+    + " paretosecurity://enrollTeam/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+    + "eyJ0b2tlbiI6ImR1bW15LXRva2VuIiwidGVhbUlEIjoiZHVtbXktdGVhbS1pZCIsImlhdCI6"
+    + "MTcwMDAwMDAwMCwiZXhwIjoxOTAwMDAwMDAwfQ.WgnL6_S0EBJHwF1wEVUG8GtIcoVvK5IjWbZpUeZr4Qw'")
+
+    config = terminal.succeed("cat /home/alice/.config/pareto.toml")
+    assert 'AuthToken = "dummy-token"' in config
+    assert 'TeamID = "dummy-team-id"' in config
 
     xfce.wait_for_x()
     xfce.succeed("xdotool mousemove 850 10")
