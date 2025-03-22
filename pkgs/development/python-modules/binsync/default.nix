@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   filelock,
   gitpython,
   libbs,
   prompt-toolkit,
   pycparser,
+  pyside6,
+  pytest-qt,
   pytestCheckHook,
+  setuptools,
   sortedcontainers,
   toml,
   tqdm,
-  pyside6,
-  flake8,
-  pytest,
-  pytest-qt,
 }:
 
 buildPythonPackage rec {
@@ -47,16 +45,15 @@ buildPythonPackage rec {
     ghidra = [ pyside6 ];
   };
 
-  doCheck = true;
-
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-qt
     pyside6
+    pytest-qt
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
-    "tests/test_angr_gui.py" # tries to import angrmanagement
+    # Test tries to import angrmanagement
+    "tests/test_angr_gui.py"
   ];
 
   pythonImportsCheck = [ "binsync" ];
