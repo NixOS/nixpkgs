@@ -2728,8 +2728,9 @@ with pkgs;
     citrix_workspace_24_02_0
     citrix_workspace_24_05_0
     citrix_workspace_24_08_0
+    citrix_workspace_24_11_0
   ;
-  citrix_workspace = citrix_workspace_24_08_0;
+  citrix_workspace = citrix_workspace_24_11_0;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -3536,10 +3537,6 @@ with pkgs;
   gyroflow = callPackage ../applications/video/gyroflow { };
 
   gzip = callPackage ../tools/compression/gzip { };
-
-  pdisk = callPackage ../tools/system/pdisk {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
-  };
 
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -5323,10 +5320,6 @@ with pkgs;
   };
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
-
-  vuls = callPackage ../by-name/vu/vuls/package.nix {
-    buildGoModule = buildGo123Module;
-  };
 
   xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
