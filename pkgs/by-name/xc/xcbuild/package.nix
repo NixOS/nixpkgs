@@ -95,7 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch =
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    ''
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
+        --replace-fail "/usr/bin/touch" "touch"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Fix build on gcc-13 due to missing includes
       sed -e '1i #include <cstdint>' -i \
         Libraries/libutil/Headers/libutil/Permissions.h \
