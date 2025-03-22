@@ -11,7 +11,6 @@
   glog,
   libGLU,
   glew,
-  qtbase,
   flann,
   cgal,
   gmp,
@@ -71,7 +70,7 @@ stdenv'.mkDerivation rec {
       glog
       libGLU
       glew
-      qtbase
+      qt5.qtbase
       flann
       lz4
       cgal
