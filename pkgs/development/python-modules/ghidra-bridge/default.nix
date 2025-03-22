@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jfx-bridge,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +19,7 @@ buildPythonPackage rec {
   };
 
   patches = [ ./no-invoke-git.patch ];
+
   postPatch = ''
     substituteInPlace ./setup.py --subst-var-by version ${version}
   '';
@@ -28,11 +28,15 @@ buildPythonPackage rec {
 
   dependencies = [ jfx-bridge ];
 
+  # Tests require a running server instance
+  doCheck = false;
+
   pythonImportsCheck = [ "ghidra_bridge" ];
 
   meta = {
-    description = "Python 3 bridge to Ghidra's Python scripting";
+    description = "Python bridge to Ghidra's Python scripting";
     homepage = "https://github.com/justfoxing/ghidra_bridge";
+    changelog = "https://github.com/justfoxing/ghidra_bridge/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
