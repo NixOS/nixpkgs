@@ -4417,8 +4417,6 @@ self: super: with self; {
 
   events = callPackage ../development/python-modules/events { };
 
-  evernote = callPackage ../development/python-modules/evernote { };
-
   evohome-async = callPackage ../development/python-modules/evohome-async { };
 
   evolutionhttp = callPackage ../development/python-modules/evolutionhttp { };
