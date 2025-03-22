@@ -1,5 +1,5 @@
 { stdenv, lib, autoPatchelfHook, fetchzip, xz, ncurses5, ncurses, readline, gmp, mpfr
-, expat, libipt, zlib, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
+, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
 , majorVersion
 }:
 
@@ -69,6 +69,11 @@ stdenv.mkDerivation(finalAttrs:
         hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
+      aarch64-linux = {
+        inherit url;
+        hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
+        upstreamTriplet = "aarch64-linux-gnu";
+      };
     }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
   };
   inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
@@ -101,6 +106,8 @@ in {
 
   buildInputs = [
     expat
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    zstd
   ] ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
     ncurses
   ] ++ lib.optionals (lib.versionOlder majorVersion "13") [
@@ -187,7 +194,7 @@ in {
     homepage = "https://www.gnu.org/software/gnat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ethindp ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
