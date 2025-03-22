@@ -15173,49 +15173,17 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  quake3wrapper = callPackage ../games/quake3/wrapper { };
-
-  quake3arena = quake3wrapper {
-    pname = "quake3";
-    paks = [
-      quake3arenadata
-      quake3pointrelease
-    ];
-  };
-
-  quake3arena-hires = quake3wrapper {
-    pname = "quake3";
-    paks = [
-      quake3arenadata
-      quake3pointrelease
-      quake3hires
-    ];
-  };
-
-  quake3demo = quake3wrapper {
-    pname = "quake3-demo";
-    paks = [
-      quake3demodata
-      quake3pointrelease
-    ];
-  };
-
-  quake3demo-hires = quake3wrapper {
-    pname = "quake3-demo";
-    paks = [
-      quake3demodata
-      quake3pointrelease
-      quake3hires
-    ];
-  };
-
-  quake3arenadata = callPackage ../games/quake3/content/arena.nix { };
-
-  quake3demodata = callPackage ../games/quake3/content/demo.nix { };
-
-  quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
-
-  quake3hires = callPackage ../games/quake3/content/hires.nix { };
+  inherit (import ../games/quake3 pkgs.callPackage)
+    quake3wrapper
+    quake3arenadata
+    quake3demodata
+    quake3pointrelease
+    quake3arena
+    quake3arena-hires
+    quake3demo
+    quake3demo-hires
+    quake3hires
+    ;
 
   quakespasm = callPackage ../games/quakespasm { };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
