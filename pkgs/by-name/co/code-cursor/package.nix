@@ -48,26 +48,27 @@
 }:
 let
   pname = "cursor";
-  version = "0.45.14";
+  version = "0.47.8";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-x86_64.AppImage";
-      hash = "sha256-5MGWJi8TP+13jZf6YMMUU5uYY/3OBTFxtGpirvgj8ZI=";
+      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/linux/x64/Cursor-0.47.8-82ef0f61c01d079d1b7e5ab04d88499d5af500e3.deb.glibc2.25-x86_64.AppImage";
+      hash = "sha256-3Ph5A+x1hW0SOaX8CF7b/8Fq7eMeBkG1ju9vud6Cbn0=";
     };
-    aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-arm64.AppImage";
-      hash = "sha256-8OUlPuPNgqbGe2x7gG+m3n3u6UDvgnVekkjJ08pVORs=";
-    };
+    # Cursor's release for aarch64-linux is the wrong version (temporarily).
+    # aarch64-linux = fetchurl {
+    #   url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-arm64.AppImage";
+    #   hash = "sha256-8OUlPuPNgqbGe2x7gG+m3n3u6UDvgnVekkjJ08pVORs=";
+    # };
     x86_64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-x64.dmg";
-      hash = "sha256-NyDY74PZjSjpuTSVaO/l9adPcLX1kytyrFGQjJ/8WcQ=";
+      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-T5N8b/6HexQ2ZchWUb9CL3t9ks93O9WJgrDtxfE1SgU=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-arm64.dmg";
-      hash = "sha256-A503TxDDFENqMnc1hy/lMMyIgC7YwwRYPJy+tp649Eg=";
+      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-ycroylfEZY/KfRiXvfOuTdyyglbg/J7DU12u6Xrsk0s=";
     };
   };
 
@@ -77,14 +78,6 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit version pname;
     src = source;
-
-    # Fix the missing keymap issue
-    postExtract = ''
-      echo $out
-      native_keymap="$out/usr/share/cursor/resources/app/node_modules/native-keymap"
-      ln -s $native_keymap/build/Release $native_keymap/build/Debug
-    '';
-
   };
 
   wrappedAppimage = appimageTools.wrapType2 {
@@ -166,10 +159,6 @@ stdenvNoCC.mkDerivation {
 
       rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
 
-      # # Replace the supplied libraries with nixpkgs versions
-      # rm $out/share/cursor/{libEGL.sl,libffmpeg.so,libGLESv2.so,libvk_swiftshader.so,libvulkan.so.1}
-      # ln -s ${egl-wayland}/lib/libEGL.so $out/share/cursor/libEGL.so
-
       # Fix the desktop file to point to the correct location
       substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/share/cursor/cursor"
 
@@ -208,7 +197,13 @@ stdenvNoCC.mkDerivation {
       sarahec
       aspauldingcode
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    # Temporary: Cursor doesn't supply a 0.47.8 build for aarch64-linux
+    badPlatforms = [ "aarch64-linux" ];
     mainProgram = "cursor";
   };
 }
