@@ -188,6 +188,8 @@ class Driver:
                 sys.exit(1)
             except RequestedAssertionFailed:
                 exc_type, exc, tb = sys.exc_info()
+                # We manually print the stack frames, keeping only the ones from the test script
+                # (note: because the script is not a real file, the frame filename is `<string>`)
                 filtered = [
                     frame
                     for frame in traceback.extract_tb(tb)
