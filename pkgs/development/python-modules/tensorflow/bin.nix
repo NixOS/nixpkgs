@@ -114,28 +114,6 @@ buildPythonPackage rec {
       mv "$f" "$(sed -E 's/(nv[0-9]+)\.0*([0-9]+)/\1.\2/' <<< "$f")"
     done
 
-    wheel unpack --dest unpacked ./*.whl
-    rm ./*.whl
-    (
-      cd unpacked/tensorflow*
-      # Adjust dependency requirements:
-      # - Relax flatbuffers, gast, protobuf, tensorboard, and tensorflow-estimator version requirements that don't match what we have packaged
-      # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
-      # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
-      # - numpy was pinned to fix some internal tests: https://github.com/tensorflow/tensorflow/issues/60216
-      sed -i *.dist-info/METADATA \
-        -e "/Requires-Dist: flatbuffers/d" \
-        -e "/Requires-Dist: gast/d" \
-        -e "/Requires-Dist: keras/d" \
-        -e "/Requires-Dist: libclang/d" \
-        -e "/Requires-Dist: protobuf/d" \
-        -e "/Requires-Dist: tensorboard/d" \
-        -e "/Requires-Dist: tensorflow-estimator/d" \
-        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d" \
-        -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
-    )
-    wheel pack ./unpacked/tensorflow*
-
     popd
   '';
 
