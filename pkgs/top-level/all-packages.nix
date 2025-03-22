@@ -6676,9 +6676,7 @@ with pkgs;
 
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
-  tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_18;
-  };
+  tinygo = callPackage ../development/compilers/tinygo { };
 
   urweb = callPackage ../development/compilers/urweb {
     icu = icu67;
