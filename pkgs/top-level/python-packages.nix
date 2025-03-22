@@ -6156,6 +6156,8 @@ self: super: with self; {
 
   html5tagger = callPackage ../development/python-modules/html5tagger { };
 
+  html2print = callPackage ../development/python-modules/html2print { };
+
   html5-parser = callPackage ../development/python-modules/html5-parser { };
 
   htmldate = callPackage ../development/python-modules/htmldate { };
