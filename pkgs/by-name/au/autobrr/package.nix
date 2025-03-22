@@ -13,12 +13,12 @@
 
 let
   pname = "autobrr";
-  version = "1.59.0";
+  version = "1.60.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-etVhOgE8H8bWuraBepwDSZZzo9Xl819w2sT+UwpUVjM=";
+    hash = "sha256-HaNaVxOtlzquKvWmUzUELtv0ZQZ+C/G5ni9/QbOlAh4=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
