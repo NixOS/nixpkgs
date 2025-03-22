@@ -2522,6 +2522,8 @@ self: super: with self; {
 
   cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
 
+  cmake-build-extension = callPackage ../development/python-modules/cmake-build-extension { };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
@@ -13008,6 +13010,8 @@ self: super: with self; {
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
     inherit (pkgs) cmake ninja;
   });
+
+  pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
