@@ -14,7 +14,7 @@ in
     rev = "v${version}";
     hash = "sha256-cTJmSrQ+xlDfrAyHKeiIvrUOgAh9DQT2NNizN8XT3P0=";
   };
-  patches = patches ++ [ ];
+  patches = patches ++ [ ./downgrade-bundler-version.patch ];
 })
 // {
   inherit version;

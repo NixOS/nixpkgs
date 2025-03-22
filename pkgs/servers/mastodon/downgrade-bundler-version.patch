@@ -1,0 +1,23 @@
+From 02aa830dc7771978acd224a9ac7b7ad61fe446c2 Mon Sep 17 00:00:00 2001
+Date: Sat, 22 Mar 2025 11:51:47 +0100
+Subject: [PATCH] Downgrade bundler version
+
+NixOS stable does not need the support of Ruby 3.4 that was added in
+bcfd6ab3e44697f4df5fbdf8566a7c66fe00a353.
+---
+ Gemfile.lock | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Gemfile.lock b/Gemfile.lock
+index cdd6b15dc..7d19c11ef 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -1065,4 +1065,4 @@ RUBY VERSION
+    ruby 3.3.4p94
+ 
+ BUNDLED WITH
+-   2.6.5
++   2.5.18
+-- 
+2.49.0
+
