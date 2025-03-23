@@ -1,10 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flit-core,
   certifi,
   cryptography,
+  docker,
+  fetchFromGitHub,
+  flit-core,
+  podman,
+  pycryptodome,
+  pytestCheckHook,
   python-dateutil,
   typing-extensions,
   urllib3,
@@ -15,9 +19,11 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F0jSlT/xM8xaQWfUp87p+2RY/8hG7vRq8/VJ4a5Fkhw=";
+  src = fetchFromGitHub {
+    owner = "Nitrokey";
+    repo = "nethsm-sdk-py";
+    tag = "v${version}";
+    hash = "sha256-vH5YjS3VO5krCMVQFcEgDhJeCUzo9EzFnBxq+zPuZ68=";
   };
 
   pythonRelaxDeps = true;
@@ -32,7 +38,24 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  nativeCheckInputs = [
+    docker
+    podman
+    pycryptodome
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "nethsm" ];
+
+  disabledTestPaths = [
+    # Tests require a running Docker instance
+    "tests/test_nethsm_config.py"
+    "tests/test_nethsm_keys.py"
+    "tests/test_nethsm_namespaces.py"
+    "tests/test_nethsm_other.py"
+    "tests/test_nethsm_system.py"
+    "tests/test_nethsm_users.py"
+  ];
 
   meta = with lib; {
     description = "Client-side Python SDK for NetHSM";
