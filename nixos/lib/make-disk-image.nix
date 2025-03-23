@@ -1,7 +1,7 @@
 /*
   Technical details
 
-  `make-disk-image` has a bit of magic to minimize the amount of work to do in a virtual machine.
+  `make-disk-image` has a bit of magic to minimize the amount of work to do in a virtual machine. It also might arguably have too much, or at least too specific magic, so please consider to work towards the effort of unifying our image builders, as outlined in https://github.com/NixOS/nixpkgs/issues/324817 before adding more.
 
   It relies on the [LKL (Linux Kernel Library) project](https://github.com/lkl/linux) which provides Linux kernel as userspace library.
 
