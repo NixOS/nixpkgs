@@ -42,9 +42,16 @@ jobs:
           nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux -o result-x86_64-linux
           nix-build --option restrict-eval true nixos/release.nix -A manual.aarch64-linux -o result-aarch64-linux
 
-      - name: Upload NixOS manual
+      - name: Upload NixOS manual for x86_64
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
-          name: nixos-manual-result
-          path: result-**
+          name: nixos-manual-x86_64-linux
+          path: result-x86_64-linux
+          if-no-files-found: error
+
+      - name: Upload NixOS manual for aarch64
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: nixos-manual-aarch64-linux
+          path: result-aarch64-linux
           if-no-files-found: error
