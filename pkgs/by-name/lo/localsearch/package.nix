@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.9.rc";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-URqEYD5RT4icF7MnH5vD+9dUeyrkKBFE0TjyjdMZmMs=";
+    hash = "sha256-1C9AjcP7KP5U9amrv18d7PWBjbnC6exRwJRkvf0MFLk=";
   };
 
   patches = [
