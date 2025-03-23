@@ -43,7 +43,7 @@ jobs:
           nix-build --option restrict-eval true nixos/release.nix -A manual.aarch64-linux -o result-aarch64-linux
 
       - name: Upload NixOS manual
-        uses: actions/upload-artifact@3850ca5b6c832f17a0f754f6293181ebbf4e161d # v3.2.5
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: nixos-manual-result
           path: result-**
