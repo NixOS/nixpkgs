@@ -51,11 +51,6 @@
   libopus,
   buildServer ? true,
   nocaps ? false,
-  AudioToolbox,
-  AVFoundation,
-  Carbon,
-  Cocoa,
-  CoreMedia,
   withUnfree ? false,
 
   # tries to compile and run generate_argument_docbook.c
@@ -154,13 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
       wayland-scanner
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioToolbox
-      AVFoundation
-      Carbon
-      Cocoa
-      CoreMedia
-    ]
     ++ lib.optionals withUnfree [
       faac
     ];
@@ -202,12 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=incompatible-function-pointer-types"
-    ]
-  );
-
-  env.NIX_LDFLAGS = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-framework AudioToolbox"
     ]
   );
 
