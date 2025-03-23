@@ -6,34 +6,34 @@
   libelf,
   libiberty,
   zlib,
-  # Once https://gitlab.com/eztrace/eztrace/-/issues/41
-  # is released we can switch to latest binutils.
-  libbfd_2_38,
-  libopcodes_2_38,
-  autoreconfHook,
+  otf2,
+  libbfd,
+  libopcodes,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "EZTrace";
-  version = "1.1-11";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "eztrace";
     repo = "eztrace";
-    rev = "eztrace-${version}";
-    hash = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
+    tag = version;
+    hash = "sha256-ccW4YjEf++tkdIJLze2x8B/SWbBBXnYt8UV9OH8+KGU=";
   };
 
   nativeBuildInputs = [
     gfortran
-    autoreconfHook
+    cmake
   ];
   buildInputs = [
     libelf
     libiberty
     zlib
-    libbfd_2_38
-    libopcodes_2_38
+    otf2
+    libbfd
+    libopcodes
   ];
 
   meta = with lib; {
