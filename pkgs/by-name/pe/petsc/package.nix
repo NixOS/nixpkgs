@@ -16,6 +16,7 @@
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
   mpiSupport ? true,
+  fortranSupport ? true,
   pythonSupport ? false, # petsc python binding
   withExamples ? false,
   withFullDeps ? false, # full External libraries support
@@ -130,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CXXOPTFLAGS=-O3"
       "CXXFLAGS=-O3"
     ]
+    ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
     ++ lib.optional pythonSupport "--with-petsc4py=1"
     ++ lib.optional withMetis "--with-metis=1"
     ++ lib.optional withParmetis "--with-parmetis=1"
@@ -179,7 +181,11 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [ "petsc4py" ];
 
   passthru = {
-    inherit mpiSupport pythonSupport;
+    inherit
+      mpiSupport
+      pythonSupport
+      fortranSupport
+      ;
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       fullDeps = petsc.override {
         withFullDeps = true;
