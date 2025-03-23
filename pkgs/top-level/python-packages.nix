@@ -11559,6 +11559,8 @@ self: super: with self; {
 
   pyexiftool = callPackage ../development/python-modules/pyexiftool { };
 
+  pyexpect = callPackage ../development/python-modules/pyexpect { };
+
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
   pyezviz = callPackage ../development/python-modules/pyezviz { };
