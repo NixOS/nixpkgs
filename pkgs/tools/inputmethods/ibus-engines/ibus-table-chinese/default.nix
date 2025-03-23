@@ -8,6 +8,7 @@
   ibus-table,
   python3,
   cmake,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -62,22 +63,15 @@ stdenv.mkDerivation {
   # FileExistsError: [Errno 17] File exists: '/build/tmp.BfVAUM4llr/ibus-table-chinese/.local/share/ibus-table'
   enableParallelBuilding = false;
 
-  preBuild = ''
-    export HOME=$(mktemp -d)/ibus-table-chinese
-  '';
-
   # Fix missing share/ibus-table, see https://github.com/NixOS/nixpkgs/issues/392191
   postInstall = ''
     cp -r /build/source/share/ibus-table $out/share
   '';
 
-  postFixup = ''
-    rm -rf $HOME
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
