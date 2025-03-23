@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-ai-documentintelligence";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_ai_documentintelligence";
     inherit version;
-    hash = "sha256-yLbvwPx+ZdeJLJWFz9JW99iz8rRs7PksdauC5inqwlM=";
+    hash = "sha256-JG7E2VMWWFF1s49of/3hezlGICIa+Wb2Nc7BWoHFt8w=";
   };
 
   build-system = [ setuptools ];
