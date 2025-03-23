@@ -63052,49 +63052,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "socket.io" = nodeEnv.buildNodePackage {
-    name = "socket.io";
-    packageName = "socket.io";
-    version = "4.8.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/socket.io/-/socket.io-4.8.1.tgz";
-      sha512 = "oZ7iUCxph8WYRHHcjBEc9unw3adt5CmSNlppj/5Q4k2RIrhl8Z5yY2Xr4j9zj0+wzVZ0bxmYoGSzKJnRl6A4yg==";
-    };
-    dependencies = [
-      sources."@socket.io/component-emitter-3.1.2"
-      sources."@types/cors-2.8.17"
-      sources."@types/node-22.13.10"
-      sources."accepts-1.3.8"
-      sources."base64id-2.0.0"
-      sources."bufferutil-4.0.9"
-      sources."cookie-0.7.2"
-      sources."cors-2.8.5"
-      sources."debug-4.3.7"
-      sources."engine.io-6.6.4"
-      sources."engine.io-parser-5.2.3"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."ms-2.1.3"
-      sources."negotiator-0.6.3"
-      sources."node-gyp-build-4.8.4"
-      sources."object-assign-4.1.1"
-      sources."socket.io-adapter-2.5.5"
-      sources."socket.io-parser-4.2.4"
-      sources."undici-types-6.20.0"
-      sources."utf-8-validate-6.0.5"
-      sources."vary-1.1.2"
-      sources."ws-8.17.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "node.js realtime framework server";
-      homepage = "https://github.com/socketio/socket.io/tree/main/packages/socket.io#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   speed-test = nodeEnv.buildNodePackage {
     name = "speed-test";
     packageName = "speed-test";
