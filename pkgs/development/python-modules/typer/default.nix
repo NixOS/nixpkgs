@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oFiMCn+mihl4oGmBhld3j4ar5v9epqv0cvlAoIv+Two=";
+    hash = "sha256-qy+rR1M6gTxJ/h8WsaNw/VgZCZwAsRngYz32XyIUS6U=";
   };
 
   build-system = [ pdm-backend ];

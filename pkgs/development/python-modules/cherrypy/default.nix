@@ -10,6 +10,7 @@
   path,
   portend,
   pyopenssl,
+  pytest-cov-stub,
   pytest-forked,
   pytest-services,
   pytestCheckHook,
@@ -38,10 +39,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
-      --replace-fail "--doctest-modules" "-vvv" \
-      --replace-fail "-p pytest_cov" "" \
-      --replace-fail "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
+      --replace-fail "--doctest-modules" "-vvv"
   '';
 
   build-system = [ setuptools-scm ];
@@ -57,6 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     objgraph
     path
+    pytest-cov-stub
     pytest-forked
     pytest-services
     pytestCheckHook

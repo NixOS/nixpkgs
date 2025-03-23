@@ -23,6 +23,7 @@
   unzip,
   versionCheckHook,
   nixosTests,
+  orthanc-framework,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Without this patch, the build fails to find `GOOGLE_PROTOBUF_VERIFY_VERSION`
     # The patch has been included upstream, it need to be removed in the next release.
     ./add-missing-include.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
   ];
 
   sourceRoot = "${finalAttrs.src.name}/OrthancServer";
@@ -98,6 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
   ];
 
+  # Remove warnings during the build
+  env.NIX_CFLAGS_COMPILE = "-Wno-builtin-macro-redefined";
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/orthanc
+    cp -r $src/OrthancServer/Resources/Samples $doc/share/doc/orthanc/Samples
+    cp -r $src/OrthancServer/Plugins/Samples $doc/share/doc/orthanc/OrthancPluginSamples
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -105,8 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) orthanc;
+  passthru = {
+    framework = orthanc-framework;
+    tests = {
+      inherit (nixosTests) orthanc;
+    };
   };
 
   meta = {

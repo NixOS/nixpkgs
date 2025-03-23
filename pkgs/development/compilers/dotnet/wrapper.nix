@@ -76,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/dotnet --info
+    HOME=$(mktemp -d) $out/bin/dotnet --info
     runHook postInstallCheck
   '';
 
@@ -282,14 +282,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       in
       unwrapped.passthru.tests or { }
       // {
-        version = testers.testVersion (
-          {
-            package = finalAttrs.finalPackage;
-          }
-          // lib.optionalAttrs (type != "sdk") {
-            command = "dotnet --info";
-          }
-        );
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
+        };
       }
       // lib.optionalAttrs (type == "sdk") ({
         console = lib.recurseIntoAttrs {

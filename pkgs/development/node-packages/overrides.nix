@@ -54,13 +54,6 @@ final: prev: {
     '';
   };
 
-  ijavascript = prev.ijavascript.override (oldAttrs: {
-    preRebuild = ''
-      export npm_config_zmq_external=true
-    '';
-    buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config

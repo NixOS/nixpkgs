@@ -6416,7 +6416,7 @@
     name = "Sebastian Krohn";
   };
   drawbu = {
-    email = "clement2104.boillot@gmail.com";
+    email = "nixpkgs@drawbu.dev";
     github = "drawbu";
     githubId = 69208565;
     name = "Clément Boillot";
@@ -13700,6 +13700,13 @@
     githubId = 10554636;
     name = "Braian A. Diez";
   };
+  linuxwhata = {
+    email = "linuxwhata@qq.com";
+    matrix = "@lwa:envs.net";
+    github = "linuxwhata";
+    githubId = 68576488;
+    name = "Zhou Ke";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
@@ -15161,6 +15168,13 @@
     github = "mcmtroffaes";
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
+  };
+  mcparland = {
+    email = "john@mcpar.land";
+    github = "mcpar-land";
+    githubId = 55669980;
+    name = "John McParland";
+    keys = [ { fingerprint = "39D2 171D D733 C718 DD21  285E B326 E14B 05D8 7A4E"; } ];
   };
   McSinyx = {
     email = "cnx@loang.net";
@@ -20715,6 +20729,13 @@
     keys = [ { fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273"; } ];
     name = "Rahul Butani";
   };
+  rseichter = {
+    email = "nixos.org@seichter.de";
+    github = "rseichter";
+    githubId = 30873939;
+    keys = [ { fingerprint = "6AE2 A847 23D5 6D98 5B34  0BC0 8E5F A470 9F69 E911"; } ];
+    name = "Ralph Seichter";
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
@@ -20990,6 +21011,13 @@
     github = "ryota-ka";
     githubId = 7309170;
     name = "Ryota Kameoka";
+  };
+  rypervenche = {
+    email = "git@ryper.org";
+    github = "rypervenche";
+    githubId = 1411504;
+    name = "rypervenche";
+    keys = [ { fingerprint = "1198 7A9F 03AE 47F0 4919  E334 6A41 2C4A ECE1 66EF"; } ];
   };
   rytone = {
     email = "max@ryt.one";
@@ -21600,6 +21628,12 @@
     github = "sepi";
     githubId = 529649;
     name = "Raffael Mancini";
+  };
+  sepiabrown = {
+    email = "bboxone@gmail.com";
+    github = "sepiabrown";
+    githubId = 35622998;
+    name = "Suwon Park";
   };
   seppeljordan = {
     email = "sebastian.jordan.mail@googlemail.com";

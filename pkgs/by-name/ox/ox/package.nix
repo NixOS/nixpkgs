@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
     repo = "ox";
     tag = version;
-    hash = "sha256-kTCdq3C0OUQS3tQRwEJ0+MTHZ8j2nnUARjdbmfH6ed4=";
+    hash = "sha256-h4oC+TRLPKgXid4YIn2TdTxgEBvbBDy66jfbyA5ia4o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1d5gGqEn6kBCXqAnwHAe7rnvaGG2wVODrxeQt+k6iJs=";
+  cargoHash = "sha256-Vf5Y/rXykaYkrnTjVMShnGYikDIu2b1l2oDOiB0O95I=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

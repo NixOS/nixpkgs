@@ -5176,14 +5176,14 @@ final: prev:
 
   git-worktree-nvim = buildVimPlugin {
     pname = "git-worktree.nvim";
-    version = "2023-11-07";
+    version = "2025-02-15";
     src = fetchFromGitHub {
-      owner = "ThePrimeagen";
+      owner = "polarmutex";
       repo = "git-worktree.nvim";
-      rev = "f247308e68dab9f1133759b05d944569ad054546";
-      sha256 = "0mspffvg2z5lx4ck96d2pnf1azy3s1zq720n6abnxzajadmnh47r";
+      rev = "3ad8c17a3d178ac19be925284389c14114638ebb";
+      sha256 = "057qh48vwiczqrwksrfk2lf24gs6cdl6fbsf3ay2yynd0jlqjyky";
     };
-    meta.homepage = "https://github.com/ThePrimeagen/git-worktree.nvim/";
+    meta.homepage = "https://github.com/polarmutex/git-worktree.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5904,6 +5904,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  houdini-nvim = buildVimPlugin {
+    pname = "houdini.nvim";
+    version = "2024-08-06";
+    src = fetchFromGitHub {
+      owner = "TheBlob42";
+      repo = "houdini.nvim";
+      rev = "1b7ec0a713a2aa9965848d8b93f66dc93716fd1c";
+      sha256 = "05np3p0lnsra6c6vx3h81vrba3nhwxrqb5l3qkdbx5bl58dds9bn";
+    };
+    meta.homepage = "https://github.com/TheBlob42/houdini.nvim";
+    meta.hydraPlatforms = [ ];
+  };
+
   hover-nvim = buildVimPlugin {
     pname = "hover.nvim";
     version = "2024-12-11";
@@ -6450,6 +6463,19 @@ final: prev:
       sha256 = "1bmvsr14b3hmbyzjx8wh4wyfqwh4vyy9zyvl04sz5kafw63j7wi1";
     };
     meta.homepage = "https://github.com/anuvyklack/keymap-layer.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  kitty-scrollback-nvim = buildVimPlugin {
+    pname = "kitty-scrollback.nvim";
+    version = "2025-03-20";
+    src = fetchFromGitHub {
+      owner = "mikesmithgh";
+      repo = "kitty-scrollback.nvim";
+      rev = "9b70b5f73b653745ddca4a8e49b9477fc33b817f";
+      sha256 = "0570ng60dzwdbbq76vpkdrww6jnm15vbcyy79885fvb0sjwcpf1a";
+    };
+    meta.homepage = "https://github.com/mikesmithgh/kitty-scrollback.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11152,14 +11178,14 @@ final: prev:
 
   obsidian-nvim = buildVimPlugin {
     pname = "obsidian.nvim";
-    version = "2024-08-01";
+    version = "2025-03-13";
     src = fetchFromGitHub {
-      owner = "epwalsh";
+      owner = "obsidian-nvim";
       repo = "obsidian.nvim";
-      rev = "14e0427bef6c55da0d63f9a313fd9941be3a2479";
-      sha256 = "15ycmhn48ryaqzch6w3w6llq2qgmjx8xwkb9dn0075z60dybpflr";
+      rev = "15b8c5fc730625a3f162817b13db144c5bba3a9f";
+      sha256 = "00amy1yg76ywic281pq4ycwjz1gxmqs14l35qf0ssp0vl8scq5gf";
     };
-    meta.homepage = "https://github.com/epwalsh/obsidian.nvim/";
+    meta.homepage = "https://github.com/obsidian-nvim/obsidian.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

@@ -18,21 +18,22 @@
   cargo,
   dbus,
   desktop-file-utils,
+  versionCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "tsukimi";
-  version = "0.19.4";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     tag = "v${version}";
-    hash = "sha256-7Us+mz0FHetka4uVDCWkAGyGMZRhQDotRsySljYZgCo=";
+    hash = "sha256-OxRxl/+JP3eqxc5b0pb6QbAAHrZgHrq1cawas2UrUro=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-JaBFL7XHVjf4NP41n9qtb5oQyaP1bYQETPYMCR9XEvQ=";
+    hash = "sha256-kt3otu5N3KAzJT992v80Mbgr0sOoPnonc1+pu5ANIxE=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +65,9 @@ stdenv.mkDerivation rec {
       gst-libav
     ]);
 
-  doCheck = false; # tests require networking
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

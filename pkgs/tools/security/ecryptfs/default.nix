@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = lib.optionals (!enablePython) [ "--disable-pywrap" ];
+  configureFlags = [ " --disable-openssl" ] ++ lib.optionals (!enablePython) [ "--disable-pywrap" ];
 
   nativeBuildInputs =
     [

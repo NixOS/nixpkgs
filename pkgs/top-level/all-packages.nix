@@ -734,8 +734,6 @@ with pkgs;
     callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
   ) patchRcPathBash patchRcPathCsh patchRcPathFish patchRcPathPosix;
 
-  pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
-
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
     ../build-support/setup-hooks/prune-libtool-files.sh;
 
@@ -1000,7 +998,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa VideoToolbox;
   };
 
-  inherit (callPackage ../development/tools/genealogos { }) genealogos-cli genealogos-api;
+  genealogos-api = genealogos-cli.override {
+    crate = "api";
+  };
 
   # This is to workaround gfal2-python broken against Python 3.12 or later.
   # TODO: Remove these lines after solving the breakage.
@@ -2328,10 +2328,6 @@ with pkgs;
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
-  homepage-dashboard = callPackage ../servers/homepage-dashboard {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
@@ -2415,13 +2411,6 @@ with pkgs;
   maliit-framework = libsForQt5.callPackage ../applications/misc/maliit-framework { };
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
-
-  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
-  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
-  maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
-  maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
-  maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
-  maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
 
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
@@ -2735,8 +2724,9 @@ with pkgs;
     citrix_workspace_24_02_0
     citrix_workspace_24_05_0
     citrix_workspace_24_08_0
+    citrix_workspace_24_11_0
   ;
-  citrix_workspace = citrix_workspace_24_08_0;
+  citrix_workspace = citrix_workspace_24_11_0;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -3144,7 +3134,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.16";
+  elk7Version = "7.17.27";
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
@@ -3543,10 +3533,6 @@ with pkgs;
   gyroflow = callPackage ../applications/video/gyroflow { };
 
   gzip = callPackage ../tools/compression/gzip { };
-
-  pdisk = callPackage ../tools/system/pdisk {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
-  };
 
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -4212,6 +4198,8 @@ with pkgs;
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
+
+  maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
@@ -5328,10 +5316,6 @@ with pkgs;
   };
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
-
-  vuls = callPackage ../by-name/vu/vuls/package.nix {
-    buildGoModule = buildGo123Module;
-  };
 
   xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
@@ -6903,12 +6887,6 @@ with pkgs;
     beam = beam_minimal;
     wxSupport = false;
     systemdSupport = false;
-  };
-  beam_nodocs = callPackage ./beam-packages.nix {
-    beam = beam_nodocs;
-    wxSupport = false;
-    systemdSupport = false;
-    ex_docSupport = false;
   };
 
   inherit (beam.interpreters)
@@ -8719,10 +8697,6 @@ with pkgs;
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
 
-  freeimage = callPackage ../development/libraries/freeimage {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   freeipa = callPackage ../os-specific/linux/freeipa {
     # NOTE: freeipa and sssd need to be built with the same version of python
     kerberos = krb5.override {
@@ -9171,6 +9145,7 @@ with pkgs;
     icu74
     icu75
     icu76
+    icu77
   ;
 
   icu = icu76;
@@ -10375,7 +10350,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  SDL = SDL1;
+  SDL = SDL_compat;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
@@ -10436,8 +10411,6 @@ with pkgs;
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile;
   };
-
-  snac2 = darwin.apple_sdk_11_0.callPackage ../servers/snac2 { };
 
   soapyairspy = callPackage ../applications/radio/soapyairspy {
     inherit (darwin) libobjc;
@@ -10939,17 +10912,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_5_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_5_1 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_5_1;
+  sbcl_2_5_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -12368,6 +12341,7 @@ with pkgs;
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   util-linuxMinimal = util-linux.override {
+    cryptsetupSupport = false;
     nlsSupport = false;
     ncursesSupport = false;
     pamSupport = false;
@@ -16816,14 +16790,15 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
-    protobuf = protobuf_23;
-    # or-tools builds with -std=c++20, so abseil-cpp must
+    protobuf = protobuf_26.override {
+      abseil-cpp = abseil-cpp_202407;
+    };
+    # or-tools builds with -std=c++17, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp_202301.override {
+    abseil-cpp = abseil-cpp_202407.override {
       static = true;
-      cxxStandard = "20";
+      cxxStandard = "17";
     };
   };
 
