@@ -15,23 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lttoolbox";
-  version = "3.7.1";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
     tag = "v${version}";
-    hash = "sha256-3lHXKtwQSrMGQEGOGr27e3kB2qKkTFZcEzeAnIm89Rg=";
+    hash = "sha256-T92TEhrWwPYW8e49rc0jfM0C3dmNYtuexhO/l5s+tQ0=";
   };
-
-  patches = [
-    # can be removed once the version goes past this commit
-    # https://github.com/apertium/lttoolbox/commit/e682fe18a96d5a865cfbd3e5661dbc7b3ace1821
-    (fetchpatch {
-      url = "https://github.com/apertium/lttoolbox/commit/e682fe18a96d5a865cfbd3e5661dbc7b3ace1821.patch";
-      hash = "sha256-VeP8Mv2KYxX+eVjIRw/jHbURaWN665+fiFaoT3VxAno=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
