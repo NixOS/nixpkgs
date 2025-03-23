@@ -45,8 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
-    ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
+    ++ lib.optional withMpris dbus
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
