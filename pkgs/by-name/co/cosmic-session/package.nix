@@ -8,19 +8,20 @@
   stdenv,
   xdg-desktop-portal-cosmic,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     rev = "epoch-${version}";
-    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
+    hash = "sha256-2EKkVdZ7uNNJ/E/3knmeH3EBa+tkYmIxP3t9d6yacww=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rK0tWckPvp31BT+K0pfs/mk/Z4XkwlOIwJEZwpYphJE=";
+  cargoHash = "sha256-iYObxjWJUKgZKGTkqtYgQK4758k0EYZGhIAM/oLxxso=";
 
   postPatch = ''
     substituteInPlace Justfile \
