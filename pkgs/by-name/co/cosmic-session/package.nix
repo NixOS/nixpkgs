@@ -51,16 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.providedSessions = [ "cosmic" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       a-kenji
       nyabinary
       thefossguy
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
