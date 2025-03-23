@@ -34,7 +34,17 @@ jobs:
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Building NixOS manual
-        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux
+        run: |
+          export NIX_PATH=nixpkgs=$(pwd)
+          nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux -o result-x86_64-linux
+          nix-build --option restrict-eval true nixos/release.nix -A manual.aarch64-linux -o result-aarch64-linux
+
+      - name: Upload NixOS manual
+        uses: actions/upload-artifact@3850ca5b6c832f17a0f754f6293181ebbf4e161d # v3.2.5
+        with:
+          name: nixos-manual-result
+          path: result-**
+          if-no-files-found: error

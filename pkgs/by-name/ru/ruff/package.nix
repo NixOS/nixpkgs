@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-uouy47Lzrrht3wBUiQePW7x6QJfpIce9ny/p6HNwCNY=";
+    hash = "sha256-/K6+zze5d0RAE7/Nalnmx9qKHI1rPDeh3OkTatgP5Q4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EaMNkliJmeKwxrnlK+aCFGvzbvVIjS0qHc9h9z9m47I=";
+  cargoHash = "sha256-uDuR7GF3918V6ssx4p64pOzCRlLl2vJR0FEBSUnlFQ8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
         --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
-    '';
+    ''
+  );
 
   # Run cargo tests
   checkType = "debug";
