@@ -41,7 +41,7 @@ buildPythonPackage rec {
       async-timeout
     ];
 
-  checkPhase = ''
+  checkPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     runHook preCheck
 
     dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- pytest ${lib.optionalString stdenv.hostPlatform.isDarwin "--ignore=jeepney/io/tests"}
