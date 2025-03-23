@@ -1,5 +1,6 @@
 {
   lib,
+  newScope,
   stdenv,
   fetchzip,
   replaceVars,
@@ -35,12 +36,12 @@
   # External libraries
   blas,
   lapack,
-  hdf5-fortran-mpi,
+  hdf5,
   metis,
   parmetis,
   scotch,
   scalapack,
-  mumps_par,
+  mumps,
   p4est,
   zlib, # propagated by p4est but required by petsc
 
@@ -50,7 +51,7 @@
 assert withFullDeps -> withCommonDeps;
 
 # This version of PETSc does not support a non-MPI p4est build
-assert withP4est -> (p4est.mpiSupport && mpiSupport && withZlib);
+assert withP4est -> (mpiSupport && withZlib);
 
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
@@ -59,6 +60,34 @@ assert withPtscotch -> mpiSupport;
 assert withScalapack -> mpiSupport;
 assert withMumps -> withScalapack;
 
+let
+  petscPackages = lib.makeScope newScope (self: {
+    inherit
+      # global override options
+      mpiSupport
+      fortranSupport
+      pythonSupport
+      precision
+      ;
+    enableMpi = self.mpiSupport;
+
+    petscPackages = self;
+    # external libraries
+    mpi = self.callPackage mpi.override { };
+    blas = self.callPackage blas.override { };
+    lapack = self.callPackage lapack.override { };
+    hdf5 = self.callPackage hdf5.override {
+      fortran = gfortran;
+      cppSupport = !mpiSupport;
+    };
+    metis = self.callPackage metis.override { };
+    parmetis = self.callPackage parmetis.override { };
+    scotch = self.callPackage scotch.override { };
+    scalapack = self.callPackage scalapack.override { };
+    mumps = self.callPackage mumps.override { };
+    p4est = self.callPackage p4est.override { };
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
   version = "3.22.4";
@@ -84,17 +113,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      blas
-      lapack
+      petscPackages.blas
+      petscPackages.lapack
     ]
-    ++ lib.optional withHdf5 hdf5-fortran-mpi
     ++ lib.optional withZlib zlib
-    ++ lib.optional withP4est p4est
-    ++ lib.optional withMetis metis
-    ++ lib.optional withParmetis parmetis
-    ++ lib.optional withPtscotch scotch
-    ++ lib.optional withScalapack scalapack
-    ++ lib.optional withMumps mumps_par;
+    ++ lib.optional withHdf5 petscPackages.hdf5
+    ++ lib.optional withP4est petscPackages.p4est
+    ++ lib.optional withMetis petscPackages.metis
+    ++ lib.optional withParmetis petscPackages.parmetis
+    ++ lib.optional withPtscotch petscPackages.scotch
+    ++ lib.optional withScalapack petscPackages.scalapack
+    ++ lib.optional withMumps petscPackages.mumps;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
@@ -186,6 +215,11 @@ stdenv.mkDerivation (finalAttrs: {
       pythonSupport
       fortranSupport
       ;
+    petscPackages = petscPackages.overrideScope (
+      final: prev: {
+        petsc = finalAttrs.finalPackage;
+      }
+    );
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       fullDeps = petsc.override {
         withFullDeps = true;
