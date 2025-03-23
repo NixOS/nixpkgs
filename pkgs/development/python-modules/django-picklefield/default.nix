@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
 
   # The PyPi source doesn't contain tests
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "gintas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UMMbJoSHWcdumZOFPhKNUjThGzU/8nhP2J8YsDjgbHo=";
+    sha256 = "sha256-/H6spsf2fmJdg5RphD8a4YADggr+5d+twuLoFMfyEac=";
   };
 
   propagatedBuildInputs = [ django ];
