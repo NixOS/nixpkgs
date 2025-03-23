@@ -9,7 +9,8 @@
   git,
   python3,
   swig,
-  boost,
+  # pin Boost 1.86 due to use of asio::io_service
+  boost186,
   cbc, # for clp
   cimg,
   clp, # for or-tools
@@ -70,7 +71,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cbc
     cimg
     clp
