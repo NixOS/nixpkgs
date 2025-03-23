@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scott-griffiths";
     repo = pname;
     tag = "bitstring-${version}";
-    hash = "sha256-0AaOVjroVb/maFBaB55ahwWyRHHnofja4pgSgjQMsT8=";
+    hash = "sha256-ZABAd42h+BqcpKTFV5PxcBN3F8FKV6Qw3rhP13eX57k=";
   };
 
   pythonRelaxDeps = [ "bitarray" ];
