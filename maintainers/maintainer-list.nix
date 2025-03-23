@@ -16193,16 +16193,16 @@
     github = "MrTarantoga";
     githubId = 53876219;
   };
-  mrupnikm = {
-    github = "mrupnikm";
-    githubId = 93078189;
-    name = "Matic Rupnik";
-  };
   mrtnvgr = {
     name = "Egor Martynov";
     github = "mrtnvgr";
     githubId = 48406064;
     keys = [ { fingerprint = "6FAD DB43 D5A5 FE52 6835  0943 5B33 79E9 81EF 48B1"; } ];
+  };
+  mrupnikm = {
+    github = "mrupnikm";
+    githubId = 93078189;
+    name = "Matic Rupnik";
   };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
