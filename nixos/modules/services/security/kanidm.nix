@@ -23,6 +23,7 @@ let
     hasPrefix
     isStorePath
     last
+    mapAttrs
     mapAttrsToList
     mkEnableOption
     mkForce
@@ -30,9 +31,10 @@ let
     mkMerge
     mkOption
     mkPackageOption
+    mkRenamedOptionModule
     optional
-    optionals
     optionalString
+    optionals
     splitString
     subtractLists
     types
@@ -139,9 +141,31 @@ let
 
   filterPresent = filterAttrs (_: v: v.present);
 
-  provisionStateJson = pkgs.writeText "provision-state.json" (
-    builtins.toJSON { inherit (cfg.provision) groups persons systems; }
-  );
+  provisionStateJson =
+    let
+      # Make sure the resulting state json does not contain any of our renamed options.
+      applyRenames =
+        state:
+        state
+        // {
+          systems.oauth2 = mapAttrs (
+            _: x:
+            removeAttrs x [
+              "redirectUri"
+              "landingUrl"
+            ]
+            // {
+              originUrl = x.redirectUri;
+              originLanding = x.landingUrl;
+            }
+          ) state.systems.oauth2;
+        };
+    in
+    pkgs.writeText "provision-state.json" (
+      builtins.toJSON {
+        inherit (applyRenames cfg.provision) groups persons systems;
+      }
+    );
 
   # Only recover the admin account if a password should explicitly be provisioned
   # for the account. Otherwise it is not needed for provisioning.
@@ -521,6 +545,11 @@ in
         default = { };
         type = types.attrsOf (
           types.submodule {
+            imports = [
+              (mkRenamedOptionModule [ "originUrl" ] [ "redirectUri" ])
+              (mkRenamedOptionModule [ "originLanding" ] [ "landingUrl" ])
+            ];
+
             options = {
               present = mkPresentOption "oauth2 resource server";
 
@@ -536,7 +565,7 @@ in
                 example = "Some Service";
               };
 
-              originUrl = mkOption {
+              redirectUri = mkOption {
                 description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
@@ -546,7 +575,7 @@ in
                 example = "https://someservice.example.com/auth/login";
               };
 
-              originLanding = mkOption {
+              landingUrl = mkOption {
                 description = "When redirecting from the Kanidm Apps Listing page, some linked applications may need to land on a specific page to trigger oauth2/oidc interactions.";
                 type = types.str;
                 example = "https://someservice.example.com/home";
