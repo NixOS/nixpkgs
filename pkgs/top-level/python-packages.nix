@@ -6630,6 +6630,8 @@ self: super: with self; {
 
   ipython-genutils = callPackage ../development/python-modules/ipython-genutils { };
 
+  ipython-pygments-lexers = callPackage ../development/python-modules/ipython-pygments-lexers { };
+
   ipython = callPackage ../development/python-modules/ipython { };
 
   ipython-sql = callPackage ../development/python-modules/ipython-sql { };
@@ -9427,6 +9429,8 @@ self: super: with self; {
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
   netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
+
+  netbox-contract = callPackage ../development/python-modules/netbox-contract { };
 
   netbox-dns = callPackage ../development/python-modules/netbox-dns { };
 
