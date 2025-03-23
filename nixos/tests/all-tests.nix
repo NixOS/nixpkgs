@@ -245,8 +245,6 @@ in {
   calibre-server = handleTest ./calibre-server.nix {};
   canaille = handleTest ./canaille.nix {};
   castopod = handleTest ./castopod.nix {};
-  cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
-  cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
   cassandra_4 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_4; };
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix {};

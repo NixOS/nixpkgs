@@ -270,6 +270,8 @@ mapAliases {
   cargo-information = throw "'cargo-information' has been removed due to being merged upstream into 'cargo'"; # Added 2025-03-09
   cargo-inspect = throw "'cargo-inspect' has been removed due to lack of upstream maintenance. Upstream recommends cargo-expand."; # Added 2025-01-26
   cargo-web = throw "'cargo-web' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
+  cassandra_3_0 = throw "'cassandra_3_0' has been removed has it reached end-of-life"; # Added 2025-03-23
+  cassandra_3_11 = throw "'cassandra_3_11' has been removed has it reached end-of-life"; # Added 2025-03-23
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   certmgr-selfsigned = certmgr; # Added 2023-11-30
   cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
