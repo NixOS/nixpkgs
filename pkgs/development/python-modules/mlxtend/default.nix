@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.3";
+  version = "0.23.4";
   pyproject = true;
 
   disabled = isPy27;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-c6I0dwu4y/Td2G6m2WP/52W4noQUmQMDvpzXA9RZauo=";
+    hash = "sha256-xoAHYRmqN5SrEWlc18ntTZ6WAznBlVZdf+x5Yev3ysE=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +37,6 @@ buildPythonPackage rec {
     pandas
     matplotlib
     joblib
-  ];
-
-  patches = [
-    # https://github.com/rasbt/mlxtend/pull/1119
-    ./0001-fix-test-replace-np.float_-to-np.float64.patch
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
