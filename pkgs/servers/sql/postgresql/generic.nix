@@ -395,12 +395,15 @@ let
       doInstallCheck =
         !(stdenv'.hostPlatform.isStatic)
         &&
-          # Tests just get stuck on macOS 14.x for v13 and v14
-          !(stdenv'.hostPlatform.isDarwin && olderThan "15")
-        &&
-          # x86: Likely due to rosetta emulation:
+          # Tests currently can't be run on darwin, because of a Nix bug:
+          # https://github.com/NixOS/nix/issues/12548
+          # https://git.lix.systems/lix-project/lix/issues/691
+          # The error appears as this in the initdb logs:
           #   FATAL:  could not create shared memory segment: Cannot allocate memory
-          # aarch64: not sure why, e.g. https://hydra.nixos.org/build/292573408/nixlog/7
+          # Don't let yourself be fooled when trying to remove this condition: Running
+          # the tests works fine most of the time. But once the tests (or any package using
+          # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
+          # will be stuck around, and any future builds with the tests enabled *will* fail.
           !(stdenv'.hostPlatform.isDarwin);
       installCheckTarget = "check-world";
 
