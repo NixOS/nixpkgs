@@ -3480,13 +3480,6 @@ in
     meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
   };
 
-  vim2nix = buildVimPlugin {
-    pname = "vim2nix";
-    version = "1.0";
-    src = ./vim2nix;
-    dependencies = [ self.vim-addon-manager ];
-  };
-
   vimsence = super.vimsence.overrideAttrs {
     meta = with lib; {
       description = "Discord rich presence for Vim";
