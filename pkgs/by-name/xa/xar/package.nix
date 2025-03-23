@@ -183,7 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/apple-oss-distributions/xar";
     description = "An easily extensible archive format";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.darwin.members ++ lib.attrValues { inherit (lib.maintainers) tie; };
+    maintainers =
+      lib.teams.darwin.members
+      ++ lib.attrValues { inherit (lib.maintainers) copumpkin tie; };
     platforms = lib.platforms.unix;
     mainProgram = "xar";
   };
