@@ -68,9 +68,13 @@ stdenv.mkDerivation {
       copyDesktopItems
     ];
 
-  buildInputs = lib.optionals (!headless) [
-    qt4-bundled
-  ];
+  buildInputs =
+    [
+      (lib.getLib stdenv.cc.cc)
+    ]
+    ++ lib.optionals (!headless) [
+      qt4-bundled
+    ];
 
   # Udev is loaded late at runtime
   appendRunpaths = [
