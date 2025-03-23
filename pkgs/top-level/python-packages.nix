@@ -6966,6 +6966,8 @@ self: super: with self; {
 
   jug = callPackage ../development/python-modules/jug { };
 
+  juliandate = callPackage ../development/python-modules/juliandate { };
+
   julius = callPackage ../development/python-modules/julius { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
