@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   pkg-config,
   qmake,
@@ -17,16 +18,39 @@
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bambootracker";
-  version = "0.6.4";
+  pname = "bambootracker" + lib.optionalString (lib.versionAtLeast qtbase.version "6.0") "-qt6";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tFUliKR55iZybNyYIF1FXh8RGf8jKEsGrWBuldB277g=";
+    hash = "sha256-WoyOqInOOOIEwsMOc2yoTdh9UhJOvFKE1GfkxOuXDe0=";
   };
+
+  patches = [
+    # Remove when version > 0.6.5
+    (fetchpatch {
+      name = "0001-bambootracker-Fix-compiler-warnings.patch";
+      url = "https://github.com/BambooTracker/BambooTracker/commit/d670cf8b6113318cd938cf19be76b6b14d3635f1.patch";
+      hash = "sha256-yyOMaOYKSc1hbbCL7wjFNPDmX2oMYo10J4hjZJss2zs=";
+    })
+
+    # Remove when version > 0.6.5
+    (fetchpatch {
+      name = "0002-bambootracker-Fix-GCC15-compat.patch";
+      url = "https://github.com/BambooTracker/BambooTracker/commit/92c0a7d1cfb05d1c6ae9482181c5c378082b772c.patch";
+      hash = "sha256-6K0RZD0LevggxFr92LaNmq+eMgOFJgFX60IgAw7tYdM=";
+    })
+
+    # Remove when version > 0.6.5
+    (fetchpatch {
+      name = "0003-bambootracker-Drop-unused-property.patch";
+      url = "https://github.com/BambooTracker/BambooTracker/commit/de4459f0315f099d3e0a2d20b938ec76285f2d46.patch";
+      hash = "sha256-zTh6i+hgQZ3kEid0IzQaR/PsrYlnhplccdlaS5g8FeA=";
+    })
+  ];
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
     # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
@@ -60,9 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
       "CONFIG+=system_rtaudio"
       "CONFIG+=system_rtmidi"
     ]
-    ++ lib.optionals (stdenv.cc.isClang || (lib.versionAtLeast qtbase.version "6.0")) [
+    ++ lib.optionals stdenv.cc.isClang [
       # Clang is extra-strict about some deprecations
-      # Latest Qt6 deprecated QCheckBox::stateChanged(int)
+      # https://github.com/BambooTracker/BambooTracker/issues/506
       "CONFIG+=no_warnings_are_errors"
     ];
 
@@ -84,12 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     mainProgram = "BambooTracker";
     homepage = "https://bambootracker.github.io/BambooTracker/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 })
