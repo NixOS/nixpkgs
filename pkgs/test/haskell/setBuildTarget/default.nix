@@ -19,8 +19,9 @@ let
       pname = "haskell-setBuildTarget";
       version = "0.1.0.0";
       src = ./src;
-      isLibrary = false;
+      isLibrary = true;
       isExecutable = true;
+      libraryHaskellDepends = [ base ];
       executableHaskellDepends = [ base ];
       testHaskellDepends = [ base ];
       license = "unknown";
