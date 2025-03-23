@@ -4819,6 +4819,12 @@
     githubId = 6487079;
     name = "Dane Rieber";
   };
+  concatime = {
+    email = "issam.e.maghni@mailbox.org";
+    github = "concatime";
+    githubId = 26262387;
+    name = "Issam E. Maghni";
+  };
   confus = {
     email = "con-f-use@gmx.net";
     github = "con-f-use";
