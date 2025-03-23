@@ -423,7 +423,7 @@ rec {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
       };
-    } ./hooks/vim-gen-doc-hook.sh
+    } ../hooks/vim-gen-doc-hook.sh
   ) { };
 
   vimCommandCheckHook = callPackage (
@@ -435,7 +435,7 @@ rec {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
-    } ./hooks/vim-command-check-hook.sh
+    } ../hooks/vim-command-check-hook.sh
   ) { };
 
   neovimRequireCheckHook = callPackage (
@@ -447,7 +447,7 @@ rec {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
-    } ./hooks/neovim-require-check-hook.sh
+    } ../hooks/neovim-require-check-hook.sh
   ) { };
 
   inherit
