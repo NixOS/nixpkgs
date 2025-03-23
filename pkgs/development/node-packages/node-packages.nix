@@ -61777,29 +61777,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  postcss = nodeEnv.buildNodePackage {
-    name = "postcss";
-    packageName = "postcss";
-    version = "8.5.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/postcss/-/postcss-8.5.3.tgz";
-      sha512 = "dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==";
-    };
-    dependencies = [
-      sources."nanoid-3.3.9"
-      sources."picocolors-1.1.1"
-      sources."source-map-js-1.2.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Tool for transforming styles with JS plugins";
-      homepage = "https://postcss.org/";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   postcss-cli = nodeEnv.buildNodePackage {
     name = "postcss-cli";
     packageName = "postcss-cli";
