@@ -220,12 +220,18 @@ stdenv.mkDerivation (finalAttrs: {
         petsc = finalAttrs.finalPackage;
       }
     );
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      fullDeps = petsc.override {
-        withFullDeps = true;
-        withParmetis = false;
+    tests =
+      {
+        serial = petsc.override {
+          mpiSupport = false;
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        fullDeps = petsc.override {
+          withFullDeps = true;
+          withParmetis = false;
+        };
       };
-    };
   };
 
   setupHook = ./setup-hook.sh;
