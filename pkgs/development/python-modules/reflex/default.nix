@@ -62,6 +62,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "fastapi"
     "gunicorn"
+    "psutil" # not affected by removed deprecated method
   ];
 
   pythonRemoveDeps = [
