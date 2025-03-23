@@ -71,10 +71,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wlav/cppyy-backend/blob/master/cling/";
     description = "Re-packaged Cling, as backend for cppyy";
-    license = licenses.bsd3Lbnl;
-    maintainers = with maintainers; [ kittywitch ];
+    license = lib.licenses.bsd3Lbnl;
+    maintainers = with lib.maintainers; [ kittywitch ];
   };
 }
