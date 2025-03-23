@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-XuSv4CVcbwWHuHiXxx4PfGJ8Pi+tfufbAdUiTFWNLcc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
