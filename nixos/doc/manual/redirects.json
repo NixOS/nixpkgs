@@ -1253,6 +1253,9 @@
   "module-services-postgres-plugins": [
     "index.html#module-services-postgres-plugins"
   ],
+  "module-services-postgres-pls": [
+    "index.html#module-services-postgres-pls"
+  ],
   "module-services-postgres-jit": [
     "index.html#module-services-postgres-jit"
   ],
