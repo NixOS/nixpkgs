@@ -232,6 +232,7 @@ let
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
+  buildTargetString = optionalString (buildTarget != "") (buildTarget + " ");
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
@@ -575,7 +576,7 @@ stdenv.mkDerivation ({
     runHook preConfigure
 
     echo configureFlags: $configureFlags
-    ${setupCommand} configure ${buildTarget} $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+    ${setupCommand} configure ${buildTargetString}$configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
       if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
         echo >&2 "*** abort because of serious configure-time warning from Cabal"
@@ -655,9 +656,13 @@ stdenv.mkDerivation ({
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
       if [ -d "$packageConfFile" ]; then
-        for file in "$packageConfFile/"*; do
-          mv "$file" "$packageConfDir"
-        done
+        ${if (buildTarget == "")
+        then ''mv "$packageConfFile/"* "$packageConfDir"''
+        else ''
+          for file in "$packageConfFile/"*; do
+            mv "$file" "$packageConfDir"
+          done
+        ''}
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do
