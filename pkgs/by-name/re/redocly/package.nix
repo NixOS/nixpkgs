@@ -22,8 +22,6 @@ buildNpmPackage rec {
 
   npmBuildScript = "prepare";
 
-  nativeBuildInputs = [ ];
-
   postBuild = ''
     npm --prefix packages/cli run copy-assets
   '';
@@ -50,7 +48,7 @@ buildNpmPackage rec {
     chmod +x $out/bin/redocly
   '';
 
-  passthru = {
+  passthru = {  
     tests.version = testers.testVersion { package = redocly; };
   };
 
