@@ -32,6 +32,10 @@
   withPtscotch ? withCommonDeps && mpiSupport,
   withMumps ? withCommonDeps,
   withP4est ? withFullDeps,
+  withHypre ? withCommonDeps && mpiSupport,
+  withFftw ? withCommonDeps,
+  withSuperLu ? withCommonDeps,
+  withSuitesparse ? withCommonDeps,
 
   # External libraries
   blas,
@@ -44,6 +48,10 @@
   mumps,
   p4est,
   zlib, # propagated by p4est but required by petsc
+  hypre,
+  fftw,
+  superlu,
+  suitesparse,
 
   # Used in passthru.tests
   petsc,
@@ -59,6 +67,7 @@ assert withParmetis -> (withMetis && mpiSupport);
 assert withPtscotch -> mpiSupport;
 assert withScalapack -> mpiSupport;
 assert (withMumps && mpiSupport) -> withScalapack;
+assert withHypre -> mpiSupport;
 
 let
   petscPackages = lib.makeScope newScope (self: {
@@ -86,6 +95,10 @@ let
     scalapack = self.callPackage scalapack.override { };
     mumps = self.callPackage mumps.override { };
     p4est = self.callPackage p4est.override { };
+    hypre = self.callPackage hypre.override { };
+    fftw = self.callPackage fftw.override { };
+    superlu = self.callPackage superlu.override { };
+    suitesparse = self.callPackage suitesparse.override { };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -123,7 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withParmetis petscPackages.parmetis
     ++ lib.optional withPtscotch petscPackages.scotch
     ++ lib.optional withScalapack petscPackages.scalapack
-    ++ lib.optional withMumps petscPackages.mumps;
+    ++ lib.optional withMumps petscPackages.mumps
+    ++ lib.optional withHypre petscPackages.hypre
+    ++ lib.optional withSuperLu petscPackages.superlu
+    ++ lib.optional withFftw petscPackages.fftw
+    ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
@@ -170,7 +187,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
     ++ lib.optional withP4est "--with-p4est=1"
     ++ lib.optional withZlib "--with-zlib=1"
-    ++ lib.optional withHdf5 "--with-hdf5=1";
+    ++ lib.optional withHdf5 "--with-hdf5=1"
+    ++ lib.optional withHypre "--with-hypre=1"
+    ++ lib.optional withSuperLu "--with-superlu=1"
+    ++ lib.optional withFftw "--with-fftw=1"
+    ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
   hardeningDisable = lib.optionals (!petsc-optimized) [
     "fortify"
