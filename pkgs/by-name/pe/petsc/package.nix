@@ -122,37 +122,16 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-cxx=mpicxx"
       "--with-fc=mpif90"
     ]
-    ++ lib.optionals withMetis [
-      "--with-metis=1"
-      "--with-metis-dir=${metis}"
-    ]
-    ++ lib.optionals withParmetis [
-      "--with-parmetis=1"
-      "--with-parmetis-dir=${parmetis}"
-    ]
-    ++ lib.optionals withPtscotch [
-      "--with-ptscotch=1"
-      "--with-ptscotch-include=${lib.getDev scotch}/include"
-      "--with-ptscotch-lib=[-L${lib.getLib scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
-    ]
-    ++ lib.optionals withScalapack [
-      "--with-scalapack=1"
-      "--with-scalapack-dir=${scalapack}"
-    ]
-    ++ lib.optionals withMumps [
-      "--with-mumps=1"
-      "--with-mumps-dir=${mumps_par}"
-    ]
+    ++ lib.optional withMetis "--with-metis=1"
+    ++ lib.optional withParmetis "--with-parmetis=1"
+    ++ lib.optional withPtscotch "--with-ptscotch=1"
+    ++ lib.optional withScalapack "--with-scalapack=1"
+    ++ lib.optional withMumps "--with-mumps=1"
     ++ lib.optionals withP4est [
       "--with-p4est=1"
-      "--with-zlib-include=${lib.getDev zlib}/include"
-      "--with-zlib-lib=[-L${lib.getLib zlib}/lib,-lz]"
+      "--with-zlib=1"
     ]
-    ++ lib.optionals withHdf5 [
-      "--with-hdf5=1"
-      "--with-hdf5-include=${lib.getDev hdf5-fortran-mpi}/include"
-      "--with-hdf5-lib=[-L${lib.getLib hdf5-fortran-mpi}/lib,-lhdf5]"
-    ]
+    ++ lib.optional withHdf5 "--with-hdf5=1"
     ++ lib.optionals petsc-optimized [
       "--with-debugging=0"
       "COPTFLAGS=-O3"
