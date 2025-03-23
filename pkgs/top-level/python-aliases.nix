@@ -390,6 +390,7 @@ mapAliases ({
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
   mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
+  modestmaps = throw "modestmaps is unmaintained and was never enabled for anything except Python27"; # Added 2025-03-23
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
   mrkd = throw "mrkd has been promoted to a top-level attribute name: `pkgs.mrkd`"; # added 2023-08-01
