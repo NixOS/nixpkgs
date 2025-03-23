@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
