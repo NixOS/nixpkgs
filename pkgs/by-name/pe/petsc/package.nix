@@ -27,10 +27,10 @@
   withHdf5 ? withCommonDeps,
   withMetis ? withCommonDeps,
   withZlib ? withP4est,
-  withScalapack ? withFullDeps,
+  withScalapack ? withCommonDeps && mpiSupport,
   withParmetis ? withFullDeps, # parmetis is unfree
-  withPtscotch ? withFullDeps,
-  withMumps ? withFullDeps,
+  withPtscotch ? withCommonDeps && mpiSupport,
+  withMumps ? withCommonDeps,
   withP4est ? withFullDeps,
 
   # External libraries
@@ -58,7 +58,7 @@ assert withParmetis -> (withMetis && mpiSupport);
 
 assert withPtscotch -> mpiSupport;
 assert withScalapack -> mpiSupport;
-assert withMumps -> withScalapack;
+assert (withMumps && mpiSupport) -> withScalapack;
 
 let
   petscPackages = lib.makeScope newScope (self: {
@@ -167,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPtscotch "--with-ptscotch=1"
     ++ lib.optional withScalapack "--with-scalapack=1"
     ++ lib.optional withMumps "--with-mumps=1"
+    ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
     ++ lib.optional withP4est "--with-p4est=1"
     ++ lib.optional withZlib "--with-zlib=1"
     ++ lib.optional withHdf5 "--with-hdf5=1";
