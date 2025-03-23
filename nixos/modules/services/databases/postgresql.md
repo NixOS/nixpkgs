@@ -330,7 +330,7 @@ self: super: {
 ## JIT (Just-In-Time compilation) {#module-services-postgres-jit}
 
 [JIT](https://www.postgresql.org/docs/current/jit-reason.html)-support in the PostgreSQL package
-is disabled by default because of the ~300MiB closure-size increase from the LLVM dependency. It
+is disabled by default because of the ~600MiB closure-size increase from the LLVM dependency. It
 can be optionally enabled in PostgreSQL with the following config option:
 
 ```nix
