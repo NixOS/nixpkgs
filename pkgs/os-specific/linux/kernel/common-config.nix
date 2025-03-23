@@ -111,6 +111,10 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
     power-management =
