@@ -17476,6 +17476,8 @@ self: super: with self; {
 
   ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
 
+  ttkbootstrap = callPackage ../development/python-modules/ttkbootstrap { };
+
   ttls = callPackage ../development/python-modules/ttls { };
 
   ttn-client = callPackage ../development/python-modules/ttn-client { };
