@@ -4869,6 +4869,12 @@
     githubId = 32609395;
     name = "B YI";
   };
+  copumpkin = {
+    email = "pumpkingod@gmail.com";
+    github = "copumpkin";
+    githubId = 2623;
+    name = "Dan Peebles";
+  };
   corbanr = {
     email = "corban@raunco.co";
     github = "CorbanR";
