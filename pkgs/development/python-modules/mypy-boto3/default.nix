@@ -1142,8 +1142,8 @@ rec {
       "sha256-0hUuTUVv6+WqpPn+TJVgsl5bIuw0WejLarVu/hv1trk=";
 
   mypy-boto3-route53-recovery-control-config =
-    buildMypyBoto3Package "route53-recovery-control-config" "1.37.0"
-      "sha256-VW984jFkCzfG2w2XP5fa5eiUjs31yTQbX5jyKuFIS20=";
+    buildMypyBoto3Package "route53-recovery-control-config" "1.37.18"
+      "sha256-biOC1fq0Fduxbh07i/LZWTeX+FPvWmrU7asljtW3fKg=";
 
   mypy-boto3-route53-recovery-readiness =
     buildMypyBoto3Package "route53-recovery-readiness" "1.37.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.37.16"
-      "sha256-fEvGy0Zp2ouvVGXi+yFpX1RTNVacb53UFXxv0rfNBd0=";
+    buildMypyBoto3Package "sagemaker" "1.37.18"
+      "sha256-kgcGaU90+TvFcxPCotm8dutYkk/GL2qTOtmMyxNzkgs=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.37.0"
