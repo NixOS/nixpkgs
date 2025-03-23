@@ -6966,6 +6966,8 @@ self: super: with self; {
 
   jug = callPackage ../development/python-modules/jug { };
 
+  juliandate = callPackage ../development/python-modules/juliandate { };
+
   julius = callPackage ../development/python-modules/julius { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
@@ -12793,7 +12795,9 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
-  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
+    inherit (pkgs) mesa;
+  };
 
   pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
 
@@ -14912,6 +14916,8 @@ self: super: with self; {
   schwifty = callPackage ../development/python-modules/schwifty { };
 
   scienceplots = callPackage ../development/python-modules/scienceplots { };
+
+  sciform = callPackage ../development/python-modules/sciform { };
 
   scim2-client = callPackage ../development/python-modules/scim2-client { };
 

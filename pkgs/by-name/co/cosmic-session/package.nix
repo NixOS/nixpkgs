@@ -8,19 +8,20 @@
   stdenv,
   xdg-desktop-portal-cosmic,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
-    rev = "epoch-${version}";
-    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-2EKkVdZ7uNNJ/E/3knmeH3EBa+tkYmIxP3t9d6yacww=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rK0tWckPvp31BT+K0pfs/mk/Z4XkwlOIwJEZwpYphJE=";
+  cargoHash = "sha256-iYObxjWJUKgZKGTkqtYgQK4758k0EYZGhIAM/oLxxso=";
 
   postPatch = ''
     substituteInPlace Justfile \
@@ -41,21 +42,25 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "prefix"
     (placeholder "out")
+    "--set"
+    "cosmic_dconf_profile"
+    "cosmic"
   ];
 
   env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
 
   passthru.providedSessions = [ "cosmic" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       a-kenji
       nyabinary
+      thefossguy
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -14,6 +14,7 @@ fish.section.md
 fuse.section.md
 geant4.section.md
 ibus.section.md
+inkscape.section.md
 kakoune.section.md
 krita.section.md
 linux.section.md
