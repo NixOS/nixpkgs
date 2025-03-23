@@ -569,6 +569,7 @@ in {
   installer = handleTest ./installer.nix {};
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix {};
   intune = handleTest ./intune.nix {};
+  interactive-repart-image = runTest ./interactive-repart-image.nix;
   invoiceplane = handleTest ./invoiceplane.nix {};
   iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
