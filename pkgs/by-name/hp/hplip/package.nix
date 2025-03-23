@@ -43,12 +43,8 @@ let
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
     hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
-    curlOptsList = [
-      "--user-agent"
-      "Mozilla/5.0 (X11; Linux x86_64; rv:136.0)"
-    ];
   };
 
   hplipState = replaceVars ./hplip.state {
