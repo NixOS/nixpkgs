@@ -8,6 +8,7 @@
   bison,
   systemd,
   boost186,
+  libedit,
   openssl,
   patchelf,
   mariadb-connector-c,
@@ -81,6 +82,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost186
+    libedit
     openssl
     systemd
   ] ++ lib.optional withPostgresql libpq;
