@@ -19,12 +19,15 @@ let
 
   initialPackages = self: { };
 
-  plugins = callPackage ./generated.nix {
-    inherit buildVimPlugin;
+  luaPackagePlugins = callPackage ./luaPackagePlugins.nix {
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
-  extras = callPackage ./extras.nix {
+  nodePackagePlugins = callPackage ./nodePackagePlugins.nix {
+    inherit buildVimPlugin;
+  };
+
+  plugins = callPackage ./generated.nix {
     inherit buildVimPlugin;
     inherit (neovimUtils) buildNeovimPlugin;
   };
@@ -44,7 +47,8 @@ let
 in
 lib.pipe initialPackages [
   (extends plugins)
-  (extends extras)
+  (extends luaPackagePlugins)
+  (extends nodePackagePlugins)
   (extends overrides)
   (extends aliases)
   lib.makeExtensible
