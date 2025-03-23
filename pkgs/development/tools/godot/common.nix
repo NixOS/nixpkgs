@@ -160,6 +160,9 @@ let
 
         module_mono_enabled = withMono;
 
+        # aliasing bugs exist with hardening+LTO
+        # https://github.com/godotengine/godot/pull/104501
+        ccflags = "-fno-strict-aliasing";
         linkflags = "-Wl,--build-id";
 
         use_sowrap = false;
