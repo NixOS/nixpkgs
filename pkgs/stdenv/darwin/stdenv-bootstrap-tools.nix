@@ -292,6 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    maintainers = lib.teams.darwin.members;
+    maintainers = [ ];
   };
 })
