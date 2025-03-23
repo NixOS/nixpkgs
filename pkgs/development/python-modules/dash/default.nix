@@ -16,6 +16,7 @@
   dash-core-components,
   dash-table,
   importlib-metadata,
+  stringcase,
   typing-extensions,
   requests,
   retrying,
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.18.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-qbvsYlf3byaT/4b+/BDvCgnaBKthL/J79y0CWh5Yid4=";
+    hash = "sha256-plGYBMwVQLBar48nv2BIH7ttfXM8Dnb3E0sPOZ2Et2M=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +83,7 @@ buildPythonPackage rec {
     dash-core-components
     dash-table
     importlib-metadata
+    stringcase
     typing-extensions
     requests
     retrying
