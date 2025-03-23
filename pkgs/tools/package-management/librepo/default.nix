@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ copumpkin ];
   };
 }

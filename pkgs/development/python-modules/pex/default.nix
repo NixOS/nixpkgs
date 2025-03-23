@@ -64,6 +64,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/pantsbuild/pex";
     changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      copumpkin
+    ];
   };
 }

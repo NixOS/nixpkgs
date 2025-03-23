@@ -161,6 +161,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://ostreedev.github.io/ostree/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ copumpkin ];
   };
 }
