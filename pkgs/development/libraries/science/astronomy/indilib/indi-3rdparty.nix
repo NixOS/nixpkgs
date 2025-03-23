@@ -67,7 +67,7 @@ let
         pname = "indi-3rdparty-${pname}";
         inherit src version;
 
-        sourceRoot = "source/${pname}";
+        sourceRoot = "${src.name}/${pname}";
 
         cmakeFlags =
           [

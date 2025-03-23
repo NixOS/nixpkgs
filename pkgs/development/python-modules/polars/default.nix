@@ -177,7 +177,7 @@ buildPythonPackage rec {
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "source/py-polars";
+    sourceRoot = "${src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
