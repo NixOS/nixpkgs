@@ -127,15 +127,20 @@ let
     (lib.concatStringsSep "\n")
   ]) +
   /* Now we update the other settings defined in cleanedConfig which are not
-  "folders" or "devices". */
+  "folders", "devices", or the "guiPasswordFile". */
   (lib.pipe cleanedConfig [
     builtins.attrNames
-    (lib.subtractLists ["folders" "devices"])
+    (lib.subtractLists ["folders" "devices" "guiPasswordFile"])
     (map (subOption: ''
       curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} ${curlAddressArgs "/rest/config/${subOption}"}
     ''))
     (lib.concatStringsSep "\n")
-  ]) + ''
+  ]) +
+  /* Now we hash the contents of guiPasswordFile and use the result to update the gui password */
+  (lib.optionalString (cfg.guiPasswordFile != null) ''
+     ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+     curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+  '') + ''
     # restart Syncthing if required
     if curl ${curlAddressArgs "/rest/config/restart-required"} |
        ${jq} -e .requiresRestart > /dev/null; then
@@ -165,6 +170,14 @@ in {
         description = mdDoc ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
