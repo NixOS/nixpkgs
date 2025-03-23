@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ andrewfield ];
     mainProgram = "alterware";
   };
-}
+})
