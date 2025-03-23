@@ -4,21 +4,19 @@
   fetchFromGitHub,
   fetchpatch,
   gitUpdater,
+  libsForQt5,
   pkg-config,
-  qmake,
-  qt5compat ? null,
-  qtbase,
-  qttools,
-  qtwayland,
+  qt6Packages,
   rtaudio_6,
   rtmidi,
-  wrapQtAppsHook,
+  withQt6 ? false,
 }:
 
-assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
-
+let
+  qtPackages = if withQt6 then qt6Packages else libsForQt5;
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bambootracker" + lib.optionalString (lib.versionAtLeast qtbase.version "6.0") "-qt6";
+  pname = "bambootracker" + lib.optionalString withQt6 "-qt6";
   version = "0.6.5";
 
   src = fetchFromGitHub {
@@ -52,32 +50,40 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
+  postPatch = lib.optionalString withQt6 ''
     # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
     # https://github.com/NixOS/nixpkgs/issues/214765
     substituteInPlace BambooTracker/lang/lang.pri \
       --replace 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    qttools
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with qtPackages; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
   buildInputs =
     [
-      qtbase
       rtaudio_6
       rtmidi
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
-      qt5compat
-    ];
+    ++ (
+      with qtPackages;
+      [
+        qtbase
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        qtwayland
+      ]
+      ++ lib.optionals withQt6 [
+        qt5compat
+      ]
+    );
 
   qmakeFlags =
     [

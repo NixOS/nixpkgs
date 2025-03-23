@@ -12830,8 +12830,7 @@ with pkgs;
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
-  bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
-  bambootracker-qt6 = qt6Packages.callPackage ../applications/audio/bambootracker { };
+  bambootracker-qt6 = bambootracker.override { withQt6 = true; };
 
   schismtracker = callPackage ../applications/audio/schismtracker {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
