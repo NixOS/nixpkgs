@@ -6,7 +6,7 @@
 with pkgs.lib;
 
 let
-  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ./make-test-python.nix ({
+  makeKafkaTest = name: { kafkaPackage, mode ? "kraft" }: (import ./make-test-python.nix ({
     inherit name;
     meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
@@ -103,10 +103,9 @@ let
   }) { inherit system; });
 
 in with pkgs; {
-  kafka_3_7 = makeKafkaTest "kafka_3_7" { kafkaPackage = apacheKafka_3_7; };
-  kafka_3_8 = makeKafkaTest "kafka_3_8" { kafkaPackage = apacheKafka_3_8; };
-  kafka_3_9 = makeKafkaTest "kafka_3_9" { kafkaPackage = apacheKafka_3_9; };
-  kafka_4_0 = makeKafkaTest "kafka_4_0" { kafkaPackage = apacheKafka_4_0; mode = "kraft"; };
+  kafka_3_7 = makeKafkaTest "kafka_3_7" { kafkaPackage = apacheKafka_3_7; mode = "zookeeper"; };
+  kafka_3_8 = makeKafkaTest "kafka_3_8" { kafkaPackage = apacheKafka_3_8; mode = "zookeeper"; };
+  kafka_3_9 = makeKafkaTest "kafka_3_9" { kafkaPackage = apacheKafka_3_9; mode = "zookeeper"; };
+  kafka_4_0 = makeKafkaTest "kafka_4_0" { kafkaPackage = apacheKafka_4_0; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
-  kafka_kraft = makeKafkaTest "kafka_kraft" { kafkaPackage = apacheKafka; mode = "kraft"; };
 }
