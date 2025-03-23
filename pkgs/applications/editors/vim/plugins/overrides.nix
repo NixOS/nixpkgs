@@ -1757,7 +1757,7 @@ in
       # We only need its dependencies `node-modules`.
       nodeDep = mkYarnModules rec {
         inherit (super.markdown-preview-nvim) pname version;
-        packageJSON = ./markdown-preview-nvim/package.json;
+        packageJSON = ./patches/markdown-preview-nvim/package.json;
         yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
@@ -1767,7 +1767,7 @@ in
     in
     super.markdown-preview-nvim.overrideAttrs {
       patches = [
-        (replaceVars ./markdown-preview-nvim/fix-node-paths.patch {
+        (replaceVars ./patches/markdown-preview-nvim/fix-node-paths.patch {
           node = "${nodejs}/bin/node";
         })
       ];
