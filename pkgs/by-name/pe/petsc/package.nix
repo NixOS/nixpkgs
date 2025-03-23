@@ -13,9 +13,9 @@
   python3Packages,
 
   # Build options
-  petsc-optimized ? true,
-  petsc-scalar-type ? "real",
-  petsc-precision ? "double",
+  debug ? false,
+  scalarType ? "real",
+  precision ? "double",
   mpiSupport ? true,
   fortranSupport ? true,
   pythonSupport ? false, # petsc python binding
@@ -161,8 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--with-blas=1"
       "--with-lapack=1"
-      "--with-scalar-type=${petsc-scalar-type}"
-      "--with-precision=${petsc-precision}"
+      "--with-scalar-type=${scalarType}"
+      "--with-precision=${precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
     ++ lib.optionals mpiSupport [
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-cxx=mpicxx"
       "--with-fc=mpif90"
     ]
-    ++ lib.optionals petsc-optimized [
+    ++ lib.optionals (!debug) [
       "--with-debugging=0"
       "COPTFLAGS=-O3"
       "FOPTFLAGS=-O3"
@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withFftw "--with-fftw=1"
     ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
-  hardeningDisable = lib.optionals (!petsc-optimized) [
+  hardeningDisable = lib.optionals debug [
     "fortify"
     "fortify3"
   ];
