@@ -13787,8 +13787,6 @@ self: super: with self; {
 
   python-whois = callPackage ../development/python-modules/python-whois { };
 
-  python-wifi = callPackage ../development/python-modules/python-wifi { };
-
   python-wink = callPackage ../development/python-modules/python-wink { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };

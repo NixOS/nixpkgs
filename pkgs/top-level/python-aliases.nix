@@ -595,6 +595,7 @@ mapAliases ({
   python-Levenshtein = levenshtein;
   python-pushover = throw "python-pushover has been removed, since it is unmaintained and is broken"; # added 2023-07-03
   python-subunit = subunit; # added 2021-09-10
+  python-wifi = throw "python-wifi does not support Python3";
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   pytoml = throw "pytoml has been removed because it is unmaintained and is superseded by toml"; # Added 2023-04-11
