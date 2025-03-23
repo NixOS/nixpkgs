@@ -18124,6 +18124,8 @@ self: super: with self; {
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
+  unity-test-parser = callPackage ../development/python-modules/unity-test-parser { };
+
   univers = callPackage ../development/python-modules/univers { };
 
   universal-pathlib = callPackage ../development/python-modules/universal-pathlib { };
