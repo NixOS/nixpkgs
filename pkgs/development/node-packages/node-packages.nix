@@ -61961,29 +61961,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  prettier-plugin-toml = nodeEnv.buildNodePackage {
-    name = "prettier-plugin-toml";
-    packageName = "prettier-plugin-toml";
-    version = "2.0.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prettier-plugin-toml/-/prettier-plugin-toml-2.0.2.tgz";
-      sha512 = "tUIIhyfdVX5DMsLGKX/2qaEwi3W48OkUSR7XC91PRI5jFzhexmaYWkrSP1Xh/eWUcEc0TVMQenM3lB09xLQstQ==";
-    };
-    dependencies = [
-      sources."@taplo/core-0.1.1"
-      sources."@taplo/lib-0.4.0-alpha.2"
-      sources."prettier-3.5.3"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "An opinionated `toml` formatter plugin for Prettier";
-      homepage = "https://github.com/un-ts/prettier/tree/master/packages/toml";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "@prisma/language-server" = nodeEnv.buildNodePackage {
     name = "_at_prisma_slash_language-server";
     packageName = "@prisma/language-server";
