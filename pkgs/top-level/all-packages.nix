@@ -947,7 +947,7 @@ with pkgs;
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
 
-  afsctool = callPackage ../tools/filesystems/afsctool { };
+  afsctool = callPackage ../by-name/af/afsctool/package.nix { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
