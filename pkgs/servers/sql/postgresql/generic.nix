@@ -398,9 +398,10 @@ let
           # Tests just get stuck on macOS 14.x for v13 and v14
           !(stdenv'.hostPlatform.isDarwin && olderThan "15")
         &&
-          # Likely due to rosetta emulation:
+          # x86: Likely due to rosetta emulation:
           #   FATAL:  could not create shared memory segment: Cannot allocate memory
-          !(stdenv'.hostPlatform.isDarwin && stdenv'.hostPlatform.isx86_64);
+          # aarch64: not sure why, e.g. https://hydra.nixos.org/build/292573408/nixlog/7
+          !(stdenv'.hostPlatform.isDarwin);
       installCheckTarget = "check-world";
 
       passthru =

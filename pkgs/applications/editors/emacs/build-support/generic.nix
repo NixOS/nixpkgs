@@ -61,6 +61,7 @@ lib.extendMkDerivation {
       propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
       strictDeps = args.strictDeps or true;
+      __structuredAttrs = args.__structuredAttrs or true;
 
       inherit turnCompilationWarningToError ignoreCompilationError;
 

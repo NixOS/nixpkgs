@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.3.1";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-uCqJg87uIfGA5v0N23yo2uQ8QOkglR44F/mWqyBNrmo=";
+    hash = "sha256-VZA7cFohKkc3Mdsg+ib1hlXjVAeLmcsTyZ7AaUAoek0=";
   };
 
   propagatedBuildInputs = [
