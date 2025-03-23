@@ -12577,7 +12577,6 @@ with pkgs;
   zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
-  zabbix64 = recurseIntoAttrs (zabbixFor "v64");
 
   zabbix = zabbix60;
 
