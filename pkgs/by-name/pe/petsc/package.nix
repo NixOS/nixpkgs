@@ -150,7 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withHdf5 [
       "--with-hdf5=1"
-      "--with-hdf5-fortran-bindings=1"
       "--with-hdf5-include=${lib.getDev hdf5-fortran-mpi}/include"
       "--with-hdf5-lib=[-L${lib.getLib hdf5-fortran-mpi}/lib,-lhdf5]"
     ]
