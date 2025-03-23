@@ -7192,9 +7192,14 @@ with pkgs;
 
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
-  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix {
+  racket = callPackage ../by-name/ra/racket/package.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
+    isMinimal = false;
+  };
+
+  racket-minimal = callPackage ../by-name/ra/racket/package.nix {
+    stdenv = stdenvAdapters.makeStaticLibraries stdenv;
+    isMinimal = true;
   };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
