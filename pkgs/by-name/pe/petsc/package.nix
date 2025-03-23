@@ -24,6 +24,7 @@
   # External libraries options
   withHdf5 ? withCommonDeps,
   withMetis ? withCommonDeps,
+  withZlib ? withP4est,
   withScalapack ? withFullDeps,
   withParmetis ? withFullDeps, # parmetis is unfree
   withPtscotch ? withFullDeps,
@@ -48,7 +49,7 @@
 assert withFullDeps -> withCommonDeps;
 
 # This version of PETSc does not support a non-MPI p4est build
-assert withP4est -> (p4est.mpiSupport && mpiSupport);
+assert withP4est -> (p4est.mpiSupport && mpiSupport && withZlib);
 
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
@@ -86,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       lapack
     ]
     ++ lib.optional withHdf5 hdf5-fortran-mpi
+    ++ lib.optional withZlib zlib
     ++ lib.optional withP4est p4est
     ++ lib.optional withMetis metis
     ++ lib.optional withParmetis parmetis
@@ -127,10 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPtscotch "--with-ptscotch=1"
     ++ lib.optional withScalapack "--with-scalapack=1"
     ++ lib.optional withMumps "--with-mumps=1"
-    ++ lib.optionals withP4est [
-      "--with-p4est=1"
-      "--with-zlib=1"
-    ]
+    ++ lib.optional withP4est "--with-p4est=1"
+    ++ lib.optional withZlib "--with-zlib=1"
     ++ lib.optional withHdf5 "--with-hdf5=1"
     ++ lib.optionals petsc-optimized [
       "--with-debugging=0"
