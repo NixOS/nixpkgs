@@ -277,7 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dglib_assert=false" # asserts should be disabled on stable releases
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
 
     "-Damfcodec=disabled" # Windows-only
     "-Dandroidmedia=disabled" # Requires Android system.
