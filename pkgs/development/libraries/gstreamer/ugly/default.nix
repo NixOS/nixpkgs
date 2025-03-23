@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
     (lib.mesonEnable "doc" enableDocumentation)
   ] ++ (if enableGplPlugins then [

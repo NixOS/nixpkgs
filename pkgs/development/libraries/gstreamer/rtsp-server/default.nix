@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     (lib.mesonEnable "doc" enableDocumentation)
   ];
