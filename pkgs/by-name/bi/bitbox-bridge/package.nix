@@ -34,6 +34,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libudev-zero
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/lib/systemd/user
+    substitute bitbox-bridge/release/linux/bitbox-bridge.service $out/lib/systemd/user/bitbox-bridge.service \
+      --replace-fail /opt/bitbox-bridge/bin/bitbox-bridge $out/bin/bitbox-bridge
+    install -Dm644 bitbox-bridge/release/linux/hid-digitalbitbox.rules $out/lib/udev/rules.d/50-hid-digitalbitbox.rules
+  '';
+
   meta = {
     description = "A bridge service that connects web wallets like Rabby to BitBox02";
     homepage = "https://github.com/BitBoxSwiss/bitbox-bridge";
