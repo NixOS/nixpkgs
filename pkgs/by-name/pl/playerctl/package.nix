@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace playerctl/meson.build \
+      --replace-fail 'link_args' '# link_args'
+  '';
+
   nativeBuildInputs =
     [
       docbook_xsl
@@ -51,7 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "playerctl";
   };
 }
