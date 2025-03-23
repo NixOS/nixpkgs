@@ -7,14 +7,14 @@
   makeDesktopItem,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "slacky";
   version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "andirsun";
     repo = "Slacky";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nDxmzZqi7xEe4hnY6iXJg+613lSKElWxvF3w8bRDW90=";
   };
 
@@ -58,10 +58,10 @@ buildNpmPackage rec {
   meta = {
     description = "Unofficial Slack desktop client for arm64 Linux";
     homepage = "https://github.com/andirsun/Slacky";
-    changelog = "https://github.com/andirsun/Slacky/releases/tag/v${version}";
+    changelog = "https://github.com/andirsun/Slacky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ awwpotato ];
     platforms = [ "aarch64-linux" ];
     mainProgram = "slacky";
   };
-}
+})
