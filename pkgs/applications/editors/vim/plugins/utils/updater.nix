@@ -42,7 +42,7 @@ buildPythonApplication {
         neovim-unwrapped
         nurl
       ]
-    }" --prefix PYTHONPATH : "${./.}:${../../../../../maintainers/scripts/pluginupdate-py}" )
+    }" --prefix PYTHONPATH : "${./.}:${../../../../../../maintainers/scripts/pluginupdate-py}" )
     wrapPythonPrograms
   '';
 
