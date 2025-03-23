@@ -54,12 +54,12 @@ assert withPtscotch -> mpiSupport;
 assert withScalapack -> mpiSupport;
 assert withMumps -> withScalapack;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
   version = "3.22.4";
 
   src = fetchzip {
-    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
     hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
   };
 
@@ -213,4 +213,4 @@ stdenv.mkDerivation rec {
       qbisi
     ];
   };
-}
+})
