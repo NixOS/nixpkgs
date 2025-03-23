@@ -1,11 +1,11 @@
 {
-  php,
+  php83,
   fetchFromGitHub,
   lib,
   versionCheckHook,
 }:
 
-(php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2
+(php83.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2
   (finalAttrs: {
     pname = "paratest";
     version = "7.8.2";
