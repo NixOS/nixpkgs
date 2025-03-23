@@ -19,10 +19,4 @@ generic: {
     hash = "sha256-Ne0OY6NGzTYOn3sDVd+5tfawBu5VBjxNRtlxasubGCk=";
     vendorHash = null;
   };
-
-  v50 = generic {
-    version = "5.0.46";
-    hash = "sha256-p6OZALpOQG6v70Y20cC2bdlzTINz3JBd9qGWZACfcl4=";
-    vendorHash = "sha256-NgSi6usIbss3WEZCYht46WjxcrdOO3qv8KwwUZwtkk0=";
-  };
 }
