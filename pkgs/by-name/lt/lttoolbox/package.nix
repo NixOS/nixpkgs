@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
   autoconf,
   automake,
   pkg-config,
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     autoconf
     automake
     pkg-config
@@ -38,12 +40,11 @@ stdenv.mkDerivation rec {
   buildFlags = [
     "CPPFLAGS=-I${utf8cpp}/include/utf8cpp"
   ];
-  configurePhase = ''
-    ./autogen.sh --prefix $out
-  '';
+
+  nativeCheckInputs = [ python3 ];
   doCheck = true;
   checkPhase = ''
-    ${python3}/bin/python3 tests/run_tests.py
+    python3 tests/run_tests.py
   '';
 
   meta = with lib; {
