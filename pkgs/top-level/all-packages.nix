@@ -7410,9 +7410,10 @@ with pkgs;
   inherit (callPackages ../servers/apache-kafka { })
     apacheKafka_3_7
     apacheKafka_3_8
-    apacheKafka_3_9;
+    apacheKafka_3_9
+    apacheKafka_4_0;
 
-  apacheKafka = apacheKafka_3_8;
+  apacheKafka = apacheKafka_4_0;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
