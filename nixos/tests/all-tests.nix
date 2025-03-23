@@ -1046,6 +1046,7 @@ in {
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
+  samba-wsdd2 = handleTest ./samba-wsdd2.nix {};
   sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
   saunafs = handleTest ./saunafs.nix {};

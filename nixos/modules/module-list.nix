@@ -1026,6 +1026,7 @@
   ./services/network-filesystems/orangefs/server.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba-wsdd.nix
+  ./services/network-filesystems/samba-wsdd2.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/saunafs.nix
   ./services/network-filesystems/tahoe.nix
