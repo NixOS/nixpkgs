@@ -27,6 +27,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wXQY9W15J7+Plv3IvB8XaZd+Hn0TP2qDOB36bPJwfpY=";
   };
 
+  # Fix building on Rust 1.82
+  # https://github.com/rust-lang/rust/issues/82901
+  postPatch = ''
+    sed -i '1s/^/\#\!\[feature\(option_get_or_insert_default\)\]\n/' crates/turborepo-lib/src/lib.rs
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-L56ubw2tQ3y2KBbbnUdnS9xZzQNMDKdCzKC0n12yl6o=";
 
