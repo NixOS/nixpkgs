@@ -1,7 +1,8 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchzip,
+  autoPatchelfHook,
   nix-update-script,
 }:
 
@@ -13,8 +14,7 @@ let
       x86_64-darwin = "x64";
       x86_64-linux = "x64";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   os =
     {
       aarch64-darwin = "darwin";
@@ -22,21 +22,26 @@ let
       x86_64-darwin = "darwin";
       x86_64-linux = "linux";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.280.0";
+  version = "1.290.0";
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-s47WaWH0ov/UazQCOFBUAO6ZYgCmCpQ1o79KjAVJFh4=";
+    hash = "sha256-ELOSeb3Z7AI8pjDhtUIRoaf+4UXjXKEu/OJ2CLQno6A=";
     stripRoot = false;
   };
 
-  npmDepsHash = "sha256-PLX/mN7xu8gMh2BkkyTncP3+rJ3nBmX+pHxl0ONXbe4=";
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+  buildInputs = [ stdenv.cc.cc.lib ];
+
+  dontStrip = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -45,7 +50,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  dontStrip = true;
 
   passthru.updateScript = nix-update-script { };
 
