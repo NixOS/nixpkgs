@@ -20,6 +20,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wlav";
     repo = pname;
+    # Uncomment and replace rev & hash lines when a new release occurs within CPyCppyy.
+    #tag = "CPyCppyy-${version}";
+    #hash = "sha256-9y0BHYMQyKUC3JTlozSv167rA2hN2IP2J0a1e/1en0o=";
     rev = "8bd9d9e10d658a33294a4ba9b2251bf1f9223469";
     hash = "sha256-IEwdJSXG6diz7j2N7WQys5na7+xj1CYu7J3FCkW9/AQ=";
   };
@@ -42,8 +45,6 @@ buildPythonPackage rec {
     ./cpycppy-setup.patch
   ];
 
-  dontUseCmakeConfigure = true;
-
   configurePhase = ''
     runHook preConfigure
     sed -i "s|%cflags_placeholder%|return '${lib.optionalString stdenv.hostPlatform.isLinux "-pthread"} -std=c++2a'|" setup.py
@@ -61,10 +62,10 @@ buildPythonPackage rec {
     cp libcppyy.so $out/${python3.sitePackages}/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wlav/CPyCppyy";
     description = "CPyCppyy: Python-C++ bindings interface based on Cling/LLVM";
-    license = licenses.bsd3Lbnl;
-    maintainers = with maintainers; [ kittywitch ];
+    license = lib.licenses.bsd3Lbnl;
+    maintainers = with lib.maintainers; [ kittywitch ];
   };
 }
