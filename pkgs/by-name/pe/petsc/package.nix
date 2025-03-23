@@ -2,16 +2,14 @@
   lib,
   stdenv,
   fetchzip,
-  gfortran,
   replaceVars,
-  python3,
-  python3Packages,
-  blas,
-  lapack,
-  zlib, # propagated by p4est but required by petsc
+  bash,
+  pkg-config,
+  gfortran,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  bash,
+  python3,
+  python3Packages,
 
   # Build options
   petsc-optimized ? true,
@@ -33,14 +31,16 @@
   withP4est ? withFullDeps,
 
   # External libraries
+  blas,
+  lapack,
   hdf5-fortran-mpi,
   metis,
   parmetis,
   scotch,
   scalapack,
   mumps_par,
-  pkg-config,
   p4est,
+  zlib, # propagated by p4est but required by petsc
 }:
 assert withFullDeps -> withCommonDeps;
 
