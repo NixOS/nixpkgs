@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wlav";
-    repo = pname;
+    repo = "cppyy";
     tag = "${pname}-${version}";
     hash = "sha256-Q40zV7t7iQBJKjqpsvhqcsVtwuYzJkfBRoT1iQxh6rc=";
   };
@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wlav/cppyy";
     description = "Python C++ bindings interface based on Cling/LLVM";
-    license = licenses.bsd3Lbnl;
-    maintainers = with maintainers; [ kittywitch ];
+    license = lib.licenses.bsd3Lbnl;
+    maintainers = with lib.maintainers; [ kittywitch ];
   };
 }
