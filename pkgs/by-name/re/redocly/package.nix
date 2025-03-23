@@ -48,7 +48,7 @@ buildNpmPackage rec {
     chmod +x $out/bin/redocly
   '';
 
-  passthru = {  
+  passthru = {
     tests.version = testers.testVersion { package = redocly; };
   };
 
