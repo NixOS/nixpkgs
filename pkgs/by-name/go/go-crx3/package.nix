@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [
     # requires network access
-    "-skip=^TestDownloadFromWebStore$"
+    "-skip=^TestDownloadFromWebStore(|Negative)$"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
