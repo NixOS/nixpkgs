@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.5";
+  version = "2.0.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-N28vc9cxtU4T3bqx2Rtjgs9qmAUk3vRN9irdFUid5t0=";
+    hash = "sha256-HpqdaXYdIQnv9bfBHYyWtIZ8z6yiuSHt7UlAEZJ2nsk=";
   };
 
   patches = [
