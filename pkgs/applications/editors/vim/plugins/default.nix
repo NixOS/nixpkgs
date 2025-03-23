@@ -27,6 +27,12 @@ let
     inherit buildVimPlugin;
   };
 
+  nonGeneratedPlugins =
+    self: super:
+    lib.mapAttrs (name: _: callPackage (./non-generated + "/${name}") { }) (
+      lib.filterAttrs (name: type: type == "directory") (builtins.readDir ./non-generated)
+    );
+
   plugins = callPackage ./generated.nix {
     inherit buildVimPlugin;
     inherit (neovimUtils) buildNeovimPlugin;
@@ -49,6 +55,7 @@ lib.pipe initialPackages [
   (extends plugins)
   (extends luaPackagePlugins)
   (extends nodePackagePlugins)
+  (extends nonGeneratedPlugins)
   (extends overrides)
   (extends aliases)
   lib.makeExtensible

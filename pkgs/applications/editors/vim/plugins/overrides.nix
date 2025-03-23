@@ -229,8 +229,6 @@ in
     ];
   };
 
-  avante-nvim = callPackage ./non-generated/avante-nvim { };
-
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [
       (replaceVars ./patches/aw-watcher-vim/program_paths.patch {
@@ -298,8 +296,6 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
-  blink-cmp = callPackage ./non-generated/blink-cmp { };
-
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
     dependencies = [ self.copilot-lua ];
   };
@@ -319,8 +315,6 @@ in
   blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
-
-  blink-pairs = callPackage ./non-generated/blink-pairs { };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -378,8 +372,6 @@ in
     ];
   };
 
-  clangd_extensions-nvim = callPackage ./non-generated/clangd_extensions-nvim { };
-
   clang_complete = super.clang_complete.overrideAttrs {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
@@ -430,8 +422,6 @@ in
       plenary-nvim
     ];
   };
-
-  cmp-async-path = callPackage ./non-generated/cmp-async-path { };
 
   cmp-beancount = super.cmp-beancount.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
@@ -753,8 +743,6 @@ in
       '';
     };
 
-  codesnap-nvim = callPackage ./non-generated/codesnap-nvim { };
-
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
@@ -879,8 +867,6 @@ in
       "coq"
     ];
   };
-
-  cord-nvim = callPackage ./non-generated/cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -1289,8 +1275,6 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
-  gitlab-vim = callPackage ./non-generated/gitlab-vim { };
-
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1372,8 +1356,6 @@ in
       "overseer.component.hardhat.refresh_gas_extmarks"
     ];
   };
-
-  hare-vim = callPackage ./non-generated/hare-vim { };
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1520,8 +1502,6 @@ in
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
   };
-
-  LanguageClient-neovim = callPackage ./non-generated/LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
@@ -1707,8 +1687,6 @@ in
   lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
-
-  lsp_lines-nvim = callPackage ./non-generated/lsp_lines-nvim { };
 
   ltex_extra-nvim = super.ltex_extra-nvim.overrideAttrs {
     # Other modules require setup call first
@@ -1898,8 +1876,6 @@ in
       "load_wezterm_nvim"
     ];
   };
-
-  moveline-nvim = callPackage ./non-generated/moveline-nvim { };
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2360,8 +2336,6 @@ in
     dependencies = [ self.nvim-dap ];
   };
 
-  nvim-dbee = callPackage ./non-generated/nvim-dbee { };
-
   nvim-FeMaco-lua = super.nvim-FeMaco-lua.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
@@ -2425,8 +2399,6 @@ in
   nvim-java-test = super.nvim-java-test.overrideAttrs {
     dependencies = [ self.nvim-java-core ];
   };
-
-  nvim-julia-autotest = callPackage ./non-generated/nvim-julia-autotest { };
 
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -2501,8 +2473,6 @@ in
     # Optional cmp integration
     nvimSkipModule = "snippets.utils.cmp";
   };
-
-  nvim-spectre = callPackage ./non-generated/nvim-spectre { };
 
   nvim-surround = super.nvim-surround.overrideAttrs {
     # Optional treesitter integration
@@ -2824,8 +2794,6 @@ in
   quicker-nvim = super.quicker-nvim.overrideAttrs {
   };
 
-  rainbow-delimiters-nvim = callPackage ./non-generated/rainbow-delimiters-nvim { };
-
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
   };
@@ -2927,8 +2895,6 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  sg-nvim = callPackage ./non-generated/sg-nvim { };
-
   skim = buildVimPlugin {
     pname = "skim";
     inherit (skim) version;
@@ -3004,8 +2970,6 @@ in
       "snap.producer.vim.help"
     ];
   };
-
-  sniprun = callPackage ./non-generated/sniprun { };
 
   # The GitHub repository returns 404, which breaks the update script
   Spacegray-vim = buildVimPlugin {
@@ -3639,8 +3603,6 @@ in
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   };
 
-  vim-clap = callPackage ./non-generated/vim-clap { };
-
   vim-codefmt = super.vim-codefmt.overrideAttrs {
     dependencies = [ self.vim-maktaba ];
   };
@@ -3771,8 +3733,6 @@ in
     '';
   };
 
-  vim-markdown-composer = callPackage ./non-generated/vim-markdown-composer { };
-
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
     nvimSkipModule = "treesitter-matchup.third-party.query";
@@ -3817,8 +3777,6 @@ in
   vim-speeddating = super.vim-speeddating.overrideAttrs {
     dependencies = [ self.vim-repeat ];
   };
-
-  vim-stationeers-ic10-syntax = callPackage ./non-generated/vim-stationeers-ic10-syntax { };
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch =
