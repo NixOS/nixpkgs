@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     description = "Hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
     license = licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
     mainProgram = "rpm-ostree";
   };
