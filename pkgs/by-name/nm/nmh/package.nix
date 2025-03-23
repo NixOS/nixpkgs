@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ShAdinvBA7guVBhjqTelBRiUzyo5KqHcawlQS9kXtqs=";
   };
 
+  patches = [ ./reproducible-build-date.patch ];
+
   postPatch = ''
     substituteInPlace \
       sbr/arglist.c \
