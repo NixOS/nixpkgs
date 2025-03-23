@@ -101,7 +101,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-D64W2+eBR2RGiN+puJW3QIO1334SgOOHv5fws5r3wmg=";
+    hash = "sha256-KeV0xzuFaKiEyth811lO6ezW4aNjuSSHcKPpPyxZCXI=";
   };
 
   dontCargoBuild = true;
@@ -153,8 +153,6 @@ flutter.buildFlutterApplication rec {
 
   patches = [
     ./make-build-reproducible.patch
-    # Multiple version of core-foundation-sys will make fetchCargoVendor unhappy. Keep one of it.
-    ./update-cargo-lock.patch
   ];
 
   prepareBuildRunner = ''
