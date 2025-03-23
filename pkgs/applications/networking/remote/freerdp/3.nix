@@ -61,7 +61,7 @@
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
-  gnome,
+  gnome-remote-desktop,
   remmina,
 }:
 
@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit remmina;
-    inherit (gnome) gnome-remote-desktop;
+    inherit gnome-remote-desktop;
   };
 
   meta = with lib; {
