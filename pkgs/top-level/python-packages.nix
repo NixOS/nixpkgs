@@ -16666,8 +16666,6 @@ self: super: with self; {
 
   tiler = callPackage ../development/python-modules/tiler { };
 
-  tilestache = callPackage ../development/python-modules/tilestache { };
-
   tilt-ble = callPackage ../development/python-modules/tilt-ble { };
 
   timeago = callPackage ../development/python-modules/timeago { };
