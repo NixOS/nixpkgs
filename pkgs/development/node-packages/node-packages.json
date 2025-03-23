@@ -133,7 +133,6 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
-, "prettier-plugin-toml"
 , "@prisma/language-server"
 , "pscid"
 , "pulp"
