@@ -118,12 +118,19 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-precision=${petsc-precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
-    ++ lib.optional pythonSupport "--with-petsc4py=1"
     ++ lib.optionals mpiSupport [
       "--CC=mpicc"
       "--with-cxx=mpicxx"
       "--with-fc=mpif90"
     ]
+    ++ lib.optionals petsc-optimized [
+      "--with-debugging=0"
+      "COPTFLAGS=-O3"
+      "FOPTFLAGS=-O3"
+      "CXXOPTFLAGS=-O3"
+      "CXXFLAGS=-O3"
+    ]
+    ++ lib.optional pythonSupport "--with-petsc4py=1"
     ++ lib.optional withMetis "--with-metis=1"
     ++ lib.optional withParmetis "--with-parmetis=1"
     ++ lib.optional withPtscotch "--with-ptscotch=1"
@@ -131,14 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withMumps "--with-mumps=1"
     ++ lib.optional withP4est "--with-p4est=1"
     ++ lib.optional withZlib "--with-zlib=1"
-    ++ lib.optional withHdf5 "--with-hdf5=1"
-    ++ lib.optionals petsc-optimized [
-      "--with-debugging=0"
-      "COPTFLAGS=-O3"
-      "FOPTFLAGS=-O3"
-      "CXXOPTFLAGS=-O3"
-      "CXXFLAGS=-O3"
-    ];
+    ++ lib.optional withHdf5 "--with-hdf5=1";
 
   hardeningDisable = lib.optionals (!petsc-optimized) [
     "fortify"
