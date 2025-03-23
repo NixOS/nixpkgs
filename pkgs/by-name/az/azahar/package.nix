@@ -37,7 +37,7 @@
   enableSdl2Frontend ? true,
   SDL2,
   enableQt ? true,
-  kdePackages,
+  qt6,
   enableQtTranslations ? enableQt,
   enableCubeb ? true,
   cubeb,
@@ -55,19 +55,21 @@ let
     ;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "lime3ds";
-  version = "2119.1";
+  pname = "azahar";
+  version = "2120.1";
 
   src = fetchzip {
-    url = "https://github.com/Lime3DS/Lime3ds-archive/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-37KFGCVyc4QW+D00CzN1+lpNYZxCWRkflt7rkIFcdM8=";
+    # TODO: use this when https://github.com/azahar-emu/azahar/issues/779 is resolved
+    # url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
+    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-20250322-6ecee96.tar.xz";
+    hash = "sha256-d4JHp/BZEQTKErh476NZoizQjgAldR19Waq9GQg2Ebk=";
   };
 
   nativeBuildInputs = [
     cmake
     doxygen
     pkg-config
-  ] ++ lib.optionals enableQt [ kdePackages.wrapQtAppsHook ];
+  ] ++ lib.optionals enableQt [ qt6.wrapQtAppsHook ];
 
   buildInputs =
     [
@@ -100,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
     ]
     ++ optionals enableQt (
-      with kdePackages;
+      with qt6;
       [
         qtbase
         qtmultimedia
@@ -109,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     )
     ++ optionals enableSdl2Frontend [ SDL2 ]
-    ++ optionals enableQtTranslations [ kdePackages.qttools ]
+    ++ optionals enableQtTranslations [ qt6.qttools ]
     ++ optionals enableCubeb [ cubeb ]
     ++ optional useDiscordRichPresence rapidjson;
 
@@ -128,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Fix file not found when looking in var/empty instead of opt
+    # Fix "file not found" bug when looking in var/empty instead of opt
     mkdir externals/dynarmic/src/dynarmic/ir/var
     ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
 
@@ -146,21 +148,16 @@ stdenv.mkDerivation (finalAttrs: {
       libs = makeLibraryPath [ vulkan-loader ];
     in
     optionalString enableSdl2Frontend ''
-      for binfile in lime3ds lime3ds-room
+      for binfile in azahar azahar-room
       do
         wrapProgram "$out/bin/$binfile" \
           --prefix LD_LIBRARY_PATH : ${libs}
-    ''
-    + optionalString enableQt ''
-        qtWrapperArgs+=(
-          --prefix LD_LIBRARY_PATH : ${libs}
-        )
       done
     '';
 
   cmakeFlags =
     [
-      (cmakeBool "LIME3DS_USE_PRECOMPILED_HEADERS" false)
+      (cmakeBool "CITRA_USE_PRECOMPILED_HEADERS" false)
       (cmakeBool "USE_SYSTEM_LIBS" true)
       (cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
       (cmakeBool "DISABLE_SYSTEM_GLSLANG" true)
@@ -177,11 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    description = "A Nintendo 3DS emulator based on Citra";
-    homepage = "https://github.com/Lime3DS/Lime3ds-archive";
+    description = "An open-source 3DS emulator project based on Citra";
+    homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arthsmn ];
-    mainProgram = "lime3ds";
+    mainProgram = "azahar";
     platforms = lib.platforms.linux;
   };
 })
