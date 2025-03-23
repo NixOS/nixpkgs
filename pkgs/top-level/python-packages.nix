@@ -11816,8 +11816,6 @@ self: super: with self; {
 
   pychannels = callPackage ../development/python-modules/pychannels { };
 
-  pychart = callPackage ../development/python-modules/pychart { };
-
   pychm = callPackage ../development/python-modules/pychm { };
 
   pychromecast = callPackage ../development/python-modules/pychromecast { };
