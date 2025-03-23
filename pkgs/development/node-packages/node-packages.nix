@@ -62560,24 +62560,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "reveal.js" = nodeEnv.buildNodePackage {
-    name = "reveal.js";
-    packageName = "reveal.js";
-    version = "5.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/reveal.js/-/reveal.js-5.1.0.tgz";
-      sha512 = "KDt7m0+xwKV6nAZt4CNPVFBf42sTKRQapg0bGGKB5PKO5XvChnMfwlZkybydHiQJ7p5+6LbHKRGrhXODdoNIaA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "The HTML Presentation Framework";
-      homepage = "https://revealjs.com";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   rimraf = nodeEnv.buildNodePackage {
     name = "rimraf";
     packageName = "rimraf";
