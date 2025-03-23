@@ -8632,8 +8632,6 @@ self: super: with self; {
 
   moderngl-window = callPackage ../development/python-modules/moderngl-window { };
 
-  modestmaps = callPackage ../development/python-modules/modestmaps { };
-
   mohawk = callPackage ../development/python-modules/mohawk { };
 
   molbar = callPackage ../development/python-modules/molbar { };
