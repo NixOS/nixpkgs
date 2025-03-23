@@ -1,0 +1,15 @@
+diff --git i/gr-utils/modtool/core/newmod.py w/gr-utils/modtool/core/newmod.py
+index 8b222473f..c82fcd538 100644
+--- i/gr-utils/modtool/core/newmod.py
++++ w/gr-utils/modtool/core/newmod.py
+@@ -66,7 +66,9 @@ class ModToolNewModule(ModTool):
+         self._setup_scm(mode='new')
+         logger.info(f"Creating out-of-tree module in {self.dir}...")
+         try:
+-            shutil.copytree(self.srcdir, self.dir)
++            # https://stackoverflow.com/a/17022146/4935114
++            shutil.copystat = lambda x, y: x
++            shutil.copytree(self.srcdir, self.dir, copy_function=shutil.copyfile)
+             source_dir = os.path.join(gr.prefix(), "share", "gnuradio")
+             for source_name, target_name in (
+                     ("clang-format.conf", ".clang-format"),

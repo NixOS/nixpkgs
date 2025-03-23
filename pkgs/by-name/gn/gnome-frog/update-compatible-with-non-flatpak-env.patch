@@ -1,0 +1,13 @@
+diff --git a/frog/language_manager.py b/frog/language_manager.py
+index d822c44..bc289db 100644
+--- a/frog/language_manager.py
++++ b/frog/language_manager.py
+@@ -193,7 +193,7 @@ class LanguageManager(GObject.GObject):
+             os.mkdir(tessdata_dir)
+ 
+         dest_path = os.path.join(tessdata_dir, 'eng.traineddata')
+-        source_path = pathlib.Path('/app/share/appdata/eng.traineddata')
++        source_path = pathlib.Path('@out@/share/appdata/eng.traineddata')
+         if os.path.exists(dest_path):
+             return
+ 

@@ -1,0 +1,13 @@
+diff --git a/deltachat2/transport.py b/deltachat2/transport.py
+index a93dc7e..251947b 100644
+--- a/deltachat2/transport.py
++++ b/deltachat2/transport.py
+@@ -71,7 +71,7 @@ class IOTransport:
+             # `process_group` is not supported before Python 3.11.
+             kwargs = {"preexec_fn": os.setpgrp, **self._kwargs}  # noqa: PLW1509
+         self.process = subprocess.Popen(  # noqa: R1732
+-            "deltachat-rpc-server",
++            "@deltachatrpcserver@",
+             stdin=subprocess.PIPE,
+             stdout=subprocess.PIPE,
+             **kwargs,

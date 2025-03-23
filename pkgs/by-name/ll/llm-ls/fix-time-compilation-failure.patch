@@ -1,0 +1,97 @@
+From cb0a3da737d933614bcd011e91048f2009036d09 Mon Sep 17 00:00:00 2001
+From: a-kenji <aks.kenji@protonmail.com>
+Date: Wed, 14 Aug 2024 09:29:18 +0200
+Subject: [PATCH] Fix `time` compilation failure
+
+This allows `llm-ls` to be compiled with `rustc --version`: 1.80, using
+the Cargo.lock file.
+
+Reference: https://github.com/rust-lang/rust/issues/127343
+---
+ Cargo.lock | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 1806f0be28f65ab1283954c5a72ae20594044624..e8328e602e50fd5e47ba55c5dc9c7881a308a0a5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -487,9 +487,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "deranged"
+-version = "0.3.8"
++version = "0.3.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f2696e8a945f658fd14dc3b87242e6b80cd0f36ff04ea560fa39082368847946"
++checksum = "b42b6fa04a440b495c8b04d0e71b707c585f83cb9cb28cf8cd0d976c315e31b4"
++dependencies = [
++ "powerfmt",
++]
+ 
+ [[package]]
+ name = "derive_builder"
+@@ -1210,6 +1213,12 @@ dependencies = [
+  "winapi",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num_cpus"
+ version = "1.16.0"
+@@ -1403,6 +1412,12 @@ version = "0.3.27"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "26072860ba924cbfa98ea39c8c19b4dd6a4a25423dbdf219c1eca91aa0cf6964"
+ 
++[[package]]
++name = "powerfmt"
++version = "0.2.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "439ee305def115ba05938db6eb1644ff94165c5ab5e9420d1c1bcedbba909391"
++
+ [[package]]
+ name = "ppv-lite86"
+ version = "0.2.17"
+@@ -2033,12 +2048,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.28"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "17f6bb557fd245c28e6411aa56b6403c689ad95061f50e4be16c274e70a17e48"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa",
++ "num-conv",
++ "powerfmt",
+  "serde",
+  "time-core",
+  "time-macros",
+@@ -2046,16 +2063,17 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.1"
++version = "0.1.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
++checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.14"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1a942f44339478ef67935ab2bbaec2fb0322496cf3cbe84b261e06ac3814c572"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 

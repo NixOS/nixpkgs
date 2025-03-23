@@ -1,0 +1,13 @@
+diff --git a/source/creator/config.d b/source/creator/config.d
+index 4289703..d8dea4e 100644
+--- a/source/creator/config.d
++++ b/source/creator/config.d
+@@ -30,7 +30,7 @@ enum INC_BANNER_ARTIST_PAGE = "https://mastodon.art/@nighteden";
+ /**
+     URI for bug reports, for unofficial builds this SHOULD be changed.
+ */
+-enum INC_BUG_REPORT_URI = "https://github.com/Inochi2D/inochi-creator/issues/new?assignees=&labels=bug&template=bug-report.yml&title=%5BBUG%5D";
++enum INC_BUG_REPORT_URI = "https://github.com/NixOS/nixpkgs/issues/new?assignees=@assignees@&labels=0.kind%3A+bug&projects=&template=bug_report.md&title=inochi-creator:";
+ 
+ /**
+     URI for feature requests, for the most part this doesn't need to be changed

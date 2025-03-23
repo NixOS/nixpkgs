@@ -1,0 +1,84 @@
+{
+  "name": "matrix-appservice-discord",
+  "version": "4.0.0",
+  "description": "A bridge between Matrix and Discord",
+  "main": "discordas.js",
+  "engines": {
+    "npm": "please-use-yarn",
+    "node": ">=18 <=20"
+  },
+  "scripts": {
+    "test": "mocha -r ts-node/register test/config.ts test/test_*.ts test/**/test_*.ts",
+    "lint": "eslint -c .eslintrc --max-warnings 200 src/**/*.ts test/**/*.ts",
+    "coverage": "tsc && nyc mocha build/test/config.js build/test",
+    "build": "tsc",
+    "postinstall": "yarn build",
+    "start": "node ./build/src/discordas.js",
+    "debug": "node --inspect ./build/src/discordas.js",
+    "addbot": "node ./build/tools/addbot.js",
+    "adminme": "node ./build/tools/adminme.js",
+    "usertool": "node ./build/tools/userClientTools.js",
+    "directoryfix": "node ./build/tools/addRoomsToDirectory.js",
+    "ghostfix": "node ./build/tools/ghostfix.js",
+    "chanfix": "node ./build/tools/chanfix.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Half-Shot/matrix-appservice-discord.git"
+  },
+  "keywords": [
+    "matrix",
+    "discord",
+    "bridge",
+    "application-service",
+    "as"
+  ],
+  "author": "Half-Shot",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Half-Shot/matrix-appservice-discord/issues"
+  },
+  "homepage": "https://github.com/Half-Shot/matrix-appservice-discord#readme",
+  "dependencies": {
+    "@mx-puppet/better-discord.js": "^12.5.1",
+    "@mx-puppet/matrix-discord-parser": "^0.1.10",
+    "better-sqlite3": "^8.6.0",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0",
+    "escape-html": "^1.0.3",
+    "escape-string-regexp": "^4.0.0",
+    "js-yaml": "^3.14.0",
+    "marked": "^1.2.2",
+    "matrix-appservice-bridge": "^9.0.1",
+    "mime": "^2.4.6",
+    "p-queue": "^6.4.0",
+    "pg-promise": "^10.5.6",
+    "prom-client": "^12.0.0",
+    "uuid": "^8.3.1",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.5.0"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/better-sqlite3": "^5.4.1",
+    "@types/chai": "^4.2.11",
+    "@types/command-line-args": "^5.0.0",
+    "@types/express": "^4.17.9",
+    "@types/js-yaml": "^3.12.4",
+    "@types/marked": "^1.1.0",
+    "@types/mime": "^2.0.2",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.4.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "proxyquire": "^1.7.11",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^8.10.2",
+    "typescript": "^4.2.3",
+    "why-is-node-running": "^2.2.0"
+  }
+}

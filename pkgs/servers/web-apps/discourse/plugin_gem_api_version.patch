@@ -1,0 +1,13 @@
+diff --git a/lib/plugin_gem.rb b/lib/plugin_gem.rb
+index 49882b2cd9..96672df2ea 100644
+--- a/lib/plugin_gem.rb
++++ b/lib/plugin_gem.rb
+@@ -4,7 +4,7 @@ module PluginGem
+   def self.load(path, name, version, opts = nil)
+     opts ||= {}
+ 
+-    gems_path = File.dirname(path) + "/gems/#{RUBY_VERSION}"
++    gems_path = File.dirname(path) + "/gems/#{Gem.ruby_api_version}"
+ 
+     spec_path = gems_path + "/specifications"
+ 

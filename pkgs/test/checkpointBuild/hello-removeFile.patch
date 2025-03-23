@@ -1,0 +1,67 @@
+:100644 100644 0000000 0000000 M	Makefile.in
+:100644 000000 0000000 0000000 D	src/additionalFile.c
+:100644 100644 0000000 0000000 M	src/hello.c
+:100755 100755 0000000 0000000 M	tests/hello-1
+
+diff --git a/Makefile.in b/Makefile.in
+index f63f830..1597d39 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -312,7 +312,7 @@ am_lib_libhello_a_OBJECTS = lib/basename-lgpl.$(OBJEXT) \
+ 	lib/version-etc.$(OBJEXT) lib/version-etc-fsf.$(OBJEXT) \
+ 	lib/wctype-h.$(OBJEXT) lib/xmalloc.$(OBJEXT) \
+ 	lib/xalloc-die.$(OBJEXT) lib/xstriconv.$(OBJEXT) \
+-	lib/xstrndup.$(OBJEXT) src/additionalFile.$(OBJEXT)
++	lib/xstrndup.$(OBJEXT)
+ lib_libhello_a_OBJECTS = $(am_lib_libhello_a_OBJECTS)
+ am_hello_OBJECTS = src/hello.$(OBJEXT)
+ hello_OBJECTS = $(am_hello_OBJECTS)
+@@ -1842,7 +1842,7 @@ lib_libhello_a_SOURCES = lib/basename-lgpl.c lib/c-ctype.h \
+ 	$(am__append_4) $(am__append_5) lib/version-etc.h \
+ 	lib/version-etc.c lib/version-etc-fsf.c lib/wctype-h.c \
+ 	lib/xmalloc.c lib/xalloc-die.c lib/xstriconv.h lib/xstriconv.c \
+-	lib/xstrndup.h lib/xstrndup.c src/additionalFile.c
++	lib/xstrndup.h lib/xstrndup.c
+ lib_libhello_a_LIBADD = $(gl_LIBOBJS)
+ lib_libhello_a_DEPENDENCIES = $(gl_LIBOBJS)
+ EXTRA_lib_libhello_a_SOURCES = lib/close.c lib/stripslash.c lib/dup2.c \
+diff --git a/src/additionalFile.c b/src/additionalFile.c
+deleted file mode 100644
+index 34d683d..0000000
+--- a/src/additionalFile.c
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#include "config.h"
+-#include "system.h"
+-
+-int somefunc() {
+-    return 0;
+-}
+diff --git a/src/hello.c b/src/hello.c
+index a8e36dc..53722d9 100644
+--- a/src/hello.c
++++ b/src/hello.c
+@@ -126,6 +126,10 @@ parse_options (int argc, char *argv[], const char **greeting_msg)
+     }
+ }
+ 
++int somefunc() {
++    return 1;
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+diff --git a/tests/hello-1 b/tests/hello-1
+index 96ffef8..f0b9f8d 100755
+--- a/tests/hello-1
++++ b/tests/hello-1
+@@ -21,7 +21,7 @@ export LANGUAGE LC_ALL LC_MESSAGES LANG
+ 
+ tmpfiles="hello-test1.ok"
+ cat <<EOF > hello-test1.ok
+-Hello, world!
++Hello, incremental world!
+ EOF
+ 
+ tmpfiles="$tmpfiles hello-test1.out"

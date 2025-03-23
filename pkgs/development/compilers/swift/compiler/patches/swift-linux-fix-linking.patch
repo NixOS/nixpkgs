@@ -1,0 +1,21 @@
+--- a/lib/Driver/ToolChains.cpp
++++ b/lib/Driver/ToolChains.cpp
+@@ -1475,7 +1475,17 @@ const char *ToolChain::getClangLinkerDriver(
+ 
+     // If there is a linker driver in the toolchain folder, use that instead.
+     if (auto tool = llvm::sys::findProgramByName(LinkerDriver, {toolchainPath}))
+-      LinkerDriver = Args.MakeArgString(tool.get());
++      return Args.MakeArgString(tool.get());
++  }
++
++  // For Nix, prefer linking using the wrapped system clang, instead of using
++  // the unwrapped clang packaged with swift. The latter is unable to link, but
++  // we still want to use it for other purposes (clang importer).
++  if (auto nixCC = llvm::sys::Process::GetEnv("NIX_CC")) {
++    llvm::SmallString<128> binDir(nixCC.getValue());
++    llvm::sys::path::append(binDir, "bin");
++    if (auto tool = llvm::sys::findProgramByName(LinkerDriver, {binDir.str()}))
++      return Args.MakeArgString(tool.get());
+   }
+ 
+   return LinkerDriver;

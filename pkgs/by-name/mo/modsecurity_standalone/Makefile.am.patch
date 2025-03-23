@@ -1,0 +1,17 @@
+--- a/apache2/Makefile.am
++++ b/apache2/Makefile.am
+@@ -179,7 +179,6 @@ install-exec-hook: $(pkglib_LTLIBRARIES)
+ 	for m in $(pkglib_LTLIBRARIES); do \
+ 	  base=`echo $$m | sed 's/\..*//'`; \
+ 	  rm -f $(DESTDIR)$(pkglibdir)/$$base.*a; \
+-	  install -D -m444 $(DESTDIR)$(pkglibdir)/$$base.so $(DESTDIR)$(APXS_MODULES)/$$base.so; \
+ 	done
+ else
+ install-exec-hook: $(pkglib_LTLIBRARIES)
+@@ -187,6 +186,5 @@ install-exec-hook: $(pkglib_LTLIBRARIES)
+ 	for m in $(pkglib_LTLIBRARIES); do \
+ 	  base=`echo $$m | sed 's/\..*//'`; \
+ 	  rm -f $(DESTDIR)$(pkglibdir)/$$base.*a; \
+-	  cp -p $(DESTDIR)$(pkglibdir)/$$base.so $(DESTDIR)$(APXS_MODULES); \
+ 	done
+ endif

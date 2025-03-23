@@ -1,0 +1,6 @@
+{
+  "stable-linux": "8.10.68",
+  "stable-darwin": "8.10.68",
+  "beta-linux":"8.10.68-12.BETA",
+  "beta-darwin": "8.10.68-12.BETA"
+}

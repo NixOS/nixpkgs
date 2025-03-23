@@ -1,0 +1,18 @@
+diff --git a/phonemizer/backend/espeak/wrapper.py b/phonemizer/backend/espeak/wrapper.py
+index 84a79f5..8abcae1 100644
+--- a/phonemizer/backend/espeak/wrapper.py
++++ b/phonemizer/backend/espeak/wrapper.py
+@@ -143,12 +143,7 @@ class EspeakWrapper:
+                     f'is not a readable file')
+             return library.resolve()
+ 
+-        library = (
+-                ctypes.util.find_library('espeak-ng') or
+-                ctypes.util.find_library('espeak'))
+-        if not library:  # pragma: nocover
+-            raise RuntimeError(
+-                'failed to find espeak library')
++        library = '@libespeak@'
+         return library
+ 
+     def _fetch_version_and_path(self):

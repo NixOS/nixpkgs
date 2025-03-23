@@ -1,0 +1,75 @@
+diff --git a/Telegram/SourceFiles/platform/mac/main_window_mac.h b/Telegram/SourceFiles/platform/mac/main_window_mac.h
+index 2a3a59b9cf..16b7b6cdde 100644
+--- a/Telegram/SourceFiles/platform/mac/main_window_mac.h
++++ b/Telegram/SourceFiles/platform/mac/main_window_mac.h
+@@ -10,6 +10,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
+ #include "platform/platform_main_window.h"
+ #include "platform/mac/specific_mac_p.h"
+ #include "base/timer.h"
++#include "base/qt/qt_common_adapters.h"
+ 
+ #include <QtWidgets/QMenuBar>
+ #include <QtCore/QTimer>
+@@ -52,7 +53,7 @@ private:
+ 	bool nativeEvent(
+ 		const QByteArray &eventType,
+ 		void *message,
+-		qintptr *result) override;
++		base::NativeEventResult *result) override;
+ 
+ 	void hideAndDeactivate();
+ 	void updateDockCounter();
+diff --git a/Telegram/SourceFiles/platform/mac/main_window_mac.mm b/Telegram/SourceFiles/platform/mac/main_window_mac.mm
+index e95ef79f16..c3381926a9 100644
+--- a/Telegram/SourceFiles/platform/mac/main_window_mac.mm
++++ b/Telegram/SourceFiles/platform/mac/main_window_mac.mm
+@@ -305,7 +305,7 @@ void MainWindow::updateWindowIcon() {
+ bool MainWindow::nativeEvent(
+ 		const QByteArray &eventType,
+ 		void *message,
+-		qintptr *result) {
++		base::NativeEventResult *result) {
+ 	if (message && eventType == "NSEvent") {
+ 		const auto event = static_cast<NSEvent*>(message);
+ 		if (PossiblyTextTypingEvent(event)) {
+diff --git a/Telegram/SourceFiles/platform/mac/notifications_manager_mac.mm b/Telegram/SourceFiles/platform/mac/notifications_manager_mac.mm
+index de28809077..2521428567 100644
+--- a/Telegram/SourceFiles/platform/mac/notifications_manager_mac.mm
++++ b/Telegram/SourceFiles/platform/mac/notifications_manager_mac.mm
+@@ -502,11 +502,11 @@ void Manager::Private::invokeIfNotFocused(Fn<void()> callback) {
+ 	} else {
+ 		if (!_processesInited) {
+ 			_processesInited = true;
+-			QObject::connect(&_dnd, &QProcess::finished, [=] {
++			QObject::connect(&_dnd, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=] {
+ 				_waitingDnd = false;
+ 				checkFocusState();
+ 			});
+-			QObject::connect(&_focus, &QProcess::finished, [=] {
++			QObject::connect(&_focus, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=] {
+ 				_waitingFocus = false;
+ 				checkFocusState();
+ 			});
+@@ -536,7 +536,7 @@ void Manager::Private::checkFocusState() {
+ 	}
+ 	const auto istrue = [](QProcess &process) {
+ 		const auto output = process.readAllStandardOutput();
+-		DEBUG_LOG(("Focus Check: %1").arg(output));
++		DEBUG_LOG(("Focus Check: %1").arg(QString::fromUtf8(output)));
+ 		const auto result = (output.trimmed() == u"true"_q);
+ 		return result;
+ 	};
+Submodule Telegram/lib_ui contains modified content
+diff --git a/Telegram/lib_ui/ui/rp_widget.cpp b/Telegram/lib_ui/ui/rp_widget.cpp
+index 0b57704..0d2ca01 100644
+--- a/Telegram/lib_ui/ui/rp_widget.cpp
++++ b/Telegram/lib_ui/ui/rp_widget.cpp
+@@ -62,7 +62,7 @@ TWidget::TWidget(QWidget *parent)
+ 		auto format = QSurfaceFormat::defaultFormat();
+ 		format.setSwapInterval(0);
+ #ifdef Q_OS_MAC
+-		format.setColorSpace(QColorSpace::SRgb);
++		format.setColorSpace(QSurfaceFormat::sRGBColorSpace);
+ #endif // Q_OS_MAC
+ 		QSurfaceFormat::setDefaultFormat(format);
+ 		return true;

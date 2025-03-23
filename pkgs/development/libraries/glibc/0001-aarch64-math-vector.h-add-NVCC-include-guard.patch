@@ -1,0 +1,37 @@
+From 44d0a3a9bd8c6fe59f6ccb44206a50a900bfcf4a Mon Sep 17 00:00:00 2001
+From: Connor Baker <connor.baker@tweag.io>
+Date: Tue, 31 Oct 2023 14:30:24 +0000
+Subject: [PATCH] aarch64/math-vector.h: add NVCC include guard
+
+---
+ sysdeps/aarch64/fpu/bits/math-vector.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/sysdeps/aarch64/fpu/bits/math-vector.h b/sysdeps/aarch64/fpu/bits/math-vector.h
+index 7c200599c1..583a426494 100644
+--- a/sysdeps/aarch64/fpu/bits/math-vector.h
++++ b/sysdeps/aarch64/fpu/bits/math-vector.h
+@@ -25,17 +25,17 @@
+ /* Get default empty definitions for simd declarations.  */
+ #include <bits/libm-simd-decl-stubs.h>
+ 
+-#if __GNUC_PREREQ(9, 0)
++#if __GNUC_PREREQ(9, 0) && !defined(__CUDACC__)
+ #  define __ADVSIMD_VEC_MATH_SUPPORTED
+ typedef __Float32x4_t __f32x4_t;
+ typedef __Float64x2_t __f64x2_t;
+-#elif __glibc_clang_prereq(8, 0)
++#elif __glibc_clang_prereq(8, 0) && !defined(__CUDACC__)
+ #  define __ADVSIMD_VEC_MATH_SUPPORTED
+ typedef __attribute__ ((__neon_vector_type__ (4))) float __f32x4_t;
+ typedef __attribute__ ((__neon_vector_type__ (2))) double __f64x2_t;
+ #endif
+ 
+-#if __GNUC_PREREQ(10, 0) || __glibc_clang_prereq(11, 0)
++#if (__GNUC_PREREQ(10, 0) || __glibc_clang_prereq(11, 0)) && !defined(__CUDACC__)
+ #  define __SVE_VEC_MATH_SUPPORTED
+ typedef __SVFloat32_t __sv_f32_t;
+ typedef __SVFloat64_t __sv_f64_t;
+-- 
+2.42.0
+
