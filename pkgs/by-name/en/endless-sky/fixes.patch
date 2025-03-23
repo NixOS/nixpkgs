@@ -19,31 +19,35 @@ index de27023e..4225051f 100644
  		resources = str;
  		SDL_free(str);
  	}
--#if defined _WIN32
--	FixWindowsSlashes(resources);
--#endif
--	if(resources.back() != '/')
--		resources += '/';
 -#if defined __linux__ || defined __FreeBSD__ || defined __DragonFly__
--	// Special case, for Linux: the resource files are not in the same place as
--	// the executable, but are under the same prefix (/usr or /usr/local).
--	static const string LOCAL_PATH = "/usr/local/";
--	static const string STANDARD_PATH = "/usr/";
--	static const string RESOURCE_PATH = "share/games/endless-sky/";
--	if(!resources.compare(0, LOCAL_PATH.length(), LOCAL_PATH))
--		resources = LOCAL_PATH + RESOURCE_PATH;
--	else if(!resources.compare(0, STANDARD_PATH.length(), STANDARD_PATH))
--		resources = STANDARD_PATH + RESOURCE_PATH;
+-		// Special case, for Linux: the resource files are not in the same place as
+-		// the executable, but are under the same prefix (/usr or /usr/local).
+-		// When used as an iterator, a trailing / will create an empty item at
+-		// the end, so parent paths do not include it.
+-		static const filesystem::path LOCAL_PATH = "/usr/local";
+-		static const filesystem::path STANDARD_PATH = "/usr";
+-		static const filesystem::path RESOURCE_PATH = "share/games/endless-sky/";
+-
+-		const auto IsParent = [](const auto parent, const auto child) -> bool {
+-			if(distance(child.begin(), child.end()) < distance(parent.begin(), parent.end()))
+-				return false;
+-			return equal(parent.begin(), parent.end(), child.begin());
+-		};
+-
+-		if(IsParent(LOCAL_PATH, resources))
+-			resources = LOCAL_PATH / RESOURCE_PATH;
+-		else if(IsParent(STANDARD_PATH, resources))
+-			resources = STANDARD_PATH / RESOURCE_PATH;
 -#endif
+-	}
 -	// If the resources are not here, search in the directories containing this
 -	// one. This allows, for example, a Mac app that does not actually have the
 -	// resources embedded within it.
--	while(!Exists(resources + "credits.txt"))
+-	while(!Exists(resources / "credits.txt"))
 -	{
--		size_t pos = resources.rfind('/', resources.length() - 2);
--		if(pos == string::npos || pos == 0)
+-		if(!resources.has_parent_path() || resources.parent_path() == resources)
 -			throw runtime_error("Unable to find the resource directories!");
--		resources.erase(pos + 1);
+-		resources = resources.parent_path();
 -	}
 +
 +	resources = "%NIXPKGS_RESOURCES_PATH%";
