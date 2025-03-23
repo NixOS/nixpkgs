@@ -5070,6 +5070,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  gen-nvim = buildVimPlugin {
+    pname = "gen.nvim";
+    version = "2024-12-29";
+    src = fetchFromGitHub {
+      owner = "David-Kunz";
+      repo = "gen.nvim";
+      rev = "e09a8dbffa139ad60d5b47998fcc8669ead1ebf4";
+      sha256 = "1fl559n01cdckv0mw5d49z72sxxqfqhqhxx1d2025gjix3db4wmk";
+    };
+    meta.homepage = "https://github.com/David-Kunz/gen.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gen_tags-vim = buildVimPlugin {
     pname = "gen_tags.vim";
     version = "2023-03-06";
@@ -5913,7 +5926,7 @@ final: prev:
       rev = "1b7ec0a713a2aa9965848d8b93f66dc93716fd1c";
       sha256 = "05np3p0lnsra6c6vx3h81vrba3nhwxrqb5l3qkdbx5bl58dds9bn";
     };
-    meta.homepage = "https://github.com/TheBlob42/houdini.nvim";
+    meta.homepage = "https://github.com/TheBlob42/houdini.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
