@@ -13837,6 +13837,11 @@
     github = "MrTarantoga";
     githubId = 53876219;
   };
+  mrupnikm = {
+    github = "mrupnikm";
+    githubId = 93078189;
+    name = "Matic Rupnik";
+  };
   mrtnvgr = {
     name = "Egor Martynov";
     github = "mrtnvgr";
@@ -13848,11 +13853,6 @@
     github = "mrVanDalo";
     githubId = 839693;
     name = "Ingolf Wanger";
-  };
-  mrupnikm = {
-    github = "mrupnikm";
-    githubId = 93078189;
-    name = "Matic Rupnik";
   };
   msanft = {
     email = "moritz.sanft@outlook.de";
