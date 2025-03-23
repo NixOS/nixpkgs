@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-iYObxjWJUKgZKGTkqtYgQK4758k0EYZGhIAM/oLxxso=";
 
   postPatch = ''
-    substituteInPlace Justfile \
-      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-session'
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
@@ -45,6 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--set"
     "cosmic_dconf_profile"
     "cosmic"
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
