@@ -9,11 +9,13 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
-      "version": "0.2.4",
-      "revision": "181da464f7edb5e675dd96cc25d611760796a739",
-      "url": "https://api.github.com/repos/andir/npins/tarball/0.2.4",
-      "hash": "04155dr6i1gy2zgy49v8zm75sn1akm83l4x8h6cxvxyk1l2abn4q"
+      "release_prefix": null,
+      "submodules": false,
+      "version": "0.3.0",
+      "revision": "6cc1930e703698487bd703258126435a536ca492",
+      "url": "https://api.github.com/repos/andir/npins/tarball/0.3.0",
+      "hash": "1450ddp5gm3n5jvg64v9rc2jvf9za79fv4dmac5m8d47l0iblfcx"
     }
   },
-  "version": 3
+  "version": 5
 }
