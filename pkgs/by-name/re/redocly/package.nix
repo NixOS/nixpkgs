@@ -40,8 +40,8 @@ buildNpmPackage rec {
     process.argv[1] = 'redocly';
 
     // Set environment variables directly
-    process.env.REDOCLY_TELEMETRY = "off";
-    process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE = "true"
+    process.env.REDOCLY_TELEMETRY = process.env.REDOCLY_TELEMETRY || "off";
+    process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE = process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE || "true";
 
     require('$out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js');
     EOF
