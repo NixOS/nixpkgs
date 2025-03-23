@@ -9,14 +9,14 @@
   xdg-desktop-portal-cosmic,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-2EKkVdZ7uNNJ/E/3knmeH3EBa+tkYmIxP3t9d6yacww=";
   };
 
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.linux;
   };
-}
+})
