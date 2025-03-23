@@ -38,6 +38,11 @@ buildPythonPackage rec {
     joblib
   ];
 
+  patches = [
+    # https://github.com/rasbt/mlxtend/issues/1117
+    ./0001-StackingCVClassifier-fit-ensure-compatibility-with-s.patch
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "-sv" ];
