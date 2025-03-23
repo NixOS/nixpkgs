@@ -12,6 +12,7 @@
   fmt,
   ffmpeg_6-headless,
   gamemode,
+  glslang,
   httplib,
   inih,
   lib,
@@ -31,27 +32,23 @@
   soundtouch,
   stdenv,
   vulkan-headers,
-  vulkan-loader,
   xorg,
   zstd,
-  enableSdl2Frontend ? true,
+  enableSDL2 ? true,
   SDL2,
   enableQt ? true,
-  qt6,
   enableQtTranslations ? enableQt,
+  qt6,
   enableCubeb ? true,
   cubeb,
-  useDiscordRichPresence ? false,
+  useDiscordRichPresence ? true,
   rapidjson,
 }:
 let
   inherit (lib)
-    optional
     optionals
     cmakeBool
-    optionalString
     getLib
-    makeLibraryPath
     ;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -81,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       enet
       fmt
       ffmpeg_6-headless
+      glslang
       httplib
       inih
       libGL
@@ -110,10 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
         qtwayland
       ]
     )
-    ++ optionals enableSdl2Frontend [ SDL2 ]
     ++ optionals enableQtTranslations [ qt6.qttools ]
+    ++ optionals enableSDL2 [ SDL2 ]
     ++ optionals enableCubeb [ cubeb ]
-    ++ optional useDiscordRichPresence rapidjson;
+    ++ optionals useDiscordRichPresence [ rapidjson ];
 
   patches = [
     # Fix boost errors
@@ -143,35 +141,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libgamemode.so.0" "${getLib gamemode}/lib/libgamemode.so.0"
   '';
 
-  postInstall =
-    let
-      libs = makeLibraryPath [ vulkan-loader ];
-    in
-    optionalString enableSdl2Frontend ''
-      for binfile in azahar azahar-room
-      do
-        wrapProgram "$out/bin/$binfile" \
-          --prefix LD_LIBRARY_PATH : ${libs}
-      done
-    '';
-
-  cmakeFlags =
-    [
-      (cmakeBool "CITRA_USE_PRECOMPILED_HEADERS" false)
-      (cmakeBool "USE_SYSTEM_LIBS" true)
-      (cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
-      (cmakeBool "DISABLE_SYSTEM_GLSLANG" true)
-      (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
-      (cmakeBool "DISABLE_SYSTEM_VMA" true)
-      (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
-      (cmakeBool "ENABLE_QT" enableQt)
-      (cmakeBool "ENABLE_SDL2_FRONTEND" enableSdl2Frontend)
-      (cmakeBool "ENABLE_CUBEB" enableCubeb)
-      (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
-    ]
-    ++ optionals enableQt [
-      (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
-    ];
+  cmakeFlags = [
+    (cmakeBool "USE_SYSTEM_LIBS" true)
+    (cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
+    (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
+    (cmakeBool "DISABLE_SYSTEM_VMA" true)
+    (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
+    (cmakeBool "ENABLE_QT" enableQt)
+    (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
+    (cmakeBool "ENABLE_SDL2" enableSDL2)
+    (cmakeBool "ENABLE_CUBEB" enableCubeb)
+    (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
+  ];
 
   meta = {
     description = "An open-source 3DS emulator project based on Citra";
@@ -179,6 +160,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arthsmn ];
     mainProgram = "azahar";
-    platforms = lib.platforms.linux;
   };
 })
