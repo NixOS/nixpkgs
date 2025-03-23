@@ -69,12 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
         inherit nixStoreDir;
       })
 
-      # Add _Complex support for glibc-2.41:
-      #   https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/519
+      # Fix getter heuristics regression
+      # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/529
       (fetchpatch {
-        name = "complex-clang.patch";
-        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/2812471365c75ab51347a9101771128f8ab283ab.patch";
-        hash = "sha256-MR0tCOVfoAAPUIlT/Y8IYWiz48j1EnhNjUBzvsCUsEI=";
+        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/7b2d3699ad117199bc316c7007cc5984c3b09368.patch";
+        hash = "sha256-xFvTanSYg01Kog+nKP84QqDIFCsItNTFqVm14CYRFQs=";
       })
     ]
     ++ lib.optionals x11Support [
