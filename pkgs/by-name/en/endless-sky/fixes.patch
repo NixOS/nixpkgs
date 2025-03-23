@@ -51,7 +51,6 @@ index de27023e..4225051f 100644
 +
 +	resources = "%NIXPKGS_RESOURCES_PATH%";
 +
-	}
  	dataPath = resources + "data/";
  	imagePath = resources + "images/";
  	soundPath = resources + "sounds/";
