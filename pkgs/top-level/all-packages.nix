@@ -11313,6 +11313,9 @@ with pkgs;
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
     # Use latest boringssl to allow http3 support
     openssl = quictls;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # experimental allocator that may crash when forking
+    };
   };
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
@@ -11320,6 +11323,9 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # experimental allocator that may crash when forking
+    };
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
@@ -11328,6 +11334,9 @@ with pkgs;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.dav nginxModules.moreheaders ];
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # experimental allocator that may crash when forking
+    };
   };
 
   nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
