@@ -132,7 +132,6 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
-, "@prisma/language-server"
 , "pscid"
 , "pulp"
 , "purescript-language-server"
