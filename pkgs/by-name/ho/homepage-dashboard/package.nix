@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7fi7cW+DKjU9CeVEg863UGwCqTXxA1UrwlK2vrx1c5w=";
+    hash = "sha256-SwzgmVy3TBzEH+FJ/kY+iCo+pZhud1IZkfCh2DiSTsk=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-E16+JLtfoiWCXwgFGdTGuFlx/pYxhINNl6tCuF9Z6MQ=";
+    hash = "sha256-GUDSfAbBK+6Bbih5jBrkjiMYLOJM7gMfurXFeez1bSw=";
   };
 
   nativeBuildInputs = [
