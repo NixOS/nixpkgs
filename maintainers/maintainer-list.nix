@@ -3205,6 +3205,12 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
+  blackzeshi = {
+    name = "blackzeshi";
+    email = "sergey_zhuzhgov@mail.ru";
+    github = "zeshi09";
+    githubId = 105582686;
+  };
   blakesmith = {
     name = "Blake Smith";
     email = "blakesmith0@gmail.com";
