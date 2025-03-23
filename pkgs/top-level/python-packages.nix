@@ -636,6 +636,8 @@ self: super: with self; {
 
   annotated-types = callPackage ../development/python-modules/annotated-types { };
 
+  annotatedyaml = callPackage ../development/python-modules/annotatedyaml { };
+
   annoy = callPackage ../development/python-modules/annoy { };
 
   anonip = callPackage ../development/python-modules/anonip { };
@@ -2008,6 +2010,8 @@ self: super: with self; {
 
   bump2version = callPackage ../development/python-modules/bump2version { };
 
+  bump-my-version = callPackage ../development/python-modules/bump-my-version { };
+
   bumpfontversion = callPackage ../development/python-modules/bumpfontversion { };
 
   bumps = callPackage ../development/python-modules/bumps { };
@@ -2519,6 +2523,8 @@ self: super: with self; {
   cmaes = callPackage ../development/python-modules/cmaes { };
 
   cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
+
+  cmake-build-extension = callPackage ../development/python-modules/cmake-build-extension { };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
@@ -5371,6 +5377,8 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
+
   ghome-foyer-api = callPackage ../development/python-modules/ghome-foyer-api { };
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
@@ -6800,6 +6808,8 @@ self: super: with self; {
 
   jh2 = callPackage ../development/python-modules/jh2 { };
 
+  jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
+
   jianpu-ly = callPackage ../development/python-modules/jianpu-ly { };
 
   jieba = callPackage ../development/python-modules/jieba { };
@@ -7443,6 +7453,8 @@ self: super: with self; {
   lib4package = callPackage ../development/python-modules/lib4package { };
 
   libagent = callPackage ../development/python-modules/libagent { };
+
+  libbs = callPackage ../development/python-modules/libbs { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
 
@@ -10922,6 +10934,8 @@ self: super: with self; {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
+  pyhidra = callPackage ../development/python-modules/pyhidra { };
+
   pyhive-integration = callPackage ../development/python-modules/pyhive-integration { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
@@ -12998,6 +13012,8 @@ self: super: with self; {
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
     inherit (pkgs) cmake ninja;
   });
+
+  pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 

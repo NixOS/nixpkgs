@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.146";
+  version = "9.2.147";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-bBjD+rhS8VS7JKXJyqwlxl6hmi34grO9HCuZ06SFLh0=";
+    hash = "sha256-ndD0NnaJtxzvb33O7/UaKi2xRuC8VRArndynZp8zCr4=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
