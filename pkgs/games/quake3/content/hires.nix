@@ -25,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
   extra-pack-resolution = fetchurl {
     # url = "https://github.com/diegoulloao/ioquake3-mac-install/raw/master/extras/extra-pack-resolution.pk3";
     url = "https://web.archive.org/web/20250310093216/https://fmt3.dl.dbolical.com/dl/2018/11/06/q3a-hqq-v37.zip?st=0XzNnNvOYWrJAi_6AB3mKw==&e=1741602736";
-    sha256 = "sha256-0nAXkrf4ahlct75TgO18PjuT9IkH8fpDhtTflJfPpPM=";
+    hash = "sha256-0nAXkrf4ahlct75TgO18PjuT9IkH8fpDhtTflJfPpPM=";
   };
 
   # backport of sound files from quake 3 live
   quake3-live-sounds = fetchurl {
     url = "https://github.com/diegoulloao/ioquake3-mac-install/blob/3a767ff0131742ec517fd5f13ddca16dee91927d/extras/quake3-live-sounds.pk3";
-    sha256 = "sha256-0vODIpA3/5BPNno5PKhc/ISI2rFYXYyumKdzUFyXn3M=";
+    hash = "sha256-kdHP6lNMuq5+OfWQuxgeVPijYEm8JcZveAzZDoYCrc4=";
   };
   # https://www.moddb.com/mods/cz45modbundle/addons/cz45-q3a-weapon-model-remake-v10
   # https://www.moddb.com/downloads/mirror/255463/130/9de70b5dc7ebb1baa44acf91458b04f9/
@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   hd-weapons = fetchurl {
     name = "czq3hdweaprem_v10.zip";
     url = "https://web.archive.org/web/20250310101737/https://fmt1.dl.dbolical.com/dl/2023/08/13/czq3hdweaprem_v10.zip?st=XBoRCpVmvTYtc60xxi36VQ==&e=1741605457";
-    sha256 = "sha256-pL7MsEFsKJV+a+z45Ns16SPdQB3i2D6T3x7tBqWtm1s=";
+    hash = "sha256-pL7MsEFsKJV+a+z45Ns16SPdQB3i2D6T3x7tBqWtm1s=";
   };
   zpack-weapons = fetchurl {
     url = "https://github.com/diegoulloao/ioquake3-mac-install/blob/3a767ff0131742ec517fd5f13ddca16dee91927d/extras/zpack-weapons.pk3";
-    sha256 = "sha256-RSK0wZvNqrC3lTT6jhSmEgGL6TiaFz+f+YoI7lr7ckA=";
+    hash = "sha256-RG9pgJc8BHB9sfkmMQI3bEzAf+xO0HPD2bxJ9CxRtek";
   };
 
   buildCommand = ''
