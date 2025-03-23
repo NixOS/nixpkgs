@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcron";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-5bSMm3jLOM+ySgONyxOgi1EhiJN1N49C88lLwlDSFJc=";
+    sha256 = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
   };
 
   buildInputs = [ perl ];
