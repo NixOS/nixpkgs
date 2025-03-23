@@ -1122,7 +1122,7 @@ in
           (lib.mkIf (cfg.user == "mastodon") {
             mastodon = {
               isSystemUser = true;
-              home = cfg.package;
+              home = "/var/lib/mastodon/";
               inherit (cfg) group;
             };
           })
