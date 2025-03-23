@@ -22,7 +22,6 @@ buildPythonPackage rec {
     repo = pname;
     # Uncomment and replace rev & hash lines when a new release occurs within CPyCppyy.
     #tag = "CPyCppyy-${version}";
-    #hash = "sha256-9y0BHYMQyKUC3JTlozSv167rA2hN2IP2J0a1e/1en0o=";
     rev = "8bd9d9e10d658a33294a4ba9b2251bf1f9223469";
     hash = "sha256-IEwdJSXG6diz7j2N7WQys5na7+xj1CYu7J3FCkW9/AQ=";
   };
