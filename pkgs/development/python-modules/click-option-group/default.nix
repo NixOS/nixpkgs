@@ -1,9 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
   click,
   fetchFromGitHub,
   pytestCheckHook,
@@ -16,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
