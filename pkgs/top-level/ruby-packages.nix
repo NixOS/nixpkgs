@@ -3133,14 +3133,15 @@
     version = "7.1.1";
   };
   rbs = {
+    dependencies = ["logger"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dgj5n7rj83981fvrhswfwsh88x42p7r00nvd80hkxmdcjvda2h6";
+      sha256 = "0drs9n5qn9pifmb752kali7r2sv0laclvchahc670phlv21awdqf";
       type = "gem";
     };
-    version = "2.8.4";
+    version = "3.9.0";
   };
   rchardet = {
     groups = ["default"];
