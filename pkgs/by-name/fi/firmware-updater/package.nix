@@ -5,13 +5,13 @@
   fetchFromGitHub,
 }:
 
-flutter.buildFlutterApplication {
+flutter.buildFlutterApplication rec {
   pname = "firmware-updater";
   version = "0-unstable-2024-20-11";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  sourceRoot = "./source/apps/firmware_updater";
+  sourceRoot = "${src.name}/apps/firmware_updater";
 
   gitHashes = {
     fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";

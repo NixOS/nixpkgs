@@ -218,8 +218,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postUnpack = ''
-    patchShebangs source/doc/*.py
-    patchShebangs source/doc/input-filter-h.sh
+    patchShebangs ${finalAttrs.src.name}/doc/*.py
+    patchShebangs ${finalAttrs.src.name}/doc/input-filter-h.sh
   '';
 
   postInstall = ''

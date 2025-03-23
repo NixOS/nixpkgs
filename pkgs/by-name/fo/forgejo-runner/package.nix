@@ -17,17 +17,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "6.2.2";
+  version = "6.3.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-vyJ5Fr38YvR8jjw/Tnih6c+GoctnVpgiaX7Bl+YNti0=";
+    hash = "sha256-fBpNWxQtej75/oVaHat/H/4Ge9rbjf6FZ/Dw+LBZjcI=";
   };
 
-  vendorHash = "sha256-KITZV8U4Hhdg9nXYd83p0joYOXulCsJ0sakiP2Q8gi0=";
+  vendorHash = "sha256-mHvAkVdUAyS4KP6S61IRF2j37XgNMgCFbyZ+WpqqjjA=";
 
   ldflags = [
     "-s"
