@@ -295,7 +295,7 @@ rec {
           fi
 
           # Unpack all of the parent layers into the image.
-          lowerdir=""
+          lowerdirs=()
           extractionID=0
           for layerTar in $(cat layer-list); do
             echo "Unpacking layer $layerTar"
@@ -308,7 +308,7 @@ rec {
             find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
             # Get the next lower directory and continue the loop.
-            lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
+            lowerdirs=( "image/$extractionID/layer"  "''${lowerdirs[@]}" )
           done
 
           mkdir work
@@ -321,11 +321,25 @@ rec {
             ${preMount}
           ''}
 
-          if [ -n "$lowerdir" ]; then
-            mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
-          else
-            mount --bind layer mnt
-          fi
+          mountDirs() {
+            local IFS=:
+            declare -g layerNum
+            if [ "$#" -eq 0 ]; then
+              mount --bind layer mnt
+              return
+            elif [ "$#" -lt 16 ]; then
+              mount -t overlay overlay -olowerdir="$*",workdir=work,upperdir=layer mnt
+              return
+            fi
+
+            # tough case: we have too many layers to mount at once; recurse
+            : layerNum=''${layerNum:=0}
+            mkdir -p "work$layerNum" "layer$layerNum" "mnt$layerNum" || return
+            mount -t overlay overlay -o "lowerdir=''${*:1:16},workdir=work$layerNum,upperdir=layer$layerNum" "mnt$layerNum" || return
+            mountDirs "mnt$layerNum" "''${@:17}"
+          }
+
+          mountDirs "''${lowerdirs[@]}"
 
           ${lib.optionalString (postMount != "") ''
             # Execute post-mount steps
@@ -350,6 +364,7 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
+        mkdir -p -- "$out"
         tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
       '';
 
