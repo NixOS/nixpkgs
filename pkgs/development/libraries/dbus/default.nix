@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
         --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
       substituteInPlace ./tools/dbus-launch.c \
         --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+
+      substituteInPlace ./configure.ac \
+        --replace-fail 'AC_PATH_PROG([LAUNCHCTL], [launchctl])' 'LAUNCHCTL=/bin/launchctl'
+      substituteInPlace ./bus/org.freedesktop.dbus-session.plist.in \
+        --replace-fail '--session' '--config-file=${placeholder "out"}/share/dbus-1/session.conf'
     '';
 
   outputs = [
@@ -106,6 +111,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-apparmor"
       "--enable-libaudit"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--enable-launchd"
+      "--with-launchd-agent-dir=${placeholder "out"}/etc/launchd"
     ]
     ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
