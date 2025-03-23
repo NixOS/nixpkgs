@@ -447,8 +447,7 @@ let
     mkdir -p $root
 
     # Copy arbitrary other files into the image
-    # Semi-shamelessly copied from make-etc.sh. I (@copumpkin) shall factor this stuff out as part of
-    # https://github.com/NixOS/nixpkgs/issues/23052.
+    # Semi-shamelessly copied from make-etc.sh.
     set -f
     sources_=(${lib.concatStringsSep " " sources})
     targets_=(${lib.concatStringsSep " " targets})

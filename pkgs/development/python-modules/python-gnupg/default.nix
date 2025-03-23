@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vsajip/python-gnupg";
     changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }
