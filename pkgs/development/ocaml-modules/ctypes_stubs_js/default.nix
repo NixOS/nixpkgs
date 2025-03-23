@@ -1,15 +1,19 @@
 {
-  lib, fetchFromGitLab, buildDunePackage
-, integers_stubs_js, ctypes, ppx_expect
-, js_of_ocaml-compiler
-, nodejs
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  integers_stubs_js,
+  ctypes,
+  ppx_expect,
+  js_of_ocaml-compiler,
+  nodejs,
+  stdenv,
 }:
 
 buildDunePackage rec {
   pname = "ctypes_stubs_js";
   version = "0.1";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
@@ -22,13 +26,18 @@ buildDunePackage rec {
   propagatedBuildInputs = [ integers_stubs_js ];
   nativeCheckInputs = [
     nodejs
-    js_of_ocaml-compiler
+    (
+      if lib.versionAtLeast js_of_ocaml-compiler.version "6.0" then
+        js_of_ocaml-compiler.override { version = "5.9.1"; }
+      else
+        js_of_ocaml-compiler
+    )
   ];
   checkInputs = [
     ctypes
     ppx_expect
   ];
-  doCheck = true;
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Js_of_ocaml Javascript stubs for the OCaml ctypes library";

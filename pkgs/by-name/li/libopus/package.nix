@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "docs" false)
   ];
 
-  doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
+  doCheck = !stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
   passthru = {
     updateScript = gitUpdater {
@@ -78,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ getchoo jopejoe1 ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      jopejoe1
+    ];
   };
 })

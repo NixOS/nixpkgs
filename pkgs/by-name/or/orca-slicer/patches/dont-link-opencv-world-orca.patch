@@ -1,0 +1,14 @@
+diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
+index 64e0a9e87..e14f29488 100644
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -576,7 +576,8 @@ target_link_libraries(libslic3r
+     mcut
+     JPEG::JPEG
+     qoi
+-    opencv_world
++    opencv_core
++    opencv_imgproc
+     noise::noise
+     )
+ 

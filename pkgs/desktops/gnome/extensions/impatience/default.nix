@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-impatience";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    rev = "refs/tags/version-${version}";
-    hash = "sha256-yBRnhdCDeA0bL+kkrmnIqyXAlhZzO2Vthc4Dnba80j4=";
+    tag = "version-${version}";
+    hash = "sha256-Z+tpmmGbC1rgV4U1w6qM3g85FwpRvzHbBCmFCfcmc60=";
   };
 
   buildInputs = [
@@ -36,7 +41,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Speed up builtin gnome-shell animations";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ timbertson tiramiseb ];
+    maintainers = with maintainers; [
+      timbertson
+      tiramiseb
+    ];
     homepage = "http://gfxmonk.net/dist/0install/gnome-shell-impatience.xml";
   };
 }

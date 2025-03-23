@@ -18,7 +18,7 @@ in
           moduleWithKey
         ];
       };
-      default = {};
+      default = { };
     };
     negative = mkOption {
       type = types.submodule {
@@ -28,7 +28,7 @@ in
         ];
         disabledModules = [ moduleWithKey ];
       };
-      default = {};
+      default = { };
     };
   };
 }

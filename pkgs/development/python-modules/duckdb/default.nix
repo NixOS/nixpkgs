@@ -38,7 +38,6 @@ buildPythonPackage rec {
     '';
 
   env = {
-    BUILD_HTTPFS = 1;
     DUCKDB_BUILD_UNITY = 1;
     OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };
@@ -63,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ] ++ lib.optionals stdenv.isDarwin [ "tests/fast" ];
+  pytestFlagsArray = [ "--verbose" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/fast" ];
 
   disabledTestPaths = [
     # avoid dependency on mypy

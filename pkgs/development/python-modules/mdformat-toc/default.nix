@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   mdformat,
-  mdit-py-plugins,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3EX6kGez408tEYiR9VSvi3GTrb4ds+HJwpFflv77nkg=";
   };
 

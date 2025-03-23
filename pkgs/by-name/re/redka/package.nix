@@ -1,19 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "redka";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "redka";
     rev = "v${version}";
-    hash = "sha256-KpfXnhwz3uUdG89XdNqm1WyKwYhA5ImDg4DzzefKMz8=";
+    hash = "sha256-CCTPhcarLFs2wyhu7OqifunVSil2QU61JViY3uTjVg8=";
   };
 
   vendorHash = "sha256-aX0X6TWVEouo884LunCt+UzLyvDHgmvuxdV0wh0r7Ro=";
 
-  subPackages = [ "cmd/redka" "cmd/cli" ];
+  subPackages = [
+    "cmd/redka"
+    "cmd/cli"
+  ];
 
   ldflags = [ "-X main.version=v${version}" ];
 

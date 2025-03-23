@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "redis_exporter";
-  version = "1.62.0";
+  version = "1.68.0";
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "sha256-EKI/oF0bAiwDYjkdEPi84R8H8wExaCxFK3uPx8MrHk8=";
+    sha256 = "sha256-rdJPrGRXNZq00U3ZX0AqaDPUtLBcPRZhqHPVuUV/Tm4=";
   };
 
-  vendorHash = "sha256-nrEglhb22LANgm6hiZToPVPfGpkpxpJ7TQlLW0Z7+/4=";
+  vendorHash = "sha256-8N/gY6YvhrGGwziLUPC12vhoxZ8QnCxgv9jxFnG6/XQ=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
@@ -29,6 +34,10 @@ buildGoModule rec {
     mainProgram = "redis_exporter";
     homepage = "https://github.com/oliver006/redis_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ eskytthe srhb ma27 ];
+    maintainers = with maintainers; [
+      eskytthe
+      srhb
+      ma27
+    ];
   };
 }

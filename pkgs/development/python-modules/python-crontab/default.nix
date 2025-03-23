@@ -10,19 +10,20 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9OoWBdJFM7Z/p6Y07ybLWaXy55VPbmd9LXoiKZWaL8g=";
+    pname = "python_crontab";
+    inherit version;
+    hash = "sha256-QAZ9HdOa3jRgsq2FV8dlFRTNOFHe//9hxcYOEifFw2s=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ python-dateutil ];
+  dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

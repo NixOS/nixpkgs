@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
-  version = "6.2.2";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-translations";
     rev = version;
-    hash = "sha256-uZVF2CsKTQOvMJsyXBW405W3vdIGxYlW8+xPiwSgUSg=";
+    hash = "sha256-By09Y4iHZz3XR7tRd5MyXK5BKOr01yJzTTLQHEZ00q0=";
   };
 
   nativeBuildInputs = [

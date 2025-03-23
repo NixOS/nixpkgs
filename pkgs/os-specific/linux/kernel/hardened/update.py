@@ -145,7 +145,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    kernel_ver = re.sub(r"(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
+    kernel_ver = re.sub(r"v?(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
     major = kernel_ver.split('.')[0]
     sha256_kernel, _ = nix_prefetch_url(f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz")
 
@@ -157,8 +157,11 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
 
 
 def parse_version(version_str: str) -> Version:
+    # There have been two variants v6.10[..] and 6.10[..], drop the v
+    version_str_without_v = version_str[1:] if not version_str[0].isdigit() else version_str
     version: Version = []
-    for component in re.split(r'\.|\-', version_str):
+
+    for component in re.split(r'\.|\-', version_str_without_v):
         try:
             version.append(int(component))
         except ValueError:
@@ -227,7 +230,7 @@ for release in repo.get_releases():
     # It's not reliable to exit earlier because not every kernel minor may
     # have hardened patches, hence the naive search below.
     i += 1
-    if i > 500:
+    if i > 100:
         break
 
     version = parse_version(release.tag_name)

@@ -8,11 +8,16 @@
   gnused,
   autoPatchelfHook,
   wrapGAppsHook3,
+  gtk3,
+  glib,
+  webkitgtk_4_0,
+  glib-networking,
+  override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.1.3";
+  version = "25.0.0";
 
   src =
     let
@@ -25,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-kPpcFkmMzTVo8GYptpp1pyNYsNEFuq6iuEtyewvRA0M=";
-        aarch64-linux = "sha256-hr3TwXIxspgF5my/j7yqPwpcTOTbCcxfd3nVBrEMkJY=";
-        x86_64-darwin = "sha256-pP6BeoSeOzWlsvXLIhMzty4pJ5J1iyokRV191lGM/5w=";
-        aarch64-darwin = "sha256-VjYrq/FyNgLcgMF/eWUmbC9y908qGkMUJ58/rWGXjvs=";
+        x86_64-linux = "sha256-9pwHoQWyy/piv5QUELbVJc+MXatrY7zsinu0X5FVmds=";
+        aarch64-linux = "sha256-Evvah8a+rUQchMORbrYTVuBqzXTk/kqpP8tTH/12zBU=";
+        x86_64-darwin = "sha256-r/d07oISifXJlnNbCD8Hlo8+2zvTZmdP6eXkx8shAnA=";
+        aarch64-darwin = "sha256-h0v2q59RqG5BrqX576Gt7EcHNii7N/zx6MLalvSDlzI=";
       };
     in
     fetchurl {
@@ -36,22 +41,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
       gnused
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
 
   dontConfigure = true;
   dontBuild = true;
 
+  prePatch = ''
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  '';
+
+  preInstall = ''
+    # most directories are for different architectures, only keep what we need
+    shopt -s extglob
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
+    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+    popd
+  '';
+
   installPhase =
-    if !stdenvNoCC.isDarwin then
+    if !stdenvNoCC.hostPlatform.isDarwin then
       ''
         runHook preInstall
 
@@ -59,10 +77,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
           --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}"
+          --set JAVA_HOME "${openjdk17.home}" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
+          --prefix LD_LIBRARY_PATH : "$out/lib:${
+            lib.makeLibraryPath [
+              gtk3
+              glib
+              webkitgtk_4_0
+              glib-networking
+            ]
+          }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
-        ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
+        # for some reason it's missing from the aarch64 build
+        if [ -e $out/opt/dbeaver/dbeaver.png ]; then
+          ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
+        fi
 
         mkdir -p $out/share/applications
         ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop
@@ -90,8 +120,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dbeaver.io/";
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${finalAttrs.version}";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
@@ -99,10 +130,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       gepbird
       mkg20001
       yzx9

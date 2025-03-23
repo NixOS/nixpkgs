@@ -16,21 +16,21 @@
   python-dateutil,
   pyusb,
   requests,
-  spsdk,
   tqdm,
   tlv8,
   typing-extensions,
-  pyserial,
-  protobuf,
   click-aliases,
   semver,
   nethsm,
   importlib-metadata,
+  nitrokey,
+  pyscard,
+  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.4.49";
+  version = "0.7.4";
   mainProgram = "nitropy";
 in
 
@@ -40,10 +40,14 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lYdrqXdB5ATFQZMUIMebpIng26ZuZW3zRnQPXiO+uTY=";
+    hash = "sha256-Qd1fc8ihoAk8kpexzm9sGh4VRo2o4e8weUjEztat/CY=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     certifi
     cffi
     click
@@ -55,21 +59,16 @@ buildPythonPackage {
     python-dateutil
     pyusb
     requests
-    spsdk
     tqdm
     tlv8
     typing-extensions
-    pyserial
-    protobuf
     click-aliases
     semver
     nethsm
     importlib-metadata
-  ];
-
-  nativeBuildInputs = [
-    flit-core
-    installShellFiles
+    nitrokey
+    pyscard
+    asn1crypto
   ];
 
   pythonRelaxDeps = true;

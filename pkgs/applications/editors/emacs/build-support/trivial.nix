@@ -2,27 +2,38 @@
 
 { callPackage, lib, ... }@envargs:
 
-args:
+lib.extendMkDerivation {
+  constructDrv = callPackage ./generic.nix envargs;
+  extendDrvArgs =
+    finalAttrs:
 
-callPackage ./generic.nix envargs ({
-  buildPhase = ''
-    runHook preBuild
+    args:
 
-    emacs -L . --batch -f batch-byte-compile *.el
+    {
+      buildPhase =
+        args.buildPhase or ''
+          runHook preBuild
 
-    runHook postBuild
-  '';
+          # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+          if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+            foundMakefile=1
+          fi
 
-  installPhase = ''
-    runHook preInstall
+          emacs -l package -f package-initialize -L . --batch -f batch-byte-compile *.el
 
-    LISPDIR=$out/share/emacs/site-lisp
-    install -d $LISPDIR
-    install *.el *.elc $LISPDIR
-    emacs --batch -l package --eval "(package-generate-autoloads \"${args.pname}\" \"$LISPDIR\")"
+          runHook postBuild
+        '';
 
-    runHook postInstall
-  '';
+      installPhase =
+        args.installPhase or ''
+          runHook preInstall
+
+          LISPDIR=$out/share/emacs/site-lisp
+          install -d $LISPDIR
+          install *.el *.elc $LISPDIR
+
+          runHook postInstall
+        '';
+    };
+
 }
-
-// args)

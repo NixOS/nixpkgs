@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -9,11 +10,11 @@ let
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n4as3kdsgrcmxxyjz9klm0v0pb24rsa1b7r43j7wmnfsir8i81k";
+    hash = "sha256-M6CIctTOVn7kIPmsoHQmYl2wQaUzfel7ryw/3ebQitg=";
   };
 
 in
-python3.pkgs.buildPythonApplication  {
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
   pyproject = true;
 
@@ -29,7 +30,7 @@ python3.pkgs.buildPythonApplication  {
     requests
   ];
 
-  # Tests for this applicaiton do not run on NixOS, and binaries were
+  # Tests for this application do not run on NixOS, and binaries were
   # manually tested instead
   doCheck = false;
 

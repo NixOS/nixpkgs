@@ -1,11 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.gateway;
 
   cliArgs = lib.cli.toGNUCommandLineShell { } {
     # If either of these are null / false, they are not passed in the command-line
-    inherit (cfg) cert key trust system user merge;
+    inherit (cfg)
+      cert
+      key
+      trust
+      system
+      user
+      merge
+      ;
   };
 in
 {
@@ -118,9 +130,9 @@ in
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     systemd.services.systemd-journal-gatewayd.serviceConfig.ExecStart = [
-        # Clear the default command line
-        ""
-        "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
+      # Clear the default command line
+      ""
+      "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
     ];
 
     systemd.sockets.systemd-journal-gatewayd = {

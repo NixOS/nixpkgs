@@ -75,17 +75,9 @@ stdenv.mkDerivation {
 }
 ```
 
-where the builder can do anything it wants, but typically starts with
+where `stdenv` sets up the environment automatically (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can use `stdenv`’s generic builder:
 
 ```bash
-source $stdenv/setup
-```
-
-to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can still use `stdenv`’s generic builder:
-
-```bash
-source $stdenv/setup
-
 buildPhase() {
   echo "... this is my custom build phase ..."
   gcc foo.c -o foo
@@ -338,7 +330,7 @@ let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 dep(h0, t0, A, B)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
-h0 + t1 in {-1, 0, -1}
+h0 + t1 in {-1, 0, 1}
 ----------------------------- Take immediate dependencies' propagated dependencies
 propagated-dep(mapOffset(h0, t0, h1),
                mapOffset(h0, t0, t1),
@@ -351,7 +343,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the target offset: `t = h + 1`. That means that:
+Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the host offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -408,7 +400,7 @@ The propagated equivalent of `depsBuildBuild`. This perhaps never ought to be us
 
 ##### `propagatedNativeBuildInputs` {#var-stdenv-propagatedNativeBuildInputs}
 
-The propagated equivalent of `nativeBuildInputs`. This would be called `depsBuildHostPropagated` but for historical continuity. For example, if package `Y` has `propagatedNativeBuildInputs = [X]`, and package `Z` has `buildInputs = [Y]`, then package `Z` will be built as if it included package `X` in its `nativeBuildInputs`. If instead, package `Z` has `nativeBuildInputs = [Y]`, then `Z` will be built as if it included `X` in the `depsBuildBuild` of package `Z`, because of the sum of the two `-1` host offsets.
+The propagated equivalent of `nativeBuildInputs`. This would be called `depsBuildHostPropagated` but for historical continuity. For example, if package `Y` has `propagatedNativeBuildInputs = [X]`, and package `Z` has `buildInputs = [Y]`, then package `Z` will be built as if it included package `X` in its `nativeBuildInputs`. Note that if instead, package `Z` has `nativeBuildInputs = [Y]`, then `X` will not be included at all.
 
 ##### `depsBuildTargetPropagated` {#var-stdenv-depsBuildTargetPropagated}
 
@@ -518,8 +510,10 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
+The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
+
 It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}
 
@@ -580,7 +574,7 @@ After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSour
 If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
 You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
 
-For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
+For example, if you want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
@@ -884,7 +878,7 @@ Like `stripAllList`, but only applies to packages’ target platform. By default
 
 ##### `stripAllFlags` {#var-stdenv-stripAllFlags}
 
-Flags passed to the `strip` command applied to the files in the directories listed in `stripAllList`. Defaults to `-s` (i.e. `--strip-all`).
+Flags passed to the `strip` command applied to the files in the directories listed in `stripAllList`. Defaults to `-s -p` (i.e. `--strip-all --preserve-dates`).
 
 ##### `stripDebugList` {#var-stdenv-stripDebugList}
 
@@ -896,7 +890,7 @@ Like `stripDebugList`, but only applies to packages’ target platform. By defau
 
 ##### `stripDebugFlags` {#var-stdenv-stripDebugFlags}
 
-Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S` (i.e. `--strip-debug`).
+Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S -p` (i.e. `--strip-debug --preserve-dates`).
 
 ##### `stripExclude` {#var-stdenv-stripExclude}
 
@@ -1136,6 +1130,12 @@ Example removing all references to the compiler in the output:
 }
 ```
 
+### `runHook` \<hook\> {#fun-runHook}
+
+Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+
+For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
+
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
@@ -1268,7 +1268,7 @@ addEnvHooks "$hostOffset" myBashFunction
 
 The *existence* of setups hooks has long been documented and packages inside Nixpkgs are free to use this mechanism. Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions. Because of the existing issues with this system, there’s little benefit from mandating it be stable for any period of time.
 
-First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
+First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation`, even with custom builders. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 ### `move-docs.sh` {#move-docs.sh}
 
@@ -1371,9 +1371,47 @@ This setup hook moves any systemd user units installed in the `lib/` subdirector
 
 This hook only runs when compiling for Linux.
 
+### `no-broken-symlinks.sh` {#no-broken-symlinks.sh}
+
+This setup hook checks for, reports, and (by default) fails builds when "broken" symlinks are found. A symlink is considered "broken" if it's dangling (the target doesn't exist) or reflexive (it refers to itself).
+
+This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
+
+::: {.note}
+The hook only considers symlinks with targets inside the Nix store.
+:::
+
+::: {.note}
+The check for reflexivity is direct and does not account for transitivity, so this hook will not prevent cycles in symlinks.
+:::
+
 ### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
+
+### `add-bin-to-path.sh` {#add-bin-to-path.sh}
+
+This setup hook checks if the `bin/` directory exists in the `$out` output path
+and, if so, adds it to the `PATH` environment variable. This ensures that
+executables located in `$out/bin` are accessible.
+
+This hook is particularly useful during testing, as it allows packages to locate their executables without requiring manual modifications to the `PATH`.
+
+**Note**: This hook is specifically designed for the `$out/bin` directory only
+and does not handle and support other paths like `$sourceRoot/bin`. It may not
+work as intended in cases with multiple outputs or when binaries are located in
+directories like `sbin/`. These caveats should be considered when using this
+hook, as they might introduce unexpected behavior in some specific cases.
+
+### `writable-tmpdir-as-home.sh` {#writable-tmpdir-as-home.sh}
+
+This setup hook ensures that the directory specified by the `HOME` environment
+variable is writable. If it is not, the hook assigns `HOME` to a writable
+directory (in `.home` in `$NIX_BUILD_TOP`). This adjustment is necessary for
+certain packages that require write access to a home directory.
+
+By setting `HOME` to a writable directory, this setup hook prevents failures in
+packages that attempt to write to the home directory.
 
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
@@ -1403,6 +1441,7 @@ these in the [Hooks Reference](#chap-hooks).
 ### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
 
 If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/ld-wrapper-hook` exists, it will be run at the end of the linker wrapper, before the linker runs.
 If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
 These hooks allow a user to inject code into the wrappers.
 As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.
@@ -1521,6 +1560,10 @@ intel_drv.so: undefined symbol: vgaHWFreeHWRec
 
 Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
 
+#### `stackclashprotection` {#stackclashprotection}
+
+This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+
 ### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
@@ -1538,6 +1581,16 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
+#### `shadowstack` {#shadowstack}
+
+Adds the `-fcf-protection=return` compiler option. This enables the Shadow Stack feature supported by some newer processors, which maintains a user-inaccessible copy of the program's stack containing only return-addresses. When returning from a function, the processor compares the return-address value on the two stacks and throws an error if they do not match, considering it a sign of corruption and possible tampering. This should significantly increase the difficulty of ROP attacks.
+
+For the Shadow Stack to be enabled at runtime, all code linked into a process must be built with Shadow Stack enabled, so this is probably only useful to enable on a wide scale, so that all of a packages dependencies also have the feature enabled.
+
+This is currently only supported on some newer Intel and AMD processors as part of the Intel CET set of features. However, the generated code should continue to work on older processors which will simply omit any of this checking.
+
+This breaks some code that does advanced stack management or exception handling. If enabling this hardening flag it is important to test the result on a system that has known working and enabled CET support, so that any such breakage can be discovered.
+
 #### `trivialautovarinit` {#trivialautovarinit}
 
 Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
@@ -1550,9 +1603,13 @@ This should be turned off or fixed for build errors such as:
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
 
-#### `stackclashprotection` {#stackclashprotection}
+#### `pacret` {#pacret}
 
-This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+This flag adds the `-mbranch-protection=pac-ret` compiler option on aarch64-linux targets. This uses ARM v8.3's Pointer Authentication feature to sign function return pointers before adding them to the stack. The pointer's authenticity is then validated before returning to its destination. This dramatically increases the difficulty of ROP exploitation techniques.
+
+This may cause problems with code that does advanced stack manipulation, and debugging/stack-unwinding tools need to be pac-ret aware to work correctly when these features are in operation.
+
+Pre-ARM v8.3 processors will ignore Pointer Authentication instructions, so code built with this flag will continue to work on older processors, though without any of the intended protections. If enabling this flag, it is recommended to ensure the resultant packages are tested against an ARM v8.3+ linux system with known-working Pointer Authentication support so that any breakage caused by this feature is actually detected.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.

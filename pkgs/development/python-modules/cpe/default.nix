@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cpe";
-  version = "1.2.1";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nilp0inter";
     repo = "cpe";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1hTOMbsL1089/yPZbAIs5OgjtEzCBlFv2hGi+u4hV/k=";
+    tag = "v${version}";
+    hash = "sha256-QI5XHy2TDSUqK6BZBoFWViBcOKfo+zg0ulzEzF4eg4w=";
   };
 
   build-system = [ setuptools ];
@@ -27,17 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cpe" ];
 
-  disabledTests = [
-    # Tests are outdated
-    "testfile_cpelang2"
-    "test_incompatible_versions"
-    "test_equals"
-  ];
-
   meta = {
+    changelog = "https://github.com/nilp0inter/cpe/releases/tag/v${version}";
     description = "Common platform enumeration for python";
     homepage = "https://github.com/nilp0inter/cpe";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
   };
 }

@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, AppKit, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  AppKit,
+  Cocoa,
+}:
 
 let
   pname = "pngpaste";
   version = "0.2.3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "jcsalterego";
@@ -12,7 +19,10 @@ in stdenv.mkDerivation {
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 
-  buildInputs = [ AppKit Cocoa ];
+  buildInputs = [
+    AppKit
+    Cocoa
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

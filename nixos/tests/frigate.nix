@@ -1,11 +1,15 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+{
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   name = "frigate";
-  meta.maintainers = with lib.maintainers; [ hexa ];
+  meta = { inherit (pkgs.frigate.meta) maintainers; };
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {
       services.frigate = {
         enable = true;
 
@@ -17,12 +21,14 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           cameras.test = {
             ffmpeg = {
               input_args = "-fflags nobuffer -strict experimental -fflags +genpts+discardcorrupt -r 10 -use_wallclock_as_timestamps 1";
-              inputs = [ {
-                path = "http://127.0.0.1:8080";
-                roles = [
-                  "record"
-                ];
-              } ];
+              inputs = [
+                {
+                  path = "http://127.0.0.1:8080";
+                  roles = [
+                    "record"
+                  ];
+                }
+              ];
             };
           };
 
@@ -40,26 +46,36 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -f mpegts -listen 1 http://0.0.0.0:8080";
+          ExecStart = "${lib.getExe pkgs.ffmpeg-headless} -re -f lavfi -i smptebars=size=1280x720:rate=5 -f mpegts -listen 1 http://0.0.0.0:8080";
           Restart = "always";
         };
       };
+
+      environment.systemPackages = with pkgs; [ httpie ];
     };
   };
 
   testScript = ''
     start_all()
 
+    # wait until frigate is up
     machine.wait_for_unit("frigate.service")
-
-    # Frigate startup
     machine.wait_for_open_port(5001)
 
-    # nginx startup
-    machine.wait_for_open_port(80)
+    # extract admin password from logs
+    machine.wait_until_succeeds("journalctl -u frigate.service -o cat | grep -q 'Password: '")
+    password = machine.execute("journalctl -u frigate.service -o cat | grep -oP '([a-f0-9]{32})'")[1]
 
-    machine.succeed("curl http://localhost")
+    # login and store session
+    machine.log(machine.succeed(f"http --check-status --session=frigate post http://localhost/api/login user=admin password={password}"))
 
+    # make authenticated api request
+    machine.log(machine.succeed("http --check-status --session=frigate get http://localhost/api/version"))
+
+    # make unauthenticated api request
+    machine.log(machine.succeed("http --check-status get http://localhost:5000/api/version"))
+
+    # wait for a recording to appear
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
   '';
-})
+}

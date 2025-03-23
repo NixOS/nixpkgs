@@ -14,16 +14,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
     rev = "v${version}";
-    hash = "sha256-I5dx0/aHCGmzgAEBL9gZcG7DFWCkSpndGvv2enQIZGU=";
+    hash = "sha256-sviGDwxbCBsNY5viV7Qim6B/COd1Uz0Wj/6n/Ge+A50=";
   };
 
-  cargoHash = "sha256-30BY6ceJj0UeZE30O/LovR+YXSd7jIxFo6ojKFuecFM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uyUwmTDa1RcgQbc/6wMwRK6932CatuGMr0FPd2rAufk=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 

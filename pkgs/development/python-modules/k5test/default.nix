@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
-  substituteAll,
   findutils,
-  krb5,
+  krb5-c,
+  pythonOlder,
   setuptools,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit findutils krb5;
+    (replaceVars ./fix-paths.patch {
+      inherit findutils;
+      krb5 = krb5-c;
       # krb5-config is in dev output
-      krb5Dev = krb5.dev;
+      krb5Dev = krb5-c.dev;
     })
   ];
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pythongssapi/k5test";
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,7 +3,7 @@
   asar,
   commandLineArgs ? "",
   copyDesktopItems,
-  electron_30,
+  electron_33,
   fetchurl,
   makeDesktopItem,
   makeWrapper,
@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.5";
+  version = "2.0.8";
 
   desktopItems = [
     (makeDesktopItem {
-      desktopName = "Youtube Music Desktop App";
+      desktopName = "YouTube Music Desktop App";
       exec = "ytmdesktop";
       icon = "ytmdesktop";
       name = "ytmdesktop";
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
         "Audio"
       ];
       startupNotify = true;
+      startupWMClass = "YouTube Music Desktop App";
     })
   ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ytmdesktop/ytmdesktop/releases/download/v${finalAttrs.version}/youtube-music-desktop-app_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-0j8HVmkFyTk/Jpq9dfQXFxd2jnLwzfEiqCgRHuc5g9o=";
+    hash = "sha256-CwidVf4i9CeD/a8u5sZrBpoYzlZqi9ptFxljr9VmKq8=";
   };
 
   unpackPhase = ''
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     asar extract resources/app.asar patched-asar
 
     # workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace patched-asar/.webpack/main/index.js \
+    substituteInPlace patched-asar/.vite/main/index.js \
       --replace-fail "process.resourcesPath" "'$out/lib/resources'"
 
     asar pack patched-asar resources/app.asar
@@ -79,9 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   fixupPhase = ''
     runHook preFixup
 
-    makeWrapper ${lib.getExe electron_30} $out/bin/ytmdesktop \
+    makeWrapper ${lib.getExe electron_33} $out/bin/ytmdesktop \
       --add-flags $out/lib/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook preFixup
@@ -93,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";
     license = lib.licenses.gpl3Only;
-    mainProgram = finalAttrs.pname;
+    mainProgram = "ytmdesktop";
     maintainers = [ lib.maintainers.cjshearer ];
-    inherit (electron_30.meta) platforms;
+    inherit (electron_33.meta) platforms;
     # While the files we extract from the .deb are cross-platform (javascript), the installation
     # process for darwin is different, and I don't have a test device. PRs are welcome if you can
     # add the correct installation steps. I would suggest looking at the following:

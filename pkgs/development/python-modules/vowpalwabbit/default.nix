@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "9.9.0";
+  version = "9.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YCg2EI4rhEMwcVEzx9ES8Z3CoCddeUFVk4lZ0nuQJUc=";
+    hash = "sha256-Yyqm3MlW6UL+bCufFfzWg9mBBQNhLxR+g++ZrQ6qM/E=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   # As we disable configure via cmake, pass explicit global options to enable
   # spdlog and fmt packages
-  setupPyGlobalFlags = [ "--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\"" ];
+  setupPyGlobalFlags = [ "--cmake-options=-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON" ];
 
   propagatedBuildInputs = [
     numpy
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
   '';
 
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     # Test again when new version is released
-    broken = stdenv.isLinux;
+    broken = stdenv.hostPlatform.isLinux;
   };
 }

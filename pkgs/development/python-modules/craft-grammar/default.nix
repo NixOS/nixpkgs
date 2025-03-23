@@ -4,40 +4,43 @@
   fetchFromGitHub,
   nix-update-script,
   overrides,
-  setuptools,
-  pytest-check,
-  pytest-mock,
+  setuptools-scm,
   pytestCheckHook,
-  pydantic_1,
+  pydantic,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "1.2.0";
+  version = "2.0.3";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-grammar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YQpxgdmUxYLkhAXDLlkLAK6VpjIEycLFY3nsE/M4o2g=";
+    tag = version;
+    hash = "sha256-d7U4AAUikYcz26ZSXQwkTobSKN1PpaL20enfggHSKRM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ overrides ];
+  dependencies = [ overrides ];
 
   pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
-    pydantic_1
+    pydantic
     pytestCheckHook
     pyyaml
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
+
+  # Temp fix for test incompatibility with Python 3.13
+  disabledTests = [
+    "test_grammar_strlist_error[value2]"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

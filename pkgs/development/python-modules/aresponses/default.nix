@@ -4,37 +4,33 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pytest,
   pytest-asyncio,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "2.1.6";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "CircleUp";
-    repo = pname;
+    owner = "aresponses";
+    repo = "aresponses";
     rev = version;
-    hash = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
+    hash = "sha256-RklXlIsbdq46/7D6Hv4mdskunqw1a7SFF09OjhrvMRY=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    pytest
-    pytest-asyncio
-  ];
-
-  nativeCheckInputs = [
+  dependencies = [
     aiohttp
     pytest-asyncio
-    pytestCheckHook
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disable tests which requires network access
@@ -47,8 +43,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aresponses" ];
 
   meta = with lib; {
+    changelog = "https://github.com/aresponses/aresponses/blob/${src.rev}/README.md#changelog";
     description = "Asyncio testing server";
-    homepage = "https://github.com/circleup/aresponses";
+    homepage = "https://github.com/aresponses/aresponses";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };

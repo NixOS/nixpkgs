@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
@@ -12,27 +13,29 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptools,
   starlette,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5AZca4APi2gLwj/AHtXOPzIFnJkCmK9mDV0bAAvIx8A=";
+    tag = "v${version}";
+    hash = "sha256-VMihaWqR4FbnTJ50fVf5e5B9GfVwRguq5UAC+D4bpxs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    requests
   ];
 
   nativeCheckInputs = [
@@ -43,9 +46,15 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    requests
     starlette
     werkzeug
   ];
+
+  preCheck = ''
+    # httpx 0.28.0+ requires SSL_CERT_FILE or SSL_CERT_DIR
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   pythonImportsCheck = [ "authlib" ];
 
@@ -60,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/lepture/authlib/blob/${src.tag}/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flokli ];
   };

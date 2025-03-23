@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pydes";
   version = "unstable-2019-01-08";
   format = "setuptools";

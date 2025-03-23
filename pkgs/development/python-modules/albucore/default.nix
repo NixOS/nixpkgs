@@ -6,34 +6,34 @@
   setuptools,
   pytestCheckHook,
   numpy,
-  opencv4,
-  tomli,
-  typing-extensions,
+  opencv-python,
+  simsimd,
+  stringzilla,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.12";
+  version = "0.0.23";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TJTIIshMUcHTGSo0lRA3hVkqMqKsfj0EuiV+SSsP5Q4=";
+    tag = version;
+    hash = "sha256-jyNOrtQbQ62bQouu5WLYBWqVS5wUDZFsiqkMMb5p7Ek=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
-    opencv4
-    tomli
-    typing-extensions
+    opencv-python
+    simsimd
+    stringzilla
   ];
 
   pythonImportsCheck = [ "albucore" ];

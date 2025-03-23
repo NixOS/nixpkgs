@@ -3,7 +3,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   addDriverRunpath,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
@@ -28,13 +28,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "gpuctypes";
     owner = "tinygrad";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xUMvMBK1UhZaMZfik0Ia6+siyZGpCkBV+LTnQvzt/rw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-fix-dlopen-cuda.patch;
+    (replaceVars ./0001-fix-dlopen-cuda.patch {
       inherit (addDriverRunpath) driverLink;
       libnvrtc =
         if cudaSupport then

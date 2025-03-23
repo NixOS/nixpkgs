@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "tendo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZOozMGxAKcEtmUEzHCFSojKc+9Ha+T2MOTmMvdMqNuQ=";
   };
 

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, substituteAll
+, replaceVars
 , fetchurl
 , pkg-config
 , gettext
@@ -30,19 +30,18 @@
 , libepoxy
 , libxkbcommon
 , libxml2
-, gmp
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
-, tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+, tinysparql
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
 , wayland
 , wayland-protocols
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
 , cups
 , AppKit
 , Cocoa
@@ -54,8 +53,7 @@
 
 let
 
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-3.0";
     gtk_binary_version = "3.0.0";
   };
@@ -64,7 +62,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.43";
+  version = "3.24.48";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -77,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = let
     inherit (finalAttrs) version;
   in fetchurl {
-    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    hash = "sha256-fgTwZIUVA0uAa3SuXXdNh8/7GiqWxGjLW+R21Rvy88c=";
+    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    hash = "sha256-0Qzp6p30TBAW2NFyHznlXT1gf8+4UzSuwNI2zcmnBVY=";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
@@ -121,10 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
-    tracker
+    tinysparql
   ];
   #TODO: colord?
 
@@ -147,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXrender
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # explicitly propagated, always needed
     Cocoa
     QuartzCore
@@ -167,13 +165,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
-    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.hostPlatform.isDarwin && !x11Support)}"
     "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
   doCheck = false; # needs X11
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
@@ -203,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ''${files[@]}
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
@@ -220,21 +218,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup =  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # a comment created a cycle between outputs
     sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gtk+";
+      packageName = "gtk";
       attrPath = "gtk3";
       freeze = true;
     };

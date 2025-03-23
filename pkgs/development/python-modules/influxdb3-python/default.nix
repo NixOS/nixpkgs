@@ -8,22 +8,30 @@
   pythonOlder,
   reactivex,
   setuptools,
+  pandas,
+  polars,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "influxdb3-python";
-  version = "0.7.0";
+  version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jncJUurkH1XzC6Hjcpet1fZejcYjcPq2OWI//FmZcmI=";
+    tag = "v${version}";
+    hash = "sha256-B4+ctx+74tl4vPgpu1pwZTb2AJ26PGTWQI8cZ2QolwY=";
   };
+
+  postPatch = ''
+    # Upstream falls back to a default version if not in a GitHub Actions
+    substituteInPlace setup.py \
+      --replace-fail "version=get_version()," "version = '${version}',"
+  '';
 
   build-system = [ setuptools ];
 
@@ -34,6 +42,15 @@ buildPythonPackage rec {
     reactivex
     urllib3
   ];
+
+  optional-dependencies = {
+    pandas = [ pandas ];
+    polars = [ polars ];
+    dataframe = [
+      pandas
+      polars
+    ];
+  };
 
   # Missing ORC support
   # https://github.com/NixOS/nixpkgs/issues/212863

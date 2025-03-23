@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, wrapQtAppsHook
-, wrapGAppsHook3
-, alsa-lib
-, gtk3
-, libcanberra
-, libgudev
-, librsvg
-, poppler
-, pulseaudio
-, gdk-pixbuf-xlib
-, coreutils
-, dbus
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  wrapGAppsHook3,
+  alsa-lib,
+  gtk3,
+  libcanberra,
+  libgudev,
+  librsvg,
+  poppler,
+  pulseaudio,
+  gdk-pixbuf-xlib,
+  coreutils,
+  dbus,
 }:
 
 buildGoModule rec {
@@ -55,10 +55,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     deepin-gettext-tools
-    wrapQtAppsHook
     wrapGAppsHook3
   ];
-  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -85,13 +83,9 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   postFixup = ''
     for binary in $out/lib/deepin-api/*; do
-      wrapProgram $binary "''${qtWrapperArgs[@]}"
+      wrapProgram $binary "''${gappsWrapperArgs[@]}"
     done
   '';
 

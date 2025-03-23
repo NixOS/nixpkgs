@@ -22,6 +22,7 @@
   psutil,
   pycparser,
   pyformlang,
+  pydemumble,
   pythonOlder,
   pyvex,
   rich,
@@ -30,13 +31,14 @@
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn,
+  unicorn-angr,
   unique-log-filter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.112";
+  version = "9.2.147";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -44,15 +46,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OrLkKPQFhcDv/9Rj8c6UYhS5QbpjfEXBSAK61Y1I6YQ=";
+    tag = "v${version}";
+    hash = "sha256-ndD0NnaJtxzvb33O7/UaKi2xRuC8VRArndynZp8zCr4=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     ailment
@@ -74,21 +74,22 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyformlang
+    pydemumble
     pyvex
     rich
     rpyc
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn
+    unicorn-angr
     unique-log-filter
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     AngrDB = [ sqlalchemy ];
   };
 
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
     "linux"
   ];
@@ -104,6 +105,8 @@ buildPythonPackage rec {
     "pyvex"
     "archinfo"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";

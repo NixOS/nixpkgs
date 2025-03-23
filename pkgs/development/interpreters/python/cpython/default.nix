@@ -15,6 +15,7 @@
 , bzip2
 , expat
 , libffi
+, libuuid
 , libxcrypt
 , mpdecimal
 , ncurses
@@ -24,8 +25,7 @@
 , zlib
 
 # platform-specific dependencies
-, bash
-, configd
+, bashNonInteractive
 , darwin
 , windows
 
@@ -35,7 +35,7 @@
 , tzdata
 , withGdbm ? !stdenv.hostPlatform.isWindows, gdbm
 , withReadline ? !stdenv.hostPlatform.isWindows, readline
-, x11Support ? false, tcl, tk, tix, libX11, xorgproto
+, x11Support ? false, tcl, tk, tclPackages, libX11, xorgproto
 
 # splicing/cross
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
@@ -70,7 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-, enableLTO ? stdenv.isDarwin || (stdenv.is64bit && stdenv.isLinux)
+, enableLTO ? stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
@@ -95,7 +95,7 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-assert lib.assertMsg (enableFramework -> stdenv.isDarwin)
+assert lib.assertMsg (enableFramework -> stdenv.hostPlatform.isDarwin)
   "Framework builds are only supported on Darwin.";
 
 assert lib.assertMsg (reproducibleBuild -> stripBytecode)
@@ -130,12 +130,13 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    # bluez is excluded manually to break an infinite recursion.
+    inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && ! lib.isDerivation v) inputs;
     override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
-    libPrefix = "python${pythonVersion}";
+    libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
@@ -151,7 +152,7 @@ let
 
   nativeBuildInputs = [
     nukeReferences
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ optionals (!stdenv.hostPlatform.isDarwin) [
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
     pkg-config
@@ -166,6 +167,7 @@ let
     bzip2
     expat
     libffi
+    libuuid
     libxcrypt
     mpdecimal
     ncurses
@@ -180,8 +182,6 @@ let
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
-  ] ++ optionals stdenv.isDarwin [
-    configd
   ] ++ optionals tzdataSupport [
     tzdata
   ] ++ optionals withGdbm [
@@ -206,81 +206,29 @@ let
     inherit hash;
   };
 
-  # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
-  # module that is imported by the sysconfig and distutils.sysconfig modules.
-  # The sysconfigdata module is generated at build time and contains settings
-  # required for building Python extension modules, such as include paths and
-  # other compiler flags. By default, the sysconfigdata module is loaded from
-  # the currently running interpreter (ie. the build platform interpreter), but
-  # when cross-compiling we want to load it from the host platform interpreter.
-  # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
-  # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
-  # platform suffix on extension modules. The correct values for these variables
-  # are not documented, and must be derived from the configure script (see links
-  # below).
-  sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
-    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
+  # win32 is added by Fedora’s patch
+  machdep = if stdenv.hostPlatform.isWindows then
+    "win32"
+  else
+    stdenv.hostPlatform.parsed.kernel.name;
 
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
-    # The configure script uses "arm" as the CPU name for all 32-bit ARM
-    # variants when cross-compiling, but native builds include the version
-    # suffix, so we do the same.
-    pythonHostPlatform = let
-      cpu = {
-        # According to PEP600, Python's name for the Power PC
-        # architecture is "ppc", not "powerpc".  Without the Rosetta
-        # Stone below, the PEP600 requirement that "${ARCH} matches
-        # the return value from distutils.util.get_platform()" fails.
-        # https://peps.python.org/pep-0600/
-        powerpc = "ppc";
-        powerpcle = "ppcle";
-        powerpc64 = "ppc64";
-        powerpc64le = "ppc64le";
-      }.${parsed.cpu.name} or parsed.cpu.name;
-    in "${machdep}-${cpu}";
-
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-    multiarchCpu =
-      if isAarch32 then
-        if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
-      else if isx86_32 then "i386"
-      else parsed.cpu.name;
-
-    pythonAbiName = let
-      # python's build doesn't match the nixpkgs abi in some cases.
-      # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-      nixpkgsPythonAbiMappings = {
-        "gnuabielfv2" = "gnu";
-        "muslabielfv2" = "musl";
-      };
-      pythonAbi = nixpkgsPythonAbiMappings.${parsed.abi.name} or parsed.abi.name;
-    in
-      # Python <3.11 doesn't distinguish musl and glibc and always prefixes with "gnu"
-      if versionOlder version "3.11" then
-        replaceStrings [ "musl" ] [ "gnu" ] pythonAbi
-      else
-        pythonAbi;
-
-    multiarch =
-      if isDarwin then "darwin"
-      else if isFreeBSD then ""
-      else if isWindows then ""
-      else "${multiarchCpu}-${machdep}-${pythonAbiName}";
-
-    abiFlags = optionalString isPy37 "m";
-
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
-    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${machdep}_${multiarch}";
-  in ''
-    sysconfigdataHook() {
-      if [ "$1" = '${placeholder "out"}' ]; then
-        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
-        export _PYTHON_SYSCONFIGDATA_NAME='${pythonSysconfigdataName}'
-      fi
-    }
-
-    addEnvHooks "$hostOffset" sysconfigdataHook
-  '';
+  # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
+  # The configure script uses "arm" as the CPU name for all 32-bit ARM
+  # variants when cross-compiling, but native builds include the version
+  # suffix, so we do the same.
+  pythonHostPlatform = let
+    cpu = {
+      # According to PEP600, Python's name for the Power PC
+      # architecture is "ppc", not "powerpc".  Without the Rosetta
+      # Stone below, the PEP600 requirement that "${ARCH} matches
+      # the return value from distutils.util.get_platform()" fails.
+      # https://peps.python.org/pep-0600/
+      powerpc = "ppc";
+      powerpcle = "ppcle";
+      powerpc64 = "ppc64";
+      powerpc64le = "ppc64le";
+    }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  in "${machdep}-${cpu}";
 
   execSuffix = stdenv.hostPlatform.extensions.executable;
 in with passthru; stdenv.mkDerivation (finalAttrs: {
@@ -289,12 +237,12 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   inherit nativeBuildInputs;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash # only required for patchShebangs
+    bashNonInteractive # only required for patchShebangs
   ] ++ buildInputs;
 
-  prePatch = optionalString stdenv.isDarwin ''
+  prePatch = optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
-  '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
+  '' + optionalString (pythonOlder "3.9" && stdenv.hostPlatform.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
   '';
@@ -306,7 +254,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.isFreeBSD) [
+  ] ++ optionals (pythonOlder "3.12") [
+    # https://www.cve.org/CVERecord?id=CVE-2025-0938
+    ./CVE-2025-0938.patch
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
     # since this diff, consider submitting this patch upstream!
@@ -321,12 +272,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
-    # Fix darwin build https://bugs.python.org/issue34027
-    ./3.7/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.11") [
-    ./3.11/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
+  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
   ] ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
@@ -353,6 +299,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+    # fix failing tests with openssl >= 3.4
+    # https://github.com/python/cpython/pull/127361
+  ] ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
+    ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
+    (fetchpatch {
+      url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
+      sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
+    })
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
@@ -361,33 +316,45 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     mingw-patch = fetchgit {
       name = "mingw-python-patches";
       url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
-      rev = "45c45833ab9e5480ad0ae00778a05ebf35812ed4"; # for python 3.11.5 at the time of writing.
-      sha256 = "sha256-KIyNvO6MlYTrmSy9V/DbzXm5OsIuyT/BEpuo7Umm9DI=";
+      rev = "3edecdbfb4bbf1276d09cd5e80e9fb3dd88c9511"; # for python 3.11.9 at the time of writing.
+      hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
     };
-  in [
-    "${mingw-patch}/*.patch"
-  ]) ++ optionals isPy312 [
-    # backport fix for various platforms; armv7l, riscv64, s390
-    # https://github.com/python/cpython/pull/121178
-    ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
-  ];
+  in (
+    builtins.map (f: "${mingw-patch}/${f}")
+    [
+      # The other patches in that repo are already applied to 3.11.10
+      "mingw-python3_distutils.patch"
+      "mingw-python3_frozenmain.patch"
+      "mingw-python3_make-sysconfigdata.py-relocatable.patch"
+      "mingw-python3_mods-failed.patch"
+      "mingw-python3_module-select.patch"
+      "mingw-python3_module-socket.patch"
+      "mingw-python3_modules.patch"
+      "mingw-python3_platform-mingw.patch"
+      "mingw-python3_posix-layout.patch"
+      "mingw-python3_pthread_threadid.patch"
+      "mingw-python3_pythonw.patch"
+      "mingw-python3_setenv.patch"
+      "mingw-python3_win-modules.patch"
+    ])
+  );
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace-fail "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace-fail "'/bin/sh'" "'${bashNonInteractive}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
-  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
-      "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
 
   env = {
     CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
+    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
       "glibc" = "-lgcc_s";
       "musl" = "-lgcc_eh";
@@ -417,9 +384,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals (stdenv.isDarwin && configd == null) [
-    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
-    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [
@@ -455,6 +419,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "ac_cv_func_lchmod=no"
   ] ++ optionals static [
     "LDFLAGS=-static"
+    "MODULE_BUILDTYPE=static"
+  ] ++ optionals (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) [
+    # dlopen is a no-op in static musl builds, and since we build everything without -fPIC it's better not to pretend.
+    "ac_cv_func_dlopen=no"
   ];
 
   preConfigure = ''
@@ -466,18 +434,23 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
     done
-  '' + optionalString stdenv.isDarwin ''
+  '' + optionalString (stdenv.hostPlatform.isDarwin && pythonOlder "3.12") ''
+    # Fix _ctypes module compilation
+    export NIX_CFLAGS_COMPILE+=" -DUSING_APPLE_OS_LIBFFI=1"
+  '' + optionalString stdenv.hostPlatform.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
-    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}
     # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
     sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
   '' + optionalString (pythonAtLeast "3.11") ''
     # Also override the auto-detection in `configure`.
     substituteInPlace configure \
-      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.isAarch64 then "uint128" else "x64"}'
-  '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
+      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}'
+  '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=incompatible-pointer-types"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
@@ -548,6 +521,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + optionalString (pythonAtLeast "3.14") ''
+    # Get rid of retained dependencies on -dev packages, and remove from _sysconfig_vars*.json introduced with Python3.14
+    for i in $out/lib/${libPrefix}/_sysconfig_vars*.json; do
+       sed -i $i -e "s|$TMPDIR|/no-such-path|g"
+    done
+    find $out/lib -name '_sysconfig_vars*.json*' -print -exec nuke-refs ${keep-references} '{}' +
+    ln -s "$out/lib/${libPrefix}/"_sysconfig_vars*.json "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -611,8 +591,31 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    cat << "EOF" >> "$out/nix-support/setup-hook"
-    ${sysconfigdataHook}
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+    sysconfigdataName="$(make --eval $'print-sysconfigdata-name:
+    \t@echo _sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) ' print-sysconfigdata-name)"
+
+    # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+    # module that is imported by the sysconfig and distutils.sysconfig modules.
+    # The sysconfigdata module is generated at build time and contains settings
+    # required for building Python extension modules, such as include paths and
+    # other compiler flags. By default, the sysconfigdata module is loaded from
+    # the currently running interpreter (ie. the build platform interpreter), but
+    # when cross-compiling we want to load it from the host platform interpreter.
+    # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+    # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+    # platform suffix on extension modules. The correct values for these variables
+    # are not documented, and must be derived from the configure script (see links
+    # below).
+    cat <<EOF >> "$out/nix-support/setup-hook"
+    sysconfigdataHook() {
+      if [ "\$1" = '$out' ]; then
+        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+        export _PYTHON_SYSCONFIGDATA_NAME='$sysconfigdataName'
+      fi
+    }
+
+    addEnvHooks "\$hostOffset" sysconfigdataHook
     EOF
   '';
 
@@ -623,7 +626,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonOnBuildForHost buildPackages.bash
+    pythonOnBuildForHost buildPackages.bashNonInteractive
   ];
 
   separateDebugInfo = true;
@@ -640,6 +643,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
           hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
         })
       ];
+
+      postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
+        substituteInPlace Doc/tools/extensions/pyspecific.py \
+          --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
+      '';
 
       dontConfigure = true;
 
@@ -685,5 +693,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
+    maintainers = lib.teams.python.members;
+    # mingw patches only apply to Python 3.11 currently
+    broken = (lib.versions.minor version) != "11" && stdenv.hostPlatform.isWindows;
   };
 })

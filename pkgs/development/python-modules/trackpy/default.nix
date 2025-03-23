@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6i1IfdxgV6bpf//mXATpnsQ0zN26S8rlL0/1ql68sd8=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/trackpy";
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = [ ];
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

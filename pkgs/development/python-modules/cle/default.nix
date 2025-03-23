@@ -5,27 +5,26 @@
   cart,
   cffi,
   fetchFromGitHub,
-  minidump,
   pefile,
   pyelftools,
   pytestCheckHook,
   pythonOlder,
   pyvex,
-  pyxbe,
   setuptools,
   sortedcontainers,
+  nix-update-script,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.112";
+  version = "9.2.147";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uVoM6Ae8r9xQ4+EzdQ5A3OrpOdt6hhJATvuzSZVxvy8=";
+    hash = "sha256-Hj56jvyKceDCqYg+JdItxTKuE66ykhhSbYSUWCL5ux4=";
   };
 in
 buildPythonPackage rec {
@@ -39,28 +38,22 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gdj3LVIYQKhDN5Dnw06D96wmvExyN5/OmNPu/EJeKw0=";
+    hash = "sha256-f4N97MFx/rfz1epFTbIQpPBGK+ioFRLZ99bINIbhktk=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "pyvex" ];
 
   dependencies = [
     archinfo
     cart
     cffi
-    minidump
     pefile
     pyelftools
     pyvex
-    pyxbe
     sortedcontainers
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''
@@ -84,10 +77,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cle" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Python loader for many binary formats";
     homepage = "https://github.com/angr/cle";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,15 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, libGL
-, libpulseaudio
-, libXxf86vm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  libGL,
+  libpulseaudio,
+  libXxf86vm,
 }:
 let
+  version = "4.15.16";
+
   desktopItem = makeDesktopItem {
     name = "unciv";
     exec = "unciv";
@@ -20,29 +23,34 @@ let
   };
 
   desktopIcon = fetchurl {
-    url = "https://github.com/yairm210/Unciv/blob/4.11.16/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
-    libGL
-    libpulseaudio
-    libXxf86vm
-  ]);
+  envLibPath = lib.makeLibraryPath (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libpulseaudio
+      libXxf86vm
+    ]
+  );
 
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.17";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-qKLRn9QmB8lZv8vGGX8JS72IRLEDJV5Zj1MVsPr+iSI=";
+    hash = "sha256-dqnQJzA2OkIlcM7TORqnFyaA5CvQ+MmFOO5iH6My+Jo=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

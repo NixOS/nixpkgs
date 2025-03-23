@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 buildGoModule rec {
   pname = "docopts";
@@ -10,15 +11,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "docopt";
     repo = "docopts";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
+    tag = "v${version}";
+    hash = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
   };
 
   patches = [
     # Migrate project to Go modules.
     (fetchpatch {
       url = "https://github.com/docopt/docopts/pull/74/commits/2c516165e72b35516a64c4529dbc938c0aaa9442.patch";
-      sha256 = "sha256-Tp05B3tmctnSYIQzCxCc/fhcAWWuEz2ifu/CQZt0XPU=";
+      hash = "sha256-Tp05B3tmctnSYIQzCxCc/fhcAWWuEz2ifu/CQZt0XPU=";
     })
   ];
 

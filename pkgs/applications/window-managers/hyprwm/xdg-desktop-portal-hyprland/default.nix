@@ -1,63 +1,74 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  pkg-config,
-  wayland-scanner,
   makeWrapper,
+  pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  hyprland,
   hyprland-protocols,
   hyprlang,
+  hyprutils,
+  hyprwayland-scanner,
   libdrm,
-  mesa,
+  libgbm,
   pipewire,
   qtbase,
   qttools,
   qtwayland,
-  sdbus-cpp,
+  sdbus-cpp_2,
+  slurp,
   systemd,
   wayland,
   wayland-protocols,
-  hyprland,
-  hyprpicker,
-  slurp,
+  wayland-scanner,
+  debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.3";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-cyyxu/oj4QEFp3CVx2WeXa9T4OAUyynuBJHGkBZSxJI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sAObJHBZjJHzYR62g+BLNBNq19cqb5LTw73H8m57K0w=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    wayland-scanner
     makeWrapper
+    pkg-config
     wrapQtAppsHook
+    hyprwayland-scanner
   ];
 
   buildInputs = [
     hyprland-protocols
     hyprlang
+    hyprutils
     libdrm
-    mesa
+    libgbm
     pipewire
     qtbase
     qttools
     qtwayland
-    sdbus-cpp
+    sdbus-cpp_2
     systemd
     wayland
     wayland-protocols
+    wayland-scanner
   ];
+
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+
+  dontStrip = debug;
 
   dontWrapQtApps = true;
 
@@ -72,12 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${
-        lib.makeBinPath [
-          (placeholder "out")
-          hyprpicker
-        ]
-      }
+      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
   '';
 
   passthru = {
@@ -90,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux;
   };
 })

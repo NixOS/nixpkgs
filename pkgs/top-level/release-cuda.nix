@@ -13,6 +13,7 @@
 */
 
 let
+  lib = import ../../lib;
   ensureList = x: if builtins.isList x then x else [ x ];
   allowUnfreePredicate =
     p:
@@ -22,6 +23,7 @@ let
       || builtins.elem license.shortName [
         "CUDA EULA"
         "cuDNN EULA"
+        "cuSPARSELt EULA"
         "cuTENSOR EULA"
         "NVidia OptiX EULA"
       ]
@@ -41,9 +43,15 @@ in
       inherit allowUnfreePredicate;
       "${variant}Support" = true;
       inHydra = true;
+
+      # Don't evaluate duplicate and/or deprecated attributes
+      allowAliases = false;
     };
+
+    __allowFileset = false;
   },
-}:
+  ...
+}@args:
 
 assert builtins.elem variant [
   "cuda"
@@ -52,9 +60,11 @@ assert builtins.elem variant [
 ];
 
 let
-  release-lib = import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+  mkReleaseLib = import ./release-lib.nix;
+  release-lib = mkReleaseLib (
+    { inherit supportedSystems nixpkgsArgs; } // lib.intersectAttrs (lib.functionArgs mkReleaseLib) args
+  );
 
-  inherit (release-lib) lib;
   inherit (release-lib)
     linux
     mapTestOn
@@ -63,11 +73,16 @@ let
     ;
 
   # Package sets to evaluate whole
-  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
+  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
+  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
 
-  jobs =
-    mapTestOn {
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
+  explicitPackagePlatforms =
+    # This comment prevents nixfmt from changing the indentation level, lol
+    {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -83,7 +98,6 @@ let
       cholmod-extra = linux;
       colmap = linux;
       ctranslate2 = linux;
-      deepin.image-editor = linux;
       ffmpeg-full = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
@@ -112,11 +126,7 @@ let
       xgboost = linux;
 
       python3Packages = {
-        boxx = linux;
-        bpycv = linux;
-        caffe = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
@@ -125,9 +135,8 @@ let
         grad-cam = linux;
         jaxlib = linux;
         jax = linux;
-        Keras = linux;
+        keras = linux;
         kornia = linux;
-        libgpuarray = linux;
         mmcv = linux;
         mxnet = linux;
         numpy = linux; # Only affected by MKL?
@@ -140,15 +149,13 @@ let
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        pytorch = linux;
-        scikitimage = linux;
+        scikit-image = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
         spacy-transformers = linux;
         tensorflow = linux;
         tensorflow-probability = linux;
         tesserocr = linux;
-        Theano = linux;
         tiny-cuda-nn = linux;
         torchaudio = linux;
         torch = linux;
@@ -156,8 +163,13 @@ let
         transformers = linux;
         ttstokenizer = linux;
         vidstab = linux;
+        vllm = linux;
       };
-    }
-    // (lib.genAttrs packageSets evalPackageSet);
+    };
+
+  # Explicitly specified platforms take precedence over the platforms
+  # automatically inferred in autoPackagePlatforms
+  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
+  jobs = mapTestOn allPackagePlatforms;
 in
 jobs

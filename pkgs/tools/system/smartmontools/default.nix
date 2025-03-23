@@ -1,24 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, enableMail ? false
-, gnused
-, hostname
-, mailutils
-, IOKit
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  enableMail ? false,
+  gnused,
+  hostname,
+  mailutils,
+  systemdLibs,
+  IOKit,
+  ApplicationServices,
 }:
 
 let
-  dbrev = "5388";
+  dbrev = "5661";
   drivedbBranch = "RELEASE_7_3_DRIVEDB";
   driverdb = fetchurl {
     url = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
+    sha256 = "sha256-/U3ym9kTG7W+JZxjxORhSV/neJ/hvVEX1hi083UB1K4=";
     name = "smartmontools-drivedb.h";
   };
-  scriptPath = lib.makeBinPath ([ gnused hostname ] ++ lib.optionals enableMail [ mailutils ]);
+  scriptPath = lib.makeBinPath (
+    [
+      gnused
+      hostname
+    ]
+    ++ lib.optionals enableMail [ mailutils ]
+  );
 
 in
 stdenv.mkDerivation rec {
@@ -45,7 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      IOKit
+      ApplicationServices
+    ];
   enableParallelBuilding = true;
 
   meta = with lib; {

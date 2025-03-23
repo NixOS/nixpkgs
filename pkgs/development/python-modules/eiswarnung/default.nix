@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -15,14 +16,14 @@
 buildPythonPackage rec {
   pname = "eiswarnung";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
 
@@ -30,14 +31,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' "" \
-      --replace 'pytz = ">=2022.7.1,<2024.0.0"' 'pytz = "*"'
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "pytz" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     pytz
     yarl
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

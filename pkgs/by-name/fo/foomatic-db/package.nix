@@ -1,32 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cups
-, cups-filters
-, ghostscript
-, gnused
-, perl
-, autoconf
-, automake
-, patchPpdFilesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cups,
+  cups-filters,
+  ghostscript,
+  gnused,
+  perl,
+  autoconf,
+  automake,
+  patchPpdFilesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-db";
-  version = "unstable-2024-05-04";
+  version = "0-unstable-2024-12-05";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db";
-    rev = "eaad4c0d2406d4cd38a6d15e5dc93d1bc8358c30";
-    hash = "sha256-A+Op1E16woNl/ppVj0QfdV4XgT1M8sbrpTXtdOz3PYk=";
+    rev = "9a7a08318598fea569cf073489709899c9af6143";
+    hash = "sha256-7vvJPhUa4oDe101Iv897LoChNIcdTa4LviLUndHxWtw=";
   };
 
-  buildInputs = [ cups cups-filters ghostscript gnused perl ];
+  buildInputs = [
+    cups
+    cups-filters
+    ghostscript
+    gnused
+    perl
+  ];
 
-  nativeBuildInputs = [ autoconf automake patchPpdFilesHook perl ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    patchPpdFilesHook
+    perl
+  ];
 
   # sed-substitute indirection is more robust
   # against characters in paths that might need escaping
@@ -43,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./make_configure
   '';
 
-  # don't let the intaller gzip ppd files as we would
+  # don't let the installer gzip ppd files as we would
   # have to unzip them later in order to patch them
   configureFlags = [ "--disable-gzip-ppds" ];
 
@@ -63,12 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Comments indicate the respective
   # package the command is contained in.
   ppdFileCommands = [
-    "cat" "date" "printf"  # coreutils
-    "rastertohp"  # cups
-    "foomatic-rip"  # cups-filters or foomatic-filters
-    "gs"  # ghostscript
-    "sed"  # gnused
-    "perl"  # perl
+    "cat"
+    "date"
+    "printf" # coreutils
+    "rastertohp" # cups
+    "foomatic-rip" # cups-filters or foomatic-filters
+    "gs" # ghostscript
+    "sed" # gnused
+    "perl" # perl
   ];
 
   # compress ppd files
@@ -83,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OpenPrinting printer support database (free content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";
-    license = lib.licenses.free;  # mostly GPL and MIT, see README in source dir
+    license = lib.licenses.free; # mostly GPL and MIT, see README in source dir
     maintainers = [ lib.maintainers.yarny ];
     # list printer manufacturers here so people
     # searching for ppd files can find this package

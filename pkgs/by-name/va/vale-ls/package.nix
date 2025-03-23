@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, pkg-config
-, openssl
-, darwin
-, vale
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  darwin,
+  vale,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "vale-ls";
-  version = "0.3.7-unstable-2024-03-13";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale-ls";
-    rev = "473e16bc88ec48b35e2bd208adc174878c4d5396";
-    hash = "sha256-ywJsnWMc9NSjYjsK6SXdMAQl+hcP+KQ7Xp1A99aeqAg=";
+    tag = "v${version}";
+    hash = "sha256-+2peLqj3/ny0hDwJVKEp2XS68VO50IvpCB2fvZoEdJo=";
   };
 
   nativeBuildInputs = [
@@ -26,28 +27,36 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        SystemConfiguration
+      ]
+    );
 
-  checkFlags = [
-    # The following tests are reaching to the network.
-    "--skip=vale::tests"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # This test does not account for the existence of aarch64-linux machines,
-    # despite upstream shipping artifacts for that architecture
-    "--skip=utils::tests::arch"
-  ];
+  checkFlags =
+    [
+      # The following tests are reaching to the network.
+      "--skip=vale::tests"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # This test does not account for the existence of aarch64-linux machines,
+      # despite upstream shipping artifacts for that architecture
+      "--skip=utils::tests::arch"
+    ];
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-ifKdSTmVWfDZF5Kn9b5JpzDxa160oRTfzjvxeL9POBg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KPgi0wZh1+PTKUmvCkLGPf+DZW5Tt4dQVK/cdxjm/1A=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
-      --prefix PATH : ${lib.makeBinPath [ vale ]}
+      --suffix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
   meta = with lib; {
@@ -55,7 +64,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/errata-ai/vale-ls";
     license = licenses.mit;
     mainProgram = "vale-ls";
-    maintainers = with maintainers; [ foo-dogsquared jansol ];
+    maintainers = with maintainers; [
+      foo-dogsquared
+      jansol
+    ];
   };
 }
-

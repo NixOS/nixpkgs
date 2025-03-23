@@ -10,13 +10,13 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0-unstable-2024-07-18";
+  version = "0-unstable-2025-03-10";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "fe731767ca481678b4a166fbce6b30d3eaf8a6ce";
-    hash = "sha256-Z63kccjl8jd6C0dvpK7SQnPpmDCgH3/Kzm1oRXJ0NqI=";
+    rev = "785eb86bc080c445e8feb947d7caa8f3a097bf2b";
+    hash = "sha256-oanc9MggMjVDrSW42XrQwwWw2YTrifiCVrg/r42oGx8=";
   };
 
   patchPhase =
@@ -24,7 +24,7 @@ buildLua {
       substituteInPlace platform.lua \
       --replace \'curl\' \'${lib.getExe curl}\' \
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       --replace xclip ${lib.getExe xclip} \
       --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
     '';

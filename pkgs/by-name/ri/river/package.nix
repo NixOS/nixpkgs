@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitea
-, libGL
-, libX11
-, libevdev
-, libinput
-, libxkbcommon
-, pixman
-, pkg-config
-, scdoc
-, udev
-, wayland
-, wayland-protocols
-, wlroots_0_17
-, xwayland
-, zig_0_13
-, withManpages ? true
-, xwaylandSupport ? true
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitea,
+  libGL,
+  libX11,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  pixman,
+  pkg-config,
+  scdoc,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots_0_18,
+  xwayland,
+  zig_0_14,
+  withManpages ? true,
+  xwaylandSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.4";
+  version = "0.3.9";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,18 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-a8Xz9VZtwmyynYHL0vNDoWqZmvdRoBmNh2jcaIO72bE=";
+    hash = "sha256-g6qjSkvcA2Ud4W+/NVzYZjiWoWkAuKvuD20KlO/zGhE=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  deps = callPackage ./build.zig.zon.nix {
+    zig = zig_0_14;
+  };
 
   nativeBuildInputs = [
     pkg-config
-    wayland
+    wayland-scanner
     xwayland
-    zig_0_13.hook
-  ]
-  ++ lib.optional withManpages scdoc;
+    zig_0_14.hook
+  ] ++ lib.optional withManpages scdoc;
 
   buildInputs = [
     libGL
@@ -52,16 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pixman
     udev
+    wayland
     wayland-protocols
-    wlroots_0_17
+    wlroots_0_18
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ] ++ lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    [
+      "--system"
+      "${finalAttrs.deps}"
+    ]
+    ++ lib.optional withManpages "-Dman-pages"
+    ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
@@ -69,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.nu;
+    updateScript = ./update.sh;
   };
 
   meta = {

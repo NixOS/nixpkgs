@@ -6,8 +6,7 @@
   setuptools,
   numpy,
   hdf5,
-  pythonRelaxDepsHook,
-  cython_0,
+  cython,
   pkgconfig,
   mpi4py ? null,
   openssh,
@@ -23,7 +22,7 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.11.0";
+  version = "3.13.0";
   pname = "h5py";
   pyproject = true;
 
@@ -31,27 +30,26 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e36PeAcqLt7IfJg28l80ID/UkqRHVwmhi0F6M8+yH6k=";
+    hash = "sha256-GHDkZRhyACPahdCJWhlg/yzjmMVnHqw7GkHsaWtxBcM=";
   };
 
-  patches = [
-    # Unlock an overly strict locking of mpi4py version (seems not to be necessary).
-    # See also: https://github.com/h5py/h5py/pull/2418/files#r1589372479
-    ./mpi4py-requirement.patch
-  ];
+  pythonRelaxDeps = [ "mpi4py" ];
 
-  # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
-  # see: https://github.com/NixOS/nixpkgs/issues/327941
+  # avoid strict pinning of numpy and mpi4py, can't be replaced with
+  # pythonRelaxDepsHook, see: https://github.com/NixOS/nixpkgs/issues/327941
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy >=2.0.0rc1" "numpy"
+      --replace-fail "numpy >=2.0.0, <3" "numpy"
+    substituteInPlace setup.py \
+      --replace-fail "mpi4py ==3.1.4" "mpi4py" \
+      --replace-fail "mpi4py ==4.0.1" "mpi4py" \
+      --replace-fail "mpi4py ==3.1.6" "mpi4py"
   '';
-  pythonRelaxDeps = [
-    "mpi4py"
-  ];
 
-  HDF5_DIR = "${hdf5}";
-  HDF5_MPI = if mpiSupport then "ON" else "OFF";
+  env = {
+    HDF5_DIR = "${hdf5}";
+    HDF5_MPI = if mpiSupport then "ON" else "OFF";
+  };
 
   postConfigure = ''
     # Needed to run the tests reliably. See:
@@ -61,16 +59,16 @@ buildPythonPackage rec {
 
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    cython_0
+  build-system = [
+    cython
+    numpy
     pkgconfig
     setuptools
   ];
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
 
-  propagatedBuildInputs =
+  dependencies =
     [ numpy ]
     ++ lib.optionals mpiSupport [
       mpi4py

@@ -1,35 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   poetry-core,
-  requests,
   pyjwt,
+  pythonOlder,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyixapi";
-  version = "0.2.3";
+  version = "0.2.5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qkgPBIYv9xzGa29RiPAU3zNhcyutTUX1Vkmpd9YdeJU=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "peering-manager";
+    repo = "pyixapi";
+    tag = version;
+    hash = "sha256-jzRdseBaNOr3Dozp15/s3ZGTcwqmCBHqdGZmP3dtdsE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "pyjwt" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     requests
     pyjwt
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "pyixapi" ];
 
   meta = with lib; {
-    homepage = "https://github.com/peering-manager/pyixapi/";
-    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${version}";
     description = "Python API client library for IX-API";
+    homepage = "https://github.com/peering-manager/pyixapi/";
+    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = teams.wdz.members;
   };

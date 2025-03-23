@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, libdrm
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  libdrm,
+  python3,
 }:
 
 let
-  python3WithLibs = python3.withPackages (ps: with ps; [
-    pybind11
-  ]);
+  python3WithLibs = python3.withPackages (
+    ps: with ps; [
+      pybind11
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.5";
+  version = "1.14.8";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-G+zNFwKWtAFr2AapQoukjFQlFItIP5Q5m5TWuvTMY8k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-57DP8kKsPEK1C5A6QfoZZDmm76pn4SaUKEKu9cicyKI=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -36,14 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     python3WithLibs
   ];
 
-  makeFlags = kernel.makeFlags ++ [
-    # This was removed in https://github.com/DisplayLink/evdi/commit/9884501a20346ff85d8a8e3782e9ac9795013ced#diff-5d2a962cad1c08060cbab9e0bba5330ed63958b64ac04024593562cec55f176dL52
-    "CONFIG_DRM_EVDI=m"
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  hardeningDisable = [ "format" "pic" "fortify" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+    "fortify"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -54,13 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = kernel.kernelOlder "4.19";
     changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
-    license = with licenses; [ lgpl21Only gpl2Only ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    maintainers = with lib.maintainers; [ drupol ];
+    platforms = lib.platforms.linux;
   };
 })

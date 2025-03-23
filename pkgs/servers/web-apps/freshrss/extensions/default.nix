@@ -1,8 +1,9 @@
-{ config
-, lib
-, fetchFromGitHub
-, fetchFromGitLab
-, callPackage
+{
+  config,
+  lib,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  callPackage,
 }:
 
 let
@@ -55,7 +56,7 @@ let
         };
       };
 
-      reading-time = buildFreshRssExtension rec {
+      reading-time = buildFreshRssExtension {
         FreshRssExtUniqueId = "ReadingTime";
         pname = "reading-time";
         version = "1.5";
@@ -97,7 +98,7 @@ let
         pname = "title-wrap";
         version = official_extensions_version;
         src = official_extensions_src;
-        sourceRoot = "source/xExtension-TitleWrap";
+        sourceRoot = "${official_extensions_src.name}/xExtension-TitleWrap";
         meta = {
           description = "FreshRSS extension instead of truncating the title is wrapped.";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-TitleWrap";
@@ -111,7 +112,7 @@ let
         pname = "youtube";
         version = official_extensions_version;
         src = official_extensions_src;
-        sourceRoot = "source/xExtension-YouTube";
+        sourceRoot = "${official_extensions_src.name}/xExtension-YouTube";
         meta = {
           description = "FreshRSS extension allows you to directly watch YouTube/PeerTube videos from within subscribed channel feeds.";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-YouTube";
@@ -133,6 +134,7 @@ let
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-(lib.fix toFix) // {
+(lib.fix toFix)
+// {
   inherit buildFreshRssExtension;
 }

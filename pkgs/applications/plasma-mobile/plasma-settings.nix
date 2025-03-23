@@ -1,27 +1,28 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kauth
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, kitemmodels
-, libselinux
-, libsepol
-, modemmanager-qt
-, networkmanager-qt
-, pcre
-, plasma-framework
-, util-linux
+  kauth,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  kitemmodels,
+  libselinux,
+  libsepol,
+  modemmanager-qt,
+  networkmanager-qt,
+  pcre,
+  plasma-framework,
+  util-linux,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "plasma-settings";
 
   nativeBuildInputs = [
@@ -53,6 +54,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/plasma-mobile/plasma-settings";
     # https://invent.kde.org/plasma-mobile/plasma-settings/-/commit/a59007f383308503e59498b3036e1483bca26e35
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

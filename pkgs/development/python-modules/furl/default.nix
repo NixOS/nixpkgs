@@ -36,8 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+  disabledTests = [
     # AssertionError: assert '//////path' == '////path'
+    # https://github.com/gruns/furl/issues/176
     "test_odd_urls"
   ];
 

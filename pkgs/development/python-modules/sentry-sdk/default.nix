@@ -1,76 +1,77 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, urllib3
+  # dependencies
+  certifi,
+  urllib3,
 
-# optional-dependencies
-, aiohttp
-, anthropic
-, asyncpg
-, apache-beam
-, bottle
-, celery
-, celery-redbeat
-, chalice
-, clickhouse-driver
-, django
-, falcon
-, fastapi
-, flask
-, blinker
-, markupsafe
-, grpcio
-, protobuf
-, httpx
-, huey
-, huggingface-hub
-, langchain
-, loguru
-, openai
-, tiktoken
-, pure-eval
-, executing
-, asttokens
-, pymongo
-, pyspark
-, quart
-, rq
-, sanic
-, sqlalchemy
-, starlette
-, tornado
+  # optional-dependencies
+  aiohttp,
+  anthropic,
+  asyncpg,
+  apache-beam,
+  bottle,
+  celery,
+  celery-redbeat,
+  chalice,
+  clickhouse-driver,
+  django,
+  falcon,
+  fastapi,
+  flask,
+  blinker,
+  markupsafe,
+  grpcio,
+  protobuf,
+  httpx,
+  huey,
+  huggingface-hub,
+  langchain,
+  loguru,
+  openai,
+  tiktoken,
+  pure-eval,
+  executing,
+  asttokens,
+  pymongo,
+  pyspark,
+  quart,
+  rq,
+  sanic,
+  sqlalchemy,
+  starlette,
+  tornado,
 
-# checks
-, ipdb
-, jsonschema
-, pip
-, pyrsistent
-, pysocks
-, pytest-asyncio
-, pytestCheckHook
-, pytest-forked
-, pytest-localserver
-, pytest-xdist
-, pytest-watch
-, responses
+  # checks
+  ipdb,
+  jsonschema,
+  pip,
+  pyrsistent,
+  pysocks,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-forked,
+  pytest-localserver,
+  pytest-xdist,
+  pytest-watch,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.11.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = version;
-    hash = "sha256-ajinOND8MC9Z69WPxF65wjOmJfU5CZUzTRWJwLLh/OQ=";
+    tag = version;
+    hash = "sha256-jrApaDZ+R/bMOqOuQZguP9ySt6nKJeJYNpJTNTxq3no=";
   };
 
   postPatch = ''
@@ -189,6 +190,7 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
+    "test_continuous_profiler_manual_start_and_stop"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

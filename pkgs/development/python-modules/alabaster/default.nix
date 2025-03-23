@@ -1,31 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
-  pygments,
 }:
 
 buildPythonPackage rec {
   pname = "alabaster";
-  version = "0.7.16";
+  version = "1.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dai5nCil2tUN1/jM3UR6Eh3bOJLanlPRylzKMQbVjWU=";
+  src = fetchFromGitHub {
+    owner = "sphinx-doc";
+    repo = "alabaster";
+    rev = "refs/tags/${version}";
+    hash = "sha256-aQEhFZUJs0TptfpjQVoIVI9V9a+xKjE2OfStSaJKHGI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ pygments ];
+  pythonImportsCheck = [ "alabaster" ];
 
   # No tests included
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/bitprophet/alabaster";
-    description = "Sphinx theme";
-    license = licenses.bsd3;
+  meta = {
+    changelog = "https://github.com/sphinx-doc/alabaster/blob/${src.rev}/docs/changelog.rst";
+    homepage = "https://github.com/sphinx-doc/alabaster";
+    description = "A light, configurable Sphinx theme";
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.sphinx.members;
   };
 }

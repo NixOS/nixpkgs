@@ -10,7 +10,6 @@
 
   # runtime
   packaging,
-  toml,
   tomli,
 
   # docs
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.6.1";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XQD+36NP2zKUp/QRlgKhwzfMYBh6GVlCYXURXs2qeO8=";
+    tag = version;
+    hash = "sha256-4oX/h3EiLZIfHhU6zBD9ZQYnHGrid93LkJzaC6swBdI=";
   };
 
   outputs = [
@@ -68,6 +67,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires eol python2 interpreter
     "test_can_build_on_python_2"
+    # different formatting for version specifier
+    "test_setuptools_prepare_metadata_for_build_wheel"
   ];
 
   pythonImportsCheck = [ "pyproject_api" ];
@@ -77,6 +78,6 @@ buildPythonPackage rec {
     description = "API to interact with the python pyproject.toml based projects";
     homepage = "https://github.com/tox-dev/pyproject-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

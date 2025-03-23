@@ -8,18 +8,21 @@
 
 melpaBuild {
   pname = "edraw";
-  version = "1.2.0-unstable-2024-07-24";
+  version = "1.2.0-unstable-2025-02-21";
 
   src = fetchFromGitHub {
     owner = "misohena";
     repo = "el-easydraw";
-    rev = "6f93e744d5f62de2176d3d0f0aa1f9e8d84ccefd";
-    hash = "sha256-dXu4hDC4qE7W+KkWb9HIqYwesOKisMiZSTAulDpjyfA=";
+    rev = "f6b0f43138693b73cb65327d28bd2a4ee1b6caa7";
+    hash = "sha256-IU+DMw8q1Si3CJ4FhJVkaRsjkh1Oc3psmbzdUgh0YMI=";
   };
 
   propagatedUserEnvPkgs = [ gzip ];
 
   files = ''(:defaults "msg")'';
+
+  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=76573
+  ignoreCompilationError = true;
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 

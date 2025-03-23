@@ -7,7 +7,7 @@
   six,
   lxml,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   mock,
 }:
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     mock
   ];
 

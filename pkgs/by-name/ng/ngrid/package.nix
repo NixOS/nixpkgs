@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, expect
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  expect,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,7 +31,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ngrid.main" ];
 
-  nativeCheckInputs = [ python3.pkgs.pytest expect ];
+  nativeCheckInputs = [
+    python3.pkgs.pytest
+    expect
+  ];
   checkPhase = ''
     runHook preCheck
 

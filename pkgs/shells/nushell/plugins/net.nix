@@ -5,30 +5,31 @@
   stdenv,
   IOKit,
   CoreFoundation,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
-  pname = "nu-plugin-net";
-  version = "0-unstable-2024-04-05";
+rustPlatform.buildRustPackage rec {
+  pname = "nushell_plugin_net";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "60d315afb19c3c673409db796a4cc7a240058605";
-    hash = "sha256-izIxV2rFxZ1Om6NNaofNpc5prtN/lsw8dC4DyKEQ+v8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nKcB919M9FkDloulh9IusWYPhf8vlhUmKVs6Gd6w3Bw=";
   };
 
-  cargoHash = "sha256-nBxcxADyvPgGrfkW8eBq/wmB2Slq+YGJV2IlxuuCgCg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nQILwEZaVL1xJ/CKGGObogFGPmW0UPq0v3vFP2kHqWo=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     IOKit
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Nushell plugin to list system network interfaces";

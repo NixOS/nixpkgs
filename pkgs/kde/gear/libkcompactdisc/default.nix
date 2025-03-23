@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "libkcompactdisc";
 
-  extraBuildInputs = [alsa-lib];
+  extraBuildInputs = [ alsa-lib ];
 }

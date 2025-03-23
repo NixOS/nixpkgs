@@ -2,45 +2,46 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+  hatchling,
   setuptools,
   click,
-  urllib3,
   requests,
   packaging,
   dparse,
   ruamel-yaml,
   jinja2,
   marshmallow,
+  nltk,
   authlib,
-  jwt,
-  rich,
   typer,
   pydantic,
   safety-schemas,
   typing-extensions,
   filelock,
+  psutil,
+  git,
   pytestCheckHook,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.4";
-
-  disabled = pythonOlder "3.7";
-
+  version = "3.3.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-usAgIBbXNqIRgFeWSg45g/og/yVj/RA8rD86we0/6hE=";
+  src = fetchFromGitHub {
+    owner = "pyupio";
+    repo = "safety";
+    tag = version;
+    hash = "sha256-u+ysRpWLHDQdNRBSlYXz80e/MCT4smmv/YX8sfIrn24=";
   };
 
   postPatch = ''
     substituteInPlace safety/safety.py \
-      --replace-fail "telemetry=True" "telemetry=False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/util.py \
-      --replace-fail "telemetry = True" "telemetry = False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/cli.py \
       --replace-fail "disable-optional-telemetry', default=False" \
                      "disable-optional-telemetry', default=True"
@@ -48,42 +49,46 @@ buildPythonPackage rec {
       --replace-fail "telemetry=True" "telemetry=False"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
-    "dparse"
     "filelock"
+    "pydantic"
+    "psutil"
   ];
 
   dependencies = [
     setuptools
     click
-    urllib3
     requests
     packaging
     dparse
     ruamel-yaml
     jinja2
     marshmallow
+    nltk
     authlib
-    jwt
-    rich
     typer
     pydantic
     safety-schemas
     typing-extensions
     filelock
+    psutil
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+    tomli
+  ];
 
-  # Disable tests depending on online services
   disabledTests = [
+    # Disable tests depending on online services
     "test_announcements_if_is_not_tty"
     "test_check_live"
-    "test_check_live_cached"
+    "test_debug_flag"
     "test_get_packages_licenses_without_api_key"
-    "test_validate_with_policy_file_using_invalid_keyword"
+    "test_init_project"
     "test_validate_with_basic_policy_file"
   ];
 
@@ -94,13 +99,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
     changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thomasdesr
       dotlambda
     ];

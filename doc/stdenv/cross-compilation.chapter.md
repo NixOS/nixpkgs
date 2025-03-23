@@ -135,7 +135,7 @@ Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is availa
 ```
 
 #### How do I avoid compiling a GCC cross-compiler from source? {#cross-qa-avoid-compiling-gcc-cross-compiler}
-On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86\_64-darwin", "x86\_64-linux", and "aarch64-linux".  See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages.  For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
+On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86\_64-linux", "aarch64-linux", and "aarch64-darwin".  See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages.  For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
 
 ```ShellSession
 $ nix-build '<nixpkgs>' -A pkgsCross.raspberryPi.hello
@@ -180,6 +180,31 @@ e.g.
 Example of an error which this fixes.
 
 `[Errno 8] Exec format error: './gdk3-scan'`
+
+#### Using `-static` outside a `isStatic` platform. {#cross-static-on-non-static-platform}
+
+Add `stdenv.cc.libc.static` (static output of glibc) to `buildInputs` conditionally on if `hostPlatform` uses `glibc`.
+
+
+e.g.
+
+```nix
+{
+  buildInputs = lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+}
+```
+
+Examples of errors which this fixes.
+
+`cannot find -lm: No such file or directory`
+
+`cannot find -lc: No such file or directory`
+
+::: {.note}
+At the time of writing it is assumed the issue only happens on `glibc` because it splits the static libraries in to a different output.
+
+::: {.note}
+You may want to look in to using `stdenvAdapters.makeStatic` or `pkgsStatic` or a `isStatic = true` platform.
 
 ## Cross-building packages {#sec-cross-usage}
 

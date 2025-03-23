@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.5.10";
+  version = "0.5.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zb/g5QLJTSb0XTZvVnzbYkYvJ/ZVvQri8CKP48n5ibg=";
+    hash = "sha256-ZvPLaO/gALIhqIzsP687ERmkkRsQGDiDmhFszRX7YlQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     unicrypto
     asyauth
     asysocks

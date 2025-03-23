@@ -1,13 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
   versioningit,
-  wheel,
 
   # dependencies
   broadbean,
@@ -36,21 +34,18 @@
   websockets,
   wrapt,
   xarray,
-  importlib-metadata,
 
   # optional-dependencies
+  furo,
   jinja2,
   nbsphinx,
   pyvisa-sim,
   scipy,
   sphinx,
   sphinx-issues,
-  sphinx-rtd-theme,
   towncrier,
-  opencensus,
-  opencensus-ext-azure,
 
-  # checks
+  # tests
   deepdiff,
   hypothesis,
   lxml,
@@ -60,26 +55,29 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.46.0";
+  version = "0.51.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CeAX3sBE21v68KnCe8z28WTc7zMPA7usRRGh+dNijjo=";
+    tag = "v${version}";
+    hash = "sha256-QgCMoZrC3ZCo8yayRXw9fvBj5xi+XH2x/E1MuQFULPo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
   dependencies = [
@@ -108,11 +106,12 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     docs = [
       # autodocsumm
+      furo
       jinja2
       nbsphinx
       pyvisa-sim
@@ -122,16 +121,11 @@ buildPythonPackage rec {
       # sphinx-favicon
       sphinx-issues
       # sphinx-jsonschema
-      sphinx-rtd-theme
       # sphinxcontrib-towncrier
       towncrier
     ];
     loop = [
       # qcodes-loop
-    ];
-    opencensus = [
-      opencensus
-      opencensus-ext-azure
     ];
     refactor = [
       libcst
@@ -154,14 +148,13 @@ buildPythonPackage rec {
     pytestCheckHook
     pyvisa-sim
     sphinx
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "-m 'not serial'"
     "--hypothesis-profile ci"
@@ -195,15 +188,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "qcodes" ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
 
   meta = {
     description = "Python-based data acquisition framework";

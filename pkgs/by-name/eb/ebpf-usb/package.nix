@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, bcc
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  bcc,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ebpf-usb";
   version = "unstable-2022-04-03";
   pyproject = false;
@@ -20,9 +21,11 @@ python3Packages.buildPythonApplication rec {
     "--set PYTHONUNBUFFERED 1"
   ];
 
-  pythonPath = [ bcc ] ++ (with python3Packages; [
-    hexdump
-  ]);
+  pythonPath =
+    [ bcc ]
+    ++ (with python3Packages; [
+      hexdump
+    ]);
 
   postPatch = ''
     substituteInPlace ebpf-usb.py \

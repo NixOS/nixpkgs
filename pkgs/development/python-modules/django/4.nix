@@ -3,9 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
   setuptools,
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.14";
+  version = "4.2.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -53,22 +54,27 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-Nt+dVIikfe7gJY6/qJzkolkXeSFNBCbCEMSaKYmvCz4=";
+    hash = "sha256-RmClB0ntPzcUzsy1lKn3G5IUoNiXiYuM+/LLj0JyFfQ=";
   };
 
   patches =
     [
-      (substituteAll {
-        src = ./django_4_set_zoneinfo_dir.patch;
+      (replaceVars ./django_4_set_zoneinfo_dir.patch {
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # make sure the tests don't remove packages from our pythonpath
       # and disable failing tests
       ./django_4_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove if ever backported
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
     ]
     ++ lib.optionals withGdal [
-      (substituteAll {
-        src = ./django_4_set_geos_gdal_lib.patch;
+      (replaceVars ./django_4_set_geos_gdal_lib.patch {
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -85,6 +91,13 @@ buildPythonPackage rec {
       # https://hydra.nixos.org/build/254630990
       substituteInPlace tests/view_tests/tests/test_debug.py \
         --replace-fail "test_files" "dont_test_files"
+    ''
+    + lib.optionalString (pythonAtLeast "3.13") ''
+      # Fixed CommandTypes.test_help_default_options_with_custom_arguments test on Python 3.13+.
+      # https://github.com/django/django/commit/3426a5c33c36266af42128ee9eca4921e68ea876
+      substituteInPlace tests/admin_scripts/tests.py --replace-fail \
+        "test_help_default_options_with_custom_arguments" \
+        "dont_test_help_default_options_with_custom_arguments"
     '';
 
   nativeBuildInputs = [ setuptools ];
@@ -94,7 +107,7 @@ buildPythonPackage rec {
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
   };
@@ -116,9 +129,12 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    # pywatchman depends on folly which does not support 32bits
+    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported

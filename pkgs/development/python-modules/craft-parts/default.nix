@@ -4,37 +4,39 @@
   fetchFromGitHub,
   nix-update-script,
   overrides,
-  pydantic_1,
-  pydantic-yaml,
+  pydantic,
   pyxdg,
   pyyaml,
   requests,
   requests-unixsocket,
-  urllib3,
   pytestCheckHook,
   pytest-check,
   pytest-mock,
   pytest-subprocess,
   requests-mock,
   hypothesis,
+  jsonschema,
   git,
   squashfsTools,
-  setuptools,
+  socat,
   setuptools-scm,
   stdenv,
+  ant,
+  maven,
+  jdk,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.33.0";
+  version = "2.6.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-parts";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SP2mkaXsU0btnA3aanSA18GkdW6ReLgImOWdpnwZiyU=";
+    tag = version;
+    hash = "sha256-3NFbAxgY183RmZ+ats6M5WM07VO2amj7EdqMCLcKNvI=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -44,29 +46,33 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "requests"
     "urllib3"
+    "pydantic"
   ];
 
   dependencies = [
     overrides
-    pydantic_1
-    pydantic-yaml
+    pydantic
     pyxdg
     pyyaml
     requests
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_parts" ];
 
   nativeCheckInputs = [
+    ant
     git
     hypothesis
+    jdk
+    jsonschema
+    maven
     pytest-check
     pytest-mock
     pytest-subprocess
     pytestCheckHook
     requests-mock
+    socat
     squashfsTools
   ];
 
@@ -82,6 +88,8 @@ buildPythonPackage rec {
     "test_run_prime"
     "test_get_build_packages_with_source_type"
     "test_get_build_packages"
+    # Relies upon certain paths being present that don't make sense on Nix.
+    "test_java_plugin_jre_not_17"
   ];
 
   disabledTestPaths =
@@ -97,7 +105,7 @@ buildPythonPackage rec {
       "tests/unit/packages/test_deb.py"
       "tests/unit/packages/test_chisel.py"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
@@ -106,10 +114,9 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = lib.versionAtLeast pydantic-yaml.version "1";
     description = "Software artifact parts builder from Canonical";
     homepage = "https://github.com/canonical/craft-parts";
-    changelog = "https://github.com/canonical/craft-parts/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

@@ -1,39 +1,40 @@
-{ buildGoModule
-, buildPackages
-, fetchFromGitHub
-, fetchNpmDeps
-, lib
-, nodejs
-, npmHooks
-, pkg-config
-, stdenv
-, ffmpeg-headless
-, taglib
-, zlib
-, nixosTests
-, nix-update-script
-, ffmpegSupport ? true
+{
+  buildGo123Module,
+  buildPackages,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  lib,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  stdenv,
+  ffmpeg-headless,
+  taglib,
+  zlib,
+  nixosTests,
+  nix-update-script,
+  ffmpegSupport ? true,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "navidrome";
-  version = "0.52.5";
+  version = "0.55.1";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-M1BxR4Mmkfbr9Wb2YwWEeVGgKOCtD/8pgFZiv8mTi7s=";
+    hash = "sha256-BkgHUX2kQ7OMnb9vOIwsQ9eNcqCzekz2IVMtG0IMUaA=";
   };
 
-  vendorHash = "sha256-puldHJs5GiaXvyvwuzAX00nMLUxoBESpxLOEtBYD7o4=";
+  vendorHash = "sha256-IF2RaEsuHADnwONrvwbL6KZVrE3bZx1sX03zpmtQZq8=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/ui";
-    hash = "sha256-OZvEPC+MobCJn16d3MsMtrStbsmRD9Ef0/leVSXtVZ8=";
+    hash = "sha256-lM8637tcKc9iSPjXJPDZXFCGj7pShOXTC6X2iketg90=";
   };
 
   nativeBuildInputs = [
@@ -60,9 +61,17 @@ buildGoModule rec {
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
 
+  postPatch = ''
+    patchShebangs ui/bin/update-workbox.sh
+  '';
+
   preBuild = ''
     make buildjs
   '';
+
+  tags = [
+    "netgo"
+  ];
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
@@ -80,8 +89,11 @@ buildGoModule rec {
     homepage = "https://www.navidrome.org/";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = with lib.maintainers; [ aciceri squalus ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      squalus
+    ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

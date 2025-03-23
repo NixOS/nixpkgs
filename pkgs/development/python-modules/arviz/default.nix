@@ -1,7 +1,7 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -9,7 +9,6 @@
   setuptools,
 
   # dependencies
-  dm-tree,
   h5netcdf,
   matplotlib,
   numpy,
@@ -19,7 +18,7 @@
   xarray,
   xarray-einstats,
 
-  # checks
+  # tests
   bokeh,
   cloudpickle,
   emcee,
@@ -34,21 +33,20 @@
   #, pystan (not packaged)
   pytestCheckHook,
   torchvision,
+  writableTmpDirAsHomeHook,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fwDCl1KWClIOBWIL/ETw3hJUyHdpVpLnRmZoZXL3QXI=";
+    tag = "v${version}";
+    hash = "sha256-rrOvdyZE0wo3iiiQ2hHklAtLU38mXs3hLsb+Fwy9eAk=";
   };
 
   build-system = [
@@ -57,7 +55,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    dm-tree
     h5netcdf
     matplotlib
     numpy
@@ -83,14 +80,18 @@ buildPythonPackage rec {
     # pystan (not packaged)
     pytestCheckHook
     torchvision
+    writableTmpDirAsHomeHook
     zarr
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  pytestFlagsArray = [
+    "arviz/tests/base_tests/"
 
-  pytestFlagsArray = [ "arviz/tests/base_tests/" ];
+    # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
+    # https://github.com/arviz-devs/arviz/issues/2357
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
+  ];
 
   disabledTests = [
     # Tests require network access
@@ -98,11 +99,15 @@ buildPythonPackage rec {
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
+
     # countourpy is not available at the moment
     "test_plot_kde"
     "test_plot_kde_2d"
     "test_plot_pair"
   ];
+
+  # Tests segfault on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "arviz" ];
 

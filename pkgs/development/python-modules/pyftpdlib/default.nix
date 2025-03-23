@@ -4,6 +4,8 @@
   fetchPypi,
   mock,
   psutil,
+  pyasyncore,
+  pyasynchat,
   pyopenssl,
   pysendfile,
   pythonOlder,
@@ -12,21 +14,25 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.10";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jb3rEhW8ui+3SNrjH/2xqwCFQMKNE7NwThePNooIcSg=";
+    hash = "sha256-7w0XKoK/rhDi3sIi6HUzUUYJ1Bv0sP0PB+KdQ4D7lr8=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ pysendfile ];
+  dependencies = [
+    pyasyncore
+    pyasynchat
+    pysendfile
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ssl = [ pyopenssl ];
   };
 
@@ -46,7 +52,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ftpbench";
   };
 }

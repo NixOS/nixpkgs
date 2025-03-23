@@ -1,39 +1,43 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, pkg-config
-, makeFontsConf
-, openssl
-, libdrm
-, libevent
-, libyaml
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-, systemd # for libudev
-, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
-, lttng-ust # withTracing
-, withQcam ? false
-, qt5 # withQcam
-, libtiff # withQcam
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  makeFontsConf,
+  openssl,
+  libdrm,
+  libevent,
+  libyaml,
+  gst_all_1,
+  gtest,
+  graphviz,
+  doxygen,
+  python3,
+  python3Packages,
+  systemd, # for libudev
+  withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
+  lttng-ust, # withTracing
+  withQcam ? false,
+  qt6, # withQcam
+  libtiff, # withQcam
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-eCtOtdjpwn0S56ZyRVdG1QCBk1KGPh8YTXD50xev7Bc=";
+    hash = "sha256-m55SojGt5v5AEatBZiVqQA3xP9eeRWqHa+C3JsTiErQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs src/py/ utils/
@@ -51,32 +55,42 @@ stdenv.mkDerivation rec {
     install -D ${./ipa-priv-key.pem} src/ipa-priv-key.pem
   '';
 
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
+
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    systemd
+      # hotplugging
+      systemd
 
-    # pycamera
-    python3Packages.pybind11
+      # pycamera
+      python3Packages.pybind11
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ] ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+      gtest
+    ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt6.qtbase
+      qt6.qttools
+    ];
 
   nativeBuildInputs = [
     meson
@@ -90,7 +104,7 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
@@ -118,6 +132,7 @@ stdenv.mkDerivation rec {
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
+    platforms = platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

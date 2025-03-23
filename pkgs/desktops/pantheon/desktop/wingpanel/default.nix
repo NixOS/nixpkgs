@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
+, wayland-scanner
 , wrapGAppsHook3
 , pkg-config
 , meson
@@ -13,7 +14,7 @@
 , granite
 , gettext
 , mutter
-, mesa
+, wayland
 , json-glib
 , elementary-gtk-theme
 , elementary-icon-theme
@@ -21,17 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.5";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+    sha256 = "sha256-3UNtqfDqgclRE8Pe9N8rOt6i2FG6lKNfJAv5Q2OYXUU=";
   };
 
   patches = [
     ./indicators.patch
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -40,6 +45,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
-    mesa # for libEGL
+    wayland
   ];
 
   preFixup = ''

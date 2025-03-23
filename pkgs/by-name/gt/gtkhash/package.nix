@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, meson
-, ninja
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, glib
-, openssl
-, nettle
-, libb2
-, libgcrypt
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  glib,
+  openssl,
+  nettle,
+  libb2,
+  libgcrypt,
 }:
 
 stdenv.mkDerivation rec {

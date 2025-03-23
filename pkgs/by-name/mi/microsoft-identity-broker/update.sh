@@ -12,15 +12,19 @@ echo "$index_file" | while read -r line; do
     if [[ "$line" =~ ^Version:[[:space:]]*(.*) ]]; then
         Version="${BASH_REMATCH[1]}"
     fi
+    if [[ "$line" =~ ^SHA256:[[:space:]]*(.*) ]]; then
+        SHA256="${BASH_REMATCH[1]}"
+    fi
 
     if ! [[ "$line" ]] && [[ "${Package}" == "microsoft-identity-broker" ]]; then
         if ( dpkg --compare-versions ${Version} gt ${latest_version} ); then
             latest_version="${Version}"
+            sri_hash=$(nix-hash --to-sri --type sha256 "$SHA256")
 
-            echo $latest_version
+            echo $latest_version $sri_hash
         fi
 
         Package=""
         Version=""
     fi
-done | tail -n 1 | (read version; update-source-version microsoft-identity-broker $version)
+done | tail -n 1 | (read version hash; update-source-version microsoft-identity-broker $version $hash)

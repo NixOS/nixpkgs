@@ -3,6 +3,7 @@
   pythonOlder,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   jsonschema,
   jxmlease,
   ncclient,
@@ -22,25 +23,27 @@
 
 let
   pname = "ansible";
-  version = "10.1.0";
+  version = "11.3.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fYxEVX9XBocwbhnQ4ylq0jBZPLEr2jXc/JJ0pgY68io=";
+    hash = "sha256-kLQJ9jDcbVWCJECaOUgxTt4bzabbLQPBdwjO9hF6YQM=";
   };
 
-  postPatch = ''
-    # we make ansible-core depend on ansible, not the other way around
-    sed -Ei '/ansible-core/d' setup.py
-  '';
+  # we make ansible-core depend on ansible, not the other way around,
+  # since when you install ansible-core you will not have ansible
+  # executables installed in the PATH variable
+  pythonRemoveDeps = [ "ansible-core" ];
 
-  propagatedBuildInputs = lib.unique (
+  build-system = [ setuptools ];
+
+  dependencies = lib.unique (
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
@@ -62,7 +65,7 @@ buildPythonPackage {
       # add the dependencies for the collections you need conditionally and install
       # ansible using overrides to enable the collections you need.
     ]
-    ++ lib.optionals (withJunos) [
+    ++ lib.optionals withJunos [
       # ansible_collections/junipernetworks/junos/requirements.txt
       jxmlease
       ncclient
@@ -71,7 +74,7 @@ buildPythonPackage {
       scp
       xmltodict
     ]
-    ++ lib.optionals (withNetbox) [
+    ++ lib.optionals withNetbox [
       # ansible_collections/netbox/netbox/pyproject.toml
       pynetbox
     ]
@@ -89,6 +92,6 @@ buildPythonPackage {
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

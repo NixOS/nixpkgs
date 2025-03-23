@@ -1,26 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
-  perlWrapped = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
-
-  description = extra: ''
-    Whether to include the capability to switch configurations.
-
-    Disabling this makes the system unable to be reconfigured via `nixos-rebuild`.
-
-    ${extra}
-  '';
-
+  perlWrapped = pkgs.perl.withPackages (
+    p: with p; [
+      ConfigIniFiles
+      FileSlurp
+    ]
+  );
 in
-
 {
-
   options.system.switch = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = description ''
+      description = ''
+        Whether to include the capability to switch configurations.
+
+        Disabling this makes the system unable to be reconfigured via `nixos-rebuild`.
+
         This is good for image based appliances where updates are handled
         outside the image. Reducing features makes the image lighter and
         slightly more secure.
@@ -29,23 +31,28 @@ in
 
     enableNg = lib.mkOption {
       type = lib.types.bool;
-      default = false;
-      description = description ''
-        Whether to use `switch-to-configuration-ng`, an experimental
-        re-implementation of `switch-to-configuration` with the goal of
-        replacing the original.
+      default = config.system.switch.enable;
+      defaultText = lib.literalExpression "config.system.switch.enable";
+      description = ''
+        Whether to use `switch-to-configuration-ng`, the Rust-based
+        re-implementation of the original Perl `switch-to-configuration`.
       '';
     };
   };
 
   config = lib.mkMerge [
-    {
-      assertions = [{
-        assertion = with config.system.switch; enable -> !enableNg;
-        message = "Only one of system.switch.enable and system.switch.enableNg may be enabled at a time";
-      }];
-    }
-    (lib.mkIf config.system.switch.enable {
+    (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
+      warnings = [
+        ''
+          The Perl implementation of switch-to-configuration will be deprecated
+          and removed in the 25.05 release of NixOS. Please migrate to the
+          newer implementation by removing `system.switch.enableNg = false`
+          from your configuration. If you are unable to migrate due to any
+          issues with the new implementation, please create an issue and tag
+          the maintainers of `switch-to-configuration-ng`.
+        ''
+      ];
+
       system.activatableSystemBuilderCommands = ''
         mkdir $out/bin
         substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
@@ -54,6 +61,7 @@ in
           --subst-var-by coreutils "${pkgs.coreutils}" \
           --subst-var-by distroId ${lib.escapeShellArg config.system.nixos.distroId} \
           --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
+          --subst-var-by preSwitchCheck ${lib.escapeShellArg config.system.preSwitchChecksScript} \
           --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
           --subst-var-by perl "${perlWrapped}" \
           --subst-var-by shell "${pkgs.bash}/bin/sh" \
@@ -86,6 +94,7 @@ in
             --set TOPLEVEL ''${!toplevelVar} \
             --set DISTRO_ID ${lib.escapeShellArg config.system.nixos.distroId} \
             --set INSTALL_BOOTLOADER ${lib.escapeShellArg config.system.build.installBootLoader} \
+            --set PRE_SWITCH_CHECK ${lib.escapeShellArg config.system.preSwitchChecksScript} \
             --set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive \
             --set SYSTEMD ${config.systemd.package}
         )

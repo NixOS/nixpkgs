@@ -6,7 +6,6 @@
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
-  opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-test-utils,
   wrapt,
@@ -28,13 +27,16 @@ buildPythonPackage {
   dependencies = [
     opentelemetry-api
     opentelemetry-instrumentation
-    opentelemetry-sdk
     opentelemetry-semantic-conventions
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     instruments = [ grpcio ];
+  };
+
+  env = {
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
   nativeCheckInputs = [
@@ -43,7 +45,11 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  preBuild = ''
+    export TMPDIR=$(mktemp -d)
+  '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Failed to bind to address
     "TestOpenTelemetryServerInterceptorUnix"
   ];

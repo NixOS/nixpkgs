@@ -4,18 +4,18 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phive";
-  version = "0.15.2";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "phar-io";
     repo = "phive";
-    rev = finalAttrs.version;
-    hash = "sha256-K/YZOGANcefjfdFY1XYEQknm0bPRorlRnNGC7dEegZ0=";
+    tag = finalAttrs.version;
+    hash = "sha256-6vNhmIDE3kwZGMrDnGNGVV6/lb32Yb3ooWDYOC7SUcs=";
   };
 
-  vendorHash = "sha256-0fJ+SyicvVONJ4FkOFTkBTekDAOjBfaLo0dZ2DYlGJU=";
+  vendorHash = "sha256-wNqQfVRm4kEWpYfdo8HBESh0L4cXPrTlHnBI79b1Al0=";
 
   meta = {
     changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";

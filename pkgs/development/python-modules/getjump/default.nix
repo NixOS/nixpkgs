@@ -5,23 +5,28 @@
   fetchPypi,
   pillow,
   poetry-core,
+  pythonOlder,
   requests,
   rich,
 }:
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.5.0";
+  version = "2.7.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3VxsKum6aB35XYjz9ZKkUBdPuofOWzG+ttkX9pnzu7U=";
+    hash = "sha256-tIM7gsgh8DDPphGsrGeV6Y3RmAjdxw9MgxDIt+EQwF0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "pillow" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     beautifulsoup4
     pillow
     requests

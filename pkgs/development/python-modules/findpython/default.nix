@@ -16,7 +16,7 @@
 
 let
   pname = "findpython";
-  version = "0.6.1";
+  version = "0.6.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VuUrQJqSvL1JXPmByFrPE387PlHMdptG66IZuxq3Uzw=";
+    hash = "sha256-WGPqVVVtiq3Gk0gaFKxPNiSVJxnvwcVZGrsLSp6WXJQ=";
   };
 
   nativeBuildInputs = [ pdm-backend ];

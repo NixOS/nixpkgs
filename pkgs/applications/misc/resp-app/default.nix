@@ -1,20 +1,21 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, brotli
-, lz4
-, pyotherside
-, python3
-, python3Packages
-, qtbase
-, qtcharts
-, qmake
-, qttools
-, rdbtools
-, snappy
-, wrapQtAppsHook
-, zstd
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  brotli,
+  lz4,
+  pyotherside,
+  python3,
+  python3Packages,
+  qtbase,
+  qtcharts,
+  qmake,
+  qttools,
+  rdbtools,
+  snappy,
+  wrapQtAppsHook,
+  zstd,
 }:
 
 let
@@ -59,7 +60,6 @@ mkDerivation rec {
     zstd
   ] ++ pythonPath;
 
-
   pythonPath = with python3Packages; [
     bitstring
     cbor
@@ -99,6 +99,6 @@ mkDerivation rec {
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

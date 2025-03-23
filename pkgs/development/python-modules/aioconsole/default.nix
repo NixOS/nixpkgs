@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -18,7 +19,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.7.1";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,21 +27,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aioconsole";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-c8zeKebS04bZS9pMIKAauaLPvRrWaGoDKbnF906tFzQ=";
+    tag = "v${version}";
+    hash = "sha256-gFkRhewuRScEhXy0lv2R0kHfaHT1gSp3TVrqL36cRVs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --strict-markers --count 2 -vv" ""
+  '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov aioconsole --count 2" ""
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -53,11 +55,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioconsole" ];
 
   meta = with lib; {
-    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     description = "Asynchronous console and interfaces for asyncio";
-    mainProgram = "apython";
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ catern ];
+    mainProgram = "apython";
   };
 }

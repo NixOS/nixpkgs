@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-6oTyOQK7mkr+jWYbPNBlJ4BpT815lNJvsJjzdTmj+68=";
   };
 
-  nativeBuildInputs = lib.optionals (cursorsConf != null) [ ruby inkscape xorg.xcursorgen ];
+  nativeBuildInputs = lib.optionals (cursorsConf != null) [
+    ruby
+    inkscape
+    xorg.xcursorgen
+  ];
 
   # './cursors.conf' contains definitions of cursor variations to generate.
   configurePhase = ''
@@ -38,33 +42,33 @@ stdenvNoCC.mkDerivation {
 
   # The repo already contains the default cursors pre-generated in './dist'. Just copy these if './cursors.conf' is not overwritten.
   # Otherwise firs remove all default variations and build.
-  buildPhase =''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      ${lib.optionalString (cursorsConf != null) ''
-        rm -r {dist,src/oreo_*}
-        export HOME=$TMP
-        ruby generator/convert.rb
-        make build
-      ''}
+    ${lib.optionalString (cursorsConf != null) ''
+      rm -r {dist,src/oreo_*}
+      export HOME=$TMP
+      ruby generator/convert.rb
+      make build
+    ''}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/share
-      mv ./dist $out/share/icons
+    mkdir -p $out/share
+    mv ./dist $out/share/icons
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     description = "Colored Material cursors with cute animations";
     homepage = "https://github.com/Souravgoswami/oreo-cursors";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [michaelBrunner];
+    maintainers = with lib.maintainers; [ michaelBrunner ];
   };
 }

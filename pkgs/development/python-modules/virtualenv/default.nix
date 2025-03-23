@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  isPy27,
   isPyPy,
   cython,
   distlib,
@@ -22,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.26.2";
+  version = "20.29.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gr8PTuu7eNNt2u4Cg9Q/5XNrU4gLiozc03OQoHrDdBw=";
+    hash = "sha256-/aq+v20DtbqDrgoCz+lvSKcW9PrlVkYdGAglhm91tyg=";
   };
 
   nativeBuildInputs = [

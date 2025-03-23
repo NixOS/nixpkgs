@@ -1,17 +1,23 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, diffedit3
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  diffedit3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diffedit3";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-qw5Wos2u/H6ccJ3qkrVOCisMFDTNwxp/YeOTE1x5lcU=";
+    hash = "sha256-zBdLz8O2WCR8SN0UXUAaEdIpmmL+LIaGt44STBw6nyU=";
   };
 
-  cargoHash = "sha256-e5bm8GLubA9BzH9oKKSC/Ysh+O+GJA8x6W576vKIIUA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ao2agqYChyrcrRVOjzKvPHYwmYGabQUVZAUaVBpAFJM=";
 
   passthru = {
     updateScript = nix-update-script { };

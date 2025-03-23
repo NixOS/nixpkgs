@@ -1,28 +1,22 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 let
   cfg = config.virtualisation.podman;
   json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override {
-    extraPackages = cfg.extraPackages
-      # setuid shadow
-      ++ [ "/run/wrappers" ]
-      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-  });
-
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
+  dockerCompat = pkgs.runCommand "${cfg.package.pname}-docker-compat-${cfg.package.version}"
     {
       outputs = [ "out" "man" ];
-      inherit (podmanPackage) meta;
+      inherit (cfg.package) meta;
+      preferLocalBuild = true;
     } ''
     mkdir -p $out/bin
-    ln -s ${podmanPackage}/bin/podman $out/bin/docker
+    ln -s ${cfg.package}/bin/podman $out/bin/docker
 
     mkdir -p $man/share/man/man1
-    for f in ${podmanPackage.man}/share/man/man1/*; do
+    for f in ${cfg.package.man}/share/man/man1/*; do
       basename=$(basename $f | sed s/podman/docker/g)
       ln -s $f $man/share/man/man1/$basename
     done
@@ -84,7 +78,7 @@ in
       description = ''
         **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
 
-        Enable use of NVidia GPUs from within podman containers.
+        Enable use of Nvidia GPUs from within podman containers.
       '';
     };
 
@@ -132,13 +126,21 @@ in
       };
     };
 
-    package = lib.mkOption {
-      type = types.package;
-      default = podmanPackage;
-      internal = true;
-      description = ''
-        The final Podman package (including extra packages).
+    package = (lib.mkPackageOption pkgs "podman" {
+      extraDescription = ''
+        This package will automatically include extra packages and runtimes.
       '';
+    }) // {
+      apply = pkg: pkg.override {
+        extraPackages = cfg.extraPackages ++ [
+            "/run/wrappers" # setuid shadow
+            config.systemd.package # To allow systemd-based container healthchecks
+          ] ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
+        extraRuntimes = [ pkgs.runc ]
+          ++ lib.optionals (config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or "" == "slirp4netns") (with pkgs; [
+          slirp4netns
+        ]);
+      };
     };
 
     defaultNetwork.settings = lib.mkOption {
@@ -170,7 +172,7 @@ in
     lib.mkIf cfg.enable {
       warnings = lib.optionals cfg.enableNvidia [
         ''
-          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set hardware.nvidia-container-toolkit.enable instead.
         ''
       ];
 
@@ -189,11 +191,6 @@ in
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
           network.network_backend = "netavark";
-        } // lib.optionalAttrs cfg.enableNvidia {
-          engine = {
-            conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
-            runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
-          };
         };
       };
 
@@ -205,11 +202,15 @@ in
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
 
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          ${cfg.package}/bin/podman system prune -f ${toString cfg.autoPrune.flags}
-        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = utils.escapeSystemdExecArgs ([
+            (lib.getExe cfg.package)
+            "system"
+            "prune"
+            "-f"
+          ] ++ cfg.autoPrune.flags);
+        };
 
         startAt = lib.optional cfg.autoPrune.enable cfg.autoPrune.dates;
         after = [ "podman.service" ];
@@ -236,7 +237,10 @@ in
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.
-        (pkgs.runCommand "podman-tmpfiles-nixos" { package = cfg.package; } ''
+        (pkgs.runCommand "podman-tmpfiles-nixos" {
+          package = cfg.package;
+          preferLocalBuild = true;
+        } ''
           mkdir -p $out/lib/tmpfiles.d/
           grep -v 'D! /run/podman 0700 root root' \
             <$package/lib/tmpfiles.d/podman.conf \

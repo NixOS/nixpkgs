@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   installShellFiles,
   restic,
@@ -9,15 +9,15 @@
   resticprofile,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "resticprofile";
-  version = "0.27.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CUTDlSpP0ztr3sEKT0ppFnWx/bcVuY1oIKWJNZylDoM=";
+    tag = "v${version}";
+    hash = "sha256-6s58rI+YMu6sCV8UsG9GOdF46Br3cMWIUqciVd2d4dY=";
   };
 
   postPatch = ''
@@ -32,9 +32,10 @@ buildGoModule rec {
 
   '';
 
-  vendorHash = "sha256-t2R5uNsliSn+rIvRM0vT6lQJY62DhhozXnONiCJ9CMc=";
+  vendorHash = "sha256-N39zPGos5EYRXGylsHFSjJ4EcQ9jahBOGV8xn7fF7gc=";
 
   ldflags = [
+    "-X main.version=${version}"
     "-X main.commit=${src.rev}"
     "-X main.date=unknown"
     "-X main.builtBy=nixpkgs"
@@ -50,11 +51,8 @@ buildGoModule rec {
     rm priority/ioprio_test.go # tries to set nice(2) IO priority
     rm restic/downloader_test.go # tries to use network
     rm schedule/schedule_test.go # tries to use systemctl
-
-    # `config/path_test.go` expects `$HOME` to be the same as `~nixbld` which is `$NIX_BUILD_TOP`
-    export HOME="$NIX_BUILD_TOP"
-    # `util/tempdir_test.go` expects `$HOME/.cache` to exist
-    mkdir "$HOME/.cache"
+    rm config/path_test.go # expects normal environment
+    rm util/tempdir_test.go # expects normal environment
   '';
 
   installPhase = ''

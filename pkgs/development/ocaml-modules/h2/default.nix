@@ -1,14 +1,15 @@
-{ buildDunePackage
-, fetchFromGitHub
-, hpack
-, angstrom
-, faraday
-, base64
-, psq
-, httpaf
-, alcotest
-, yojson
-, hex
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  hpack,
+  angstrom,
+  faraday,
+  base64,
+  psq,
+  httpun-types,
+  alcotest,
+  yojson,
+  hex,
 }:
 
 let
@@ -20,7 +21,7 @@ let
   };
 in
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "h2";
 
   inherit (hpack)
@@ -34,7 +35,7 @@ buildDunePackage rec {
     base64
     psq
     hpack
-    httpaf
+    httpun-types
   ];
 
   doCheck = true;

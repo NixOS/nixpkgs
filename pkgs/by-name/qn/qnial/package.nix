@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-     ncurses
-     libxcrypt
+    ncurses
+    libxcrypt
   ];
 
   strictDeps = true;
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bitbucket.com/museoa/qnial";
     license = lib.licenses.artistic1;
     mainProgram = "nial";
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

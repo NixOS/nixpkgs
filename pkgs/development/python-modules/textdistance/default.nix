@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/life4/textdistance";
     changelog = "https://github.com/life4/textdistance/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,26 +1,37 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.clatd;
 
-  settingsFormat = pkgs.formats.keyValue {};
+  settingsFormat = pkgs.formats.keyValue { };
 
   configFile = settingsFormat.generate "clatd.conf" cfg.settings;
 in
 {
   options = {
     services.clatd = {
-      enable = mkEnableOption "clatd";
+      enable = lib.mkEnableOption "clatd";
 
-      package = mkPackageOption pkgs "clatd" { };
+      package = lib.mkPackageOption pkgs "clatd" { };
 
-      settings = mkOption {
-        type = types.submodule ({ name, ... }: {
-          freeformType = settingsFormat.type;
-        });
+      enableNetworkManagerIntegration = lib.mkEnableOption "NetworkManager integration" // {
+        default = config.networking.networkmanager.enable;
+        defaultText = "config.networking.networkmanager.enable";
+      };
+
+      settings = lib.mkOption {
+        type = lib.types.submodule (
+          { name, ... }:
+          {
+            freeformType = settingsFormat.type;
+          }
+        );
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             plat-prefix = "64:ff9b::/96";
           }
@@ -32,7 +43,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.clatd = {
       description = "464XLAT CLAT daemon";
       documentation = [ "man:clatd(8)" ];
@@ -64,6 +75,7 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -77,5 +89,17 @@ in
         ];
       };
     };
+
+    networking.networkmanager.dispatcherScripts = lib.optionals cfg.enableNetworkManagerIntegration [
+      {
+        type = "basic";
+        # https://github.com/toreanderson/clatd/blob/master/scripts/clatd.networkmanager
+        source = pkgs.writeShellScript "restart-clatd" ''
+          [ "$DEVICE_IFACE" = "${cfg.settings.clat-dev or "clat"}" ] && exit 0
+          [ "$2" != "up" ] && [ "$2" != "down" ] && exit 0
+          ${pkgs.systemd}/bin/systemctl restart clatd.service
+        '';
+      }
+    ];
   };
 }

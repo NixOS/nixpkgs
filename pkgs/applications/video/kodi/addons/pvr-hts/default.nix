@@ -1,14 +1,19 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+}:
 buildKodiBinaryAddon rec {
   pname = "pvr-hts";
   namespace = "pvr.hts";
-  version = "21.2.4";
+  version = "21.2.5";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.hts";
     rev = "${version}-${rel}";
-    sha256 = "sha256-3q78rJ+LGRD/pqeWfcP2Z469HAu1T0LoidvD6mjNkwg=";
+    sha256 = "sha256-BG5mGD674gvjUSdydu4g3F/4GH53gkJoKMDuvaFNi6k=";
   };
 
   meta = with lib; {

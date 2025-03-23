@@ -6,17 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offat";
-  version = "0.19.1";
+  version = "0.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "OFFAT";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-USSvUtY5THzsWlJtVYxrCquRJWfAoD7b7NHP7pB27sg=";
+    tag = "v${version}";
+    hash = "sha256-LZd9nMeI+TMd95r6CuNAB7eMqrE97ne0ioPjuIbtK7w=";
   };
 
   sourceRoot = "${src.name}/src";
+
+  pythonRelaxDeps = [
+    "setuptools"
+    "tenacity"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 
@@ -31,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     api = with python3.pkgs; [
       fastapi
       uvicorn

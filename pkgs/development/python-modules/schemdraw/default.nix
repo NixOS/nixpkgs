@@ -11,20 +11,21 @@
   ziamath,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.19";
+  version = "0.20";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = pname;
-    rev = version;
-    hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
+    repo = "schemdraw";
+    tag = version;
+    hash = "sha256-mt1XTrUH570zrJpCFo0jORAE/jo7H2T7sKpIskYw8bk=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +48,12 @@ buildPythonPackage rec {
     latex2mathml
     ziafont
     ziamath
+    writableTmpDirAsHomeHook
   ];
 
   # Strip out references to unfree fonts from the test suite
   postPatch = ''
-    substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
+    substituteInPlace test/test_backend.ipynb --replace-fail "(font='Times')" "()"
   '';
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files

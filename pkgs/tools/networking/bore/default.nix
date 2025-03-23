@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromBitbucket, Libsystem, SystemConfiguration, installShellFiles }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromBitbucket,
+  Libsystem,
+  SystemConfiguration,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bore";
@@ -11,20 +19,28 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1fdnnx7d18gj4rkv1dc6q379dqabl66zks9i0rjarjwcci8m30d9";
   };
 
-  cargoHash = "sha256-vUKv98lfsrxBiJxjL8ZKLZ1IVCX5hHzl+F5y4Ot3i/Y=";
-  cargoBuildFlags = [ "-p" pname ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6uIqvX50XoWCPQ8u38rUdi4LwtMTBcNuefNmzGY+vLU=";
+  cargoBuildFlags = [
+    "-p"
+    pname
+  ];
 
   # error[E0793]: reference to packed field is unaligned
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # FIXME can’t test --all-targets and --doc in a single invocation
-  cargoTestFlags = [ "--all-targets" "--workspace" ];
+  cargoTestFlags = [
+    "--all-targets"
+    "--workspace"
+  ];
   checkFeatures = [ "std" ];
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Libsystem
     SystemConfiguration
   ];
@@ -46,6 +62,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = [ ];
     mainProgram = "bore";
-    broken = stdenv.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
+    broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
   };
 }

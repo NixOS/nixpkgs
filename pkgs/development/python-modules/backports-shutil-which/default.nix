@@ -1,30 +1,33 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
-  pytest,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "backports-shutil-which";
   version = "3.5.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "backports.shutil_which";
-    inherit version;
-    sha256 = "fe39f567cbe4fad89e8ac4dbeb23f87ef80f7fe8e829669d0221ecdb0437c133";
+  src = fetchFromGitHub {
+    owner = "minrk";
+    repo = "backports.shutil_which";
+    tag = version;
+    hash = "sha256-smvBySS8Ek24y8X9DUGxF4AfJL2ZQ12xeDhEBsZRiP0=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    py.test test
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Backport of shutil.which from Python 3.3";
     homepage = "https://github.com/minrk/backports.shutil_which";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

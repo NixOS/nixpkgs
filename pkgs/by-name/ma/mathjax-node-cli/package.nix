@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 buildNpmPackage rec {

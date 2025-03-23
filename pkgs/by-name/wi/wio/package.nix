@@ -1,21 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alacritty
-, cage
-, cairo
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, pkg-config
-, udev
-, unstableGitUpdater
-, wayland
-, wayland-protocols
-, wlroots
-, xwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alacritty,
+  cage,
+  cairo,
+  libxkbcommon,
+  makeWrapper,
+  libgbm,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  udev,
+  unstableGitUpdater,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,12 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     cairo
     libxkbcommon
-    mesa
+    libgbm
     udev
     wayland
     wayland-protocols
@@ -53,7 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/wio \
-      --prefix PATH ":" "${lib.makeBinPath [ alacritty cage ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          alacritty
+          cage
+        ]
+      }"
   '';
 
   passthru = {
@@ -70,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })

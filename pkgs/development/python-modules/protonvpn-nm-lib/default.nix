@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   dbus-python,
   distro,
   jinja2,
@@ -17,7 +17,6 @@
   pkgs-systemd,
   python,
   xdg-utils,
-  makeWrapper,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n3jfBHMYqyQZgvFFJcylNbTWZ3teuqhdelTfpNrwWuA=";
   };
 
@@ -49,8 +48,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-Patching-GIRepository.patch;
+    (replaceVars ./0001-Patching-GIRepository.patch {
       networkmanager_path = "${networkmanager}/lib/girepository-1.0";
     })
   ];

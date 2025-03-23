@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "mobly";
-  version = "1.12.3";
+  version = "1.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hhI1jrHJk4wo49MK8J4VTS2dGmHG2kwzgZeSWBXdXkA=";
+    tag = version;
+    hash = "sha256-77wZK5dqxXUkOgWE7NBpGJBbbtYYxRCJwPbtwLIX09I=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +46,13 @@ buildPythonPackage rec {
     procps
     pytestCheckHook
     pytz
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # cannot access /usr/bin/pgrep from the sandbox
+    "test_stop_standing_subproc"
+    "test_stop_standing_subproc_and_descendants"
+    "test_stop_standing_subproc_without_pipe"
   ];
 
   __darwinAllowLocalNetworking = true;

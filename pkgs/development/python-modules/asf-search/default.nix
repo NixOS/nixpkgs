@@ -20,22 +20,21 @@
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "7.1.4";
+  version = "8.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l1FrhQ82+0g/ivm2K2yXJ5EZNDGM3Olcj1AxiQc8cZI=";
+    tag = "v${version}";
+    hash = "sha256-9NyBDpCIsRBPN2965SR106h6hxwML7kXv6sY3YlPseA=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ setuptools-scm ];
-
 
   dependencies = [
     dateparser
@@ -60,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
-    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
   };

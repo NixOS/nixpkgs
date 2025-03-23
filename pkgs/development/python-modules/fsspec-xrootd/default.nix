@@ -1,37 +1,40 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # dependencies
   fsspec,
   xrootd,
+
+  # tests
   pkgs,
   pytestCheckHook,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "fsspec-xrootd";
-  version = "0.3.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fhamfMWlsiiqfU9c9XDfLEEkRbMAqm74rc2bGF3fRaM=";
+    tag = "v${version}";
+    hash = "sha256-Vpe/Gcm6rmehG05h2H7BDZcBQDyie0Ww9X8LgoTgAkE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fsspec
     xrootd
   ];
@@ -52,11 +55,11 @@ buildPythonPackage rec {
   # Timeout related tests hang indifinetely
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_basicio.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "XRootD implementation for fsspec";
     homepage = "https://github.com/CoffeaTeam/fsspec-xrootd";
     changelog = "https://github.com/CoffeaTeam/fsspec-xrootd/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

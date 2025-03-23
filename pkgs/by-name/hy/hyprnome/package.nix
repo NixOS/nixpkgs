@@ -8,16 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprnome";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprnome";
     rev = version;
-    hash = "sha256-J/gaAwydSA9fi2qZYrWLpodTltL56yG4VQ2YlIPKJ/U=";
+    hash = "sha256-GZn7qS1J6QSanWdy17sMBbwJ77iMij2jKRgPdrjt6tM=";
   };
 
-  cargoHash = "sha256-Fyst6rwpvVQoeWCOkJwpNuMcnp6Q+kAXtDg+fccTVNM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qCexb8D0iN3BWOz5L45mR5n9x0nqAh8MHHTp9QTHSOg=";
+
+  # Upstream has 'missing_docs = "deny"', which trips up test builds for 0.3.1 release.
+  # Let's just treat lints as warnings.
+  env.RUSTFLAGS = "--cap-lints warn";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -2,45 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
-  setuptools,
+  # build-system
   cmake,
   nanobind,
   ninja,
   pcpp,
   scikit-build,
+  setuptools,
+
+  # buildInputs
   isl,
 
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2024.1";
+  version = "2025.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-N5XI6V3BvNobCh7NAvtzVejtDMnlcb31S5gseyab1T0=";
+    tag = "v${version}";
+    hash = "sha256-F+qF/pX/1rFZiDVK71FYNatWuVkcvl62+EriTHzAfHw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail "setuptools>=42,<64;python_version<'3.12'" "setuptools>=42"
-  '';
-
   build-system = [
-    setuptools
     cmake
     nanobind
     ninja
     pcpp
     scikit-build
+    setuptools
   ];
 
   buildInputs = [ isl ];
@@ -55,7 +51,7 @@ buildPythonPackage rec {
 
   # Force resolving the package from $out to make generated ext files usable by tests
   preCheck = ''
-    mv islpy islpy.hidden
+    rm -rf islpy
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -65,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
+    changelog = "https://github.com/inducer/islpy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

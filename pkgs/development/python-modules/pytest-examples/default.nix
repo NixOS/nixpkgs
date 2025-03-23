@@ -1,36 +1,25 @@
 {
   lib,
-  black,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
+  black,
   ruff,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.12";
+  version = "0.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hTLTL3w4OEv8Pkzc/h9qDMnlhe6P+Q6XUImLVDsDKvk=";
+    tag = "v${version}";
+    hash = "sha256-FLcvPa3vBldNINFM5hOraczrZCjSmlrEqkBj+f/sU1k=";
   };
-
-  postPatch = ''
-    # ruff binary is used directly, the ruff Python package is not needed
-    substituteInPlace pytest_examples/lint.py \
-      --replace-fail "'ruff'" "'${lib.getExe ruff}'"
-  '';
-
-  pythonRemoveDeps = [ "ruff" ];
 
   build-system = [
     hatchling
@@ -38,11 +27,21 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  dependencies = [ black ];
+  dependencies = [
+    black
+    ruff
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_examples" ];
+
+  disabledTests = [
+    # Fails with AssertionError because formatting is different than expected
+    "test_black_error"
+    "test_black_error_dot_space"
+    "test_black_error_multiline"
+  ];
 
   meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";

@@ -9,6 +9,7 @@
   hatchling,
   pandas,
   pyarrow,
+  python-dateutil,
   pythonOlder,
   sqlalchemy,
   tenacity,
@@ -16,26 +17,27 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "3.8.3";
+  version = "3.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mcYIYOgww4UM0CAcdtOD12pp53clPdDqN85bLRHGDag=";
+    hash = "sha256-A1661jfGTCb8g8Hah7RhNOUsWMlRhomfnsaxEMTqhlg=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     fsspec
     tenacity
+    python-dateutil
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pandas = [ pandas ];
     sqlalchemy = [ sqlalchemy ];
     arrow = [ pyarrow ];
@@ -54,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/laughingman7743/PyAthena/";
     changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,19 +1,22 @@
-{ lib, fetchFromGitHub, php }:
+{
+  lib,
+  fetchFromGitHub,
+  php,
+}:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "pest";
-  version = "2.34.7";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "pestphp";
     repo = "pest";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rRXRtcjQUCx8R5sGRBUwlKtog6jQ1WaOu225npM6Ct8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ddsdVx/Vsg7GG11fGASouBU3HAJLSjs1AQGHx52TWzA=";
   };
 
   composerLock = ./composer.lock;
-
-  vendorHash = "sha256-+FKNGjwq+KFPw8agdwsgnwb2ENgFAWK5EngmS4hMcSA=";
+  vendorHash = "sha256-rOJ6PFp4Xfe89usoH455EAT30d2Tu3zd3+C/6K/kGBw=";
 
   meta = {
     changelog = "https://github.com/pestphp/pest/releases/tag/v${finalAttrs.version}";
@@ -21,6 +24,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://pestphp.com";
     license = lib.licenses.mit;
     mainProgram = "pest";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = lib.teams.php.members;
   };
 })

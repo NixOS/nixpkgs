@@ -3,27 +3,37 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+let
+  version = "1.2.0.0";
+  tag = "v${version}";
+in
+buildGoModule {
   pname = "superfile";
-  version = "1.1.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    rev = "v${version}";
-    hash = "sha256-z1jcRzID20s7tEDUaEcnOYBfv/BPZtcXz9fy3V5iPPg=";
+    inherit tag;
+    hash = "sha256-ByCKpNUWwVzO6A8Ad9V0P0lsquYgVqDS3eCta5iOfXI=";
   };
 
-  vendorHash = "sha256-OzPH7dNu/V4HDGSxrvYxu3s+hw36NiulFZs0BJ44Pjk=";
+  vendorHash = "sha256-5mjy6Mu/p7UJCxn2XRbgtfGmrS+9bEt4+EVheYZcDpY=";
 
-  ldflags = ["-s" "-w"];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [momeemt];
+    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      momeemt
+      redyf
+    ];
     mainProgram = "superfile";
   };
 }

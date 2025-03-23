@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, fontconfig
-, libxkbcommon
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  fontconfig,
+  libxkbcommon,
+  wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "salut";
   version = "unstable-2022-12-17";
 
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     description = "Sleek notification daemon for Wayland";
     homepage = "https://gitlab.com/snakedye/salut/-/wikis/Home";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "salut";
     platforms = lib.platforms.linux;
   };

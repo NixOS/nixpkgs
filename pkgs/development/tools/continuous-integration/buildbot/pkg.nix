@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, isPy3k, buildbot }:
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  buildbot,
+}:
 
 buildPythonPackage {
   pname = "buildbot_pkg";

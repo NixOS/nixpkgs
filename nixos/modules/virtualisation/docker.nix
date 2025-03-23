@@ -1,6 +1,6 @@
 # Systemd services for docker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -34,7 +34,7 @@ in
         default = ["/run/docker.sock"];
         description = ''
             A list of unix and tcp docker should listen to. The format follows
-            ListenStream as described in systemd.socket(5).
+            ListenStream as described in {manpage}`systemd.socket(5)`.
           '';
       };
 
@@ -52,10 +52,26 @@ in
 
     daemon.settings =
       mkOption {
-        type = settingsFormat.type;
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            live-restore = mkOption {
+              type = types.bool;
+              # Prior to NixOS 24.11, this was set to true by default, while upstream defaulted to false.
+              # Keep the option unset to follow upstream defaults
+              default = versionOlder config.system.stateVersion "24.11";
+              defaultText = literalExpression "lib.versionOlder config.system.stateVersion \"24.11\"";
+              description = ''
+                Allow dockerd to be restarted without affecting running container.
+                This option is incompatible with docker swarm.
+              '';
+            };
+          };
+        };
         default = { };
         example = {
           ipv6 = true;
+          "live-restore" = true;
           "fixed-cidr-v6" = "fd00::/80";
         };
         description = ''
@@ -73,16 +89,6 @@ in
 
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
-      };
-
-    liveRestore =
-      mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-            Allow dockerd to be restarted without affecting running container.
-            This option is incompatible with docker swarm.
-          '';
       };
 
     storageDriver =
@@ -153,6 +159,34 @@ in
           which the prune will occur.
         '';
       };
+
+      randomizedDelaySec = mkOption {
+        default = "0";
+        type = types.singleLineStr;
+        example = "45min";
+        description = ''
+          Add a randomized delay before each auto prune.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          {manpage}`systemd.time(7)`
+        '';
+      };
+
+      persistent = mkOption {
+        default = true;
+        type = types.bool;
+        example = false;
+        description = ''
+          Takes a boolean argument. If true, the time when the service
+          unit was last triggered is stored on disk. When the timer is
+          activated, the service unit is triggered immediately if it
+          would have been triggered at least once during the time when
+          the timer was inactive. Such triggering is nonetheless
+          subject to the delay imposed by RandomizedDelaySec=. This is
+          useful to catch up on missed runs of the service when the
+          system was powered down.
+        '';
+      };
     };
 
     package = mkPackageOption pkgs "docker" { };
@@ -166,6 +200,11 @@ in
       '';
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
+  ];
 
   ###### implementation
 
@@ -232,19 +271,30 @@ in
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
 
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
-        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = utils.escapeSystemdExecArgs ([
+            (lib.getExe cfg.package)
+            "system"
+            "prune"
+            "-f"
+          ] ++ cfg.autoPrune.flags);
+        };
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
         after = [ "docker.service" ];
         requires = [ "docker.service" ];
       };
 
+      systemd.timers.docker-prune = mkIf cfg.autoPrune.enable {
+        timerConfig = {
+          RandomizedDelaySec = cfg.autoPrune.randomizedDelaySec;
+          Persistent = cfg.autoPrune.persistent;
+        };
+      };
+
       assertions = [
-        { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.graphics.enable32Bit or false;
+        { assertion = cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64 -> config.hardware.graphics.enable32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
         }];
 
@@ -253,18 +303,16 @@ in
         hosts = [ "fd://" ];
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
-        live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            # Use the legacy nvidia-container-runtime wrapper to allow
+            # the `--runtime=nvidia` approach to expose
+            # GPU's. Starting with Docker > 25, CDI can be used
+            # instead, removing the need for runtime wrappers.
+            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
           };
         };
       };
     }
   ]);
-
-  imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
-  ];
-
 }

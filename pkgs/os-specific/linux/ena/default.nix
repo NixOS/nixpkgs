@@ -1,35 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-
-stdenv.mkDerivation rec {
-  version = "2.12.0";
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  kernel,
+  kernelModuleMakeFlags,
+}:
+let
+  rev-prefix = "ena_linux_";
+  version = "2.13.2";
+in
+stdenv.mkDerivation {
+  inherit version;
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
-    rev = "ena_linux_${version}";
-    hash = "sha256-Z/eeIUY7Yl2l/IqK3Z2nxPhn+JLvP976IZ9ZXPBqoSo=";
+    rev = "${rev-prefix}${version}";
+    hash = "sha256-v4S23lG3DGcsLcxwl4F11UlN7xD69mg0yS4fWs89+kM=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
-  # linux 3.12
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-
-  patches = [
-    # Use kernel version checks instead of API feature detection
-    # See https://github.com/NixOS/nixpkgs/pull/310680
-    ./override-features-api-detection.patch
-  ];
+  env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
     export ENA_PHC_INCLUDE=1
-    substituteInPlace Makefile --replace '/lib/modules/$(BUILD_KERNEL)' ${kernel.dev}/lib/modules/${kernel.modDirVersion}
     runHook postConfigure
   '';
 
@@ -43,11 +45,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater {
+    inherit rev-prefix;
+  };
+
   meta = with lib; {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ eelco sielicki ];
+    maintainers = with maintainers; [
+      sielicki
+      arianvp
+    ];
     platforms = platforms.linux;
   };
 }

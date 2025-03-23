@@ -1,22 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ks";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "loteoo";
     repo = "ks";
     rev = "${finalAttrs.version}";
-    hash = "sha256-jGo0u0wiwOc2n8x0rvDIg1suu6vJQ5UCfslYD5vUlyI=";
+    hash = "sha256-v05wqlG7Utq1b7ctvDY9MCdjHVVZZNNzuHaIBwuRjEE=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp ${finalAttrs.pname} $out/bin/
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    installShellCompletion \
+      --bash ${./ks-completion.bash} \
+      --zsh --name _ks ${./ks-completion.zsh}
   '';
 
   meta = {

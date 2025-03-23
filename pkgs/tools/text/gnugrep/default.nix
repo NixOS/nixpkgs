@@ -27,12 +27,13 @@ stdenv.mkDerivation {
   outputs = [ "out" "info" ]; # the man pages are rather small
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ pcre2 libiconv runtimeShellPackage ];
+  buildInputs = [ pcre2 libiconv ] ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
   # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
-  doCheck = !stdenv.isCygwin && !stdenv.isFreeBSD && !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64) && !stdenv.buildPlatform.isRiscV64;
+  # aarch32: fails 'stack-overflow' when run on qemu under x86_64
+  doCheck = !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isFreeBSD && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) && !stdenv.buildPlatform.isRiscV64 && !stdenv.hostPlatform.isAarch32;
 
   # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.

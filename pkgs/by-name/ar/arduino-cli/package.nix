@@ -12,13 +12,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.0.3";
+    version = "1.2.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-/2GtWiks/d8sTJ6slX2nQtFpGkqm4PSfgDd0uVG+qN8=";
+      repo = "arduino-cli";
+      tag = "v${version}";
+      hash = "sha256-7rruSIhKGm2R89Jo1jY+1ZWKloYsL5oaSWuppMKOeFQ=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
@@ -27,7 +27,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-OkilZMDTueHfn6T5Af8e+CVersSPDMcAUUB2o1ny6nc=";
+    vendorHash = "sha256-uNrkDqw0JoRxe7FuAvQLd7Y4i+nQPhKH0/aWES2+FRc=";
 
     postPatch =
       let
@@ -47,7 +47,7 @@ let
           --replace-fail "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
       '';
 
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
 
     checkPhase = ''
       runHook preCheck
@@ -58,9 +58,9 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/version.versionString=${version}"
-      "-X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
+      "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
@@ -89,22 +89,18 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   # buildFHSEnv is needed because the arduino-cli downloads compiler
   # toolchains from the internet that have their interpreters pointed at
   # /lib64/ld-linux-x86-64.so.2
   buildFHSEnv {
-    inherit (pkg) name meta;
+    inherit (pkg) pname version meta;
 
     runScript = "${pkg.outPath}/bin/arduino-cli";
 
-    extraInstallCommands =
-      ''
-        mv $out/bin/$name $out/bin/arduino-cli
-      ''
-      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        cp -r ${pkg.outPath}/share $out/share
-      '';
+    extraInstallCommands = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      cp -r ${pkg.outPath}/share $out/share
+    '';
     passthru.pureGoPkg = pkg;
 
     targetPkgs = pkgs: with pkgs; [ zlib ];

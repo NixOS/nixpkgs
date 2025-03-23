@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.25.2";
+  version = "0.27.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
-    rev = "refs/tags/${version}";
-    hash = "sha256-720qF1t/xl2voOMtkOR7U3lFXia4nI0VirgEFHpb39k=";
+    tag = version;
+    hash = "sha256-L86aFq1S7Hfp+1MHwliCSz0mfgAFD/5AHbeqL1aZ5XM=";
   };
 
   postPatch = ''

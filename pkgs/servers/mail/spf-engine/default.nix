@@ -1,18 +1,32 @@
-{ lib, buildPythonApplication, fetchurl, flit-core, pyspf, dnspython, authres, pymilter }:
+{
+  lib,
+  buildPythonApplication,
+  fetchurl,
+  flit-core,
+  pyspf,
+  dnspython,
+  authres,
+  pymilter,
+}:
 
 buildPythonApplication rec {
   pname = "spf-engine";
-  version = "3.0.4";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Gcw7enNIb/TrZEYa0Z04ezHUmfMmc1J+aEH6FlXbhTo=";
+    url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/spf-engine-${version}.tar.gz";
+    hash = "sha256-HUuMxYFCqItLFgMSnrkwfmJWqgFGyI1RWgmljb+jkWk=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ pyspf dnspython authres pymilter ];
+  propagatedBuildInputs = [
+    pyspf
+    dnspython
+    authres
+    pymilter
+  ];
 
   pythonImportsCheck = [
     "spf_engine"
@@ -20,10 +34,10 @@ buildPythonApplication rec {
     "spf_engine.policyd_spf"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/spf-engine/";
     description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
   };
 }

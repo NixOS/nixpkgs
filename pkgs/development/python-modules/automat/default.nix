@@ -11,14 +11,13 @@
 
 let
   automat = buildPythonPackage rec {
-    version = "22.10.0";
-    format = "setuptools";
+    version = "24.8.1";
+    format = "pyproject";
     pname = "automat";
 
     src = fetchPypi {
-      pname = "Automat";
-      inherit version;
-      hash = "sha256-5WvrhO2tGdzBHTDo2biV913ute9elrhKRnBms7hLsE4=";
+      inherit pname version;
+      hash = "sha256-s0Inz2P2MluK0jme3ngGdQg+Q5sgwyPTdjc9juYwbYg=";
     };
 
     nativeBuildInputs = [ setuptools-scm ];
@@ -47,7 +46,7 @@ let
       description = "Self-service finite-state machines for the programmer on the go";
       mainProgram = "automat-visualize";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

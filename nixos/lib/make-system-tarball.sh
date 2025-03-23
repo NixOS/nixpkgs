@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 sources_=($sources)
 targets_=($targets)
 

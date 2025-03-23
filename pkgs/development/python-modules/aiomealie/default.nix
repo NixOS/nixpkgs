@@ -2,12 +2,14 @@
   lib,
   aiohttp,
   aioresponses,
+  awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -16,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.8.0";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,19 +26,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/Hg0kcwUNaEsm8znOOkWd0oOu0ikK5LAYGKbP2pvHhQ=";
+    tag = "v${version}";
+    hash = "sha256-hcHXX95d9T/jJMqHkikWN8ZdM5MRxJxhH575U3KDXxY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
-  '';
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    awesomeversion
     mashumaro
     orjson
     yarl
@@ -45,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

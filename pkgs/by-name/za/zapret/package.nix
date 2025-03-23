@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   libcap,
   zlib,
@@ -10,44 +11,54 @@
 
   iptables,
   nftables,
-  gawk
+  gawk,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "0-unstable-2024-07-16";
+  version = "70.3";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-    rev = "9fcd8f830ebde2491719a5c698e22d1d5210e0fb";
-    sha256 = "sha256-8cqKCNYLLkZXlwrybKUPG6fLd7gmf8zV9tjWoTxAwIY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sYLZH/j8bHUKfkUAAAuTrCTOXB6Qp9kVj4GjyFv6M+g=";
   };
 
-  buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];
-  nativeBuildInputs = [ iptables nftables gawk ];
+  buildInputs = [
+    libcap
+    zlib
+    libnetfilter_queue
+    libnfnetlink
+  ];
+  nativeBuildInputs = [
+    iptables
+    nftables
+    gawk
+  ];
 
-  buildPhase = ''
-    mkdir -p $out/bin
-
-    make TGT=$out/bin
-  '';
+  makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/usr/share/zapret/init.d/sysv
     mkdir -p $out/usr/share/docs
 
     cp $src/blockcheck.sh $out/bin/blockcheck
 
     substituteInPlace $out/bin/blockcheck \
-      --replace "ZAPRET_BASE=\"\$EXEDIR\"" "ZAPRET_BASE=$out/usr/share/zapret"
+      --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/usr/share/zapret"
+
+    ln -s ../../../bin/blockcheck $out/usr/share/zapret/blockcheck
 
     cp $src/init.d/sysv/functions $out/usr/share/zapret/init.d/sysv/functions
     cp $src/init.d/sysv/zapret $out/usr/share/zapret/init.d/sysv/init.d
 
     substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
-      --replace "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret" \
-      --replace ". \"\$ZAPRET_BASE/config\"" ""
+      --replace-fail "/opt/zapret" "\"$out/usr/share/zapret\""
+
+    touch $out/usr/share/zapret/config
 
     cp -r $src/docs/* $out/usr/share/docs
 
@@ -55,6 +66,8 @@ stdenv.mkDerivation {
 
     cp $src/common/* $out/usr/share/zapret/common
     cp $src/ipset/* $out/usr/share/zapret/ipset
+
+    rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
 
     mkdir -p $out/usr/share/zapret/nfq
     ln -s ../../../../bin/nfqws $out/usr/share/zapret/nfq/nfqws
@@ -66,16 +79,21 @@ stdenv.mkDerivation {
     done
 
     ln -s ../usr/share/zapret/init.d/sysv/init.d $out/bin/zapret
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nishimara ];
+    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
 
     # probably gonna work on darwin, but untested
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

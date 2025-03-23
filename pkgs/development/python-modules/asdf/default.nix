@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "3.2.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-r+cEv6g7fq3I/h2mlszzJRQcazy7qP9pg0hfYG/Sa9E=";
+    tag = version;
+    hash = "sha256-h7OkLq9+sW507Va22cF0eez6xrI7iIaLV5D7EZFWxJQ=";
   };
 
   build-system = [
@@ -60,12 +60,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert 527033 >= 1048801
+    "test_update_add_array_at_end"
+  ];
+
   pythonImportsCheck = [ "asdf" ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

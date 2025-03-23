@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, mdx
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mdx,
 }:
 
 buildDunePackage rec {
@@ -30,6 +31,6 @@ buildDunePackage rec {
     homepage = "https://github.com/leostera/colors";
     changelog = "https://github.com/leostera/colors/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

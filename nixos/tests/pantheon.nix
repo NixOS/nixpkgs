@@ -10,6 +10,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   {
     imports = [ ./common/user-account.nix ];
 
+    # Workaround ".gala-wrapped invoked oom-killer"
+    virtualisation.memorySize = 2047;
+
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
@@ -53,12 +56,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
     with subtest("Check if Pantheon components actually start"):
-        for i in ["gala", "io.elementary.wingpanel", "plank", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
             machine.wait_until_succeeds(f"pgrep -f {i}")
-        for i in ["gala", "io.elementary.wingpanel", "plank"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock"]:
             machine.wait_for_window(i)
-        for i in ["bamfdaemon.service", "io.elementary.files.xdg-desktop-portal.service"]:
-            machine.wait_for_unit(i, "${user.name}")
+        machine.wait_until_succeeds("pgrep -xf ${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal")
 
     with subtest("Check if various environment variables are set"):
         cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.gala}/bin/gala)/environ"
@@ -67,8 +69,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"{cmd} | grep 'XDG_DATA_DIRS' | grep 'gsettings-schemas/pantheon-agent-geoclue2'")
         # Hopefully from login shell.
         machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
-        # See elementary-session-settings packaging.
-        machine.succeed(f"{cmd} | grep 'XDG_CONFIG_DIRS' | grep 'elementary-default-settings'")
 
     with subtest("Open elementary videos"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.videos >&2 &'")
@@ -83,10 +83,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("io.elementary.calendar")
 
     with subtest("Open system settings"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.switchboard >&2 &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.settings >&2 &'")
         # Wait for all plugins to be loaded before we check if the window is still there.
         machine.sleep(5)
-        machine.wait_for_window("io.elementary.switchboard")
+        machine.wait_for_window("io.elementary.settings")
 
     with subtest("Open elementary terminal"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")
@@ -98,6 +98,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
         machine.sleep(5)
         machine.screenshot("multitasking")
+        machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")

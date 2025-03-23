@@ -4,11 +4,11 @@
   libffi,
   melpaBuild,
   pkg-config,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
   pname = "elisp-ffi";
+  ename = "ffi";
   version = "1.0.0-unstable-2017-05-18";
 
   src = fetchFromGitHub {
@@ -18,16 +18,15 @@ melpaBuild {
     hash = "sha256-StOezQEnNTjRmjY02ub5FRh59aL6gWfw+qgboz0wF94=";
   };
 
+  files = ''(:defaults "ffi-glue")'';
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libffi ];
 
   preBuild = ''
-    mv ffi.el elisp-ffi.el
-    make
+    make CXX=$CXX
   '';
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/skeeto/elisp-ffi";
@@ -39,6 +38,6 @@ melpaBuild {
       values on to Emacs.
     '';
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

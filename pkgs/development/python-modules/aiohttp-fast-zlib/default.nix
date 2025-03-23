@@ -1,24 +1,24 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  aiohttp,
   isal,
-  zlib-ng,
+  poetry-core,
   pytestCheckHook,
+  zlib-ng,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-zlib";
-  version = "0.1.0";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
-    rev = "v${version}";
-    hash = "sha256-nR/0hVe5zAhLXu+kBOBH+whIjUV44c5yuNOj+Zl+eFo=";
+    tag = "v${version}";
+    hash = "sha256-PQ44XFdaolxGQTwzssv1inOUAGAyYghS3SVLq4w5SoA=";
   };
 
   postPatch = ''
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
     changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

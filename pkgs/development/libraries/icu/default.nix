@@ -1,11 +1,40 @@
-{ stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, testers, buildPackages, updateAutotoolsGnuConfigScriptsHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  fixDarwinDylibNames,
+  testers,
+  buildPackages,
+  updateAutotoolsGnuConfigScriptsHook,
+}:
 
 let
   make-icu = (import ./make-icu.nix) {
-    inherit stdenv lib buildPackages fetchurl fixDarwinDylibNames testers updateAutotoolsGnuConfigScriptsHook;
+    inherit
+      stdenv
+      lib
+      buildPackages
+      fetchurl
+      fixDarwinDylibNames
+      testers
+      updateAutotoolsGnuConfigScriptsHook
+      ;
   };
 in
 {
+  icu77 = make-icu {
+    version = "77.1";
+    hash = "sha256-WI5DH3cyfDkDH/u4hDwOO8EiwhE3RIX6h9xfP6/yQGE=";
+  };
+  icu76 = make-icu {
+    version = "76.1";
+    hash = "sha256-36y0a/5HR0EEcs4+EUS/KKEC/uqk44dbrJtMbPMPTz4=";
+  };
+  icu75 = make-icu {
+    version = "75.1";
+    hash = "sha256-y5aN8+TS6H6LEcSaXQHHh70TuVRSgPxmQvgmUnYYyu8=";
+  };
   icu74 = make-icu {
     version = "74.2";
     hash = "sha256-aNsIIhKpbW9T411g9H04uWLp+dIHp0z6x4Apro/14Iw=";

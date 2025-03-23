@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.26.2";
+  version = "0.33.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8c1l4zoD44SjaOUXlFUSho/y7oMNOEVM9ZlnRs1irV8=";
+    tag = version;
+    hash = "sha256-c7mEYgk+9sHvOI7z/jp/VI3mA7XOlNFik8X5rTyBclg=";
   };
 
   nativeBuildInputs = [

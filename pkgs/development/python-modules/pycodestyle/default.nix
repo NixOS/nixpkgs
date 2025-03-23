@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   python,
   pytestCheckHook,
@@ -9,20 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.12.0";
+  version = "2.12.1";
 
   disabled = pythonOlder "3.6";
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RC+VAUG09D33Ut0wNRH/3tOgTCtvt/ZZgFdPDDHm55w=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "pycodestyle";
+    rev = version;
+    hash = "sha256-rQkOjDikJPHCBqrqxFQ9PLikYSeQZwJnHAmPGRUZecA=";
   };
 
   pythonImportsCheck = [ "pycodestyle" ];
 
-  nativCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
   postCheck = ''

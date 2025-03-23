@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, kubernetes-helm
-, kind
-, docker
+{
+  lib,
+  python3,
+  fetchPypi,
+  kubernetes-helm,
+  kind,
+  docker,
 }:
 
 python3.pkgs.buildPythonApplication rec {

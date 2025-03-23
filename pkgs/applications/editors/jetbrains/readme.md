@@ -15,18 +15,23 @@ To test the build process of every IDE (as well as the process for adding plugin
  - If binaries need patch or some other special treatment, add an entry to `plugins/specialPlugins.nix`
 
 ## How to update stuff:
- - Run ./bin/update_bin.py
- - This will update binary IDEs and plugins, and automatically commit them
+ - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
    - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
-   - I find this at https://jetbrains.com/updates/updates.xml (search for `product name="`, then `fullNumber`)
-   - Update the `buildVer` field in source/default.nix
+   - Build number is available on JetBrains website:
+     - IDEA: https://www.jetbrains.com/idea/download/other.html
+     - PyCharm: https://www.jetbrains.com/pycharm/download/other.html
+   - Update the `version` & `buildNumber` fields in source/ides.json
    - Empty the `ideaHash`, `androidHash`, `jpsHash` and `restarterHash` (only `ideaHash` and `restarterHash` changes on a regular basis) fields and try to build to get the new hashes
-   - Run `nix build .#jetbrains.(idea/pycharm)-community-src.src.src`, then `./source/build_maven.py source/idea_maven_artefacts.json result/`
-   - Update `source/brokenPlugins.json` (from https://plugins.jetbrains.com/files/brokenPlugins.json)
+   - Run these commands respectively:
+     - `nix build .#jetbrains.idea-community-src.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
+     - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
+   - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
    - Do a test build
-   - If it succeeds, make a PR/merge
-   - If it fails, ping/message GenericNerdyUsername
+   - If it succeeds, make a commit
+   - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
+   - make a PR/merge
+   - If it fails, ping/message GenericNerdyUsername or the nixpkgs Jetbrains maintainer team
 
 ## How to add an IDE:
  - Make dummy entries in `bin/versions.json` (make sure to set the version to something older than the real one)

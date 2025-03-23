@@ -4,29 +4,29 @@
   fetchFromGitHub,
   flit-scm,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.2.1";
-  format = "pyproject";
+  version = "1.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "exceptiongroup";
-    rev = version;
-    hash = "sha256-87HmZsbsoV7QPHux50sYsFY2RaIc3627dH3WAwqXfQU=";
+    tag = version;
+    hash = "sha256-k88+9FpB/aBun73SnsN6GsBceSUekT8Ig1XBt3hO4ok=";
   };
 
   nativeBuildInputs = [ flit-scm ];
 
-  doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
-
   nativeCheckInputs = [ pytestCheckHook ];
+
+  doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
   pythonImportsCheck = [ "exceptiongroup" ];
 

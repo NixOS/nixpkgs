@@ -4,32 +4,30 @@
 , fetchYarnDeps
 , yarnConfigHook
 , yarnBuildHook
+, yarnInstallHook
 , nodejs
-, npmHooks
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
   offlineCacheHash = {
-    x86_64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    aarch64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    x86_64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
-    aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
+    x86_64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    aarch64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    x86_64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    aarch64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
   }.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.5.16";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GTHM27i716RZk+kDELMg/lYy355/SZoQLXGPQ90M4xg=";
+    hash = "sha256-HmkFr2DroN1uNNH2pnRwE7vsJsEPLYU6yhroiuR/E6Q=";
   };
-
-  patches = [ ./name.patch ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
@@ -40,11 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     yarnConfigHook
     yarnBuildHook
     nodejs
-    npmHooks.npmInstallHook
   ];
-  # From some reason causes the build to fail due to dependencies not available
-  # offline
-  dontNpmPrune = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp -r dist/* $out
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";

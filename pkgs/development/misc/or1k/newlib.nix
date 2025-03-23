@@ -1,6 +1,11 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
+{
+  stdenv,
+  fetchFromGitHub,
+  stdenvNoLibc,
+  buildPackages,
+}:
 
-crossLibcStdenv.mkDerivation {
+stdenvNoLibc.mkDerivation {
   name = "newlib";
   src = fetchFromGitHub {
     owner = "openrisc";
@@ -16,7 +21,10 @@ crossLibcStdenv.mkDerivation {
     export CC=cc
   '';
 
-  configurePlatforms = [ "build" "target" ];
+  configurePlatforms = [
+    "build"
+    "target"
+  ];
   configureFlags = [
     "--host=${stdenv.buildPlatform.config}"
 

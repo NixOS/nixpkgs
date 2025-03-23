@@ -6,26 +6,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mokuro";
-  version = "0.1.8";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "mokuro";
-    rev = "v${version}";
-    hash = "sha256-w+hhUt2fTl9zrca4xotK5eNhbfragYNC0u5WDwNGb7k=";
+    tag = "v${version}";
+    hash = "sha256-cdbkculYPPWCSqBufpgt4EU3ne6KU2Dxk0xsvkdMZHA=";
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-        --replace-fail 'opencv-python' 'opencv'
-  '';
-
-
-  pythonRelaxDeps = [ "torchvision" ];
-
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
     fire
@@ -33,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     manga-ocr
     natsort
     numpy
-    opencv4
+    opencv-python
     pillow
     pyclipper
     requests
@@ -51,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/kha-white/mokuro/releases/tag/v${version}";
     description = "Read Japanese manga inside browser with selectable text";
     homepage = "https://github.com/kha-white/mokuro";
     license = lib.licenses.gpl3Only;

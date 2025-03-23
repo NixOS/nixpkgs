@@ -6,15 +6,15 @@
 }:
 
 let
-  timestamp = "202406271335";
+  timestamp = "202502271238";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdt-language-server";
-  version = "1.37.0";
+  version = "1.45.0";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
-    hash = "sha256-0EzZ9N9FzoWunPSVMMcqGjJLFO7nR68m4zdFAONrW9A=";
+    hash = "sha256-wJ556Vi+tc5B+ztQl67ARVKYvIihTI5BRitX7bKBJ5c=";
   };
 
   sourceRoot = ".";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       # The application ships with different config directories for each platform.
       # Note the application come with ARM variants as well, although the
       # current included wrapper doesn't use them.
-      configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
+      configDir = if stdenv.hostPlatform.isDarwin then "config_mac" else "config_linux";
     in
     ''
       runHook preInstall

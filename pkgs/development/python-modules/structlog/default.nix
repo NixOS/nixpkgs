@@ -1,30 +1,31 @@
 {
   lib,
+  better-exceptions,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  greenlet,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
   pretend,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  rich,
   simplejson,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "24.4.0";
+  version = "25.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = "refs/tags/${version}";
-    hash = "sha256-z3ecgsep/BQJ+Fv78rV4XiFU4+1aaUEfNEtIqy44KV4=";
+    tag = version;
+    hash = "sha256-sDJZMAXOfcBx+PgKt48nsATEiR5QvAfyrCP+qWiTzrc=";
   };
 
   build-system = [
@@ -34,20 +35,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    better-exceptions
     freezegun
+    greenlet
     pretend
     pytest-asyncio
     pytestCheckHook
+    rich
     simplejson
+    twisted
   ];
 
   pythonImportsCheck = [ "structlog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
-    changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/hynek/structlog/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

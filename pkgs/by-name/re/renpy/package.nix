@@ -1,98 +1,96 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  python3,
-  pkg-config,
-  SDL2,
-  libpng,
   ffmpeg,
   freetype,
+  fribidi,
   glew,
+  harfbuzz,
+  lib,
   libGL,
   libGLU,
-  fribidi,
-  zlib,
-  harfbuzz,
+  libpng,
   makeWrapper,
+  nix-update-script,
+  pkg-config,
+  python3,
+  SDL2,
+  stdenv,
+  versionCheckHook,
+  withoutSteam ? true,
+  zlib,
 }:
 
 let
-  # https://renpy.org/doc/html/changelog.html#versioning
-  # base_version is of the form major.minor.patch
-  # vc_version is of the form YYMMDDCC
-  # version corresponds to the tag on GitHub
-  base_version = "8.2.1";
-  vc_version = "24030407";
-  version = "${base_version}.${vc_version}";
+  python = python3;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  inherit version;
+  version = "8.3.7.25031702";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
-    rev = version;
-    hash = "sha256-07Hj8mJGR0+Pn1DQ+sK5YQ3x3CTMsZ5h5yEoz44b2TM=";
+    tag = finalAttrs.version;
+    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
-    # Ren'Py currently does not compile on Cython 3.x.
-    # See https://github.com/renpy/renpy/issues/5359
-    python3.pkgs.cython_0
-    python3.pkgs.setuptools
+    pkg-config
+    python.pkgs.cython
+    python.pkgs.setuptools
   ];
 
   buildInputs =
     [
-      SDL2
-      libpng
       ffmpeg
       freetype
-      glew
-      libGLU
-      libGL
       fribidi
-      zlib
+      glew
       harfbuzz
+      libGL
+      libGLU
+      libpng
+      SDL2
+      zlib
     ]
-    ++ (with python3.pkgs; [
-      python
-      pygame-sdl2
-      tkinter
-      future
-      six
-      pefile
-      requests
+    ++ (with python.pkgs; [
       ecdsa
+      future
+      pefile
+      pygame-sdl2
+      python
+      requests
+      six
+      tkinter
     ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" [
-    SDL2
-    SDL2.dev
-    libpng
     ffmpeg.lib
     freetype
-    glew.dev
-    libGLU
-    libGL
     fribidi
-    zlib
+    glew.dev
     harfbuzz.dev
+    libGL
+    libGLU
+    libpng
+    SDL2
+    (lib.getDev SDL2)
+    zlib
   ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./shutup-erofs-errors.patch ];
+  patches = [
+    ./shutup-erofs-errors.patch
+    ./5687.patch
+  ] ++ lib.optional withoutSteam ./noSteam.patch;
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
-    version = '${version}'
+    version = '${finalAttrs.version}'
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
@@ -100,13 +98,13 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  buildPhase = with python3.pkgs; ''
+  buildPhase = ''
     runHook preBuild
     ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
-  installPhase = with python3.pkgs; ''
+  installPhase = ''
     runHook preInstall
 
     ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
@@ -120,7 +118,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include";
+  };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Visual Novel Engine";
@@ -128,11 +134,7 @@ stdenv.mkDerivation {
     homepage = "https://renpy.org/";
     changelog = "https://renpy.org/doc/html/changelog.html";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shadowrz ];
   };
-
-  passthru = {
-    inherit base_version vc_version;
-  };
-}
+})

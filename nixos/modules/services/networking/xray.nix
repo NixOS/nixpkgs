@@ -80,9 +80,12 @@ with lib;
       description = "xray Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      script = ''
+        exec "${cfg.package}/bin/xray" -config "$CREDENTIALS_DIRECTORY/config.json"
+      '';
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";
+        LoadCredential = "config.json:${settingsFile}";
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         NoNewPrivileges = true;

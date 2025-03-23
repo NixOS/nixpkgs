@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Framework for developing console applications using Python and curses";
-    homepage = "http://github.com/outscale/npyscreen";
+    homepage = "https://github.com/outscale/npyscreen";
     changelog = "https://github.com/outscale/npyscreen/blob/${src.rev}/CHANGELOG";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nicolas-goudry ];

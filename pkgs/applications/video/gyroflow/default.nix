@@ -1,47 +1,68 @@
-{ lib, rustPlatform, fetchFromGitHub, callPackage, makeDesktopItem
-, clang, copyDesktopItems, patchelf, pkg-config, wrapQtAppsHook
-, alsa-lib, bash, ffmpeg, mdk-sdk, ocl-icd, opencv, qtbase, qtdeclarative, qtsvg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeDesktopItem,
+  clang,
+  copyDesktopItems,
+  patchelf,
+  pkg-config,
+  qt6,
+  alsa-lib,
+  bash,
+  ffmpeg,
+  mdk-sdk,
+  ocl-icd,
+  opencv,
 }:
-
+let
+  lens-profiles = fetchFromGitHub {
+    owner = "gyroflow";
+    repo = "lens_profiles";
+    tag = "v19";
+    hash = "sha256-8R2mMqKxzoa5Sfqxs8pcfwUfo1PQKSrnM+60Ri3wiXY=";
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "gyroflow";
-  version = "1.5.4-2023-12-25";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "gyroflow";
     repo = "gyroflow";
-    rev = "e0869ffe648cb3fd88d81c807b1f7fa2e18d7430";
-    hash = "sha256-KB/uoQR43im/m5uJhheAPCqUH9oIx85JaIUwW9rhAAw=";
+    tag = "v${version}";
+    hash = "sha256-Ib9GnHN23eTbd3nEwvZf3+CBSkUHycN77o3ura0Ze/0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ahrs-0.6.0" = "sha256-CxWyX8t+BjqIyNj1p1LdkCmNrtJkudmKgZPv0MVcghY=";
-      "akaze-0.7.0" = "sha256-KkGXKoVRZZ7HUTtWYBerrN36a7RqsHjYQb+bwG1JagY=";
-      "d3d12-0.7.0" = "sha256-FqAVwW2jtDE1BV31OfrCJljGhj5iD0OfN2fANQ1wasc=";
-      "fc-blackbox-0.2.0" = "sha256-gL8m9DpHJPVD8vvrmuYv+biJT4PA5LmtohJwFVO+khU=";
-      "glow-0.13.0" = "sha256-vhPWzsm7NZx9JiRZcVoUslTGySQbASRh/wNlo1nK5jg=";
-      "keep-awake-0.1.0" = "sha256-EoXhK4/Aij70f73+5NBUoCXqZISG1+n2eVavNqe8mq4=";
-      "nshare-0.9.0" = "sha256-PAV41mMLDmhkAz4+qyf+MZnYTAdMwjk83+f+RdaJji8=";
-      "qmetaobject-0.2.10" = "sha256-ldmpbOYoCOaAoipfcCSwuV+fzF9gg1PTbRz2Jm4zJvA=";
-      "qml-video-rs-0.1.0" = "sha256-rwdci0QhGYOnCf04u61xuon06p8Zm2wKCNrW/qti9+U=";
-      "rs-sync-0.1.0" = "sha256-sfym7zv5SUitopqNJ6uFP6AMzAGf4Y7U0dzXAKlvuGA=";
-      "simplelog-0.12.0" = "sha256-NvmtLbzahSw1WMS3LY+jWiX4SxfSRwidTMvICGcmDO4=";
-      "system_shutdown-4.0.1" = "sha256-arJWmEjDdaig/oAfwSolVmk9s1UovrQ5LNUgTpUvoOQ=";
-      "telemetry-parser-0.2.8" = "sha256-Nr4SWEERKEAiZppqzjn1LIuMiZ2BTQEOKOlSnLVAXAg=";
-     };
-  };
+  useFetchCargoVendor = true;
 
-  lens-profiles = callPackage ./lens-profiles.nix { };
+  cargoHash = "sha256-bqBFAobXwPC4V0OYHbwmkk7shfiFt3YMGAf7F5ybLAQ=";
 
   nativeBuildInputs = [
-    clang copyDesktopItems patchelf pkg-config rustPlatform.bindgenHook wrapQtAppsHook
+    clang
+    copyDesktopItems
+    patchelf
+    pkg-config
+    rustPlatform.bindgenHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [ alsa-lib bash ffmpeg mdk-sdk ocl-icd opencv qtbase qtdeclarative qtsvg ];
+  buildInputs = [
+    alsa-lib
+    bash
+    ffmpeg
+    mdk-sdk
+    ocl-icd
+    opencv
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+  ];
 
-  patches = [ ./no-static-zlib.patch ];
+  postPatch = ''
+    substituteInPlace build.rs \
+      --replace-fail 'println!("cargo:rustc-link-lib=static:+whole-archive=z")' ""
+  '';
 
   # qml-video-rs and gyroflow assume that all Qt headers are installed
   # in a single (qtbase) directory.  Apart form QtCore and QtGui from
@@ -52,13 +73,13 @@ rustPlatform.buildRustPackage rec {
   # Additionally gyroflow needs QtQuickControls2:
   # https://github.com/gyroflow/gyroflow/blob/v1.5.4/build.rs#L173
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${qtdeclarative}/include/QtQuick"
-    "-I${qtdeclarative}/include/QtQuick/${qtdeclarative.version}"
-    "-I${qtdeclarative}/include/QtQuick/${qtdeclarative.version}/QtQuick"
-    "-I${qtdeclarative}/include/QtQml"
-    "-I${qtdeclarative}/include/QtQml/${qtdeclarative.version}"
-    "-I${qtdeclarative}/include/QtQml/${qtdeclarative.version}/QtQml"
-    "-I${qtdeclarative}/include/QtQuickControls2"
+    "-I${qt6.qtdeclarative}/include/QtQuick"
+    "-I${qt6.qtdeclarative}/include/QtQuick/${qt6.qtdeclarative.version}"
+    "-I${qt6.qtdeclarative}/include/QtQuick/${qt6.qtdeclarative.version}/QtQuick"
+    "-I${qt6.qtdeclarative}/include/QtQml"
+    "-I${qt6.qtdeclarative}/include/QtQml/${qt6.qtdeclarative.version}"
+    "-I${qt6.qtdeclarative}/include/QtQml/${qt6.qtdeclarative.version}/QtQml"
+    "-I${qt6.qtdeclarative}/include/QtQuickControls2"
   ];
 
   # FFMPEG_DIR is used by ffmpeg-sys-next/build.rs and
@@ -100,7 +121,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem ({
       name = "gyroflow";
       desktopName = "Gyroflow";
       genericName = "Video stabilization using gyroscope data";
@@ -109,18 +130,26 @@ rustPlatform.buildRustPackage rec {
       exec = "gyroflow-open %u";
       terminal = false;
       mimeTypes = [ "application/x-gyroflow" ];
-      categories = [ "AudioVideo" "Video" "AudioVideoEditing" "Qt" ];
+      categories = [
+        "AudioVideo"
+        "Video"
+        "AudioVideoEditing"
+        "Qt"
+      ];
       startupNotify = true;
       startupWMClass = "gyroflow";
       prefersNonDefaultGPU = true;
     }))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced gyro-based video stabilization tool";
-    homepage = "https://gyroflow.xyz/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    homepage = "https://gyroflow.xyz";
+    license = with lib.licenses; [
+      gpl3Plus
+      cc0
+    ];
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
   };
 }

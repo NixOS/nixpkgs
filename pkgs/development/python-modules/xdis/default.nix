@@ -5,24 +5,29 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.0";
-  format = "setuptools";
+  version = "6.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KgKTO99T2/be1sBs5rY3Oy7/Yl9WGgdG3hqqkZ7D7ZY=";
+    tag = version;
+    hash = "sha256-fdLZg3MFMS9EIPC5EPE8DAT6K5a6l780msCfzTiZwoo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     click
     six
   ];
@@ -41,6 +46,9 @@ buildPythonPackage rec {
 
     # Doesn't run on non-2.7 but has global-level mis-import
     "test_unit/test_dis27.py"
+
+    # Has Python 2 style prints
+    "test/decompyle/test_nested_scopes.py"
   ];
 
   disabledTests = [
@@ -50,11 +58,14 @@ buildPythonPackage rec {
     "test_basic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      onny
+      melvyn2
+    ];
   };
 }

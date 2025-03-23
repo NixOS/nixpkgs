@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf mkOption types;
 
@@ -44,7 +49,10 @@ in
 
       unit = mkOption {
         description = "Celsius or Fahrenheit";
-        type = types.enum [ "C" "F" ];
+        type = types.enum [
+          "C"
+          "F"
+        ];
         default = "C";
       };
 
@@ -67,6 +75,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.hddtemp = {
       description = "HDD/SSD temperature";
+      documentation = [ "man:hddtemp(8)" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";

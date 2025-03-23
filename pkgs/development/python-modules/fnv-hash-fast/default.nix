@@ -5,45 +5,44 @@
   cython,
   poetry-core,
   setuptools,
-  wheel,
   fnvhash,
+  pytest-codspeed,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "1.2.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
-    rev = "v${version}";
-    hash = "sha256-gAHCssJC6sTR6ftkQHrtF/5Nf9dXE4ykRhVusb0Gu3I=";
+    tag = "v${version}";
+    hash = "sha256-u4DKOJcE/0bRZ+0kcdVoDx7e4HOA4VH8V0DzxQ/SZCo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=fnv_hash_fast --cov-report=term-missing:skip-covered" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ fnvhash ];
+  dependencies = [ fnvhash ];
 
   pythonImportsCheck = [ "fnv_hash_fast" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-codspeed
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Fast version of fnv1a";
     homepage = "https://github.com/bdraco/fnv-hash-fast";
-    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

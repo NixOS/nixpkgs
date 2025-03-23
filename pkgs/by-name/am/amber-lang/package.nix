@@ -4,30 +4,43 @@
   rustPlatform,
   bc,
   util-linux,
+  gnused,
   makeWrapper,
+  installShellFiles,
+  stdenv,
   runCommand,
   amber-lang,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.3.3-alpha";
+  version = "0.4.0-alpha";
 
   src = fetchFromGitHub {
-    owner = "Ph0enixKM";
-    repo = "Amber";
+    owner = "amber-lang";
+    repo = "amber";
     rev = version;
-    hash = "sha256-Al1zTwQufuVGSlttf02s5uI3cyCNDShhzMT3l9Ctv3Y=";
+    hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
 
-  cargoHash = "sha256-HbkIkCVy2YI+nP5t01frXBhlp/rCsB6DwLL53AHJ4vE=";
+  patches = [
+    # https://github.com/amber-lang/amber/pull/686
+    ./fix_gnused_detection.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \
       --replace-fail 'Command::new("/usr/bin/env")' 'Command::new("env")'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     bc
@@ -36,14 +49,27 @@ rustPlatform.buildRustPackage rec {
     util-linux
   ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
-  '';
+  checkFlags = [
+    "--skip=tests::extra::download"
+    "--skip=tests::formatter::all_exist"
+  ];
 
-  passthru.tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
-    diff -U3 --color=auto <(amber -e 'echo "Hello, World"') <(echo 'Hello, World')
-    touch $out
-  '';
+  postInstall =
+    ''
+      wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd amber \
+        --bash <($out/bin/amber completion)
+    '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
+      diff -U3 --color=auto <(amber eval 'echo "Hello, World"') <(echo 'Hello, World')
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Programming language compiled to bash";

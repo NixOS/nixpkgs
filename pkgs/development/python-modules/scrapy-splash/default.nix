@@ -1,34 +1,47 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  pytest-twisted,
+  pytestCheckHook,
   scrapy,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
-  version = "0.9.0";
-  format = "setuptools";
+  version = "0.11.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7PEwJk3AjgxGHIYH7K13dGimStAd7bJinA+BvV/NcpU=";
+  src = fetchFromGitHub {
+    owner = "scrapy-plugins";
+    repo = "scrapy-splash";
+    tag = version;
+    hash = "sha256-eOWqSCuuZtUtaEuAew4g0P67N0zClaguHn2u4ZMT3FU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     scrapy
     six
   ];
 
-  # no tests
-  doCheck = false;
   pythonImportsCheck = [ "scrapy_splash" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    hypothesis
+    pytest-twisted
+    pytestCheckHook
+  ];
+
+  meta = {
+    changelog = "https://github.com/scrapy-plugins/scrapy-splash/blob/${src.tag}/CHANGES.rst";
     description = "Scrapy+Splash for JavaScript integration";
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evanjs ];
   };
 }

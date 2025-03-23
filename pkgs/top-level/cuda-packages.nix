@@ -11,7 +11,7 @@
 #
 # To summarize:
 #
-# - `prev` should only be used to access attributes which are going to be overriden.
+# - `prev` should only be used to access attributes which are going to be overridden.
 # - `final` should only be used to access `callPackage` to build new packages.
 # - Attribute names should be computable without relying on `final`.
 #   - Extensions should take arguments to build attribute names before relying on `final`.
@@ -33,7 +33,9 @@ let
     attrsets
     customisation
     fixedPoints
+    lists
     strings
+    trivial
     versions
     ;
   # Backbone
@@ -77,9 +79,49 @@ let
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
     cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
+    cudnn-frontend = final.callPackage ../development/cuda-modules/cudnn-frontend/default.nix { };
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
+
+    tests =
+      let
+        bools = [
+          true
+          false
+        ];
+        configs = {
+          openCVFirst = bools;
+          useOpenCVDefaultCuda = bools;
+          useTorchDefaultCuda = bools;
+        };
+        builder =
+          {
+            openCVFirst,
+            useOpenCVDefaultCuda,
+            useTorchDefaultCuda,
+          }@config:
+          {
+            name = strings.concatStringsSep "-" (
+              [
+                "test"
+                (if openCVFirst then "opencv" else "torch")
+              ]
+              ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
+                "with-default-cuda"
+              ]
+              ++ [
+                "then"
+                (if openCVFirst then "torch" else "opencv")
+              ]
+              ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
+                "with-default-cuda"
+              ]
+            );
+            value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+          };
+      in
+      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
 
     writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });
@@ -106,6 +148,9 @@ let
       (callPackage ../development/cuda-modules/cutensor/extension.nix {
         inherit cudaVersion flags mkVersionedPackageName;
       })
+      (callPackage ../development/cuda-modules/cusparselt/extension.nix {
+        inherit cudaVersion flags mkVersionedPackageName;
+      })
       (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit cudaVersion flags mkVersionedPackageName;
         pname = "tensorrt";
@@ -123,4 +168,10 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages
+# We want to warn users about the upcoming deprecation of old CUDA
+# versions, without breaking Nixpkgs CI with evaluation warnings. This
+# gross hack ensures that the warning only triggers if aliases are
+# enabled, which is true by default, but not for ofborg.
+lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
+  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
+  cudaPackages

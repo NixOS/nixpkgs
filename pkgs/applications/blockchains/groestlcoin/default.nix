@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fetchpatch2
-, autoreconfHook
-, pkg-config
-, installShellFiles
-, util-linux
-, hexdump
-, autoSignDarwinBinariesHook
-, wrapQtAppsHook ? null
-, boost
-, libevent
-, miniupnpc
-, zeromq
-, zlib
-, sqlite
-, qrencode
-, qtbase ? null
-, qttools ? null
-, python3
-, withGui ? false
-, withWallet ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  installShellFiles,
+  util-linux,
+  hexdump,
+  autoSignDarwinBinariesHook,
+  wrapQtAppsHook ? null,
+  boost,
+  libevent,
+  miniupnpc,
+  zeromq,
+  zlib,
+  db53,
+  sqlite,
+  qrencode,
+  qtbase ? null,
+  qttools ? null,
+  python3,
+  withGui ? false,
+  withWallet ? true,
 }:
 
 let
@@ -33,66 +34,81 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "27.0";
+  version = "28.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "0f6vi2k5xvjrhiazfjcd4aj246dfcg51xsnqb9wdjl41cg0ckwmf";
+    sha256 = "0kl7nq62362clgzxwwd5c256xnaar4ilxcvbralazxg47zv95r11";
   };
 
-  patches = [
-    # upnp: add compatibility for miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/Groestlcoin/groestlcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
-      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
-    })
-  ];
-
-  nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ sqlite ]
-    ++ lib.optionals withGui [ qrencode qtbase qttools ];
+  buildInputs =
+    [
+      boost
+      libevent
+      miniupnpc
+      zeromq
+      zlib
+    ]
+    ++ lib.optionals withWallet [
+      db53
+      sqlite
+    ]
+    ++ lib.optionals withGui [
+      qrencode
+      qtbase
+      qttools
+    ];
 
-  postInstall = ''
-    installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
-    installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
-    installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
+  postInstall =
+    ''
+      installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
+      installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
+      installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
 
-    for file in contrib/completions/fish/groestlcoin-*.fish; do
-      installShellCompletion --fish $file
-    done
-  '' + lib.optionalString withGui ''
-    installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
+      for file in contrib/completions/fish/groestlcoin-*.fish; do
+        installShellCompletion --fish $file
+      done
+    ''
+    + lib.optionalString withGui ''
+      installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
 
-    install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
-    substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
-    install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
-  '';
+      install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
+      substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
+      install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
+    '';
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    export MACOSX_DEPLOYMENT_TARGET=10.13
-  '';
-
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--disable-bench"
-  ] ++ lib.optionals (!withWallet) [
-    "--disable-wallet"
-  ] ++ lib.optionals withGui [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+  configureFlags =
+    [
+      "--with-boost-libdir=${boost.out}/lib"
+      "--disable-bench"
+    ]
+    ++ lib.optionals (!withWallet) [
+      "--disable-wallet"
+    ]
+    ++ lib.optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   nativeCheckInputs = [ python3 ];
 
-  checkFlags = [ "LC_ALL=en_US.UTF-8" ]
+  checkFlags =
+    [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
     ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";

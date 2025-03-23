@@ -89,7 +89,7 @@ let
 
         nativeBuildInputs = [ cmake ninja pkg-config ];
         buildInputs =
-          lib.optional stdenv.isDarwin CoreFoundation ++
+          lib.optional stdenv.hostPlatform.isDarwin CoreFoundation ++
           extraCppBuildInputs;
 
         cmakeDir = "../runtime/Cpp";
@@ -108,9 +108,9 @@ let
 
 in {
   antlr4_13 = (mkAntlr {
-    version = "4.13.0";
-    sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
-    jarSha256 = "sha256-vG9KvA0iWidXASbFFAJWnwAKje2jSHtw52QoQOVw5KY=";
+    version = "4.13.2";
+    sourceSha256 = "sha256-DxxRL+FQFA+x0RudIXtLhewseU50aScHKSCDX7DE9bY=";
+    jarSha256 = "sha256-6uLfoRmmQydERnKv9j6ew1ogGA3FuAkLemq4USXfTXY=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"
@@ -153,7 +153,7 @@ in {
     version = "4.10.1";
     sourceSha256 = "sha256-Z1P81L0aPbimitzrHH/9rxsMCA6Qn3i42jFbUmVqu1E=";
     jarSha256 = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
-    extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
+    extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
     extraCppCmakeFlags = [
       "-DANTLR4_INSTALL=ON"
       "-DANTLR_BUILD_CPP_TESTS=OFF"
@@ -165,7 +165,7 @@ in {
     sourceSha256 = "1af3cfqwk7lq1b5qsh1am0922fyhy7wmlpnrqdnvch3zzza9n1qm";
     jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
     extraCppBuildInputs = [ utf8cpp ]
-      ++ lib.optional stdenv.isLinux libuuid;
+      ++ lib.optional stdenv.hostPlatform.isLinux libuuid;
     extraCppCmakeFlags = [
       "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
     ];
@@ -178,7 +178,7 @@ in {
     version = "4.8";
     sourceSha256 = "1qal3add26qxskm85nk7r758arladn5rcyjinmhlhznmpbbv9j8m";
     jarSha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
-    extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
+    extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
     extraCppCmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
   }).antlr;
 }

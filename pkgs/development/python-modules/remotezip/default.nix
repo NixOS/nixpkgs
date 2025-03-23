@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   requests,
-  tabulate,
   pytestCheckHook,
   requests-mock,
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gtsystem";
     repo = "python-remotezip";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TNEM7Dm4iH4Z/P/PAqjJppbn1CKmyi9Xpq/sU9O8uxg=";
   };
 

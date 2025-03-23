@@ -1,21 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, hicolor-icon-theme
-, pantheon
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  hicolor-icon-theme,
+  pantheon,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "marwaita-icons";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-icons";
     rev = version;
-    hash = "sha256-6NFCXj80VAoFX+i4By5IpbtJC4qL+sAzlLHUJjTQ/sI=";
+    hash = "sha256-UehujziT13kA9ltjyCvbSDTEpR8ISxoBpoLj22Zih8k=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,10 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
+
+  # FIXME: https://github.com/darkomarko42/Marwaita-Icons/issues/3
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall

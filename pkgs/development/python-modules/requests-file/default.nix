@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dashea";
     repo = "requests-file";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JtdtE44yiw2mLMZ0bJv0QiGWb7f8ywPLF7+BUufh/g4=";
   };
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dashea/requests-file";
     changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

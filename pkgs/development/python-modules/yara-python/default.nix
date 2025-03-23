@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P+OQljzp+ZwVOXAgJqK7GNrqBep40MyVtMKDtT4ZUr8=";
   };
 

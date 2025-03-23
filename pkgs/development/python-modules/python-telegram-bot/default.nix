@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.4";
+  version = "21.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,22 +32,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5raEejd8WH9JrFvMIy2AuMGK9O/FJ2rq9PeVqK+IMOU=";
+    tag = "v${version}";
+    hash = "sha256-ro3v7JXTxhxmxS0/TXTgV6ZixR5UaJ4zQ+UCt2oel9w=";
   };
 
-  build-system = [ setuptools hatchling ];
-
-  dependencies = [
-    httpx
+  build-system = [
+    setuptools
+    hatchling
   ];
+
+  dependencies = [ httpx ];
 
   optional-dependencies = rec {
     all = ext ++ http2 ++ passport ++ socks;
     callback-data = [ cachetools ];
     ext = callback-data ++ job-queue ++ rate-limiter ++ webhooks;
     http2 = httpx.optional-dependencies.http2;
-    job-queue = [ apscheduler pytz ];
+    job-queue = [
+      apscheduler
+      pytz
+    ];
     passport = [ cryptography ] ++ lib.optionals (pythonAtLeast "3.13") [ cffi ];
     rate-limiter = [ aiolimiter ];
     socks = httpx.optional-dependencies.socks;
@@ -88,6 +92,7 @@ buildPythonPackage rec {
     "TestForum"
     "TestGame"
     "TestGet"
+    "TestGiftsWithRequest"
     "TestHTTP"
     "TestInline"
     "TestInput"
@@ -129,7 +134,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
-    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/${src.tag}/CHANGES.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
       veprbl

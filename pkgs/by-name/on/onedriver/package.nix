@@ -1,14 +1,15 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, pkg-config
-, webkitgtk_4_1
-, glib
-, fuse
-, installShellFiles
-, wrapGAppsHook3
-, glib-networking
-, wrapperDir ? "/run/wrappers/bin"
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  webkitgtk_4_1,
+  glib,
+  fuse,
+  installShellFiles,
+  wrapGAppsHook3,
+  glib-networking,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 let
   pname = "onedriver";
@@ -25,8 +26,17 @@ buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook3 ];
-  buildInputs = [ webkitgtk_4_1 glib fuse glib-networking ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    webkitgtk_4_1
+    glib
+    fuse
+    glib-networking
+  ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
 

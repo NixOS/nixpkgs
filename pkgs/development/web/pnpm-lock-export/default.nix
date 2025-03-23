@@ -1,5 +1,9 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
-buildNpmPackage rec {
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
+buildNpmPackage {
   pname = "pnpm-lock-export";
   version = "unstable-2023-07-31";
 

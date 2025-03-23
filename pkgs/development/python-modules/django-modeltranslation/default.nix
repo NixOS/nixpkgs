@@ -6,13 +6,14 @@
   django,
   django-stubs,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-django,
   parameterized,
 }:
 let
   # 0.18.12 was yanked from PyPI, it refers to this issue:
   # https://github.com/deschler/django-modeltranslation/issues/701
-  version = "0.19.5";
+  version = "0.19.12";
 in
 buildPythonPackage {
   pname = "django-modeltranslation";
@@ -21,17 +22,9 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wIvX9m3AGa6rLAWI56B7sEyj04g8cPIF37JWgVzbtig=";
+    tag = "v${version}";
+    hash = "sha256-j5IKAjGes1EUNX9XE1RAPkGJGviABa4VFl789Mj2dyc=";
   };
-
-  # Remove all references to pytest-cov
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--no-cov-on-fail" "" \
-      --replace "--cov-report=\"\"" "" \
-      --replace "--cov modeltranslation" ""
-  '';
 
   disabled = pythonOlder "3.6";
 
@@ -40,6 +33,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     django-stubs
     pytestCheckHook
+    pytest-cov-stub
     pytest-django
     parameterized
   ];

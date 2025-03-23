@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.39.1";
+  version = "0.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "snitun";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jewDQqvLUh/066BSEADXkCvjLFRnodKtUPKfvi0KUpI=";
+    tag = version;
+    hash = "sha256-wit0GVuWFMl1u+VC7Aw+dPcvqLGyviSz/DVUKXvSvAs=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
       # AssertionError: Expected 'fileno' to not have been called. Called 1 times.
       "test_client_stop_no_wait"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
       # port binding conflicts
       "test_snitun_single_runner_timeout"
@@ -78,7 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SNI proxy with TCP multiplexer";
-    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
     homepage = "https://github.com/nabucasa/snitun";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];

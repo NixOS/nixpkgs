@@ -11,8 +11,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "qwerty-fr";
     repo = "qwerty-fr";
-    rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-TD67wKdaPaXzJzjKFCfRZl3WflUfdnUSQl/fnjr9TF8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TD67wKdaPaXzJzjKFCfRZl3WflUfdnUSQl/fnjr9TF8=";
   };
 
   installPhase = ''

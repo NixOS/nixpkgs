@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # 15284.1 (build number)
   # dcd0176 (commit hash)
   # 20240504 (pub date)
-  version = "1.5284-15284.1-dcd0176-20240504";
+  version = "1.5310-15310.1-5f6bcc5-20240930";
 
   src = fetchzip {
     url =
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         commitHash = lib.elemAt (lib.splitString "-" finalAttrs.version) 2;
       in
       "https://updates.rewind.ai/builds/main/b${buildNumber}-main-${commitHash}.zip";
-    hash = "sha256-Y7iAYHH/msZoXFzAZHJb6YoDz5fwMPHJx1kg7TqP5Gw=";
+    hash = "sha256-uNqblEOezCj1JanDl6MZZO3GLX5jgWh19VeMcmwZvZg=";
   };
 
   installPhase = ''
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Example response to use when modifing the script: https://pastebin.com/raw/90qU3n6H
+  # Example response to use when modifying the script: https://pastebin.com/raw/90qU3n6H
   # There is a real harsh limit on update checks, so DO NOT send any unnecessary update checks
   # Wait at least 3 days since the last pub_date (you will find the date at the end of the version number)
   # Example: 20240504 would be 2024/05/04, and that would mean that we want to check no earlier than on 2024/05/07 for any updates

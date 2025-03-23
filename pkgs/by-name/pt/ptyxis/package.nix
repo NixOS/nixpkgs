@@ -14,27 +14,17 @@
   pcre2,
 }:
 
-let
-  version = "46.5";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ptyxis";
+  version = "47.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
-    rev = version;
-    hash = "sha256-PHjQJEM0W26ZpzW//+gsYCCq0lcikWh0707kDXxryAo=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZZwrqX7GkqMVtLhyzJvThzqmxg/PRwBxSshSv/Z7uKo=";
   };
-
-  vte-gtk4-patched = vte-gtk4.overrideAttrs (prev: {
-    patches = (prev.patches or [ ]) ++ [
-      "${src}/build-aux/0001-a11y-implement-GtkAccessibleText.patch"
-      "${src}/build-aux/0001-add-notification-and-shell-precmd-preexec.patch"
-    ];
-  });
-in
-stdenv.mkDerivation {
-  pname = "ptyxis";
-  inherit version src;
 
   nativeBuildInputs = [
     meson
@@ -47,14 +37,10 @@ stdenv.mkDerivation {
   buildInputs = [
     libadwaita
     json-glib
-    vte-gtk4-patched
+    vte-gtk4
     libportal-gtk4
     pcre2
   ];
-
-  passthru = {
-    inherit vte-gtk4-patched;
-  };
 
   meta = {
     description = "Terminal for GNOME with first-class support for containers";
@@ -64,4 +50,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

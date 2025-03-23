@@ -1,4 +1,11 @@
-{ mkDerivation, lib, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
+{
+  mkDerivation,
+  lib,
+  graphicsmagick,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
 }:
 
 mkDerivation rec {
@@ -12,8 +19,14 @@ mkDerivation rec {
     sha256 = "sha256-0eAuof/FBro2IKxkJ6JHauW6C96VTPxy7QtfPVzPFi4=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase graphicsmagick ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    graphicsmagick
+  ];
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 

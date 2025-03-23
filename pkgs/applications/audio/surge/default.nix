@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, git
-, pkg-config
-, python3
-, cairo
-, libsndfile
-, libxcb
-, libxkbcommon
-, xcbutil
-, xcbutilcursor
-, xcbutilkeysyms
-, zenity
-, curl
-, rsync
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  git,
+  pkg-config,
+  python3,
+  cairo,
+  libsndfile,
+  libxcb,
+  libxkbcommon,
+  xcbutil,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  zenity,
+  curl,
+  rsync,
 }:
 
 stdenv.mkDerivation rec {
@@ -78,7 +79,6 @@ stdenv.mkDerivation rec {
     cp -r $extraContent/Skins/ resources/data/skins
   '';
 
-
   installPhase = ''
     cd ..
     cmake --build build --config Release --target install-everything-global
@@ -100,6 +100,9 @@ stdenv.mkDerivation rec {
     homepage = "https://surge-synthesizer.github.io";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon orivej ];
+    maintainers = with maintainers; [
+      magnetophon
+      orivej
+    ];
   };
 }

@@ -1,4 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, libarchive, xz, zlib, bzip2, meson, pkg-config, ninja }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  libarchive,
+  xz,
+  zlib,
+  bzip2,
+  meson,
+  pkg-config,
+  ninja,
+}:
 
 mkDerivation rec {
   pname = "libarchive-qt";

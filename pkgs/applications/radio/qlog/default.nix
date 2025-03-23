@@ -1,44 +1,47 @@
-{ fetchFromGitHub
-, qtbase
-, stdenv
-, lib
-, wrapQtAppsHook
-, qmake
-, qtcharts
-, qtwebengine
-, qtserialport
-, qtwebchannel
-, hamlib
-, qtkeychain
-, pkg-config
-, cups
+{
+  fetchFromGitHub,
+  qtbase,
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+  qmake,
+  qtcharts,
+  qtwebengine,
+  qtserialport,
+  qtwebchannel,
+  hamlib,
+  qtkeychain,
+  pkg-config,
+  cups,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.37.2";
+  version = "0.42.2";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     rev = "v${version}";
-    hash = "sha256-cphbM9dl+Ls2i3H5QjOugW0nXqa9bp5LpcnE9ACjqWM=";
+    hash = "sha256-DWUfP0C48JMvUashqCaDfnsn1IxzhtOzmSG5Fh+sL/w=";
     fetchSubmodules = true;
   };
 
   env.NIX_LDFLAGS = "-lhamlib";
 
-  buildInputs = [
-    qtbase
-    qtcharts
-    qtwebengine
-    qtserialport
-    qtwebchannel
-    hamlib
-    qtkeychain
-  ] ++ (lib.optionals stdenv.isDarwin [
-    cups
-  ]);
+  buildInputs =
+    [
+      qtbase
+      qtcharts
+      qtwebengine
+      qtserialport
+      qtwebchannel
+      hamlib
+      qtkeychain
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+      cups
+    ]);
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -51,7 +54,10 @@ stdenv.mkDerivation rec {
     mainProgram = "qlog";
     license = with licenses; [ gpl3Only ];
     homepage = "https://github.com/foldynl/QLog";
-    maintainers = with maintainers; [ oliver-koss mkg20001 ];
+    maintainers = with maintainers; [
+      oliver-koss
+      mkg20001
+    ];
     platforms = with platforms; unix;
   };
 }

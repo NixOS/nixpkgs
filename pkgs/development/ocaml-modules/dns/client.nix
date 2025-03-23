@@ -1,12 +1,16 @@
-{ buildDunePackage, dns
-, mirage-crypto-rng, mtime, randomconv
-, domain-name, alcotest
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto-rng,
+  mtime,
+  randomconv,
+  domain-name,
+  alcotest,
 }:
 
 buildDunePackage {
   pname = "dns-client";
   inherit (dns) src version;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns

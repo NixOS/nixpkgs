@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, vala
-, wrapGAppsHook4
-, desktop-file-utils
-, sqlite
-, libcanberra
-, libsoup_3
-, libgee
-, json-glib
-, qrencode
-, curl
-, libadwaita
-, aria2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  vala,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  sqlite,
+  libcanberra,
+  libsoup_3,
+  libgee,
+  json-glib,
+  qrencode,
+  curl,
+  libadwaita,
+  aria2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gabutdm";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = "gabutdm";
     rev = version;
-    hash = "sha256-0PBNKacgKT5xcd0mnn0y9ltmxEAbP+S7MLtt/Zau8vs=";
+    hash = "sha256-FKOgoJ0QreYk3PgvUoQMczC3tXkthw86/Y3pnm6tTQk=";
   };
 
   nativeBuildInputs = [

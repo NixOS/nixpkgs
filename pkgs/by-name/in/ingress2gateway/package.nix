@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "ingress2gateway";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+ImMpO1qRkXYLy+MDloKSoDCmMmJSBorgDjzaeSCBdY=";
+    hash = "sha256-0w2ZM1g2rr46bN8BNgrkmb3tOQw0FZTMLp/koW01c5I=";
   };
 
-  vendorHash = "sha256-IEU9cfYCkrQagxzJT6jPz2nRCz1BAaiGvkEPhNRQr4E=";
+  vendorHash = "sha256-7b247/9/9kdNIYuaLvKIv3RK/nzQzruMKZeheTag2sA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Convert Ingress resources to Gateway API resources";

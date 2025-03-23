@@ -2,20 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+  nix-update-script,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   huggingface-hub,
   langchain-core,
   sentence-transformers,
   tokenizers,
   transformers,
+
+  # tests
+  freezegun,
+  httpx,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
@@ -24,21 +31,25 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.0.3";
+  version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-huggingface==${version}";
-    hash = "sha256-4k3C6T2N7SBM/wP8KAwMQqt9DkXDdYNt2i/OkZilWw0=";
+    tag = "langchain-huggingface==${version}";
+    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     huggingface-hub
@@ -50,6 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -66,8 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-huggingface==([0-9.]+)$"
+    ];
   };
 
   meta = {
@@ -75,6 +90,9 @@ buildPythonPackage rec {
     description = "An integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

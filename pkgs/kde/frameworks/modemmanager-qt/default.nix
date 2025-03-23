@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "modemmanager-qt";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraPropagatedBuildInputs = [modemmanager];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraPropagatedBuildInputs = [ modemmanager ];
 }

@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, cacert }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  cacert,
+}:
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";

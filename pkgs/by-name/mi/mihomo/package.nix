@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "mihomo";
-  version = "1.18.7";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "mihomo";
     rev = "v${version}";
-    hash = "sha256-+9tVkMOOGwdmOXhoXanOpp8/7TEGGLR2aTeOsw+FzKc=";
+    hash = "sha256-NzxH6rgr85oHmkMxh3rLbYXJoQKOsngeTazAV3SvRCg=";
   };
 
-  vendorHash = "sha256-wbJgJY1EH3ajmoWXWRCSpD2C0eknajkwD1DaQz2EsUU=";
+  vendorHash = "sha256-dQNdOTFcfk53Snu01XLGB3PTiU1Ex/QQvykfopIdk2M=";
 
   excludedPackages = [ "./test" ];
 
@@ -31,7 +32,6 @@ buildGoModule rec {
 
   # network required
   doCheck = false;
-
 
   passthru.tests = {
     mihomo = nixosTests.mihomo;

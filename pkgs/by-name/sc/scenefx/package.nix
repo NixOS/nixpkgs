@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots,
+  wlroots_0_18,
   scdoc,
   pkg-config,
   wayland,
@@ -13,23 +13,26 @@
   pixman,
   wayland-protocols,
   libGL,
-  mesa,
+  libgbm,
   validatePkgConfig,
   testers,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scenefx";
-  version = "0.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vBmunqXwGbMNiGRd372TdMU4siWhIVYn5RVYne9C7uQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=";
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -37,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     validatePkgConfig
+    wayland-scanner
   ];
 
   buildInputs = [
     libdrm
     libGL
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_18
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -56,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Drop-in replacement for the wlroots scene API that allows wayland compositors to render surfaces with eye-candy effects";
     homepage = "https://github.com/wlrfx/scenefx";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "scenefx";
     pkgConfigModules = [ "scenefx" ];
     platforms = lib.platforms.all;

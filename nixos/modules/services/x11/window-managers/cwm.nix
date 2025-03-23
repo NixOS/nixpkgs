@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,14 +15,13 @@ in
     services.xserver.windowManager.cwm.enable = mkEnableOption "cwm";
   };
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "cwm";
-        start =
-          ''
-            cwm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "cwm";
+      start = ''
+        cwm &
+        waitPID=$!
+      '';
+    };
     environment.systemPackages = [ pkgs.cwm ];
   };
 }

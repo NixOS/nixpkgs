@@ -15,7 +15,12 @@ let
     mkOption
     ;
 
-  inherit (lib.types) enum port str;
+  inherit (lib.types)
+    listOf
+    enum
+    port
+    str
+    ;
 
   inherit (utils) escapeSystemdExecArgs;
 
@@ -41,6 +46,20 @@ in
       description = "Internal port of the signal server.";
     };
 
+    metricsPort = mkOption {
+      type = port;
+      default = 9091;
+      description = "Internal port of the metrics server.";
+    };
+
+    extraOptions = mkOption {
+      type = listOf str;
+      default = [ ];
+      description = ''
+        Additional options given to netbird-signal as commandline arguments.
+      '';
+    };
+
     logLevel = mkOption {
       type = enum [
         "ERROR"
@@ -54,24 +73,38 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = cfg.port != cfg.metricsPort;
+        message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
+      }
+    ];
+
     systemd.services.netbird-signal = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeSystemdExecArgs [
-          (getExe' cfg.package "netbird-signal")
-          "run"
-          # Port to listen on
-          "--port"
-          cfg.port
-          # Log to stdout
-          "--log-file"
-          "console"
-          # Log level
-          "--log-level"
-          cfg.logLevel
-        ];
+        ExecStart = escapeSystemdExecArgs (
+          [
+            (getExe' cfg.package "netbird-signal")
+            "run"
+            # Port to listen on
+            "--port"
+            cfg.port
+            # Port the internal prometheus server listens on
+            "--metrics-port"
+            cfg.metricsPort
+            # Log to stdout
+            "--log-file"
+            "console"
+            # Log level
+            "--log-level"
+            cfg.logLevel
+          ]
+          ++ cfg.extraOptions
+        );
 
         Restart = "always";
         RuntimeDirectory = "netbird-mgmt";

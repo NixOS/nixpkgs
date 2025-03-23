@@ -12,19 +12,22 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.26.1";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NeUIU+vXML9lP+JL7MJyGNxZB0ggAngOpf8mMgOE+r8=";
+    hash = "sha256-U1C0vwHcUfjBPGLcmmWFqaKmIMPlV/FumIbFJ6JDBFc=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   patches = [ ./assets-path.diff ];
 

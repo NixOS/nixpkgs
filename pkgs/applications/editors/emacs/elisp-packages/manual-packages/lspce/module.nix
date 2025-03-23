@@ -2,39 +2,39 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenv,
 }:
 
+let
+  libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+in
 rustPlatform.buildRustPackage {
   pname = "lspce-module";
-  version = "1.1.0-unstable-2024-07-14";
+  version = "1.1.0-unstable-2024-12-15";
 
   src = fetchFromGitHub {
     owner = "zbelial";
     repo = "lspce";
-    rev = "fd320476df89cfd5d10f1b70303c891d3b1e3c81";
-    hash = "sha256-KnERYq/CvJhJIdQkpH/m82t9KFMapPl+CyZkYyujslU=";
+    rev = "45f84ce102bb34e44c39e5f437107ba786973d6f";
+    hash = "sha256-DiqC7z1AQbXsSXc77AGRilWi3HfEg0YoHrXu54O3Clo=";
   };
 
-  cargoHash = "sha256-I2OobRu1hc6xc4bRrIO1FImPYBbFy1jXPcTsivbbskk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ygFXKniCCOyXndPOTKoRbd4W1OR2CSA2jr7yxpwkw28=";
 
   checkFlags = [
     # flaky test
     "--skip=msg::tests::serialize_request_with_null_params"
   ];
 
-  # rename module without changing either suffix or location
-  # use for loop because there seems to be two modules on darwin systems
-  # https://github.com/zbelial/lspce/issues/7#issue-1783708570
   postInstall = ''
-    for f in $out/lib/*; do
-      mv --verbose $f $out/lib/lspce-module.''${f##*.}
-    done
+    mv --verbose $out/lib/liblspce_module${libExt} $out/lib/lspce-module${libExt}
   '';
 
   meta = {
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using Rust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

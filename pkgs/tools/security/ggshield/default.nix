@@ -7,20 +7,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.29.0";
+  version = "1.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-x37FRSjhqV7LxD8VFSmVjg/FPlxsa4NEX6y7OEAniF4=";
+    tag = "v${version}";
+    hash = "sha256-5Fh0wLsI3syfrk/TE5P08gsmMdZ427agQ2/yilW0Sx8=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
-
+  build-system = with python3.pkgs; [ pdm-backend ];
 
   dependencies = with python3.pkgs; [
     appdirs
@@ -44,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ (with python3.pkgs; [
       jsonschema
       pyfakefs
+      pytest-factoryboy
       pytest-mock
       pytest-voluptuous
       pytestCheckHook
@@ -57,9 +57,8 @@ python3.pkgs.buildPythonApplication rec {
     # Don't run functional tests
     "tests/functional/"
     "tests/unit/cmd/honeytoken"
-    "tests/unit/cmd/iac"
-    "tests/unit/cmd/sca/"
     "tests/unit/cmd/scan/"
+    "tests/test_factories.py"
   ];
 
   disabledTests = [
@@ -70,10 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
     # Encoding issues
+    "test_create_files_from_paths"
     "test_file_decode_content"
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"
     "test_generate_files_from_paths"
+    # Nixpkgs issue
+    "test_get_file_sha_in_ref"
   ];
 
   meta = with lib; {

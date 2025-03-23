@@ -2,61 +2,53 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # dependencies
   numpy,
   lightning-utilities,
-  cloudpickle,
-  scikit-learn,
-  scikit-image,
   packaging,
-  pretty-errors,
-  psutil,
-  py-deprecate,
+
+  # buildInputs
   torch,
+
+  # tests
   pytestCheckHook,
-  torchmetrics,
-  pytorch-lightning,
   pytest-doctestplus,
   pytest-xdist,
+  pytorch-lightning,
+  scikit-image,
+
+  # passthru
+  torchmetrics,
 }:
 
-let
+buildPythonPackage rec {
   pname = "torchmetrics";
-  version = "1.4.0.post0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tQqlLfdk8rSJqwR3rC7kqnM+pLFYZSPHfI7RmIi2Iq4=";
+    tag = "v${version}";
+    hash = "sha256-OrNYkvaTU1Zm1634eaLQqESkmLmPGgIBN2mAd1xmMP0=";
   };
 
   dependencies = [
     numpy
     lightning-utilities
     packaging
-    pretty-errors
-    py-deprecate
   ];
 
   # Let the user bring their own instance
   buildInputs = [ torch ];
 
   nativeCheckInputs = [
-    pytorch-lightning
-    scikit-learn
-    scikit-image
-    cloudpickle
-    psutil
     pytestCheckHook
     pytest-doctestplus
     pytest-xdist
+    pytorch-lightning
+    scikit-image
   ];
 
   # A cyclic dependency in: integrations/test_lightning.py
@@ -70,15 +62,19 @@ buildPythonPackage {
     dontInstall = true;
   });
 
-  disabledTests = [
-    # `IndexError: list index out of range`
-    "test_metric_lightning_log"
-  ];
-
   disabledTestPaths = [
     # These require too many "leftpad-level" dependencies
     # Also too cross-dependent
     "tests/unittests"
+
+    # AttributeError: partially initialized module 'pesq' has no attribute 'pesq' (most likely due to a circular import)
+    "examples/audio/pesq.py"
+
+    # Require internet access
+    "examples/text/bertscore.py"
+    "examples/image/clip_score.py"
+    "examples/text/perplexity.py"
+    "examples/text/rouge.py"
 
     # A trillion import path mismatch errors
     "src/torchmetrics"
@@ -86,11 +82,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torchmetrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
     changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

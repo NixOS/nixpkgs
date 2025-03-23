@@ -1,32 +1,34 @@
-{ lib
-, SDL2
-, alsa-lib
-, autoconf-archive
-, autoreconfHook
-, fetchFromGitHub
-, fltk
-, libGL
-, libGLU
-, libao
-, libarchive
-, libepoxy
-, makeWrapper
-, pkg-config
-, stdenv
-, unzip
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  SDL2,
+  alsa-lib,
+  autoconf-archive,
+  autoreconfHook,
+  fetchFromGitHub,
+  fltk,
+  libGL,
+  libGLU,
+  libao,
+  libarchive,
+  libepoxy,
+  makeWrapper,
+  pkg-config,
+  libsamplerate,
+  stdenv,
+  unzip,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nestopia";
-  version = "1.52.1";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "0ldsk00l";
     repo = "nestopia";
     rev = finalAttrs.version;
-    hash = "sha256-r8Z0Ejf5vWcdvxkUkUKJtipQIRoiwoRj0Bx06Gnxd08=";
+    hash = "sha256-C2uiC8zlleXQlThrRETJa9vu++mJy1ySJKAkgu5zuxc=";
   };
 
   buildInputs = [
@@ -40,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libao
     xdg-utils
+    libsamplerate
   ];
 
   nativeBuildInputs = [
@@ -60,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-     for f in $out/bin/*; do
-       wrapProgram $f \
-         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-     done
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   meta = {
@@ -72,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/0ldsk00l/nestopia/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "nestopia";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

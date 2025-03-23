@@ -1,25 +1,34 @@
 {
   lib,
-  mkYarnPackage,
+  stdenv,
   fetchYarnDeps,
   fetchFromGitHub,
-  nix-update-script
-}: mkYarnPackage rec {
+  yarnConfigHook,
+  npmHooks,
+  nodejs,
+  nix-update-script,
+}:
+stdenv.mkDerivation rec {
   pname = "dotenv-cli";
-  version = "7.4.3";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "entropitor";
     repo = "dotenv-cli";
     rev = "v${version}";
-    hash = "sha256-kR9LSHvbvKLuJBGrsmYMeqF3s8SF+/99OeNlKp9azI8=";
+    hash = "sha256-cqJGw6z0m1ImFEmG2jfcYjaKVhrGyM4hbOAHC7xNAFY=";
   };
 
-  packageJSON = ./package.json;
-  offlineCache = fetchYarnDeps {
+  yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-Sx5DHUAXquqMqJgvhvHcRPqkfWN49+6icUQIos6OHCg=";
+    hash = "sha256-/w9MZ+hNEwB41VwPSYEY6V0uWmZ4Tsev3h2fa/REm2E=";
   };
+
+  nativeBuildInputs = [
+    yarnConfigHook
+    npmHooks.npmInstallHook
+    nodejs
+  ];
 
   passthru.updateScript = nix-update-script { };
 

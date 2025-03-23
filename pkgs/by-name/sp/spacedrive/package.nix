@@ -10,29 +10,29 @@
   gdk-pixbuf,
   glib,
   gst_all_1,
-  libsoup,
+  libsoup_3,
   webkitgtk_4_1,
   xdotool,
 }:
 
 let
   pname = "spacedrive";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-          hash = "sha256-9E7h03zJtH8b6khDcbBsB46iVWwl48s+GJuBMOmEre4=";
+          hash = "sha256-W0nFNmBgrypTj1Y6r6vstdL0UUaP9jTOH5RgAirwxsY=";
         };
         x86_64-darwin = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-          hash = "sha256-h+B7tc6jXJUFNEMhG6ZNch+grtgUeAzfa37BDoZ6M8Q=";
+          hash = "sha256-iX7aUs2k1fjOoDxkgXbePEYXYKFK3rGFlN9b0+gz378=";
         };
         x86_64-linux = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
-          hash = "sha256-E1mOODG4YzBc0TPZJmKgrt/c5hp5LwzLaYPl+J5dnkg=";
+          hash = "sha256-SbuL96xNEOPZ3Z5jd0gfJtNkUoEjO4W+P7K9mvyNmHA=";
         };
       }
       .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
@@ -59,7 +59,7 @@ let
 
   passthru.updateScript = nix-update-script { };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
     inherit
       pname
@@ -79,7 +79,7 @@ if stdenv.isDarwin then
       mkdir -p "$out/Applications/Spacedrive.app"
       cp -r . "$out/Applications/Spacedrive.app"
       mkdir -p "$out/bin"
-      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/Spacedrive" "$out/bin/spacedrive"
+      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/sd-desktop" "$out/bin/spacedrive"
 
       runHook postInstall
     '';
@@ -106,7 +106,7 @@ else
     buildInputs = [
       xdotool
       glib
-      libsoup
+      libsoup_3
       webkitgtk_4_1
       gdk-pixbuf
       gst_all_1.gst-plugins-ugly
@@ -114,14 +114,6 @@ else
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
     ];
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb -x $src .
-
-      runHook postUnpack
-    '';
 
     installPhase = ''
       runHook preInstall

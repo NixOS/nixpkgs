@@ -1,22 +1,26 @@
 {
   lib,
-  async-timeout,
-  bash,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  langchain,
+  nix-update-script,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
   langchain-core,
   openai,
   tiktoken,
+
+  # tests
+  freezegun,
+  langchain-tests,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
+  pytestCheckHook,
   pytest-mock,
   pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
@@ -25,32 +29,32 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.17";
+  version = "0.3.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-ELD1KXCVx3SmiJodagtOHgBGKdjRWiRVCCNYcL63eCY=";
+    tag = "langchain-openai==${version}";
+    hash = "sha256-ooqIUHel/tAI0jNI/j7OXD9ytAH3pXQ3QN5YMhFt2ac=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
   preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
     substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../../standard-tests\"" "path = \"./langchain_standard_tests\"" \
       --replace-fail "--cov=langchain_openai" ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
-    langchain
     langchain-core
     openai
     tiktoken
@@ -58,12 +62,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain-tests
     lark
     pandas
     pytest-asyncio
+    pytestCheckHook
     pytest-mock
     pytest-socket
-    pytestCheckHook
     requests-mock
     responses
     syrupy
@@ -74,23 +79,28 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests require network access
+    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_get_token_ids"
-    "test_azure_openai_secrets"
     "test_azure_openai_api_key_is_secret_string"
-    "test_get_num_tokens_from_messages"
     "test_azure_openai_api_key_masked_when_passed_from_env"
     "test_azure_openai_api_key_masked_when_passed_via_constructor"
+    "test_azure_openai_secrets"
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
-    "test_openai_get_num_tokens"
     "test_chat_openai_get_num_tokens"
+    "test_get_num_tokens_from_messages"
+    "test_get_token_ids"
+    "test_init_o1"
+    "test_openai_get_num_tokens"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-openai==([0-9.]+)$"
+    ];
   };
 
   meta = {
@@ -98,6 +108,9 @@ buildPythonPackage rec {
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

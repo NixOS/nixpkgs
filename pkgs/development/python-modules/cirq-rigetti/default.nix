@@ -1,78 +1,32 @@
 {
   buildPythonPackage,
   cirq-core,
-  lib,
-  pytestCheckHook,
-  attrs,
-  certifi,
-  h11,
-  httpcore,
-  idna,
-  httpx,
-  iso8601,
-  pydantic,
-  pyjwt,
+  setuptools,
   pyquil,
-  python-dateutil,
-  pythonOlder,
-  qcs-api-client,
-  retrying,
-  rfc3339,
-  rfc3986,
-  six,
-  sniffio,
-  toml,
+  qcs-sdk-python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-rigetti";
-  format = "setuptools";
+  pyproject = true;
   inherit (cirq-core) version src;
-
-  disabled = pythonOlder "3.7";
 
   sourceRoot = "${src.name}/${pname}";
 
-  pythonRelaxDeps = [
-    "attrs"
-    "certifi"
-    "h11"
-    "httpcore"
-    "httpx"
-    "idna"
-    "iso8601"
-    "pydantic"
-    "pyjwt"
-    "pyquil"
-    "qcs-api-client"
-    "rfc3986"
-  ];
+  pythonRelaxDeps = [ "pyquil" ];
 
   postPatch = ''
     # Remove outdated test
     rm cirq_rigetti/service_test.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cirq-core
-    attrs
-    certifi
-    h11
-    httpcore
-    httpx
-    idna
-    iso8601
-    pydantic
-    pyjwt
     pyquil
-    python-dateutil
-    qcs-api-client
-    retrying
-    rfc3339
-    rfc3986
-    six
-    sniffio
-    toml
+    qcs-sdk-python
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -85,8 +39,9 @@ buildPythonPackage rec {
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
 
-  meta = cirq-core.meta // {
-    # ModuleNotFoundError: No module named 'pyquil.parser'
-    broken = lib.versionAtLeast pyquil.version "4";
+  meta = {
+    inherit (cirq-core.meta) changelog license maintainers;
+    description = "Cirq package to simulate and connect to Rigetti quantum computers and Quil QVM";
+    homepage = "https://github.com/quantumlib/Cirq/tree/main/cirq-rigetti";
   };
 }

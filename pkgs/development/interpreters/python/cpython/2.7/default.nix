@@ -8,10 +8,10 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, libX11 ? null, x11Support ? false
+, tcl ? null, tk ? null, tclPackages, libX11 ? null, x11Support ? false
 , zlib
 , self
-, configd, coreutils
+, coreutils
 , autoreconfHook
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
@@ -137,14 +137,10 @@ let
         revert = true;
         hash = "sha256-Lp5fGlcfJJ6p6vKmcLckJiAA2AZz4prjFE0aMEJxotw=";
       })
-    ] ++ lib.optionals (x11Support && stdenv.isDarwin) [
+    ] ++ lib.optionals (x11Support && stdenv.hostPlatform.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
 
-    ] ++ lib.optionals stdenv.isDarwin [
-      # Fix darwin build https://bugs.python.org/issue34027
-      ../3.7/darwin-libutil.patch
-
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
       # ldconfig doesn't work on NixOS), and don't use
@@ -188,7 +184,7 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
         --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
@@ -205,10 +201,10 @@ let
     "--enable-unicode=ucs${toString ucsEncoding}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "ac_cv_func_bind_textdomain_codeset=yes"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-toolbox-glue"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "PYTHON_FOR_BUILD=${lib.getBin buildPackages.python}/bin/python"
+    "PYTHON_FOR_BUILD=${lib.getBin buildPackages.python27}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
     "ac_cv_little_endian_double=yes"
@@ -239,12 +235,11 @@ let
   buildInputs =
     lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
-    ++ lib.optionals x11Support [ tcl tk libX11 ]
-    ++ lib.optional (stdenv.isDarwin && configd != null) configd;
+    ++ lib.optionals x11Support [ tcl tk libX11 ];
   nativeBuildInputs =
     [ autoreconfHook ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-      [ buildPackages.stdenv.cc buildPackages.python ];
+      [ buildPackages.stdenv.cc buildPackages.python27 ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" paths;
@@ -264,7 +259,7 @@ in with passthru; stdenv.mkDerivation ({
 
     inherit src patches buildInputs nativeBuildInputs preConfigure configureFlags;
 
-    LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+    LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
@@ -273,8 +268,8 @@ in with passthru; stdenv.mkDerivation ({
 
     setupHook = python-setup-hook sitePackages;
 
-    postPatch = lib.optionalString (x11Support && (tix != null)) ''
-          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    postPatch = lib.optionalString (x11Support && ((tclPackages.tix or null) != null)) ''
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
     '';
 
     postInstall =

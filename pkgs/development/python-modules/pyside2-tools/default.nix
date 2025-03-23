@@ -5,6 +5,7 @@
   stdenv,
   cmake,
   qt5,
+  distutils,
   shiboken2,
   pyside2,
 }:
@@ -27,6 +28,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    distutils
     wrapPython
   ];
   propagatedBuildInputs = [
@@ -62,6 +64,6 @@ stdenv.mkDerivation {
     description = "PySide2 development tools";
     license = licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

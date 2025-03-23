@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-xray-sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rWP0yQ+Ril0UByOCWJKcL3mD7TvzK8Ddq9JlFIRBFU4=";
   };
 
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/aws-xray-sdk-python";
     changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

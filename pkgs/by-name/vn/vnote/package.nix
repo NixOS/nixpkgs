@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vnote";
-  version = "3.18.1";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-IONa9oLRm3IZsjLScZReH/V6U6WMd6wNzIRvCxP22uE=";
+    hash = "sha256-2yNhWDExxg5A6DgGtKAtql3HsJuYG1YM/NjUJ718jRw=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vnote";
     changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -5,23 +5,26 @@
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.5.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
-    rev = "v${version}";
-    hash = "sha256-kIm0q4/D80skFjlj2ABq4d2PKnATDt53x4fLU6kmA9U=";
+    tag = "v${version}";
+    hash = "sha256-2YXecurdmlho5LvkkMc97GiyrSy/kTZINTPtC+J+eL0=";
   };
 
-  vendorHash = "sha256-xolhwdWRjYZMgwI4jq0fGzvxnNjx6EplvZC7XMvBw+M=";
+  vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
 
   meta = with lib; {
     homepage = "https://github.com/guyfedwards/nom";
     description = "RSS reader for the terminal";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nadir-ishiguro ];
+    maintainers = with maintainers; [
+      nadir-ishiguro
+      matthiasbeyer
+    ];
     mainProgram = "nom";
   };
 }

@@ -1,44 +1,45 @@
-{ fetchFromGitHub
-, cinnamon-desktop
-, cinnamon-translations
-, colord
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, lcms2
-, libcanberra-gtk3
-, libgnomekbd
-, libnotify
-, libxklavier
-, wrapGAppsHook3
-, pkg-config
-, lib
-, stdenv
-, systemd
-, upower
-, dconf
-, cups
-, polkit
-, librsvg
-, libwacom
-, xorg
-, fontconfig
-, tzdata
-, nss
-, libgudev
-, meson
-, ninja
+{
+  fetchFromGitHub,
+  cinnamon-desktop,
+  cinnamon-translations,
+  colord,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  lcms2,
+  libcanberra-gtk3,
+  libgnomekbd,
+  libnotify,
+  libxklavier,
+  wrapGAppsHook3,
+  pkg-config,
+  lib,
+  stdenv,
+  systemd,
+  upower,
+  dconf,
+  cups,
+  polkit,
+  librsvg,
+  libwacom,
+  xorg,
+  fontconfig,
+  tzdata,
+  nss,
+  libgudev,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "6.2.0";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-settings-daemon";
     rev = version;
-    hash = "sha256-OAG5Tes+0bi+vKqm77Y7OykTpUkMdRaXIJYLuomIDMo=";
+    hash = "sha256-L7+OgymYoYBdprw66RW8tiGA7XGWjTBpDpXhli8Fjoo=";
   };
 
   patches = [
@@ -79,7 +80,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     sed "s|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g" -i plugins/datetime/system-timezone.h

@@ -85,9 +85,10 @@ in
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+      # Packages used in default config
+      default = with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       defaultText = lib.literalExpression ''
-        with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+        with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       '';
       example = lib.literalExpression ''
         with pkgs; [ i3status i3status-rust termite rofi light ]
@@ -112,6 +113,16 @@ in
         }
       ];
 
+      warnings =
+          lib.mkIf
+            (
+              (lib.elem "nvidia" config.services.xserver.videoDrivers)
+              && (lib.versionOlder (lib.versions.major (lib.getVersion config.hardware.nvidia.package)) "551")
+            )
+            [
+              "Using Sway with Nvidia driver version <= 550 may result in a broken system. Configure hardware.nvidia.package to use a newer version."
+            ];
+
       environment = {
         systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
@@ -123,19 +134,40 @@ in
             # Import the most important environment variables into the D-Bus and systemd
             # user environments (e.g. required for screen sharing and Pinentry prompts):
             exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+            # enable systemd-integration
+            exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+            exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
           '';
         } // lib.optionalAttrs (cfg.package != null) {
           "sway/config".source = lib.mkOptionDefault "${cfg.package}/etc/sway/config";
         };
       };
 
-      programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
+      systemd.user.targets.sway-session = {
+        description = "sway compositor session";
+        documentation = [ "man:systemd.special(7)" ];
+        bindsTo = [ "graphical-session.target" ];
+        wants = [ "graphical-session-pre.target" ];
+        after = [ "graphical-session-pre.target" ];
+      };
 
       # To make a Sway session available if a display manager like SDDM is enabled:
       services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-      xdg.portal.config.sway.default = lib.mkDefault [ "wlr" "gtk" ];
+      # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
+      # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
+      xdg.portal.config.sway = {
+        # Use xdg-desktop-portal-gtk for every portal interface...
+        default = [ "gtk" ];
+        # ... except for the ScreenCast, Screenshot and Secret
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
+        # ignore inhibit bc gtk portal always returns as success,
+        # despite sway/the wlr portal not having an implementation,
+        # stopping firefox from using wayland idle-inhibit
+        "org.freedesktop.impl.portal.Inhibit" = "none";
+      };
     }
 
     (import ./wayland-session.nix {

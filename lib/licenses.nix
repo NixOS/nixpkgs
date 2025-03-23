@@ -24,10 +24,11 @@ let
 
 in
 lib.mapAttrs mkLicense ({
-  /* License identifiers from spdx.org where possible.
-   * If you cannot find your license here, then look for a similar license or
-   * add it to this list. The URL mentioned above is a good source for inspiration.
-   */
+  /**
+    License identifiers from spdx.org where possible.
+    If you cannot find your license here, then look for a similar license or
+    add it to this list. The URL mentioned above is a good source for inspiration.
+  */
 
   abstyles = {
     spdxId = "Abstyles";
@@ -37,7 +38,9 @@ lib.mapAttrs mkLicense ({
   acsl14 = {
     fullName = "Anti-Capitalist Software License v1.4";
     url = "https://anticapitalist.software/";
-    /* restrictions on corporations apply for both use and redistribution */
+    /**
+      restrictions on corporations apply for both use and redistribution
+    */
     free = false;
     redistributable = false;
   };
@@ -92,6 +95,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  ampas = {
+    spdxId = "AMPAS";
+    fullName = "Academy of Motion Picture Arts and Sciences BSD";
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
@@ -110,7 +118,6 @@ lib.mapAttrs mkLicense ({
   arphicpl = {
     spdxId = "Arphic-1999";
     fullName = "Arphic Public License";
-    url = "https://www.freedesktop.org/wiki/Arphic_Public_License/";
   };
 
   artistic1 = {
@@ -131,11 +138,6 @@ lib.mapAttrs mkLicense ({
   asl20 = {
     spdxId = "Apache-2.0";
     fullName = "Apache License 2.0";
-  };
-
-  asl20-llvm = {
-    spdxId = "Apache-2.0 WITH LLVM-exception";
-    fullName = "Apache License 2.0 with LLVM Exceptions";
   };
 
   bitstreamVera = {
@@ -208,6 +210,16 @@ lib.mapAttrs mkLicense ({
     fullName = "BSD 3-Clause Clear License";
   };
 
+  bsd3Lbnl = {
+    spdxId = "BSD-3-Clause-LBNL";
+    fullName = "Lawrence Berkeley National Labs BSD variant license";
+  };
+
+  bsdAxisNoDisclaimerUnmodified = {
+    fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
+    url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -229,8 +241,8 @@ lib.mapAttrs mkLicense ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
-    url = "https://mariadb.com/bsl11";
     free = false;
     redistributable = true;
   };
@@ -243,13 +255,11 @@ lib.mapAttrs mkLicense ({
   cal10 = {
     spdxId = "CAL-1.0";
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
-    url = "https://opensource.org/licenses/CAL-1.0";
   };
 
   caldera = {
     spdxId = "Caldera";
     fullName = "Caldera License";
-    url = "http://www.lemis.com/grog/UNIX/ancient-source-all.pdf";
   };
 
   capec = {
@@ -403,6 +413,12 @@ lib.mapAttrs mkLicense ({
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
+  };
+
   cpal10 = {
     spdxId = "CPAL-1.0";
     fullName = "Common Public Attribution License 1.0";
@@ -447,7 +463,6 @@ lib.mapAttrs mkLicense ({
 
   ecl20 = {
     fullName = "Educational Community License, Version 2.0";
-    url = "https://opensource.org/licenses/ECL-2.0";
     shortName = "ECL 2.0";
     spdxId = "ECL-2.0";
   };
@@ -465,7 +480,6 @@ lib.mapAttrs mkLicense ({
   elastic20 = {
     spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
-    url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
   };
 
@@ -543,6 +557,13 @@ lib.mapAttrs mkLicense ({
   fsl11Mit = {
     fullName = "Functional Source License, Version 1.1, MIT Future License";
     url = "https://fsl.software/FSL-1.1-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
+  fsl11Asl20 = {
+    fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+    url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
     free = false;
     redistributable = true;
   };
@@ -651,8 +672,7 @@ lib.mapAttrs mkLicense ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
-    url = "https://old.calculate-linux.org/packages/licenses/iASL";
+    fullName = "Intel ACPI Software License Agreement";
   };
 
   icu = {
@@ -678,7 +698,6 @@ lib.mapAttrs mkLicense ({
   info-zip = {
     spdxId = "Info-ZIP";
     fullName = "Info-ZIP License";
-    url = "https://infozip.sourceforge.net/license.html";
   };
 
   inria-compcert = {
@@ -714,10 +733,9 @@ lib.mapAttrs mkLicense ({
     fullName = "ISC License";
   };
 
-  # Proprietary binaries; free to redistribute without modification.
   databricks = {
-    fullName = "Databricks Proprietary License";
-    url = "https://pypi.org/project/databricks-connect";
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
     free = false;
   };
 
@@ -726,6 +744,12 @@ lib.mapAttrs mkLicense ({
     url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
     free = false;
     redistributable = false;
+  };
+
+  databricks-license = {
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
+    free = false;
   };
 
   fair = {
@@ -771,7 +795,7 @@ lib.mapAttrs mkLicense ({
 
   lens = {
     fullName = "Lens Terms of Service Agreement";
-    url = "https://k8slens.dev/licenses/tos";
+    url = "https://k8slens.dev/legal/tos";
     free = false;
   };
 
@@ -820,11 +844,6 @@ lib.mapAttrs mkLicense ({
     fullName = "PNG Reference Library version 2";
   };
 
-  libssh2 = {
-    fullName = "libssh2 License";
-    url = "https://www.libssh2.org/license.html";
-  };
-
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -833,6 +852,11 @@ lib.mapAttrs mkLicense ({
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = "https://opensource.franz.com/preamble.html";
+  };
+
+  llvm-exception = {
+    spdxId = "LLVM-exception";
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
   };
 
   lppl1 = {
@@ -863,19 +887,27 @@ lib.mapAttrs mkLicense ({
   miros = {
     spdxId = "MirOS";
     fullName = "MirOS License";
-    url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
   };
-  # https://spdx.org/licenses/MIT-feh.html
+
+  mit-cmu = {
+    spdxId = "MIT-CMU";
+    fullName = "CMU License";
+  };
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
+  };
+
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
   };
 
   mitAdvertising = {
@@ -916,7 +948,11 @@ lib.mapAttrs mkLicense ({
   mulan-psl2 = {
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
-    url = "https://license.coscl.org.cn/MulanPSL2";
+  };
+
+  naist-2003 = {
+    spdxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
   };
 
   nasa13 = {
@@ -946,7 +982,6 @@ lib.mapAttrs mkLicense ({
     fullName = "Netdata Cloud UI License v1.0";
     free = false;
     redistributable = true; # Only if used in Netdata products.
-    url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
   nistSoftware = {
@@ -1044,7 +1079,6 @@ lib.mapAttrs mkLicense ({
   parity70 = {
     spdxId = "Parity-7.0.0";
     fullName = "Parity Public License 7.0.0";
-    url = "https://paritylicense.com/versions/7.0.0.html";
   };
 
   php301 = {
@@ -1066,7 +1100,6 @@ lib.mapAttrs mkLicense ({
   psfl = {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
-    url = "https://docs.python.org/license.html";
   };
 
   publicDomain = {
@@ -1074,7 +1107,7 @@ lib.mapAttrs mkLicense ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
@@ -1097,6 +1130,11 @@ lib.mapAttrs mkLicense ({
   qwt = {
     fullName = "Qwt License, Version 1.0";
     url = "https://qwt.sourceforge.io/qwtlicense.html";
+  };
+
+  radiance = {
+    fullName = "The Radiance Software License, Version 2.0";
+    url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
   };
 
   ruby = {
@@ -1167,6 +1205,45 @@ lib.mapAttrs mkLicense ({
     redistributable = false; # only free to redistribute "for non-commercial purposes"
   };
 
+  teamspeak = {
+    fullName = "Teamspeak client license";
+    url = "https://www.teamspeak.com/en/privacy-and-terms/";
+    free = false;
+    redistributable = true; # we got a permit to redistribute it:
+    # License issues:
+    # Date: Mon, 10 Dec 2007 19:55:16 -0500
+    # From: TeamSpeak Sales <sales@tritoncia.com>
+    # To: 'Marc Weber' <marco-oweber@gmx.de>
+    # Subject: RE: teamspeak on nix?
+    #
+    # Yes, that would be fine.  As long as you are not renting servers or selling
+    # TeamSpeak then you are more than welcome to distribute it.
+    #
+    # Thank you,
+    #
+    # TeamSpeak Sales Team
+    # ________________________________
+    # e-Mail: sales@tritoncia.com
+    # TeamSpeak: http://www.TeamSpeak.com
+    # Account Login: https://sales.TritonCIA.com/users
+    #
+    #
+    #
+    # -----Original Message-----
+    # From: Marc Weber [mailto:marco-oweber@gmx.de]
+    # Sent: Monday, December 10, 2007 5:03 PM
+    # To: sales@tritoncia.com
+    # Subject: teamspeak on nix?
+    #
+    # Hello,
+    #
+    # nix is very young software distribution system (http://nix.cs.uu.nl/)
+    # I'd like to ask wether you permit us to add teamspeak (server/ client?)
+    #
+    # Sincerly
+    # Marc Weber (small nix contributor)
+  };
+
   tsl = {
     shortName = "TSL";
     fullName = "Timescale License Agreegment";
@@ -1179,14 +1256,19 @@ lib.mapAttrs mkLicense ({
     fullName = "TCL/TK License";
   };
 
+  tost = {
+    fullName = "Tomorrow Open Source Technology License 1.0";
+    url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+  };
+
   ucd = {
     fullName = "Unicode Character Database License";
     url = "https://fedoraproject.org/wiki/Licensing:UCD";
   };
 
   ufl = {
+    spdxId = "Ubuntu-font-1.0";
     fullName = "Ubuntu Font License 1.0";
-    url = "https://ubuntu.com/legal/font-licence";
   };
 
   unfree = {
@@ -1230,7 +1312,6 @@ lib.mapAttrs mkLicense ({
   upl = {
     spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
-    url = "https://oss.oracle.com/licenses/upl/";
   };
 
   vim = {
@@ -1257,6 +1338,15 @@ lib.mapAttrs mkLicense ({
   watcom = {
     spdxId = "Watcom-1.0";
     fullName = "Sybase Open Watcom Public License 1.0";
+    # Despite being OSI‐approved, this licence is not considered FOSS
+    # by Debian, Fedora, or the FSF, due to an onerous restriction that
+    # requires publication of even privately‐deployed modifications.
+    # This violates the FSF’s freedom 3 and Debian’s “desert island
+    # test” and “dissident test”.
+    #
+    # See: <https://en.wikipedia.org/wiki/Sybase_Open_Watcom_Public_License>
+    free = false;
+    redistributable = true;
   };
 
   w3c = {
@@ -1287,7 +1377,6 @@ lib.mapAttrs mkLicense ({
   xfig = {
     spdxId = "Xfig";
     fullName = "xfig";
-    url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
   xinetd = {
@@ -1303,11 +1392,6 @@ lib.mapAttrs mkLicense ({
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
-  };
-
-  zsh = {
-    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
-    fullName = "Zsh License";
   };
 
   zpl20 = {

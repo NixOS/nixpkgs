@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, libedit, libsecret, ncurses, pkg-config, readline, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libedit,
+  libsecret,
+  ncurses,
+  pkg-config,
+  readline,
+  Security,
+}:
 
 stdenv.mkDerivation rec {
   pname = "envchain";
@@ -17,8 +27,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libsecret readline ]
-    ++ lib.optionals stdenv.isDarwin [ libedit ncurses Security ];
+  buildInputs =
+    [
+      libsecret
+      readline
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libedit
+      ncurses
+      Security
+    ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -27,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sorah/envchain";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "envchain";
   };
 }

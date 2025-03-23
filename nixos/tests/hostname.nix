@@ -62,6 +62,8 @@ let
             fqdn_and_host_name
             == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()
         )
+
+        assert "${fqdn}" == machine.succeed("getent hosts ${hostName} | awk '{print $2}'").strip()
       '';
     };
 

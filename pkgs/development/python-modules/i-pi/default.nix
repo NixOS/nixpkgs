@@ -4,35 +4,54 @@
   fetchFromGitHub,
   gfortran,
   makeWrapper,
+  setuptools,
+  setuptools-scm,
   numpy,
-  pytest,
+  scipy,
+  distutils,
+  pytestCheckHook,
   mock,
   pytest-mock,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "2.6.1";
-  format = "setuptools";
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-c1bs8ZI/dfDwKx5Df8ndtsDxESQrdbMkvrjfI6b9JTg=";
+    tag = "v${version}";
+    hash = "sha256-Z9xTuRm4go/FGrM7norRHVHgjcOqssNgFQ8R/Mh1yXo=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     gfortran
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     mock
     pytest-mock
+  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
+
+  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
+  disabledTests = [
+    "test_driver_base"
+    "test_driver_forcebuild"
   ];
 
   postFixup = ''

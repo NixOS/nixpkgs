@@ -4,9 +4,7 @@
 , release_version
 , monorepoSrc ? null
 , src ? null
-, patches ? []
 , runCommand
-, substitute
 , cmake
 , lndir
 , ninja
@@ -16,7 +14,10 @@
 , freebsd
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.hostPlatform.hasSharedLibraries
+, devExtraCmakeFlags ? []
+, substitute
+, fetchpatch
 }:
 
 # external cxxabi is not supported on Darwin as the build will not link libcxx
@@ -34,7 +35,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -44,6 +45,8 @@ let
       cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
+    '') + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+      cp -r ${monorepoSrc}/libc "$out"
     '') + ''
       cp -r ${monorepoSrc}/runtimes "$out"
     '' + (lib.optionalString (cxxabi == null) ''
@@ -61,7 +64,8 @@ let
   ]) ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared) [
+  ] ++ lib.optionals (!enableShared || stdenv.hostPlatform.isWindows) [
+    # Required on Windows due to https://github.com/llvm/llvm-project/issues/55245
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
@@ -91,6 +95,9 @@ let
     "-DLIBCXX_ENABLE_THREADS=OFF"
     "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
     "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    # https://github.com/llvm/llvm-project/issues/55245
+    "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON"
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXX_ENABLE_SHARED=OFF"
   ] ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
@@ -99,17 +106,22 @@ let
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
+  ] ++ lib.optionals (
+    stdenv.hostPlatform.isWasm
+    || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
+  ) [
+    "-DCMAKE_CXX_COMPILER_WORKS=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DCMAKE_C_COMPILER_WORKS=ON"
-    "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
   ] ++ cxxCMakeFlags
-    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags;
+    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
+    ++ devExtraCmakeFlags;
 
 in
 
 stdenv.mkDerivation (rec {
-  inherit pname version cmakeFlags patches;
+  inherit pname version cmakeFlags;
 
   src = src';
 
@@ -119,8 +131,40 @@ stdenv.mkDerivation (rec {
     patchShebangs utils/cat_files.py
   '';
 
+  patches = lib.optionals (lib.versionOlder release_version "16") (
+    lib.optional (lib.versions.major release_version == "15")
+      # See:
+      #   - https://reviews.llvm.org/D133566
+      #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+      # !!! Drop in LLVM 16+
+      (
+        fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+          hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+        }
+      )
+    ++ [
+      (substitute {
+        src = ../libcxxabi/wasm.patch;
+        substitutions = [
+          "--replace-fail"
+          "/cmake/"
+          "/llvm/cmake/"
+        ];
+      })
+    ]
+    ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+      src = ./libcxx-0001-musl-hacks.patch;
+      substitutions = [
+        "--replace-fail"
+        "/include/"
+        "/libcxx/include/"
+      ];
+    })
+  );
+
   nativeBuildInputs = [ cmake ninja python3 ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]

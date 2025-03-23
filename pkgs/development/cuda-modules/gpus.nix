@@ -28,23 +28,6 @@
 # https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 [
   {
-    # GeForce 700, GT-730
-    archName = "Kepler";
-    computeCapability = "3.0";
-    isJetson = false;
-    minCudaVersion = "10.0";
-    dontDefaultAfter = "10.2";
-    maxCudaVersion = "10.2";
-  }
-  {
-    archName = "Kepler";
-    computeCapability = "3.2";
-    isJetson = false;
-    minCudaVersion = "10.0";
-    dontDefaultAfter = "10.2";
-    maxCudaVersion = "10.2";
-  }
-  {
     # Tesla K40
     archName = "Kepler";
     computeCapability = "3.5";
@@ -198,6 +181,60 @@
     computeCapability = "9.0a";
     isJetson = false;
     minCudaVersion = "12.0";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA B100
+    archName = "Blackwell";
+    computeCapability = "10.0";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA B100 Accelerated
+    archName = "Blackwell";
+    computeCapability = "10.0a";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell
+    archName = "Blackwell";
+    computeCapability = "10.1";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell Accelerated
+    archName = "Blackwell";
+    computeCapability = "10.1a";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA GeForce RTX 5090 (GB202), RTX 5080 (GB203), RTX 5070 (GB205)
+    archName = "Blackwell";
+    computeCapability = "12.0";
+    isJetson = false;
+    minCudaVersion = "12.8";
+    dontDefaultAfter = null;
+    maxCudaVersion = null;
+  }
+  {
+    # NVIDIA Blackwell Accelerated
+    archName = "Blackwell";
+    computeCapability = "12.0a";
+    isJetson = false;
+    minCudaVersion = "12.8";
     dontDefaultAfter = null;
     maxCudaVersion = null;
   }

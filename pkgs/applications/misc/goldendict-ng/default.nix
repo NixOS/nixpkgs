@@ -1,46 +1,50 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, libvorbis
-, ffmpeg
-, libeb
-, hunspell
-, opencc
-, xapian
-, libzim
-, lzo
-, xz
-, tomlplusplus
-, fmt
-, bzip2
-, libiconv
-, libXtst
-, qtbase
-, qtsvg
-, qtwebengine
-, qttools
-, qtwayland
-, qt5compat
-, qtmultimedia
-, qtspeech
-, wrapQtAppsHook
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libvorbis,
+  libeb,
+  hunspell,
+  opencc,
+  xapian,
+  libzim,
+  lzo,
+  xz,
+  tomlplusplus,
+  fmt,
+  bzip2,
+  libiconv,
+  libXtst,
+  qtbase,
+  qtsvg,
+  qtwebengine,
+  qttools,
+  qtwayland,
+  qt5compat,
+  qtmultimedia,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "goldendict-ng";
-  version = "24.05.05";
+  version = "25.02.0";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}-LiXia.ecd1138c";
-    hash = "sha256-C/0FUFLE3R+tZyCL88BiSFOHPTanILD/fIIQ/OQBSfk=";
+    tag = "v25.02.0-Release.e895b18c";
+    hash = "sha256-k8pGzrSFbAUP7DG3lSAYBa5WeeSUbjZMvMqmxPqdT3E=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     qtbase
     qtsvg
@@ -48,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebengine
     qt5compat
     qtmultimedia
-    qtspeech
     qtwayland
     libvorbis
     tomlplusplus
@@ -61,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     opencc
     libeb
-    ffmpeg
     xapian
     libzim
   ];
@@ -76,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_XAPIAN=ON"
     "-DWITH_ZIM=ON"
-    "-DWITH_FFMPEG_PLAYER=ON"
+    "-DWITH_FFMPEG_PLAYER=OFF"
     "-DWITH_EPWING_SUPPORT=ON"
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_TOML=ON"
@@ -87,7 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Advanced multi-dictionary lookup program";
     platforms = platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ slbtty michojel ];
+    maintainers = with maintainers; [
+      slbtty
+      michojel
+    ];
     license = licenses.gpl3Plus;
   };
-})
+}

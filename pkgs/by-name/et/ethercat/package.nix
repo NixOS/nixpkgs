@@ -1,24 +1,28 @@
-{ autoreconfHook
-, lib
-, pkg-config
-, stdenv
-, fetchFromGitLab
-, gitUpdater
+{
+  autoreconfHook,
+  lib,
+  pkg-config,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
-  version = "1.6.0";
+  version = "1.6.3";
 
   src = fetchFromGitLab {
     owner = "etherlab.org";
     repo = "ethercat";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-w1aoznLjCHh+dN2fyfpKpzq68B4D/rert2XFpTxk/F4=";
+    hash = "sha256-vTAAeWAiJDo/Bd/3id4Bc0OdkL6s57vl+jbwOGFzfnc=";
   };
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   configureFlags = [
     "--enable-userlib=yes"

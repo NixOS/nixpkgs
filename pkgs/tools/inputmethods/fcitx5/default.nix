@@ -5,6 +5,7 @@
 , pkg-config
 , cmake
 , extra-cmake-modules
+, wayland-scanner
 , cairo
 , pango
 , expat
@@ -33,6 +34,7 @@
 , xcb-imdkit
 , libxkbfile
 , nixosTests
+, gettext
 }:
 let
   enDictVer = "20121020";
@@ -43,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.10";
+  version = "5.1.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-rMtCzFe3imF/uY0kXM2ivyt11r5qNTNab7GkWzdeC/g=";
+    hash = "sha256-Jk7YY6nrY1Yn9KeNlRJbMF/fCMIlUVg/Elt7SymlK84=";
   };
 
   prePatch = ''
@@ -60,9 +62,12 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    wayland-scanner
+    gettext
   ];
 
   buildInputs = [
+    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -92,6 +97,8 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = ./update.py;
     tests = {
@@ -103,6 +110,7 @@ stdenv.mkDerivation rec {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };

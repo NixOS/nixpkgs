@@ -30,6 +30,7 @@ args@{
   # [1]: https://github.com/bazelbuild/rules_cc
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
+, removeLocalConfigSh ? true
 , removeLocal ? true
 
   # Use build --nobuild instead of fetch. This allows fetching the dependencies
@@ -64,7 +65,7 @@ let
       ;
   };
   fBuildAttrs = fArgs // buildAttrs;
-  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
+  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "hash" "sha256" ];
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
@@ -154,9 +155,15 @@ stdenv.mkDerivation (fBuildAttrs // {
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
       ${lib.optionalString removeRulesCC "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}"}
+
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}"}
       ${lib.optionalString removeLocal "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}"}
+
+      # For bazel version >= 6 with bzlmod.
+      ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/*[~+]{local_config_cc,local_config_cc.marker}"}
+      ${lib.optionalString removeLocalConfigSh "rm -rf $bazelOut/external/*[~+]{local_config_sh,local_config_sh.marker}"}
+      ${lib.optionalString removeLocal "rm -rf $bazelOut/external/*[~+]{local_jdk,local_jdk.marker}"}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
@@ -181,7 +188,7 @@ stdenv.mkDerivation (fBuildAttrs // {
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
         rm "$symlink"
         ln -sf "$new_target" "$symlink"
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # on linux symlink permissions cannot be modified, so we modify those on darwin to match the linux ones
         ${chmodder}/bin/chmodder "$symlink"
     '' + ''
@@ -197,8 +204,10 @@ stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashAlgo = "sha256";
-    outputHash = fetchAttrs.sha256;
+    inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
+      outputHash
+      outputHashAlgo
+    ;
   });
 
   nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonApplication
-, pytest-mock
-, pytestCheckHook
-, fetchFromGitHub
-, installShellFiles
-, git
-, nix-update-script
+{
+  lib,
+  buildPythonApplication,
+  pytest-mock,
+  pytestCheckHook,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.26.2";
+  version = "3.33.0";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AvHRl+xP4VSBP9p2BoRr/z/BT6c7zlOWUlWmfp5VvfA=";
+    hash = "sha256-kzMjMyqaf4F/cRJ6+r9Ne+NUlG98iubKYqAm+NpmRtM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

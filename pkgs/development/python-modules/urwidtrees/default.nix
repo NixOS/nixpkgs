@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "urwidtrees";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yGSjwagCd5TiwEFtF6ZhDuVqj4PTa5pVXhs8ebr2O/g=";
   };
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pazz/urwidtrees";
     changelog = "https://github.com/pazz/urwidtrees/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

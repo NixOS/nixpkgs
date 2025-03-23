@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, json-glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pidgin,
+  json-glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-skypeweb";
@@ -16,7 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pidgin json-glib ];
+  buildInputs = [
+    pidgin
+    json-glib
+  ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
@@ -26,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "SkypeWeb plugin for Pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

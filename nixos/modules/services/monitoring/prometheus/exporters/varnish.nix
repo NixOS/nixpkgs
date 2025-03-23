@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.varnish;
@@ -82,13 +88,15 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --varnishstat-path ${escapeShellArg cfg.varnishStatPath} \
-          ${concatStringsSep " \\\n  " (cfg.extraFlags
+          ${concatStringsSep " \\\n  " (
+            cfg.extraFlags
             ++ optional (cfg.healthPath != null) "--web.health-path ${cfg.healthPath}"
             ++ optional (cfg.instance != null) "-n ${escapeShellArg cfg.instance}"
             ++ optional cfg.noExit "--no-exit"
             ++ optional cfg.withGoMetrics "--with-go-metrics"
             ++ optional cfg.verbose "--verbose"
-            ++ optional cfg.raw "--raw")}
+            ++ optional cfg.raw "--raw"
+          )}
       '';
     };
   };

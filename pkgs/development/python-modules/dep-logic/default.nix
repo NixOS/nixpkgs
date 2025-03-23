@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dep-logic";
-  version = "0.4.4";
+  version = "0.4.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "dep-logic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7w5yN+3/u7mcGwBZAgTc/HHpZGyVZzSTWktmmcVSqpA=";
+    tag = version;
+    hash = "sha256-AS+ZCs50MBXKbsQsu0vIefpCOf3zU4iohCngzaKNIfA=";
   };
 
   nativeBuildInputs = [ pdm-backend ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dep_logic" ];
 
   meta = {
-    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${src.rev}";
+    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${src.tag}";
     description = "Python dependency specifications supporting logical operations";
     homepage = "https://github.com/pdm-project/dep-logic";
     license = lib.licenses.asl20;

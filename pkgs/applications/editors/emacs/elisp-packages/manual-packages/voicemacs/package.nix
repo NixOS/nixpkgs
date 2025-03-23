@@ -13,19 +13,19 @@
   melpaBuild,
   nav-flash,
   porthole,
-  unstableGitUpdater,
   yasnippet,
+  el-patch,
 }:
 
 melpaBuild {
   pname = "voicemacs";
-  version = "0-unstable-2022-02-16";
+  version = "0-unstable-2024-12-11";
 
   src = fetchFromGitHub {
     owner = "jcaw";
     repo = "voicemacs";
-    rev = "d91de2a31c68ab083172ade2451419d6bd7bb389";
-    hash = "sha256-/MBB2R9/V0aYZp15e0vx+67ijCPp2iPlgxe262ldmtc=";
+    rev = "fb6133f59d3062a0cb2396353d9a1edd2af4750a";
+    hash = "sha256-7JF6c5T+Dl3/S3zMHwvf7lsnsPWoZStE1FiVobJHgyI=";
   };
 
   patches = [
@@ -45,14 +45,13 @@ melpaBuild {
     nav-flash
     porthole
     yasnippet
+    el-patch
   ];
-
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/jcaw/voicemacs/";
     description = "Set of utilities for controlling Emacs by voice";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

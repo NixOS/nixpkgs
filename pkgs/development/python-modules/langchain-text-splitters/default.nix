@@ -2,44 +2,59 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  nix-update-script,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
   langchain-core,
+
+  # tests
+  httpx,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.2.2";
+  version = "0.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-SixF3ZkN+gjQ4KYLhGoezdQAOQ1AlGEC6IBzHePF6/o=";
+    tag = "langchain-text-splitters==${version}";
+    hash = "sha256-mYaIVE/v+t7TJw/l87IJcFh893OTIew6jl6OVj0gXCo=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    httpx
     pytest-asyncio
     pytestCheckHook
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-test-splitters==([0-9.]+)$"
+    ];
   };
 
   meta = {
@@ -47,6 +62,9 @@ buildPythonPackage rec {
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
   };
 }

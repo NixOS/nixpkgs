@@ -7,21 +7,21 @@
   marshmallow,
   packaging,
   sqlalchemy,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "1.0.0";
+  version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "marshmallow_sqlalchemy";
     inherit version;
-    hash = "sha256-IKDy/N1b3chkRPoBRh8X+bahKo3dTKjJs0/i8uNdAKI=";
+    hash = "sha256-tKqWQ1bQDheL24Rpoo2qkCKzdf9PXAT44rmq/h5lxSk=";
   };
 
   build-system = [ flit-core ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "marshmallow_sqlalchemy" ];
 
   nativeCheckInputs = [
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytestCheckHook
   ];
 
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     docopt-ng
     lxml

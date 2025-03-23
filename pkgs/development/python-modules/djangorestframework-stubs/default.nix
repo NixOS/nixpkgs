@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.15.0";
+  version = "3.15.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5fZzSRn59ii41QKOqkZUXTDnm70Um9SY445Vfoo8sgg=";
+    tag = version;
+    hash = "sha256-6bs/FGCxxV1sE4J3aqzYS1wIr82mWlnGGXIuYOF5+dw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compatible-mypy = [ mypy ] ++ django-stubs.optional-dependencies.compatible-mypy;
     coreapi = [ coreapi ];
     markdown = [ types-markdown ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     py
     pytest-mypy-plugins
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all testsare failing with 3.14.5 and below
   doCheck = false;
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
-    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${version}";
+    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

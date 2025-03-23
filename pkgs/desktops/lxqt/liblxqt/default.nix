@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gitUpdater
-, kwindowsystem
-, libXScrnSaver
-, libqtxdg
-, lxqt-build-tools
-, polkit-qt-1
-, qtsvg
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gitUpdater,
+  kwindowsystem,
+  libXScrnSaver,
+  libqtxdg,
+  lxqt-build-tools,
+  polkit-qt-1,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblxqt";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-ClAmREsPBb7i7T2aGgf0h3rk1ohUvWQvmSnrlprHzds=";
+    hash = "sha256-90t7jukm2vNfkgZ3326UDMXNzwJ+FIVEF3kNZ2SgNN8=";
   };
 
   nativeBuildInputs = [

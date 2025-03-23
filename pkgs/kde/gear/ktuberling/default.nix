@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "ktuberling";
 
-  extraBuildInputs = [qtmultimedia];
+  extraBuildInputs = [ qtmultimedia ];
   meta.mainProgram = "ktuberling";
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FVRqh30mYVfC8zuhPteuvqGYGTp3PW+pi1bquUjYFAg=";
+    tag = "v${version}";
+    hash = "sha256-InotzUk1lEuTD1tAojpEGfFyjrCDoGaa8JMDUdRd+Hw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     pandas
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
     changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

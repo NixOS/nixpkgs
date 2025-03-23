@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ws4py";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KdBz1/LgBjc+aoSLHQCVGhEH64HzdClSvpBUKdxaVIM=";
+    hash = "sha256-n4exm3c/CgdEo486+jaoAyht0xl/C7Ndm3UpPscALRk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://ws4py.readthedocs.org";
     changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

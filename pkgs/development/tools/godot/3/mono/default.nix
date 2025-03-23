@@ -1,71 +1,57 @@
-{ godot3
-, callPackage
-, mkNugetDeps
-, mkNugetSource
-, mono
-, dotnet-sdk
-, writeText
-, scons
-, python311Packages
+{
+  godot3,
+  callPackage,
+  mkNugetDeps,
+  mono,
+  dotnet-sdk,
+  scons,
+  python311Packages,
 }:
 
 (godot3.override {
   scons = scons.override {
     python3Packages = python311Packages;
   };
-}).overrideAttrs (self: base: {
-  pname = "godot3-mono";
+}).overrideAttrs
+  (
+    self: base: {
+      pname = "godot3-mono";
 
-  godotBuildDescription = "mono build";
+      godotBuildDescription = "mono build";
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ mono dotnet-sdk ];
+      nativeBuildInputs = base.nativeBuildInputs ++ [
+        mono
+        dotnet-sdk
+      ];
 
-  glue = callPackage ./glue.nix {};
+      glue = callPackage ./glue.nix { };
 
-  nugetDeps = mkNugetDeps { name = "deps"; nugetDeps = import ./deps.nix; };
+      buildInputs = base.buildInputs ++ [
+        (mkNugetDeps {
+          name = "deps";
+          sourceFile = ./deps.json;
+        })
+      ];
 
-  nugetSource =
-    mkNugetSource {
-      name = "${self.pname}-nuget-source";
-      description = "Nuget source with dependencies for ${self.pname}";
-      deps = [ self.nugetDeps ];
-    };
+      sconsFlags = base.sconsFlags ++ [
+        "module_mono_enabled=true"
+        "mono_prefix=${mono}"
+      ];
 
-  nugetConfig = writeText "NuGet.Config" ''
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <add key="${self.pname}-deps" value="${self.nugetSource}/lib" />
-      </packageSources>
-    </configuration>
-  '';
+      postConfigure = ''
+        echo "Setting up buildhome."
+        mkdir buildhome
+        export HOME="$PWD"/buildhome
 
-  sconsFlags = base.sconsFlags ++ [
-    "module_mono_enabled=true"
-    "mono_prefix=${mono}"
-  ];
+        echo "Overlaying godot glue."
+        cp -R --no-preserve=mode "$glue"/. .
+      '';
 
-  shouldConfigureNuget = true;
+      installedGodotShortcutFileName = "org.godotengine.GodotMono3.desktop";
+      installedGodotShortcutDisplayName = "Godot Engine (Mono) 3";
 
-  postConfigure = ''
-    echo "Setting up buildhome."
-    mkdir buildhome
-    export HOME="$PWD"/buildhome
-
-    echo "Overlaying godot glue."
-    cp -R --no-preserve=mode "$glue"/. .
-
-    if [ -n "$shouldConfigureNuget" ]; then
-      echo "Configuring NuGet."
-      mkdir -p ~/.nuget/NuGet
-      ln -s "$nugetConfig" ~/.nuget/NuGet/NuGet.Config
-    fi
-  '';
-
-  installedGodotShortcutFileName = "org.godotengine.GodotMono3.desktop";
-  installedGodotShortcutDisplayName = "Godot Engine (Mono) 3";
-
-  passthru = {
-    make-deps = callPackage ./make-deps.nix {};
-  };
-})
+      passthru = {
+        make-deps = callPackage ./make-deps.nix { };
+      };
+    }
+  )

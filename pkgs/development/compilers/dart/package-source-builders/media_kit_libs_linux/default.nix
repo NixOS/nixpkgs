@@ -1,4 +1,5 @@
-{ stdenv
+{
+  stdenv,
 }:
 
 # Implementation notes
@@ -9,7 +10,7 @@
 
 # Direct link for the original CMakeLists.txt: https://raw.githubusercontent.com/media-kit/media-kit/main/libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
 
-{version, src, ...}:
+{ version, src, ... }:
 
 stdenv.mkDerivation {
   pname = "media_kit_libs_linux";

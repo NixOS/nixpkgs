@@ -1,4 +1,10 @@
-{ buildDunePackage, linol, jsonrpc, lwt, yojson }:
+{
+  buildDunePackage,
+  linol,
+  jsonrpc,
+  lwt,
+  yojson,
+}:
 
 buildDunePackage {
   pname = "linol-lwt";

@@ -1,14 +1,21 @@
-{ lib, modulesPath, pkgs, ... }:
+{
+  lib,
+  modulesPath,
+  pkgs,
+  ...
+}:
 let
   ssh-keys =
-    if builtins.pathExists ../../ssh-keys.nix
-    then # Outside sandbox
+    if builtins.pathExists ../../ssh-keys.nix then # Outside sandbox
       ../../ssh-keys.nix
-    else # In sandbox
+    # In sandbox
+    else
       ./ssh-keys.nix;
 
   inherit (import ssh-keys pkgs)
-    snakeOilPrivateKey snakeOilPublicKey;
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    ;
 in
 {
   imports = [
@@ -26,6 +33,12 @@ in
   users.users.root.openssh.authorizedKeys.keys = [
     snakeOilPublicKey
   ];
-  security.pam.services.sshd.limits =
-    [{ domain = "*"; item = "memlock"; type = "-"; value = 1024; }];
+  security.pam.services.sshd.limits = [
+    {
+      domain = "*";
+      item = "memlock";
+      type = "-";
+      value = 1024;
+    }
+  ];
 }

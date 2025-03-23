@@ -2,7 +2,7 @@
 
 ## Updating the CLI
 
-- Update `version` and `src.hash` in default.nix
+- Update `version` and `src.hash` in package.nix
 - Check out the changes made to the azure-cli [setup.py](https://github.com/Azure/azure-cli/blob/dev/src/azure-cli/setup.py) since the last release
 - Try build the CLI, will likely fail with `ModuleNotFoundError`, for example
   ```
@@ -56,7 +56,7 @@ The output should look something like this:
 Based on this, you can add an attribute to `extensions-manual.nix`:
 
 ```nix
-  azure-devops = mkAzExtension rec {
+  azure-devops = mkAzExtension {
     pname = "azure-devops";
     version = "1.0.0";
     url = "https://github.com/Azure/azure-devops-cli-extension/releases/download/20240206.1/azure_devops-${version}-py2.py3-none-any.whl";

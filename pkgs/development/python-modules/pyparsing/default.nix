@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyparsing";
-  version = "3.1.2";
+  version = "3.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyparsing";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
+    tag = version;
+    hash = "sha256-o2Bh5fQHjo8sanHiQiDorAfgu7lVhMNvfHkuml7u2Uo=";
   };
 
   nativeBuildInputs = [ flit-core ];

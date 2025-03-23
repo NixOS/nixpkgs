@@ -10,6 +10,7 @@
 , mypy
 , systemd
 , fakeroot
+, util-linux
 
   # filesystem tools
 , dosfstools
@@ -23,6 +24,7 @@
   # compression tools
 , zstd
 , xz
+, zeekstd
 
   # arguments
 , name
@@ -30,7 +32,7 @@
 , imageFileBasename
 , compression
 , fileSystems
-, partitionsJSON
+, finalPartitions
 , split
 , seed
 , definitionsDirectory
@@ -80,6 +82,7 @@ let
     "erofs" = [ erofs-utils ];
     "btrfs" = [ btrfs-progs ];
     "xfs" = [ xfsprogs ];
+    "swap" = [ util-linux ];
   };
 
   fileSystemTools = builtins.concatMap (f: fileSystemToolMapping."${f}") fileSystems;
@@ -87,11 +90,13 @@ let
   compressionPkg = {
     "zstd" = zstd;
     "xz" = xz;
+    "zstd-seekable" = zeekstd;
   }."${compression.algorithm}";
 
   compressionCommand = {
     "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
     "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "zstd-seekable" = "zeekstd --quiet --max-frame-size 2M --compression-level ${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:
@@ -101,8 +106,14 @@ in
   ) // {
   __structuredAttrs = true;
 
+
+  # the image will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
   nativeBuildInputs = [
     systemd
+    util-linux
     fakeroot
   ] ++ lib.optionals (compression.enable) [
     compressionPkg
@@ -110,7 +121,9 @@ in
 
   env = mkfsEnv;
 
-  inherit partitionsJSON definitionsDirectory;
+  inherit finalPartitions definitionsDirectory;
+
+  partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
   # relative path to the repart definitions that are read by systemd-repart
   finalRepartDefinitions = "repart.d";
@@ -136,7 +149,7 @@ in
   patchPhase = ''
     runHook prePatch
 
-    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} $partitionsJSON $definitionsDirectory)
+    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} <(echo "$partitionsJSON") $definitionsDirectory)
     ln -vs $amendedRepartDefinitionsDir $finalRepartDefinitions
 
     runHook postPatch
@@ -146,7 +159,7 @@ in
     runHook preBuild
 
     echo "Building image with systemd-repart..."
-    fakeroot systemd-repart \
+    unshare --map-root-user fakeroot systemd-repart \
       ''${systemdRepartFlags[@]} \
       ${imageFileBasename}.raw \
       | tee repart-output.json

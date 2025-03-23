@@ -1,5 +1,6 @@
 {
   lib,
+  apprise,
   babel,
   buildPythonPackage,
   click,
@@ -10,25 +11,25 @@
   markdown,
   paho-mqtt,
   pytest-mock,
-  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,
   setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.8.1";
+  version = "1.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CKIP5yZyt+kPeWnVuHnWV8Li2zhaiowQ9Uy6VlvyN/I=";
+    hash = "sha256-KQ6xIXAo3VBAgCNxSU1wwbyrkH5mNKd8JjSJ2+T9c6g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -51,22 +52,7 @@ buildPythonPackage rec {
     gntp
     paho-mqtt
     pytest-mock
-    pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_apprise_cli_nux_env"
-    # Nondeterministic. Fails with `assert 0 == 1`
-    "test_notify_emoji_general"
-    "test_plugin_mqtt_general"
-    # Nondeterministic. Fails with `AssertionError`
-    "test_plugin_xbmc_kodi_urls"
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
-    "test/test_plugin_bulksms.py"
   ];
 
   postInstall = ''
@@ -75,12 +61,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apprise" ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      package = apprise;
+      version = "v${version}";
+    };
+  };
+
+  meta = {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
 }

@@ -13,20 +13,20 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.9.7"; # ensure that jellyfin-web has matching version
+  version = "10.10.6"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "sha256-jxOFbmYrgxP6jbjnWubajqXInLXu7TO4vssU4E1oeoc=";
+    hash = "sha256-QFXZtmdR07xIjh4wKgbx1usXgRg5X0jfzzLjsxKMniU=";
   };
 
   propagatedBuildInputs = [ sqlite ];
 
   projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
   executables = [ "jellyfin" ];
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
   runtimeDeps = [
     jellyfin-ffmpeg
     fontconfig
@@ -37,8 +37,10 @@ buildDotnetModule rec {
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [
-    "--add-flags" "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
-    "--add-flags" "--webdir=${jellyfin-web}/share/jellyfin-web"
+    "--add-flags"
+    "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
+    "--add-flags"
+    "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
   passthru.tests = {

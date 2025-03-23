@@ -1,0 +1,205 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/dyld/blob/main/dyld.xcodeproj/project.pbxproj
+
+# Project settings
+project(
+    'dyld',
+    'c', 'cpp',
+    default_options : { 'cpp_std': 'c++20' },
+    version : '@version@'
+)
+add_project_arguments(
+    # Prevent build failures due to these targets not being defined
+    '-DTARGET_OS_BRIDGE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
+    # Enable support for arm64 variants
+    '-DSUPPORT_ARCH_arm64e=1',
+    '-DSUPPORT_ARCH_arm64_32=1',
+    # Per base.xcconfig
+    '-Wmost',
+    '-Wimplicit-fallthrough',
+    '-Wno-unknown-pragmas',
+    '-Wno-assume',
+    '-Wformat-nonliteral',
+    '-Wno-vla-extension',
+    '-Wundef-prefix=SUPPORT_',
+    language : [ 'c', 'cpp' ],
+)
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+cxx = meson.get_compiler('cpp')
+
+llvm_dep = dependency('llvm')
+openssl_dep = dependency('openssl', version : '>=3.0')
+
+
+common_inc = [
+    'common',
+    'dyld',
+    'include',
+    'mach_o',
+]
+
+
+# Internal dependencies
+corecrypto = static_library(
+    'corecrypto',
+    include_directories : [
+        common_inc,
+        'compat',
+    ],
+    sources : [
+        'compat/corecrypto/ccdigest.c',
+        'compat/corecrypto/ccsha1.c',
+        'compat/corecrypto/ccsha2.c',
+    ],
+)
+corecrypto_dep = declare_dependency(
+    dependencies : [ openssl_dep ],
+    include_directories : 'compat',
+    link_with : corecrypto,
+)
+
+lsl = static_library(
+    'lsl',
+    cpp_args : [
+        # Required for `_COMM_PAGE_CPU_CAPABILITIES64` in <System/machine/cpu_capabilities.h>
+        '-DPRIVATE',
+    ],
+    include_directories : [
+        common_inc,
+        'cache-builder',
+        'cache_builder',
+        'libdyld',
+        'lsl',
+    ],
+    sources : [
+        'lsl/Allocator.cpp',
+        'lsl/CRC32c.cpp',
+        'lsl/PVLEInt64.cpp',
+    ],
+)
+lsl_dep = declare_dependency(
+    include_directories : [ 'lsl' ],
+    link_with : lsl,
+)
+
+
+# These files need to be built with `BUILDING_LIBDYLD` not `BUILDING_DYLDINFO`.
+# `dyld_info` can’t just link against `libdyld` because the symbols it needs are not publicly exported.
+# Building `libdyld` as a static archive doesn’t work because it results in internal error when linking with ld64.
+libminidyld = static_library(
+    'minidyld',
+    cpp_args : [
+        # Required for `openbyid_np` in <System/sys/fsgetpath.h>
+        '-DPRIVATE',
+        '-DBUILDING_LIBDYLD=1',
+    ],
+    dependencies : [ corecrypto_dep, lsl_dep ],
+    include_directories : [
+        common_inc,
+        'cache-builder',
+        'cache_builder',
+        'libdyld',
+        'libdyld_introspection',
+    ],
+    sources : [
+        'common/CachePatching.cpp',
+        'common/MachOLayout.cpp',
+        'common/MachOLoaded.cpp',
+        'libdyld/CrashReporterAnnotations.c',
+        'mach_o/ChainedFixups.cpp',
+        'mach_o/GradedArchitectures.cpp',
+    ],
+)
+
+libdsc_extractor = shared_library(
+    'dsc_extractor',
+    cpp_args : [ '-DBUILDING_SHARED_CACHE_EXTRACTOR=1' ],
+    dependencies : [ corecrypto_dep, lsl_dep ],
+    include_directories : [
+        common_inc,
+        'cache-builder',
+        'cache_builder',
+    ],
+    install : true,
+    link_args : [ '-Wl,-exported_symbol,_dyld_shared_cache_extract_dylibs_progress' ],
+    link_with : [ libminidyld ],
+    name_prefix : '',
+    name_suffix : 'bundle',
+    sources : [
+        'common/DyldSharedCache.cpp',
+        'common/MachOFile.cpp',
+        'other-tools/dsc_extractor.cpp',
+        'other-tools/dsc_iterator.cpp',
+        'common/MachOLayout.cpp',
+        'common/Diagnostics.cpp',
+    ],
+)
+
+# Binaries
+executable(
+    'dsc_extractor',
+    install : true,
+    link_args : [ '-Wl,-exported_symbol,_dyld_shared_cache_extract_dylibs_progress' ],
+    link_with : [ libdsc_extractor ],
+    sources : [ 'other-tools/dsc_extractor_bin.cpp' ],
+)
+
+executable(
+    'dyld_info',
+    cpp_args : [
+        '-DBUILDING_DYLDINFO=1',
+        '-DBUILDING_FOR_TOOLCHAIN=1',
+    ],
+    dependencies : [
+        corecrypto_dep,
+        llvm_dep,
+        lsl_dep,
+    ],
+    include_directories : [
+        common_inc,
+        'cache-builder',
+        'cache_builder',
+    ],
+    install : true,
+    link_args : [ '-Wl,-weak-lLTO' ],
+    link_with : [ libminidyld ],
+    sources : [
+        'cache-builder/FileUtils.cpp',
+        'common/Diagnostics.cpp',
+        'common/DyldSharedCache.cpp',
+        'common/MachOAnalyzer.cpp',
+        'common/MachOFile.cpp',
+        'common/MetadataVisitor.cpp',
+        'common/SwiftVisitor.cpp',
+        'mach_o/Architecture.cpp',
+        'mach_o/Archive.cpp',
+        'mach_o/BindOpcodes.cpp',
+        'mach_o/ChainedFixups.cpp',
+        'mach_o/CompactUnwind.cpp',
+        'mach_o/Error.cpp',
+        'mach_o/ExportsTrie.cpp',
+        'mach_o/Fixups.cpp',
+        'mach_o/FunctionStarts.cpp',
+        'mach_o/Header.cpp',
+        'mach_o/Image.cpp',
+        'mach_o/Instructions.cpp',
+        'mach_o/LoggingStub.cpp',
+        'mach_o/Misc.cpp',
+        'mach_o/NListSymbolTable.cpp',
+        'mach_o/ObjC.cpp',
+        'mach_o/Platform.cpp',
+        'mach_o/Policy.cpp',
+        'mach_o/RebaseOpcodes.cpp',
+        'mach_o/SplitSeg.cpp',
+        'mach_o/Symbol.cpp',
+        'mach_o/Universal.cpp',
+        'mach_o/Version32.cpp',
+        'mach_o/Version64.cpp',
+        'other-tools/dyld_info.cpp',
+    ],
+)
+install_man('doc/man/man1/dyld_info.1')

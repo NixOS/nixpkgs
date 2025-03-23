@@ -5,7 +5,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -13,7 +13,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   postPatch =
     ''
-      patchShebangs tp/maintain
+      patchShebangs tp/maintain/regenerate_commands_perl_info.pl
     ''
     # This patch is needed for IEEE-standard long doubles on
     # powerpc64; it does not apply cleanly to texinfo 5.x or
@@ -83,10 +83,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [
-      bash
+      bashNonInteractive
       libintl
     ]
-    ++ optionals stdenv.isSunOS [
+    ++ optionals stdenv.hostPlatform.isSunOS [
       libiconv
       gawk
     ]
@@ -101,7 +101,10 @@ stdenv.mkDerivation {
       "--enable-perl-xs=no"
       "TI_AWK=${getBin gawk}/bin/awk"
     ]
-    ++ optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
+    ++ optionals (crossBuildTools && lib.versionAtLeast version "7.1") [
+      "texinfo_cv_sys_iconv_converts_euc_cn=yes"
+    ]
+    ++ optional stdenv.hostPlatform.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [
@@ -111,7 +114,7 @@ stdenv.mkDerivation {
 
   nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
-  doCheck = interactive && !stdenv.isDarwin && !stdenv.isSunOS; # flaky
+  doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
 
   checkFlags = optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
@@ -122,7 +125,7 @@ stdenv.mkDerivation {
   postFixup = optionalString crossBuildTools ''
     for f in "$out"/bin/{pod2texi,texi2any}; do
       substituteInPlace "$f" \
-        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+        --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
     done
   '';
 

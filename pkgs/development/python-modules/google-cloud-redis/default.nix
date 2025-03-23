@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.15.4";
+  version = "2.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vG8+mL1A5j9Cuwzmz+aYbjmYXWlGCzriDNtQoLbwmoU=";
+    pname = "google_cloud_redis";
+    inherit version;
+    hash = "sha256-o64V2KL/Gmeg2LOXR3XCsGypf4Tz8zyHYoIiGR7+rJw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-redis";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${version}/packages/google-cloud-redis/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

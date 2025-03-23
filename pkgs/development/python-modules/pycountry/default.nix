@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycountry";
     repo = "pycountry";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4YVPh6OGWguqO9Ortv+vAejxx7WLs4u0SVLv8JlKSWM=";
   };
 

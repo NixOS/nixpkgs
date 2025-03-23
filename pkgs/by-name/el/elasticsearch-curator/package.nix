@@ -9,15 +9,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
-  version = "8.0.15";
-  format = "pyproject";
+  version = "8.0.18";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pW928jT9oL76RJuJgH7nhCvgWPzXixzqBKVYsaJy9xw=";
+    tag = "v${version}";
+    hash = "sha256-J0RHCWr0l1Vm/rcmcH3w0E0U+S9AvM0XMO89rnG38mY=";
   };
+
+  pythonRelaxDeps = [ "es-client" ];
 
   build-system = with python3.pkgs; [ hatchling ];
 

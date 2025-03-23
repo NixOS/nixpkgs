@@ -5,12 +5,14 @@
   msal,
   portalocker,
   setuptools,
+  stdenv,
   pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "msal-extensions";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,19 +20,33 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AzureAD";
     repo = "microsoft-authentication-extensions-for-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ScInTvOgFxP5mgep5FRu6YZHPTtXhrcZGFE7Wdvcm4c=";
+    tag = version;
+    hash = "sha256-javYE1XDW1yrMZ/BLqIu/pUXChlBZlACctbD2RfWuis=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "portalocker" ];
+
+  dependencies = [
     msal
     portalocker
   ];
 
-  # No tests found
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests =
+    [
+      # `from gi.repository import Secret` fails to find libsecret
+      "test_token_cache_roundtrip_with_persistence_builder"
+      "test_libsecret_persistence"
+      "test_nonexistent_libsecret_persistence"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      #  msal_extensions.osx.KeychainError
+      "test_keychain_roundtrip"
+      "test_keychain_persistence"
+    ];
 
   pythonImportsCheck = [ "msal_extensions" ];
 

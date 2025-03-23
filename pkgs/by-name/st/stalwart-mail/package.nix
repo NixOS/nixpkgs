@@ -2,53 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   protobuf,
   bzip2,
   openssl,
   sqlite,
+  foundationdb,
   zstd,
   stdenv,
   darwin,
   nix-update-script,
   nixosTests,
-  rocksdb_8_11,
+  rocksdb,
+  callPackage,
 }:
 
-let
-  # Stalwart depends on rocksdb crate:
-  # https://github.com/stalwartlabs/mail-server/blob/v0.8.0/crates/store/Cargo.toml#L10
-  # which expects a specific rocksdb versions:
-  # https://github.com/rust-rocksdb/rust-rocksdb/blob/v0.22.0/librocksdb-sys/Cargo.toml#L3
-  # See upstream issue for rocksdb 9.X support
-  # https://github.com/stalwartlabs/mail-server/issues/407
-  rocksdb = rocksdb_8_11;
-  version = "0.8.5";
-in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
-  inherit version;
+  version = "0.11.6-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "v${version}";
-    hash = "sha256-Y28o4BIoGcakEY3ig4wNR0sI6YBoR6BQUhXWK7fA3qo=";
-    fetchSubmodules = true;
+    # release 0.11.6 broken, see https://github.com/stalwartlabs/mail-server/issues/1150
+    rev = "fa6483b6df57513582425119027bc4fce8f03d65";
+    hash = "sha256-mB3Vm07b+eKDlQ95pmVk14Q7jXTBbV1jTbN+6hcFt0s=";
   };
 
-  cargoHash = "sha256-axLg7igmupGHU6xohDN+UIwaZB+vt02p9WIK+P9YkY8=";
-
-  patches = [
-    # Remove "PermissionsStartOnly" from systemd service files,
-    # which is deprecated and conflicts with our module's ExecPreStart.
-    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
-    (fetchpatch {
-      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
-      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
-    })
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PHr73GQ/6d5ulJzntSHIilGzdF4Y8Np9jSFa6F2Nwao=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,15 +38,30 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    bzip2
-    openssl
-    sqlite
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs =
+    [
+      bzip2
+      openssl
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "sqlite"
+    "postgres"
+    "mysql"
+    "rocks"
+    "elastic"
+    "s3"
+    "redis"
   ];
 
   env = {
@@ -76,8 +73,6 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     mkdir -p $out/etc/stalwart
-    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
-    cp -r resources/config/spamfilter $out/etc/stalwart/
 
     mkdir -p $out/lib/systemd/system
 
@@ -91,8 +86,10 @@ rustPlatform.buildRustPackage {
     "--skip=directory::internal::internal_directory"
     "--skip=directory::ldap::ldap_directory"
     "--skip=directory::sql::sql_directory"
+    "--skip=directory::oidc::oidc_directory"
     "--skip=store::blob::blob_tests"
     "--skip=store::lookup::lookup_tests"
+    "--skip=smtp::lookup::sql::lookup_sql"
     # thread 'directory::smtp::lmtp_directory' panicked at tests/src/store/mod.rs:122:44:
     # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
     "--skip=directory::smtp::lmtp_directory"
@@ -121,20 +118,44 @@ rustPlatform.buildRustPackage {
     # error[E0432]: unresolved import `r2d2_sqlite`
     # use of undeclared crate or module `r2d2_sqlite`
     "--skip=backend::sqlite::pool::SqliteConnectionManager::with_init"
+    # thread 'smtp::reporting::analyze::report_analyze' panicked at tests/src/smtp/reporting/analyze.rs:88:5:
+    # assertion `left == right` failed
+    #   left: 0
+    #  right: 12
+    "--skip=smtp::reporting::analyze::report_analyze"
+    # thread 'smtp::inbound::dmarc::dmarc' panicked at tests/src/smtp/inbound/mod.rs:59:26:
+    # Expected empty queue but got Reload
+    "--skip=smtp::inbound::dmarc::dmarc"
+    # thread 'smtp::queue::concurrent::concurrent_queue' panicked at tests/src/smtp/inbound/mod.rs:65:9:
+    # assertion `left == right` failed
+    "--skip=smtp::queue::concurrent::concurrent_queue"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::auth::auth"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::antispam::antispam"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
-    update-script = nix-update-script { };
+    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    webadmin = callPackage ./webadmin.nix { };
+    updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada onny ];
+    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      happysalada
+      onny
+      oddlama
+      pandapip1
+    ];
   };
 }

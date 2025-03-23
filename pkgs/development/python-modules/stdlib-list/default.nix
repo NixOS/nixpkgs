@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "stdlib-list";
-  version = "0.10.0";
+  version = "0.11.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "stdlib_list";
     inherit version;
-    hash = "sha256-ZRnFDWRVE+0odle/6FbVJ/J3MxVAaR3er3eyVFmWShQ=";
+    hash = "sha256-levR1z2pMzu6A8zAl/W6wF46oD5oIqDAKQ+H4QR/GFc=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "List of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

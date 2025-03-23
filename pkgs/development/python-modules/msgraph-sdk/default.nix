@@ -3,6 +3,7 @@
   azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
@@ -12,12 +13,11 @@
   microsoft-kiota-serialization-text,
   msgraph-core,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.4.0";
+  version = "1.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-afnxk79duKzTykNnSHPE6lZhMkOt+9JhEskj/KjQpQI=";
+    tag = "v${version}";
+    hash = "sha256-CRs9Pqgv8sVhjlMPmC8UR03b4jP1Pm39Yndn2LF51jU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     azure-identity
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Graph SDK for Python";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python";
-    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

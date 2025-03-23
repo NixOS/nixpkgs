@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pkgs,
   qtbase,
   qmake,
@@ -10,15 +11,17 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.8";
-  format = "setuptools";
+  version = "0.6.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-y72nzZAelyRDR2JS73/0jo2x/XiDZpsERPZV3gzIhAI=";
+    tag = version;
+    hash = "sha256-wWM8eKTehWCIbRxxWkZ4YrYyeIJuzQaBOUMrW9a5MVo=";
   };
+
+  build-system = [ setuptools ];
 
   dontUseCmakeConfigure = true;
 
@@ -60,10 +63,12 @@ buildPythonPackage rec {
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 
+  pythonImportsCheck = [ "pivy" ];
+
   meta = with lib; {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

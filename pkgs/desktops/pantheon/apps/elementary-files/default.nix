@@ -12,9 +12,9 @@
 , glib
 , libgee
 , libhandy
+, libportal-gtk3
 , granite
 , pango
-, bamf
 , sqlite
 , zeitgeist
 , libcloudproviders
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.5.3";
+  version = "7.1.1";
 
   outputs = [ "out" "dev" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-geJLHRo1Bd2oFT+UtirHj9FVSFTFMK/v/5h+NF9woFo=";
+    hash = "sha256-GJ+OYe2DJ9VIMkwobQJxD1bGoV8k6ALkx9RpT3Cazis=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
     glib
     granite
     gtk3
@@ -55,6 +54,7 @@ stdenv.mkDerivation rec {
     libgee
     libgit2-glib
     libhandy
+    libportal-gtk3
     pango
     sqlite
     systemd

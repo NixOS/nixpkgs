@@ -1,5 +1,6 @@
-{ faust
-, csound
+{
+  faust,
+  csound,
 }:
 
 faust.wrapWithBuildEnv {

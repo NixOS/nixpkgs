@@ -2,7 +2,6 @@
   lib,
   async-timeout,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   flask,
   httpcore,
@@ -14,7 +13,6 @@
   python-socks,
   pythonOlder,
   setuptools,
-  sniffio,
   starlette,
   tiny-proxy,
   trio,
@@ -24,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,19 +30,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
+    tag = "v${version}";
+    hash = "sha256-H+A6203XMM7MaIdwtjQScyOBRJNpTx9NsSMIoov8hg8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     httpcore
     python-socks
-  ];
+  ] ++ python-socks.optional-dependencies.asyncio;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ async-timeout ];
     trio = [ trio ];
   };
@@ -74,7 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
-    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/v${version}";
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

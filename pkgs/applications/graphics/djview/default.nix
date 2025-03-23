@@ -1,23 +1,28 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, autoconf
-, automake
-, libtool
-, pkg-config
-, djvulibre
-, qtbase
-, qttools
-, xorg
-, libtiff
-, darwin
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  djvulibre,
+  qtbase,
+  qttools,
+  xorg,
+  libtiff,
+  darwin,
 }:
 
 mkDerivation rec {
   pname = "djview";
   version = "4.12";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
@@ -37,7 +42,7 @@ mkDerivation rec {
     qtbase
     xorg.libXt
     libtiff
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AGL;
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
@@ -49,10 +54,10 @@ mkDerivation rec {
     "--with-x"
     "--with-tiff"
     "--disable-nsdejavu" # 2023-11-14: modern browsers have dropped support for NPAPI
-  ] ++ lib.optional stdenv.isDarwin "--enable-mac";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-mac";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
     mainProgram = "djview";
     homepage = "https://djvu.sourceforge.net/djview4.html";

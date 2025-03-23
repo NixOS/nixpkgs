@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, weechat }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  weechat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "edit-weechat";

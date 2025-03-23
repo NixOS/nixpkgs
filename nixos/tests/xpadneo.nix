@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "xpadneo";
   meta.maintainers = with lib.maintainers; [ kira-bruneau ];
 
@@ -15,4 +16,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.start();
     machine.succeed("modinfo hid_xpadneo | grep 'version:\s\+${pkgs.linuxPackages.xpadneo.version}'")
   '';
-})
+}

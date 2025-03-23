@@ -5,24 +5,26 @@
   buildPythonPackage,
   pillow,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "captcha";
-  version = "0.5.0";
+  version = "0.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  format = "setuptools";
-
   src = fetchFromGitHub {
     owner = "lepture";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TPPuf0BRZPSHPSF0HuGxhjhoSyZQ7r86kSjkrztgZ5w=";
+    repo = "captcha";
+    tag = "v${version}";
+    hash = "sha256-wMnfPkHexiRprtDL6Kkmh9dms4NtW3u37DKtDMPb2ZI=";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  dependencies = [ pillow ];
+
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "captcha" ];
 

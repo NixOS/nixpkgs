@@ -1,24 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mpris-notifier";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "l1na-forever";
     repo = "mpris-notifier";
     rev = "v${version}";
-    hash = "sha256-B1nfVsn95oe2FlHFjb9O4tfL/EqsZZ4JGF0mbJcCg2Y=";
+    hash = "sha256-SD37JFbfg05GemtRNQKvXkXPAyszItSW9wClzudrTS8=";
   };
 
-  cargoHash = "sha256-8WzG712/soPgooyR35L8aFIRfPC2MvV3vCcPbkTgoF0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5LDhxciLpDYd4isUQNx8LF3y7m6cfcuIF2atHj/kayg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

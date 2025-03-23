@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kconfig
-, ki18n
-, kirigami-addons
-, kirigami2
-, kcoreaddons
-, qtquickcontrols2
-, kwindowsystem
-, qmltermwidget
+  kconfig,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  kcoreaddons,
+  qtquickcontrols2,
+  kwindowsystem,
+  qmltermwidget,
 }:
 
 mkDerivation {
@@ -37,7 +38,11 @@ mkDerivation {
     description = "Terminal app for Plasma Mobile";
     mainProgram = "qmlkonsole";
     homepage = "https://invent.kde.org/plasma-mobile/qmlkonsole";
-    license = with licenses; [ gpl2Plus gpl3Plus cc0 ];
+    license = with licenses; [
+      gpl2Plus
+      gpl3Plus
+      cc0
+    ];
     maintainers = with maintainers; [ balsoft ];
   };
 }

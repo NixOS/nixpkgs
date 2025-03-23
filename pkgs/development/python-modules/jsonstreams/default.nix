@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "JSON streaming writer";
     homepage = "https://github.com/dcbaker/jsonstreams";
     license = licenses.mit;

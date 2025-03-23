@@ -3,22 +3,31 @@
   stdenvNoCC,
   fetchFromGitHub,
   dash,
+  scdoc,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";
-  version = "0.10.0";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "xdg-terminal-exec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u/BYhae6xf5rVhYi8uPxZeQTN7skjLbmOC8xoDcUDQk=";
+    hash = "sha256-mA/azPl4pB7vW1dB+Are5WbIf/eLmU91iwjC/V0+Xh8=";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ scdoc ];
+
+  buildPhase = ''
+    runHook preBuild
+    scdoc < xdg-terminal-exec.1.scd > xdg-terminal-exec.1
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm555 xdg-terminal-exec -t $out/bin
+    install -Dm444 xdg-terminal-exec.1 -t $out/share/man/man1
     runHook postInstall
   '';
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -23,24 +22,16 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "6.6.1";
+  version = "7.3.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    rev = version;
-    hash = "sha256-MR6kyoGM3uXt6JiIEfGcsmTmxqlLxUF9Wn+CFuK5LtQ=";
+    tag = version;
+    hash = "sha256-8Ly1QKKFzct0CPAN/54/kzNUE2FPiwvM+EqmX1utboU=";
   };
-
-  patches = [
-    # fix xarray tests, remove on next release
-    (fetchpatch {
-      url = "https://github.com/cogeotiff/rio-tiler/commit/7a36ed58b649d2f4d644f280b54851ecb7ffa4e9.patch";
-      hash = "sha256-QlX5ZKpjSpXevi76gx39dXok0aClApkLU0cAVpCuYYs=";
-    })
-  ];
 
   build-system = [ hatchling ];
 
@@ -70,5 +61,8 @@ buildPythonPackage rec {
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
     maintainers = lib.teams.geospatial.members;
+    # Tests broken with gdal 3.10
+    # https://github.com/cogeotiff/rio-tiler/issues/769
+    broken = true;
   };
 }

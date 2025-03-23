@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "celery-types";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "celery_types";
     inherit version;
-    hash = "sha256-DsrS+lpu3tCh+Rnl4eOBzC/wY1/ksh21O0ZhtodtWzA=";
+    hash = "sha256-QC7QVVrqPNXh5iSPRjLk8Y7sjtskNRc/nm3AhEn6EB4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -18,15 +18,25 @@
 
 buildPythonPackage rec {
   pname = "webrtc-noise-gain";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
-    rev = "v${version}";
-    hash = "sha256-ALRdj9zBcx05DcSKjAI0oEPruTD/p+pQ0kcqqyHl37A=";
+    tag = "v${version}";
+    hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
+
+  postPatch = with stdenv.hostPlatform.uname; ''
+    # Configure the correct host platform for cross builds
+    substituteInPlace setup.py --replace-fail \
+      "system = platform.system().lower()" \
+      'system = "${lib.toLower system}"'
+    substituteInPlace setup.py --replace-fail \
+      "machine = platform.machine().lower()" \
+      'machine = "${lib.toLower processor}"'
+  '';
 
   nativeBuildInputs = [
     pybind11
@@ -35,7 +45,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
-  ] ++ lib.optionals (stdenv.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
 
   pythonImportsCheck = [ "webrtc_noise_gain" ];
 

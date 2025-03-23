@@ -14,7 +14,7 @@ save_api = waybackpy.WaybackMachineSaveAPI("https://nav.gov.hu/pfile/programFile
 url = save_api.save()
 
 print("Prefetching...")
-sha256, unpack_path = subprocess.check_output(["nix-prefetch-url", "--unpack", "--print-path", url], universal_newlines=True).split("\n")[:2]
+sha256, unpack_path = subprocess.check_output(["nix-prefetch-url", "--unpack", "--print-path", "--name", "abevjava", url], universal_newlines=True).split("\n")[:2]
 
 print("Extracting version...")
 manifest = (Path(unpack_path) / "META-INF" / "MANIFEST.MF").read_text()

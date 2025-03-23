@@ -3,10 +3,11 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript,
+  ghostscript_headless,
+  hatch-vcs,
+  hatchling,
   hypothesis,
   img2pdf,
-  importlib-resources,
   jbig2enc,
   packaging,
   pdfminer-six,
@@ -17,23 +18,17 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   reportlab,
-  setuptools-scm,
-  substituteAll,
+  replaceVars,
   tesseract,
-  tqdm,
   unpaper,
   installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.4.2";
-
-  disabled = pythonOlder "3.10";
-
+  version = "16.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -46,14 +41,13 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-zU3Yzdu5iF6USGj7bpf52+UMyeJuC7LFvR9NOrd8gXE=";
+    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
   };
 
   patches = [
     ./use-pillow-heif.patch
-    (substituteAll {
-      src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+    (replaceVars ./paths.patch {
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;
@@ -61,7 +55,10 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -1,15 +1,14 @@
 {
-  async-generator,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   ipykernel,
   ipywidgets,
   jupyter-client,
+  jupyter-core,
   lib,
   nbconvert,
   nbformat,
-  nest-asyncio,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -21,26 +20,25 @@
 let
   nbclient = buildPythonPackage rec {
     pname = "nbclient";
-    version = "0.10.0";
-    format = "pyproject";
+    version = "0.10.2";
+    pyproject = true;
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "jupyter";
       repo = pname;
-      rev = "refs/tags/v${version}";
-      hash = "sha256-8OLkpwX4Gpam9VSFUtNS41Ypxe4+2yN3ng6iVY9DSqY=";
+      tag = "v${version}";
+      hash = "sha256-+qSed6yy4YVZ25GigNTap+kMaoDiMYSJO85wurbzeDs=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
-    propagatedBuildInputs = [
-      async-generator
-      traitlets
-      nbformat
-      nest-asyncio
+    dependencies = [
       jupyter-client
+      jupyter-core
+      nbformat
+      traitlets
     ];
 
     # circular dependencies if enabled by default
@@ -66,11 +64,11 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/jupyter/nbclient";
       description = "Client library for executing notebooks";
       mainProgram = "jupyter-execute";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

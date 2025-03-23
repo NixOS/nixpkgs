@@ -1,33 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, telegram-desktop
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  telegram-desktop,
+  withWebkit ? true,
 }:
 
-telegram-desktop.overrideAttrs (old: rec {
+telegram-desktop.override {
   pname = "64gram";
-  version = "1.1.31";
+  inherit withWebkit;
+  unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
+    pname = "64gram-unwrapped";
+    version = "1.1.58";
 
-  src = fetchFromGitHub {
-    owner = "TDesktop-x64";
-    repo = "tdesktop";
-    rev = "v${version}";
+    src = fetchFromGitHub {
+      owner = "TDesktop-x64";
+      repo = "tdesktop";
+      tag = "v${version}";
+      hash = "sha256-RHybrvm5p8BUt5StT/NuR76f2y1CCICirTMjdeRLtkY=";
+      fetchSubmodules = true;
+    };
 
-    fetchSubmodules = true;
-    hash = "sha256-xYCousLXV9TeQjDNiXkEMbTiiuusLc7Ib2xHkMYBD1M=";
-  };
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
+    ];
 
-  passthru.updateScript = nix-update-script {};
-
-  meta = with lib; {
-    description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    homepage = "https://github.com/TDesktop-x64/tdesktop";
-    changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ clot27 ];
-    mainProgram = "telegram-desktop";
-    broken = stdenv.isDarwin;
-  };
-})
+    meta = {
+      description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.all;
+      homepage = "https://github.com/TDesktop-x64/tdesktop";
+      changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
+      maintainers = with lib.maintainers; [ clot27 ];
+      mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    };
+  });
+}

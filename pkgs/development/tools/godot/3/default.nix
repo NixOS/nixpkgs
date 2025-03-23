@@ -1,41 +1,48 @@
-{ lib
-, stdenv
-, alsa-lib
-, alsa-plugins
-, autoPatchelfHook
-, fetchFromGitHub
-, freetype
-, installShellFiles
-, libGLU
-, libpulseaudio
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, makeWrapper
-, openssl
-, pkg-config
-, scons
-, udev
-, yasm
-, zlib
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  alsa-plugins,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  freetype,
+  installShellFiles,
+  libGLU,
+  libpulseaudio,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  scons,
+  udev,
+  yasm,
+  zlib,
 }:
 
 stdenv.mkDerivation (self: {
   pname = "godot3";
-  version = "3.5.2";
+  version = "3.6";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${self.version}-stable";
-    sha256 = "sha256-C+1J5N0ETL1qKust+2xP9uB4x9NwrMqIm8aFAivVYQw=";
+    sha256 = "sha256-4WQYO1BBDK9+eyblpI8qRgbBG4+qPRVZMjeAFAtot+0=";
   };
+
+  # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
+  postPatch = ''
+    substituteInPlace platform/x11/detect.py \
+      --replace-fail 'env.Append(LINKFLAGS=["-no-pie"])' ""
+  '';
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -83,7 +90,7 @@ stdenv.mkDerivation (self: {
   shouldBuildTools = true;
   godotBuildTarget = "release_debug";
 
-  shouldUseLinkTimeOptimization = self.godotBuildTarget == "release";
+  lto = if self.godotBuildTarget == "release" then "full" else "none";
 
   sconsFlags = [
     "arch=${stdenv.hostPlatform.linuxArch}"
@@ -91,7 +98,7 @@ stdenv.mkDerivation (self: {
     "tools=${lib.boolToString self.shouldBuildTools}"
     "target=${self.godotBuildTarget}"
     "bits=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "use_lto=${lib.boolToString self.shouldUseLinkTimeOptimization}"
+    "lto=${self.lto}"
   ];
 
   shouldWrapBinary = self.shouldBuildTools;
@@ -100,9 +107,13 @@ stdenv.mkDerivation (self: {
   shouldInstallHeaders = self.shouldBuildTools;
   shouldInstallShortcut = self.shouldBuildTools && self.godotBuildPlatform != "server";
 
-  outputs = ["out"] ++ lib.optional self.shouldInstallManual "man" ++ lib.optional self.shouldBuildTools "dev";
+  outputs =
+    [ "out" ]
+    ++ lib.optional self.shouldInstallManual "man"
+    ++ lib.optional self.shouldBuildTools "dev";
 
-  builtGodotBinNamePattern = if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
+  builtGodotBinNamePattern =
+    if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
 
   godotBinInstallPath = "bin";
   installedGodotBinName = self.pname;
@@ -150,17 +161,26 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  runtimeDependencies = lib.optionals self.shouldPatchBinary (map lib.getLib [
-    alsa-lib
-    libpulseaudio
-    udev
-  ]);
+  runtimeDependencies = lib.optionals self.shouldPatchBinary (
+    map lib.getLib [
+      alsa-lib
+      libpulseaudio
+      udev
+    ]
+  );
 
   meta = with lib; {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine (" + self.godotBuildDescription + ")";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ rotaerk twey ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      rotaerk
+      twey
+    ];
   };
 })

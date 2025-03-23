@@ -1,36 +1,36 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
-let
+  let
 
-  # FIXME: 404s
-  stick = pkgs.fetchurl {
-    url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
-    sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
-  };
+    # FIXME: 404s
+    stick = pkgs.fetchurl {
+      url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
+      sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
+    };
 
-in
+  in
 
-{
-  name = "udisks2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
+  {
+    name = "udisks2";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
+    };
 
-  nodes.machine =
-    { ... }:
-    { services.udisks2.enable = true;
-      imports = [ ./common/user-account.nix ];
+    nodes.machine =
+      { ... }:
+      {
+        services.udisks2.enable = true;
+        imports = [ ./common/user-account.nix ];
 
-      security.polkit.extraConfig =
-        ''
+        security.polkit.extraConfig = ''
           polkit.addRule(function(action, subject) {
             if (subject.user == "alice") return "yes";
           });
         '';
-    };
+      };
 
-  testScript =
-    ''
+    testScript = ''
       import lzma
 
       machine.systemctl("start udisks2")
@@ -70,4 +70,5 @@ in
       machine.fail("[ -e /dev/sda ]")
     '';
 
-})
+  }
+)

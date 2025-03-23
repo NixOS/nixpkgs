@@ -6,23 +6,23 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.3.5";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-Og7yDZn6PBkoihApCy/dWxWt/DoBwQDXVAio8nwcI9A=";
+    hash = "sha256-ZlB9lyfC4xrLWAb+Jbo6eI/LuYjvgMEauQeLxGCqy88=";
   };
 
   projectFile = "CarCareTracker.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  nugetDeps = ./deps.json; # File generated with `nix-build -A lubelogger.passthru.fetch-deps`.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   makeWrapperArgs = [
-    "--set DOTNET_CONTENTROOT ${placeholder "out"}/lib/lubelogger"
+    "--set DOTNET_WEBROOT ${placeholder "out"}/lib/lubelogger/wwwroot"
   ];
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
@@ -37,7 +37,7 @@ buildDotnetModule rec {
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ samasaur ];
+    maintainers = with maintainers; [ lyndeno ];
     mainProgram = "CarCareTracker";
     platforms = platforms.all;
   };

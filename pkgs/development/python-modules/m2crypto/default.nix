@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchurl,
   openssl,
   pytestCheckHook,
   pythonOlder,
@@ -12,16 +13,21 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.41.0";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "M2Crypto";
-    inherit version;
-    hash = "sha256-OhNYx+6EkEbZF4Knd/F4a/AnocHVG1+vjxlDW/w/FJU=";
+    inherit pname version;
+    hash = "sha256-OEu0y9F47g50AVMRt7H58sN342huA/oHCz7C9JRnHA8=";
   };
+  patches = [
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/m/m2crypto/0.42.0-2.1/debian/patches/0004-swig-Workaround-for-reading-sys-select.h-ending-with.patch";
+      hash = "sha256-/Bkuqu/Od+S56AUWo0ZzpZF7FGMxP766K2GJnfKXrOI=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -31,7 +37,7 @@ buildPythonPackage rec {
 
   env =
     {
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=incompatible-pointer-types"
       ]);
@@ -52,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

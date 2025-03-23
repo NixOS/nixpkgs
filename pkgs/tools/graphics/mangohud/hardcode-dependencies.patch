@@ -12,10 +12,10 @@ index 7379af1..4eef3fe 100644
          return false;
      }
 diff --git a/src/logging.cpp b/src/logging.cpp
-index 7d4cb98..256128c 100644
+index ca986d4..c4d99ea 100644
 --- a/src/logging.cpp
 +++ b/src/logging.cpp
-@@ -27,8 +27,12 @@ string exec(string command) {
+@@ -28,8 +28,12 @@ string exec(string command) {
  #endif
      std::array<char, 128> buffer;
      std::string result;

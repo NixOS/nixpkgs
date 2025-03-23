@@ -52,7 +52,7 @@ in {
         Web interface credentials should also be set here in `SLSKD_USERNAME` and `SLSKD_PASSWORD`.
         Other, optional credentials like SOCKS5 with `SLSKD_SLSK_PROXY_USERNAME` and `SLSKD_SLSK_PROXY_PASSWORD`
         should all reside here instead of in the world-readable nix store.
-        Variables are documented at https://github.com/slskd/slskd/blob/master/docs/config.md
+        Variables are documented at <https://github.com/slskd/slskd/blob/master/docs/config.md>
       '';
     };
 
@@ -282,6 +282,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        Environment = ["DOTNET_USE_POLLING_FILE_WATCHER=1"];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";  # Creates /var/lib/slskd and manages permissions
         ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";

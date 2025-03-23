@@ -16,7 +16,10 @@
     config.allowUnfree = true;
   },
 
-  config ? pkgs.config
+  config ? pkgs.config,
+  # You probably need to set it to true to express consent.
+  licenseAccepted ?
+    config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1"),
 }:
 
 # Copy this file to your Android project.
@@ -26,18 +29,21 @@ let
   android = {
     versions = {
       cmdLineToolsVersion = "13.0";
-      platformTools = "35.0.1";
-      buildTools = "34.0.0";
+      platformTools = "35.0.2";
+      buildTools = "35.0.0";
       ndk = [
-        "26.3.11579264"
+        "27.0.12077973"
       ];
       cmake = "3.6.4111459";
       emulator = "35.1.4";
     };
 
-    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
-    abis = ["armeabi-v7a" "arm64-v8a"];
-    extras = ["extras;google;gcm"];
+    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
+    abis = [ "x86_64" ];
+    extras = [
+      "extras;google;gcm"
+      "extras;google;auto"
+    ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
@@ -54,9 +60,7 @@ let
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs;
-    # You probably need to uncomment below line to express consent.
-    # licenseAccepted = true;
+    inherit config pkgs licenseAccepted;
   };
 
   androidComposition = androidEnv.composeAndroidPackages {
@@ -118,7 +122,7 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [ androidSdk platformTools jdk ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -163,21 +167,26 @@ pkgs.mkShell rec {
       output="$(sdkmanager --list)"
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
+      # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
       packages=(
-        "build-tools;34.0.0" "platform-tools" \
+        "build-tools;35.0.0" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" \
+        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-35" \
         "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
         "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
         "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
-        "system-images;android-28;google_apis_playstore;arm64-v8a" \
-        "system-images;android-29;google_apis_playstore;arm64-v8a" \
-        "system-images;android-30;google_apis_playstore;arm64-v8a" \
-        "system-images;android-31;google_apis_playstore;arm64-v8a" \
-        "system-images;android-32;google_apis_playstore;arm64-v8a" \
-        "system-images;android-33;google_apis_playstore;arm64-v8a" \
-        "system-images;android-34;google_apis_playstore;arm64-v8a"
+        "sources;android-35" \
+        "system-images;android-28;google_apis_playstore;x86_64" \
+        "system-images;android-29;google_apis_playstore;x86_64" \
+        "system-images;android-30;google_apis_playstore;x86_64" \
+        "system-images;android-31;google_apis_playstore;x86_64" \
+        "system-images;android-32;google_apis_playstore;x86_64" \
+        "system-images;android-33;google_apis_playstore;x86_64" \
+        "system-images;android-34;google_apis;x86_64" \
+        "system-images;android-35;google_apis;x86_64" \
+        "extras;google;gcm"
+        "extras;google;auto"
       )
 
       for package in "''${packages[@]}"; do

@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.28.1";
+  version = "1.31.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1yu/4tXC8lVfS8YgW+RFDd/RKXZhDdmhapqw8Fxotk0=";
+    hash = "sha256-EbXmo/gC/9OnIQcgPiDE6sbvU0AZYbiAryg1tyPYBXg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     pyjwt
     requests

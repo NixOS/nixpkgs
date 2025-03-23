@@ -31,6 +31,5 @@ let
     '';
   };
 in with pkgs; {
-  unifi7 = makeAppTest unifi7;
   unifi8 = makeAppTest unifi8;
 }

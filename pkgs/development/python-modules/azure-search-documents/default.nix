@@ -6,7 +6,6 @@
   azure-common,
   azure-core,
   isodate,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +34,9 @@ buildPythonPackage rec {
 
   # require devtools_testutils which is a internal package for azure-sdk
   doCheck = false;
+
+  # multiple packages in the repo and the updater picks the wrong tag
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Microsoft Azure Cognitive Search Client Library for Python";

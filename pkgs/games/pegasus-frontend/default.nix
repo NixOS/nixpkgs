@@ -1,28 +1,29 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, qtbase
-, qtgraphicaleffects
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, SDL2
-, sqlite
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  SDL2,
+  sqlite,
+  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pegasus-frontend";
-  version = "0-unstable-2023-12-05";
+  version = "0-unstable-2024-11-11";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "86d3eed534ef8e79f412270b955dc2ffd4d172a3";
+    rev = "54362976fd4c6260e755178d97e9db51f7a896af";
     fetchSubmodules = true;
-    hash = "sha256-lUoL63yFOVwTOcsGd8+pWqgcS5b3a6uuR8M4L6OvlXM=";
+    hash = "sha256-DqtkvDg0oQL9hGB+6rNXe3sDBywvnqy9N31xfyl6nbI=";
   };
 
   nativeBuildInputs = [

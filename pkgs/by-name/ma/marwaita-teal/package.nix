@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-teal";
-  version = "20.3";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "marwaita-teal";
     rev = version;
-    hash = "sha256-3wiT75fnwagxe1dLVXj+V3n6tZ1zKZcVXlMagAAKXoI=";
+    hash = "sha256-63VJrmb0TcsXT1JM77+ZxN4kOZPBlqR2ANAhY041QCA=";
   };
 
   buildInputs = [

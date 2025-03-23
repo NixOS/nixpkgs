@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gtk3
-, xcursorgen
-, papirus-icon-theme
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gtk3,
+  xcursorgen,
+  papirus-icon-theme,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "2024.07.19";
+  version = "2024.07.31";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-eUL0V9pGYzvAdVZpnrWXDO/YeCBETCOGvcMqDTwTgoU=";
+    hash = "sha256-Vt2rYZthGelXVUp8/L57ZlDsVEjjZhCv+kSGeU6nC2s=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -24,13 +25,13 @@ stdenvNoCC.mkDerivation rec {
     xcursorgen
   ];
 
-  propagatedBuildInputs = [
-    papirus-icon-theme
-  ];
+  propagatedBuildInputs = [ papirus-icon-theme ];
 
   dontDropIconThemeCache = true;
 
+  # Remove broken symbolic link(https://github.com/linuxdeepin/developer-center/issues/11245)
   preFixup = ''
+    rm $out/share/icons/bloom/actions/24/{draw-triangle1.svg,draw-triangle2.svg,draw-triangle3.svg,draw-triangle4.svg}
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

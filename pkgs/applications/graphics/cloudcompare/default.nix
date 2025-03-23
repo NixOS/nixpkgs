@@ -1,25 +1,25 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, cmake
-, boost
-, cgal
-, eigen
-, flann
-, gdal
-, gmp
-, laszip
-, mpfr
-, pdal
-, pcl
-, qtbase
-, qtsvg
-, qttools
-, tbb
-, xercesc
-, wrapGAppsHook3
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  cmake,
+  boost,
+  cgal,
+  eigen,
+  flann,
+  gdal,
+  gmp,
+  laszip,
+  mpfr,
+  pcl,
+  qtbase,
+  qtsvg,
+  qttools,
+  tbb,
+  xercesc,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {
@@ -49,7 +49,6 @@ mkDerivation rec {
     gmp
     laszip
     mpfr
-    pdal
     pcl
     qtbase
     qtsvg
@@ -72,7 +71,7 @@ mkDerivation rec {
     "-DPLUGIN_IO_QCSV_MATRIX=ON"
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
-    "-DPLUGIN_IO_QPDAL=ON" # required for .las/.laz support
+    "-DPLUGIN_IO_QLAS=ON" # required for .las/.laz support
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 
@@ -121,8 +120,15 @@ mkDerivation rec {
       comment = "3D point cloud and mesh processing software";
       exec = "CloudCompare";
       terminal = false;
-      categories = [ "Graphics" "3DGraphics" "Viewer" ];
-      keywords = [ "3d" "processing" ];
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "processing"
+      ];
       icon = "CloudCompare";
     })
     (makeDesktopItem {
@@ -131,8 +137,15 @@ mkDerivation rec {
       comment = "3D point cloud and mesh processing software";
       exec = "ccViewer";
       terminal = false;
-      categories = [ "Graphics" "3DGraphics" "Viewer" ];
-      keywords = [ "3d" "viewer" ];
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "viewer"
+      ];
       icon = "ccViewer";
     })
   ];

@@ -6,8 +6,15 @@ let
 
   common = import ./common.nix;
   inherit (common) outputPath indexPath;
+  devmode = pkgs.devmode.override {
+    buildArgs = ''${toString ../../release.nix} -A manualHTML.${builtins.currentSystem}'';
+    open = "/${outputPath}/${indexPath}";
+  };
+  nixos-render-docs-redirects = pkgs.writeShellScriptBin "redirects" "${pkgs.lib.getExe pkgs.nixos-render-docs-redirects} --file ${toString ./redirects.json} $@";
 in
-pkgs.callPackage ../../../pkgs/tools/nix/web-devmode.nix {
-  buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
-  open = "/${outputPath}/${indexPath}";
+pkgs.mkShellNoCC {
+  packages = [
+    devmode
+    nixos-render-docs-redirects
+  ];
 }

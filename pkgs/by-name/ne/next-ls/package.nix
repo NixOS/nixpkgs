@@ -1,34 +1,26 @@
 {
   lib,
 
-  beam_minimal,
+  beamPackages,
   fetchFromGitHub,
 }:
 
-let
-  beamPackages = beam_minimal.packages.erlang_27;
-  elixir = beamPackages.elixir_1_17;
-in
-
 beamPackages.mixRelease rec {
   pname = "next-ls";
-  version = "0.23.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "elixir-tools";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jI7/BcS9CimCQskXd7Cq3EGPuc9l4L7Gre8hor58ags=";
+    tag = "v${version}";
+    hash = "sha256-2KzBOzrfoQQIqjEtYufvhT9bBibfEjNDiC+d3l5eaUc=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    inherit src version elixir;
+    inherit src version;
     pname = "next-ls-deps";
     hash = "sha256-4Rt5Q0fX+fbncvxyXdpIhgEvn9VYX/QDxDdnbanT21Q=";
   };
-
-  inherit elixir;
-  inherit (beamPackages) erlang;
 
   removeCookie = false;
 

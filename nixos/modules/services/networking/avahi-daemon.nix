@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.avahi;
 
@@ -13,15 +10,15 @@ let
       # a host name from DHCP.  In that case, let Avahi take whatever the
       # current host name is; setting `host-name' to the empty string in
       # `avahi-daemon.conf' would be invalid.
-      optionalString (hostName != "") "host-name=${hostName}"}
-    browse-domains=${concatStringsSep ", " browseDomains}
+      lib.optionalString (hostName != "") "host-name=${hostName}"}
+    browse-domains=${lib.concatStringsSep ", " browseDomains}
     use-ipv4=${yesNo ipv4}
     use-ipv6=${yesNo ipv6}
-    ${optionalString (allowInterfaces!=null) "allow-interfaces=${concatStringsSep "," allowInterfaces}"}
-    ${optionalString (denyInterfaces!=null) "deny-interfaces=${concatStringsSep "," denyInterfaces}"}
-    ${optionalString (domainName!=null) "domain-name=${domainName}"}
+    ${lib.optionalString (allowInterfaces!=null) "allow-interfaces=${lib.concatStringsSep "," allowInterfaces}"}
+    ${lib.optionalString (denyInterfaces!=null) "deny-interfaces=${lib.concatStringsSep "," denyInterfaces}"}
+    ${lib.optionalString (domainName!=null) "domain-name=${domainName}"}
     allow-point-to-point=${yesNo allowPointToPoint}
-    ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
+    ${lib.optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
 
     [wide-area]
     enable-wide-area=${yesNo wideArea}
@@ -46,8 +43,8 @@ in
   ];
 
   options.services.avahi = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to run the Avahi daemon, which allows Avahi clients
@@ -57,28 +54,28 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "avahi" { };
+    package = lib.mkPackageOption pkgs "avahi" { };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = lib.literalExpression "config.networking.hostName";
       description = ''
         Host name advertised on the LAN. If not set, avahi will use the value
         of {option}`config.networking.hostName`.
       '';
     };
 
-    domainName = mkOption {
-      type = types.str;
+    domainName = lib.mkOption {
+      type = lib.types.str;
       default = "local";
       description = ''
         Domain name for all advertisements.
       '';
     };
 
-    browseDomains = mkOption {
-      type = types.listOf types.str;
+    browseDomains = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "0pointer.de" "zeroconf.org" ];
       description = ''
@@ -86,20 +83,21 @@ in
       '';
     };
 
-    ipv4 = mkOption {
-      type = types.bool;
+    ipv4 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Whether to use IPv4.";
     };
 
-    ipv6 = mkOption {
-      type = types.bool;
-      default = false;
+    ipv6 = lib.mkOption {
+      type = lib.types.bool;
+      default = config.networking.enableIPv6;
+      defaultText = lib.literalExpression "config.networking.enableIPv6";
       description = "Whether to use IPv6.";
     };
 
-    allowInterfaces = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    allowInterfaces = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         List of network interfaces that should be used by the {command}`avahi-daemon`.
@@ -108,8 +106,8 @@ in
       '';
     };
 
-    denyInterfaces = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    denyInterfaces = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = ''
         List of network interfaces that should be ignored by the
@@ -119,8 +117,8 @@ in
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to open the firewall for UDP port 5353.
@@ -128,8 +126,8 @@ in
       '';
     };
 
-    allowPointToPoint = mkOption {
-      type = types.bool;
+    allowPointToPoint = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
@@ -138,22 +136,22 @@ in
       '';
     };
 
-    wideArea = mkOption {
-      type = types.bool;
+    wideArea = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Whether to enable wide-area service discovery.";
     };
 
-    reflector = mkOption {
-      type = types.bool;
+    reflector = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Reflect incoming mDNS requests to all allowed network interfaces.";
     };
 
-    extraServiceFiles = mkOption {
-      type = with types; attrsOf (either str path);
+    extraServiceFiles = lib.mkOption {
+      type = with lib.types; attrsOf (either str path);
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
           smb = '''
@@ -176,26 +174,26 @@ in
     };
 
     publish = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to allow publishing in general.";
       };
 
-      userServices = mkOption {
-        type = types.bool;
+      userServices = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to publish user services. Will set `addresses=true`.";
       };
 
-      addresses = mkOption {
-        type = types.bool;
+      addresses = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to register mDNS address records for all local IP addresses.";
       };
 
-      hinfo = mkOption {
-        type = types.bool;
+      hinfo = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to register a mDNS HINFO record which contains information about the
@@ -203,23 +201,23 @@ in
         '';
       };
 
-      workstation = mkOption {
-        type = types.bool;
+      workstation = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to register a service of type "_workstation._tcp" on the local LAN.
         '';
       };
 
-      domain = mkOption {
-        type = types.bool;
+      domain = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to announce the locally used domain name for browsing by other hosts.";
       };
     };
 
-    nssmdns4 = mkOption {
-      type = types.bool;
+    nssmdns4 = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the mDNS NSS (Name Service Switch) plug-in for IPv4.
@@ -228,8 +226,8 @@ in
       '';
     };
 
-    nssmdns6 = mkOption {
-      type = types.bool;
+    nssmdns6 = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the mDNS NSS (Name Service Switch) plug-in for IPv6.
@@ -243,8 +241,8 @@ in
       '';
     };
 
-    cacheEntriesMax = mkOption {
-      type = types.nullOr types.int;
+    cacheEntriesMax = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         Number of resource records to be cached per interface. Use 0 to
@@ -252,8 +250,8 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Extra config to append to avahi-daemon.conf.
@@ -261,7 +259,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.avahi = {
       description = "avahi-daemon privilege separation user";
       home = "/var/empty";
@@ -271,7 +269,7 @@ in
 
     users.groups.avahi = { };
 
-    system.nssModules = optional (cfg.nssmdns4 || cfg.nssmdns6) pkgs.nssmdns;
+    system.nssModules = lib.optional (cfg.nssmdns4 || cfg.nssmdns6) pkgs.nssmdns;
     system.nssDatabases.hosts = let
       mdns = if (cfg.nssmdns4 && cfg.nssmdns6) then
         "mdns"
@@ -281,17 +279,17 @@ in
         "mdns4"
       else
         "";
-    in optionals (cfg.nssmdns4 || cfg.nssmdns6) (mkMerge [
-      (mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
-      (mkAfter [ "${mdns}" ]) # after dns
+    in lib.optionals (cfg.nssmdns4 || cfg.nssmdns6) (lib.mkMerge [
+      (lib.mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
+      (lib.mkAfter [ "${mdns}" ]) # after dns
     ]);
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = (mapAttrs'
-      (n: v: nameValuePair
+    environment.etc = (lib.mapAttrs'
+      (n: v: lib.nameValuePair
         "avahi/services/${n}.service"
-        { ${if types.path.check v then "source" else "text"} = v; }
+        { ${if lib.types.path.check v then "source" else "text"} = v; }
       )
       cfg.extraServiceFiles);
 
@@ -307,6 +305,12 @@ in
       description = "Avahi mDNS/DNS-SD Stack";
       wantedBy = [ "multi-user.target" ];
       requires = [ "avahi-daemon.socket" ];
+      documentation = [
+        "man:avahi-daemon(8)"
+        "man:avahi-daemon.conf(5)"
+        "man:avahi.hosts(5)"
+        "man:avahi.service(5)"
+      ];
 
       # Make NSS modules visible so that `avahi_nss_support ()' can
       # return a sensible value.
@@ -320,12 +324,53 @@ in
         Type = "dbus";
         ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
         ConfigurationDirectory = "avahi/services";
+
+        # Hardening
+        CapabilityBoundingSet = [
+          # https://github.com/avahi/avahi/blob/v0.9-rc1/avahi-daemon/caps.c#L38
+          "CAP_SYS_CHROOT"
+          "CAP_SETUID"
+          "CAP_SETGID"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = false;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@chown setgroups setresuid"
+        ];
+        UMask = "0077";
       };
     };
 
     services.dbus.enable = true;
     services.dbus.packages = [ cfg.package ];
 
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 5353 ];
   };
 }

@@ -1,25 +1,27 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, qtbase
-, qtmultimedia
-, qtquickcontrols
-, qtimageformats
-, qtxmlpatterns
-, ffmpeg
-, guvcview
-, cmake
-, ninja
-, libxml2
-, gettext
-, pkg-config
-, libgphoto2
-, gphoto2
-, v4l-utils
-, libv4l
-, pcre
-, qwt
-, extra-cmake-modules
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  qtbase,
+  qtmultimedia,
+  qtquickcontrols,
+  qtimageformats,
+  qtxmlpatterns,
+  ffmpeg,
+  guvcview,
+  cmake,
+  ninja,
+  libxml2,
+  gettext,
+  pkg-config,
+  libgphoto2,
+  gphoto2,
+  v4l-utils,
+  libv4l,
+  pcre,
+  qwt,
+  extra-cmake-modules,
 }:
 
 mkDerivation rec {
@@ -27,7 +29,9 @@ mkDerivation rec {
   version = "2.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/Version_${builtins.replaceStrings ["."] ["_"] version}/${pname}-${version}-Source.tar.gz";
+    url = "mirror://sourceforge/project/${pname}/Version_${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }/${pname}-${version}-Source.tar.gz";
     sha256 = "sha256-jyBUyadkSuQKXOrr5XZ1jy6of1Qw8S2HPxuOrPc7RnE=";
   };
 
@@ -64,7 +68,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   meta = with lib; {
@@ -79,7 +86,7 @@ mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "qstopmotion";
   };

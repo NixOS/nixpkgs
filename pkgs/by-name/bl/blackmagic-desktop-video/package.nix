@@ -1,36 +1,39 @@
-{ stdenv
-, cacert
-, curl
-, runCommandLocal
-, lib
-, autoPatchelfHook
-, libcxx
-, libGL
-, gcc7
+{
+  stdenv,
+  cacert,
+  curl,
+  runCommandLocal,
+  lib,
+  autoPatchelfHook,
+  libcxx,
+  libGL,
+  gcc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
-  version = "14.0.1a2";
+  version = "14.4.1a4";
 
   buildInputs = [
     autoPatchelfHook
     libcxx
     libGL
-    gcc7.cc.lib
+    gcc.cc.lib
   ];
 
   # yes, the below download function is an absolute mess.
   # blame blackmagicdesign.
   src =
     let
-    # from the URL that the POST happens to, see browser console
-      DOWNLOADID = "d73a63095b6a4a189916fb2baa5a0ef3";
+      # from the URL the download page where you click the "only download" button is at
+      REFERID = "5baba0af3eda41ee9cd0ec7349660d74";
+      # from the URL that the POST happens to, see browser console
+      DOWNLOADID = "bc31044728f146859c6d9e0ccef868d8";
     in
     runCommandLocal "${finalAttrs.pname}-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-jkKzUqfirvsVIefjWLx4NlqznXanWDtvhTsIThWFTo4=";
+        outputHash = "sha256-qh305s7u1yurv58TZnlONgDmWT4RXG3fXTfun382HAs=";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -39,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
         # ENV VARS
         SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        inherit DOWNLOADID;
-        # from the URL the download page where you click the "only download" button is at
-        REFERID = "76801bc1d84147da9cb1a16e663ac33e";
+        inherit REFERID;
         SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
         USERAGENT = builtins.concatStringsSep " " [
@@ -57,22 +58,22 @@ stdenv.mkDerivation (finalAttrs: {
           "platform" = "Linux";
           "policy" = true;
         };
-
-      } ''
-      RESOLVEURL=$(curl \
-        -s \
-        -H "$USERAGENT" \
-        -H 'Content-Type: application/json;charset=UTF-8' \
-        -H "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
-        --data-ascii "$REQJSON" \
-        --compressed \
-        "$SITEURL")
-      curl \
-        --retry 3 --retry-delay 3 \
-        --compressed \
-        "$RESOLVEURL" \
-        > $out
-    '';
+      }
+      ''
+        RESOLVEURL=$(curl \
+          -s \
+          -H "$USERAGENT" \
+          -H 'Content-Type: application/json;charset=UTF-8' \
+          -H "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
+          --data-ascii "$REQJSON" \
+          --compressed \
+          "$SITEURL")
+        curl \
+          --retry 3 --retry-delay 3 \
+          --compressed \
+          "$RESOLVEURL" \
+          > $out
+      '';
 
   postUnpack =
     let

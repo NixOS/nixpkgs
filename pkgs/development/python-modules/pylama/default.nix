@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   git,
   eradicate,
   mccabe,
@@ -12,7 +12,6 @@
   pyflakes,
   vulture,
   setuptools,
-  isort,
   pylint,
   pytestCheckHook,
 }:
@@ -33,8 +32,7 @@ let
     };
 
     patches = [
-      (substituteAll {
-        src = ./paths.patch;
+      (replaceVars ./paths.patch {
         git = "${lib.getBin git}/bin/git";
       })
     ];

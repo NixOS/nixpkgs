@@ -19,13 +19,13 @@ let
 in
 buildPythonPackage rec {
   pname = "materialyoucolor";
-  version = "2.0.9";
+  version = "2.0.10";
   pyproject = true;
 
   # PyPI sources contain additional vendored sources
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J35//h3tWn20f5ej6OXaw4NKnxung9q7m0E4Zf9PUw4=";
+    hash = "sha256-MbTUB7mk/UtUswVZsNAxP21tofnRm3VUbtZdpSZx6nY=";
   };
 
   build-system = [

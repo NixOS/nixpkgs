@@ -239,8 +239,8 @@ in {
       daemonize = false;
     };
 
-    systemd.slices.phpfpm = {
-      description = "PHP FastCGI Process manager pools slice";
+    systemd.slices.system-phpfpm = {
+      description = "PHP FastCGI Process Manager Slice";
     };
 
     systemd.targets.phpfpm = {
@@ -254,11 +254,12 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
+        documentation = [ "man:php-fpm(8)" ];
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolOpts;
           iniFile = phpIni poolOpts;
         in {
-          Slice = "phpfpm.slice";
+          Slice = "system-phpfpm.slice";
           PrivateDevices = true;
           PrivateTmp = true;
           ProtectSystem = "full";

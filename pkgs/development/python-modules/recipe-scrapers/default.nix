@@ -4,6 +4,7 @@
   fetchFromGitHub,
   beautifulsoup4,
   extruct,
+  isodate,
   language-tags,
   regex,
   requests,
@@ -11,31 +12,36 @@
   responses,
   setuptools,
   pythonOlder,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.56.0";
+  version = "15.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+9oQLCuR+rRCG5tnyofHd8WMkQ5QPsWfLCnwIDU5d9o=";
+    tag = version;
+    hash = "sha256-s/ocJi7NidebFkd724p/k7njOzELsdh7n9nQXaeVXV8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     extruct
+    isodate
     language-tags
     regex
-    requests
   ];
+
+  optional-dependencies = {
+    online = [ requests ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,6 +54,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "recipe_scrapers" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) mealie tandoor-recipes;
+    };
+  };
 
   meta = with lib; {
     description = "Python package for scraping recipes data";

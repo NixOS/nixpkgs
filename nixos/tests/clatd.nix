@@ -26,13 +26,15 @@
 #        |         Route:   192.0.2.0/24 via 100.64.0.1
 #        +------
 
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ lib, ... }:
 
 {
   name = "clatd";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 jmbaur ];
-  };
+
+  meta.maintainers = with lib.maintainers; [
+    hax404
+    jmbaur
+  ];
 
   nodes = {
     # The server is configured with static IPv4 addresses. RFC 6052 Section 3.1
@@ -49,7 +51,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ];
       networking = {
         useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
+        interfaces.eth1 = lib.mkForce { };
       };
       systemd.network = {
         enable = true;
@@ -59,7 +61,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "100.64.0.2/24"
           ];
           routes = [
-            { Destination = "192.0.2.0/24"; Gateway = "100.64.0.1"; }
+            {
+              Destination = "192.0.2.0/24";
+              Gateway = "100.64.0.1";
+            }
           ];
         };
       };
@@ -93,12 +98,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
           ipv4 = {
-            addresses = [ { address = "100.64.0.1"; prefixLength = 24; } ];
+            addresses = [
+              {
+                address = "100.64.0.1";
+                prefixLength = 24;
+              }
+            ];
           };
         };
         interfaces.eth2 = lib.mkForce {
           ipv6 = {
-            addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
+            addresses = [
+              {
+                address = "2001:db8::1";
+                prefixLength = 64;
+              }
+            ];
           };
         };
       };
@@ -162,45 +177,30 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     # server, the client starts the clat daemon which starts and configures the
     # local IPv4 -> IPv6 translation via Tayga after discovering the PLAT
     # prefix via DNS64.
-    client = {
-      virtualisation.vlans = [
-        3 # towards router
-      ];
+    client =
+      { pkgs, ... }:
+      {
+        virtualisation.vlans = [
+          3 # towards router
+        ];
 
-      networking = {
-        useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
-      };
-
-      systemd.network = {
-        enable = true;
-        networks."vlan1" = {
-          matchConfig.Name = "eth1";
-
-          # NOTE: clatd does not actually use the PREF64 prefix discovered by
-          # systemd-networkd (nor does systemd-networkd do anything with it,
-          # yet), but we set this to confirm it works. See the test script
-          # below.
-          ipv6AcceptRAConfig.UsePREF64 = true;
+        networking = {
+          useDHCP = false;
+          interfaces.eth1 = lib.mkForce { };
         };
+
+        systemd.network = {
+          enable = true;
+          networks."vlan1" = {
+            matchConfig.Name = "eth1";
+            ipv6AcceptRAConfig.UsePREF64 = true;
+          };
+        };
+
+        services.clatd.enable = true;
+
+        environment.systemPackages = [ pkgs.mtr ];
       };
-
-      services.clatd = {
-        enable = true;
-        # NOTE: Perl's Net::DNS resolver does not seem to work well querying
-        # for AAAA records to systemd-resolved's default IPv4 bind address
-        # (127.0.0.53), so we add an IPv6 listener address to systemd-resolved
-        # and tell clatd to use that instead.
-        settings.dns64-servers = "::1";
-      };
-
-      # Allow clatd to find dns server. See comment above.
-      services.resolved.extraConfig = ''
-        DNSStubListenerExtra=::1
-      '';
-
-      environment.systemPackages = [ pkgs.mtr ];
-    };
   };
 
   testScript = ''
@@ -210,7 +210,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     # wait for all machines to start up
     for machine in client, router, server:
-      machine.wait_for_unit("network-online.target")
+      machine.wait_for_unit("network.target")
 
     with subtest("Wait for tayga and clatd"):
       router.wait_for_unit("tayga.service")
@@ -226,11 +226,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ]["PREF64"][0]["Prefix"] == [0x0, 0x64, 0xFF, 0x9B] + ([0] * 12)
 
     with subtest("Test ICMP"):
-      client.wait_until_succeeds("ping -c 3 100.64.0.2 >&2")
+      client.wait_until_succeeds("ping -c3 100.64.0.2 >&2")
 
     with subtest("Test ICMP and show a traceroute"):
       client.wait_until_succeeds("mtr --show-ips --report-wide 100.64.0.2 >&2")
 
     client.log(client.execute("systemd-analyze security clatd.service")[1])
   '';
-})
+}

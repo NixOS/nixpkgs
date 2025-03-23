@@ -28,6 +28,8 @@ def pytest_runtest_makereport(item, call):
         for exc in iterate_exc_chain(call.excinfo.value):
             if isinstance(exc, NixNetworkAccessDeniedError):
                 tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
+            if isinstance(exc, socket.gaierror):
+                tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
             if isinstance(exc, httpx.ConnectError):
                 tr.outcome, tr.wasxfail = 'skipped', "reason: Requires network access."
             if isinstance(exc, FileNotFoundError):  # gradio specific

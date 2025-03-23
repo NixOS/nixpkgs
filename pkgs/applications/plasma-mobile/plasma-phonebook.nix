@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kcontacts
-, kcoreaddons
-, kirigami2
-, kirigami-addons
-, kpeople
-, kpeoplevcard
-, qtquickcontrols2
+  kcontacts,
+  kcoreaddons,
+  kirigami2,
+  kirigami-addons,
+  kpeople,
+  kpeoplevcard,
+  qtquickcontrols2,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "plasma-phonebook";
 
   nativeBuildInputs = [
@@ -37,6 +38,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/plasma-mobile/plasma-phonebook";
     # https://invent.kde.org/plasma-mobile/plasma-phonebook/-/commit/3ac27760417e51c051c5dd44155c3f42dd000e4f
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

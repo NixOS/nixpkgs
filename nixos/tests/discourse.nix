@@ -4,7 +4,12 @@
 #  3. replying to that message via email.
 
 import ./make-test-python.nix (
-  { pkgs, lib, package ? pkgs.discourse, ... }:
+  {
+    pkgs,
+    lib,
+    package ? pkgs.discourse,
+    ...
+  }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     clientDomain = "client.fake.domain";
@@ -76,7 +81,10 @@ import ./make-test-python.nix (
           unicornTimeout = 900;
         };
 
-        networking.firewall.allowedTCPPorts = [ 25 465 ];
+        networking.firewall.allowedTCPPorts = [
+          25
+          465
+        ];
       };
 
     nodes.client =
@@ -155,13 +163,13 @@ import ./make-test-python.nix (
                   smtp.quit()
             '';
           in
-            [ replyToEmail ];
+          [ replyToEmail ];
 
         networking.firewall.allowedTCPPorts = [ 25 ];
       };
 
-
-    testScript = { nodes }:
+    testScript =
+      { nodes }:
       let
         request = builtins.toJSON {
           title = "Private message";
@@ -169,7 +177,8 @@ import ./make-test-python.nix (
           target_recipients = admin.username;
           archetype = "private_message";
         };
-      in ''
+      in
+      ''
         discourse.start()
         client.start()
 
@@ -199,4 +208,5 @@ import ./make-test-python.nix (
             'curl -sS -f https://${discourseDomain}/t/$(<topic_id) -H "Accept: application/json" -H "Api-Key: $(<api_key)" -H "Api-Username: system" | jq -e \'if .post_stream.posts[1].cooked == "<p>Test reply.</p>" then true else null end\' '
         )
       '';
-  })
+  }
+)

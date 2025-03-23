@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.2.5";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ui3731ChEUterRXb+QVMR1CNXhPYhBkZoUwbSJ47g+4=";
+    hash = "sha256-FaynJT+bR63nIwLEwXjTjwPXZ3Q5/X+zpx0gTA3Pqo8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];

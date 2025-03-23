@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.1.2";
+  version = "11.3.1";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,7 +28,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-FL1nLaq8A9PI+RzqZg5+O+4+ZsH16MG3cf7OIKimDqw=";
+    hash = "sha256-2VOuEOLFDHMuN/xqhSofeCMVvCvLI7CGFq21qdwQetA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -64,7 +64,7 @@ let
     echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
 
     # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    tee -a Ghidra/Debug/Debugger-{isf,rmi-trace}/build.gradle <<HERE
     protobuf {
       protoc {
         path = '${protobuf}/bin/protoc'
@@ -72,6 +72,9 @@ let
     }
     HERE
   '';
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -112,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3Packages.pip
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
       desktopToDarwinBundle
     ];
@@ -130,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
-    gradle -I gradle/support/fetchDependencies.gradle init
+    gradle -I gradle/support/fetchDependencies.gradle
   '';
 
   gradleBuildTask = "buildGhidra";
@@ -160,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
@@ -195,6 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
       roblabla
       vringar
     ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

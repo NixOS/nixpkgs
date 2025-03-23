@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
+, fetchpatch
+, replaceVars
 , meson
 , ninja
 , gettext
@@ -11,6 +12,7 @@
 , orc
 , gstreamer
 , gobject-introspection
+, wayland-scanner
 , enableZbar ? false
 , faacSupport ? false
 , faac
@@ -45,6 +47,7 @@
 , flite
 , gsm
 , json-glib
+, ajaSupport ? lib.meta.availableOn stdenv.hostPlatform libajantv2
 , libajantv2
 , libaom
 , libdc1394
@@ -103,30 +106,35 @@
 , Foundation
 , MediaToolbox
 , enableGplPlugins ? true
-, bluezSupport ? stdenv.isLinux
+, bluezSupport ? stdenv.hostPlatform.isLinux
 # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
-, guiSupport ? true, directfb
+, guiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.24.3";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-6Q8mx9ycdvSqWZt1jP1tjBDWoLnLJluiw8m984iFWPg=";
+    hash = "sha256-FwfjEDlQybrtNkqK8roEldaxE/zTbhBi3aX1grj4kE0=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
+    })
+    # Add support for newer AJA SDK from next GStreamer release
+    (fetchpatch {
+      url = "https://github.com/GStreamer/gstreamer/commit/d68ac0db571f44cae42b57c876436b3b09df616b.patch";
+      hash = "sha256-ZXwlHzuPT8kUKt5+HkqFH5tzL9l5NusDXImabj4fBbI=";
+      relative = "subprojects/${pname}";
     })
   ];
 
@@ -141,8 +149,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
-    wayland # for wayland-scanner
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -213,17 +221,18 @@ stdenv.mkDerivation rec {
     libmicrodns
   ] ++ lib.optionals openh264Support [
     openh264
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
+  ] ++ lib.optionals ajaSupport [
+    libajantv2
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
     chromaprint
     flite
-    libajantv2
     libdrm
     libgudev
     sbc
@@ -244,9 +253,7 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
-  ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
-    directfb
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
     #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
@@ -299,20 +306,19 @@ stdenv.mkDerivation rec {
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
-    "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
+    "-Daja=${if ajaSupport then "enabled" else "disabled"}"
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "directfb" false)
   ]
-  ++ lib.optionals (!stdenv.isLinux) [
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
-  ] ++ lib.optionals (!stdenv.isLinux || !gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
-    "-Ddirectfb=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Daja=disabled"
     "-Dchromaprint=disabled"
     "-Dflite=disabled"
@@ -326,7 +332,7 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64 || !gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"

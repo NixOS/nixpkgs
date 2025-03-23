@@ -1,10 +1,17 @@
 # File Roller.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config.programs.file-roller;
+let
+  cfg = config.programs.file-roller;
 
-in {
+in
+{
 
   ###### interface
 
@@ -19,7 +26,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 

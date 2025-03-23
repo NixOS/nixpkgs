@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "5.1.0";
-  format = "pyproject";
+  version = "7.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SnmI1/lB1p/zldgn9jIid4yJ5+ubr5mh/IAqXY/1Wbc=";
+    repo = "ntc-templates";
+    tag = "v${version}";
+    hash = "sha256-B5gKCvouqxzH5BoMpV9I6aLuUYbfdjABqjtzkXWs0Uw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [ textfsm ];
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
-    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/v${version}";
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.84";
+  version = "1.95";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-RPrNpm+0N//CpVtG6cJD+m+0G6ca75hZwdEdHsGadEg=";
+    hash = "sha256-Xb4LHoon56P6OmHvd7RkODrOc4MDa0+U8npypGhcyw4=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
          libiconv
          CoreAudio
          CoreMIDI

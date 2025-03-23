@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, udev
-, nwjs
-, gcc-unwrapped
-, autoPatchelfHook
-, gsettings-desktop-schemas
-, gtk3
-, wrapGAppsHook3
-, makeWrapper
-, pinegrowVersion ? "7"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  udev,
+  nwjs,
+  gcc-unwrapped,
+  autoPatchelfHook,
+  gsettings-desktop-schemas,
+  gtk3,
+  wrapGAppsHook3,
+  makeWrapper,
+  pinegrowVersion ? "7",
 }:
 
 let
@@ -26,14 +27,16 @@ let
     "7" = {
       version = "7.8";
       src = fetchurl {
-        url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${builtins.substring 0 4 (versions."7".version)}/PinegrowLinux64.${versions."7".version}.zip";
+        url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${
+          builtins.substring 0 4 (versions."7".version)
+        }/PinegrowLinux64.${versions."7".version}.zip";
         hash = "sha256-tYQfPfzKRwClNwgSoJfMwG3LHhi3O/iFuuwIVHS8OXk=";
       };
     };
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pinegrow";
   # deactivate auto update, because an old 6.21 version is getting mixed up
   # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
@@ -58,7 +61,13 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gcc-unwrapped.lib
+        gtk3
+        udev
+      ]
+    }"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 

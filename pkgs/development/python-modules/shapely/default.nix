@@ -2,11 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
 
-  cython_0,
+  cython,
   geos,
   numpy,
   oldest-supported-numpy,
@@ -16,18 +16,19 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.5";
+  version = "2.0.7";
   pyproject = true;
-
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v/I2a8eGv6bLNT1rR9BEPFcMMndmEuUn7ke232P8/jI=";
+  src = fetchFromGitHub {
+    owner = "shapely";
+    repo = "shapely";
+    tag = version;
+    hash = "sha256-oq08nDeCdS6ARISai/hKM74v+ezSxO2PpSzas/ZFVaw=";
   };
 
   nativeBuildInputs = [
-    cython_0
+    cython
     geos # for geos-config
     oldest-supported-numpy
     setuptools
@@ -36,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs = [ geos ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # FIXME(lf-): these logging tests are broken, which is definitely our
     # fault. I've tried figuring out the cause and failed.
     #
@@ -59,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shapely" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members;
   };
 }

@@ -8,22 +8,24 @@
   nodejs,
   makeWrapper,
   callPackage,
+  nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-e82j2blGxQLWAlBNuAnFvlD9vwMk4/mRI0Vf7vuaPA0=";
+    tag = finalAttrs.version;
+    hash = "sha256-QmDjBZEKI5wQ2fcbfVLI6aD9+73ROeKnXWYUz2eSimc=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-5SgknaRVzgO2Dzc8MhAaM8UERWMv+PrItzevoWHbWnA=";
+    hash = "sha256-LlSYrDIUkvIlcR4emvLBNtaqzEVISirekv9G+AX6XbM=";
   };
 
   nativeBuildInputs = [
@@ -61,8 +63,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     client = callPackage ./client.nix {
-      inherit (finalAttrs) src version offlineCache meta;
+      inherit (finalAttrs)
+        src
+        version
+        offlineCache
+        meta
+        ;
     };
+    tests = {
+      inherit (nixosTests) your_spotify;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

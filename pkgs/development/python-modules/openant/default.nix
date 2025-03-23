@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tigge";
     repo = "openant";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     serial = [ pyserial ];
     influx = [ influxdb-client ];
   };

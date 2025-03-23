@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, python3Packages
-, wirelesstools
-, aircrack-ng
-, wireshark-cli
-, reaverwps-t6x
-, cowpatty
-, hashcat
-, hcxtools
-, hcxdumptool
-, which
-, bully
-, pixiewps
-, john
-, iw
-, macchanger
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  python3Packages,
+  wirelesstools,
+  aircrack-ng,
+  wireshark-cli,
+  reaverwps-t6x,
+  cowpatty,
+  hashcat,
+  hcxtools,
+  hcxdumptool,
+  which,
+  bully,
+  pixiewps,
+  john,
+  iw,
+  macchanger,
 }:
 
 let
@@ -76,6 +77,10 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "wifite";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus danielfullmer d3vil0p3r ];
+    maintainers = with maintainers; [
+      lassulus
+      danielfullmer
+      d3vil0p3r
+    ];
   };
 }

@@ -3,7 +3,7 @@
   argparse-addons,
   bitstruct,
   buildPythonPackage,
-  can,
+  python-can,
   crccheck,
   diskcache,
   fetchPypi,
@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.5";
+  version = "40.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WU8q6A3q24xrCOjhMi1C4lj0DULIDWiG2E4BQ/kLWiM=";
+    hash = "sha256-3Tvt9psNxFCiJwmdAKkTqLuP6+SoRBXutV62mSJlw+A=";
   };
 
   nativeBuildInputs = [
@@ -36,18 +36,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argparse-addons
     bitstruct
-    can
+    python-can
     crccheck
     diskcache
     textparser
   ];
 
-  passthru.optional-dependencies.plot = [ matplotlib ];
+  optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.plot;
+  ] ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 

@@ -1,6 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  isPyPy,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
   setuptools,
@@ -25,6 +27,18 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/PyCQA/pyflakes/issues/812
+      "test_errors_syntax"
+    ]
+    ++ lib.optionals isPyPy [
+      # https://github.com/PyCQA/pyflakes/issues/779
+      "test_eofSyntaxError"
+      "test_misencodedFileUTF8"
+      "test_multilineSyntaxError"
+    ];
 
   pythonImportsCheck = [ "pyflakes" ];
 

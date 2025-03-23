@@ -3,8 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -21,13 +20,7 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [ colorama ];
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-  ];
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python 2.7 & 3.5+ runtime type-checker";

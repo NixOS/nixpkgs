@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coccinelle";
-  version = "1.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     repo = "coccinelle";
     rev = finalAttrs.version;
     owner = "coccinelle";
-    hash = "sha256-v51KQLMJENLrlstCsP3DAuJJFMyjFyOZPJ7cRW5ovws=";
+    hash = "sha256-be95cuFP6bAdpCT0Z9zBAx9cc3gYuuXAmHYaI/bmyTE=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

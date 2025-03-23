@@ -30,8 +30,29 @@ evalConfigArgs@
   check ? true
 , prefix ? []
 , lib ? import ../../lib
-, extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                 in lib.optional (e != "") (import e)
+, extraModules ?
+    let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+    in lib.optional (e != "") (
+      lib.warn
+        ''
+          The NIXOS_EXTRA_MODULE_PATH environment variable is deprecated and will be
+          removed in NixOS 25.05.
+          We recommend a workflow where you update the expression files instead, but
+          if you wish to continue to use this variable, you may do so with a module like:
+
+          {
+            imports = [
+              (builtins.getEnv "NIXOS_EXTRA_MODULE_PATH")
+            ];
+          }
+
+          This has the benefit that your configuration hints at the
+          non-standard workflow.
+        ''
+        # NOTE: this import call is unnecessary and it even removes the file name
+        #       from error messages.
+        import e
+    )
 }:
 
 let
@@ -65,6 +86,14 @@ let
   withWarnings = x:
     lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
     lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    lib.warnIf (specialArgs?pkgs) ''
+      You have set specialArgs.pkgs, which means that options like nixpkgs.config
+      and nixpkgs.overlays will be ignored. If you wish to reuse an already created
+      pkgs, which you know is configured correctly for this NixOS configuration,
+      please import the `nixosModules.readOnlyPkgs` module from the nixpkgs flake or
+      `(modulesPath + "/misc/nixpkgs/read-only.nix"), and set `{ nixpkgs.pkgs = <your pkgs>; }`.
+      This properly disables the ignored options to prevent future surprises.
+    ''
     x;
 
   legacyModules =

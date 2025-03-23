@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
-  version = "20";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "clevis";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rBdZrnHPzRd9vbyl1h/Nb0cFAtIPUHSmxVoKrKuCrQ8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2vDQP+yvH4v46fLEWG/37r5cYP3OeDfJz71cDHEGiUg=";
   };
 
   patches = [
@@ -125,6 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/latchset/clevis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

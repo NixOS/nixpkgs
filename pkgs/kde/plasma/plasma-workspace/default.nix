@@ -1,10 +1,14 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
+  dbus,
+  fontconfig,
   xorg,
+  lsof,
   pkg-config,
   spirv-tools,
+  qtpositioning,
   qtsvg,
   qtwayland,
   libcanberra,
@@ -18,11 +22,15 @@ mkKdeDerivation {
   pname = "plasma-workspace";
 
   patches = [
-    (substituteAll {
-      src = ./tool-paths.patch;
-      xmessage = "${lib.getBin xorg.xmessage}/bin/xmessage";
-      xsetroot = "${lib.getBin xorg.xsetroot}/bin/xsetroot";
-      qdbus = "${lib.getBin qttools}/bin/qdbus";
+    (replaceVars ./dependency-paths.patch {
+      dbusSend = lib.getExe' dbus "dbus-send";
+      fcMatch = lib.getExe' fontconfig "fc-match";
+      lsof = lib.getExe lsof;
+      qdbus = lib.getExe' qttools "qdbus";
+      xmessage = lib.getExe xorg.xmessage;
+      xrdb = lib.getExe xorg.xrdb;
+      # @QtBinariesDir@ only appears in the *removed* lines of the diff
+      QtBinariesDir = null;
     })
   ];
 
@@ -31,8 +39,12 @@ mkKdeDerivation {
     chmod -x $out/libexec/plasma-sourceenv.sh
   '';
 
-  extraNativeBuildInputs = [pkg-config spirv-tools];
+  extraNativeBuildInputs = [
+    pkg-config
+    spirv-tools
+  ];
   extraBuildInputs = [
+    qtpositioning
     qtsvg
     qtwayland
 
@@ -50,5 +62,16 @@ mkKdeDerivation {
     gpsd
   ];
 
-  passthru.providedSessions = ["plasma" "plasmax11"];
+  qtWrapperArgs = [ "--inherit-argv0" ];
+
+  # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb}" > $out/nix-support/depends
+  '';
+
+  passthru.providedSessions = [
+    "plasma"
+    "plasmax11"
+  ];
 }

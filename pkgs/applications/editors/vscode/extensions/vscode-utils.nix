@@ -9,34 +9,36 @@
   jq,
 }:
 let
-  buildVscodeExtension =
-    a@{
-      name,
-      src,
-      # Same as "Unique Identifier" on the extension's web page.
-      # For the moment, only serve as unique extension dir.
-      vscodeExtPublisher,
-      vscodeExtName,
-      vscodeExtUniqueId,
-      configurePhase ? ''
-        runHook preConfigure
-        runHook postConfigure
-      '',
-      buildPhase ? ''
-        runHook preBuild
-        runHook postBuild
-      '',
-      dontPatchELF ? true,
-      dontStrip ? true,
-      nativeBuildInputs ? [ ],
-      passthru ? { },
-      ...
-    }:
-    stdenv.mkDerivation (
-      (removeAttrs a [ "vscodeExtUniqueId" ])
-      // {
-
-        name = "vscode-extension-${name}";
+  buildVscodeExtension = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
+    excludeDrvArgNames = [
+      "vscodeExtUniqueId"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname ? null, # Only optional for backward compatibility.
+        # Same as "Unique Identifier" on the extension's web page.
+        # For the moment, only serve as unique extension dir.
+        vscodeExtPublisher,
+        vscodeExtName,
+        vscodeExtUniqueId,
+        configurePhase ? ''
+          runHook preConfigure
+          runHook postConfigure
+        '',
+        buildPhase ? ''
+          runHook preBuild
+          runHook postBuild
+        '',
+        dontPatchELF ? true,
+        dontStrip ? true,
+        nativeBuildInputs ? [ ],
+        passthru ? { },
+        ...
+      }:
+      {
+        pname = "vscode-extension-${pname}";
 
         passthru = passthru // {
           inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
@@ -53,12 +55,12 @@ let
         # If other directories are present but `sourceRoot` is unset, the unpacker phase fails.
         sourceRoot = "extension";
 
+        # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
         nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
         installPhase = ''
-
           runHook preInstall
 
           mkdir -p "$out/$installPrefix"
@@ -66,36 +68,38 @@ let
 
           runHook postInstall
         '';
-      }
-    );
+      };
+  };
 
   fetchVsixFromVscodeMarketplace =
     mktplcExtRef: fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
 
-  buildVscodeMarketplaceExtension =
-    a@{
-      name ? "",
-      src ? null,
-      vsix ? null,
-      mktplcRef,
-      ...
-    }:
-    assert "" == name;
-    assert null == src;
-    buildVscodeExtension (
-      (removeAttrs a [
-        "mktplcRef"
-        "vsix"
-      ])
-      // {
-        name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
-        version = mktplcRef.version;
+  buildVscodeMarketplaceExtension = lib.extendMkDerivation {
+    constructDrv = buildVscodeExtension;
+    excludeDrvArgNames = [
+      "mktplcRef"
+      "vsix"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name ? "",
+        src ? null,
+        vsix ? null,
+        mktplcRef,
+        ...
+      }:
+      assert "" == name;
+      assert null == src;
+      {
+        inherit (mktplcRef) version;
+        pname = "${mktplcRef.publisher}-${mktplcRef.name}";
         src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;
         vscodeExtPublisher = mktplcRef.publisher;
         vscodeExtName = mktplcRef.name;
         vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
-      }
-    );
+      };
+  };
 
   mktplcRefAttrList = [
     "name"

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "2.7";
+  version = "2.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9vC+xGwyzsr3vn/YIpbsRpfUvyEB8MSqskzBI5kfojA=";
+    hash = "sha256-FoR17UloBtFg3pRurquHCzGaySehUPhVtmQmNkhWTz4=";
   };
 
   propagatedBuildInputs = [

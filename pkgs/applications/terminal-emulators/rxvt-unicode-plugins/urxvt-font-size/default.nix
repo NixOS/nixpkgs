@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, xrdb, xlsfonts }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xrdb,
+  xlsfonts,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urxvt-font-size";
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Change the urxvt font size on the fly";
     homepage = "https://github.com/majutsushi/urxvt-font-size";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

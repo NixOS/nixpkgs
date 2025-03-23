@@ -9,7 +9,7 @@
   pykwalify,
   jsonschema,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +34,9 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [
-    # addopts uses --no-cov
-    pytest-cov
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTestPaths = [
@@ -46,7 +44,7 @@ buildPythonPackage rec {
     "tests/cli/test_rawify_url.py"
   ];
 
-  pythonImportsCheckHook = [ "cffconvert" ];
+  pythonImportsCheck = [ "cffconvert" ];
 
   meta = {
     changelog = "https://github.com/citation-file-format/cffconvert/blob/${src.rev}/CHANGELOG.md";

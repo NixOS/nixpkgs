@@ -1,4 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, jq, quicktype, testers }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  jq,
+  quicktype,
+  testers,
+}:
 
 buildNpmPackage rec {
   pname = "quicktype";

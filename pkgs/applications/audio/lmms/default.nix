@@ -1,7 +1,29 @@
-{ lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, alsa-lib ? null, carla ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
-, libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  alsa-lib ? null,
+  carla ? null,
+  fftwFloat,
+  fltk13,
+  fluidsynth ? null,
+  lame ? null,
+  libgig ? null,
+  libjack2 ? null,
+  libpulseaudio ? null,
+  libsamplerate,
+  libsoundio ? null,
+  libsndfile,
+  libvorbis ? null,
+  portaudio ? null,
+  qtbase,
+  qtx11extras,
+  qttools,
+  SDL ? null,
+  mkDerivation,
+}:
 
 mkDerivation rec {
   pname = "lmms";
@@ -15,7 +37,11 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qttools pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    pkg-config
+  ];
 
   buildInputs = [
     carla
@@ -51,7 +77,10 @@ mkDerivation rec {
     mainProgram = "lmms";
     homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ ];
   };
 }

@@ -1,9 +1,8 @@
 {
   lib,
-  bitcoinlib,
+  python-bitcoinlib,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
   gitpython,
   pycryptodomex,
   pytestCheckHook,
@@ -25,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    bitcoinlib
+    python-bitcoinlib
     gitpython
     pycryptodomex
   ];

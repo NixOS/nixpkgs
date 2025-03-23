@@ -7,15 +7,20 @@
   eventlet,
   fixtures,
   iso8601,
+  libxcrypt-legacy,
   netaddr,
   netifaces,
   oslo-i18n,
   oslotest,
   packaging,
   pbr,
+  psutil,
   pyparsing,
   pytz,
+  qemu-utils,
+  replaceVars,
   setuptools,
+  stdenv,
   stestr,
   testscenarios,
   tzdata,
@@ -26,14 +31,20 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "7.2.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    hash = "sha256-lPgFM5GjNQLatNhEZUAyYsoZ/9jP0poaXqPIqmIO9hA=";
+    hash = "sha256-kG/PHIb2cfIkwZJbKo03WgU5FD+2FYsT4gKnndjmxpQ=";
   };
+
+  patches = [
+    (replaceVars ./ctypes.patch {
+      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -53,6 +64,7 @@ buildPythonPackage rec {
     netifaces
     oslo-i18n
     packaging
+    psutil
     pyparsing
     pytz
     tzdata
@@ -62,7 +74,9 @@ buildPythonPackage rec {
     ddt
     eventlet
     fixtures
+    libredirect.hook
     oslotest
+    qemu-utils
     stestr
     testscenarios
     pyyaml
@@ -74,7 +88,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip

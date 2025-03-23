@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -9,15 +10,19 @@
 
 buildPythonPackage rec {
   pname = "berkeleydb";
-  version = "18.1.10";
+  version = "18.1.13";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QmNBoWAHqQAtmHpvTZcib46v/8saBIhIgFPTijEnyBo=";
+    hash = "sha256-PPxNayvSqi8iMDnvh3dzys+RaSyYb9GuFKU/kT7nSrg=";
   };
 
   build-system = [ setuptools ];
+
+  # Every test currently fails with:
+  # berkeleydb.db.DBRunRecoveryError: (-30973, 'BDB0087 DB_RUNRECOVERY: Fatal error, run database recovery -- BDB1546 unable to join the environment')
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     ${python.interpreter} test.py

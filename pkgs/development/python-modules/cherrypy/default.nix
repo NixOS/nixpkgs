@@ -10,6 +10,7 @@
   path,
   portend,
   pyopenssl,
+  pytest-cov-stub,
   pytest-forked,
   pytest-services,
   pytestCheckHook,
@@ -38,10 +39,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
-      --replace-fail "--doctest-modules" "-vvv" \
-      --replace-fail "-p pytest_cov" "" \
-      --replace-fail "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
+      --replace-fail "--doctest-modules" "-vvv"
   '';
 
   build-system = [ setuptools-scm ];
@@ -57,6 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     objgraph
     path
+    pytest-cov-stub
     pytest-forked
     pytest-services
     pytestCheckHook
@@ -101,15 +100,17 @@ buildPythonPackage rec {
       "test_1_Ram_Concurrency"
       "test_2_File_Concurrency"
     ]
-    ++ lib.optionals stdenv.isDarwin [ "test_block" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "cherrypy/test/test_config_server.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "cherrypy/test/test_config_server.py"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "cherrypy" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];
@@ -126,6 +127,6 @@ buildPythonPackage rec {
     homepage = "https://cherrypy.dev/";
     changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

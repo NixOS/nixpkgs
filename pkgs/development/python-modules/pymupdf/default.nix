@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   python,
 
   # build-system
@@ -19,14 +20,15 @@
   jbig2dec,
   libjpeg_turbo,
   gumbo,
-  memstreamHook,
 
   # dependencies
   mupdf,
 
   # tests
-  fonttools,
   pytestCheckHook,
+  fonttools,
+  pillow,
+  pymupdf-fonts,
 }:
 
 let
@@ -40,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.23.26";
+  version = "1.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,16 +50,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = "refs/tags/${version}";
-    hash = "sha256-m2zq04+PDnlzFuqeSt27UhdHXTHxpHdMPIg5RQl/5bQ=";
+    tag = version;
+    hash = "sha256-6XbHQ8PE9IF0kngUhYkFSGjwgt+r+19v+PeDAQin2Ko=";
   };
+
+  patches = [
+    # Fix build against mupdf-1.25.3:
+    #   https://github.com/pymupdf/PyMuPDF/pull/4248
+    (fetchpatch {
+      name = "mupdf-1.25.3.patch";
+      url = "https://github.com/pymupdf/PyMuPDF/commit/f42ef85058fee087d3f5e565f34a7657aad11240.patch";
+      hash = "sha256-X5JF8nPLj4uubdEdvUJ5aEf0yZkW+ks99pzua0vCrZc=";
+    })
+  ];
 
   # swig is not wrapped as Python package
   # libclang calls itself just clang in wheel metadata
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"swig",' "" \
-      --replace-fail "libclang" "clang"
+    substituteInPlace setup.py \
+      --replace-fail "ret.append( 'swig')" "pass" \
   '';
 
   nativeBuildInputs = [
@@ -74,20 +85,22 @@ buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  ];
 
   propagatedBuildInputs = [ mupdf-cxx ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
     PYMUPDF_SETUP_MUPDF_BUILD = "";
+    # Setup the name of the package away from the default 'libclang'
+    PYMUPDF_SETUP_LIBCLANG = "clang";
     # provide MuPDF paths
     PYMUPDF_MUPDF_LIB = "${lib.getLib mupdf-cxx}/lib";
     PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
       install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
     done
@@ -95,95 +108,45 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    fonttools
   ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
+  checkInputs = [
+    fonttools
+    pillow
+    pymupdf-fonts
+  ];
 
-  disabledTests =
-    [
-      # fails for indeterminate reasons
-      "test_2548"
-      "test_2753"
-      "test_3020"
-      "test_3050"
-      "test_3058"
-      "test_3177"
-      "test_3186"
-      "test_color_count"
-      "test_pilsave"
-      "test_fz_write_pixmap_as_jpeg"
-      # NotImplementedError
-      "test_1824"
-      "test_2093"
-      "test_2093"
-      "test_2108"
-      "test_2182"
-      "test_2182"
-      "test_2246"
-      "test_2270"
-      "test_2270"
-      "test_2391"
-      "test_2788"
-      "test_2861"
-      "test_2871"
-      "test_2886"
-      "test_2904"
-      "test_2922"
-      "test_2934"
-      "test_2957"
-      "test_2969"
-      "test_3070"
-      "test_3131"
-      "test_3140"
-      "test_3209"
-      "test_3209"
-      "test_caret"
-      "test_deletion"
-      "test_file_info"
-      "test_line"
-      "test_page_links_generator"
-      "test_polyline"
-      "test_redact"
-      "test_techwriter_append"
-      "test_text2"
-      # Issue with FzArchive
-      "test_htmlbox"
-      "test_2246"
-      "test_3140"
-      "test_fit_springer"
-      "test_write_stabilized_with_links"
-      "test_textbox"
-      "test_delete_image"
-      # Fonts not available
-      "test_fontarchive"
-      "test_subset_fonts"
-      # Exclude lint tests
-      "test_flake8"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # darwin does not support OCR right now
-      "test_tesseract"
-    ];
-
-  disabledTestPaths = [
-    # Issue with FzArchive
-    "tests/test_docs_samples.py"
+  disabledTests = [
+    # Do not lint code
+    "test_codespell"
+    "test_pylint"
+    "test_flake8"
+    # Upstream recommends disabling these when not using bundled MuPDF build
+    "test_color_count"
+    "test_3050"
+    "test_textbox3"
   ];
 
   pythonImportsCheck = [
+    "pymupdf"
     "fitz"
-    "fitz_old"
   ];
 
-  meta = with lib; {
+  preCheck = ''
+    export PATH="$out/bin:$PATH";
+
+    # Fixes at least one test; see:
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/scripts/sysinstall.py#L390>
+    # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/tests/test_pixmap.py#L425-L428>
+    export PYMUPDF_SYSINSTALL_TEST=1
+  '';
+
+  meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.unix;
   };
 }

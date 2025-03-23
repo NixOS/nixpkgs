@@ -712,9 +712,9 @@ in
 
     (mkIf cfg.enable {
 
-      boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
+      boot.loader.grub.devices = mkIf (cfg.device != "") [ cfg.device ];
 
-      boot.loader.grub.mirroredBoots = optionals (cfg.devices != [ ]) [
+      boot.loader.grub.mirroredBoots = mkIf (cfg.devices != [ ]) [
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
@@ -727,11 +727,13 @@ in
 
       system.build.installBootLoader =
         let
-          install-grub-pl = pkgs.substituteAll {
-            src = ./install-grub.pl;
+          install-grub-pl = pkgs.replaceVars ./install-grub.pl {
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
             inherit (config.system.nixos) distroName;
+            # targets of a replacement in code
+            bootPath = null;
+            bootRoot = null;
           };
           perl = pkgs.perl.withPackages (p: with p; [
             FileSlurp FileCopyRecursive
@@ -752,7 +754,7 @@ in
       # set at once.
       system.boot.loader.id = "grub";
 
-      environment.systemPackages = optional (grub != null) grub;
+      environment.systemPackages = mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''

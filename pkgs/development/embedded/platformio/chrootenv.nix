@@ -1,7 +1,12 @@
-{ lib, buildFHSEnv, platformio-core }:
+{
+  lib,
+  buildFHSEnv,
+  platformio-core,
+}:
 
 let
-  pio-pkgs = pkgs:
+  pio-pkgs =
+    pkgs:
     let
       inherit (platformio-core) python;
     in
@@ -12,7 +17,8 @@ let
       xdg-user-dirs
       ncurses
       udev
-    ]) ++ (with python.pkgs; [
+    ])
+    ++ (with python.pkgs; [
       python
       setuptools
       pip
@@ -21,7 +27,8 @@ let
 
 in
 buildFHSEnv {
-  name = "platformio";
+  pname = "platformio";
+  inherit (platformio-core) version;
 
   targetPkgs = pio-pkgs;
   # disabled temporarily because fastdiff no longer support 32bit

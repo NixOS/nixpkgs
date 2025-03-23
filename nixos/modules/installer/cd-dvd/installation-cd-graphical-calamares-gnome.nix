@@ -1,11 +1,11 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-calamares.nix ];
 
-  isoImage.edition = "gnome";
+  isoImage.edition = lib.mkDefault "gnome";
 
   services.xserver.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
@@ -25,7 +25,7 @@
       sleep-inactive-battery-type='nothing'
     '';
 
-    extraGSettingsOverridePackages = [ pkgs.gnome.gnome-settings-daemon ];
+    extraGSettingsOverridePackages = [ pkgs.gnome-settings-daemon ];
 
     enable = true;
   };

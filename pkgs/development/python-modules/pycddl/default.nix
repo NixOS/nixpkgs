@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycddl";
-  version = "0.6.1";
-  format = "pyproject";
+  version = "0.6.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-63fe8UJXEH6t4l7ujV8JDvlGb7q3kL6fHHATFdklzFc=";
+    hash = "sha256-lVybSr+QvyepdTZfiTjqU0ENu6TT87ZZXIECBA8nMV4=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -39,10 +39,10 @@ buildPythonPackage rec {
     rm tests/test_benchmarks.py
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ssDEKRd3Y9/10oXBZHCxvlRkl9KMh3pGYbCkM4rXThQ=";
+    hash = "sha256-Qep5YD4LQ+r118L5H+hUqeS00SibyvsbtLWDrJJBNc0=";
   };
 
   nativeCheckInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     cbor2
   ];
 
-  disabledTests =[
+  disabledTests = [
     # flaky
     "test_memory_usage"
   ];

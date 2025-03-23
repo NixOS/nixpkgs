@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsocol";
     repo = "pystatsd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g830TjFERKUguFKlZeaOhCTlaUs0wcDg4bMdRDr3smw=";
   };
 

@@ -1,14 +1,19 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "orchard";
-  version = "0.22.0";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = pname;
     rev = version;
-    hash = "sha256-SJZJN0IDR17hRd0NBER3CCys87vCTHOVz8+PNwFNt1M=";
+    hash = "sha256-blXxINsM793iH7X38J+Mrqf/WKnSRoS48yP4r3Dllow=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -19,7 +24,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Irpqg+orQsDv9iof+tGC/Out6hIOmlf3sdHGY80zxdE=";
+  vendorHash = "sha256-OimkH34coQLhJlJd3BGBFE9L/TQtU4tJbTl0zwmQh3w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,8 +51,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "orchard";
-    description =
-      "Orchestrator for running Tart Virtual Machines on a cluster of Apple Silicon devices";
+    description = "Orchestrator for running Tart Virtual Machines on a cluster of Apple Silicon devices";
     homepage = "https://github.com/cirruslabs/orchard";
     license = licenses.fairsource09;
     maintainers = with maintainers; [ techknowlogick ];

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cryptography,
   ifaddr,
+  freezegun,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -13,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.12.2";
+  version = "3.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gajxXIR3lmHsW7258v4z20RilzGfm5KGVrXZwRm74Mk=";
+    tag = version;
+    hash = "sha256-NEtx4aK4D6ZiLD8X3U0VTcLv5LLyPLxql9JbXrwamno=";
   };
 
   build-system = [ setuptools ];
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];

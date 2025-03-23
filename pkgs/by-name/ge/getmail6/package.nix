@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.19.03";
+  version = "6.19.07";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BBsQ3u8CL3Aom+hqjeOErOBtWB8imU2PGgzP8+dq4mM=";
+    tag = "v${version}";
+    hash = "sha256-uu+soEYC12LWx0aLbPupoK7g/rnD47dp32w7jpRj/38=";
   };
 
   build-system = with python3.pkgs; [
@@ -36,6 +37,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://getmail6.org";
     changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbe dotlambda ];
+    maintainers = with maintainers; [
+      abbe
+      dotlambda
+    ];
   };
 }

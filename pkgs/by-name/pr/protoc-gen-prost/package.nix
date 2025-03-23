@@ -7,14 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ma9sdt3/uq06BMELwsNadMkiEfstQhA4DAQEPdizZJM=";
+    hash = "sha256-Bz5/LyKludw0Tz3r+xr4DMRdMSz/nRzjs7Q66z1PrTU=";
   };
 
-  cargoHash = "sha256-pJDrwX5uDIrycxtmbds8l4wadZE0RdgmNpMwVkUGJDs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-alzrgiOx9zTR9mgmtvcqpj9SxSz7Zz3mmZOX6vfAFeE=";
 
   passthru.updateScript = nix-update-script { };
 

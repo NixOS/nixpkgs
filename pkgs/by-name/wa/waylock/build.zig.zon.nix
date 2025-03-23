@@ -4,17 +4,17 @@
 
 linkFarm "zig-packages" [
   {
-    name = "1220840390382c88caf9b0887f6cebbba3a7d05960b8b2ee6d80567b2950b71e5017";
+    name = "wayland-0.3.0-lQa1kjPIAQDmhGYpY-zxiRzQJFHQ2VqhJkQLbKKdt5wl";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.1.0.tar.gz";
-      hash = "sha256-xilmsDGWlkfpTiGff+/nb76jx87ANdr4zqYy6rKOBMg=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.3.0.tar.gz";
+      hash = "sha256-ydEavD9z20wRwn9ZVX56ZI2T5i1tnm3LupVxfa30o84=";
     };
   }
   {
-    name = "1220b0f8f822c1625af7aae4cb3ab2c4ec1a4c0e99ef32867b2a8d88bb070b3e7f6d";
+    name = "xkbcommon-0.3.0-VDqIe3K9AQB2fG5ZeRcMC9i7kfrp5m2rWgLrmdNn9azr";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.1.0.tar.gz";
-      hash = "sha256-VLEx8nRgmJZWgLNBRqrR7bZEkW0m5HTRv984HKwoIfA=";
+      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.3.0.tar.gz";
+      hash = "sha256-e5bPEfxl4SQf0cqccLt/py1KOW1+Q1+kWZUEXBbh9oQ=";
     };
   }
 ]

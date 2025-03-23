@@ -1,29 +1,37 @@
 {
   lib,
-  aiohttp,
-  anthropic,
   buildPythonPackage,
-  docstring-parser,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  aiohttp,
+  docstring-parser,
   jiter,
   openai,
-  poetry-core,
   pydantic,
-  pytest-examples,
-  pytest-asyncio,
-  pytestCheckHook,
-  fastapi,
-  diskcache,
-  redis,
-  pythonOlder,
   rich,
   tenacity,
   typer,
+
+  # tests
+  anthropic,
+  diskcache,
+  fastapi,
+  google-generativeai,
+  jinja2,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dotenv,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.3.3";
+  version = "1.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,17 +39,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ye6uNnwvJ3RXmKM8ix/sBiJgeCFQazNVgHZkBAnL0nw=";
+    tag = version;
+    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
   };
 
-  pythonRelaxDeps = [
-    "docstring-parser"
-    "pydantic"
-    "jiter"
-  ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -56,20 +58,30 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anthropic
-    fastapi
-    redis
     diskcache
+    fastapi
+    google-generativeai
+    jinja2
     pytest-asyncio
-    pytest-examples
     pytestCheckHook
+    python-dotenv
+    redis
   ];
 
   pythonImportsCheck = [ "instructor" ];
 
   disabledTests = [
     # Tests require OpenAI API key
-    "test_partial"
     "successfully"
+    "test_mode_functions_deprecation_warning"
+    "test_partial"
+
+    # Requires unpackaged `vertexai`
+    "test_json_preserves_description_of_non_english_characters_in_json_mode"
+
+    # Checks magic values and this fails on Python 3.13
+    "test_raw_base64_autodetect_jpeg"
+    "test_raw_base64_autodetect_png"
   ];
 
   disabledTestPaths = [
@@ -78,12 +90,12 @@ buildPythonPackage rec {
     "tests/llm/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";
   };
 }

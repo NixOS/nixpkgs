@@ -1,27 +1,29 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
 
-, cmake
-, pkg-config
+  cmake,
+  pkg-config,
 
-, exiv2
-, mpv
-, opencv4
-, qtbase
-, qtimageformats
-, qtsvg
+  exiv2,
+  mpv,
+  opencv4,
+  qtbase,
+  qtimageformats,
+  qtsvg,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "qimgv";
-  version = "1.0.3-alpha";
+  version = "1.0.3-unstable-2024-10-11";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fHMSo8zlOl9Lt8nYwClUzON4TPB9Ogwven+TidsesxY=";
+    rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
+    sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +42,7 @@ mkDerivation rec {
     qtbase
     qtimageformats
     qtsvg
+    qttools
   ];
 
   postPatch = ''

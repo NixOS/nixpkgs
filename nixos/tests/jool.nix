@@ -44,7 +44,10 @@ in
 
     # Border relay
     nodes.relay = {
-      virtualisation.vlans = [ 1 2 ];
+      virtualisation.vlans = [
+        1
+        2
+      ];
 
       # Enable packet routing
       boot.kernel.sysctl = {
@@ -54,8 +57,18 @@ in
 
       networking.useDHCP = false;
       networking.interfaces = lib.mkVMOverride {
-        eth1.ipv6.addresses = [ { address = "fd::198.51.100.1"; prefixLength = 120; } ];
-        eth2.ipv4.addresses = [ { address = "192.0.2.1";  prefixLength = 24; } ];
+        eth1.ipv6.addresses = [
+          {
+            address = "fd::198.51.100.1";
+            prefixLength = 120;
+          }
+        ];
+        eth2.ipv4.addresses = [
+          {
+            address = "192.0.2.1";
+            prefixLength = 24;
+          }
+        ];
       };
 
       networking.jool.enable = true;
@@ -64,25 +77,51 @@ in
 
     # IPv6 only node
     nodes.alice = {
-      imports = [ ipv6Only (webserver 6 "Hello, Bob!") ];
+      imports = [
+        ipv6Only
+        (webserver 6 "Hello, Bob!")
+      ];
 
       virtualisation.vlans = [ 1 ];
       networking.interfaces.eth1.ipv6 = {
-        addresses = [ { address = "fd::198.51.100.8"; prefixLength = 120; } ];
-        routes    = [ { address = "fd::192.0.2.0"; prefixLength = 120;
-                        via = "fd::198.51.100.1"; } ];
+        addresses = [
+          {
+            address = "fd::198.51.100.8";
+            prefixLength = 120;
+          }
+        ];
+        routes = [
+          {
+            address = "fd::192.0.2.0";
+            prefixLength = 120;
+            via = "fd::198.51.100.1";
+          }
+        ];
       };
     };
 
     # IPv4 only node
     nodes.bob = {
-      imports = [ ipv4Only (webserver 4 "Hello, Alice!") ];
+      imports = [
+        ipv4Only
+        (webserver 4 "Hello, Alice!")
+      ];
 
       virtualisation.vlans = [ 2 ];
       networking.interfaces.eth1.ipv4 = {
-        addresses = [ { address = "192.0.2.16"; prefixLength = 24; } ];
-        routes    = [ { address = "198.51.100.0"; prefixLength = 24;
-                        via = "192.0.2.1"; } ];
+        addresses = [
+          {
+            address = "192.0.2.16";
+            prefixLength = 24;
+          }
+        ];
+        routes = [
+          {
+            address = "198.51.100.0";
+            prefixLength = 24;
+            via = "192.0.2.1";
+          }
+        ];
       };
     };
 
@@ -125,7 +164,10 @@ in
 
     # Router
     nodes.router = {
-      virtualisation.vlans = [ 1 2 ];
+      virtualisation.vlans = [
+        1
+        2
+      ];
 
       # Enable packet routing
       boot.kernel.sysctl = {
@@ -135,26 +177,53 @@ in
 
       networking.useDHCP = false;
       networking.interfaces = lib.mkVMOverride {
-        eth1.ipv6.addresses = [ { address = "2001:db8::1"; prefixLength = 96; } ];
-        eth2.ipv4.addresses = [ { address = "203.0.113.1"; prefixLength = 24; } ];
+        eth1.ipv6.addresses = [
+          {
+            address = "2001:db8::1";
+            prefixLength = 96;
+          }
+        ];
+        eth2.ipv4.addresses = [
+          {
+            address = "203.0.113.1";
+            prefixLength = 24;
+          }
+        ];
       };
 
       networking.jool.enable = true;
       networking.jool.nat64.default = {
         bib = [
-          { # forward HTTP 203.0.113.1 (router) → 2001:db8::9 (homeserver)
-            "protocol"     = "TCP";
+          {
+            # forward HTTP 203.0.113.1 (router) → 2001:db8::9 (homeserver)
+            "protocol" = "TCP";
             "ipv4 address" = "203.0.113.1#80";
             "ipv6 address" = "2001:db8::9#80";
           }
         ];
         pool4 = [
           # Ports for dynamic translation
-          { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
-          { protocol =  "UDP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
-          { protocol = "ICMP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
+          {
+            protocol = "TCP";
+            prefix = "203.0.113.1/32";
+            "port range" = "40001-65535";
+          }
+          {
+            protocol = "UDP";
+            prefix = "203.0.113.1/32";
+            "port range" = "40001-65535";
+          }
+          {
+            protocol = "ICMP";
+            prefix = "203.0.113.1/32";
+            "port range" = "40001-65535";
+          }
           # Ports for static BIB entries
-          { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "80"; }
+          {
+            protocol = "TCP";
+            prefix = "203.0.113.1/32";
+            "port range" = "80";
+          }
         ];
       };
     };
@@ -165,37 +234,61 @@ in
       virtualisation.vlans = [ 1 ];
 
       networking.interfaces.eth1.ipv6 = {
-        addresses = lib.mkForce [ { address = "2001:db8::8"; prefixLength = 96; } ];
-        routes = lib.mkForce [ {
-          address = "64:ff9b::";
-          prefixLength = 96;
-          via = "2001:db8::1";
-        } ];
+        addresses = lib.mkForce [
+          {
+            address = "2001:db8::8";
+            prefixLength = 96;
+          }
+        ];
+        routes = lib.mkForce [
+          {
+            address = "64:ff9b::";
+            prefixLength = 96;
+            via = "2001:db8::1";
+          }
+        ];
       };
     };
 
     # LAN server (IPv6 only)
     nodes.homeserver = {
-      imports = [ ipv6Only (webserver 6 "Hello from IPv6!") ];
+      imports = [
+        ipv6Only
+        (webserver 6 "Hello from IPv6!")
+      ];
 
       virtualisation.vlans = [ 1 ];
       networking.interfaces.eth1.ipv6 = {
-        addresses = lib.mkForce [ { address = "2001:db8::9"; prefixLength = 96; } ];
-        routes    = lib.mkForce [ {
-          address = "64:ff9b::";
-          prefixLength = 96;
-          via = "2001:db8::1";
-        } ];
+        addresses = lib.mkForce [
+          {
+            address = "2001:db8::9";
+            prefixLength = 96;
+          }
+        ];
+        routes = lib.mkForce [
+          {
+            address = "64:ff9b::";
+            prefixLength = 96;
+            via = "2001:db8::1";
+          }
+        ];
       };
     };
 
     # WAN server (IPv4 only)
     nodes.server = {
-      imports = [ ipv4Only (webserver 4 "Hello from IPv4!") ];
+      imports = [
+        ipv4Only
+        (webserver 4 "Hello from IPv4!")
+      ];
 
       virtualisation.vlans = [ 2 ];
-      networking.interfaces.eth1.ipv4.addresses =
-        [ { address = "203.0.113.16"; prefixLength = 24; } ];
+      networking.interfaces.eth1.ipv4.addresses = [
+        {
+          address = "203.0.113.16";
+          prefixLength = 24;
+        }
+      ];
     };
 
     testScript = ''

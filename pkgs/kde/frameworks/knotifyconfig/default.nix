@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "knotifyconfig";
 
-  extraBuildInputs = [libcanberra];
+  extraBuildInputs = [ libcanberra ];
 }

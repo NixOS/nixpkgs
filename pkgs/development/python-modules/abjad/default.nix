@@ -6,6 +6,7 @@
   roman,
   uqbar,
   pythonOlder,
+  pythonAtLeast,
   pytestCheckHook,
   lilypond,
   typing-extensions,
@@ -13,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "abjad";
-  version = "3.19";
+  version = "3.20";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
+  # see issue upstream indicating Python 3.12 support will come
+  # with version 3.20: https://github.com/Abjad/abjad/issues/1574
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I9t3ORUKFFlMfXJsAzXhCzl1B4a9/ZNmvSX2/R44TPs=";
+    hash = "sha256-Bzv+KSYi4LtuwOh37u09KIM1Gf0+kDwguypkW+8wlsM=";
   };
 
   propagatedBuildInputs = [

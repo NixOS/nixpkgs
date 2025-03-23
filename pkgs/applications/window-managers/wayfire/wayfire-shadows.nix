@@ -1,24 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, meson
-, ninja
-, pkg-config
-, wayfire
-, libxkbcommon
-, libGL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  libxkbcommon,
+  libGL,
+  libinput,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-shadows";
-  version = "unstable-2024-03-28";
+  version = "0-unstable-2025-03-04";
 
   src = fetchFromGitHub {
     owner = "timgott";
     repo = "wayfire-shadows";
-    rev = "81699f6e4be65dcf3f7ad5155dfb4247b37b7997";
-    hash = "sha256-H9pqpHoeDfNBrtVLax57CUXVhU2XT+syAUZTYSJizxw=";
+    rev = "8257a4f04670d8baf29e2d9cee0d78f978f0233f";
+    hash = "sha256-cRayvjbolVxWtr1PbLSjxtIpZogTJaoAMxPOcZ+zBT8=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayfire
     libxkbcommon
     libGL
+    libinput
+    xcbutilwm
   ];
 
   env = {

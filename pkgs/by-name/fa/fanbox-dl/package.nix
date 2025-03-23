@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "fanbox-dl";
-  version = "0.22.1";
+  version = "0.27.3";
 
   src = fetchFromGitHub {
     owner = "hareku";
     repo = "fanbox-dl";
     rev = "v${version}";
-    hash = "sha256-wMFxAi4ENFFdMwHpgfOp/FRF6h2p91NS94FAjH/C2ww=";
+    hash = "sha256-el9+pusnqui7G+x05lJsLjnZ4OymvBVSCa7ReJTgqLw=";
   };
 
-  vendorHash = "sha256-GD5uxa5XWhlHHBztTpDKCTSym2pdkr/or6aGl9qF29U=";
+  vendorHash = "sha256-BZebo50HEKIk1z0LJg8kE1adovyAk67L6jsiaNcpeDY=";
 
   # pings websites during testing
   doCheck = false;

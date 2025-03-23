@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ruff,
   click,
   click-default-group,
@@ -19,21 +19,20 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.6.1";
+  version = "24.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ijXV7ZKIKg44OhySBwfQ8s5IFaLZKM3oBgXeLAr9wiM=";
+    tag = "v${version}";
+    hash = "sha256-ARq7QNwEtnXo0Q04CNWf3bAwyjl92YnFUp/Y51sgsLU=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ruff = lib.getExe ruff;
     })
   ];
@@ -47,7 +46,7 @@ buildPythonPackage rec {
 
   dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       click-default-group
@@ -60,10 +59,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs =
-    [ pytestCheckHook ]
-    ++ passthru.optional-dependencies.cli
-    ++ passthru.optional-dependencies.lxml
-    ++ passthru.optional-dependencies.soap;
+    [
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.cli
+    ++ optional-dependencies.lxml
+    ++ optional-dependencies.soap;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 

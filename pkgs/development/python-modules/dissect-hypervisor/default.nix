@@ -8,14 +8,13 @@
   pycryptodome,
   pytestCheckHook,
   pythonOlder,
-  rich,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.14";
+  version = "3.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-27GfO1HEy9EWdWuPkznOjju6Xy3W2kjKDP0gF3NqYs0=";
+    tag = version;
+    hash = "sha256-3seluZDN5rfJ2XQPblNpEXZQwjxTZB10IwYNZirb7J0=";
   };
 
   build-system = [
@@ -38,10 +37,9 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       pycryptodome
-      rich
     ];
   };
 
@@ -52,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing parsers for various hypervisor disk, backup and configuration files";
     homepage = "https://github.com/fox-it/dissect.hypervisor";
-    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,14 +1,15 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, gnumake
-, tinycc
-, gnused
-, gnugrep
-, gnutar
-, gzip
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  gnumake,
+  tinycc,
+  gnused,
+  gnugrep,
+  gnutar,
+  gzip,
 }:
 
 let
@@ -22,42 +23,45 @@ let
     hash = "sha256-20XNY/0BDmUFN9ZdXfznaJplJ0UjZgbl5ceCk3Jn2YM=";
   };
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version meta;
 
-  nativeBuildInputs = [
-    gnumake
-    tinycc.compiler
-    gnused
-    gnugrep
-    gnutar
-    gzip
-  ];
+    nativeBuildInputs = [
+      gnumake
+      tinycc.compiler
+      gnused
+      gnugrep
+      gnutar
+      gzip
+    ];
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/sed --version
-      mkdir ''${out}
-    '';
-} (''
-  # Unpack
-  tar xzf ${src}
-  cd sed-${version}
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/sed --version
+        mkdir ''${out}
+      '';
+  }
+  (''
+    # Unpack
+    tar xzf ${src}
+    cd sed-${version}
 
-  # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export LD=tcc
-  ./configure \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --disable-shared \
-    --disable-nls \
-    --disable-dependency-tracking \
-    --prefix=$out
+    # Configure
+    export CC="tcc -B ${tinycc.libs}/lib"
+    export LD=tcc
+    ./configure \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --disable-shared \
+      --disable-nls \
+      --disable-dependency-tracking \
+      --prefix=$out
 
-  # Build
-  make AR="tcc -ar"
+    # Build
+    make AR="tcc -ar"
 
-  # Install
-  make install
-'')
+    # Install
+    make install
+  '')

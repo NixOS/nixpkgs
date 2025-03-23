@@ -1,19 +1,21 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.languagetool;
   settingsFormat = pkgs.formats.javaProperties { };
 in
 {
   options.services.languagetool = {
-    enable = mkEnableOption "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts";
+    enable = lib.mkEnableOption "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts";
 
-    package = mkPackageOption pkgs "languagetool" { };
+    package = lib.mkPackageOption pkgs "languagetool" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8081;
       example = 8081;
       description = ''
@@ -21,31 +23,31 @@ in
       '';
     };
 
-    public = mkEnableOption "access from anywhere (rather than just localhost)";
+    public = lib.mkEnableOption "access from anywhere (rather than just localhost)";
 
-    allowOrigin = mkOption {
-      type = types.nullOr types.str;
+    allowOrigin = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "https://my-website.org";
       description = ''
         Set the Access-Control-Allow-Origin header in the HTTP response,
         used for direct (non-proxy) JavaScript-based access from browsers.
-        `null` to allow access from all sites.
+        `"*"` to allow access from all sites.
       '';
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        options.cacheSize = mkOption {
-          type = types.ints.unsigned;
+        options.cacheSize = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 1000;
           apply = toString;
           description = "Number of sentences cached.";
         };
       };
-      default = {};
+      default = { };
       description = ''
         Configuration file options for LanguageTool, see
         'languagetool-http-server --help'
@@ -53,22 +55,22 @@ in
       '';
     };
 
-    jrePackage = mkPackageOption pkgs "jre" { };
+    jrePackage = lib.mkPackageOption pkgs "jre" { };
 
-    jvmOptions = mkOption {
+    jvmOptions = lib.mkOption {
       description = ''
         Extra command line options for the JVM running languagetool.
-        More information can be found here: https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java
+        More information can be found here: <https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java>
       '';
       default = [ ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       example = [
         "-Xmx512m"
       ];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.languagetool = {
       description = "LanguageTool HTTP server";
@@ -80,7 +82,10 @@ in
         Group = "languagetool";
         CapabilityBoundingSet = [ "" ];
         RestrictNamespaces = [ "" ];
-        SystemCallFilter = [ "@system-service" "~ @privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~ @privileged"
+        ];
         ProtectHome = "yes";
         Restart = "on-failure";
         ExecStart = ''
@@ -89,8 +94,8 @@ in
             ${toString cfg.jvmOptions} \
             org.languagetool.server.HTTPServer \
               --port ${toString cfg.port} \
-              ${optionalString cfg.public "--public"} \
-              ${optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
+              ${lib.optionalString cfg.public "--public"} \
+              ${lib.optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
               "--config" ${settingsFormat.generate "languagetool.conf" cfg.settings}
         '';
       };

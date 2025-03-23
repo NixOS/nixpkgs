@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pwaller";
     repo = "pyprof2calltree";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PrIYpvcoD+zVIoOdcON41JmqzpA5FyRKhI7rqDV8cSo=";
   };
 

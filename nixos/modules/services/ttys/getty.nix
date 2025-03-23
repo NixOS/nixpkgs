@@ -7,14 +7,26 @@ let
 
   baseArgs = [
     "--login-program" "${cfg.loginProgram}"
-  ] ++ optionals (cfg.autologinUser != null) [
+  ] ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
     "--autologin" cfg.autologinUser
   ] ++ optionals (cfg.loginOptions != null) [
     "--login-options" cfg.loginOptions
   ] ++ cfg.extraArgs;
 
   gettyCmd = args:
-    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs baseArgs} ${args}";
+    "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
+
+  autologinScript = ''
+    otherArgs="--noclear --keep-baud $TTY 115200,38400,9600 $TERM";
+    ${lib.optionalString cfg.autologinOnce ''
+      autologged="/run/agetty.autologged"
+      if test "$TTY" = tty1 && ! test -f "$autologged"; then
+        touch "$autologged"
+        exec ${gettyCmd "$otherArgs --autologin ${cfg.autologinUser}"}
+      fi
+    ''}
+    exec ${gettyCmd "$otherArgs"}
+  '';
 
 in
 
@@ -37,6 +49,16 @@ in
         description = ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
+        '';
+      };
+
+      autologinOnce = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled the automatic login will only happen in the first tty
+          once per boot. This can be useful to avoid retyping the account
+          password on systems with full disk encrypted.
         '';
       };
 
@@ -98,17 +120,28 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf config.console.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
+    systemd.additionalUpstreamSystemUnits = [
+      "getty.target"
+      "getty-pre.target"
+      "getty@.service"
+      "serial-getty@.service"
+      "console-getty.service"
+      "container-getty@.service"
+    ];
+
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [
-          "" # override upstream default with an empty ExecStart
-          (gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM")
+          # override upstream default with an empty ExecStart
+          ""
+          (pkgs.writers.writeDash "getty" autologinScript)
         ];
+        environment.TTY = "%I";
         restartIfChanged = false;
       };
 

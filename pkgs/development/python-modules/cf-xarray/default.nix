@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -17,7 +16,7 @@
   rich,
   shapely,
 
-  # checks
+  # tests
   dask,
   pytestCheckHook,
   scipy,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.4";
+  version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zio00ki86DZqWtGnVseDR28He4DW1jjKdwfsxRwFDfg=";
+    tag = "v${version}";
+    hash = "sha256-uhlJOOxmyW7WxiWUOwj2T1wSdvUlpRVE2gWz6rLO9VY=";
   };
 
   build-system = [
@@ -45,7 +42,7 @@ buildPythonPackage rec {
 
   dependencies = [ xarray ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       matplotlib
       pint
@@ -60,20 +57,21 @@ buildPythonPackage rec {
     dask
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 
   disabledTestPaths = [
     # Tests require network access
     "cf_xarray/tests/test_accessor.py"
+    "cf_xarray/tests/test_groupers.py"
     "cf_xarray/tests/test_helpers.py"
   ];
 
   meta = {
     description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
-    changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/v${version}";
+    changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

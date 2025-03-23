@@ -10,10 +10,10 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "arrow-glib";
   inherit (arrow-cpp) src version;
-  sourceRoot = "source/c_glib";
+  sourceRoot = "${arrow-cpp.src.name}/c_glib";
 
   strictDeps = true;
 

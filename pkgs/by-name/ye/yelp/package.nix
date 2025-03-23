@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, webkitgtk_4_1
-, pkg-config
-, gtk3
-, libhandy
-, glib
-, gnome
-, adwaita-icon-theme
-, sqlite
-, itstool
-, libxml2
-, libxslt
-, gst_all_1
-, wrapGAppsHook3
-, yelp-xsl
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  webkitgtk_4_1,
+  pkg-config,
+  gtk3,
+  libhandy,
+  glib,
+  gnome,
+  adwaita-icon-theme,
+  sqlite,
+  itstool,
+  libxml2,
+  libxslt,
+  gst_all_1,
+  wrapGAppsHook3,
+  yelp-xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
   version = "42.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-osX9B4epCJxyLMZr0Phc33CI2HDntsyFeZ+OW/+erEs=";
+    url = "mirror://gnome/sources/yelp/${lib.versions.major version}/yelp-${version}.tar.xz";
+    hash = "sha256-osX9B4epCJxyLMZr0Phc33CI2HDntsyFeZ+OW/+erEs=";
   };
 
   nativeBuildInputs = [

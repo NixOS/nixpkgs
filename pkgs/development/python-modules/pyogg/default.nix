@@ -8,12 +8,10 @@
   libogg,
   libopus,
   opusfile,
-  substituteAll,
-  python,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
-
   pname = "pyogg";
   version = "0.6.14a1";
 
@@ -30,7 +28,7 @@ buildPythonPackage rec {
     libopus
   ];
 
-  propagatedBuidInputs = [
+  propagatedBuildInputs = [
     libvorbis
     flac
     libogg
@@ -47,8 +45,7 @@ buildPythonPackage rec {
     "--binary"
   ];
   patches = [
-    (substituteAll {
-      src = ./pyogg-paths.patch;
+    (replaceVars ./pyogg-paths.patch {
       flacLibPath = "${flac.out}/lib/libFLAC${stdenv.hostPlatform.extensions.sharedLibrary}";
       oggLibPath = "${libogg}/lib/libogg${stdenv.hostPlatform.extensions.sharedLibrary}";
       vorbisLibPath = "${libvorbis}/lib/libvorbis${stdenv.hostPlatform.extensions.sharedLibrary}";

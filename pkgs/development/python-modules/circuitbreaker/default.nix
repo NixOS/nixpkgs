@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "circuitbreaker";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabfuel";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-jaDCMGCZZu3STluYeHDNgdEPf2DNq7bXJ0LPV3JZdk0=";
+    tag = version;
+    hash = "sha256-lwLy/bWvXhmQbRJ6Qii7e0SrEL3iDPGs6k7Bqamvg50=";
   };
 
   nativeCheckInputs = [

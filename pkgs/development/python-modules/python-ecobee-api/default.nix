@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-ecobee-api";
-  version = "0.2.19";
+  version = "0.2.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-ecobee-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-osEqDUVf7fU5DWRUQyFaM8jOi2OgSqbtMaLSWMKQMPw=";
+    tag = version;
+    hash = "sha256-ffCd109hweeKJn+nnsVo/kDVg3bam/WONZWJOA2EibE=";
   };
 
   build-system = [ setuptools ];

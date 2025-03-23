@@ -1,4 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config, cmake, libX11, libXtst, qtbase, qttools, qtx11extras }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libX11,
+  libXtst,
+  qtbase,
+  qttools,
+  qtx11extras,
+}:
 mkDerivation rec {
   pname = "qjoypad";
   version = "4.3.1";
@@ -10,8 +21,17 @@ mkDerivation rec {
     hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
 
-  nativeBuildInputs = [ pkg-config cmake qttools ];
-  buildInputs = [ libX11 libXtst qtbase qtx11extras ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    libX11
+    libXtst
+    qtbase
+    qtx11extras
+  ];
 
   meta = with lib; {
     description = "Program that lets you use gaming devices anywhere";

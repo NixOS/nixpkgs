@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "ksanecore";
 
-  extraBuildInputs = [sane-backends];
+  extraBuildInputs = [ sane-backends ];
 }

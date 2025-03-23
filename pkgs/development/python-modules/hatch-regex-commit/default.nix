@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatch-regex-commit,
   hatchling,
   pythonOlder,
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "hatch-regex-commit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E0DIBBaDmTCsZQ41NcjcbzgJ16BwhdexlrGWBdf77oA=";
   };
 

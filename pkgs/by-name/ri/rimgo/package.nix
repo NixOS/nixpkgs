@@ -2,7 +2,7 @@
   lib,
   fetchFromGitea,
   buildGoModule,
-  tailwindcss,
+  tailwindcss_3,
 }:
 buildGoModule rec {
   pname = "rimgo";
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-nk1Pl9K62RjmBUgTlbp3u6cCoiEwpUHavfT3Oy0iyGU=";
 
-  nativeBuildInputs = [ tailwindcss ];
+  nativeBuildInputs = [ tailwindcss_3 ];
 
   preBuild = ''
     tailwindcss -i static/tailwind.css -o static/app.css -m

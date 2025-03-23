@@ -1,59 +1,77 @@
 {
   lib,
-  buildPythonPackage,
-  callPackage,
-  fetchPypi,
   axisregistry,
   babelfont,
   beautifulsoup4,
   beziers,
+  buildPythonPackage,
+  callPackage,
   cmarkgfm,
   collidoscope,
   defcon,
   dehinter,
-  fonttools,
+  fetchPypi,
   font-v,
+  fonttools,
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
+  gitMinimal,
   glyphsets,
-  lxml,
   installShellFiles,
   jinja2,
+  lxml,
   munkres,
   opentypespec,
   ots-python,
   packaging,
   pip-api,
   protobuf,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
   pyyaml,
-  requests,
   requests-mock,
+  requests,
   rich,
-  setuptools,
   setuptools-scm,
+  setuptools,
   shaperglot,
   stringbrewer,
   toml,
-  unicodedata2,
   ufo2ft,
   ufolint,
+  ufomerge,
+  unicodedata2,
   vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.12.7";
+  version = "0.13.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7cZeazEyAyU+WDop2n7wneg2wzh+9U9atKSRcreJpGw=";
+    hash = "sha256-NoUqR+u2GgjE+nj05AXvtprdWieT6XbGGcmOnEMolC4=";
   };
 
-  pyproject = true;
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
+  pythonRelaxDeps = [
+    "collidoscope"
+    "freetype-py"
+    "protobuf"
+    "vharfbuzz"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   dependencies = [
     axisregistry
@@ -64,17 +82,17 @@ buildPythonPackage rec {
     collidoscope
     defcon
     dehinter
-    fonttools
     font-v
+    fonttools
     freetype-py
     gflanguages
     gfsubsets
     glyphsets
-    lxml
     jinja2
+    lxml
     munkres
-    ots-python
     opentypespec
+    ots-python
     packaging
     pip-api
     protobuf
@@ -84,33 +102,21 @@ buildPythonPackage rec {
     shaperglot
     stringbrewer
     toml
+    ufo2ft
     ufolint
+    ufomerge
     unicodedata2
     vharfbuzz
-    ufo2ft
-  ];
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-  nativeBuildInputs = [
-    installShellFiles
   ];
 
-  pythonRelaxDeps = [
-    "collidoscope"
-    "protobuf"
-    "vharfbuzz"
-  ];
-
-  doCheck = true;
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock
     ufolint
   ];
+
   preCheck = ''
     # Let the tests invoke 'fontbakery' command.
     export PATH="$out/bin:$PATH"
@@ -121,8 +127,10 @@ buildPythonPackage rec {
     git config user.name Test
     git commit --allow-empty --message 'Dummy commit for tests'
   '';
+
   disabledTests = [
-    # These require network access:
+    # These require network access
+    "test_check_axes_match"
     "test_check_description_broken_links"
     "test_check_description_family_update"
     "test_check_metadata_designer_profiles"
@@ -133,6 +141,8 @@ buildPythonPackage rec {
     "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
+    # AssertionError
+    "test_check_shape_languages"
   ];
 
   postInstall = ''
@@ -145,7 +155,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
+    changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "fontbakery";
     maintainers = with maintainers; [ danc86 ];
   };
 }

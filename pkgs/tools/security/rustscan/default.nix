@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "2.2.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GOoyq2GgVGNUxxy0KQeRvkISb3FJqwWK5XpmoBAw/tk=";
+    tag = version;
+    hash = "sha256-+qPSeDpOeCq+KwZb5ANXx6z+pYbgdT1hVgcrSzxyGp0=";
   };
 
-  cargoHash = "sha256-K9NFm++jBsrn7U+rZkTOWhrUuL4CA0NR7SlSyhSIwSc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cUuInYCT2jzen9gswfFGtKum6w2X/SiKA2ccdmxk38A=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs fixtures/.rustscan_scripts/*
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     perl
@@ -39,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     # These tests require network access
     "--skip=parse_correct_host_addresses"
     "--skip=parse_hosts_file_and_incorrect_hosts"
+    "--skip=resolver_args_google_dns"
+    "--skip=resolver_default_cloudflare"
   ];
 
   meta = with lib; {

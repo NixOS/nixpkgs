@@ -15,7 +15,7 @@
   libnotify,
   libpulseaudio,
   libva,
-  mesa,
+  libgbm,
   nixosTests,
   openssl,
   pciutils,
@@ -28,25 +28,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.12.1";
+  version = "2.13.3";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-0Yyd0mJK/eDallg9ERimvZIRCOTeDkzeAVUfDeNP928=";
+    hash = "sha256-u6zKB5+P/f3qM5Sqmhk2ts1AhgRN8Oq877uKQuJ6Uao=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mime-0.4.0-a.0" = "sha256-LjM7LH6rL3moCKxVsA+RUL9lfnvY31IrqHa9pDIAZNE=";
-      "web_app_manifest-0.0.0" = "sha256-G+kRN8AEmAY1TxykhLmgoX8TG8y2lrv7SCRJlNy0QzA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-23XTb+gAN0D67llZj8Er43cFfhLSdEA6X6V6Ds1rvV8=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
@@ -69,14 +64,14 @@ rustPlatform.buildRustPackage rec {
   libs =
     let
       libs =
-        lib.optionals stdenv.isLinux [
+        lib.optionals stdenv.hostPlatform.isLinux [
           cups
           ffmpeg
           libglvnd
           libnotify
           libpulseaudio
           libva
-          mesa
+          libgbm
           pciutils
           pipewire
           udev
@@ -156,9 +151,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      adamcstephens
       camillemndn
       pasqui23
     ];

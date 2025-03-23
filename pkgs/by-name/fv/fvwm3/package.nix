@@ -1,32 +1,32 @@
-{ lib
-, asciidoctor
-, autoreconfHook
-, cairo
-, fetchFromGitHub
-, fontconfig
-, freetype
-, fribidi
-, libSM
-, libX11
-, libXcursor
-, libXft
-, libXi
-, libXinerama
-, libXpm
-, libXrandr
-, libXt
-, libevent
-, libintl
-, libpng
-, librsvg
-, libstroke
-, libxslt
-, perl
-, pkg-config
-, python3Packages
-, readline
-, sharutils
-, stdenv
+{
+  lib,
+  asciidoctor,
+  autoreconfHook,
+  cairo,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  fribidi,
+  libSM,
+  libX11,
+  libXcursor,
+  libXft,
+  libXi,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libXt,
+  libevent,
+  libintl,
+  libpng,
+  librsvg,
+  libxslt,
+  perl,
+  pkg-config,
+  python3Packages,
+  readline,
+  sharutils,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     libpng
     librsvg
-    libstroke
     libxslt
     perl
     python3Packages.python
@@ -114,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/fvwmorg/fvwm3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (libX11.meta) platforms;
   };
 })

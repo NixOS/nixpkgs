@@ -1,111 +1,62 @@
 {
   lib,
-  vscode-utils,
-  patchelf,
-  icu,
   stdenv,
+  vscode-utils,
+  autoPatchelfHook,
+  icu,
   openssl,
+  libz,
+  glibc,
   coreutils,
 }:
 let
   inherit (stdenv.hostPlatform) system;
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
+  lockfile = lib.importJSON ./lockfile.json;
   extInfo =
-    let
-      baseBins = [
-        ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
-        ".razor/rzls"
-      ];
-      linuxBins = baseBins ++ [
-        ".debugger/vsdbg-ui"
-        ".debugger/vsdbg"
-      ];
-      darwinBins = baseBins ++ [
-        ".debugger/x86_64/vsdbg-ui"
-        ".debugger/x86_64/vsdbg"
-      ];
-    in
-    {
-      x86_64-linux = {
-        arch = "linux-x64";
-        hash = "sha256-Y+Re3tDX8HQrWo045JxdX8Jt4jomm1/C9T+BU2/hE+g=";
-        binaries = linuxBins;
-      };
-      aarch64-linux = {
-        arch = "linux-arm64";
-        hash = "sha256-nFCFK2GVLljMqmxJnlma6kAXHc9qN/DnnRiWrkjmLmo=";
-        binaries = linuxBins;
-      };
-      x86_64-darwin = {
-        arch = "darwin-x64";
-        hash = "sha256-hC1ZJdBKJR3om9xuxEBhaBtQXEin1R0t7BFVdOUu6X8=";
-        binaries = darwinBins;
-      };
-      aarch64-darwin = {
-        arch = "darwin-arm64";
-        hash = "sha256-mIZJXgACvJmhrJzOtKcF2DKeBkLSjKehE1xEwtp1X+E=";
-        binaries = darwinBins ++ [
-          ".debugger/arm64/vsdbg-ui"
-          ".debugger/arm64/vsdbg"
-        ];
-      };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    (arch: {
+      inherit arch;
+      inherit (lockfile.${arch}) hash binaries;
+    })
+      (
+        {
+          x86_64-linux = "linux-x64";
+          aarch64-linux = "linux-arm64";
+          x86_64-darwin = "darwin-x64";
+          aarch64-darwin = "darwin-arm64";
+        }
+        .${system} or (throw "Unsupported system: ${system}")
+      );
 in
 buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.34.12";
+    inherit (lockfile) version;
     inherit (extInfo) hash arch;
   };
 
-  nativeBuildInputs = [ patchelf ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+    (lib.getLib glibc) # libgcc_s.so.1
+    (lib.getLib libz) # libz.so.1
+  ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib openssl) # libopenssl.so.3
+    (lib.getLib icu) # libicui18n.so libicuuc.so
+    (lib.getLib libz) # libz.so.1
+  ];
 
-  postPatch =
-    ''
-      patchelf_add_icu_as_needed() {
-        declare elf="''${1?}"
-        declare icu_major_v="${lib.head (lib.splitVersion (lib.getVersion icu.name))}"
+  postPatch = ''
+    substituteInPlace dist/extension.js \
+      --replace-fail 'uname -m' '${lib.getExe' coreutils "uname"} -m'
 
-        for icu_lib in icui18n icuuc icudata; do
-          patchelf --add-needed "lib''${icu_lib}.so.$icu_major_v" "$elf"
-        done
-      }
+    chmod +x ${lib.escapeShellArgs extInfo.binaries}
+  '';
 
-      patchelf_common() {
-        declare elf="''${1?}"
-
-        patchelf_add_icu_as_needed "$elf"
-        patchelf --add-needed "libssl.so" "$elf"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${
-            lib.makeLibraryPath [
-              stdenv.cc.cc
-              openssl
-              icu.out
-            ]
-          }:\$ORIGIN" \
-          "$elf"
-      }
-
-      substituteInPlace dist/extension.js \
-        --replace 'uname -m' '${lib.getExe' coreutils "uname"} -m'
-
-    ''
-    + (lib.concatStringsSep "\n" (
-      map (bin: ''
-        chmod +x "${bin}"
-      '') extInfo.binaries
-    ))
-    + lib.optionalString stdenv.isLinux (
-      lib.concatStringsSep "\n" (
-        map (bin: ''
-          patchelf_common "${bin}"
-        '') extInfo.binaries
-      )
-    );
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Official C# support for Visual Studio Code";

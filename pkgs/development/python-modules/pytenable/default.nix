@@ -1,18 +1,24 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   defusedxml,
   fetchFromGitHub,
+  gql,
+  graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
+  pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
   python-box,
   python-dateutil,
   pythonOlder,
-  requests,
   requests-pkcs12,
   requests-toolbelt,
+  requests,
   responses,
   restfly,
   semver,
@@ -22,25 +28,33 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.5.0";
+  version = "1.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uLZ1TQx5awHOOF+IR3aWTwwYTd71O/V+EHaDrb1LAXU=";
+    tag = version;
+    hash = "sha256-kIjAmGtfOZSNqSKOmagttfzVt2onqVwrCkYM6SCOlCg=";
   };
 
-  pythonRelaxDeps = [ "defusedxml" ];
+  pythonRelaxDeps = [
+    "cryptography"
+    "defusedxml"
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cryptography
     defusedxml
+    gql
+    graphql-core
     marshmallow
+    pydantic
+    pydantic-extra-types
     python-box
     python-dateutil
     requests
@@ -51,6 +65,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-datafiles
     pytest-vcr
     pytestCheckHook

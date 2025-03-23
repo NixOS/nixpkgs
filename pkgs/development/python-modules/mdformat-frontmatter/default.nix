@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  linkify-it-py,
-  markdown-it-py,
   mdformat,
   mdit-py-plugins,
   ruamel-yaml,
@@ -21,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "butler54";
     repo = "mdformat-frontmatter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2heQw8LL/ILY36oItBeQq33qjVBGT51qGG4CcCEDutA=";
   };
 

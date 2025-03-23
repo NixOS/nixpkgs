@@ -1,17 +1,24 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  python3,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "swaywsr";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pedroscaff";
-    repo = pname;
+    repo = "swaywsr";
     rev = "521fbf92738f44be438d3be6bdd665f02ac9d35c";
     hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };
 
-  cargoHash = "sha256-zoV2vy41fVsX8BtddURqQymMX4Zpso+GOBBqoVr3tYo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u+aMwj+IxFY+fSAECkKr8dSPVw2q+FXZpgwwexu7BFU=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

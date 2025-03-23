@@ -1,38 +1,44 @@
 {
   lib,
-  addict,
   buildPythonPackage,
-  coverage,
   fetchFromGitHub,
-  lmdb,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  addict,
   matplotlib,
-  mlflow,
   numpy,
   opencv4,
-  parameterized,
-  pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
-  setuptools,
-  stdenv,
   termcolor,
-  torch,
   yapf,
+
+  # tests
+  bitsandbytes,
+  coverage,
+  dvclive,
+  lion-pytorch,
+  lmdb,
+  mlflow,
+  parameterized,
+  pytestCheckHook,
+  transformers,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.4";
+  version = "0.10.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+YDtYHp3BwKvzhmHC6hAZ3Qtc9uRZMo/TpWqdpm2hn0=";
+    tag = "v${version}";
+    hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
 
   build-system = [ setuptools ];
@@ -48,64 +54,62 @@ buildPythonPackage rec {
     yapf
   ];
 
+  pythonImportsCheck = [ "mmengine" ];
+
   nativeCheckInputs = [
+    bitsandbytes
     coverage
+    dvclive
+    lion-pytorch
     lmdb
     mlflow
     parameterized
     pytestCheckHook
-    torch
+    transformers
+    writableTmpDirAsHomeHook
   ];
 
   preCheck =
-    ''
-      export HOME=$TMPDIR
-    ''
     # Otherwise, the backprop hangs forever. More precisely, this exact line:
     # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
     # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
-    + ''
+    ''
       export MKL_NUM_THREADS=1
     '';
 
-  pythonImportsCheck = [ "mmengine" ];
+  pytestFlagsArray = [
+    # Require unpackaged aim
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
-  disabledTestPaths = [
-    # AttributeError
-    "tests/test_fileio/test_backends/test_petrel_backend.py"
-    # Freezes forever?
-    "tests/test_runner/test_activation_checkpointing.py"
-    # missing dependencies
-    "tests/test_visualizer/test_vis_backend.py"
+    # Cannot find SSL certificate
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
+
+    # AttributeError: type object 'MagicMock' has no attribute ...
+    "--deselect tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
   ];
 
   disabledTests = [
-    # Tests are disabled due to sandbox
+    # Require network access
     "test_fileclient"
     "test_http_backend"
     "test_misc"
+
     # RuntimeError
     "test_dump"
     "test_deepcopy"
     "test_copy"
     "test_lazy_import"
-    # AssertionError
+
+    # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
-    # Require unpackaged aim
-    "test_experiment"
-    "test_add_config"
-    "test_add_image"
-    "test_add_scalar"
-    "test_add_scalars"
-    "test_close"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ rxiao ];
-    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

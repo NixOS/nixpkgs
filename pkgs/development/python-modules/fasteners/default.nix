@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "harlowja";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XFa1ItFqkSYE940p/imWFp5e9gS6n+D1uM6Cj+Vzmmg=";
   };
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/harlowja/fasteners";
     changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

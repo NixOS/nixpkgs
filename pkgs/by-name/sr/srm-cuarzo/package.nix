@@ -8,15 +8,15 @@
 , libdrm
 , libGL
 , libinput
-, mesa
+, libgbm
 , seatd
 , udev
 }:
 stdenv.mkDerivation (self: {
   pname = "srm-cuarzo";
-  version = "0.6.3-1";
+  version = "0.12.0-1";
   rev = "v${self.version}";
-  hash = "sha256-nQucfh/Eri2BM70NFYqJQnBgVlHO/5eNHVFX/6RYoZA=";
+  hash = "sha256-baLi0Upv8VMfeusy9EfeAXVxMo0KuKNC+EYg/c+tzRY=";
 
   src = fetchFromGitHub {
     inherit (self) rev hash;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (self: {
     libdrm
     libGL
     libinput
-    mesa
+    libgbm
     seatd
     udev
   ];

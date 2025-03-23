@@ -1,18 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  cmake,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vulkan-memory-allocator";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "VulkanMemoryAllocator";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-j0Z9OEwQx3RB2cni9eK3gYfwkhOc2ST213b6VseaVzg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PnrzYZfTZU02odvmUrD9he1T6O09vhfOfhkvgEBnDHk=";
   };
 
   # A compiler is only required for the samples. This lets us use stdenvNoCC.
@@ -27,10 +29,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Easy to integrate Vulkan memory allocation library";
     homepage = "https://gpuopen.com/vulkan-memory-allocator/";
-    changelog = "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "vulkan-memory-allocator";

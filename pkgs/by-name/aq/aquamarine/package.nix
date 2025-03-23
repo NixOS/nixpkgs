@@ -11,7 +11,7 @@
   libffi,
   libGL,
   libinput,
-  mesa,
+  libgbm,
   nix-update-script,
   pixman,
   pkg-config,
@@ -19,16 +19,17 @@
   udev,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.1.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rux5XA+ixI0fuiQGSOerLKxsW2D8cfjmP1B7FY24xF8=";
+    hash = "sha256-ybpV2+yNExdHnMhhhmtxqgBCgI+nRr8gi/D+VVb9lQY=";
   };
 
   nativeBuildInputs = [
@@ -38,21 +39,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    hwdata
     hyprutils
     libdisplay-info
     libdrm
     libffi
     libGL
     libinput
-    mesa
+    libgbm
     pixman
     seatd
     udev
     wayland
     wayland-protocols
+    wayland-scanner
   ];
 
-  depsBuildBuild = [ hwdata ];
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -61,19 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/hyprwm/aquamarine/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/hyprwm/aquamarine/releases/tag/v${finalAttrs.version}";
     description = "A very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
-    platforms = lib.platforms.linux;
+    maintainers = lib.teams.hyprland.members;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

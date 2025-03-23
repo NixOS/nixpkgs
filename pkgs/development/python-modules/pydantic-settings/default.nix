@@ -14,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.3.2";
+    version = "2.8.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -22,13 +22,13 @@ let
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-1wnTAoF9xi1xLgSWl0FhtIddWPpHgDJPxJlsctJvFQo=";
+      tag = "v${version}";
+      hash = "sha256-Bvdq4ATOhLjowkyR39y0Jxi+wuPbpVW30qtbsXa9+HA=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       pydantic
       python-dotenv
     ];
@@ -62,7 +62,7 @@ let
       homepage = "https://github.com/pydantic/pydantic-settings";
       license = licenses.mit;
       broken = lib.versionOlder pydantic.version "2.0.0";
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

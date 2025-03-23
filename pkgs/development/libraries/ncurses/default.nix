@@ -9,22 +9,26 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
+, withTermlib ? false
 , unicodeSupport ? true
 , testers
 , binlore
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4.20221231";
+  version = "6.5";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
-    hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-E22RvCaamleF5fnpgLx2q1dCj2BM4+WlqQzrx2eXHMY=";
   };
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
+
+  # see other isOpenBSD clause below
+  configurePlatforms = if stdenv.hostPlatform.isOpenBSD then ["build"] else ["build" "host"];
 
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+    ++ lib.optional withTermlib "--with-termlib"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
@@ -62,10 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
       #
       # For now we allow this with `--undefined-version`:
       "LDFLAGS=-Wl,--undefined-version"
-  ]);
+  ]) ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # If you don't specify the version number in the host specification, a branch gets taken in configure
+    # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
+    # No, autoreconfHook doesn't work.
+    "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   strictDeps = true;
 
@@ -77,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
+  buildInputs = lib.optional (mouseSupport && stdenv.hostPlatform.isLinux) gpm;
 
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
@@ -90,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
     )
   ''
-  + lib.optionalString stdenv.isSunOS ''
+  + lib.optionalString stdenv.hostPlatform.isSunOS ''
     sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
@@ -102,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   postFixup = let
-    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
+    abiVersion-extension = if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
   ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"

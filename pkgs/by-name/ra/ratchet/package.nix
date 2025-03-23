@@ -4,9 +4,10 @@
   fetchFromGitHub,
   callPackage,
 }:
+
 buildGoModule rec {
   pname = "ratchet";
-  version = "0.9.2";
+  version = "0.10.2";
 
   # ratchet uses the git sha-1 in the version string, e.g.
   #
@@ -19,12 +20,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sethvargo";
     repo = "ratchet";
-    rev = "d57cc1a53c022d3f87c4820bc6b64384a06c8a07";
-    hash = "sha256-gQ98uD9oPUsECsduv/lqGdYNmtHetU49ETfWCE8ft8U=";
+    rev = "ee93c849418d0b9316703bb349055a4078ad205e";
+    hash = "sha256-pVpZB8WWGgFbu0iK6gM2lEaXN4IqDJ1lMtVnUfcE4MQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-J7LijbhpKDIfTcQMgk2x5FVaYG7Kgkba/1aSTmgs5yw=";
+
+  vendorHash = "sha256-KKHlegmvpmmUZGoiEawgSUwOPQEfTjfzTYvere1YAv4=";
 
   subPackages = [ "." ];
 
@@ -35,34 +37,34 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}/internal/version.name=${pname}"
+      "-X ${package_url}/internal/version.name=ratchet"
       "-X ${package_url}/internal/version.version=${version}"
       "-X ${package_url}/internal/version.commit=${src.rev}"
     ];
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/ratchet --version 2>&1 | grep ${version};
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
+
     install -Dm755 "$GOPATH/bin/ratchet" -T $out/bin/ratchet
+
     runHook postInstall
   '';
 
-  passthru.tests = {
-    execution = callPackage ./tests.nix { };
-  };
+  passthru.tests.execution = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for securing CI/CD workflows with version pinning";
     mainProgram = "ratchet";
     downloadPage = "https://github.com/sethvargo/ratchet";
     homepage = "https://github.com/sethvargo/ratchet";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cameronraysmith
       ryanccn
     ];

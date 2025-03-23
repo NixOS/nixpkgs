@@ -1,0 +1,13 @@
+diff --git a/src/closures.c b/src/closures.c
+index 01f9950cd0..1dfd375cff 100644
+--- a/src/closures.c
++++ b/src/closures.c
+@@ -329,7 +329,7 @@
+     table->next->prev = table->prev;
+ 
+   /* Deallocate pages */
+-  vm_deallocate (mach_task_self (), table->config_page, PAGE_MAX_SIZE * 2);
++  vm_deallocate (mach_task_self (), table->config_page, FFI_TRAMPOLINE_ALLOCATION_PAGE_COUNT * PAGE_MAX_SIZE);
+ 
+   /* Deallocate free list */
+   free (table->free_list_pool);

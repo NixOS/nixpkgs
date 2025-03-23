@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   hello-world = pkgs.writeText "hello-world" ''
@@ -12,17 +12,22 @@ in
 {
   name = "agda";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ alexarice turion ];
+    maintainers = [
+      alexarice
+      turion
+    ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [
-      (pkgs.agda.withPackages {
-        pkgs = p: [ p.standard-library ];
-      })
-    ];
-    virtualisation.memorySize = 2000; # Agda uses a lot of memory
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [
+        (pkgs.agda.withPackages {
+          pkgs = p: [ p.standard-library ];
+        })
+      ];
+      virtualisation.memorySize = 2000; # Agda uses a lot of memory
+    };
 
   testScript = ''
     # Minimal script that typechecks
@@ -40,4 +45,3 @@ in
     ), "HelloWorld does not run properly"
   '';
 }
-)

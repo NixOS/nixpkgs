@@ -1,117 +1,109 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
-, nodejs
-, python3
-, makeWrapper
-, electron
-, vulkan-helper
-, gogdl
-, legendary-gl
-, nile
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pnpm_9,
+  nodejs,
+  python3,
+  makeWrapper,
+  electron,
+  vulkan-helper,
+  gogdl,
+  legendary-heroic,
+  nile,
+  comet-gog,
 }:
 
-let appName = "heroic";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.14.1";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
-    rev = "v${version}";
-    hash = "sha256-AnyltqNP+XyVzgCobM3g6DIXntD3spKecYtCRx+8oic=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BnBzbbyi9cdO6W59cnY13hnhH+tjrTryTp9XIcERwh4=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3CYSw1Qy363eyhy3UyFgihSau+miNHwvKjhlq/kWxWQ=";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-2IQyXULgFoz0rFQ8SwERgMDzzo7pZ3DbqhwrWNYSwRo=";
   };
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
     nodejs
+    pnpm_9.configHook
     python3
     makeWrapper
   ];
 
   patches = [
-    # Reverts part of upstream PR 2761 so that we don't have to use a non-free Electron fork.
-    # https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/2761
-    ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
   ];
 
-  postPatch = ''
-    # We are not packaging this as an Electron application bundle, so Electron
-    # reports to the application that is is not "packaged", which causes Heroic
-    # to take some incorrect codepaths meant for development environments.
-    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
-  '';
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline vite build
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
 
-    # Remove dev dependencies.
-    yarn install --production --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    pnpm --offline electron-vite build
+    pnpm --offline electron-builder \
+      --linux \
+      --dir \
+      -c.asarUnpack="**/*.node" \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
 
   # --disable-gpu-compositing is to work around upstream bug
   # https://github.com/electron/electron/issues/32317
-  installPhase = let
-    binPlatform = if stdenv.isDarwin then "darwin" else "linux";
-  in ''
+  installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{applications,${appName}}
-    cp -r . $out/share/${appName}
-    rm -rf $out/share/${appName}/{.devcontainer,.vscode,.husky,.idea,.github}
+    mkdir -p "$out/opt/heroic"
+    cp -r dist/linux-unpacked/resources "$out/opt/heroic"
 
-    chmod -R u+w "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
-    rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
-    mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
+    cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
+    rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
     ln -s \
-      "${gogdl}/bin/gogdl" \
-      "${legendary-gl}/bin/legendary" \
-      "${nile}/bin/nile" \
-      "${lib.optionalString stdenv.isLinux "${vulkan-helper}/bin/vulkan-helper"}" \
-      "$out/share/${appName}/build/bin/${binPlatform}"
+      "${lib.getExe gogdl}" \
+      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe nile}" \
+      "${lib.getExe comet-gog}" \
+      "${lib.getExe vulkan-helper}" \
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/share/${appName} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    substituteInPlace "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" \
-      --replace "Exec=heroic-run" "Exec=heroic"
-    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
-    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
-    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+    install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
+    install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
+    substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
+      --replace-fail "Exec=heroic-run" "Exec=heroic"
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
@@ -119,7 +111,11 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
-    mainProgram = appName;
+    # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
+    # It may also work on other Linux targets, but all the game stores only
+    # support x86 Linux, so it would require extra hacking to run games via QEMU
+    # user emulation.  Upstream provide Linux builds only for x86_64.
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "heroic";
   };
-}
+})

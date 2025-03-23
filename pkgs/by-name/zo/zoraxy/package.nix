@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "zoraxy";
-  version = "3.0.7";
+  version = "3.1.8";
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-fyhnP+MtX5dYR9yzIp7vpahJKbkuvopZSSTwt7JnaMI=";
+    tag = "v${version}";
+    hash = "sha256-0BJuomRz/ZnvHQXPZBBrVv1nk2UFPGGdjsZ/FpUAtwk=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-FiE7j2XB6QcJBu1wtTpBCkfi0ac8pzx6RSOcVrsaOwQ=";
+  vendorHash = "sha256-gqDgM+xyvzrpQEQz0fju8GEtQhJOaL6FeuwYxgeSRmo=";
 
   checkFlags =
     let
@@ -27,6 +27,8 @@ buildGoModule rec {
         "TestReplaceLocationHostRelative"
         "TestHandleTraceRoute"
         "TestHandlePing"
+        "TestListTable"
+        "TestWriteAndRead"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -38,5 +40,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     mainProgram = "zoraxy";
+    platforms = lib.platforms.linux;
   };
 }

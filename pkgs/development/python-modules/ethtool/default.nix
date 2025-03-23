@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "python-ethtool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0XzGaqpkEv3mpUsbfOtRl8E62iNdS7kRoo4oYrBjMys=";
   };
 

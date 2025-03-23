@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, gitUpdater
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,13 +14,12 @@ python3.pkgs.buildPythonApplication rec {
     owner = "roys";
     repo = "cewler";
     rev = "v${version}";
-    hash = "sha256-nlF+B7Z1GRo3ZrGhG58c0vLcJAW+PvXT2tfFoyElw7w=";
+    hash = "sha256-lVI3p6YMugQ3yKHFNxISmUY7XZMuX/TXvVUoZfIeJog=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

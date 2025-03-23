@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, bash
-, bison
-, flex
-, gperf
-, ncurses
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  bison,
+  flex,
+  gperf,
+  ncurses,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "lib" "dev" "doc" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     bison
@@ -60,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://bitbucket.org/nuttx/tools/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

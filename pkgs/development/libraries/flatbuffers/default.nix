@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "24.3.25";
+  version = "25.1.24";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    hash = "sha256-uE9CQnhzVgOweYLhWPn2hvzXHyBbFiFVESJ1AEM3BmA=";
+    hash = "sha256-LApjF14eoqcT11Jp9SaJQbtvK8iIelTY4GJKqjVCpCM=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   cmakeFlags = [
     "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DFLATBUFFERS_OSX_BUILD_UNIVERSAL=OFF"
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkTarget = "test";
 
   meta = with lib; {

@@ -5,7 +5,6 @@
   cmake,
   cppe,
   eigen,
-  python,
   pybind11,
   numpy,
   h5py,
@@ -17,7 +16,7 @@
   llvmPackages,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (cppe)
     pname
     version

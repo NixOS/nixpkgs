@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, stdlib-shims }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
   pname = "bitstring";

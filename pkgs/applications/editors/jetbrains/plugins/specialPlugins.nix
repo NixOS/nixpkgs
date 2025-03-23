@@ -1,21 +1,28 @@
-{ delve, autoPatchelfHook, stdenv, lib, glibc, gcc-unwrapped }:
+{
+  delve,
+  autoPatchelfHook,
+  stdenv,
+  lib,
+  glibc,
+  gcc-unwrapped,
+}:
 # This is a list of plugins that need special treatment. For example, the go plugin (id is 9568) comes with delve, a
 # debugger, but that needs various linking fixes. The changes here replace it with the system one.
 {
   "631" = {
     # Python
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   };
   "7322" = {
     # Python community edition
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   };
   "8182" = {
     # Rust (deprecated)
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     buildPhase = ''
       runHook preBuild
       chmod +x -R bin
@@ -27,8 +34,11 @@
     buildInputs = [ delve ];
     buildPhase =
       let
-        arch = (if stdenv.isLinux then "linux" else "mac") + (if stdenv.isAarch64 then "arm" else "");
-      in ''
+        arch =
+          (if stdenv.hostPlatform.isLinux then "linux" else "mac")
+          + (if stdenv.hostPlatform.isAarch64 then "arm" else "");
+      in
+      ''
         runHook preBuild
         ln -sf ${delve}/bin/dlv lib/dlv/${arch}/dlv
         runHook postBuild
@@ -38,10 +48,21 @@
     # Github Copilot
     # Modified version of https://github.com/ktor/nixos/commit/35f4071faab696b2a4d86643726c9dd3e4293964
     buildPhase = ''
-      agent="copilot-agent/bin/copilot-agent-linux"
+      agent='copilot-agent/native/${lib.toLower stdenv.hostPlatform.uname.system}${
+        {
+          x86_64 = "-x64";
+          aarch64 = "-arm64";
+        }
+        .${stdenv.hostPlatform.uname.processor} or ""
+      }/copilot-language-server'
       orig_size=$(stat --printf=%s $agent)
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $agent
-      patchelf --set-rpath ${lib.makeLibraryPath [glibc gcc-unwrapped]} $agent
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          glibc
+          gcc-unwrapped
+        ]
+      } $agent
       chmod +x $agent
       new_size=$(stat --printf=%s $agent)
       var_skip=20
@@ -62,8 +83,8 @@
   };
   "22407" = {
     # Rust
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     buildPhase = ''
       runHook preBuild
       chmod +x -R bin

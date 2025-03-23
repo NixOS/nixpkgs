@@ -5,32 +5,30 @@
   nix-update-script,
   packaging,
   platformdirs,
-  pydantic_1,
+  pydantic,
   pyyaml,
   requests-unixsocket,
-  setuptools,
   setuptools-scm,
-  urllib3,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
   responses,
   freezegun,
   pytest-subprocess,
-  pytest-logdog,
+  logassert,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "1.24.1";
+  version = "2.2.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-providers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-l57Y+sdCD0/3sBK48N/3p3ns3o0LB4h9FQ35ha1AOV4=";
+    tag = version;
+    hash = "sha256-HCt6xdUu8+6CtkLeUrY2KYnULLwLLobDDm4O1DAiZrc=";
   };
 
   patches = [
@@ -52,34 +50,29 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>=" \
-      --replace-fail "urllib3<2" "urllib3"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     platformdirs
-    pydantic_1
+    pydantic
     pyyaml
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_providers" ];
 
   nativeCheckInputs = [
     freezegun
+    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
-    pytest-logdog
     pytestCheckHook
     responses
   ];
@@ -109,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

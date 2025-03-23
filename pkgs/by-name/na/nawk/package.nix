@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, buildPackages
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  buildPackages,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20240422";
+  version = "20250116";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-wsRkSXCLtK2jk4gW/Lpg/14NiOUANfmCrYqeKZW6CLY=";
+    hash = "sha256-zRGMqMPkP801nZE/pG/NwsiOvv6dTQBcPtfTJCh1eiQ=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -24,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -33,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 a.out "$out/bin/nawk"
+    mv a.out nawk
+    installBin nawk
     mv awk.1 nawk.1
     installManPage nawk.1
     runHook postInstall
@@ -50,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/onetrueawk/awk/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;
     mainProgram = "nawk";
-    maintainers = with lib.maintainers; [ AndersonTorres konimex ];
+    maintainers = with lib.maintainers; [
+      konimex
+    ];
     platforms = lib.platforms.all;
   };
 })

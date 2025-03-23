@@ -1,35 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   dash,
-  setuptools,
+  hatchling,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dash-bootstrap-components";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "facultyai";
-    repo = "dash-bootstrap-components";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6tx7rOB5FVj44NbTznyZd1Q0HOc8QdxiZOhja5kgpAE=";
+  src = fetchPypi {
+    inherit version;
+    pname = "dash_bootstrap_components";
+    hash = "sha256-MNSDQNbciYMdbAbkAM1CNvDVNjViwFsqki8hVFaVoII=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ dash ];
 
   # Tests a additional requirements
   doCheck = false;
 
-  # Circular import
-  # pythonImportsCheck = [ "dash_bootstrap_components" ];
+  pythonImportsCheck = [ "dash_bootstrap_components" ];
 
   meta = with lib; {
     description = "Bootstrap components for Plotly Dash";

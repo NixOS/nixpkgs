@@ -1,29 +1,31 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JgeajCubRz9hR6uvRAw1HXdKa6Ua+l/Im/bYXdx1gL0=";
+    hash = "sha256-OCRfJh6vfAkL86J1GuLgfs57from3fx0NS1Bh1+/oXE=";
   };
 
-  cargoHash = "sha256-mEgFfg8I+JJuUEvj+sia2aL3BVg3HteQorZ2EOiLo64=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aEjsBhm0iPysA1Wz1Ea7rtX0g/yH/rklUkYV/Elxcq8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   # device::test_physical_device_name test fails on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # ofborg sometimes fails with "Resource temporarily unavailable"
@@ -35,7 +37,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pkolaczk/fclones";
     changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ cyounkins figsoda ];
+    maintainers = with maintainers; [
+      cyounkins
+      figsoda
+    ];
     mainProgram = "fclones";
   };
 }

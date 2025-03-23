@@ -9,7 +9,10 @@
 mkKdeDerivation {
   pname = "kopeninghours";
 
-  extraNativeBuildInputs = [bison flex];
+  extraNativeBuildInputs = [
+    bison
+    flex
+  ];
   extraBuildInputs = [
     qtdeclarative
     (boost.override {

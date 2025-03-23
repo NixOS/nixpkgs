@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildBazelPackage,
   fetchFromGitHub,
   bazel_6,
@@ -8,25 +9,39 @@
   libcap,
 }:
 
-buildBazelPackage rec {
+let
+  system = stdenv.hostPlatform.system;
+  registry = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-central-registry";
+    rev = "ef34e6bfad5a6ab54080ddcc83a4d65849855e3a";
+    hash = "sha256-PhacBegQDwWZqZeoZjoLR4akhVV3QrSPr1KflCuied0=";
+  };
+in
+buildBazelPackage {
   pname = "perf_data_converter";
-  version = "0-unstable-2024-07-10";
+  version = "0-unstable-2024-10-14";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "perf_data_converter";
-    rev = "5b27c287a57811db91d40b5776cbaedd00945afc";
-    hash = "sha256-A5DEDi52gp1gTugGnutmKNRa/GGsc+LKLE3xRl/1gbw=";
+    rev = "f76cd4dd1e85bb54d60ea3fe69f92168fdf94edb";
+    hash = "sha256-AScXL74K0Eiajdib56+7ay3K/MMWbmeUWkRWMaEJRC8=";
   };
 
   bazel = bazel_6;
   bazelFlags = [
-    "--java_runtime_version=local_jdk"
-    "--tool_java_runtime_version=local_jdk"
+    "--registry"
+    "file://${registry}"
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-Qm6Ng9cXvKx043P7qyNHyyMvdGK9aNarX1ZKeCp3mgY=";
+    hash =
+      {
+        aarch64-linux = "sha256-Ksae4VC2FbkW79N5EGn/rTdj+GFKQsZCdi4LPfnzV7Y=";
+        x86_64-linux = "sha256-TYeS1bax7sA0hJLXqtE8Q5FLnIylcWPZynVE2LhvZKc=";
+      }
+      .${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [ jdk ];
@@ -41,6 +56,7 @@ buildBazelPackage rec {
   bazelBuildFlags = [ "-c opt" ];
   bazelTargets = [ "src:perf_to_profile" ];
 
+  doCheck = true;
   bazelTestTargets = [ "src:all" ];
 
   buildAttrs = {

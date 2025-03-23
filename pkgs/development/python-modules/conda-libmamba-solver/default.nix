@@ -9,15 +9,15 @@
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";
-  version = "24.1.0";
+  version = "25.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    rev = version;
-    hash = "sha256-vsUYrDVNMKHd3mlaAFYCP4uPQ9HxeKsose5O8InaMcE=";
+    tag = version;
+    hash = "sha256-d6KLUhc7+KZ5H9vkI84S9TyximSwatu6lg7XIdMqtk0=";
   };
 
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     libmambapy
   ];
 
-  # this package depends on conda for the import to run succesfully, but conda depends on this package to execute.
+  # this package depends on conda for the import to run successfully, but conda depends on this package to execute.
   # pythonImportsCheck = [ "conda_libmamba_solver" ];
 
   pythonRemoveDeps = [ "conda" ];

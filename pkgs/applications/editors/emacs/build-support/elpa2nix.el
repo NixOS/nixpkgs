@@ -5,8 +5,10 @@
   (if (not noninteractive)
       (error "`elpa2nix-install-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,archive ,elpa)
-     (progn (setq package-user-dir elpa)
+    (`(,archive ,elpa ,turn-compilation-warning-to-error ,ignore-compilation-error)
+     (progn (setq byte-compile-error-on-warn (string= turn-compilation-warning-to-error "t"))
+            (setq byte-compile-debug (string= ignore-compilation-error "nil"))
+            (setq package-user-dir elpa)
             (elpa2nix-install-file archive)))))
 
 (defun elpa2nix-install-from-buffer ()

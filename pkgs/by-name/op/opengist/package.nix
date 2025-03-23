@@ -1,24 +1,30 @@
-{ lib, buildGoModule, buildNpmPackage, fetchFromGitHub, moreutils, jq, git }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  moreutils,
+  jq,
+  git,
+}:
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
   # https://github.com/NixOS/nixpkgs/issues/273815
-  version = "1.6.1";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
-    rev = "v${version}";
-    hash = "sha256-rJ8oiH08kSSFNgPHKGo68Oi1i3L1SEJyHuzoxKMOZME=";
+    tag = "v${version}";
+    hash = "sha256-Zjn38OGnDtgD2OfIhgUxWo0Cx+ZmNv6UjJanASbjiYU=";
   };
 
   frontend = buildNpmPackage {
     pname = "opengist-frontend";
     inherit version src;
-
-    nativeBuildInputs = [ moreutils jq ];
-
     # npm complains of "invalid package". shrug. we can give it a version.
-    preBuild = ''
-      jq '.version = "${version}"' package.json | sponge package.json
+    postPatch = ''
+      ${lib.getExe jq} '.version = "${version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
     '';
 
     # copy pasta from the Makefile upstream, seems to be a workaround of sass
@@ -33,15 +39,17 @@ let
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-Sy321tIQOOrypk+EOGGixEzrPdhA9U8Hak+DOS+d00A=";
+    npmDepsHash = "sha256-Uh+oXd//G/lPAMXRxijjEOpQNmeXK/XCIU7DJN3ujaY=";
   };
 in
 buildGoModule {
   pname = "opengist";
   inherit version src;
-  vendorHash = "sha256-IorqXJKzUTUL5zfKRipZaJtRlwVOmTwolJXFG/34Ais=";
-  tags = [
-    "fs_embed"
+  vendorHash = "sha256-aqfr3yGyTXDtZDU8d1lbWWvFfY4fo6/PsSDwpiDtM90=";
+  tags = [ "fs_embed" ];
+  ldflags = [
+    "-s"
+    "-X github.com/thomiceli/opengist/internal/config.OpengistVersion=v${version}"
   ];
 
   # required for tests
@@ -54,18 +62,30 @@ buildGoModule {
     export OG_OPENGIST_HOME=$(mktemp -d)
   '';
 
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkPhase = ''
+    runHook preCheck
+    make test
+    runHook postCheck
+  '';
+
   postPatch = ''
     cp -R ${frontend}/public/{manifest.json,assets} public/
   '';
 
-  passthru.frontend = frontend;
+  passthru = {
+    inherit frontend;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Self-hosted pastebin powered by Git";
-    mainProgram = "opengist";
     homepage = "https://github.com/thomiceli/opengist";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    changelog = "https://github.com/thomiceli/opengist/blob/${src.tag}/CHANGELOG.md";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    mainProgram = "opengist";
   };
 }

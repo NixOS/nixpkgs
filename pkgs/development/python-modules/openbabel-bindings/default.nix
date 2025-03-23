@@ -5,12 +5,12 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (openbabel) pname version;
 
-  src = "${openbabel}/lib/python${python.sourceVersion.major}.${python.sourceVersion.minor}/site-packages";
+  src = "${openbabel}/${python.sitePackages}";
 
-  nativeBuildInputs = [ openbabel ];
+  buildInputs = [ openbabel ];
 
   # these env variables are used by the bindings to find libraries
   # they need to be included explicitly in your nix-shell for

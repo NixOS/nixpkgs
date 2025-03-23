@@ -1,21 +1,17 @@
 diff --git a/src/libponyc/codegen/genexe.c b/src/libponyc/codegen/genexe.c
-index 42a68251..b37958ab 100644
+index 9ae3ff16..fdfe2bc5 100644
 --- a/src/libponyc/codegen/genexe.c
 +++ b/src/libponyc/codegen/genexe.c
-@@ -296,13 +296,13 @@ static bool link_exe(compile_t* c, ast_t* program,
+@@ -296,10 +296,10 @@ static bool link_exe(compile_t* c, ast_t* program,
+   char* ld_cmd = (char*)ponyint_pool_alloc_size(ld_len);
  
    snprintf(ld_cmd, ld_len,
- #if defined(PLATFORM_IS_ARM)
 -    "%s -execute -arch %.*s "
 +    "%s -execute "
- #else
--    "%s -execute -no_pie -arch %.*s "
-+    "%s -execute -no_pie "
- #endif
      "-o %s %s %s %s "
--    "-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem %s",
+-    "-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem %s -platform_version macos '" STR(PONY_OSX_PLATFORM) "' '0.0.0'",
 -           linker, (int)arch_len, c->opt->triple, file_exe, file_o,
-+    "-L@libSystem@/lib -lSystem %s",
++    "-L@libSystem@/lib -lSystem %s -platform_version macos '" STR(PONY_OSX_PLATFORM) "' '0.0.0'",
 +           linker, file_exe, file_o,
             lib_args, ponyrt, sanitizer_arg
      );

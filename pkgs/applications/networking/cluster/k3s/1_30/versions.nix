@@ -1,14 +1,15 @@
 {
-  k3sVersion = "1.30.2+k3s2";
-  k3sCommit = "faeaf1b01b2a708a46cae2a67c1b4d381ee1ba6b";
-  k3sRepoSha256 = "0hy0f44hj5n5nscr0p52dbklvj2ki2vs7k0cgh1r8xlg4p6fn1b0";
-  k3sVendorHash = "sha256-Mj9Q3TgqZoJluG4/nyuw2WHnB3OJ+/mlV7duzWt1B1A=";
+  k3sVersion = "1.30.10+k3s1";
+  k3sCommit = "b86a69470cd71af521a4b71499db74a600049f70";
+  k3sRepoSha256 = "1k6msdfx9c4hwwq766yq99km48ck2p1ga2srrc13g17marn81vsr";
+  k3sVendorHash = "sha256-HTUFv8WBIDiBQ860p3RiROF+kDzBekvgBAr2TJh036E=";
   chartVersions = import ./chart-versions.nix;
-  k3sRootVersion = "0.13.0";
-  k3sRootSha256 = "1jq5f0lm08abx5ikarf92z56fvx4kjpy2nmzaazblb34lajw87vj";
-  k3sCNIVersion = "1.4.0-k3s2";
-  k3sCNISha256 = "17dg6jgjx18nrlyfmkv14dhzxsljz4774zgwz5dchxcf38bvarqa";
-  containerdVersion = "1.7.17-k3s1";
-  containerdSha256 = "1j61mbgx346ydvnjd8b07wf7nmvvplx28wi5jjdzi1k688r2hxpf";
+  imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
+  k3sRootVersion = "0.14.1";
+  k3sRootSha256 = "0svbi42agqxqh5q2ri7xmaw2a2c70s7q5y587ls0qkflw5vx4sl7";
+  k3sCNIVersion = "1.6.0-k3s1";
+  k3sCNISha256 = "0g7zczvwba5xqawk37b0v96xysdwanyf1grxn3l3lhxsgjjsmkd7";
+  containerdVersion = "1.7.23-k3s2";
+  containerdSha256 = "0lp9vxq7xj74wa7hbivvl5hwg2wzqgsxav22wa0p1l7lc1dqw8dm";
   criCtlVersion = "1.29.0-k3s1";
 }

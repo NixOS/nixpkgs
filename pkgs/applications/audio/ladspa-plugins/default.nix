@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, automake
-, fftw
-, ladspaH
-, libxml2
-, pkg-config
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  automake,
+  fftw,
+  ladspaH,
+  libxml2,
+  pkg-config,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,12 +22,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl perlPackages.XMLParser ];
+  preBuild = ''
+    shopt -s globstar
+    for f in **/Makefile; do
+      substituteInPlace "$f" \
+        --replace-quiet 'ranlib' '${stdenv.cc.targetPrefix}ranlib'
+    done
+    shopt -u globstar
+  '';
 
-  patchPhase = ''
-    patchShebangs .
-    patchShebangs ./metadata/
+  nativeBuildInputs = [
+    autoreconfHook
+    perlPackages.perl
+    perlPackages.XMLParser
+    pkg-config
+    perlPackages.perl
+    perlPackages.XMLParser
+  ];
+  buildInputs = [
+    fftw
+    ladspaH
+    libxml2
+  ];
+
+  postPatch = ''
+    patchShebangs --build . ./metadata/ makestub.pl
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 

@@ -1,26 +1,31 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gettext
-, gi-docgen
-, gnome
-, glib
-, gtk3
-, gobject-introspection
-, python3
-, ncurses
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gi-docgen,
+  gnome,
+  glib,
+  gtk3,
+  gobject-introspection,
+  python3,
+  ncurses,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "1.36.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -29,8 +34,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];

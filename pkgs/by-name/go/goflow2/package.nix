@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.1.5";
+  version = "2.2.2";
 in
 buildGoModule {
   pname = "goflow2";
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "netsampler";
     repo = "goflow2";
     rev = "v${version}";
-    hash = "sha256-Xo0SG9s39fPBGkPaVUbfWrHVVqZ7gQvjp4PJE/Z/jog=";
+    hash = "sha256-H+YeW1FOx4hE8ad8sEWFQPxl8IOZ+xIaiSk1a5w+0+Y=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule {
     "-X=main.version=${version}"
   ];
 
-  vendorHash = "sha256-6Wuf6trx8Epyv3FWAtEyAjGBM4OQyK0C8bpRWX0NUdo=";
+  vendorHash = "sha256-AR4jKNzHato9qz0fkHurGGfIyQC9BYsGQ/87y9mtJpE=";
 
   meta = {
     description = "High performance sFlow/IPFIX/NetFlow Collector";

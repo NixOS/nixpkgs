@@ -25,11 +25,11 @@ aliases the generic module for manifests.
 
 Alternatively, additional fields or values may need to be configured to account
 for the particulars of a package. For example, while the release expressions for
-[CUDNN](./cudnn/releases.nix) and [TensorRT](./tensorrt/releases.nix) are very
+[CUDNN](../cudnn/releases.nix) and [TensorRT](../tensorrt/releases.nix) are very
 close, they differ slightly in the fields they have. The [module for
-CUDNN](./modules/cudnn/default.nix) is able to use the generic module for
+CUDNN](./cudnn/default.nix) is able to use the generic module for
 release expressions, while the [module for
-TensorRT](./modules/tensorrt/default.nix) must add additional fields to the
+TensorRT](./tensorrt/default.nix) must add additional fields to the
 generic module.
 
 ### `manifests`

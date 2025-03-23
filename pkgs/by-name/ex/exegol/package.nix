@@ -1,29 +1,41 @@
 {
   fetchPypi,
   lib,
-  python3,
+  python3Packages,
+  xorg,
 }:
-python3.pkgs.buildPythonApplication rec {
-  pname = "Exegol";
-  version = "4.3.1";
-  format = "setuptools";
-
-  # Project has no unit tests
-  doCheck = false;
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pyyaml
-    gitpython
-    docker
-    requests
-    rich
-    argcomplete
-  ];
+python3Packages.buildPythonApplication rec {
+  pname = "exegol";
+  version = "4.3.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cMbMmkG52A104iHVwe+6k1Fazi7fISeU/doWJqw5Whw=";
+    hash = "sha256-BtOW7EBbFil7yyhL6uayTUUkDldI8+xxolfQZtX+00c=";
   };
+
+  build-system = with python3Packages; [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    "rich"
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      pyyaml
+      gitpython
+      docker
+      requests
+      rich
+      argcomplete
+      tzlocal
+    ]
+    ++ [ xorg.xhost ];
+
+  doCheck = true;
+
+  pythonImportsCheck = [ "exegol" ];
 
   meta = with lib; {
     description = "Fully featured and community-driven hacking environment";
@@ -37,8 +49,11 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with maintainers; [ _0b11stan ];
+    maintainers = with lib.maintainers; [
+      _0b11stan
+      charB66
+    ];
   };
 }

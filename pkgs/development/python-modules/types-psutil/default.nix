@@ -6,12 +6,13 @@
 
 buildPythonPackage rec {
   pname = "types-psutil";
-  version = "5.9.5.20240516";
+  version = "7.0.0.20250218";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uylvWfxWRYiR0P6xmUcX5UihvPiZNqKHffh5K4IrRpY=";
+    pname = "types_psutil";
+    inherit version;
+    hash = "sha256-HmQs2v6DeyQClbI7HL1GkdgLCKB9KZMhQ8u64w6w25w=";
   };
 
   # Module doesn't have tests
@@ -23,6 +24,6 @@ buildPythonPackage rec {
     description = "Typing stubs for psutil";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ anselmschueler ];
+    maintainers = [ ];
   };
 }

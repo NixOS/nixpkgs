@@ -10,7 +10,7 @@
   libsodium,
   libunistring,
   pkg-config,
-  postgresql,
+  libpq,
   autoreconfHook,
   python3,
   recutils,
@@ -20,19 +20,18 @@
   texinfo,
 }:
 
-let
-  version = "0.11.2";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  inherit version;
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DflUfXAe310LRhZmaHgF1ZpCi+hHF30lpzAIpI1HZvM=";
+    hash = "sha256-DD6fX54K1q4f2d/IqC+urVpMkypDRaL3lrBoQieGviI=";
   };
+
+  patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,7 +43,7 @@ stdenv.mkDerivation {
     libmicrohttpd
     jansson
     libsodium
-    postgresql
+    libpq
     curl
     recutils
     gettext
@@ -61,9 +60,33 @@ stdenv.mkDerivation {
   preAutoreconf = ''
     ./contrib/gana-generate.sh
     pushd contrib
-    find wallet-core/aml-backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
+    rm -f Makefile.am
+    {
+      echo 'dist_amlspapkgdata_DATA = \'
+      find wallet-core/aml-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
     truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_kycspapkgdata_DATA = \'
+      find wallet-core/kyc/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_auditorspapkgdata_DATA = \'
+      find wallet-core/auditor-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
     cat Makefile.am.in Makefile.am.ext >> Makefile.am
+    # Prevent accidental editing of the generated Makefile.am
+    chmod -w Makefile.am
     popd
   '';
 
@@ -78,11 +101,12 @@ stdenv.mkDerivation {
 
   checkTarget = "check";
 
-  meta = with lib; {
-    description = ''
+  meta = {
+    description = "Exchange component for the GNU Taler electronic payment system";
+    longDescription = ''
       Taler is an electronic payment system providing the ability to pay
       anonymously using digital cash.  Taler consists of a network protocol
-      definition (using a RESTful API over HTTP), a Exchange (which creates
+      definition (using a RESTful API over HTTP), an Exchange (which creates
       digital coins), a Wallet (which allows customers to manage, store and
       spend digital coins), and a Merchant website which allows customers to
       spend their digital coins.  Naturally, each Merchant is different, but
@@ -91,8 +115,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://taler.net/";
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.linux;
   };
-}
+})

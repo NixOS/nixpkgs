@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "whistle";
-  version = "2.9.78";
+  version = "2.9.94";
 
   src = fetchFromGitHub {
     owner = "avwo";
     repo = "whistle";
     rev = "v${version}";
-    hash = "sha256-OQ0dVxWlPvquaApdpHEXmDzzG7NjbLducR9jkhXDsGw=";
+    hash = "sha256-hSpXCF+SS2kVYB/lPQSs8dZPp6yKlQEjAl1tjzcNu3g=";
   };
 
-  npmDepsHash = "sha256-3ILtxRI8hvYanXmKZjld7zN127KaCKmWm96nrdSah/E=";
+  npmDepsHash = "sha256-23CIMNXsbDOkrSDszZOueNUSu5dywRDs6WRAeQJVL1o=";
 
   dontNpmBuild = true;
 

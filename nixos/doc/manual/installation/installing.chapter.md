@@ -31,6 +31,7 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
      :::
 
      ::: {.note}
@@ -220,6 +221,8 @@ The NixOS installer ships with multiple partitioning tools. The examples
 below use `parted`, but also provides `fdisk`, `gdisk`, `cfdisk`, and
 `cgdisk`.
 
+Use the command 'lsblk' to find the name of your 'disk' device.
+
 The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
 
@@ -395,6 +398,9 @@ Use the following commands:
     [](#ch-options). A minimal example is shown in
     [Example: NixOS Configuration](#ex-config).
 
+    This command accepts an optional `--flake` option, to also generate a
+    `flake.nix` file, if you want to set up a flake-based configuration.
+
     The command `nixos-generate-config` can generate an initial
     configuration file for you:
 
@@ -487,6 +493,14 @@ Use the following commands:
     from the NixOS binary cache), you can re-run `nixos-install` after
     fixing your `configuration.nix`.
 
+    If you opted for a flake-based configuration, you will need to pass the
+    `--flake` here as well and specify the name of the configuration as used in
+    the `flake.nix` file. For the default generated flake, this is `nixos`.
+
+    ```ShellSession
+    # nixos-install --flake 'path/to/flake.nix#nixos'
+    ```
+
     As the last step, `nixos-install` will ask you to set the password
     for the `root` user, e.g.
 
@@ -494,6 +508,12 @@ Use the following commands:
     setting root password...
     New password: ***
     Retype new password: ***
+    ```
+
+    If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
+
+    ```ShellSession
+    # nixos-enter --root /mnt -c 'passwd alice'
     ```
 
     ::: {.note}
@@ -515,15 +535,13 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    You should log in and change the `root` password with `passwd`.
+    Use your declared user account to log in.
+    If you didn’t declare one, you should still be able to log in using the `root` user.
 
-    You'll probably want to create some user accounts as well, which can
-    be done with `useradd`:
-
-    ```ShellSession
-    $ useradd -c 'Eelco Dolstra' -m eelco
-    $ passwd eelco
-    ```
+    ::: {.note}
+    Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
+    Refer to [](#sec-user-management) for details on declaring user accounts.
+    :::
 
     You may also want to install some software. This will be covered in
     [](#sec-package-management).

@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2INL6ZXi7f4HD0ilhQLSivk8TfYh3qRSPRsCCtCLAP8=";
+    tag = version;
+    hash = "sha256-aYlnaFim4ezZ/nOAf1m6iIfE4NGswtEmPsslfrTd5tI=";
   };
 
   build-system = [ setuptools ];

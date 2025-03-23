@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  msrest,
   pythonOlder,
   setuptools,
   typing-extensions,
@@ -13,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.17.0";
+  version = "12.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-97LGz8G3y4AJelOx7S76nlRbSaKRQw02nNtJ+vvIQdY=";
+    pname = "azure_storage_file_share";
+    inherit version;
+    hash = "sha256-20K/a0OzwMJ8kVIgKVUnffwmpZ9/rSbAWEMaaumVgM4=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 

@@ -12,6 +12,7 @@
   bison,
   wrapGAppsHook3,
 
+  exiftool,
   opencv,
   libtiff,
   libpng,
@@ -24,7 +25,6 @@
   exiv2,
   libxml2,
   libxslt,
-  ffmpeg,
   jasper,
   eigen,
   lensfun,
@@ -35,6 +35,8 @@
   x265,
   libGLX,
   libGLU,
+  cudaPackages,
+  enableCuda ? config.cudaSupport,
 
   kdePackages,
 
@@ -60,17 +62,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
+    hash = "sha256-KO6kq0SlYzu7sh6+7JQWhIeHNowy3fx03OFTdDwyR10=";
   };
 
-  patches = [ ./disable-tests-download.patch ];
+  patches = [
+    ./disable-tests-download.patch
+  ];
 
   strictDeps = true;
 
@@ -124,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtnetworkauth
     kdePackages.qtscxml
     kdePackages.qtsvg
+    kdePackages.qtwayland
     kdePackages.qtwebengine
     kdePackages.qt5compat
     kdePackages.qtmultimedia
@@ -149,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ kdePackages.qtdeclarative ];
 
-  postConfigure = lib.optionalString finalAttrs.doCheck ''
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
     ln -s ${testData} $cmakeDir/test-data
   '';
 
@@ -166,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
+    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Tests segfault for some reason…
@@ -181,12 +187,13 @@ stdenv.mkDerivation (finalAttrs: {
         gnumake
         hugin
         enblend-enfuse
+        exiftool
       ]
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${perl}/bin/perl" \
-      --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
+      --replace "/usr/bin/perl" "${lib.getExe perl}" \
+      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
   meta = {

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-db-nonfree";
-  version = "unstable-2015-06-05";
+  version = "0-unstable-2015-06-05";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
@@ -19,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cRZH0CXg03FEqUJdxaNnPVXjf8+ct86PjhL59WQbw60=";
   };
 
-  nativeBuildInputs = [ autoconf automake perl ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    perl
+  ];
 
   # sed-substitute indirection is more robust against
   # characters in paths that might need escaping

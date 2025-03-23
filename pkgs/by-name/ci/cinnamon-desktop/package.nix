@@ -1,34 +1,39 @@
-{ fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, intltool
-, meson
-, ninja
-, pkg-config
-, pulseaudio
-, python3
-, lib
-, stdenv
-, systemd
-, xkeyboard_config
-, xorg
-, wrapGAppsHook3
-, glib
+{
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  isocodes,
+  meson,
+  ninja,
+  pkg-config,
+  pulseaudio,
+  python3,
+  lib,
+  stdenv,
+  systemd,
+  xkeyboard_config,
+  xorg,
+  wrapGAppsHook3,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.2.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-desktop";
     rev = version;
-    hash = "sha256-9uewZh0GHQAenTcZpLchgFXSt3vOhxLbaepsJIkjTdI=";
+    hash = "sha256-YKGVuT28MLcLO9T8ZJqbHqMN0SAn1P1l8JTDBo4n838=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -38,6 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
+    isocodes
     systemd
     xkeyboard_config
     xorg.libxkbfile
@@ -73,7 +79,10 @@ stdenv.mkDerivation rec {
       gtk-doc.
     '';
 
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

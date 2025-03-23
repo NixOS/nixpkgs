@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.10.1";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,9 +40,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-joV+elRaAICNQHkYuYtTDjvOUkHPsRkG1OLRvdxeIHc=";
+    tag = "v${version}";
+    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
   };
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
@@ -128,11 +129,12 @@ buildPythonPackage rec {
     inherit (nixosTests) nixos-test-driver;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
-    license = licenses.mit;
+    changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ lnl7 ];
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }

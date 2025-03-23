@@ -1,38 +1,43 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   pythonOlder,
-  importlib-metadata,
   pbr,
   setuptools,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "5.2.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "5.4.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rrk8pA4RFM6pPXOKbB42U5aYG7a7eMJwRbdYfJRzVE0=";
+    hash = "sha256-MTW1rlD+EoFu8pG6/0IKy3J/zTVhBuPpy/qeWYXNb0s=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
     pbr
     setuptools
-    six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
+  # Checks moved to 'passthru.tests' to workaround infinite recursion
   doCheck = false;
+
+  passthru.tests = {
+    tests = callPackage ./tests.nix { };
+  };
+
   pythonImportsCheck = [ "stevedore" ];
 
   meta = with lib; {
     description = "Manage dynamic plugins for Python applications";
-    homepage = "https://docs.openstack.org/stevedore/";
+    homepage = "https://github.com/openstack/stevedore";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = teams.openstack.members;
   };
 }

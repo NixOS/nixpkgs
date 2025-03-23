@@ -11,24 +11,24 @@
 }:
 
 let
-  embedded-protocol-version = "2.7.1";
+  embedded-protocol-version = "3.1.0";
 
   embedded-protocol = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
     rev = "refs/tags/embedded-protocol-${embedded-protocol-version}";
-    hash = "sha256-6bGH/klCYxuq7CrOJVF8ySafhLJwet5ppBcpI8dzeCQ=";
+    hash = "sha256-DBoGACNhc9JMT8D+dO50aKUitY8xx/3IGj/XntFts1w=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.77.6";
+  version = "1.85.1";
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
+    repo = "dart-sass";
     rev = version;
-    hash = "sha256-GiZbx60HtyFTsargh0UVhjzOwlw3VWkhUEaX0s2ehos=";
+    hash = "sha256-646MhO2VaH6UZoKqBgk08lmgCTctEh50tz7F6cXO4Ks=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -45,6 +45,11 @@ buildDartApplication rec {
   '';
 
   dartCompileFlags = [ "--define=version=${version}" ];
+
+  postInstall = ''
+    # dedupe identiall binaries
+    ln -rsf $out/bin/{,dart-}sass
+  '';
 
   passthru = {
     inherit embedded-protocol-version embedded-protocol;

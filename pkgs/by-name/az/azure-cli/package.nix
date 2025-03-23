@@ -7,8 +7,13 @@
   fetchFromGitHub,
   runCommand,
   installShellFiles,
-  python311,
-  writeScriptBin,
+  python3,
+  writeShellScriptBin,
+
+  black,
+  isort,
+  mypy,
+  makeWrapper,
 
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
@@ -21,20 +26,15 @@
 }:
 
 let
-  version = "2.62.0";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-Rb27KRAb50YzTZzMs6n8g04x14ni3rIYAL3c5j/ieRw=";
+    hash = "sha256-vvX/LkG8qA53AxVlvq7FSTqbVblvE5xbDq4V0SINCAk=";
   };
-
-  # Pin Python version to 3.11.
-  # See https://discourse.nixos.org/t/breaking-changes-announcement-for-unstable/17574/53
-  # and https://github.com/Azure/azure-cli/issues/27673
-  python3 = python311;
 
   # put packages that needs to be overridden in the py package scope
   py = callPackage ./python-packages.nix { inherit src version python3; };
@@ -46,37 +46,77 @@ let
       pname,
       version,
       url,
-      sha256,
+      hash,
       description,
       ...
     }@args:
-    python3.pkgs.buildPythonPackage (
-      {
-        format = "wheel";
-        src = fetchurl { inherit url sha256; };
-        meta = {
-          inherit description;
-          inherit (azure-cli.meta) platforms maintainers;
-          homepage = "https://github.com/Azure/azure-cli-extensions";
-          changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
-          license = lib.licenses.mit;
-          sourceProvenance = [ lib.sourceTypes.fromSource ];
-        } // args.meta or { };
-      }
-      // (removeAttrs args [
-        "url"
-        "sha256"
-        "description"
-        "meta"
-      ])
-    );
+    let
+      self = python3.pkgs.buildPythonPackage (
+        {
+          format = "wheel";
+          src = fetchurl { inherit url hash; };
+          passthru = {
+            updateScript = extensionUpdateScript { inherit pname; };
+            tests.azWithExtension = testAzWithExts [ self ];
+          } // args.passthru or { };
+          meta = {
+            inherit description;
+            inherit (azure-cli.meta) platforms maintainers;
+            homepage = "https://github.com/Azure/azure-cli-extensions";
+            changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
+            license = lib.licenses.mit;
+            sourceProvenance = [ lib.sourceTypes.fromSource ];
+          } // args.meta or { };
+        }
+        // (removeAttrs args [
+          "url"
+          "hash"
+          "description"
+          "passthru"
+          "meta"
+        ])
+      );
+    in
+    self;
 
-  extensions =
-    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
-    // callPackages ./extensions-manual.nix {
-      inherit mkAzExtension python3;
-      python3Packages = python3.pkgs;
-    };
+  # Update script for azure cli extensions. Currently only works for manual extensions.
+  extensionUpdateScript =
+    { pname }:
+    [
+      "${lib.getExe azure-cli.extensions-tool}"
+      "--cli-version"
+      "${azure-cli.version}"
+      "--extension"
+      "${pname}"
+    ];
+
+  # Test that the Azure CLI can be built with the given extensions, and that
+  # the extensions are recognized by the CLI and listed in the output.
+  testAzWithExts =
+    extensions:
+    let
+      extensionNames = map (ext: ext.pname) extensions;
+      az = (azure-cli.withExtensions extensions);
+    in
+    runCommand "test-az-with-extensions" { } ''
+      export HOME=$TMPDIR
+      ${lib.getExe az} extension list > $out
+      for ext in ${lib.concatStringsSep " " extensionNames}; do
+        if ! grep -q $ext $out; then
+          echo "Extension $ext not found in list"
+          exit 1
+        fi
+      done
+    '';
+
+  extensions-generated = lib.mapAttrs (
+    name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
+  ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
+  extensions-manual = callPackages ./extensions-manual.nix {
+    inherit mkAzExtension;
+    python3Packages = python3.pkgs;
+  };
+  extensions = extensions-generated // extensions-manual;
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
@@ -105,7 +145,10 @@ py.pkgs.toPythonApplication (
 
     sourceRoot = "${src.name}/src/azure-cli";
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      py.pkgs.argcomplete
+    ];
 
     # Dependencies from:
     # https://github.com/Azure/azure-cli/blob/azure-cli-2.62.0/src/azure-cli/setup.py#L52
@@ -143,8 +186,8 @@ py.pkgs.toPythonApplication (
         azure-mgmt-containerservice
         azure-mgmt-cosmosdb
         azure-mgmt-databoxedge
+        azure-mgmt-datalake-store
         azure-mgmt-datamigration
-        azure-mgmt-devtestlabs
         azure-mgmt-dns
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
@@ -155,7 +198,6 @@ py.pkgs.toPythonApplication (
         azure-mgmt-iothub
         azure-mgmt-iothubprovisioningservices
         azure-mgmt-keyvault
-        azure-mgmt-kusto
         azure-mgmt-loganalytics
         azure-mgmt-managedservices
         azure-mgmt-managementgroups
@@ -164,8 +206,10 @@ py.pkgs.toPythonApplication (
         azure-mgmt-media
         azure-mgmt-monitor
         azure-mgmt-msi
+        azure-mgmt-mysqlflexibleservers
         azure-mgmt-netapp
         azure-mgmt-policyinsights
+        azure-mgmt-postgresqlflexibleservers
         azure-mgmt-privatedns
         azure-mgmt-rdbms
         azure-mgmt-recoveryservicesbackup
@@ -196,7 +240,7 @@ py.pkgs.toPythonApplication (
         chardet
         colorama
       ]
-      ++ lib.optional stdenv.isLinux distro
+      ++ lib.optional stdenv.hostPlatform.isLinux distro
       ++ [
         fabric
         javaproperties
@@ -226,11 +270,11 @@ py.pkgs.toPythonApplication (
       ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
     postInstall =
-      ''
-        substituteInPlace az.completion.sh \
-          --replace register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
-        installShellCompletion --bash --name az.bash az.completion.sh
-        installShellCompletion --zsh --name _az az.completion.sh
+      lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+        installShellCompletion --cmd az \
+          --bash <(register-python-argcomplete az --shell bash) \
+          --zsh <(register-python-argcomplete az --shell zsh) \
+          --fish <(register-python-argcomplete az --shell fish)
       ''
       + lib.optionalString withImmutableConfig ''
         export HOME=$TMPDIR
@@ -243,6 +287,7 @@ py.pkgs.toPythonApplication (
         # remove garbage
         rm $out/bin/az.bat
         rm $out/bin/az.completion.sh
+        rm $out/bin/azps.ps1
       '';
 
     # wrap the executable so that the python packages are available
@@ -296,7 +341,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.containerservice"
       "azure.mgmt.cosmosdb"
       "azure.mgmt.datamigration"
-      "azure.mgmt.devtestlabs"
       "azure.mgmt.dns"
       "azure.mgmt.eventgrid"
       "azure.mgmt.eventhub"
@@ -306,7 +350,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.iothub"
       "azure.mgmt.iothubprovisioningservices"
       "azure.mgmt.keyvault"
-      "azure.mgmt.kusto"
       "azure.mgmt.loganalytics"
       "azure.mgmt.managedservices"
       "azure.mgmt.managementgroups"
@@ -341,28 +384,14 @@ py.pkgs.toPythonApplication (
       inherit extensions;
       withExtensions = extensions: azure-cli.override { withExtensions = extensions; };
       tests = {
-        # Test the package builds with some extensions configured, and the
-        # wanted extensions are recognized by the CLI and listed in the output.
-        azWithExtensions =
-          let
-            extensions = with azure-cli.extensions; [
-              aks-preview
-              azure-devops
-              rdbms-connect
-            ];
-            extensionNames = map (ext: ext.pname) extensions;
-            az = (azure-cli.withExtensions extensions);
-          in
-          runCommand "test-az-with-extensions" { } ''
-            export HOME=$TMPDIR
-            ${lib.getExe az} extension list > $out
-            for ext in ${lib.concatStringsSep " " extensionNames}; do
-              if ! grep -q $ext $out; then
-                echo "Extension $ext not found in list"
-                exit 1
-              fi
-            done
-          '';
+        azWithExtensions = testAzWithExts (
+          with azure-cli.extensions;
+          [
+            aks-preview
+            azure-devops
+            rdbms-connect
+          ]
+        );
         # Test the package builds with mutable config.
         # TODO: Maybe we can install an extension from local python wheel to
         #       check mutable extension install still works.
@@ -375,20 +404,47 @@ py.pkgs.toPythonApplication (
             ${lib.getExe az} --version || exit 1
             touch $out
           '';
+
+        # Ensure the extensions-tool builds.
+        inherit (azure-cli) extensions-tool;
       };
 
-      generate-extensions = writeScriptBin "${pname}-update-extensions" ''
-        export FILE=extensions-generated.nix
-        echo "# This file is automatically generated. DO NOT EDIT! Read README.md" > $FILE
-        echo "{ mkAzExtension }:" >> $FILE
-        echo "{" >> $FILE
-        ${./query-extension-index.sh} --requirements=false --download --nix --cli-version=${version} \
-          | xargs -n1 -d '\n' echo " " >> $FILE
-        echo "" >> $FILE
-        echo "}" >> $FILE
-        echo "Extension was saved to \"extensions-generated.nix\" file."
-        echo "Move it to \"{nixpkgs}/pkgs/by-name/az/azure-cli/extensions-generated.nix\"."
+      generate-extensions = writeShellScriptBin "${pname}-update-extensions" ''
+        ${lib.getExe azure-cli.extensions-tool} --cli-version ${azure-cli.version} --commit
       '';
+
+      extensions-tool =
+        runCommand "azure-cli-extensions-tool"
+          {
+            src = ./extensions-tool.py;
+            nativeBuildInputs = [
+              black
+              isort
+              makeWrapper
+              mypy
+              python3
+            ];
+            meta.mainProgram = "extensions-tool";
+          }
+          ''
+            black --check --diff $src
+            isort --profile=black --check --diff $src
+
+            install -Dm755 $src $out/bin/extensions-tool
+
+            patchShebangs --build $out
+            wrapProgram $out/bin/extensions-tool \
+              --set PYTHONPATH "${
+                python3.pkgs.makePythonPath (
+                  with python3.pkgs;
+                  [
+                    packaging
+                    semver
+                    gitpython
+                  ]
+                )
+              }"
+          '';
     };
 
     meta = {

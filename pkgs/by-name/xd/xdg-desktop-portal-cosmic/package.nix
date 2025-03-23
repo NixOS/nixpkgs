@@ -1,62 +1,94 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, mesa
-, libglvnd
-, libxkbcommon
-, pipewire
-, wayland
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  libcosmicAppHook,
+  pkg-config,
+  util-linux,
+  libgbm,
+  pipewire,
+  gst_all_1,
+  coreutils,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "unstable-2023-12-07";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "23b3e5a1b9fa76e30266f29949d54e97c2fadf6e";
-    hash = "sha256-AqwJ3bV8Xz0MpY/ZmWgE9vNJIACX5SVeIYbSewyG/Bs=";
+    repo = "xdg-desktop-portal-cosmic";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-ymBmnSEXGCNbLTIVzHP3tjKAG0bgvEFU1C8gnxiow98=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-      "cosmic-protocols-0.1.0" = "sha256-AEgvF7i/OWPdEMi8WUaAg99igBwE/AexhAXHxyeJMdc=";
-      "ashpd-0.7.0" = "sha256-jBuxKJ2ADBvkJPPv4gzmFlZFybrfZBkCjerzeKe2Tt4=";
-      "libspa-0.7.2" = "sha256-QWOcNWzEyxfTdjUIB33s9dpWJ7Fsfmb5jd70CXOP/bw=";
-    };
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-02-20";
+    VERGEN_GIT_SHA = finalAttrs.src.rev;
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FO/GIzv9XVu8SSV+JbOf98UX/XriRgqTthtzvRIWNjo=";
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
-  buildInputs = [ libglvnd libxkbcommon mesa pipewire wayland ];
-
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
+  nativeBuildInputs = [
+    libcosmicAppHook
+    rustPlatform.bindgenHook
+    pkg-config
+    util-linux
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/{dbus-1/services,xdg-desktop-portal/portals}
-    cp data/*.service $out/share/dbus-1/services/
-    cp data/cosmic.portal $out/share/xdg-desktop-portal/portals/
+  buildInputs = [
+    libgbm
+    pipewire
+  ];
+
+  checkInputs = [ gst_all_1.gstreamer ];
+
+  # TODO: Remove this when updating to the next version
+  patches = [
+    (fetchpatch {
+      name = "cosmic-portal-fix-examples-after-ashpd-api-update.patch";
+      url = "https://github.com/pop-os/xdg-desktop-portal-cosmic/commit/df831ce7a48728aa9094fa1f30aed61cf1cc6ac3.diff?full_index=1";
+      hash = "sha256-yRrB3ds9TtN1OBZEZbnE6h2fkPyP4PP2IJ17n+0ugEo=";
+    })
+  ];
+
+  # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
+  postPatch = ''
+    substituteInPlace data/org.freedesktop.impl.portal.desktop.cosmic.service \
+      --replace-fail 'Exec=/bin/false' 'Exec=${lib.getExe' coreutils "true"}'
   '';
 
-  meta = with lib; {
+  dontCargoInstall = true;
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/xdg-desktop-portal-cosmic";
     description = "XDG Desktop Portal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      nyabinary
+      HeitorAugustoLN
+    ];
     mainProgram = "xdg-desktop-portal-cosmic";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

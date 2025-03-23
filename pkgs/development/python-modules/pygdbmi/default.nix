@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cs01";
     repo = "pygdbmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
 

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyexcel";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+/Du5dk7ls728ZqfAHA/IsCmTxlyjZG5VCgAmlISlwk=";
+    hash = "sha256-yHWZHB3pAUBjRdE8fd5sSs/V8IsWr2xKiBpSxsPDqwY=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

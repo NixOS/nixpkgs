@@ -5,11 +5,13 @@
   pythonOlder,
   pyvex,
   setuptools,
+  typing-extensions,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.112";
+  version = "9.2.147";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,18 +19,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "ailment";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R1Tvo4xqxKB2yQypiOtmuCzujE1DhHo2kPQUL7RuWGk=";
+    tag = "v${version}";
+    hash = "sha256-WrqkTNFhttpLG1dG05+nnqzoPUQPZUG15JooChBIKEA=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ pyvex ];
+  dependencies = [
+    pyvex
+    typing-extensions
+  ];
 
   # Tests depend on angr (possibly a circular dependency)
   doCheck = false;
 
   pythonImportsCheck = [ "ailment" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Angr Intermediate Language";

@@ -5,10 +5,8 @@
 , lib
 , lighthouse
 , nix-update-script
-, nodePackages
-, perl
+, openssl
 , pkg-config
-, postgresql
 , protobuf
 , rustPlatform
 , rust-jemalloc-sys
@@ -21,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "5.2.0";
+  version = "6.0.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -31,33 +29,21 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-kruHYFPQ9H9HtEjzscQOyghPSpx++wNbHDYOVo0qtjY=";
+    hash = "sha256-8jHNm/MGpHGOt52rLMXLMWIVn8AXqnpAr+Wvk7DH6gc=";
   };
 
   patches = [
     ./use-system-sqlite.patch
-    ./fix-dep-lazy_static.patch
   ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "alloy-consensus-0.1.0" = "sha256-y5AIZN4d7Vm2dVa3jd0e6zXwC8hzPyOv0h5+W/Az3rs=";
-      "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
-      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-    };
-  };
+  cargoHash = "sha256-Opkz3EVKw0M4LeWMsn1NlSw/Fg7cWVqnDJRRTPYYlLo=";
+  useFetchCargoVendor = true;
 
   buildFeatures = [ "modern" "gnosis" ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     cmake
-    perl
     pkg-config
     protobuf
   ];
@@ -65,7 +51,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     rust-jemalloc-sys
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
     SystemConfiguration
@@ -83,6 +71,8 @@ rustPlatform.buildRustPackage rec {
 
   LIGHTHOUSE_DEPOSIT_CONTRACT_SPEC_URL = "file://${depositContractSpec}";
   LIGHTHOUSE_DEPOSIT_CONTRACT_TESTNET_URL = "file://${testnetDepositContractSpec}";
+
+  OPENSSL_NO_VENDOR = true;
 
   cargoBuildFlags = [
     "--package lighthouse"
@@ -121,15 +111,10 @@ rustPlatform.buildRustPackage rec {
     "--skip persist::test_persist_caches"
     "--skip service::tests::tests::test_dht_persistence"
     "--skip time::test::test_reinsertion_updates_timeout"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
-  ];
-
-  nativeCheckInputs = [
-    nodePackages.ganache
-    postgresql
   ];
 
   passthru = {

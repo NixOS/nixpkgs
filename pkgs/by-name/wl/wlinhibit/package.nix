@@ -7,8 +7,9 @@
   pkg-config,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlinhibit";
   version = "0.1.1";
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   meta = {
@@ -37,6 +39,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/0x5a4/wlinhibit";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [_0x5a4];
+    maintainers = with lib.maintainers; [ _0x5a4 ];
   };
 }

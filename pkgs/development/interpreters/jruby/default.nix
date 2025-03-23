@@ -1,4 +1,13 @@
-{ lib, stdenv, callPackage, fetchurl, gitUpdater, mkRubyVersion, makeBinaryWrapper, jre }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  gitUpdater,
+  mkRubyVersion,
+  makeBinaryWrapper,
+  jre,
+}:
 
 let
   # The version number here is whatever is reported by the RUBY_VERSION string
@@ -6,11 +15,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jruby";
-  version = "9.4.8.0";
+  version = "9.4.12.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${finalAttrs.version}/jruby-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NHtmkr2ckcSApFryXOiNd76LbkrEp3vJSHDyxbVLySk=";
+    hash = "sha256-BcXSA9aZDJJnHMQvV9L6HBCDu/0W+nAj3FhIzbjwqi4=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -61,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ruby interpreter written in Java";
     homepage = "https://www.jruby.org/";
     changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    license = with licenses; [
+      cpl10
+      gpl2
+      lgpl21
+    ];
     platforms = jre.meta.platforms;
     maintainers = [ maintainers.fzakaria ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

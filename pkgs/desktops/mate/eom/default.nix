@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, exempi
-, lcms2
-, libexif
-, libjpeg
-, librsvg
-, libxml2
-, libpeas
-, shared-mime-info
-, gtk3
-, mate-desktop
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  exempi,
+  lcms2,
+  libexif,
+  libjpeg,
+  librsvg,
+  libxml2,
+  libpeas,
+  shared-mime-info,
+  gtk3,
+  mate-desktop,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

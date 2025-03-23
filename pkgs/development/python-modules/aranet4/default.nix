@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.3.4";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Anrijs";
     repo = "Aranet4-Python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ni6qbt1eXeV/PS/1l0DaSSob7f0Gh4nYQThCHTYB7yI=";
+    tag = "v${version}";
+    hash = "sha256-/FBrP4aceIX9dcZmm+k13PSAPuK4SQenjWqOAFPSvL8=";
   };
 
   build-system = [ setuptools ];

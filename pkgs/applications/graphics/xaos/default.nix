@@ -1,27 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, wrapQtAppsHook, copyDesktopItems }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
+  copyDesktopItems,
+}:
 
-let datapath = "$out/share/XaoS";
-in stdenv.mkDerivation rec {
+let
+  datapath = "$out/share/XaoS";
+in
+stdenv.mkDerivation rec {
   pname = "xaos";
-  version = "4.2.1";
-  outputs = [ "out" "man" ];
+  version = "4.3.3";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xaos-project";
-    repo = pname;
-    rev = "release-${version}";
-    hash = "sha256-JLF8Mz/OHZEEJG/aryKQuJ6B5R8hPJdvln7mbKoqXFU=";
+    repo = "XaoS";
+    tag = "release-${version}";
+    hash = "sha256-EUhh1j0OVpCggpKcUJTRJOMKKy3ZF5Fdrk9yuXc2uEY=";
   };
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook copyDesktopItems ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [
+    qt6.qmake
+    qt6.qttools
+    qt6.wrapQtAppsHook
+    copyDesktopItems
+  ];
+
+  buildInputs = [ qt6.qtbase ];
 
   QMAKE_LRELEASE = "lrelease";
-  DEFINES = [ "USE_OPENGL" "USE_FLOAT128" ];
+
+  DEFINES = [
+    "USE_OPENGL"
+    "USE_FLOAT128"
+  ];
 
   postPatch = ''
     substituteInPlace src/include/config.h \
-      --replace "/usr/share/XaoS" "${datapath}"
+      --replace-fail "/usr/share/XaoS" "${datapath}"
   '';
 
   desktopItems = [ "xdg/xaos.desktop" ];
@@ -34,9 +55,10 @@ in stdenv.mkDerivation rec {
     mkdir -p "${datapath}"
     cp -r tutorial examples catalogs "${datapath}"
 
-    install -D "xdg/${pname}.png" "$out/share/icons/${pname}.png"
+    install -D "xdg/xaos.png" "$out/share/icons/xaos.png"
 
     install -D doc/xaos.6 "$man/man6/xaos.6"
+
     runHook postInstall
   '';
 

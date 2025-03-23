@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "radcli";
     repo = "radcli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YnZkFYTiU2VNKxuP+JTnH64XYTB/+imeMKN1mZN9VCQ=";
   };
 

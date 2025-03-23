@@ -1,11 +1,12 @@
-{ alcotest
-, buildDunePackage
-, ocaml
-, fetchzip
-, gcc
-, fmt
-, lib
-, uutf
+{
+  alcotest,
+  buildDunePackage,
+  ocaml,
+  fetchzip,
+  gcc,
+  fmt,
+  lib,
+  uutf,
 }:
 
 buildDunePackage rec {
@@ -34,6 +35,6 @@ buildDunePackage rec {
     description = "Simple mapper between UTF-7 to Unicode according RFC2152";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/yuscii";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

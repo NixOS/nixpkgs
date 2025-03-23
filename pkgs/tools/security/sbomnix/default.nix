@@ -1,39 +1,41 @@
-{ lib
-, fetchFromGitHub
-, grype
-, nix
-, nix-visualize
-, python
-, vulnix
-, # python libs
-  beautifulsoup4
-, colorlog
-, dfdiskcache
-, graphviz
-, numpy
-, packageurl-python
-, packaging
-, pandas
-, pyrate-limiter
-, requests
-, requests-cache
-, requests-ratelimiter
-, reuse
-, setuptools
-, tabulate
-,
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  grype,
+  nix,
+  nix-visualize,
+  python,
+  vulnix,
+  # python libs
+  beautifulsoup4,
+  colorlog,
+  dfdiskcache,
+  filelock,
+  graphviz,
+  numpy,
+  packageurl-python,
+  packaging,
+  pandas,
+  pyrate-limiter,
+  requests,
+  requests-cache,
+  requests-ratelimiter,
+  reuse,
+  setuptools,
+  tabulate,
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kPjCK9NEs3D0qFsSSVX6MYGKbwqeij0svTfzz5JC4qM=";
+    tag = "v${version}";
+    hash = "sha256-LMrsJnJXmn+rneIslAaoIpwOyPVIVjOyu49O+7J/nIs=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -42,18 +44,18 @@ python.pkgs.buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
-    wrapProgram $out/bin/sbomnix \
-      --prefix PATH : ${lib.makeBinPath [nix graphviz]}
-    wrapProgram $out/bin/nixgraph \
-      --prefix PATH : ${lib.makeBinPath [nix graphviz]}
-    wrapProgram $out/bin/vulnxscan \
-      --prefix PATH : ${lib.makeBinPath [grype nix vulnix]}
-    wrapProgram $out/bin/nix_outdated \
-      --prefix PATH : ${lib.makeBinPath [nix-visualize]}
-    wrapProgram $out/bin/provenance \
-      --prefix PATH : ${lib.makeBinPath [nix]}
-  '';
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        git
+        nix
+        graphviz
+        nix-visualize
+        vulnix
+        grype
+      ]
+    }"
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -62,6 +64,7 @@ python.pkgs.buildPythonApplication rec {
     colorlog
     dfdiskcache
     graphviz
+    filelock
     numpy
     packageurl-python
     packaging
@@ -81,7 +84,15 @@ python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Utilities to help with software supply chain challenges on nix targets";
     homepage = "https://github.com/tiiuae/sbomnix";
-    license = with licenses; [ asl20 bsd3 cc-by-30 ];
-    maintainers = with maintainers; [ henrirosten jk ];
+    license = with licenses; [
+      asl20
+      bsd3
+      cc-by-30
+    ];
+    maintainers = with maintainers; [
+      henrirosten
+      jk
+    ];
+    mainProgram = "sbomnix";
   };
 }

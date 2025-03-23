@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JVBf21as4DNmGT84dSG+54RIU6PbRBoLPSsWj2FGXxc=";
   };
 
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate";
     changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

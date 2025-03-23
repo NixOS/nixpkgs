@@ -5,16 +5,16 @@
   pythonOlder,
   pytestCheckHook,
   flit-core,
-  setuptools,
   numpy,
   pydicom,
   pylibjpeg-data,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
 }:
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,13 +22,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qGtrphsBBVieGS/8rdymbsjLMU/QEd7zFNAANN8bD+k=";
+    tag = "v${version}";
+    hash = "sha256-MA1A/hTIx95MYZ2LGOifnHn77wbv0ydAgQSzNZRykVg=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [ numpy ];
+
+  optional-dependencies = {
+    libjpeg = [ pylibjpeg-libjpeg ];
+    openjpeg = [ pylibjpeg-openjpeg ];
+    #rle = [ pylibjpeg-rle ]; # not in Nixpkgs
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

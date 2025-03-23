@@ -6,6 +6,7 @@
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
+  "guillotine@fopdoodle.net" = callPackage ./guillotine { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };

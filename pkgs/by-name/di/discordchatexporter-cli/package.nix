@@ -18,7 +18,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
@@ -39,8 +39,8 @@ buildDotnetModule rec {
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = with maintainers; [ eclairevoyant ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
     mainProgram = "discordchatexporter-cli";
   };
 }

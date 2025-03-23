@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,6 +20,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   vendorHash = "sha256-jscyNyVr+RDN1EaxIOc3aYCAVT+1eO/c+dxEsIorDIs=";
+
+  checkFlags = [
+    # Test tries to monkey-patch the stdlib, fails with permission denied error.
+    "-skip=TestKeystore"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/keepassxc-go"

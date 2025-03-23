@@ -8,34 +8,37 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  setuptools,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "flask-jwt-extended";
-  version = "4.6.0";
-  format = "setuptools";
+  version = "4.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Flask-JWT-Extended";
+    pname = "flask_jwt_extended";
     inherit version;
-    hash = "sha256-khXQWpQT04VXZLzWcDXnWBnSOvL6+2tVGX61ozE/37I=";
+    hash = "sha256-gIXWdXUFtvMpGiY4yE0gfo8K0N5mLR9Gqi935ligyXY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     pyjwt
     python-dateutil
     werkzeug
   ];
 
-  passthru.optional-dependencies.asymmetric_crypto = [ cryptography ];
+  optional-dependencies.asymmetric_crypto = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "flask_jwt_extended" ];
 

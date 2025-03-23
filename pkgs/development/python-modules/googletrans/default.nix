@@ -1,34 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  requests,
+  fetchPypi,
+  hatchling,
+  httpx,
 }:
 
 buildPythonPackage rec {
   pname = "googletrans";
-  version = "2.4.0";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ssut";
-    repo = "py-googletrans";
-    rev = "v${version}";
-    sha256 = "0wzzinn0k9rfv9z1gmfk9l4kljyd4n6kizsjw4wjxv91kfhj92hz";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-2e8Sa12S+r7sC7ndzb7s1Dhl/ADhfx36B3F4N4J6F94=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ hatchling ];
 
-  # majority of tests just try to ping Google's Translate API endpoint
+  dependencies = [ httpx ] ++ httpx.optional-dependencies.http2;
+
+  # Majority of tests just try to ping Google's Translate API endpoint
   doCheck = false;
 
   pythonImportsCheck = [ "googletrans" ];
 
   meta = with lib; {
-    description = "Googletrans is python library to interact with Google Translate API";
-    mainProgram = "translate";
+    description = "Library to interact with Google Translate API";
     homepage = "https://py-googletrans.readthedocs.io";
+    changelog = "https://github.com/ssut/py-googletrans/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];
+    mainProgram = "translate";
   };
 }

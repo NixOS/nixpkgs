@@ -13,31 +13,22 @@
   gtksourceview5,
   xdg-utils,
   ollama,
+  vte-gtk4,
+  libspelling,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "1.0.1";
+  version = "5.0.6";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = version;
-    hash = "sha256-GxnYPnrjaJ47/i+pigw+on2dmbHwQSX+STasvqnAtuQ=";
+    tag = version;
+    hash = "sha256-iBce9ROWajUBq3GX/IU7yMoWTFNw98HnaE0kp+t73G0=";
   };
-
-  patches = [
-    # Change the way XDG paths are handled so it makes sense outside of flatpak
-    ./fix_xdg_path_flatpak.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/local_instance.py \
-      --replace-fail '/app/bin/ollama' 'ollama'
-    substituteInPlace src/window.py \
-      --replace-fail '/app/share' "$out/share"
-  '';
 
   nativeBuildInputs = [
     appstream
@@ -52,6 +43,8 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     gtksourceview5
+    vte-gtk4
+    libspelling
   ];
 
   dependencies = with python3Packages; [
@@ -59,19 +52,31 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
-    pytube
     html2text
+    youtube-transcript-api
+    pydbus
+    odfpy
+    pyicu
+    matplotlib
+    openai
   ];
 
   dontWrapGApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ollama ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        xdg-utils
+        ollama
+      ]
+    }"
     # Declared but not used in src/window.py, for later reference
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";
@@ -87,7 +92,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      aleksana
+      Gliczy
+    ];
+    platforms = lib.platforms.unix;
   };
 }

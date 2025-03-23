@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, libdvdcss}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdcss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdread";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zjVFSZeiCMvlDpEjLw5z+xrDRxllgToTuHMKjxihU2k=";
   };
 
-  buildInputs = [libdvdcss];
+  buildInputs = [ libdvdcss ];
 
   NIX_LDFLAGS = "-ldvdcss";
 
@@ -22,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Library for reading DVDs";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.unix;
   };
 }

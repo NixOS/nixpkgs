@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
-  version = "3.6";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-lDgQC3VzfcLqMOQSaRZ/znMamAAGYq/9C9bHgI4G7B8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qvi+8HwEipI8vkhPgFSN+q+3BsUCQTOqPVUUzzDn3Uo=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-  ];
-
   installPhase = ''
     runHook preInstall
     install -D httping $out/bin/httping
@@ -49,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       command = "${lib.getExe finalAttrs.finalPackage} --version";
       package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };

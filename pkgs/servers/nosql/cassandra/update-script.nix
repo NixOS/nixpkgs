@@ -1,9 +1,10 @@
-{ git
-, lib
-, runtimeShell
-, writeScript
-, generation
-, gnupg
+{
+  git,
+  lib,
+  runtimeShell,
+  writeScript,
+  generation,
+  gnupg,
 }:
 let
   inherit (lib) makeBinPath;
@@ -18,7 +19,12 @@ writeScript "update-cassandra_${generation}" ''
     exit 1
   }
   cd pkgs/servers/nosql/cassandra
-  PATH="${makeBinPath [git gnupg]}:$PATH"
+  PATH="${
+    makeBinPath [
+      git
+      gnupg
+    ]
+  }:$PATH"
 
   tmp="$(mktemp -d)"
   cleanup() {

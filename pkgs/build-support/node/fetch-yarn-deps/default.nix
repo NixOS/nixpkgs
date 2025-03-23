@@ -2,17 +2,23 @@
   stdenv,
   lib,
   makeWrapper,
+  installShellFiles,
+  nodejsInstallManuals,
+  nodejsInstallExecutables,
   coreutils,
   nix-prefetch-git,
   fetchurl,
+  jq,
+  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
+  diffutils,
   yarn,
   makeSetupHook,
   cacert,
   callPackage,
-  nix,
+  nixForLinking,
 }:
 
 let
@@ -49,7 +55,7 @@ in
           lib.makeBinPath [
             coreutils
             nix-prefetch-git
-            nix
+            nixForLinking
           ]
         }
 
@@ -164,6 +170,11 @@ in
       yarn
       fixup-yarn-lock
     ];
+    substitutions = {
+      # Specify `diff` by abspath to ensure that the user's build
+      # inputs do not cause us to find the wrong binaries.
+      diff = "${diffutils}/bin/diff";
+    };
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
     };
@@ -175,4 +186,16 @@ in
       description = "Run yarn build in buildPhase";
     };
   } ./yarn-build-hook.sh;
+
+  yarnInstallHook = makeSetupHook {
+    name = "yarn-install-hook";
+    propagatedBuildInputs = [
+      yarn
+      nodejsInstallManuals
+      nodejsInstallExecutables
+    ];
+    substitutions = {
+      jq = lib.getExe jq;
+    };
+  } ./yarn-install-hook.sh;
 }

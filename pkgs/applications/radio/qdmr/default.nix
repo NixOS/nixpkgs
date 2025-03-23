@@ -16,18 +16,18 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
-    hash = "sha256-8NV0+M9eMcvkP3UERDkaimbapTKxB4rYRLbHZjzG4Ws=";
+    hash = "sha256-6eg2w2h1ot7Cklt5UAiaFqJZjC6EM1VtEAwy3HgH4CE=";
   };
 
   nativeBuildInputs = [

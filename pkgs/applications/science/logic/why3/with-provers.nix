@@ -1,7 +1,12 @@
-{ stdenv, makeWrapper, runCommand, why3 }:
+{
+  stdenv,
+  makeWrapper,
+  runCommand,
+  why3,
+}:
 provers:
-let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
-  ''
+let
+  configAwkScript = runCommand "why3-conf.awk" { inherit provers; } ''
     for p in $provers; do
       for b in $p/bin/*; do
         BASENAME=$(basename $b)

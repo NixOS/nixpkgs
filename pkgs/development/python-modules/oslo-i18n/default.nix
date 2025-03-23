@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.3.0";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.i18n";
     inherit version;
-    hash = "sha256-ZKJR7e+L8bsdTm9403fhSdTxXBqSRd538XIBbaYmdEQ=";
+    hash = "sha256-k5O8rpLq3F93ETLRxqsjmxmJb/bYheOvwhqfqk3pJNM=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];

@@ -24,6 +24,7 @@ lib.makeOverridable (
       {
         pname,
         extraScripts ? [ ],
+        runtime-dependencies ? [ ],
         ...
       }@args:
       let
@@ -67,17 +68,28 @@ lib.makeOverridable (
             cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
           else
             install -m644 -Dt "${scriptsDir}" ${escaped scriptPath}
-            ${
-              lib.optionalString (extraScripts != [ ]) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''
-            }
+            ${lib.optionalString (
+              extraScripts != [ ]
+            ) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''}
           fi
 
           runHook postInstall
         '';
 
-        passthru = {
-          inherit scriptName;
-        };
+        passthru =
+          {
+            inherit scriptName;
+          }
+          // lib.optionalAttrs (runtime-dependencies != [ ]) {
+            extraWrapperArgs =
+              [
+                "--prefix"
+                "PATH"
+                ":"
+              ]
+              ++ (map lib.makeBinPath runtime-dependencies)
+              ++ args.passthru.extraWrapperArgs or [ ];
+          };
         meta =
           {
             platforms = lib.platforms.all;

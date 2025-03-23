@@ -3,13 +3,16 @@
 , stdenv
 , aws-sdk-cpp
 , boehmgc
+, libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
-, overrideSDK
 , Security
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -66,7 +69,7 @@ let
       rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
       # TestRandomURLMultiThreaded fails
       rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+    '' + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
       # EPSILON is exceeded
       rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
     '';
@@ -84,7 +87,6 @@ let
     # only a stripped down version is build which takes a lot less resources to build
     requiredSystemFeatures = [ ];
   };
-
 
   common = args:
     callPackage
@@ -115,7 +117,9 @@ let
         runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
           paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
         } ''
-          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+          # NOTE: name may contain cross compilation details between the pname
+          #       and version this is permitted thanks to ([^-]*-)*
+          if [[ "" != $(grep -vE 'nix-([^-]*-)*${lib.strings.replaceStrings ["."] ["\\."] pkg.version}$' <<< "$paths") ]]; then
             echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
             echo "The following paths are not up to date:"
             grep -v 'nix-${pkg.version}$' <<< "$paths"
@@ -133,6 +137,29 @@ let
     }
     pkg;
 
+  # (meson based packaging)
+  # Add passthru tests to the package, and re-expose package set overriding
+  # functions. This will not incorporate the tests into the package set.
+  # TODO (roberth): add package-set level overriding to the "everything" package.
+  addTests = selfAttributeName: pkg:
+    let
+      tests =
+        pkg.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (pkg) version src;
+          nix = pkg;
+          self_attribute_name = selfAttributeName;
+        };
+    in
+    # preserve old pkg, including overrideSource, etc
+    pkg // {
+      tests = pkg.tests or {} // tests;
+      passthru = pkg.passthru or {} // {
+        tests = lib.warn "nix.passthru.tests is deprecated. Use nix.tests instead." pkg.passthru.tests or {} // tests;
+      };
+    };
+
 in lib.makeExtensible (self: ({
   nix_2_3 = ((common {
     version = "2.3.18";
@@ -148,64 +175,33 @@ in lib.makeExtensible (self: ({
     enableParallelChecking = false;
   };
 
-  nix_2_18 = common {
-    version = "2.18.5";
-    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
-    self_attribute_name = "nix_2_18";
+  nix_2_24 = common {
+    version = "2.24.12";
+    hash = "sha256-lPiheE0D146tstoUInOUf1451stezrd8j6H6w7+RCv8=";
+    self_attribute_name = "nix_2_24";
   };
 
-  nix_2_19 = common {
-    version = "2.19.6";
-    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
-    self_attribute_name = "nix_2_19";
+  nix_2_25 = common {
+    version = "2.25.5";
+    hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
+    self_attribute_name = "nix_2_25";
   };
 
-  nix_2_20 = common {
-    version = "2.20.8";
-    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
-    self_attribute_name = "nix_2_20";
-  };
+  nix_2_26 = addTests "nix_2_26" (callPackage ./vendor/2_26/componentized.nix { inherit (self.nix_2_24.meta) maintainers; });
 
-  nix_2_21 = common {
-    version = "2.21.4";
-    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
-    self_attribute_name = "nix_2_21";
-  };
-
-  nix_2_22 = common {
-    version = "2.22.3";
-    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
-    self_attribute_name = "nix_2_22";
-  };
-
-  nix_2_23 = common {
-    version = "2.23.3";
-    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
-    self_attribute_name = "nix_2_23";
-  };
-
-  git = (common rec {
-    version = "2.24.0";
-    suffix = "pre20240723_${lib.substring 0 8 src.rev}";
+  git = common rec {
+    version = "2.25.0";
+    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "fb450de20ec8df558f9f7f167d748acf7cabe151";
-      hash = "sha256-xjN65yaPGwmly+Fdo6lVHL67+0IG+Cnxv7hNgYgoTGk=";
+      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
+      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
     };
     self_attribute_name = "git";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
-  latest = self.nix_2_23;
+  latest = self.nix_2_26;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -224,7 +220,8 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  # Read ./README.md before bumping a major release
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -232,7 +229,7 @@ in lib.makeExtensible (self: ({
       attr = "nix_2_${toString minor}";
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
-  ) (lib.range 4 17))
+  ) (lib.range 4 23))
   // {
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }

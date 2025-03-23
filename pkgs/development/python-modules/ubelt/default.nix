@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ygoJqyTscfuZVDGVbrZobZFvlcuF4HavTU65tmhyU+w=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optional = [
       numpy
       python-dateutil
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to sandbox environment
     "CacheStamp.expired"
     "userhome"

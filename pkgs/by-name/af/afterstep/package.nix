@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, dbus
-, fltk13
-, gtk2
-, libICE
-, libSM
-, libtiff
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  dbus,
+  fltk13,
+  gtk2,
+  libICE,
+  libSM,
+  libtiff,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -96,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       improving aestetics, and efficient use of system resources.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "afterstep";
     platforms = lib.platforms.linux;
   };

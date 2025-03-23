@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, expect
-, which
-, gnupg
-, coreutils
-, git
-, pinentry
-, gnutar
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  expect,
+  which,
+  gnupg,
+  coreutils,
+  git,
+  pinentry,
+  gnutar,
+  procps,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnupg ];
 
   # https://github.com/NixOS/nixpkgs/issues/134445
-  doCheck = !stdenv.isDarwin && stdenv.isx86_64;
+  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
 
   nativeCheckInputs = [
     expect
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Safely store secrets in a VCS repo";
+    homepage = "https://github.com/StackExchange/blackbox";
     maintainers = with maintainers; [ ericsagnes ];
     license = licenses.mit;
     platforms = platforms.all;

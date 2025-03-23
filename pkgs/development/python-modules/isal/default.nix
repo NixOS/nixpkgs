@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
 
   # build-system
   setuptools,
+  versioningit,
 
   # native dependencies
   isa-l,
@@ -16,17 +18,26 @@
 
 buildPythonPackage rec {
   pname = "isal";
-  version = "1.6.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
     rev = "v${version}";
-    hash = "sha256-EhdKT2ftyU2zevFg9Yi3q2FVx0FmKwJMzszsK1NS3Qg=";
+    hash = "sha256-gvUVSGarPA4KupQTd61x75CfqNVqZfFC1zq0R21Clf8=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    (replaceVars ./version.patch {
+      inherit version;
+    })
+  ];
+
+  build-system = [
+    setuptools
+    versioningit
+  ];
 
   buildInputs = [ isa-l ];
 

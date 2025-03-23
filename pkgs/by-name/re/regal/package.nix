@@ -1,17 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   name = "regal";
-  version = "0.24.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "StyraInc";
     repo = "regal";
     rev = "v${version}";
-    hash = "sha256-bSu35IfQBoz2YKlEm8e02ahw9FxQfilR3b2WdjbAubs=";
+    hash = "sha256-hacpTx19DVm2MMm2UdfGlgcNhxZCVVskqO1Z4KDPV+M=";
   };
 
-  vendorHash = "sha256-2NzBcOQ1TLUsh8wKiGlPogql+6qNou8//XpCiE7eV5I=";
+  vendorHash = "sha256-D1ti8wAJewTScWojAPva7gdgBJSZBr0Ruvd7NEXAB+k=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/styrainc/regal/pkg/version.Version=${version}"
+    "-X github.com/styrainc/regal/pkg/version.Commit=${version}"
+  ];
 
   meta = with lib; {
     description = "Linter and language server for Rego";

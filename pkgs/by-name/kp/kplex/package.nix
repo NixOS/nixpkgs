@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
   src = fetchFromGitHub {
     owner = "stripydog";
-    repo =  "kplex";
+    repo = "kplex";
     rev = "v${finalAttrs.version}";
     hash = "sha256-sps9l238hGLJ673kewFH8fOJw0HphEkZbJ+VUIzxC+o=";
   };

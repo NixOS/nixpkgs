@@ -1,45 +1,37 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash -p cacert curl jq moreutils nix-prefetch
+#!nix-shell -i bash -p cacert jq git moreutils nix nix-prefetch-github
 # shellcheck shell=bash
 
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-nixpkgs=$(while [[ ! -e .git ]]; do [[ ${PWD} != / ]] || exit 1; cd ..; done; echo "${PWD}")
-
 repo=duckdb
 owner=duckdb
 
 msg() {
-    echo "$*" >&2
+  echo "$*" >&2
 }
 
 json_get() {
-    jq -r "$1" < 'versions.json'
+  jq -r "$1" < ./versions.json
 }
 
 json_set() {
-    jq --arg x "$2" "$1 = \$x" < 'versions.json' | sponge 'versions.json'
+  jq --arg x "$2" "$1 = \$x" < ./versions.json | sponge 'versions.json'
 }
 
 get_latest() {
-    curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s \
-        "https://api.github.com/repos/${owner}/${repo}/releases/latest" | jq -r .tag_name
+  gh release --repo "${owner}/${repo}" list \
+    --exclude-pre-releases \
+    --limit 1 \
+    --json tagName \
+    --jq '.[].tagName'
 }
 
-get_sha() {
-    curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s \
-        "https://api.github.com/repos/${owner}/${repo}/git/ref/tags/$1" | jq -r .object.sha
-}
+tag="$(get_latest | sed 's/^v//g')"
 
-tag=$(get_latest)
-version=${tag/v/}
+json=$(nix-prefetch-github "${owner}" "${repo}" --rev "v${tag}")
 
-[[ ${version} = $(json_get .version) ]] && { msg "${version} is up to date"; exit 0; }
-
-sha=$(get_sha "${tag}")
-sri=$(nix-prefetch -I nixpkgs="${nixpkgs}" -E "duckdb.overrideAttrs { version = \"${version}\"; }")
-
-json_set ".version" "${version}"
-json_set ".rev" "${sha}"
-json_set ".hash" "${sri}"
+json_set ".version" "${tag}"
+json_set ".rev" "$(jq -r '.rev' <<< "${json}")"
+json_set ".hash" "$(jq -r '.hash' <<< "${json}")"

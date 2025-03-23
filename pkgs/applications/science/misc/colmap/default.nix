@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, cmake, boost179, ceres-solver, eigen,
+{ lib, fetchFromGitHub, cmake, boost, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   flann,
   cgal,
@@ -17,7 +17,7 @@
 assert cudaSupport -> cudaPackages != { };
 
 let
-  boost_static = boost179.override { enableStatic = true; };
+  boost_static = boost.override { enableStatic = true; };
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   # TODO: migrate to redist packages

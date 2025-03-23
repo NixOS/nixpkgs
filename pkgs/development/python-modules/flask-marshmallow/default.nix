@@ -13,33 +13,33 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GQLkt/CJf/QI8emvlW8xSRziGnncwfMSxBccW0Bb8I0=";
+    tag = version;
+    hash = "sha256-dK2bE5mZiFh0nAN2yRpABT+SGG/UGWJ1oDtnD6bgyXk=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     marshmallow
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sqlalchemy = [
       flask-sqlalchemy
       marshmallow-sqlalchemy
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.sqlalchemy;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.sqlalchemy;
 
   pythonImportsCheck = [ "flask_marshmallow" ];
 

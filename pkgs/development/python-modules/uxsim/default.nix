@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "uxsim";
-  version = "1.3.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "toruseo";
     repo = "UXsim";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-74iNsRtEmpE+i4FeKCXrqczdMP9u4mVt6eyF/4RXZfU=";
+    tag = "v${version}";
+    hash = "sha256-5up44edivGWj0nQOOL3+lqjdOBBfxk01nFokG5ht+5Y=";
   };
 
   patches = [ ./add-qt-plugin-path-to-env.patch ];

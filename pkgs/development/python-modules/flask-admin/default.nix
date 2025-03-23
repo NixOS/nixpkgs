@@ -1,7 +1,6 @@
 {
   lib,
   azure-storage-blob,
-  boto,
   buildPythonPackage,
   fetchpatch,
   fetchFromGitHub,
@@ -32,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L8Q9uPpoen6ZvuF2bithCMSgc6X5khD1EqH2FJPspZc=";
   };
 
@@ -53,7 +52,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    aws = [ boto ];
     azure = [ azure-storage-blob ];
   };
 

@@ -8,6 +8,7 @@
   fetchFromGitHub,
   pyopenssl,
   pythonOlder,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   setuptools,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.48.1";
+  version = "0.57.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zJzNVwrG5R2cLN7mJY9kjji2p1jP/b3b0qU7CMOPXCE=";
+    tag = version;
+    hash = "sha256-bG0jRGhioNm0QNe7ymRKYO4hdgkiZypul79+gxN3Gsk=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +39,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # mismatch in expected data structure
-    "test_parse_advertisement_data_curtain"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "switchbot" ];

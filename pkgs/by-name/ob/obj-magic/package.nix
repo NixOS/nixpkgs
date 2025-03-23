@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
@@ -35,4 +36,3 @@ stdenv.mkDerivation {
     mainProgram = "obj-magic";
   };
 }
-

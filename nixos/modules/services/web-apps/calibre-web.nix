@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.calibre-web;
+  dataDir = if lib.hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 
   inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
 in
@@ -34,7 +35,8 @@ in
         type = types.str;
         default = "calibre-web";
         description = ''
-          The directory below {file}`/var/lib` where Calibre-Web stores its data.
+          Where Calibre-Web stores its data.
+          Either an absolute path, or the directory name below {file}`/var/lib`.
         '';
       };
 
@@ -107,9 +109,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.settings = lib.optionalAttrs (lib.hasPrefix "/" cfg.dataDir) {
+      "10-calibre-web".${dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+    };
+
     systemd.services.calibre-web = let
-      appDb = "/var/lib/${cfg.dataDir}/app.db";
-      gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
+      appDb = "${dataDir}/app.db";
+      gdriveDb = "${dataDir}/gdrive.db";
       calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
       settings = concatStringsSep ", " (
@@ -134,7 +143,6 @@ in
           User = cfg.user;
           Group = cfg.group;
 
-          StateDirectory = cfg.dataDir;
           ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
             ''
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
@@ -147,6 +155,8 @@ in
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+        } // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
         };
       };
 

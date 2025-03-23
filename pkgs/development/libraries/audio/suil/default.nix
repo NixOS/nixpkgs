@@ -7,6 +7,10 @@
   pkg-config,
   meson,
   ninja,
+  sphinxygen,
+  doxygen,
+  sphinx,
+  python3Packages,
 
   # runtime
   lv2,
@@ -18,7 +22,7 @@
   gtk3,
   withQt5 ? true,
   qt5,
-  withX11 ? !stdenv.isDarwin,
+  withX11 ? !stdenv.hostPlatform.isDarwin,
 }:
 
 let
@@ -40,11 +44,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    sphinxygen
+    doxygen
+    sphinx
+    python3Packages.sphinx-lv2-theme
   ];
 
   mesonFlags = [
-    # docs require sphinxygen
-    (mesonEnable "docs" false)
     (mesonEnable "gtk2" withGtk2)
     (mesonEnable "gtk3" withGtk3)
     (mesonEnable "qt5" withQt5)

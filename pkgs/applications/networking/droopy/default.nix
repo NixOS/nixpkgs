@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, wrapPython, fetchpatch }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapPython,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "droopy";

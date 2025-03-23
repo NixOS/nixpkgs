@@ -2,22 +2,16 @@
   lib,
   buildPythonPackage,
   dj-database-url,
-  django,
-  django-rq,
   fetchFromGitHub,
   flit-core,
-  freezegun,
-  google-cloud-translate,
-  polib,
   python,
   pythonOlder,
-  typing-extensions,
   wagtail,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-modeladmin";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "wagtail-nest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J6ViGf7lqUvl5EV4/LbADVDp15foY9bUZygs1dSDlKw=";
+    tag = "v${version}";
+    hash = "sha256-IG7e7YomMM7K2IlJ1Dr1zo+blDPHnu/JeS5csos8ncc=";
   };
 
   nativeBuildInputs = [ flit-core ];

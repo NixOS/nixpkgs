@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 mkdir -p $out
 
 dot2ps() {

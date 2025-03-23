@@ -13,7 +13,6 @@
   imageio-ffmpeg,
   lightparam,
   matplotlib,
-  nose,
   numba,
   numpy,
   opencv4,
@@ -28,6 +27,7 @@
   qimage2ndarray,
   scikit-image,
   scipy,
+  setuptools,
   tables,
 }:
 
@@ -47,7 +47,9 @@ buildPythonPackage rec {
     ./0000-workaround-pyqtgraph.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     opencv4
     pyqt5
     pyqtgraph
@@ -74,7 +76,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     pyserial
   ];
@@ -89,6 +90,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/stytra";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tbenst ];
-    broken = true; # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
   };
 }

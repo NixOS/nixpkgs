@@ -1,0 +1,19 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "luarocks-packages-updater"
+version = "0.0.1"
+description = """
+Module to update luarocks-packages"""
+
+[project.urls]
+Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/lu/luarocks-packages-updater"
+
+[project.scripts]
+luarocks-packages-updater = "updater:main"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4

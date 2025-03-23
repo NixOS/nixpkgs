@@ -1,17 +1,23 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, stdenv }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "go-passbolt-cli";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "passbolt";
     repo = "go-passbolt-cli";
     rev = "v${version}";
-    hash = "sha256-I+niNUowKTFDMa7yOnRToMFPzO/CbnjXHJr5nAhhHcg=";
+    hash = "sha256-BtMPOmp9dbi/HoNigEeGWIYXRh1/gorV8ycrtWw9I8s=";
   };
 
-  vendorHash = "sha256-XRHGq3Qeq7VWHzw5WWVv4x5orQu740lttGVreiu7qP4=";
+  vendorHash = "sha256-wGSrhW7OsSjHlSKLkOf2AYIxU1m2lM1WGUsy16qxBwA=";
 
   ldflags = [
     "-X=main.version=${version}"

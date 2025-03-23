@@ -49,7 +49,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mainapp = [
       gunicorn
       gevent
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

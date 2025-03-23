@@ -1,19 +1,29 @@
 {
-  absl-py,
-  buildPythonPackage,
-  cmake,
-  etils,
-  fetchPypi,
-  glfw,
   lib,
-  mujoco,
-  numpy,
-  perl,
-  pybind11,
-  pyopengl,
-  python,
-  setuptools,
   stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # nativeBuildInputs
+  cmake,
+
+  # build-system
+  setuptools,
+
+  # buildInputs
+  mujoco,
+  pybind11,
+
+  # dependencies
+  absl-py,
+  etils,
+  glfw,
+  numpy,
+  pyopengl,
+  typing-extensions,
+
+  perl,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -28,24 +38,27 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fPiIdSbwcedBHcAs4c1mXjm0tgg/3/Sf4TSKgtIxRlE=";
+    hash = "sha256-D7EqtxW8K20jlKYzC4w6HdlbDzuoEr/k9skeChyjrQ8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    setuptools
-  ];
+  nativeBuildInputs = [ cmake ];
+
   dontUseCmakeConfigure = true;
+
+  build-system = [ setuptools ];
+
   buildInputs = [
     mujoco
     pybind11
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     absl-py
     etils
     glfw
     numpy
     pyopengl
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "${pname}" ];
@@ -53,8 +66,8 @@ buildPythonPackage rec {
   env.MUJOCO_PATH = "${mujoco}";
   env.MUJOCO_PLUGIN_PATH = "${mujoco}/lib";
   env.MUJOCO_CMAKE_ARGS = lib.concatStringsSep " " [
-    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
-    "-DMUJOCO_PYTHON_USE_SYSTEM_PYBIND11=ON"
+    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
+    (lib.cmakeBool "MUJOCO_PYTHON_USE_SYSTEM_PYBIND11" true)
   ];
 
   preConfigure =
@@ -71,8 +84,8 @@ buildPythonPackage rec {
         platform = with stdenv.hostPlatform.parsed; "${kernel.name}-${cpu.name}";
       in
       ''
-        ${perl}/bin/perl -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
-        ${perl}/bin/perl -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
+        ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
+        ${lib.getExe perl} -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
 
         build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
         mkdir -p $build/_deps
@@ -84,9 +97,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for MuJoCo: a general purpose physics simulator";
-    homepage = "https://mujoco.org/";
-    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
-    license = lib.licenses.asl20;
+    inherit (mujoco.meta) homepage changelog license;
     maintainers = with lib.maintainers; [
       GaetanLepage
       tmplt

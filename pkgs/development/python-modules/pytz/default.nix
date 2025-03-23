@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2024.1";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KilzXqnBi68UtEiEa95aSAMO0mdXhHLYlVzQ50Q6mBI=";
+    hash = "sha256-wttCviolGLKOZfkgfE0F5v9UfR76QIZGnvhV5KtwF44=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libudev-zero
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libudev-zero,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "uni-sync";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "EightB1ts";
-    repo = pname;
+    repo = "uni-sync";
     rev = "ca349942c06fabcc028ce24e79fc6ce7c758452b";
     hash = "sha256-K2zX3rKtTaKO6q76xlxX+rDLL0gEsJ2l8x/s1vsp+ZQ=";
   };
@@ -23,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     ./ignore_read-only_filesystem.patch
   ];
 
-  cargoHash = "sha256-DdmjP0h15cXkHJZxvOcINgoZ/EhTgu/7iYb+bgsIXxU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Qb0TPpYGDjsqHkI4B8QRz5c9rqZ+H98YjOg5K++zpBg=";
 
   meta = with lib; {
     description = "Synchronization tool for Lian Li Uni Controllers";

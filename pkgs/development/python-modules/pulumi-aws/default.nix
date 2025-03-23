@@ -11,24 +11,24 @@
 
 buildPythonPackage rec {
   pname = "pulumi-aws";
-  # Version is independant of pulumi's.
-  version = "6.46.0";
-
+  # Version is independent of pulumi's.
+  version = "6.66.3";
   pyproject = true;
-  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TxtvvkZULEDhxodUyc+T6Xo3i8qwOEE7Mh8Wh0WMJTA=";
+    tag = "v${version}";
+    hash = "sha256-BPL4B0KwXQld+/aPTJKhsFMPEbJByccTj+Zs70b8O6A=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     parver
     pulumi
     semver
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
-    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/v${version}";
+    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

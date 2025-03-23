@@ -3,8 +3,7 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -25,22 +24,21 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.15.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
-    rev = version;
-    hash = "sha256-TpD8YZnnv48PKYrUqR0/qvJG1XRbcMBcrkcERh6Q4q0=";
+    tag = version;
+    hash = "sha256-JG1FH2UAekFF9Vv7wCn/L7gJlVKv5AxqgGrj8pejqeY=";
   };
 
   patches = [
     # Hardcode path to mp library
-    (substituteAll {
-      src = ./0001-hardcode-path-to-libgomp.patch;
+    (replaceVars ./0001-hardcode-path-to-libgomp.patch {
       gomp = "${
-        if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib
+        if stdenv.cc.isClang then openmp else (lib.getLib stdenv.cc.cc)
       }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
@@ -51,9 +49,9 @@ buildPythonPackage rec {
     ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     gast
     numpy
@@ -73,9 +71,8 @@ buildPythonPackage rec {
   # Test suite is huge and has a circular dependency on scipy.
   doCheck = false;
 
-  disabled = !isPy3k;
-
   meta = {
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.rev}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;

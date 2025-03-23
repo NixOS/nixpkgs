@@ -20,14 +20,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.26.2";
+  version = "3.29.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DCFDVdtuXwY7hphChHSzCTc8hw8MEohX67SRGOaRQ6A=";
+    pname = "google_cloud_asset";
+    inherit version;
+    hash = "sha256-fFmpPUeKgniruevGhXnJLhzwM4ymO4ERjD8BQ0/HBbs=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 
@@ -68,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

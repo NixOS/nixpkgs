@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.66.4";
+  version = "4.67.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5Nk2yd6HJ5KPO+YHlZDpfZq/6NOaWQvmeOtZGf/Bhrs=";
+    hash = "sha256-+K75xSwIwTpl8w6jT05arD/Ro0lZh51+WeYwJyhmJ/I=";
   };
 
   nativeBuildInputs = [

@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pybluez/pybluez";
     license = licenses.gpl2;
     maintainers = with maintainers; [ leenaars ];
-    broken = stdenv.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
+    broken = stdenv.hostPlatform.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
   };
 }

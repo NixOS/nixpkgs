@@ -1,8 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,12 +19,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Xo45X4374FXvlrJ4Q0PahYvuWXO0k3N0ke0mbURYt54=";
   };
 
+  patches = [
+    # Fix the build against C23 compilers (like gcc-15):
+    (fetchpatch {
+      name = "c23.patch";
+      url = "https://dev.lovelyhq.com/libburnia/libburn/commit/d537f9dd35282df834a311ead5f113af67d223b3.patch";
+      hash = "sha256-aouU/6AchLhzMzvkVvUnFHWfebYTrkEJ6P3fF5pvE9M=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -31,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     changelog = "https://dev.lovelyhq.com/libburnia/libburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ abbradar AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      abbradar
+    ];
     mainProgram = "cdrskin";
     platforms = lib.platforms.unix;
   };

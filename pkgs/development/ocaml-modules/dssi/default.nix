@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, ladspa, alsa-lib }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  ladspa,
+  alsa-lib,
+}:
 
 buildDunePackage rec {
   pname = "dssi";
@@ -14,7 +21,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ladspa alsa-lib ];
+  propagatedBuildInputs = [
+    ladspa
+    alsa-lib
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-dssi";

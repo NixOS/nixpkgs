@@ -83,7 +83,7 @@
   # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
   "test_force_window_opengl_render_with_movies"
 
-  # mismatching expecation on the new commandline
+  # mismatching expectation on the new commandline
   "test_manim_new_command"
 
   # This tests checks if the manim executable is a python script. In our case it is not.

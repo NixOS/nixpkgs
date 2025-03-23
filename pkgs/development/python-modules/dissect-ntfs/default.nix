@@ -12,24 +12,24 @@
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.11";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rwn7nKfEmv92JdSMhKztMWptvggzlWhGA0gg5C0EbFM=";
+    tag = version;
+    hash = "sha256-C2tve1RVR8Q7t1Xz7Of1xRZH6IuLP9nL2l1cHbycFQ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
-    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

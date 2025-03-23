@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook4
 , libadwaita
 , libhandy
@@ -15,9 +16,13 @@
 , pulseaudio
 , evince
 , glib
+, modemmanager
 , gtk4
-, gnome
+, gnome-bluetooth
+, gnome-control-center
 , gnome-desktop
+, gnome-session
+, gnome-shell
 , gcr
 , pam
 , systemd
@@ -32,16 +37,17 @@
 , libsecret
 , evolution-data-server
 , nixosTests
+, gmobile
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.39.0";
+  version = "0.44.1";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-n1ZegSJAUr1Lbn0+Mx64vHhl4bwSJEdnO1xN/QdEKlw=";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -64,12 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
     evolution-data-server
     pulseaudio
     glib
+    modemmanager
     gcr
     networkmanager
     polkit
-    gnome.gnome-control-center
+    gmobile
+    gnome-bluetooth
+    gnome-control-center
     gnome-desktop
-    gnome.gnome-session
+    gnome-session
     gtk4
     pam
     systemd
@@ -87,11 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   mesonFlags = [
-    "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
-    # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # Save some time building if tests are disabled
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
@@ -108,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
-      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
+      --set GNOME_SESSION "${gnome-session}/bin/gnome-session"
     )
   '';
 

@@ -1,67 +1,66 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   astroid,
-  anyascii,
   jinja2,
   pyyaml,
   sphinx,
+  stdlib-list,
 
   # tests
   beautifulsoup4,
-  mock,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.2.0";
+  version = "3.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "sphinx_autoapi";
-    inherit version;
-    hash = "sha256-+AWA/1DseoZA3J0MPEDqrNOnFbtyx6t4Dk5QTB0HWfs=";
+  src = fetchFromGitHub {
+    owner = "readthedocs";
+    repo = "sphinx-autoapi";
+    tag = "v${version}";
+    hash = "sha256-GLIImHO6exBJBhvIMvyv8AyX+01QheIDwOj9Lhc83a8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
-  dependencies = [
-    anyascii
-    astroid
-    jinja2
-    pyyaml
-    sphinx
-  ];
+  dependencies =
+    [
+      astroid
+      jinja2
+      pyyaml
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      stdlib-list
+    ];
 
   nativeCheckInputs = [
     beautifulsoup4
-    mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # failing typing assertions
+    # require network access
     "test_integration"
-    "test_annotations"
-    # sphinx.errors.SphinxWarning: cannot cache unpickable configuration value: 'autoapi_prepare_jinja_env' (because it contains a function, class, or module object)
-    "test_custom_jinja_filters"
   ];
 
   pythonImportsCheck = [ "autoapi" ];
 
   meta = with lib; {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
-    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
     longDescription = ''
       Sphinx AutoAPI provides 'autodoc' style documentation for

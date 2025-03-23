@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -37,6 +38,9 @@ buildPythonPackage {
     pyopenssl
   ];
 
+  # arm64 is an unsupported platform on etcd 3.4. should be able to be removed on >= etcd 3.5
+  doCheck = !stdenv.hostPlatform.isAarch64;
+
   preCheck = ''
     for file in "test_auth" "integration/test_simple"; do
       substituteInPlace src/etcd/tests/$file.py \
@@ -44,9 +48,20 @@ buildPythonPackage {
     done
   '';
 
-  meta = with lib; {
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Seems to be failing because of network restrictions
+    # AttributeError: Can't get local object 'TestWatch.test_watch_indexed_generator.<locals>.watch_value'
+    "test_watch"
+    "test_watch_generator"
+    "test_watch_indexed"
+    "test_watch_indexed_generator"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

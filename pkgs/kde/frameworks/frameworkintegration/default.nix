@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "frameworkintegration";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [packagekit-qt];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ packagekit-qt ];
 }

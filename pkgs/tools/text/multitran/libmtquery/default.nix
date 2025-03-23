@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, libmtsupport, libfacet, libbtree, multitrandata } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libmtsupport,
+  libfacet,
+  libbtree,
+  multitrandata,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmtquery";
@@ -9,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "e24c7c15772445f1b14871928d84dd03cf93bd88f9d2b2ed1bf0257c2cf2b15e";
   };
 
-  buildInputs = [ libmtsupport libfacet libbtree multitrandata ];
+  buildInputs = [
+    libmtsupport
+    libfacet
+    libbtree
+    multitrandata
+  ];
 
   NIX_LDFLAGS = "-lbtree";
 

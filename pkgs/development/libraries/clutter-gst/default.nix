@@ -1,10 +1,27 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, clutter, gtk3, glib, cogl, gnome, gdk-pixbuf, gobject-introspection }:
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+  pkg-config,
+  clutter,
+  gtk3,
+  glib,
+  cogl,
+  gnome,
+  gdk-pixbuf,
+  gobject-introspection,
+  gst_all_1,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clutter-gst";
   version = "3.0.27";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -22,8 +39,20 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config glib gobject-introspection ];
-  propagatedBuildInputs = [ clutter gtk3 glib cogl gdk-pixbuf ];
+  nativeBuildInputs = [
+    pkg-config
+    glib
+    gobject-introspection
+  ];
+  propagatedBuildInputs = [
+    clutter
+    gtk3
+    glib
+    cogl
+    gdk-pixbuf
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 
@@ -41,7 +70,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.lgpl2Plus;
 
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

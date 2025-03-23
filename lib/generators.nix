@@ -70,6 +70,7 @@ let
     split
     toJSON
     typeOf
+    escapeXML
     ;
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
@@ -548,13 +549,17 @@ in rec {
 
     # Inputs
 
-    Options
-    : Empty set, there may be configuration options in the future
+    Structured function argument
+
+    : escape (optional, default: `false`)
+      : If this option is true, XML special characters are escaped in string values and keys
 
     Value
       : The value to be converted to Plist
   */
-  toPlist = {}: v: let
+  toPlist = {
+    escape ? false
+  }: v: let
     expr = ind: x:
       if x == null  then "" else
       if isBool x   then bool ind x else
@@ -568,10 +573,12 @@ in rec {
 
     literal = ind: x: ind + x;
 
+    maybeEscapeXML = if escape then escapeXML else x: x;
+
     bool = ind: x: literal ind  (if x then "<true/>" else "<false/>");
     int = ind: x: literal ind "<integer>${toString x}</integer>";
-    str = ind: x: literal ind "<string>${x}</string>";
-    key = ind: x: literal ind "<key>${x}</key>";
+    str = ind: x: literal ind "<string>${maybeEscapeXML x}</string>";
+    key = ind: x: literal ind "<key>${maybeEscapeXML x}</key>";
     float = ind: x: literal ind "<real>${toString x}</real>";
 
     indent = ind: expr "\t${ind}";
@@ -597,11 +604,14 @@ in rec {
       (expr "\t${ind}" value)
     ]) x));
 
-  in ''<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-${expr "" v}
-</plist>'';
+  in
+  # TODO: As discussed in #356502, deprecated functionality should be removed sometime after 25.11.
+  lib.warnIf (!escape && lib.oldestSupportedReleaseIsAtLeast 2505) "Using `lib.generators.toPlist` without `escape = true` is deprecated" ''
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  ${expr "" v}
+  </plist>'';
 
   /**
     Translate a simple Nix expression to Dhall notation.
@@ -733,6 +743,8 @@ ${expr "" v}
       "nil"
     else if isInt v || isFloat v || isString v || isBool v then
       toJSON v
+    else if isPath v || isDerivation v then
+      toJSON "${v}"
     else if isList v then
       (if v == [ ] then "{}" else
       "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
@@ -742,8 +754,6 @@ ${expr "" v}
           "(${v.expr})"
         else if v == { } then
           "{}"
-        else if isDerivation v then
-          ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
             mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v

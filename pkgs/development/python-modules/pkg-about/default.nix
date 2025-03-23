@@ -1,27 +1,27 @@
 {
   lib,
   buildPythonPackage,
+  docutils,
   fetchPypi,
   pythonOlder,
   importlib-metadata,
   importlib-resources,
   setuptools,
   packaging,
-  tomli,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "1.1.5";
-  format = "pyproject";
+  version = "1.2.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-B5u+iJuqHtv4BlGhdWqYxBfS89/S01OXmLyDOQraHfo=";
+    pname = "pkg_about";
+    inherit version;
+    hash = "sha256-NXty1yFvBLSpN5e3/KNCMOU+owkCTBaX0KINzVrUgzM=";
   };
 
   # tox is listed in build requirements but not actually used to build
@@ -30,17 +30,17 @@ buildPythonPackage rec {
     sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     packaging
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    docutils
     importlib-metadata
     importlib-resources
     packaging
     setuptools
-    tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

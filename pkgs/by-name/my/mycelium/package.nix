@@ -1,35 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  openssl,
+  darwin,
+  nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.5.3";
+  version = "0.5.7";
 
-  sourceRoot = "source/myceliumd";
+  sourceRoot = "${src.name}/myceliumd";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-nyHHuwOHaIh8WCxaQb7QoTReV09ydhHLYwEVHQg2Hek=";
+    hash = "sha256-PbEoM+AnZTuo9xtwcDcTH9FZAzPzfBhX41+zVVTdgRo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tun-0.6.1" = "sha256-tJx/qRwPcZOAfxyjZUHKLKsLu+loltVUOCP8IzWMryM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-63AB63vmxXi6ugLCAOKI1eJcOB8XHWEiCc5yoIEqd+w=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ versionCheckHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  doInstallCheck = true;
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -37,12 +40,23 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) mycelium;
+    };
+  };
+
   meta = with lib; {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli matthewcroughan ];
+    maintainers = with maintainers; [
+      flokli
+      matthewcroughan
+      rvdp
+    ];
     mainProgram = "mycelium";
   };
 }

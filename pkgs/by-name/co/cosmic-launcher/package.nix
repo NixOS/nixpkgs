@@ -1,74 +1,70 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
-, appstream-glib
-, desktop-file-utils
-, intltool
+{
+  lib,
+  stdenv,
+  stdenvAdapters,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  libcosmicAppHook,
+  nix-update-script,
+
+  withMoldLinker ? stdenv.targetPlatform.isLinux,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-launcher";
-  version = "unstable-2023-12-13";
+rustPlatform.buildRustPackage.override
+  { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
+  (finalAttrs: {
+    pname = "cosmic-launcher";
+    version = "1.0.0-alpha.6";
 
-  src = fetchFromGitHub {
-    owner = "pop-os";
-    repo = pname;
-    rev = "d5098e3674d1044645db256347f232fb33334376";
-    sha256 = "sha256-2nbjw6zynlmzoMBZhnQSnnQIgxkyq8JA+VSiQJHU6JQ=";
-  };
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-dvBYNtzKnbMTixe9hMNnEyiIsWd0KBCeVVbc19DPLMQ=";
-      "cosmic-client-toolkit-0.1.0" = "sha256-AEgvF7i/OWPdEMi8WUaAg99igBwE/AexhAXHxyeJMdc=";
-      "glyphon-0.3.0" = "sha256-Uw1zbHVAjB3pUfUd8GnFUnske3Gxs+RktrbaFJfK430=";
-      "pop-launcher-1.2.2" = "sha256-yELJN6wnJxnHiF3r45nwN2UCpMQrpBJfUg2yGFa7jBY=";
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
+    src = fetchFromGitHub {
+      owner = "pop-os";
+      repo = "cosmic-launcher";
+      tag = "epoch-${finalAttrs.version}";
+      hash = "sha256-BtYnL+qkM/aw+Air5yOKH098V+TQByM5mh1DX7v+v+s=";
     };
-  };
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland appstream-glib desktop-file-utils intltool ];
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-g7Qr3C8jQg65KehXAhftdXCpEukag0w12ClvZFkxfqs=";
 
-  dontUseJustBuild = true;
+    nativeBuildInputs = [
+      just
+      libcosmicAppHook
+    ];
 
-  justFlags = [
-    "--set"
-    "prefix"
-    (placeholder "out")
-    "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
-  ];
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+    justFlags = [
+      "--set"
+      "prefix"
+      (placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
+    ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
-  '';
+    env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      "--cfg tokio_unstable${lib.optionalString withMoldLinker " -C link-arg=-fuse-ld=mold"}";
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+    passthru.updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
 
-  meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-launcher";
-    description = "Launcher for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-launcher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
-    platforms = platforms.linux;
-  };
-}
+    meta = {
+      homepage = "https://github.com/pop-os/cosmic-launcher";
+      description = "Launcher for the COSMIC Desktop Environment";
+      mainProgram = "cosmic-launcher";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [
+        nyabinary
+        HeitorAugustoLN
+      ];
+      platforms = lib.platforms.linux;
+    };
+  })

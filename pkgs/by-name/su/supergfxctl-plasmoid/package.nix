@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, kdePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "supergfxctl-plasmoid";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "jhyub";
     repo = "supergfxctl-plasmoid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m3NmbFD9tqqCyiQgMVRNtlCZy7q+rMCsWgtds1QdOrE=";
+    hash = "sha256-Un2uVTde18qloZoWk6bbscyvsBTIAdK1CfxYAZg1+F4=";
   };
 
   nativeBuildInputs = [

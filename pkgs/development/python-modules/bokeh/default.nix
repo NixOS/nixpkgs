@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchFromGitHub,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   colorama,
   contourpy,
   jinja2,
@@ -17,7 +16,6 @@
   pytestCheckHook,
   pyyaml,
   setuptools,
-  setuptools-git-versioning,
   xyzservices,
   beautifulsoup4,
   channels,
@@ -47,36 +45,33 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.5.0";
-  format = "pyproject";
+  version = "3.6.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zeia3b6QDDevJaIFKuF0ttO6HvCMkf1att/XEuGEw5k=";
-  };
-
-  src_test = fetchFromGitHub {
-    owner = "bokeh";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PK9iLOCcivr4oF9Riq73dzxGfxzWRk3bdrCCpRrTv5g=";
+    hash = "sha256-m4HWqepi51oEoanZ+TGUIBaJC+7Jq10SmipEMs9ZXAo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-nodejs-npmjs-paths.patch;
+    (replaceVars ./hardcode-nodejs-npmjs-paths.patch {
       node_bin = "${nodejs}/bin/node";
       npm_bin = "${nodejs}/bin/npm";
     })
   ];
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [
     colorama
     nodejs
     setuptools
-    setuptools-git-versioning
   ];
 
   nativeCheckInputs = [
@@ -106,7 +101,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     contourpy
     numpy
@@ -119,11 +114,8 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # need more work
-  pytestFlagsArray = "tests/test_defaults.py";
+
   pythonImportsCheck = [ "bokeh" ];
-  preCheck = ''
-    cp -rv ''${src_test}/tests/* ./tests/
-  '';
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";

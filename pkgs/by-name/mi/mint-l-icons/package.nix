@@ -1,22 +1,23 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, adwaita-icon-theme
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  adwaita-icon-theme,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    # https://github.com/linuxmint/mint-l-icons/issues/11
-    rev = "ee03e6dad0b1f9e25847977eae42766e2ddd4877";
-    hash = "sha256-OKlkqDp9mZOeM4M9QN9H0WH4k+5eMEUshvadaV6qhBA=";
+    repo = "mint-l-icons";
+    # They don't really do tags, this is just a named commit.
+    rev = "b442277c822c92f7bb68282cb82c7d1a98e3fd37";
+    hash = "sha256-vPDEribE/CZwoAK1C9fjbWQEO/NWMWCKCUO/Xw/SxZ0=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +30,8 @@ stdenvNoCC.mkDerivation rec {
     gtk3
   ];
 
+  # FIXME: https://hydra.nixos.org/build/287344480/nixlog/5
+  dontCheckForBrokenSymlinks = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''

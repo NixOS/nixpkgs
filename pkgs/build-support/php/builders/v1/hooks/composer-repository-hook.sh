@@ -20,7 +20,7 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
-        setComposeRootVersion
+        setComposerRootVersion
 
         composer \
             --no-install \
@@ -58,7 +58,7 @@ composerRepositoryBuildHook() {
 
     mkdir -p repository
 
-    setComposeRootVersion
+    setComposerRootVersion
 
     # Build the local composer repository
     # The command 'build-local-repo' is provided by the Composer plugin

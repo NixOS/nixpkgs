@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hors";
@@ -11,9 +17,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1q17i8zg7dwd8al42wfnkn891dy5hdhw4325plnihkarr50avbr0";
   };
 
-  cargoHash = "sha256-1PB/JvgfC6qABI+cIePqtsSlZXPqMGQIay9SCXJkV9o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JTHgOEBpGXPO3C7YUbBF0LFeSUQK+R2w1LugwMV5xyU=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # requires network access
   doCheck = false;

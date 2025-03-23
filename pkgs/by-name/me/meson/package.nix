@@ -1,43 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, coreutils
-, darwin
-, libblocksruntime
-, llvmPackages
-, libxcrypt
-, openldap
-, ninja
-, pkg-config
-, python3
-, substituteAll
-, zlib
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  coreutils,
+  libblocksruntime,
+  llvmPackages,
+  ninja,
+  pkg-config,
+  python3,
+  replaceVars,
+  zlib,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
+    tag = version;
+    hash = "sha256-nvaq+9evQSj/ahK68nj8FckG4nA1gs2DqcZxFEFH1iU=";
   };
 
   patches = [
+    # Nixpkgs cmake uses NIXPKGS_CMAKE_PREFIX_PATH for the search path
+    ./000-nixpkgs-cmake-prefix-path.patch
+
     # In typical distributions, RPATH is only needed for internal libraries so
     # meson removes everything else. With Nix, the locations of libraries
     # are not as predictable, therefore we need to keep them in the RPATH.
     # At the moment we are keeping the paths starting with /nix/store.
     # https://github.com/NixOS/nixpkgs/issues/31222#issuecomment-365811634
-    (substituteAll {
-      src = ./001-fix-rpath.patch;
+    (replaceVars ./001-fix-rpath.patch {
       inherit (builtins) storeDir;
     })
 
@@ -66,25 +62,8 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./005-boost-Do-not-add-system-paths-on-nix.patch
 
-    # Nixpkgs cctools does not have bitcode support.
-    ./006-disable-bitcode.patch
-
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
-
-    # Find boost via pkg-config
-    # https://github.com/NixOS/nixpkgs/issues/86131
-    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
-    # FIXME: Will be in meson 1.5.0
-    (fetchpatch {
-      name = "find-boost-pkg-config.patch";
-      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
-      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
-    })
-  ];
-
-  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
-    libxcrypt
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -94,53 +73,55 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
   ];
 
-  checkInputs = [
-    zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    LDAP
-    OpenAL
-    OpenGL
-    openldap
-  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
-    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-    llvmPackages.openmp
-    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
-    libblocksruntime
-  ];
+  checkInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+      llvmPackages.openmp
+      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+      libblocksruntime
+    ];
 
-  checkPhase = lib.concatStringsSep "\n" ([
-    "runHook preCheck"
-    ''
-      patchShebangs 'test cases'
-      substituteInPlace \
-        'test cases/native/8 external program shebang parsing/script.int.in' \
-        'test cases/common/273 customtarget exe for test/generate.py' \
-          --replace /usr/bin/env ${coreutils}/bin/env
-    ''
-  ]
-  # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
-    # requires git, creating cyclic dependency
-    ''test cases/common/66 vcstag''
-    # requires glib, creating cyclic dependency
-    ''test cases/linuxlike/6 subdir include order''
-    ''test cases/linuxlike/9 compiler checks with dependencies''
-    # requires static zlib, see #66461
-    ''test cases/linuxlike/14 static dynamic linkage''
-    # Nixpkgs cctools does not have bitcode support.
-    ''test cases/osx/7 bitcode''
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # pch doesn't work quite right on FreeBSD, I think
-    ''test cases/common/13 pch''
-  ]))
-  ++ [
-    ''HOME="$TMPDIR" python ./run_project_tests.py''
-    "runHook postCheck"
-  ]);
+  checkPhase = lib.concatStringsSep "\n" (
+    [
+      "runHook preCheck"
+      ''
+        patchShebangs 'test cases'
+        substituteInPlace \
+          'test cases/native/8 external program shebang parsing/script.int.in' \
+          'test cases/common/274 customtarget exe for test/generate.py' \
+            --replace /usr/bin/env ${coreutils}/bin/env
+      ''
+    ]
+    # Remove problematic tests
+    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+      [
+        # requires git, creating cyclic dependency
+        ''test cases/common/66 vcstag''
+        # requires glib, creating cyclic dependency
+        ''test cases/linuxlike/6 subdir include order''
+        ''test cases/linuxlike/9 compiler checks with dependencies''
+        # requires static zlib, see #66461
+        ''test cases/linuxlike/14 static dynamic linkage''
+        # Nixpkgs cctools does not have bitcode support.
+        ''test cases/osx/7 bitcode''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # requires llvmPackages.openmp, creating cyclic dependency
+        ''test cases/common/184 openmp''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # pch doesn't work quite right on FreeBSD, I think
+        ''test cases/common/13 pch''
+      ]
+    ))
+    ++ [
+      ''HOME="$TMPDIR" python ./run_project_tests.py''
+      "runHook postCheck"
+    ]
+  );
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson
@@ -163,6 +144,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+  env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
     homepage = "https://mesonbuild.com";
@@ -178,7 +160,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ qyliss ];
     inherit (python3.meta) platforms;
   };
 }

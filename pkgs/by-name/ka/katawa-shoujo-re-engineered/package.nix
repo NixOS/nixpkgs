@@ -6,10 +6,11 @@
   copyDesktopItems,
   makeWrapper,
   renpy,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
-  version = "1.4.7";
+  version = "2.0.1-1";
 
   src = fetchFromGitea {
     # GitHub mirror at fleetingheart/ksre
@@ -17,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E+2G47vWA7o4bFWttoMDfPjAG32K8FDv+OluMjzPDQw=";
+    hash = "sha256-5AK6QtF47EGiKDihiUv4FHsw1sjraq/Mh838wbb1hac=";
   };
 
   desktopItems = [
@@ -49,6 +50,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fan-made modernization of the classic visual novel Katawa Shoujo";
     homepage = "https://www.fhs.sh/projects";
@@ -59,7 +62,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cc-by-nc-nd-30
     ];
     mainProgram = "katawa-shoujo-re-engineered";
-    maintainers = with lib.maintainers; [ quantenzitrone rapiteanu ];
+    maintainers = with lib.maintainers; [
+      quantenzitrone
+      rapiteanu
+    ];
     platforms = renpy.meta.platforms;
   };
 })

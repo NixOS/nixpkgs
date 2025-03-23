@@ -1,4 +1,16 @@
-{ lib, fetchurl, pkg-config, libjack2, alsa-lib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  alsa-lib,
+  libsndfile,
+  liblo,
+  lv2,
+  qt5,
+  fftwFloat,
+  mkDerivation,
+}:
 
 mkDerivation rec {
   pname = "padthv1";
@@ -9,7 +21,16 @@ mkDerivation rec {
     sha256 = "sha256-9yFfvlskOYnGraou2S3Qffl8RoYJqE0wnDlOP8mxQgg=";
   };
 
-  buildInputs = [ libjack2 alsa-lib libsndfile liblo lv2 qt5.qtbase qt5.qttools fftwFloat ];
+  buildInputs = [
+    libjack2
+    alsa-lib
+    libsndfile
+    liblo
+    lv2
+    qt5.qtbase
+    qt5.qttools
+    fftwFloat
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -110,14 +110,19 @@ in
       default = {};
 
       example = literalExpression ''
-        { stdio.text =
-          '''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          ''';
+        {
+          stdio = {
+            # Run after /dev has been mounted
+            deps = [ "specialfs" ];
+            text =
+              '''
+                # Needed by some programs.
+                ln -sfn /proc/self/fd /dev/fd
+                ln -sfn /proc/self/fd/0 /dev/stdin
+                ln -sfn /proc/self/fd/1 /dev/stdout
+                ln -sfn /proc/self/fd/2 /dev/stderr
+              ''';
+          };
         }
       '';
 
@@ -170,7 +175,7 @@ in
 
       apply = set: {
         script = ''
-          unset PATH
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done
@@ -198,17 +203,21 @@ in
       type = types.nullOr types.path;
       visible = false;
       description = ''
-        The env(1) executable that is linked system-wide to
+        The {manpage}`env(1)` executable that is linked system-wide to
         `/usr/bin/env`.
       '';
     };
 
     system.build.installBootLoader = mkOption {
       internal = true;
-      # "; true" => make the `$out` argument from switch-to-configuration.pl
-      #             go to `true` instead of `echo`, hiding the useless path
-      #             from the log.
-      default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      default = pkgs.writeShellScript "no-bootloader" ''
+        echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+      '';
+      defaultText = lib.literalExpression ''
+        pkgs.writeShellScript "no-bootloader" '''
+          echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+        '''
+      '';
       description = ''
         A program that writes a bootloader installation script to the path passed in the first command line argument.
 
@@ -234,11 +243,12 @@ in
     system.activationScripts.var = ""; # obsolete
 
     systemd.tmpfiles.rules = [
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ] ++ lib.optionals config.nix.enable [
       # Prevent the current configuration from being garbage-collected.
       "d /nix/var/nix/gcroots -"
       "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
-      "D /var/empty 0555 root root -"
-      "h /var/empty - - - - +i"
     ];
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
@@ -250,7 +260,8 @@ in
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
+        if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
+        if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
       '';
 
     system.activationScripts.specialfs =

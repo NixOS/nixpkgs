@@ -1,105 +1,121 @@
-{ lib
-, buildNpmPackage
-, cargo
-, copyDesktopItems
-, dbus
-, electron_29
-, fetchFromGitHub
-, glib
-, gnome-keyring
-, gtk3
-, jq
-, libsecret
-, makeDesktopItem
-, makeWrapper
-, moreutils
-, napi-rs-cli
-, nodejs_20
-, patchutils_0_4_2
-, pkg-config
-, python3
-, runCommand
-, rustc
-, rustPlatform
+{
+  lib,
+  apple-sdk_14,
+  buildNpmPackage,
+  cargo,
+  copyDesktopItems,
+  darwin,
+  electron_34,
+  fetchFromGitHub,
+  gnome-keyring,
+  jq,
+  llvmPackages_18,
+  makeDesktopItem,
+  makeWrapper,
+  napi-rs-cli,
+  nix-update-script,
+  nodejs_20,
+  pkg-config,
+  rustc,
+  rustPlatform,
+  stdenv,
+  xcbuild,
 }:
 
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_29;
-in buildNpmPackage rec {
+  electron = electron_34;
+
+  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
+  buildNpmPackage' = buildNpmPackage.override {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+  };
+in
+buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2024.6.4";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-oQ2VZoxePdYUC+xMKlRMpvPubSPULvt31XSh/OBw3Ec=";
+    hash = "sha256-+RMeo+Kyum1WNm7citUe9Uk5yOtfhMPPlQRtnYL3Pj8=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
+    ./dont-auto-setup-biometrics.patch
+    ./set-exe-path.patch # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
+    ./skip-afterpack-and-aftersign.patch # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
+    ./dont-use-platform-triple.patch # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
   ];
 
-  # The nested package-lock.json from upstream is out-of-date, so copy the
-  # lock metadata from the root package-lock.json.
   postPatch = ''
-    cat {,apps/desktop/src/}package-lock.json \
-      | ${lib.getExe jq} -s '
-        .[1].packages."".dependencies.argon2 = .[0].packages."".dependencies.argon2
-          | .[0].packages."" = .[1].packages.""
-          | .[1].packages = .[0].packages
-          | .[1]
-        ' \
-      | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
+    # remove code under unfree license
+    rm -r bitwarden_license
+
+    substituteInPlace apps/desktop/src/main.ts --replace-fail '%%exePath%%' "$out/bin/bitwarden"
+
+    # force canUpdate to false
+    # will open releases page instead of trying to update files
+    substituteInPlace apps/desktop/src/main/updater.main.ts \
+      --replace-fail 'this.canUpdate =' 'this.canUpdate = false; let _dummy ='
   '';
 
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
-  npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
-  npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-9d9pWrFYelAx/PPDHY3m92Frp8RSQuBqpiOjmWtm/1g=";
+  npmFlags = [
+    "--engine-strict"
+    "--legacy-peer-deps"
+  ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    patches = map
-      (patch: runCommand
-        (builtins.baseNameOf patch)
-        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
-        ''
-          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
-        ''
-      )
-      patches;
-    patchFlags = [ "-p4" ];
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-ZmblY1APVa8moAR1waVBZPhrf5Wt1Gi6dvAxkhizckQ=";
+  npmRebuildFlags = [
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    "--ignore-scripts"
+  ];
+  npmWorkspace = "apps/desktop";
+  npmDepsHash = "sha256-fYZJA6qV3mqxO2g+yxD0MWWQc9QYmdWJ7O7Vf88Qpbs=";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      patches
+      ;
+    hash = "sha256-OldVFMI+rcGAbpDg7pHu/Lqbw5I6/+oXULteQ9mXiFc=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs = [
-    cargo
-    copyDesktopItems
-    jq
-    makeWrapper
-    moreutils
-    napi-rs-cli
-    pkg-config
-    python3
-    rustc
-    rustPlatform.cargoCheckHook
-    rustPlatform.cargoSetupHook
-  ];
+  # make electron-builder not attempt to codesign the app on darwin
+  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
-  buildInputs = [
-    glib
-    gtk3
-    libsecret
+  nativeBuildInputs =
+    [
+      cargo
+      jq
+      makeWrapper
+      napi-rs-cli
+      pkg-config
+      rustc
+      rustPlatform.cargoCheckHook
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+      darwin.autoSignDarwinBinariesHook
+    ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
   ];
 
   preBuild = ''
@@ -107,74 +123,89 @@ in buildNpmPackage rec {
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    pushd apps/desktop/desktop_native/napi
+    npm run build
+    popd
   '';
 
   postBuild = ''
     pushd apps/desktop
 
-    # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
+    # electron-dist needs to be writable on darwin or when using fuses
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     popd
   '';
 
-  doCheck = true;
+  # there seem to be issues with missing libs on darwin when running tests
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  nativeCheckInputs = [
-    dbus
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
-  checkFlags = [
-    "--skip=password::password::tests::test"
-  ];
+  checkFlags =
+    [
+      "--skip=password::password::tests::test"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--skip=clipboard::tests::test_write_read"
+    ];
 
-  checkPhase = ''
-    runHook preCheck
-
+  preCheck = ''
     pushd ${cargoRoot}
-    export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
-    export cargoCheckType=release
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      -- bash -e -c cargoCheckHook
-    popd
-
-    runHook postCheck
+    cargoCheckType=release
+    HOME=$(mktemp -d)
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir $out
-
-    pushd apps/desktop/dist/linux-unpacked
-    mkdir -p $out/opt/Bitwarden
-    cp -r locales resources{,.pak} $out/opt/Bitwarden
+  postCheck = ''
     popd
-
-    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
-      --add-flags $out/opt/Bitwarden/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
-
-    pushd apps/desktop/resources/icons
-    for icon in *.png; do
-      dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
-      mkdir -p "$dir"
-      cp "$icon" "$dir"/${icon}.png
-    done
-    popd
-
-    runHook postInstall
   '';
+
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r apps/desktop/dist/mac*/Bitwarden.app $out/Applications
+      makeWrapper $out/Applications/Bitwarden.app/Contents/MacOS/Bitwarden $out/bin/bitwarden
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p $out/opt/Bitwarden
+      cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
+
+      makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+        --add-flags $out/opt/Bitwarden/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
+
+      # Extract the polkit policy file from the multiline string in the source code.
+      # This may break in the future but its better than copy-pasting it manually.
+      mkdir -p $out/share/polkit-1/actions/
+      pushd apps/desktop/src/key-management/biometrics
+      awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+      popd
+
+      pushd apps/desktop/resources/icons
+      for icon in *.png; do
+        dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
+        mkdir -p "$dir"
+        cp "$icon" "$dir"/${icon}.png
+      done
+      popd
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -184,8 +215,19 @@ in buildNpmPackage rec {
       comment = description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/bitwarden" ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^desktop-v(.*)$"
+      ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
@@ -193,7 +235,12 @@ in buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "bitwarden";
   };
 }

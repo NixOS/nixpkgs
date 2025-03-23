@@ -18,21 +18,21 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.9";
+  version = "1.11.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ENdUXfvQOfd9cgHr6fd5Hf+8AJXFix3YbsYJQfpu4ZE=";
+    tag = "v${version}";
+    hash = "sha256-uTZqpitexB5e2/W9HtNo0j4gOW9vDS2BsaVq16BUFM4=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     wagtail
     polib
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     google-cloud-translate
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     google = [ google-cloud-translate ];
   };
 
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Translation plugin for Wagtail CMS";
     homepage = "https://github.com/wagtail/wagtail-localize";
-    changelog = "https://github.com/wagtail/wagtail-localize/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wagtail/wagtail-localize/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sephi ];
   };

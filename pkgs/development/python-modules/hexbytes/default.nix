@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "hexbytes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8st1nQiGApt+aNl8/cftYk0ZzA+MxbLyGi53UWUlAjM=";
   };
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/hexbytes";
     changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,9 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.0.7";
+  version = "5.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,40 +53,47 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-g2Y8kcfYUjykZ7Y6JEsNW/jw6chMLLYpQlgdTFt7HmM=";
+    hash = "sha256-BxhHqWpTZLcx46RofnXzZ5nj4xDPcj7hNng9ppUN5Hw=";
   };
 
   patches =
     [
-      (substituteAll {
-        src = ./django_5_set_zoneinfo_dir.patch;
+      (replaceVars ./django_5_set_zoneinfo_dir.patch {
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # prevent tests from messing with our pythonpath
       ./django_5_tests_pythonpath.patch
-      # disable test that excpects timezone issues
+      # disable test that expects timezone issues
       ./django_5_disable_failing_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove in 5.2
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
+
+      # fix regression which breaks django-import-export
+      # https://github.com/django-import-export/django-import-export/pull/2045
+      # https://github.com/django/django/pull/19233
+      # manual backport because commit doesn't apply on stable cleanly
+      ./Restored-single_object-rgument-to-LogEntry-objects-log_actions.diff
     ]
     ++ lib.optionals withGdal [
-      (substituteAll {
-        src = ./django_5_set_geos_gdal_lib.patch;
+      (replaceVars ./django_5_set_geos_gdal_lib.patch {
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;
       })
     ];
 
-  postPatch =
-    ''
-      substituteInPlace tests/utils_tests/test_autoreload.py \
-        --replace "/usr/bin/python" "${python.interpreter}"
-    ''
-    + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
-      # Test regression after xz was reverted from 5.6.0 to 5.4.6
-      # https://hydra.nixos.org/build/254532197
-      substituteInPlace tests/view_tests/tests/test_debug.py \
-        --replace-fail "test_files" "dont_test_files"
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=61.0.0,<69.3.0" setuptools
+
+    substituteInPlace tests/utils_tests/test_autoreload.py \
+      --replace-fail "/usr/bin/python" "${python.interpreter}"
+  '';
 
   build-system = [ setuptools ];
 
@@ -119,14 +126,22 @@ buildPythonPackage rec {
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    # pywatchman depends on folly which does not support 32bits
+    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported
     rm -rf django
 
+    # fails to import github_links from docs/_ext/github_links.py
+    rm tests/sphinx/test_github_links.py
+
     # provide timezone data, works only on linux
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+
+    export PYTHONPATH=$PWD/docs/_ext:$PYTHONPATH
   '';
 
   checkPhase = ''

@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, pandoc
+, pandoc_3_6
 , typst
 , esbuild
 , deno
@@ -13,34 +13,32 @@
 , runCommand
 , python3
 , quarto
-, extraPythonPackages ? ps: with ps; []
+, extraPythonPackages ? ps: []
 , sysctl
 }:
-
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.5.55";
+  version = "1.6.42";
+
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-1HqjMENJ1H5RBaKIRZoUDGrdSEQOhhIiRLIQFqnkFlk=";
+    hash = "sha256-9mf1YfcfCWMZaYFlYyJN9WKlRHk8U2sq2ESb4mqz3sY=";
   };
+
+  patches = [
+    ./deno2.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
   ];
-
-  postPatch = ''
-    # Compat for Deno >=1.26
-    substituteInPlace bin/quarto.js \
-      --replace-fail ']))?.trim();' ']))?.trim().split(" ")[0];'
-  '';
 
   dontStrip = true;
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
       --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \
@@ -63,7 +61,7 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
     } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check

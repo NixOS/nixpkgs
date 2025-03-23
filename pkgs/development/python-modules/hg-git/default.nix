@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "hg_git";
     inherit version;
-    hash = "sha256-BZzcElZa0pMBSGXSiSB+d+YFhJMM5PAdT2Txq5qLZCU=";
+    hash = "sha256-Pr+rNkqBubVlsQCyqd5mdr8D357FzSd3Kuz5EWeez8M=";
   };
 
   build-system = [

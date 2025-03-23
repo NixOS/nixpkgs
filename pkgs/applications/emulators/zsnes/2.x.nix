@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL
-, libGL
-, libGLU
-, libpng
-, nasm
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL,
+  libGL,
+  libGLU,
+  libpng,
+  nasm,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xyproto/zsnes";
     description = "Maintained fork of zsnes";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
   };
 })

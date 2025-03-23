@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "3.9.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/regina-rexx/regina-rexx/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/regina-rexx/regina-rexx/${version}/regina-rexx-${version}.tar.gz";
     hash = "sha256-7ZjHp/HVpBSLAv7xsWruSmpthljQGoDPXFAwFe8Br6U=";
   };
 

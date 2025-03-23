@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ ... }:
+import ../make-test-python.nix (
+  { ... }:
   {
     name = "extra-python-packages";
 
@@ -10,4 +11,5 @@ import ../make-test-python.nix ({ ... }:
       import numpy as np
       assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
     '';
-  })
+  }
+)

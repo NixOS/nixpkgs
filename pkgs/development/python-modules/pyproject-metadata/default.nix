@@ -6,14 +6,12 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   tomli,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyproject_metadata";
     inherit version;
-    hash = "sha256-N21aAHZKwpRApUV5+I5mt9nLfmKdNcNaHHJIv+vJtFU=";
+    hash = "sha256-hRHACkytlmhq9qa0FDQzKYvrlhBak3mv3JsDKPTyYMk=";
   };
 
   build-system = [ flit-core ];

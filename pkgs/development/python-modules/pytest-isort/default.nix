@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stephrdev";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1oCVIi0sXwac4AufScJJRsfvBwaBAwlMBRNqLcUXEh4=";
   };
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/moccu/pytest-isort/";
     changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

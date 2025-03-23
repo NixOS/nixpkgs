@@ -8,15 +8,17 @@
   gunicorn,
   pyopenssl,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
-  setuptools-scm,
   requests,
+  setuptools-scm,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
   pname = "threat9-test-bed";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,16 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     faker
     flask
     gunicorn
     pyopenssl
     requests
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -51,9 +53,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for adding unittests.mock as view functions";
-    mainProgram = "test-bed";
     homepage = "https://github.com/threat9/threat9-test-bed";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "test-bed";
   };
 }

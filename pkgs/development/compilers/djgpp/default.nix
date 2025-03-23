@@ -1,45 +1,51 @@
-{ bison
-, buildPackages
-, curl
-, fetchFromGitHub
-, fetchurl
-, file
-, flex
-, targetArchitecture ? "i586"
-, lib
-, makeWrapper
-, perl
-, stdenv
-, texinfo
-, unzip
-, which }:
+{
+  bison,
+  buildPackages,
+  curl,
+  fetchFromGitHub,
+  fetchurl,
+  file,
+  flex,
+  targetArchitecture ? "i586",
+  lib,
+  makeWrapper,
+  perl,
+  stdenv,
+  texinfo,
+  unzip,
+  which,
+}:
 
 let
   s = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
 in
-assert lib.elem targetArchitecture [ "i586" "i686" ];
+assert lib.elem targetArchitecture [
+  "i586"
+  "i686"
+];
 stdenv.mkDerivation rec {
   pname = "djgpp";
   version = s.gccVersion;
   src = s.src;
 
-  patchPhase = ''
-    runHook prePatch
-    for f in "build-djgpp.sh" "script/${version}" "setenv/copyfile.sh"; do
-      substituteInPlace "$f" --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    done
-  ''
-  # i686 patches from https://github.com/andrewwutw/build-djgpp/issues/45#issuecomment-1484010755
-  # The build script unpacks some files so we can't patch ahead of time, instead patch the script
-  # to patch after it extracts
+  patchPhase =
+    ''
+      runHook prePatch
+      for f in "build-djgpp.sh" "script/${version}" "setenv/copyfile.sh"; do
+        substituteInPlace "$f" --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+      done
+    ''
+    # i686 patches from https://github.com/andrewwutw/build-djgpp/issues/45#issuecomment-1484010755
+    # The build script unpacks some files so we can't patch ahead of time, instead patch the script
+    # to patch after it extracts
 
-  + lib.optionalString (targetArchitecture == "i686") ''
-    sed -i 's/i586/i686/g' setenv/setenv script/${version}
-    sed -i '/Building DXE tools./a sed -i "s/i586/i686/g" src/makefile.def src/dxe/makefile.dxe' script/${version}
-  ''
-  + ''
-    runHook postPatch
-  '';
+    + lib.optionalString (targetArchitecture == "i686") ''
+      sed -i 's/i586/i686/g' setenv/setenv script/${version}
+      sed -i '/Building DXE tools./a sed -i "s/i586/i686/g" src/makefile.def src/dxe/makefile.dxe' script/${version}
+    ''
+    + ''
+      runHook postPatch
+    '';
 
   nativeBuildInputs = [
     makeWrapper

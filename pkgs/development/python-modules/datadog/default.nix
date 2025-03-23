@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.49.1";
+  version = "0.51.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TLenmRr2ytuGj+RQzUVkc+ZfEfxni3189hBE/xxgdNg=";
+    hash = "sha256-MnlTT4Ma4LSuLYzkLvA4tKs45mfX7W/3Q3mC16DPUlA=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -49,11 +49,16 @@ buildPythonPackage rec {
     "tests/integration/api/test_*.py"
   ];
 
-  disabledTests = [
-    "test_default_settings_set"
-    # https://github.com/DataDog/datadogpy/issues/746
-    "TestDogshell"
-  ];
+  disabledTests =
+    [
+      "test_default_settings_set"
+      # https://github.com/DataDog/datadogpy/issues/746
+      "TestDogshell"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/DataDog/datadogpy/issues/880
+      "test_timed_coroutine"
+    ];
 
   pythonImportsCheck = [ "datadog" ];
 
@@ -62,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DataDog/datadogpy";
     changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

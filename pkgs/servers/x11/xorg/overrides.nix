@@ -1,17 +1,17 @@
 { callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
+  automake, autoconf, libiconv, libtool, intltool, gettext, gzip, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress, updateAutotoolsGnuConfigScriptsHook,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg, windows
+  xorg, windows, libgbm, mesa-gl-headers, dri-pkgconfig-stub
 }:
 
 let
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -45,7 +45,10 @@ self: super:
       postInstallHooks+=(wrapWithXFileSearchPath)
   '')) {};
 
-  appres = addMainProgram super.appres { };
+  appres = super.appres.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
+    meta = attrs.meta // { mainProgram = "appres"; };
+  });
 
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
@@ -84,7 +87,7 @@ self: super:
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
+    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.hostPlatform.isDarwin
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
 
@@ -147,7 +150,8 @@ self: super:
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ] ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -160,15 +164,16 @@ self: super:
       # Remove useless DocBook XML files.
       rm -rf $out/share/doc
     '';
-    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
+    CPP = lib.optionalString stdenv.hostPlatform.isDarwin "clang -E -";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xorgproto ];
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
-    preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
-    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    meta = attrs.meta // {
+      platforms = lib.platforms.darwin;
+    };
   });
 
   libXau = super.libXau.overrideAttrs (attrs: {
@@ -255,21 +260,13 @@ self: super:
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
     outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
-  });
-
-  luit = super.luit.overrideAttrs (attrs: {
-    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-    # Once the bug is fixed upstream, this can be removed.
-    configureFlags = [ "--disable-selective-werror" ];
-
-    buildInputs = attrs.buildInputs ++ [libiconv];
-    meta = attrs.meta // { mainProgram = "luit"; };
   });
 
   libICE = super.libICE.overrideAttrs (attrs: {
@@ -360,13 +357,13 @@ self: super:
 
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -392,11 +389,13 @@ self: super:
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
     XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
+    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
+    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
     meta = attrs.meta // { mainProgram = "sxpm"; };
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
-    buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXext xorg.libXfixes xorg.libXrandr ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes ];
   });
 
@@ -412,7 +411,7 @@ self: super:
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
 
     buildInputs = attrs.buildInputs ++ [ zlib ]
-      ++ lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+      ++ lib.optionals stdenv.hostPlatform.isNetBSD [ netbsd.libarch netbsd.libpci ];
 
     mesonFlags = [
       (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
@@ -452,7 +451,7 @@ self: super:
   transset = addMainProgram super.transset { };
 
   utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ automake autoconf libtool ];
+    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [] ++ [ automake autoconf libtool ];
   });
 
   viewres = addMainProgram super.viewres { };
@@ -576,8 +575,13 @@ self: super:
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      buildPackages.xorg.utilmacros # For xorg-utils.m4 macros
+      buildPackages.xorg.xorgserver # For xorg-server.m4 macros
+    ];
+    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
   xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
@@ -600,7 +604,6 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa mesa.driversdev llvm ]; # for libxatracker
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address" ]; # gcc12
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
@@ -663,15 +666,13 @@ self: super:
   xkeyboardconfig_custom = { layouts ? { } }:
   let
     patchIn = name: layout:
-    with layout;
-    with lib;
     ''
         # install layout files
-        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
-        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
-        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
-        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
-        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+        ${lib.optionalString (layout.compatFile   != null) "cp '${layout.compatFile}'   'compat/${name}'"}
+        ${lib.optionalString (layout.geometryFile != null) "cp '${layout.geometryFile}' 'geometry/${name}'"}
+        ${lib.optionalString (layout.keycodesFile != null) "cp '${layout.keycodesFile}' 'keycodes/${name}'"}
+        ${lib.optionalString (layout.symbolsFile  != null) "cp '${layout.symbolsFile}'  'symbols/${name}'"}
+        ${lib.optionalString (layout.typesFile    != null) "cp '${layout.typesFile}'    'types/${name}'"}
 
         # add model description
         ${ed}/bin/ed -v rules/base.xml <<EOF
@@ -700,7 +701,7 @@ self: super:
             <shortDescription>${name}</shortDescription>
             <description>${layout.description}</description>
             <languageList>
-              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+              ${lib.concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
             </languageList>
           </configItem>
           <variantList/>
@@ -711,8 +712,8 @@ self: super:
     '';
   in
     xorg.xkeyboardconfig.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ automake ];
-      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
+      nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
+      postPatch   = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
@@ -738,7 +739,7 @@ self: super:
     meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
-  xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
+  xorgserver = super.xorgserver.overrideAttrs (attrs_passed:
     let
       attrs = attrs_passed // {
         buildInputs = attrs_passed.buildInputs ++
@@ -754,14 +755,14 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
+      commonBuildInputs = attrs.buildInputs ++ [ xorg.xtrans xorg.libxcvt ];
       commonPropagatedBuildInputs = [
-        dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
-        libxshmfence pixman xorgproto zlib
+        dbus libGL libGLU xorg.libXext xorg.libXfont xorg.libXfont2 libepoxy libunwind
+        xorg.libxshmfence xorg.pixman xorg.xorgproto zlib
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = xorgserver.overrideAttrs (oldAttrs: {
+      darwinOtherX = xorg.xorgserver.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -790,8 +791,8 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        buildInputs = commonBuildInputs ++ [ libdrm libgbm mesa-gl-headers dri-pkgconfig-stub ];
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -839,7 +840,7 @@ self: super:
           mesa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
-          libAppleWM xorgproto
+          xorg.libAppleWM xorg.xorgproto
         ];
 
         patches = [
@@ -876,6 +877,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-libunwind" # libunwind on darwin is missing unw_strerror
           "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"
@@ -923,16 +925,16 @@ self: super:
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
-    ] ++ lib.optional stdenv.isDarwin [
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [
       "--without-dtrace"
     ];
 
-    buildInputs = old.buildInputs ++ (with xorg; [
-      pixman
-      libXfont2
-      xtrans
-      libxcvt
-    ]) ++ lib.optional stdenv.isDarwin [ Xplugin ];
+    buildInputs = old.buildInputs ++ [
+      xorg.pixman
+      xorg.libXfont2
+      xorg.xtrans
+      xorg.libxcvt
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [ Xplugin ];
   });
 
   lndir = super.lndir.overrideAttrs (attrs: {
@@ -1008,17 +1010,17 @@ self: super:
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2021-01-15";
+    name = "xf86-video-intel-2024-05-06";
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
       group = "xorg";
       owner = "driver";
       repo = "xf86-video-intel";
-      rev = "31486f40f8e8f8923ca0799aea84b58799754564";
-      sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
+      rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
+      sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
     patches = [ ./use_crocus_and_iris.patch ];
 
@@ -1080,7 +1082,7 @@ self: super:
   xmore = addMainProgram super.xmore { };
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
   });
@@ -1177,8 +1179,7 @@ self: super:
       super.${name}.overrideAttrs (attrs: {
         meta = attrs.meta // { inherit license; };
       });
-    mapNamesToAttrs = f: names: with lib;
-      listToAttrs (zipListsWith nameValuePair names (map f names));
+    mapNamesToAttrs = f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
 
   in
     mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist //

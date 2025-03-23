@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.bookstack;
-  bookstack = pkgs.bookstack.override {
+  bookstack = cfg.package.override {
     dataDir = cfg.dataDir;
   };
   db = cfg.database;
@@ -33,8 +33,9 @@ in {
   ];
 
   options.services.bookstack = {
-
     enable = mkEnableOption "BookStack";
+
+    package = mkPackageOption pkgs "bookstack" { };
 
     user = mkOption {
       default = "bookstack";
@@ -248,7 +249,7 @@ in {
           OIDC_NAME = "MyLogin";
           OIDC_DISPLAY_NAME_CLAIMS = "name";
           OIDC_CLIENT_ID = "bookstack";
-          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret"};
+          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret";};
           OIDC_ISSUER = "https://keycloak.example.com/auth/realms/My%20Realm";
           OIDC_ISSUER_DISCOVER = true;
         }
@@ -348,10 +349,10 @@ in {
             index = "index.php";
             tryFiles = "$uri $uri/ /index.php?$query_string";
           };
-          "~ \.php$".extraConfig = ''
+          "~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
           '';
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
         };

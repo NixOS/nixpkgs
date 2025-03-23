@@ -63,7 +63,7 @@ buildPythonPackage {
     '');
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
+    homepage = "https://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [

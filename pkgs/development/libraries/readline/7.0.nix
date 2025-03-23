@@ -1,4 +1,8 @@
-{ fetchurl, lib, stdenv, ncurses
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,28 +14,35 @@ stdenv.mkDerivation rec {
     sha256 = "0d13sg9ksf982rrrmv5mb6a2p4ys9rvg9r71d6il0vr8hmql63bm";
   };
 
-  outputs = [ "out" "dev" "man" "doc" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+    "info"
+  ];
 
   strictDeps = true;
   propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];
 
-  upstreamPatches =
-    (let
-       patch = nr: sha256:
-         fetchurl {
-           url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline70-${nr}";
-           inherit sha256;
-         };
-     in
-       import ./readline-7.0-patches.nix patch);
+  upstreamPatches = (
+    let
+      patch =
+        nr: sha256:
+        fetchurl {
+          url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline70-${nr}";
+          inherit sha256;
+        };
+    in
+    import ./readline-7.0-patches.nix patch
+  );
 
-  patches =
-    [ ./link-against-ncurses.patch
-      ./no-arch_only-6.3.patch
-    ]
-    ++ upstreamPatches;
+  patches = [
+    ./link-against-ncurses.patch
+    ./no-arch_only-6.3.patch
+  ] ++ upstreamPatches;
 
   meta = with lib; {
     description = "Library for interactive line editing";

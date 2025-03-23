@@ -16,58 +16,23 @@
   withIvy ? false,
 }:
 
-let
+melpaBuild {
   pname = "notdeft";
-  version = "0-unstable-2021-12-04";
+  version = "0-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "hasu";
     repo = "notdeft";
-    rev = "1b7054dcfc3547a7cafeb621552cec01d0540478";
-    hash = "sha256-LMMLJFVpmoE/y3MqrgY2fmsehmzk6TkLsVoHmFUxiSw=";
+    rev = "de2b6a7666e9e5010184966f89a04241f221afe3";
+    hash = "sha256-B8aVRb8hyAKmHTTVCtDRcb2F0Rs5zhlqyfRe7IxH5jc=";
   };
-
-  # Xapian bindings for NotDeft
-  notdeft-xapian = stdenv.mkDerivation {
-    pname = "notdeft-xapian";
-    inherit version src;
-
-    strictDeps = true;
-
-    nativeBuildInputs = [ pkg-config ];
-
-    buildInputs = [
-      tclap
-      xapian
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      $CXX -std=c++11 -o notdeft-xapian xapian/notdeft-xapian.cc -lxapian
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/bin
-      cp notdeft-xapian $out/bin
-
-      runHook postInstall
-    '';
-  };
-in
-melpaBuild {
-  inherit pname version src;
 
   packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
 
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
-      --replace 'defcustom notdeft-xapian-program nil' \
-                "defcustom notdeft-xapian-program \"${notdeft-xapian}/bin/notdeft-xapian\""
+      --replace-fail 'defcustom notdeft-xapian-program nil' \
+                     "defcustom notdeft-xapian-program \"$out/bin/notdeft-xapian\""
   '';
 
   files = ''
@@ -77,8 +42,22 @@ melpaBuild {
      ${lib.optionalString withIvy ''"extras/notdeft-ivy.el"''})
   '';
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    tclap
+    xapian
+  ];
+
+  preBuild = ''
+    $CXX -std=c++11 -o notdeft-xapian xapian/notdeft-xapian.cc -lxapian
+  '';
+
+  preInstall = ''
+    install -D --target-directory=$out/bin notdeft-xapian
+  '';
+
   passthru = {
-    inherit notdeft-xapian;
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 

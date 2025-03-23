@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "11.0.1";
+  version = "12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,13 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anymail";
     repo = "django-anymail";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tCGohY/vwdKKOqhFGLJqX+kyl0n3XUJToJMErICGjEw=";
+    tag = "v${version}";
+    hash = "sha256-TuEEwxwgZVv97Ns4sRWdQjaNymE03nj8CTiU9S6ynZ8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     requests
     urllib3
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     responses
-  ] ++ passthru.optional-dependencies.amazon-ses;
+  ] ++ optional-dependencies.amazon-ses;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     amazon-ses = [ boto3 ];
   };
 

@@ -1,53 +1,71 @@
 {
   lib,
+  stdenv,
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+
+  # patches
+  replaceVars,
   addDriverRunpath,
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
   cudaPackages,
+  llvmPackages,
   ocl-icd,
-  stdenv,
   rocmPackages,
+
   # build-system
   setuptools,
-  wheel,
-  # dependencies
-  numpy,
-  tqdm,
-  # nativeCheckInputs
+
+  # optional-dependencies
+  llvmlite,
+  triton,
+  unicorn,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  blobfile,
+  bottle,
+  capstone,
   clang,
   hexdump,
   hypothesis,
+  jax,
   librosa,
+  networkx,
+  numpy,
   onnx,
+  onnxruntime,
   pillow,
   pytest-xdist,
-  pytestCheckHook,
   safetensors,
   sentencepiece,
   tiktoken,
   torch,
+  tqdm,
   transformers,
+
+  # passthru
+  tinygrad,
+
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.9.0";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-opBxciETZruZjHqz/3vO7rogzjvVJKItulIiok/Zs2Y=";
+    tag = "v${version}";
+    hash = "sha256-BXQMacp6QjlgsVwhp2pxEZkRylZfKQhqIh92/0dPlfg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-dlopen-cuda.patch;
+    (replaceVars ./fix-dlopen-cuda.patch {
       inherit (addDriverRunpath) driverLink;
       libnvrtc =
         if cudaSupport then
@@ -58,63 +76,104 @@ buildPythonPackage rec {
   ];
 
   postPatch =
+    # Patch `clang` directly in the source file
+    # Use the unwrapped variant to enable the "native" features currently unavailable in the sandbox
     ''
+      substituteInPlace tinygrad/runtime/ops_cpu.py \
+        --replace-fail "getenv(\"CC\", 'clang')" "'${lib.getExe llvmPackages.clang-unwrapped}'"
+    ''
+    + ''
+      substituteInPlace tinygrad/runtime/autogen/libc.py \
+        --replace-fail "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so.6'"
+    ''
+    + ''
+      substituteInPlace tinygrad/runtime/support/llvm.py \
+        --replace-fail "ctypes.util.find_library('LLVM')" "'${lib.getLib llvmPackages.llvm}/lib/libLLVM.so'"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
-    # hipGetDevicePropertiesR0600 is a symbol from rocm-6. We are currently at rocm-5.
-    # We are not sure that this works. Remove when rocm gets updated to version 6.
+    # test/test_tensor.py imports the PTX variable from the cuda_compiler.py file.
+    # This import leads to loading the libnvrtc.so library that is not substituted when cudaSupport = false.
+    # -> As a fix, we hardcode this variable to False
+    + lib.optionalString (!cudaSupport) ''
+      substituteInPlace test/test_tensor.py \
+        --replace-fail "from tinygrad.runtime.support.compiler_cuda import PTX" "PTX = False"
+    ''
+    # `cuda_fp16.h` and co. are needed at runtime to compile kernels
+    + lib.optionalString cudaSupport ''
+      substituteInPlace tinygrad/runtime/support/compiler_cuda.py \
+        --replace-fail \
+        ', "-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include/"' \
+        ', "-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
+    ''
     + lib.optionalString rocmSupport ''
-      substituteInPlace extra/hip_gpu_driver/hip_ioctl.py \
-        --replace-fail "processor = platform.processor()" "processor = ${stdenv.hostPlatform.linuxArch}"
       substituteInPlace tinygrad/runtime/autogen/hip.py \
-        --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
-        --replace-fail "/opt/rocm/lib/libhiprtc.so" "${rocmPackages.clr}/lib/libhiprtc.so" \
-        --replace-fail "hipGetDevicePropertiesR0600" "hipGetDeviceProperties"
+        --replace-fail "/opt/rocm/" "${rocmPackages.clr}/"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/include" "${rocmPackages.clr}/include"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/llvm" "${rocmPackages.llvm.llvm}"
 
       substituteInPlace tinygrad/runtime/autogen/comgr.py \
-        --replace-fail "/opt/rocm/lib/libamd_comgr.so" "${rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
+        --replace-fail "/opt/rocm/" "${rocmPackages.rocm-comgr}/"
     '';
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  dependencies =
+  optional-dependencies = {
+    llvm = [ llvmlite ];
+    arm = [ unicorn ];
+    triton = [ triton ];
+  };
+
+  pythonImportsCheck =
     [
-      numpy
-      tqdm
+      "tinygrad"
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      # pyobjc-framework-libdispatch
-      # pyobjc-framework-metal
+    ++ lib.optionals cudaSupport [
+      "tinygrad.runtime.ops_nv"
     ];
 
-  pythonImportsCheck = [ "tinygrad" ];
-
   nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+
+    blobfile
+    bottle
+    capstone
     clang
     hexdump
     hypothesis
+    jax
     librosa
+    networkx
+    numpy
     onnx
+    onnxruntime
     pillow
     pytest-xdist
-    pytestCheckHook
     safetensors
     sentencepiece
     tiktoken
     torch
+    tqdm
     transformers
-  ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ] ++ networkx.optional-dependencies.extra;
 
   disabledTests =
     [
+      # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
+      "test_backward_sum_acc_dtype"
+      "test_failure_27"
+
+      # Flaky:
+      # AssertionError: 2.1376906810000946 not less than 2.0
+      "test_recursive_pad"
+
       # Require internet access
       "test_benchmark_openpilot_model"
       "test_bn_alone"
@@ -129,12 +188,14 @@ buildPythonPackage rec {
       "test_e2e_big"
       "test_fetch_small"
       "test_huggingface_enet_safetensors"
+      "test_index_mnist"
       "test_linear_mnist"
       "test_load_convnext"
       "test_load_enet"
       "test_load_enet_alt"
       "test_load_llama2bfloat"
       "test_load_resnet"
+      "test_mnist_val"
       "test_openpilot_model"
       "test_resnet"
       "test_shufflenet"
@@ -146,35 +207,41 @@ buildPythonPackage rec {
       "test_transcribe_long_no_batch"
       "test_vgg7"
     ]
-    # Fail on aarch64-linux with AssertionError
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      "test_casts_to"
-      "test_casts_to"
-      "test_int8_to_uint16_negative"
-      "test_casts_to"
-      "test_casts_to"
+      # Fail with AssertionError
       "test_casts_from"
       "test_casts_to"
       "test_int8"
-      "test_casts_to"
+      "test_int8_to_uint16_negative"
     ];
 
-  disabledTestPaths =
-    [
-      # Require internet access
-      "test/models/test_mnist.py"
-      "test/models/test_real_world.py"
-      "test/testextra/test_lr_scheduler.py"
-    ]
-    ++ lib.optionals (!rocmSupport) [ "extra/hip_gpu_driver/" ];
+  disabledTestPaths = [
+    # Require internet access
+    "test/models/test_mnist.py"
+    "test/models/test_real_world.py"
+    "test/testextra/test_lr_scheduler.py"
 
-  meta = with lib; {
+    # Files under this directory are not considered as tests by upstream and should be skipped
+    "extra/"
+  ];
+
+  passthru.tests = {
+    withCuda = tinygrad.override { cudaSupport = true; };
+  };
+
+  meta = {
     description = "Simple and powerful neural network framework";
     homepage = "https://github.com/tinygrad/tinygrad";
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
-    # Requires unpackaged pyobjc-framework-libdispatch and pyobjc-framework-metal
-    broken = stdenv.isDarwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # Fatal Python error: Aborted
+      # onnxruntime/capi/_pybind_state.py", line 32 in <module>
+      "aarch64-linux"
+
+      # Tests segfault on darwin
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

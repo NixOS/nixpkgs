@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, cfitsio
-, hdf5
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  cfitsio,
+  hdf5,
+  pkg-config,
 }:
 
 buildOctavePackage rec {

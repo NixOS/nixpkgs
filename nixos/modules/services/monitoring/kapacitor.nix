@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.kapacitor;
 
@@ -26,13 +28,13 @@ let
       [storage]
         boltdb = "${cfg.dataDir}/kapacitor.db"
 
-      ${optionalString (cfg.loadDirectory != null) ''
+      ${lib.optionalString (cfg.loadDirectory != null) ''
         [load]
           enabled = true
           dir = "${cfg.loadDirectory}"
       ''}
 
-      ${optionalString (cfg.defaultDatabase.enable) ''
+      ${lib.optionalString (cfg.defaultDatabase.enable) ''
         [[influxdb]]
           name = "default"
           enabled = true
@@ -42,7 +44,7 @@ let
           password = "${cfg.defaultDatabase.password}"
       ''}
 
-      ${optionalString (cfg.alerta.enable) ''
+      ${lib.optionalString (cfg.alerta.enable) ''
         [alerta]
           enabled = true
           url = "${cfg.alerta.url}"
@@ -57,107 +59,107 @@ let
 in
 {
   options.services.kapacitor = {
-    enable = mkEnableOption "kapacitor";
+    enable = lib.mkEnableOption "kapacitor";
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/kapacitor";
       description = "Location where Kapacitor stores its state";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 9092;
       description = "Port of Kapacitor";
     };
 
-    bind = mkOption {
-      type = types.str;
+    bind = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "0.0.0.0";
       description = "Address to bind to. The default is to bind to all addresses";
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       description = "These lines go into kapacitord.conf verbatim.";
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "kapacitor";
       description = "User account under which Kapacitor runs";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "kapacitor";
       description = "Group under which Kapacitor runs";
     };
 
-    taskSnapshotInterval = mkOption {
-      type = types.str;
+    taskSnapshotInterval = lib.mkOption {
+      type = lib.types.str;
       description = "Specifies how often to snapshot the task state  (in InfluxDB time units)";
       default = "1m0s";
     };
 
-    loadDirectory = mkOption {
-      type = types.nullOr types.path;
+    loadDirectory = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       description = "Directory where to load services from, such as tasks, templates and handlers (or null to disable service loading on startup)";
       default = null;
     };
 
     defaultDatabase = {
-      enable = mkEnableOption "kapacitor.defaultDatabase";
+      enable = lib.mkEnableOption "kapacitor.defaultDatabase";
 
-      url = mkOption {
+      url = lib.mkOption {
         description = "The URL to an InfluxDB server that serves as the default database";
         example = "http://localhost:8086";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      username = mkOption {
+      username = lib.mkOption {
         description = "The username to connect to the remote InfluxDB server";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      password = mkOption {
+      password = lib.mkOption {
         description = "The password to connect to the remote InfluxDB server";
-        type = types.str;
+        type = lib.types.str;
       };
     };
 
     alerta = {
-      enable = mkEnableOption "kapacitor alerta integration";
+      enable = lib.mkEnableOption "kapacitor alerta integration";
 
-      url = mkOption {
+      url = lib.mkOption {
         description = "The URL to the Alerta REST API";
         default = "http://localhost:5000";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      token = mkOption {
+      token = lib.mkOption {
         description = "Default Alerta authentication token";
-        type = types.str;
+        type = lib.types.str;
         default = "";
       };
 
-      environment = mkOption {
+      environment = lib.mkOption {
         description = "Default Alerta environment";
-        type = types.str;
+        type = lib.types.str;
         default = "Production";
       };
 
-      origin = mkOption {
+      origin = lib.mkOption {
         description = "Default origin of alert";
-        type = types.str;
+        type = lib.types.str;
         default = "kapacitor";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
     systemd.tmpfiles.settings."10-kapacitor".${cfg.dataDir}.d = {

@@ -1,325 +1,525 @@
 let
 
   generic =
-      # dependencies
-      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
-      , linux-pam
-
-      # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
-      , enableSystemd ? null
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
-
-      # for postgresql.pkgs
-      , self, newScope, buildEnv
+    # utils
+    {
+      stdenv,
+      fetchFromGitHub,
+      fetchpatch,
+      fetchurl,
+      lib,
+      replaceVars,
+      writeShellScriptBin,
 
       # source specification
-      , version, hash, muslPatches ? {}
+      hash,
+      muslPatches ? { },
+      rev,
+      version,
 
-      # for tests
-      , testers, nixosTests
+      # runtime dependencies
+      darwin,
+      glibc,
+      libuuid,
+      libxml2,
+      lz4,
+      openssl,
+      readline,
+      tzdata,
+      zlib,
+      zstd,
+
+      # build dependencies
+      bison,
+      docbook-xsl-nons,
+      docbook_xml_dtd_45,
+      flex,
+      libxslt,
+      makeWrapper,
+      pkg-config,
+      removeReferencesTo,
+
+      # passthru
+      buildEnv,
+      newScope,
+      nixosTests,
+      postgresqlTestHook,
+      self,
+      stdenvNoCC,
+      testers,
+
+      # bonjour
+      bonjourSupport ? false,
+
+      # GSSAPI
+      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
+      libkrb5,
+
+      # icu
+      # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
+      #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
+      #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
+      #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
+      icuSupport ? !stdenv.hostPlatform.isStatic,
+      icu,
 
       # JIT
-      , jitSupport
-      , nukeReferences, patchelf, llvmPackages
+      jitSupport, # not default on purpose, this is set via "_jit or not" attributes
+      llvmPackages,
+      nukeReferences,
+      overrideCC,
+
+      # LDAP
+      ldapSupport ? false,
+      openldap,
+
+      # NLS
+      nlsSupport ? false,
+      gettext,
+
+      # PAM
+      # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
+      #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
+      #     in function `pam_modutil_audit_write':(.text+0x571):
+      #     undefined reference to `audit_close'
+      pamSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+      linux-pam,
+
+      # PL/Perl
+      perlSupport ? false,
+      perl,
 
       # PL/Python
-      , pythonSupport ? false
-      , python3
+      pythonSupport ? false,
+      python3,
 
-      # detection of crypt fails when using llvm stdenv, so we add it manually
-      # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
-      , libxcrypt
-    } @args:
-  let
-    atLeast = lib.versionAtLeast version;
-    olderThan = lib.versionOlder version;
-    lz4Enabled = atLeast "14";
-    zstdEnabled = atLeast "15";
+      # PL/Tcl
+      tclSupport ? false,
+      tcl,
 
-    systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
+      # SELinux
+      selinuxSupport ? false,
+      libselinux,
 
-    pname = "postgresql";
-
-    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
-  in stdenv'.mkDerivation (finalAttrs: {
-    inherit version;
-    pname = pname + lib.optionalString jitSupport "-jit";
-
-    src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-      inherit hash;
-    };
-
-    hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
-
-    outputs = [ "out" "lib" "doc" "man" ];
-    setOutputFlags = false; # $out retains configureFlags :-/
-
-    buildInputs = [
-      zlib
-      readline
-      openssl
-      libxml2
-      icu
-    ]
-      ++ lib.optionals (olderThan "13") [ libxcrypt ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm ]
-      ++ lib.optionals lz4Enabled [ lz4 ]
-      ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport' [ systemd ]
-      ++ lib.optionals pythonSupport [ python3 ]
-      ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.isLinux [ linux-pam ]
-      ++ lib.optionals (!stdenv'.isDarwin) [ libossp_uuid ];
-
-    nativeBuildInputs = [
-      makeWrapper
-      pkg-config
-    ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
-
-    enableParallelBuilding = true;
-
-    separateDebugInfo = true;
-
-    buildFlags = [ "world" ];
-
-    # Makes cross-compiling work when xml2-config can't be executed on the host.
-    # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
-    env.NIX_CFLAGS_COMPILE = lib.optionalString (olderThan "13") "-I${libxml2.dev}/include/libxml2";
-
-    configureFlags = [
-      "--with-openssl"
-      "--with-libxml"
-      "--with-icu"
-      "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
-      "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--enable-debug"
-      (lib.optionalString systemdSupport' "--with-systemd")
-      (if stdenv'.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
-    ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
-      ++ lib.optionals zstdEnabled [ "--with-zstd" ]
-      ++ lib.optionals gssSupport [ "--with-gssapi" ]
-      ++ lib.optionals pythonSupport [ "--with-python" ]
-      ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
-
-    patches = [
-      (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
-      ./patches/less-is-more.patch
-      ./patches/paths-for-split-outputs.patch
-      ./patches/specify_pkglibdir_at_runtime.patch
-      ./patches/paths-with-postgresql-suffix.patch
-
-      (substituteAll {
-        src = ./patches/locale-binary-path.patch;
-        locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
-      })
-
-      (
-        if atLeast "16" then
-          fetchpatch {
-            name = "libxml2-2.13-compat.patch";
-            # This one is for 16 branch upstream.
-            url = "https://github.com/postgres/postgres/commit/f85c91a1867b45742bb28e4578ca2b4a0976383f.diff";
-            hash = "sha256-4YcXfo98uVuCu+ybVw3bM4x8Y0I1xfjdjBZOlhyF21w=";
-          }
-        else
-          fetchpatch {
-            name = "libxml2-2.13-compat.patch";
-            # This one is for 15 branch upstream, but it also applies well to all our older branches.
-            url = "https://github.com/postgres/postgres/commit/f68d6aabb7e2c803818185b49a3d356bdb2b2974.diff";
-            hash = "sha256-Nelb0mbjx0Xq9UJuVv7cs3ifCtUPP7UZraPMPGb2wyQ=";
-          }
-      )
-    ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
-      # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
-      map fetchurl (lib.attrValues muslPatches)
-    ) ++ lib.optionals stdenv'.isLinux  [
-      (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
-    ];
-
-    installTargets = [ "install-world" ];
-
-    postPatch = ''
-      # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --subst-var out
-    '' + lib.optionalString jitSupport ''
-        # Force lookup of jit stuff in $out instead of $lib
-        substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
-    '';
-
-    postInstall =
-      ''
-        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon*.a" "$out"
-        moveToOutput "lib/libpgport*.a" "$out"
-        moveToOutput "lib/libecpg*" "$out"
-
-        # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
-
-        if [ -z "''${dontDisableStatic:-}" ]; then
-          # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a $lib/lib/*.a; do
-            name="$(basename "$i")"
-            ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
-            if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
-              rm "$i"
-            fi
-          done
-        fi
-      '' + lib.optionalString jitSupport ''
-        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
-        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
-        moveToOutput "lib/bitcode" "$out"
-        moveToOutput "lib/llvmjit*" "$out"
-
-        # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
-        nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
-
-        # Stop out depending on the default output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.out}/bin "" \
-          --replace '$(LLVM_BINPATH)/' ""
-
-        # Stop out depending on the -dev output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
-          --replace -I${llvmPackages.llvm.dev}/include ""
-
-        ${lib.optionalString (!stdenv'.isDarwin) ''
-          # Stop lib depending on the -dev output of llvm
-          rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
-          nuke-refs -e $out $out/lib/llvmjit.so
-          # Restore the correct rpath
-          patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
-        ''}
-      '';
-
-    postFixup = lib.optionalString (!stdenv'.isDarwin && stdenv'.hostPlatform.libc == "glibc")
-      ''
-        # initdb needs access to "locale" command from glibc.
-        wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
-      '';
-
-    doCheck = !stdenv'.isDarwin;
-    # autodetection doesn't seem to able to find this, but it's there.
-    checkTarget = "check";
-
-    disallowedReferences = [ stdenv'.cc ];
-
-    passthru = let
-      this = self.callPackage generic args;
-      jitToggle = this.override {
-        jitSupport = !jitSupport;
-      };
-    in
-    {
-      psqlSchema = lib.versions.major version;
-
-      withJIT = if jitSupport then this else jitToggle;
-      withoutJIT = if jitSupport then jitToggle else this;
+      # Systemd
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+      systemdLibs,
+    }@args:
+    let
+      atLeast = lib.versionAtLeast version;
+      olderThan = lib.versionOlder version;
+      lz4Enabled = atLeast "14";
+      zstdEnabled = atLeast "15";
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
-      pkgs = let
-        scope = {
-          inherit jitSupport;
-          inherit (llvmPackages) llvm;
-          postgresql = this;
-          stdenv = stdenv';
-        };
-        newSelf = self // scope;
-        newSuper = { callPackage = newScope (scope // this.pkgs); };
-      in import ./ext newSelf newSuper;
+      pname = "postgresql";
 
-      withPackages = postgresqlWithPackages {
-                       inherit makeWrapper buildEnv;
-                       postgresql = this;
-                     }
-                     this.pkgs;
+      stdenv' =
+        if jitSupport && !stdenv.cc.isClang then
+          overrideCC llvmPackages.stdenv (
+            llvmPackages.stdenv.cc.override {
+              # LLVM bintools are not used by default, but are needed to make -flto work below.
+              bintools = llvmPackages.bintools;
+            }
+          )
+        else
+          stdenv;
 
-      tests = {
-        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
+      pg_config = writeShellScriptBin "pg_config" (builtins.readFile ./pg_config.sh);
+    in
+    stdenv'.mkDerivation (finalAttrs: {
+      inherit version;
+      pname = pname + lib.optionalString jitSupport "-jit";
+
+      src = fetchFromGitHub {
+        owner = "postgres";
+        repo = "postgres";
+        # rev, not tag, on purpose: allows updating when new versions
+        # are "stamped" a few days before release (tag).
+        inherit hash rev;
+      };
+
+      __structuredAttrs = true;
+
+      hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
+
+      outputs = [
+        "out"
+        "dev"
+        "doc"
+        "lib"
+        "man"
+      ];
+      outputChecks = {
+        out = {
+          disallowedReferences = [
+            "dev"
+            "doc"
+            "man"
+          ];
+          disallowedRequisites = [
+            stdenv'.cc
+            llvmPackages.llvm.out
+          ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
         };
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      } // lib.optionalAttrs jitSupport {
-        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
+
+        lib = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "doc"
+            "man"
+          ];
+          disallowedRequisites = [
+            stdenv'.cc
+            llvmPackages.llvm.out
+          ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+        };
+
+        doc = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "man"
+          ];
+        };
+
+        man = {
+          disallowedReferences = [
+            "out"
+            "dev"
+            "doc"
+          ];
         };
       };
-    };
 
-    meta = with lib; {
-      homepage    = "https://www.postgresql.org";
-      description = "Powerful, open source object-relational database system";
-      license     = licenses.postgresql;
-      changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 wolfgangwalther ];
-      pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
-      platforms   = platforms.unix;
+      strictDeps = true;
 
-      # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
-      # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for
-      # the JIT apparently, but with a $(CLANG) that can produce binaries for the build, not the
-      # host-platform.
-      #
-      # I managed to get a cross-build with JIT support working with
-      # `depsBuildBuild = [ llvmPackages.clang ] ++ buildInputs`, but considering that the
-      # resulting LLVM IR isn't platform-independent this doesn't give you much.
-      # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
-      # a query, postgres would coredump with `Illegal instruction`.
-      broken = (jitSupport && stdenv.hostPlatform != stdenv.buildPlatform)
-        # Allmost all tests fail FATAL errors for v12 and v13
-        || (jitSupport && stdenv.hostPlatform.isMusl && olderThan "14");
-    };
-  });
+      buildInputs =
+        [
+          zlib
+          readline
+          openssl
+          libxml2
+          libuuid
+        ]
+        ++ lib.optionals icuSupport [ icu ]
+        ++ lib.optionals jitSupport [ llvmPackages.llvm ]
+        ++ lib.optionals lz4Enabled [ lz4 ]
+        ++ lib.optionals zstdEnabled [ zstd ]
+        ++ lib.optionals systemdSupport [ systemdLibs ]
+        ++ lib.optionals pythonSupport [ python3 ]
+        ++ lib.optionals gssSupport [ libkrb5 ]
+        ++ lib.optionals pamSupport [ linux-pam ]
+        ++ lib.optionals perlSupport [ perl ]
+        ++ lib.optionals ldapSupport [ openldap ]
+        ++ lib.optionals tclSupport [ tcl ]
+        ++ lib.optionals selinuxSupport [ libselinux ]
+        ++ lib.optionals nlsSupport [ gettext ];
 
-  postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
-    name = "postgresql-and-plugins-${postgresql.version}";
-    paths = f pkgs ++ [
+      nativeBuildInputs =
+        [
+          bison
+          docbook-xsl-nons
+          docbook_xml_dtd_45
+          flex
+          libxml2
+          libxslt
+          makeWrapper
+          perl
+          pkg-config
+          removeReferencesTo
+        ]
+        ++ lib.optionals jitSupport [
+          llvmPackages.llvm.dev
+          nukeReferences
+        ];
+
+      enableParallelBuilding = true;
+
+      separateDebugInfo = true;
+
+      buildFlags = [ "world" ];
+
+      # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
+      # into all binaries. However, almost no binaries actually use those paths. The following
+      # flags will remove unused sections from all shared libraries and binaries - including
+      # those paths. This avoids a lot of circular dependency problems with different outputs,
+      # and allows splitting them cleanly.
+      env = {
+        CFLAGS =
+          "-fdata-sections -ffunction-sections"
+          + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+      } // lib.optionalAttrs pythonSupport { PYTHON = "${python3}/bin/python"; };
+
+      configureFlags =
+        let
+          inherit (lib) withFeature;
+        in
+        [
+          "--with-openssl"
+          "--with-libxml"
+          (withFeature icuSupport "icu")
+          "--sysconfdir=/etc"
+          "--with-system-tzdata=${tzdata}/share/zoneinfo"
+          "--enable-debug"
+          (lib.optionalString systemdSupport "--with-systemd")
+          "--with-uuid=e2fs"
+        ]
+        ++ lib.optionals lz4Enabled [ "--with-lz4" ]
+        ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+        ++ lib.optionals gssSupport [ "--with-gssapi" ]
+        ++ lib.optionals pythonSupport [ "--with-python" ]
+        ++ lib.optionals jitSupport [ "--with-llvm" ]
+        ++ lib.optionals pamSupport [ "--with-pam" ]
+        # This can be removed once v17 is removed. v18+ ships with it.
+        ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [
+          "LDFLAGS_EX_BE=-Wl,-export_dynamic"
+        ]
+        ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
+        ++ lib.optionals ldapSupport [ "--with-ldap" ]
+        ++ lib.optionals tclSupport [ "--with-tcl" ]
+        ++ lib.optionals selinuxSupport [ "--with-selinux" ]
+        ++ lib.optionals nlsSupport [ "--enable-nls" ]
+        ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
+
+      patches =
+        [
+          (
+            if atLeast "16" then
+              ./patches/relative-to-symlinks-16+.patch
+            else
+              ./patches/relative-to-symlinks.patch
+          )
+          (
+            if atLeast "15" then
+              ./patches/empty-pg-config-view-15+.patch
+            else
+              ./patches/empty-pg-config-view.patch
+          )
+          ./patches/less-is-more.patch
+          ./patches/paths-for-split-outputs.patch
+          ./patches/paths-with-postgresql-suffix.patch
+
+          (replaceVars ./patches/locale-binary-path.patch {
+            locale = "${
+              if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc
+            }/bin/locale";
+          })
+        ]
+        ++ lib.optionals stdenv'.hostPlatform.isMusl (
+          # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
+          map fetchurl (lib.attrValues muslPatches)
+        )
+        ++ lib.optionals stdenv'.hostPlatform.isLinux [
+          ./patches/socketdir-in-run-13+.patch
+        ]
+        ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
+          ./patches/export-dynamic-darwin-15-.patch
+        ];
+
+      installTargets = [ "install-world" ];
+
+      postPatch = ''
+        substituteInPlace "src/Makefile.global.in" --subst-var out
+        # Hardcode the path to pgxs so pg_config returns the path in $dev
+        substituteInPlace "src/common/config_info.c" --subst-var dev
+      '';
+
+      postInstall =
+        ''
+          moveToOutput "bin/ecpg" "$dev"
+          moveToOutput "lib/pgxs" "$dev"
+
+          # Pretend pg_config is located in $out/bin to return correct paths, but
+          # actually have it in -dev to avoid pulling in all other outputs. See the
+          # pg_config.sh script's comments for details.
+          moveToOutput "bin/pg_config" "$dev"
+          install -c -m 755 "${pg_config}"/bin/pg_config "$out/bin/pg_config"
+          wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
+
+          # postgres exposes external symbols get_pkginclude_path and similar. Those
+          # can't be stripped away by --gc-sections/LTO, because they could theoretically
+          # be used by dynamically loaded modules / extensions. To avoid circular dependencies,
+          # references to -dev, -doc and -man are removed here. References to -lib must be kept,
+          # because there is a realistic use-case for extensions to locate the /lib directory to
+          # load other shared modules.
+          remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
+        ''
+        + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
+          if [ -z "''${dontDisableStatic:-}" ]; then
+            # Remove static libraries in case dynamic are available.
+            for i in $lib/lib/*.a; do
+              name="$(basename "$i")"
+              ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
+              if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
+                rm "$i"
+              fi
+            done
+          fi
+        ''
+        + ''
+          # The remaining static libraries are libpgcommon.a, libpgport.a and related.
+          # Those are only used when building e.g. extensions, so go to $dev.
+          moveToOutput "lib/*.a" "$dev"
+        ''
+        + lib.optionalString jitSupport ''
+          # In the case of JIT support, prevent useless dependencies on header files
+          find "$out/lib" -iname '*.bc' -type f -exec nuke-refs '{}' +
+
+          # Stop lib depending on the -dev output of llvm
+          remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
+        ''
+        + lib.optionalString stdenv'.hostPlatform.isDarwin ''
+          # The darwin specific Makefile for PGXS contains a reference to the postgres
+          # binary. Some extensions (here: postgis), which are able to set bindir correctly
+          # to their own output for installation, will then fail to find "postgres" during linking.
+          substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
+            --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
+        '';
+
+      postFixup =
+        lib.optionalString stdenv'.hostPlatform.isGnu ''
+          # initdb needs access to "locale" command from glibc.
+          wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
+        ''
+        + lib.optionalString pythonSupport ''
+          wrapProgram "$out/bin/postgres" --set PYTHONPATH "${python3}/${python3.sitePackages}"
+        '';
+
+      # Running tests as "install check" to work around SIP issue on macOS:
+      # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
+      # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
+      doCheck = false;
+      doInstallCheck =
+        !(stdenv'.hostPlatform.isStatic)
+        &&
+          # Tests just get stuck on macOS 14.x for v13 and v14
+          !(stdenv'.hostPlatform.isDarwin && olderThan "15")
+        &&
+          # x86: Likely due to rosetta emulation:
+          #   FATAL:  could not create shared memory segment: Cannot allocate memory
+          # aarch64: not sure why, e.g. https://hydra.nixos.org/build/292573408/nixlog/7
+          !(stdenv'.hostPlatform.isDarwin);
+      installCheckTarget = "check-world";
+
+      passthru =
+        let
+          this = self.callPackage generic args;
+          jitToggle = this.override {
+            jitSupport = !jitSupport;
+          };
+        in
+        {
+          inherit dlSuffix;
+
+          psqlSchema = lib.versions.major version;
+
+          withJIT = if jitSupport then this else jitToggle;
+          withoutJIT = if jitSupport then jitToggle else this;
+
+          pkgs =
+            let
+              scope = {
+                inherit jitSupport;
+                inherit (llvmPackages) llvm;
+                postgresql = this;
+                stdenv = stdenv';
+                postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
+                postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
+              };
+              newSelf = self // scope;
+              newSuper = {
+                callPackage = newScope (scope // this.pkgs);
+              };
+            in
+            import ./ext.nix newSelf newSuper;
+
+          withPackages = postgresqlWithPackages {
+            inherit buildEnv;
+            postgresql = this;
+          };
+
+          tests =
+            {
+              postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+              postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+              postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
+              pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+            }
+            // lib.optionalAttrs jitSupport {
+              postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+            };
+        };
+
+      meta = with lib; {
+        homepage = "https://www.postgresql.org";
+        description = "Powerful, open source object-relational database system";
+        license = licenses.postgresql;
+        changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
+        maintainers = with maintainers; teams.postgres.members;
+        pkgConfigModules = [
+          "libecpg"
+          "libecpg_compat"
+          "libpgtypes"
+          "libpq"
+        ];
+        platforms = platforms.unix;
+
+        # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
+        # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for
+        # the JIT apparently, but with a $(CLANG) that can produce binaries for the build, not the
+        # host-platform.
+        #
+        # I managed to get a cross-build with JIT support working with
+        # `depsBuildBuild = [ llvmPackages.clang ] ++ buildInputs`, but considering that the
+        # resulting LLVM IR isn't platform-independent this doesn't give you much.
+        # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
+        # a query, postgres would coredump with `Illegal instruction`.
+        #
+        # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
+        # to do JIT at **runtime**.
+        broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
+      };
+    });
+
+  postgresqlWithPackages =
+    { postgresql, buildEnv }:
+    f:
+    let
+      installedExtensions = f postgresql.pkgs;
+    in
+    buildEnv {
+      name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+      paths = installedExtensions ++ [
         postgresql
-        postgresql.lib
-        postgresql.man   # in case user installs this into environment
-    ];
-    nativeBuildInputs = [ makeWrapper ];
+        postgresql.man # in case user installs this into environment
+      ];
 
+      pathsToLink = [ "/" ];
 
-    # We include /bin to ensure the $out/bin directory is created, which is
-    # needed because we'll be removing the files from that directory in postBuild
-    # below. See #22653
-    pathsToLink = ["/" "/bin"];
+      passthru = {
+        inherit installedExtensions;
+        inherit (postgresql)
+          psqlSchema
+          version
+          ;
 
-    # Note: the duplication of executables is about 4MB size.
-    # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitly.
-    postBuild = ''
-      mkdir -p $out/bin
-      rm $out/bin/{pg_config,postgres,pg_ctl}
-      cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
-      wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
-    '';
-
-    passthru.version = postgresql.version;
-    passthru.psqlSchema = postgresql.psqlSchema;
-  };
+        withJIT = postgresqlWithPackages {
+          inherit buildEnv;
+          postgresql = postgresql.withJIT;
+        } f;
+        withoutJIT = postgresqlWithPackages {
+          inherit buildEnv;
+          postgresql = postgresql.withoutJIT;
+        } f;
+      };
+    };
 
 in
 # passed by <major>.nix
 versionArgs:
 # passed by default.nix
-{ self, ... } @defaultArgs:
+{ self, ... }@defaultArgs:
 self.callPackage generic (defaultArgs // versionArgs)

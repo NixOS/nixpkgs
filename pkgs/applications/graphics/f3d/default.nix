@@ -4,7 +4,7 @@
 , cmake
 , help2man
 , gzip
-# There is a f3d overriden with EGL enabled vtk in top-level/all-packages.nix
+# There is a f3d overridden with EGL enabled vtk in top-level/all-packages.nix
 # compiling with EGL enabled vtk will result in f3d running in headless mode
 # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
 , vtk_9
@@ -15,21 +15,21 @@
 , opencascade-occt
 , assimp
 , fontconfig
-, withManual ? !stdenv.isDarwin
+, withManual ? !stdenv.hostPlatform.isDarwin
 , withPythonBinding ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "2.5.0";
+  version = "3.0.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Mw40JyXZj+Q4a9dD5UnkUSdUfQGaV92gor8ynn86VJ8=";
+    tag = "v${version}";
+    hash = "sha256-mnDmo5qzdnElhvZwBmHL3xC2o8iLuvYyfZXHoaAUG08=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     OpenGL
   ] ++ lib.optionals withPythonBinding [
@@ -80,5 +80,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin pbsds ];
     platforms = with platforms; unix;
     mainProgram = "f3d";
+    # error: use of undeclared identifier 'NSMenuItem'
+    # adding AppKit does not solve it
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
 }

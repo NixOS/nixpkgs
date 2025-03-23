@@ -1,5 +1,4 @@
 {
-  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -9,22 +8,24 @@
   testers,
   nix-update-script,
   maturin,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.7.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-SjINeNtCbyMp3U+Op7ey+8lV7FYxLVpmO5g1a01ouBs=";
+    hash = "sha256-k4s0kh68kycc8MSVkD64X547mWmFW4UuToDIcZ87OSc=";
   };
 
-  cargoHash = "sha256-xJafCgpCeihyORj3gIVUus74vu9h3N1xuyKvkxSqYK4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6aLWkphWLScUz6l0RJj9LmNad6aPxLz2iVxXVOXq7pg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     libiconv
   ];
@@ -35,7 +36,16 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests = {
       version = testers.testVersion { package = maturin; };
-      pyo3 = callPackage ./pyo3-test { };
+      pyo3 = python3.pkgs.callPackage ./pyo3-test {
+        format = "pyproject";
+        buildAndTestSubdir = "examples/word-count";
+        preConfigure = "";
+
+        nativeBuildInputs = with rustPlatform; [
+          cargoSetupHook
+          maturinBuildHook
+        ];
+      };
     };
 
     updateScript = nix-update-script { };

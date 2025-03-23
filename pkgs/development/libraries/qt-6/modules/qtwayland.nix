@@ -1,38 +1,44 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, wayland
-, pkg-config
-, libdrm
-, fetchpatch
+{
+  lib,
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  wayland,
+  wayland-scanner,
+  pkg-config,
+  libdrm,
+  fetchpatch2,
 }:
 
 qtModule {
   pname = "qtwayland";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
-  buildInputs = [ wayland libdrm ];
+  # wayland-scanner needs to be propagated as both build
+  # (for the wayland-scanner binary) and host (for the
+  # actual wayland.xml protocol definition)
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    wayland
+    wayland-scanner
+  ];
+  propagatedNativeBuildInputs = [
+    wayland
+    wayland-scanner
+  ];
+  buildInputs = [ libdrm ];
   nativeBuildInputs = [ pkg-config ];
 
   patches = [
-    # Included in qtwayland 6.7.3
-    # Fixes https://bugs.kde.org/show_bug.cgi?id=489259
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/92bcb8f6b7a852c7a5d662fc34de561692a7a454.diff";
-      sha256 = "sha256-XgGO8VnmQHLhUxTGf9CniwkCr5FsFiuUbnVP0NLNekI=";
-    })
-
-    # Included in qtwayland 6.7.3
-    # Fixes https://bugs.kde.org/show_bug.cgi?id=489072
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/c4f91b479303dda2e49499de249018d7c66c5f99.diff";
-      sha256 = "sha256-4rUdl6WuJHONW0Uy2wjTvyvDY3bJWeRvhk3tCkaOOro=";
-    })
-
-    # Included in qtwayland 6.7.3
-    # Fixes https://bugs.kde.org/show_bug.cgi?id=489180
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/632127d7f1d86cba4dd17361f24f9fd70a0ae44c.diff";
-      sha256 = "sha256-1EIcMj6+yIpqXAGZB3ZbrwRkl4n1o7TVP2SC1Nu1t78=";
+    # run waylandscanner with private-code to avoid conflict with symbols from libwayland
+    # better solution for https://github.com/NixOS/nixpkgs/pull/337913
+    (fetchpatch2 {
+      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/67f121cc4c3865aa3a93cf563caa1d9da3c92695.patch";
+      hash = "sha256-uh5lecHlHCWyO1/EU5kQ00VS7eti3PEvPA2HBCL9K0k=";
     })
   ];
+
+  meta = {
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+  };
 }

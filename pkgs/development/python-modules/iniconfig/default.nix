@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   fetchPypi,
-  hatch-vcs,
   hatchling,
 }:
 
@@ -20,9 +19,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ hatchling ];
 
   patches = [
-    # Cannot use hatch-vcs, due to an inifinite recursion
-    (substituteAll {
-      src = ./version.patch;
+    # Cannot use hatch-vcs, due to an infinite recursion
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];
@@ -37,6 +35,6 @@ buildPythonPackage rec {
     description = "brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

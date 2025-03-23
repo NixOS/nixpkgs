@@ -35,56 +35,72 @@
   copyDesktopItems,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.2.3";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
-    rev = version;
-    hash = "sha256-6TdirqEnWvuPgKOLzNIAm66EgKNdGVjD7vf2maqlxI8=";
+    tag = "${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-m1bFljZL8vNaugepVs8u1EWNpDLtxgSSZqKGQmgrmsA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "confy-0.4.0-2" = "sha256-r5VeggXrIq5Cwxc2WSrxQDI5Gvbw979qIUQfMKHgBUI=";
+      "android-wakelock-0.1.0" = "sha256-09EH/U1BBs3l4galQOrTKmPUYBgryUjfc/rqPZhdYc4=";
+      "arboard-3.4.0" = "sha256-BJI3+Wz2xwnOfIz5O2NlPKKWfF8t/QrS8kxJK1RqbLw=";
+      "cacao-0.4.0-beta2" = "sha256-U5tCLeVxjmZCm7ti1u71+i116xmozPaR69pCsA4pxrM=";
+      "cidre-0.4.0" = "sha256-FSpMC/kpTH10ncqRcJ+XJJ1yjgAc2U+mxLH9NTfLM3o=";
+      "clipboard-master-4.0.0-beta.6" = "sha256-GZyzGMQOZ0iwGNZa/ZzFp8gU2tQVWZBpAbim8yb6yZA=";
+      "confy-0.4.0-2" = "sha256-V7BCKISrkJIxWC3WT5+B5Vav86YTQvdO9TO6A++47FU=";
+      "core-foundation-0.9.3" = "sha256-iB4OVmWZhuWbs9RFWvNc+RNut6rip2/50o5ZM6c0c3g=";
+      "cpal-0.15.3" = "sha256-2Oo4igwjx9oZjikYEBfiVCD1Wl+D0LXgvVIHvYLQM+o=";
+      "default_net-0.1.0" = "sha256-wwVcnS99I1NJFeSihy5YrB5p0y+OHXTX81DQ+TtyFBU=";
       "evdev-0.11.5" = "sha256-aoPmjGi/PftnH6ClEWXHvIj0X3oh15ZC1q7wPC1XPr0=";
-      "hwcodec-0.1.1" = "sha256-EQGJr5kH8O48y1oSrzFF3QGGpGFKP3v4gn2JquAkdlY=";
-      "impersonate_system-0.1.0" = "sha256-qbaTw9gxMKDjX5pKdUrKlmIxCxWwb99YuWPDvD2A3kY=";
-      "keepawake-0.4.3" = "sha256-sLQf9q88dB2bkTN01UlxRWSpoF1kFsqqpYC4Sw6cbEY=";
+      "hwcodec-0.7.1" = "sha256-WxAa0DD8eVk6QyuIHuPDyFHGz8yj7I0qpRrJAc0iFpk=";
+      "impersonate_system-0.1.0" = "sha256-pIV7s2qGoCIUrhaRovBDCJaGQ/pMdJacDXJmeBpkcyI=";
+      "keepawake-0.4.3" = "sha256-cqSpkq/PCz+5+ZUyPy5hF6rP3fBzuZDywyxMUQ50Rk4=";
       "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
       "magnum-opus-0.4.0" = "sha256-T4qaYOl8lCK1h9jWa9KqGvnVfDViT9Ob5R+YgnSw2tg=";
-      "mouce-0.2.1" = "sha256-3PtNEmVMXgqKV4r3KiKTkk4oyCt4BKynniJREE+RyFk=";
-      "pam-0.7.0" = "sha256-qe2GH6sfGEUnqLiQucYLB5rD/GyAaVtm9pAxWRb1H3Q=";
-      "parity-tokio-ipc-0.7.3-2" = "sha256-WXDKcDBaJuq4K9gjzOKMozePOFiVX0EqYAFamAz/Yvw=";
-      "rdev-0.5.0-2" = "sha256-MJ4Uqp0yz1CcFvoZYyUYwNojUcfW1AyVowKShihhhbY=";
-      "reqwest-0.11.18" = "sha256-3k2wcVD+DzJEdP/+8BqP9qz3tgEWcbWZj5/CjrZz5LY=";
+      "pam-0.7.0" = "sha256-o47tVoFlW9RiL7O8Lvuwz7rMYQHO+5TG27XxkAdHEOE=";
+      "pam-sys-1.0.0-alpha4" = "sha256-5HIErVWnanLo5054NgU+DEKC2wwyiJ8AHvbx0BGbyWo=";
+      "parity-tokio-ipc-0.7.3-4" = "sha256-PKw2Twd2ap+tRrQxqg8T1FvpoeKn0hvBqn1Z44F1LcY=";
+      "rdev-0.5.0-2" = "sha256-+1XsGhGcAz2YWENi+Ho614dhzjrwcY/gggq1YQ36fak=";
+      "reqwest-0.11.23" = "sha256-kEUT+gs4ziknDiGdPMLnj5pmxC5SBpLopZ8jZ34GDWc=";
       "rust-pulsectl-0.2.12" = "sha256-8jXTspWvjONFcvw9/Z8C43g4BuGZ3rsG32tvLMQbtbM=";
-      "sciter-rs-0.5.57" = "sha256-NQPDlMQ0sGY8c9lBMlplT82sNjbgJy2m/+REnF3fz8M=";
-      "tao-0.22.2" = "sha256-vZx7WM6vK9UarbFQ/FMnTNEEDS+tglhWcPXt/h7YMFA=";
-      "tfc-0.6.1" = "sha256-ukxJl7Z+pUXCjvTsG5Q0RiXocPERWGsnAyh3SIWm0HU=";
-      "tokio-socks-0.5.1-2" = "sha256-x3aFJKo0XLaCGkZLtG9GYA+A/cGGedVZ8gOztWiYVUY=";
-      "tray-icon-0.5.1" = "sha256-1VyUg8V4omgdRIYyXhfn8kUvhV5ef6D2cr2Djz2uQyc=";
+      "sciter-rs-0.5.57" = "sha256-5Nd9npdx8yQJEczHv7WmSmrE1lBfvp5z7BubTbYBg3E=";
+      "sysinfo-0.29.10" = "sha256-/UsFAvlWs/F7X1xT+97Fx+pnpCguoPHU3hTynqYMEs4=";
+      "tao-0.25.0" = "sha256-kLmx1z9Ybn/hDt2OcszEjtZytQIE+NKTIn9zNr9oEQk=";
+      "tfc-0.7.0" = "sha256-wJs+OhDZVO9iU+J7rLWIlV1VULtKyzizeXMbBCjRY90=";
+      "tokio-socks-0.5.2-1" = "sha256-i1dfNatqN4dinMcyAdLhj9hJWVsT10OWpCXsxl7pifI=";
+      "tray-icon-0.14.3" = "sha256-dSX7LucZaLplRrh6zLwmFzyZN4ZtwIXzAEdZzlu3gQg=";
+      "wallpaper-3.2.0" = "sha256-p9NRmusdA0wvF6onp1UTL0/4t7XnEAc19sqyGDnfg/Q=";
+      "webm-1.1.0" = "sha256-p4BMej7yvb8c/dJynRWZmwo2hxAAY96Qx6Qx2DbT8hE=";
       "x11-2.19.0" = "sha256-GDCeKzUtvaLeBDmPQdyr499EjEfT6y4diBMzZVEptzc=";
+      "x11-clipboard-0.8.1" = "sha256-PtqmSD2MwkbLVWbfTSXZW3WEvEnUlo04qieUTjN2whE=";
     };
   };
 
-  prePatch = ''
-    # Patch 404 repos
-    substituteInPlace Cargo.lock --replace-fail "fufesou" "rustdesk-org";
-    substituteInPlace Cargo.toml --replace-fail "fufesou" "rustdesk-org";
-    substituteInPlace libs/enigo/Cargo.toml --replace-fail "fufesou" "rustdesk-org";
+  patches = [
+    ./make-build-reproducible.patch
+  ];
+
+  postPatch = ''
+    # Overwrite cargo.lock because the one in the upstream repo has duplicates entries.
+    # It should probably be removed in the next rustdesk update (if they fix their cargoLock)
+    cp ${./Cargo.lock} Cargo.lock
   '';
 
   desktopItems = [
     (makeDesktopItem {
       name = "rustdesk";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       icon = "rustdesk";
       desktopName = "RustDesk";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       genericName = "Remote Desktop";
       categories = [ "Network" ];
       mimeTypes = [ "x-scheme-handler/rustdesk" ];
@@ -98,7 +114,7 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildFeatures = lib.optionals stdenv.isLinux [ "linux-pkg-config" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "linux-pkg-config" ];
 
   # Checks require an active X server
   doCheck = false;
@@ -128,7 +144,7 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -141,7 +157,7 @@ rustPlatform.buildRustPackage rec {
         SystemConfiguration
       ]
     )
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       xdotool
     ];
@@ -153,7 +169,7 @@ rustPlatform.buildRustPackage rec {
 
     # .so needs to be next to the executable
     mv $out/bin/rustdesk $out/lib/rustdesk
-    ${lib.optionalString stdenv.isLinux "ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk"}
+    ${lib.optionalString stdenv.hostPlatform.isLinux "ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk"}
 
     makeWrapper $out/lib/rustdesk/rustdesk $out/bin/rustdesk \
       --chdir "$out/share"
@@ -163,7 +179,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 $src/res/logo.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath "${libayatana-appindicator}/lib" "$out/lib/rustdesk/rustdesk"
   '';
 
@@ -175,11 +191,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
     homepage = "https://rustdesk.com";
+    changelog = "https://github.com/rustdesk/rustdesk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ocfox
       leixb
     ];
     mainProgram = "rustdesk";
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})

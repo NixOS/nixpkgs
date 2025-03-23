@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-iv5zIn9C56AQB87T+n5fJzm/fhBFBUObFwrlJ72A/J4=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bufbuild/bufisk";
     description = "User-friendly launcher for Buf";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "bufisk";
   };
 }

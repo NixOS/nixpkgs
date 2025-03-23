@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nrfIyXftS2X2HuuLFRZpWLz/IbRasqUzv+r/HvhxfAw=";
   };
 
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
     changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

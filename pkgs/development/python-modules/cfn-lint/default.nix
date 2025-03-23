@@ -2,6 +2,7 @@
   lib,
   aws-sam-translator,
   buildPythonPackage,
+  defusedxml,
   fetchFromGitHub,
   jschema-to-python,
   jsonpatch,
@@ -21,19 +22,21 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.87.7";
-  format = "setuptools";
+  version = "1.27.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-em6Vi9zIn8ikmcHVbljA1vr+R3t8ZpJ57p3Ix3bqMYU=";
+    tag = "v${version}";
+    hash = "sha256-UUbIDThzjlypwHvAv6ry2ppBTQp3/4EXRnn570/s0Xo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aws-sam-translator
     jschema-to-python
     jsonpatch
@@ -47,11 +50,26 @@ buildPythonPackage rec {
     sympy
   ];
 
+  optional-dependencies = {
+    graph = [ pydot ];
+    junit = [ junit-xml ];
+    sarif = [
+      jschema-to-python
+      sarif-om
+    ];
+    full = [
+      jschema-to-python
+      junit-xml
+      pydot
+      sarif-om
+    ];
+  };
+
   nativeCheckInputs = [
+    defusedxml
     mock
-    pydot
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -69,6 +87,8 @@ buildPythonPackage rec {
     "test_override_parameters"
     "test_positional_template_parameters"
     "test_template_config"
+    # Assertion error
+    "test_build_graph"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];
@@ -77,8 +97,8 @@ buildPythonPackage rec {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
-    changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

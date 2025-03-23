@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, dune-build-info
-, bos
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  dune-build-info,
+  bos,
 }:
 let
   author = "avsm";
@@ -20,7 +21,10 @@ buildDunePackage rec {
     sha256 = "0hw4gl7irarcywibdjqxmrga8f7yj52wgy7sc7n0wyy74jzxb8np";
   };
 
-  buildInputs = [ dune-build-info bos ];
+  buildInputs = [
+    dune-build-info
+    bos
+  ];
 
   meta = with lib; {
     description = "Pretty print an OCaml cmi/cmt/cmti file in human-readable OCaml signature form";

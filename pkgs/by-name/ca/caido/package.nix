@@ -15,14 +15,14 @@ let
     "cli"
     "desktop"
   ];
-  version = "0.39.0";
+  version = "0.45.1";
   cli = fetchurl {
-    url = "https://storage.googleapis.com/caido-releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
-    hash = "sha256-I8UF2rzIKfpcrxyvDa4AReWDIHOKTCj3ERaWhG1xGG0=";
+    url = "https://caido.download/releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
+    hash = "sha256-tudXyf9wwWABMGwfsxaLJtkZPKImlgjzfJJYFtimQOE=";
   };
   desktop = fetchurl {
-    url = "https://storage.googleapis.com/caido-releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-KYQck2+YYPLJN3L6qchacjyVyyXR3nmJDTX5GPB4WvI=";
+    url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
+    hash = "sha256-meNB1KCtxApsP95476ggL2gbCxu2fdold6BQ2dlZqFc=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version;
@@ -33,13 +33,14 @@ let
     src = desktop;
     inherit pname version;
 
+    nativeBuildInputs = [ makeWrapper ];
+
     extraPkgs = pkgs: [ pkgs.libthai ];
 
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/caido \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     '';

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.19.2";
+  version = "3.20.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+HHtU6sxxwISciLxiwa5m1zj7h/SLDmRxOZNqW5FQSY=";
+    tag = "v${version}";
+    hash = "sha256-wE/jqBMXVtmbc/78X4lgfvuj074CrzfLJL1CM6LCfas=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "simplejson" ];
 

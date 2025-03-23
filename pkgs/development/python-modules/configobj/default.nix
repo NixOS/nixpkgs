@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "configobj";
-  version = "5.0.8";
+  version = "5.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DiffSK";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-t3Q0FEBibkAM5PAG4fjXwNH/71RqSSDj/Mn27ri0iDU=";
+    tag = "v${version}";
+    hash = "sha256-duPCGBaHCXp4A6ZHLnyL1SZtR7K4FJ4hs5wCE1V9WB4=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DiffSK/configobj";
     changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

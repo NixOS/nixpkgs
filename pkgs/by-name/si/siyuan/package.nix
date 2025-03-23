@@ -2,13 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
-  substituteAll,
+  buildGo123Module,
+  replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
   electron,
   makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 let
@@ -20,27 +23,35 @@ let
   };
 
   platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+
+  desktopEntry = makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.0";
+  version = "3.1.25";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UIPASTSW7YGpxJJHfCq28M/U6CzyqaJiISZGtE0aDPw=";
+    hash = "sha256-ZLhLuRj5gdqca9Sbty7BEUBB/+8SgPYhnhoSOR5j4YE=";
   };
 
-  kernel = buildGoModule {
+  kernel = buildGo123Module {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-s4dW43Qy3Lrc5WPpugQpN6BDEFVxqnorXpp40SGFk7I=";
+    vendorHash = "sha256-pW52K3nvIdhpeBj2CtJwwsihcV10+FEf2mgAX61s5nM=";
 
     patches = [
-      (substituteAll {
-        src = ./set-pandoc-path.patch;
+      (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
@@ -68,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpm.configHook
     makeWrapper
+    copyDesktopItems
   ];
 
   pnpmDeps = pnpm.fetchDeps {
@@ -77,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-QSaBNs0m13Pfrvl8uUVqRpP3m8PoOBIY5VU5Cg/G2jY=";
+    hash = "sha256-01UyupFLr82w0LmainA/7u6195Li/QoTzz/tVxXSVQE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -101,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     npm exec electron-builder -- \
         --dir \
         --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -117,18 +129,35 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --inherit-argv0
+
+    install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
 
     runHook postInstall
   '';
+
+  desktopItems = [ desktopEntry ];
+
+  passthru = {
+    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      ltrump
+    ];
     platforms = lib.attrNames platformIds;
   };
 })

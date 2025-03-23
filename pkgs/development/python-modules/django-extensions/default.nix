@@ -29,10 +29,10 @@ buildPythonPackage rec {
   version = "3.2.3";
   pyproject = true;
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
 
@@ -78,6 +78,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Mismatch in expectation of exception message
     "test_installed_apps_no_resolve_conflicts_function"
+    # pygments compat issue
+    "test_should_highlight_python_syntax_with_name"
   ];
 
   disabledTestPaths = [

@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Python library for the simplenote.com web service";
     homepage = "http://readthedocs.org/docs/simplenotepy/en/latest/api.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

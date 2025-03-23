@@ -12,11 +12,14 @@
   onnx,
   onnxruntime,
   opencv4,
+  pillow,
   prettytable,
   pythonOlder,
+  requests,
+  setuptools,
+  scipy,
   scikit-image,
   scikit-learn,
-  tensorboard,
   testers,
   tqdm,
   stdenv,
@@ -34,37 +37,48 @@ buildPythonPackage rec {
     hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
 
-  build-system = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   dependencies = [
+    albumentations
     easydict
     matplotlib
-    mxnet
+    mxnet # used in insightface/commands/rec_add_mask_param.py
     numpy
     onnx
     onnxruntime
     opencv4
+    pillow
+    prettytable
+    requests
     scikit-learn
     scikit-image
-    tensorboard
+    scipy
     tqdm
-    albumentations
-    prettytable
   ];
+
+  # aarch64-linux tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
+  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform.system != "aarch64-linux") {
+    version = testers.testVersion {
+      package = insightface;
+      command = "insightface-cli --help";
+      # Doesn't support --version but we still want to make sure the cli is executable
+      # and returns the help output
+      version = "help";
+    };
+  };
 
   pythonImportsCheck = [
     "insightface"
     "insightface.app"
     "insightface.data"
   ];
-
-  passthru.tests.version = testers.testVersion {
-    package = insightface;
-    command = "insightface-cli --help";
-    # Doesn't support --version but we still want to make sure the cli is executable
-    # and returns the help output
-    version = "help";
-  };
 
   doCheck = false; # Upstream has no tests
 
@@ -74,7 +88,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepinsight/insightface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
-    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
-    broken = stdenv.system == "aarch64-linux";
   };
 }

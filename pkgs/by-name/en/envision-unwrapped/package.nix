@@ -1,57 +1,67 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  writeScript,
   appstream-glib,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
+  applyPatches,
   cairo,
+  cargo,
   desktop-file-utils,
+  fetchFromGitLab,
   gdb,
   gdk-pixbuf,
+  git,
   glib,
   gtk4,
   gtksourceview5,
+  lib,
   libadwaita,
   libgit2,
   libusb1,
+  meson,
+  ninja,
+  nix-update-script,
   openssl,
+  openxr-loader,
   pango,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
   vte-gtk4,
+  versionCheckHook,
+  wrapGAppsHook4,
   zlib,
-  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-07-03";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "6cf5e40b96d1cbd99a3cfcef1f03899356e79448";
-    hash = "sha256-a/IUNGoq9OKEC3uCg6PUp2TRHkfm4mTT3QQ8SfA29RU=";
+    rev = finalAttrs.version;
+    hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
+
+  patches = [
+    ./support-headless-cli.patch
+  ];
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-PsNgfpgso3HhIMXKky/u6Xw8phk1isRpNXKLhvN1wIE=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version;
+    # TODO: Use srcOnly instead
+    src = applyPatches {
+      inherit (finalAttrs) src patches;
     };
+    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     cargo
+    git
     meson
     ninja
     pkg-config
@@ -70,9 +80,18 @@ stdenv.mkDerivation (finalAttrs: {
     libgit2
     libusb1
     openssl
+    openxr-loader
     pango
     vte-gtk4
     zlib
+  ];
+
+  # FIXME: error when running `env -i envision`:
+  # "HOME env var not defined: NotPresent"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/envision";
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   postInstall = ''
@@ -80,11 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = writeScript "envision-update" ''
-    source ${builtins.head (unstableGitUpdater { })}
-
-    cp $tmpdir/Cargo.lock ./pkgs/by-name/en/envision-unwrapped/Cargo.lock
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";

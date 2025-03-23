@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "5.1.1";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
-    rev = "v${version}";
-    hash = "sha256-wXTXuX+iIMEoALxsciopucmvBxAyEeiOgjJPrbD63gM=";
+    tag = "v${version}";
+    hash = "sha256-bgD+wtq9AXCobUCpDfGVe6Ze1cTbbM5auXohQw5gcnk=";
   };
 
   build-system = [ setuptools ];

@@ -1,16 +1,35 @@
 import ./make-test-python.nix ({ pkgs, ... }:
   let
+    tls-cert =
+      pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+        openssl req \
+          -x509 -newkey rsa:4096 -sha256 -days 365 \
+          -nodes -out cert.pem -keyout key.pem \
+          -subj '/CN=minio' -addext "subjectAltName=DNS:localhost"
+
+        mkdir -p $out
+        cp key.pem cert.pem $out
+      '';
+
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
     secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
     minioPythonScript = pkgs.writeScript "minio-test.py" ''
       #! ${pkgs.python3.withPackages(ps: [ ps.minio ])}/bin/python
       import io
       import os
+      import sys
       from minio import Minio
+
+      if len(sys.argv) > 1 and sys.argv[1] == 'tls':
+        tls = True
+      else:
+        tls = False
+
       minioClient = Minio('localhost:9000',
                     access_key='${accessKey}',
                     secret_key='${secretKey}',
-                    secure=False)
+                    secure=tls,
+                    cert_check=False)
       sio = io.BytesIO()
       sio.write(b'Test from Python')
       sio.seek(0, os.SEEK_END)
@@ -56,6 +75,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("multi-user.target")
       machine.copy_from_host("${credsFull}", "${rootCredentialsFile}")
 
+      # Test non-TLS server
       machine.wait_for_unit("minio.service")
       machine.wait_for_open_port(9000)
 
@@ -67,6 +87,27 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.succeed("${minioPythonScript}")
       assert "test-bucket" in machine.succeed("mc ls minio")
       assert "Test from Python" in machine.succeed("mc cat minio/test-bucket/test.txt")
+      machine.succeed("mc rb --force minio/test-bucket")
+      machine.systemctl("stop minio.service")
+
+      # Test TLS server
+      machine.copy_from_host("${tls-cert}/cert.pem", "/var/lib/minio/certs/public.crt")
+      machine.copy_from_host("${tls-cert}/key.pem", "/var/lib/minio/certs/private.key")
+
+      machine.systemctl("start minio.service")
+      machine.wait_for_unit("minio.service")
+      machine.wait_for_open_port(9000)
+
+      # Create a test bucket on the server
+      machine.succeed(
+          "mc config host add minio https://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+      )
+      machine.succeed("mc --insecure mb minio/test-bucket")
+      machine.succeed("${minioPythonScript} tls")
+      assert "test-bucket" in machine.succeed("mc --insecure ls minio")
+      assert "Test from Python" in machine.succeed("mc --insecure cat minio/test-bucket/test.txt")
+      machine.succeed("mc --insecure rb --force minio/test-bucket")
+
       machine.shutdown()
     '';
   })

@@ -18,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PBvfkv9GQ5Vj5I5SygtmHXtqqHMJ4XgNV1/I+lSU0/U=";
+    hash = "sha256-2BT4VTZBAJx8Gk4qTTyhSoBMjJvKzmL4PO8IfTpN+2g=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -49,6 +49,9 @@ buildPythonPackage rec {
     # if the test runs fast enough. That makes the test flaky when
     # running on slow systems or cross- / emulated building
     "test_many_source_for_filename_calls"
+
+    # https://github.com/alexmojaki/executing/issues/91
+    "test_exception_catching"
   ];
 
   pythonImportsCheck = [ "executing" ];

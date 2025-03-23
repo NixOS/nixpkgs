@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, systemd
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  udev,
+  libxkbcommon,
+  wayland,
+  vulkan-loader,
+  xorg,
 }:
 
 let
@@ -23,6 +26,10 @@ let
     freetype
     freetype.dev
     libGL
+    pkg-config
+    udev
+    wayland
+    libxkbcommon
     vulkan-loader
     xorg.libX11
     xorg.libXcursor
@@ -32,22 +39,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "5.0";
+  version = "9.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
-    rev = "v${version}";
-    hash = "sha256-RkZ2HSN7IjwN3tD0UhpMeQeqkb+Y79kSWnjJZ5KPbQk=";
+    tag = "v${version}";
+    hash = "sha256-RFlICvoePwSglpheqMb+820My//LElnSeMDPFmXyHz0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-5.0.0" = "sha256-wePqsVpMBRP2eJZd8W05CaeesqY5g/rnr4OonmRzeeM=";
-      "iced_futures-0.6.0" = "sha256-ejkAxU6DwiX1/119eA0GRapSmz7dqwx9M0uMwyDHATQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nj7L4glbjevVd1ef6RUGPm4hpzeNdnsCLC01BOJj6kI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,13 +60,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     fontconfig
-    systemd
+    udev
   ];
 
-  sourceRoot = "${src.name}/gui";
+  buildAndTestSubdir = "liana-gui";
 
   postInstall = ''
-    install -Dm0644 ./ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
+    install -Dm0644 ./liana-ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
     wrapProgram $out/bin/liana-gui --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 
@@ -88,6 +90,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ dunxen ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

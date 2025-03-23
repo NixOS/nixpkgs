@@ -29,9 +29,10 @@ let
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
     if checkConfigEnabled then
-      pkgs.runCommandLocal
-        "${name}-${replaceStrings [" "] [""] what}-checked"
-        { nativeBuildInputs = [ cfg.package.cli ]; } ''
+      pkgs.runCommand "${name}-${replaceStrings [" "] [""] what}-checked" {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ cfg.package.cli ];
+      } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
@@ -201,6 +202,26 @@ let
     };
   };
 
+  promTypes.sigv4 = types.submodule {
+    options = {
+      region = mkOpt types.str ''
+        The AWS region.
+      '';
+      access_key = mkOpt types.str ''
+        The Access Key ID.
+      '';
+      secret_key = mkOpt types.str ''
+        The Secret Access Key.
+      '';
+      profile = mkOpt types.str ''
+        The named AWS profile used to authenticate.
+      '';
+      role_arn = mkOpt types.str ''
+        The AWS role ARN.
+      '';
+    };
+  };
+
   promTypes.tls_config = types.submodule {
     options = {
       ca_file = mkOpt types.str ''
@@ -254,6 +275,7 @@ let
     };
   };
 
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
   promTypes.scrape_config = types.submodule {
     options = {
       authorization = mkOption {
@@ -277,6 +299,15 @@ let
       scrape_timeout = mkOpt types.str ''
         Per-target timeout when scraping this job. Defaults to the
         globally configured default.
+      '';
+
+      scrape_protocols = mkOpt (types.listOf types.str) ''
+        The protocols to negotiate during a scrape with the client.
+      '';
+
+      fallback_scrape_protocol = mkOpt types.str ''
+        Fallback protocol to use if a scrape returns blank, unparseable, or otherwise
+        invalid Content-Type.
       '';
 
       metrics_path = mkDefOpt types.str "/metrics" ''
@@ -515,7 +546,7 @@ let
 
       authentication_method = mkDefOpt (types.enum [ "OAuth" "ManagedIdentity" ]) "OAuth" ''
         The authentication method, either OAuth or ManagedIdentity.
-        See https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview
+        See <https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview>
       '';
 
       subscription_id = mkOption {
@@ -687,8 +718,8 @@ let
         '';
       };
 
-      type = mkDefOpt (types.enum [ "SRV" "A" "AAAA" ]) "SRV" ''
-        The type of DNS query to perform. One of SRV, A, or AAAA.
+      type = mkDefOpt (types.enum [ "SRV" "A" "AAAA" "MX" "NS" ]) "SRV" ''
+        The type of DNS query to perform.
       '';
 
       port = mkOpt types.port ''
@@ -942,8 +973,8 @@ let
         )
       ) ''
       Optional label and field selectors to limit the discovery process to a subset of available resources.
-      See https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
-      and https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ to learn more about the possible
+      See <https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/>
+      and <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/> to learn more about the possible
       filters that can be used. Endpoints role supports pod, service and endpoints selectors, other roles
       only support selectors matching the role itself (e.g. node role can only contain node selectors).
 
@@ -1179,7 +1210,7 @@ let
       type = types.str;
       description = ''
         Puppet Query Language (PQL) query. Only resources are supported.
-        https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html
+        <https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html>
       '';
     };
 
@@ -1207,12 +1238,12 @@ let
       access_key = mkOption {
         type = types.str;
         description = ''
-          Access key to use. https://console.scaleway.com/project/credentials
+          Access key to use. <https://console.scaleway.com/project/credentials>
         '';
       };
 
       secret_key = mkOpt types.str ''
-        Secret key to use when listing targets. https://console.scaleway.com/project/credentials
+        Secret key to use when listing targets. <https://console.scaleway.com/project/credentials>
         It is mutually exclusive with `secret_key_file`.
       '';
 
@@ -1463,6 +1494,9 @@ let
       bearer_token_file = mkOpt types.str ''
         Sets the `Authorization` header on every remote write request with the bearer token
         read from the configured file. It is mutually exclusive with `bearer_token`.
+      '';
+      sigv4 = mkOpt promTypes.sigv4 ''
+        Configures AWS Signature Version 4 settings.
       '';
       tls_config = mkOpt promTypes.tls_config ''
         Configures the remote write request's TLS settings.
@@ -1811,8 +1845,6 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;

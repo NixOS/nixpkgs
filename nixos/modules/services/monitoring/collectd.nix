@@ -1,37 +1,40 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.collectd;
 
   baseDirLine = ''BaseDir "${cfg.dataDir}"'';
   unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" cfg.extraConfig;
 
-  conf = if cfg.validateConfig then
-    pkgs.runCommand "collectd.conf" {} ''
-      echo testing ${unvalidated_conf}
-      cp ${unvalidated_conf} collectd.conf
-      # collectd -t fails if BaseDir does not exist.
-      substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
-      ${package}/bin/collectd -t -C collectd.conf
-      cp ${unvalidated_conf} $out
-    '' else unvalidated_conf;
+  conf =
+    if cfg.validateConfig then
+      pkgs.runCommand "collectd.conf" { } ''
+        echo testing ${unvalidated_conf}
+        cp ${unvalidated_conf} collectd.conf
+        # collectd -t fails if BaseDir does not exist.
+        substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
+        ${package}/bin/collectd -t -C collectd.conf
+        cp ${unvalidated_conf} $out
+      ''
+    else
+      unvalidated_conf;
 
-  package =
-    if cfg.buildMinimalPackage
-    then minimalPackage
-    else cfg.package;
+  package = if cfg.buildMinimalPackage then minimalPackage else cfg.package;
 
   minimalPackage = cfg.package.override {
     enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
   };
 
-in {
-  options.services.collectd = with types; {
-    enable = mkEnableOption "collectd agent";
+in
+{
+  options.services.collectd = with lib.types; {
+    enable = lib.mkEnableOption "collectd agent";
 
-    validateConfig = mkOption {
+    validateConfig = lib.mkOption {
       default = true;
       description = ''
         Validate the syntax of collectd configuration file at build time.
@@ -41,9 +44,9 @@ in {
       type = types.bool;
     };
 
-    package = mkPackageOption pkgs "collectd" { };
+    package = lib.mkPackageOption pkgs "collectd" { };
 
-    buildMinimalPackage = mkOption {
+    buildMinimalPackage = lib.mkOption {
       default = false;
       description = ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
@@ -51,7 +54,7 @@ in {
       type = bool;
     };
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "collectd";
       description = ''
         User under which to run collectd.
@@ -59,7 +62,7 @@ in {
       type = nullOr str;
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       default = "/var/lib/collectd";
       description = ''
         Data directory for collectd agent.
@@ -67,7 +70,7 @@ in {
       type = path;
     };
 
-    autoLoadPlugin = mkOption {
+    autoLoadPlugin = lib.mkOption {
       default = false;
       description = ''
         Enable plugin autoloading.
@@ -75,24 +78,28 @@ in {
       type = bool;
     };
 
-    include = mkOption {
-      default = [];
+    include = lib.mkOption {
+      default = [ ];
       description = ''
         Additional paths to load config from.
       '';
       type = listOf str;
     };
 
-    plugins = mkOption {
-      default = {};
-      example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
+    plugins = lib.mkOption {
+      default = { };
+      example = {
+        cpu = "";
+        memory = "";
+        network = "Server 192.168.1.1 25826";
+      };
       description = ''
         Attribute set of plugin names to plugin config segments
       '';
       type = attrsOf lines;
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = "";
       description = ''
         Extra configuration for collectd. Use mkBefore to add lines before the
@@ -103,11 +110,11 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # 1200 is after the default (1000) but before mkAfter (1500).
     services.collectd.extraConfig = lib.mkOrder 1200 ''
       ${baseDirLine}
-      AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+      AutoLoadPlugin ${lib.boolToString cfg.autoLoadPlugin}
       Hostname "${config.networking.hostName}"
 
       LoadPlugin syslog
@@ -116,14 +123,16 @@ in {
         NotifyLevel "OKAY"
       </Plugin>
 
-      ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
-        LoadPlugin ${plugin}
-        <Plugin "${plugin}">
-        ${pluginConfig}
-        </Plugin>
-      '') cfg.plugins)}
+      ${lib.concatStrings (
+        lib.mapAttrsToList (plugin: pluginConfig: ''
+          LoadPlugin ${plugin}
+          <Plugin "${plugin}">
+          ${pluginConfig}
+          </Plugin>
+        '') cfg.plugins
+      )}
 
-      ${concatMapStrings (f: ''
+      ${lib.concatMapStrings (f: ''
         Include "${f}"
       '') cfg.include}
     '';
@@ -145,15 +154,15 @@ in {
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "collectd") {
+    users.users = lib.optionalAttrs (cfg.user == "collectd") {
       collectd = {
         isSystemUser = true;
         group = "collectd";
       };
     };
 
-    users.groups = optionalAttrs (cfg.user == "collectd") {
-      collectd = {};
+    users.groups = lib.optionalAttrs (cfg.user == "collectd") {
+      collectd = { };
     };
   };
 }

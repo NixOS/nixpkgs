@@ -1,9 +1,10 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, camlp-streams
-, cstruct
-, decompress
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  camlp-streams,
+  cstruct,
+  decompress,
 }:
 
 buildDunePackage rec {

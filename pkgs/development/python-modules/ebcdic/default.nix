@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "CodecMapper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gRyZychcF3wYocgVbdF255cSuZh/cl8X0WH/Iplkmxc=";
   };
 

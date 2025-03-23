@@ -12,8 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  websockets,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "volvooncall";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
 
@@ -41,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     console = [
       certifi
       docopt
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.mqtt;
+  ] ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

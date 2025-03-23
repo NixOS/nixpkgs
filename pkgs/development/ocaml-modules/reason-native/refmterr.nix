@@ -1,4 +1,13 @@
-{ lib, buildDunePackage, atdgen, re, reason, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  atdgen,
+  atdgen-runtime,
+  re,
+  reason,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -6,13 +15,17 @@ buildDunePackage {
   pname = "refmterr";
   version = "3.3.0-unstable-2024-05-07";
 
+  postPatch = ''
+    substituteInPlace src/refmterr/lib/dune --replace-warn 'atdgen re' 'atdgen-runtime re'
+  '';
+
   nativeBuildInputs = [
     atdgen
     reason
   ];
 
   propagatedBuildInputs = [
-    atdgen
+    atdgen-runtime
     re
     pastel
   ];
@@ -22,6 +35,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/refmterr";
     homepage = "https://reason-native.com/docs/refmterr/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

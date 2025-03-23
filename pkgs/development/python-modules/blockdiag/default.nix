@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     funcparserlib
     pillow
     reportlab
+    setuptools
     webcolors
   ];
 
@@ -71,6 +72,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_app_cleans_up_images"
+    # DeprecationWarning in dependency: reportlab
+    "test_align_option_1"
+    # Comparison w/ magic values in test
+    "test_generate_with_separate"
   ];
 
   pythonImportsCheck = [ "blockdiag" ];

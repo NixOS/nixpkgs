@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja, glib, gsignond, gsasl, check
-, gtk-doc, docbook_xml_dtd_43, docbook_xml_dtd_45, docbook_xsl, glibcLocales, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  ninja,
+  glib,
+  gsignond,
+  gsasl,
+  check,
+  gtk-doc,
+  docbook_xml_dtd_43,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  glibcLocales,
+  gobject-introspection,
+}:
 
 stdenv.mkDerivation {
   pname = "gsignond-plugin-sasl";
@@ -39,7 +55,7 @@ stdenv.mkDerivation {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles the SASL authentication protocol";
     homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-sasl";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

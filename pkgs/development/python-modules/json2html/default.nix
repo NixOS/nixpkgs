@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  python3,
   setuptools,
 }:
 

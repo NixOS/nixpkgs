@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-routing";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IUubPd6mqtCfY4ruI/8wkFcAcS0xXHWbe9RzDac5kRc=";
   };
 
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic-routing";
     changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

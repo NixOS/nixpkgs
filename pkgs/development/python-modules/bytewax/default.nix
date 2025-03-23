@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bytewax";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
   };
 
@@ -48,13 +48,9 @@ buildPythonPackage rec {
   # Package uses old version.
   patches = [ ./remove-docs-test.patch ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "columnation-0.1.0" = "sha256-RAyZKR+sRmeWGh7QYPZnJgX9AtWqmca85HcABEFUgX8=";
-      "timely-0.12.0" = "sha256-sZuVLBDCXurIe38m4UAjEuFeh73VQ5Jawy+sr3U/HbI=";
-      "libsqlite3-sys-0.26.0" = "sha256-WpJA+Pm5dWKcdUrP0xS5ps/oE/yAXuQvvsdyDfDet1o=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-osLr4u5vQa3/2whytC9PsXKURAwMCNObykY5Us7P3kQ=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +70,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jsonpickle ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kafka = [ confluent-kafka ];
   };
 
@@ -85,7 +81,7 @@ buildPythonPackage rec {
   checkInputs = [
     myst-docutils
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # dependens on an old myst-docutils version
@@ -104,6 +100,6 @@ buildPythonPackage rec {
       kfollesdal
     ];
     # mismatched type expected u8, found i8
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

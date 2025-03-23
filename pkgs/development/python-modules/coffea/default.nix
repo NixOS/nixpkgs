@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -32,30 +31,34 @@
   toml,
   tqdm,
   uproot,
+  vector,
 
-  # checks
+  # tests
   distributed,
   pyinstrument,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.6.1";
+  version = "2025.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Z6c8R8B8IrDkXVDx89XVtg3eRgORuHPfUyAPRGwAlrg=";
+    tag = "v${version}";
+    hash = "sha256-NZ3r/Dyw5bB4qOO29DUAARPzdJJxgR9OO9LxVu3YbNo=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -82,11 +85,13 @@ buildPythonPackage rec {
     toml
     tqdm
     uproot
+    vector
   ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
     pyinstrument
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -96,6 +101,11 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_cutflow_dak" # cutflow.npz
+    "test_packed_selection_nminusone_dak" # nminusone.npz
   ];
 
   __darwinAllowLocalNetworking = true;

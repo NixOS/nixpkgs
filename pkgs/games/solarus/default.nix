@@ -1,7 +1,20 @@
-{ lib, mkDerivation, fetchFromGitLab, cmake, luajit
-,  SDL2, SDL2_image, SDL2_ttf, physfs, glm
-, openal, libmodplug, libvorbis
-, qtbase, qttools }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  cmake,
+  luajit,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  physfs,
+  glm,
+  openal,
+  libmodplug,
+  libvorbis,
+  qtbase,
+  qttools,
+}:
 
 mkDerivation rec {
   pname = "solarus";
@@ -14,13 +27,28 @@ mkDerivation rec {
     sha256 = "sbdlf+R9OskDQ5U5rqUX2gF8l/fj0sDJv6BL7H1I1Ng=";
   };
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ luajit SDL2
-    SDL2_image SDL2_ttf physfs
-    openal libmodplug libvorbis
-    qtbase glm ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    luajit
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    physfs
+    openal
+    libmodplug
+    libvorbis
+    qtbase
+    glm
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")

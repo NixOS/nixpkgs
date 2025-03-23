@@ -1,48 +1,27 @@
 {
   fetchFromGitHub,
-  git,
+  gitMinimal,
   glibc,
   lib,
   makeWrapper,
   nix-update-script,
-  python3,
+  python3Packages,
   squashfsTools,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
-        version = "0.11.2";
-        src = fetchFromGitHub {
-          owner = "NowanIlfideme";
-          repo = "pydantic-yaml";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
-        };
-        dependencies = with self; [
-          deprecated
-          importlib-metadata
-          pydantic_1
-          ruamel-yaml
-          types-deprecated
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.1";
+  version = "8.7.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "snapcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cdRlUY9hAJ8US93aiJymzsV27JVPY7lWCK7IUdjDmYE=";
+    tag = version;
+    hash = "sha256-RlaAvLU0UE8u6y2xCHLxbOFLQF9jRa+8e2mgrRgTIjw=";
   };
 
   patches = [
@@ -50,11 +29,6 @@ python.pkgs.buildPythonApplication rec {
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
     ./lxd-socket-path.patch
-    # In certain places, Snapcraft expects an /etc/os-release file to determine
-    # host info which doesn't exist in our test environment. This is a
-    # relatively naive patch which helps the test suite pass - without it *many*
-    # of the tests fail. This patch will likely never be accepted upstream.
-    ./os-platform.patch
     # Snapcraft will try to inject itself as a snap *from the host system* into
     # the build system. This patch short-circuits that logic and ensures that
     # Snapcraft is installed on the build system from the snap store - because
@@ -69,15 +43,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"' \
-      --replace-fail 'gnupg' 'python-gnupg'
-
-    substituteInPlace requirements.txt \
-      --replace-fail 'gnupg==2.3.1' 'python-gnupg'
-
-    substituteInPlace snapcraft/__init__.py \
-      --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
+    substituteInPlace snapcraft/__init__.py --replace-fail "dev" "${version}"
 
     substituteInPlace snapcraft_legacy/__init__.py \
       --replace-fail '__version__ = _get_version()' '__version__ = "${version}"'
@@ -86,14 +52,12 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -102,9 +66,10 @@ python.pkgs.buildPythonApplication rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
-    debian
+    python-debian
     docutils
     jsonschema
     launchpadlib
@@ -125,7 +90,7 @@ python.pkgs.buildPythonApplication rec {
     pyyaml
     raven
     requests-toolbelt
-    requests-unixsocket
+    requests-unixsocket2
     simplejson
     snap-helpers
     tabulate
@@ -136,9 +101,12 @@ python.pkgs.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "click"
+    "craft-parts"
+    "cryptography"
     "docutils"
     "jsonschema"
     "pygit2"
@@ -151,24 +119,21 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    with python.pkgs;
+    with python3Packages;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook
       responses
       setuptools
+      writableTmpDirAsHomeHook
     ]
     ++ [
-      git
+      gitMinimal
       squashfsTools
     ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -181,6 +146,7 @@ python.pkgs.buildPythonApplication rec {
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+    "test_get_build_commands"
     "test_get_extensions_data_dir"
     "test_get_os_platform_alternative_formats"
     "test_get_os_platform_linux"
@@ -190,12 +156,13 @@ python.pkgs.buildPythonApplication rec {
     "test_lifecycle_write_component_metadata"
     "test_parse_info_integrated"
     "test_patch_elf"
+    "test_project_platform_unknown_name"
     "test_remote_builder_init"
     "test_setup_assets_remote_icon"
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [ "test_load_project" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

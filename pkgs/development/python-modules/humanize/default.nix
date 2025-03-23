@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.10.0";
+  version = "4.12.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-humanize";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-zzasFAaWH284IEnWwWKvCL1lt/ItNfdbWhq1K30gSPU=";
+    repo = "humanize";
+    tag = version;
+    hash = "sha256-sj7c44KQ5jGkmans2EyAn9qMS4+GGu3hcSt7PRiTGKk=";
   };
 
   nativeBuildInputs = [

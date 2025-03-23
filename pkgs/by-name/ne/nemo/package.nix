@@ -1,36 +1,47 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk3
-, gvfs
-, cinnamon-desktop
-, xapp
-, libexif
-, json-glib
-, gtk-layer-shell
-, exempi
-, intltool
-, shared-mime-info
-, cinnamon-translations
-, libgsf
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxmlb,
+  gtk3,
+  gvfs,
+  cinnamon-desktop,
+  xapp,
+  libexif,
+  json-glib,
+  exempi,
+  intltool,
+  shared-mime-info,
+  cinnamon-translations,
+  libgsf,
+  python3,
 }:
 
+let
+  # For action-layout-editor.
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      pycairo
+      pygobject3
+      python-xapp
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.2.6";
+  version = "6.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2gUIdAKpdL2obfK5lmlwRgyeeIkiFLO8LBdem1hBzkU=";
+    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
   };
 
   patches = [
@@ -39,20 +50,23 @@ stdenv.mkDerivation rec {
     ./load-extensions-from-env.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [
     glib
     gtk3
     cinnamon-desktop
-    libxml2
+    libxmlb # action-layout-editor
+    pythonEnv
     xapp
     libexif
     exempi
     gvfs
     libgsf
     json-glib
-    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
@@ -68,8 +82,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
-    # enabled by default in Mint packaging (see debian/rules)
-    "-Dgtk_layer_shell=true"
   ];
 
   postInstall = ''
@@ -92,10 +104,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
     mainProgram = "nemo";
   };
 }
-

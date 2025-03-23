@@ -2,7 +2,7 @@
 
 builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit pname; })) {
   zettlr = {
-    version = "3.0.2";
-    hash = "sha256-xwBq+kLmTth15uLiYWJOhi/YSPZVJNO6JTrKFojSDXA=";
+    version = "3.4.3";
+    hash = "sha256-Xb9zszbkHWAaIcu74EGQH0PVbuXIZXH/dja1F1Hkx1c=";
   };
 }

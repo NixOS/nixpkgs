@@ -15,20 +15,19 @@
   html-tidy,
   libsForQt5,
   testers,
-  lgogdownloader,
 
   enableGui ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lgogdownloader";
-  version = "3.14";
+  version = "3.17";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pxYiSefscglHN53wvp38Ec4/3X46sWc56Y4YKNtqABQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rERcwPVuioZT4lqw4SUaM0TQIks6ggA5x8fuI+1GAsk=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
 
   passthru.tests = {
-    version = testers.testVersion { package = lgogdownloader; };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
@@ -67,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
   };
-}
+})

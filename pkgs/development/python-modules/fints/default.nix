@@ -13,24 +13,20 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
+  version = "4.2.3";
   pname = "fints";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-1k6ZeYlv0vxNkqQse9vi/NT6ag3DJONKCWB594LvER0=";
+    tag = "v${version}";
+    hash = "sha256-QR5/mAll6vuP+hJo/oguynLLsGawhTQNaU6TCgww9yM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "enum-tools~=0.9.0" ""
-    sed -i "/document_enum/d" fints/formals.py
-  '';
+  pythonRemoveDeps = [ "enum-tools" ];
 
   build-system = [ setuptools ];
 

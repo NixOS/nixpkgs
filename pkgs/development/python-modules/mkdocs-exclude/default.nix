@@ -1,12 +1,11 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-exclude";
   version = "1.0.2";
   format = "setuptools";

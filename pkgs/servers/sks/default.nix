@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, perl
-, zlib, db
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+  perl,
+  zlib,
+  db,
 }:
 
 let
@@ -27,12 +33,27 @@ stdenv.mkDerivation rec {
     ./adapt-to-nixos.patch
   ];
 
-  outputs = [ "out" "webSamples" ];
+  outputs = [
+    "out"
+    "webSamples"
+  ];
 
-  nativeBuildInputs = [ ocaml findlib perl ];
-  buildInputs = [ zlib db cryptokit num ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    perl
+  ];
+  buildInputs = [
+    zlib
+    db
+    cryptokit
+    num
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=$(out)/share/man"
+  ];
   preConfigure = ''
     cp Makefile.local.unused Makefile.local
     sed -i \
@@ -60,7 +81,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
-

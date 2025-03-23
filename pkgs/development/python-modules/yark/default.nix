@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "yark";
-  version = "1.2.10";
+  version = "1.2.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y1fWHpvrqGuBPyJ2dO2y0W2zhEgcTJABtkOAoZ7uyZU=";
+    hash = "sha256-K66LC/HhajAMCWU7PPfxkoaK84kLlAccYAH5FXoc+yE=";
   };
 
   pythonRelaxDeps = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Owez/yark";
     changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

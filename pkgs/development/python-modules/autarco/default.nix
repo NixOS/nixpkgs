@@ -8,6 +8,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "2.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e/wi4suDMSQTaSdyYsTiBxVUNvisYBVPqy9Rpk0lwJw=";
+    tag = "v${version}";
+    hash = "sha256-zSqIEtQucrrAFEY7pBJ14Cevq8xbcGOheEmEE7Jd4qk=";
   };
 
   pythonRelaxDeps = [ "orjson" ];
@@ -33,8 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
   build-system = [ poetry-core ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

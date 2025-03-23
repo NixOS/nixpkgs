@@ -3,31 +3,31 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pizauth";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
-    rev = "pizauth-${version}";
-    hash = "sha256-Du+MVdYVQgH2V7928kpur+Xp/0y7HXgB8ZC0qciiQvs=";
+    tag = "pizauth-${version}";
+    hash = "sha256-lvG50Ej0ius4gHEsyMKOXLD20700mc4iWJxHK5DvYJc=";
   };
 
-  cargoHash = "sha256-DrpYMVGvu7UnzQToVgVptURqp7XyoR1iYUfRSLZaqXw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WyQIk74AKfsv0noafCGMRS6o+Lq6CeP99AFSdYq+QHg=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = ''
     installShellCompletion --cmd pizauth \
       --bash share/bash/completion.bash
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";

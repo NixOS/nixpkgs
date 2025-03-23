@@ -1,22 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, writeText
-, cmake, ninja, curl, git, pandoc, pkg-config, unzip, zip
-, libGL, libGLU, freeimage, freetype, assimp
-, catch2, fmt, glew, miniz, tinyxml-2, xorg
-, qtbase, qtwayland, wrapQtAppsHook
-, copyDesktopItems, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  cmake,
+  ninja,
+  curl,
+  git,
+  pandoc,
+  pkg-config,
+  unzip,
+  zip,
+  libGL,
+  libGLU,
+  freeimage,
+  freetype,
+  assimp,
+  catch2,
+  fmt,
+  glew,
+  miniz,
+  tinyxml-2,
+  xorg,
+  qt6,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
-  version = "2024.1";
+  version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "TrenchBroom";
     repo = "TrenchBroom";
-    rev = "v${version}";
-    hash = "sha256-HNK/gLbew7MKN6GVStxDb2tyMgyw2l1+dhPr6fSaZ4A=";
+    tag = "v${version}";
+    hash = "sha256-aOHhL0yBDgFTMcDY7RKZXRrReRiThcQdf7QMHEpRuks=";
     fetchSubmodules = true;
   };
+
   # Manually simulate a vcpkg installation so that it can link the libraries
   # properly.
   postUnpack =
@@ -40,8 +62,10 @@ stdenv.mkDerivation rec {
           Architecture : ${vcpkg_target}
           Version : 1.0
           Status : is installed
-        '') vcpkg_pkgs);
-    in ''
+        '') vcpkg_pkgs
+      );
+    in
+    ''
       export VCPKG_ROOT="$TMP/vcpkg"
 
       mkdir -p $VCPKG_ROOT/.vcpkg-root
@@ -62,22 +86,49 @@ stdenv.mkDerivation rec {
       ln -s ${miniz}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
       ln -s ${tinyxml-2}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     '';
+
   postPatch = ''
     substituteInPlace common/src/Version.h.in \
       --subst-var-by APP_VERSION_YEAR ${lib.versions.major version} \
       --subst-var-by APP_VERSION_NUMBER ${lib.versions.minor version} \
       --subst-var-by GIT_DESCRIBE v${version}
     substituteInPlace app/CMakeLists.txt \
-      --replace 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
+      --replace-fail 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
   '';
 
-  nativeBuildInputs = [ cmake ninja curl git pandoc wrapQtAppsHook copyDesktopItems pkg-config unzip zip ];
-  buildInputs = [
-    libGL libGLU xorg.libXxf86vm xorg.libSM
-    freeimage freetype qtbase qtwayland catch2 fmt
-    glew miniz tinyxml-2 assimp
+  nativeBuildInputs = [
+    cmake
+    ninja
+    curl
+    git
+    pandoc
+    qt6.wrapQtAppsHook
+    copyDesktopItems
+    pkg-config
+    unzip
+    zip
   ];
-  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
+
+  buildInputs = [
+    libGL
+    libGLU
+    xorg.libXxf86vm
+    xorg.libSM
+    freeimage
+    freetype
+    qt6.qtbase
+    qt6.qtwayland
+    qt6.qtsvg
+    catch2
+    fmt
+    glew
+    miniz
+    tinyxml-2
+    assimp
+  ];
+
+  QT_PLUGIN_PATH = "${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
+
   QT_QPA_PLATFORM = "offscreen";
 
   cmakeFlags = [
@@ -87,18 +138,16 @@ stdenv.mkDerivation rec {
     # https://github.com/TrenchBroom/TrenchBroom/issues/4002#issuecomment-1125390780
     "-DCMAKE_PREFIX_PATH=cmake/packages"
   ];
-  ninjaFlags = [
-    "TrenchBroom"
-  ];
+
+  ninjaFlags = [ "TrenchBroom" ];
 
   postInstall = ''
-    pushd $out/share/TrenchBroom/icons
+    pushd ../app/resources/linux/icons
 
     for F in icon_*.png; do
       SIZE=$(echo $F|sed -e s/icon_// -e s/.png//)
       DIR=$out/share/icons/hicolor/$SIZE"x"$SIZE/apps
-      mkdir -p $DIR
-      ln -s ../../../../TrenchBroom/icons/$F $DIR/trenchbroom.png
+      install -Dm644 $F $DIR/trenchbroom.png
     done
 
     popd
@@ -115,12 +164,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trenchbroom.github.io/";
     changelog = "https://github.com/TrenchBroom/TrenchBroom/releases/tag/v${version}";
     description = "Level editor for Quake-engine based games";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -6,7 +6,6 @@
   backendStdenv,
   fetchurl,
   lib,
-  lndir,
   markForCudatoolkitRootHook,
   flags,
   stdenv,
@@ -104,7 +103,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     in
     outputs;
 
-  # Traversed in the order of the outputs speficied in outputs;
+  # Traversed in the order of the outputs specified in outputs;
   # entries are skipped if they don't exist in outputs.
   outputToPatterns = {
     bin = [ "bin" ];
@@ -216,7 +215,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # one that is compatible with the rest of nixpkgs, even when
     # nvcc forces us to use an older gcc
     # NB: We don't actually know if this is the right thing to do
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   # Picked up by autoPatchelf

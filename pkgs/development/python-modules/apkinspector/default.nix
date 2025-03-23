@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "apkinspector";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erev0s";
     repo = "apkInspector";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-frcggMsDpPfIqL0J7FNOht+aXeg79xnZryZZwI4wWGw=";
+    tag = "v${version}";
+    hash = "sha256-trEbm9EFZLoFBWKKOlbI305r+8GdSmU5zWPnNhb5qzQ=";
   };
 
   build-system = [ poetry-core ];

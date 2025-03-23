@@ -70,7 +70,10 @@
     version = "1.24.0";
   };
   parser = {
-    dependencies = [ "ast" "racc" ];
+    dependencies = [
+      "ast"
+      "racc"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
@@ -131,7 +134,18 @@
     version = "3.2.6";
   };
   rubocop = {
-    dependencies = [ "json" "language_server-protocol" "parallel" "parser" "rainbow" "regexp_parser" "rexml" "rubocop-ast" "ruby-progressbar" "unicode-display_width" ];
+    dependencies = [
+      "json"
+      "language_server-protocol"
+      "parallel"
+      "parser"
+      "rainbow"
+      "regexp_parser"
+      "rexml"
+      "rubocop-ast"
+      "ruby-progressbar"
+      "unicode-display_width"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
@@ -153,7 +167,10 @@
     version = "1.31.2";
   };
   rubocop-minitest = {
-    dependencies = [ "rubocop" "rubocop-ast" ];
+    dependencies = [
+      "rubocop"
+      "rubocop-ast"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
@@ -164,7 +181,10 @@
     version = "0.35.0";
   };
   rubocop-performance = {
-    dependencies = [ "rubocop" "rubocop-ast" ];
+    dependencies = [
+      "rubocop"
+      "rubocop-ast"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {

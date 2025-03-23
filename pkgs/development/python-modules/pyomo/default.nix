@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.7.3";
+  version = "6.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6qpJH6WkrTzsDCtvoGMzZgw1UeSIIyI3jSA8JMsUC4E=";
+    tag = version;
+    hash = "sha256-n/Nt9omZfYSK/dvfp82aGfWIAAxF2mXYCJ1QcR6j8Ic=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     homepage = "http://www.pyomo.org/";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pyomo";
   };
 }

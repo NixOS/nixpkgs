@@ -1,51 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, arcan
-, audit
-, dbus
-, libepoxy
-, fontutil
-, libGL
-, libX11
-, libXau
-, libXdmcp
-, libXfont2
-, libdrm
-, libgcrypt
-, libmd
-, libselinux
-, libtirpc
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, nettle
-, ninja
-, openssl
-, pixman
-, pkg-config
-, systemd
-, xcbutil
-, xcbutilwm
-, xcbutilimage
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  arcan,
+  audit,
+  dbus,
+  dri-pkgconfig-stub,
+  libepoxy,
+  fontutil,
+  libGL,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXfont2,
+  libdrm,
+  libgcrypt,
+  libmd,
+  libselinux,
+  libtirpc,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  libgbm,
+  mesa-gl-headers,
+  meson,
+  nettle,
+  ninja,
+  openssl,
+  pixman,
+  pkg-config,
+  systemd,
+  xcbutil,
+  xcbutilwm,
+  xcbutilimage,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0-unstable-2024-05-23";
+  version = "0-unstable-2024-08-26";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "ebb46609315d95fb286009310de11b03f7333022";
-    hash = "sha256-XXA5c/yV6QaPiz1LHWkb+Tm6Wmead8EndkSk3onvrcs=";
+    rev = "5672116f627de492fb4df0b33d36b78041cd3931";
+    hash = "sha256-xZX6uLs/H/wONKrUnYxSynHK7CL7FDfzWvSjtXxT8es=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +61,7 @@ stdenv.mkDerivation (finalPackages: {
     arcan
     audit
     dbus
+    dri-pkgconfig-stub
     libepoxy
     fontutil
     libGL
@@ -73,7 +77,8 @@ stdenv.mkDerivation (finalPackages: {
     libxcb
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
+    mesa-gl-headers
     nettle
     openssl
     pixman
@@ -106,9 +111,9 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
     mainProgram = "Xarcan";
@@ -118,7 +123,7 @@ stdenv.mkDerivation (finalPackages: {
       allows running an X session as a window under Arcan.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

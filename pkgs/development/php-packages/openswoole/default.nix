@@ -5,10 +5,11 @@
   valgrind,
   pcre2,
   fetchFromGitHub,
+  php,
 }:
 
 let
-  version = "22.1.2";
+  version = "25.2.0";
 in
 buildPecl {
   inherit version;
@@ -18,10 +19,10 @@ buildPecl {
     owner = "openswoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-Z26E1PdKypB/MImCHFgA3rJW5LvVaLZsQUxRv0RcFuo=";
+    hash = "sha256-1Bq/relLhjPRROikpCzSzzrelxW3AiMA5G17Ln2lg34=";
   };
 
-  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
+  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   meta = with lib; {
     changelog = "https://github.com/openswoole/swoole-src/releases/tag/v${version}";
@@ -34,5 +35,6 @@ buildPecl {
       You can use the sync or async, Coroutine API to write whole applications or create thousands of light weight Coroutines within one Linux process.
     '';
     maintainers = teams.php.members;
+    broken = lib.versionOlder php.version "8.2";
   };
 }

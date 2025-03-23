@@ -1,15 +1,16 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "nurbs";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "16r05av75nvmkz1knf0nv0gj4fcjjf3jnyf94bdgxf84wahncim7";
+    sha256 = "sha256-QfF1tu9z/FQWNDirRs5OP3IRJOGkkR2lnHELn3ItknY=";
   };
 
   meta = with lib; {

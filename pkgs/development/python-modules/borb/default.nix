@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.24";
+  version = "2.1.25";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,9 +27,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jorisschellekens";
     repo = "borb";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3PZ3fHsq9pgJ4oK42Y4b/3ghuYELgRPe09fciOKknuE=";
+    tag = "v${version}";
+    hash = "sha256-eVxpcYL3ZgwidkSt6tUav3Bkne4lo1QCshdUFqkA0wI=";
   };
+
+  # ModuleNotFoundError: No module named '_decimal'
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    grep -Rl 'from _decimal' tests/ | while read -r test_file; do
+      substituteInPlace "$test_file" \
+        --replace-fail 'from _decimal' 'from decimal'
+    done
+  '';
 
   build-system = [ setuptools ];
 
@@ -52,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "borb.pdf" ];
 
   disabledTests = [
-    "test_code_files_are_small "
+    "test_code_files_are_small"
     "test_image_has_pdfobject_methods"
   ];
 

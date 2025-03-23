@@ -1,15 +1,16 @@
-{ fetchFromGitHub
-, lib
-, openssl
-, pkg-config
-, protobuf
-, rocksdb_8_3
-, rust-jemalloc-sys-unprefixed
-, rustPlatform
-, rustc
-, stdenv
-, Security
-, SystemConfiguration
+{
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  protobuf,
+  rocksdb_8_3,
+  rust-jemalloc-sys-unprefixed,
+  rustPlatform,
+  rustc,
+  stdenv,
+  Security,
+  SystemConfiguration,
 }:
 
 let
@@ -17,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "1.14.0";
+  version = "2412-3";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-v${version}";
-    hash = "sha256-IKKhGjWHyHUrDVGJo1d1JXzagkydgdfd/u6jk76qxHU=";
+    rev = "polkadot-stable${version}";
+    hash = "sha256-Bsy6CUDxtm5atkpp03edzWtZYuDKFdtBG6wfr+NPkng=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -44,21 +45,11 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ark-secret-scalar-0.0.2" = "sha256-91sODxaj0psMw0WqigMCGO5a7+NenAsRj5ZmW6C7lvc=";
-      "common-0.1.0" = "sha256-LHz2dK1p8GwyMimlR7AxHLz1tjTYolPwdjP7pxork1o=";
-      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
-      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
-      "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
-      "sp-crypto-ec-utils-0.4.1" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9irbcL7wBlwYkWM5goLZx6AAFCOjMSEbZ+Va69Am3pc=";
 
   buildType = "production";
-
-  cargoBuildFlags = [ "-p" "polkadot" ];
+  buildAndTestSubdir = "polkadot";
 
   # NOTE: tests currently fail to compile due to an issue with cargo-auditable
   # and resolution of features flags, potentially related to this:
@@ -73,24 +64,37 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
-  buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
-    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
-  # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
-  # available for `rustc-wasm32`
-  WASM_BUILD_STD = 0;
+  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
+  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
+  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
+  # since the new wasmv1-none target won't require rebuilding std.
+  SKIP_WASM_BUILD = 1;
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {
-    description = "Polkadot Node Implementation";
-    homepage = "https://polkadot.network";
+    description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
+    homepage = "https://github.com/paritytech/polkadot-sdk";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
+    maintainers = with maintainers; [
+      akru
+      andresilva
+      FlorianFranzen
+      RaghavSood
+    ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
-    platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
+    platforms = intersectLists platforms.unix (
+      platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86
+    );
   };
 }

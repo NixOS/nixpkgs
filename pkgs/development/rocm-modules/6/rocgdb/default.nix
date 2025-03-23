@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, pkg-config
-, texinfo
-, bison
-, flex
-, glibc
-, zlib
-, gmp
-, mpfr
-, ncurses
-, expat
-, rocdbgapi
-, python3
-, babeltrace
-, sourceHighlight
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  pkg-config,
+  texinfo,
+  bison,
+  flex,
+  glibc,
+  zlib,
+  gmp,
+  mpfr,
+  ncurses,
+  expat,
+  rocdbgapi,
+  python3,
+  babeltrace,
+  sourceHighlight,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    # Ensure we build the amdgpu traget
+    # Ensure we build the amdgpu target
     "--enable-targets=${stdenv.targetPlatform.config},amdgcn-amd-amdhsa"
     "--with-amd-dbgapi=yes"
 

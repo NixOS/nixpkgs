@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
     owner = "PhirePhly";
     repo = "aprx";
     rev = "2c84448fe6d897980234961a87ee4c1d4fad69ec";
-    sha256 = "sha256-01PB7FaG8GmPm1U15/3g1CfQwdYmf3ThZFdVh2zUAl4=";
+    hash = "sha256-01PB7FaG8GmPm1U15/3g1CfQwdYmf3ThZFdVh2zUAl4=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -20,7 +21,8 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-fcommon"
     "-O2"
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error=implicit-int");
+    "-Wno-implicit-int" # clang, gcc 14
+  ]);
 
   configureFlags = [
     "--with-erlangstorage"

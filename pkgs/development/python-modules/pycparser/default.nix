@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   unittestCheckHook,
   pythonOlder,
 }:
@@ -9,12 +10,14 @@
 buildPythonPackage rec {
   pname = "pycparser";
   version = "2.22";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-SRyL6cBA9TkPW/RKWwd1K9B/Vu35kjgbBccBQ57sEPY=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
   disabled = pythonOlder "3.8";

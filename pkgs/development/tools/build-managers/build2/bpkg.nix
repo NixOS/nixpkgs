@@ -1,25 +1,31 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, git
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, openssl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  git,
+  libbpkg,
+  libbutl,
+  libodb,
+  libodb-sqlite,
+  openssl,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
-  version = "0.16.0";
+  version = "0.17.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
-    hash = "sha256-sxzVidVL8dpoH82IevcwjcIWj4LQzliGv9zasTYqeok=";
+    hash = "sha256-Yw6wvTqO+VfCo91B2BUT0A8OIN0MVhGK1USYM7hgGMs=";
   };
 
   strictDeps = true;
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  doCheck = !stdenv.isDarwin; # tests hang
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang
 
   # Failing test
   postPatch = ''
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath '${lib.getLib build2}/lib' "''${!outputBin}/bin/bpkg"
   '';
 

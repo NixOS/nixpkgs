@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, desktop-file-utils
-, meson
-, ninja
-, vala
-, libxslt
-, pkg-config
-, glib
-, gtk3
-, libhandy
-, gnome
-, dconf
-, libxml2
-, gettext
-, docbook-xsl-nons
-, wrapGAppsHook3
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  desktop-file-utils,
+  meson,
+  ninja,
+  vala,
+  libxslt,
+  pkg-config,
+  glib,
+  gtk3,
+  libhandy,
+  gnome,
+  dconf,
+  libxml2,
+  gettext,
+  docbook-xsl-nons,
+  wrapGAppsHook3,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,8 @@ stdenv.mkDerivation rec {
   version = "45.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
+    url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
+    hash = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
   patches = [
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "dconf-editor";
     };
   };
 
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     description = "GSettings editor for GNOME";
     mainProgram = "dconf-editor";
     homepage = "https://apps.gnome.org/DconfEditor/";
+    changelog = "https://gitlab.gnome.org/GNOME/dconf-editor/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

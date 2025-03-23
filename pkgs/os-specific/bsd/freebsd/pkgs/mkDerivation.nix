@@ -7,7 +7,7 @@
   buildPackages,
   stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
   versionData,
-  patches,
+  patchesRoot,
   compatIfNeeded,
   freebsd-lib,
   filterSource,
@@ -56,55 +56,63 @@ lib.makeOverridable (
       ] ++ attrs.extraNativeBuildInputs or [ ];
       buildInputs = compatIfNeeded;
 
-      HOST_SH = stdenv'.shell;
+      makeFlags =
+        [
+          "STRIP=-s" # flag to install, not command
+        ]
+        ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no"
+        ++ lib.optional stdenv.hostPlatform.isStatic "SHLIB_NAME=";
 
-      makeFlags = [
-        "STRIP=-s" # flag to install, not command
-      ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
+      env =
+        {
+          HOST_SH = stdenv'.shell;
 
-      # amd64 not x86_64 for this on unlike NetBSD
-      MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
+          # amd64 not x86_64 for this on unlike NetBSD
+          MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
 
-      MACHINE = freebsd-lib.mkBsdArch stdenv';
+          MACHINE = freebsd-lib.mkBsdMachine stdenv';
 
-      MACHINE_CPUARCH = MACHINE_ARCH;
+          MACHINE_CPUARCH = freebsd-lib.mkBsdCpuArch stdenv';
 
-      COMPONENT_PATH = attrs.path or null;
+          COMPONENT_PATH = attrs.path or null;
+
+          # don't set filesystem flags that require root
+          NO_FSCHG = "yes";
+        }
+        // lib.optionalAttrs stdenv'.hasCC {
+          # TODO should CC wrapper set this?
+          CPP = "${stdenv'.cc.targetPrefix}cpp";
+
+          # Since STRIP in `makeFlags` has to be a flag, not the binary itself
+          STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
+        }
+        // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) { BOOTSTRAPPING = true; }
+        // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
+        // lib.optionalAttrs (stdenv'.cc.isClang or false) {
+          HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+        }
+        // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
+          HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+        }
+        // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
+        // (attrs.env or { });
 
       strictDeps = true;
 
-      meta =
-        with lib;
-        {
-          maintainers = with maintainers; [
-            rhelmot
-            artemist
-          ];
-          platforms = platforms.unix;
-          license = licenses.bsd2;
-        }
-        // attrs.meta or { };
+      meta = {
+        maintainers = with lib.maintainers; [
+          rhelmot
+          artemist
+        ];
+        platforms = lib.platforms.unix;
+        license = lib.licenses.bsd2;
+      } // attrs.meta or { };
     }
-    // lib.optionalAttrs stdenv'.hasCC {
-      # TODO should CC wrapper set this?
-      CPP = "${stdenv'.cc.targetPrefix}cpp";
-
-      # Since STRIP in `makeFlags` has to be a flag, not the binary itself
-      STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
-    }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
-    // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-      HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-    }
-    // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-      HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-    }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;
     }
-    // attrs
+    // (builtins.removeAttrs attrs [ "env" ])
     // lib.optionalAttrs (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) {
       preBuild =
         ''
@@ -118,11 +126,27 @@ lib.makeOverridable (
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (
-          freebsd-lib.filterPatches patches (
+          freebsd-lib.filterPatches patchesRoot (
             attrs.extraPaths or [ ] ++ (lib.optional (attrs ? path) attrs.path)
           )
         ))
         ++ attrs.patches or [ ];
     }
+    //
+      lib.optionalAttrs
+        (!stdenv.hostPlatform.isStatic && !attrs.alwaysKeepStatic or false && stdenv.hostPlatform.isFreeBSD)
+        {
+          postInstall =
+            (attrs.postInstall or "")
+            + ''
+              rm -f $out/lib/*.a
+            '';
+        }
+    //
+      lib.optionalAttrs
+        ((stdenv.hostPlatform.isStatic || !stdenv.hostPlatform.isFreeBSD) && attrs ? outputs)
+        {
+          outputs = lib.lists.remove "debug" attrs.outputs;
+        }
   )
 )

@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
-  enabled = elem "displaylink" config.services.xserver.videoDrivers;
+  enabled = lib.elem "displaylink" config.services.xserver.videoDrivers;
 
   evdi = config.boot.kernelPackages.evdi;
 
@@ -16,7 +18,7 @@ in
 
 {
 
-  config = mkIf enabled {
+  config = lib.mkIf enabled {
 
     boot.extraModulePackages = [ evdi ];
     boot.kernelModules = [ "evdi" ];

@@ -12,7 +12,13 @@
 }:
 
 lib.makeScope newScope (self: {
-  inherit lib buildDunePackage re reason ppxlib;
+  inherit
+    lib
+    buildDunePackage
+    re
+    reason
+    ppxlib
+    ;
 
   # Upstream doesn't use tags, releases, or branches.
   src = fetchFromGitHub {

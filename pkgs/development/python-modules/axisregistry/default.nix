@@ -5,29 +5,21 @@
   fonttools,
   protobuf,
   pytestCheckHook,
+  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.10";
-  format = "setuptools";
+  version = "0.4.12";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/N67VDr1ZFDRmZsxYCFT+KdUmc2ElgGNd8ljGWC5V0U=";
+    hash = "sha256-d60VbzlDiAL+J8sCE0sp2RgB02WGrigqcdzqW55ex1s=";
   };
-
-  propagatedBuildInputs = [
-    fonttools
-    protobuf
-  ];
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  doCheck = true;
-  nativeCheckInputs = [ pytestCheckHook ];
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
   # ecosystem have begun upgrading from protobuf 3 to protobuf 4,
@@ -35,9 +27,23 @@ buildPythonPackage rec {
   # in the closure of fontbakery. It seems to be compatible enough.
   pythonRelaxDeps = [ "protobuf" ];
 
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    fonttools
+    protobuf
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "axisregistry" ];
+
   meta = with lib; {
     description = "Google Fonts registry of OpenType variation axis tags";
     homepage = "https://github.com/googlefonts/axisregistry";
+    changelog = "https://github.com/googlefonts/axisregistry/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];
   };

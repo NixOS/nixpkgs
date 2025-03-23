@@ -1,24 +1,27 @@
-{ installShellFiles
-, lib
-, rustPlatform
-, fetchFromGitHub
+{
+  installShellFiles,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "steamguard-cli";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dyc3";
-    repo = pname;
+    repo = "steamguard-cli";
     rev = "v${version}";
-    hash = "sha256-cd2j3QRJv4GNm05W1O2tfYyZ/GHwixFisAG6EQ6TXzw=";
+    hash = "sha256-o4hJ8+FsFLKJwifLP3pGbn35SOsTTnQosO4IejitUeI=";
   };
 
-  cargoHash = "sha256-LYrn0MKrOYjYPLdBukXRXGW+XWVcGHNAl0vC/qkmkNs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OBftq8bPqmc77oeOStAeXZN5DHfASdOJCrmgDTgHFWc=";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd steamguard \
       --bash <($out/bin/steamguard completion --shell bash) \
       --fish <($out/bin/steamguard completion --shell fish) \
@@ -31,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dyc3/steamguard-cli";
     license = with licenses; [ gpl3Only ];
     mainProgram = "steamguard";
-    maintainers = with maintainers; [ surfaceflinger ];
+    maintainers = with maintainers; [
+      surfaceflinger
+      sigmasquadron
+    ];
     platforms = platforms.linux;
   };
 }

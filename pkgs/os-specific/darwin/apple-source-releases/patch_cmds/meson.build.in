@@ -1,0 +1,103 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/patch_cmds/blob/main/patch_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('patch_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+libutil = cc.find_library('util')
+
+
+# Binaries
+executable(
+    'cmp',
+    include_directories : 'cmp',
+    dependencies : [ libutil ],
+    install : true,
+    sources : [
+        'cmp/cmp.c',
+        'cmp/link.c',
+        'cmp/misc.c',
+        'cmp/regular.c',
+        'cmp/special.c',
+    ],
+)
+install_man('cmp/cmp.1')
+
+executable(
+    'diff',
+    include_directories : 'diff',
+    install : true,
+    sources : [
+        'diff/diff.c',
+        'diff/diff_atomize_text.c',
+        'diff/diff_main.c',
+        'diff/diff_myers.c',
+        'diff/diff_output.c',
+        'diff/diff_output_edscript.c',
+        'diff/diff_output_plain.c',
+        'diff/diff_output_unidiff.c',
+        'diff/diff_patience.c',
+        'diff/diffdir.c',
+        'diff/diffreg.c',
+        'diff/diffreg_new.c',
+        'diff/pr.c',
+        'diff/recallocarray.c',
+        'diff/xmalloc.c',
+    ],
+)
+install_man('diff/diff.1')
+
+executable(
+    'diff3',
+    include_directories : 'diff3',
+    install : true,
+    sources : [
+        'diff3/diff3.c',
+        'diff3/xmalloc.c',
+    ],
+)
+install_man('diff3/diff3.1')
+
+executable(
+    'diffstat',
+    include_directories : 'diffstat',
+    c_args : [
+        '-DHAVE_CONFIG_H',
+        '-D_XOPEN_SOURCE=500',
+        '-D_DARWIN_C_SOURCE',
+    ],
+    install : true,
+    sources : [ 'diffstat/diffstat.c' ],
+)
+install_man('diffstat/diffstat.1')
+
+executable(
+    'patch',
+    include_directories : 'patch',
+    install : true,
+    sources : [
+        'patch/backupfile.c',
+        'patch/inp.c',
+        'patch/mkpath.c',
+        'patch/patch.c',
+        'patch/pch.c',
+        'patch/util.c',
+        'patch/vcs.c',
+    ],
+)
+install_man('patch/patch.1')
+
+executable(
+    'sdiff',
+    include_directories : 'sdiff',
+    install : true,
+    sources : [
+        'sdiff/edit.c',
+        'sdiff/sdiff.c',
+    ],
+)
+install_man('sdiff/sdiff.1')

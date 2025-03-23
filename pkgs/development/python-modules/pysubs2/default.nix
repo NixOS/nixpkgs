@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pysubs2";
-  version = "1.6.1";
+  version = "1.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tkarabela";
     repo = pname;
     rev = version;
-    hash = "sha256-0bW9aB6ERRQK3psqeU0Siyi/8drEGisAp8UtTfOKlp0=";
+    hash = "sha256-fKSb7MfBHGft8Tp6excjfkVXKnHRER11X0QxbR1zD4I=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Python library for editing subtitle files";
     mainProgram = "pysubs2";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

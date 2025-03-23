@@ -7,20 +7,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.23.2";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wXBfrlb4i4G3Sm0SopvDVGcQ0/hRGtUdzUQYyUj8/Ps=";
+    tag = "v${version}";
+    hash = "sha256-3o4ap8BElDxxg3pohzXz38AQlQbzOPeSc5/OYZg8VFM=";
   };
 
   pythonRelaxDeps = [
     "defusedxml"
     "ijson"
+    "importlib-metadata"
     "sqlalchemy"
+    "websockets"
+    "xsdata"
   ];
 
   build-system = with python3.pkgs; [
@@ -40,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     mashumaro
     mergedeep
     orjson
+    packageurl-python
     pytest-snapshot
     python-dateutil
     pyyaml

@@ -14,20 +14,20 @@
 buildPythonPackage rec {
   pname = "idasen";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "idasen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TQ+DBFpG+IeZ4/dN+YKMw3AM4Dl1rpqA1kRcb3Tb3jA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     pyyaml
     voluptuous

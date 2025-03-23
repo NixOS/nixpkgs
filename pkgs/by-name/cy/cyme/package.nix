@@ -1,53 +1,62 @@
 {
-  lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, stdenv
-, darwin
-, libusb1
-, nix-update-script
-, testers
-, cyme
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  installShellFiles,
+  stdenv,
+  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.8.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-Rq7ykD6L+DrDNz+d++ztv+fmoSSNCoeC1YfXiIJiXzM=";
+    hash = "sha256-KAHCeM1rAPGi98PrcVJtzkhTWGWFwf37VuSQTjqXSEg=";
   };
 
-  cargoHash = "sha256-XvU8r4bmI18qp+1O3nsJG3RTiiNxfKksRgkSBMsja5s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LwBTDBrsigt8H6PFuuGndiMlj5d8v68dyHipVYOGKVk=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.DarwinTools
-  ];
-
-  buildInputs = [
-    libusb1
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+    ];
 
   checkFlags = [
     # doctest that requires access outside sandbox
     "--skip=udev::hwdb::get"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # system_profiler is not available in the sandbox
+    # - system_profiler is not available in the sandbox
+    # - workaround for "Io Error: No such file or directory"
     "--skip=test_run"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = cyme;
-    };
-  };
+  postInstall = ''
+    installManPage doc/cyme.1
+    installShellCompletion --cmd cyme \
+      --bash doc/cyme.bash \
+      --fish doc/cyme.fish \
+      --zsh doc/_cyme
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";

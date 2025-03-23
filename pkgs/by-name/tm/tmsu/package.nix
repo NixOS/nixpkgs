@@ -13,7 +13,7 @@ buildGoModule {
     owner = "oniony";
     repo = "tmsu";
     rev = "0bf4b8031cbeffc0347007d85647062953e90571";
-    sha256 = "sha256-5Rmelgiqs7YkdDBZNXZW4sBf0l/bwiq0xxB2tWpm1s8=";
+    hash = "sha256-5Rmelgiqs7YkdDBZNXZW4sBf0l/bwiq0xxB2tWpm1s8=";
   };
 
   vendorHash = "sha256-r2wzVkPTsxWdVPFLO84tJgl3VJonoU7kNKLOBgHHdF8=";

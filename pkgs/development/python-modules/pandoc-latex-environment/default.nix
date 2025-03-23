@@ -2,29 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
   panflute,
   pytestCheckHook,
   pandoc,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "pandoc-latex-environment";
-  version = "1.1.6.4";
+  version = "1.2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chdemko";
     repo = "pandoc-latex-environment";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DLuLFCKP5ip3duHlGAZnFip7GCDzWK91bka3DrknQSA=";
+    tag = version;
+    hash = "sha256-DdDCwysTCiDg1rXO3pvI5m6lIcdAXhsnwEEgvG/ErBM=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
+
   dependencies = [ panflute ];
 
   pythonImportsCheck = [ "pandoc_latex_environment" ];

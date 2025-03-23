@@ -1,9 +1,10 @@
 {
-  installShellFiles
-, fetchFromGitHub
-, lib
-, micronucleus
-, rustPlatform
+  installShellFiles,
+  fetchFromGitHub,
+  lib,
+  micronucleus,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,18 +13,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
+    repo = "elf2nucleus";
     rev = "v${version}";
-    sha256 = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
+    hash = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 
-  cargoHash = "sha256-IeQnI6WTzxSI/VzoHtVukZtB1jX98wzLOT01NMLD5wQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xw+heCEwQePyU2gElpG8PTIUZA7y+Onx+2AX2NZzDGs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ micronucleus ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd elf2nucleus \
       --bash <($out/bin/elf2nucleus --completions bash) \
       --fish <($out/bin/elf2nucleus --completions fish) \

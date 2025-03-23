@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -59,16 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.43.3";
+  version = "4.50.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CMc+bI99/kN560X7qsXh1tSho0/V8iwJMy4TALambRE=";
+    tag = "v${version}";
+    hash = "sha256-/scrMPUY43n+XAMbwWCtmiJKXscXGLrklyDg9XZTaqw=";
   };
 
   build-system = [ setuptools ];
@@ -157,7 +154,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
@@ -176,7 +173,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [

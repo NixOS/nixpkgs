@@ -1,34 +1,38 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, git
-, nixosTests
-, python311
-, vaultwarden
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  git,
+  nixosTests,
+  python3,
+  vaultwarden,
 }:
 
 let
-  version = "2024.5.1b";
+  version = "2025.1.1";
+
+  suffix = lib.head (lib.match "[0-9.]*([a-z]*)" version);
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-5nlFt05ari9ovl+CaoyR/X9BzhsmsGyDt6eGLJ5ae/4=";
+    hash = "sha256-wQGpl7N0D83FrrV4T+LFe9h3n5Q/MqLbGGO2F5R9k2g=";
   };
 
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-U/lAt2HfoHGMu6mOki/4+ljhU9FwkodvFBr5zcDO8Wk=";
+    rev = "web-v${lib.removeSuffix suffix version}";
+    hash = "sha256-Bq133V8CsDMnLeaKrW5JmLTGRaZVLRbp+tTgG725tqE=";
   };
 
-  npmDepsHash = "sha256-ui00afmnu77CTT9gh6asc4uT7AhVIuiD60sq/1f9viA=";
+  npmDepsHash = "sha256-bWcp3VJI2bObLH/XBx3cdxXQY9Cw+IFpeNA2TXVTtFg=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -37,18 +41,26 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    # signalr through gyp wants to import distutils
-    python311
+    python3
   ];
 
   makeCacheWritable = true;
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    npm_config_build_from_source = "true";
+  };
+
+  npmRebuildFlags = [
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    "--ignore-scripts"
+  ];
 
   npmBuildScript = "dist:oss:selfhost";
 
   npmBuildFlags = [
-    "--workspace" "apps/web"
+    "--workspace"
+    "apps/web"
   ];
 
   npmFlags = [ "--legacy-peer-deps" ];

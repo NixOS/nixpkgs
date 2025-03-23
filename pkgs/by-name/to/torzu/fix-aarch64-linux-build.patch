@@ -1,0 +1,14 @@
+diff --git a/src/video_core/host1x/vic.cpp b/src/video_core/host1x/vic.cpp
+index 3ad56bb80..57e6adbf8 100644
+--- a/src/video_core/host1x/vic.cpp
++++ b/src/video_core/host1x/vic.cpp
+@@ -13,7 +13,8 @@
+ #endif
+ #elif defined(ARCHITECTURE_arm64)
+ #pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wimplicit-int-conversion"
++#pragma GCC diagnostic ignored "-Wconversion"
++#pragma GCC diagnostic ignored "-Wshadow"
+ #include <sse2neon.h>
+ #pragma GCC diagnostic pop
+ #endif

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.10.2";
+  version = "0.11.1";
 
   disabled = pythonOlder "3.5";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zgCOmcR9FWj0lpi78U0G1CKR5kyNyr541HusIrBpF/Q=";
+    hash = "sha256-e6CvclFrRfXR5fL2ZG1LZxTTsTRouLsDicCwvXtySGE=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     chart = [
       # pycha
       pyyaml
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     fodt = [ python-magic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.fodt;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.fodt;
 
   pythonImportsCheck = [ "relatorio" ];
 

@@ -65,7 +65,7 @@ finalAttrs: prevAttrs: {
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [ finalAttrs.passthru.cudnn.lib ];
+  buildInputs = prevAttrs.buildInputs ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
 
   preInstall =
     (prevAttrs.preInstall or "")
@@ -74,6 +74,11 @@ finalAttrs: prevAttrs: {
       for dir in bin lib; do
         rm "$dir"
         mv "targets/${targetArch}/$dir" "$dir"
+      done
+
+      # Remove broken symlinks
+      for dir in include samples; do
+        rm "targets/${targetArch}/$dir" || :
       done
     '';
 
@@ -99,9 +104,8 @@ finalAttrs: prevAttrs: {
     cudnn =
       let
         desiredName = mkVersionedPackageName "cudnn" package.cudnnVersion;
-        desiredIsAvailable = final ? desiredName;
       in
-      if package.cudnnVersion == null || !desiredIsAvailable then final.cudnn else final.${desiredName};
+      if package.cudnnVersion == null || (final ? desiredName) then final.cudnn else final.${desiredName};
   };
 
   meta = prevAttrs.meta // {
@@ -110,5 +114,10 @@ finalAttrs: prevAttrs: {
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
+
+    # Building TensorRT on Hydra is impossible because of the non-redistributable
+    # license and because the source needs to be manually downloaded from the
+    # NVIDIA Developer Program (see requireFile above).
+    hydraPlatforms = lib.platforms.none;
   };
 }

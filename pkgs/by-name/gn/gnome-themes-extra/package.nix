@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, intltool, gtk3, gnome, adwaita-icon-theme, librsvg, pkg-config, pango, atk, gtk2
-, gdk-pixbuf, hicolor-icon-theme }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  gtk3,
+  gnome,
+  adwaita-icon-theme,
+  librsvg,
+  pkg-config,
+  pango,
+  atk,
+  gtk2,
+  gdk-pixbuf,
+  hicolor-icon-theme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-themes-extra";
@@ -7,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-themes-extra/${lib.versions.majorMinor version}/gnome-themes-extra-${version}.tar.xz";
-    sha256 = "06aqg9asq2vqi9wr29bs4v8z2bf4manhbhfghf4nvw01y2zs0jvw";
+    hash = "sha256-fEugv/AB8G2Jg8/BBa2qxC3x0SZ6JZF5ingLrFV6WBk=";
   };
 
   passthru = {
@@ -16,9 +30,23 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config intltool gtk3 ];
-  buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf ];
-  propagatedBuildInputs = [ adwaita-icon-theme hicolor-icon-theme ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    gtk3
+  ];
+  buildInputs = [
+    gtk3
+    librsvg
+    pango
+    atk
+    gtk2
+    gdk-pixbuf
+  ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 

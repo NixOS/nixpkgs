@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, quazip
-, rlottie
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  quazip,
+  rlottie,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

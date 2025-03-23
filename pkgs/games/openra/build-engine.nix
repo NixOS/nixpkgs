@@ -17,8 +17,8 @@ buildDotnetModule rec {
 
   nugetDeps = engine.deps;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0-bin;
 
   useAppHost = false;
 
@@ -34,6 +34,9 @@ buildDotnetModule rec {
   ];
 
   dontDotnetFixup = true;
+
+  # Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/Newtonsoft.Json.dll" to "[...]/Newtonsoft.Json.dll". Access to the path '[...]Newtonsoft.Json.dll' is denied. [/build/source/OpenRA.Mods.Cnc/OpenRA.Mods.Cnc.csproj]
+  enableParallelBuilding = false;
 
   preBuild = ''
     make VERSION=${engine.build}-${version} version

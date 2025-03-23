@@ -1,16 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   ###### interface
-
   options = {
 
-    hardware.cpu.amd.updateMicrocode = mkOption {
+    hardware.cpu.amd.updateMicrocode = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Update the CPU microcode for AMD processors.
       '';
@@ -18,12 +18,10 @@ with lib;
 
   };
 
-
   ###### implementation
-
-  config = mkIf config.hardware.cpu.amd.updateMicrocode {
+  config = lib.mkIf config.hardware.cpu.amd.updateMicrocode {
     # Microcode updates must be the first item prepended in the initrd
-    boot.initrd.prepend = mkOrder 1 [ "${pkgs.microcodeAmd}/amd-ucode.img" ];
+    boot.initrd.prepend = lib.mkOrder 1 [ "${pkgs.microcode-amd}/amd-ucode.img" ];
   };
 
 }

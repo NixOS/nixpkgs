@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "py-nextbusnext";
-  version = "2.0.3";
+  version = "2.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dSBjOMqryEddWB54AddGDojRE8/STi3kxfjJsVFBuOw=";
+    tag = "v${version}";
+    hash = "sha256-/pzlxYGXqWix11G7DsHgwkCrSQFT/N1boKcBJ1YpE0A=";
   };
 
   build-system = [ setuptools ];

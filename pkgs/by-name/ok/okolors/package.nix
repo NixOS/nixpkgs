@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,10 +12,11 @@ rustPlatform.buildRustPackage rec {
     owner = "Ivordir";
     repo = "Okolors";
     rev = "v${version}";
-    sha256 = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
+    hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
   };
 
-  cargoHash = "sha256-xRCxpmIocvkg1ErYVqBLHb/jXV2eWeWHg4IO/QsnnF0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3wZeRPG2VrpPlqRVmkrMskqzM6NGZoSGbgGBTJzKCgQ=";
 
   meta = with lib; {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";

@@ -15,19 +15,29 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
+
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) basedpyright git go gopls python3;
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
   };
 
-  matrix-client = callPackage ./manual-packages/matrix-client {
-    _map = self.map;
-  };
+  lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
+
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 
   structured-haskell-mode = self.shm;
 
   texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
+
+  zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
 
   # From old emacsPackages (pre emacsPackagesNg)
   cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
@@ -44,5 +54,6 @@ lib.packagesFromDirectoryRecursive {
   ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
   ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
   haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
+  matrix-client = throw "emacsPackages.matrix-client is deprecated in favor of emacsPackages.ement."; # Added 2024-08-17
   perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }

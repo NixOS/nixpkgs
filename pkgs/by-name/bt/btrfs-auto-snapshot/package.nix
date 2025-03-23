@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hunleyd";
-    repo = pname;
+    repo = "btrfs-auto-snapshot";
     rev = "v${version}";
     hash = "sha256-QpuwkGaYAkpu5hYyb360Mr5tHsZc2LzMlKtpS8CyyhI=";
   };
@@ -32,19 +32,17 @@ stdenv.mkDerivation rec {
     install -Dm755 btrfs-auto-snapshot $out/bin/btrfs-auto-snapshot
   '';
 
-  wrapperPath =
-    with lib;
-    makeBinPath (
-      [
-        coreutils
-        getopt
-        gnugrep
-        gnused
-        gawk
-        btrfs-progs
-      ]
-      ++ optional syslogSupport util-linux
-    );
+  wrapperPath = lib.makeBinPath (
+    [
+      coreutils
+      getopt
+      gnugrep
+      gnused
+      gawk
+      btrfs-progs
+    ]
+    ++ lib.optional syslogSupport util-linux
+  );
 
   postFixup = ''
     wrapProgram $out/bin/btrfs-auto-snapshot \

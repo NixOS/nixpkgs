@@ -3,9 +3,10 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "hid-t150";
   #https://github.com/scarburato/t150_driver/blob/165d0601e11576186c9416c40144927549ef804d/install.sh#L3
   version = "0.8a";
@@ -19,9 +20,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  sourceRoot = "source/hid-t150";
+  sourceRoot = "${src.name}/hid-t150";
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];

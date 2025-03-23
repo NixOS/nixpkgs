@@ -2,13 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+
+  # nativeBuildInputs
+  pyqtwebengine,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiohttp,
+  asyncssh,
   atomicwrites,
   chardet,
   cloudpickle,
   cookiecutter,
   diff-match-patch,
+  fzf,
   intervaltree,
+  ipython-pygments-lexers,
   jedi,
   jellyfish,
   keyring,
@@ -18,14 +29,14 @@
   numpydoc,
   pickleshare,
   psutil,
+  pygithub,
   pygments,
   pylint-venv,
   pyls-spyder,
   pyopengl,
-  pyqtwebengine,
   python-lsp-black,
   python-lsp-server,
-  pyxdg,
+  pyuca,
   pyzmq,
   qdarkstyle,
   qstylizer,
@@ -35,39 +46,41 @@
   rope,
   rtree,
   scipy,
-  setuptools,
   spyder-kernels,
+  superqt,
   textdistance,
   three-merge,
   watchdog,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.5";
+  version = "6.1.0a1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y+JZO/LfWi1QzoSSV1uDI4zxLcte0HwVMNmBK0aXgd4=";
+    hash = "sha256-Yjii1YUmdWdrrSLe3trAoATJXt2bfjc0JX5CBMVIEq8=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  build-system = [
-    pyqtwebengine.wrapQtAppsHook
-    setuptools
-  ];
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
+    asyncssh
     atomicwrites
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
+    fzf
     intervaltree
+    ipython-pygments-lexers
     jedi
     jellyfish
     keyring
@@ -77,6 +90,7 @@ buildPythonPackage rec {
     numpydoc
     pickleshare
     psutil
+    pygithub
     pygments
     pylint-venv
     pyls-spyder
@@ -84,7 +98,7 @@ buildPythonPackage rec {
     pyqtwebengine
     python-lsp-black
     python-lsp-server
-    pyxdg
+    pyuca
     pyzmq
     qdarkstyle
     qstylizer
@@ -95,9 +109,11 @@ buildPythonPackage rec {
     rtree
     scipy
     spyder-kernels
+    superqt
     textdistance
     three-merge
     watchdog
+    yarl
   ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
@@ -127,7 +143,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

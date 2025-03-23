@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, python3Packages
-, writeShellScript
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  python3Packages,
+  writeShellScript,
+  nix-update-script,
 }:
 
 let
-  version = "1.9.0";
+  version = "2.7.1";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
-    rev = "v${version}";
-    hash = "sha256-gg7ClclBS9j9n4/3HLxbX8HXTz9Zw5+BYG2MEYRsRBU=";
+    tag = "v${version}";
+    hash = "sha256-nN8AuSzxHjIDKc8rGN+O2/vlzkH/A5LAr4aoAlOTLlk=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -41,22 +43,20 @@ let
   };
 in
 
-pythonpkgs.buildPythonPackage rec {
+pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
-  nativeBuildInputs = [
-    pythonpkgs.poetry-core
-    makeWrapper
-  ];
+  build-system = with pythonpkgs; [ poetry-core ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontWrapPythonPrograms = true;
 
-  doCheck = false;
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with pythonpkgs; [
+  dependencies = with pythonpkgs; [
     aiofiles
     alembic
     aniso8601
@@ -69,6 +69,7 @@ pythonpkgs.buildPythonPackage rec {
     gunicorn
     html2text
     httpx
+    itsdangerous
     jinja2
     lxml
     openai
@@ -93,42 +94,54 @@ pythonpkgs.buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm -rf dev # Do not need dev scripts & code
+
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
   '';
 
-  postInstall = let
-    start_script = writeShellScript "start-mealie" ''
-      ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
+  postInstall =
+    let
+      start_script = writeShellScript "start-mealie" ''
+        ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
+      '';
+      init_db = writeShellScript "init-mealie-db" ''
+        ${python.interpreter} $OUT/${python.sitePackages}/mealie/scripts/install_model.py
+        ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
+      '';
+    in
+    ''
+      mkdir -p $out/bin $out/libexec
+      rm -f $out/bin/*
+
+      makeWrapper ${start_script} $out/bin/mealie \
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
+        --set LD_LIBRARY_PATH "${crfpp}/lib" \
+        --set STATIC_FILES "${frontend}" \
+        --set PATH "${lib.makeBinPath [ crfpp ]}"
+
+      makeWrapper ${init_db} $out/libexec/init_db \
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
+        --set OUT "$out"
     '';
-    init_db = writeShellScript "init-mealie-db" ''
-      ${python.interpreter} $OUT/${python.sitePackages}/mealie/scripts/install_model.py
-      ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
-    '';
-  in ''
-    mkdir -p $out/config $out/bin $out/libexec
-    rm -f $out/bin/*
 
-    substitute ${src}/alembic.ini $out/config/alembic.ini \
-      --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
+  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
 
-    makeWrapper ${start_script} $out/bin/mealie \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
-      --set LD_LIBRARY_PATH "${crfpp}/lib" \
-      --set STATIC_FILES "${frontend}" \
-      --set PATH "${lib.makeBinPath [ crfpp ]}"
-
-    makeWrapper ${init_db} $out/libexec/init_db \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
-      --set OUT "$out"
-  '';
-
-  checkInputs = with python.pkgs; [
-    pytestCheckHook
+  disabledTestPaths = [
+    # KeyError: 'alembic_version'
+    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
+    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
+    # sqlite3.OperationalError: no such table
+    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
+    "tests/unit_tests/test_ingredient_parser.py"
+    "tests/unit_tests/test_security.py"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mealie;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) mealie;
+    };
   };
 
   meta = with lib; {
@@ -142,7 +155,10 @@ pythonpkgs.buildPythonPackage rec {
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi anoa ];
+    maintainers = with maintainers; [
+      litchipi
+      anoa
+    ];
     mainProgram = "mealie";
   };
 }

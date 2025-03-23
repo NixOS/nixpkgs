@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "trio-websocket";
-  version = "0.11.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HyperionGray";
     repo = "trio-websocket";
     rev = version;
-    hash = "sha256-ddLbYkb1m9zRjv3Lb7YwUzj26gYbK4nYN6jN+FAuiOs=";
+    hash = "sha256-TGFf4WUeZDrjp/UiQ9O/GoaK5BRC2aaGZVPfqZ4Ip9I=";
   };
 
   build-system = [ setuptools ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
       "test_client_connect_networking_error"
       "test_finalization_dropped_exception"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Failed: DID NOT RAISE <class 'ValueError'>
       "test_finalization_dropped_exception"
       # Timing related
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "WebSocket client and server implementation for Python Trio";
     homepage = "https://github.com/HyperionGray/trio-websocket";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

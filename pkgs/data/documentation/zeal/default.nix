@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qtbase
-, qtimageformats
-, qtwebengine
-, qtx11extras
-, libarchive
-, libXdmcp
-, libpthreadstubs
-, wrapQtAppsHook
-, xcbutilkeysyms
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  httplib,
+  qtbase,
+  qtimageformats,
+  qtwebengine,
+  qtx11extras,
+  libarchive,
+  libXdmcp,
+  libpthreadstubs,
+  wrapQtAppsHook,
+  xcbutilkeysyms,
 }:
 
 let
@@ -21,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-918hWy5be5mHINLbFJPiE29wlL1kRUD4MS3AjML/6fs=";
+    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    httplib
     libXdmcp
     libarchive
     libpthreadstubs
@@ -45,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtimageformats
     qtwebengine
     xcbutilkeysyms
-  ]
-  ++ lib.optionals isQt5 [ qtx11extras ];
+  ] ++ lib.optionals isQt5 [ qtx11extras ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
@@ -61,7 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://zealdocs.org/";
     changelog = "https://github.com/zealdocs/zeal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peterhoeg AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+    ];
     mainProgram = "zeal";
     inherit (qtbase.meta) platforms;
   };

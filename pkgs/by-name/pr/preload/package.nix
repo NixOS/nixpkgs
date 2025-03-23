@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, autoconf, automake, pkg-config, glib }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoconf,
+  automake,
+  pkg-config,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "preload";
@@ -14,7 +22,11 @@ stdenv.mkDerivation rec {
     ./0001-prevent-building-to-var-directories.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+  ];
   buildInputs = [ glib ];
 
   configureFlags = [ "--localstatedir=/var" ];

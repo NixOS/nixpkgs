@@ -1,19 +1,24 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  distutils,
   fetchPypi,
   pythonOlder,
   ncurses,
+  packaging,
   setuptools,
   filelock,
-  typing-extensions,
-  wheel,
   patchelf,
+  tomli,
+  importlib-metadata,
+  typing-extensions,
+  dmgbuild,
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "7.1.1";
+  version = "7.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,33 +26,37 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_freeze";
     inherit version;
-    hash = "sha256-M1wwutDj5lNlXyMJkzCEWL7cmXuvW3qZXoZB3rousoc=";
+    hash = "sha256-Z4/lsHTBURkY7e17PL5ULqV7TuKSZFzazrnGkc4TKT4=";
   };
-
-  pythonRelaxDeps = [
-    "setuptools"
-    "wheel"
-  ];
-
-  build-system = [
-    setuptools
-    wheel
-  ];
-
-  buildInputs = [
-    ncurses
-  ];
-
-  dependencies = [
-    filelock
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
 
   postPatch = ''
     sed -i /patchelf/d pyproject.toml
+    # Build system requirements
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=70.1,<75" "setuptools"
   '';
+
+  build-system = [
+    setuptools
+  ];
+
+  buildInputs = [ ncurses ];
+
+  dependencies =
+    [
+      distutils
+      packaging
+      setuptools
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      tomli
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+      typing-extensions
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux filelock
+    ++ lib.optional stdenv.hostPlatform.isDarwin dmgbuild;
 
   makeWrapperArgs = [
     "--prefix"
@@ -56,7 +65,7 @@ buildPythonPackage rec {
     (lib.makeBinPath [ patchelf ])
   ];
 
-  # fails to find Console even though it exists on python 3.x
+  # Fails to find Console even though it exists on python 3.x
   doCheck = false;
 
   meta = with lib; {
@@ -64,7 +73,7 @@ buildPythonPackage rec {
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cxfreeze";
   };
 }

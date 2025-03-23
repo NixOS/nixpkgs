@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.47.0";
+  version = "3.48.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvclive";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oC45cSqiKeorbyPe3GIsJ824U3OS1cKvWxUM901/QwQ=";
+    tag = version;
+    hash = "sha256-KwS5426EU0vym2fDbtIH4bmlSLKWLfZRRxXE+bEmGfc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pynvml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       jsonargparse
       lightgbm

@@ -30,10 +30,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: {command}`htpasswd -c <filename> <username>`.
-
-        WARNING: The generate file contains the users' passwords in a
-        non-cryptographically-securely hashed way.
+        Can be created by running {command}`nix-shell --packages apacheHttpd --run 'htpasswd -B -c FILENAME USERNAME'`.
       '';
     };
 
@@ -53,6 +50,16 @@ with lib;
       example = true;
       description = ''
         Whether to support proxying websocket connections with HTTP/1.1.
+      '';
+    };
+
+    uwsgiPass = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "unix:/run/example/example.sock";
+      description = ''
+        Adds uwsgi_pass directive and sets recommended proxy headers if
+        recommendedUwsgiSettings is enabled.
       '';
     };
 
@@ -135,6 +142,15 @@ with lib;
       defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
+      '';
+    };
+
+    recommendedUwsgiSettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedUwsgiSettings;
+      defaultText = literalExpression "config.services.nginx.recommendedUwsgiSettings";
+      description = ''
+        Enable recommended uwsgi settings.
       '';
     };
   };

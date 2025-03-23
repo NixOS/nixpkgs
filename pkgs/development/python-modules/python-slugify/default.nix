@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-slugify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zReUMIkItnDot3XyYCoPUNHrrAllbClWFYcxdTy3A30=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ text-unidecode ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     unidecode = [ unidecode ];
   };
 
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/un33k/python-slugify";
     changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

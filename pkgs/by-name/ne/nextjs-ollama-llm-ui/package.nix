@@ -14,7 +14,8 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.2.0";
+  tag = "v.${version}";
 in
 buildNpmPackage {
   pname = "nextjs-ollama-llm-ui";
@@ -23,21 +24,15 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "jakobhoeg";
     repo = "nextjs-ollama-llm-ui";
-    rev = "v${version}";
-    hash = "sha256-pZJgiopm0VGwaZxsNcyRawevvzEcK1j5WhngX1Pn6YE=";
+    inherit tag;
+    hash = "sha256-hgLeTWtnyxGMkMsAGBbaM2yeS/H8AStMPR2bjLdjwEc=";
   };
-  npmDepsHash = "sha256-wtHOW0CyEOszgiZwDkF2/cSxbw6WFRLbhDnd2FlY70E=";
+  npmDepsHash = "sha256-9+A+85IK4zmMGlBsVoLg7RnST72AhAM6xPGnBZLgLTk=";
 
   patches = [
-    # Update to a newer nextjs version that buildNpmPackage is able to build.
-    # Remove at nextjs update.
-    ./0001-update-nextjs.patch
     # nextjs tries to download google fonts from the internet during buildPhase and fails in Nix sandbox.
     # We patch the code to expect a local font from src/app/Inter.ttf that we load from Nixpkgs in preBuild phase.
     ./0002-use-local-google-fonts.patch
-    # Modify next.config.js to produce a production "standalone" output at .next/standalone.
-    # This output is easy to package with Nix and run with "node .next/standalone/server.js" later.
-    ./0003-add-standalone-output.patch
   ];
 
   # Adjust buildNpmPackage phases with nextjs quirk workarounds.
@@ -70,6 +65,12 @@ buildNpmPackage {
     mkdir -p $out/share/homepage/.next
     cp -r .next/static $out/share/homepage/.next/static
 
+    # https://github.com/vercel/next.js/discussions/58864
+    ln -s /var/cache/nextjs-ollama-llm-ui $out/share/homepage/.next/cache
+    # also provide a environment variable to override the cache directory
+    substituteInPlace $out/share/homepage/node_modules/next/dist/server/image-optimizer.js \
+        --replace '_path.join)(distDir,' '_path.join)(process.env["NEXT_CACHE_DIR"] || distDir,'
+
     chmod +x $out/share/homepage/server.js
 
     # we set a default port to support "nix run ..."
@@ -91,7 +92,7 @@ buildNpmPackage {
 
   meta = {
     description = "Simple chat web interface for Ollama LLMs";
-    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/v${version}";
+    changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/${tag}";
     mainProgram = "nextjs-ollama-llm-ui";
     homepage = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui";
     license = lib.licenses.mit;

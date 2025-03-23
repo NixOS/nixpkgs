@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 
@@ -102,6 +102,6 @@ buildPythonPackage rec {
     description = "Noto fonts support tools and scripts plus web site generation";
     homepage = "https://github.com/googlefonts/nototools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

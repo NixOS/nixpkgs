@@ -6,7 +6,7 @@
   six,
   termcolor,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   django,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     django
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "snapshottest" ];
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Snapshot testing for pytest, unittest, Django, and Nose";
     homepage = "https://github.com/syrusakbary/snapshottest";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

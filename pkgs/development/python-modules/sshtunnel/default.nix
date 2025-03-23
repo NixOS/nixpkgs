@@ -5,19 +5,22 @@
   paramiko,
   pytestCheckHook,
   mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
-  format = "setuptools";
   pname = "sshtunnel";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-58sOp3Tbgb+RhE2yLecqQKro97D5u5ug9mbUdO9r+fw=";
   };
 
-  propagatedBuildInputs = [ paramiko ];
+  build-system = [ setuptools ];
+
+  dependencies = [ paramiko ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,6 +39,6 @@ buildPythonPackage rec {
     mainProgram = "sshtunnel";
     homepage = "https://github.com/pahaz/sshtunnel";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

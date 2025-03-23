@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, cmake
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, faudio
-, physfs
-, SDL2
-, tinyxml-2
-, Foundation
-, IOKit
-, makeAndPlay ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  cmake,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  faudio,
+  physfs,
+  SDL2,
+  tinyxml-2,
+  Foundation,
+  IOKit,
+  makeAndPlay ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    hash = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
+    hash = "sha256-SYXuA7RJ0x4d1Lyvmk/R2nofEt5k7OJ91X6w3sGQOhg=";
     fetchSubmodules = true;
   };
 
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";
-    sha256 = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
+    hash = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
     meta.license = lib.licenses.unfree;
   };
 
@@ -40,12 +41,17 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    faudio
-    physfs
-    SDL2
-    tinyxml-2
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
+  buildInputs =
+    [
+      faudio
+      physfs
+      SDL2
+      tinyxml-2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      IOKit
+    ];
 
   cmakeDir = "../desktop_version";
 
@@ -59,7 +65,7 @@ stdenv.mkDerivation rec {
       name = "VVVVVV";
       desktopName = "VVVVVV";
       comment = meta.description;
-      exec = pname;
+      exec = "vvvvvv";
       icon = "VVVVVV";
       terminal = false;
       categories = [ "Game" ];
@@ -69,12 +75,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 VVVVVV $out/bin/${pname}
+    install -Dm755 VVVVVV $out/bin/vvvvvv
     install -Dm644 "$src/desktop_version/icon.ico" "$out/share/pixmaps/VVVVVV.png"
     cp -r "$src/desktop_version/fonts/" "$out/share/"
     cp -r "$src/desktop_version/lang/" "$out/share/"
 
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/vvvvvv \
       --add-flags "-assets ${dataZip}" \
       --add-flags "-langdir $out/share/lang" \
       --add-flags "-fontsdir $out/share/fonts"
@@ -83,17 +89,21 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A retro-styled platform game" + lib.optionalString makeAndPlay " (redistributable, without original levels)";
-    longDescription = ''
-      VVVVVV is a platform game all about exploring one simple mechanical
-      idea - what if you reversed gravity instead of jumping?
-    '' + lib.optionalString makeAndPlay ''
-      (Redistributable version, doesn't include the original levels.)
-    '';
+    description =
+      "A retro-styled platform game"
+      + lib.optionalString makeAndPlay " (redistributable, without original levels)";
+    longDescription =
+      ''
+        VVVVVV is a platform game all about exploring one simple mechanical
+        idea - what if you reversed gravity instead of jumping?
+      ''
+      + lib.optionalString makeAndPlay ''
+        (Redistributable version, doesn't include the original levels.)
+      '';
     homepage = "https://thelettervsixtim.es";
     changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

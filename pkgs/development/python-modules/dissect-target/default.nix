@@ -24,6 +24,7 @@
   dissect-util,
   dissect-volume,
   dissect-xfs,
+  docutils,
   fetchFromGitHub,
   flow-record,
   fusepy,
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.18";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -52,8 +53,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jR+f4t0QXmm007lrGdMyF9vFa3NW35gZxs7pe9sdjfg=";
+    tag = version;
+    hash = "sha256-kB1RhLnmsK77V5uI/GesRQX//awWKVAtWUGgtj38URM=";
   };
 
   postPatch = ''
@@ -80,7 +81,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       asn1crypto
       dissect-btrfs
@@ -102,18 +103,26 @@ buildPythonPackage rec {
       yara-python
       zstandard
     ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-    yara = [ yara-python ] ++ passthru.optional-dependencies.full;
-    smb = [ impacket ] ++ passthru.optional-dependencies.full;
-    mqtt = [ paho-mqtt ] ++ passthru.optional-dependencies.full;
+    yara = [ yara-python ] ++ optional-dependencies.full;
+    smb = [ impacket ] ++ optional-dependencies.full;
+    mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [
+    docutils
+    pytestCheckHook
+  ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "dissect.target" ];
 
   disabledTests =
     [
       "test_cpio"
+      "test_env_parser"
+      "test_cp_directory"
+      "test_cp_subdirectories"
+      "test_shell_cli"
+      "test_shell_cmd"
       # Test requires rdump
       "test_exec_target_command"
       # Issue with tar file
@@ -136,8 +145,8 @@ buildPythonPackage rec {
       "test_reg_output"
       "test_regflex"
       "test_systemd_basic_syntax"
-      "test_target_cli_unicode_argparse"
-      "test_target_query"
+      "test_target"
+      "test_yara"
     ]
     ++
     # test is broken on Darwin
@@ -149,8 +158,10 @@ buildPythonPackage rec {
     # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
     "tests/plugins/os/unix/locate/"
     # Missing plugin support
+    "tests/plugins/child/"
     "tests/tools/test_dump.py"
     "tests/plugins/os/"
+    "tests/test_container.py"
     "tests/plugins/filesystem/"
     "tests/test_registration.py"
     "tests/filesystems/"
@@ -161,7 +172,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
-    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

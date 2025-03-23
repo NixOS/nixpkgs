@@ -96,7 +96,7 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
-      path = ./formats.nix;
+      path = ./testfile;
     };
     expected = ''
       {
@@ -111,14 +111,14 @@ in runBuildTests {
           null
         ],
         "null": null,
-        "path": "${./formats.nix}",
+        "path": "${./testfile}",
         "str": "foo",
         "true": true
       }
     '';
   };
 
-  yamlAtoms = shouldPass {
+  yaml_1_1Atoms = shouldPass {
     format = formats.yaml {};
     input = {
       null = null;
@@ -128,7 +128,9 @@ in runBuildTests {
       str = "foo";
       attrs.foo = null;
       list = [ null null ];
-      path = ./formats.nix;
+      path = ./testfile;
+      no = "no";
+      time = "22:30:00";
     };
     expected = ''
       attrs:
@@ -138,9 +140,11 @@ in runBuildTests {
       list:
       - null
       - null
+      'no': 'no'
       'null': null
-      path: ${./formats.nix}
+      path: ${./testfile}
       str: foo
+      time: '22:30:00'
       'true': true
     '';
   };
@@ -220,6 +224,67 @@ in runBuildTests {
       baz=false
       qux=qux
     '';
+  };
+
+  iniCoercedDuplicateKeys = shouldPass rec {
+    format = formats.ini {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1
+      bar=2
+    '';
+  };
+
+  iniCoercedListToValue = shouldPass rec {
+    format = formats.ini {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1, 2
+    '';
+  };
+
+  iniCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = true; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
+  };
+
+  iniNoCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = false; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
   };
 
   iniWithGlobalNoSections = shouldPass {
@@ -317,6 +382,82 @@ in runBuildTests {
     '';
   };
 
+  iniWithGlobalCoercedDuplicateKeys = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3
+      baz=4
+
+      [foo]
+      bar=2
+      bar=1
+    '';
+  };
+
+  iniWithGlobalCoercedListToValue = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3, 4
+
+      [foo]
+      bar=2, 1
+    '';
+  };
+
+  iniWithGlobalCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = true; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
+  };
+
+  iniWithGlobalNoCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = false; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
+  };
+
   keyValueAtoms = shouldPass {
     format = formats.keyValue {};
     input = {
@@ -392,6 +533,40 @@ in runBuildTests {
     '';
   };
 
+  cdnAtoms = shouldPass {
+    format = formats.cdn { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        1
+        null
+      ];
+      path = ./testfile;
+    };
+    expected = ''
+      attrs {
+        "foo": null
+      }
+      "false": false
+      "float": 3.141
+      "int": 10
+      list [
+        1,
+        null
+      ]
+      "null": null
+      "path": "${./testfile}"
+      "str": "foo"
+      "true": true
+    '';
+  };
+
   # This test is responsible for
   #   1. testing type coercions
   #   2. providing a more readable example test
@@ -423,6 +598,82 @@ in runBuildTests {
       tautologies = true
       \u00fctf\ 8 = d\u00fbh
       \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
+    '';
+  };
+
+  luaTable = shouldPass {
+    format = formats.lua { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      inline = lib.mkLuaInline "hello('world')";
+    };
+    expected = ''
+      return {
+        ["attrs"] = {
+          ["foo"] = nil,
+        },
+        ["false"] = false,
+        ["float"] = 3.141,
+        ["inline"] = (hello("world")),
+        ["int"] = 10,
+        ["list"] = {
+          nil,
+          nil,
+        },
+        ["null"] = nil,
+        ["path"] = "${./testfile}",
+        ["str"] = "foo",
+        ["true"] = true,
+      }
+    '';
+  };
+
+  luaBindings = shouldPass {
+    format = formats.lua {
+      asBindings = true;
+    };
+    input = {
+      null = null;
+      _false = false;
+      _true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        null
+        null
+      ];
+      path = ./testfile;
+      inline = lib.mkLuaInline "hello('world')";
+    };
+    expected = ''
+      _false = false
+      _true = true
+      attrs = {
+        ["foo"] = nil,
+      }
+      float = 3.141
+      inline = (hello("world"))
+      int = 10
+      list = {
+        nil,
+        nil,
+      }
+      null = nil
+      path = "${./testfile}"
+      str = "foo"
     '';
   };
 
@@ -469,4 +720,31 @@ in runBuildTests {
     '';
   };
 
+  badgerfishToXmlGenerate = shouldPass {
+    format = formats.xml { };
+    input = {
+      root = {
+        "@id" = "123";
+        "@class" = "example";
+        child1 = {
+          "@name" = "child1Name";
+          "#text" = "text node";
+        };
+        child2 = {
+          grandchild = "This is a grandchild text node.";
+        };
+        nulltest = null;
+      };
+    };
+    expected = ''
+      <?xml version="1.0" encoding="utf-8"?>
+      <root class="example" id="123">
+        <child1 name="child1Name">text node</child1>
+        <child2>
+          <grandchild>This is a grandchild text node.</grandchild>
+        </child2>
+        <nulltest></nulltest>
+      </root>
+    '';
+  };
 }

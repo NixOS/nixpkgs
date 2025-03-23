@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pysol-cards";
-  version = "0.16.0";
+  version = "0.18.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "pysol_cards";
-    hash = "sha256-C4fKez+ZFVzM08/XOfc593RNb4GYIixtSToDSj1FcMM=";
+    hash = "sha256-EDx8DDGecug24Jm7tH/1S+cp2XXjXBG6dNSsXkKGuOs=";
   };
 
   propagatedBuildInputs = [

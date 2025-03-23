@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, soundtouch }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  soundtouch,
+}:
 
 buildDunePackage rec {
   pname = "soundtouch";

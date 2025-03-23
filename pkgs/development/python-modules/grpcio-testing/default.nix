@@ -8,9 +8,12 @@
   setuptools,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.65.1";
+  version = "1.70.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;
-    hash = "sha256-AdYhmtubPYxmrGYIbd5LpSu28icVxMzeYO7Qp4RQysE=";
+    hash = "sha256-XrVNt0zgW8l+4VuzrgDt36ACuD9YBoE1cv2ceYAD4HU=";
   };
 
   postPatch = ''

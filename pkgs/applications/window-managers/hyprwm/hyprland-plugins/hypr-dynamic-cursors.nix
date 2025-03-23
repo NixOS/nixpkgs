@@ -3,17 +3,18 @@
   mkHyprlandPlugin,
   fetchFromGitHub,
   hyprland,
+  nix-update-script,
 }:
 
 mkHyprlandPlugin hyprland {
   pluginName = "hypr-dynamic-cursors";
-  version = "0-unstable-2024-07-06";
+  version = "0-unstable-2025-03-06";
 
   src = fetchFromGitHub {
     owner = "VirtCode";
     repo = "hypr-dynamic-cursors";
-    rev = "85423b074e112f28e84f6276d31d1548906a625e";
-    hash = "sha256-lCAZ/7xtOE6P7uPIX2uQgC0nDOBZefWYO3O3izRx19E=";
+    rev = "261bc1668f7de45b48ba6a40d5d727025575390b";
+    hash = "sha256-2HSbWe1r5DYulPzMXZYSluiwG/T+5904YmJSrPJ8tEo=";
   };
 
   dontUseCmakeConfigure = true;
@@ -22,10 +23,12 @@ mkHyprlandPlugin hyprland {
     runHook preInstall
 
     mkdir -p $out/lib
-    mv out/dynamic-cursors.so $out/lib/libdynamic-cursors.so
+    mv out/dynamic-cursors.so $out/lib/libhypr-dynamic-cursors.so
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Plugin to make your Hyprland cursor more realistic";

@@ -27,16 +27,18 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.3.1";
+  version = "5.3.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    rev = "refs/tags/${version}";
+    tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-wSF20I5WaxRoN0n0jxB5O3mAAIOxP/TclYBTRAUwYHo=";
+    hash = "sha256-4q4Se/8psa6hl+PA1vnh/3HpQsihDL8UCg0ScNLg61o=";
   };
 
   outputs = [
@@ -44,21 +46,20 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    flit-core
-
-    # docs
-    sphinxHook
-    sphinx-rtd-theme
-    myst-parser
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  build-system = [ flit-core ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    myst-parser
+  ];
+
+  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies = rec {
     full = crypto ++ image;

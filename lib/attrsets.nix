@@ -5,9 +5,9 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -17,7 +17,7 @@ rec {
   /**
     Return an attribute from nested attribute sets.
 
-    Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
@@ -319,7 +319,7 @@ rec {
   getAttrFromPath =
     attrPath:
     set:
-    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
+    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'")) set;
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.
@@ -644,8 +644,7 @@ rec {
   filterAttrs =
     pred:
     set:
-    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
-
+    removeAttrs set (filter (name: ! pred name set.${name}) (attrNames set));
 
   /**
     Filter an attribute set recursively by removing all attributes for
@@ -2137,6 +2136,6 @@ rec {
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 
   # DEPRECATED
-  cartesianProductOfSets = warnIf (isInOldestRelease 2405)
+  cartesianProductOfSets = warnIf (oldestSupportedReleaseIsAtLeast 2405)
     "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }

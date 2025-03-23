@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, liquid-dsp, soapysdr }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  liquid-dsp,
+  soapysdr,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fm-tune";
@@ -8,12 +15,15 @@ stdenv.mkDerivation rec {
     owner = "viraptor";
     repo = "fm_tune";
     rev = version;
-    sha256 = "pwL2G1Ni1Ixw/N0diSoGGIoVrtmF92mWZ5i57OOvkX4=";
+    hash = "sha256-pwL2G1Ni1Ixw/N0diSoGGIoVrtmF92mWZ5i57OOvkX4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ liquid-dsp soapysdr ];
+  buildInputs = [
+    liquid-dsp
+    soapysdr
+  ];
 
   meta = with lib; {
     description = "Find initial calibration offset for SDR devices";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -20,7 +25,11 @@ in
       description = "Wireguard network manager";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [ wireguard-tools iproute2 wireguard-go ];
+      path = with pkgs; [
+        wireguard-tools
+        iproute2
+        wireguard-go
+      ];
       serviceConfig = {
         Type = "simple";
         Restart = "on-failure";
@@ -29,11 +38,14 @@ in
         ExecStop = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         ReadWritePaths = [
-          "/tmp"  # wg-netmanager creates files in /tmp before deleting them after use
+          "/tmp" # wg-netmanager creates files in /tmp before deleting them after use
         ];
       };
-      unitConfig =  {
-        ConditionPathExists = ["/etc/wg_netmanager/network.yaml" "/etc/wg_netmanager/peer.yaml"];
+      unitConfig = {
+        ConditionPathExists = [
+          "/etc/wg_netmanager/network.yaml"
+          "/etc/wg_netmanager/peer.yaml"
+        ];
       };
     };
   };

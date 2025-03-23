@@ -28,17 +28,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    crate
     geojson
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "agatesql" ];
 
+  disabledTests = [
+    # requires crate (sqlalchemy-cratedb)
+    "test_to_sql_create_statement_with_dialects"
+  ];
+
   meta = with lib; {
     description = "Adds SQL read/write support to agate";
     homepage = "https://github.com/wireservice/agate-sql";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

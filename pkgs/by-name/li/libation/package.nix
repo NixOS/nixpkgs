@@ -6,27 +6,19 @@
   dotnetCorePackages,
   wrapGAppsHook3,
 
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
-  fontconfig,
   glew,
   gtk3,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.3.6";
+  version = "11.5.5";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
+    hash = "sha256-FD3f2Cba1xN15BloyRQ/m/vDovhN8x0AlfeJk+LGVV4=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -34,9 +26,13 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnetFlags = [ "-p:PublishReadyToRun=false" ];
+  dotnetFlags = [
+    "-p:PublishReadyToRun=false"
+    # for some reason this is set to win-x64 in the project files
+    "-p:RuntimeIdentifier="
+  ];
 
   projectFile = [
     "LibationAvalonia/LibationAvalonia.csproj"
@@ -48,14 +44,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     # For Avalonia UI
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
     # For file dialogs
     gtk3
@@ -68,12 +56,12 @@ buildDotnetModule rec {
         --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
   '';
 
-  # wrap manually, because we need lower case excutables
+  # wrap manually, because we need lower case executables
   dontDotnetFixup = true;
 
   preFixup = ''
     # remove binaries for other platform, like upstream does
-    pushd $out/lib/${pname}
+    pushd $out/lib/libation
     rm -f *.x86.dll *.x64.dll
     ${lib.optionalString (stdenv.system != "x86_64-linux") "rm -f *.x64.so"}
     ${lib.optionalString (stdenv.system != "aarch64-linux") "rm -f *.arm64.so"}
@@ -81,9 +69,9 @@ buildDotnetModule rec {
     ${lib.optionalString (stdenv.system != "aarch64-darwin") "rm -f *.arm64.dylib"}
     popd
 
-    wrapDotnetProgram $out/lib/${pname}/Libation $out/bin/libation
-    wrapDotnetProgram $out/lib/${pname}/LibationCli $out/bin/libationcli
-    wrapDotnetProgram $out/lib/${pname}/Hangover $out/bin/hangover
+    wrapDotnetProgram $out/lib/libation/Libation $out/bin/libation
+    wrapDotnetProgram $out/lib/libation/LibationCli $out/bin/libationcli
+    wrapDotnetProgram $out/lib/libation/Hangover $out/bin/hangover
   '';
 
   meta = {

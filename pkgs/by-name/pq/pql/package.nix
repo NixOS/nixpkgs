@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "pql";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "runreveal";
     repo = "pql";
     rev = "v${version}";
-    hash = "sha256-xNWwjDdnF4+IvS814iJlqCFYNOGNF2nHEnnbRqxJsjM=";
+    hash = "sha256-/112LQfIkya/9hzq3nxtpdSarHIshPw4mezNcKm4xyI=";
   };
 
-  vendorHash = "sha256-j/R+1PWfX+lmm99cHWSuo+v8RxKg089Bvb4rFHpmpfE=";
+  vendorHash = "sha256-hYCbwDChI7pnc9aZ/i2PffTwSBjUjc0Qc71D4EfUOI8=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Pipelined Query Language";

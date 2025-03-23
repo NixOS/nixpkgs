@@ -10,20 +10,25 @@
   pythonOlder,
   pyqt6,
   python,
+  mesa,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.7.0";
-  format = "pyproject";
+  version = "6.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "PyQt6_WebEngine";
     inherit version;
-    hash = "sha256-aO3HrbbZ4nX13pVogeecyg1x+tQ5q+qhDYI7/1rFUAE=";
+    hash = "sha256-ZARepiK2pBiCwrGPVa6XFLhmCs/walTpEOtygiwvP/I=";
   };
+
+  patches = [
+    ./qvariant.patch
+  ];
 
   # fix include path and increase verbosity
   postPatch = ''
@@ -52,18 +57,23 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with qt6Packages; [
-    pkg-config
-    lndir
+  build-system = [
     sip
-    qtwebengine
-    qmake
     pyqt-builder
   ];
 
-  buildInputs = with qt6Packages; [ qtwebengine ];
+  dependencies = [
+    pyqt6
+  ];
 
-  propagatedBuildInputs = [ pyqt6 ];
+  nativeBuildInputs = with qt6Packages; [
+    pkg-config
+    lndir
+    qtwebengine
+    qmake
+  ];
+
+  buildInputs = with qt6Packages; [ qtwebengine ];
 
   passthru = {
     inherit sip;
@@ -72,7 +82,6 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
-  doCheck = true;
 
   pythonImportsCheck = [
     "PyQt6.QtWebEngineCore"
@@ -80,14 +89,13 @@ buildPythonPackage rec {
     "PyQt6.QtWebEngineWidgets"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt6 WebEngine";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    inherit (mesa.meta) platforms;
+    maintainers = with lib.maintainers; [
       LunNova
-      nrdxp
     ];
   };
 }

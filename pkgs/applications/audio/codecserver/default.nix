@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, udev, protobuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  udev,
+  protobuf,
 }:
 
 stdenv.mkDerivation rec {

@@ -2,31 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytest-cov-stub,
+  pytest,
   pythonOlder,
   setuptools,
-  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "6.2";
-  format = "setuptools";
+  version = "7.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mGP7o52Wun6AdE2jMAJBmLR10EmN50qzbMzB06BFXMg=";
+    hash = "sha256-jl0LSJGJlKYU1eX7y1ElDNbtkORo7grR3Bz5Ot5pabA=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=pglast --cov-report term-missing" ""
-  '';
+  dependencies = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    pytest-cov-stub
+  ];
 
   # pytestCheckHook doesn't work
   # ImportError: cannot import name 'parse_sql' from 'pglast'
@@ -40,11 +41,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/lelit/pglast";
     description = "PostgreSQL Languages AST and statements prettifier";
+    homepage = "https://github.com/lelit/pglast";
     changelog = "https://github.com/lelit/pglast/blob/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pgpp";
   };
 }

@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-webrisk";
-  version = "1.14.4";
+  version = "1.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nfWCUXVGiNrECNqGxQrknZutqLh/WSF6YnYH7cnM14U=";
+    pname = "google_cloud_webrisk";
+    inherit version;
+    hash = "sha256-apCNF81eeLIP4nNdzm9KeUlUO7pjN6quKTrl1xsUn0Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     proto-plus

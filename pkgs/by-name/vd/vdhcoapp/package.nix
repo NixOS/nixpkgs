@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, nodejs
-, ffmpeg
-, callPackage
-, substituteAll
-, makeWrapper
-, toml2json
-, jq
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  nodejs,
+  ffmpeg,
+  callPackage,
+  replaceVars,
+  makeWrapper,
+  toml2json,
+  jq,
 }:
 buildNpmPackage rec {
   pname = "vdhcoapp";
@@ -31,10 +32,9 @@ buildNpmPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-filepicker.patch;
+    (replaceVars ./ffmpeg-filepicker.patch {
       inherit ffmpeg;
-      filepicker = lib.getExe (callPackage ./filepicker.nix {});
+      filepicker = lib.getExe (callPackage ./filepicker.nix { });
     })
   ];
 

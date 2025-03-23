@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   # How to interactively test this module if the audio actually works
 
   # - nix run .#pulseaudio-module-xrdp.tests.xrdp-with-audio-pulseaudio.driverInteractive
@@ -14,84 +15,94 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    server = { pkgs, ... }: {
-      imports = [ ./common/user-account.nix ];
+    server =
+      { pkgs, ... }:
+      {
+        imports = [ ./common/user-account.nix ];
 
-      environment.etc."xrdp/test.txt".text = "Shouldn't conflict";
+        environment.etc."xrdp/test.txt".text = "Shouldn't conflict";
 
-      services.xrdp.enable = true;
-      services.xrdp.audio.enable = true;
-      services.xrdp.defaultWindowManager = "${pkgs.xterm}/bin/xterm";
+        services.xrdp.enable = true;
+        services.xrdp.audio.enable = true;
+        services.xrdp.defaultWindowManager = "${pkgs.xterm}/bin/xterm";
 
-      hardware.pulseaudio = {
-        enable = true;
-      };
+        services.pulseaudio = {
+          enable = true;
+        };
 
-      systemd.user.services.pactl-list = {
-        script = ''
-          while [ ! -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]; do
+        systemd.user.services.pactl-list = {
+          script = ''
+            while [ ! -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]; do
+              sleep 1
+            done
             sleep 1
-          done
-          sleep 1
-          ${pkgs.pulseaudio}/bin/pactl list
-          echo Source:
-          ${pkgs.pulseaudio}/bin/pactl get-default-source | tee /tmp/pulseaudio-source
-          echo Sink:
-          ${pkgs.pulseaudio}/bin/pactl get-default-sink | tee /tmp/pulseaudio-sink
+            ${pkgs.pulseaudio}/bin/pactl list
+            echo Source:
+            ${pkgs.pulseaudio}/bin/pactl get-default-source | tee /tmp/pulseaudio-source
+            echo Sink:
+            ${pkgs.pulseaudio}/bin/pactl get-default-sink | tee /tmp/pulseaudio-sink
 
-        '';
-        wantedBy = [ "default.target" ];
+          '';
+          wantedBy = [ "default.target" ];
+        };
+
+        networking.firewall.allowedTCPPorts = [ 3389 ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 3389 ];
-    };
+    client =
+      { pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+          ./common/user-account.nix
+        ];
+        test-support.displayManager.auto.user = "alice";
 
-    client = { pkgs, ... }: {
-      imports = [ ./common/x11.nix ./common/user-account.nix ];
-      test-support.displayManager.auto.user = "alice";
+        environment.systemPackages = [ pkgs.freerdp ];
 
-      environment.systemPackages = [ pkgs.freerdp ];
+        services.xrdp.enable = true;
+        services.xrdp.audio.enable = true;
+        services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";
 
-      services.xrdp.enable = true;
-      services.xrdp.audio.enable = true;
-      services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";
-
-      hardware.pulseaudio = {
-        enable = true;
+        services.pulseaudio = {
+          enable = true;
+        };
       };
-    };
   };
 
-  testScript = { nodes, ... }: let
-    user = nodes.client.config.users.users.alice;
-  in ''
-    start_all()
+  testScript =
+    { nodes, ... }:
+    let
+      user = nodes.client.config.users.users.alice;
+    in
+    ''
+      start_all()
 
-    client.wait_for_x()
-    client.wait_for_file("${user.home}/.Xauthority")
-    client.succeed("xauth merge ${user.home}/.Xauthority")
+      client.wait_for_x()
+      client.wait_for_file("${user.home}/.Xauthority")
+      client.succeed("xauth merge ${user.home}/.Xauthority")
 
-    client.sleep(5)
+      client.sleep(5)
 
-    client.execute("xterm >&2 &")
-    client.sleep(1)
+      client.execute("xterm >&2 &")
+      client.sleep(1)
 
-    client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password} /sound\n")
+      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password} /sound\n")
 
-    client.sleep(10)
+      client.sleep(10)
 
-    client.succeed("[ -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]") # checks if it's a socket
-    client.sleep(5)
-    client.screenshot("localrdp")
+      client.succeed("[ -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]") # checks if it's a socket
+      client.sleep(5)
+      client.screenshot("localrdp")
 
-    client.execute("xterm >&2 &")
-    client.sleep(1)
-    client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password} /sound\n")
-    client.sleep(10)
+      client.execute("xterm >&2 &")
+      client.sleep(1)
+      client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password} /sound\n")
+      client.sleep(10)
 
-    server.succeed("[ -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]") # checks if it's a socket
-    server.succeed('[ "$(cat /tmp/pulseaudio-source)" == "xrdp-source" ]')
-    server.succeed('[ "$(cat /tmp/pulseaudio-sink)" == "xrdp-sink" ]')
-    client.screenshot("remoterdp")
-  '';
-})
+      server.succeed("[ -S /tmp/.xrdp/xrdp_chansrv_audio_in_socket_* ]") # checks if it's a socket
+      server.succeed('[ "$(cat /tmp/pulseaudio-source)" == "xrdp-source" ]')
+      server.succeed('[ "$(cat /tmp/pulseaudio-sink)" == "xrdp-sink" ]')
+      client.screenshot("remoterdp")
+    '';
+}

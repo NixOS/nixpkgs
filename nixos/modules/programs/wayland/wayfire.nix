@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.programs.wayfire;
 in
@@ -12,7 +17,10 @@ in
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = with pkgs.wayfirePlugins; [ wcm wf-shell ];
+      default = with pkgs.wayfirePlugins; [
+        wcm
+        wf-shell
+      ];
       defaultText = lib.literalExpression "with pkgs.wayfirePlugins; [ wcm wf-shell ]";
       example = lib.literalExpression ''
         with pkgs.wayfirePlugins; [
@@ -25,26 +33,39 @@ in
         Additional plugins to use with the wayfire window manager.
       '';
     };
-  };
-
-  config = let
-    finalPackage = pkgs.wayfire-with-plugins.override {
-      wayfire = cfg.package;
-      plugins = cfg.plugins;
-    };
-  in
-  lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      finalPackage
-    ];
-
-    services.displayManager.sessionPackages = [ finalPackage ];
-
-    xdg.portal = {
-      enable = lib.mkDefault true;
-      wlr.enable = lib.mkDefault true;
-      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050914
-      config.wayfire.default = lib.mkDefault [ "wlr" "gtk" ];
+    xwayland.enable = lib.mkEnableOption "XWayland" // {
+      default = true;
     };
   };
+
+  config =
+    let
+      finalPackage = pkgs.wayfire-with-plugins.override {
+        wayfire = cfg.package;
+        plugins = cfg.plugins;
+      };
+    in
+    lib.mkIf cfg.enable (
+      lib.mkMerge [
+        {
+          environment.systemPackages = [ finalPackage ];
+
+          services.displayManager.sessionPackages = [ finalPackage ];
+
+          xdg.portal = {
+            enable = lib.mkDefault true;
+            wlr.enable = lib.mkDefault true;
+            # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050914
+            config.wayfire.default = lib.mkDefault [
+              "wlr"
+              "gtk"
+            ];
+          };
+        }
+        (import ./wayland-session.nix {
+          inherit lib pkgs;
+          enableXWayland = cfg.xwayland.enable;
+        })
+      ]
+    );
 }

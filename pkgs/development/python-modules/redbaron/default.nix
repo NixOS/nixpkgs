@@ -26,7 +26,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage = "https://github.com/gristlabs/asttokens";
+    homepage = "https://github.com/PyCQA/redbaron";
     description = "Abstraction on top of baron, a FST for python to make writing refactoring code a realistic task";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ marius851000 ];

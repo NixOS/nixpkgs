@@ -5,6 +5,7 @@
 # this file.
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -25,9 +26,8 @@ makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "qt6Packages";
   f = (self: let
     inherit (self) callPackage;
-    noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
+    noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
   in (noExtraAttrs qt6) // {
-  inherit stdenv;
 
   # LIBRARIES
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -54,11 +54,21 @@ makeScopeWithSplicing' {
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
+  libqglviewer = callPackage ../development/libraries/libqglviewer { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
   libquotient = callPackage ../development/libraries/libquotient { };
   mlt = pkgs.mlt.override {
     qt = qt6;
   };
+
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
@@ -84,12 +94,16 @@ makeScopeWithSplicing' {
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
+  qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qtspell = callPackage ../development/libraries/qtspell { };
+
   qwlroots = callPackage ../development/libraries/qwlroots {
-    wlroots = pkgs.wlroots_0_17;
+    wlroots = pkgs.wlroots_0_18;
   };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -102,20 +116,22 @@ makeScopeWithSplicing' {
     suffix = "qt6";
   };
 
+  sailfish-access-control-plugin = callPackage ../development/libraries/sailfish-access-control-plugin { };
+
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
-  sddm = callPackage ../applications/display-managers/sddm {};
+  sddm = kdePackages.callPackage ../applications/display-managers/sddm {};
 
   sierra-breeze-enhanced = kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
 
   signond = callPackage ../development/libraries/signond {};
 
+  timed = callPackage ../applications/system/timed { };
+
   waylib = callPackage ../development/libraries/waylib { };
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
-  } // lib.optionalAttrs pkgs.config.allowAliases {
-    # Remove completely before 24.11
-    overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
+  xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
 }

@@ -10,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pytransportnswv2";
-  version = "0.4.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LbFBzC7kGa2qz+XQZDmjhE2FhmScesx5jtLtkV0hlg8=";
+    pname = "PyTransportNSWv2";
+    inherit version;
+    hash = "sha256-IQhapQzzrjvhB2pWxoIePEk7epiuC0IolO7SM3/QSWg=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "TransportNSW" ];
+  pythonImportsCheck = [ "TransportNSWv2" ];
 
   meta = with lib; {
     description = "Python module to access Transport NSW information";

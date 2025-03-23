@@ -11,6 +11,7 @@
   isodate,
   lxml,
   mock,
+  packaging,
   platformdirs,
   pretend,
   pytest-asyncio,
@@ -22,28 +23,34 @@
   requests-toolbelt,
   requests-file,
   requests-mock,
+  setuptools,
   xmlsec,
 }:
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.2.1";
-  format = "setuptools";
+  version = "4.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
+    tag = version;
+    hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
 
-  propagatedBuildInputs = [
+  patches = [ ./httpx-compat.patch ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     defusedxml
     isodate
     lxml
+    packaging
     platformdirs
     pytz
     requests
@@ -51,9 +58,9 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  passthru.optional-dependencies = {
-    async_require = [ httpx ];
-    xmlsec_require = [ xmlsec ];
+  optional-dependencies = {
+    async = [ httpx ];
+    xmlsec = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];
@@ -68,7 +75,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Failed: External connections not allowed during tests.

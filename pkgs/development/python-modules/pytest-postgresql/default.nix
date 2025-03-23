@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  pytest-cov-stub,
   setuptools,
   mirakuru,
   port-for,
@@ -22,13 +23,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "pytest-postgresql";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6D9QNcfq518ORQDYCH5G+LLJ7tVWPFwB6ylZR3LOZ5g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace-fail "--cov" ""  \
       --replace-fail "--max-worker-restart=0" ""
     sed -i 's#/usr/lib/postgresql/.*/bin/pg_ctl#${postgresql}/bin/pg_ctl#' pytest_postgresql/plugin.py
   '';
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     postgresql
     pytestCheckHook
+    pytest-cov-stub
   ];
   pytestFlagsArray = [
     "-p"

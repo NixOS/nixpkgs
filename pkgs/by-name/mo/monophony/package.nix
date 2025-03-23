@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitLab
-, python3Packages
-, wrapGAppsHook4
-, gst_all_1
-, gobject-introspection
-, yt-dlp
-, libadwaita
-, glib-networking
-, nix-update-script
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+  wrapGAppsHook4,
+  gst_all_1,
+  gobject-introspection,
+  yt-dlp,
+  libadwaita,
+  glib-networking,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.11.0";
+  version = "2.15.0";
   pyproject = false;
 
   sourceRoot = "${src.name}/source";
@@ -19,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-OGUj1NNJNerYx/nBtg4g9xMbz6u4YSqKO6HeMNeYpE8=";
+    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
   };
 
   pythonPath = with python3Packages; [
@@ -39,15 +40,17 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-    # needed for gstreamer https
-    glib-networking
-  ] ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      libadwaita
+      # needed for gstreamer https
+      glib-networking
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
   # Makefile only contains `install`
   dontBuild = true;
@@ -58,7 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
+      --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}"
       "''${gappsWrapperArgs[@]}"
     )
   '';

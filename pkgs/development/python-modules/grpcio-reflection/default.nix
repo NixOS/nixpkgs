@@ -7,15 +7,18 @@
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.65.1";
+  version = "1.70.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_reflection";
     inherit version;
-    hash = "sha256-5q5ZAPnYAdyXApglUEL7xCaBVG904IwjNt/9Brl2Wr8=";
+    hash = "sha256-r0bOE+V/12At6u9bHRkD9mRPiYLMAPYvqfpbkorPakk=";
   };
 
   build-system = [ setuptools ];

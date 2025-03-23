@@ -1,31 +1,29 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, rocksdb_8_3
-, testers
-, surrealdb
-, darwin
-, protobuf
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  rocksdb,
+  testers,
+  surrealdb,
+  darwin,
+  protobuf,
 }:
-
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
-  version = "1.5.4";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    rev = "v${version}";
-    hash = "sha256-KtR+qU2Xys4NkEARZBbO8mTPa7EI9JplWvXdtuLt2vE=";
+    tag = "v${version}";
+    hash = "sha256-MzVyzhZ9BNxavlyj3E1D9Mo2/o6Yue21FdhpT8ziXwE=";
   };
 
-  cargoHash = "sha256-b0KmL6RQevO7oLPZCgUc4EUkgv99DbMFD/RkE/fwAHw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Uza2Ujg8EKGJrzitch71qIevgUv+n3YCtkMLHIAgPr4=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -45,14 +43,13 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   doCheck = false;
 
   checkFlags = [
-    # flaky
-    "--skip=ws_integration::none::merge"
     # requires docker
     "--skip=database_upgrade"
   ];
@@ -69,6 +66,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sikmir happysalada ];
+    maintainers = with maintainers; [
+      sikmir
+      happysalada
+      siriobalmelli
+    ];
   };
 }

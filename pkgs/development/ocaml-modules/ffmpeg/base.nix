@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub }:
 
 rec {
-  version = "1.1.11";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ffmpeg";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Tr0YhoaaUSOlA7vlhAjPyFJI/iL7Z54oO27RnG7d+nA=";
+    sha256 = "sha256-Df+dU7Cd1rgsC/TelPzQ7wYlwsX9MGd8qcYsVN6dyMg=";
   };
 
   meta = with lib; {

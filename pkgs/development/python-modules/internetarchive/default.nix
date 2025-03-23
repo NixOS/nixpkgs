@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  docopt,
   fetchFromGitHub,
   pytestCheckHook,
   requests,
@@ -17,23 +16,22 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "4.1.0";
+  version = "5.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
+    tag = "v${version}";
+    hash = "sha256-2CShbIS5hq+queeHHlE53Vf8sl4HQySp1ZU8mz67Qbc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tqdm
-    docopt
     requests
     jsonpatch
     schema
@@ -63,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "internetarchive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
-    license = licenses.agpl3Plus;
-    maintainers = [ ];
+    changelog = "https://github.com/jjjake/internetarchive/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "ia";
   };
 }

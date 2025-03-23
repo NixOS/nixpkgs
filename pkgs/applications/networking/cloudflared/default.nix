@@ -3,17 +3,18 @@
 , buildGoModule
 , fetchFromGitHub
 , callPackage
+, gitUpdater
 }:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2024.7.1";
+  version = "2025.2.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VJJN2hWmgjnBy8FhQn3c91BLx8NU3TvRgxKoanFs+GM=";
+    tag = version;
+    hash = "sha256-RiHEUs1I9ErYBQF28la6kqU3BW968PVT+K7uGUVr6Ec=";
   };
 
   vendorHash = null;
@@ -68,9 +69,12 @@ buildGoModule rec {
       --replace "TestManagerCtxDoneCloseSessions" "SkipManagerCtxDoneCloseSessions"
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  passthru.tests.simple = callPackage ./tests.nix { inherit version; };
+  passthru = {
+    tests.simple = callPackage ./tests.nix { inherit version; };
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";

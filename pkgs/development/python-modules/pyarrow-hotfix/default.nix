@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pitrou";
     repo = "pyarrow-hotfix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LlSbxIxvouzvlP6PB8J8fJaxWoRbxz4wTs7Gb5LbM4A=";
   };
 

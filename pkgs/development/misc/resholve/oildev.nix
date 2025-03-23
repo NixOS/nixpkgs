@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, python27
-, callPackage
-, fetchFromGitHub
-, makeWrapper
-, re2c
-, # oil deps
-  glibcLocales
-, file
-, six
-, typing
+{
+  lib,
+  stdenv,
+  python27,
+  callPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  re2c,
+  # oil deps
+  glibcLocales,
+  file,
+  six,
+  typing,
 }:
 
-rec {
+{
   /*
     Upstream isn't interested in packaging this as a library
     (or accepting all of the patches we need to do so).
@@ -67,9 +68,16 @@ rec {
       "--without-readline"
     ];
 
-    nativeBuildInputs = [ re2c file makeWrapper ];
+    nativeBuildInputs = [
+      re2c
+      file
+      makeWrapper
+    ];
 
-    propagatedBuildInputs = [ six typing ];
+    propagatedBuildInputs = [
+      six
+      typing
+    ];
 
     doCheck = true;
 
@@ -85,7 +93,9 @@ rec {
     '';
 
     # See earlier note on glibcLocales TODO: verify needed?
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (
+      stdenv.buildPlatform.libc == "glibc"
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
     # not exhaustive; sample what resholve uses as a sanity check
     pythonImportsCheck = [

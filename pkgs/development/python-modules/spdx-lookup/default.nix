@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "spdx-lookup-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jtzhqRAj1BWdU8AuR7Gr343mL5alLXhi+SyCkCI5AAU=";
   };
 

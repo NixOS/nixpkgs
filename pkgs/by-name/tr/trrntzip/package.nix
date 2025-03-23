@@ -7,11 +7,12 @@
 # Besides the new one is on github instead of sourceforge
 # which makes life for us easier
 
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ TheBrainScrambler ];
+    maintainers = with maintainers; [ ];
   };
 })

@@ -1,11 +1,12 @@
 {
-  stdenv,
   lib,
+  stdenv,
   asyncssh,
   bcrypt,
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
+  importlib-metadata,
   mock-ssh-server,
   pytest-asyncio,
   pytestCheckHook,
@@ -15,46 +16,60 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2024.4.1";
+  version = "2025.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qkEojf/3YBMoYbRt0Q93MJYXyL9AWR24AEe3/zdn58U=";
+    tag = version;
+    hash = "sha256-O9Va3dLfTko9AfyK4iJa8U6xrtJsNNEeBn9UeRAgmVc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncssh
-    bcrypt
     fsspec
   ];
+
+  optional-dependencies = {
+    bcrypt = [ asyncssh ] ++ asyncssh.optional-dependencies.bcrypt;
+    fido2 = [ asyncssh ] ++ asyncssh.optional-dependencies.fido2;
+    gssapi = [ asyncssh ] ++ asyncssh.optional-dependencies.gssapi;
+    libnacl = [ asyncssh ] ++ asyncssh.optional-dependencies.libnacl;
+    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.pkcs11;
+    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyOpenSSL;
+  };
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    importlib-metadata
     mock-ssh-server
     pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # test fails with sandbox enabled
-    "test_checksum"
-  ];
+  disabledTests =
+    [
+      # Test requires network access
+      "test_config_expansions"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Test fails with sandbox enabled
+      "test_checksum"
+    ];
 
   pythonImportsCheck = [ "sshfs" ];
 
   meta = with lib; {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://github.com/fsspec/sshfs/";
-    changelog = "https://github.com/fsspec/sshfs/releases/tag/${version}";
+    changelog = "https://github.com/fsspec/sshfs/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
   };

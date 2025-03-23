@@ -49,6 +49,10 @@ in
 , # The standard environment to use for building packages.
   stdenv
 
+, # `stdenv` without a C compiler. Passing in this helps avoid infinite
+  # recursions, and may eventually replace passing in the full stdenv.
+  stdenvNoCC ? stdenv.override { cc = null; hasCC = false; }
+
 , # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
@@ -94,6 +98,10 @@ let
           or lib.systems.parse.abis.musl;
       });
 
+  makeLLVMParsedPlatform = parsed:
+    (parsed // {
+      abi = lib.systems.parse.abis.llvm;
+    });
 
   stdenvAdapters = self: super:
     let
@@ -141,7 +149,7 @@ let
     pkgs = self.pkgsHostTarget;
     targetPackages = self.pkgsTargetTarget;
 
-    inherit stdenv;
+    inherit stdenv stdenvNoCC;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
@@ -203,6 +211,49 @@ let
       };
     };
 
+    pkgsLLVMLibc = nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsLLVMLibc = super';
+      })] ++ overlays;
+      # Bootstrap a cross stdenv using LLVM libc.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
+        libc = "llvm";
+      };
+    };
+
+    pkgsArocc = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsArocc = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Aro C compiler.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useArocc = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsZig = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsZig = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Zig toolchain.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useZig = true;
+        linker = "lld";
+      };
+    };
+
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
@@ -212,7 +263,7 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
       };
     } else throw "Musl libc only supports 64-bit Linux systems.";
 
@@ -224,9 +275,9 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
-        };
+        });
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
@@ -236,9 +287,9 @@ let
         pkgsx86_64Darwin = super';
       })] ++ overlays;
       localSystem = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
-        };
+        });
       };
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
@@ -277,10 +328,11 @@ let
       })] ++ overlays;
       crossSystem = {
         isStatic = true;
-        parsed =
-          if stdenv.isLinux
+        config = lib.systems.parse.tripleFromSystem (
+          if stdenv.hostPlatform.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
-          else stdenv.hostPlatform.parsed;
+          else stdenv.hostPlatform.parsed
+        );
         gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
           stdenv.hostPlatform.gcc or {};
       };
@@ -292,10 +344,20 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
-              "stackclashprotection"
+              "shadowstack"
+              "pacret"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override rec {
+            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+            enableCETRuntimeDefault = enableCET != false;
+          };
+        } // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+          # causes shadowstack disablement
+          pcre = super'.pcre.override { enableJit = false; };
+          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+          pcre16 = super'.pcre16.override { enableJit = false; };
         })
       ] ++ overlays;
     };

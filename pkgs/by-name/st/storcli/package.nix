@@ -1,32 +1,35 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, rpmextract
-, testers
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  rpmextract,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "storcli";
-  version = "7.2904.00";
-  phase = "30";
+  version = "7.3103.00";
+  phase = "32";
 
   src = fetchzip {
     url = "https://docs.broadcom.com/docs-and-downloads/host-bus-adapters/host-bus-adapters-common-files/sas_sata_nvme_12g_p${finalAttrs.phase}/STORCLI_SAS3.5_P${finalAttrs.phase}.zip";
-    hash = "sha256-VfK71eiDonzWdR6g5zkXgRRi25vwoI4DDL6xy3zsfak=";
+    hash = "sha256-bOlIChZi2eWpc5QA+wXBQA4s+o/MVLVWsligjDpUXEU=";
   };
 
   nativeBuildInputs = [ rpmextract ];
 
-  unpackPhase = let
-    inherit (stdenvNoCC.hostPlatform) system;
-    platforms = {
-      x86_64-linux = "Linux";
-      aarch64-linux = "ARM/Linux";
-    };
-    platform = platforms.${system} or (throw "unsupported system: ${system}");
-  in ''
-    rpmextract $src/univ_viva_cli_rel/Unified_storcli_all_os/${platform}/storcli-00${finalAttrs.version}00.0000-1.*.rpm
-  '';
+  unpackPhase =
+    let
+      inherit (stdenvNoCC.hostPlatform) system;
+      platforms = {
+        x86_64-linux = "Linux";
+        aarch64-linux = "ARM/Linux";
+      };
+      platform = platforms.${system} or (throw "unsupported system: ${system}");
+    in
+    ''
+      rpmextract $src/univ_viva_cli_rel/Unified_storcli_all_os/${platform}/storcli-00${finalAttrs.version}00.0000-1.*.rpm
+    '';
 
   dontPatch = true;
   dontConfigure = true;
@@ -56,6 +59,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = with maintainers; [ panicgh ];
     mainProgram = "storcli";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

@@ -28,28 +28,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "displaylink";
-  version = "6.0.0-24";
+  version = "6.1.0-17";
 
   src = requireFile rec {
-    name = "displaylink-600.zip";
-    sha256 = "1ixrklwk67w25cy77n7l0pq6j9i4bp4lkdr30kp1jsmyz8daaypw";
+    name = "displaylink-610.zip";
+    hash = "sha256-RJgVrX+Y8Nvz106Xh+W9N9uRLC2VO00fBJeS8vs7fKw=";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-6.0
+      https://www.synaptics.com/products/displaylink-usb-graphics-software-ubuntu-61
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu6.0-EXE.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu6.1-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
 
       Alternatively, you can use the following command to download the
       file directly:
 
-      nix-prefetch-url --name ${name} https://www.synaptics.com/sites/default/files/exe_files/2024-05/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.0-EXE.zip
+      nix-prefetch-url --name ${name} https://www.synaptics.com/sites/default/files/exe_files/2024-10/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.1-EXE.zip
     '';
   };
 

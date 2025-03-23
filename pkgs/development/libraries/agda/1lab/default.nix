@@ -1,14 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+}:
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2024-03-07";
+  version = "unstable-2024-08-05";
 
   src = fetchFromGitHub {
-    owner = "plt-amy";
+    owner = "the1lab";
     repo = pname;
-    rev = "d698f21793c4815082c94d174b9eafae912abb1a";
-    hash = "sha256-v8avF9zNNz32kLuAacPdEVeUI9rjn6JCiWPzkXfzBS0=";
+    rev = "7cc9bf7bbe90be5491e0d64da90a36afa29a540b";
+    hash = "sha256-hOyf6ZzejDAFDRj6liFZsBc9bKdxV5bzTPP4kGXIhW0=";
   };
 
   postPatch = ''
@@ -33,8 +37,7 @@ mkDerivation rec {
   everythingFile = "_build/all-pages.agda";
 
   meta = with lib; {
-    description =
-      "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
+    description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
     license = licenses.agpl3Only;
     platforms = platforms.unix;

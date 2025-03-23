@@ -24,19 +24,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "go-macaroon-bakery";
     repo = "py-macaroon-bakery";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NEhr8zkrHceeLbAyuUvc7U6dyQxkpkj0m5LlnBMafA0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  # fix version string
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "VERSION = (1, 3, 3)" "VERSION = (1, 3, 4)"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     protobuf
     pymacaroons
     pynacl
     pyrfc3339
     requests
   ];
+
+  pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "macaroonbakery" ];
 

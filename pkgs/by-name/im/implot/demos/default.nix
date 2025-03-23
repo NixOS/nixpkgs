@@ -16,7 +16,7 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "implot-demos";
   version = "unstable-2023-08-20";
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/epezent/implot_demos";
     broken =
       stdenv.hostPlatform.isAarch64 # Target "mandel" relies on AVX2
-      || stdenv.isDarwin;
+      || stdenv.hostPlatform.isDarwin;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
     mainProgram = "implot-demos";

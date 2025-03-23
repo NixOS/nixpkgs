@@ -1,20 +1,26 @@
-{ generateProtobufCode
-, version
-, zitadelRepo
+{
+  generateProtobufCode,
+  version,
+  zitadelRepo,
 }:
 
-{ mkYarnPackage
-, fetchYarnDeps
-, lib
+{
+  lib,
+  stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
 
-, grpc-gateway
-, protoc-gen-grpc-web
-, protoc-gen-js
+  grpc-gateway,
+  protoc-gen-grpc-web,
+  protoc-gen-js,
 }:
 
 let
   protobufGenerated = generateProtobufCode {
     pname = "zitadel-console";
+    inherit version;
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-grpc-web
@@ -23,38 +29,35 @@ let
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-BBXFt4f2SQphr106sQ0eEL4Z2ooAI8fxXhu2rKqhjb4=";
+    hash = "sha256-3WvfbhLpp03yP7Nb8bmZXYSlGJuEnBkBuyEzNVkIYZg=";
   };
 in
-mkYarnPackage rec {
-  name = "zitadel-console";
+stdenv.mkDerivation {
+  pname = "zitadel-console";
   inherit version;
 
-  src = "${zitadelRepo}/console";
+  src = zitadelRepo;
 
-  packageJSON = ./package.json;
+  sourceRoot = "${zitadelRepo.name}/console";
+
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-cfo2WLSbfU8tYADjF7j9zTLNsboVThF6MUBrb49MrII=";
+    yarnLock = "${zitadelRepo}/console/yarn.lock";
+    hash = "sha256-+7CFBEKfRsqXbJR+BkLdB+pZ/dEEk4POGwZOVQ1LAUo=";
   };
 
-  postPatch = ''
-    substituteInPlace src/styles.scss \
-      --replace "/node_modules/flag-icons" "flag-icons"
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
+  ];
 
-    substituteInPlace angular.json \
-      --replace "./node_modules/tinycolor2" "../../node_modules/tinycolor2"
-  '';
-
-  buildPhase = ''
-    mkdir deps/console/src/app/proto
-    cp -r ${protobufGenerated}/* deps/console/src/app/proto/
-    yarn --offline build
+  preBuild = ''
+    cp -r ${protobufGenerated} src/app/proto
   '';
 
   installPhase = ''
-    cp -r deps/console/dist/console $out
+    runHook preInstall
+    cp -r dist/console "$out"
+    runHook postInstall
   '';
-
-  doDist = false;
 }

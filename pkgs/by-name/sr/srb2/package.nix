@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, libopenmpt
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  libopenmpt,
+  game-music-emu,
+  libGLU,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
-    "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2.dev}/include/SDL2"
+    "-DSDL2_INCLUDE_DIR=${lib.getInclude SDL2}/include/SDL2"
   ];
 
   patches = [
@@ -79,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake.patch
     ./thirdparty.patch
   ];
+
+  postPatch = ''
+    substituteInPlace ./src/sdl/ogl_sdl.c \
+      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
+  '';
 
   desktopItems = [
     (makeDesktopItem rec {
@@ -114,7 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.srb2.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zeratax donovanglover ];
+    maintainers = with maintainers; [
+      zeratax
+      donovanglover
+    ];
     mainProgram = "srb2";
   };
 })

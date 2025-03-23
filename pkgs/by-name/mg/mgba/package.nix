@@ -19,24 +19,31 @@
 }:
 
 let
-    inherit (libsForQt5)
-      qtbase
-      qtmultimedia
-      qttools
-      wrapQtAppsHook;
+  inherit (libsForQt5)
+    qtbase
+    qtmultimedia
+    qttools
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.3";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
-    rev = finalAttrs.version;
-    hash = "sha256-wSt3kyjRxKBnDOVY10jq4cpv7uIaBUIcsZr6aU7XnMA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Za2o06odeisnrE3i7w54OeaPXHscZAaD1+EXii7bnuk=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     SDL2
@@ -58,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
-  ]
-  ++ lib.optionals enableDiscordRpc [ discord-rpc ];
+  ] ++ lib.optionals enableDiscordRpc [ discord-rpc ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
@@ -93,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
     license = with lib.licenses; [ mpl20 ];
     mainProgram = "mgba";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ Gliczy ];
     platforms = lib.platforms.linux;
     broken = enableDiscordRpc; # Some obscure `ld` error
   };

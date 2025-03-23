@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.15.1";
+  version = "0.16.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Jzsh0m00SiJjTP7hXMDmuR4XHmsCYdURuFDkVopGyIE=";
+    tag = version;
+    hash = "sha256-ckakH+H4h2Iwl4tkUpnVV23dkKP9Q7I86oygxfHkXU8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

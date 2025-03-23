@@ -10,7 +10,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   tox,
   virtualenv,
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pyscaffold
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       setuptools-scm
       tox
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Integration of django builtin scaffold cli (django-admin) into PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,12 @@
-{ buildDunePackage, lablgtk, ocamlgraph, stdlib-shims, ... }:
+{
+  buildDunePackage,
+  lablgtk,
+  ocamlgraph,
+  stdlib-shims,
+  ...
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlgraph_gtk";
   inherit (ocamlgraph) version src meta;
 

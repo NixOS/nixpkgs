@@ -18,6 +18,8 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$version" ]]; then
     exit 0
 fi
 
+pushd manifests
+
 # Update the package.json
 sed -i "s|$UPDATE_NIX_OLD_VERSION|$version|g" package.json
 
@@ -25,17 +27,10 @@ sed -i "s|$UPDATE_NIX_OLD_VERSION|$version|g" package.json
 rm -f package-lock.json
 npm i --package-lock-only
 npm_hash=$(prefetch-npm-deps package-lock.json)
+
+popd
+
 sed -i "s|npmDepsHash = \".*\";|npmDepsHash = \"$npm_hash\";|" package.nix
-
-# Update the Gemfile
-curl -sf "https://raw.githubusercontent.com/Shopify/cli/$version/packages/cli-kit/src/public/node/ruby.ts" > $tmp/ruby.ts
-ruby_version=$(cat $tmp/ruby.ts | grep -oP "RubyCLIVersion = '\K[^']*")
-sed -i "s|gem 'shopify-cli', '.*'|gem 'shopify-cli', '$ruby_version'|" Gemfile
-
-# Update Gemfile.lock
-rm -f Gemfile.lock gemset.nix
-BUNDLE_FORCE_RUBY_PLATFORM=true bundle lock
-bundix
 
 popd
 

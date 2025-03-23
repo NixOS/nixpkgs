@@ -1,19 +1,23 @@
 {
   rouge = {
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0sfikq1q8xyqqx690iiz7ybhzx87am4w50w8f2nq36l3asw4x89d";
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "080fswzii68wnbsg7pgq55ba7p289sqjlxwp4vch0h32qy1f8v8d";
       type = "gem";
     };
-    version = "2.0.7";
+    version = "3.28.0";
   };
   xcpretty = {
-    dependencies = ["rouge"];
+    dependencies = [ "rouge" ];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1xq47q2h5llj7b54rws4796904vnnjz7qqnacdv7wlp3gdbwrivm";
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1lbwk77g28jjhin3qjrh7ldfsgf7aszi9j60mp8yz10i3wyqgvqj";
       type = "gem";
     };
-    version = "0.3.0";
+    version = "0.4.0";
   };
 }

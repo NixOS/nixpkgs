@@ -1,20 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, vacuum-go }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  vacuum-go,
+}:
 
 buildGoModule rec {
   pname = "vacuum-go";
-  version = "0.11.1";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
-    rev = "refs/tags/v${version}";
-    hash = "sha256-i4B11hTPvF6kL7x8LUv8A4J1HfAhtxgSmvzNL+4sdYI=";
+    tag = "v${version}";
+    hash = "sha256-7nVDKR2H84SW6s97jgShylcc1degLzkjkeldlGBcQ/o=";
   };
 
-  vendorHash = "sha256-b51Rs09EjHxYATwaFdHV96ZOORFxD0Y9cKTcJTSGhIU=";
+  vendorHash = "sha256-1lr1VQU4JHg0PZbjAUmALFZJiYc+HTwrk0E/t/1qXqE=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"

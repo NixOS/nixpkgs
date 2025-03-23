@@ -6,7 +6,7 @@
   fetchPypi,
 
   # build-system
-  cython_0,
+  cython,
   setuptools,
 
   # native dependencies
@@ -15,7 +15,6 @@
   ApplicationServices,
 
   # tests
-  aiohttp,
   psutil,
   pyopenssl,
   pytestCheckHook,
@@ -23,18 +22,25 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Akb0/Rvyv3AuBrDUXukWd+5cMSQvOaq06m/gxRrt0P0=";
+    hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
   };
 
-  nativeBuildInputs = [
-    cython_0
+  postPatch = ''
+    rm -rf vendor
+
+    substituteInPlace setup.py \
+      --replace-fail "use_system_libuv = False" "use_system_libuv = True"
+  '';
+
+  build-system = [
+    cython
     setuptools
   ];
 
@@ -42,13 +48,12 @@ buildPythonPackage rec {
 
   buildInputs =
     [ libuv ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices
       ApplicationServices
     ];
 
   nativeCheckInputs = [
-    aiohttp
     pyopenssl
     pytestCheckHook
     psutil
@@ -62,8 +67,15 @@ buildPythonPackage rec {
       # AssertionError: b'' != b'out\n'
       "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+      # Depends on performance of builder
+      "--deselect=tests/test_base.py::TestBaseUV.test_call_at"
+      # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
+      "--deselect=tests/test_dns.py"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (pythonOlder "3.11") [
+      "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # Segmentation fault
       "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
       # Broken: https://github.com/NixOS/nixpkgs/issues/160904
@@ -80,7 +92,7 @@ buildPythonPackage rec {
       # force using installed/compiled uvloop
       rm -rf uvloop
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Work around "OSError: AF_UNIX path too long"
       # https://github.com/MagicStack/uvloop/issues/463
       export TMPDIR="/tmp"
@@ -99,6 +111,6 @@ buildPythonPackage rec {
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

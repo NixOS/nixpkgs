@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "ruamel-yaml";
-  version = "0.18.6";
+  version = "0.18.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ruamel.yaml";
     inherit version;
-    hash = "sha256-iyfmohfnhsb75WNNjz8RvGPg+A9qWJDyiGPZxFqsMRs=";
+    hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     changelog = "https://sourceforge.net/p/ruamel-yaml/code/ci/default/tree/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

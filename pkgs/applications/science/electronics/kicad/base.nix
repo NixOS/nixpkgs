@@ -25,6 +25,7 @@
 , libsecret
 , libgcrypt
 , libgpg-error
+, ninja
 
 , util-linux
 , libselinux
@@ -39,12 +40,14 @@
 , pcre2
 , libdeflate
 
-, swig4
+, swig
 , python
 , wxPython
 , opencascade-occt_7_6
 , libngspice
 , valgrind
+, protobuf
+, nng
 
 , stable
 , testing
@@ -92,13 +95,17 @@ stdenv.mkDerivation rec {
       --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
-  makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
+  preConfigure = optional (debug) ''
+    export CFLAGS="''${CFLAGS:-} -Og -ggdb"
+    export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
+  '';
 
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     # https://gitlab.com/kicad/code/kicad/-/issues/17133
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
+    "-DKICAD_USE_CMAKE_FINDPROTOBUF=OFF"
   ]
   ++ optional (stdenv.hostPlatform.system == "aarch64-linux")
     "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
@@ -127,6 +134,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     doxygen
     graphviz
     pkg-config
@@ -137,7 +145,7 @@ stdenv.mkDerivation rec {
   ]
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
-  ++ optionals (stdenv.isLinux) [
+  ++ optionals (stdenv.hostPlatform.isLinux) [
     util-linux
     libselinux
     libsepol
@@ -168,11 +176,15 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    swig4
+    swig
     python
     unixODBC
     libdeflate
     opencascade-occt
+    protobuf
+
+    # This would otherwise cause a linking requirement for mbedtls.
+    (nng.override { mbedtlsSupport = false; })
   ]
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice

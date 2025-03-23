@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "daiquiri";
-  version = "3.2.5.1";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xy6G1vyovDjR6a36YFGE32/eo3AuB8oC0Wqj0AQ7Luw=";
+    hash = "sha256-uybgVHMA7kDGQEERyw6tGCc/aXzcWg/ixgZyMyOn6vI=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Library to configure Python logging easily";
     homepage = "https://github.com/Mergifyio/daiquiri";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

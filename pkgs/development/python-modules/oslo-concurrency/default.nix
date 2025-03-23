@@ -13,18 +13,19 @@
   oslo-utils,
   oslotest,
   pbr,
+  setuptools,
   stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    hash = "sha256-tS8CtORvXydLkfuOG/xcv5pBjfzUqDvggDRUlePSboo=";
+    hash = "sha256-DLNz7ioTICQfkt4FqNHPS0eGBl7vYeol08goain6R2U=";
   };
 
   postPatch = ''
@@ -33,13 +34,15 @@ buildPythonPackage rec {
     rm test-requirements.txt
 
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
-      --replace "/bin/bash" "${bash}/bin/bash" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/env" "${coreutils}/bin/env" \
-      --replace "/usr/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/bash" "${bash}/bin/bash" \
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fasteners
     oslo-config
     oslo-utils
@@ -52,6 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     eventlet
     fixtures
+    libredirect.hook
     oslotest
     stestr
   ];
@@ -59,7 +63,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn

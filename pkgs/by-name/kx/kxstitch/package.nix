@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchgit, cmake, extra-cmake-modules, imagemagick, libsForQt5 }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cmake,
+  extra-cmake-modules,
+  imagemagick,
+  libsForQt5,
+}:
 
 stdenv.mkDerivation {
   pname = "kxstitch";

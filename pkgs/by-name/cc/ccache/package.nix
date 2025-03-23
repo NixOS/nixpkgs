@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   binutils,
   asciidoctor,
   cmake,
@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.10.2";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     # `git archive` replaces `$Format:%H %D$` in cmake/CcacheVersion.cmake
     # we need to replace it with something reproducible
     # see https://github.com/NixOS/nixpkgs/pull/316524
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-j7Cjr5R/fN/1C6hR9400Y/hwgG++qjPvo9PYyetzrx0=";
+    hash = "sha256-oYuvcM1BkOh+fj6FmZ8GiiyMyNCAHNp+zQdYvoAb/lU=";
   };
 
   outputs = [
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Darwin.
     # Additionally, when cross compiling, the correct target prefix
     # needs to be set.
-    (substituteAll {
-      src = ./fix-objdump-path.patch;
+    (replaceVars ./fix-objdump-path.patch {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
-  ] ++ lib.optional stdenv.isDarwin xcodebuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
@@ -95,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "test.basedir"
           "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
           "test.multi_arch"
@@ -122,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
         };
-        inherit (unwrappedCC) lib;
+        lib = lib.getLib unwrappedCC;
         nativeBuildInputs = [ makeWrapper ];
         # Unwrapped clang does not have a targetPrefix because it is multi-target
         # target is decided with argv0.

@@ -1,20 +1,21 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, just
-, pop-icon-theme
-, hicolor-icon-theme
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  just,
+  pop-icon-theme,
+  hicolor-icon-theme,
+  nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
-  version = "0-unstable-2024-07-17";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "73be037ba266b08a2fa7b544d78e7f143a2894c5";
-    sha256 = "sha256-Lyn9VneGr7RcfMPREOs3tP/HzpoRcnmw/nyo7kzOKCw=";
+    repo = "cosmic-icons";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-j5H2+BOWxq2jShN15QCvj9rY6OK+vlUbyR9R07Ka2rA=";
   };
 
   nativeBuildInputs = [ just ];
@@ -32,14 +33,24 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "System76 Cosmic icon theme for Linux";
     homepage = "https://github.com/pop-os/cosmic-icons";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ a-kenji ];
+    maintainers = with lib.maintainers; [
+      a-kenji
+      HeitorAugustoLN
+    ];
   };
-}
+})

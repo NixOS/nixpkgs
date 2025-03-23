@@ -1,6 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, cairo, libxkbcommon
-, xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor
-, alsa-lib, libjack2, lv2, gcc-unwrapped }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairo,
+  libxkbcommon,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  xcbutil,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  alsa-lib,
+  libjack2,
+  lv2,
+  gcc-unwrapped,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chow-centaur";
@@ -10,11 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jatinchowdhury18";
     repo = "KlonCentaur";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mrzlf4a6f25xd7z9xanpyq7ybb4al01dzpjsgi0jkmlmadyhc4h";
+    hash = "sha256-kDDom6q0Tgni0/L+FgBVZC1/sL9W9fRP60U4o4ijP1c=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     cairo
     libxkbcommon
@@ -43,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description =
-      "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
+    description = "Digital emulation of the Klon Centaur guitar pedal using RNNs, Wave Digital Filters, and more";
     homepage = "https://github.com/jatinchowdhury18/KlonCentaur";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

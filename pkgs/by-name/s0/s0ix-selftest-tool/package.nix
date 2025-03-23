@@ -19,7 +19,7 @@
 }:
 
 let
-  deps = [
+  deps = lib.makeBinPath [
     acpica-tools
     bc
     coreutils
@@ -36,18 +36,18 @@ let
 in
 stdenv.mkDerivation {
   pname = "s0ix-selftest-tool";
-  version = "0-unstable-2024-05-16";
+  version = "0-unstable-2024-09-22";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "S0ixSelftestTool";
-    rev = "846e14ab86faaca2fe600c434191d33b9fc75632";
-    hash = "sha256-PlsxGkr20pbUunRSa7PXdLLUlnBAgARRC/HpAkofMds=";
+    rev = "3af4af2009cb01da43ddae906f671d435494a0dc";
+    hash = "sha256-phQxlbQB3J08tPtcw4vqupVgAT9gsSJxgPT044SMMNk=";
   };
 
   # don't use the bundled turbostat binary
   postPatch = ''
-    substituteInPlace s0ix-selftest-tool.sh --replace '"$DIR"/turbostat' 'turbostat'
+    substituteInPlace s0ix-selftest-tool.sh --replace-fail '"$DIR"/turbostat' 'turbostat'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm555 s0ix-selftest-tool.sh "$out/bin/s0ix-selftest-tool"
-    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${lib.escapeShellArg deps}
+    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${deps}
     runHook postInstall
   '';
 

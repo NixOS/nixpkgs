@@ -1,22 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, pango
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  pango,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3bar-river";
-  version = "0.1.9";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "i3bar-river";
     rev = "v${version}";
-    hash = "sha256-tG23bdEKp8+9RMS1fpW8EVe+bAdjQp7nVW0eHl3eYSQ=";
+    hash = "sha256-0ux0woVp9HVCJf/oND2AKHj30eNC/w1WDnlPafLTgxM=";
   };
 
-  cargoHash = "sha256-nSzGWpnyGRus9qCTPAd+BM4KsujSNyRmFUCc4Lg4D5k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dwOinrHvk0MRKlbn62MEfmcyXNf+ZfYzVNtv7teRsV4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ];

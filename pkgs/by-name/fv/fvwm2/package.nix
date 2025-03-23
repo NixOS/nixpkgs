@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cairo
-, fontconfig
-, freetype
-, fribidi
-, libXcursor
-, libXft
-, libXinerama
-, libXpm
-, libXt
-, libpng
-, librsvg
-, libstroke
-, libxslt
-, perl
-, pkg-config
-, python3Packages
-, readline
-, enableGestures ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cairo,
+  fontconfig,
+  freetype,
+  fribidi,
+  libXcursor,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXt,
+  libpng,
+  librsvg,
+  libstroke,
+  libxslt,
+  perl,
+  pkg-config,
+  python3Packages,
+  readline,
+  enableGestures ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
-    repo = pname;
+    repo = "fvwm";
     rev = version;
     hash = "sha256-KcuX8las1n8UUE/BOHj7WOeZjva5hxgpFHtATMUk3bg=";
   };

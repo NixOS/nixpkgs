@@ -1,32 +1,49 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, udev
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  pkg-config,
+  geoclue2-with-demo-agent,
+  libinput,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings-daemon";
-  version = "unstable-2023-12-29";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "f7183b68c6ca3f68054b5dd6457b1d5798a75a48";
-    hash = "sha256-Wck0NY6CUjD16gxi74stayiahs4UiqS7iQCkbOXCgKE=";
+    repo = "cosmic-settings-daemon";
+    rev = "epoch-${version}";
+    hash = "sha256-DtwW6RxHnNh87Xu0NCULfUsHNzYU9tHtFKE9HO3rvME=";
   };
 
-  cargoHash = "sha256-vCs20RdGhsI1+f78KEau7ohtoGTrGP9QH91wooQlgOE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lGzQBL9IXbPsaKeVHp34xkm5FnTxWvfw4wg3El4LZdA=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    libinput
+    udev
+  ];
+
+  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
+
+  makeFlags = [
+    "prefix=$(out)"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  dontCargoInstall = true;
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
 }

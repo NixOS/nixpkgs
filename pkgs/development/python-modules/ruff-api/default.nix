@@ -3,19 +3,16 @@
   stdenv,
   buildPythonPackage,
   cargo,
-  darwin,
   fetchFromGitHub,
   libiconv,
   pythonOlder,
   rustc,
   rustPlatform,
-  ufmt,
-  usort,
 }:
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.0.6";
+  version = "0.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,15 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "ruff-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nZKf0LpCoYwWoLDGoorJ+zQSLyuxfWu3LOygocVlYSs=";
+    tag = "v${version}";
+    hash = "sha256-1XULyxu3XujhAcFnvqI5zMiXOc0axx1LS4EevjhoGDc=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ruff-0.3.7" = "sha256-PS4YJpVut+KtEgSlTVtoVdlu6FVipPIzsl01/Io5N64=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-q8Y5oqoSzUk1Xg4AmjLs7RO8Kr87Oi3eKLSpmXlHp4U=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +36,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -52,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruff_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
-    changelog = "https://github.com/amyreese/ruff-api/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

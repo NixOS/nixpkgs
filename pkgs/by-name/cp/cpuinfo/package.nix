@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";
-  version = "0-unstable-2024-07-10";
+  version = "0-unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
-    rev = "ca678952a9a8eaa6de112d154e8e104b22f9ab3f";
-    hash = "sha256-UKy9TIiO/UJ5w+qLRlMd085CX2qtdVH2W3rtxB5r6MY=";
+    rev = "b73ae6ce38d5dd0b7fe46dbe0a4b5f4bab91c7ea";
+    hash = "sha256-JNLaK105qDk9DxTqCFyXFfYn46dF+nZIaF5urSVRa0U=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
@@ -37,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_LIBS" true)
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  # The tests check what CPU the host has and makes sure it can query information.
+  # not all build environments may have this information available. And, cpuinfo may
+  # not understand all CPUs (causing test failures such as https://github.com/pytorch/cpuinfo/issues/132)
+  # Instead, allow building in any environment.
+  doCheck = false;
 
   meta = {
     description = "Tools and library to detect essential for performance optimization information about host CPU";

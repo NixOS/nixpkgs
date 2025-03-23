@@ -7,8 +7,11 @@
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -19,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.18.0";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,15 +30,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0BJgbyDhCPFlHxlEry7Rh/j0nv3D3kRhIqCSW+Irhqk=";
+    tag = "v${version}";
+    hash = "sha256-yJ7tiJWSOpkkLwKXo4lYlDrp1FEJ/cGoDaXJamY4ARg=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}" \
-      --replace-fail "--cov" ""
   '';
 
   build-system = [ poetry-core ];
@@ -45,10 +47,12 @@ buildPythonPackage rec {
     awesomeversion
     backoff
     cachetools
+    mashumaro
+    orjson
     yarl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       typer
       zeroconf
@@ -58,6 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
   ];

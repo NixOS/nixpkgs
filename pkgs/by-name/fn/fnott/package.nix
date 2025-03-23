@@ -1,33 +1,34 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, scdoc
-, wayland-scanner
-, fontconfig
-, freetype
-, pixman
-, libpng
-, tllist
-, wayland
-, wayland-protocols
-, dbus
-, fcft
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  scdoc,
+  wayland-scanner,
+  fontconfig,
+  freetype,
+  pixman,
+  libpng,
+  tllist,
+  wayland,
+  wayland-protocols,
+  dbus,
+  fcft,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fnott";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
-    rev = version;
-    hash = "sha256-out3OZCGZGIIHFZ4t2nN6/3UpsRH9zfw35emexVo4RE=";
+    rev = finalAttrs.version;
+    hash = "sha256-C0GvpjOrcelk/KNNDQ7/02Ai7xy8FVzmLcuC2je5wYA=";
   };
 
   PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
@@ -59,14 +60,16 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
-    changelog = "https://codeberg.org/dnkl/fnott/src/tag/${src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/dnkl/fnott/src/tag/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = with lib.licenses; [ mit zlib ];
+    license = with lib.licenses; [
+      mit
+      zlib
+    ];
     maintainers = with lib.maintainers; [
       jmbaur
-      eclairevoyant
     ];
     mainProgram = "fnott";
     platforms = lib.platforms.linux;
   };
-}
+})

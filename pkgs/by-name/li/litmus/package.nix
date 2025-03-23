@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, expat
-, libproxy
-, neon
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  expat,
+  libproxy,
+  neon,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  autoreconfFlags = [ "-I" "neon/macros" ];
+  autoreconfFlags = [
+    "-I"
+    "neon/macros"
+  ];
 
   meta = with lib; {
     description = "WebDAV server protocol compliance test suite";
@@ -52,4 +56,3 @@ stdenv.mkDerivation rec {
     mainProgram = "litmus";
   };
 }
-

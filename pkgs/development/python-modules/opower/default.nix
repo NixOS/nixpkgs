@@ -4,6 +4,7 @@
   aiozoneinfo,
   arrow,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   pyotp,
   python-dotenv,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.6.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-juN9o1RPLDALND1po5S4WNMDkOWnr4hl38yxWnsoupg=";
+    tag = "v${version}";
+    hash = "sha256-1g7B4r1CDapi4yfnOLTHNE2Y1TYYqtkdfHwcptxXL9E=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     aiohttp
     aiozoneinfo
     arrow
+    cryptography
     pyotp
   ];
 

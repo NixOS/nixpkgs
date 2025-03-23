@@ -3,12 +3,12 @@
   stdenv,
   buildPythonPackage,
   callPackage,
-  cargo,
+  setuptools,
+  bcrypt,
   certifi,
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
-  fetchPypi,
-  fetchpatch2,
+  fetchFromGitHub,
   isPyPy,
   libiconv,
   libxcrypt,
@@ -18,63 +18,53 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  rustc,
   rustPlatform,
   Security,
-  setuptoolsRustBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "42.0.8"; # Also update the hash in vectors.nix
+  version = "44.0.2"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jQnQVDnOe6qOnpWwfsW2yIb1SN634Pae8l9ks7zoQvI=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "cryptography";
+    tag = version;
+    hash = "sha256-nXwW6v+U47/+CmjhREHcuQ7QQi/b26gagWBQ3F16DuQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-PgxPcFocEhnQyrsNtCN8YHiMptBmk1PUhEDQFdUR1nU=";
+    hash = "sha256-HbUsV+ABE89UvhCRZYXr+Q/zRDKUy+HgCVdQFHqaP4o=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # skip overflowing tests on 32 bit; https://github.com/pyca/cryptography/pull/10366
-      url = "https://github.com/pyca/cryptography/commit/d741901dddd731895346636c0d3556c6fa51fbe6.patch";
-      hash = "sha256-eC+MZg5O8Ia5CbjRE4y+JhaFs3Q5c62QtPHr3x9T+zw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--benchmark-disable" ""
   '';
 
-  cargoRoot = "src/rust";
-
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
-    setuptoolsRustBuildHook
-    cargo
-    rustc
+    rustPlatform.maturinBuildHook
     pkg-config
+    setuptools
   ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
       libiconv
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
+  dependencies = lib.optionals (!isPyPy) [ cffi ];
+
+  optional-dependencies.ssh = [ bcrypt ];
 
   nativeCheckInputs = [
     certifi
@@ -82,7 +72,7 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ];
+  ] ++ optional-dependencies.ssh;
 
   pytestFlagsArray = [ "--disable-pytest-warnings" ];
 
@@ -90,6 +80,10 @@ buildPythonPackage rec {
     # save compute time by not running benchmarks
     "tests/bench"
   ];
+
+  passthru = {
+    vectors = cryptography-vectors;
+  };
 
   meta = with lib; {
     description = "Package which provides cryptographic recipes and primitives";

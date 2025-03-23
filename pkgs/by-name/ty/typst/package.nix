@@ -1,32 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, xz
-, stdenv
-, darwin
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  xz,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.11.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "v${version}";
-    hash = "sha256-FagjVU8BJZStE/geexZERuV2P28iF/pPn2mTi1Gu9iU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-dev-assets-0.11.1" = "sha256-SMRtitDHFpdMEoOuPBnC3RBTyZ96hb4KmMSCXpAyKfU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,10 +32,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {
@@ -62,14 +54,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--workspace" ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
     mainProgram = "typst";
-    maintainers = with lib.maintainers; [ drupol figsoda kanashimia ];
+    maintainers = with lib.maintainers; [
+      drupol
+      figsoda
+      kanashimia
+    ];
   };
-}
+})

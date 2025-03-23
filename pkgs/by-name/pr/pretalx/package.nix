@@ -1,50 +1,43 @@
-{ lib
-, buildNpmPackage
-, gettext
-, python3
-, fetchFromGitHub
-, fetchpatch2
-, plugins ? [ ]
-, nixosTests
+{
+  lib,
+  buildNpmPackage,
+  gettext,
+  python3,
+  fetchFromGitHub,
+  plugins ? [ ],
+  nixosTests,
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
-      django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = oldAttrs.src.override {
-          rev = "v${version}";
-          hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
-        };
+      django = prev.django_5;
 
-        propagatedBuildInputs = with final; [
-          beautifulsoup4
-          django
-        ];
-
-        # fails with some assertions
+      django-extensions = prev.django-extensions.overridePythonAttrs {
+        # Compat issues with Django 5.1
+        # https://github.com/django-extensions/django-extensions/issues/1885
         doCheck = false;
-      });
+      };
     };
   };
 
-  version = "2024.1.0";
+  version = "2024.3.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-rFOlovybaEZnv5wBx6Dv8bVkP1D+CgYAKRXuNb6hLKQ=";
+    hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
   };
 
   meta = with lib; {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
-    changelog = "https://docs.pretalx.org/en/latest/changelog.html";
+    changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
+    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
     platforms = platforms.linux;
   };
 
@@ -54,7 +47,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-B9R3Nn4tURNxzeyLDHscqHxYOQK9AcmDnyNq3k5WQQs=";
+    npmDepsHash = "sha256-i7awRuR7NxhpxN2IZuI01PsN6FjXht7BxTbB1k039HA=";
 
     npmBuildScript = "build";
 
@@ -71,37 +64,30 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
-  patches = [
-    (fetchpatch2 {
-      # Backport support for Djangorestframework 3.15.x
-      name = "pretalx-drf-3.15.patch";
-      url = "https://github.com/pretalx/pretalx/commit/43a0416c6968d64ea57720abdb82f482940b11f8.patch";
-      hash = "sha256-Iw1xVF7j7c712kwIk1SMbQSF0ixMUZr1BJib3KAb2HY=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
-
-    substituteInPlace src/setup.cfg \
-      --replace "--cov=./ --cov-report=" ""
   '';
 
   nativeBuildInputs = [
     gettext
-  ] ++ (with python.pkgs; [
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-  ]);
+  ];
 
   pythonRelaxDeps = [
+    "bleach"
     "celery"
     "css-inline"
     "cssutils"
+    "defusedxml"
     "django-compressor"
     "django-csp"
     "django-filter"
     "django-hierarkey"
+    "django-i18nfield"
     "djangorestframework"
     "markdown"
     "pillow"
@@ -110,49 +96,52 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "rules"
+    "whitenoise"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    beautifulsoup4
-    bleach
-    celery
-    css-inline
-    csscompressor
-    cssutils
-    defusedcsv
-    django
-    django-bootstrap4
-    django-compressor
-    django-context-decorator
-    django-countries
-    django-csp
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-i18nfield
-    django-libsass
-    django-scopes
-    djangorestframework
-    libsass
-    markdown
-    pillow
-    publicsuffixlist
-    python-dateutil
-    qrcode
-    reportlab
-    requests
-    rules
-    urlman
-    vobject
-    whitenoise
-    zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
+  dependencies =
+    with python.pkgs;
+    [
+      beautifulsoup4
+      bleach
+      celery
+      css-inline
+      csscompressor
+      cssutils
+      defusedcsv
+      defusedxml
+      django
+      django-compressor
+      django-context-decorator
+      django-countries
+      django-csp
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-i18nfield
+      django-libsass
+      django-scopes
+      djangorestframework
+      libsass
+      markdown
+      pillow
+      publicsuffixlist
+      python-dateutil
+      qrcode
+      reportlab
+      requests
+      rules
+      urlman
+      vobject
+      whitenoise
+      zxcvbn
+    ]
+    ++ beautifulsoup4.optional-dependencies.lxml
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
 
-  passthru.optional-dependencies = {
-    mysql = with python.pkgs; [
-      mysqlclient
-    ];
+  optional-dependencies = {
     postgres = with python.pkgs; [
       psycopg2
     ];
@@ -193,16 +182,20 @@ python.pkgs.buildPythonApplication rec {
     cd src
   '';
 
-  nativeCheckInputs = with python.pkgs; [
-    faker
-    freezegun
-    jsonschema
-    pytest-django
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      faker
+      freezegun
+      jsonschema
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-xdist
+      pytestCheckHook
+      responses
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # tries to run npm run i18n:extract
@@ -218,6 +211,8 @@ python.pkgs.buildPythonApplication rec {
     "test_schedule_page_text_table"
     "test_schedule_page_text_wrong_format"
     "test_versioned_schedule_page"
+    # Test is racy
+    "test_can_reset_password_by_email"
   ];
 
   passthru = {

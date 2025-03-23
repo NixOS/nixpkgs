@@ -13,6 +13,7 @@
   Security,
   msgpack,
   fetchpatch,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -40,10 +41,10 @@ buildPythonPackage rec {
     })
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-We19laZd6b2fLSPNLegyNp0eQSeCvUJeTIXqvG7o08c=";
+    hash = "sha256-tFOZJFrNge3N+ux2Hp4Mlm9K/AXYxuuBzEQdQYGGDjg=";
     inherit patches;
   };
 
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   propagatedBuildInputs = [ msgpack ];
 
@@ -70,8 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "etebase" ];
 
+  passthru.tests = {
+    inherit (nixosTests) etebase-server;
+  };
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.etebase.com/";
     description = "Python client library for Etebase";
     license = licenses.bsd3;

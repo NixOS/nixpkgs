@@ -1,23 +1,31 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.9.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-JQx4vuXbsLrPAbmPlwPiPXJIpRufUzQN+R+Wqj4H8n4=";
+    hash = "sha256-LXuURq+MSSkd8+VzhltX2VqKsU3PWcQLMQTqqS5oLMg=";
   };
 
-  cargoHash = "sha256-5caZTdpEog8xdCn+LOfW5UdbuWZmO8iggSstxvdjwb0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nA24qjxo1C0t4twTv2/Uu05ELiSzYLrnsRgAIFKsIxg=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   postInstall = ''
     installManPage tldr.1

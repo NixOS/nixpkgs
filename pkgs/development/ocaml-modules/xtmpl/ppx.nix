@@ -1,4 +1,8 @@
-{ buildDunePackage, xtmpl, ppxlib }:
+{
+  buildDunePackage,
+  xtmpl,
+  ppxlib,
+}:
 
 buildDunePackage {
   pname = "xtmpl_ppx";
@@ -7,7 +11,10 @@ buildDunePackage {
 
   inherit (xtmpl) src version;
 
-  buildInputs = [ ppxlib xtmpl ];
+  buildInputs = [
+    ppxlib
+    xtmpl
+  ];
 
   meta = xtmpl.meta // {
     description = "Xml templating library, ppx extension";

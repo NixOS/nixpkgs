@@ -2,80 +2,117 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  huggingface-hub,
-  nltk,
-  numpy,
-  pytestCheckHook,
   pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  accelerate,
+  datasets,
+  huggingface-hub,
+  optimum,
+  pillow,
   scikit-learn,
   scipy,
   sentencepiece,
-  setuptools,
   tokenizers,
   torch,
-  torchvision,
   tqdm,
   transformers,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "2.7.0";
+  version = "3.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xER+WHprW83KWJ0bom+lTn0HNU7PgGROnp/QLG1uUcw=";
+    tag = "v${version}";
+    hash = "sha256-TNqCukHdjQYxK/UkAV/lm+TTAm5NyoZjVPUyHPyE3Ko=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
-    nltk
-    numpy
+    pillow
     scikit-learn
     scipy
-    sentencepiece
-    tokenizers
     torch
-    torchvision
     tqdm
     transformers
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    train = [
+      accelerate
+      datasets
+    ];
+    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
+  };
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
   disabledTests = [
     # Tests require network access
-    "test_simple_encode"
-    "test_paraphrase_mining"
-    "test_cmnrl_same_grad"
     "test_LabelAccuracyEvaluator"
     "test_ParaphraseMiningEvaluator"
+    "test_TripletEvaluator"
+    "test_cmnrl_same_grad"
+    "test_forward"
+    "test_initialization_with_embedding_dim"
+    "test_initialization_with_embedding_weights"
+    "test_loading_model2vec"
+    "test_model_card_base"
+    "test_model_card_reuse"
+    "test_nanobeir_evaluator"
+    "test_paraphrase_mining"
+    "test_save_and_load"
+    "test_simple_encode"
+    "test_tokenize"
+    "test_trainer"
+    "test_trainer_invalid_column_names"
+    "test_trainer_multi_dataset_errors"
   ];
 
   disabledTestPaths = [
     # Tests require network access
+    "tests/evaluation/test_information_retrieval_evaluator.py"
+    "tests/test_compute_embeddings.py"
+    "tests/test_cross_encoder.py"
+    "tests/test_model_card_data.py"
+    "tests/test_multi_process.py"
     "tests/test_pretrained_stsb.py"
     "tests/test_sentence_transformer.py"
-    "tests/test_compute_embeddings.py"
-    "tests/test_multi_process.py"
-    "tests/test_cross_encoder.py"
     "tests/test_train_stsb.py"
   ];
 
-  meta = with lib; {
+  # Sentence-transformer needs a writable hf_home cache
+  postInstall = ''
+    export HF_HOME=$(mktemp -d)
+  '';
+
+  meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
-    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

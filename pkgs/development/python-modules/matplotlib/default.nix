@@ -21,7 +21,7 @@
   ffmpeg-headless,
   freetype,
   # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still define use this argument to define the overriden
+  # freetype. We still use this argument to define the overridden
   # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
   # builds matplotlib with the freetype version they default to, with which all
   # tests should pass.
@@ -52,7 +52,7 @@
 
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
-  enableTk ? (!stdenv.isDarwin && !isPyPy),
+  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
   tcl,
   tk,
   tkinter,
@@ -89,22 +89,16 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.9.0";
+  version = "3.10.1";
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5tKepsGeNLMPt9iLcIH4aaAwFPZv4G1izHfVpuqI7Xo=";
+    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Don't crash when running in Darwin sandbox
-    # Submitted upstream: https://github.com/matplotlib/matplotlib/pull/28498
-    ./darwin-sandbox-crash.patch
-  ];
 
   env.XDG_RUNTIME_DIR = "/tmp";
 
@@ -117,10 +111,11 @@ buildPythonPackage rec {
   postPatch =
     ''
       substituteInPlace pyproject.toml \
-        --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+
       patchShebangs tools
     ''
-    + lib.optionalString (stdenv.isLinux && interactive) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.cpp \
         --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
@@ -145,10 +140,10 @@ buildPythonPackage rec {
       tcl
       tk
     ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   build-system = [
     certifi

@@ -16,7 +16,11 @@
 
   obs-3d-effect = callPackage ./obs-3d-effect.nix { };
 
+  obs-advanced-masks = callPackage ./obs-advanced-masks.nix { };
+
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
+
+  obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
 
   obs-command-source = callPackage ./obs-command-source.nix { };
 

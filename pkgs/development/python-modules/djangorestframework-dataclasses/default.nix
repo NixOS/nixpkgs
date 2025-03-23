@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
   };
 
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = " Dataclasses serializer for Django REST framework";
     homepage = "https://github.com/oxan/djangorestframework-dataclasses";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

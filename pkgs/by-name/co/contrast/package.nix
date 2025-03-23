@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    hash = "sha256-Y0CynBvnCOBesONpxUicR7PgMJgmM0ZQX/uOwIppj7w=";
+    hash = "sha256-8A1qX1H0cET5AUvMoHC1/VyIQiaTysEY5RJRrVYvGng=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-BdwY2YDJyDApGgE0Whz3xRU/0gRbkwbKUvPbWEObXE8=";
+    hash = "sha256-Nj5MkYDeYUzgqegCbPt/XofSCw8ULFXAD7XHNecPznc=";
   };
 
   nativeBuildInputs = [

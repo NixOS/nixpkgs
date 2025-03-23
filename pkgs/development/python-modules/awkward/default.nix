@@ -1,40 +1,38 @@
 {
   lib,
-  fsspec,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-fancy-pypi-readme,
   hatchling,
+
+  # dependencies
   awkward-cpp,
-  importlib-metadata,
+  fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  jax,
-  jaxlib,
+
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.6";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5Jg+Ki1vJ4Rz22TbqTvVtb5YLvkvP8EOQ7cmTmI6gQU=";
+    tag = "v${version}";
+    hash = "sha256-dr8DUY6T6fvtMASdM9U+XQN0dVP8AKvwa1gwHfOz3Dw=";
   };
 
   build-system = [
@@ -42,43 +40,36 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      importlib-metadata
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "awkward" ];
 
-  nativeCheckInputs =
-    [
-      fsspec
-      numba
-      setuptools
-      numexpr
-      pandas
-      pyarrow
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      # no support for darwin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    fsspec
+    numba
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
+  disabledTests = [
+    # pyarrow.lib.ArrowInvalid
+    "test_recordarray"
+  ];
+
   disabledTestPaths = [
+    # Need to be run on a GPU platform.
     "tests-cuda"
-    # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+  ];
 
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
+#!nix-shell -I nixpkgs=./ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
 
 # shellcheck shell=bash
 
@@ -36,6 +36,7 @@ popd
 # Use friendlier hashes
 yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
 
-sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
-sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" common.nix
-sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" common.nix
+common="./pkgs/applications/misc/tandoor-recipes/common.nix"
+sed -i -E -e "s#version = \".*\"#version = \"$version\"#" $common
+sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" $common
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" $common

@@ -1,5 +1,4 @@
 {
-  backoff,
   sparqlwrapper,
   boto3,
   buildPythonPackage,
@@ -26,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.9.0";
+  version = "3.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XhTRnQ2wsCD2jiiRFHDagmMB26lZ8Oj+tscgVypN0+c=";
+    tag = version;
+    hash = "sha256-dIdNrfhBrfrzXmspw25yd/y6MbXRrLfDveCQk+AERV0=";
   };
 
   pythonRelaxDeps = [ "packaging" ];
@@ -58,7 +57,7 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sqlserver = [ pyodbc ];
     sparql = [ sparqlwrapper ];
   };

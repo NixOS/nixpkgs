@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index d28c673..1cd0548 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -434,16 +434,7 @@ AC_CHECK_LIB([udev], [udev_device_new_from_device_id], [
+   LIBS="$LIBS $LIBUDEV_LIBS"
+ ])
+ 
+-dnl Ubuntu's systemd pkg-config seems broken beyond repair. So:
+-kernelversion=`cat /proc/version || echo "non-linux"`
+-AS_CASE([$kernelversion],
+-  [*Ubuntu*],[
+-    AC_MSG_NOTICE([Hardwiring Ubuntu systemd setup])
+-    AC_SUBST([systemdsystemunitdir], [/lib/systemd/system])
+-    AM_CONDITIONAL([WITH_SYSTEMDSYSTEMUNITDIR], [true])
+-  ],[*],[
+-    SYSTEMD_SYSTEMUNITDIR
+-])
++SYSTEMD_SYSTEMUNITDIR
+ 
+ AC_ARG_WITH(lockdir,
+   [  --with-lockdir=DIR      Old-school device lock files in DIR (/var/lock{/lockdev})],

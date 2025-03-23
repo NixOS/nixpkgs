@@ -1,61 +1,57 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   rustPlatform,
   numpy,
   pytestCheckHook,
   syrupy,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.10.0";
+  version = "0.15.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
-    rev = "quil-py/v${version}";
-    hash = "sha256-GJ39pvIqYs2bMGAHJL8OgB0OfmIpo/k3FxorYvdOvhI=";
+    tag = "quil-py/v${version}";
+    hash = "sha256-55NfQlpeqp0je9MpTeQdVyhZ8C16lZJKM43PTsQY5nc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    hash = "sha256-VvnjdCFrpo/rDLNJrHpZoV+E+fQGgNW/nBOvMG91sHQ=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-hMvbbJulJaR5Qy7LS4H9CyiAoQWoPMNxxVzmwD9aYTQ=";
   };
 
   buildAndTestSubdir = "quil-py";
 
-  build-system = [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
   dependencies = [ numpy ];
 
-  pythonImportsCheck = [ "numpy" ];
+  pythonImportsCheck = [
+    "quil.expression"
+    "quil.instructions"
+    "quil.program"
+    "quil.validation"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
   ];
 
-  disabledTests = [
-    # Syrupy snapshot needs to be regenerated
-    "test_filter_instructions"
-  ];
-
   meta = {
-    changelog = "https://github.com/rigetti/quil-rs/blob/${src.rev}/quil-py/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-py/CHANGELOG.md";
     description = "Python package for building and parsing Quil programs";
     homepage = "https://github.com/rigetti/quil-rs/tree/main/quil-py";
     license = lib.licenses.asl20;

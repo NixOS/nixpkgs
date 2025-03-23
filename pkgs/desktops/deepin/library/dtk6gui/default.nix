@@ -1,29 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6core
-, librsvg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6core,
+  librsvg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.16";
+  version = "6.0.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-fnbCKqeeQE5WBnNJ0D1ihsZswDSJ/Oj98eUXFrOuk+w=";
+    hash = "sha256-Ybi68lTSUJpAipx92JF7wj6y+GTYDodJKRCVFhfnBvQ=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/util/dsvgrenderer.cpp \
+      --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -35,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6Packages.qtbase
+    qt6Packages.qtwayland
     librsvg
   ];
 
@@ -56,7 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DGui/bin/*; do

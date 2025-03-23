@@ -1,0 +1,24 @@
+Avoid spurious implicit int/implicit function declaration errors in the
+statvfs64 check (which still fails on Fedora; statvfs is used instead).
+
+Submitted upstream: <https://github.com/rdesktop/rdesktop/pull/407>
+
+diff --git a/configure.ac b/configure.ac
+index 1ab12a83b01f8a47..b5092b0f8cab520f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -668,12 +668,13 @@ if test $space = no; then
+   # SVR4
+   AC_CACHE_CHECK([statvfs64 function (SVR4)], fu_cv_sys_stat_statvfs64,
+   [AC_TRY_RUN([
++#include <stdlib.h>
+ #if defined(HAVE_UNISTD_H)
+ #include <unistd.h>
+ #endif
+ #include <sys/types.h>
+ #include <sys/statvfs.h>
+-  main ()
++  int main (void)
+   {
+     struct statvfs64 fsd;
+     exit (statvfs64 (".", &fsd));

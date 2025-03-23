@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "broox";
     repo = "python-nuheat";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EsPuwILfKc1Bpvu0Qos7yooC3dBaqf46lWhiSZdu3sc=";
   };
 

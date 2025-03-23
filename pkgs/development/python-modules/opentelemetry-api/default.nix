@@ -7,7 +7,6 @@
   hatchling,
   importlib-metadata,
   opentelemetry-test-utils,
-  setuptools,
   pytestCheckHook,
   writeScript,
 }:
@@ -15,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.25.0";
+    version = "1.29.0";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -24,12 +23,11 @@ let
     src = fetchFromGitHub {
       owner = "open-telemetry";
       repo = "opentelemetry-python";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-9mxgPYliGkNsZGOhF9YCmxZjP3hc2UUmxSpWY4IMLCo=";
+      tag = "v${version}";
+      hash = "sha256-3lqAJq8p+IQG9LWcyrsbwF/CrIMkx93g65bOAnknVTM=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
-
 
     build-system = [ hatchling ];
 
@@ -65,7 +63,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
       description = "OpenTelemetry Python API";
-      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${self.src.rev}";
+      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
       license = licenses.asl20;
       maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
     };

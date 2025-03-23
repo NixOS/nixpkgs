@@ -1,39 +1,30 @@
-{ alsa-lib
-, autoPatchelfHook
-, buildFHSEnv
-, dbus
-, elfutils
-, expat
-, extraEnv ? { }
-, fetchFromGitLab
-, fetchurl
-, glib
-, glibc
-, lib
-, libGL
-, libapparmor
-, libbsd
-, libedit
-, libffi_3_3
-, libgcrypt
-, libglvnd
-, makeShellWrapper
-, sqlite
-, squashfsTools
-, stdenv
-, tcp_wrappers
-, udev
-, waylandpp
-, writeShellScript
-, xkeyboard_config
-, xorg
-, xz
-, zstd
+{
+  alsa-lib,
+  autoPatchelfHook,
+  buildFHSEnv,
+  elfutils,
+  extraEnv ? { },
+  fetchurl,
+  ffmpeg_6-headless,
+  lib,
+  libdrm,
+  libedit,
+  libpulseaudio,
+  libva,
+  libxkbcommon,
+  makeShellWrapper,
+  minizip,
+  nss,
+  squashfsTools,
+  stdenv,
+  writeShellScript,
+  xkeyboard_config,
+  xorg,
 }:
 let
   pname = "plex-desktop";
-  version = "1.96.0";
-  rev = "69";
+  version = "1.108.1";
+  rev = "84";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -48,52 +39,44 @@ let
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
   };
-
-  # The latest unstable version isn't compatible with libraries that ship in the snap.
-  libglvnd-1_4_0 = libglvnd.overrideAttrs {
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "glvnd";
-      repo = "libglvnd";
-      rev = "v1.4.0";
-      sha256 = "sha256-Y6JHRygXcZtnrdnqi1Lzyvh/635gwZWnMeW9aRCpxxs";
-    };
-  };
   plex-desktop = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-rECc8rK1ENAL5mXdabO8ynudCaSzz0yygOyg4gMbCtddgqwSOanP24/oguzPLr3zdRMC3VSf9B3hr2BGQ54tzg==";
+      hash = "sha512-ZcP84maap5Dskf9yECd76gn5x+tWxyVcIo+c0P2VJiQ4VwN2KCgWmwH2JkHzafFCcCFm9EqFBrFlNXWEvnUieQ==";
     };
 
-    nativeBuildInputs = [ squashfsTools ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeShellWrapper
+      squashfsTools
+    ];
 
     buildInputs = [
-      alsa-lib
-      autoPatchelfHook
-      dbus
       elfutils
-      expat
-      glib
-      glibc
-      libGL
-      libapparmor
-      libbsd
-      libedit
-      libffi_3_3
-      libgcrypt
-      makeShellWrapper
-      sqlite
-      squashfsTools
+      ffmpeg_6-headless
+      libpulseaudio
+      libva
+      libxkbcommon
+      minizip
+      nss
       stdenv.cc.cc
-      tcp_wrappers
-      udev
-      waylandpp
+      xorg.libXcomposite
+      xorg.libXdamage
       xorg.libXinerama
-      xz
-      zstd
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libxshmfence
+      xorg.xcbutilimage
+      xorg.xcbutilkeysyms
+      xorg.xcbutilrenderutil
+      xorg.xcbutilwm
+      xorg.xrandr
     ];
+
+    strictDeps = true;
 
     unpackPhase = ''
       runHook preUnpack
@@ -104,48 +87,75 @@ let
 
     dontWrapQtApps = true;
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        cp -r . $out
+      cp -r . $out
+      rm -r $out/etc
+      rm -r $out/usr
 
-        ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
-        rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-        ln -s ${alsa-lib}/lib/libasound.so.2 $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-        rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
-        ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
+      # flatpak removes these during installation.
+      rm -r $out/lib/dri
+      rm $out/lib/libpciaccess.so*
+      rm $out/lib/libswresample.so*
+      rm $out/lib/libva-*.so*
+      rm $out/lib/libva.so*
+      rm $out/lib/libEGL.so*
+      rm $out/lib/libdrm.so*
+      rm $out/lib/libdrm*
 
-        runHook postInstall
-      '';
+      ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
+
+      # Keep dependencies where the version from nixpkgs is higher.
+      cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2
+      cp usr/lib/x86_64-linux-gnu/libjbig.so.0 $out/lib/libjbig.so.0
+      cp usr/lib/x86_64-linux-gnu/libjpeg.so.8 $out/lib/libjpeg.so.8
+      cp usr/lib/x86_64-linux-gnu/liblcms2.so.2 $out/lib/liblcms2.so.2
+      cp usr/lib/x86_64-linux-gnu/libpci.so.3.6.4 $out/lib/libpci.so.3
+      cp usr/lib/x86_64-linux-gnu/libsnappy.so.1.1.8 $out/lib/libsnappy.so.1
+      cp usr/lib/x86_64-linux-gnu/libtiff.so.5 $out/lib/libtiff.so.5
+      cp usr/lib/x86_64-linux-gnu/libwebp.so.6 $out/lib/libwebp.so.6
+      cp usr/lib/x86_64-linux-gnu/libxkbfile.so.1.0.2 $out/lib/libxkbfile.so.1
+      cp usr/lib/x86_64-linux-gnu/libxslt.so.1.1.34 $out/lib/libxslt.so.1
+
+      runHook postInstall
+    '';
   };
 in
 buildFHSEnv {
-    name = "${pname}-${version}";
-    targetPkgs = pkgs: [ xkeyboard_config ];
+  inherit pname version meta;
+  targetPkgs = pkgs: [
+    alsa-lib
+    libdrm
+    xkeyboard_config
+  ];
 
-    extraInstallCommands = ''
-      mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-      install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
-      substituteInPlace $out/share/applications/plex-desktop.desktop \
-        --replace-fail \
-        'Icon=''${SNAP}/meta/gui/icon.png' \
-        'Icon=${plex-desktop}/meta/gui/icon.png' \
-        --replace-fail \
-        'Exec=plex-desktop' \
-        'Exec=plex-desktop-${version}'
-    '';
-
-    runScript = writeShellScript "plex-desktop.sh" ''
-      # Widevine won't download unless this directory exists.
-      mkdir -p $HOME/.cache/plex/
-      PLEX_USR_PATH=${lib.makeSearchPath "usr/lib/x86_64-linux-gnu"  [ plex-desktop ]}
-
-      set -o allexport
-      LD_LIBRARY_PATH=${lib.makeLibraryPath [ plex-desktop libglvnd-1_4_0 ]}:$PLEX_USR_PATH
-      LIBGL_DRIVERS_PATH=$PLEX_USR_PATH/dri
-      ${lib.toShellVars extraEnv}
-      exec ${plex-desktop}/Plex.sh
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
+    install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
+    substituteInPlace $out/share/applications/plex-desktop.desktop \
+      --replace-fail \
+      'Icon=''${SNAP}/meta/gui/icon.png' \
+      'Icon=${plex-desktop}/meta/gui/icon.png'
   '';
-}
 
+  runScript = writeShellScript "plex-desktop.sh" ''
+    # Widevine won't download unless this directory exists.
+    mkdir -p $HOME/.cache/plex/
+
+    # Copy the sqlite plugin database on first run.
+    PLEX_DB="$HOME/.local/share/plex/Plex Media Server/Plug-in Support/Databases"
+    if [[ ! -d "$PLEX_DB" ]]; then
+      mkdir -p "$PLEX_DB"
+      cp "${plex-desktop}/resources/com.plexapp.plugins.library.db" "$PLEX_DB"
+    fi
+
+    # db files should have write access.
+    chmod --recursive 750 "$PLEX_DB"
+
+    set -o allexport
+    ${lib.toShellVars extraEnv}
+    exec ${plex-desktop}/Plex.sh
+  '';
+  passthru.updateScript = ./update.sh;
+}

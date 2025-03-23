@@ -1,44 +1,42 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, alsa-lib
-, dbus
-, fontconfig
-, libxkbcommon
-, makeWrapper
-, nix-update-script
-, openvr
-, openxr-loader
-, pipewire
-, pkg-config
-, pulseaudio
-, shaderc
-, testers
-, wayland
-, wlx-overlay-s
-, xorg
+{
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  fontconfig,
+  lib,
+  libGL,
+  libX11,
+  libXext,
+  libXrandr,
+  libxkbcommon,
+  makeWrapper,
+  nix-update-script,
+  openvr,
+  openxr-loader,
+  pipewire,
+  pkg-config,
+  pulseaudio,
+  rustPlatform,
+  shaderc,
+  stdenv,
+  testers,
+  wayland,
+  wlx-overlay-s,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.4.2";
+  version = "25.3.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-4sW/WxoN5jAomA/aFAAH8z8CAB7zsevpBllSwaQWSmU=";
+    hash = "sha256-m2YVXF9bEjovZOWa+X1CYHAUaAsUI4dBMG2ni3jP9L4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ovr_overlay-0.0.0" = "sha256-d38LqhKOp9tHbiK4eU7OPdFvkExqaJN1tB6y2qqPm9U=";
-      "vulkano-0.34.0" = "sha256-o1KP/mscMG5j3U3xtei/2nMNEh7jLedcW1P0gL9Y1Rc=";
-      "wlx-capture-0.3.11" = "sha256-CmFnVfA3MAYXSejn9GpuaNCRu4HiX0CN0j3aN4Pxvjw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-y4pWUQFPR0jOTdukQZe4d1v0DFDfQtAg0Bi4V4ue5+Y=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -50,13 +48,15 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     dbus
     fontconfig
+    libGL
+    libX11
+    libXext
+    libXrandr
     libxkbcommon
     openvr
     openxr-loader
     pipewire
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
+    wayland
   ];
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
@@ -66,12 +66,6 @@ rustPlatform.buildRustPackage rec {
       --replace '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
-  '';
-
-  postInstall = ''
-    patchelf $out/bin/wlx-overlay-s \
-      --add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
-      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
 
   passthru = {
@@ -86,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "wlx-overlay-s";
   };
 }

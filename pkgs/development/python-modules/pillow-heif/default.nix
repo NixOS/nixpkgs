@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   cmake,
@@ -23,40 +22,34 @@
   # tests
   opencv4,
   numpy,
-  pympler,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.17.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fKh4UbTVj74YxH2vvL24DNmMxg10GSYAmduwuRneE+0=";
+    tag = "v${version}";
+    hash = "sha256-wmxfFapcd7vduR4tQ3grAhqS35GsNvYA/mCFscQ3aDs=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # fix libheif 1.18 support in tests
-      url = "https://github.com/bigcat88/pillow_heif/commit/a59434e9ca1138e47e322ddef2adc79e684384f1.patch";
-      hash = "sha256-yVT/pnO5KWMnsO95EPCZgyhx6FIJOhsna7t0zpTjWpE=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+    substituteInPlace setup.py \
+      --replace-warn ', "-Werror"' ""
   '';
 
   nativeBuildInputs = [
     cmake
     nasm
     pkg-config
-    setuptools
   ];
+
+  build-system = [ setuptools ];
 
   dontUseCmakeConfigure = true;
 
@@ -68,34 +61,36 @@ buildPythonPackage rec {
   ];
 
   env = {
-    # clang-16: error: argument unused during compilation: '-fno-strict-overflow'
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
-
     RELEASE_FULL_FLAG = 1;
   };
 
-  propagatedBuildInputs = [ pillow ];
+  dependencies = [ pillow ];
 
   pythonImportsCheck = [ "pillow_heif" ];
 
   nativeCheckInputs = [
     opencv4
     numpy
-    pympler
     pytestCheckHook
   ];
+
+  preCheck = ''
+    # https://github.com/bigcat88/pillow_heif/issues/325
+    rm tests/images/heif_other/L_xmp_latin1.heic
+    rm tests/images/heif/L_xmp.heif
+  '';
 
   disabledTests =
     [
       # Time based
       "test_decode_threads"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89
       # not reproducible in nixpkgs
       "test_opencv_crash"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # RuntimeError: Encoder plugin generated an error: Unsupported bit depth: Bit depth not supported by x265
       "test_open_heif_compare_non_standard_modes_data"
       "test_open_save_disable_16bit"
@@ -107,7 +102,7 @@ buildPythonPackage rec {
     ];
 
   meta = {
-    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/v${version}";
+    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${src.tag}";
     description = "Python library for working with HEIF images and plugin for Pillow";
     homepage = "https://github.com/bigcat88/pillow_heif";
     license = with lib.licenses; [

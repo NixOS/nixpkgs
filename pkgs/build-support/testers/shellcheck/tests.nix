@@ -1,38 +1,36 @@
 # Run:
 #   nix-build -A tests.testers.shellcheck
 
-{ lib, testers, runCommand }:
-let
-  inherit (lib) fileset;
-in
+{
+  lib,
+  testers,
+}:
 lib.recurseIntoAttrs {
+  example-dir = testers.testBuildFailure' {
+    drv = testers.shellcheck {
+      name = "example-dir";
+      src = ./src;
+    };
+    expectedBuilderExitCode = 123;
+    expectedBuilderLogEntries = [
+      ''
+        echo $@
+             ^-- SC2068 (error): Double quote array expansions to avoid re-splitting elements.
+      ''
+    ];
+  };
 
-  example-dir = runCommand "test-testers-shellcheck-example-dir" {
-    failure = testers.testBuildFailure
-      (testers.shellcheck {
-        src = fileset.toSource {
-          root = ./.;
-          fileset = fileset.unions [
-            ./example.sh
-          ];
-        };
-      });
-  } ''
-    log="$failure/testBuildFailure.log"
-    echo "Checking $log"
-    grep SC2068 "$log"
-    touch $out
-  '';
-
-  example-file = runCommand "test-testers-shellcheck-example-file" {
-    failure = testers.testBuildFailure
-      (testers.shellcheck {
-        src = ./example.sh;
-      });
-  } ''
-    log="$failure/testBuildFailure.log"
-    echo "Checking $log"
-    grep SC2068 "$log"
-    touch $out
-  '';
+  example-file = testers.testBuildFailure' {
+    drv = testers.shellcheck {
+      name = "example-file";
+      src = ./src/example.sh;
+    };
+    expectedBuilderExitCode = 123;
+    expectedBuilderLogEntries = [
+      ''
+        echo $@
+             ^-- SC2068 (error): Double quote array expansions to avoid re-splitting elements.
+      ''
+    ];
+  };
 }

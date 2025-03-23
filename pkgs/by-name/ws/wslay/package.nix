@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ cunit ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH=$(pwd)/lib/.libs
   '';
 

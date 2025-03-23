@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnupg
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnupg,
+  installShellFiles,
 }:
 
 let
   pname = "apt-offline";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
     repo = "apt-offline";
-    rev = "v${version}";
-    hash = "sha256-KkJwQ9EpOSJK9PaM747l6Gqp8Z8SWvuo3TJ+Ry6d0l4=";
+    tag = "v${version}";
+    hash = "sha256-PnU8vbEY+EpEv8D6Ap/iJqfwOWxpNytT+XDFCFD8XqU=";
   };
 in
 python3Packages.buildPythonApplication {
@@ -23,10 +24,10 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
-      --replace /usr/bin/ "$out/bin"
+      --replace-fail /usr/bin/ "$out/bin"
 
     substituteInPlace apt_offline_core/AptOfflineCoreLib.py \
-      --replace /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
+      --replace-fail /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
   '';
 
   postInstall = ''
@@ -41,14 +42,17 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "apt_offline_core" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: verify GUI and pkexec

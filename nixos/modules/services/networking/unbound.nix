@@ -30,10 +30,12 @@ let
     ${confServer}
     ${confNoServer}
   '';
-  confFile = if cfg.checkconf then pkgs.runCommandLocal "unbound-checkconf" { } ''
+  confFile = if cfg.checkconf then pkgs.runCommand "unbound-checkconf" {
+    preferLocalBuild = true;
+  } ''
     cp ${confFileUnchecked} unbound.conf
 
-    # fake stateDir which is not accesible in the sandbox
+    # fake stateDir which is not accessible in the sandbox
     mkdir -p $PWD/state
     sed -i unbound.conf \
       -e '/auto-trust-anchor-file/d' \
@@ -79,7 +81,7 @@ in {
         default = !cfg.settings ? include && !cfg.settings ? remote-control;
         defaultText = "!services.unbound.settings ? include && !services.unbound.settings ? remote-control";
         description = ''
-          Wether to check the resulting config file with unbound checkconf for syntax errors.
+          Whether to check the resulting config file with unbound checkconf for syntax errors.
 
           If settings.include is used, this options is disabled, as the import can likely not be accessed at build time.
           If settings.remote-control is used, this option is disabled, too as the control-key-file, server-cert-file and server-key-file cannot be accessed at build time.
@@ -193,7 +195,7 @@ in {
         interface = mkDefault ([ "127.0.0.1" ] ++ (optional config.networking.enableIPv6 "::1"));
         access-control = mkDefault ([ "127.0.0.0/8 allow" ] ++ (optional config.networking.enableIPv6 "::1/128 allow"));
         auto-trust-anchor-file = mkIf cfg.enableRootTrustAnchor rootTrustAnchorFile;
-        tls-cert-bundle = mkDefault "/etc/ssl/certs/ca-certificates.crt";
+        tls-cert-bundle = mkDefault config.security.pki.caBundle;
         # prevent race conditions on system startup when interfaces are not yet
         # configured
         ip-freebind = mkDefault true;

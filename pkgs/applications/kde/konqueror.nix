@@ -1,16 +1,33 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules, kdoctools
-, kinit, kcmutils, khtml, kdesu
-, qtwebengine, qtx11extras, qtscript, qtwayland
+{
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  kdoctools,
+  kinit,
+  kcmutils,
+  khtml,
+  kdesu,
+  qtwebengine,
+  qtx11extras,
+  qtscript,
+  qtwayland,
 }:
 
 mkDerivation {
   pname = "konqueror";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
-    kcmutils khtml kinit kdesu
-    qtwebengine qtx11extras qtscript qtwayland
+    kcmutils
+    khtml
+    kinit
+    kdesu
+    qtwebengine
+    qtx11extras
+    qtscript
+    qtwayland
   ];
 
   # InitialPreference values are too high and any text/html ends up

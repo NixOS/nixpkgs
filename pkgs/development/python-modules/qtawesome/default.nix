@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.3.1";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dF77vkrEl671fQvsHAX+JY9OmLA29kgAVswY2b3UyTg=";
+    tag = "v${version}";
+    hash = "sha256-VjUlP+5QU9ApD09UNvF48b0gepCUpVO6U6zYaKm0KoE=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux; # fails on Darwin
   };
 }

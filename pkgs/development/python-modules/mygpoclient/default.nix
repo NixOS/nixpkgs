@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mypgoclient";
+  pname = "mygpoclient";
   version = "1.9";
   pyproject = true;
 
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

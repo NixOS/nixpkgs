@@ -1,56 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, cosmic-icons
-, just
-, pkg-config
-, libxkbcommon
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  libcosmicAppHook,
+  glib,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "0-unstable-2024-06-10";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "6123108f3ae3c7074264184952f0a53e49a981d5";
-    hash = "sha256-BeqpoLIZbR5Dg7OGYGQMFWBLdD96n4t7fX8Ju9/h5JU=";
+    repo = "cosmic-files";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-i1CVhfieexeiKPwp0y29QyrKspzEFkp1+zwIaM9D/Qc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-eaG/HCwlKqSfEp6GEPeBS63j5WHq4qdYTNHqnW2zeeE=";
-      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
-      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
-      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
-      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
-    };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I5WRuEogMwa0dB6wxhWDxivqhCdUugvsPrwUvjjDnt8=";
+
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-06-10";
-  env.VERGEN_GIT_SHA = src.rev;
+  nativeBuildInputs = [
+    just
+    libcosmicAppHook
+  ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ wayland ];
+  buildInputs = [ glib ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -59,20 +45,60 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "--set"
+    "applet-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland libxkbcommon ]}
+  # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
+  # at the same time, which would cause problems with the desktop items applet
+  buildPhase = ''
+    runHook preBuild
+
+    defaultCargoBuildFlags="$cargoBuildFlags"
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+
+    runHook postBuild
   '';
 
-  meta = with lib; {
+  checkPhase = ''
+    runHook preCheck
+
+    defaultCargoTestFlags="$cargoTestFlags"
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
+
+    runHook postCheck
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "cosmic-files";
+    maintainers = with lib.maintainers; [
+      ahoneybun
+      nyabinary
+      HeitorAugustoLN
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

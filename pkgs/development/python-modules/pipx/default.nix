@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-B57EIUIwy0XG5bnIwxYKgm3WwckdJWWAeUl84mWC1Ds=";
+    tag = version;
+    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
   };
 
   build-system = [

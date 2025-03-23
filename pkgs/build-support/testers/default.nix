@@ -1,4 +1,18 @@
-{ pkgs, pkgsLinux, buildPackages, diffoscopeMinimal, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+{
+  lib,
+  buildPackages,
+  callPackage,
+  pkgs,
+  pkgsLinux,
+
+  diffoscopeMinimal,
+  runCommand,
+  runCommandWith,
+  stdenv,
+  stdenvNoCC,
+  replaceVars,
+  testers,
+}:
 # Documentation is in doc/build-helpers/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
@@ -10,10 +24,19 @@
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
-      (substituteAll { coreutils = buildPackages.coreutils; src = ./expect-failure.sh; })
+      (replaceVars ./expect-failure.sh {
+        coreutils = buildPackages.coreutils;
+        vars = lib.toShellVars {
+          outputNames = (orig.outputs or [ "out" ]);
+        };
+      })
       orig.realBuilder or stdenv.shell
-    ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
+    ] ++ orig.args or ["-e" ../../stdenv/generic/source-stdenv.sh (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
+  # or doc/build-helpers/testers.chapter.md
+  testBuildFailure' = callPackage ./testBuildFailurePrime { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
   # or doc/build-helpers/testers.chapter.md
@@ -46,6 +69,10 @@
     fi
   '';
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
+  # or doc/build-helpers/testers.chapter.md
+  testEqualArrayOrMap = callPackage ./testEqualArrayOrMap { };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
   testVersion =
@@ -53,7 +80,7 @@
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      if output=$(${command} 2>&1); then
+      if output=$(${command} 2>&1 | sed -e 's|${builtins.storeDir}/[^/ ]*/|{{storeDir}}/|g'); then
         if grep -Fw -- "${version}" - <<< "$output"; then
           touch $out
         else
@@ -86,6 +113,31 @@
         then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
         else salted;
     in checked;
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runCommand
+  runCommand = testers.invalidateFetcherByDrvHash (
+    {
+      hash ? pkgs.emptyFile.outputHash,
+      name,
+      script,
+      stdenv ? stdenvNoCC,
+      ...
+    }@args:
+
+    runCommandWith {
+      inherit name stdenv;
+
+      derivationArgs = {
+        outputHash = hash;
+        outputHashMode = "recursive";
+      } // lib.removeAttrs args [
+        "hash"
+        "name"
+        "script"
+        "stdenv"
+      ];
+    } script
+  );
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   # or doc/build-helpers/testers.chapter.md
@@ -142,4 +194,6 @@
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
+
+  shfmt = callPackage ./shfmt { };
 }

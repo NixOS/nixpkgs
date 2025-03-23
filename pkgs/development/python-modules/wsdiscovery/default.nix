@@ -7,23 +7,26 @@
   netifaces,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wsdiscovery";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "andreikop";
     repo = "python-ws-discovery";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-6LGZogNRCnmCrRXvHq9jmHwqW13KQPpaGaao/52JPtk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     netifaces
   ];
@@ -38,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WS-Discovery implementation for Python";
     homepage = "https://github.com/andreikop/python-ws-discovery";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

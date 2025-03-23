@@ -1,18 +1,19 @@
-{ boost
-, cmake
-, fetchFromGitHub
-, lib
-, libGLU
-, libGL
-, openssl
-, pkg-config
-, SDL
-, SDL_image
-, SDL_mixer
-, SDL_gfx
-, stdenv
-, yaml-cpp
-, zlib
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libGLU,
+  libGL,
+  openssl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_gfx,
+  stdenv,
+  yaml-cpp,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -49,7 +50,7 @@ stdenv.mkDerivation {
     mainProgram = "openxcom";
     homepage = "https://openxcom.org";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

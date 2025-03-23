@@ -1,23 +1,29 @@
-{ lib
-, fetchFromGitHub
-, python3
-, libseccomp
-, nixosTests
-, testers
-, benchexec
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  libseccomp,
+  nixosTests,
+  testers,
+  benchexec,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "benchexec";
-  version = "3.21";
+  version = "3.27";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
     rev = version;
-    hash = "sha256-bE3brmmLHZQakDKvd47I1hm9Dcsu6DrSeJyjWWtEZWI=";
+    hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
   };
 
   pyproject = true;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools ==' 'setuptools >='
+  '';
 
   nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
@@ -39,10 +45,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests =
     let
-      testVersion = result: testers.testVersion {
-        command = "${result} --version";
-        package = benchexec;
-      };
+      testVersion =
+        result:
+        testers.testVersion {
+          command = "${result} --version";
+          package = benchexec;
+        };
     in
     {
       nixos = nixosTests.benchexec;

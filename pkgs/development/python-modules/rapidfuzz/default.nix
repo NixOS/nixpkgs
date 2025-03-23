@@ -7,8 +7,7 @@
   cmake,
   cython,
   ninja,
-  scikit-build,
-  setuptools,
+  scikit-build-core,
   numpy,
   hypothesis,
   pandas,
@@ -19,29 +18,23 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.9.4";
+  version = "3.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Af5WTmvUVO91GfnnjVnShMB188XINBdmk2NWC80REdI=";
+    tag = "v${version}";
+    hash = "sha256-keV+IBBHkdDpKuT1o6xNA5UAHlG1I9vkt13W8dafiDw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython >=3.0.9, <3.1.0" "Cython"
-  '';
 
   build-system = [
     cmake
     cython
     ninja
-    scikit-build
-    setuptools
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -55,12 +48,12 @@ buildPythonPackage rec {
     ''
       export RAPIDFUZZ_BUILD_EXTENSION=1
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
     '';
 
-  passthru.optional-dependencies = {
-    full = [ numpy ];
+  optional-dependencies = {
+    all = [ numpy ];
   };
 
   preCheck = ''
@@ -73,7 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # segfaults
     "test_cdist"
   ];
@@ -88,7 +81,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

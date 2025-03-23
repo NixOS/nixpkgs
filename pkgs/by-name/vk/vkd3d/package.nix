@@ -14,17 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkd3d";
-  version = "1.12";
+  version = "1.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.winehq.org";
     owner = "wine";
     repo = "vkd3d";
     rev = "vkd3d-${finalAttrs.version}";
-    hash = "sha256-9FNuWtfJJqkSZ3O11G22aNp8PfseLHH4oyL6MulNwMY=";
+    hash = "sha256-EzXsYi9wC+JdMYE77cIeO2lV+fY4ViQM3+KcAJFv9tU=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -57,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ lgpl21Plus ];
     mainProgram = "vkd3d-compiler";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wine.meta) platforms;
   };
 })

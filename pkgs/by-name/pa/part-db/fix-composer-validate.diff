@@ -1,0 +1,24 @@
+diff --git a/composer.json b/composer.json
+index 0659f2ee..5a2dee70 100644
+--- a/composer.json
++++ b/composer.json
+@@ -1,4 +1,6 @@
+ {
++    "name": "part-db/part-db-server",
++    "description": "Part-DB is an Open source inventory management system for your electronic components",
+     "type": "project",
+     "license": "AGPL-3.0-or-later",
+     "require": {
+diff --git a/composer.lock b/composer.lock
+index 614a35f7..e0c949eb 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "465fa2ab7f9f8dad2b8cfbeaa640c136",
++    "content-hash": "cec123f8cbf51820ba08c5c69ec2ded4",
+     "packages": [
+         {
+             "name": "amphp/amp",

@@ -1,11 +1,12 @@
-{ fetchFromGitHub
-, lib
-, makeWrapper
-, pkg-config
-, stdenv
-, alsa-lib
-, flrig
-, hamlib
+{
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  pkg-config,
+  stdenv,
+  alsa-lib,
+  flrig,
+  hamlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

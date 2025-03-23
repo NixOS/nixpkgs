@@ -8,20 +8,21 @@
   pytestCheckHook,
   nbval,
   latex2mathml,
+  writableTmpDirAsHomeHook,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.10";
+  version = "0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Drssi+YySh4OhVYAOvgIwzeeu5dQbUUXuhwTedhUUt8=";
+    repo = "ziamath";
+    tag = version;
+    hash = "sha256-ShR9O170Q26l6XHSe2CO4bEuQm4JNOxiPZ2kbKDLNEU=";
   };
 
   build-system = [ setuptools ];
@@ -32,24 +33,27 @@ buildPythonPackage rec {
     pytestCheckHook
     nbval
     latex2mathml
+    writableTmpDirAsHomeHook
   ];
+
+  preCheck =
+    let
+      # The test notebooks try to download font files, unless they already exist in the test directory,
+      # so we prepare them in advance.
+      checkFonts = lib.map fetchurl (import ./checkfonts.nix);
+      copyFontCmd = font: "cp ${font} test/${lib.last (lib.splitString "/" font.url)}\n";
+    in
+    lib.concatMapStrings copyFontCmd checkFonts;
 
   pytestFlagsArray = [ "--nbval-lax" ];
 
-  # Prevent the test suite from attempting to download fonts
-  postPatch = ''
-    substituteInPlace test/styles.ipynb \
-      --replace '"def testfont(exprs, fonturl):\n",' '"def testfont(exprs, fonturl):\n", "    return\n",' \
-      --replace "mathfont='FiraMath-Regular.otf', " ""
-  '';
-
   pythonImportsCheck = [ "ziamath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Render MathML and LaTeX Math to SVG without Latex installation";
     homepage = "https://ziamath.readthedocs.io/en/latest/";
     changelog = "https://ziamath.readthedocs.io/en/latest/changes.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sfrijters ];
   };
 }

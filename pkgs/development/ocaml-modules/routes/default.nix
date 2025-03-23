@@ -1,4 +1,8 @@
-{ lib, fetchurl, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "routes";
@@ -16,6 +20,9 @@ buildDunePackage rec {
     description = "Typed routing for OCaml applications";
     license = licenses.bsd3;
     homepage = "https://anuragsoni.github.io/routes";
-    maintainers = with maintainers; [ ulrikstrid anmonteiro ];
+    maintainers = with maintainers; [
+      ulrikstrid
+      anmonteiro
+    ];
   };
 }

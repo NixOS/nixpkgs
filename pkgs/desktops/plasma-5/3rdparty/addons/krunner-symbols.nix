@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, extra-cmake-modules
-, qtbase
-, wrapQtAppsHook
-, ki18n
-, kdelibs4support
-, krunner
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  extra-cmake-modules,
+  qtbase,
+  wrapQtAppsHook,
+  ki18n,
+  kdelibs4support,
+  krunner,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YsoZdPTWpk3/YERwerrVEcaf2IfGVJwpq32onhP8Exo=";
   };
 
-  buildInputs = [ qtbase ki18n kdelibs4support krunner ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook extra-cmake-modules ];
+  buildInputs = [
+    qtbase
+    ki18n
+    kdelibs4support
+    krunner
+  ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    extra-cmake-modules
+  ];
 
   postPatch = ''
     # symbols.cpp hardcodes the location of configuration files

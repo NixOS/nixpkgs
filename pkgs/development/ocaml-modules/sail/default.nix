@@ -1,44 +1,52 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, base64
-, omd
-, menhir
-, ott
-, linenoise
-, dune-site
-, pprint
-, makeWrapper
-, lem
-, linksem
-, yojson
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchurl,
+  buildDunePackage,
+  base64,
+  omd,
+  menhir,
+  menhirLib,
+  ott,
+  linenoise,
+  dune-site,
+  pprint,
+  makeWrapper,
+  lem,
+  linksem,
+  yojson,
+  version ? "0.18",
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "sail";
-  version = "0.16";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "rems-project";
-    repo = "sail";
-    rev = version;
-    hash = "sha256-HY/rgWi0S7ZiAWZF0fVIRK6fpoJ7Xp5EQcxoPRCPJ5Y=";
+  src = fetchurl {
+    url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
+    hash = "sha256-/NvaFPHtWfow4j2jSr4CVHQW48KoP77uVgbhAKXtzzU=";
   };
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs = [
-    makeWrapper
-    ott
-    menhir
-    lem
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      ott
+      menhir
+      lem
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      darwin.sigtool
+    ];
 
   propagatedBuildInputs = [
     base64
     omd
     dune-site
     linenoise
+    menhirLib
     pprint
     linksem
     yojson
@@ -52,12 +60,12 @@ buildDunePackage rec {
   # This doesnt work in this case, as sail includes multiple packages in the same source tree
   buildPhase = ''
     runHook preBuild
-    dune build --release ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune build --release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   checkPhase = ''
     runHook preCheck
-    dune runtest ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune runtest ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
   installPhase = ''

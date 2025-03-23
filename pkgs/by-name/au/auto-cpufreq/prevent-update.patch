@@ -1,10 +1,10 @@
-diff --git a/auto_cpufreq/bin/auto_cpufreq.py b/auto_cpufreq/bin/auto_cpufreq.py
-index 4343b8d..183c2e9 100755
---- a/auto_cpufreq/bin/auto_cpufreq.py
-+++ b/auto_cpufreq/bin/auto_cpufreq.py
-@@ -235,47 +235,7 @@ def main(config, daemon, debug, update, install, remove, live, log, monitor, sta
-                 remove_daemon()
-                 remove_complete_msg()
+diff --git c/auto_cpufreq/bin/auto_cpufreq.py i/auto_cpufreq/bin/auto_cpufreq.py
+index 7192366..0bf087e 100755
+--- c/auto_cpufreq/bin/auto_cpufreq.py
++++ i/auto_cpufreq/bin/auto_cpufreq.py
+@@ -149,41 +149,7 @@ def main(monitor, live, daemon, install, update, remove, force, config, stats, g
+                 deploy_daemon()
+             deploy_complete_msg()
          elif update:
 -            root_check()
 -            custom_dir = "/opt/auto-cpufreq/source"
@@ -16,27 +16,22 @@ index 4343b8d..183c2e9 100755
 -            if "--update" in sys.argv:
 -                update = True
 -                sys.argv.remove("--update")
--                if len(sys.argv) == 2:
--                    custom_dir = sys.argv[1] 
+-                if len(sys.argv) == 2: custom_dir = sys.argv[1] 
 -                    
--            if os.getenv("PKG_MARKER") == "SNAP":
+-            if IS_INSTALLED_WITH_SNAP:
 -                print("Detected auto-cpufreq was installed using snap")
 -                # refresh snap directly using this command
 -                # path wont work in this case
 -
 -                print("Please update using snap package manager, i.e: `sudo snap refresh auto-cpufreq`.")
 -                #check for AUR 
--            elif subprocess.run(["bash", "-c", "command -v pacman >/dev/null 2>&1"]).returncode == 0 and subprocess.run(["bash", "-c", "pacman -Q auto-cpufreq >/dev/null 2>&1"]).returncode == 0:
--                print("Arch-based distribution with AUR support detected. Please refresh auto-cpufreq using your AUR helper.")
+-            elif IS_INSTALLED_WITH_AUR: print("Arch-based distribution with AUR support detected. Please refresh auto-cpufreq using your AUR helper.")
 -            else:
 -                is_new_update = check_for_update()
--                if not is_new_update:
--                    return
+-                if not is_new_update: return
 -                ans = input("Do you want to update auto-cpufreq to the latest release? [Y/n]: ").strip().lower()
--                if not os.path.exists(custom_dir):
--                    os.makedirs(custom_dir)
--                if os.path.exists(os.path.join(custom_dir, "auto-cpufreq")):
--                    shutil.rmtree(os.path.join(custom_dir, "auto-cpufreq"))
+-                if not os.path.exists(custom_dir): os.makedirs(custom_dir)
+-                if os.path.exists(os.path.join(custom_dir, "auto-cpufreq")): rmtree(os.path.join(custom_dir, "auto-cpufreq"))
 -                if ans in ['', 'y', 'yes']:
 -                    remove_daemon()
 -                    remove_complete_msg()
@@ -45,28 +40,28 @@ index 4343b8d..183c2e9 100755
 -                    run(["auto-cpufreq", "--install"])
 -                    print("auto-cpufreq is installed with the latest version")
 -                    run(["auto-cpufreq", "--version"])
--                else:
--                    print("Aborted")
+-                else: print("Aborted")
 +            print("update is disabled in the nix package")
- 
-         elif completions:
-             if completions == "bash":
-diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
-index 58cedb7..8b44712 100755
---- a/auto_cpufreq/core.py
-+++ b/auto_cpufreq/core.py
-@@ -17,8 +17,7 @@ import importlib.metadata
- from math import isclose
+         elif remove:
+             root_check()
+             if IS_INSTALLED_WITH_SNAP:
+diff --git c/auto_cpufreq/core.py i/auto_cpufreq/core.py
+index b51d55d..99eeed8 100755
+--- c/auto_cpufreq/core.py
++++ i/auto_cpufreq/core.py
+@@ -7,9 +7,8 @@ from math import isclose
  from pathlib import Path
- from shutil import which
--from subprocess import getoutput, call, run, check_output, DEVNULL
--import requests
-+from subprocess import getoutput, call, run, DEVNULL
- import re
+ from pickle import dump, load
+ from re import search
+-from requests import get, exceptions
+ from shutil import copy
+-from subprocess import call, check_output, DEVNULL, getoutput, run
++from subprocess import call, DEVNULL, getoutput, run
+ from time import sleep
+ from warnings import filterwarnings
  
- # execution timestamp used in countdown func
-@@ -158,55 +157,7 @@ def app_version():
-             pass
+@@ -105,49 +104,7 @@ def app_version():
+         except Exception as e: print(repr(e))
  
  def check_for_update():
 -    # returns True if a new release is available from the GitHub repo
@@ -74,21 +69,19 @@ index 58cedb7..8b44712 100755
 -    # Specify the repository and package name
 -    # IT IS IMPORTANT TO  THAT IF THE REPOSITORY STRUCTURE IS CHANGED, THE FOLLOWING FUNCTION NEEDS TO BE UPDATED ACCORDINGLY
 -    # Fetch the latest release information from GitHub API
--    latest_release_url = f"https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest"
+-    latest_release_url = GITHUB.replace("github.com", "api.github.com/repos") + "/releases/latest"
 -    try:
--        response = requests.get(latest_release_url)
--        if response.status_code == 200:
--            latest_release = response.json()
+-        response = get(latest_release_url)
+-        if response.status_code == 200: latest_release = response.json()
 -        else:
 -            message = response.json().get("message")
 -            print("Error fetching recent release!")
 -            if message is not None and message.startswith("API rate limit exceeded"):
 -                print("GitHub Rate limit exceeded. Please try again later within 1 hour or use different network/VPN.")
--            else:
--                print("Unexpected status code:", response.status_code)
+-            else: print("Unexpected status code:", response.status_code)
 -            return False
--    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout,
--            requests.exceptions.RequestException, requests.exceptions.HTTPError) as err:
+-    except (exceptions.ConnectionError, exceptions.Timeout,
+-            exceptions.RequestException, exceptions.HTTPError):
 -        print("Error Connecting to server!")
 -        return False
 -
@@ -98,8 +91,7 @@ index 58cedb7..8b44712 100755
 -        # Get the current version of auto-cpufreq
 -        # Extract version number from the output string
 -        output = check_output(['auto-cpufreq', '--version']).decode('utf-8')
--        try:
--            version_line = next((re.search(r'\d+\.\d+\.\d+', line).group() for line in output.split('\n') if line.startswith('auto-cpufreq version')), None)
+-        try: version_line = next((search(r'\d+\.\d+\.\d+', line).group() for line in output.split('\n') if line.startswith('auto-cpufreq version')), None)
 -        except AttributeError:
 -            print("Error Retrieving Current Version!")
 -            exit(1)
@@ -113,40 +105,31 @@ index 58cedb7..8b44712 100755
 -            print(f"Updates are available,\nCurrent version: {installed_version}\nLatest version: {latest_version}")
 -            print("Note that your previous custom settings might be erased with the following update")
 -            return True
--    else:
--        # Handle the case where "tag_name" key doesn't exist
--        print("Malformed Released data!\nReinstall manually or Open an issue on GitHub for help!")
--
--
+-    # Handle the case where "tag_name" key doesn't exist
+-    else: print("Malformed Released data!\nReinstall manually or Open an issue on GitHub for help!")
 +    pass
  
  def new_update(custom_dir):
      os.chdir(custom_dir)
-diff --git a/poetry.lock b/poetry.lock
-index 2a99ca6..9bc26e2 100644
---- a/poetry.lock
-+++ b/poetry.lock
-@@ -1,4 +1,4 @@
--# This file is automatically @generated by Poetry 1.8.2 and should not be changed by hand.
-+# This file is automatically @generated by Poetry 1.8.3 and should not be changed by hand.
- 
- [[package]]
- name = "attrs"
-@@ -1300,4 +1300,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
+diff --git c/poetry.lock i/poetry.lock
+index 0e6da84..b4936fe 100644
+--- c/poetry.lock
++++ i/poetry.lock
+@@ -1306,4 +1306,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
  [metadata]
  lock-version = "2.0"
  python-versions = "^3.8"
--content-hash = "ee73b2db6a43cac87120f38c93d0a8a297bec52f1346b55bc0ca2992aa464482"
-+content-hash = "1ba0c404ffea01a611e7c74f9c104de44a914b0a6fad2350470f15880931ae42"
-diff --git a/pyproject.toml b/pyproject.toml
-index 876d80c..7190356 100644
---- a/pyproject.toml
-+++ b/pyproject.toml
+-content-hash = "cad3783d04e35b66b241352e76631d0a83c8df3d286b113979ba34a65847f06c"
++content-hash = "b21af52156d2d624602fe6941cf001abd7f8cf5b70b22ebfd7b7ad0dece1e39f"
+diff --git c/pyproject.toml i/pyproject.toml
+index 562a94b..cc44d8d 100644
+--- c/pyproject.toml
++++ i/pyproject.toml
 @@ -25,7 +25,6 @@ python = "^3.8"
- psutil = {git = "https://github.com/giampaolo/psutil.git", rev = "4cf56e08c1bc883ec89758834b50954380759858"}
+ psutil = "^6.0.0"
  click = "^8.1.0"
  distro = "^1.8.0"
--requests = "^2.31.0"
+-requests = "^2.32.3"
  PyGObject = "^3.46.0"
  pyinotify = {git = "https://github.com/shadeyg56/pyinotify-3.12"}
  

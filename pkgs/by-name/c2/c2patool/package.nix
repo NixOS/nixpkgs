@@ -1,39 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, darwin
-, openssl
-, pkg-config
-, git
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  git,
+  versionCheckHook,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "c2patool";
-  version = "0.9.5";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "contentauth";
-    repo = pname;
+    repo = "c2patool";
     rev = "v${version}";
-    sha256 = "sha256-VmaU8cUtjF5xWOJqK1DB8AAPr1Q7nxOvZVPYsle67Pw=";
+    hash = "sha256-3OaCsy6xt2Pc/Cqm3qbbpr7kiQiA2BM/LqIQnuw73MY=";
   };
 
-  cargoHash = "sha256-L79hWws9ub02K+3gL6bD5rtEiQGtq0BykxFmsml2EuI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jod9wKuyhbY+/3NIEMZGoKIA1rT6Y4XoLKqYvzM5fAQ=";
 
   # use the non-vendored openssl
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     git
     pkg-config
   ];
+
   buildInputs = [
     openssl
-  ] ++ lib.optional stdenv.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Carbon
   ];
 
   checkFlags = [
@@ -52,14 +50,18 @@ rustPlatform.buildRustPackage rec {
   ];
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/c2patool --version | grep "${version}"
-  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = with lib; {
     description = "Command line tool for displaying and adding C2PA manifests";
     homepage = "https://github.com/contentauth/c2patool";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };

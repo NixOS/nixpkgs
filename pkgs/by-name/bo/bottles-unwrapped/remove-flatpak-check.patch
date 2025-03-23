@@ -1,0 +1,17 @@
+diff --git a/bottles/frontend/meson.build b/bottles/frontend/meson.build
+index 6ff7c011..c26ea0b9 100644
+--- a/bottles/frontend/meson.build
++++ b/bottles/frontend/meson.build
+@@ -23,12 +23,6 @@ params_file = configure_file(
+     configuration: conf
+ )
+ 
+-fs = import('fs')
+-
+-if not fs.is_file('/' + '.flatpak-info')
+-  error('file does not exist')
+-endif
+-
+ bottles_sources = [
+   '__init__.py',
+   'main.py',

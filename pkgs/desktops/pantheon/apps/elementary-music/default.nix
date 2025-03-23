@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, elementary-gtk-theme
-, elementary-icon-theme
-, glib
-, granite7
-, gst_all_1
-, gtk4
-, libadwaita
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  elementary-gtk-theme,
+  elementary-icon-theme,
+  glib,
+  granite7,
+  gst_all_1,
+  gtk4,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,19 +36,21 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    elementary-icon-theme
-    glib
-    granite7
-    gtk4
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      elementary-icon-theme
+      glib
+      granite7
+      gtk4
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   preFixup = ''
     gappsWrapperArgs+=(

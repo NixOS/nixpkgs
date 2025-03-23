@@ -1,19 +1,26 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rdme";
-  version = "1.4.4";
+  version = "1.4.8";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-AARkXr6qOq9u/nmcmCnA4P+Q+MPPChCXoRaYiLwCNPs=";
+    hash = "sha256-lVu9w8l3+SeqiMoQ8Bjoslf7tWz49jrrE4g/pDU1axI=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
-  cargoHash = "sha256-myTh+zOtAt9h/irld7OHSXKMv0V+LAR4h/afYKvXeXg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-W800jepxDv6OjbcxRKphAnDU2OuBGGGSLELe8gAfTr8=";
 
   meta = with lib; {
     description = "Cargo command to create the README.md from your crate's documentation";

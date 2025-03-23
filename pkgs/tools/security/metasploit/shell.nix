@@ -1,9 +1,12 @@
-# Env to update Gemfile.lock / gemset.nix
-with import <nixpkgs> {};
-stdenv.mkDerivation {
-  name = "env";
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
+{
+  pkgs ? import ../../../.. { },
+}:
+pkgs.mkShell {
+  nativeBuildInputs = [
+    pkgs.pkg-config
+    pkgs.libffi # libffi as native input
+  ];
+  buildInputs = with pkgs; [
     bundix
     git
     libiconv
@@ -14,4 +17,9 @@ stdenv.mkDerivation {
     ruby.devEnv
     sqlite
   ];
+  # Ensure that pkg-config finds libffi
+  shellHook = ''
+    export PKG_CONFIG_PATH="${pkgs.libffi.out}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    echo "PKG_CONFIG_PATH set to: $PKG_CONFIG_PATH"
+  '';
 }

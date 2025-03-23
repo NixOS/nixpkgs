@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgbrd-grabber";
-  version = "7.12.2";
+  version = "7.13.0";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6XfIaASfbvdPovtdDEJtsk4pEL4Dhmyq8ml4X7KZ4DE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7EIXmqfTADG95vxKU1cFGnzZD3NJJN28HOF71YZD6nI=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     # ensure the script uses the rsync package from nixpkgs
     substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
 
+    substituteInPlace gui/CMakeLists.txt \
+      --replace-fail "find_package(Qt6 COMPONENTS " "find_package(Qt6 COMPONENTS NetworkAuth " \
+      --replace-fail "set(QT_LIBRARIES " "set(QT_LIBRARIES Qt6::NetworkAuth "
 
     # the npm build step only runs typescript
     # run this step directly so it doesn't try and fail to download the unnecessary node_modules, etc.

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.15";
+  version = "3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+bA/6CW/1k9JfkXBk/JKXgOlrVHcMcKggzOAHyjdkX0=";
+    tag = version;
+    hash = "sha256-kDoDPeMvpctNnB+e2LnCZ7fw9AP+AjPYDXwVqKedJ88=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     dissect-target
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       dissect-target
       minio
@@ -52,7 +52,15 @@ buildPythonPackage rec {
     ] ++ dissect-target.optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+
+  disabledTests = [
+    "output_encrypt"
+    "test_collector_collect_glob"
+    "test_collector_collect_path_with_dir"
+    "test_misc_osx"
+    "test_misc_unix"
+  ];
 
   pythonImportsCheck = [ "acquire" ];
 

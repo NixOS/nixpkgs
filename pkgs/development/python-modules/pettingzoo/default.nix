@@ -1,27 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
+  chess,
   fetchFromGitHub,
-  setuptools,
-  wheel,
   gymnasium,
   numpy,
-  chess,
   pillow,
+  pre-commit,
   pybox2d,
   pygame,
   pymunk,
-  rlcard,
-  scipy,
-  pre-commit,
   pynput,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
+  rlcard,
+  scipy,
+  setuptools,
+  shimmy,
   stdenv,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TVM4MrA4W6AIWEdBIecI85ahJAAc21f27OzCxSpOoZU=";
   };
 
@@ -48,18 +49,8 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
-    all = [
-      chess
-      # multi-agent-ale-py
-      pillow
-      pybox2d
-      pygame
-      pymunk
-      rlcard
-      scipy
-      # shimmy
-    ];
+  optional-dependencies = {
+    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
     atari = [
       # multi-agent-ale-py
       pygame
@@ -72,7 +63,7 @@ buildPythonPackage rec {
       chess
       pygame
       rlcard
-      # shimmy
+      shimmy
     ];
     mpe = [ pygame ];
     other = [ pillow ];
@@ -87,7 +78,7 @@ buildPythonPackage rec {
       pre-commit
       pynput
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-markdown-docs
       pytest-xdist
     ];
@@ -117,7 +108,7 @@ buildPythonPackage rec {
       # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
       "test_chess"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Crashes on darwin: `Fatal Python error: Aborted`
       "test_multi_episode_parallel_env_wrapper"
     ];

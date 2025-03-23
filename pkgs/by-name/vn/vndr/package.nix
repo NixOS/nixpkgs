@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule {
@@ -11,7 +12,7 @@ buildGoModule {
     owner = "LK4D4";
     repo = "vndr";
     rev = "87603e47e8ea2ddac96f508fc9e9d6fc17b198b0";
-    sha256 = "sha256-L7OemAPCv7epOVmjrDDtiGqQqzscm5zj3C6dsZP4uUc=";
+    hash = "sha256-L7OemAPCv7epOVmjrDDtiGqQqzscm5zj3C6dsZP4uUc=";
   };
 
   vendorHash = null;
@@ -27,7 +28,10 @@ buildGoModule {
     description = "Stupid golang vendoring tool, inspired by docker vendor script";
     mainProgram = "vndr";
     homepage = "https://github.com/LK4D4/vndr";
-    maintainers = with lib.maintainers; [ vdemeester rvolosatovs ];
+    maintainers = with lib.maintainers; [
+      vdemeester
+      rvolosatovs
+    ];
     license = lib.licenses.asl20;
   };
 }

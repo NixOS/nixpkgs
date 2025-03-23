@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplistix";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
   };
 
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cjw296/sybil";
     changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

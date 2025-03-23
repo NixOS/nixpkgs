@@ -5,7 +5,7 @@
   fetchpatch,
   stdenv,
   pkg-config,
-  gnome,
+  gnome-settings-daemon,
   gettext,
   gobject-introspection,
   cairo,
@@ -25,6 +25,7 @@
   libXtst,
   libinput,
   libdrm,
+  libgbm,
   gsettings-desktop-schemas,
   glib,
   gtk3,
@@ -32,7 +33,7 @@
   pipewire,
   libgudev,
   libwacom,
-  mesa,
+  mesa-gl-headers,
   meson,
   nix-update-script,
   validatePkgConfig,
@@ -50,7 +51,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magpie";
-  version = "0.9.3";
+  version = "0.9.4";
 
   outputs = [
     "out"
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BuddiesOfBudgie";
     repo = "magpie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A8FmW2o2p5B5pxTZ6twwufyhfppuMXjnMKopZRD+XdE=";
+    hash = "sha256-a8e0uzbS0HEH/0sOOnwIiQI0/BizKbpdlVdfb3IbmcU=";
   };
 
   patches = [
@@ -86,13 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libcap_ng
     graphene
+    mesa-gl-headers
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run
@@ -108,12 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgudev
     libinput
     libstartup_notification

@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # tests
   djangorestframework,
   html5lib,
@@ -12,17 +15,19 @@
   pyyaml,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "django-i18nfield";
-  version = "1.9.4";
-  format = "setuptools";
+  version = "1.10.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-i18nfield";
-    rev = "10488eb6c673be50e50387c76085a7c8d84e9157";
-    hash = "sha256-FF980LTw7RFuG9QgxA96yJsSczCNNMq9WsbacQqIReE=";
+    tag = version;
+    hash = "sha256-27PR2jLDXxRSgbJvRxDSBK4sTiqGAhP+XYg/fCg9AzM=";
   };
+
+  build-system = [ setuptools ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 

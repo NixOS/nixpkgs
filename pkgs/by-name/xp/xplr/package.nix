@@ -1,4 +1,9 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
@@ -8,13 +13,14 @@ rustPlatform.buildRustPackage rec {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
+    hash = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
   };
 
-  cargoHash = "sha256-RZgdWhVBZozYxbbNslCBLhN6EnogpyVXvht6GbzLnPs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D8BYJtf6joAXyqLDdAeP4GGAA9W5dvA16ia4/ZeZWaE=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
-  env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
     TARGET_STRIP = "${stdenv.cc.targetPrefix}strip";
   };
 
@@ -43,6 +49,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://xplr.dev";
     changelog = "https://github.com/sayanarijit/xplr/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sayanarijit suryasr007 pyrox0 mimame figsoda ];
+    maintainers = with maintainers; [
+      sayanarijit
+      suryasr007
+      pyrox0
+      mimame
+      figsoda
+    ];
   };
 }

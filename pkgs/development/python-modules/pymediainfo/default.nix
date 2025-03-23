@@ -6,7 +6,6 @@
   libmediainfo,
   setuptools-scm,
   pytest,
-  glibcLocales,
   pythonOlder,
 }:
 
@@ -35,12 +34,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   nativeCheckInputs = [
-    glibcLocales
     pytest
   ];
 
   checkPhase = ''
-    export LC_ALL=en_US.UTF-8
     py.test -k 'not test_parse_url' tests
   '';
 
@@ -51,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sbraz/pymediainfo";
     changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -7,6 +7,7 @@
   httpx,
   numpy,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.9.0";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,13 +28,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CUnUz2SsXtWaqGzaB1PH+EoHqebSue6e8GXhRZRcXLs=";
+    tag = version;
+    hash = "sha256-x8qb9nAAl7F+w0lHHQtLYwMZYdZ9WhAxJ63jdjlyfhQ=";
   };
-
-  postPatch = ''
-    sed -i -e "/--cov/d" -e "/--no-cov/d" pyproject.toml
-  '';
 
   build-system = [ hatchling ];
 
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       numpy
       rapidfuzz
@@ -61,9 +58,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "avwx" ];
 

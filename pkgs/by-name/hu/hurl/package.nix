@@ -1,26 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, libxml2
-, openssl
-, stdenv
-, curl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  libxml2,
+  openssl,
+  curl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "4.3.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
-    repo = pname;
-    rev = version;
-    hash = "sha256-gSkiNwRR47CZ1YjVa5o8EByCzWBAYPfsMRXydTwFwp0=";
+    repo = "hurl";
+    tag = version;
+    hash = "sha256-fj9OKS8IFKbxwzjhnta44hAXPy90fBOAV35K13YtaOs=";
   };
 
-  cargoHash = "sha256-dY00xcMnOCWhdRzC+3mTHSIqeYEPUDBJeYd/GiLM/38=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aGj/vQCf1nBLmQYYxdR8437irLP+3W3z0F8tyVTrKZk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,12 +32,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxml2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
     curl
   ];
 
-  # Tests require network access to a test server
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # The actual tests require network access to a test server, but we can run an install check
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
@@ -52,7 +56,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ eonpatapon figsoda ];
+    maintainers = with maintainers; [
+      eonpatapon
+      figsoda
+    ];
     license = licenses.asl20;
     mainProgram = "hurl";
   };

@@ -1,51 +1,40 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
+  rustPlatform,
+
+  # tests
   h5py,
   numpy,
-  pythonOlder,
   pytestCheckHook,
-  rustc,
-  rustPlatform,
-  setuptools-rust,
   torch,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.3";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Rc+o7epQJ8qEvdgbFnGvXxBr/U4eULZwkKNEaPlJkyU=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-tzNEUvWgolSwX0t/JLgYcTEIv3/FiKxoTJ4VjFQs8AY=";
+    tag = "v${version}";
+    hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src sourceRoot;
+    hash = "sha256-hjV2cfS/0WFyAnATt+A8X8sQLzQViDzkNI7zN0ltgpU=";
+  };
+
   nativeBuildInputs = [
-    setuptools-rust
-    cargo
-    rustc
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     h5py
@@ -61,18 +50,18 @@ buildPythonPackage rec {
       "tests/test_paddle_comparison.py"
       "tests/test_tf_comparison.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # don't require mlx (not in Nixpkgs) to run tests
       "tests/test_mlx_comparison.py"
     ];
 
   pythonImportsCheck = [ "safetensors" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
     changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }
