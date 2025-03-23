@@ -5,6 +5,7 @@
   fetchFromGitHub,
   writeShellScriptBin,
   gradio,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -71,19 +72,19 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.20.0";
+  version = "5.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-gAAyhsnc1LUcAvlUC5hftsWN1kSiRWqcQ4iKGpSIL+U=";
+    hash = "sha256-pHmeS9wnhS8lAQ2lnzGXLVGKZwzHkKA0tAF2t/nDmt8=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-y0Bdupn19gEtwatc6Q3KD7aekXDk0xrq04LaG7gxMFI=";
+    hash = "sha256-HjJxd2dzBGEE9dxWIi9dI28J7rOA6iidJmoAGDYM/Zw=";
   };
 
   pythonRelaxDeps = [
@@ -347,6 +348,13 @@ buildPythonPackage rec {
         pythonImportsCheck = null;
         dontCheckRuntimeDeps = true;
       });
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^gradio@(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://www.gradio.app/";
