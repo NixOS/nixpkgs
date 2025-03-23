@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.17.0";
+  version = "1.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
     inherit version;
-    hash = "sha256-JqKKtjBeJ/jyGZZ9SGhQ9a89khuZKSJMPhqc5BOnFcg=";
+    hash = "sha256-nDjk29d1V19fUNei6lJLtmJDwfLcBSnXm4jZQV2s+vI=";
   };
 
   build-system = [ setuptools ];
