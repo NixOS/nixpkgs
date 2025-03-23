@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "endless-sky";
     repo = "endless-sky";
     tag = "v${version}";
-    hash = "sha256-wulDRzYDteMsL7P18EOl0DiQUMbVaSyVpJ2kWyfAHdY=";
+    hash = "sha256-cT/bklRGQnS9Nm8J0oH1mG20JQOe58FAAHToNDpvPpQ=";
   };
 
   patches = [
