@@ -1,12 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, buildFHSEnv
 , fetchurl
+, fetchzip
 , nixosTests
 , copyDesktopItems
 , makeDesktopItem
-, makeWrapper
-, wrapGAppsHook3
-, gobject-introspection
-, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
 , xorg
 , zlib
 , nss
@@ -28,29 +27,74 @@
 , libpulseaudio
 , libuuid
 , systemd
-, flite ? null
-, libXxf86vm ? null
+, libdrm
+, libxkbcommon
+, libGL
+, xdg-utils
+, libsecret
+, orca
+, mesa
+, flite
 }:
 let
-  desktopItem = makeDesktopItem {
-    name = "minecraft-launcher";
-    exec = "minecraft-launcher";
-    icon = "minecraft-launcher";
-    comment = "Official launcher for Minecraft, a sandbox-building game";
-    desktopName = "Minecraft Launcher";
-    categories = [ "Game" ];
-  };
+  pname = "minecraft-launcher";
+  version = "1.0";
 
-  envLibPath = lib.makeLibraryPath [
+  minecraft-launcher = stdenv.mkDerivation {
+    inherit pname version;
+
+    src = fetchzip {
+      url = "https://web.archive.org/web/20240711212151/https://launcher.mojang.com/download/Minecraft.tar.gz";
+      sha256 = "sha256-aCHY3yE/o8m7WbA+rY4mRd2FFJiqnBE5EtadwHLfbn0=";
+    };
+
+    icon = fetchurl {
+      url = "https://web.archive.org/web/20240901161401/https://launcher.mojang.com/download/minecraft-launcher.svg";
+      sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
+    };
+
+    nativeBuildInputs = [ copyDesktopItems ];
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      mv minecraft-launcher $out/bin
+
+      install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
+
+      runHook postInstall
+    '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "minecraft-launcher";
+        exec = "minecraft-launcher";
+        icon = "minecraft-launcher";
+        comment = "Official launcher for Minecraft, a sandbox-building game";
+        desktopName = "Minecraft Launcher";
+        categories = [ "Game" ];
+      })
+    ];
+  };
+in
+buildFHSEnv {
+  name = pname;
+  inherit version;
+
+  runScript = "minecraft-launcher";
+
+  targetPkgs = _: [
+    minecraft-launcher
     curl
     libpulseaudio
     systemd
     alsa-lib # needed for narrator
     flite # needed for narrator
-    libXxf86vm # needed only for versions <1.13
-  ];
-
-  libPath = lib.makeLibraryPath ([
+    xorg.libXxf86vm # needed only for versions <1.13
     alsa-lib
     atk
     cairo
@@ -69,80 +113,30 @@ let
     stdenv.cc.cc
     zlib
     libuuid
-  ] ++
-  (with xorg; [
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libXScrnSaver
-  ]));
-in
-stdenv.mkDerivation rec {
-  pname = "minecraft-launcher";
+    libdrm
+    libxkbcommon
+    libGL
+    xdg-utils
+    libsecret
+    orca
+    mesa
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXScrnSaver
+  ];
 
-  version = "2.2.1441";
-
-  src = fetchurl {
-    url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
+  passthru = {
+    tests = { inherit (nixosTests) minecraft; };
   };
-
-  icon = fetchurl {
-    url = "https://launcher.mojang.com/download/minecraft-launcher.svg";
-    sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
-  };
-
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 copyDesktopItems gobject-introspection ];
-
-  sourceRoot = ".";
-
-  dontWrapGApps = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/opt
-    mv minecraft-launcher $out/opt
-
-    install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
-
-    runHook postInstall
-  '';
-
-  preFixup = ''
-    patchelf \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/minecraft-launcher
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/libcef.so
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/liblauncher.so
-  '';
-
-  postFixup = ''
-    # Do not create `GPUCache` in current directory
-    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
-      --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${lib.getBin jre} \
-      --chdir /tmp \
-      "''${gappsWrapperArgs[@]}"
-  '';
-
-  desktopItems = [ desktopItem ];
 
   meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
@@ -151,13 +145,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    # "minecraft-launcher will fail on NixOS for minecraft versions >1.19
-    # try prismlauncher or atlauncher instead"
-    broken = true;
-  };
-
-  passthru = {
-    tests = { inherit (nixosTests) minecraft; };
-    updateScript = ./update.sh;
   };
 }
