@@ -41,6 +41,9 @@
   mumps_par,
   p4est,
   zlib, # propagated by p4est but required by petsc
+
+  # Used in passthru.tests
+  petsc,
 }:
 assert withFullDeps -> withCommonDeps;
 
@@ -199,6 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit mpiSupport pythonSupport;
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      fullDeps = petsc.override {
+        withFullDeps = true;
+        withParmetis = false;
+      };
+    };
   };
 
   setupHook = ./setup-hook.sh;
