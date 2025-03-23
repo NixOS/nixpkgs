@@ -10,6 +10,7 @@
 , gnutls
 , installShellFiles
 , libuuid
+, meson64-tools
 , meson-tools
 , ncurses
 , openssl
@@ -138,6 +139,48 @@ let
       maintainers = with maintainers; [ bartsch dezgeg lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
+
+  amlogic-boot-fip = fetchFromGitHub {
+    owner = "LibreELEC";
+    repo = "amlogic-boot-fip";
+    rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
+    sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
+    meta.license = lib.licenses.unfreeRedistributableFirmware;
+  };
+
+  # Flashing instructions:
+  # dd if=${drv}/u-boot.bin.sd.bin of=$DEV conv=fsync,notrunc bs=512 skip=1 seek=1
+  # dd if=${drv}/u-boot.bin.sd.bin of=$DEV conv=fsync,notrunc bs=1 count=440
+  buildUBootOdroidN2 = fipDirectory: buildUBoot {
+    defconfig = "odroid-n2_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    postBuild = ''
+      mkdir $out
+
+      FIPDIR=${amlogic-boot-fip}/${fipDirectory}
+      ${buildPackages.meson64-tools}/bin/meson64-g12-pkg --type bl30 --output bl30.pkg $FIPDIR/bl30.bin $FIPDIR/bl301.bin
+      ${buildPackages.meson64-tools}/bin/meson64-g12-pkg --type bl2 --output bl2.pkg $FIPDIR/bl2.bin $FIPDIR/acs.bin
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bl30sig --input bl30.pkg --output bl30.30sig
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bl3sig --input bl30.30sig --output bl30.3sig
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bl3sig --input $FIPDIR/bl31.img --output bl31.3sig
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bl3sig --input u-boot.bin --output bl33.3sig
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bl2sig --input bl2.pkg --output bl2.2sig
+      ${buildPackages.meson64-tools}/bin/meson64-g12-bootmk --output $out/u-boot.bin \
+        --bl2 bl2.2sig \
+        --bl30 bl30.3sig \
+        --bl31 bl31.3sig \
+        --bl33 bl33.3sig \
+        --ddrfw1 $FIPDIR/ddr4_1d.fw \
+        --ddrfw2 $FIPDIR/ddr4_2d.fw \
+        --ddrfw3 $FIPDIR/ddr3_1d.fw \
+        --ddrfw4 $FIPDIR/piei.fw \
+        --ddrfw5 $FIPDIR/lpddr4_1d.fw \
+        --ddrfw6 $FIPDIR/lpddr4_2d.fw \
+        --ddrfw7 $FIPDIR/diag_lpddr4.fw \
+        --ddrfw8 $FIPDIR/aml_ddr.fw
+    '';
+  };
 in {
   inherit buildUBoot;
 
@@ -248,15 +291,7 @@ in {
   # Flashing instructions:
   # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
   # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
-  ubootLibreTechCC = let
-    firmwareImagePkg = fetchFromGitHub {
-      owner = "LibreELEC";
-      repo = "amlogic-boot-fip";
-      rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
-      sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
-      meta.license = lib.licenses.unfreeRedistributableFirmware;
-    };
-  in
+  ubootLibreTechCC =
   assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
   buildUBoot {
     defconfig = "libretech-cc_defconfig";
@@ -265,8 +300,8 @@ in {
     postBuild = ''
       # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
       mkdir $out tmp
-      cp ${firmwareImagePkg}/lepotato/{acs.bin,bl2.bin,bl21.bin,bl30.bin,bl301.bin,bl31.img} \
-         ${firmwareImagePkg}/lepotato/{acs_tool.py,aml_encrypt_gxl,blx_fix.sh} \
+      cp ${amlogic-boot-fip}/lepotato/{acs.bin,bl2.bin,bl21.bin,bl30.bin,bl301.bin,bl31.img} \
+         ${amlogic-boot-fip}/lepotato/{acs_tool.py,aml_encrypt_gxl,blx_fix.sh} \
          u-boot.bin tmp/
       cd tmp
       python3 acs_tool.py bl2.bin bl2_acs.bin acs.bin 0
@@ -367,6 +402,9 @@ in {
       dd if=u-boot.img of=u-boot.gxbb bs=512 skip=96
     '';
   };
+
+  ubootOdroidN2 = buildUBootOdroidN2 "odroid-n2";
+  ubootOdroidN2Plus = buildUBootOdroidN2 "odroid-n2-plus";
 
   ubootOdroidXU3 = buildUBoot {
     defconfig = "odroid-xu3_defconfig";
