@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "generic";
-  version = "1.1.3";
+  version = "1.1.4";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d4+CRv1uecIdS4t23cAI34s/PdIFYNQXfABuRWjzCUQ=";
+    hash = "sha256-3QcFbbWgCJcL37MwiK1Sv7LG6N60zsw93CupD4Xzp/w=";
   };
 
   nativeBuildInputs = [ poetry-core ];
