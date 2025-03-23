@@ -13849,6 +13849,11 @@
     githubId = 839693;
     name = "Ingolf Wanger";
   };
+  mrupnikm = {
+    github = "mrupnikm";
+    githubId = 93078189;
+    name = "Matic Rupnik";
+  };
   msanft = {
     email = "moritz.sanft@outlook.de";
     matrix = "@msanft:matrix.org";

@@ -2,13 +2,12 @@
 
 buildGoModule rec {
   pname = "helm-sops";
-  version = "20250205-1";  # Replace with the correct version
-
+  version = "20250205-1";
   src = fetchFromGitHub {
-    owner = "camptocamp";  # Replace with the correct owner
+    owner = "camptocamp";
     repo = "helm-sops";
     rev = "20250205-1";
-    sha256 = "sha256-xkHv+PM2acwk9uwAHlVgBbJKhofAU60KJykMEx7Zq8I=";  # Replace with the correct sha256 hash
+    sha256 = "sha256-xkHv+PM2acwk9uwAHlVgBbJKhofAU60KJykMEx7Zq8I=";
   };
 
   vendorHash = "sha256-jynNpi9XRaLLW1rbvFTgX5CHDoJxagFpx9nGK0F2H0Y=";
@@ -17,8 +16,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A Helm plugin to encrypt secrets with SOPS";
-    homepage = "https://github.com/camptocamp/helm-sops";  # Replace with the correct homepage URL
-    license = licenses.gpl3Only;  # Replace with the correct license
-    maintainers = with maintainers; [ mrupnikm ];  # Replace with your GitHub username
+    homepage = "https://github.com/camptocamp/helm-sops";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mrupnikm ];
   };
 }
