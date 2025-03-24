@@ -17,7 +17,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-4ZHCnLeG5gr0UtKQLU+6xnTxUbxnLcmDd51Psnaa42I=";
   };
 
-  pythonRelaxDeps = [ "python-json-logger" ];
+  pythonRelaxDeps = [
+    "python-json-logger"
+    "yamllint"
+  ];
 
   build-system = with python3Packages; [
     poetry-core
