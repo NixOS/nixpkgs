@@ -30,6 +30,7 @@ let
     "oil-nvim"
     "orgmode"
     "papis-nvim"
+    "plenary-nvim"
     "rest-nvim"
     "rocks-config-nvim"
     "rtp-nvim"
