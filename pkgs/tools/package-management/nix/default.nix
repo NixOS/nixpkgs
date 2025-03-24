@@ -5,6 +5,7 @@
   aws-sdk-cpp,
   boehmgc,
   callPackage,
+  generateSplicesForMkScope,
   fetchFromGitHub,
   fetchpatch2,
   runCommand,
@@ -199,6 +200,19 @@ let
       };
     };
 
+  # Factored out for when we have package sets for multiple versions of
+  # Nix.
+  #
+  # `nixPackages_*` would be the most regular name, analogous to
+  # `linuxPackages_*`, especially if we put other 3rd-party software in
+  # here, but `nixPackages_*` would also be *very* confusing to humans!
+  generateSplicesForNixComponents =
+    nixComponentsAttributeName:
+    generateSplicesForMkScope [
+      "nixVersions"
+      nixComponentsAttributeName
+    ];
+
 in
 lib.makeExtensible (
   self:
@@ -235,9 +249,16 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_25";
       };
 
-      nix_2_26 = addTests "nix_2_26" (
-        callPackage ./vendor/2_26/componentized.nix { inherit (self.nix_2_24.meta) maintainers; }
+      nixComponents_2_26 = (
+        callPackage ./vendor/2_26/componentized.nix {
+          inherit (self.nix_2_24.meta) maintainers;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
+        }
       );
+
+      # Note, this might eventually become an alias, as packages should
+      # depend on the components they need in `nixComponents_2_26`.
+      nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
 
       git = common rec {
         version = "2.25.0";
