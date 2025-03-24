@@ -8,7 +8,7 @@
   stdenv,
   libgit2-thin-packfile,
   maintainers,
-  ...
+  otherSplices,
 }:
 let
   officialRelease = true;
@@ -25,7 +25,7 @@ let
         inherit (nixDependencies) newScope;
       }
       {
-        otherSplices = generateSplicesForMkScope "nixComponents";
+        inherit otherSplices;
         f = import ./packaging/components.nix {
           inherit
             lib
@@ -46,7 +46,9 @@ let
         inherit newScope; # layered directly on pkgs, unlike nixComponents above
       }
       {
-        otherSplices = generateSplicesForMkScope "nixDependencies";
+        # Technically this should point to the nixDependencies set only, but
+        # this is ok as long as the scopes don't intersect.
+        inherit otherSplices;
         f = import ./dependencies.nix {
           inherit pkgs;
           inherit stdenv;
@@ -54,4 +56,4 @@ let
         };
       };
 in
-(nixComponents.overrideSource src).nix-everything
+nixComponents.overrideSource src
