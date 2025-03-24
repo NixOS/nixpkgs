@@ -4709,8 +4709,6 @@ with pkgs;
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
-  qastools = libsForQt5.callPackage ../tools/audio/qastools { };
-
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
@@ -6673,9 +6671,7 @@ with pkgs;
 
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
-  tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_18;
-  };
+  tinygo = callPackage ../development/compilers/tinygo { };
 
   urweb = callPackage ../development/compilers/urweb {
     icu = icu67;
