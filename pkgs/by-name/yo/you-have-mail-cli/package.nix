@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
   ];
 
   goSrpVersion = "0.1.5";
-  configurePhase = ''
+  postPatch = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto $goModules ../cargo-vendor-dir/go-srp-$goSrpVersion/go/vendor
+    cp -r --reflink=auto "$goModules" "$cargoDepsCopy/go-srp-$goSrpVersion/go/vendor"
   '';
 
   goModules =
