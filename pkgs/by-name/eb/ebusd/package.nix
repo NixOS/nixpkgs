@@ -41,13 +41,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/ebusd-cmake.patch
-    # Upstream patch for gcc-13 copmpatibility:
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/john30/ebusd/commit/3384f3780087bd6b94d46bf18cdad18201ad516c.patch";
-      hash = "sha256-+wZDHjGaIhBCqhy2zmIE8Ko3uAiw8kfKx64etCqRQjM=";
-    })
   ];
+
+  preInstall = ''
+    mkdir -p $out/usr/bin
+  '';
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mv $out/usr/bin $out
+    rmdir $out/usr/bin
     rmdir $out/usr
   '';
 
