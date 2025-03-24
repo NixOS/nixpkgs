@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "250228-43447fa38";
+  version = "250321-57590c48b";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-7WN3XRASKdRZODXkHiKUcYITUtIS1o6b0xoqfL3i5xs=";
+    hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
   };
 
   libtensorflow = callPackage ./libtensorflow.nix { };
