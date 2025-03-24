@@ -18682,6 +18682,12 @@
     githubId = 88469;
     name = "Jaime Breva";
   };
+  phodina = {
+    email = "phodina@protonmail.com";
+    github = "phodina";
+    githubId = 2997905;
+    name = "Petr Hodina";
+  };
   photex = {
     email = "photex@gmail.com";
     github = "photex";
