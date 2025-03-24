@@ -1,13 +1,11 @@
 {
   cmake,
-  copyPkgconfigItems,
   fetchFromGitHub,
   fmt,
   git,
   gitUpdater,
   gtest,
   lib,
-  makePkgconfigItem,
   pkg-config,
   python3,
   range-v3,
@@ -39,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "args.git_version" '"${finalAttrs.version}"' \
         --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
         --replace-fail "args.git_date" '"1970-01-01"'
+      substituteInPlace cmake/templates/lcevc_dec.pc.in \
+        --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
 
     ''
     + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
@@ -55,35 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
-  pkgconfigItems = [
-    (makePkgconfigItem rec {
-      name = "lcevc_dec";
-      inherit (finalAttrs) version;
-      libs = [
-        "-L${variables.libdir}"
-        "-llcevc_dec_api"
-      ];
-      libsPrivate = [
-        "-lpthread"
-        "-llcevc_dec_core"
-      ];
-      cflags = [
-        "-I${variables.includedir}"
-      ];
-      variables = {
-        prefix = "@dev@";
-        includedir = "@includedir@";
-        libdir = "@libdir@";
-      };
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
     python3
     git
     pkg-config
-    copyPkgconfigItems
   ];
 
   buildInputs = [
