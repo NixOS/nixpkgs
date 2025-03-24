@@ -15862,6 +15862,8 @@ self: super: with self; {
 
   sphinxext-opengraph = callPackage ../development/python-modules/sphinxext-opengraph { };
 
+  sphinxext-rediraffe = callPackage ../development/python-modules/sphinxext-rediraffe { };
+
   spidev = callPackage ../development/python-modules/spidev { };
 
   splinter = callPackage ../development/python-modules/splinter { };
