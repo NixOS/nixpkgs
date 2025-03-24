@@ -14,14 +14,14 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
   version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1jssSlyjbrGgkxGC1gieZooVVI42Qvz0q+pIfcZRIj0=";
   };
 
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       minijackson
@@ -83,4 +83,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sq";
   };
-}
+})
