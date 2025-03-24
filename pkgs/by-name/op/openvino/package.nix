@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "python"
   ];
 
@@ -86,6 +88,11 @@ stdenv.mkDerivation rec {
     shellcheck
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ];
+
+  patches = [
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
   ];
 
   postPatch = ''
@@ -160,9 +167,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $python
-    mv $out/python/* $python/
-    rmdir $out/python
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
   '';
 
   postFixup = ''
@@ -170,6 +176,10 @@ stdenv.mkDerivation rec {
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addDriverRunpath "$lib"
     done
+
+    substituteInPlace $dev/lib/pkgconfig/openvino.pc \
+      --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="}
   '';
 
   meta = with lib; {

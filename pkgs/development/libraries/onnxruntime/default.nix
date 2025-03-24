@@ -25,6 +25,9 @@
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
 , ncclSupport ? config.cudaSupport
+, openvino
+, openvinoSupport ? stdenv.isLinux
+, onnxruntime
 , cudaPackages ? {}
 }@inputs:
 
@@ -149,6 +152,8 @@ effectiveStdenv.mkDerivation rec {
   ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
+  ] ++ lib.optionals openvinoSupport [
+    openvino
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cccl # cub/cub.cuh
     libcublas # cublas_v2.h
@@ -197,6 +202,12 @@ effectiveStdenv.mkDerivation rec {
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+  ] ++ lib.optionals openvinoSupport [
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" true)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (effectiveStdenv.hostPlatform.system == "x86_64-linux"))
+    (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [
@@ -206,12 +217,11 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error";
-  };
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
-  doCheck = !(cudaSupport || effectiveStdenv.buildPlatform.system == "aarch64-linux");
+  # - aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
+  # - enoent $out/lib/libonnxruntime_provider_shared.so when built with openvino support
+  doCheck = !(cudaSupport || openvinoSupport || effectiveStdenv.buildPlatform.system == "aarch64-linux");
 
   requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
 
@@ -246,6 +256,7 @@ effectiveStdenv.mkDerivation rec {
     protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
+      withTests = onnxruntime.override { openvinoSupport = false; };
     };
   };
 
