@@ -11,7 +11,6 @@
   postgresql,
   replaceVars,
   rustPlatform,
-  stdenv,
 }:
 
 let
@@ -54,14 +53,8 @@ in
       hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
     };
 
-    # Package has git dependencies on Cargo.lock (instead of just crate.io dependencies),
-    # so cargoHash does not work, therefore we have to include Cargo.lock in nixpkgs.
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "pgrx-0.12.0-alpha.1" = "sha256-HSQrAR9DFJsi4ZF4hLiJ1sIy+M9Ygva2+WxeUzflOLk=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-8otJ1uqGrCmlxAqvfAL3OjhBI4I6dAu6EoajstO46Sw=";
 
     # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
     postPatch = ''
