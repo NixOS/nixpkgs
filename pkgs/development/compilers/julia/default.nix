@@ -29,23 +29,23 @@ in
     { });
   julia_110-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
-      version = "1.10.8";
+      version = "1.10.9";
       sha256 = {
-        x86_64-linux = "0410175aeec3df63173c15187f2083f179d40596d36fd3a57819cc5f522ae735";
-        aarch64-linux = "8d63dd12595a08edc736be8d6c4fea1840f137b81c62079d970dbd1be448b8cd";
-        x86_64-darwin = "8dae60def14db9e9b0f70891f15483d05785ae27a2c14f8f4b1ce27010e4015f";
-        aarch64-darwin = "cdd5891a7b143bde835a79155471b82c5482d4dc5576f719351810548242e64b";
+        x86_64-linux = "5a2d2c5224594b683c97e7304cb72407fbcf0be4a0187789cba1a2f73f0cbf09";
+        aarch64-linux = "be222882e3674f960f43b6842f7bbb52a369977e40d5dcd26498793e1cd2dfb6";
+        x86_64-darwin = "f80c93c30a18d8a5dc7f37d0cc94757fd3857651268e4a9e2d42d3b1ea3372f1";
+        aarch64-darwin = "e62e00b22408159cba3d669f2d9e8b60c1d23b5c2d1c22ec25f4957d15ca98ef";
       };
     })
     { });
   julia_111-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
-      version = "1.11.3";
+      version = "1.11.4";
       sha256 = {
-        x86_64-linux = "7d48da416c8cb45582a1285d60127ee31ef7092ded3ec594a9f2cf58431c07fd";
-        aarch64-linux = "0c1f2f60c3ecc37ae0c559db325dc64858fb11d6729b25d63f23e5285f7906ef";
-        x86_64-darwin = "5220aade1b43db722fb4e287f1c5d25aa492267b86a846db1546504836cca1be";
-        aarch64-darwin = "554fb0ddb4d94d623c83ca5e9d309fe1a7a0924445cb18ec3b863fb3367b0ba8";
+        x86_64-linux = "fb3d3c5fccef82158a70677c0044ac5ae40410eceb0604cdc8e643eeff21df8d";
+        aarch64-linux = "859f1a8cc4bce6911bc912f0e226a6ba2b1c144110b9d559d88f5077513d0e37";
+        x86_64-darwin = "7e693914399f2ebe1fafe5c670af0373474145cfe2bfda661f370559a680720a";
+        aarch64-darwin = "5adfb4482bba9610405c0f9b5a3c1aa09cabf70c8751d75970f2dab0fa819488";
       };
     })
     { });
@@ -60,8 +60,8 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.8";
-      hash = "sha256-NPojubjOgy32CWlD/TDzI764Ca7cMsFj9r7vUdUW9Oc=";
+      version = "1.10.9";
+      hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
@@ -77,8 +77,8 @@ in
     { });
   julia_111 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.11.3";
-      hash = "sha256-Ansli0e04agdHs3TVa3v/bbAGBya2YjnF/XkdaEqHeg=";
+      version = "1.11.4";
+      hash = "sha256-xJNlYtBRKIQtf+K+MHNDM1GeqUpUhhtdC/440QPpa1s=";
       patches = [
         ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
       ];

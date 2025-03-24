@@ -17,8 +17,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ diff-match-patch ];
 
-  dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "three_merge" ];
 
   meta = with lib; {

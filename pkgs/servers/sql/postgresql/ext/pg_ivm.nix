@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension rec {
   pname = "pg_ivm";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = "pg_ivm";
     tag = "v${version}";
-    hash = "sha256-Qcie7sbXcMbQkMoFIYBfttmvlYooESdSk2DyebHKPlk=";
+    hash = "sha256-4/ftJkm2ZInm9lkjJG7y4ZULwlyVC19lP0wGXu56SGw=";
   };
 
   meta = {

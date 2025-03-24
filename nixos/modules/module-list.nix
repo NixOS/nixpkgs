@@ -560,6 +560,7 @@
   ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
+  ./services/desktops/wlock.nix
   ./services/desktops/zeitgeist.nix
   ./services/development/athens.nix
   ./services/development/blackfire.nix
@@ -934,6 +935,7 @@
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
   ./services/monitoring/do-agent.nix
+  ./services/monitoring/fluent-bit.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/gatus.nix
   ./services/monitoring/gitwatch.nix
@@ -1101,6 +1103,11 @@
   ./services/networking/firewall.nix
   ./services/networking/firewall-iptables.nix
   ./services/networking/firewall-nftables.nix
+  ./services/networking/firezone/gateway.nix
+  ./services/networking/firezone/gui-client.nix
+  ./services/networking/firezone/headless-client.nix
+  ./services/networking/firezone/relay.nix
+  ./services/networking/firezone/server.nix
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
@@ -1364,6 +1371,7 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/prefect.nix
   ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix

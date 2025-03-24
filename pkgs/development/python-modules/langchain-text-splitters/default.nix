@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -31,6 +32,12 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
+
   dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
@@ -43,10 +50,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-test-splitters==([0-9.]+)$"
+    ];
   };
 
   meta = {

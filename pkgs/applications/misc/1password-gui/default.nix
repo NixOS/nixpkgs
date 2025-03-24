@@ -12,7 +12,8 @@ let
   pname = "1password";
 
   versions = builtins.fromJSON (builtins.readFile ./versions.json);
-  inherit (versions.${channel} or (throw "unknown channel ${channel}")) version;
+  hostOs = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
+  version = versions."${channel}-${hostOs}" or (throw "unknown channel-os ${channel}-${hostOs}");
 
   sources = builtins.fromJSON (builtins.readFile ./sources.json);
 

@@ -2,7 +2,6 @@
   cmake,
   copyPkgconfigItems,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   git,
   gitUpdater,
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "3.2.1";
+  version = "3.3.5";
 
   outputs = [
     "out"
@@ -31,27 +30,29 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-Nf0YntB1A3AH0MTXlfUHhxYbzZqeB0EH9Fe9Xrqdsts=";
+    hash = "sha256-PcV31lLABv7SGzrD/+rR9j1Z9/uZrp1hFPdW0EZwOqc=";
   };
 
-  patches = [
-    # fix for build with GCC 14
-    (fetchpatch {
-      url = "https://github.com/v-novaltd/LCEVCdec/commit/43ef5a17ec1ced77f834136945b3cbfe2e46b9b4.patch";
-      hash = "sha256-8OgPh6v+nmRIUB6flR93qOjvaL8fUJdqIe48ZA+8Pr0=";
-    })
-  ];
+  postPatch =
+    ''
+      substituteInPlace cmake/tools/version_files.py \
+        --replace-fail "args.git_version" '"${finalAttrs.version}"' \
+        --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
+        --replace-fail "args.git_date" '"1970-01-01"'
 
-  postPatch = ''
-    substituteInPlace cmake/tools/version_files.py \
-      --replace-fail "args.git_version" '"${finalAttrs.version}"' \
-      --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
-      --replace-fail "args.git_date" '"1970-01-01"'
-  '';
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
+      substituteInPlace cmake/modules/Compiler/GNU.cmake \
+        --replace-fail "-mavx" ""
+
+       substituteInPlace src/core/decoder/src/common/simd.c \
+        --replace-fail "((_xgetbv(kControlRegister) & kOSXSaveMask) == kOSXSaveMask)" "false"
+    '';
 
   env = {
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
   pkgconfigItems = [
@@ -95,6 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "VN_SDK_FFMPEG_LIBS_PACKAGE" "")
     (lib.cmakeBool "VN_SDK_UNIT_TESTS" false)
     (lib.cmakeBool "VN_SDK_SAMPLE_SOURCE" false)
+    (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
+    # Requires avx for checking on runtime
+    (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)
   ];
 
   passthru = {

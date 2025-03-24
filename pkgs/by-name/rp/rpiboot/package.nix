@@ -22,15 +22,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];
 
-  patchPhase = ''
-    sed -i "s@/usr/@$out/@g" main.c
-  '';
+  makeFlags = [ "INSTALL_PREFIX=$(out)" ];
 
-  installPhase = ''
+  preInstall = ''
     mkdir -p $out/bin
-    mkdir -p $out/share/rpiboot
-    cp rpiboot $out/bin
-    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-eeprom rpi-imager-embedded $out/share/rpiboot
   '';
 
   passthru.updateScript = gitUpdater { };

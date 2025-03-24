@@ -951,6 +951,21 @@ in {
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
+        (
+          let
+            # Things fail in various ways with especially non-ascii usernames.
+            # This regex mirrors the one from shadow's is_valid_name:
+            # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
+            # though without the trailing $, because Samba 3 got its last release
+            # over 10 years ago and is not in Nixpkgs anymore,
+            # while later versions don't appear to require anything like that.
+            nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
+          in
+          {
+            assertion = builtins.match nameRegex user.name != null;
+            message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
+          }
+        )
         {
         assertion = (user.hashedPassword != null)
         -> (match ".*:.*" user.hashedPassword == null);

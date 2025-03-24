@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/glanceapp/glance/internal/glance.buildVersion=${finalAttrs.version}"
+    "-X github.com/glanceapp/glance/internal/glance.buildVersion=v${finalAttrs.version}"
   ];
 
   excludedPackages = [ "scripts/build-and-ship" ];

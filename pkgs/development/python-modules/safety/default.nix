@@ -52,7 +52,9 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
+    "filelock"
     "pydantic"
+    "psutil"
   ];
 
   dependencies = [

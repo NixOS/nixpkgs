@@ -15,7 +15,6 @@ buildPythonPackage {
   src = fetchPypi { inherit pname version hash; };
 
   propagatedBuildInputs = [ numpy ];
-  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/erdewit/eventkit";

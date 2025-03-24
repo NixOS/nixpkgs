@@ -1,4 +1,5 @@
 { lib, ... }:
+
 {
   name = "zipline";
   meta.maintainers = with lib.maintainers; [ defelo ];
@@ -18,6 +19,18 @@
     };
 
     networking.hosts."127.0.0.1" = [ "zipline.local" ];
+  };
+
+  interactive.nodes.machine = {
+    services.zipline.settings.CORE_HOSTNAME = lib.mkForce "0.0.0.0";
+    networking.firewall.allowedTCPPorts = [ 8000 ];
+    virtualisation.forwardPorts = [
+      {
+        from = "host";
+        host.port = 8000;
+        guest.port = 8000;
+      }
+    ];
   };
 
   testScript = ''

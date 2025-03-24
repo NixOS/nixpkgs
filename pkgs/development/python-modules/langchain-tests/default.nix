@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -37,6 +38,13 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+    "numpy"
+  ];
+
   dependencies = [
     httpx
     langchain-core
@@ -53,6 +61,13 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-tests==([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Build context-aware reasoning applications";

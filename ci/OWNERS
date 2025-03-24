@@ -149,9 +149,12 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
 /nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
 
+# Monitoring
+/nixos/modules/services/monitoring/fluent-bit.nix @arianvp
+/nixos/tests/fluent-bit.nix                       @arianvp
+
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
-
 
 # Updaters
 ## update.nix
@@ -398,6 +401,11 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid
 /pkgs/development/ocaml-modules     @ulrikstrid
+
+# ZFS
+/nixos/modules/tasks/filesystems/zfs.nix @adamcstephens @amarshall
+/nixos/tests/zfs.nix                     @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
 
 # Zig
 /pkgs/development/compilers/zig @figsoda @RossComputerGuy

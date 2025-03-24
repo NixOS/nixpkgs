@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-fastapi-instrumentator";
-  version = "7.0.2";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
     tag = "v${version}";
-    hash = "sha256-ObzaKWrN+9+MUpSOlqbW16KKTklMVo5nPRHodk+GEPs=";
+    hash = "sha256-54h/kwIdzFzxdYglwcEBPkLYno1YH2iWklg35qY2b00=";
   };
 
   build-system = [
