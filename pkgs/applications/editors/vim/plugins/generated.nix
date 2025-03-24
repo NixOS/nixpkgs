@@ -10669,6 +10669,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-rg = buildVimPlugin {
+    pname = "nvim-rg";
+    version = "2025-02-09";
+    src = fetchFromGitHub {
+      owner = "duane9";
+      repo = "nvim-rg";
+      rev = "38b221cefbfb57547c0c6952a1e049d840b2fdfb";
+      sha256 = "1wbgayyasli57p11751hackcmqcbaisca0kxbm24r67h3137yi23";
+    };
+    meta.homepage = "https://github.com/duane9/nvim-rg/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-rip-substitute = buildVimPlugin {
     pname = "nvim-rip-substitute";
     version = "2025-03-19";

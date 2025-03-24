@@ -51,14 +51,8 @@ rustPlatform.buildRustPackage rec {
     libXi
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "egui_skia_renderer-0.2.0" = "sha256-1l8iluTHDYZGRkKWnurRMj4iHljogPWs26pzkUtIGwY=";
-      "spade-0.10.0" = "sha256-nl9MsrV68mE7hVEBFF/WdasUXCJoUazCFg4xG+2MOEY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-89pkHS0YQ77PmQfT8epdu2tPRNAenYGgtoiJVuuVYiI=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
