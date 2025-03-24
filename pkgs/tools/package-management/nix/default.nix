@@ -3,7 +3,6 @@
 , stdenv
 , aws-sdk-cpp
 , boehmgc
-, libgit2
 , callPackage
 , fetchFromGitHub
 , fetchpatch2
