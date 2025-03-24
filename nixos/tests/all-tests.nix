@@ -912,7 +912,7 @@ in {
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
-  pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgadmin4 = runTest ./pgadmin4.nix;
   pgbouncer = handleTest ./pgbouncer.nix {};
   pghero = runTest ./pghero.nix;
   pgweb = runTest ./pgweb.nix;
