@@ -56,6 +56,7 @@ let
       # ************* Module duplicity.backends.swiftbackend
       # duplicity/backends/swiftbackend.py:176: [E0401(import-error), SwiftBackend._put] Unable to import 'swiftclient.service'
       "test_pylint"
+      "test_black"
     ];
 
     nativeBuildInputs = [
@@ -65,7 +66,6 @@ let
       wrapGAppsNoGuiHook
       python3.pkgs.setuptools-scm
       python3.pkgs.pycodestyle
-      python3.pkgs.black
       python3.pkgs.pylint
     ];
 
