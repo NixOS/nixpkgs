@@ -12141,6 +12141,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  rainbow_csv = buildVimPlugin {
+    pname = "rainbow_csv";
+    version = "2024-07-05";
+    src = fetchFromGitHub {
+      owner = "mechatroner";
+      repo = "rainbow_csv";
+      rev = "3dbbfd7d17536aebfb80f571255548495574c32b";
+      sha256 = "0zdhk1fhjdqsi9zlmhdnasg2kxik3lh3kpq7w1hmyf5z3dsmbzv5";
+    };
+    meta.homepage = "https://github.com/mechatroner/rainbow_csv/";
+    meta.hydraPlatforms = [ ];
+  };
+
   rainbow_parentheses-vim = buildVimPlugin {
     pname = "rainbow_parentheses.vim";
     version = "2013-03-05";
