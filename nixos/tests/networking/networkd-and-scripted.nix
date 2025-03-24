@@ -178,6 +178,29 @@ let
             router.wait_until_succeeds("ping -c 1 fd00:1234:5678:2::2")
       '';
     };
+    dhcpHostname = {
+      name = "hostnameDHCP";
+      nodes.router = router;
+      nodes.client = clientConfig {
+        # use the name given by the DHCP server
+        system.name = "client";
+        networking.hostName = lib.mkForce "";
+        security.polkit.enable = true;
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking.interfaces.enp1s0.useDHCP = true;
+      };
+      testScript = ''
+        router.start()
+        router.systemctl("start network-online.target")
+        router.wait_for_unit("network-online.target")
+
+        client.start()
+        client.wait_for_unit("network.target")
+
+        with subtest("Wait until we have received the hostname"):
+            client.wait_until_succeeds("hostname | grep -q 'client1'")
+      '';
+    };
     dhcpOneIf = {
       name = "OneInterfaceDHCP";
       nodes.router = router;
