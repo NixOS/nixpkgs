@@ -29,7 +29,7 @@
   pam,
   pandoc,
   pango,
-  pulseaudio,
+  pulseaudioFull,
   python3,
   stdenv,
   util-linux,
@@ -247,7 +247,7 @@ buildPythonApplication rec {
             xauth
             which
             util-linux
-            pulseaudio
+            pulseaudioFull
           ]
         }
     ''
