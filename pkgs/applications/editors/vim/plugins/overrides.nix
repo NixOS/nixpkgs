@@ -2971,19 +2971,6 @@ in
     ];
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  Spacegray-vim = buildVimPlugin {
-    pname = "Spacegray.vim";
-    version = "2021-07-06";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "Spacegray.vim";
-      rev = "c699ca10ed421c462bd1c87a158faaa570dc8e28";
-      sha256 = "0ma8w6p5jh6llka49x5j5ql8fmhv0bx5hhsn5b2phak79yqg1k61";
-    };
-    meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
-  };
-
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
     nvimSkipModule = "spaceman.adapters.telescope";
