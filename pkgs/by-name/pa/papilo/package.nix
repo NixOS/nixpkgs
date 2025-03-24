@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papilo";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rB8kRyBxd+zn3XFueTQoN16jbFpXMvneqatQm8Hh2Hg=";
+    hash = "sha256-oQ9iq5UkFK0ghUx6uxdJIOo5niQjniHegSZptqi2fgE=";
   };
 
   buildInputs = [
