@@ -24,7 +24,7 @@
   lyx,
   makeWrapper,
   meson,
-  ninja,
+  ninja_1_11,
   perl,
   perlPackages,
   pkg-config,
@@ -122,7 +122,7 @@ mkDerivation rec {
     [
       makeWrapper
       meson
-      ninja
+      ninja_1_11
       pkg-config
       which
     ]
@@ -202,7 +202,7 @@ mkDerivation rec {
     ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
   '';
 
-  enableParallelBuilding = false; # XXX: -j44 tried linking befoire librecoll had been created
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Full-text search tool";
