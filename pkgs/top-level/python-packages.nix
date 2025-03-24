@@ -16825,6 +16825,8 @@ self: super: with self; {
 
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
 
+  torch-scatter = callPackage ../development/python-modules/torch-scatter { };
+
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
     triton = self.triton-bin;
   };
