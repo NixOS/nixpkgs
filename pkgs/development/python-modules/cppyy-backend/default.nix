@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cppyy_backend" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wlav/cppyy-backend/blob/master/clingwrapper/";
     description = "C/C++ wrapper for Cling";
-    license = licenses.bsd3Lbnl;
-    maintainers = with maintainers; [ kittywitch ];
+    license = lib.licenses.bsd3Lbnl;
+    maintainers = with lib.maintainers; [ kittywitch ];
   };
 }
