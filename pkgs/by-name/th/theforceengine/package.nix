@@ -12,6 +12,7 @@
   cmake,
   pkg-config,
   zenity,
+  withEditor ? true,
 }:
 let
   # package depends on SDL2main static library
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_EDITOR" true)
+    (lib.cmakeBool "ENABLE_EDITOR" withEditor)
   ];
 
   prePatch = ''
