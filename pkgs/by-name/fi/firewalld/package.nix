@@ -69,41 +69,38 @@ stdenv.mkDerivation rec {
         --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
     '';
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      docbook_xml_dtd_42
-      docbook-xsl-nons
-      glib
-      intltool
-      ipset
-      iptables
-      kmod
-      libxml2
-      libxslt
-      pkg-config
-      python3
-      python3.pkgs.wrapPython
-      sysctl
-    ]
-    ++ lib.optionals withGui [
-      gobject-introspection
-      wrapGAppsNoGuiHook
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    docbook_xml_dtd_42
+    docbook-xsl-nons
+    glib
+    intltool
+    ipset
+    iptables
+    kmod
+    libxml2
+    libxslt
+    pkg-config
+    python3
+    python3.pkgs.wrapPython
+    sysctl
+    wrapGAppsNoGuiHook
+  ];
 
   buildInputs =
     [
       glib
+      gobject-introspection
       ipset
       iptables
       kmod
+      pythonPath
       sysctl
     ]
     ++ lib.optionals withGui [
       gtk3
       libnotify
-      pythonPath
     ];
 
   preConfigure = ''
@@ -116,7 +113,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  preFixup = lib.optionalString withGui ''
+  preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
