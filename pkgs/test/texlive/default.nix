@@ -438,6 +438,9 @@ rec {
     let
       # TODO known broken binaries
       broken = [
+        # do not know how to test without a valid build.lua
+        "ppmcheckpdf"
+
         # *.inc files in source container rather than run
         "texaccents"
 
@@ -660,6 +663,8 @@ rec {
         "allcm"
         "allec"
         "chkweb"
+        "explcheck"
+        "extractbb"
         "fontinst"
         "ht*"
         "installfont-tl"
