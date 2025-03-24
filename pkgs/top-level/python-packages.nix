@@ -427,6 +427,8 @@ self: super: with self; {
 
   aiosonic = callPackage ../development/python-modules/aiosonic { };
 
+  aiosonos = callPackage ../development/python-modules/aiosonos { };
+
   aiosql = callPackage ../development/python-modules/aiosql { };
 
   aiosseclient = callPackage ../development/python-modules/aiosseclient { };
@@ -12846,6 +12848,8 @@ self: super: with self; {
   pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
+
+  pyquerylist = callPackage ../development/python-modules/pyquerylist { };
 
   pyquaternion = callPackage ../development/python-modules/pyquaternion { };
 
