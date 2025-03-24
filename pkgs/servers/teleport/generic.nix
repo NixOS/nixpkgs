@@ -261,6 +261,9 @@ buildGoModule rec {
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
-    broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
+    # For x86_64-darwin, see See https://github.com/NixOS/nixpkgs/pull/387339#issuecomment-2745420435
+    broken =
+      stdenv.hostPlatform.parsed.cpu.bits < 64
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 }

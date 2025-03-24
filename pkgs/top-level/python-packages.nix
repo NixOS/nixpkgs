@@ -1430,7 +1430,7 @@ self: super: with self; {
 
   pulumi-command = pkgs.pulumiPackages.pulumi-command.sdks.python;
 
-  pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
+  pulumi-hcloud = pkgs.pulumiPackages.pulumi-hcloud.sdks.python;
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
@@ -1941,6 +1941,8 @@ self: super: with self; {
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
 
   bump2version = callPackage ../development/python-modules/bump2version { };
+
+  bump-my-version = callPackage ../development/python-modules/bump-my-version { };
 
   bumpfontversion = callPackage ../development/python-modules/bumpfontversion { };
 
@@ -11556,6 +11558,8 @@ self: super: with self; {
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
   pyexiftool = callPackage ../development/python-modules/pyexiftool { };
+
+  pyexpect = callPackage ../development/python-modules/pyexpect { };
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
