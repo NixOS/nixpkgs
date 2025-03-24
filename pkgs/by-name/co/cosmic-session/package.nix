@@ -73,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       a-kenji
       nyabinary
       thefossguy
+      HeitorAugustoLN
     ];
     platforms = lib.platforms.linux;
   };
