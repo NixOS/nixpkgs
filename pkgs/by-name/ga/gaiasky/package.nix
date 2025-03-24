@@ -26,11 +26,12 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/*.png $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source 3D universe visualization software for desktop and VR with support for more than a billion objects.";
     homepage = "https://gaiasky.space";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ reputable2772 ];
+    changelog = "https://codeberg.org/gaiasky/gaiasky/releases/tag/${version}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ reputable2772 ];
     platforms = [ "x86_64-linux" ];
   };
 }
