@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    dpkg
     autoPatchelfHook
     copyDesktopItems
     wrapGAppsHook4
@@ -127,18 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    ${dpkg}/bin/dpkg -x $src $out
-    mv $out/usr/share $out/share
-    runHook postUnpack
-  '';
-
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib
-    mv $out/usr/lib/x86_64-linux-gnu/workspacesclient/dcv $out/lib/
 
+    mkdir -p $out/libexec
+    cp -R usr/* $out/
+    mv $out/lib/x86_64-linux-gnu/workspacesclient/dcv $out/libexec/
     rm -rf $out/opt
 
     # We introduce a dependency on the source file so that it need not be redownloaded everytime
@@ -146,40 +141,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Remove the vendored-in libgio-2.0.so.0, so the system one is used
     # The vendored-in version has libselinux.so.1 linked, which doesn't exist natively on NixOS
-    rm $out/lib/dcv/libgio-2.0.so.0
-
-    mkdir -p $out/share/glib-2.0/schemas
-    if [ -d $out/usr/share/glib-2.0/schemas ]; then
-      cp -r $out/usr/share/glib-2.0/schemas/* $out/share/glib-2.0/schemas/
-    else
-      echo "Creating dummy GSettings schema..."
-      cat > $out/share/glib-2.0/schemas/com.amazon.workspacesclient.proxy.gschema.xml <<EOF
-    <?xml version="1.0" encoding="UTF-8"?>
-    <schemalist>
-      <schema id="com.amazon.workspacesclient.proxy" path="/com/amazon/workspacesclient/proxy/">
-      </schema>
-    </schemalist>
-    EOF
-    fi
+    rm $out/libexec/dcv/libgio-2.0.so.0
 
     glib-compile-schemas $out/share/glib-2.0/schemas/
-
-    # Move the binary FIRST
-    mv $out/usr/bin/workspacesclient $out/bin/workspacesclient
 
     mkdir -p $out/share/publicsuffix
     cp ${publicsuffixList}/share/publicsuffix/public_suffix_list.dat $out/share/publicsuffix/
 
-    # Wrap it in its new location
-    wrapProgram $out/bin/workspacesclient \
-      --prefix PATH : "$out/lib/dcv":"${lib.makeBinPath [ custom_lsb_release ]}" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/dcv":"${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
-      --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
-      --set GSETTINGS_SCHEMA_DIR "$out/share/glib-2.0/schemas" \
-
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "$out/libexec/dcv":"${lib.makeBinPath [ custom_lsb_release ]}" \
+    )
   '';
 
   meta = {
