@@ -17267,8 +17267,6 @@ with pkgs;
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
-  depotdownloader = callPackage ../tools/misc/depotdownloader { };
-
   faust = res.faust2;
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix { };
