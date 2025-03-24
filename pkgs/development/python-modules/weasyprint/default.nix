@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "64.1";
+  version = "65.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-KLAvLGQJuvzhsSINnXanNFh1vTvQjE9t+/UQu5KpR1c=";
+    hash = "sha256-PGed6Wp8hxrgDwjNHncgDzPipJ014gnHIRWTJ1eN+Yg=";
   };
 
   patches = [
@@ -48,8 +48,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ flit-core ];
-
-  pythonRelaxDeps = [ "tinycss2" ];
 
   dependencies = [
     cffi
