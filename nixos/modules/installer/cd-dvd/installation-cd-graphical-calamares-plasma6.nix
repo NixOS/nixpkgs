@@ -24,6 +24,13 @@
     pkgs.maliit-keyboard
   ];
 
+  environment.plasma6.excludePackages = [
+    # Optional wallpapers that add 126 MiB to the graphical installer
+    # closure. They will still need to be downloaded when installing a
+    # Plasma system, though.
+    pkgs.kdePackages.plasma-workspace-wallpapers
+  ];
+
   system.activationScripts.installerDesktop =
     let
 
