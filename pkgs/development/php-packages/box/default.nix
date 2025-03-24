@@ -19,7 +19,7 @@ php82.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-7oZtuQ7PhB7q9vNO2TLI46kg2q9BgdLjGUduGXAHc0E=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

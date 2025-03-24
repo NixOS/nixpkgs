@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-9o8HT5GNeqGQqzrDhSzzwoeo//MYV1YPec98j8UMHv4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
   __darwinAllowLocalNetworking = true;
 

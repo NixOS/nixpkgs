@@ -42,7 +42,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Find credentials all over the place";

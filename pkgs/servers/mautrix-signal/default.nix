@@ -60,7 +60,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";

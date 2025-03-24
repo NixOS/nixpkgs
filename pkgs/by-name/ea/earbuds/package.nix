@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
   # nativeInstallCheckInputs = [
   #   versionCheckHook
   # ];
-  # versionCheckProgramArg = [ "--version" ];
+  # versionCheckProgramArg = "--version";
   # doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

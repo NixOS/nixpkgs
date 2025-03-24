@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [
     "sbom4python"
