@@ -64,6 +64,23 @@ in
     hash = info.chromium_npm_hash;
   };
 
+  env =
+    base.env
+    // {
+      # Hydra can fail to build electron due to clang spamming deprecation
+      # warnings mid-build, causing the build log to grow beyond the limit
+      # of 64mb and then getting killed by Hydra.
+      # For some reason, the log size limit appears to only be enforced on
+      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
+      # unbreak the build on h.n.o, we simply disable those warnings for now.
+      # https://hydra.nixos.org/build/283952243
+      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
+    }
+    // lib.optionalAttrs (lib.versionAtLeast info.version "35") {
+      # Needed for header generation in electron 35 and above
+      ELECTRON_OUT_DIR = "Release";
+    };
+
   src = null;
 
   patches = base.patches;
@@ -178,7 +195,7 @@ in
     # build/args/all.gn
     is_electron_build = true;
     root_extra_deps = [ "//electron" ];
-    node_module_version = info.modules;
+    node_module_version = lib.toInt info.modules;
     v8_promise_internal_field_count = 1;
     v8_embedder_string = "-electron.0";
     v8_enable_snapshot_native_code_counters = false;
@@ -193,7 +210,6 @@ in
     allow_runtime_configurable_key_storage = true;
     enable_cet_shadow_stack = false;
     is_cfi = false;
-    use_qt = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
     dawn_use_built_dxc = false;
