@@ -31,6 +31,9 @@
     pkgs.kdePackages.plasma-workspace-wallpapers
   ];
 
+  # Avoid bundling an entire MariaDB installation on the ISO.
+  programs.kde-pim.enable = false;
+
   system.activationScripts.installerDesktop =
     let
 
