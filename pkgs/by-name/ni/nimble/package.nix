@@ -39,6 +39,7 @@ buildNimPackage (
     meta = {
       description = "Package manager for the Nim programming language";
       homepage = "https://github.com/nim-lang/nimble";
+      changelog = "https://github.com/nim-lang/nimble/releases/tag/v${final.version}";
       license = lib.licenses.bsd3;
       mainProgram = "nimble";
       maintainers = [ lib.maintainers.daylinmorgan ];
