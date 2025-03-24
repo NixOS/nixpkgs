@@ -4,24 +4,25 @@
   rustPlatform,
   python3Packages,
   libiconv,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "granian";
-  version = "1.7.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     rev = "v${version}";
-    hash = "sha256-OjyDwfp0d779oFQ7wUdR1eRPP35kcJa3wIdcYGrGGME=";
+    hash = "sha256-YQ9+PcKXtSc+wdvhgDfSAfcv/y53oqcrPCEI9dDKFa0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jAjHvVyFhGGE/OwfusUE/GdrNrEgvh48lmC5tla4lhI=";
+    hash = "sha256-XJ61+u5aGQis6YkfASD+WJHEKDBL+2ImqCAuQmm3A/g=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -37,6 +38,8 @@ python3Packages.buildPythonApplication rec {
     python3Packages.uvloop
     python3Packages.click
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
