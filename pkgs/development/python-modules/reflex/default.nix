@@ -9,6 +9,7 @@
   dill,
   distro,
   fastapi,
+  granian,
   gunicorn,
   hatchling,
   httpx,
@@ -25,6 +26,7 @@
   pydantic,
   pytest-asyncio,
   pytest-mock,
+  python-dotenv,
   pytestCheckHook,
   python-engineio,
   python-multipart,
@@ -48,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.4a0";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-KFNcdPoZc+Zps8OV3aLIkk9rlbfy6rx0I9JrYFt2b5E=";
+    hash = "sha256-Ra7XFa86sZ18xXjfJ4COiIl7MDqz87MPLRws+kGEfKk=";
   };
 
   pythonRelaxDeps = [
@@ -77,6 +79,8 @@ buildPythonPackage rec {
     dill
     distro
     fastapi
+    granian
+    granian.optional-dependencies.reload
     gunicorn
     httpx
     jinja2
@@ -106,6 +110,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+    python-dotenv
     playwright
     attrs
     numpy
