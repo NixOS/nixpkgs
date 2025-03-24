@@ -58,7 +58,7 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
+  nativeCheckInputs = lib.optionals (
     [
       pytestCheckHook
       numpy
@@ -69,7 +69,8 @@ buildPythonPackage rec {
       tensorflow-bin
       jax
       jaxlib
-    ];
+    ]
+  );
 
   passthru.tests = {
     pytest = nanobind.overridePythonAttrs { doCheck = true; };
