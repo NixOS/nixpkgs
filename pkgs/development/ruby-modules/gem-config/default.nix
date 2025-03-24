@@ -287,7 +287,18 @@ in
     meta.mainProgram = "ruby-parse";
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.2.1") {
+    dontBuild = false;
+    patches = [
+      # Fix builds when compiling with glibc >= 2.38.
+      # See https://github.com/pganalyze/pg_query/issues/298
+      (fetchpatch {
+        name = "pg_query_2_2_1_glibc_2_38.patch";
+        url = "https://github.com/octobus-net/ruby-pg_query/commit/200f2aa5d41338ace031a50b29e09bb562e8b220.patch";
+        hash = "sha256-45rgA2VSTuFD2buGya9G7DPovWT0wYiWeFZFxgMigbs=";
+      })
+    ];
+  } // lib.optionalAttrs (attrs.version == "2.0.2") {
     dontBuild = false;
     postPatch = ''
       sed -i "s;'https://codeload.github.com.*';'${fetchurl {
