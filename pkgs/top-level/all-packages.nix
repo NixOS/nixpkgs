@@ -4709,8 +4709,6 @@ with pkgs;
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
-  qastools = libsForQt5.callPackage ../tools/audio/qastools { };
-
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
