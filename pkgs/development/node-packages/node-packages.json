@@ -130,7 +130,6 @@
 , "peerflix-server"
 , "poor-mans-t-sql-formatter-cli"
 , "postcss"
-, "postcss-cli"
 , "prebuild-install"
 , "prettier"
 , "prettier-plugin-toml"
