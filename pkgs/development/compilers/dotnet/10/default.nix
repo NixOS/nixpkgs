@@ -8,5 +8,5 @@ callPackage ../dotnet.nix {
   bootstrapSdkFile = ./bootstrap-sdk.nix;
   allowPrerelease = true;
   depsFile = ./deps.json;
-  fallbackTargetPackages = dotnetCorePackages.sdk_10_0-bin.targetPackages;
+  fallbackTargetPackages = dotnetCorePackages.sdk_10_0.targetPackages;
 }

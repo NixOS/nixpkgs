@@ -12423,10 +12423,6 @@ with pkgs;
     inherit (pkgs) meson;
   };
 
-  cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk23.override { enableJavaFX = true; };
-  };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`

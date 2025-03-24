@@ -5269,12 +5269,12 @@ with self; {
 
   CryptRandom = buildPerlPackage {
     pname = "Crypt-Random";
-    version = "1.54";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.54.tar.gz";
-      hash = "sha256-1m+OF+3Dh3zHl/3VneU045kGNvjxpecmBiFZr35n2sw=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-Random-1.57.tar.gz";
+      hash = "sha256-lQRnbAzgQRA636cCP4yGHECAYckCljQUwe27LYhydRU=";
     };
-    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
+    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare CryptURandom ];
     meta = {
       description = "Interface to /dev/random and /dev/urandom";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
