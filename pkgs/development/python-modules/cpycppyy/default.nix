@@ -6,9 +6,9 @@
   cmake,
   buildPythonPackage,
   setuptools,
-  python3,
   wheel,
   pip,
+  python,
   stdenv,
 }:
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    cp libcppyy.so $out/${python3.sitePackages}/
+    cp libcppyy.so $out/${python.sitePackages}/
   '';
 
   meta = {
