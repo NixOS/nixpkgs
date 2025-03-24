@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  autoconf,
+  automake,
   bash,
   docbook_xml_dtd_42,
   docbook-xsl-nons,
@@ -67,7 +68,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [
-      autoreconfHook
+      autoconf
+      automake
       docbook_xml_dtd_42
       docbook-xsl-nons
       glib
@@ -93,6 +95,10 @@ stdenv.mkDerivation rec {
       libnotify
       pythonPath
     ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   dontWrapGApps = true;
 
