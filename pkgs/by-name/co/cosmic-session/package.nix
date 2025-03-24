@@ -49,6 +49,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
 
+  postInstall = ''
+    dconf_profile_dst=$out/etc/dconf/profile/cosmic
+    if [ ! -f $dconf_profile_dst ]; then
+        install -Dm0644 data/dconf/profile/cosmic $dconf_profile_dst
+    else
+        # future proofing
+        echo 'The Justfile is now correctly installing the dconf profile.'
+        echo 'Please remove the dconf profile from the `postInstall` phase.'
+        exit 1
+    fi
+  '';
+
   passthru.providedSessions = [ "cosmic" ];
 
   meta = {
