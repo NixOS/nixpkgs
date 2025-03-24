@@ -18731,6 +18731,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  vim-pony = buildVimPlugin {
+    pname = "vim-pony";
+    version = "2018-06-24";
+    src = fetchFromGitHub {
+      owner = "jmcomets";
+      repo = "vim-pony";
+      rev = "cd0949971c485fd23de62bb78ca39e5bbe8b915a";
+      sha256 = "0sassx3mkkd543mljycfmvgwcnw36zbpanm41mf3bavxvsk0azx6";
+    };
+    meta.homepage = "https://github.com/jmcomets/vim-pony/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-poweryank = buildVimPlugin {
     pname = "vim-poweryank";
     version = "2017-08-13";
