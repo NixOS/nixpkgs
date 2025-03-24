@@ -22,6 +22,10 @@
   tensorflow-bin,
   jax,
   jaxlib,
+
+  # allow to remove the tests dependencies
+  # that can cause issues with a derivation using nanobind (eg: tensorflow)
+  withCheck ? true
 }:
 buildPythonPackage rec {
   pname = "nanobind";
@@ -61,7 +65,9 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
+  doCheck = withCheck;
+
+  nativeCheckInputs = lib.optionals withCheck (
     [
       pytestCheckHook
       numpy
@@ -72,7 +78,7 @@ buildPythonPackage rec {
       tensorflow-bin
       jax
       jaxlib
-    ];
+    ]);
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
