@@ -4,19 +4,22 @@
   fetchFromGitHub,
   autoconf,
   automake,
-  bash,
   docbook_xml_dtd_42,
   docbook-xsl-nons,
   glib,
   gobject-introspection,
   gtk3,
   intltool,
+  ipset,
+  iptables,
+  kmod,
   libnotify,
   libxml2,
   libxslt,
   networkmanagerapplet,
   pkg-config,
   python3,
+  sysctl,
   wrapGAppsNoGuiHook,
   withGui ? false,
 }:
@@ -74,11 +77,15 @@ stdenv.mkDerivation rec {
       docbook-xsl-nons
       glib
       intltool
+      ipset
+      iptables
+      kmod
       libxml2
       libxslt
       pkg-config
       python3
       python3.pkgs.wrapPython
+      sysctl
     ]
     ++ lib.optionals withGui [
       gobject-introspection
@@ -87,8 +94,11 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      bash
       glib
+      ipset
+      iptables
+      kmod
+      sysctl
     ]
     ++ lib.optionals withGui [
       gtk3
