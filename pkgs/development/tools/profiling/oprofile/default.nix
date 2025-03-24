@@ -11,12 +11,12 @@
   libiberty_static,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oprofile";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/oprofile/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/oprofile/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "04m46ni0ryk4sqmzd6mahwzp7iwhwqzfbmfi42fki261sycnz83v";
   };
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace opjitconv/opjitconv.c \
-      --replace "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
-      --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
+      --replace-fail "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
+      --replace-fail "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
