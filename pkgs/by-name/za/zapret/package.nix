@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "70.3";
+  version = "70.5";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sYLZH/j8bHUKfkUAAAuTrCTOXB6Qp9kVj4GjyFv6M+g=";
+    hash = "sha256-El/3qWZCyN5WixDWbtv+W69z0WITGMODX83dwDIT/94=";
   };
 
   buildInputs = [
