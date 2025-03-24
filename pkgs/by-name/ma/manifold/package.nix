@@ -6,7 +6,7 @@
   clipper2,
   gtest,
   glm,
-  tbb_2021_11,
+  tbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     glm
-    tbb_2021_11
+    tbb
     clipper2
   ];
 

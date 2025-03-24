@@ -237,7 +237,6 @@ with pkgs;
   };
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    tbb = tbb_2021_11;
     cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
@@ -6651,7 +6650,6 @@ with pkgs;
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
   tbb_2022_0 = callPackage ../development/libraries/tbb/2022_0.nix { };
-  # many packages still fail with latest version
   tbb = tbb_2021_11;
 
   terra = callPackage ../development/compilers/terra {
@@ -7864,7 +7862,6 @@ with pkgs;
 
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2021_11;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
@@ -7946,7 +7943,6 @@ with pkgs;
 
   mold = callPackage ../by-name/mo/mold/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-    tbb = tbb_2021_11;
   };
 
   mold-wrapped = wrapBintoolsWith {
@@ -8480,7 +8476,6 @@ with pkgs;
 
   cctag = callPackage ../development/libraries/cctag {
     stdenv = clangStdenv;
-    tbb = tbb_2021_11;
   };
 
   cctz = callPackage ../development/libraries/cctz {
@@ -11356,9 +11351,7 @@ with pkgs;
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
   opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
   opensmtpd-filter-rspamd = callPackage ../servers/mail/opensmtpd/filter-rspamd.nix { };
-  osrm-backend = callPackage ../servers/osrm-backend {
-    tbb = tbb_2021_11;
-  };
+  osrm-backend = callPackage ../servers/osrm-backend { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 

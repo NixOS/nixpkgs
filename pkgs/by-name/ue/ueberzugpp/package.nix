@@ -7,7 +7,7 @@
   openssl,
   zeromq,
   cppzmq,
-  tbb_2021_11,
+  tbb,
   spdlog,
   libsodium,
   fmt,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       openssl
       zeromq
       cppzmq
-      tbb_2021_11
+      tbb
       spdlog
       libsodium
       fmt

@@ -11,7 +11,7 @@
   libdwarf-lite,
   pkg-config,
   python3,
-  tbb_2021_11,
+  tbb,
   buildPackages,
 }:
 stdenv.mkDerivation {
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     capnproto # cmake modules
     flex # include dir
     libdwarf-lite
-    tbb_2021_11
+    tbb
     python3
   ];
 
