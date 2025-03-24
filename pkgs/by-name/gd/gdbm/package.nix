@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdbm";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/gdbm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-aV6YJ/33Y1E/EzkQvH5s/bkYeUOk/slD5XRJcj0rjb8=";
+    hash = "sha256-0C2zxZJu2Hf4gXuBzR+S9T73TKjG21Q/u6AnGzTzk+w=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
