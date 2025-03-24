@@ -1240,11 +1240,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  # NOTE: this overrides a luaPackages-based plugin
-  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
-
   git-conflict-nvim = super.git-conflict-nvim.overrideAttrs {
     # TODO: Remove after next fixed version
     # https://github.com/akinsho/git-conflict.nvim/issues/103
@@ -1389,24 +1384,6 @@ in
     ];
 
     doInstallCheck = true;
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  image-nvim = super.image-nvim.overrideAttrs {
-    dependencies = with self; [
-      nvim-treesitter
-      nvim-treesitter-parsers.markdown_inline
-      nvim-treesitter-parsers.norg
-    ];
-
-    # Add magick to package.path
-    patches = [ ./patches/image-nvim/magick.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/image/magick.lua \
-        --replace-fail @nix_magick@ ${luajitPackages.magick}
-    '';
-
   };
 
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
@@ -1658,11 +1635,6 @@ in
     dependencies = [ self.lualine-nvim ];
   };
 
-  # NOTE: this overrides a luaPackages-based plugin
-  luasnip = super.luasnip.overrideAttrs {
-    dependencies = [ luaPackages.jsregexp ];
-  };
-
   luasnip-latex-snippets-nvim = super.luasnip-latex-snippets-nvim.overrideAttrs {
     dependencies = [ self.luasnip ];
     # E5108: /luasnip-latex-snippets/luasnippets/tex/utils/init.lua:3: module 'luasnip-latex-snippets.luasnippets.utils.conditions' not found:
@@ -1908,14 +1880,6 @@ in
       neorg
       plenary-nvim
       telescope-nvim
-    ];
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  neotest = super.neotest.overrideAttrs {
-    dependencies = with self; [
-      nvim-nio
-      plenary-nvim
     ];
   };
 
@@ -2802,18 +2766,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  # needs  "http" and "json" treesitter grammars too
-  # NOTE: this overrides a luaPackages-based plugin
-  rest-nvim = super.rest-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      (nvim-treesitter.withPlugins (p: [
-        p.http
-        p.json
-      ]))
-    ];
-  };
-
   rocks-nvim =
     (neovimUtils.buildNeovimPlugin {
       luaAttr = luaPackages.rocks-nvim;
@@ -3186,11 +3138,6 @@ in
   };
 
   telescope-project-nvim = super.telescope-project-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  telescope-nvim = super.telescope-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
