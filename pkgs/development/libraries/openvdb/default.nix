@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     "-DOPENVDB_BUILD_NANOVDB=ON"
   ];
 
+  # Fixes clang build
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-missing-template-arg-list-after-template-kw"
+  ];
+
   postFixup = ''
     substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
       --replace \''${OPENVDB_LIBRARYDIR} $out/lib \
