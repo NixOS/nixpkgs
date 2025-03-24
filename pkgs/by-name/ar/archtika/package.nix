@@ -21,7 +21,7 @@ let
   web = buildNpmPackage {
     name = "web-app";
     src = "${src}/web-app";
-    npmDepsHash = "sha256-RTyo7K/Hr1hBGtcBKynrziUInl91JqZl84NkJg16ufA=";
+    npmDepsHash = "sha256-2udi8vLLvdoZxIyRKLOCfEpEMsooxsIrM1wiua1QPAI=";
     npmFlags = [ "--legacy-peer-deps" ];
     installPhase = ''
       mkdir -p $out/web-app
@@ -51,7 +51,7 @@ symlinkJoin {
   ];
 
   passthru = {
-    inherit src;
+    inherit src web;
     updateScript = nix-update-script { };
   };
 
