@@ -1,8 +1,8 @@
-diff --git a/CMakeGlobals.txt b/CMakeGlobals.txt
-index 8868c44..19b2fa0 100644
---- a/CMakeGlobals.txt
-+++ b/CMakeGlobals.txt
-@@ -345,6 +345,7 @@ if (APPLE)
+diff --git a/cmake/globals.cmake b/cmake/globals.cmake
+index e53248b..c705d67 100644
+--- a/cmake/globals.cmake
++++ b/cmake/globals.cmake
+@@ -334,6 +334,7 @@ if (APPLE)
        set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources/app)
        # handles Quarto share when not stored alongside bin
        set(RSTUDIO_INSTALL_RESOURCES RStudio.app/Contents/Resources)
@@ -11,10 +11,10 @@ index 8868c44..19b2fa0 100644
        set(RSTUDIO_INSTALL_BIN        RStudio.app/Contents/MacOS)
        set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources)
 diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
-index b47f04f..928165d 100644
+index 76f3acb..2910cee 100644
 --- a/src/cpp/CMakeLists.txt
 +++ b/src/cpp/CMakeLists.txt
-@@ -240,7 +240,7 @@ endif()
+@@ -243,7 +243,7 @@ endif()
  # determine whether we should statically link boost. we always do this
  # unless we are building a non-packaged build on linux (in which case
  # boost dynamic libraries are presumed to be installed on the system ldpath)
@@ -23,7 +23,7 @@ index b47f04f..928165d 100644
     set(Boost_USE_STATIC_LIBS ON)
  endif()
  
-@@ -475,7 +475,7 @@ endif()
+@@ -483,7 +483,7 @@ endif()
  
  # find SOCI libraries
  if(UNIX)
@@ -33,7 +33,7 @@ index b47f04f..928165d 100644
        find_library(SOCI_SQLITE_LIB NAMES "libsoci_sqlite3.a" "soci_sqlite3" REQUIRED)
        if(RSTUDIO_PRO_BUILD)
 diff --git a/src/node/CMakeNodeTools.txt b/src/node/CMakeNodeTools.txt
-index 43f7f63..8a35a16 100644
+index 40ae0f3..756fd5f 100644
 --- a/src/node/CMakeNodeTools.txt
 +++ b/src/node/CMakeNodeTools.txt
 @@ -27,17 +27,7 @@ endif()
@@ -56,10 +56,10 @@ index 43f7f63..8a35a16 100644
     # Detect node.js, npm, and npx; use versions supplied by the dependency scripts
     find_program(NODEJS
 diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
-index 2f4d929..9769143 100644
+index 35438fd..f9b1951 100644
 --- a/src/node/desktop/CMakeLists.txt
 +++ b/src/node/desktop/CMakeLists.txt
-@@ -119,22 +119,9 @@ if (APPLE)
+@@ -122,22 +122,9 @@ if (APPLE)
     # configure Info.plist
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
        ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
@@ -84,7 +84,7 @@ index 2f4d929..9769143 100644
     set(ELECTRON_BUILD_DIR "${ELECTRON_SOURCE_DIR}" CACHE INTERNAL "")
  endif()
  
-@@ -230,16 +217,21 @@ if(WIN32)
+@@ -233,16 +220,21 @@ if(WIN32)
           PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
           DESTINATION "${RSTUDIO_INSTALL_BIN}")
  
@@ -110,16 +110,18 @@ index 2f4d929..9769143 100644
        OWNER_READ OWNER_WRITE OWNER_EXECUTE
        GROUP_READ GROUP_EXECUTE
 diff --git a/src/node/desktop/src/main/session-launcher.ts b/src/node/desktop/src/main/session-launcher.ts
-index 615ca1e..a9c1624 100644
+index 94f56ac..fe7d5d9 100644
 --- a/src/node/desktop/src/main/session-launcher.ts
 +++ b/src/node/desktop/src/main/session-launcher.ts
-@@ -89,27 +89,9 @@ function launchProcess(absPath: FilePath, argList: string[]): ChildProcess {
+@@ -91,29 +91,9 @@ function launchProcess(absPath: FilePath, argList: string[]): ChildProcess {
      // DYLD_INSERT_LIBRARIES to inject the library we wish to use
      const rHome = new FilePath(getenv('R_HOME'));
      const rLib = rHome.completePath('lib/libR.dylib');
 -    const dyldArgs = [
--      '-e', `DYLD_INSERT_LIBRARIES=${rLib.getAbsolutePath()}`,
--      '-e', `DYLD_FALLBACK_LIBRARY_PATH=${dyldFallbackLibraryPath}`
+-      '-e',
+-      `DYLD_INSERT_LIBRARIES=${rLib.getAbsolutePath()}`,
+-      '-e',
+-      `DYLD_FALLBACK_LIBRARY_PATH=${dyldFallbackLibraryPath}`,
 -    ];
 -
 -    // launch via /usr/bin/arch, so we can control whether the OS requests
@@ -144,7 +146,7 @@ index 615ca1e..a9c1624 100644
    }
  
    const rsessionOptions = new LogOptions('rsession');
-@@ -542,22 +524,6 @@ export class SessionLauncher {
+@@ -566,22 +546,6 @@ export class SessionLauncher {
        }
      }
  
@@ -164,6 +166,6 @@ index 615ca1e..a9c1624 100644
 -      }
 -    }
 -
-     const sessionProc = launchProcess(this.sessionPath, argList);
-     sessionProc.on('error', (err) => {
-       // Unable to start rsession (at all)
+     // if we're running automation tests, set that up now
+     if (app.commandLine.hasSwitch('run-automation')) {
+       argList.push('--run-automation');
