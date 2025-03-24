@@ -339,6 +339,25 @@ in {
     };
   };
 
+  kanagawa = mkTmuxPlugin rec {
+    pluginName = "kanagawa";
+    version = "0-unstable-2025-02-10";
+    src = fetchFromGitHub {
+      owner = "Nybkox";
+      repo = "tmux-kanagawa";
+      rev = "5440b9476627bf5f7f3526156a17ae0e3fd232dd";
+      hash = "sha256-sFL9/PMdPJxN7tgpc4YbUHW4PkCXlKmY7a7gi7PLcn8=";
+    };
+    meta = {
+      homepage = "https://github.com/Nybkox/tmux-kanagawa";
+      downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
+      description = "Feature packed kanagawa theme for tmux!";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
   logging = mkTmuxPlugin {
     pluginName = "logging";
     version = "unstable-2019-04-19";

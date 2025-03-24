@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 let
   cfg = config.virtualisation.podman;
   json = pkgs.formats.json { };
@@ -202,11 +202,15 @@ in
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
 
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          ${cfg.package}/bin/podman system prune -f ${toString cfg.autoPrune.flags}
-        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = utils.escapeSystemdExecArgs ([
+            (lib.getExe cfg.package)
+            "system"
+            "prune"
+            "-f"
+          ] ++ cfg.autoPrune.flags);
+        };
 
         startAt = lib.optional cfg.autoPrune.enable cfg.autoPrune.dates;
         after = [ "podman.service" ];

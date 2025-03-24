@@ -108,8 +108,7 @@
   withDocumentation ? true,
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
-  # conflicts with the NixOS /etc management
-  withFirstboot ? false,
+  withFirstboot ? true,
   withGcrypt ? true,
   withHomed ? !stdenv.hostPlatform.isMusl,
   withHostnamed ? true,
@@ -883,6 +882,7 @@ stdenv.mkDerivation (finalAttrs: {
       withKmod
       withLocaled
       withMachined
+      withNetworkd
       withPortabled
       withTimedated
       withTpm2Tss
@@ -891,6 +891,10 @@ stdenv.mkDerivation (finalAttrs: {
       kmod
       kbd
       ;
+
+    # Many TPM2-related units are only installed if this trio of features are
+    # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
+    withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
 
     tests =
       let

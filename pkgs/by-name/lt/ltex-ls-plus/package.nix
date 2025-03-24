@@ -4,6 +4,7 @@
   fetchurl,
   makeBinaryWrapper,
   jre_headless,
+  jvmOptions ? [ ],
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,18 +18,22 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      java_opts = lib.optionalString (jvmOptions != [ ]) ''--set JAVA_OPTS "${toString jvmOptions}"'';
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    cp -rfv bin/ lib/ $out
-    rm -fv $out/bin/.lsp-cli.json $out/bin/*.bat
-    for file in $out/bin/{ltex-ls-plus,ltex-cli-plus}; do
-      wrapProgram $file --set JAVA_HOME "${jre_headless}"
-    done
+      mkdir -p $out
+      cp -rfv bin/ lib/ $out
+      rm -fv $out/bin/.lsp-cli.json $out/bin/*.bat
+      for file in $out/bin/{ltex-ls-plus,ltex-cli-plus}; do
+        wrapProgram $file --set JAVA_HOME "${jre_headless}" ${java_opts}
+      done
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta =
     let

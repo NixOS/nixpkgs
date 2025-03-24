@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "django-q2";
-  version = "1.7.4";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
     tag = "v${version}";
-    hash = "sha256-mp/IZkfT64xW42B1TEO6lSHxvLQbeH4td8vqZH7wUxM=";
+    hash = "sha256-L2IrLKszo2UCpeioAwI8c636KwQgNCEJjHUDY2Ctv4A=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_q" ];
 
   preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 

@@ -22,7 +22,6 @@
   rapidfuzz,
 
   # checks
-  glibcLocales,
   pytestCheckHook,
 }:
 
@@ -91,7 +90,6 @@ buildPythonPackage rec {
     ]);
 
   nativeCheckInputs = [
-    glibcLocales
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
@@ -103,10 +101,6 @@ buildPythonPackage rec {
     "test_fa"
     "test_ar"
   ];
-
-  preCheck = ''
-    export LC_ALL=en_US.utf-8
-  '';
 
   pythonImportsCheck = [ "gruut" ];
 

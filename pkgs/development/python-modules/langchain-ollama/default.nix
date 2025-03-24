@@ -35,6 +35,12 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
+
   dependencies = [
     langchain-core
     ollama
@@ -57,8 +63,6 @@ buildPythonPackage rec {
       "langchain-ollama==(.*)"
     ];
   };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -56,7 +57,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "langchain" # Can fail during updates where building sees the old langchain
+    # Each component release requests the exact latest langchain and -core.
+    # That prevents us from updating individul components.
+    "langchain"
+    "langchain-core"
     "numpy"
     "pydantic-settings"
     "tenacity"
@@ -98,12 +102,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
@@ -123,6 +121,13 @@ buildPythonPackage rec {
     # Fails due to the lack of blockbuster
     "test_group_dependencies"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-community==(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";

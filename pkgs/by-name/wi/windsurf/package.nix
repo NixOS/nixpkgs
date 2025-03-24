@@ -47,6 +47,7 @@ callPackage vscode-generic {
     homepage = "https://codeium.com/windsurf";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      sarahec
       xiaoxiangmoe
     ];
     platforms = [

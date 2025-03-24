@@ -3,6 +3,8 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  tbb_2022_0,
+  useTBB ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,11 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = finalAttrs.src.name + "/c";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals useTBB [ tbb_2022_0 ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
@@ -36,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fgaz
       fpletz
+      silvanshade
     ];
     platforms = lib.platforms.all;
   };

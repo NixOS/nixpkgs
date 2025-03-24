@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       src/comp/wrapper.sh
 
     substituteInPlace src/comp/Makefile \
-      --replace-fail 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
+      --replace-fail 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) $(SHOWRULESEXES) install-utils install-showrules'
 
     # For darwin
     # ld: library not found for -ltcl8.5
@@ -172,12 +172,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/B-Lang-org/bsc";
     license = lib.licenses.bsd3;
     platforms = [
+      "aarch64-linux"
       "x86_64-linux"
-      "aarch64-darwin"
-    ];
+    ] ++ lib.platforms.darwin;
     mainProgram = "bsc";
-    # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
-    # aarch64 fails, as GHC fails with "ghc: could not execute: opt"
     maintainers = with lib.maintainers; [
       jcumming
       thoughtpolice

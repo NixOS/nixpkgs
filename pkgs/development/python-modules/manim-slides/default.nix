@@ -9,7 +9,6 @@
   manim,
   ffmpeg,
 
-  av,
   beautifulsoup4,
   click,
   click-default-group,
@@ -59,7 +58,6 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      av
       beautifulsoup4
       click
       click-default-group

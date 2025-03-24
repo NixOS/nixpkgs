@@ -1018,8 +1018,9 @@ with lib.maintainers;
 
   rocm = {
     members = [
-      Madouura
       Flakebi
+      GZGavinZhao
+      LunNova
       mschwaig
     ];
     githubTeams = [ "rocm-maintainers" ];

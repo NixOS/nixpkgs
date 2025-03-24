@@ -188,6 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/LnL7/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
+
+    # remove 4.0.2
+    # https://github.com/fish-shell/fish-shell/issues/11254
+    ./1d78c8bd4295262a3118f478e6b3a7c7536fa282.patch
   ];
 
   # Fix FHS paths in tests
@@ -317,16 +321,12 @@ stdenv.mkDerivation (finalAttrs: {
       darwin.system_cmds
     ];
 
+  # we target the top-level make target which runs all the cmake/ctest
+  # tests, including test_cargo-test
   checkTarget = "fish_run_tests";
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
   '';
-  checkFlags = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # thread 'tests::string_escape::test_escape_random_url' panicked at src/tests/string_escape.rs:122:9:
-    # assertion `left == right` failed: Escaped and then unescaped string ... but got back a different string ...
-    # https://github.com/fish-shell/fish-shell/issues/11254
-    "--skip=tests::string_escape::test_escape_random_url"
-  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

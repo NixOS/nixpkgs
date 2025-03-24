@@ -20,31 +20,16 @@ GEM
       concurrent-ruby (~> 1.0)
     iso-639 (0.3.8)
       csv
-    json (2.10.1)
+    json (2.10.2)
     mini_portile2 (2.8.8)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.18.3)
+    nokogiri (1.18.5)
       mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
-    nokogiri (1.18.3-aarch64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.3-aarch64-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.3-arm-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.3-arm-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.3-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.1)
     parslet (2.0.0)
+    pdfkit (0.8.7.3)
     public_suffix (6.0.1)
     racc (1.8.1)
     rack (2.2.13)
@@ -53,6 +38,7 @@ GEM
     rack-protection (2.2.4)
       rack
     redcarpet (3.6.1)
+    rexml (3.4.1)
     ruby-dbus (0.14.1)
     ruby2_keywords (0.0.5)
     showoff (0.20.4)
@@ -86,17 +72,11 @@ GEM
     tilt (2.6.0)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
   ruby
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
 
 DEPENDENCIES
+  pdfkit (~> 0.8.7)
+  rexml (~> 3.4)
   showoff
 
 BUNDLED WITH

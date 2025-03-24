@@ -14,13 +14,13 @@
 
 postgresqlBuildExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.18.2";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
     tag = version;
-    hash = "sha256-/PKk8/cS6jqL+mhSqFU6gybqDx3ld77RLF/uB+1XJCQ=";
+    hash = "sha256-8E5oEEsyu247WtmR20xRO/SAI6KXYSVCrU0qta6iUB8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,14 +29,12 @@ postgresqlBuildExtension rec {
     libkrb5
   ];
 
-  cmakeFlags =
-    [
-      "-DSEND_TELEMETRY_DEFAULT=OFF"
-      "-DREGRESS_CHECKS=OFF"
-      "-DTAP_CHECKS=OFF"
-    ]
-    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "SEND_TELEMETRY_DEFAULT" false)
+    (lib.cmakeBool "REGRESS_CHECKS" false)
+    (lib.cmakeBool "TAP_CHECKS" false)
+    (lib.cmakeBool "APACHE_ONLY" (!enableUnfree))
+  ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.

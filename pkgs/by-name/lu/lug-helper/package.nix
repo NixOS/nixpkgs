@@ -62,7 +62,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           unzip
           libnotify
         ]
-      }
+      } \
+      --prefix XDG_DATA_DIRS : "$out"
 
   '';
   passthru.updateScript = nix-update-script { };
