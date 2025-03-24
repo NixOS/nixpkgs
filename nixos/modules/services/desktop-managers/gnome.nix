@@ -15,7 +15,7 @@ let
     literalExpression
     ;
 
-  cfg = config.services.xserver.desktopManager.gnome;
+  cfg = config.services.desktopManager.gnome;
   serviceCfg = config.services.gnome;
 
   # Prioritize nautilus by default when opening directories
@@ -79,6 +79,42 @@ in
 
 {
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "enable" ]
+      [ "services" "desktopManager" "gnome" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "extraGSettingsOverrides" ]
+      [ "services" "desktopManager" "gnome" "extraGSettingsOverrides" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "extraGSettingsOverridePackages" ]
+      [ "services" "desktopManager" "gnome" "extraGSettingsOverridePackages" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "debug" ]
+      [ "services" "desktopManager" "gnome" "debug" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "sessionPath" ]
+      [ "services" "desktopManager" "gnome" "sessionPath" ]
+    )
+    # flashback options
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "flashback" "customSessions" ]
+      [ "services" "desktopManager" "gnome" "flashback" "customSessions" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "flashback" "enableMetacity" ]
+      [ "services" "desktopManager" "gnome" "flashback" "enableMetacity" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "gnome" "flashback" "panelModulePackages" ]
+      [ "services" "desktopManager" "gnome" "flashback" "panelModulePackages" ]
+    )
+  ];
+
   meta = {
     doc = ./gnome.md;
     maintainers = lib.teams.gnome.members;
@@ -94,7 +130,7 @@ in
       games.enable = mkEnableOption "GNOME games";
     };
 
-    services.xserver.desktopManager.gnome = {
+    services.desktopManager.gnome = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -206,8 +242,8 @@ in
       system.nixos-generate-config.desktopConfiguration = [
         ''
           # Enable the GNOME Desktop Environment.
-          services.xserver.displayManager.gdm.enable = true;
-          services.xserver.desktopManager.gnome.enable = true;
+          services.displayManager.gdm.enable = true;
+          services.desktopManager.gnome.enable = true;
         ''
       ];
 
@@ -326,7 +362,7 @@ in
     })
 
     (lib.mkIf serviceCfg.core-shell.enable {
-      services.xserver.desktopManager.gnome.sessionPath =
+      services.desktopManager.gnome.sessionPath =
         let
           mandatoryPackages = [
             pkgs.gnome-shell
