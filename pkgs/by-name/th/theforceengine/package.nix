@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://theforceengine.github.io";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ devusb ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
