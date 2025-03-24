@@ -805,6 +805,7 @@ with lib.maintainers;
     members = [
       _9999years
       Gabriella439
+      lf-
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
@@ -825,6 +826,8 @@ with lib.maintainers;
     members = [
       raitobezarius
       qyriad
+      _9999years
+      lf-
     ];
     scope = "Maintain the Lix package manager inside of Nixpkgs.";
     shortName = "Lix ecosystem";
