@@ -10,17 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.9.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
-    rev = "cli/v${version}";
-    hash = "sha256-oK1tCPoTeUHvVdi+ym4J5xEj2NIi2zHQpNU1KUchQfY=";
+    rev = "@biomejs/biome@${finalAttrs.version}";
+    hash = "sha256-2oHEaHKTyD+j34Or/Obb0pPGpEXEgSq6wowyYVV6DqI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lo4IAStdv1CW/cQYzRDLzDwsDqCwoo5xKen2Rti9kPU=";
+  cargoHash = "sha256-jh7LlX7Ip2oy5NcXHfFkGeyJVGeu4Y0HqN690bok+/E=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,17 +34,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = cargoBuildFlags ++ [
+    # fails due to cargo insta
     "-- --skip=commands::check::print_json"
     "--skip=commands::check::print_json_pretty"
     "--skip=commands::explain::explain_logs"
     "--skip=commands::format::print_json"
     "--skip=commands::format::print_json_pretty"
     "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
+    "--skip=cases::migrate_v2::should_successfully_migrate_sentry"
   ];
 
   env = {
     BIOME_VERSION = version;
     LIBGIT2_NO_VENDOR = 1;
+    INSTA_UPDATE = "no";
   };
 
   preCheck = ''
