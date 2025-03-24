@@ -214,6 +214,7 @@ in {
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
+  bitbox-bridge = runTest ./bitbox-bridge.nix;
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
