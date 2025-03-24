@@ -58,8 +58,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "transformers"
+    "jsonlines"
     "numpy"
+    "transformers"
   ];
 
   pythonImportsCheck = [
