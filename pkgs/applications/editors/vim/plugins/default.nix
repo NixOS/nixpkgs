@@ -19,6 +19,10 @@ let
 
   initialPackages = self: { };
 
+  cocPlugins = callPackage ./cocPlugins.nix {
+    inherit buildVimPlugin;
+  };
+
   luaPackagePlugins = callPackage ./luaPackagePlugins.nix {
     inherit (neovimUtils) buildNeovimPlugin;
   };
@@ -53,6 +57,7 @@ let
 in
 lib.pipe initialPackages [
   (extends plugins)
+  (extends cocPlugins)
   (extends luaPackagePlugins)
   (extends nodePackagePlugins)
   (extends nonGeneratedPlugins)
