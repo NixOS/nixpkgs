@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2025.3.2025031001";
-    hash = "sha256-uYz0WgFqbLohCEmT8ewYgvlFrVLuZr9OAiKnrbNup7U=";
+    version = "2024.15.2024091301";
+    hash = "sha256-MB8Vq2rjO37yW3Zh+f8ek/yz0qT+ZYHn/JnF5ZA6CXQ=";
   };
 
   buildInputs = [ icu ];
