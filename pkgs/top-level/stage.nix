@@ -51,7 +51,15 @@ in
 
 , # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? stdenv.override { cc = null; hasCC = false; }
+  stdenvNoCC ? (
+    stdenv.override {
+      cc = null;
+      hasCC = false;
+    }
+    # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
+    # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
+  )
 
 , # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
