@@ -4,7 +4,10 @@
   lib,
   nix-update-script,
 }:
-beamPackages.mixRelease rec {
+let
+  inherit (beamPackages) mixRelease fetchMixDeps erlang;
+in
+mixRelease rec {
   pname = "protoc-gen-elixir";
   version = "0.14.1";
 
@@ -15,12 +18,14 @@ beamPackages.mixRelease rec {
     hash = "sha256-SbwjOFTyN3euMNXkuIP49zNqoXmD8611IXgqPwqfuFU=";
   };
 
-  mixFodDeps = beamPackages.fetchMixDeps {
+  mixFodDeps = fetchMixDeps {
     inherit version src;
     pname = "protoc-gen-elixir-deps";
 
     hash = "sha256-T1uL3xXXmCkobJJhS3p6xMrJUyiim3AMwaG87/Ix7A8=";
   };
+
+  buildInputs = [ erlang ];
 
   postBuild = ''
     mix do escript.build
