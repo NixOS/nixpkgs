@@ -14,23 +14,21 @@
   libvorbis,
   openal,
   udev,
-  libXi,
   libX11,
   libXcursor,
   libXrandr,
   libXrender,
   xcbutilimage,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
-  version = "3.0.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
     tag = finalAttrs.version;
-    hash = "sha256-e6x/L2D3eT6F/DBLQDZ+j0XD5NL9RalWZA8kcm9lZ3g=";
+    hash = "sha256-m8FVXM56qjuRKRmkcEcRI8v6IpaJxskoUQ+sNsR1EhM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -46,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isLinux udev
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
-      libXi
       libXcursor
       libXrandr
       libXrender
@@ -70,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })
