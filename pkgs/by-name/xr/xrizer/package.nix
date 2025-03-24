@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libGL,
   libxkbcommon,
   nix-update-script,
   openxr-loader,
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace Cargo.toml \
       --replace-fail 'features = ["static"]' 'features = ["linked"]'
+    substituteInPlace src/graphics_backends/gl.rs \
+      --replace-fail 'libGLX.so.0' '${lib.getLib libGL}/lib/libGLX.so.0'
   '';
 
   postInstall = ''
