@@ -41,6 +41,8 @@ tcl.mkTclDerivation rec {
     homepage = "https://sourceforge.net/projects/tkimg/";
     description = "Img package adds several image formats to Tcl/Tk";
     maintainers = with lib.maintainers; [ matthewcroughan ];
+    # fdopen is not defined but used.
+    badPlatforms = [ "aarch64-darwin" ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
