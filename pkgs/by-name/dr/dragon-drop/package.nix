@@ -26,14 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/dragon-drop $out/bin/xdragon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple drag-and-drop source/sink for X or Wayland (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       das_j
       taliyahwebb
     ];
     mainProgram = "dragon-drop";
+    platforms = lib.platforms.linux;
   };
 })
