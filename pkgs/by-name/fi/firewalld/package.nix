@@ -110,6 +110,10 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  postInstall = lib.optionalString (!withGui) ''
+    rm $out/bin/firewall-{applet,config}
+  '';
+
   dontWrapGApps = true;
 
   preFixup = lib.optionalString withGui ''
