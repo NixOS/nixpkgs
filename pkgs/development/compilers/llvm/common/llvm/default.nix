@@ -75,6 +75,8 @@ let
       checkDeps = ps: [ ps.psutil ];
     in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
   else python3;
+in {
+  inherit pname version;
 
   pname = "llvm";
 
@@ -94,10 +96,6 @@ let
     '' + lib.optionalString (lib.versionAtLeast release_version "21") ''
       cp -r ${monorepoSrc}/libc "$out"
     '') else src;
-in {
-  inherit pname version;
-
-  src = src';
 
   sourceRoot = "${finalAttrs.src.name}/${pname}";
 
