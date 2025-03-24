@@ -96,7 +96,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XY8NZhWCRLjpgq0dOClzftvMR7g/X64b+OYyjOGC/lM=";
   };
 
@@ -282,17 +282,18 @@ buildPythonApplication rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       offline
       numinit
       mvnetbiz
+      lucasew
     ];
   };
 }
