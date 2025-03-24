@@ -118,9 +118,13 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  postInstall = lib.optionalString (!withGui) ''
-    rm $out/bin/firewall-{applet,config}
-  '';
+  postInstall =
+    ''
+      rm -r $out/share/firewalld/testsuite
+    ''
+    + lib.optionalString (!withGui) ''
+      rm $out/bin/firewall-{applet,config}
+    '';
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -134,10 +138,9 @@ stdenv.mkDerivation rec {
     '';
 
   postFixup = ''
-    chmod +x $out/share/firewalld/*.py $out/share/firewalld/testsuite/python/*.py $out/share/firewalld/testsuite/{,integration/}testsuite
-    patchShebangs --host $out/share/firewalld/testsuite/{,integration/}testsuite $out/share/firewalld/*.py
+    chmod +x $out/share/firewalld/*.py
+    patchShebangs --host $out/share/firewalld/*.py
     wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
-    wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
   '';
 
   meta = {
