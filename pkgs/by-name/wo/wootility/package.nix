@@ -48,7 +48,6 @@ appimageTools.wrapType2 {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      davidtwco
       sodiboo
       returntoreality
     ];
