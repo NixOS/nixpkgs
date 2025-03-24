@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-Bo8nqhxL6st/Nk9wSqly7FH+RNkT0baB+1bbTIolUis=";
+    hash = "sha256-vR0FoBDsSMQiSGgqMegPqPvDgq00fqF7d+jKvqgeCAg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/huggingface/peft";
     description = "State-of-the art parameter-efficient fine tuning";
-    changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/peft/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };
