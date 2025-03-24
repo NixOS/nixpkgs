@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jeromerobert/hmat-oss";
     license = licenses.gpl2;
     platforms = platforms.unix;
+    # Lapack linking erros on macOS:
+    # "_LAPACKE_cgeqrf", referenced from:
+    #  hmat::ScalarArray<std::__1::complex<float>>::qrDecomposition(hmat::ScalarArray<std::__1::complex<float>>*, int) in scalar_array.cpp.o
+    # "_LAPACKE_cgesdd", referenced from:
+    # int hmat::sddCall<std::__1::complex<float>>(char, int, int, std::__1::complex<float>*, int, hmat::Types<std::__1::complex<float>>::real*, std::__1::complex<float>*, int, std::__1::complex<float>*, int) in lapack_operations.cpp.o
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ gdinh ];
   };
 }
