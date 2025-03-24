@@ -13558,6 +13558,12 @@
     githubId = 13804737;
     keys = [ { fingerprint = "7FE2 113A A08B 695A C8B8  DDE6 AE53 B4C2 E58E DD45"; } ];
   };
+  lf- = {
+    name = "Jade Lovelace";
+    github = "lf-";
+    githubId = 6652840;
+    matrix = "@jade_:matrix.org";
+  };
   lgbishop = {
     email = "lachlan.bishop@hotmail.com";
     github = "lgbishop";
