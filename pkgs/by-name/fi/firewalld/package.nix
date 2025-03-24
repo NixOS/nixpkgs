@@ -57,12 +57,13 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      substituteInPlace src/firewall/config/__init__.py.in \
-        --replace-fail /usr "$out"
+      substituteInPlace config/xmlschema/check.sh \
+        --replace-fail /usr/bin/ ""
 
-      for file in config/firewall-{applet,config}.desktop.in; do
-        substituteInPlace $file \
-          --replace "/usr/bin/" "$out/bin/"
+      for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
+        config/firewall-{applet,config}.desktop.in; do
+          substituteInPlace $file \
+            --replace-fail /usr "$out"
       done
     ''
     + lib.optionalString withGui ''
