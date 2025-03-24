@@ -2664,11 +2664,6 @@ in
     ];
   };
 
-  plenary-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.plenary-nvim;
-    runtimeDeps = [ curl ];
-  };
-
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
     # Optional treesitter support
     nvimSkipModule = "poimandres.highlights";
