@@ -1310,8 +1310,6 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS
 
-  _86Box = callPackage ../applications/emulators/86box { };
-
   _86Box-with-roms = _86Box.override {
     unfreeEnableRoms = true;
     unfreeEnableDiscord = true;
