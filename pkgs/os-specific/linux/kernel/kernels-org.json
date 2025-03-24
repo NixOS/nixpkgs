@@ -30,5 +30,9 @@
     "6.13": {
         "version": "6.13.8",
         "hash": "sha256:1fqsfnam0ca2lyqgi9vh7x6xa24yjk6ym6z85bn6nrrxsxczm6i5"
+    },
+    "6.14": {
+        "version": "6.14",
+        "hash": "sha256:0w3nqh02vl8f2wsx3fmsvw1pdsnjs5zfqcmv2w2vnqdiwy1vd552"
     }
 }
