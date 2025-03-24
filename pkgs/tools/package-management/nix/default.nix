@@ -186,7 +186,12 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_25";
   };
 
-  nix_2_26 = addTests "nix_2_26" (callPackage ./vendor/2_26/componentized.nix { inherit (self.nix_2_24.meta) maintainers; });
+  components.nix_2_26 =
+    (callPackage ./vendor/2_26/componentized.nix {
+      inherit (self.nix_2_24.meta) maintainers;
+      selfAttributeName = "nix_2_26";
+    });
+  nix_2_26 = addTests "nix_2_26" self.components.nix_2_26.nix-everything;
 
   git = common rec {
     version = "2.25.0";
