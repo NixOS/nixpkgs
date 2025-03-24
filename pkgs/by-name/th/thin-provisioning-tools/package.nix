@@ -28,12 +28,8 @@ rustPlatform.buildRustPackage rec {
     lvm2
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rio-0.9.4" = "sha256-2l5cm7YLZyf2kuRPMytu7Fdewi6x3+9KyyQBv2F8ZDA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cjNgp+StWkqtR1Y4caLv8EWhHsinSpbc/hgUUG7CGtE=";
 
   passthru.tests = {
     inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
