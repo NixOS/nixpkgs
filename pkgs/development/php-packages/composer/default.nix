@@ -12,6 +12,7 @@
   curl,
   cacert,
   makeBinaryWrapper,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -110,6 +111,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
