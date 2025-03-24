@@ -1,18 +1,18 @@
 {
   buildOctavePackage,
   lib,
-  fetchhg,
+  fetchzip,
   matgeom,
+  stdenv,
 }:
 
 buildOctavePackage rec {
   pname = "geometry";
-  version = "unstable-2021-07-07";
+  version = "4.1.0";
 
-  src = fetchhg {
-    url = "http://hg.code.sf.net/p/octave/${pname}";
-    rev = "04965cda30b5f9e51774194c67879e7336df1710";
-    sha256 = "sha256-ECysYOJMF4gPiCFung9hFSlyyO60X3MGirQ9FlYDix8=";
+  src = fetchzip {
+    url = "https://downloads.sourceforge.net/project/octave/Octave%20Forge%20Packages/Individual%20Package%20Releases/geometry-${version}.tar.gz";
+    sha256 = "sha256-Gru+wDm8TzAMrN49Jj7d7vj7sUrxPTbGbwmterwQAAw";
   };
 
   requiredOctavePackages = [
@@ -20,11 +20,14 @@ buildOctavePackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://octave.sourceforge.io/geometry/index.html";
+    homepage = "https://gnu-octave.github.io/packages/geometry/";
     license = with licenses; [
       gpl3Plus
       boost
     ];
+    # Build error on macOS
+    # ./martinez.h:40:30: error: no template named 'binary_function'; did you mean '__binary_function'?
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Library for extending MatGeom functionality";
   };
