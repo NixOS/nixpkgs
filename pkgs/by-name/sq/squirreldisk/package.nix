@@ -15,6 +15,7 @@
   stdenv,
   copyDesktopItems,
   makeDesktopItem,
+  autoPatchelfHook,
 }:
 let
   pname = "squirreldisk";
@@ -61,15 +62,13 @@ rustPlatform.buildRustPackage rec {
     cp -r ${frontend-build}/* frontend-build
 
     substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend-build"'
-
-    # Copy pdu binary from nixpkgs, since the default packaged binary has issues.
-    cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
   '';
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
     copyDesktopItems
+    autoPatchelfHook
   ];
   buildInputs = [
     dbus
