@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -80,6 +81,12 @@ buildPythonPackage rec {
     "test_layoutpredictor"
     "test_readingorder"
     "test_tf_predictor"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+    "tests/test_code_formula_predictor.py"
+    "tests/test_layout_predictor.py"
   ];
 
   meta = {
