@@ -8,14 +8,14 @@
   zlib,
   gitMinimal,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
   version = "2.0.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
-    rev = "@biomejs/biome@${version}";
+    rev = "@biomejs/biome@${finalAttrs.version}";
     hash = "sha256-WSemkzWREUkIDA0hQJ7uKQGRD4QZvcL80clheyUwcEk=";
   };
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = cargoBuildFlags ++ [
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
     # fails due to cargo insta
     "-- --skip=commands::check::print_json"
     "--skip=commands::check::print_json_pretty"
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    BIOME_VERSION = version;
+    BIOME_VERSION = finalAttrs.version;
     LIBGIT2_NO_VENDOR = 1;
   };
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
-    changelog = "https://github.com/biomejs/biome/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/biomejs/biome/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
@@ -68,4 +68,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "biome";
   };
-}
+})
