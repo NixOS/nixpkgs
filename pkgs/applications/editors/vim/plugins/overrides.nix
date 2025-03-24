@@ -3454,19 +3454,6 @@ in
     ];
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  VimCompletesMe = buildVimPlugin {
-    pname = "VimCompletesMe";
-    version = "2022-02-18";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "VimCompletesMe";
-      rev = "9adf692d7ae6424038458a89d4a411f0a27d1388";
-      sha256 = "1sndgb3291dyifaa8adri2mb8cgbinbar3nw1fnf67k9ahwycaz0";
-    };
-    meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
-  };
-
   vimsence = super.vimsence.overrideAttrs {
     meta = with lib; {
       description = "Discord rich presence for Vim";
