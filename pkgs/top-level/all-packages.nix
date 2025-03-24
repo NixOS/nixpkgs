@@ -4558,11 +4558,12 @@ with pkgs;
   nm-tray = libsForQt5.callPackage ../tools/networking/networkmanager/tray.nix { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud28 nextcloud29 nextcloud30;
+    nextcloud28 nextcloud29 nextcloud30 nextcloud31;
 
   nextcloud28Packages = callPackage ../servers/nextcloud/packages { ncVersion = "28"; };
   nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
+  nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
 
 
   nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
