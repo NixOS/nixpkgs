@@ -55,9 +55,12 @@ buildPythonPackage rec {
     "--no-deps"
   ];
 
-  postInstall = ''
+  postBuild = ''
     cmake ./
     make
+  '';
+
+  postInstall = ''
     cp libcppyy.so $out/${python3.sitePackages}/
   '';
 
