@@ -8544,8 +8544,6 @@ with pkgs;
 
   cxxtest = python3Packages.callPackage ../development/libraries/cxxtest { };
 
-  cypress = callPackage ../development/web/cypress { };
-
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
   db = db5;
