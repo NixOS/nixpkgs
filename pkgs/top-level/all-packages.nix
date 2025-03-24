@@ -13394,10 +13394,7 @@ with pkgs;
         inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
       };
-      freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {
-        stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-        inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
-      };
+      freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {};
     })
     freerdp
     freerdp3
