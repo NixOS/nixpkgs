@@ -34,8 +34,7 @@ let
       pygobject3
     ]
     ++ lib.optionals withGui [
-      pyqt5
-      pyqt5-sip
+      pyqt6
     ]
   );
 in
