@@ -1,0 +1,16 @@
+# shellcheck shell=bash
+
+function boltFixupPhase {
+  local i
+  while IFS= read -r -d $'\0' i; do
+    if ! isELF "$i"; then continue; fi
+    if ! @readelf@ --program-headers "$i" | grep -q LOAD; then continue; fi
+
+    llvm-bolt "$i" -o $(dirname "$i")/.bolt-$(basename "$i") "${boltFlags[@]-}"
+    mv $(dirname "$i")/.bolt-$(basename "$i") "$i"
+  done < <(find "$prefix" -type f -print0)
+}
+
+if [ -z "${dontUseBolt-}" ]; then
+    appendToVar preFixupPhases boltFixupPhase
+fi
