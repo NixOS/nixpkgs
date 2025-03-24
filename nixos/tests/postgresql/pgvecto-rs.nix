@@ -7,7 +7,7 @@
 let
   inherit (pkgs) lib;
 
-  # Test cases from https://docs.pgvecto.rs/use-cases/hybrid-search.html
+  # Test cases from https://docs.vectorchord.ai/use-case/hybrid-search.html
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION vectors;
 

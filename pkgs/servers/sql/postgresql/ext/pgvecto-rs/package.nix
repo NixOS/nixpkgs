@@ -17,7 +17,7 @@
 let
   # Upstream only works with clang 16, so we're pinning it here to
   # avoid future incompatibility.
-  # See https://docs.pgvecto.rs/developers/development.html#environment, step 4
+  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 2
   clang = clang_16;
   rustPlatform' = rustPlatform // {
     bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
@@ -27,7 +27,7 @@ in
 (buildPgrxExtension.override {
   # Upstream only works with a fixed version of cargo-pgrx for each release,
   # so we're pinning it here to avoid future incompatibility.
-  # See https://docs.pgvecto.rs/developers/development.html#environment, step 6
+  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 5
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
   rustPlatform = rustPlatform';
 })
