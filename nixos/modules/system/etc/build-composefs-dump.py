@@ -166,7 +166,8 @@ def main() -> None:
                 composefs_path = ComposefsPath(
                     attrs,
                     path=glob_target,
-                    size=100,
+                    # since paths should be all ascii chars, it's safe to use len here
+                    size=len(glob_source),
                     filetype=FileType.symlink,
                     mode="0777",
                     payload=glob_source,
@@ -178,8 +179,8 @@ def main() -> None:
             if mode == "symlink" or mode == "direct-symlink":
                 composefs_path = ComposefsPath(
                     attrs,
-                    # A high approximation of the size of a symlink
-                    size=100,
+                    # since paths should be all ascii chars, it's safe to use len here
+                    size=len(source),
                     filetype=FileType.symlink,
                     mode="0777",
                     payload=source,
@@ -187,6 +188,7 @@ def main() -> None:
             elif os.path.isdir(source):
                 composefs_path = ComposefsPath(
                     attrs,
+                    # size for directory is ignored by composefs, value is not important
                     size=4096,
                     filetype=FileType.directory,
                     mode=mode,
@@ -198,8 +200,7 @@ def main() -> None:
                     size=os.stat(source).st_size,
                     filetype=FileType.file,
                     mode=mode,
-                    # payload needs to be relative path in this case
-                    payload=target.lstrip("/"),
+                    payload=source,
                 )
             paths[target] = composefs_path
             add_leading_directories(target, attrs, paths)
