@@ -76,7 +76,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [
       danth
-      davidtwco
       Br1ght0ne
       Frostman
     ];
