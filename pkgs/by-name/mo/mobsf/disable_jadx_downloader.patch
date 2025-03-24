@@ -1,0 +1,21 @@
+From bde7f7a95f26163ac56895e6c7dbba199bb37b16 Mon Sep 17 00:00:00 2001
+From: countingbeeps <gamedungeon@protonmail.com>
+Date: Thu, 28 Nov 2024 12:49:22 -0600
+Subject: [PATCH] disable jadx installer
+
+---
+ mobsf/MobSF/tools_download.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mobsf/MobSF/tools_download.py b/mobsf/MobSF/tools_download.py
+index 203994467..7e414c67c 100644
+--- a/mobsf/MobSF/tools_download.py
++++ b/mobsf/MobSF/tools_download.py
+@@ -59,6 +59,7 @@ def download_file(url, file_path):
+ 
+ def install_jadx(mobsf_home, version='1.5.0'):
+     """Install JADX dynamically."""
++    return
+     try:
+         url = ('https://github.com/skylot/jadx/releases/download/'
+                f'v{version}/jadx-{version}.zip')
