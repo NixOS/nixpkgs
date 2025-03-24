@@ -5,7 +5,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nodejs_20,
-  electron_32,
+  electron_33,
 }:
 buildNpmPackage rec {
   pname = "trakkr";
@@ -29,8 +29,8 @@ buildNpmPackage rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron_32.dist} \
-      -c.electronVersion=${electron_32.version} \
+      -c.electronDist=${electron_33.dist} \
+      -c.electronVersion=${electron_33.version} \
       --publish=never
 
     runHook postBuild
@@ -53,7 +53,7 @@ buildNpmPackage rec {
     # Code relies on checking app.isPackaged, which returns false if the executable is electron.
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-    makeWrapper '${electron_32}/bin/electron' "$out/bin/Trakkr" \
+    makeWrapper '${electron_33}/bin/electron' "$out/bin/Trakkr" \
       --add-flags "$out/share/lib/Trakkr/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags "--disable-gpu" \
