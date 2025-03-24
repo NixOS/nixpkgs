@@ -5,6 +5,7 @@
   fetchFromGitHub,
   tbb_2022_0,
   useTBB ? true,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals useTBB [ tbb_2022_0 ];
+  buildInputs =
+    lib.optionals useTBB [ tbb_2022_0 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.13") ];
 
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)
