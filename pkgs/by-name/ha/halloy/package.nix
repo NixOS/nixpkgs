@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
-      alsa-lib
       libxkbcommon
       openssl
       vulkan-loader
@@ -56,7 +55,10 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wayland
+      alsa-lib
+    ];
 
   desktopItems = [
     (makeDesktopItem {
