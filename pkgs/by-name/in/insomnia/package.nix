@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   appimageTools,
+  undmg,
 }:
 let
   pname = "insomnia";
@@ -11,6 +12,10 @@ let
   src =
     fetchurl
       {
+        aarch64-darwin = {
+          url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
+          hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
+        };
         x86_64-darwin = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
           hash = "sha256-3LjQYFCIIrjEQ+J0m7Xau3qcHMRR3xU078QOVgoBat4=";
@@ -29,6 +34,7 @@ let
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
     license = licenses.asl20;
     platforms = [
+      "aarch64-darwin"
       "x86_64-linux"
       "x86_64-darwin"
     ];
@@ -49,23 +55,7 @@ if stdenv.hostPlatform.isDarwin then
       ;
     sourceRoot = ".";
 
-    unpackCmd = ''
-      echo "Creating temp directory"
-      mnt=$(TMPDIR=/tmp mktemp -d -t nix-XXXXXXXXXX)
-      function finish {
-        echo "Ejecting temp directory"
-        /usr/bin/hdiutil detach $mnt -force
-        rm -rf $mnt
-      }
-      # Detach volume when receiving SIG "0"
-      trap finish EXIT
-      # Mount DMG file
-      echo "Mounting DMG file into \"$mnt\""
-      /usr/bin/hdiutil attach -nobrowse -mountpoint $mnt $curSrc
-      # Copy content to local dir for later use
-      echo 'Copying extracted content into "sourceRoot"'
-      cp -a $mnt/Insomnia.app $PWD/
-    '';
+    nativeBuildInputs = [ undmg ];
 
     installPhase = ''
       runHook preInstall
