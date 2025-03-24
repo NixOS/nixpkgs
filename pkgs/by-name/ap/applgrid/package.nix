@@ -5,7 +5,7 @@
   gfortran,
   hoppet,
   lhapdf,
-  root5,
+  root,
   zlib,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     hoppet
     lhapdf
-    root5
+    root
     zlib
   ];
 
