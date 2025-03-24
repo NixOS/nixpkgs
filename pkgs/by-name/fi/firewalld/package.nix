@@ -12,10 +12,12 @@
   intltool,
   ipset,
   iptables,
+  kdePackages,
   kmod,
   libnotify,
   libxml2,
   libxslt,
+  networkmanager,
   networkmanagerapplet,
   pkg-config,
   python3,
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       substituteInPlace src/firewall/config/__init__.py.in \
-        --replace "/usr/share" "$out/share"
+        --replace-fail /usr "$out"
 
       for file in config/firewall-{applet,config}.desktop.in; do
         substituteInPlace $file \
@@ -65,7 +67,8 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString withGui ''
       substituteInPlace src/firewall-applet.in \
-        --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
+        --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
+        --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
     '';
 
   nativeBuildInputs = [
@@ -94,6 +97,7 @@ stdenv.mkDerivation rec {
       ipset
       iptables
       kmod
+      networkmanager
       pythonPath
       sysctl
     ]
