@@ -29,6 +29,10 @@ rustPlatform.buildRustPackage {
   preCheck = ''
     patchShebangs tests/editor/fake_editor.sh
   '';
+  checkFlags = [
+    # this test can be flaky ; help is needed to stabilize it in upstream
+    "--skip=git_time_keeper::white_box::lock_file::create_as_many_as_lock_files_when_starting_several_times"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
