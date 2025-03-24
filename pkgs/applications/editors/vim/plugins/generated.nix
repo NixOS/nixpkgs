@@ -458,6 +458,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  VimCompletesMe = buildVimPlugin {
+    pname = "VimCompletesMe";
+    version = "2015-04-20";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "VimCompletesMe";
+      rev = "b915ac2c081dd5aec69b561b04a8ac1778d2277c";
+      sha256 = "0mal1raflzzmahb4skc01dwp9vasvwcyh9mpw3r75gfrfzbyjrlk";
+    };
+    meta.homepage = "https://github.com/vim-scripts/VimCompletesMe/";
+    meta.hydraPlatforms = [ ];
+  };
+
   VimOrganizer = buildVimPlugin {
     pname = "VimOrganizer";
     version = "2020-12-15";
