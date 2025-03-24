@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, helm, sops }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  helm,
+  sops,
+}:
 
 buildGoModule rec {
   pname = "helm-sops";
@@ -12,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-jynNpi9XRaLLW1rbvFTgX5CHDoJxagFpx9nGK0F2H0Y=";
 
-  nativeBuildInputs = [ helm sops ];
+  nativeBuildInputs = [
+    helm
+    sops
+  ];
 
   meta = with lib; {
     description = "A Helm plugin to encrypt secrets with SOPS";
