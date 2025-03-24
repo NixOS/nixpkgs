@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
       wulfsta
       broke
     ];
+    # cannot find openmp
+    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.lgpl21;
   };
 
