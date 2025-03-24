@@ -2132,8 +2132,6 @@ with pkgs;
 
   cot = with python3Packages; toPythonApplication cot;
 
-  crosvm = callPackage ../applications/virtualization/crosvm { };
-
   crossplane = with python3Packages; toPythonApplication crossplane;
 
   csv2md = with python3Packages; toPythonApplication csv2md;
