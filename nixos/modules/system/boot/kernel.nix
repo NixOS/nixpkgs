@@ -91,32 +91,7 @@ in
         ]
       '';
       description = ''
-        A list of additional patches to apply to the kernel.
-
-        Every item should be an attribute set with the following attributes:
-
-        ```nix
-        {
-          name = "foo";                 # descriptive name, required
-
-          patch = ./foo.patch;          # path or derivation that contains the patch source
-                                        # (required, but can be null if only config changes
-                                        # are needed)
-
-          extraStructuredConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
-            FOO = lib.kernel.yes;       # (optional)
-          };                            # values should generally be lib.kernel.yes,
-                                        # lib.kernel.no or lib.kernel.module
-
-          features = {                  # attrset of extra "features" the kernel is considered to have
-            foo = true;                 # (may be checked by other NixOS modules, optional)
-          };
-
-          extraConfig = "FOO y";        # extra configuration options in string form without the CONFIG_ prefix
-                                        # (optional, multiple lines allowed to specify multiple options)
-                                        # (deprecated, use extraStructuredConfig instead)
-        }
-        ```
+        A list of additional patches to apply to the kernel. Every item should be an attribute set as shown in the example below.
 
         There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
         that follow this format and can be used directly.
