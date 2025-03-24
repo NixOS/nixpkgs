@@ -57,7 +57,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.6";
+  version = "3.2.8";
 
   outputs = [
     "lib"
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-SEL/JIenmueYayxZlWlMO3lTUOcqiaZZC6RJbbH4DmE=";
+    hash = "sha256-BpNo8t0st8v2cTV2iSrjvjCPiDa26NwkWXgMGKFkeAQ=";
   };
 
   postPatch =
