@@ -18,7 +18,7 @@ let
       src = fetchHex {
         pkg = "unicode_util_compat";
         version = "0.7.0";
-        sha256 = "sha256-Je7m1n32GWDPanlCOVZlmbCeF+Zo03ACR7xJhjgVJSE=";
+        hash = "sha256-Je7m1n32GWDPanlCOVZlmbCeF+Zo03ACR7xJhjgVJSE=";
       };
       beamDeps = [ ];
     };
@@ -28,7 +28,7 @@ let
       src = fetchHex {
         pkg = "ssl_verify_fun";
         version = "1.1.7";
-        sha256 = "sha256-/kwZDo83QB0wFnyMQF7aGUafNFd5h8dt3mE+g4u8Z/g=";
+        hash = "sha256-/kwZDo83QB0wFnyMQF7aGUafNFd5h8dt3mE+g4u8Z/g=";
       };
       beamDeps = [ ];
     };
@@ -38,7 +38,7 @@ let
       src = fetchHex {
         pkg = "parse_trans";
         version = "3.4.2";
-        sha256 = "sha256-TCU0feO3w1cy0y5pq0PRzu4L6uPzs63htZy9PdIk2co=";
+        hash = "sha256-TCU0feO3w1cy0y5pq0PRzu4L6uPzs63htZy9PdIk2co=";
       };
       beamDeps = [ ];
     };
@@ -48,7 +48,7 @@ let
       src = fetchHex {
         pkg = "mimerl";
         version = "1.3.0";
-        sha256 = "sha256-oeFaUNGIchfelfC5sHk+MoU/fCWKXNInZQiJs4g5/p0=";
+        hash = "sha256-oeFaUNGIchfelfC5sHk+MoU/fCWKXNInZQiJs4g5/p0=";
       };
       beamDeps = [ ];
     };
@@ -58,7 +58,7 @@ let
       src = fetchHex {
         pkg = "metrics";
         version = "1.0.1";
-        sha256 = "sha256-abCa3dxPdKQHFq5U0UD5O+sPuJeNhjbq3tDDG28JnxY=";
+        hash = "sha256-abCa3dxPdKQHFq5U0UD5O+sPuJeNhjbq3tDDG28JnxY=";
       };
       beamDeps = [ ];
     };
@@ -68,7 +68,7 @@ let
       src = fetchHex {
         pkg = "idna";
         version = "6.1.1";
-        sha256 = "sha256-kjdut4lEEu0ZrEdeSob3tBPBufu1vRbczVeTQVeUTOo=";
+        hash = "sha256-kjdut4lEEu0ZrEdeSob3tBPBufu1vRbczVeTQVeUTOo=";
       };
       beamDeps = [ unicode_util_compat ];
     };
@@ -78,7 +78,7 @@ let
       src = fetchHex {
         pkg = "certifi";
         version = "2.13.0";
-        sha256 = "sha256-jz2VM6DwYHCv39XVlrMuIcZYBmekkokYUbDic3vFB6E=";
+        hash = "sha256-jz2VM6DwYHCv39XVlrMuIcZYBmekkokYUbDic3vFB6E=";
       };
       beamDeps = [ ];
     };
@@ -88,7 +88,7 @@ let
       src = fetchHex {
         pkg = "zipper";
         version = "1.0.1";
-        sha256 = "sha256-ah/T4fDMHR31ZCyaDOIXgDZBGwpclkKFHR2idr1zfC0=";
+        hash = "sha256-ah/T4fDMHR31ZCyaDOIXgDZBGwpclkKFHR2idr1zfC0=";
       };
       beamDeps = [ ];
     };
@@ -98,7 +98,7 @@ let
       src = fetchHex {
         pkg = "lager";
         version = "3.9.1";
-        sha256 = "sha256-P1m6daBKmeXxi/kcifRtzlNvg8bLQV/ibm51pivvN9w=";
+        hash = "sha256-P1m6daBKmeXxi/kcifRtzlNvg8bLQV/ibm51pivvN9w=";
       };
       beamDeps = [ goldrush ];
     };
@@ -108,7 +108,7 @@ let
       src = fetchHex {
         pkg = "katana_code";
         version = "2.1.0";
-        sha256 = "sha256-rju6yhh1EViPaWlan/IiUcssxnL9zMGAKJd5vdJRde8=";
+        hash = "sha256-rju6yhh1EViPaWlan/IiUcssxnL9zMGAKJd5vdJRde8=";
       };
       beamDeps = [ ];
     };
@@ -118,7 +118,7 @@ let
       src = fetchHex {
         pkg = "jsx";
         version = "2.10.0";
-        sha256 = "sha256-moPjcEgHKYAWlo21Bvn60PAn3jdUbrg4s64QZMOgrWI=";
+        hash = "sha256-moPjcEgHKYAWlo21Bvn60PAn3jdUbrg4s64QZMOgrWI=";
       };
       beamDeps = [ ];
     };
@@ -128,7 +128,7 @@ let
       src = fetchHex {
         pkg = "hackney";
         version = "1.17.1";
-        sha256 = "sha256-0sup48gQOtAyBiPp8cM+jTeKFeqr4u6K5EGJjz01oYw=";
+        hash = "sha256-0sup48gQOtAyBiPp8cM+jTeKFeqr4u6K5EGJjz01oYw=";
       };
       beamDeps = [
         certifi
@@ -146,7 +146,7 @@ let
       src = fetchHex {
         pkg = "goldrush";
         version = "0.1.9";
-        sha256 = "sha256-mctBKM/8syJ1geXU2APVQT+mQ/TrllI/d9nmk32ZTOs=";
+        hash = "sha256-mctBKM/8syJ1geXU2APVQT+mQ/TrllI/d9nmk32ZTOs=";
       };
       beamDeps = [ ];
     };
@@ -156,7 +156,7 @@ let
       src = fetchHex {
         pkg = "getopt";
         version = "1.0.2";
-        sha256 = "sha256-oAKa6kMi+4KmH2h2ptnGbcmHi2y2H6oT3zGHOE/U6iY=";
+        hash = "sha256-oAKa6kMi+4KmH2h2ptnGbcmHi2y2H6oT3zGHOE/U6iY=";
       };
       beamDeps = [ ];
     };
@@ -166,7 +166,7 @@ let
       src = fetchHex {
         pkg = "elvis_core";
         version = "3.2.3";
-        sha256 = "sha256-oPDWgczZNVoWXDWXNnVVHxAhaHz5kvFcW/9mtmZO3gQ=";
+        hash = "sha256-oPDWgczZNVoWXDWXNnVVHxAhaHz5kvFcW/9mtmZO3gQ=";
       };
       beamDeps = [
         katana_code
@@ -179,7 +179,7 @@ let
       src = fetchHex {
         pkg = "egithub";
         version = "0.7.0";
-        sha256 = "sha256-4AnOEe/YAI0PntWdnEiOPpq+MCoPLNbWY+TMJnVvzEw=";
+        hash = "sha256-4AnOEe/YAI0PntWdnEiOPpq+MCoPLNbWY+TMJnVvzEw=";
       };
       beamDeps = [
         goldrush

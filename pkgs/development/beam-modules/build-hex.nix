@@ -7,7 +7,8 @@
 {
   name,
   version,
-  sha256,
+  hash ? "",
+  sha256 ? "",
   builder ? buildRebar3,
   hexPkg ? name,
   ...
@@ -22,8 +23,7 @@ let
 
         src = fetchHex {
           pkg = hexPkg;
-          inherit version;
-          inherit sha256;
+          inherit version hash sha256;
         };
       }
     );

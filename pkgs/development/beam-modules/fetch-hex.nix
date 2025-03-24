@@ -7,9 +7,12 @@
 {
   pkg,
   version,
-  sha256,
+  hash ? "",
+  sha256 ? "",
   meta ? { },
 }:
+assert (hash == "") -> (sha256 != "");
+assert lib.warnIf (sha256 != "") "Use of sha256 is being deprecated in favor of hash" true;
 
 stdenv.mkDerivation ({
   pname = pkg;
@@ -20,7 +23,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
-    inherit sha256;
+    inherit hash sha256;
   };
 
   unpackCmd = ''

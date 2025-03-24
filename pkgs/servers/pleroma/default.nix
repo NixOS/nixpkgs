@@ -26,7 +26,7 @@ beamPackages.mixRelease rec {
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
+    hash = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -148,7 +148,7 @@ beamPackages.mixRelease rec {
         src = beamPackages.fetchHex {
           pkg = name;
           inherit version;
-          sha256 = "0fnx2pm1n2m0zs2skivv43s42hrgpq9i143p9mngw9f3swjqpxvx";
+          hash = "sha256-ffeLJdfDJf5sTXeQEBO+L0NB9CB7x6mF/qAKG+oV3To=";
         };
 
         patchPhase = ''
@@ -166,7 +166,7 @@ beamPackages.mixRelease rec {
         src = fetchHex {
           pkg = "${name}";
           inherit version;
-          sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
+          hash = "sha256-H8h3OnGhVVOxecmGsi++6tGbKP5IbDMtSSlwD/63H4g=";
         };
 
         beamDeps = [ ];
