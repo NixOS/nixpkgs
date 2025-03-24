@@ -19,7 +19,6 @@
   qt6,
   rsync,
   rustPlatform,
-  writeShellScriptBin,
   yarn,
 
   swift,
@@ -52,38 +51,10 @@ let
 
   anki-build-python = python3.withPackages (ps: with ps; [ mypy-protobuf ]);
 
-  # anki shells out to git to check its revision, and also to update submodules
-  # We don't actually need the submodules, so we stub that out
-  fakeGit = writeShellScriptBin "git" ''
-    case "$*" in
-      "rev-parse --short=8 HEAD")
-        echo ${builtins.substring 0 8 rev}
-      ;;
-      *"submodule update "*)
-        exit 0
-      ;;
-      *)
-        echo "Unrecognized git: $@"
-        exit 1
-      ;;
-    esac
-  '';
-
-  # We don't want to run pip-sync, it does network-io
-  fakePipSync = writeShellScriptBin "pip-sync" ''
-    exit 0
-  '';
-
-  offlineYarn = writeShellScriptBin "yarn" ''
-    [[ "$1" == "install" ]] && exit 0
-    exec ${yarn}/bin/yarn --offline "$@"
-  '';
-
   pyEnv = buildEnv {
     name = "anki-pyenv-${version}";
     paths = with python3.pkgs; [
       pip
-      fakePipSync
       anki-build-python
     ];
     pathsToLink = [ "/bin" ];
@@ -134,8 +105,7 @@ python3.pkgs.buildPythonApplication {
   inherit cargoDeps yarnOfflineCache;
 
   nativeBuildInputs = [
-    fakeGit
-    offlineYarn
+    yarn
     fixup-yarn-lock
 
     cargo
@@ -227,10 +197,12 @@ python3.pkgs.buildPythonApplication {
     # Activate optimizations
     RELEASE = true;
 
+    # https://github.com/ankitects/anki/blob/24.11/docs/linux.md#packaging-considerations
+    OFFLINE_BUILD = "1";
     NODE_BINARY = lib.getExe nodejs;
     PROTOC_BINARY = lib.getExe protobuf;
     PYTHON_BINARY = lib.getExe python3;
-    YARN_BINARY = lib.getExe offlineYarn;
+    YARN_BINARY = lib.getExe yarn;
   };
 
   buildPhase = ''
@@ -240,8 +212,6 @@ python3.pkgs.buildPythonApplication {
     mkdir -p out/pylib/anki .git
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
-    touch out/env
-    touch .git/HEAD
 
     ln -vsf ${pyEnv} ./out/pyenv
     rsync --chmod +w -avP ${anki-nodemodules}/ out/node_modules/
