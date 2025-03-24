@@ -136,7 +136,6 @@ in
           breeze-icons
           breeze-gtk
           ocean-sound-theme
-          plasma-workspace-wallpapers
           pkgs.hicolor-icon-theme # fallback icons
           qqc2-breeze-style
           qqc2-desktop-style
@@ -158,6 +157,7 @@ in
           [
             aurorae
             plasma-browser-integration
+            plasma-workspace-wallpapers
             konsole
             kwin-x11
             (lib.getBin qttools) # Expose qdbus in PATH
