@@ -6652,7 +6652,7 @@ with pkgs;
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
   tbb_2022_0 = callPackage ../development/libraries/tbb/2022_0.nix { };
   # many packages still fail with latest version
-  tbb = tbb_2020_3;
+  tbb = tbb_2021_11;
 
   terra = callPackage ../development/compilers/terra {
     inherit (darwin) libobjc;
