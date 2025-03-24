@@ -1,0 +1,12 @@
+diff --git a/src/tpm2_pytss/FAPI.py b/src/tpm2_pytss/FAPI.py
+index 916eda6..1afba3f 100644
+--- a/src/tpm2_pytss/FAPI.py
++++ b/src/tpm2_pytss/FAPI.py
+@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
+ 
+ FAPI_CONFIG_ENV = "TSS2_FAPICONF"
+ FAPI_CONFIG_PATHS = [
++    "@TPM2_TSS@/etc/tpm2-tss/fapi-config.json",
+     "/etc/tpm2-tss/fapi-config.json",
+     "/usr/local/etc/tpm2-tss/fapi-config.json",
+ ]

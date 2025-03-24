@@ -1,0 +1,53 @@
+{
+  "archMap": {
+    "aarch64-darwin": "darwin_arm64",
+    "aarch64-linux": "linux_arm64",
+    "x86_64-darwin": "darwin_amd64",
+    "x86_64-linux": "linux_amd64"
+  },
+  "fetchurlAttrSet": {
+    "docker-credential-up": {
+      "aarch64-darwin": {
+        "hash": "sha256-OeFMycBwFtZStrXduaGRY0VCB/EFWndzkx7IgGsB+XQ=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/docker-credential-up/darwin_arm64.tar.gz"
+      },
+      "aarch64-linux": {
+        "hash": "sha256-XTtcnxJ+N9DPBunyBd9mk5JSN12H//73aZiiWZ5JNEM=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/docker-credential-up/linux_arm64.tar.gz"
+      },
+      "x86_64-darwin": {
+        "hash": "sha256-QmFB1w1CgrjE1ON4FHuyjyXyvmplNhmcFH+3Xew5nsE=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/docker-credential-up/darwin_amd64.tar.gz"
+      },
+      "x86_64-linux": {
+        "hash": "sha256-Xa26xnlJ2s7rjMyV+Xo7A/OjAjsAg3fZ21rTCkLHOAM=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/docker-credential-up/linux_amd64.tar.gz"
+      }
+    },
+    "up": {
+      "aarch64-darwin": {
+        "hash": "sha256-Md+lA+JqVaA60hJLQBDKfQYBbUwMQBVT/kPsgSCEuIY=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/up/darwin_arm64.tar.gz"
+      },
+      "aarch64-linux": {
+        "hash": "sha256-fCuvg8kQg9GozlrQfYHGZtPGYVJgJccW1LkYUxMF4DI=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/up/linux_arm64.tar.gz"
+      },
+      "x86_64-darwin": {
+        "hash": "sha256-nzRUk4FG4oHb6IPHHKBfUlJJvn74RM632Vmo+SF/EHg=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/up/darwin_amd64.tar.gz"
+      },
+      "x86_64-linux": {
+        "hash": "sha256-FpILjL2IV4EJ7UfLuBPHUfCDxx0a86+P5AZm3yinHuA=",
+        "url": "https://cli.upbound.io/main/v0.39.0-0.rc.0.161.gfb781f0d/bundle/up/linux_amd64.tar.gz"
+      }
+    }
+  },
+  "platformList": [
+    "aarch64-darwin",
+    "aarch64-linux",
+    "x86_64-darwin",
+    "x86_64-linux"
+  ],
+  "version": "0.39.0-0.rc.0.161.gfb781f0d"
+}

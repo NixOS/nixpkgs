@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index a0289ad..10c0a28 100644
+--- a/meson.build
++++ b/meson.build
+@@ -285,7 +285,6 @@ endif
+ 
+ 
+ # Include sub-directories.
+-subdir('config/init')
+ subdir('share')
+ subdir('tests')
+ 

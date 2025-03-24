@@ -1,0 +1,83 @@
+diff --git a/src/cmds.c b/src/cmds.c
+index b2f61d7..16554d8 100644
+--- a/src/cmds.c
++++ b/src/cmds.c
+@@ -108,21 +108,21 @@ void search_path_for_cmds ( FileBrowserModePrivateData *pd )
+         fbcmd->cmd = cmdstr;
+         fbcmd->name = NULL;
+         fbcmd->icon_name = NULL;
+ 
+         num_cmds++;
+     }
+ 
+     g_hash_table_steal_all ( table );
+     g_hash_table_destroy ( table );
+ 
+-    g_qsort_with_data ( cmds, num_cmds, sizeof ( FBCmd ), compare_cmds, NULL );
++    g_sort_array ( cmds, num_cmds, sizeof ( FBCmd ), compare_cmds, NULL );
+ 
+     add_cmds(cmds, num_cmds, pd);
+ 
+     g_free ( cmds );
+ }
+ 
+ void destroy_cmds ( FileBrowserModePrivateData *pd )
+ {
+     for ( int i = 0; i < pd->num_cmds; i++ ) {
+         g_free( pd->cmds[i].cmd );
+diff --git a/src/files.c b/src/files.c
+index 29a5f9c..6a15b2e 100644
+--- a/src/files.c
++++ b/src/files.c
+@@ -135,46 +135,46 @@ void load_files ( FileBrowserFileData *fd )
+     FBFile *sort_files = fd->files;
+     int num_sort_files = fd->num_files;
+     if ( ! fd->hide_parent ) {
+         sort_files++;
+         num_sort_files--;
+     }
+ 
+     /* Sort all but the parent dir. */
+     if ( fd->sort_by_type ) {
+         if ( fd->sort_by_depth ) {
+-            g_qsort_with_data ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_depth_type, NULL );
++            g_sort_array ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_depth_type, NULL );
+         } else {
+-            g_qsort_with_data ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_type, NULL );
++            g_sort_array ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_type, NULL );
+         }
+     } else {
+         if ( fd->sort_by_depth ) {
+-            g_qsort_with_data ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_depth, NULL );
++            g_sort_array ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files_depth, NULL );
+         } else {
+-            g_qsort_with_data ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files, NULL );
++            g_sort_array ( sort_files, num_sort_files, sizeof ( FBFile ), compare_files, NULL );
+         }
+     }
+ }
+ 
+ void change_dir ( char *path, FileBrowserFileData *pd )
+ {
+     char* new_dir = get_canonical_abs_path ( path, pd->current_dir );
+     g_free ( pd->current_dir );
+     pd->current_dir = new_dir;
+     g_chdir ( new_dir );
+ }
+ 
+ static bool match_glob_patterns ( const char *basename, FileBrowserFileData *fd )
+ {
+     int len = strlen ( basename );
+     for ( int i = 0; i < fd->num_exclude_patterns; i++ ) {
+-        if ( g_pattern_match ( fd->exclude_patterns[i], len, basename, NULL ) ) {
++        if ( g_pattern_spec_match ( fd->exclude_patterns[i], len, basename, NULL ) ) {
+             return false;
+         }
+     }
+     return true;
+ }
+ 
+ static int add_file ( const char *fpath, G_GNUC_UNUSED const struct stat *sb, int typeflag, struct FTW *ftwbuf )
+ {
+     FileBrowserFileData *fd = global_fd;
+ 

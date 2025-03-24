@@ -1,0 +1,34 @@
+{
+  "libcutensor": {
+    "linux-sbsa": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "linux-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": true,
+        "sample": false,
+        "static": true
+      }
+    },
+    "windows-x86_64": {
+      "outputs": {
+        "bin": false,
+        "dev": true,
+        "doc": false,
+        "lib": false,
+        "sample": false,
+        "static": false
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+diff --git a/apps/desktop/scripts/after-pack.js b/apps/desktop/scripts/after-pack.js
+index 45b79c0..65a6fd5 100644
+--- a/apps/desktop/scripts/after-pack.js
++++ b/apps/desktop/scripts/after-pack.js
+@@ -13,6 +13,9 @@ async function run(context) {
+   console.log("## After pack");
+   // console.log(context);
+ 
++  // skip after-pack
++  return;
++
+   if (context.packager.platform.nodeName !== "darwin" || context.arch === builder.Arch.universal) {
+     await addElectronFuses(context);
+   }
+diff --git a/apps/desktop/scripts/after-sign.js b/apps/desktop/scripts/after-sign.js
+index 20c24c8..acaf867 100644
+--- a/apps/desktop/scripts/after-sign.js
++++ b/apps/desktop/scripts/after-sign.js
+@@ -12,6 +12,9 @@ async function run(context) {
+   console.log("## After sign");
+   // console.log(context);
+ 
++  // skip after-sign
++  return;
++
+   const appName = context.packager.appInfo.productFilename;
+   const appPath = `${context.appOutDir}/${appName}.app`;
+   const macBuild = context.electronPlatformName === "darwin";
