@@ -37,7 +37,6 @@
   meson,
   neovim-unwrapped,
   nim1,
-  nodePackages,
   nodejs,
   notmuch,
   openscad,
@@ -631,12 +630,6 @@ in
     pname = "coc-pyright";
     inherit (coc-pyright) version meta;
     src = "${coc-pyright}/lib/node_modules/coc-pyright";
-  };
-
-  coc-nginx = buildVimPlugin {
-    pname = "coc-nginx";
-    inherit (nodePackages."@yaegassy/coc-nginx") version meta;
-    src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
   };
 
   coc-toml = buildVimPlugin {

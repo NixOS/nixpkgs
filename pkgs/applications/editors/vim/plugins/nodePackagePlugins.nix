@@ -46,13 +46,20 @@ let
     "coc-wxml"
     "coc-yaml"
     "coc-yank"
+    "coc-nginx"
   ];
+
+  packageNameOverrides = {
+    "coc-nginx" = "@yaegassy/coc-nginx";
+  };
+
+  getPackageName = name: packageNameOverrides.${name} or name;
 in
 lib.genAttrs nodePackageNames (
   name:
   buildVimPlugin {
     pname = name;
-    inherit (nodePackages.${name}) version meta;
-    src = "${nodePackages.${name}}/lib/node_modules/${name}";
+    inherit (nodePackages.${getPackageName name}) version meta;
+    src = "${nodePackages.${getPackageName name}}/lib/node_modules/${getPackageName name}";
   }
 )
