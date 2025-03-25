@@ -1131,6 +1131,8 @@ with pkgs;
 
   yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
 
+  archi = callPackage ../tools/misc/archi { };
+
   breitbandmessung = callPackage ../applications/networking/breitbandmessung {
     electron = electron_34;
   };
@@ -1476,7 +1478,7 @@ with pkgs;
     inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
-  krusader = kdePackages.callPackage ../applications/file-managers/krusader { };
+  krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -5155,8 +5157,6 @@ with pkgs;
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
-
-  typesense = callPackage ../servers/search/typesense { };
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
@@ -11661,6 +11661,10 @@ with pkgs;
   };
 
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
+
+  snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
+    php = php84;
+  };
 
   spacecookie =
     haskell.lib.compose.justStaticExecutables haskellPackages.spacecookie;
