@@ -6,6 +6,7 @@
   makeDesktopItem,
   libxkbcommon,
   makeWrapper,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -105,6 +106,8 @@ rustPlatform.buildRustPackage rec {
 
       makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "IRC application";
