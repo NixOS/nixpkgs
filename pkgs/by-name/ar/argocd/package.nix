@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argocd";
   version = "2.14.7";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ilXJWPvu3qwzuUN6AsQNyzrTHdQO51IFZcvZiQ/+/tU=";
   };
 
@@ -31,10 +31,10 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}.version=${version}"
+      "-X ${package_url}.version=${finalAttrs.version}"
       "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${src.rev}"
-      "-X ${package_url}.gitTag=${src.rev}"
+      "-X ${package_url}.gitCommit=v${finalAttrs.version}"
+      "-X ${package_url}.gitTag=v${finalAttrs.version}"
       "-X ${package_url}.gitTreeState=clean"
       "-X ${package_url}.kubectlVersion=v0.31.2"
       # NOTE: Update kubectlVersion when upgrading this package with
@@ -54,7 +54,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
+    $out/bin/argocd version --client | grep v${finalAttrs.version} > /dev/null
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -76,4 +76,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})
