@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bibiman";
-  version = "0.11.0";
+  version = "0.11.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lukeflo";
     repo = "bibiman";
     tag = "v${version}";
-    hash = "sha256-g8C5yLtEHS/4Q312Rdse9FFymDXacIHqwg/ySpSt+NE=";
+    hash = "sha256-6dSs9sj84W1AJVT9iRz8LC65rZF1Bok82xrJlu4f3vA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RWLKiYyUQUgAPPWTugp1G05X3B9SbknmpVLc7eSdn8U=";
+  cargoHash = "sha256-UPP+tc1qoDeFv79JIQXjuiCxEOMlxN7wuvlQYRVKJ+M=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
