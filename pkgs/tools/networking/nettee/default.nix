@@ -6,8 +6,8 @@
 }:
 
 let
-  version = "0.3.4";
-  sha256 = "00xbkp99x9v07r34w7m2p8gak5hdsdbka36n7a733rdrrkgf5z7r";
+  version = "0.3.5";
+  hash = "sha256-WeZ18CLexdWy8RlHNh0Oo/6KXxzShZT8/xklAWyB8ss=";
 
 in
 stdenv.mkDerivation {
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://saf.bio.caltech.edu/pub/software/linux_or_unix_tools/beta-nettee-${version}.tar.gz";
-    inherit sha256;
+    url = "mirror://sourceforge/nettee/nettee-${version}.tar.gz";
+    inherit hash;
   };
 
   meta = {
