@@ -219,6 +219,11 @@ in
           NODE_ENV = "production";
         };
 
+        path = [
+          # required for sendmail
+          "/run/wrappers"
+        ];
+
         preStart = ''
           # We need this so the gancio executable run by the user finds the right settings.
           ln -sf ${configFile} config.json
