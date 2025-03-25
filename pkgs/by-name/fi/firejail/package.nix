@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.72";
+  version = "0.9.74";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "sha256-XAlb6SSyY2S1iWDaulIlghQ16OGvT/wBCog95/nxkog=";
+    sha256 = "sha256-BKEW2IWatzePGREAA479eaP6bJb1i2fRs/GZcyLinrM=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/include/common.h \
       --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
 
-    # Workaround for regression introduced in 0.9.72 preventing usage of
+    # Workaround for regression introduced in 0.9.74 preventing usage of
     # end-of-options indicator "--"
     # See https://github.com/netblue30/firejail/issues/5659
     substituteInPlace src/firejail/sandbox.c \
