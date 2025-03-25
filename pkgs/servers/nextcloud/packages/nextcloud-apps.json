@@ -25,6 +25,7 @@
 , "memories": "agpl3Plus"
 , "music": "agpl3Plus"
 , "news": "agpl3Plus"
+, "nextpod": "agpl3Only"
 , "notes": "agpl3Plus"
 , "oidc_login": "agpl3Only"
 , "onlyoffice": "asl20"
