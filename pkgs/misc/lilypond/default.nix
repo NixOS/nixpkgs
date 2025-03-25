@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchzip,
   ghostscript,
   gyre-fonts,
   texinfo,
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   pname = "lilypond";
   version = "2.24.4";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    hash = "sha256-6W+gNXHHnyDhl5ZTr6vb5O5Cdlo9n9FJU/DNnupReBw=";
+    hash = "sha256-UYdORvodrVchxslOxpMiXrAh7DtB9sWp9yqZU/jeB9Y=";
   };
 
   postInstall = ''
