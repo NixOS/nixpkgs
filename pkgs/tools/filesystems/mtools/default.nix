@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mtools";
-  version = "4.0.47";
+  version = "4.0.48";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/${pname}-${version}.tar.bz2";
-    hash = "sha256-MaoGB4zD9QWRuV5xqQnFbdF52H6cvcB79DXllb18x/8=";
+    hash = "sha256-A8KarIc13XFUqYn7wp6vK1BhIa4cOjXNC/KgLpTScak=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isDarwin ./UNUSED-darwin.patch;
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--without-x";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
