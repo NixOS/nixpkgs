@@ -218,6 +218,7 @@ with lib.maintainers;
   cuda = {
     members = [
       connorbaker
+      prusnak
       samuela
       SomeoneSerge
     ];
