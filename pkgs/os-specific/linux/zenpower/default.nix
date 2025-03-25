@@ -2,17 +2,15 @@
   lib,
   stdenv,
   kernel,
-  fetchFromGitea,
+  fetchgit,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
   version = "unstable-2022-11-04";
 
-  src = fetchFromGitea {
-    domain = "git.exozy.me";
-    owner = "a";
-    repo = "zenpower3";
+  src = fetchgit {
+    url = "https://git.unnamed.website/zenpower3/";
     rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
     sha256 = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
   };
