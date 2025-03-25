@@ -1,0 +1,16 @@
+diff --git a/Makefile b/Makefile
+index d8d3f91..47abc37 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,10 @@
+ obj-m := librem_ec_acpi.o
+-KERNEL_DIR = /lib/modules/$(shell uname -r)/build
+ 
+ all:
+ 	$(MAKE) -C "$(KERNEL_DIR)" M="$(PWD)" modules
+ 
++install:
++	$(MAKE) -C "$(KERNEL_DIR)" M="$(PWD)" modules_install
++
+ clean:
+ 	$(MAKE) -C "$(KERNEL_DIR)" M="$(PWD)" clean
