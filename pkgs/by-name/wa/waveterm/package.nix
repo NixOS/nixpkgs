@@ -149,6 +149,7 @@ let
 
     nativeBuildInputs = [
       unzip
+      makeWrapper
     ];
 
     installPhase = ''
@@ -156,6 +157,9 @@ let
 
       mkdir -p $out/Applications
       cp -r . "$out/Applications/Wave.app"
+      for bin in $out/Applications/Wave.app/Contents/MacOS/*; do
+        makeWrapper $bin "$out/bin/$(basename $bin)"
+      done
 
       runHook postInstall
     '';
