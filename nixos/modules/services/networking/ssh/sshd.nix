@@ -664,7 +664,7 @@ in
 
     services.openssh.settings.AuthorizedPrincipalsFile = lib.mkIf (authPrincipalsFiles != {}) "/etc/ssh/authorized_principals.d/%u";
 
-    services.openssh.extraConfig = lib.mkOrder 0
+    services.openssh.extraConfig = lib.mkOrder 0 (lib.concatStringsSep "\n" ( [
       ''
         Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
@@ -677,22 +677,26 @@ in
           ListenAddress ${addr}${lib.optionalString (port != null) (":" + toString port)}
         '') cfg.listenAddresses}
 
-        ${lib.optionalString cfgc.setXAuthLocation ''
-            XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
-        ${lib.optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}
-        ''}
+      ''
+      ]
+      ++ lib.optional cfgc.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"
+      ++ lib.optional cfg.allowSFTP ''Subsystem sftp ${cfg.sftpServerExecutable} ${lib.concatStringsSep " " cfg.sftpFlags}''
+      ++ [
+        ''
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-        ${lib.optionalString (cfg.authorizedKeysCommand != "none") ''
+        ''
+      ]
+      ++ lib.optional (cfg.authorizedKeysCommand != "none") ''
           AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
           AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
-        ''}
-
+        ''
+      ++ [
+        ''
         ${lib.flip lib.concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
         '')}
-      '';
+        ''
+        ]));
 
     system.checks = [
       (pkgs.runCommand "check-sshd-config"
