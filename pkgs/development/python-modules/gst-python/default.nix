@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
 
@@ -29,6 +30,16 @@ buildPythonPackage rec {
     url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
     hash = "sha256-5QRqBdd6uxVnGtAc0ZCNF9YuWgb114Qb5DQq3io/uNs=";
   };
+
+  patches = [
+    # Fix segfault with PyGObject>=3.52.0
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8653
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/69bba61e548c7a63bc18137e63e41489a7de9d36.patch";
+      stripLen = 2;
+      hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
+    })
+  ];
 
   # Python 2.x is not supported.
   disabled = !isPy3k;
