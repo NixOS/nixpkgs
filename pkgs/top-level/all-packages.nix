@@ -11356,7 +11356,6 @@ with pkgs;
     modules = [];
   };
 
-  opensmtpd = callPackage ../servers/mail/opensmtpd { };
   osrm-backend = callPackage ../servers/osrm-backend {
     tbb = tbb_2021_11;
   };
