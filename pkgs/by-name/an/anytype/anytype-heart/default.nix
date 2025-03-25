@@ -1,16 +1,15 @@
 {
   stdenv,
   lib,
-  callPackage,
   fetchFromGitHub,
   buildGoModule,
   protoc-gen-grpc-web,
   protoc-gen-js,
   protobuf,
+  tantivy-go,
 }:
 
 let
-  tantivy-go = callPackage ../tantivy-go { };
   pname = "anytype-heart";
   version = "0.39.11";
   src = fetchFromGitHub {
