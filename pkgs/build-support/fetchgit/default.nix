@@ -100,7 +100,7 @@ lib.makeOverridable (
       throw
         "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
     else
-      stdenvNoCC.mkDerivation {
+      stdenvNoCC.mkDerivation (finalAttrs: {
         name = if name != null then name else urlToName url revWithTag;
 
         builder = ./builder.sh;
@@ -160,7 +160,10 @@ lib.makeOverridable (
         passthru = {
           gitRepoUrl = url;
           inherit tag;
+          unpacked = lib.removeAttrs finalAttrs.finalPackage [ "unpacked" ] // {
+            passthru = removeAttrs finalAttrs.finalPackage.passthru [ "unpacked" ];
+          };
         };
-      }
+      })
   )
 )
