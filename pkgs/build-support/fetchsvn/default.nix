@@ -1,5 +1,6 @@
 {
   lib,
+  config ? { },
   stdenvNoCC,
   buildPackages,
   cacert,
@@ -52,7 +53,7 @@ in
 if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
-  stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation (finalAttrs: {
     name = name_;
     builder = ./builder.sh;
     nativeBuildInputs = [
@@ -82,4 +83,8 @@ else
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
     inherit preferLocalBuild;
-  }
+
+    passthru = lib.optionalAttrs (config.allowAliases or false) {
+      unpacked = lib.removeAttrs finalAttrs.finalPackage [ "unpacked" ];
+    };
+  })
