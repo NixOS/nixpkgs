@@ -1,24 +1,24 @@
 { lib
 , fetchFromGitHub
-, php
+, php83
 , nixosTests
 , nix-update-script
 , dataDir ? "/var/lib/pixelfed"
 , runtimeDir ? "/run/pixelfed"
 }:
 
-php.buildComposerProject (finalAttrs: {
+php83.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.3";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CKjqnxp7p2z/13zfp4HQ1OAmaoUtqBKS6HFm6TV8Jwg=";
+    hash = "sha256-bPoYEPCWj7vAKDL/P4yjhrfp4HK9sbBh4eK0Co+xaZc=";
   };
 
-  vendorHash = "sha256-zjIjGkR9MCnjRho/ViqZ5EbS9MJ7OQ1kkg93jBssuZU=";
+  vendorHash = "sha256-/ep0j1KUBrpcJsd40L8PbUHSrIhV1bKRkq+qqbJB2sM=";
 
   postInstall = ''
     mv "$out/share/php/${finalAttrs.pname}"/* $out
@@ -34,7 +34,7 @@ php.buildComposerProject (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) pixelfed; };
+    tests = { inherit (nixosTests.pixelfed) standard; };
     updateScript = nix-update-script { };
   };
 

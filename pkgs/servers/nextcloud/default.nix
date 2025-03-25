@@ -6,6 +6,7 @@
   nextcloud28Packages,
   nextcloud29Packages,
   nextcloud30Packages,
+  nextcloud31Packages,
 }:
 
 let
@@ -75,6 +76,12 @@ in
     version = "30.0.8";
     hash = "sha256-uwhqES+zUW50SSHXrhSCzBvVN+39HxQFHBNI1LatWKI=";
     packages = nextcloud30Packages;
+  };
+
+  nextcloud31 = generic {
+    version = "31.0.2";
+    hash = "sha256-ALVyERt8K5iELZXARt5570Y8z63IoEtUAGx4bh+UwxA=";
+    packages = nextcloud31Packages;
   };
 
   # tip: get the sha with:
