@@ -11,7 +11,6 @@
   freezegun,
   grpcio,
   mock,
-  oauth2client,
   pyasn1-modules,
   pyjwt,
   pyopenssl,
@@ -68,24 +67,17 @@ buildPythonPackage rec {
     requests = [ requests ];
   };
 
-  nativeCheckInputs =
-    [
-      aioresponses
-      flask
-      freezegun
-      grpcio
-      mock
-    ]
-    ++ lib.optionals (pythonOlder "3.13") [
-      oauth2client
-    ]
-    ++ [
-      pytest-asyncio
-      pytest-localserver
-      pytestCheckHook
-      responses
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    aioresponses
+    flask
+    freezegun
+    grpcio
+    mock
+    pytest-asyncio
+    pytest-localserver
+    pytestCheckHook
+    responses
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"
