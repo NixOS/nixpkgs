@@ -124,8 +124,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Music typesetting system";
-    homepage = "http://lilypond.org/";
-    license = lib.licenses.gpl3;
+    homepage = "https://lilypond.org/";
+    license = with lib.licenses; [
+      gpl3Plus # most code
+      gpl3Only # ly/articulate.ly
+      ofl # mf/
+    ];
     maintainers = with lib.maintainers; [
       marcweber
       yurrriq
