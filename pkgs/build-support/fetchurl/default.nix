@@ -5,6 +5,7 @@
   },
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
+  srcOnly ? null,
   cacert ? null,
 }:
 
@@ -199,6 +200,9 @@ assert
       curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
 stdenvNoCC.mkDerivation (
+  # This is only for access to '_finalAttrs.finalPackage', please
+  # avoid referencing '_finalAttrs' for treewide eval performance reasons
+  _finalAttrs:
   (
     if (pname != "" && version != "") then
       { inherit pname version; }
@@ -273,6 +277,58 @@ stdenvNoCC.mkDerivation (
     inherit meta;
     passthru = {
       inherit url;
+      /**
+        A convenience derivation for quick access to downloaded
+        archives, as unpacked by the standard `unpackPhase` in `stdenv`.
+        If `recursiveHash` is set to `true` then this output will avoid
+        unnecessary builds and reference the `fetchurl` result directly.
+
+        This attribute can be quickly built with e.g. `nix-build . -A hello.src.unpacked`.
+        Internally it makes use of `pkgs.srcOnly`, but it will not apply any patches
+        since it is not aware of any.
+
+        Using this will push duplicate data to the store.
+        As such it will raise a warning on instantiation, primarily to disallow use within Nixpkgs.
+
+        # Examples
+
+        ```shell
+        $ nix-build . -A hello.src.unpacked
+        trace: evaluation warning: Avoid using `(fetchurl {...}).unpacked` in derivations as it will push duplicate data to the store and any cache.
+        this derivation will be built:
+          /nix/store/00b1nzgl2pdnxxardrbxv3349xvhcvz3-hello-2.12.1.tar.gz-unpacked-source.drv
+          building '/nix/store/00b1nzgl2pdnxxardrbxv3349xvhcvz3-hello-2.12.1.tar.gz-unpacked-source.drv'
+        Running phase: unpackPhase
+        unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+        source root is hello-2.12.1
+        setting SOURCE_DATE_EPOCH to timestamp 1653865426 of file "hello-2.12.1/ChangeLog"
+        $ head -n2 result/README
+        This is the README file for the GNU Hello distribution.
+        Hello prints a friendly greeting.  It also serves as a sample GNU
+        ```
+      */
+      unpacked =
+        lib.warnOnInstantiate
+          "Avoid using `(fetchurl {...}).unpacked` in derivations as it will push duplicate data to the store and any cache."
+          (
+            if srcOnly == null then
+              null # early on bootstrap, not needed
+            else if recursiveHash then
+              lib.removeAttrs _finalAttrs.finalPackage [ "unpacked" ]
+              // {
+                passthru = removeAttrs _finalAttrs.finalPackage.passthru [ "unpacked" ];
+              }
+            else
+              srcOnly {
+                name = "${_finalAttrs.finalPackage.name}-unpacked";
+                src = _finalAttrs.finalPackage;
+                stdenv = stdenvNoCC;
+                inherit preferLocalBuild;
+                passthru = {
+                  inherit url;
+                } // passthru;
+              }
+          );
     } // passthru;
   }
 )
