@@ -8112,7 +8112,7 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
-  vcpkg-tool-unwrapped = callPackage ../by-name/vc/vcpkg-tool/package.nix { doWrap = false; };
+  vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
   wails = callPackage ../development/tools/wails {
     stdenv = gccStdenv;
