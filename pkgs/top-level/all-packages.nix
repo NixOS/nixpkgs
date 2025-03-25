@@ -11662,10 +11662,6 @@ with pkgs;
 
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
-  snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
-    php = php84;
-  };
-
   spacecookie =
     haskell.lib.compose.justStaticExecutables haskellPackages.spacecookie;
 
