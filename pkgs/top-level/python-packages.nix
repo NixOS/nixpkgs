@@ -5594,8 +5594,6 @@ self: super: with self; {
 
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
 
-  goobook = callPackage ../development/python-modules/goobook { };
-
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   goodwe = callPackage ../development/python-modules/goodwe { };
