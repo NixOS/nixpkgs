@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vFk29KESATcEY0eRNbS+mHLD9T1phJiG1fqjOlI19/w=";
   };
 
+  patches = [
+    # fix build with gcc14:
+    # https://github.com/n64dev/cen64/pull/191/commits/f13bdf94c00a9da3b152ed9fe20001e240215b96
+    ./cast-mi_regs-callbacks.patch
+    # https://github.com/n64dev/cen64/pull/237
+    ./fix-thread-arg-type-for-pthread_setname_np.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libGL
