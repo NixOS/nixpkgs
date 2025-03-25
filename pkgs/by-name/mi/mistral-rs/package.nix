@@ -79,6 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-mkxgssJUBtM1DYOhFfj8YKlW61/gd0cgPtMze7YZ9L8=";
   };
 
+  patches = [
+    ./no-native-cpu.patch
+  ];
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
