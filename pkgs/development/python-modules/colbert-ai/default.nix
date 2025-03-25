@@ -32,6 +32,15 @@ buildPythonPackage rec {
     hash = "sha256-qNb9tOInLysI7Tf45QlgchYNhBXR5AWFdRiYt35iW6s=";
   };
 
+  # ImportError: cannot import name 'AdamW' from 'transformers'
+  # https://github.com/stanford-futuredata/ColBERT/pull/390
+  postPatch = ''
+    substituteInPlace colbert/training/training.py \
+      --replace-fail \
+      "from transformers import AdamW, get_linear_schedule_with_warmup" \
+      "from transformers import get_linear_schedule_with_warmup; from torch.optim import AdamW"
+  '';
+
   pythonRemoveDeps = [ "git-python" ];
 
   build-system = [
@@ -64,6 +73,11 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bachp
+    ];
+    badPlatforms = [
+      # `import torch.distributed.tensor` fails on darwin:
+      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a packag
+      lib.systems.inspect.patterns.isDarwin
     ];
   };
 }
