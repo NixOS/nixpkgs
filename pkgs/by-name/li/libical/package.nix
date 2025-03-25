@@ -20,7 +20,7 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libical";
   version = "3.0.20";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libical";
     repo = "libical";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KIMqZ6QAh+fTcKEYrcLlxgip91CLAwL9rwjUdKzBsQk=";
   };
 
@@ -124,4 +124,4 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
   };
-}
+})
