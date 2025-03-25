@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mcaselector";
-  version = "2.4.2";
+  version = "2.5";
 
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
-    hash = "sha256-3Kq3vkBiz3A5tUSLNqDHNpognF2Q9HhU8WXwdRVxfSE=";
+    hash = "sha256-7u4EE8U7XTdlFj/hzZhis8lScyRz4Izx7KoJ+r3ZL00=";
   };
 
   dontUnpack = true;
