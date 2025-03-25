@@ -15791,6 +15791,8 @@ self: super: with self; {
 
   rq = callPackage ../development/python-modules/rq { };
 
+  rrdtool = callPackage ../development/python-modules/rrdtool { };
+
   rsa = callPackage ../development/python-modules/rsa { };
 
   rsskey = callPackage ../development/python-modules/rsskey { };
