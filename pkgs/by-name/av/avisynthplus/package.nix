@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-M+F7bUSlH6kAyQLCq0RxmaE19RqHPPleTMyRuz5zqPg=";
   };
 
+  patchPhase = ''
+    substituteInPlace ./avs_core/avisynth_conf.h.in \
+        --replace-fail '@CORE_PLUGIN_INSTALL_PATH@' '/run/current-system/sw/lib'
+  '';
+
   buildInputs = [
     libdevil
     soundtouch
