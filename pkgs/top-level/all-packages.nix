@@ -123,7 +123,7 @@ with pkgs;
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
-  vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
+  vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/utils/updater.nix {
     inherit (python3Packages) buildPythonApplication ;
   };
 
@@ -17761,7 +17761,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
-  vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
+  vimUtils = callPackage ../applications/editors/vim/plugins/utils/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
