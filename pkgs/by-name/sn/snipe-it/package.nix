@@ -3,10 +3,10 @@
 , fetchFromGitHub
 , mariadb
 , nixosTests
-, php
+, php84
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+php84.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
   version = "8.0.4";
 
@@ -41,7 +41,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   passthru = {
     tests = nixosTests.snipe-it;
-    phpPackage = php;
+    phpPackage = php84;
   };
 
   meta = with lib; {
