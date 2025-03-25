@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";

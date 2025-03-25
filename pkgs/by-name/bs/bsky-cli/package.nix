@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/bsky";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   nativeBuildInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };

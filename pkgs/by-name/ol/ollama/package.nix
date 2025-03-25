@@ -248,7 +248,7 @@ goBuild {
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

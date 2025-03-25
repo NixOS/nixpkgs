@@ -96,7 +96,7 @@ python3Packages.buildPythonApplication rec {
       addBinToPathHook
     ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests =
     # On darwin, kaleido fails to starts
