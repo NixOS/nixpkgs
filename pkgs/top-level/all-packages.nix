@@ -222,8 +222,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  anime-downloader = callPackage ../applications/video/anime-downloader { };
-
   aocd = with python3Packages; toPythonApplication aocd;
 
   archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
