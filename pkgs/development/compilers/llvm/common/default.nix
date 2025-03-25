@@ -266,23 +266,28 @@ let
           bintools = bintools';
           extraPackages =
             [ targetLlvmLibraries.compiler-rt ]
-            ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-              targetLlvmLibraries.libunwind
-            ];
+            ++ lib.optionals
+              (stdenv.targetPlatform.hasStackUnwinding && !stdenv.targetPlatform.hasSystemLibunwind)
+              [
+                targetLlvmLibraries.libunwind
+              ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
                 echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
                 echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
+              + lib.optionalString stdenv.targetPlatform.hasStackUnwinding ''
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
                 echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-                echo "-lunwind" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString stdenv.targetPlatform.isWasm ''
+              +
+                lib.optionalString
+                  (stdenv.targetPlatform.hasStackUnwinding && stdenv.targetPlatform.useLLVM or false)
+                  ''
+                    echo "-lunwind" >> $out/nix-support/cc-ldflags
+                  ''
+              + lib.optionalString (!stdenv.targetPlatform.hasExceptions) ''
                 echo "-fno-exceptions" >> $out/nix-support/cc-cflags
               ''
             )
@@ -296,16 +301,30 @@ let
               "-B${targetLlvmLibraries.compiler-rt}/lib"
             ]
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+              stdenv.targetPlatform.hasStackUnwinding
+              && (
+                !stdenv.targetPlatform.hasSystemLibunwind
+                # TODO: Why is this flag needed on Darwin, but not on FreeBSD?
+                || stdenv.targetPlatform.isDarwin
+              )
             ) "--unwindlib=libunwind"
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm
-              && !stdenv.targetPlatform.isFreeBSD
+              stdenv.targetPlatform.hasStackUnwinding
+              && (
+                !stdenv.targetPlatform.hasSystemLibunwind
+                # TODO: Why is this flag needed on Darwin, but not on FreeBSD?
+                || stdenv.targetPlatform.isDarwin
+              )
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
-            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+            ++ lib.optional (!stdenv.targetPlatform.hasExceptions) "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+            stdenv.targetPlatform.hasStackUnwinding
+            && (
+              !stdenv.targetPlatform.hasSystemLibunwind
+              # TODO: Why is this flag needed on Darwin, but not on FreeBSD?
+              || stdenv.targetPlatform.isDarwin
+            )
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
@@ -318,9 +337,7 @@ let
           extraPackages =
             [ targetLlvmLibraries.compiler-rt-no-libc ]
             ++ lib.optionals
-              (
-                !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-              )
+              (stdenv.targetPlatform.hasStackUnwinding && !stdenv.targetPlatform.hasSystemLibunwind)
               [
                 targetLlvmLibraries.libunwind
               ];
@@ -330,14 +347,27 @@ let
                 echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
                 echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isDarwin) ''
-                echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-                echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-                echo "-lunwind" >> $out/nix-support/cc-ldflags
-              ''
-              + lib.optionalString stdenv.targetPlatform.isWasm ''
+              +
+                lib.optionalString
+                  (
+                    stdenv.targetPlatform.hasStackUnwinding
+                    && (
+                      !stdenv.targetPlatform.hasSystemLibunwind
+                      # TODO: Why is this flag needed on FreeBSD, but not on Darwin?
+                      || stdenv.targetPlatform.isFreeBSD
+                    )
+                  )
+                  ''
+                    echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+                    echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
+                  ''
+              +
+                lib.optionalString
+                  (stdenv.targetPlatform.hasStackUnwinding && stdenv.targetPlatform.useLLVM or false)
+                  ''
+                    echo "-lunwind" >> $out/nix-support/cc-ldflags
+                  ''
+              + lib.optionalString (!stdenv.targetPlatform.hasExceptions) ''
                 echo "-fno-exceptions" >> $out/nix-support/cc-cflags
               ''
             )
@@ -351,16 +381,20 @@ let
               "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+              stdenv.targetPlatform.hasStackUnwinding && !stdenv.targetPlatform.hasSystemLibunwind
             ) "--unwindlib=libunwind"
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm
-              && !stdenv.targetPlatform.isFreeBSD
+              stdenv.targetPlatform.hasStackUnwinding
+              && (
+                !stdenv.targetPlatform.hasSystemLibunwind
+                # TODO: Why is this flag needed on Darwin, but not on FreeBSD?
+                || stdenv.targetPlatform.isDarwin
+              )
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
-            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+            ++ lib.optional (!stdenv.targetPlatform.hasExceptions) "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+            stdenv.targetPlatform.hasStackUnwinding && !stdenv.targetPlatform.hasSystemLibunwind
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
@@ -387,7 +421,7 @@ let
               "-nostdlib++"
             ]
             ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+              lib.versionAtLeast metadata.release_version "15" && !stdenv.targetPlatform.hasExceptions
             ) "-fno-exceptions";
         }
       );
@@ -412,7 +446,7 @@ let
               "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+              lib.versionAtLeast metadata.release_version "15" && !stdenv.targetPlatform.hasExceptions
             ) "-fno-exceptions";
         }
       );
@@ -433,7 +467,7 @@ let
           nixSupport.cc-cflags =
             [ "-nostartfiles" ]
             ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+              lib.versionAtLeast metadata.release_version "15" && !stdenv.targetPlatform.hasExceptions
             ) "-fno-exceptions";
         }
       );
@@ -449,7 +483,7 @@ let
           extraBuildCommands = mkExtraBuildCommands0 cc;
         }
         // lib.optionalAttrs (
-          lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          lib.versionAtLeast metadata.release_version "15" && !stdenv.targetPlatform.hasExceptions
         ) { nixSupport.cc-cflags = [ "-fno-exceptions" ]; };
 
       # Aliases
