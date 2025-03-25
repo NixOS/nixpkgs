@@ -41,6 +41,7 @@
   IMGUI_FREETYPE ? false,
   IMGUI_FREETYPE_LUNASVG ? false,
   IMGUI_USE_WCHAR32 ? false,
+  IMGUI_EXPERIMENTAL_DOCKING ? false,
 }@args:
 
 let
@@ -54,8 +55,8 @@ let
       })
     ];
   };
-in
 
+in
 stdenv.mkDerivation rec {
   pname = "imgui";
   version = "1.91.4";
@@ -66,12 +67,25 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  src = fetchFromGitHub {
-    owner = "ocornut";
-    repo = "imgui";
-    tag = "v${version}";
-    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
-  };
+  src =
+    let
+      source =
+        if !IMGUI_EXPERIMENTAL_DOCKING then
+          {
+            owner = "ocornut";
+            repo = "imgui";
+            tag = "v${version}";
+            hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
+          }
+        else
+          {
+            owner = "ocornut";
+            repo = "imgui";
+            tag = "v${version}-docking";
+            hash = "sha256-b0ZXuSXV8U8eBU6WE6blxUvS6xaIgEt9Svob+Kow0g8=";
+          };
+    in
+    fetchFromGitHub source;
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
   postPatch = ''
@@ -140,9 +154,7 @@ stdenv.mkDerivation rec {
     description = "Bloat-free Graphical User interface for C++ with minimal dependencies";
     homepage = "https://github.com/ocornut/imgui";
     license = lib.licenses.mit; # vcpkg licensed as MIT too
-    maintainers = with lib.maintainers; [
-      SomeoneSerge
-    ];
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     platforms = lib.platforms.all;
   };
 }
