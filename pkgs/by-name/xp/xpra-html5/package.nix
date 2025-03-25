@@ -22,7 +22,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     uglify-js
   ];
 
-  installPhase = "python $src/setup.py install $out /share/xpra/www /share/xpra/www";
+  installPhase = ''
+    runHook preInstall
+    python $src/setup.py install $out /share/xpra/www /share/xpra/www
+    runHook postInstall
+  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
