@@ -1,4 +1,8 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "frida-tools";
@@ -14,6 +18,7 @@ python3Packages.buildPythonApplication rec {
     prompt-toolkit
     colorama
     frida-python
+    websockets
   ];
 
   meta = {

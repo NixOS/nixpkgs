@@ -1,8 +1,15 @@
 { callPackage }:
-callPackage ./generic.nix { } rec {
+callPackage ./generic.nix { } {
   pname = "signal-desktop";
-  dir = "Signal";
-  version = "7.36.0";
-  url = "https://github.com/0mniteck/Signal-Desktop-Mobian/raw/${version}/builds/release/signal-desktop_${version}_arm64.deb";
-  hash = "sha256-nmAqFDw35pdZg5tiq9MUlqXnbRLRkSOX9SWhccnE2Xw=";
+  version = "7.46.0-1";
+
+  libdir = "usr/lib64/signal-desktop";
+  bindir = "usr/bin";
+  extractPkg = ''
+    mkdir -p $out
+    bsdtar -xf $downloadedFile -C "$out"
+  '';
+
+  url = "https://download.copr.fedorainfracloud.org/results/useidel/signal-desktop/fedora-42-aarch64/08759579-signal-desktop/signal-desktop-7.46.0-1.fc42.aarch64.rpm";
+  hash = "sha256-kiNwaB+jNOgkfkJ4V5Fj23RNILP3IOZfKWKAehMmtZ0=";
 }
