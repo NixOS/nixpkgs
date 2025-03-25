@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     with python3Packages;
     [
+      setuptools
       sphinx
       sphinxcontrib-jinjadomain
       sphinx-rtd-theme
