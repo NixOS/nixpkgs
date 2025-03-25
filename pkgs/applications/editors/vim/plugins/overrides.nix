@@ -16,11 +16,6 @@
   mkYarnModules,
   python3,
   # Misc dependencies
-  coc-clangd,
-  coc-css,
-  coc-diagnostic,
-  coc-pyright,
-  coc-toml,
   code-minimap,
   dasht,
   deno,
@@ -37,7 +32,6 @@
   meson,
   neovim-unwrapped,
   nim1,
-  nodePackages,
   nodejs,
   notmuch,
   openscad,
@@ -229,8 +223,6 @@ in
     ];
   };
 
-  avante-nvim = callPackage ./non-generated/avante-nvim { };
-
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [
       (replaceVars ./patches/aw-watcher-vim/program_paths.patch {
@@ -285,21 +277,6 @@ in
     ];
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  bitbake-vim = buildVimPlugin {
-    pname = "bitbake.vim";
-    version = "2021-02-06";
-    src = fetchFromGitHub {
-      owner = "sblumentritt";
-      repo = "bitbake.vim";
-      rev = "faddca1e8768b10c80ee85221fb51a560df5ba45";
-      sha256 = "1hfly2vxhhvjdiwgfz58hr3523kf9z71i78vk168n3kdqp5vkwrp";
-    };
-    meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
-  };
-
-  blink-cmp = callPackage ./non-generated/blink-cmp { };
-
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
     dependencies = [ self.copilot-lua ];
   };
@@ -319,8 +296,6 @@ in
   blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
-
-  blink-pairs = callPackage ./non-generated/blink-pairs { };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -378,8 +353,6 @@ in
     ];
   };
 
-  clangd_extensions-nvim = callPackage ./non-generated/clangd_extensions-nvim { };
-
   clang_complete = super.clang_complete.overrideAttrs {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
@@ -430,8 +403,6 @@ in
       plenary-nvim
     ];
   };
-
-  cmp-async-path = callPackage ./non-generated/cmp-async-path { };
 
   cmp-beancount = super.cmp-beancount.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
@@ -622,39 +593,6 @@ in
     ];
   };
 
-  coc-clangd = buildVimPlugin {
-    inherit (coc-clangd) pname version meta;
-    src = "${coc-clangd}/lib/node_modules/coc-clangd";
-  };
-
-  coc-css = buildVimPlugin {
-    inherit (coc-css) pname version meta;
-    src = "${coc-css}/lib/node_modules/coc-css";
-  };
-
-  coc-diagnostic = buildVimPlugin {
-    inherit (coc-diagnostic) pname version meta;
-    src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
-  };
-
-  coc-pyright = buildVimPlugin {
-    pname = "coc-pyright";
-    inherit (coc-pyright) version meta;
-    src = "${coc-pyright}/lib/node_modules/coc-pyright";
-  };
-
-  coc-nginx = buildVimPlugin {
-    pname = "coc-nginx";
-    inherit (nodePackages."@yaegassy/coc-nginx") version meta;
-    src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
-  };
-
-  coc-toml = buildVimPlugin {
-    pname = "coc-toml";
-    inherit (coc-toml) version meta;
-    src = "${coc-toml}/lib/node_modules/coc-toml";
-  };
-
   codecompanion-nvim = super.codecompanion-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModule = [
@@ -752,8 +690,6 @@ in
         runHook postCheck
       '';
     };
-
-  codesnap-nvim = callPackage ./non-generated/codesnap-nvim { };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
@@ -879,8 +815,6 @@ in
       "coq"
     ];
   };
-
-  cord-nvim = callPackage ./non-generated/cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -1293,14 +1227,7 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
-  gitlab-vim = callPackage ./non-generated/gitlab-vim { };
-
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
@@ -1377,8 +1304,6 @@ in
     ];
   };
 
-  hare-vim = callPackage ./non-generated/hare-vim { };
-
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1452,24 +1377,6 @@ in
     doInstallCheck = true;
   };
 
-  # NOTE: this overrides a luaPackages-based plugin
-  image-nvim = super.image-nvim.overrideAttrs {
-    dependencies = with self; [
-      nvim-treesitter
-      nvim-treesitter-parsers.markdown_inline
-      nvim-treesitter-parsers.norg
-    ];
-
-    # Add magick to package.path
-    patches = [ ./patches/image-nvim/magick.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/image/magick.lua \
-        --replace-fail @nix_magick@ ${luajitPackages.magick}
-    '';
-
-  };
-
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
     nvimSkipModule = "ibl.config.types";
@@ -1524,8 +1431,6 @@ in
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
   };
-
-  LanguageClient-neovim = callPackage ./non-generated/LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
@@ -1712,8 +1617,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  lsp_lines-nvim = callPackage ./non-generated/lsp_lines-nvim { };
-
   ltex_extra-nvim = super.ltex_extra-nvim.overrideAttrs {
     # Other modules require setup call first
     nvimRequireCheck = "ltex_extra";
@@ -1721,11 +1624,6 @@ in
 
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
     dependencies = [ self.lualine-nvim ];
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  luasnip = super.luasnip.overrideAttrs {
-    dependencies = [ luaPackages.jsregexp ];
   };
 
   luasnip-latex-snippets-nvim = super.luasnip-latex-snippets-nvim.overrideAttrs {
@@ -1761,7 +1659,7 @@ in
       # We only need its dependencies `node-modules`.
       nodeDep = mkYarnModules rec {
         inherit (super.markdown-preview-nvim) pname version;
-        packageJSON = ./markdown-preview-nvim/package.json;
+        packageJSON = ./patches/markdown-preview-nvim/package.json;
         yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
@@ -1771,7 +1669,7 @@ in
     in
     super.markdown-preview-nvim.overrideAttrs {
       patches = [
-        (replaceVars ./markdown-preview-nvim/fix-node-paths.patch {
+        (replaceVars ./patches/markdown-preview-nvim/fix-node-paths.patch {
           node = "${nodejs}/bin/node";
         })
       ];
@@ -1903,8 +1801,6 @@ in
     ];
   };
 
-  moveline-nvim = callPackage ./non-generated/moveline-nvim { };
-
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
@@ -1975,14 +1871,6 @@ in
       neorg
       plenary-nvim
       telescope-nvim
-    ];
-  };
-
-  # NOTE: this overrides a luaPackages-based plugin
-  neotest = super.neotest.overrideAttrs {
-    dependencies = with self; [
-      nvim-nio
-      plenary-nvim
     ];
   };
 
@@ -2364,8 +2252,6 @@ in
     dependencies = [ self.nvim-dap ];
   };
 
-  nvim-dbee = callPackage ./non-generated/nvim-dbee { };
-
   nvim-FeMaco-lua = super.nvim-FeMaco-lua.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
@@ -2429,8 +2315,6 @@ in
   nvim-java-test = super.nvim-java-test.overrideAttrs {
     dependencies = [ self.nvim-java-core ];
   };
-
-  nvim-julia-autotest = callPackage ./non-generated/nvim-julia-autotest { };
 
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -2505,8 +2389,6 @@ in
     # Optional cmp integration
     nvimSkipModule = "snippets.utils.cmp";
   };
-
-  nvim-spectre = callPackage ./non-generated/nvim-spectre { };
 
   nvim-surround = super.nvim-surround.overrideAttrs {
     # Optional treesitter integration
@@ -2773,11 +2655,6 @@ in
     ];
   };
 
-  plenary-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.plenary-nvim;
-    runtimeDeps = [ curl ];
-  };
-
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
     # Optional treesitter support
     nvimSkipModule = "poimandres.highlights";
@@ -2828,8 +2705,6 @@ in
   quicker-nvim = super.quicker-nvim.overrideAttrs {
   };
 
-  rainbow-delimiters-nvim = callPackage ./non-generated/rainbow-delimiters-nvim { };
-
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
   };
@@ -2877,18 +2752,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  # needs  "http" and "json" treesitter grammars too
-  # NOTE: this overrides a luaPackages-based plugin
-  rest-nvim = super.rest-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      (nvim-treesitter.withPlugins (p: [
-        p.http
-        p.json
-      ]))
-    ];
-  };
-
   rocks-nvim =
     (neovimUtils.buildNeovimPlugin {
       luaAttr = luaPackages.rocks-nvim;
@@ -2930,8 +2793,6 @@ in
   searchbox-nvim = super.searchbox-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
-
-  sg-nvim = callPackage ./non-generated/sg-nvim { };
 
   skim = buildVimPlugin {
     pname = "skim";
@@ -3007,21 +2868,6 @@ in
       "snap.preview.help"
       "snap.producer.vim.help"
     ];
-  };
-
-  sniprun = callPackage ./non-generated/sniprun { };
-
-  # The GitHub repository returns 404, which breaks the update script
-  Spacegray-vim = buildVimPlugin {
-    pname = "Spacegray.vim";
-    version = "2021-07-06";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "Spacegray.vim";
-      rev = "c699ca10ed421c462bd1c87a158faaa570dc8e28";
-      sha256 = "0ma8w6p5jh6llka49x5j5ql8fmhv0bx5hhsn5b2phak79yqg1k61";
-    };
-    meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
   };
 
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
@@ -3281,11 +3127,6 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  # NOTE: this overrides a luaPackages-based plugin
-  telescope-nvim = super.telescope-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
-
   telescope-smart-history-nvim = super.telescope-smart-history-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3507,26 +3348,6 @@ in
     ];
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  VimCompletesMe = buildVimPlugin {
-    pname = "VimCompletesMe";
-    version = "2022-02-18";
-    src = fetchFromGitHub {
-      owner = "ackyshake";
-      repo = "VimCompletesMe";
-      rev = "9adf692d7ae6424038458a89d4a411f0a27d1388";
-      sha256 = "1sndgb3291dyifaa8adri2mb8cgbinbar3nw1fnf67k9ahwycaz0";
-    };
-    meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
-  };
-
-  vim2nix = buildVimPlugin {
-    pname = "vim2nix";
-    version = "1.0";
-    src = ./vim2nix;
-    dependencies = [ self.vim-addon-manager ];
-  };
-
   vimsence = super.vimsence.overrideAttrs {
     meta = with lib; {
       description = "Discord rich presence for Vim";
@@ -3642,8 +3463,6 @@ in
   vim-beancount = super.vim-beancount.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   };
-
-  vim-clap = callPackage ./non-generated/vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs {
     dependencies = [ self.vim-maktaba ];
@@ -3775,8 +3594,6 @@ in
     '';
   };
 
-  vim-markdown-composer = callPackage ./non-generated/vim-markdown-composer { };
-
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
     nvimSkipModule = "treesitter-matchup.third-party.query";
@@ -3794,19 +3611,6 @@ in
     dependencies = [ self.denops-vim ];
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  vim-pony = buildVimPlugin {
-    pname = "vim-pony";
-    version = "2018-07-27";
-    src = fetchFromGitHub {
-      owner = "jakwings";
-      repo = "vim-pony";
-      rev = "b26f01a869000b73b80dceabd725d91bfe175b75";
-      sha256 = "0if8g94m3xmpda80byfxs649w2is9ah1k8v3028nblan73zlc8x8";
-    };
-    meta.homepage = "https://github.com/jakwings/vim-pony/";
-  };
-
   vim-sensible = super.vim-sensible.overrideAttrs {
     patches = [ ./patches/vim-sensible/fix-nix-store-path-regex.patch ];
   };
@@ -3821,8 +3625,6 @@ in
   vim-speeddating = super.vim-speeddating.overrideAttrs {
     dependencies = [ self.vim-repeat ];
   };
-
-  vim-stationeers-ic10-syntax = callPackage ./non-generated/vim-stationeers-ic10-syntax { };
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch =

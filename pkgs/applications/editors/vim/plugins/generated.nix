@@ -458,6 +458,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  VimCompletesMe = buildVimPlugin {
+    pname = "VimCompletesMe";
+    version = "2015-04-20";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "VimCompletesMe";
+      rev = "b915ac2c081dd5aec69b561b04a8ac1778d2277c";
+      sha256 = "0mal1raflzzmahb4skc01dwp9vasvwcyh9mpw3r75gfrfzbyjrlk";
+    };
+    meta.homepage = "https://github.com/vim-scripts/VimCompletesMe/";
+    meta.hydraPlatforms = [ ];
+  };
+
   VimOrganizer = buildVimPlugin {
     pname = "VimOrganizer";
     version = "2020-12-15";
@@ -18754,6 +18767,19 @@ final: prev:
       sha256 = "05navypzrz1ck1vmf60rnmscisxy7gfi3ic749vqmr7prmdbavp6";
     };
     meta.homepage = "https://github.com/sheerun/vim-polyglot/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-pony = buildVimPlugin {
+    pname = "vim-pony";
+    version = "2018-06-24";
+    src = fetchFromGitHub {
+      owner = "jmcomets";
+      repo = "vim-pony";
+      rev = "cd0949971c485fd23de62bb78ca39e5bbe8b915a";
+      sha256 = "0sassx3mkkd543mljycfmvgwcnw36zbpanm41mf3bavxvsk0azx6";
+    };
+    meta.homepage = "https://github.com/jmcomets/vim-pony/";
     meta.hydraPlatforms = [ ];
   };
 

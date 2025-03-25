@@ -11428,6 +11428,8 @@ self: super: with self; {
 
   pcffont = callPackage ../development/python-modules/pcffont { };
 
+  pcodec = callPackage ../development/python-modules/pcodec { };
+
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
