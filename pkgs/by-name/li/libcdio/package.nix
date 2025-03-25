@@ -57,6 +57,14 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "info"
+    "man"
+  ];
+
   meta = with lib; {
     description = "Library for OS-independent CD-ROM and CD image access";
     longDescription = ''
