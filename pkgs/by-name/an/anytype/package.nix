@@ -74,13 +74,20 @@ buildNpmPackage {
     runHook postBuild
   '';
 
+  # remove unnecessary files
+  preInstall = ''
+    npm prune --omit=dev
+    chmod u+w -R dist
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/node_modules/anytype
-    cp -r electron.js electron dist node_modules package.json $out/lib/node_modules/anytype/
+    mkdir -p $out/lib/anytype
+    cp -r electron.js electron dist node_modules package.json $out/lib/anytype/
 
-    for icon in $out/lib/node_modules/anytype/electron/img/icons/*.png; do
+    for icon in $out/lib/anytype/electron/img/icons/*.png; do
       mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
       ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/anytype.png"
     done
@@ -90,7 +97,7 @@ buildNpmPackage {
     makeWrapper '${lib.getExe electron}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --add-flags $out/lib/node_modules/anytype/ \
+      --add-flags $out/lib/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
