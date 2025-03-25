@@ -3720,6 +3720,8 @@ self: super: with self; {
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
+  django-tasks = callPackage ../development/python-modules/django-tasks { };
+
   django-tastypie = callPackage ../development/python-modules/django-tastypie { };
 
   django-tenants = callPackage ../development/python-modules/django-tenants { };
