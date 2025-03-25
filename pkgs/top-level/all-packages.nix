@@ -1131,8 +1131,6 @@ with pkgs;
 
   yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
 
-  archi = callPackage ../tools/misc/archi { };
-
   breitbandmessung = callPackage ../applications/networking/breitbandmessung {
     electron = electron_34;
   };
@@ -14026,8 +14024,6 @@ with pkgs;
   };
 
   ledger-web = callPackage ../applications/office/ledger-web { };
-
-  lightburn = callPackage ../applications/graphics/lightburn { };
 
   lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr {
     inherit (darwin.apple_sdk.frameworks) AppKit;
