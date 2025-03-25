@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
@@ -52,10 +53,11 @@ buildGoModule (finalAttrs: {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/argocd version --client | grep v${finalAttrs.version} > /dev/null
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "argocd version --client";
+    version = "v${finalAttrs.version}";
+  };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd argocd \
