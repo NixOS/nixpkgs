@@ -6764,10 +6764,33 @@ with pkgs;
 
   mbqn = bqn;
 
-  cbqn = cbqn-bootstrap.phase2;
-  cbqn-replxx = cbqn-bootstrap.phase2-replxx;
-  cbqn-standalone = cbqn-bootstrap.phase0;
-  cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
+  cbqn = callPackage ../by-name/cb/cbqn/package.nix {
+    inherit (buildPackages.cbqn-bootstrap) mbqn-source stdenv;
+    generateBytecode = true;
+    bqn-interpreter = "${lib.getExe' buildPackages.cbqn-bootstrap.phase0 "cbqn"}";
+  };
+
+  cbqn-replxx = callPackage ../by-name/cb/cbqn/package.nix {
+    inherit (buildPackages.cbqn-bootstrap) mbqn-source stdenv;
+    generateBytecode = true;
+    enableReplxx = true;
+    bqn-interpreter = "${lib.getExe' buildPackages.cbqn-bootstrap.phase0 "cbqn"}";
+  };
+
+  cbqn-standalone = callPackage ../by-name/cb/cbqn/package.nix {
+    inherit (buildPackages.cbqn-bootstrap) mbqn-source stdenv;
+    generateBytecode = false;
+    # Not really used, but since null can be dangerous...
+    bqn-interpreter = "${lib.getExe' buildPackages.mbqn "bqn"}";
+  };
+
+  cbqn-standalone-replxx = callPackage ../by-name/cb/cbqn/package.nix {
+    inherit (buildPackages.cbqn-bootstrap) mbqn-source stdenv;
+    enableReplxx = true;
+    generateBytecode = false;
+    # Not really used, but since null can be dangerous...
+    bqn-interpreter = "${lib.getExe' buildPackages.mbqn "bqn"}";
+  };
 
   # Below, the classic self-bootstrapping process
   cbqn-bootstrap = lib.dontRecurseIntoAttrs {
@@ -6785,39 +6808,19 @@ with pkgs;
 
     mbqn-source = buildPackages.mbqn.src;
 
-    phase0 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source stdenv;
-      generateBytecode = false;
-      # Not really used, but since null can be dangerous...
-      bqn-interpreter = "${lib.getExe' buildPackages.mbqn "bqn"}";
-    };
+    phase0 = buildPackages.cbqn-standalone;
 
-    phase0-replxx = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source stdenv;
-      enableReplxx = true;
-      generateBytecode = false;
-      # Not really used, but since null can be dangerous...
-      bqn-interpreter = "${lib.getExe' buildPackages.mbqn "bqn"}";
-    };
+    phase0-replxx = buildPackages.cbqn-standalone-replxx;
 
-    phase1 = callPackage ../development/interpreters/bqn/cbqn {
+    phase1 = callPackage ../by-name/cb/cbqn/package.nix {
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       generateBytecode = true;
       bqn-interpreter = "${lib.getExe' buildPackages.cbqn-bootstrap.phase0 "cbqn"}";
     };
 
-    phase2 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source stdenv;
-      generateBytecode = true;
-      bqn-interpreter = "${lib.getExe' buildPackages.cbqn-bootstrap.phase0 "cbqn"}";
-    };
+    phase2 = buildPackages.cbqn;
 
-    phase2-replxx = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) mbqn-source stdenv;
-      generateBytecode = true;
-      enableReplxx = true;
-      bqn-interpreter = "${lib.getExe' buildPackages.cbqn-bootstrap.phase0 "cbqn"}";
-    };
+    phase2-replxx = buildPackages.cbqn-replxx;
   };
 
   dbqn = callPackage ../by-name/db/dbqn/package.nix {
