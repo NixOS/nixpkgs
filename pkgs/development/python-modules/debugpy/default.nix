@@ -84,7 +84,6 @@ buildPythonPackage rec {
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
             "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "i686-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86.dylib";
             "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -147,7 +146,6 @@ buildPythonPackage rec {
       "i686-linux"
       "aarch64-linux"
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
     ];
   };
