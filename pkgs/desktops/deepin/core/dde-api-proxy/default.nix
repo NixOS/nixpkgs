@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-api-proxy";
-  version = "1.0.16";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-api-proxy";
     rev = version;
-    hash = "sha256-kWodNftOPLIiQNPHAIC9p3VHFAis8FAI7vLJTqahAtU=";
+    hash = "sha256-QE31BOh2LFlY6te+2+nSHGbhLsikSX8V7xSvcLzCWRA=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dtkcore
     libsForQt5.qtbase
+    libsForQt5.polkit-qt
   ];
 
   meta = {
