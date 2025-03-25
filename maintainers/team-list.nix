@@ -858,6 +858,18 @@ with lib.maintainers;
     shortName = "Vim/Neovim";
   };
 
+  nextcloud = {
+    members = [
+      bachp
+      britter
+      dotlambda
+      ma27
+    ];
+    scope = "Maintain Nextcloud, its tests and the integration of applications.";
+    shortName = "Nextcloud";
+    enableFeatureFreezePing = true;
+  };
+
   ngi = {
     members = [
       eljamm
