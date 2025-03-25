@@ -5,6 +5,7 @@
   fetchFromGitea,
   nixosTests,
   installShellFiles,
+  eris-go,
 }:
 
 buildGoModule rec {
@@ -35,7 +36,12 @@ buildGoModule rec {
 
   env.skipNetworkTests = true;
 
-  passthru.tests = { inherit (nixosTests) eris-server; };
+  passthru.tests = { inherit (nixosTests) eris-server-modular; };
+
+  passthru.services.default = {
+    imports = [ ./service.nix ];
+    eris-server.package = eris-go; # FIXME: finalAttrs.finalPackage #321791
+  };
 
   meta = src.meta // {
     description = "Implementation of ERIS for Go";
