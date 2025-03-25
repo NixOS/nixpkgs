@@ -10589,6 +10589,12 @@
     githubId = 993484;
     name = "Greg Hale";
   };
+  imartemy1524 = {
+    email = "imartemy1524@gmail.com";
+    github = "imartemy1524";
+    githubId = 41122604;
+    name = "IMartemy";
+  };
   imgabe = {
     email = "gabrielpmonte@hotmail.com";
     github = "ImGabe";
