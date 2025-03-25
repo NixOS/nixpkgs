@@ -229,7 +229,7 @@ let
       + lib.optionalString withMono ''
         cp -r bin/GodotSharp/ $out/bin/
         wrapProgram $out/bin/godot4${suffix} \
-          --set DOTNET_ROOT ${dotnet-sdk} \
+          --set DOTNET_ROOT ${dotnet-sdk}/share/dotnet \
           --prefix PATH : "${
             lib.makeBinPath [
               dotnet-sdk
