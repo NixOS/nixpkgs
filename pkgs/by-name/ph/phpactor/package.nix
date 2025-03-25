@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -24,6 +25,10 @@ php.buildComposerProject2 (finalAttrs: {
     installShellCompletion --cmd phpactor \
     --bash <(php $out/bin/phpactor completion bash)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";
