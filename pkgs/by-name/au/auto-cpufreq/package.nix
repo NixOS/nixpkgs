@@ -93,6 +93,8 @@ python3Packages.buildPythonPackage rec {
     cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
 
+  pythonRelaxDeps = [ "psutil" ];
+
   passthru.tests = {
     inherit (nixosTests) auto-cpufreq;
   };
