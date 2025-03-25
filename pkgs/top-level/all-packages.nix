@@ -7968,8 +7968,6 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
-  rufo = callPackage ../development/tools/rufo { };
-
   muonStandalone = muon.override {
     embedSamurai = true;
     buildDocs = false;
