@@ -123,11 +123,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "script/patches/use-cross-platform-livekit.patch"
   ];
 
-  # Dynamically link WebRTC instead of static
-  postPatch = ''
-    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
-      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-  '';
+  postPatch =
+    # Dynamically link WebRTC instead of static
+    ''
+      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+    ''
+    # nixpkgs ships cargo-about 0.7, which is a seamless upgrade from 0.6
+    + ''
+      substituteInPlace script/generate-licenses \
+        --replace-fail 'CARGO_ABOUT_VERSION="0.6"' 'CARGO_ABOUT_VERSION="0.7"'
+    '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-xJaiHngsm74RdcEUXaDrc/Hwy4ywZrEiJt7JYTc/NpM=";

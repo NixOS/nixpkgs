@@ -5070,6 +5070,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  gen-nvim = buildVimPlugin {
+    pname = "gen.nvim";
+    version = "2024-12-29";
+    src = fetchFromGitHub {
+      owner = "David-Kunz";
+      repo = "gen.nvim";
+      rev = "e09a8dbffa139ad60d5b47998fcc8669ead1ebf4";
+      sha256 = "1fl559n01cdckv0mw5d49z72sxxqfqhqhxx1d2025gjix3db4wmk";
+    };
+    meta.homepage = "https://github.com/David-Kunz/gen.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gen_tags-vim = buildVimPlugin {
     pname = "gen_tags.vim";
     version = "2023-03-06";
@@ -5913,7 +5926,7 @@ final: prev:
       rev = "1b7ec0a713a2aa9965848d8b93f66dc93716fd1c";
       sha256 = "05np3p0lnsra6c6vx3h81vrba3nhwxrqb5l3qkdbx5bl58dds9bn";
     };
-    meta.homepage = "https://github.com/TheBlob42/houdini.nvim";
+    meta.homepage = "https://github.com/TheBlob42/houdini.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10656,6 +10669,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-rg = buildVimPlugin {
+    pname = "nvim-rg";
+    version = "2025-02-09";
+    src = fetchFromGitHub {
+      owner = "duane9";
+      repo = "nvim-rg";
+      rev = "38b221cefbfb57547c0c6952a1e049d840b2fdfb";
+      sha256 = "1wbgayyasli57p11751hackcmqcbaisca0kxbm24r67h3137yi23";
+    };
+    meta.homepage = "https://github.com/duane9/nvim-rg/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-rip-substitute = buildVimPlugin {
     pname = "nvim-rip-substitute";
     version = "2025-03-19";
@@ -12125,6 +12151,19 @@ final: prev:
       sha256 = "0wa4ayv7j68mighx9gacqrmxv131c21cqngr4f0qffnxrl0y04bl";
     };
     meta.homepage = "https://github.com/luochen1990/rainbow/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  rainbow_csv = buildVimPlugin {
+    pname = "rainbow_csv";
+    version = "2024-07-05";
+    src = fetchFromGitHub {
+      owner = "mechatroner";
+      repo = "rainbow_csv";
+      rev = "3dbbfd7d17536aebfb80f571255548495574c32b";
+      sha256 = "0zdhk1fhjdqsi9zlmhdnasg2kxik3lh3kpq7w1hmyf5z3dsmbzv5";
+    };
+    meta.homepage = "https://github.com/mechatroner/rainbow_csv/";
     meta.hydraPlatforms = [ ];
   };
 

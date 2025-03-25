@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook

@@ -1285,6 +1285,10 @@ in
     '';
   };
 
+  gen-nvim = super.gen-nvim.overrideAttrs {
+    runtimeDeps = [ curl ];
+  };
+
   ghcid = super.ghcid.overrideAttrs {
     configurePhase = "cd plugins/nvim";
   };

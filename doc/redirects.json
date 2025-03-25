@@ -17,6 +17,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -61,6 +64,9 @@
   ],
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
+  ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
   ],
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"

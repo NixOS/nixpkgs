@@ -26,7 +26,6 @@
         sourceHanPackages
         zabbix50
         zabbix60
-        zeroadPackages
         ;
 
       # Make sure haskell.compiler is included, so alternative GHC versions show up,

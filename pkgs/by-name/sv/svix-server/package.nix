@@ -22,13 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/server";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "hyper-0.14.28" = "sha256-4HGGpM9Ce3l3EJnu5XsGfqhrD9EykpR+ihEJlSZc03Q=";
-      "omniqueue-0.2.1" = "sha256-ab0/WO45m1A56EUY8nLUuxKI9NZqjDar9Y0ua77UCi8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0HxKL59IQFrospD/IkTP7+16u5ZEtOMiDn8cK1DpLXA=";
 
   nativeBuildInputs = [ pkg-config ];
 

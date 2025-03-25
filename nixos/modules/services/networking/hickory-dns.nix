@@ -13,14 +13,13 @@ let
         '';
       };
       zone_type = mkOption {
-        type = types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
+        type = types.enum [ "Primary" "Secondary" "External" ];
         default = "Primary";
         description = ''
           One of:
           - "Primary" (the master, authority for the zone).
           - "Secondary" (the slave, replicated from the primary).
-          - "Hint" (a cached zone with recursive resolver abilities).
-          - "Forward" (a cached zone where all requests are forwarded to another resolver).
+          - "External" (a cached zone that queries other nameservers).
 
           For more details about these zone types, consult the documentation for BIND,
           though note that hickory-dns supports only a subset of BIND's zone types:
@@ -28,13 +27,13 @@ let
         '';
       };
       file = mkOption {
-        type = types.either types.path types.str;
-        default = "${config.zone}.zone";
-        defaultText = literalExpression ''"''${config.zone}.zone"'';
+        type = types.nullOr (types.either types.path types.str);
+        default = if config.zone_type != "External" then "${config.zone}.zone" else null;
+        defaultText = literalExpression ''if config.zone_type != "External" then "''${config.zone}.zone" else null'';
         description = ''
           Path to the .zone file.
           If not fully-qualified, this path will be interpreted relative to the `directory` option.
-          If omitted, defaults to the value of the `zone` option suffixed with ".zone".
+          If omitted, defaults to the value of the `zone` option suffixed with ".zone" when `zone_type` isn't External; otherwise, defaults to `null`.
         '';
       };
     };
@@ -82,7 +81,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = toml.generate "hickory-dns.toml" (
-          lib.filterAttrsRecursive (_: v: v != null) cfg.settings
+          lib.mapAttrs (_: v: if builtins.isList v then map (v: if builtins.isAttrs v then lib.filterAttrs (_: v: v != null) v else v) v else v) (lib.filterAttrsRecursive (_: v: v != null) cfg.settings)
         );
         defaultText = lib.literalExpression ''
           let toml = pkgs.formats.toml { }; in toml.generate "hickory-dns.toml" cfg.settings

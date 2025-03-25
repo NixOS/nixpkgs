@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       devPaths = lib.mapAttrsToList (_k: lib.getDev) finalAttrs.finalPackage.libs;
     in
     ''
-      mkdir -p $out $dev/nix-support $doc $man
+      mkdir -p $out $dev/nix-support
 
       # Custom files
       echo $libs >> $dev/nix-support/propagated-build-inputs
@@ -168,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       # Forwarded outputs
-      ln -s ${nix-manual} $doc
-      ln -s ${nix-manual.man} $man
+      ln -sT ${nix-manual} $doc
+      ln -sT ${nix-manual.man} $man
     '';
 
   passthru = {

@@ -22,13 +22,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cpp_demangle-0.4.1" = "sha256-9QopX2TOJc8bZ+UlSOFdjoe8NTJLVGrykyFL732tE3A=";
-      "reqwest-0.12.2" = "sha256-m46NyzsgXsDxb6zwVXP0wCdtCH+rb5f0x+oPNHuBF8s=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wRzHFKTzS/wSX2LEB4Hj5LX1gVI9gFonbibPzCmhWtw=";
 
   nativeBuildInputs = [
     pkg-config

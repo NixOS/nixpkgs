@@ -912,7 +912,7 @@ in {
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
-  pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgadmin4 = runTest ./pgadmin4.nix;
   pgbouncer = handleTest ./pgbouncer.nix {};
   pghero = runTest ./pghero.nix;
   pgweb = runTest ./pgweb.nix;
@@ -999,7 +999,7 @@ in {
   qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
-  qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix {};
+  qtile = runTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix;
   quake3 = handleTest ./quake3.nix {};
   quicktun = handleTest ./quicktun.nix {};
   quickwit = handleTest ./quickwit.nix {};
@@ -1008,7 +1008,7 @@ in {
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
   radicle = runTest ./radicle.nix;
-  ragnarwm = handleTest ./ragnarwm.nix {};
+  ragnarwm = runTestOn ["x86_64-linux" "aarch64-linux"] ./ragnarwm.nix;
   rasdaemon = handleTest ./rasdaemon.nix {};
   rathole = runTest ./rathole.nix;
   readarr = handleTest ./readarr.nix {};

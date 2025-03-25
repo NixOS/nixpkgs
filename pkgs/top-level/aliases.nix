@@ -853,6 +853,7 @@ mapAliases {
   linuxPackages_6_11 = linuxKernel.packages.linux_6_11;
   linuxPackages_6_12 = linuxKernel.packages.linux_6_12;
   linuxPackages_6_13 = linuxKernel.packages.linux_6_13;
+  linuxPackages_6_14 = linuxKernel.packages.linux_6_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -879,6 +880,7 @@ mapAliases {
   linux_6_11 = linuxKernel.kernels.linux_6_11;
   linux_6_12 = linuxKernel.kernels.linux_6_12;
   linux_6_13 = linuxKernel.kernels.linux_6_13;
+  linux_6_14 = linuxKernel.kernels.linux_6_14;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -1168,8 +1170,8 @@ mapAliases {
   openlp = throw "openlp has been removed for now because the outdated version depended on insecure and removed packages and it needs help to upgrade and maintain it; see https://github.com/NixOS/nixpkgs/pull/314882"; # Added 2024-07-29
   openmpt123 = throw "'openmpt123' has been renamed to/replaced by 'libopenmpt'"; # Converted to throw 2024-10-17
   openssl_3_0 = openssl_3; # Added 2022-06-27
-  opensycl = lib.warn "'opensycl' has been renamed to 'adaptivecpp'" adaptivecpp; # Added 2024-12-04
-  opensyclWithRocm = lib.warn "'opensyclWithRocm ' has been renamed to 'adaptivecppWithRocm '" adaptivecppWithRocm; # Added 2024-12-04
+  opensycl = lib.warnOnInstantiate "'opensycl' has been renamed to 'adaptivecpp'" adaptivecpp; # Added 2024-12-04
+  opensyclWithRocm = lib.warnOnInstantiate "'opensyclWithRocm' has been renamed to 'adaptivecppWithRocm'" adaptivecppWithRocm; # Added 2024-12-04
   orchis = throw "'orchis' has been renamed to/replaced by 'orchis-theme'"; # Converted to throw 2024-10-17
   onlyoffice-bin = onlyoffice-desktopeditors; # Added 2024-09-20
   onlyoffice-bin_latest = onlyoffice-bin; # Added 2024-07-03
@@ -1494,6 +1496,7 @@ mapAliases {
   steam-run-native = steam-run; # added 2022-02-21
   StormLib = stormlib; # Added 2024-01-21
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry-qt6"; # Added 2024-11-22
+  strelka = throw "strelka depends on Python 2.6+, and does not support Python 3."; # Added 2025-03-17
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
   sumokoin = throw "sumokoin has been removed as it was abandoned upstream"; # Added 2024-11-23
   swiProlog = lib.warnOnInstantiate "swiProlog has been renamed to swi-prolog" swi-prolog; # Added 2024-09-07
@@ -1701,6 +1704,7 @@ mapAliases {
   xbmc-retroarch-advanced-launchers = throw "'xbmc-retroarch-advanced-launchers' has been renamed to/replaced by 'kodi-retroarch-advanced-launchers'"; # Converted to throw 2024-10-17
   xboxdrv = throw "'xboxdrv' has been dropped as it has been superseded by an in-tree kernel driver"; # Added 2024-12-25
   xdg_utils = throw "'xdg_utils' has been renamed to/replaced by 'xdg-utils'"; # Converted to throw 2024-10-17
+  xdragon = dragon-drop; # Added 2025-03-22
   xen-light = throw "'xen-light' has been renamed to/replaced by 'xen-slim'"; # Added 2024-06-30
   xen-slim = throw "'xen-slim' has been renamed to 'xen'. The old Xen package with built-in components no longer exists"; # Added 2024-10-05
   xen_4_16 = throw "While Xen 4.16 was still security-supported when it was removed from Nixpkgs, it would have reached its End of Life a couple of days after NixOS 24.11 released. To avoid shipping an insecure version of Xen, the Xen Project Hypervisor Maintenance Team decided to delete the derivation entirely"; # Added 2024-10-05
@@ -1735,6 +1739,11 @@ mapAliases {
 
   ### Z ###
 
+  zeroadPackages = recurseIntoAttrs {
+    zeroad = lib.warnOnInstantiate "'zeroadPackages.zeroad' has been renamed to 'zeroad'" zeroad; # Added 2025-03-22
+    zeroad-data = lib.warnOnInstantiate "'zeroadPackages.zeroad-data' has been renamed to 'zeroad-data'" zeroad-data; # Added 2025-03-22
+    zeroad-unwrapped = lib.warnOnInstantiate "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'" zeroad-unwrapped; # Added 2025-03-22
+  };
   zeromq4 = zeromq; # Added 2024-11-03
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
