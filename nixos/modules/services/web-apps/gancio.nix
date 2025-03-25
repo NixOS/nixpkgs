@@ -171,7 +171,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      (pkgs.runCommand "gancio" { } ''
+        mkdir -p $out/bin
+        echo "#!${pkgs.runtimeShell}
+          cd /var/lib/gancio/
+          exec ${lib.getExe cfg.package} ''${1:---help}
+        " > $out/bin/gancio
+        chmod +x $out/bin/gancio
+      '')
+    ];
 
     users.users.gancio = lib.mkIf (cfg.user == "gancio") {
       isSystemUser = true;
