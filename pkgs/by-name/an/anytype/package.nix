@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   runCommand,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
+  anytype-heart,
   libsecret,
   electron,
   makeDesktopItem,
@@ -14,7 +14,6 @@
 }:
 
 let
-  anytype-heart = callPackage ./anytype-heart { };
   pname = "anytype";
   version = "0.45.3";
 
