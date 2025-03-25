@@ -11,7 +11,7 @@
   zlib,
   libjpeg,
   libusb1,
-  python311Packages,
+  python3Packages,
   sane-backends,
   dbus,
   file,
@@ -78,7 +78,7 @@ assert
     builtins.elem hplipArch pluginArches
     || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-python311Packages.buildPythonApplication {
+python3Packages.buildPythonApplication {
   inherit pname version;
   format = "other";
 
@@ -121,7 +121,7 @@ python311Packages.buildPythonApplication {
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath =
-    with python311Packages;
+    with python3Packages;
     [
       dbus
       pillow
@@ -130,6 +130,7 @@ python311Packages.buildPythonApplication {
       usbutils
       dbus-python
       distro
+      distutils
     ]
     ++ lib.optionals withQt5 [
       pyqt5
@@ -342,7 +343,7 @@ python311Packages.buildPythonApplication {
     "share/hplip"
     "lib/cups/backend"
     "lib/cups/filter"
-    python311Packages.python.sitePackages
+    python3Packages.python.sitePackages
     "lib/sane"
   ];
 
