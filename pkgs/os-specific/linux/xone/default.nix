@@ -56,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux kernel driver for Xbox One and Xbox Series X|S accessories";
     homepage = "https://github.com/medusalix/xone";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ rhysmdnz ];
+    maintainers = with lib.maintainers; [
+      rhysmdnz
+      fazzi
+    ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.11";
   };
