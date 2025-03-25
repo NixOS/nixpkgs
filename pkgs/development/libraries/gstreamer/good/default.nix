@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , replaceVars
 , meson
 , nasm
@@ -73,6 +74,13 @@ stdenv.mkDerivation rec {
     # dlopen libsoup_3 with an absolute path
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/dd1fc2b7931f5789815e17dda2ef7c31b9fba563.patch";
+      stripLen = 2;
+      hash = "sha256-m2h1F6M2hzw3HxizmCyEEqkUQe0ccLWFBvgT2f+GjNE=";
     })
   ];
 
