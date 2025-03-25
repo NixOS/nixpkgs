@@ -80,7 +80,10 @@ buildGoModule {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = [
+      maintainers.thoughtpolice
+      maintainers.theoparis
+    ];
     license = with licenses; [
       openssl
       isc
