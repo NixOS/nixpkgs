@@ -17211,13 +17211,13 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  lixVersions = recurseIntoAttrs (callPackage ../tools/package-management/lix {
+  lixPackageSets = recurseIntoAttrs (callPackage ../tools/package-management/lix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
   });
 
-  lix = lixVersions.stable;
+  lix = lixPackageSets.stable.lix;
 
   lixStatic = pkgsStatic.lix;
 
