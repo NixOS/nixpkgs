@@ -1478,7 +1478,7 @@ with pkgs;
     inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
-  krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
+  krusader = kdePackages.callPackage ../applications/file-managers/krusader { };
 
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -14686,13 +14686,6 @@ with pkgs;
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
-  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion {
-    guvcview = guvcview.override {
-      useQt = true;
-      useGtk = false;
-    };
-  };
-
   qsudo = libsForQt5.callPackage ../applications/misc/qsudo { };
 
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
@@ -16072,6 +16065,7 @@ with pkgs;
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
   freecad-wayland = freecad.override { withWayland = true; };
+  freecad-qt6 = freecad.override { withWayland = true; qtVersion = 6; };
 
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
@@ -17687,8 +17681,6 @@ with pkgs;
   romdirfs = callPackage ../tools/filesystems/romdirfs {
     stdenv = gccStdenv;
   };
-
-  xdragon = lowPrio (callPackage ../tools/X11/xdragon { });
 
   sail-riscv = callPackage ../applications/virtualization/sail-riscv {
     inherit (ocamlPackages) sail;
