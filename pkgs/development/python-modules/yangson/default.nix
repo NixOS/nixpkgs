@@ -5,7 +5,6 @@
   poetry-core,
   elementpath,
   pyyaml,
-  setuptools,
   pytestCheckHook,
 }:
 
@@ -23,14 +22,9 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "setuptools"
-  ];
-
   dependencies = [
     elementpath
     pyyaml
-    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
