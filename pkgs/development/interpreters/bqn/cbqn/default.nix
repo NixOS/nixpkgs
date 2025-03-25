@@ -1,6 +1,6 @@
 {
   lib,
-  callPackage,
+  fetchFromGitHub,
   fixDarwinDylibNames,
   libffi,
   mbqn-source,
@@ -14,12 +14,17 @@
   bqn-interpreter,
 }:
 
-let
-  sources = callPackage ./sources.nix { };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
-  inherit (sources.cbqn) version src;
+  version = "0.9.0";
+
+  src = fetchFromGitHub {
+    owner = "dzaima";
+    repo = "CBQN";
+    rev = "v${version}";
+    hash = "sha256-ZtajrH9bDIehZhNaKg1BOIXXE1Jo5p60inzlshcS4HU=";
+    fetchSubmodules = true;
+  };
 
   nativeBuildInputs =
     [
@@ -75,7 +80,7 @@ stdenv.mkDerivation {
   preBuild =
     ''
       mkdir -p build/singeliLocal/
-      cp -r ${sources.singeli.src}/* build/singeliLocal/
+      cp -r build/singeliSubmodule/* build/singeliLocal/
     ''
     + (
       if generateBytecode then
@@ -86,12 +91,12 @@ stdenv.mkDerivation {
       else
         ''
           mkdir -p build/bytecodeLocal/gen
-          cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
+          cp -r build/bytecodeSubmodule/* build/bytecodeLocal/
         ''
     )
     + lib.optionalString enableReplxx ''
       mkdir -p build/replxxLocal/
-      cp -r ${sources.replxx.src}/* build/replxxLocal/
+      cp -r build/replxxSubmodule/* build/replxxLocal/
     '';
 
   installPhase =
