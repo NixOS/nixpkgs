@@ -1131,8 +1131,6 @@ with pkgs;
 
   yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
 
-  archi = callPackage ../tools/misc/archi { };
-
   breitbandmessung = callPackage ../applications/networking/breitbandmessung {
     electron = electron_34;
   };
@@ -17264,8 +17262,6 @@ with pkgs;
 
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
-
-  depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   faust = res.faust2;
 
