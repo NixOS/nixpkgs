@@ -8,7 +8,6 @@
 ocamlPackages.buildDunePackage rec {
   pname = "obelisk";
   version = "0.8.1";
-  duneVersion = "3";
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
     repo = pname;
