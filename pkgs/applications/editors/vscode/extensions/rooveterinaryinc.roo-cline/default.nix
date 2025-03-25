@@ -1,6 +1,7 @@
 {
   lib,
   vscode-utils,
+  vscode-extensions-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -10,6 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "3.10.5";
     hash = "sha256-7A8BQHUu7CYA28fHv68Zvf6zhlJwwXZaNVLb+/cBAIg=";
   };
+
+  passthru.updateScript = vscode-extensions-update-script { };
 
   meta = {
     description = "AI-powered autonomous coding agent that lives in your editor";
