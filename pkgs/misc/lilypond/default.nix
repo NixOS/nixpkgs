@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-6W+gNXHHnyDhl5ZTr6vb5O5Cdlo9n9FJU/DNnupReBw=";
+    hash = "sha256-6W+gNXHHnyDhl5ZTr6vb5O5Cdlo9n9FJU/DNnupReBw=";
   };
 
   postInstall = ''
@@ -76,7 +76,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
+    substituteInPlace scripts/build/mf2pt1.pl \
+      --replace-fail "mem=mf2pt1" "mem=$PWD/mf/mf2pt1"
     export HOME=$TMPDIR/home
   '';
 
@@ -121,15 +122,15 @@ stdenv.mkDerivation rec {
     supportedFeatures = [ "commit" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Music typesetting system";
     homepage = "http://lilypond.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       marcweber
       yurrriq
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {
