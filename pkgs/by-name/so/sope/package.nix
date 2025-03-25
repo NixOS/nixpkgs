@@ -6,13 +6,13 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.11.2";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
     rev = "SOPE-${version}";
-    hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
+    hash = "sha256-2W8EMpbhkax2TQ2U/brOAi7Av6mcg209FUYyT3FZ5B4=";
   };
 
   buildInputs = [ gnustep-base libxml2 openssl ]
