@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  texinfo,
   libcddb,
   pkg-config,
   ncurses,
@@ -13,9 +15,11 @@ stdenv.mkDerivation rec {
   pname = "libcdio";
   version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/libcdio/libcdio/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-b4+99NGJz2Pyp6FUnFFs1yDHsiLHqq28kkom50WkhTk=";
+  src = fetchFromGitHub {
+    owner = "libcdio";
+    repo = "libcdio";
+    tag = version;
+    hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
   };
 
   env = lib.optionalAttrs stdenv.is32bit {
@@ -24,11 +28,23 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+    echo "
+    @set UPDATED 1 January 1970
+    @set UPDATED-MONTH January 1970
+    @set EDITION ${version}
+    @set VERSION ${version}
+    " > doc/version.texi
   '';
+
+  configureFlags = [
+    (lib.enableFeature true "maintainer-mode")
+  ];
 
   nativeBuildInputs = [
     pkg-config
     help2man
+    autoreconfHook
+    texinfo
   ];
 
   buildInputs = [
