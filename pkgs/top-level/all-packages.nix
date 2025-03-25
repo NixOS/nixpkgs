@@ -2058,8 +2058,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
 
-  colorls = callPackage ../tools/system/colorls { };
-
   coloursum = callPackage ../tools/text/coloursum {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3508,8 +3506,6 @@ with pkgs;
   headscale = callPackage ../servers/headscale {
     buildGoModule = buildGo123Module;
   };
-
-  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
   hobbits = libsForQt5.callPackage ../tools/graphics/hobbits { };
 
@@ -7918,8 +7914,6 @@ with pkgs;
   };
 
   premake = premake4;
-
-  procodile = callPackage ../tools/system/procodile { };
 
   pry = callPackage ../development/tools/pry { };
 
