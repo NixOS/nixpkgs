@@ -18905,6 +18905,8 @@ self: super: with self; {
 
   waybackpy = callPackage ../development/python-modules/waybackpy { };
 
+  waymax = callPackage ../development/python-modules/waymax { };
+
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcag-contrast-ratio = callPackage ../development/python-modules/wcag-contrast-ratio { };
