@@ -12,7 +12,8 @@
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
   version = "2.5.0";
-  format = "pyproject";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
@@ -21,28 +22,27 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-iDvgL5dQerQnu2ERKAWGvWppG7cQ/0uKEfVY93ItvO4=";
   };
 
+  build-system = [ python3Packages.poetry-core ];
+
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
   ];
 
   buildInputs = [
+    getent
     gtk3
-    python3Packages.poetry-core
   ];
 
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      click
-      distro
-      psutil
-      pygobject3
-      poetry-dynamic-versioning
-      setuptools
-      pyinotify
-    ]
-    ++ [ getent ];
+  dependencies = with python3Packages; [
+    click
+    distro
+    psutil
+    pygobject3
+    poetry-dynamic-versioning
+    setuptools
+    pyinotify
+  ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
