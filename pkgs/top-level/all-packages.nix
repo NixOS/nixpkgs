@@ -4749,8 +4749,6 @@ with pkgs;
 
   ratarmount = with python3Packages; toPythonApplication ratarmount;
 
-  rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
-
   retext = qt6Packages.callPackage ../applications/editors/retext { };
 
   inherit (callPackage ../tools/security/rekor { })

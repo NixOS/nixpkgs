@@ -15344,6 +15344,8 @@ self: super: with self; {
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
+  rdbtools = callPackage ../development/python-modules/rdbtools { };
+
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdkit = callPackage ../development/python-modules/rdkit {
