@@ -48,6 +48,15 @@ in
                 override_local_dns = false;
               };
             };
+            extraSettings = {
+              dns.extra_records = [
+                {
+                  name = "grafana.myvpn.example.com";
+                  type = "A";
+                  value = "100.64.0.3";
+                }
+              ];
+            };
           };
           nginx = {
             enable = true;
@@ -73,7 +82,13 @@ in
       };
     };
 
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
+  extraPythonPackages = p: [ p.pyyaml ];
+
   testScript = ''
+    import yaml
+
     start_all()
     headscale.wait_for_unit("headscale")
     headscale.wait_for_open_port(443)
@@ -90,5 +105,10 @@ in
     # Check that they are reachable from the tailnet
     peer1.wait_until_succeeds("tailscale ping peer2")
     peer2.wait_until_succeeds("tailscale ping peer1.tailnet")
+
+    with open("/etc/headscale/config.yaml", encoding="utf-8") as config:
+        config_dict = yaml.safe_load(config)
+        assert "extra_records" in config_dict["dns"].keys(), "Config file does not contain settings from services.headscale.extraSettings."
+        assert config_dict["dns"]["extra_records"][0]["name"] == "grafana.myvpn.example.com", "Extra record has wrong name or does not exist."
   '';
 }
