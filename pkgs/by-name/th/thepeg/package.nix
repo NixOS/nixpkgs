@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     description = "Toolkit for High Energy Physics Event Generation";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3Only;
+    # Broken on macOS/clang?
+    #        > ../include/ThePEG/Config/std.h:101:12: error: no member named 'mem_fun' in namespace 'std'; did you mean 'mem_fn'?
+    #   >   101 | using std::mem_fun;
+    #   >       |       ~~~~~^~~~~~~
+    #   >       |            mem_fn
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
   };
