@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  testers,
   texinfo,
   libcddb,
   pkg-config,
@@ -11,14 +12,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "libcdio";
     repo = "libcdio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
   };
 
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
     echo "
     @set UPDATED 1 January 1970
     @set UPDATED-MONTH January 1970
-    @set EDITION ${version}
-    @set VERSION ${version}
+    @set EDITION ${finalAttrs.version}
+    @set VERSION ${finalAttrs.version}
     " > doc/version.texi
   '';
 
@@ -65,6 +66,10 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     description = "Library for OS-independent CD-ROM and CD image access";
     longDescription = ''
@@ -75,6 +80,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
+    pkgConfigModules = [
+      "libcdio"
+      "libcdio++"
+      "libiso9660"
+      "libiso9660++"
+      "libudf"
+    ];
     platforms = platforms.unix;
   };
-}
+})
