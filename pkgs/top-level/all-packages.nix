@@ -12876,8 +12876,6 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
-  cdparanoiaIII = callPackage ../applications/audio/cdparanoia { };
-
   brotab = callPackage ../tools/misc/brotab {
     python = python3;
   };
