@@ -51,6 +51,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/llm-openrouter";
     changelog = "https://github.com/simonw/llm-openrouter/releases/tag/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ philiptaron ];
+    maintainers = with lib.maintainers; [
+      arcuru
+      philiptaron
+    ];
   };
 }
