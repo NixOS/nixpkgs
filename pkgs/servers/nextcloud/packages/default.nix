@@ -32,6 +32,7 @@ let
           appName = pname;
           appVersion = data.version;
           license = appBaseDefs.${pname};
+          maintainers = lib.teams.nextcloud.members;
           inherit (data)
             url
             hash
