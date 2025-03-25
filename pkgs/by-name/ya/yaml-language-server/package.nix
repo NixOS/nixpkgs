@@ -5,6 +5,7 @@
   fixup-yarn-lock,
   makeWrapper,
   nodejs,
+  writableTmpDirAsHomeHook,
   stdenv,
   yarn,
 }:
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     fixup-yarn-lock
     yarn
     nodejs
+    writableTmpDirAsHomeHook
   ];
 
   # NodeJS is also needed here so that script interpreter get patched
@@ -40,7 +42,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$offlineCache"
     fixup-yarn-lock yarn.lock
     yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
