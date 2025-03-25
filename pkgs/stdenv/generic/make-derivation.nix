@@ -288,7 +288,7 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isElf;
   outputs' = outputs ++ optional separateDebugInfo' "debug";
 
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
