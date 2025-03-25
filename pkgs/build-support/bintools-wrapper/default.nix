@@ -36,7 +36,9 @@
 
 # Note: the hardening flags are part of the bintools-wrapper, rather than
 # the cc-wrapper, because a few of them are handled by the linker.
-, defaultHardeningFlags ? [
+# Note: do not have default hardening flags for embedded (kernel=none)
+# targets, since these tend to fail to build or break assumptions
+, defaultHardeningFlags ? lib.optionals (!stdenvNoCC.targetPlatform.isNone) ([
     "bindnow"
     "format"
     "fortify"
@@ -60,7 +62,7 @@
       #    - static armv7l, where compilation fails.
       (!(targetPlatform.isAarch && targetPlatform.isStatic))
     ])
-  ]) "pie"
+  ]) "pie")
 }:
 
 assert propagateDoc -> bintools ? man;
