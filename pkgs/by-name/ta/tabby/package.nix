@@ -164,7 +164,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     # NOTE: Project contains a subproject for building llama-server
     # But, we already have a derivation for this
-    ln -s ${lib.getExe' llama-cpp "llama-server"} $out/bin/llama-server
+    ln -s ${lib.getExe' llamaccpPackage "llama-server"} $out/bin/llama-server
   '';
 
   env = {
