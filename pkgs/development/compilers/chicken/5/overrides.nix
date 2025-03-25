@@ -289,7 +289,30 @@ in
   chicken-doc-admin = broken;
   coops-utils = broken;
   crypt = broken;
-  hypergiant = broken;
+  hypergiant =
+    old:
+    (
+      (addToBuildInputsWithPkgConfig (
+        [
+          pkgs.libepoxy
+        ]
+      ))
+      old
+    )
+    // {
+      # hyperscene re-exports symbols from deps
+      propagatedBuildInputs = [
+        chickenEggs.glfw3
+        chickenEggs.glls
+        chickenEggs.gl-type
+        chickenEggs.hyperscene
+        chickenEggs.noise
+        chickenEggs.hyperscene
+        chickenEggs.soil
+        chickenEggs.srfi-18
+        chickenEggs.bitstring
+      ];
+    };
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
