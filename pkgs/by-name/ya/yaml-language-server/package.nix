@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "yaml-language-server";
-  version = "1.15.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     tag = version;
-    hash = "sha256-Y3Q/y9UIiy7US8Jl4vxT0Pfw8h3hiXK+Cu9TEQHyAaA=";
+    hash = "sha256-YGPktMZxYi6eihCDc8JIfN/Ht2uu3wGKoKPJWlDKu+g=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-zHcxZ4VU6CGux72Nsy0foU4gFshK1wO/LTfnwOoirmg=";
+    hash = "sha256-2OVxvvijnfB8Bytgoaybyx4p66nD/aahtyjxLf8womE=";
   };
 
   nativeBuildInputs = [
