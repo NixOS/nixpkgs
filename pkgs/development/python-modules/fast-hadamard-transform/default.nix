@@ -6,8 +6,10 @@
   config,
   setuptools,
   torch,
+  ninja,
+  wheel,
   cudaSupport ? config.cudaSupport,
-
+  autoAddDriverRunpath,
 }:
 
 assert cudaSupport -> torch.cudaSupport;
@@ -24,9 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-WFrjTQac+mUcVqW1QmDxbcXzYLU/YSgTnjgQHImpoTc=";
   };
 
-  nativeBuildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
   build-system = [
     setuptools
+    ninja
+    wheel
   ];
 
   dependencies = [
@@ -39,6 +46,7 @@ buildPythonPackage rec {
       FORCE_CUDA = cudaSupport;
     }
     // lib.optionalAttrs cudaSupport {
+      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
       TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
     };
 
