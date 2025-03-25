@@ -523,6 +523,7 @@ in {
   homer = handleTest ./homer {};
   homepage-dashboard = handleTest ./homepage-dashboard.nix {};
   honk = runTest ./honk.nix;
+  icecast = handleTest ./web-apps/icecast.nix {};
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   iosched = handleTest ./iosched.nix {};
