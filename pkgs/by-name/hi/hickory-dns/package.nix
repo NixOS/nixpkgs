@@ -27,13 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tests expect internet connectivity to query real nameservers like 8.8.8.8
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-    # remove when 0.25.0 is released
-    extraArgs = [
-      "--version"
-      "unstable"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust based DNS client, server, and resolver";
