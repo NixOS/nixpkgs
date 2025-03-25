@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
+    hash = "sha256-13iwjc1vrTgBhWRg4vpLmlrEoxA9DSuXIOz4R9cXXEc=";
   };
 
   outputs = [
