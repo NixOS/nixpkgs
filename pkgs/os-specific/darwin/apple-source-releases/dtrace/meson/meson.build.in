@@ -1,0 +1,25 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/dtrace/blob/main/dtrace.xcodeproj/project.pbxproj
+
+project('dtrace', 'c', 'cpp', version : '@version@')
+
+flex_exe = find_program('flex')
+yacc_exe = find_program('bison')
+
+lex = generator(flex_exe,
+  output : '@PLAINNAME@.yy.c',
+  arguments : ['-o', '@OUTPUT@', '@INPUT@'])
+
+yacc = generator(yacc_exe,
+  output : ['@BASENAME@.tab.c', '@BASENAME@.tab.h'],
+  arguments : ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'])
+
+corefoundation_dep = dependency('CoreFoundation')
+iokit_dep = dependency('IOKit')
+
+subdir('compat/opensolaris')
+subdir('lib/libelf')
+subdir('lib/libproc')
+subdir('lib/libctf')
+subdir('lib/libdtrace')
+subdir('cmd/dtrace')
