@@ -8,28 +8,36 @@
   libtermkey,
   unibilium,
 }:
-let
-  version = "0.4.5";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtickit";
-  inherit version;
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "leonerd";
     repo = "libtickit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-q8JMNFxmnyOiUso4nXLZjJIBFYR/EF6g45lxVeY0f1s=";
   };
+
+  outputs = [
+    "dev"
+    "man"
+    "out"
+  ];
 
   patches = [
     # Disabled on darwin, since test assumes TERM=linux
     ./001-skip-test-18term-builder-on-macos.patch
+    # Make the Makefile use $(PKG_CONFIG) instead of pkg-config, allowing for
+    # cross compilation.
+    ./002-use-pkg-config-env-var.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
     libtool
+    libtermkey
+    unibilium
   ];
 
   buildInputs = [
@@ -49,7 +57,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   meta = with lib; {
     description = "Terminal interface construction kit";
@@ -63,4 +71,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ onemoresuza ];
     platforms = platforms.unix;
   };
-}
+})
