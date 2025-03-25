@@ -276,7 +276,7 @@ rec {
   #
 
   iphone64 = {
-    config = "aarch64-apple-ios";
+    config = "arm64-apple-ios";
     # config = "aarch64-apple-darwin14";
     darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
@@ -295,7 +295,7 @@ rec {
   };
 
   aarch64-darwin = {
-    config = "aarch64-apple-darwin";
+    config = "arm64-apple-darwin";
     xcodePlatform = "MacOSX";
     platform = { };
   };
