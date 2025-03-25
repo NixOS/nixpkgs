@@ -76,8 +76,8 @@ in
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
-          Add OpenSMTPD-extras here if you want to use the filters, etc. from
-          that package.
+          Add packages here if you want to use them as as such, for example
+          from the opensmtpd-table-* packages.
         '';
       };
     };
