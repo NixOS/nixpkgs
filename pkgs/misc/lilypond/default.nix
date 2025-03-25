@@ -7,9 +7,12 @@
   texinfo,
   imagemagick,
   texi2html,
+  extractpdfmark,
   guile,
   python3,
   gettext,
+  glib,
+  gmp,
   flex,
   perl,
   bison,
@@ -21,9 +24,6 @@
   pango,
   fontforge,
   help2man,
-  zip,
-  netpbm,
-  groff,
   freefont_ttf,
   makeFontsConf,
   makeWrapper,
@@ -81,36 +81,43 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR/home
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    flex
-    makeWrapper
+  strictDeps = true;
+
+  depsBuildBuild = [
     pkg-config
   ];
 
-  buildInputs = [
-    ghostscript
-    texinfo
-    imagemagick
-    texi2html
-    guile
-    dblatex
-    tex
-    zip
-    netpbm
-    python3
-    gettext
-    perl
-    fontconfig
-    freetype
-    pango
-    fontforge
-    help2man
-    groff
-    t1utils
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
     boehmgc
+    dblatex
+    extractpdfmark
+    flex # for flex binary
+    fontconfig
+    fontforge
+    gettext
+    ghostscript
+    guile
+    help2man
+    imagemagick
+    makeWrapper
+    perl
+    pkg-config
+    python3
     rsync
+    t1utils
+    tex
+    texi2html
+    texinfo
+  ];
+
+  buildInputs = [
+    flex # FlexLexer.h
+    freetype
+    glib
+    gmp
+    pango
   ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
