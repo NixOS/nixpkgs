@@ -48,5 +48,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
+    badPlatforms = [
+      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
