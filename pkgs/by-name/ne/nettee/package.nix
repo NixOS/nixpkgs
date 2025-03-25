@@ -19,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  # additional shell scripts require accudate (not in nixpkgs)
+  postInstall = ''
+    rm $out/bin/*.sh
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
