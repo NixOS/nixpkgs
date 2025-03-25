@@ -13377,8 +13377,6 @@ with pkgs;
 
   inherit (xorg) xlsfonts;
 
-  xrdp = callPackage ../applications/networking/remote/xrdp { };
-
   inherit
     ({
       freerdp = callPackage ../applications/networking/remote/freerdp {
