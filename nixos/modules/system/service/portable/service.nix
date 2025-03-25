@@ -58,6 +58,13 @@ in
         '';
         default = [ ];
       };
+      environment = lib.mkOption {
+        type = types.attrsOf types.str;
+        description = ''
+          Environment variables to set for the process.
+        '';
+        default = { };
+      };
     };
   };
 }
