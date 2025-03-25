@@ -2,6 +2,7 @@
   lib,
   stdenv,
   kernel,
+  fetchpatch,
   fetchFromGitea,
 }:
 
@@ -16,6 +17,13 @@ stdenv.mkDerivation rec {
     rev = "c176fdb0d5bcba6ba2aba99ea36812e40f47751f";
     sha256 = "sha256-d2WH8Zv7F0phZmEKcDiaak9On+Mo9bAFhMulT/N5FWI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/AliEmreSenel/zenpower3/commit/cbb35320c4d1605a54c64e0dcd0293b13bc4dbcc.patch";
+      hash = "sha256-mEdfVE+qtCSKajordHDWwRo4QeR0mHB7sDE1zw805l8=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 
