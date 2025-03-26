@@ -56,7 +56,7 @@ run_require_checks() {
     set +e
     for name in "${nvimRequireCheck[@]}"; do
         local skip=false
-        for module in "${nvimSkipModule[@]}"; do
+        for module in "${nvimSkipModules[@]}"; do
             if [[ "$module" == "$name" ]]; then
                 echo "$name is in list of modules to not check. Skipping..."
                 skip=true
