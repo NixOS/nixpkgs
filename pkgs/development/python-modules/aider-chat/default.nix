@@ -177,6 +177,14 @@ let
         pyee
         typing-extensions
       ];
+      browser = [
+        streamlit
+      ];
+      help = [
+        llama-index-core
+        llama-index-embeddings-huggingface
+        torch
+      ];
     };
 
     passthru = {
@@ -189,6 +197,41 @@ let
         }:
         {
           dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
+          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
+          makeWrapperArgs = makeWrapperArgs ++ [
+            "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
+            "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
+          ];
+        }
+      );
+
+      withBrowser = aider-chat.overridePythonAttrs (
+        { dependencies, ... }:
+        {
+          dependencies = dependencies ++ aider-chat.optional-dependencies.browser;
+        }
+      );
+
+      withHelp = aider-chat.overridePythonAttrs (
+        { dependencies, ... }:
+        {
+          dependencies = dependencies ++ aider-chat.optional-dependencies.help;
+        }
+      );
+
+      withOptional = aider-chat.overridePythonAttrs (
+        {
+          dependencies,
+          makeWrapperArgs,
+          propagatedBuildInputs ? [ ],
+          ...
+        }:
+        {
+          dependencies =
+            dependencies
+            ++ aider-chat.optional-dependencies.playwright
+            ++ aider-chat.optional-dependencies.browser
+            ++ aider-chat.optional-dependencies.help;
           propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
           makeWrapperArgs = makeWrapperArgs ++ [
             "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
