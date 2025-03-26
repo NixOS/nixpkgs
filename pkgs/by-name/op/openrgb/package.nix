@@ -22,19 +22,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
-  nativeBuildInputs = with libsForQt5; [
-    qmake
-    pkg-config
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with libsForQt5; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
-  buildInputs = with libsForQt5; [
-    libusb1
-    hidapi
-    mbedtls_2
-    qtbase
-    qttools
-  ];
+  buildInputs =
+    [
+
+      libusb1
+      hidapi
+      mbedtls_2
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qttools
+      qtwayland
+    ]);
 
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
@@ -75,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     });
 
-  meta = with lib; {
+  meta = {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "openrgb";
   };
 })
