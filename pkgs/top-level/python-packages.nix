@@ -10123,6 +10123,8 @@ self: super: with self; {
 
   mujoco = callPackage ../development/python-modules/mujoco { inherit (pkgs) mujoco; };
 
+  mujoco-mjx = callPackage ../development/python-modules/mujoco-mjx { mujoco-main = pkgs.mujoco; };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
