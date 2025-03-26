@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  gitUpdater,
   # Optionally build Python bindings
   withPython ? false,
   python3,
@@ -126,6 +127,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $dev/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace-fail \
       'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/' 'INTERFACE_INCLUDE_DIRECTORIES "'
   '';
+
+  passthru.updateScript = gitUpdater {
+    # Releases are prefixed with v
+    rev-prefix = "v";
+    # Prefix for versions pre v2.5.0
+    ignoredVersions = "^nlopt-.*$";
+  };
 
   meta = {
     homepage = "https://nlopt.readthedocs.io/en/latest/";
