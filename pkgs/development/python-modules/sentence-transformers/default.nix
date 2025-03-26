@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -15,8 +14,6 @@
   pillow,
   scikit-learn,
   scipy,
-  sentencepiece,
-  tokenizers,
   torch,
   tqdm,
   transformers,
@@ -30,8 +27,6 @@ buildPythonPackage rec {
   pname = "sentence-transformers";
   version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "UKPLab";
@@ -114,5 +109,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+    badPlatforms = [
+      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
