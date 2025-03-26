@@ -12,7 +12,6 @@
   fetchFromGitHub,
   python3,
   nodejs,
-
 }:
 let
   # boring-sys expects the static libraries in build/ instead of lib/
