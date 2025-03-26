@@ -8,12 +8,10 @@
   setuptools,
 
   # dependencies
-  coloredlogs,
   datasets,
   huggingface-hub,
   numpy,
   packaging,
-  sympy,
   torch,
   transformers,
 
@@ -34,7 +32,7 @@ buildPythonPackage rec {
   version = "1.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -48,12 +46,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "transformers" ];
 
   dependencies = [
-    coloredlogs
-    datasets
     huggingface-hub
     numpy
     packaging
-    sympy
     torch
     transformers
   ] ++ transformers.optional-dependencies.sentencepiece;
