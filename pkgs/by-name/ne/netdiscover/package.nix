@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "netdiscover";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "netdiscover-scanner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pd/Rf1G9z8sBZA5i+bzuzYUCiNI0Tv7Bz0lJDJCQU9I=";
+    sha256 = "sha256-LUM6vl6pohrTW3X9c1FaDE7j9mvMuAiDkFBKWc4KZso=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
