@@ -39,7 +39,7 @@ let
   srcs = {
     "x86_64-linux" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_x86_64.whl";
-      hash = "sha256-05Xe87NP1oSOEVlu8pdaiV0fUG31EuQbH8XS3lIMjlE=";
+      hash = "sha256-xTeDBlaLoMgbIwp3ndMZTJ3RAzmrY2CugJKBCNN+f3U=";
     };
     # "aarch64-linux" = fetchurl {
     #   url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_aarch64.whl";

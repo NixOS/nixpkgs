@@ -1,6 +1,5 @@
 {
   apple-sdk,
-  fetchpatch2,
   libutil,
   mkAppleDerivation,
   ncurses,

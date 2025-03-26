@@ -16,7 +16,7 @@ def processItem(
 ):
     narInfoHash = dropPrefix(item["path"], nixPrefix).split("-")[0]
 
-    narFile = outDir / "nar" / f"{narInfoHash}{compressionExtension}"
+    narFile = outDir / "nar" / f"{narInfoHash}.nar{compressionExtension}"
     with open(narFile, "wb") as f:
         subprocess.run(
             f"nix-store --dump {item['path']} {compressionCommand}",
@@ -36,7 +36,7 @@ def processItem(
     )
     fileSize = os.path.getsize(narFile)
 
-    finalNarFileName = Path("nar") / f"{fileHash}{compressionExtension}"
+    finalNarFileName = Path("nar") / f"{fileHash}.nar{compressionExtension}"
     os.rename(narFile, outDir / finalNarFileName)
 
     with open(outDir / f"{narInfoHash}.narinfo", "wt") as f:

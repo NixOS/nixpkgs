@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mbp2018-bridge-drv";
   version = "2020-01-31";
 

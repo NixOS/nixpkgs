@@ -140,11 +140,6 @@ lib.mapAttrs mkLicense ({
     fullName = "Apache License 2.0";
   };
 
-  asl20-llvm = {
-    spdxId = "Apache-2.0 WITH LLVM-exception";
-    fullName = "Apache License 2.0 with LLVM Exceptions";
-  };
-
   bitstreamVera = {
     spdxId = "Bitstream-Vera";
     fullName = "Bitstream Vera Font License";
@@ -218,6 +213,11 @@ lib.mapAttrs mkLicense ({
   bsd3Lbnl = {
     spdxId = "BSD-3-Clause-LBNL";
     fullName = "Lawrence Berkeley National Labs BSD variant license";
+  };
+
+  bsdAxisNoDisclaimerUnmodified = {
+    fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
+    url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
   };
 
   bsdOriginal = {
@@ -852,6 +852,11 @@ lib.mapAttrs mkLicense ({
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = "https://opensource.franz.com/preamble.html";
+  };
+
+  llvm-exception = {
+    spdxId = "LLVM-exception";
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
   };
 
   lppl1 = {

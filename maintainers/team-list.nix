@@ -58,6 +58,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  apm = {
+    scope = "Team for packages maintained by employees of Akademie für Pflegeberufe und Management GmbH.";
+    shortName = "apm employees";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      wolfgangwalther
+      DutchGerman
+    ];
+  };
+
   bazel = {
     members = [
       mboes
@@ -208,6 +218,7 @@ with lib.maintainers;
   cuda = {
     members = [
       connorbaker
+      prusnak
       samuela
       SomeoneSerge
     ];
@@ -434,6 +445,7 @@ with lib.maintainers;
     members = [
       globin
       krav
+      leona
       talyz
       yayayayaka
     ];
@@ -515,6 +527,7 @@ with lib.maintainers;
 
   home-assistant = {
     members = [
+      dotlambda
       fab
       hexa
     ];
@@ -537,7 +550,10 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [ akhilmhdh ];
+    members = [
+      akhilmhdh
+      mahyarmirrashed
+    ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };
@@ -1003,8 +1019,9 @@ with lib.maintainers;
 
   rocm = {
     members = [
-      Madouura
       Flakebi
+      GZGavinZhao
+      LunNova
       mschwaig
     ];
     githubTeams = [ "rocm-maintainers" ];

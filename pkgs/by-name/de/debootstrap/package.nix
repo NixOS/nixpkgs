@@ -16,6 +16,7 @@
   gnused,
   gzip,
   xz,
+  zstd,
   makeWrapper,
   nix-update-script,
   testers,
@@ -40,6 +41,7 @@ let
     util-linux
     wget
     xz
+    zstd
   ];
 in
 stdenv.mkDerivation rec {

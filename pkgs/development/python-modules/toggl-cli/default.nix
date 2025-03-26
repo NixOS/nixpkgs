@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AuHau";
     repo = "toggl-cli";
     tag = "v${version}";
-    hash = "sha256-RYOnlZxg3TZQO5JpmWlnUdL2hNFu4bjkdGU4c2ysqpA=";
+    hash = "sha256-x73gs0L+/m1cJPRkzZfna5KxU2KNjsqeUCyFo2JjkdE=";
   };
 
   env.PBR_VERSION = version;
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     homepage = "https://toggl.uhlir.dev/";
-    changelog = "https://github.com/AuHau/toggl-cli/releases/tag/v${version}";
+    changelog = "https://github.com/AuHau/toggl-cli/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
     mainProgram = "toggl";

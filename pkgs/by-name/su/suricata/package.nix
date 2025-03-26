@@ -27,7 +27,7 @@
   python3,
   zlib,
   redisSupport ? true,
-  redis,
+  valkey,
   hiredis,
   rustSupport ? true,
   rustc,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional hyperscanSupport hyperscan
     ++ lib.optionals redisSupport [
-      redis
+      valkey
       hiredis
     ];
 

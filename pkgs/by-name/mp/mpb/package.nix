@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "mpb";
     tag = "v${version}";
     hash = "sha256-+2cMjZSGdfngtGoAeZRPRPBDvflTEIOWO8Se0W6jv9k=";
   };

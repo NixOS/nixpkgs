@@ -20,7 +20,7 @@
   mesa,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "piglit";
   version = "unstable-2020-10-23";
 

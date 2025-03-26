@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qxmpp";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "qxmpp-project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mb8JMBV5M+0hFJLTxwYE47jB/FJKi/MPUwd3Nhan+QQ=";
+    hash = "sha256-M3F4tNIO3RvDxk/lce8/J6kmQtnsGLILQ15uEzgyfds=";
   };
 
   nativeBuildInputs = [

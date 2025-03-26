@@ -12,8 +12,6 @@
   liblo,
   libmad,
   lrdf,
-  librdf_raptor,
-  librdf_rasqal,
   libsamplerate,
   libsndfile,
   pkg-config,
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
     libsamplerate
     vamp-plugin-sdk
     alsa-lib
-    librdf_raptor
-    librdf_rasqal
     redland
     serd
     sord

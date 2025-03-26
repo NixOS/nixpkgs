@@ -56,7 +56,7 @@ The output should look something like this:
 Based on this, you can add an attribute to `extensions-manual.nix`:
 
 ```nix
-  azure-devops = mkAzExtension rec {
+  azure-devops = mkAzExtension {
     pname = "azure-devops";
     version = "1.0.0";
     url = "https://github.com/Azure/azure-devops-cli-extension/releases/download/20240206.1/azure_devops-${version}-py2.py3-none-any.whl";

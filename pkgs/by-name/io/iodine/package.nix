@@ -20,8 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib ];
 
-  patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
-
   env.NIX_CFLAGS_COMPILE = ''-DIFCONFIGPATH="${nettools}/bin/" -DROUTEPATH="${nettools}/bin/"'';
 
   installFlags = [ "prefix=\${out}" ];
@@ -31,9 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "http://code.kryo.se/iodine/";
+    homepage = "https://code.kryo.se/iodine/";
     description = "Tool to tunnel IPv4 data through a DNS server";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 })

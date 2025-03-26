@@ -3,6 +3,7 @@
   qtwebengine,
   qttools,
   libxslt,
+  phonon,
 }:
 mkKdeDerivation {
   pname = "mailcommon";
@@ -11,5 +12,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtwebengine
     qttools
+    phonon
   ];
 }

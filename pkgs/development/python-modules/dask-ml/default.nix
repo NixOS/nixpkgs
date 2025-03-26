@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatch-vcs,
@@ -71,13 +69,27 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # AttributeError: module 'numpy' has no attribute 'product'
-    "tests/test_svd.py"
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask/dask-ml/issues/1016
+    "tests/model_selection/test_hyperband.py"
+    "tests/model_selection/test_incremental.py"
+    "tests/model_selection/test_incremental_warns.py"
+    "tests/model_selection/test_successive_halving.py"
   ];
 
   disabledTests = [
     # AssertionError: Regex pattern did not match.
     "test_unknown_category_transform_array"
+
+    # ValueError: cannot broadcast shape (nan,) to shape (nan,)
+    # https://github.com/dask/dask-ml/issues/1012
+    "test_fit_array"
+    "test_fit_frame"
+    "test_fit_transform_frame"
+    "test_laziness"
+    "test_lr_score"
+    "test_ok"
+    "test_scoring_string"
   ];
 
   __darwinAllowLocalNetworking = true;

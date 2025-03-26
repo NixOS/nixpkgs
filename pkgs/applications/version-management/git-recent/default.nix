@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-recent";
-  version = "1.1.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     rev = "v${version}";
-    sha256 = "1g8i6vpjnnfh7vc1269c91bap267w4bxdqqwnzb8x18vqgn2fx8i";
+    sha256 = "sha256-KPM24DVwvLdHeOkq77fz1TJ6NxJ2h21bP0TrItCPamo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -72,7 +72,6 @@ python.pkgs.buildPythonApplication rec {
     description = "Simple Let's Encrypt client";
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      gebner
       makefu
     ];
     platforms = platforms.linux;

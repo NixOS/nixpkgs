@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "brocode";
-    repo = pname;
+    repo = "fblog";
     rev = "v${version}";
     hash = "sha256-YOHLw8YCgOGB1Nn2tD+EnicKd/tiMk07OWv+49btbpw=";
   };

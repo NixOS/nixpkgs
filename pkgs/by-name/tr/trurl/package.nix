@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "curl";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "trurl";
+    rev = "trurl-${version}";
     hash = "sha256-Og7+FVCBWohVd58GVxFN3KChcG0Kts1MokiOQXZ1OTc=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command line tool for URL parsing and manipulation";
     homepage = "https://curl.se/trurl";
-    changelog = "https://github.com/curl/trurl/releases/tag/${pname}-${version}";
+    changelog = "https://github.com/curl/trurl/releases/tag/trurl-${version}";
     license = licenses.curl;
     maintainers = with maintainers; [ christoph-heiss ];
     platforms = platforms.all;

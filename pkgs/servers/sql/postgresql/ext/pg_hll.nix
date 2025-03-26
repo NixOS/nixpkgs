@@ -1,28 +1,28 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  stdenv,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_hll";
   version = "2.18";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "postgresql-hll";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "HyperLogLog for PostgreSQL";
     homepage = "https://github.com/citusdata/postgresql-hll";
     changelog = "https://github.com/citusdata/postgresql-hll/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

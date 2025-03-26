@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "ldap3-bleeding-edge";
-  version = "2.10.1.1337";
+  version = "2.10.1.1338";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ldap3_bleeding_edge";
     inherit version;
-    hash = "sha256-j4hzcqwOONol6YqY9Ldz9YphjPmacFoVyqUnMHW1aZk=";
+    hash = "sha256-7j5W1C0scvjm6j3eueNomdTRd+Uzishhr2U1bb1gB3s=";
   };
 
   build-system = [ setuptools ];

@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/morganstanley/modern-cpp-kafka/commit/236f8f91f5c3ad6e1055a6f55cd3aebd218e1226.patch";
       hash = "sha256-cy568TQUu08sadq79hDz9jMvDqiDjfr+1cLMxFWGm1Q=";
     })
+    (fetchpatch {
+      name = "macos-find-dylib.patch";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/commit/dc2753cd95b607a7202b40bad3aad472558bf350.patch";
+      hash = "sha256-Te3GwAVRDyb6GFWlvkq1mIcNeXCtMyLr+/w1LilUYbE=";
+    })
   ];
 
   postPatch = ''
@@ -53,13 +58,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
   propagatedBuildInputs = [ rdkafka ];
 
-  cmakeFlags = [
-    "-DLIBRDKAFKA_INCLUDE_DIR=${rdkafka.out}/include"
-    "-DGTEST_LIBRARY_DIR=${gtest.out}/lib"
-    "-DGTEST_INCLUDE_DIR=${gtest.dev}/include"
-    "-DRAPIDJSON_INCLUDE_DIRS=${rapidjson.out}/include"
-    "-DCMAKE_CXX_FLAGS=-Wno-uninitialized"
-  ];
+  cmakeFlags =
+    let
+      inherit (lib) cmakeFeature getLib getInclude;
+    in
+    [
+      (cmakeFeature "LIBRDKAFKA_LIBRARY_DIR" "${getLib rdkafka}/lib")
+      (cmakeFeature "LIBRDKAFKA_INCLUDE_DIR" "${getInclude rdkafka}/include")
+      (cmakeFeature "GTEST_LIBRARY_DIR" "${getLib gtest}/lib")
+      (cmakeFeature "GTEST_INCLUDE_DIR" "${getInclude gtest}/include")
+      (cmakeFeature "RAPIDJSON_INCLUDE_DIRS" "${getInclude rapidjson}/include")
+      (cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-uninitialized")
+    ];
 
   checkInputs = [
     gtest

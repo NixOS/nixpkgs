@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  crystal_1_14,
+  crystal,
   wrapGAppsHook4,
   gobject-introspection,
   desktopToDarwinBundle,
@@ -20,13 +20,13 @@
   writeShellScript,
 }:
 let
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
     tag = "v${version}";
-    hash = "sha256-KuxGQs7TPn2Lmgk/NjfoRsBtkTY0GC/DOUlQZXCdRXE=";
+    hash = "sha256-qWQ2V7o7swbnXGgPOcnZ5Mg/SpjHOYpaD1HL6kgutCs=";
   };
 
   gtk-doc =
@@ -45,7 +45,7 @@ let
       ];
     };
 in
-crystal_1_14.buildCrystalPackage {
+crystal.buildCrystalPackage {
   pname = "rtfm";
   inherit version src;
 
@@ -57,7 +57,7 @@ crystal_1_14.buildCrystalPackage {
       --replace-fail 'basedir = Path.new("/usr/share/doc")' 'basedir = Path.new(ARGV[0]? || "${gtk-doc}/share/doc")' \
       --replace-fail 'webkit2gtk-4.0' 'webkitgtk-6.0'
     substituteInPlace src/doc2dash/create_crystal_docset.cr \
-      --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal_1_14}/share/doc/crystal/api")'
+      --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal}/share/doc/crystal/api")'
     substituteInPlace src/doc2dash/docset_builder.cr \
       --replace-fail 'File.copy(original, real_dest)' 'File.copy(original, real_dest); File.chmod(real_dest, 0o600)'
     substituteInPlace Makefile \

@@ -44,6 +44,9 @@ llvmPackages.stdenv.mkDerivation rec {
     description = "High-performance automatic differentiation of LLVM and MLIR";
     maintainers = with lib.maintainers; [ kiranshila ];
     platforms = lib.platforms.all;
-    license = lib.licenses.asl20-llvm;
+    license = with lib.licenses; [
+      asl20
+      llvm-exception
+    ];
   };
 }

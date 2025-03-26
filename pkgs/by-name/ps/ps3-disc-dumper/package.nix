@@ -5,6 +5,7 @@
   zlib,
   openssl,
   dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -37,7 +38,7 @@ buildDotnetModule rec {
     openssl
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Handy utility to make decrypted PS3 disc dumps";

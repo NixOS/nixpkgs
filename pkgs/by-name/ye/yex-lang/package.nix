@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "yex-lang";
   version = "0.pre+date=2022-05-10";
 

@@ -41,7 +41,6 @@
   importlib-resources,
   packaging,
   unidiff,
-  glibcLocales,
   nixosTests,
 }:
 
@@ -136,7 +135,6 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
@@ -155,7 +153,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
   '';
 

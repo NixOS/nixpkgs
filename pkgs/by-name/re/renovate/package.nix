@@ -4,8 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  overrideSDK,
-  pnpm_9,
+  pnpm_10,
   python3,
   testers,
   xcbuild,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "39.153.1";
+  version = "39.208.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-QKCUHwm6c50wTDFbmAqhh/tV8Lzx9HD4U9k7ke6t8OE=";
+    hash = "sha256-Y4EJCbIK3XZAilbf/zMEfjEDYHNrUrAGRfsNmY0h/Bw=";
   };
 
   postPatch = ''
@@ -33,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
     yq-go
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-MTkbRQnimEXP4XepJ+x2KGHtJTkqN9WBWvisAHH/j18=";
+    hash = "sha256-5KGTt6lx44LNpHG/RelCQ1ZlQOMOL6bJi66M2nCiirg=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

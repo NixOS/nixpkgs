@@ -91,16 +91,6 @@ python3Packages.buildPythonApplication rec {
     mv test_character_info resources/character_info
   '';
 
-  disabledTests = [
-    # this test checks the behaviour of openapi
-    # one of the functions returns a slightly different output due to openapi version differences
-    "test_OpenAPIの形が変わっていないことを確認"
-
-    # these tests fail due to some tiny floating point discrepancies
-    "test_upspeak_voiced_last_mora"
-    "test_upspeak_voiced_N_last_mora"
-  ];
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     syrupy

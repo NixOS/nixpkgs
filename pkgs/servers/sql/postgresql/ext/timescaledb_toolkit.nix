@@ -1,11 +1,11 @@
 {
-  lib,
-  fetchFromGitHub,
   buildPgrxExtension,
-  postgresql,
-  nixosTests,
   cargo-pgrx_0_12_6,
+  fetchFromGitHub,
+  lib,
   nix-update-script,
+  nixosTests,
+  postgresql,
 }:
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
@@ -17,7 +17,7 @@
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
-    rev = version;
+    tag = version;
     hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
   };
 
@@ -33,11 +33,11 @@
   # tests take really long
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provide additional tools to ease all things analytic when using TimescaleDB";
     homepage = "https://github.com/timescale/timescaledb-toolkit";
-    maintainers = with maintainers; [ typetetris ];
+    maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.tsl;
+    license = lib.licenses.tsl;
   };
 }

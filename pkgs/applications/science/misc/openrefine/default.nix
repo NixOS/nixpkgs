@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "3.9.0";
+  version = "3.9.1";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-793qKSo9/FVzchlHqQKSBF4MT3rJUv9xvf7YJBiQnZo=";
+    hash = "sha256-ClRjU9xGZLtLhjnvWrEVEojniVMpVNGyBu9bmEGqSDI=";
   };
 
   npmPkg = buildNpmPackage {

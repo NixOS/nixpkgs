@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "fetzerch-sunandmoon-datasource";
   version = "0.3.3";
   zipHash = "sha256-IJe1OiPt9MxqqPymuH0K27jToSb92M0P4XGZXvk0paE=";

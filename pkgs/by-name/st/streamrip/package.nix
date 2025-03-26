@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamrip";
-  version = "2.0.5";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
     rev = "v${version}";
-    hash = "sha256-KwMt89lOPGt6nX7ywliG/iAJ1WnG0CRPwhAVlPR85q0=";
+    hash = "sha256-Klrkz0U36EIGO2sNxTnKPACvvqu1sslLFFrQRjFdxiE=";
   };
 
   patches = [

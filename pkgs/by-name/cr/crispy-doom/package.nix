@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "crispy-doom";
+    rev = "crispy-doom-${version}";
     sha256 = "sha256-+rNZsb4GAjzNcIU5xZGBpmP+nXNOP16oVg68nfecMrw=";
   };
 

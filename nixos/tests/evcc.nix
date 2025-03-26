@@ -1,5 +1,8 @@
 { pkgs, lib, ... }:
 
+let
+  port = "1234";
+in
 {
   name = "evcc";
   meta.maintainers = with lib.maintainers; [ hexa ];
@@ -8,11 +11,15 @@
     machine = {
       services.evcc = {
         enable = true;
+        # This is NOT a safe way to deal with secrets in production
+        environmentFile = pkgs.writeText "evcc-secrets" ''
+          PORT=${toString port}
+        '';
         settings = {
           network = {
             schema = "http";
             host = "localhost";
-            port = 7070;
+            port = "$PORT";
           };
 
           log = "info";
@@ -82,14 +89,14 @@
     start_all()
 
     machine.wait_for_unit("evcc.service")
-    machine.wait_for_open_port(7070)
+    machine.wait_for_open_port(${port})
 
     with subtest("Check package version propagates into frontend"):
         machine.fail(
-            "curl --fail http://localhost:7070 | grep '0.0.1-alpha'"
+            "curl --fail http://localhost:${port} | grep '0.0.1-alpha'"
         )
         machine.succeed(
-            "curl --fail http://localhost:7070 | grep '${pkgs.evcc.version}'"
+            "curl --fail http://localhost:${port} | grep '${pkgs.evcc.version}'"
         )
 
     with subtest("Check journal for errors"):

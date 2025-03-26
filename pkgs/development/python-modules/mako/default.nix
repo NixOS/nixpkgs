@@ -1,10 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   isPyPy,
 
   # build-system
@@ -25,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.8";
+  version = "1.3.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -34,16 +32,8 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "mako";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-7KttExqHxv//q8ol7eOFIrgRHbQySQTvL7Rd9VooX0Y=";
+    hash = "sha256-BC1PSmMG9KzD+w8tDUW9WXJS25HNsELgwDpkTHYO9j0=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "float-precision.patch";
-      url = "https://github.com/sqlalchemy/mako/commit/188d5431a5c93b937da03e70c4c2c8c42cd9a502.patch";
-      hash = "sha256-/ROS6WkSqYXJsX6o1AejUg/faS3lUAimrRJzS74Bwws=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

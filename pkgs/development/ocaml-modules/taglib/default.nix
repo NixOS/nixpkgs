@@ -4,7 +4,7 @@
   fetchFromGitHub,
   dune-configurator,
   pkg-config,
-  taglib,
+  taglib_1,
   zlib,
 }:
 
@@ -24,7 +24,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    taglib
+    taglib_1
     zlib
   ];
 

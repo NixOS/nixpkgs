@@ -20,7 +20,7 @@
   kio,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "falkon";
 
   preConfigure = ''

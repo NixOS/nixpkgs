@@ -20,11 +20,11 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
 
-      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
         with:
           extra_nix_config: sandbox = true
 
-      - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         if: github.repository_owner == 'NixOS'
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.

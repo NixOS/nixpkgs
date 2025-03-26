@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "apt";
-  version = "2.9.2";
+  version = "2.9.9";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "apt-team";
     repo = "python-apt";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2Bl3KnIdlHh0bKiE30nal5ekixjShPBkXSMJRAJYHI=";
+    hash = "sha256-3mRMqbhKy5CYwpSttq8MgXY147Ov3lPuZaTjUMtmHik=";
   };
 
   buildInputs = [ apt.dev ];

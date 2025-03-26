@@ -361,7 +361,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
+        CURL_CA_BUNDLE = config.security.pki.caBundle;
         TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
       };
 

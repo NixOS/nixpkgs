@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libzra";
   version = "unstable-2020-09-11";
 

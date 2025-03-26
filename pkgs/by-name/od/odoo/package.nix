@@ -1,6 +1,5 @@
 {
   lib,
-  fetchgit,
   fetchzip,
   python312,
   rtlcss,

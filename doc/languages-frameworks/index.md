@@ -58,6 +58,7 @@ beam.section.md
 bower.section.md
 chicken.section.md
 coq.section.md
+cosmic.section.md
 crystal.section.md
 cuda.section.md
 cuelang.section.md

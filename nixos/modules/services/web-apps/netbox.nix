@@ -102,7 +102,9 @@ in
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "24.11" then
+        if lib.versionAtLeast config.system.stateVersion "25.05" then
+          pkgs.netbox_4_2
+        else if lib.versionAtLeast config.system.stateVersion "24.11" then
           pkgs.netbox_4_1
         else if lib.versionAtLeast config.system.stateVersion "24.05" then
           pkgs.netbox_3_7

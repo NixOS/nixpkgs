@@ -31,7 +31,7 @@
   pipewireSupport ? true,
   pipewire,
   rdpSupport ? true,
-  freerdp,
+  freerdp3,
   remotingSupport ? true,
   gst_all_1,
   vaapiSupport ? true,
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional lcmsSupport lcms2
     ++ lib.optional pangoSupport pango
     ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional rdpSupport freerdp
+    ++ lib.optional rdpSupport freerdp3
     ++ lib.optionals remotingSupport [
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base

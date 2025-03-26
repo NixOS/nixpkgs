@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o0Cpy+20EqNdNENaYlasJcKIGU7W4RYBcTMsQwFTUNc=";
+    hash = "sha256-/E9JSINmuv+9M5qODsmTCkcpdTyG0qN6I+iUbq5XclE=";
   };
 
   outputs = [

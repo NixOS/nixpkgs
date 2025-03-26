@@ -14,7 +14,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pop-gtk-theme";
   version = "2021-08-19";
 

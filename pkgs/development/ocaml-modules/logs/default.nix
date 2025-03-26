@@ -11,7 +11,7 @@
   cmdliner,
   fmt,
   fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
-  js_of_ocaml,
+  js_of_ocaml-compiler,
   jsooSupport ? true,
   lwtSupport ? true,
   cmdlinerSupport ? true,
@@ -22,8 +22,8 @@ let
 
   optional_deps = [
     {
-      pkg = js_of_ocaml;
-      enable_flag = "--with-js_of_ocaml";
+      pkg = js_of_ocaml-compiler;
+      enable_flag = "--with-js_of_ocaml-compiler";
       enabled = jsooSupport;
     }
     {
@@ -55,11 +55,11 @@ else
 
   stdenv.mkDerivation rec {
     name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "0.7.0";
+    version = "0.8.0";
 
     src = fetchurl {
       url = "${webpage}/releases/${pname}-${version}.tbz";
-      sha256 = "1jnmd675wmsmdwyb5mx5b0ac66g4c6gpv5s4mrx2j6pb0wla1x46";
+      hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
     };
 
     nativeBuildInputs = [

@@ -12,19 +12,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.40.3";
+  version = "0.43.3";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
-    tag = "v${version}";
-    hash = "sha256-PxG5bbHcpPOc4wAqxsiGkw1NeS3ya4/cZcDSg4LgX6Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FWUnab6mj4Xq3k3GLQFKrlZkWxX3fqHZujwuK3sbgbg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0jWtbCcj4BTCBuW+KenBG/MCcRWWn8WHrTEJdkIyMes=";
+  cargoHash = "sha256-Ioqw8ddpJWiPB8wniLsteaWzDXIORoOsHitGVQ2uPBw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pixi";
   };
-}
+})

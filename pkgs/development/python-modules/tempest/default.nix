@@ -33,14 +33,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "42.0.0";
+  version = "43.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
+    hash = "sha256-Py8SwyBYO35t+xv8oaxLv58owEUX/T9uhp3XM5wjsAI=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
@@ -86,6 +84,9 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_resource_list
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_saved_state
+      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_take_action_got_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';

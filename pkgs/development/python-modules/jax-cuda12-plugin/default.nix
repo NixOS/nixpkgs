@@ -40,42 +40,42 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-ymCGSgWlzqRK51dthHtHeeTeYYUKmhgjg0H8Q6dY1Vs=";
+      hash = "sha256-uiVVln+bbDgci075+wPQW8Vewl7P7lz+RcWs4099QVI=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp310";
-      hash = "sha256-488emSaNinBBPw+sM1krh2nBPckdch+RxYeEa+nYhAM=";
+      hash = "sha256-YXGu0vSzvdX8E3gt4QcsamNPzhNzG3XQywpquPTm5lA=";
     };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-NGVbjq/H2b/sMbB3rBPULgjY7YZV0kFHxa38AVFSaU8=";
+      hash = "sha256-qqcEpe9UdZXQItscHkh4oGdxFkEqk2DBFdZ/9LZOFZY=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-ik8Mje8QnXb1uqwbKuRpCURFzS1/vYxZf83WI+sC/1Q=";
+      hash = "sha256-KY0tdo8QKbdKCx0BJw5Uk0nSw33Adlh5ZULNqWfre9M=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-Fp22Rbr+whOO2YOvjxTk0RqElyivpXIC55qRBNmJLxY=";
+      hash = "sha256-IDDPEgjOTqcO5WysYd3SOfl5hpX8Obt3OcUKJdbp2kQ=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-wqhtVj3AR5rLTHmuz/vuwYn6vY6XAP4/cxvwOV4dbBE=";
+      hash = "sha256-wlF6fCGG+HCIlGluJs+W69YLeHnOyjmLLEarso0slsg=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-J0kTjLGHMZBoa7FPMxBIskwXjwXkdIo9L/fSA2c1rT0=";
+      hash = "sha256-GGJZWyttgVZ50R4OiJ5SMYXuVKRtRuAiaJ9w/EVU3ZE=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-C7aXl3+NbGOS9WLDQF6D68xvXLfCCBQFCE9tXPoJ4yo=";
+      hash = "sha256-If7BtWyYeD6gVpt0elZ1Hx+f8hh7SKzBHHANO/xeGjE=";
     };
   };
 in

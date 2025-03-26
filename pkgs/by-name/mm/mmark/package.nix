@@ -6,7 +6,7 @@
   mmark,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "mmark";
   version = "2.2.32";
 

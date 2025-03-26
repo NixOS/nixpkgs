@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   vulkan-headers,
   vulkan-loader,

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.25.1";
+  version = "3.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_datacatalog";
     inherit version;
-    hash = "sha256-LkCi+bzCywtmtEK/aypVeunA6/FC7tDHLVzriPhYdE0=";
+    hash = "sha256-rE3KvGuBi4YIwxLiICX5b1AO93NAWL6IpapNW5a/FVY=";
   };
 
   build-system = [ setuptools ];

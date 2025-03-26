@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,

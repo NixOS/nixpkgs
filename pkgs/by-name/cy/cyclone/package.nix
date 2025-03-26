@@ -5,7 +5,7 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cyclone";
   version = "unstable-2023-09-12";
 

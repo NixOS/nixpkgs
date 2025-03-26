@@ -28,7 +28,7 @@ let
     "--add-exports=java.desktop/com.sun.imageio.spi=ALL-UNNAMED"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;

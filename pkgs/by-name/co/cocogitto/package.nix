@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "oknozor";
-    repo = pname;
+    repo = "cocogitto";
     rev = version;
     hash = "sha256-VorWk7E+I1hU8Hc+WF47+V483E/xPjf7Glqp7iA1t5g=";
   };

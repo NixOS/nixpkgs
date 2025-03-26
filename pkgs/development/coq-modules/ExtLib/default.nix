@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, coq, stdlib, version ? null }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "coq-ext-lib";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [

@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ Performance Portability Programming EcoSystem";
     homepage = "https://github.com/kokkos/kokkos";
     changelog = "https://github.com/kokkos/kokkos/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20-llvm ];
+    license = with licenses; [
+      asl20
+      llvm-exception
+    ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

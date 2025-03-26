@@ -120,6 +120,16 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
+  disabledTests = [
+    # cause by authlib being too up-to-date for this version of canaille
+    # see: https://github.com/NixOS/nixpkgs/issues/389861#issuecomment-2726361949
+    # FIX: update and see if this is fixed
+    "test_invalid_client[ldap_backend]"
+    "test_invalid_client[memory_backend]"
+    "test_invalid_client[sql_backend]"
+    "test_password_reset[sql_backend]"
+  ];
+
   meta = with lib; {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";

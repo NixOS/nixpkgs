@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "bsull-console-datasource";
   version = "1.0.1";
   zipHash = "sha256-V6D/VIdwwQvG21nVMXD/xF86Uy8WRecL2RjyDTZr1wQ=";

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   frozenlist,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -26,13 +27,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "filterwarnings = error" "" \
-      --replace "--cov=aiosignal" ""
+      --replace "filterwarnings = error" ""
   '';
 
   pythonImportsCheck = [ "aiosignal" ];

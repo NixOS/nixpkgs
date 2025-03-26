@@ -16,13 +16,13 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.30";
+        version = "1.1.34";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-ZLTRHarjVFAk+tYPkgLm192rE+C82vNzqs8PmJhGSeg=";
+          hash = "sha256-UxokPUnYET1XyRok0FH7e8G3RpCMvOigY4huw6Tfllo=";
         };
 
         postPatch = ''
@@ -44,14 +44,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.4.2";
+  version = "2.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-5FIIXIn4tEz6w/uAh6PGkU4tU+mz7Jpb3+bq1mRNr2Y=";
+    hash = "sha256-rxXEsR4EfJZp3OFGHcSRaJp1egt2OT15P8V35v35KmU=";
   };
 
   patches = [

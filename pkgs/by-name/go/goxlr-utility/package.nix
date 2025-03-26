@@ -21,14 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-aThIu+3eNHCKS6lsio7cLZeIMg0509qkE0YQ6M6vPAI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ksni-0.2.1" = "sha256-cq3PAqkiYEv4MW5CtT7eau38Mf4uxdJ1C2fw640RXzI=";
-      "tasklist-0.2.15" = "sha256-YVAXqXuE4azxYi0ObOq4c9ZeMKFa2KjwwjjQlAeIPro=";
-      "xpc-connection-sys-0.1.1" = "sha256-VYZyf271sDjnvgIv4iDA6bcPt9dm4Tp8rRxr682iWwU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EhqniqdgD95yUwiaqlA0vtRZfq4cR7wxsGPmjpvzgdI=";
 
   buildInputs = [
     libpulseaudio

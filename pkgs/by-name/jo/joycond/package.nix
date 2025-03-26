@@ -9,7 +9,7 @@
   acl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "joycond";
   version = "unstable-2021-07-30";
 

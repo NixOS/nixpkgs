@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdi";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
     tag = finalAttrs.version;
-    hash = "sha256-Xrsjy6encfT2l9ks5701FjvQhyAjdvSRC3Mp0FWeq/k=";
+    hash = "sha256-oiHkCXQZGeijoJf8XpbBPdxmxClWyCsnv6laDdMXk6U=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')

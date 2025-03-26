@@ -15,6 +15,10 @@ buildGoModule rec {
     rev = "v${version}";
   };
 
+  patches = [
+    ./fix-tests-go-1.24.diff
+  ];
+
   vendorHash = "sha256-t/SJjh9bcsIevr3S0ysDlvtaIGzkks+qvfXF5/SEidE=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile

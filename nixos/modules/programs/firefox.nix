@@ -118,7 +118,14 @@ in
         Some of these might be able to be configured more ergonomically
         using policies.
 
+        See [here](https://mozilla.github.io/policy-templates/#preferences) for allowed preferences.
+
         ${organisationInfo}
+      '';
+      example = lib.literalExpression ''
+        {
+          "browser.tabs.tabmanager.enabled" = false;
+        }
       '';
     };
 

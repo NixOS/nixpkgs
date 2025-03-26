@@ -2,7 +2,6 @@
 , stdenv
 , llvm_meta
 , release_version
-, patches ? []
 , buildLlvmTools
 , monorepoSrc ? null
 , src ? null
@@ -13,6 +12,8 @@
 , libllvm
 , version
 , devExtraCmakeFlags ? []
+, getVersionFile
+, fetchpatch
 }:
 let
   pname = "lld";
@@ -35,11 +36,29 @@ let
   '';
 in
 stdenv.mkDerivation (rec {
-  inherit pname version patches;
+  inherit pname version;
 
   src = src';
 
   sourceRoot = "${src.name}/${pname}";
+
+  patches =
+    [ (getVersionFile "lld/gnu-install-dirs.patch") ]
+    ++ lib.optional (lib.versions.major release_version == "14") (
+      getVersionFile "lld/fix-root-src-dir.patch"
+    )
+    ++ lib.optional (
+      lib.versionAtLeast release_version "16" && lib.versionOlder release_version "18"
+    ) (getVersionFile "lld/add-table-base.patch")
+    ++ lib.optional (lib.versions.major release_version == "18") (
+      # https://github.com/llvm/llvm-project/pull/97122
+      fetchpatch {
+        name = "more-openbsd-program-headers.patch";
+        url = "https://github.com/llvm/llvm-project/commit/d7fd8b19e560fbb613159625acd8046d0df75115.patch";
+        stripLen = 1;
+        hash = "sha256-7wTy7XDTx0+fhWQpW1KEuz7xJvpl42qMTUfd20KGOfA=";
+      }
+    );
 
   nativeBuildInputs = [ cmake ] ++ lib.optional (lib.versionAtLeast release_version "15") ninja;
   buildInputs = [ libllvm libxml2 ];

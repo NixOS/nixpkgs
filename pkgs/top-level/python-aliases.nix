@@ -122,6 +122,7 @@ mapAliases ({
   chia-rs = throw "chia-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   class-registry = phx-class-registry; # added 2021-10-05
   cirq-ft = throw "cirq-ft is not longer provieded by cirq upstream"; # added 2024-08-31
+  ciscoconfparse = throw "ciscoconfparse was archived by upstream, use ciscoconfparse2"; # added 2025-03-08
   cld2-cffi = throw "cld2-cffi has been removed, as the last release was in 2016"; # added 2024-05-20
   clvm = throw "clvm has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   clvm-rs = throw "clvm-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
@@ -134,6 +135,7 @@ mapAliases ({
   command_runner = command-runner; # added 2024-03-06
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
+  configshell = configshell-fb; # added 2025-03-14
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
   covCore = throw "covCore was renamed to cov-core and subsequently removed since it has ben unmaintained since 2014"; # added 2024-05-20
   cov-core = throw "cov-core has been removed, it was archived and unmaintained since 2014"; # added 2024-05-21
@@ -152,6 +154,7 @@ mapAliases ({
   debian = python-debian; # added 2024-12-10
   deep_merge = throw "deep_merge has been removed, since it is no longer maintained and may be broken."; # added 2023-10-09
   demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  deprecat  = throw "deprecat has been removed, it unmaintained and archived by upstream"; # added 2025-03-08
   descartes = throw "descartes has been removed, since it is abandoned and broken"; # added 2023-06-21
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
@@ -203,6 +206,7 @@ mapAliases ({
   email_validator = email-validator; # added 2022-06-22
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   enum-compat = throw "enum-compat is a virtual package providing enum34, which does not do anything since Python 3.4"; # added 2025-02-15
+  enum34 = throw "enum34 is no longer needed since Python 3.4"; # added 2025-03-06
   et_xmlfile = et-xmlfile; # added 2023-10-16
   etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
@@ -355,6 +359,7 @@ mapAliases ({
   livestreamer = throw "'livestreamer' has been removed, as it unmaintained. A currently maintained fork is 'streamlink'."; # added 2023-11-14
   livestreamer-curses = throw "'livestreamer-curses' has been removed as it, and livestreamer itself are unmaintained."; # added 2023-11-14
   lmcloud = pylamarzocco; # added 2024-11-26
+  localstack = throw "localstack was promoted to a top-level attribute"; # added 2025-02-21
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
@@ -383,6 +388,7 @@ mapAliases ({
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
+  mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
@@ -560,6 +566,7 @@ mapAliases ({
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   PyStemmer = pystemmer; # added 2023-02-19
+  pysuez = pysuezv2; # added 2025-03-14
   pytado = python-tado; # added 2024-12-02
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
@@ -595,6 +602,7 @@ mapAliases ({
   pytorchWithCuda = torchWithCuda; # added 2022-09-30
   pytorchWithoutCuda = torchWithoutCuda; # added 2022-09-30
   pytwitchapi = twitchapi; # added 2022-03-07
+  pytzdata = throw "pytzdata has been removed, because iit is unmaintained upstream. Use pytz or tzdata instead."; # added 2025-03-03
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyunifiprotect = throw "pyunifiprotect has disappeared from GitHub and PyPI, use uiprotect instead"; # added 2024-09-17
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
@@ -643,6 +651,7 @@ mapAliases ({
   ronin = throw "ronin has been removed because it was unmaintained since 2018"; # added 2024-08-21
   ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
+  rtslib = rtslib-fb; # added 2025-03-14
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01

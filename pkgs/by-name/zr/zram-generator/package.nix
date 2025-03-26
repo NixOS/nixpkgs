@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = pname;
+    repo = "zram-generator";
     rev = "v${version}";
     hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };

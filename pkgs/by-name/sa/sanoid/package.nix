@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
-    repo = pname;
+    repo = "sanoid";
     rev = "v${version}";
     sha256 = "sha256-qfRGZ10fhLL4tJL97VHrdOkO/4OVpa087AsL9t8LMmk=";
   };
@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
           lzop
           gzip
           pigz
+          # /run/booted-system/sw/bin contains a sudo that does not work, so we need to override the override to use /run/wrappers/bin/sudo
+          "/run/wrappers"
           "/run/booted-system/sw"
           zfs
         ]

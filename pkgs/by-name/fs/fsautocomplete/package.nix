@@ -4,19 +4,18 @@
   fetchFromGitHub,
   dotnetCorePackages,
   testers,
-  _experimental-update-script-combinators,
   nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.77.2";
+  version = "0.77.4";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rCfiWzVsK9lvo4uMNrgWdXsjrvBQDZOyFpKxKdbT/3g=";
+    hash = "sha256-QTLaaztZghcQRQSE/GXQGpo7W7bHNNXGwYNIaV41PvY=";
   };
 
   nugetDeps = ./deps.json;
@@ -38,10 +37,7 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      finalAttrs.passthru.fetch-deps
-    ];
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

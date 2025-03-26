@@ -36,7 +36,7 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
-This is section describes a general framework of understanding and exceptions might apply.
+This section describes a general framework of understanding and exceptions might apply.
 
 Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
 

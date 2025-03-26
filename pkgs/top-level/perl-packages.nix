@@ -5279,12 +5279,12 @@ with self; {
 
   CryptRandom = buildPerlPackage {
     pname = "Crypt-Random";
-    version = "1.54";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.54.tar.gz";
-      hash = "sha256-1m+OF+3Dh3zHl/3VneU045kGNvjxpecmBiFZr35n2sw=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-Random-1.57.tar.gz";
+      hash = "sha256-lQRnbAzgQRA636cCP4yGHECAYckCljQUwe27LYhydRU=";
     };
-    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
+    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare CryptURandom ];
     meta = {
       description = "Interface to /dev/random and /dev/urandom";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11356,6 +11356,7 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
+    nativeCheckInputs = [ GlibObjectIntrospection ];
     preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Currently failing on macOS
       rm t/overrides.t
@@ -15440,7 +15441,7 @@ with self; {
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
-    env.NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
     makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tgz" ];
     src = fetchurl {

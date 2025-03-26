@@ -18,7 +18,7 @@ let
     hash = "sha256-PhacBegQDwWZqZeoZjoLR4akhVV3QrSPr1KflCuied0=";
   };
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "perf_data_converter";
   version = "0-unstable-2024-10-14";
 

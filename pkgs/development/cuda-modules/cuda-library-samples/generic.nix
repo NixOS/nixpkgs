@@ -4,17 +4,30 @@
   fetchFromGitHub,
   cmake,
   addDriverRunpath,
+  autoAddDriverRunpath,
   cudatoolkit,
   cutensor,
+  cusparselt,
+  cudaPackages,
+  setupCudaHook,
+  autoPatchelfHook,
 }:
 
 let
-  rev = "5aab680905d853bce0dbad4c488e4f7e9f7b2302";
+  inherit (cudaPackages)
+    cuda_cccl
+    cuda_cudart
+    cuda_nvcc
+    libcusparse
+    cudaAtLeast
+    cudaOlder
+    ;
+  rev = "e57b9c483c5384b7b97b7d129457e5a9bdcdb5e1";
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "CUDALibrarySamples";
     inherit rev;
-    sha256 = "0gwgbkq05ygrfgg5hk07lmap7n7ampxv0ha1axrv8qb748ph81xs";
+    sha256 = "0g17afsmb8am0darxchqgjz1lmkaihmnn7k1x4ahg5gllcmw8k3l";
   };
   commonAttrs = {
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
@@ -81,6 +94,52 @@ in
       '';
 
       CUTENSOR_ROOT = cutensor;
+    }
+  );
+
+  cusparselt = backendStdenv.mkDerivation (
+    commonAttrs
+    // {
+      pname = "cuda-library-samples-cusparselt";
+
+      src = "${src}/cuSPARSELt";
+
+      sourceRoot = "cuSPARSELt/matmul";
+
+      buildInputs = lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
+
+      nativeBuildInputs =
+        [
+          cmake
+          addDriverRunpath
+          (lib.getDev cusparselt)
+          (lib.getDev libcusparse)
+        ]
+        ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
+        ++ lib.optionals (cudaAtLeast "11.4") [
+          cuda_nvcc
+          (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
+        ]
+        ++ lib.optionals (cudaAtLeast "12.0") [
+          cuda_cccl # <nv/target>
+        ];
+
+      postPatch = ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/bin
+        cp matmul_example $out/bin/
+        cp matmul_example_static $out/bin/
+        runHook postInstall
+      '';
+
+      CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
+      CUSPARSELT_PATH = lib.getLib cusparselt;
     }
   );
 }

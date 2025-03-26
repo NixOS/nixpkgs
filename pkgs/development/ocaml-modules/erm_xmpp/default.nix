@@ -14,7 +14,7 @@
   digestif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.3+20241009";
   pname = "ocaml${ocaml.version}-erm_xmpp";
 

@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OpenCorsairLink";
   version = "unstable-2019-12-23";
 

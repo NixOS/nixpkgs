@@ -9,7 +9,7 @@
   irssi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fish-irssi";
   version = "unstable-2021-04-16";
 

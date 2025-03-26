@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "sshocker";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "sshocker";
     tag = "v${version}";
-    hash = "sha256-Q+g48Mm3JsFz9zTsFFypgp7RtQL/03EbVGAwnXLE8fA=";
+    hash = "sha256-ehsQ/Z1LCSpnvIvABLCIR2aLG4DK33VJ9gidoSEoeqw=";
   };
 
-  vendorHash = "sha256-D4TJ8bIahv05cE6gvF6LmcU2RzV2krjtU8t8wD6R/lY=";
+  vendorHash = "sha256-9le1ETAdMZ1s7Hl2STz76/9eU0YkI4yNM/PZVXOwndQ=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

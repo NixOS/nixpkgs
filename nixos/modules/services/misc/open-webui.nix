@@ -120,6 +120,18 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         UMask = "0077";
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        ProtectClock = true;
+        ProtectProc = "invisible";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
 

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchurl,
   makeWrapper,
   makeDesktopItem,

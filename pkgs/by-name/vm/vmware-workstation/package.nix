@@ -1,6 +1,5 @@
 { stdenv
 , buildFHSEnv
-, fetchurl
 , fetchzip
 , lib
 , zlib
@@ -46,7 +45,7 @@ let
     sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
-  vmware-unpack-env = buildFHSEnv rec {
+  vmware-unpack-env = buildFHSEnv {
     pname = "vmware-unpack-env";
     inherit version;
     targetPkgs = pkgs: [ zlib ];

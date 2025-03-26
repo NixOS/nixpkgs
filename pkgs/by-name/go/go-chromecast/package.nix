@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "go-chromecast";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
     tag = "v${version}";
-    hash = "sha256-R1VGgustsKRoVZFiH2wuYRRSOolWIYq33H0DyQXHDvg=";
+    hash = "sha256-6I10UZ7imH1R78L2uM/697PskPYjhKSiPHoMM7EFElU=";
   };
 
-  vendorHash = "sha256-EI37KPdNxPXdgmxvawTiRQ516dLxt5o0iYvGcAHXdUw=";
+  vendorHash = "sha256-cu8PuZLkWLatU46VieaeoV5oyejyjR0uVUMVzOrheLM=";
 
   env.CGO_ENABLED = 0;
 

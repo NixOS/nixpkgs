@@ -3,7 +3,6 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   replaceVars,
 
   # build-system

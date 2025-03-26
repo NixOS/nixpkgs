@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.13.1";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-uUb7epvPPzOTzO0WB7bPuzo2wngiUEo+QQweq6yoGZw=";
+    hash = "sha256-erjDDK7XJrq4Ast/RgQhEDQfDplUGMhWt4kakEzi8z8=";
   };
 
   postPatch = ''
@@ -49,9 +49,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "lightning_utilities.core.enums.StrEnum"
+    # DocTestFailure
     "lightning_utilities.core.imports.RequirementCache"
+
+    # NameError: name 'operator' is not defined. Did you forget to import 'operator'
     "lightning_utilities.core.imports.compare_version"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pytorch-lightning==1.8.0
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
 
     # weird doctests fail on imports, but providing the dependency

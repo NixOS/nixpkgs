@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,

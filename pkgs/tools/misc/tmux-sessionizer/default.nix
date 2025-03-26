@@ -13,7 +13,7 @@
 let
 
   name = "tmux-sessionizer";
-  version = "0.4.4";
+  version = "0.4.5";
 
 in
 rustPlatform.buildRustPackage {
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage {
     owner = "jrmoulton";
     repo = name;
     rev = "v${version}";
-    hash = "sha256-4xwpenoAVGKdVO3eSS4BhaEcwpNPGA5Ozie53focDlA=";
+    hash = "sha256-uoSm9oWZSiqwsg7dVVMay9COL5MEK3a5Pd+D66RzzPM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NFM9tZQIR9Rw9uSlqxhbNnmwe3xqK+dv/qyJBHfEmi4=";
+  cargoHash = "sha256-fd0IEORqnqxKN9zisXTT0G8CwRNVsGd3HZmCVY5DKsM=";
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;
@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tms \
-      --bash <($out/bin/tms --generate bash) \
-      --fish <($out/bin/tms --generate fish) \
-      --zsh <($out/bin/tms --generate zsh)
+      --bash <(COMPLETE=bash $out/bin/tms) \
+      --fish <(COMPLETE=fish $out/bin/tms) \
+      --zsh <(COMPLETE=zsh $out/bin/tms)
   '';
 
   meta = with lib; {

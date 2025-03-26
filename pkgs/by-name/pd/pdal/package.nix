@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format

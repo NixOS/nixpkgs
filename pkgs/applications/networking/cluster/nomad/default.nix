@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   buildGo122Module,
-  buildGo123Module,
+  buildGo124Module,
   fetchFromGitHub,
   nixosTests,
   installShellFiles,
@@ -109,10 +109,10 @@ rec {
   };
 
   nomad_1_9 = generic {
-    buildGoModule = buildGo123Module;
-    version = "1.9.6";
-    sha256 = "sha256-j+3ecQsFicdYX4GddwaKEwoIFu88kdjI5Kl8bHUQQwE=";
-    vendorHash = "sha256-frHIP86NsW6C9GRdPaZQc3PilolXJ2ojaNZYlrMcbOg=";
+    buildGoModule = buildGo124Module;
+    version = "1.9.7";
+    sha256 = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
+    vendorHash = "sha256-9GnwqkexJAxrhW9yJFaDTdSaZ+p+/dcMuhlusp4cmyw=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

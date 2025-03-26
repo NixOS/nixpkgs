@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ohme";
-  version = "1.3.2";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dan-r";
     repo = "ohmepy";
     tag = "v${version}";
-    hash = "sha256-d4d/3/2c8ML/V06kT5iTHavTEDdobZdvNdynSvIFr14=";
+    hash = "sha256-aKlB5TJLtj6NcYzzGjvR1WhpP2rZKMl/pUcPlDmy3+8=";
   };
 
   build-system = [ setuptools ];

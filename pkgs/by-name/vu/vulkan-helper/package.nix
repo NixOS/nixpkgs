@@ -6,7 +6,7 @@
   addDriverRunpath,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "vulkan-helper";
   version = "unstable-2023-12-22";
 

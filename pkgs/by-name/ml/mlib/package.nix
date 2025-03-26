@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "P-p-H-d";
-    repo = pname;
+    repo = "mlib";
     rev = "V${version}";
     hash = "sha256-r8ol923tNkZ13QXWjWpMrN6rBjjjg5XoBCho4OKdyvY=";
   };

@@ -15,23 +15,19 @@
   nix-update-script,
   bzip2,
 }:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "komac";
+  version = "2.11.1";
 
-let
-  version = "2.10.1";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    tag = "v${version}";
-    hash = "sha256-oqnFenSFWCe3vax5mqstvNNTFWOecLOkuhJzaxv78yE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X0lvr8GafJIP8kwnLTk3taq3WZAx50/jUt3zJIELJnc=";
   };
-in
-rustPlatform.buildRustPackage {
-  inherit version src;
-
-  pname = "komac";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-g7R4Vk6bFaJ5TA4IdeXRiFzZOcj1T4JY3HsOt+Zx2mU=";
+  cargoHash = "sha256-utsLfvFGTBuD1Tywu9TfnPGDhvSWZSokvwW22USWWls=";
 
   nativeBuildInputs =
     [
@@ -72,7 +68,7 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
 
       package = komac;
       command = "komac --version";
@@ -84,7 +80,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Community Manifest Creator for WinGet";
     homepage = "https://github.com/russellbanks/Komac";
-    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${version}";
+    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       kachick
@@ -92,4 +88,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "komac";
   };
-}
+})

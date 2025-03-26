@@ -8,6 +8,7 @@
   pytestCheckHook,
   pytest-aiohttp,
   pytest-asyncio,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
@@ -28,8 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-aiohttp
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [

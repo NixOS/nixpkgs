@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   buildEnv,
   linkFarm,
   makeWrapper,
@@ -44,17 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.5.12";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${version}";
-    hash = "sha256-le3OeGC/rddY9NNgmO7YcFthsZSQiO+gGSkpcV+TNXo=";
+    hash = "sha256-ZQiBbVQbMYxC73DAPyWi6Yn/cPySpsPcTiCOHK3F35w=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-ON9ow9/KglBy+RKNhw1n3E5AJtpjPQvJwNAQTaWzEFA=";
+  vendorHash = "sha256-Zpzn2YWpiDAl4cwgrrSpN8CFy4GqqhE1mWsRxtYwdDA=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "

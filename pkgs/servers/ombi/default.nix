@@ -24,16 +24,16 @@ let
 
   hash =
     {
-      x64-linux_hash = "sha256-wyGvTXsXSsfTrlWVBaqbeDhj5s6w31+Ixi0sxsHcOjA=";
-      arm64-linux_hash = "sha256-iqgyCNY62FBIyjcHXDk1zZY0RzFhUA5IQ8EDzAonKRE=";
-      x64-osx_hash = "sha256-h9qKe1GL2DSBAFhtztS254ILMCeIZqlCXyO0AvSA5Zo=";
+      x64-linux_hash = "sha256-5pnHuYjT+O/mlGC+arIofwlAwOWOzyYa4/jK+fstkHs=";
+      arm64-linux_hash = "sha256-yBZQuTNPIPCa2LqaRd9rFinJpPvJraAe4xo09mt8RD8=";
+      x64-osx_hash = "sha256-VZTFsjB08/plpwv0ErwHbyIiSBGxsXAz92X2AdACN1E=";
     }
     ."${arch}-${os}_hash";
 
 in
 stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.44.1";
+  version = "4.47.1";
 
   sourceRoot = ".";
 

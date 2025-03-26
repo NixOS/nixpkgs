@@ -1,6 +1,6 @@
 {
   fetchgit,
-  fetchpatch,
+  gitUpdater,
   lib,
   libftdi1,
   libgpiod,
@@ -17,22 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mpSmPZ306DedRi3Dcck/cDqoumgwFYpljiJtma+LZz4=";
   };
-
-  patches = [
-    # fixes compiler warnings on Darwin
-    (fetchpatch {
-      url = "https://review.sourcearcade.org/changes/flashprog~309/revisions/2/patch?download";
-      hash = "sha256-eiEenR8+CHCJcNx9YY09I7gxRGUQWmaQlmXtykvXyMU=";
-      decode = "base64 -d";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -59,6 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$src"
     install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
 
   meta = with lib; {
     homepage = "https://flashprog.org";

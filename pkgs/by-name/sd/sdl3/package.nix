@@ -57,7 +57,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.6";
+  version = "3.2.8";
 
   outputs = [
     "lib"
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-SEL/JIenmueYayxZlWlMO3lTUOcqiaZZC6RJbbH4DmE=";
+    hash = "sha256-BpNo8t0st8v2cTV2iSrjvjCPiDa26NwkWXgMGKFkeAQ=";
   };
 
   postPatch =
@@ -137,12 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrandr
-    ];
-
-  propagatedBuildInputs = finalAttrs.dlopenPropagatedBuildInputs;
-
-  dlopenPropagatedBuildInputs =
-    [
+    ]
+    ++ [
       vulkan-headers
       vulkan-loader
     ]
@@ -176,12 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
     # helps them be found
-    NIX_LDFLAGS =
-      lib.optionalString
-        (stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so")
-        "-rpath ${
-          lib.makeLibraryPath (finalAttrs.dlopenBuildInputs ++ finalAttrs.dlopenPropagatedBuildInputs)
-        }";
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
+    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
 
   passthru = {

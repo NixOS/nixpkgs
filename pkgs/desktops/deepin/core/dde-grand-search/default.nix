@@ -11,7 +11,7 @@
   deepin-pdfium,
   qt5integration,
   qt5platform-plugins,
-  taglib,
+  taglib_1,
   ffmpeg,
   ffmpegthumbnailer,
   pcre,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     deepin-pdfium
     qt5integration
     qt5platform-plugins
-    taglib
+    taglib_1
     ffmpeg
     ffmpegthumbnailer
     pcre

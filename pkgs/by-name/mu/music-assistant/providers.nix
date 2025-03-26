@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.4.2";
+  version = "2.4.4";
   providers = {
     airplay = ps: [
     ];
@@ -89,8 +89,10 @@
         bidict
         snapcast
       ];
-    sonos = ps: [
-    ]; # missing aiosonos
+    sonos =
+      ps: with ps; [
+        aiosonos
+      ];
     sonos_s1 =
       ps: with ps; [
         defusedxml

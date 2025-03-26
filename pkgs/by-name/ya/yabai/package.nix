@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.10";
+  version = "7.1.13";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -66,32 +66,20 @@ stdenv.mkDerivation (finalAttrs: {
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-mWN59BfexCmaahADzUP+B1xGQK8TNyrKOBKKJ00D7tg=";
+        hash = "sha256-1/fPBLbC6wcgQAX/soCCVeIUXXm124RnxTJJc/7ayzo=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-4OYB+RlAUD8LcRcUNIEXWfFFedTmQFzcTgqd1g/tdWc=";
+        hash = "sha256-6yCMd7+RBqRj3OjnAwm3Ex4CVKVFPWyWdeMqXFaHZlM=";
       };
     };
 
     updateScript = writeShellScript "update-yabai" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          jq
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
+      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
       --replace 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
       --replace '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
 
+    # fix calloc argument cause a build failure
+    substituteInPlace bin/xbps-fbulk/main.c \
+      --replace-fail 'calloc(sizeof(*depn), 1)' 'calloc(1UL, sizeof(*depn))'
+
     # fix unprefixed ranlib (needed on cross)
     substituteInPlace lib/Makefile \
       --replace 'SILENT}ranlib ' 'SILENT}$(RANLIB) '

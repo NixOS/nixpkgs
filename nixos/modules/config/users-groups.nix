@@ -557,6 +557,7 @@ let
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
   usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
+  usersWithNullShells = attrNames (filterAttrs (name: cfg: cfg.shell == null) cfg.users);
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -910,12 +911,21 @@ in {
               ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
           '';
       }
+      {
+        assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
+        message = ''
+          users.mutableUsers = false has been set,
+          but found users that have their shell set to null.
+          If you wish to disable login, set their shell to pkgs.shadow (the default).
+          Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+        '';
+      }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.allowNoPasswordLogin
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
           any id (mapAttrsToList (name: cfg:
@@ -941,6 +951,21 @@ in {
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
+        (
+          let
+            # Things fail in various ways with especially non-ascii usernames.
+            # This regex mirrors the one from shadow's is_valid_name:
+            # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
+            # though without the trailing $, because Samba 3 got its last release
+            # over 10 years ago and is not in Nixpkgs anymore,
+            # while later versions don't appear to require anything like that.
+            nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
+          in
+          {
+            assertion = builtins.match nameRegex user.name != null;
+            message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
+          }
+        )
         {
         assertion = (user.hashedPassword != null)
         -> (match ".*:.*" user.hashedPassword == null);

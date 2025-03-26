@@ -44,7 +44,10 @@ let
     else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase =
-      let machineName = if githubBase == "github.com" then "api.github.com" else githubBase;
+      # When using private repos:
+      # - Fetching with git works using https://github.com but not with the GitHub API endpoint
+      # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
+      let machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
       in ''
         if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
           echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip
+{ stdenv, lib, fetchFromGitHub, fetchzip, fetchpatch
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
@@ -96,6 +96,15 @@ in stdenv.mkDerivation (finalAttrs: {
       rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
       hash  = "sha256-RdTJcq6FPerQx05dU3r8iyaorT4L7162hg5RdywsA88=";
     };
+
+    patches = [
+      # Backport to fix build with Pipewire 1.4
+      # FIXME: remove in the next update
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
+        hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
+      })
+    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden

@@ -44,7 +44,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   srcs = [

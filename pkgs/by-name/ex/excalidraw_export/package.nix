@@ -8,7 +8,7 @@
   stdenv,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "excalidraw_export";
   version = "1.1.0";
 

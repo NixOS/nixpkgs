@@ -294,6 +294,7 @@ let
     nativeBuildInputs =
       [
         ninja
+        gnChromium
       ]
       ++ lib.optionals needsCompgen [
         bashInteractive # needed for compgen in buildPhase -> process_template
@@ -445,6 +446,9 @@ let
         ./patches/cross-compile.patch
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
+        # Fix build with Pipewire 1.4
+        # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        ./patches/webrtc-pipewire-1.4.patch
       ]
       ++ lib.optionals (packageName == "chromium") [
         # This patch is limited to chromium and ungoogled-chromium because electron-source sets
@@ -479,18 +483,11 @@ let
         # Rebased variant of patch to build M126+ with LLVM 17.
         # staging-next will bump LLVM to 18, so we will be able to drop this soon.
         ./patches/chromium-126-llvm-17.patch
-      ]
-      ++ lib.optionals (versionRange "126" "129") [
         # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
         # allowing us to use our rustc and our clang.
-        # Rebased variant of patch right above to build M126+ with our rust and our clang.
-        ./patches/chromium-126-rust.patch
-      ]
-      ++ lib.optionals (chromiumVersionAtLeast "129") [
-        # Rebased variant of patch right above to build M129+ with our rust and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
+      ++ lib.optionals (!ungoogled) [
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -630,7 +627,7 @@ let
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -797,7 +794,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1

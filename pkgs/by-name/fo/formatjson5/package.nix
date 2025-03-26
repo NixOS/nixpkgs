@@ -8,7 +8,7 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "formatjson5";
   version = "0.2.6";
 

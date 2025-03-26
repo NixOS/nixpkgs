@@ -17,7 +17,7 @@
   callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
   version = "0.11.6-unstable-2025-02-04";
 

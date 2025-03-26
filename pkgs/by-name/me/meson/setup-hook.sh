@@ -26,6 +26,11 @@ mesonConfigurePhase() {
         "--buildtype=${mesonBuildType:-plain}"
     )
 
+    # --no-undefined is universally a bad idea on freebsd because environ is in the csu
+    if [[ "@hostPlatform@" == *-freebsd ]]; then
+        flagsArray+=("-Db_lundef=false")
+    fi
+
     concatTo flagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"

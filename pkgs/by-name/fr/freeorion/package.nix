@@ -22,7 +22,7 @@
 , libxslt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "freeorion";
   version = "0.5.0.1-unstable-2024-07-28";
 

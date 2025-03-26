@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-kJ+xjxd8MAuwzARCgN6qLeetwLxRzhmip1Z4U4IfqmY=";
+    hash = "sha256-T+hyC3YfTMn5txFlFbm/+wKWj21vuwIN5lfe+iiAm8c=";
   };
 
   nativeBuildInputs = [

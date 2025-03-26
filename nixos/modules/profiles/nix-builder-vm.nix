@@ -127,8 +127,6 @@ in
     system.disableInstallerTools = true;
 
     nix.settings = {
-      auto-optimise-store = true;
-
       min-free = cfg.min-free;
 
       max-free = cfg.max-free;

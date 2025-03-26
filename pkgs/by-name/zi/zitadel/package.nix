@@ -16,14 +16,14 @@
 }:
 
 let
-  version = "2.58.3";
+  version = "2.71.1";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-RXcJwGO8OQ38lbuy2uLTSkh6yUbyqY42FpwgMXC3g6c=";
+    hash = "sha256-izYsf2Cc0jG8Wf82K6HsTVP+kAhmoEJVU7OJXhSzXLo=";
   };
-  goModulesHash = "sha256-gp17dP67HX7Tx3Gq+kEu9xCYkfs/rGpqLFiKT7cKlrc=";
+  goModulesHash = "sha256-mE0vhW1nW16SzqIu0C3q8qCXabJO7fZgkp7GeLWCwog=";
 
   buildZitadelProtocGen =
     name:
@@ -55,6 +55,7 @@ let
   generateProtobufCode =
     {
       pname,
+      version,
       nativeBuildInputs ? [ ],
       bufArgs ? "",
       workDir ? ".",
@@ -62,7 +63,8 @@ let
       hash,
     }:
     stdenv.mkDerivation {
-      name = "${pname}-buf-generated";
+      pname = "${pname}-buf-generated";
+      inherit version;
 
       src = zitadelRepo;
       patches = [ ./console-use-local-protobuf-plugins.patch ];
@@ -88,6 +90,7 @@ let
 
   protobufGenerated = generateProtobufCode {
     pname = "zitadel";
+    inherit version;
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-authoption
@@ -97,7 +100,7 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-KRf11PNn7LtVFjG3NYUtPEJtLNbnxfzR4B69US07B3k=";
+    hash = "sha256-QUUe3jK9rOWzI1jzevgZ/UB6SqB6GXtd9CVtAqiStdo=";
   };
 in
 buildGoModule rec {

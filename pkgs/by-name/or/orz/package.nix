@@ -5,7 +5,7 @@
   rust-cbindgen,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "orz";
   version = "1.6.2-unstable-2024-11-08";
 

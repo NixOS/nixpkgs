@@ -6,7 +6,7 @@
   txt2tags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libixp";
   version = "unstable-2022-04-04";
 

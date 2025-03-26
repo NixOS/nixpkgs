@@ -36,7 +36,7 @@
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_3-1.3.3"
+        "kanidm_1_4-1.4.6"
       ];
     };
 

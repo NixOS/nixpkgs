@@ -48,7 +48,7 @@ let
       };
 
       repartConfig = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool ]);
+        type = with lib.types; attrsOf (oneOf [ str int bool (listOf str) ]);
         example = {
           Type = "home";
           SizeMinBytes = "512M";
@@ -56,7 +56,7 @@ let
         };
         description = ''
           Specify the repart options for a partiton as a structural setting.
-          See <https://www.freedesktop.org/software/systemd/man/repart.d.html>
+          See {manpage}`repart.d(5)`
           for all available options.
         '';
       };
@@ -113,7 +113,7 @@ in
       enable = lib.mkEnableOption "Image compression";
 
       algorithm = lib.mkOption {
-        type = lib.types.enum [ "zstd" "xz" ];
+        type = lib.types.enum [ "zstd" "xz" "zstd-seekable" ];
         default = "zstd";
         description = "Compression algorithm";
       };
@@ -274,6 +274,7 @@ in
           {
             "zstd" = ".zst";
             "xz" = ".xz";
+            "zstd-seekable" = ".zst";
           }."${cfg.compression.algorithm}";
 
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
@@ -298,6 +299,7 @@ in
           level = lib.mkOptionDefault {
             "zstd" = 3;
             "xz" = 3;
+            "zstd-seekable" = 3;
           }."${cfg.compression.algorithm}";
         };
 
@@ -311,7 +313,7 @@ in
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
 
 
-        format = pkgs.formats.ini { };
+        format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
         definitionsDirectory = utils.systemdUtils.lib.definitions
           "repart.d"

@@ -19,7 +19,6 @@
   python3,
   riemann_c_client,
   protobufc,
-  pcre,
   paho-mqtt-c,
   python3Packages,
   libnet,
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
       systemd
       riemann_c_client
       protobufc
-      pcre
       libnet
       json_c
       libuuid

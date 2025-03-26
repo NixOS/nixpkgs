@@ -8,13 +8,13 @@
   libXpm,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation {
   pname = "0verkill";
   version = "unstable-2011-01-13";
 
   src = fetchFromGitHub {
     owner = "hackndev";
-    repo = pname;
+    repo = "0verkill";
     rev = "522f11a3e40670bbf85e0fada285141448167968";
     sha256 = "WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
   };

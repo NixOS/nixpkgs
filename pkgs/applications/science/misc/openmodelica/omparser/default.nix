@@ -7,7 +7,7 @@
   mkOpenModelicaDerivation,
 }:
 
-mkOpenModelicaDerivation rec {
+mkOpenModelicaDerivation {
   pname = "omparser";
   omdir = "OMParser";
   omdeps = [ openmodelica.omcompiler ];

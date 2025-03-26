@@ -8,13 +8,13 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   version = "0.3.1";
   pname = "transmission-rss";
 
   src = fetchFromGitHub {
     owner = "herlon214";
-    repo = pname;
+    repo = "transmission-rss";
     rev = "5bbad7a81621a194b7a8b11a56051308a7ccbf06";
     sha256 = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
   };

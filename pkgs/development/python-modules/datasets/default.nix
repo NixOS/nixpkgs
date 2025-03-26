@@ -15,31 +15,27 @@
   pythonOlder,
   requests,
   responses,
+  setuptools,
   tqdm,
   xxhash,
 }:
-
 buildPythonPackage rec {
   pname = "datasets";
-  version = "3.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "3.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "datasets";
     tag = version;
-    hash = "sha256-3Q4tNLA9qUb7XdxP1NftYDcVUgq5ol9OZfklhmadk5I=";
+    hash = "sha256-a0c5E4N1X+PtO4+UZn8l1JcLGTNpLPyfEkrrxNsjfLA=";
   };
 
-  # remove pyarrow<14.0.1 vulnerability fix
-  postPatch = ''
-    substituteInPlace src/datasets/features/features.py \
-      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dill
     fsspec
@@ -53,7 +49,17 @@ buildPythonPackage rec {
     responses
     tqdm
     xxhash
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
+
+  pythonRelaxDeps = [
+    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
+    # "pin until dill has official support for determinism"
+    "dill"
+    "multiprocess"
+    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L129
+    # "to support protocol=kwargs in fsspec's `open`, `get_fs_token_paths`"
+    "fsspec"
+  ];
 
   # Tests require pervasive internet access
   doCheck = false;
@@ -63,13 +69,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
     changelog = "https://github.com/huggingface/datasets/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ osbm ];
   };
 }

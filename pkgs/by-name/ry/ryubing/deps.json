@@ -151,8 +151,8 @@
   },
   {
     "pname": "Gommon",
-    "version": "2.7.1",
-    "hash": "sha256-tD1gdk4umsl7r5jFd2Wyx3zeRE9BX1FQfZMYoCcpmwY="
+    "version": "2.7.1.1",
+    "hash": "sha256-2AnVtyEbg5A+K/LDjgOpKw/CNRDkAhjVa38L5LYYyrw="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -828,11 +828,6 @@
     "pname": "shaderc.net",
     "version": "0.1.0",
     "hash": "sha256-+K7ObC9ucilwWY+Tlf9KcrAVoTFS65V6Di7JDWDSZTg="
-  },
-  {
-    "pname": "SharpMetal",
-    "version": "1.0.0-preview21",
-    "hash": "sha256-ixS88SuK94KfBONdTgXSPSI4tftqekjQ3aJ502rG3Vo="
   },
   {
     "pname": "SharpZipLib",

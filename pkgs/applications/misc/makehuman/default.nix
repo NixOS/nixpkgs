@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  fetchpatch,
   fetchFromGitHub,
   python3,
   qtbase,

@@ -1,3 +1,9 @@
-{ python3Packages }:
+{
+  python3Packages,
+  withPlaywright ? false,
+}:
 
-python3Packages.toPythonApplication python3Packages.aider-chat
+if withPlaywright then
+  python3Packages.toPythonApplication python3Packages.aider-chat.passthru.withPlaywright
+else
+  python3Packages.toPythonApplication python3Packages.aider-chat

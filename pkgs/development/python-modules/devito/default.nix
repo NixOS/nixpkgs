@@ -9,17 +9,16 @@
 
   # dependencies
   anytree,
-  cached-property,
   cgen,
   click,
+  cloudpickle,
   codepy,
-  distributed,
   llvmPackages,
   multidict,
-  nbval,
+  numpy,
+  packaging,
   psutil,
   py-cpuinfo,
-  scipy,
   sympy,
 
   # tests
@@ -27,18 +26,19 @@
   matplotlib,
   pytest-xdist,
   pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.12";
+  version = "4.8.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-Eqyq96mVB5ZhPaLASesWhzjjHcXz/tAIOPP//8yGoBM=";
+    hash = "sha256-NM60H8Fx0pe4JEF7K8A+1i1MbxKhgab5cGcCD8wl9l8=";
   };
 
   pythonRemoveDeps = [ "pip" ];
@@ -49,16 +49,15 @@ buildPythonPackage rec {
 
   dependencies = [
     anytree
-    cached-property
     cgen
     click
+    cloudpickle
     codepy
-    distributed
-    nbval
     multidict
+    numpy
+    packaging
     psutil
     py-cpuinfo
-    scipy
     sympy
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
@@ -67,36 +66,45 @@ buildPythonPackage rec {
     matplotlib
     pytest-xdist
     pytestCheckHook
+    scipy
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlagsArray =
+    [
+      "-x"
+      # Tests marked as 'parallel' require mpi and fail in the sandbox:
+      # FileNotFoundError: [Errno 2] No such file or directory: 'mpiexec'
+      "-m 'not parallel'"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # assert np.all(f.data == check)
+      # assert Data(False)
+      "--deselect tests/test_data.py::TestDataReference::test_w_data"
 
-  # I've had to disable the following tests since they fail while using nix-build, but they do pass
-  # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
+      # AssertionError: assert 'omp for schedule(dynamic,1)' == 'omp for coll...le(dynamic,1)'
+      "--deselect tests/test_dle.py::TestNestedParallelism::test_nested_cache_blocking_structure_subdims"
+
+      # codepy.CompileError: module compilation failed
+      # FAILED compiler invocation
+      "--deselect tests/test_dle.py::TestNodeParallelism::test_dynamic_nthreads"
+
+      # AssertionError: assert all(not i.pragmas for i in iters[2:])
+      "--deselect tests/test_dle.py::TestNodeParallelism::test_incr_perfect_sparse_outer"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # IndexError: tuple index out of range
+      "--deselect tests/test_dle.py::TestNestedParallelism"
+
+      # codepy.CompileError: module compilation failed
+      "--deselect tests/test_autotuner.py::test_nested_nthreads"
+
+      # assert np.all(np.isclose(f0.data, check0))
+      # assert Data(false)
+      "--deselect tests/test_interpolation.py::TestSubDomainInterpolation::test_inject_subdomain"
+    ];
+
   disabledTests =
     [
-      "test_assign_parallel"
-      "test_cache_blocking_structure_distributed"
-      "test_codegen_quality0"
-      "test_coefficients_w_xreplace"
-      "test_docstrings"
-      "test_docstrings[finite_differences.coefficients]"
-      "test_gs_parallel"
-      "test_if_halo_mpi"
-      "test_if_parallel"
-      "test_index_derivative"
-      "test_init_omp_env_w_mpi"
-      "test_loop_bounds_forward"
-      "test_min_max_mpi"
-      "test_mpi"
-      "test_mpi_nocomms"
-      "test_new_distributor"
-      "test_setupWOverQ"
-      "test_shortcuts"
-      "test_stability_mpi"
-      "test_subdomainset_mpi"
-      "test_subdomains_mpi"
-
       # Download dataset from the internet
       "test_gs_2d_float"
       "test_gs_2d_int"
@@ -111,6 +119,9 @@ buildPythonPackage rec {
 
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
       "test_v0"
+
+      # AssertionError: assert(np.allclose(grad_u.data, grad_v.data, rtol=tolerance, atol=tolerance))
+      "test_gradient_equivalence"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Numerical tests
@@ -123,18 +134,12 @@ buildPythonPackage rec {
     ];
 
   disabledTestPaths =
-    [
-      "tests/test_pickle.py"
-      "tests/test_benchmark.py"
-      "tests/test_mpi.py"
-      "tests/test_autotuner.py"
-      "tests/test_data.py"
-      "tests/test_dse.py"
-      "tests/test_gradient.py"
-    ]
-    ++ lib.optionals (
-      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin
-    ) [ "tests/test_dle.py" ];
+    lib.optionals
+      ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
+      [
+        # Flaky: codepy.CompileError: module compilation failed
+        "tests/test_dse.py"
+      ];
 
   pythonImportsCheck = [ "devito" ];
 

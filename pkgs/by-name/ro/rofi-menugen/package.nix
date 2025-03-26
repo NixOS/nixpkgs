@@ -6,7 +6,7 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rofi-menugen";
   version = "unstable-2015-12-28";
 

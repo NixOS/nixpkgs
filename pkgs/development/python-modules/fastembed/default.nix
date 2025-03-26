@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
     tag = "v${version}";
-    hash = "sha256-aVeQC0BooVZcbIplVRzY22ozliWW/Ts/asiInTxSBOE=";
+    hash = "sha256-mZClZuSTTGQQSH6KYLcVx0YaNoAwRO25eRxGGjOz8B8=";
   };
 
   build-system = [ poetry-core ];
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, Accurate, Lightweight Python library to make State of the Art Embedding";
     homepage = "https://github.com/qdrant/fastembed";
-    changelog = "https://github.com/qdrant/fastembed/releases/tag/v${version}";
+    changelog = "https://github.com/qdrant/fastembed/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'

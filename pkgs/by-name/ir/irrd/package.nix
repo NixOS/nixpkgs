@@ -6,7 +6,7 @@
 , git
 , postgresql
 , postgresqlTestHook
-, redis
+, valkey
 }:
 
 let
@@ -84,7 +84,7 @@ py.pkgs.buildPythonPackage rec {
 
   nativeCheckInputs = [
     git
-    redis
+    valkey
     postgresql
     postgresqlTestHook
   ] ++ (with py.pkgs; [

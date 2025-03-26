@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  fetchurl,
-  patchelf,
   wrapGAppsHook3,
   cairo,
   dbus,

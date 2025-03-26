@@ -5,7 +5,7 @@
   python,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hg-commitsigs";
   # Latest tag is 11 years old.
   version = "unstable-2021-01-08";

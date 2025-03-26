@@ -4,11 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   coreutils,
-  darwin,
   libblocksruntime,
   llvmPackages,
-  libxcrypt,
-  openldap,
   ninja,
   pkg-config,
   python3,
@@ -16,16 +13,6 @@
   zlib,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    AppKit
-    Cocoa
-    Foundation
-    LDAP
-    OpenAL
-    OpenGL
-    ;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "1.7.0";
@@ -75,15 +62,8 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./005-boost-Do-not-add-system-paths-on-nix.patch
 
-    # Nixpkgs cctools does not have bitcode support.
-    ./006-disable-bitcode.patch
-
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
-  ];
-
-  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
-    libxcrypt
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -96,15 +76,6 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs =
     [
       zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Foundation
-      LDAP
-      OpenAL
-      OpenGL
-      openldap
     ]
     ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
       # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
@@ -173,6 +144,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+  env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
     homepage = "https://mesonbuild.com";

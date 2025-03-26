@@ -3,7 +3,6 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  fetchpatch2,
   gitUpdater,
   linkFarm,
   replaceVars,
@@ -58,7 +57,6 @@
   qtsvg,
   wrapGAppsHook3,
   wrapQtAppsHook,
-  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

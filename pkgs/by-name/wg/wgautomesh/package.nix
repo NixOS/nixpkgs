@@ -3,7 +3,7 @@
   fetchFromGitea,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wgautomesh";
   version = "unstable-20240524";
 

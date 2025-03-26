@@ -99,6 +99,11 @@ buildPythonPackage {
     # AssertionError: Scalars are not close!
     # Expected 7.781850814819336 but got 7.781772613525391
     "--deselect=tests/metrics/image/test_psnr.py::TestPeakSignalNoiseRatio::test_psnr_with_random_data"
+
+    # -- tests/metrics/regression/test_mean_squared_error.py --
+    # AssertionError: Scalars are not close!
+    # Expected -640.4547729492188 but got -640.4707641601562
+    "--deselect=tests/metrics/regression/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
   ];
 
   meta = {

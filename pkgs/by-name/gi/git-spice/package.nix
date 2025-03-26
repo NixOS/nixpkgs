@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  buildGo123Module,
+  buildGo124Module,
   fetchFromGitHub,
   git,
   nix-update-script,
   installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGo124Module rec {
   pname = "git-spice";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
     tag = "v${version}";
-    hash = "sha256-1EWuKjvDeOV6W+nntdevUI/SO68ssYgoxJ5QIy5jkFM=";
+    hash = "sha256-ew0ehaYXJgc1ePdQCxxfahBdTs5zsiHDfB4SdS2WZ8A=";
   };
 
-  vendorHash = "sha256-F9CyhUtdkwvEsmQ+T5zt2n+TBRhVgyr2CEOvIzcXpug=";
+  vendorHash = "sha256-jlCNcjACtms9kI4Lo8AtUfxqODyv4U2nJITGpBNxk9I=";
 
   subPackages = [ "." ];
 

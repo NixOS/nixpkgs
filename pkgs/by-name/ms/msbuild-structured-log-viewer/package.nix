@@ -10,8 +10,7 @@
   openssl,
   libkrb5,
   makeDesktopItem,
-  writeShellScript,
-  nix-update,
+  nix-update-script,
 }:
 buildDotnetModule (finalAttrs: rec {
   pname = "msbuild-structured-log-viewer";
@@ -73,10 +72,7 @@ buildDotnetModule (finalAttrs: rec {
     categories = [ "Development" ];
   };
 
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
-    ${lib.getExe nix-update}
-    "$(nix-build -A "$UPDATE_NIX_ATTR_PATH.fetch-deps" --no-out-link)"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rich interactive log viewer for MSBuild logs";

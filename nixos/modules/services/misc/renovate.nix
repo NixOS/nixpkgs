@@ -69,7 +69,7 @@ in
     validateSettings = mkOption {
       type = types.bool;
       default = true;
-      description = "Weither to run renovate's config validator on the built configuration.";
+      description = "Whether to run renovate's config validator on the built configuration.";
     };
     settings = mkOption {
       type = json.type;

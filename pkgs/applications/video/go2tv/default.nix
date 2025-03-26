@@ -63,6 +63,6 @@ buildGoModule rec {
     changelog = "https://github.com/alexballas/go2tv/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gdamjan ];
-    mainProgram = "go2tv";
+    mainProgram = pname;
   };
 }

@@ -80,6 +80,7 @@
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/libftdi.nix
+  ./hardware/libjaylink.nix
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/ath-user-regd.nix
@@ -121,6 +122,7 @@
   ./hardware/wooting.nix
   ./hardware/xone.nix
   ./hardware/xpadneo.nix
+  ./hardware/xpad-noone.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx5.nix
   ./i18n/input-method/hime.nix
@@ -559,6 +561,7 @@
   ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
+  ./services/desktops/wlock.nix
   ./services/desktops/zeitgeist.nix
   ./services/development/athens.nix
   ./services/development/blackfire.nix
@@ -742,6 +745,7 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
+  ./services/matrix/matrix-alertmanager.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-signal.nix
@@ -751,6 +755,7 @@
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse.nix
+  ./services/matrix/synapse-auto-compressor.nix
   ./services/misc/airsonic.nix
   ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
@@ -822,6 +827,7 @@
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
   ./services/misc/lifecycled.nix
+  ./services/misc/litellm.nix
   ./services/misc/llama-cpp.nix
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
@@ -845,6 +851,7 @@
   ./services/misc/ombi.nix
   ./services/misc/omnom.nix
   ./services/misc/open-webui.nix
+  ./services/misc/orthanc.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
@@ -852,6 +859,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pghero.nix
+  ./services/misc/pinchflat.nix
   ./services/misc/pinnwand.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
@@ -929,6 +937,7 @@
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
   ./services/monitoring/do-agent.nix
+  ./services/monitoring/fluent-bit.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/gatus.nix
   ./services/monitoring/gitwatch.nix
@@ -1011,6 +1020,7 @@
   ./services/network-filesystems/kubo.nix
   ./services/network-filesystems/litestream/default.nix
   ./services/network-filesystems/moosefs.nix
+  ./services/network-filesystems/ipfs-cluster.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs/client.nix
@@ -1096,6 +1106,11 @@
   ./services/networking/firewall.nix
   ./services/networking/firewall-iptables.nix
   ./services/networking/firewall-nftables.nix
+  ./services/networking/firezone/gateway.nix
+  ./services/networking/firezone/gui-client.nix
+  ./services/networking/firezone/headless-client.nix
+  ./services/networking/firezone/relay.nix
+  ./services/networking/firezone/server.nix
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
@@ -1113,6 +1128,7 @@
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix
   ./services/networking/gobgpd.nix
+  ./services/networking/gokapi.nix
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
   ./services/networking/harmonia.nix
@@ -1315,6 +1331,7 @@
   ./services/networking/trickster.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
+  ./services/networking/umurmur.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
   ./services/networking/uptermd.nix
@@ -1357,6 +1374,7 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/prefect.nix
   ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
@@ -1381,7 +1399,6 @@
   ./services/security/esdm.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
-  ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hockeypuck.nix
   ./services/security/hologram-agent.nix
@@ -1395,6 +1412,7 @@
   ./services/security/oauth2-proxy.nix
   ./services/security/oauth2-proxy-nginx.nix
   ./services/security/opensnitch.nix
+  ./services/security/paretosecurity.nix
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
@@ -1716,6 +1734,7 @@
   ./system/boot/loader/grub/memtest.nix
   ./system/boot/loader/external/external.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/limine/limine.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix

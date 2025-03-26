@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "go-landlock";
   version = "0-unstable-2024-02-16";
 

@@ -5,7 +5,7 @@
   pkg-config,
   alsa-lib,
 }:
-buildGoModule rec {
+buildGoModule {
   name = "termsonic";
   version = "0-unstable-2025-01-07";
 

@@ -7,7 +7,7 @@
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg, windows
+  xorg, windows, libgbm, mesa-gl-headers, dri-pkgconfig-stub
 }:
 
 let
@@ -791,7 +791,7 @@ self: super:
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
         ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
+        buildInputs = commonBuildInputs ++ [ libdrm libgbm mesa-gl-headers dri-pkgconfig-stub ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
@@ -1008,10 +1008,26 @@ self: super:
     meta = attrs.meta // { mainProgram = "xinit"; };
   });
 
-  xf86videointel = throw ''
-    xf86videointel has been removed as the package is unmaintained and the driver is no longer functional.
-    Please remove "intel" from `services.xserver.videoDrivers` and switch to the "modesetting" driver.
-  ''; # Added 2024-12-16;
+  xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
+    # the update script only works with released tarballs :-/
+    name = "xf86-video-intel-2024-05-06";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      group = "xorg";
+      owner = "driver";
+      repo = "xf86-video-intel";
+      rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
+      sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
+    };
+    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
+    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    patches = [ ./use_crocus_and_iris.patch ];
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
+  });
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.libXv ];

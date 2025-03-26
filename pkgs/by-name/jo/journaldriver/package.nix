@@ -7,7 +7,7 @@
   systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "journaldriver";
   version = "5656.0.0";
   useFetchCargoVendor = true;

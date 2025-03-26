@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   bison,
   flex,
   libxml2,

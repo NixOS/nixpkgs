@@ -4,7 +4,6 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
-  fetchpatch,
   importlib-resources,
   mistune,
   mypy,

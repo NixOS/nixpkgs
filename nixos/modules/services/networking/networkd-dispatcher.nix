@@ -64,7 +64,7 @@ in
                 default = null;
                 description = ''
                   List of names of the systemd-networkd operational states which
-                  should trigger the script. See <https://www.freedesktop.org/software/systemd/man/networkctl.html>
+                  should trigger the script. See {manpage}`networkctl(1)`
                   for a description of the specific state type.
                 '';
               };

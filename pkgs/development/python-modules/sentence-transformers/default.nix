@@ -7,20 +7,18 @@
   setuptools,
 
   # dependencies
+  accelerate,
+  datasets,
   huggingface-hub,
-  nltk,
-  numpy,
+  optimum,
+  pillow,
   scikit-learn,
   scipy,
-  sentencepiece,
-  tokenizers,
   torch,
   tqdm,
   transformers,
 
   # tests
-  accelerate,
-  datasets,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -41,23 +39,28 @@ buildPythonPackage rec {
 
   dependencies = [
     huggingface-hub
-    nltk
-    numpy
+    pillow
     scikit-learn
     scipy
-    sentencepiece
-    tokenizers
     torch
     tqdm
     transformers
   ];
 
+  optional-dependencies = {
+    train = [
+      accelerate
+      datasets
+    ];
+    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
+  };
+
   nativeCheckInputs = [
-    accelerate
-    datasets
-    pytestCheckHook
     pytest-cov-stub
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -106,5 +109,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+    badPlatforms = [
+      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

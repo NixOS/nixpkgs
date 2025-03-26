@@ -15,15 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.17";
+  version = "1.1.18";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "Nvidia";
-    repo = pname;
+    repo = "egl-wayland";
     rev = version;
-    hash = "sha256-/lj52qCbv07NDYDdF8SEjCIWWPAMcwXNvYXiU8IoC/A=";
+    hash = "sha256-Vu0XPcFKQJ+nypNMX1tw17whVWceZ0YlqvEEmEbTQaU=";
   };
 
   postPatch = ''

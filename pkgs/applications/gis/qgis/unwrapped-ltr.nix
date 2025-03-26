@@ -82,14 +82,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.34.15";
+  version = "3.40.4";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-TFnlQIizI+8CZgNpwkuipSCNT3OYIaOeoz6kIGcSYL4=";
+    hash = "sha256-R2/ycRPQVKqleSt+9D/YCpBlqKgJdhLc0BvYT7qFJo8=";
   };
 
   passthru = {
@@ -160,6 +160,11 @@ mkDerivation rec {
       "-DWITH_3D=True"
       "-DWITH_PDAL=True"
       "-DENABLE_TESTS=False"
+      "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
+
+      # Remove for QGIS 3.42
+      "-DCMAKE_POLICY_DEFAULT_CMP0175=OLD"
+      "-DCMAKE_POLICY_DEFAULT_CMP0177=OLD"
     ]
     ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withServer [

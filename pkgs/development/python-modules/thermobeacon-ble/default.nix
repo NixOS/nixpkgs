@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "thermobeacon-ble";
     tag = "v${version}";
-    hash = "sha256-kyhLj72WzQ4LpPbW38OWlb1YQs5R+R9Fb3sBYqRkY2M=";
+    hash = "sha256-UnTJ1uvEnZ5//2arwMsJUSosCK8w26lpAcC1XGO9srw=";
   };
 
   build-system = [ poetry-core ];

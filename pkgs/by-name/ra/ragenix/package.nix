@@ -5,18 +5,18 @@
   nix,
   installShellFiles,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ragenix";
-  version = "0-unstable-2024-09-19";
+  version = "2025.03.09";
 
   src = fetchFromGitHub {
     owner = "yaxitech";
     repo = "ragenix";
-    rev = "687ee92114bce9c4724376cf6b21235abe880bfa";
-    hash = "sha256-03XIEjHeZEjHXctsXYUB+ZLQmM0WuhR6qWQjwekFk/M=";
+    tag = finalAttrs.version;
+    hash = "sha256-iQf1WdNxaApOFHIx4RLMRZ4f8g+8Xp0Z1/E/Mz2rLxY=";
   };
 
-  cargoHash = "sha256-NO0VpLZTGjddh1aESulAx4pP4k1vdDm1+oCmf/ybuO4=";
+  cargoHash = "sha256-aM7kjyJJ8h4Yd1k2FTE8Vk/ezAXcCbfdAPxuNewptNQ=";
   useFetchCargoVendor = true;
 
   RAGENIX_NIX_BIN_PATH = lib.getExe nix;
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "ragenix";
   };
-}
+})

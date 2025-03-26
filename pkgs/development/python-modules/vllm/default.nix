@@ -88,7 +88,7 @@ let
     hash = "sha256-GUTRXmv3DiM/GN5Bvv2LYovMLKZMlMhoKv4O0g627gs=";
   };
 
-  vllm-flash-attn = stdenv.mkDerivation rec {
+  vllm-flash-attn = stdenv.mkDerivation {
     pname = "vllm-flash-attn";
     # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
     version = "2.7.2.post1";

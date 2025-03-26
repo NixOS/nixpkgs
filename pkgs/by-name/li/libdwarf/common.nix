@@ -9,7 +9,7 @@
   knownVulnerabilities,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libdwarf";
   inherit version;
 

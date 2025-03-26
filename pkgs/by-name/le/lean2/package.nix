@@ -61,7 +61,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       thoughtpolice
-      gebner
     ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "lean";

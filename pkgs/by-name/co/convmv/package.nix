@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   prePatch =
-    lib.optionalString finalAttrs.doCheck ''
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
       tar -xf testsuite.tar
     ''
     + ''

@@ -5,7 +5,7 @@
   bcc,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ebpf-usb";
   version = "unstable-2022-04-03";
   pyproject = false;

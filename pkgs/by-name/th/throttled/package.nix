@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "erpalma";
-    repo = pname;
+    repo = "throttled";
     rev = "v${version}";
     sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
   };

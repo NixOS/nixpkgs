@@ -6,7 +6,7 @@
   ronn,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "vulnix";
   version = "1.10.2";
 

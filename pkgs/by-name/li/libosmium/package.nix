@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libosmium";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IGZQBziXKYVG+uKLjHr6LsIF5H8klq6LGF5j1KrfHZU=";
+    hash = "sha256-b4jdPh6lJ/ALPVblDt16Nabx9ZL8MW8/roI+NqTZshU=";
   };
 
   nativeBuildInputs = [ cmake ];

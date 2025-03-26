@@ -1,5 +1,18 @@
 { lib, stdenv, makeWrapper, buildEnv
-, bash, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial, nix, subversion
+, bash, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial
+, # FIXME: These scripts should not depend on Nix, they should depend on a
+  # `.nar` hasher compatible with Nix.
+  #
+  # The fact that these scripts depend on Nix means that e.g. Chromium depends
+  # on Nix.
+  #
+  # Also should be fixed:
+  # - prefetch-yarn-deps
+  # - nurl, nix-init
+  #
+  # Gridlock is one such candidate: https://github.com/lf-/gridlock
+  nixForLinking
+, subversion
 }:
 
 let mkPrefetchScript = tool: src: deps:
@@ -15,7 +28,7 @@ let mkPrefetchScript = tool: src: deps:
     installPhase = ''
       install -vD ${src} $out/bin/$name;
       wrapProgram $out/bin/$name \
-        --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils gnused nix ])} \
+        --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils gnused nixForLinking ])} \
         --set HOME /homeless-shelter
     '';
 

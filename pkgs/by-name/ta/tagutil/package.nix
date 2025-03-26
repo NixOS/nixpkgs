@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kaworu";
-    repo = pname;
+    repo = "tagutil";
     rev = "v${version}";
     sha256 = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
   };

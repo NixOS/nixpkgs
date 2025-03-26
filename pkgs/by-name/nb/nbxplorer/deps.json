@@ -166,13 +166,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "7.0.46",
-    "hash": "sha256-c5KHQ/TYGBTMoKKKo7XYR8r7VTJlaU0ZW6KqWRMjh2Y="
+    "version": "7.0.50",
+    "hash": "sha256-l3H70u5OAbd2hevX/yeVBdQyee/dUn5mp4iGvTnTcjk="
   },
   {
     "pname": "NBitcoin.Altcoins",
-    "version": "3.0.31",
-    "hash": "sha256-Mtaqj8Fl8jxeOBXz66fjZQKZ/yg6pARJKJTFW0V/wDA="
+    "version": "3.0.34",
+    "hash": "sha256-eh5Yft+UQqlLREJJ3kKAKLYYjAHOuMxhBI+tr3Ciya8="
   },
   {
     "pname": "NETStandard.Library",

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xerces-c";
-  version = "3.2.5";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://apache/xerces/c/3/sources/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VFz8zmxOdVIHvR8n4xkkHlDjfAwnJQ8RzaEWAY8e8PU=";
+    sha256 = "sha256-lVXx0G+CmH+7RliGJwVRV0BBT9NLTbatLtdqLcCNO94=";
   };
 
   buildInputs = [

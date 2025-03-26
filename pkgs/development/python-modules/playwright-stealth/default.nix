@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "playwright-stealth";
   version = "1.0.6-unstable-2023-09-11";
   pyproject = true;

@@ -1,34 +1,27 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
-  go_1_24,
-  pkg-config,
   nix-update-script,
 }:
 
-buildGoModule.override { go = go_1_24; } rec {
+buildGo124Module rec {
   pname = "matrix-alertmanager-receiver";
-  version = "2025.2.19";
+  version = "2025.3.19";
 
   src = fetchFromGitHub {
     owner = "metio";
     repo = "matrix-alertmanager-receiver";
     tag = version;
-    hash = "sha256-mzWxAR82tD5zbviAjRFyBLZSpaETti85kzolWRmhx1o=";
+    hash = "sha256-uNQU0E2QItXK5VCwFDC4tZZIIECXhas5SMSOTYj9zlo=";
   };
 
-  vendorHash = "sha256-lRZGnkcdQtU9ecM6ezm97YtMzC/65yEgzJ99iKWY4QY=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  env.CGO_ENABLED = "0";
+  vendorHash = "sha256-u1oTutEEYZ79Ne27Tu4S5eDuUIlVamsFR2WR6O+giM8=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X main.matrixAlertmanagerReceiverVersion=${version}"
   ];
 
   passthru = {

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   boost,
   dash,
   freetype,

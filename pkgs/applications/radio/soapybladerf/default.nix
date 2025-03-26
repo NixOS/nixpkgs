@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "0.4.1";
+  version = "0.4.2";
 
 in
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyBladeRF";
     rev = "soapy-bladerf-${version}";
-    sha256 = "02wh09850vinqg248fw4lxmx7y857cqmnnb8jm9zhyrsggal0hki";
+    sha256 = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
   };
 
   nativeBuildInputs = [

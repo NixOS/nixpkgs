@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "grafana-polystat-panel";
   version = "2.1.13";
   zipHash = "sha256-O8YOSVLhJ1hDNbBHKwkikNBOjQTrGofGklVTalgDH4I=";

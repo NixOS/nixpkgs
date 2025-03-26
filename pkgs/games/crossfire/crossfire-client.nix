@@ -9,6 +9,8 @@
   gtk2,
   pcre,
   zlib,
+  libGL,
+  libGLU,
   libpng,
   fribidi,
   harfbuzzFull,
@@ -25,7 +27,7 @@
   sha256,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-client";
   version = rev;
 
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     gtk2
     pcre
     zlib
+    libGL
+    libGLU
     libpng
     fribidi
     harfbuzzFull

@@ -19,7 +19,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "distutils";
   inherit (setuptools) version;
   pyproject = true;

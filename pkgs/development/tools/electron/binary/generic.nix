@@ -46,6 +46,7 @@ let
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     platforms = [
       "x86_64-darwin"
@@ -56,7 +57,7 @@ let
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "32.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "33.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -127,13 +128,6 @@ let
     vulkan-loader
   ];
 
-  # Fix read out of range on aarch64 16k pages builds
-  # https://github.com/NixOS/nixpkgs/pull/365364
-  # https://github.com/NixOS/nixpkgs/pull/380991
-  # Can likely be removed when v34.2.1 (or v32.3.0?) releases:
-  # https://github.com/electron/electron/pull/45571
-  needsAarch64PageSizeFix = lib.versionAtLeast version "34" && stdenv.hostPlatform.isAarch64;
-
   linux = finalAttrs: {
     buildInputs = [
       glib
@@ -161,8 +155,7 @@ let
 
     preFixup = ''
       makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
-        "''${gappsWrapperArgs[@]}" \
-        ${lib.optionalString needsAarch64PageSizeFix "--add-flags '--js-flags=--no-decommit-pooled-pages'"}
+        "''${gappsWrapperArgs[@]}"
     '';
 
     postFixup = ''

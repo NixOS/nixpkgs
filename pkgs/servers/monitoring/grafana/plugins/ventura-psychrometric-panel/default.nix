@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "ventura-psychrometric-panel";
   version = "4.5.1";
   zipHash = "sha256-Y/Eh3eWZkPS8Q1eha7sEJ3wTMI7QxOr7MEbPc25fnGg=";

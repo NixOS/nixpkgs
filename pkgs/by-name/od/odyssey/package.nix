@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "yandex";
-    repo = pname;
+    repo = "odyssey";
     rev = version;
     sha256 = "sha256-1ALTKRjpKmmFcAuhmgpcbJBkNuUlTyau8xWDRHh7gf0=";
   };

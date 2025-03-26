@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
-    repo = pname;
+    repo = "cloud-hypervisor";
     rev = "v${version}";
     hash = "sha256-2nA8bhezmGa6Gu420nxDrgW0SonTQv1WoGYmBwm7/bI=";
   };

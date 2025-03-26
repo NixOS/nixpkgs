@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
     tag = "v${version}";
-    hash = "sha256-4KOF/3/PxHHSo95zaqtPy5+h53VcUsMhSx85tGvXV2o=";
+    hash = "sha256-VnoQ8cKqPcZPpR9c3M6xJDdG7gnO9fxIa4v2kxd9Nzg=";
   };
 
   build-system = [ setuptools ];

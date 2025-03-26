@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
     opencv4'
     openssl'
     pango
+    pcsclite
     speex
     (lib.getLib systemd)
     stdenv.cc.cc

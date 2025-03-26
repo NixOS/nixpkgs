@@ -292,6 +292,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (mkRemovedOptionModule [ "services" "haka" ] ''
+      The corresponding package was broken and removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "tedicross" ] ''
       The corresponding package was broken and removed from nixpkgs.
     '')

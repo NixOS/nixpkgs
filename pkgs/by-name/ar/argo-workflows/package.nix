@@ -11,7 +11,7 @@ let
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = pkgsBuildBuild.buildGoModule rec {
+  staticfiles = pkgsBuildBuild.buildGoModule {
     name = "staticfiles";
 
     src = fetchFromGitHub {
@@ -34,16 +34,16 @@ let
 in
 buildGoModule rec {
   pname = "argo-workflows";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     tag = "v${version}";
-    hash = "sha256-R6njT6Lae+8KiTyXjxE5/U922pP0VqgCIRwGhWBOZUI=";
+    hash = "sha256-LvFpYVylVwWhoVtMDldalSHa5KGdbKVB6yFnP5ha4gg=";
   };
 
-  vendorHash = "sha256-uCIdZkoPgppJtrFf7nOVIyEXo1bVILYXNs5LtLLLmsY=";
+  vendorHash = "sha256-hMegxeUFSBf32dnXmD7QagkvWgWDeB4Fu4nlKNoePWY=";
 
   doCheck = false;
 

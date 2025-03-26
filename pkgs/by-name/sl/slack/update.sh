@@ -3,8 +3,13 @@
 
 set -eou pipefail
 
-latest_linux_version=$(curl -L --silent https://slack.com/downloads/linux | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
-latest_mac_version=$(curl -L --silent https://slack.com/downloads/mac | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
+latest_linux_data="$(curl -s 'https://slack.com/api/desktop.latestRelease?arch=x64&variant=deb')"
+latest_mac_data="$(curl -s 'https://slack.com/api/desktop.latestRelease?arch=universal&variant=dmg')"
+latest_mac_arm_data="$(curl -s 'https://slack.com/api/desktop.latestRelease?arch=arm64&variant=dmg')"
+
+latest_linux_version="$(echo ${latest_linux_data} | jq -rc '.version')"
+latest_mac_version="$(echo ${latest_mac_data} | jq -rc '.version')"
+latest_mac_arm_version="$(echo ${latest_mac_arm_data} | jq -rc '.version')"
 
 nixpkgs="$(git rev-parse --show-toplevel)"
 slack_nix="$nixpkgs/pkgs/by-name/sl/slack/package.nix"
@@ -19,9 +24,9 @@ if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && \
   exit 0
 fi
 
-linux_url="https://downloads.slack-edge.com/desktop-releases/linux/x64/${latest_linux_version}/slack-desktop-${latest_linux_version}-amd64.deb"
-mac_url="https://downloads.slack-edge.com/desktop-releases/mac/universal/${latest_mac_version}/Slack-${latest_mac_version}-macOS.dmg"
-mac_arm_url="https://downloads.slack-edge.com/desktop-releases/mac/arm64/${latest_mac_version}/Slack-${latest_mac_version}-macOS.dmg"
+linux_url="$(echo ${latest_linux_data} | jq -rc '.download_url')"
+mac_url="$(echo ${latest_mac_data} | jq -rc '.download_url')"
+mac_arm_url="$(echo ${latest_mac_arm_data} | jq -rc '.download_url')"
 linux_sha256=$(nix-prefetch-url ${linux_url})
 mac_sha256=$(nix-prefetch-url ${mac_url})
 mac_arm_sha256=$(nix-prefetch-url ${mac_arm_url})

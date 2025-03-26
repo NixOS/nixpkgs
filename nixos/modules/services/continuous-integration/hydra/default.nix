@@ -520,7 +520,7 @@ in
             elif [[ $compression == zstd ]]; then
               compressionCmd=(zstd --rm)
             fi
-            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "''${compressionCmd[@]}" --force --quiet
+            find ${baseDir}/build-logs -ignore_readdir_race -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "''${compressionCmd[@]}" --force --quiet
           '';
         startAt = "Sun 01:45";
         serviceConfig.Slice = "system-hydra.slice";

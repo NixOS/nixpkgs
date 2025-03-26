@@ -9,7 +9,7 @@
   libxkbcommon,
   wayland-scanner,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlock";
   version = "0-unstable-2024-09-13";
 
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/sewn/wlock";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fliegendewurst ];
+    mainProgram = "wlock";
   };
 }

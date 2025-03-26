@@ -51,29 +51,24 @@
   libopus,
   buildServer ? true,
   nocaps ? false,
-  AudioToolbox,
-  AVFoundation,
-  Carbon,
-  Cocoa,
-  CoreMedia,
   withUnfree ? false,
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
-  gnome,
+  gnome-remote-desktop,
   remmina,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.12.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-Bbpwfnz8xPyNLZ+UtcYw4arpzGEh3znqncExl4DlByA=";
+    hash = "sha256-Dd7J0QpKNY0cbTldtKkXjBoAJUSCyDf9Pzoah+Ak9Vw=";
   };
 
   postPatch =
@@ -154,13 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
       wayland-scanner
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioToolbox
-      AVFoundation
-      Carbon
-      Cocoa
-      CoreMedia
-    ]
     ++ lib.optionals withUnfree [
       faac
     ];
@@ -205,15 +193,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  env.NIX_LDFLAGS = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-framework AudioToolbox"
-    ]
-  );
-
   passthru.tests = {
     inherit remmina;
-    inherit (gnome) gnome-remote-desktop;
+    inherit gnome-remote-desktop;
   };
 
   meta = with lib; {

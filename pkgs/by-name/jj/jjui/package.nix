@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "jjui";
-  version = "0.5";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${version}";
-    hash = "sha256-+1KVKevY7aWkAbbHQi06whh3keibdSVEykYDItSMi4I=";
+    hash = "sha256-y93ANgIlHafwZJ1jOIzGxt81G6YbHO7/PFqYovgGBMc=";
   };
 
-  vendorHash = "sha256-MxTwe0S2wvkIy8VJl1p8utTX98zfcwpNgCdnpFAMxO0=";
+  vendorHash = "sha256-84VMhT+Zbub9sw+lAKEZba1aXcRaTIbnYhJ7zJt118Y=";
 
   passthru.updateScript = nix-update-script { };
 

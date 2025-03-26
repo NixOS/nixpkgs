@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       pciutils
     ]
     + ":"
-    + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+    + lib.makeSearchPathOutput "lib" "lib" [ stdenv.cc.cc ];
 
   desktopItem = makeDesktopItem {
     name = "zotero";

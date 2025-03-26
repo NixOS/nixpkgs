@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = pname;
-    repo = pname;
+    owner = "zeitgeist";
+    repo = "zeitgeist";
     rev = "v${version}";
     sha256 = "kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
   };

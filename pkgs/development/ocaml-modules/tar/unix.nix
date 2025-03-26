@@ -6,7 +6,7 @@
   git,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "tar-unix";
   inherit (tar) version src doCheck;
 

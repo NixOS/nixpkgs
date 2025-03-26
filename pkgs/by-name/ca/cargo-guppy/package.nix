@@ -8,7 +8,7 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cargo-guppy";
   version = "unstable-2023-10-04";
 

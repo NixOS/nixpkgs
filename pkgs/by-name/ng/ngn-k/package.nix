@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, stdenvNoLibs
 , fetchFromGitea
 , runtimeShell
 }:

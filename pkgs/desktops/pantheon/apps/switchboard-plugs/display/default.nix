@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XeBctwLCeDM4AoHbqk6olc6rosBQDQ4uFm1Vv0stFVA=";
+    sha256 = "sha256-uSEixgakYmh+rheDVF9kYs43C+vjfzuz1SNfwV3+RIU=";
   };
 
   nativeBuildInputs = [

@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "bdt";
   version = "0.18.0";
 

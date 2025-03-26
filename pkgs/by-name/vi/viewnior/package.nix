@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -23,7 +22,7 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "viewnior-gtk3";
   version = "1.8-unstable-2023-11-23";
 

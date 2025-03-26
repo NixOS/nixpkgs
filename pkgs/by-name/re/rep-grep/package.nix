@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rep-grep";
   version = "0-unstable-2024-02-06";
 

@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-screenshot";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
+    repo = "cosmic-screenshot";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-/sGYF+XWmPraNGlBVUcN/nokDB9JwWViEAL9gVH3ZaI=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     mainProgram = "cosmic-screenshot";
   };
-}
+})

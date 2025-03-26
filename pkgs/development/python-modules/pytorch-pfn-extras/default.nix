@@ -17,6 +17,7 @@
   onnx,
   pytestCheckHook,
   torchvision,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -60,7 +61,11 @@ buildPythonPackage rec {
       # where 4 = <MagicMock id='140733587469184'>.call_count
       "test_lr_scheduler_wait_for_first_optimizer_step"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_register"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # torch.distributed is not available on darwin
       "test_create_distributed_evaluator"
       "test_distributed_evaluation"

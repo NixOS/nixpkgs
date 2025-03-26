@@ -5,7 +5,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "coq-record-update";
   owner = "tchajed";
   inherit version;

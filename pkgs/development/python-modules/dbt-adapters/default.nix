@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_adapters";
     inherit version;
-    hash = "sha256-byBmlP3Gf8/olHl34L2SyMb4ZnKK5Gi1fZ3li2Acd+g=";
+    hash = "sha256-C6IyW/3wDwhLY103Py2J45K+JXynnEcoBoOiYSiCxhs=";
   };
 
   postPatch = ''

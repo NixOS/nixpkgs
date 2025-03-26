@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shim";
-  version = "15.8";
+  version = "16.0";
 
   src = fetchFromGitHub {
     owner = "rhboot";
-    repo = pname;
+    repo = "shim";
     rev = version;
-    hash = "sha256-xnr9HBfYP035C7p2YTRZasx5SF4a2ZkOl9IpsVduNm4=";
+    hash = "sha256-KFpt//A4/T0FRBSPuTKQH/mEIqLVEiE+Lpvuq7ec6eo=";
     fetchSubmodules = true;
   };
 

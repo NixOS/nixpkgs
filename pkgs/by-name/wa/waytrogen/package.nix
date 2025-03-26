@@ -13,24 +13,25 @@
   rustc,
   sqlite,
   openssl,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "waytrogen";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = version;
-    hash = "sha256-Y83l6GKuaH+976MTOo03saVBh6gDegxyo3WRsRA+iQI=";
+    hash = "sha256-OO7HHmTa5qH0lFl+ZnsJMo4MxQCRnKn7kkO2BOGt8PA=";
   };
 
   useFetchCargoVendor = true;
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-t3bDgY1Jtc/lE3WOnmti12shwsmSX3HhGBtYjesQ7hk=";
+    hash = "sha256-S+JW6OvmB9vj9cR9/qnw5EIECjpD8JPhxfgwDEEtlC0=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    desktop-file-utils
   ];
 
   buildInputs = [

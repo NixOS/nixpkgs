@@ -13,9 +13,13 @@ setKV ./package.nix version $version
 
 # Update desktop application
 sha256_linux64=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-x64.zip)
+sha256_linux64_arm=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-arm64.zip)
 sha256_darwin64=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip)
-setKV ./package.nix linuxSource.sha256 $sha256_linux64
-setKV ./package.nix darwinSource.sha256 $sha256_darwin64
+sha256_darwin64_arm=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-arm64.zip)
+setKV ./package.nix x86_64-linux.sha256 $sha256_linux64
+setKV ./package.nix aarch64-linux.sha256 $sha256_linux64_arm
+setKV ./package.nix x86_64-darwin.sha256 $sha256_darwin64
+setKV ./package.nix aarch64-darwin.sha256 $sha256_darwin64_arm
 
 # Update server
 sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-x64-v${version}.tar.xz)

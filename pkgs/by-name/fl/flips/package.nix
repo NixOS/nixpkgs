@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flips";
-  version = "196";
+  version = "198";
 
   src = fetchFromGitHub {
     owner = "Alcaro";
     repo = "Flips";
     tag = "v${version}";
-    hash = "sha256-lQ88Iz607AcVzvN/jLGhOn7qiRe9pau9oQcLMt7JIT8=";
+    hash = "sha256-zYGDcUbtzstk1sTKgX2Mna0rzH7z6Dic+OvjZLI1umI=";
   };
 
   nativeBuildInputs = [

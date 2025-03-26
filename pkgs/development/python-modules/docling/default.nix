@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -48,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.25.2";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-QHjcyHxfpmz65EfzNNEmjonGs3YOyMY43J2pIi65LNo=";
+    hash = "sha256-MFMOxNXA/QwQJt/WZmtmmD+OxYxY2LCnutPT4PkZzkw=";
   };
 
   build-system = [
@@ -158,6 +159,25 @@ buildPythonPackage rec {
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+    "tests/test_backend_csv.py"
+    "tests/test_backend_html.py"
+    "tests/test_backend_jats.py"
+    "tests/test_backend_msexcel.py"
+    "tests/test_backend_msword.py"
+    "tests/test_backend_pptx.py"
+    "tests/test_cli.py"
+    "tests/test_code_formula.py"
+    "tests/test_document_picture_classifier.py"
+    "tests/test_e2e_conversion.py"
+    "tests/test_e2e_ocr_conversion.py"
+    "tests/test_interfaces.py"
+    "tests/test_invalid_input.py"
+    "tests/test_legacy_format_transform.py"
+    "tests/test_options.py"
   ];
 
   meta = {

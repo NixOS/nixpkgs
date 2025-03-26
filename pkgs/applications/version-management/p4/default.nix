@@ -35,7 +35,7 @@ let
       }
     ];
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p4";
   version = "2024.1/2596294";
 

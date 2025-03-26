@@ -20,7 +20,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "curv";
   version = "0.5-unstable-2025-01-20";
 
