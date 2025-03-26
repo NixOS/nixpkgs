@@ -165,7 +165,7 @@ with self; {
     version = "0.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Algorithm-Backoff-0.009.tar.gz";
-      sha256 = "9f0ffcdf1e65a88022d6412f46ad977ede5a7b64be663009d13948fe8c9d180b";
+      hash = "sha256-nw/83x5lqIAi1kEvRq2Xft5ae2S+ZjAJ0TlI/oydGAs=";
     };
     buildInputs = [ TestException TestNumberDelta ];
     meta = {
@@ -1800,7 +1800,7 @@ with self; {
     version = "3.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVULLO/Bio-DB-HTS-3.01.tar.gz";
-      sha256 = "12a6bc1f579513cac8b9167cce4e363655cc8eba26b7d9fe1170dfe95e044f42";
+      hash = "sha256-Eqa8H1eVE8rIuRZ8zk42NlXMjromt9n+EXDf6V4ET0I=";
     };
 
     buildInputs = [ pkgs.htslib pkgs.zlib ];
@@ -7238,7 +7238,7 @@ with self; {
     version = "1.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-ODBC-1.61.tar.gz";
-      sha256 = "96def438c9610d72d0e24d007ea0eacd0059b5203c17eadb623bdea22fa9f40a";
+      hash = "sha256-lt70OMlhDXLQ4k0AfqDqzQBZtSA8F+rbYjveoi+p9Ao=";
     };
     buildInputs = [ pkgs.unixODBC ];
     propagatedBuildInputs = [ DBI ];
@@ -9790,7 +9790,7 @@ with self; {
     pname = "File-DirList";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TP/TPABA/File-DirList/File-DirList-0.05.tar.gz";
-      sha256 = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
+      hash = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
     };
     preCheck = ''
       export HOME="$TMPDIR"
@@ -10826,7 +10826,7 @@ with self; {
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LI/LIYANAGE/Geometry-AffineTransform-1.4.tar.gz";
-      sha256 = "2da85aca9da4dd62b51fdaa686e5683fbe8708ba0c7fb1e41fbebbed599442e4";
+      hash = "sha256-Lahayp2k3WK1H9qmhuVoP76HCLoMf7HkH7677VmUQuQ=";
     };
     meta = {
       description = "Affine Transformation to map 2D coordinates to other 2D coordinates";
@@ -14651,7 +14651,7 @@ with self; {
     version = "8.000000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEGL/Marpa-R2-8.000000.tar.gz";
-      sha256 = "56e694a7198ea0c81dd7de61a9c495f5a86426823b8f4b9c54ae460a84028fe8";
+      hash = "sha256-VuaUpxmOoMgd195hqcSV9ahkJoI7j0ucVK5GCoQCj+g=";
     };
     buildInputs = [ ConfigAutoConf ];
     propagatedBuildInputs = [ HTMLParser PPI ];
@@ -14761,7 +14761,7 @@ with self; {
     version = "1.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-1.33.tar.gz";
-      sha256 = "49624da338fd7d57288fa22a47241476fb5ce2f6008181f786c7830fe5af01ff";
+      hash = "sha256-SWJNozj9fVcoj6IqRyQUdvtc4vYAgYH3hseDD+WvAf8=";
     };
     propagatedBuildInputs = [ DevelGlobalDestruction LogReportOptional StringPrint ];
     meta = {
@@ -14776,7 +14776,7 @@ with self; {
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-Optional-1.07.tar.gz";
-      sha256 = "b2658b53176df5afa5d02789368715c86b98c8d04ecd930252bcd7f832cc6224";
+      hash = "sha256-smWLUxdt9a+l0CeJNocVyGuYyNBOzZMCUrzX+DLMYiQ=";
     };
     propagatedBuildInputs = [ StringPrint ];
     meta = {
@@ -23549,7 +23549,7 @@ with self; {
     version = "0.94";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/String-Print-0.94.tar.gz";
-      sha256 = "9b3cd677adb7a40cb183bd6c60db80d96adcabd5aae27e324e3ee37e3275229b";
+      hash = "sha256-mzzWd623pAyxg71sYNuA2Wrcq9Wq4n4yTj7jfjJ1Ips=";
     };
     propagatedBuildInputs = [ HTMLParser TimeDate UnicodeLineBreak ];
     meta = {
@@ -24581,7 +24581,7 @@ with self; {
     outputs = [ "out" ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Term-ReadLine-Perl-1.0303.tar.gz";
-      sha256 = "314b9f8df7e89e77eaac200b9bbcbe28e01e0dab2646ada83c5b26584839095d";
+      hash = "sha256-MUufjffonnfqrCALm7y+KOAeDasmRq2oPFsmWEg5CV0=";
     };
     meta = {
       homepage = "https://metacpan.org/dist/Term-ReadLine";
@@ -28736,7 +28736,7 @@ with self; {
     version = "1.4.27";
     src = fetchurl {
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+      hash = "sha256-ujteEICeV5rNEb0WV3nOP9KaiQTqN5aO9bV62Xw2GLo=";
     };
     buildInputs = [ pkgs.xapian ];
     preConfigure = ''
@@ -28765,7 +28765,7 @@ with self; {
     version = "1.63";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-1.63.tar.gz";
-      sha256 = "4b0871ef4a70bff37266d531bebcd1d065b109e8f5c5e996f87189a9f92d595f";
+      hash = "sha256-Swhx70pwv/NyZtUxvrzR0GWxCej1xemW+HGJqfktWV8=";
     };
     propagatedBuildInputs = [ LogReport TestDeep TypesSerialiser XMLCompileTester XMLLibXML ];
     meta = {
@@ -28780,7 +28780,7 @@ with self; {
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Cache-1.06.tar.gz";
-      sha256 = "591b136bd92842c81a5176082503f47df6d5cc4d8e0d78953ef1557f747038a0";
+      hash = "sha256-WRsTa9koQsgaUXYIJQP0ffbVzE2ODXiVPvFVf3RwOKA=";
     };
     propagatedBuildInputs = [ LogReport XMLCompile XMLCompileTester XMLLibXMLSimple ];
     meta = {
@@ -28795,7 +28795,7 @@ with self; {
     version = "0.91";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Tester-0.91.tar.gz";
-      sha256 = "e5ccc6f965543391a43d25087a2f9a8bd5220425fc6244e074d9a4c8e3e73fb7";
+      hash = "sha256-5czG+WVUM5GkPSUIei+ai9UiBCX8YkTgdNmkyOPnP7c=";
     };
     propagatedBuildInputs = [ LogReport TestDeep ];
     meta = {
