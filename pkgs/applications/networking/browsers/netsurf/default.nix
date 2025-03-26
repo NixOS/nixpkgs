@@ -31,7 +31,7 @@ lib.makeScope pkgs.newScope (
     libcss = pkgs.libcss;
     libdom = pkgs.libdom;
     libhubbub = pkgs.libhubbub;
-    libnsbmp = callPackage ./libnsbmp.nix { };
+    libnsbmp = pkgs.libnsbmp;
     libnsfb = callPackage ./libnsfb.nix { };
     libnsgif = callPackage ./libnsgif.nix { };
     libnslog = callPackage ./libnslog.nix { };
