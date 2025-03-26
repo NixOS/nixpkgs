@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchgit,
   makeWrapper,
   meson,
   ninja,
@@ -22,18 +22,18 @@
   libXrandr,
   libXfixes,
   wrapperDir ? "/run/wrappers/bin",
+  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder";
-  version = "5.2.0";
+  version = "5.2.1";
 
-  src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder.git.${finalAttrs.version}.tar.gz";
-    hash = "sha256-7aUW0WhoTpkJhj9WjjI2lnq+vOCG53vl/4DckHmLPBo=";
+  src = fetchgit {
+    url = "https://repo.dec05eba.com/${pname}";
+    tag = version;
+    hash = "sha256-FO+T0x3WFLUWHWe0pUwahAdNkU1MWdGf8tF+h2vsh98=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     pkg-config
@@ -82,12 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH : "$out/bin"
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
     license = lib.licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder";
-    maintainers = [ lib.maintainers.babbaj ];
+    maintainers = with lib.maintainers; [
+      babbaj
+      js6pak
+    ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
