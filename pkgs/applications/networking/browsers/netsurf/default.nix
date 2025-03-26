@@ -41,6 +41,6 @@ lib.makeScope pkgs.newScope (
     libsvgtiny = pkgs.libsvgtiny;
     libutf8proc = pkgs.libutf8proc;
     libwapcaplet = pkgs.libwapcaplet;
-    nsgenbind = callPackage ./nsgenbind.nix { };
+    nsgenbind = pkgs.nsgenbind;
   }
 )
