@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   rtaudio,
   rtmidi,
@@ -16,7 +16,7 @@
 }:
 let
   # package depends on SDL2main static library
-  SDL2' = SDL2.override {
+  SDL2' = SDL2_classic.override {
     withStatic = true;
   };
 in
