@@ -5,11 +5,11 @@
   bison,
   flex,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libnslog";
+  pname = "libnslog";
   version = "0.1.3";
 
   src = fetchurl {
@@ -23,17 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf Parametric Logging Library";
     license = lib.licenses.isc;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
