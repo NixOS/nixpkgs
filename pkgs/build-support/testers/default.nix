@@ -54,7 +54,9 @@
   } ''
     echo "Checking:"
     printf '%s\n' "$assertion"
-    if ! diffoscope --no-progress --text-color=always --exclude-directory-metadata=no -- "$actual" "$expected"
+    # --exclude-directory-metadata=yes: This reports false positives such as the internal directory sizes,
+    # so we work around this by excluding the directory metadata, and then checking the executable bits later.
+    if ! diffoscope --no-progress --text-color=always --exclude-directory-metadata=yes -- "$actual" "$expected"
     then
       echo
       echo 'Contents must be equal, but were not!'
@@ -62,11 +64,36 @@
       echo "+: expected,   at $expected"
       echo "-: unexpected, at $actual"
       false
-    else
-      echo "expected $expected and actual $actual match."
-      echo OK
-      touch -- "$out"
     fi
+
+    if [ -d "$expected" ] && [ -d "$actual" ]
+    then
+      (cd "$expected"; find . -type f -executable) | sort > expected-executables
+      (cd "$actual"; find . -type f -executable) | sort > actual-executables
+      if ! diff -U0 actual-executables expected-executables --color=always
+      then
+        echo
+        echo "Contents must be equal, but some files' executable bits don't match."
+        echo
+        echo "+: make this file executable in the actual contents"
+        echo "-: make this file non-executable in the actual contents"
+        false
+      fi
+    else
+      if [ -f "$expected" ] && [ -f "$actual" ] \
+        && (([ -x "$expected" ] && ! [ -x "$actual" ]) \
+          || (! [ -x "$expected" ] && [ -x "$actual" ]))
+      then
+        echo
+        echo "Contents must be equal, but the executable bit doesn't match."
+        echo "The file executable bits must match for NAR-style equality."
+        false
+      fi
+    fi
+
+    echo "expected $expected and actual $actual match."
+    echo 'OK'
+    touch -- $out
   '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap

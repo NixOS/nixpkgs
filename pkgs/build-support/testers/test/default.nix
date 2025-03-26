@@ -289,6 +289,19 @@ lib.recurseIntoAttrs {
       }
     );
 
+    unequalExe2 = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Different file mode bits are not recognized as equal";
+        expected = runCommand "expected" { } ''
+          touch -- "$out"
+        '';
+        actual = runCommand "actual" { } ''
+          touch -- "$out"
+          chmod a+x -- "$out"
+        '';
+      }
+    );
+
     unequalExeInDir = testers.testBuildFailure (
       testers.testEqualContents {
         assertion = "Different file mode bits are not recognized as equal in directory";
