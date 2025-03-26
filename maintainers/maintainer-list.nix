@@ -5089,6 +5089,12 @@
     githubId = 202474;
     name = "Jens Reimann";
   };
+  curran = {
+    email = "curran@mercury.com";
+    github = "curranosaurus";
+    githubId = 148147150;
+    name = "Curran McConnell";
+  };
   cust0dian = {
     email = "serg@effectful.software";
     github = "cust0dian";
