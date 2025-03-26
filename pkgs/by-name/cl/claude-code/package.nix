@@ -23,6 +23,14 @@ buildNpmPackage rec {
 
   AUTHORIZED = "1";
 
+  # `claude-code` tries to auto-update by default, this disables that functionality.
+  # Note that the `DISABLE_AUTOUPDATER` environment variable is not documented, so this trick may
+  # not continue to work.
+  postInstall = ''
+    wrapProgram $out/bin/claude \
+      --set DISABLE_AUTOUPDATER 1
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
