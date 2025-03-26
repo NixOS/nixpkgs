@@ -3,11 +3,11 @@
   stdenv,
   fetchurl,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libnsutils";
+  pname = "libnsutils";
   version = "0.1.1";
 
   src = fetchurl {
@@ -17,17 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "Generalised utility library for netsurf browser";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
