@@ -3,11 +3,11 @@
   stdenv,
   fetchurl,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libutf8proc";
+  pname = "libutf8proc";
   version = "2.4.0-1";
 
   src = fetchurl {
@@ -17,17 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ buildsystem ];
+  buildInputs = [ netsurf-buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "UTF8 Processing library for netsurf browser";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
