@@ -8,19 +8,23 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "lunatic";
-  version = "0.13.2";
+  version = "0.13.2-unstable-2024-03-18";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = "lunatic";
-    rev = "v${version}";
-    hash = "sha256-uMMssZaPDZn3bOtQIho+GvUCPmzRllv7eJ+SJuKaYtg=";
+    rev = "fc046ed65fecfdb580922c8df409881ca12b9052";
+    hash = "sha256-hJ3A4KYubOY8/+1lBGQefwBWaCOJBprOCqK6CMJ6XW0=";
   };
 
+  cargoPatches = [
+    ./update-time-cargo-lock.patch
+  ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SzfM4hQW9vTTRqCAEn/EPv9mK9WlXYRFUW8pA/Gfw04=";
+  cargoHash = "sha256-+2koGrhM9VMLh8uO1YcaugcfmZaCP4S2twKem+y2oks=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
-    changelog = "https://github.com/lunatic-solutions/lunatic/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/lunatic-solutions/lunatic/blob/v0.13.2/CHANGELOG.md";
     license = with licenses; [
       mit # or
       asl20
