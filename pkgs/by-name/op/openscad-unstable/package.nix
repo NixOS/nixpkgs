@@ -137,7 +137,7 @@ clangStdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
-    rmdir $out/bin || true
+    rmdir $out/bin
   '';
 
   nativeCheckInputs = [
