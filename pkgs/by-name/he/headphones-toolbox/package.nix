@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       knarkzel
       nyabinary
+      flacks
     ];
     license = licenses.gpl3Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
