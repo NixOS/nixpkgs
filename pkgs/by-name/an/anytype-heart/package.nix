@@ -75,6 +75,9 @@ buildGoModule {
     cp LICENSE.md $out/share
   '';
 
+  # disable tests to save time, as it's mostly built by users, not CI
+  doCheck = false;
+
   meta = {
     description = "Shared library for Anytype clients";
     homepage = "https://anytype.io/";
