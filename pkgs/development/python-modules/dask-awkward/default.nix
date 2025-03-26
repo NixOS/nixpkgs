@@ -72,6 +72,11 @@ buildPythonPackage rec {
     "test_basic_root_works"
     # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
     "test_distance_behavior"
+
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask-contrib/dask-awkward/issues/573
+    "test_persist"
+    "test_ravel_fail"
   ];
 
   __darwinAllowLocalNetworking = true;

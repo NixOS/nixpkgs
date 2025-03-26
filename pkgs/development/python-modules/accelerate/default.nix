@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.3.0";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-HcbvQL8nASsZcfjAoPbQKNoEkSLp5Vmus2MEa3Dv6Po=";
+    hash = "sha256-J4eDm/PcyKK3256l6CAWUj4AWTB6neTKgxbBmul0BPE=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
   '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =

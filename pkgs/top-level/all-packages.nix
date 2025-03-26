@@ -2860,7 +2860,7 @@ with pkgs;
   cudaPackages_12_5 = callPackage ./cuda-packages.nix { cudaVersion = "12.5"; };
   cudaPackages_12_6 = callPackage ./cuda-packages.nix { cudaVersion = "12.6"; };
   cudaPackages_12_8 = callPackage ./cuda-packages.nix { cudaVersion = "12.8"; };
-  cudaPackages_12 = cudaPackages_12_4; # Latest supported by cudnn
+  cudaPackages_12 = cudaPackages_12_8; # Latest supported by cudnn
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -7968,8 +7968,6 @@ with pkgs;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
-  rufo = callPackage ../development/tools/rufo { };
-
   muonStandalone = muon.override {
     embedSamurai = true;
     buildDocs = false;
@@ -8112,7 +8110,7 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
-  vcpkg-tool-unwrapped = callPackage ../by-name/vc/vcpkg-tool/package.nix { doWrap = false; };
+  vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
   wails = callPackage ../development/tools/wails {
     stdenv = gccStdenv;
@@ -17211,13 +17209,13 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  lixVersions = recurseIntoAttrs (callPackage ../tools/package-management/lix {
+  lixPackageSets = recurseIntoAttrs (callPackage ../tools/package-management/lix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
   });
 
-  lix = lixVersions.stable;
+  lix = lixPackageSets.stable.lix;
 
   lixStatic = pkgsStatic.lix;
 
