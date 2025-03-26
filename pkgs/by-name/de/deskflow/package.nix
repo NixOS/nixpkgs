@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ flacks ];
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl
