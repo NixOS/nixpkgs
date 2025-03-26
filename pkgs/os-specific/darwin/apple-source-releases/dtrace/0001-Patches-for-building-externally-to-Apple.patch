@@ -1,0 +1,260 @@
+From 6be38fb19fffb058bbb12365aebda1e9918e5196 Mon Sep 17 00:00:00 2001
+From: Jade Lovelace <jadel@mercury.com>
+Date: Mon, 24 Mar 2025 15:20:13 -0700
+Subject: [PATCH] Patches for building externally to Apple
+
+---
+ cmd/dtrace/dtrace.c                     | 15 +++++++++++++--
+ lib/libdtrace/apple/dt_module_apple.c   |  2 +-
+ lib/libdtrace/apple/dt_provider_apple.c |  4 ++--
+ lib/libdtrace/apple/dt_subr_apple.c     |  2 +-
+ lib/libdtrace/common/dt_consume.c       |  1 +
+ lib/libdtrace/common/dt_grammar.h       |  2 +-
+ lib/libdtrace/common/dt_impl.h          |  3 ++-
+ lib/libdtrace/common/dt_lex.l           |  2 +-
+ lib/libdtrace/common/dt_print.c         |  1 -
+ lib/libdtrace/common/dt_proc.c          |  4 ++++
+ lib/libdtrace/common/dt_proc.h          |  1 +
+ lib/libproc/libproc.c                   |  4 ++--
+ 12 files changed, 29 insertions(+), 12 deletions(-)
+
+diff --git a/cmd/dtrace/dtrace.c b/cmd/dtrace/dtrace.c
+index b776708..e5c8924 100644
+--- a/cmd/dtrace/dtrace.c
++++ b/cmd/dtrace/dtrace.c
+@@ -47,11 +47,12 @@
+ #include <mach/machine.h>
+ #include <sys/sysctl.h>
+ #include <pthread.h>
+-#include <pthread/qos_private.h>
++/* #include <pthread/qos_private.h> */
+ 
+ #include <IOKit/IOKitLib.h>
+ 
+-#include <System/sys/csr.h>
++/* #include <System/sys/csr.h> */
++#include "procfs.h"
+ 
+ typedef struct dtrace_cmd {
+ 	void (*dc_func)(struct dtrace_cmd *);	/* function to compile arg */
+@@ -1082,10 +1083,12 @@ set_sched_policy() {
+ 		notice("could not set thread priority to %d", param.sched_priority);
+ 	}
+ 
++#if 0
+ 	err = pthread_set_fixedpriority_self();
+ 	if (err) {
+ 		notice("could not set thread scheduling priority to fixed");
+ 	}
++#endif
+ 
+ }
+ 
+@@ -1199,11 +1202,13 @@ main(int argc, char *argv[])
+ 				break;
+ 
+ 			case 'A':
++#if 0
+ #if DTRACE_TARGET_APPLE_MAC
+ 				if (csr_check(CSR_ALLOW_UNRESTRICTED_DTRACE) != 0 && csr_check(CSR_ALLOW_APPLE_INTERNAL) != 0) {
+ 					fatal("system integrity protection restricts the use of anonymous tracing");
+ 				}
+ #endif /* DTRACE_TARGET_APPLE_MAC */
++#endif
+ 				g_mode = DMODE_ANON;
+ 				g_exec = 0;
+ 				mode++;
+@@ -1297,11 +1302,13 @@ main(int argc, char *argv[])
+ 	if (g_mode == DMODE_VERS)
+ 		return (printf("%s: %s\n", g_pname, _dtrace_version) <= 0);
+ 
++#if 0
+ #if DTRACE_TARGET_APPLE_MAC
+ 	if (g_mode != DMODE_HEADER && csr_check(CSR_ALLOW_UNRESTRICTED_DTRACE) != 0) {
+ 		notice("system integrity protection is on, some features will not be available\n");
+ 	}
+ #endif /* DTRACE_TARGET_APPLE_MAC */
++#endif
+ 
+ 	/*
+ 	 * Open libdtrace.  If we are not actually going to be enabling any
+@@ -1640,6 +1647,10 @@ main(int argc, char *argv[])
+ 	(void) dtrace_getopt(g_dtp, "quiet", &opt);
+ 	g_quiet = opt != DTRACEOPT_UNSET;
+ 
++    if (g_mode != DMODE_VERS || g_mode != DMODE_HEADER) {
++        fputs("WARNING: nixpkgs' Apple DTrace package is only intended as a header generator and is likely arbitrarily broken for all other use cases, use /usr/sbin/dtrace instead\n", stderr);
++    }
++
+ 	/*
+ 	 * Now make a fifth and final pass over the options that have been
+ 	 * turned into programs and saved in g_cmdv[], performing any mode-
+diff --git a/lib/libdtrace/apple/dt_module_apple.c b/lib/libdtrace/apple/dt_module_apple.c
+index 617202f..8d56f09 100644
+--- a/lib/libdtrace/apple/dt_module_apple.c
++++ b/lib/libdtrace/apple/dt_module_apple.c
+@@ -10,10 +10,10 @@
+ #if DTRACE_USE_CORESYMBOLICATION
+ #include <CoreSymbolication/CoreSymbolication.h>
+ #include <CoreSymbolication/CoreSymbolicationPrivate.h>
++#include <sys/kas_info.h>
+ #endif /* DTRACE_USE_CORESYMBOLICATION */
+ 
+ #include <libkern/OSAtomic.h>
+-#include <sys/kas_info.h>
+ #include <sys/stat.h>
+ #include <sys/sysctl.h>
+ #include <sys/types.h>
+diff --git a/lib/libdtrace/apple/dt_provider_apple.c b/lib/libdtrace/apple/dt_provider_apple.c
+index de4c84a..f41c29b 100644
+--- a/lib/libdtrace/apple/dt_provider_apple.c
++++ b/lib/libdtrace/apple/dt_provider_apple.c
+@@ -8,7 +8,7 @@
+ #if DTRACE_TARGET_APPLE_EMBEDDED
+ #include <sys/sysctl.h>
+ #elif DTRACE_TARGET_APPLE_MAC
+-#include <sys/csr.h>
++// #include <sys/csr.h>
+ #endif
+ 
+ int
+@@ -35,7 +35,7 @@ dt_probe_noprobe_errno(dtrace_hdl_t *dtp, const dtrace_probedesc_t *pdp)
+ 	 * actually exist).
+ 	 */
+ 
+-#if DTRACE_TARGET_APPLE_MAC
++#if 0
+ 	if (csr_check(CSR_ALLOW_UNRESTRICTED_DTRACE) != 0) {
+ 		return EDT_PROBERESTRICTED;
+ 	}
+diff --git a/lib/libdtrace/apple/dt_subr_apple.c b/lib/libdtrace/apple/dt_subr_apple.c
+index cb615c2..00552c4 100644
+--- a/lib/libdtrace/apple/dt_subr_apple.c
++++ b/lib/libdtrace/apple/dt_subr_apple.c
+@@ -5,7 +5,7 @@
+ #include <string.h>
+ 
+ #include <sys/sysctl.h>
+-#include <os/assumes.h>
++/* #include <os/assumes.h> */
+ 
+ #if TARGET_OS_IPHONE && (TARGET_OS_SIMULATOR || !TARGET_OS_IOS)
+ #define TARGET_SUPPORTS_NATIVE_SYSTEM 0
+diff --git a/lib/libdtrace/common/dt_consume.c b/lib/libdtrace/common/dt_consume.c
+index b18afba..010d616 100644
+--- a/lib/libdtrace/common/dt_consume.c
++++ b/lib/libdtrace/common/dt_consume.c
+@@ -38,6 +38,7 @@
+ #include <ctype.h>
+ #include <alloca.h>
+ #include <dt_impl.h>
++#include <libproc.h>
+ 
+ #include "dt_printf.h"
+ 
+diff --git a/lib/libdtrace/common/dt_grammar.h b/lib/libdtrace/common/dt_grammar.h
+index 0194f29..6b56f23 100644
+--- a/lib/libdtrace/common/dt_grammar.h
++++ b/lib/libdtrace/common/dt_grammar.h
+@@ -1 +1 @@
+-#include "y.tab.h"
+\ No newline at end of file
++#include "dt_grammar.tab.h"
+diff --git a/lib/libdtrace/common/dt_impl.h b/lib/libdtrace/common/dt_impl.h
+index 9584acd..a8185a3 100644
+--- a/lib/libdtrace/common/dt_impl.h
++++ b/lib/libdtrace/common/dt_impl.h
+@@ -44,6 +44,7 @@
+ #endif
+ 
+ #include <sys/param.h>
++#include <sys/utsname.h>
+ 
+ #if defined(__APPLE__)
+ #define OS_LOG_SUPPORTED 1
+@@ -737,7 +738,7 @@ extern dt_pcb_t *yypcb;		/* pointer to current parser control block */
+ extern char yyintprefix;	/* int token prefix for macros (+/-) */
+ extern char yyintsuffix[4];	/* int token suffix ([uUlL]*) */
+ extern int yyintdecimal;	/* int token is decimal (1) or octal/hex (0) */
+-extern char yytext[];		/* lex input buffer */
++extern char * yytext;		/* lex input buffer */
+ extern int yylineno;		/* lex line number */
+ extern int yydebug;		/* lex debugging */
+ extern dt_node_t *yypragma;	/* lex token list for control lines */
+diff --git a/lib/libdtrace/common/dt_lex.l b/lib/libdtrace/common/dt_lex.l
+index 27f5ee1..cc3126b 100644
+--- a/lib/libdtrace/common/dt_lex.l
++++ b/lib/libdtrace/common/dt_lex.l
+@@ -699,7 +699,7 @@ if (yypcb->pcb_token != 0) {
+ void
+ yybegin(yystate_t state)
+ {
+-#ifdef	YYDEBUG
++#if	defined(YYDEBUG) && YYDEBUG
+ 	yydebug = _dtrace_debug;
+ #endif
+ 	if (yypcb->pcb_yystate == state)
+diff --git a/lib/libdtrace/common/dt_print.c b/lib/libdtrace/common/dt_print.c
+index 68e3cb2..6dc2c5f 100644
+--- a/lib/libdtrace/common/dt_print.c
++++ b/lib/libdtrace/common/dt_print.c
+@@ -77,7 +77,6 @@
+ #include <netdb.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
+-#include <arpa/nameser.h>
+ 
+ #include <dt_module.h>
+ #include <dt_printf.h>
+diff --git a/lib/libdtrace/common/dt_proc.c b/lib/libdtrace/common/dt_proc.c
+index 93a11c8..75f3044 100644
+--- a/lib/libdtrace/common/dt_proc.c
++++ b/lib/libdtrace/common/dt_proc.c
+@@ -92,6 +92,10 @@
+ #include <crt_externs.h>
+ #endif
+ 
++// NIX: private symbols from Darwin libproc
++int pid_suspend(int pid);
++int pid_resume(int pid);
++
+ dt_bkpt_t *
+ dt_proc_bpcreate(dt_proc_t *dpr, uintptr_t addr, dt_bkpt_f *func, void *data)
+ {
+diff --git a/lib/libdtrace/common/dt_proc.h b/lib/libdtrace/common/dt_proc.h
+index f3d62de..c15ddaa 100644
+--- a/lib/libdtrace/common/dt_proc.h
++++ b/lib/libdtrace/common/dt_proc.h
+@@ -33,6 +33,7 @@
+ #include <dt_list.h>
+ 
+ #include <sys/link.h>
++#include <rtld_db.h>
+ 
+ #ifdef	__cplusplus
+ extern "C" {
+diff --git a/lib/libproc/libproc.c b/lib/libproc/libproc.c
+index 352d49f..4b5bb63 100644
+--- a/lib/libproc/libproc.c
++++ b/lib/libproc/libproc.c
+@@ -36,7 +36,7 @@
+ #include <sys/sysctl.h>
+ 
+ #include <sys/proc_info.h>
+-#include <sys/codesign.h>
++// #include <sys/codesign.h>
+ #include <sys/fasttrap_isa.h>
+ 
+ #if DTRACE_TARGET_APPLE_MAC
+@@ -46,7 +46,7 @@
+ 
+ #include "libproc.h"
+ #include "libproc_apple.h"
+-#include "libproc_internal.h"
++// #include "libproc_internal.h"
+ 
+ #include <spawn.h>
+ #include <pthread.h>
+-- 
+2.48.1
+

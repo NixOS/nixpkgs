@@ -47,6 +47,10 @@
     "hash": "sha256-/Mf+RhaTU9O5i95gddZ2h9eDjLezwj3nP6FvryMF54E=",
     "version": "66"
   },
+  "dtrace": {
+    "hash": "sha256-iNEZyxK3DmEwO3gzrfvCaVZSEuuOMQm5IG/6FodPNdI=",
+    "version": "411"
+  },
   "dyld": {
     "hash": "sha256-DDhV7X81nhd3oeJuICEvF8FU43yE/afQ/LYgDNtXswA=",
     "version": "1241.17"

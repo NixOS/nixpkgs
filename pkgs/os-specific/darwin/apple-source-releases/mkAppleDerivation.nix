@@ -66,13 +66,15 @@ lib.makeOverridable (
       // lib.optionalAttrs (super ? xcodeHash) {
         postUnpack =
           super.postUnpack or ""
-          + lib.concatMapStrings (
-            file:
-            if baseNameOf file == "meson.build.in" then
-              "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
-            else
-              "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
-          ) mesonFiles;
+          + lib.optionalString (!(super.dontCopyMeson or false)) (
+            lib.concatMapStrings (
+              file:
+              if baseNameOf file == "meson.build.in" then
+                "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
+              else
+                "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
+            ) mesonFiles
+          );
 
         xcodeProject = super.xcodeProject or "${releaseName}.xcodeproj";
 
