@@ -45,9 +45,11 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/rush/";
     license = lib.licenses.gpl3Plus;
-
-    maintainers = [ ];
     platforms = lib.platforms.all;
+
+    maintainers = with lib.maintainers; [
+      c4f3z1n
+    ];
   };
 
   passthru = {
