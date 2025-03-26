@@ -1162,6 +1162,7 @@ with lib.maintainers;
       hehongbo
       lach
       sigmasquadron
+      rane
     ];
     scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
     shortName = "Xen Project Hypervisor";
