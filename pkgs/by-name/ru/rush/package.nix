@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
@@ -44,10 +44,12 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "https://www.gnu.org/software/rush/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
 
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [
+      c4f3z1n
+    ];
   };
 
   passthru = {
