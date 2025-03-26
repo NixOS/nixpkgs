@@ -186,8 +186,15 @@ buildPythonApplication rec {
         --disable-link-time-optimization \
         ${commonOptions}
       '';
+      reproducibilityOptions = ''
+        export PYTHONHASHSEED=0
+        export LC_ALL=C.UTF-8
+        export TZ=UTC
+        export SPHINXOPTS="-W -q"
+      '';
     in
     ''
+      ${reproducibilityOptions}
       runHook preBuild
 
       # Add the font by hand because fontconfig does not finds it in darwin
@@ -287,7 +294,7 @@ buildPythonApplication rec {
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \
-      --fish <("$out/bin/kitty" +complete setup fish2) \
+      --fish <("$out/bin/kitty" +complete setup fish2 | LC_ALL=C sort) \
       --zsh  <("$out/bin/kitty" +complete setup zsh)
 
     terminfo_src=${
