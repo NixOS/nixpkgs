@@ -15633,6 +15633,8 @@ self: super: with self; {
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
+  rio-stac = callPackage ../development/python-modules/rio-stac { };
+
   rio-tiler = callPackage ../development/python-modules/rio-tiler { };
 
   rioxarray = callPackage ../development/python-modules/rioxarray { };
