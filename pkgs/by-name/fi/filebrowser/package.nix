@@ -1,45 +1,64 @@
 {
+  lib,
+  stdenv,
+  fetchFromGitHub,
   buildGo123Module,
   buildNpmPackage,
-  fetchFromGitHub,
-  lib,
+
+  nodejs,
+  pnpm
 }:
 
 let
-  version = "2.31.0";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
+    hash = "sha256-jckwk45pIRrlzZaG3jH8aLq08L5xnrbt4OdwKNS6+nI=";
   };
 
-  frontend = buildNpmPackage rec {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "filebrowser-frontend";
     inherit version src;
 
-    sourceRoot = "${src.name}/frontend";
+    nativeBuildInputs = [
+      nodejs
+      pnpm.configHook
+    ];
 
-    npmDepsHash = "sha256-5/yEMWkNPAS8/PkaHlPBGFLiJu7xK2GHYo5dYqHAfCE=";
+    pnpmRoot = "frontend";
 
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version;
+      sourceRoot = "${finalAttrs.pnpmRoot}";
+      hash = "sha256-rjV6DwLrT+52BSjV08rWKYtZBhhmJd6M+MVxd/ypZVE=";
+    };
 
     installPhase = ''
       runHook preInstall
 
+      cd frontend/
+      
+      pnpm install --frozen-lockfile
+      pnpm run build
+
       mkdir $out
       mv dist $out
+      
+      cd ..
 
       runHook postInstall
     '';
-  };
+  });
+
 in
 buildGo123Module {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-N5aUs8rgTYXeb0qJhPQBCa6lUDkT6lH1bh+1u4bixos=";
+  vendorHash = "sha256-Jce90mvNzjElCtEMQSSU3IQPz+WLhyEol1ktW4FG7yk=";
 
   excludedPackages = [ "tools" ];
 
