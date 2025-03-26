@@ -850,8 +850,8 @@ rec {
       "sha256-c8b/bdAfTYFJPJaK3q8+N5jQvV6/aMsoDbOxGY1OZL0=";
 
   mypy-boto3-marketplace-entitlement =
-    buildMypyBoto3Package "marketplace-entitlement" "1.37.0"
-      "sha256-f7Ds+IyF+94s563loNxTAiOv1bPqTLEjckk/mPXJ+r8=";
+    buildMypyBoto3Package "marketplace-entitlement" "1.37.20"
+      "sha256-+B/0n8wPQ6OixrHwCzHUeMZiFPFf2MgRdImqonyRvbQ=";
 
   mypy-boto3-marketplacecommerceanalytics =
     buildMypyBoto3Package "marketplacecommerceanalytics" "1.37.0"
