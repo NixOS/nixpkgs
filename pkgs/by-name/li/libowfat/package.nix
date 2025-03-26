@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     make headers
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -30,5 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fefe.de/libowfat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    # build tool "json" is built for the host platform
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
