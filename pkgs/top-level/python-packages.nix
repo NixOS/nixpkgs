@@ -14898,6 +14898,8 @@ self: super: with self; {
 
   pytimeparse2 = callPackage ../development/python-modules/pytimeparse2 { };
 
+  pytinyrenderer = callPackage ../development/python-modules/pytinyrenderer { };
+
   pytlv = callPackage ../development/python-modules/pytlv { };
 
   pytm = callPackage ../development/python-modules/pytm { };
