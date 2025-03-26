@@ -10,6 +10,10 @@
   callPackage,
   testers,
   pulumi,
+  # updateScript
+  writers,
+  python3Packages,
+  nix,
 }:
 buildGoModule rec {
   pname = "pulumi";
@@ -117,6 +121,21 @@ buildGoModule rec {
   passthru = {
     pkgs = callPackage ./plugins.nix { };
     withPackages = callPackage ./with-packages.nix { };
+    updateScript = {
+      supportedFeatures = [ "commit" ];
+      command = writers.writePython3 "pulumi-updater" {
+        libraries = with python3Packages; [ requests ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [
+            nix
+            git
+          ])
+        ];
+      } ./update.py;
+    };
     tests = {
       version = testers.testVersion {
         package = pulumi;
