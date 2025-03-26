@@ -317,20 +317,17 @@ in
       ]))
       old
     )
-    // {
-      # hyperscene re-exports symbols from deps
-      propagatedBuildInputs = [
-        chickenEggs.glfw3
-        chickenEggs.glls
-        chickenEggs.gl-type
-        chickenEggs.hyperscene
-        chickenEggs.noise
-        chickenEggs.hyperscene
-        chickenEggs.soil
-        chickenEggs.srfi-18
-        chickenEggs.bitstring
-      ];
-    };
+    // (addToPropagatedBuildInputs (with chickenEggs; [
+      glfw3
+      glls
+      gl-type
+      hyperscene
+      noise
+      hyperscene
+      soil
+      srfi-18
+      bitstring
+    ]) old);
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
