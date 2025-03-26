@@ -9,8 +9,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2024.3.1.13"; # "Android Studio Meerkat | 2024.3.1"
-    sha256Hash = "sha256-4zJeoD5Fd4KgCt/oNzxhBwYeHuHBgmmAeFTIfZCElRA=";
+    version = "2024.3.1.14"; # "Android Studio Meerkat | 2024.3.1 Patch 1"
+    sha256Hash = "sha256-VNXErfb4PhljcJwGq863ldh/3i8fMdJirlwolEIk+fI=";
   };
   betaVersion = {
     version = "2024.3.1.12"; # "Android Studio Meerkat | 2024.3.1 RC 2"

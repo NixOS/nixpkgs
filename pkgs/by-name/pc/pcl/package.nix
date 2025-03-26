@@ -75,8 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CUDA" true)
   ];
 
-  passthru = {
-    updateScript = gitUpdater { rev-prefix = "pcl-"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "pcl-";
+    ignoredVersions = "rc";
   };
 
   meta = {

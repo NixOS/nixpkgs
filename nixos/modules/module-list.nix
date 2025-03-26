@@ -859,6 +859,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pghero.nix
+  ./services/misc/pinchflat.nix
   ./services/misc/pinnwand.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
