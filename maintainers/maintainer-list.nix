@@ -3725,6 +3725,12 @@
     githubId = 382011;
     name = "c4605";
   };
+  c4f3z1n = {
+    name = "João Nogueira";
+    email = "shires.waking0d@icloud.com";
+    github = "c4f3z1n";
+    githubId = 22820003;
+  };
   c4thebomb = {
     name = "Ceferino Patino";
     email = "c4patino@gmail.com";
