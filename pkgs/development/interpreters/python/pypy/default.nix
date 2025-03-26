@@ -69,6 +69,8 @@ in with passthru; stdenv.mkDerivation rec {
   dontPatchShebangs = true;
   disallowedReferences = [ python ];
 
+  # fix compiler error in curses cffi module, where char* != const char*
+  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=incompatible-function-pointer-types" else null;
   C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = lib.makeLibraryPath buildInputs;
   LD_LIBRARY_PATH = lib.makeLibraryPath (builtins.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
@@ -210,6 +212,9 @@ in with passthru; stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     broken = optimizationLevel == "0"; # generates invalid code
-    maintainers = with maintainers; [ andersk ];
+    maintainers = with maintainers; [
+      andersk
+      fliegendewurst
+    ];
   };
 }
