@@ -30,7 +30,7 @@ lib.makeScope pkgs.newScope (
     buildsystem = pkgs.netsurf-buildsystem;
     libcss = pkgs.libcss;
     libdom = callPackage ./libdom.nix { };
-    libhubbub = callPackage ./libhubbub.nix { };
+    libhubbub = pkgs.libhubbub;
     libnsbmp = callPackage ./libnsbmp.nix { };
     libnsfb = callPackage ./libnsfb.nix { };
     libnsgif = callPackage ./libnsgif.nix { };
