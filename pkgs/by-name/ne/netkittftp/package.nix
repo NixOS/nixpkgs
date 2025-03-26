@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "0kfibbjmy85r3k92cdchha78nzb6silkgn1zaq9g8qaf1l0w0hrs";
   };
+
+  patches = [
+    # fix compilation errors, warning and many style issues
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/n/netkit-tftp/0.17-23/debian/patches/debian_changes_0.17-18.patch";
+      hash = "sha256-kprmSMoNF6E8GGRIPWDLWcqfPRxdUeheeLoFNqI3Uv0=";
+    })
+  ];
 
   preInstall = "
     mkdir -p $out/man/man{1,8} $out/sbin $out/bin
