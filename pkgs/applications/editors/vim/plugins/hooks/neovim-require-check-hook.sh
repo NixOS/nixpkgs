@@ -54,6 +54,12 @@ run_require_checks() {
     local nativeCheckInputs="${nativeBuildInputs[*]}"
     local checkInputs="${buildInputs[*]}"
     set +e
+
+    if [ -v 'nvimSkipModule' ]; then
+        nvimSkipModules=("${nvimSkipModule[@]}")
+        echo "WARNING: nvimSkipModule got renamed to nvimSkipModules, please update package $name"
+    fi
+
     for name in "${nvimRequireCheck[@]}"; do
         local skip=false
         for module in "${nvimSkipModules[@]}"; do
