@@ -17,14 +17,14 @@
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
   version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gNhuxbHnCT31VHVQfhep4oCyaLf5N9y4vQXIaZzvL8Y=";
     fetchSubmodules = true;
   };
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage rec {
     chmod -R +w .
   '';
 
-  sourceRoot = "${src.name}/apps/readest-app";
+  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-VcPxhCpDrKaqKtGMsvPwXwniPy0rbJ/i03gbZ3i87aE=";
   };
 
@@ -95,10 +95,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modern, feature-rich ebook reader";
     homepage = "https://github.com/readest/readest";
-    changelog = "https://github.com/readest/readest/releases/tag/v${version}";
+    changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
