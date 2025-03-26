@@ -34,10 +34,11 @@
   texliveSmall,
   tex ? texliveSmall.withPackages (
     ps: with ps; [
-      lh
-      metafont
       epsf
       fontinst
+      fontware
+      lh
+      metafont
     ]
   ),
 }:
@@ -69,7 +70,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-documentation"
     # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
     "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
@@ -129,12 +129,16 @@ stdenv.mkDerivation rec {
     supportedFeatures = [ "commit" ];
   };
 
+  # documentation makefile uses "out" for different purposes, hence we explicitly set it to an empty string
+  makeFlags = [ "out=" ];
+
   meta = {
     description = "Music typesetting system";
     homepage = "https://lilypond.org/";
     license = with lib.licenses; [
       gpl3Plus # most code
       gpl3Only # ly/articulate.ly
+      fdl13Plus # docs
       ofl # mf/
     ];
     maintainers = with lib.maintainers; [
