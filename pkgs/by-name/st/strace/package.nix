@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
