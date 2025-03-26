@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "0.10.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
     tag = version;
-    hash = "sha256-AlC5WtYnMrrI8yR1io84QtblndlZLsGGiicc10tpnF8=";
+    hash = "sha256-g6FozwSieurnXS76+yu/lBeL4yIWXdoyl9cUyUpMJx0=";
   };
 
-  # https://github.com/devopshq/artifactory/issues/430
-  disabled = pythonAtLeast "3.12";
+  # https://github.com/devopshq/artifactory/issues/470
+  disabled = pythonAtLeast "3.13";
 
   pyproject = true;
 
