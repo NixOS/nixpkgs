@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Audit Protos";
-    homepage = "https://github.com/googleapis/python-audit-log";
-    changelog = "https://github.com/googleapis/python-audit-log/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-audit-log";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-audit-log-v${version}/packages/google-cloud-audit-log/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };
