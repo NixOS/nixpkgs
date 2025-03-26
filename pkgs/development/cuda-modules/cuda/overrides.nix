@@ -296,6 +296,10 @@ filterAndCreateOverrides {
 
   cuda_sanitizer_api = _: _: { outputs = [ "out" ]; };
 
+  fabricmanager = { zlib }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ zlib ]; };
+
+  imex = { zlib }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ zlib ]; };
+
   nsight_compute =
     {
       lib,
