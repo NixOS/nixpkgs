@@ -412,11 +412,25 @@ rec {
   withCFlags =
     compilerFlags: stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env = (args.env or { }) // {
-          NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
-        };
-      });
+      mkDerivationFromStdenv = extendMkDerivationArgs old (
+        args:
+        let
+          diff =
+            if (args ? env && args.env ? NIX_CFLAGS_COMPILE && builtins.isList args.env.NIX_CFLAGS_COMPILE) then
+              { env.NIX_CFLAGS_COMPILE = args.env.NIX_CFLAGS_COMPILE ++ compilerFlags; }
+            else if
+              (args ? env && args.env ? NIX_CFLAGS_COMPILE && builtins.isString args.env.NIX_CFLAGS_COMPILE)
+            then
+              { env.NIX_CFLAGS_COMPILE = args.env.NIX_CFLAGS_COMPILE + " ${toString compilerFlags}"; }
+            else if (args ? NIX_CFLAGS_COMPILE && builtins.isList args.NIX_CFLAGS_COMPILE) then
+              { NIX_CFLAGS_COMPILE = args.NIX_CFLAGS_COMPILE ++ compilerFlags; }
+            else if (args ? NIX_CFLAGS_COMPILE && builtins.isString args.NIX_CFLAGS_COMPILE) then
+              { NIX_CFLAGS_COMPILE = args.NIX_CFLAGS_COMPILE + " ${toString compilerFlags}"; }
+            else
+              { env.NIX_CFLAGS_COMPILE = toString compilerFlags; };
+        in
+        lib.recursiveUpdate args diff
+      );
     });
 
   # Overriding the SDK changes the Darwin SDK used to build the package, which:
