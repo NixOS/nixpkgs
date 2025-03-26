@@ -9,6 +9,7 @@
   lua,
   pkg-config,
   unibilium,
+  utf8proc,
   libvterm-neovim,
   tree-sitter,
   fetchurl,
@@ -96,7 +97,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.10.4";
+    version = "0.11.0";
 
     __structuredAttrs = true;
 
@@ -104,7 +105,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-TAuoa5GD50XB4OCHkSwP1oXfedzVrCBRutNxBp/zGLY=";
+      hash = "sha256-UVMRHqyq3AP9sV79EkPUZnVkj0FpbS+XDPPOppp2yFE=";
     };
 
     patches = [
@@ -144,6 +145,7 @@ stdenv.mkDerivation (
         neovimLuaEnv
         tree-sitter
         unibilium
+        utf8proc
       ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [
         glibcLocales
@@ -198,14 +200,20 @@ stdenv.mkDerivation (
         # can spot that cmake says this option was "not used by the project".
         # That's because all dependencies were found and
         # third-party/CMakeLists.txt is not read at all.
-        "-DUSE_BUNDLED=OFF"
+        (lib.cmakeBool "USE_BUNDLED" false)
       ]
-      ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
-      ++ lib.optionals lua.pkgs.isLuaJIT [
-        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
-        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
-        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
-      ];
+      ++ (
+        if lua.pkgs.isLuaJIT then
+          [
+            (lib.cmakeFeature "LUAC_PRG" "${lib.getExe' codegenLua "luajit"} -b -s %s -")
+            (lib.cmakeFeature "LUA_GEN_PRG" (lib.getExe' codegenLua "luajit"))
+            (lib.cmakeFeature "LUA_PRG" (lib.getExe' neovimLuaEnvOnBuild "luajit"))
+          ]
+        else
+          [
+            (lib.cmakeBool "PREFER_LUA" true)
+          ]
+      );
 
     preConfigure =
       ''
@@ -236,7 +244,7 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {
