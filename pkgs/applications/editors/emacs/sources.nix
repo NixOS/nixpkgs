@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromBitbucket,
+  fetchFromGitHub,
   fetchFromSavannah,
 }:
 
@@ -30,13 +31,19 @@ let
               inherit rev hash;
             }
           );
-          "macport" = (
-            fetchFromBitbucket {
-              owner = "mituharu";
-              repo = "emacs-mac";
-              inherit rev hash;
-            }
-          );
+          "macport" =
+            if lib.versionAtLeast version "30" then
+              (fetchFromGitHub {
+                owner = "jdtsmith";
+                repo = "emacs-mac";
+                inherit rev hash;
+              })
+            else
+              (fetchFromBitbucket {
+                owner = "mituharu";
+                repo = "emacs-mac";
+                inherit rev hash;
+              });
         }
         .${variant};
 
@@ -156,5 +163,14 @@ in
     variant = "macport";
     rev = "emacs-29.1-mac-10.0";
     hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+  });
+
+  emacs30-macport = import ./make-emacs.nix (mkArgs {
+    pname = "emacs-mac";
+    version = "30.1.50";
+    variant = "macport";
+    rev = "a50f20585960d92510fb62c95cb12606218a2081";
+    hash = "sha256-Ap4ZBb9NYIbwLroOoqvpQU/hjhaJJDB+3/1V0Q2c6aA=";
+    patches = _: [ ./macport-stdbool.patch ];
   });
 }

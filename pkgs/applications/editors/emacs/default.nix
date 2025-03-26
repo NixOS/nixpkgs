@@ -28,6 +28,7 @@ lib.makeScope pkgs.newScope (
       inherit lib;
       inherit (pkgs)
         fetchFromBitbucket
+        fetchFromGitHub
         fetchFromSavannah
         ;
     };
@@ -49,5 +50,7 @@ lib.makeScope pkgs.newScope (
     emacs28-macport = callPackage (self.sources.emacs28-macport) inheritedArgs;
 
     emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
+
+    emacs30-macport = callPackage (self.sources.emacs30-macport) inheritedArgs;
   }
 )

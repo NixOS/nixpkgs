@@ -1,0 +1,12 @@
+diff --git a/src/conf_post.h b/src/conf_post.h
+index e3272278832..01d3bcf9a81 100644
+--- a/src/conf_post.h
++++ b/src/conf_post.h
+@@ -58,6 +58,7 @@ along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.  */
+ #if NS_IMPL_GNUSTEP || defined __MINGW32__
+ typedef unsigned int bool_bf;
+ #else
++#include <stdbool.h> /* Clang in C mode does not automatically define bool unless you explicitly include that header */
+ typedef bool bool_bf;
+ #endif
+ 
