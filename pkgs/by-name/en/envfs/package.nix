@@ -6,15 +6,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "envfs";
-  version = "1.0.6";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
     rev = version;
-    hash = "sha256-kOfnKguvJQHW/AfQOetxVefjoEj7ec5ew6fumhOwP08=";
+    hash = "sha256-bpATdm/lB+zomPYGCxA7omWK/SKPIaqr94J+fjMaXfE=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VvdvYxNBzwJJy09npC30VaOzOU9Fwi++qon9Od4juHE=";
+  cargoHash = "sha256-nMUdAFRHJZDwvLASBVykzzkwk3HxslDehqqm1U99qYg=";
 
   passthru.tests = {
     envfs = nixosTests.envfs;
