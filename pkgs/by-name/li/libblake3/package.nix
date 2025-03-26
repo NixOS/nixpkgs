@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       fgaz
+      fpletz
       silvanshade
     ];
     platforms = lib.platforms.all;
