@@ -1,4 +1,4 @@
-{ config, lib, options, pkgs, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 let
   cfg = config.services.amule;
   opt = options.services.amule;
@@ -40,6 +40,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "amule-daemon" { };
+
     };
 
   };
@@ -61,20 +63,44 @@ in
         gid = config.ids.gids.amule;
       } ];
 
+    systemd.tmpfiles.settings."10-amuled".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
+
     systemd.services.amuled = {
       description = "AMule daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      environment.HOME = cfg.dataDir;
 
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${user} ${cfg.dataDir}
-      '';
+      serviceConfig = {
+        User = "${cfg.user}";
+        WorkingDirectory = cfg.dataDir;
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe' cfg.package "amuled")
+          "--config-dir=${config.services.amule.dataDir}"
+        ];
+        Restart = "on-failure";
+        RestartSec = "5s";
 
-      script = ''
-        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${user} \
-            -c 'HOME="${cfg.dataDir}" ${pkgs.amule-daemon}/bin/amuled'
-      '';
+        # Hardening
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        DevicePolicy = "closed";
+        ProtectSystem = "strict";
+        ReadWritePaths = cfg.dataDir;
+        ProtectHome = "tmpfs";
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = "AF_INET";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+      };
     };
   };
 }
