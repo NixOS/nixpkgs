@@ -25,7 +25,7 @@ lib.makeScope pkgs.newScope (
       }
       .${self.ui} or null;
 
-    browser = callPackage ./browser.nix { };
+    browser = pkgs.netsurf-browser;
 
     buildsystem = pkgs.netsurf-buildsystem;
     libcss = pkgs.libcss;
