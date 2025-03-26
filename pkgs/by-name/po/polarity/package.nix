@@ -16,12 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ufWHDqvAaQiqwlezm95BCTLMdQEK5NTmMQgeq3oKR1o=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tower-lsp-server-0.21.0" = "sha256-aeCc8m7zf3Kww1EBmMJFhQTYJ9lP6+R+9WzQ8yaj3Jo=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+RqW8ISBKMKIzsJd3PBUPi5OYCADjXctOH+jH19qg9g=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

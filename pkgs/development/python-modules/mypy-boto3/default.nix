@@ -694,8 +694,8 @@ rec {
       "sha256-/YnQXdkazAjklYHhxykdLgQ1ciLXODg37e2NwLnqtJI=";
 
   mypy-boto3-iotwireless =
-    buildMypyBoto3Package "iotwireless" "1.37.0"
-      "sha256-ZSBmESqXR8TXFP4BnE9Xj5UBErBgooNCbLk9G3lpJwI=";
+    buildMypyBoto3Package "iotwireless" "1.37.19"
+      "sha256-AOMp/Xagz6ybETbi0/pql+pyaTrup2cov/mUuU0PyWI=";
 
   mypy-boto3-ivs =
     buildMypyBoto3Package "ivs" "1.37.0"
@@ -1294,8 +1294,8 @@ rec {
       "sha256-7VbfcklEJdTn0OBI8jIcwXUU+ju+38QQu7i3CcS/9WQ=";
 
   mypy-boto3-ssm =
-    buildMypyBoto3Package "ssm" "1.37.4"
-      "sha256-fnhpeIqk24UXEniZChFadkJbLebbKAdKHxZrlG7MpSI=";
+    buildMypyBoto3Package "ssm" "1.37.19"
+      "sha256-bopkgSzOq7haz6di3A/v4GVJfSJ0oJU266uxygLPhfk=";
 
   mypy-boto3-ssm-contacts =
     buildMypyBoto3Package "ssm-contacts" "1.37.0"

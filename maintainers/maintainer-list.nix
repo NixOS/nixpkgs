@@ -4188,6 +4188,12 @@
     githubId = 1774239;
     name = "Charlie Egan";
   };
+  charludo = {
+    email = "github@charlotteharludo.com";
+    github = "charludo";
+    githubId = 47758554;
+    name = "Charlotte Harludo";
+  };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
@@ -11704,6 +11710,12 @@
     email = "j.g.chang@gmail.com";
     github = "jonochang";
     githubId = 13179;
+  };
+  jonocodes = {
+    name = "Jono Finger";
+    email = "jono@foodnotblogs.com";
+    github = "jonocodes";
+    githubId = 1310468;
   };
   jopejoe1 = {
     email = "nixpkgs@missing.ninja";

@@ -10663,6 +10663,8 @@ self: super: with self; {
 
   numpy = numpy_2;
 
+  numpy-financial = callPackage ../development/python-modules/numpy-financial { };
+
   numpy-groupies = callPackage ../development/python-modules/numpy-groupies { };
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
@@ -11427,6 +11429,8 @@ self: super: with self; {
   pcbnewtransition = callPackage ../development/python-modules/pcbnewtransition { };
 
   pcffont = callPackage ../development/python-modules/pcffont { };
+
+  pcodec = callPackage ../development/python-modules/pcodec { };
 
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
