@@ -69,10 +69,10 @@ stdenvNoCC.mkDerivation {
     ${lib.optionalString hostPlatform.isLinux ''
       cp -r bin $out/bin
       mkdir -p $out/share/cursor
-      
+
       # Copy icon
       install -Dm 644 ${appimageContents}/co.anysphere.cursor.png -t $out/share/icons/hicolor/256x256/apps/
-      
+
       # Copy desktop file
       install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
 
@@ -107,7 +107,7 @@ stdenvNoCC.mkDerivation {
       version=$(curl -s "https://download.cursor.sh/latest-versions.json" | jq -r '.latestVers.main.ver')
       buildId=$(curl -s "https://download.cursor.sh/latest-versions.json" | jq -r '.latestVers.main.buildId')
       baseUrl="https://downloads.cursor.com/production/$buildId"
-      
+
       currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
 
       if [[ "$version" != "$currentVersion" ]]; then
