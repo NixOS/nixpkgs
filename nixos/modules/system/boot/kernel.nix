@@ -91,7 +91,13 @@ in
         ]
       '';
       description = ''
-        A list of additional patches to apply to the kernel. Every item should be an attribute set as shown in the example below.
+        A list of additional patches to apply to the kernel. Every item should be an attribute set as shown below.
+
+        * **`name`**: (Required) Descriptive name (e.g., `"foo"`).
+        * **`patch`**: (Required, or `null`) Path to patch source (e.g., `./foo.patch`).
+        * **`extraStructuredConfig`**: (Optional) Configuration options (e.g., `{ FOO = lib.kernel.yes; }`).
+        * **`features`**: (Optional) Kernel "features" (e.g., `{ foo = true; }`).
+        * **`extraConfig`**: (Optional, deprecated) String config options (e.g., `"FOO y"`).
 
         There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
         that follow this format and can be used directly.
