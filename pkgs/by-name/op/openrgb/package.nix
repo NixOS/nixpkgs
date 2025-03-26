@@ -9,17 +9,16 @@
   coreutils,
   mbedtls_2,
   symlinkJoin,
-  openrgb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
-    rev = "release_${version}";
+    rev = "release_${finalAttrs.version}";
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
-      --replace /bin/chmod "${coreutils}/bin/chmod"
+      --replace-fail /bin/chmod "${coreutils}/bin/chmod"
   '';
 
   doInstallCheck = true;
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
         '';
       };
     in
-    openrgb.overrideAttrs (old: {
+    finalAttrs.finalPackage.overrideAttrs (old: {
       qmakeFlags = old.qmakeFlags or [ ] ++ [
         # Welcome to Escape Hell, we have backslashes
         ''DEFINES+=OPENRGB_EXTRA_PLUGIN_DIRECTORY=\\\""${
@@ -84,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "openrgb";
   };
-}
+})
