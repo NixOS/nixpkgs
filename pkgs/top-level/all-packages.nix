@@ -3393,8 +3393,6 @@ with pkgs;
     withCloudUi = true;
   };
 
-  netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
-
   nyxt = callPackage ../applications/networking/browsers/nyxt {
     sbcl = sbcl_2_4_6;
     inherit (gst_all_1)
