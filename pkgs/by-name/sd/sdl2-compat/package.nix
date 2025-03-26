@@ -105,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       nadiaholmquist
       grimmauld
+      marcin-serwin
     ];
     platforms = lib.platforms.all;
     pkgConfigModules = [ "sdl2_compat" ];
