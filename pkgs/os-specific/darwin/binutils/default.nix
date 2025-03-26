@@ -61,6 +61,11 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  postPatch = ''
+    # Fix timestamps to ensure reproducibility
+    export SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+  '';
+
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
