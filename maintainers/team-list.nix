@@ -761,7 +761,6 @@ with lib.maintainers;
 
   marketing = {
     members = [
-      garbas
       tomberek
     ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
