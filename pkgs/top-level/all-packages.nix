@@ -10233,10 +10233,6 @@ with pkgs;
     inherit (skawarePackages) cleanPackaging;
   };
 
-  nettee = callPackage ../tools/networking/nettee {
-    inherit (skawarePackages) cleanPackaging;
-  };
-
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile;
   };
