@@ -40,7 +40,7 @@ lib.makeScope pkgs.newScope (
     libparserutils = pkgs.libparserutils;
     libsvgtiny = callPackage ./libsvgtiny.nix { };
     libutf8proc = callPackage ./libutf8proc.nix { };
-    libwapcaplet = callPackage ./libwapcaplet.nix { };
+    libwapcaplet = pkgs.libwapcaplet;
     nsgenbind = callPackage ./nsgenbind.nix { };
   }
 )
