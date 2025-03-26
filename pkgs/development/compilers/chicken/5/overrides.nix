@@ -292,11 +292,9 @@ in
   hypergiant =
     old:
     (
-      (addToBuildInputsWithPkgConfig (
-        [
-          pkgs.libepoxy
-        ]
-      ))
+      (addToBuildInputsWithPkgConfig ([
+        pkgs.libepoxy
+      ]))
       old
     )
     // {
