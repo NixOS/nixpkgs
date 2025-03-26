@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "pywbem";
   version = "1.7.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     pbr
     ply
     pyyaml
+    requests
     six
     yamlloader
   ];
@@ -54,7 +55,6 @@ buildPythonPackage rec {
     lxml
     pytest
     pytz
-    requests
     requests-mock
     testfixtures
   ];
