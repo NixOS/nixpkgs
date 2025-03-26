@@ -14342,16 +14342,10 @@
   };
   mic92 = {
     email = "joerg@thalheim.io";
-    matrix = "@mic92:nixos.dev";
+    matrix = "@joerg:thalheim.io";
     github = "Mic92";
     githubId = 96200;
     name = "Jörg Thalheim";
-    keys = [
-      {
-        # compare with https://keybase.io/Mic92
-        fingerprint = "3DEE 1C55 6E1C 3DC5 54F5  875A 003F 2096 411B 5F92";
-      }
-    ];
   };
   michaeladler = {
     email = "therisen06@gmail.com";

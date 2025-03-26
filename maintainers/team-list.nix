@@ -748,11 +748,14 @@ with lib.maintainers;
     shortName = "Mercury Employees";
   };
 
+  # same as https://github.com/orgs/NixOS/teams/nix-team
   nix = {
     members = [
       eelco
-      grahamc
-      pierron
+      mic92
+      tomberek
+      roberth
+      ericson2314
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
