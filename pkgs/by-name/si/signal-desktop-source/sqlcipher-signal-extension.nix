@@ -34,9 +34,10 @@ let
   });
 
   sqlcipher-amalgamation = stdenv.mkDerivation {
-    pname = "sqlcipher-with-signal-extension";
+    pname = "sqlcipher-amalgamation";
+    version = "${sqlcipher.version}-signal-patch2";
 
-    inherit (sqlcipher) version src meta;
+    inherit (sqlcipher) src meta;
 
     patches = [
       (fetchpatch {
@@ -89,6 +90,9 @@ let
 in
 buildEnv {
   name = "sqlcipher-signal";
+  passthru = {
+    inherit sqlcipher-amalgamation signal-sqlcipher-extension;
+  };
 
   paths = [
     sqlcipher-amalgamation

@@ -7,11 +7,9 @@
   python3,
   makeWrapper,
   callPackage,
-  libpulseaudio,
   fetchFromGitHub,
   runCommand,
-  fetchzip,
-  autoPatchelfHook,
+  jq,
   makeDesktopItem,
   copyDesktopItems,
   replaceVars,
@@ -32,26 +30,7 @@ let
   sqlcipher-signal-extension = callPackage ./sqlcipher-signal-extension.nix { };
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
-  ringrtc = stdenv.mkDerivation (finalAttrs: {
-    pname = "ringrtc-bin";
-    version = "2.50.2";
-    src = fetchzip {
-      url = "https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v${finalAttrs.version}.tar.gz";
-      hash = "sha256-hNlz+gSulyJ//FdbPvY/5OHbtJ4rEUdi9/SHJDX6gZE=";
-    };
-
-    installPhase = ''
-      cp -r . $out
-    '';
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ libpulseaudio ];
-    meta = {
-      homepage = "https://github.com/signalapp/ringrtc";
-      license = lib.licenses.agpl3Only;
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
-  });
+  ringrtc-bin = callPackage ./ringrtc-bin.nix { };
 
   # Noto Color Emoji PNG files for emoji replacement; see below.
   noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
@@ -83,7 +62,7 @@ let
     hash = "sha256-/jtuGsBOFsSgJZNpRilWZ0daI0iYVziZBaF/vLvQ7NU=";
   };
 
-  stickerCreator = stdenv.mkDerivation (finalAttrs: {
+  sticker-creator = stdenv.mkDerivation (finalAttrs: {
     pname = "signal-desktop-sticker-creator";
     inherit version;
     src = src + "/sticker-creator";
@@ -121,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
     python3
+    jq
   ];
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
@@ -151,9 +131,43 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
+    if [ "`jq -r '.engines.node' < package.json | head -c 2`" != `head -c 2 <<< "${nodejs.version}"` ]
+    then
+      die "nodejs version mismatch"
+    fi
+
+    if [ "`jq -r '.devDependencies.electron' < package.json | head -c 2`" != `head -c 2 <<< "${electron.version}"` ]
+    then
+      die "electron version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/libsignal-client"' < package.json`" != "${libsignal-node.version}" ]
+    then
+      die "libsignal-client version mismatch"
+    fi
+
+    if [ "`jq -r '.dependencies."@signalapp/ringrtc"' < package.json`" != "${ringrtc-bin.version}" ]
+    then
+      die "ringrtc version mismatch"
+    fi
+
+    sqlcipherVersion=${sqlcipher-signal-extension.passthru.sqlcipher-amalgamation.version}
+    if ! grep "const SQLCIPHER_VERSION = '$sqlcipherVersion';" \
+      node_modules/@signalapp/better-sqlite3/deps/download.js
+    then
+      die "sqlcipher version mismatch"
+    fi
+
+    extensionVersion=${sqlcipher-signal-extension.passthru.signal-sqlcipher-extension.version}
+    if ! grep "const EXTENSION_VERSION = '$extensionVersion-asm2';" \
+      node_modules/@signalapp/better-sqlite3/deps/download.js
+    then
+      die "signal-sqlcipher-extension version mismatch"
+    fi
+
     cp ${sqlcipher-signal-extension}/share/sqlite3.gyp node_modules/@signalapp/better-sqlite3/deps/sqlite3.gyp
 
-    cp -r ${ringrtc} node_modules/@signalapp/ringrtc/build
+    cp -r ${ringrtc-bin} node_modules/@signalapp/ringrtc/build
 
     rm -fr node_modules/@signalapp/libsignal-client/prebuilds
     cp -r ${libsignal-node}/lib node_modules/@signalapp/libsignal-client/prebuilds
@@ -165,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${electron-headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-    cp -r ${stickerCreator} sticker-creator/dist
+    cp -r ${sticker-creator} sticker-creator/dist
 
     pnpm run generate
     pnpm exec electron-builder \
@@ -219,8 +233,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    inherit sqlcipher-signal-extension libsignal-node;
+    inherit
+      sqlcipher-signal-extension
+      libsignal-node
+      ringrtc-bin
+      sticker-creator
+      ;
     tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
   };
 
   meta = {
