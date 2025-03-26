@@ -33,9 +33,15 @@ let
 
   nonGeneratedPlugins =
     self: super:
-    lib.mapAttrs (name: _: callPackage (./non-generated + "/${name}") { }) (
-      lib.filterAttrs (name: type: type == "directory") (builtins.readDir ./non-generated)
-    );
+    let
+      root = ./non-generated;
+      call = name: callPackage (root + "/${name}") { };
+    in
+    lib.pipe root [
+      builtins.readDir
+      (lib.filterAttrs (_: type: type == "directory"))
+      (builtins.mapAttrs (name: _: call name))
+    ];
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPlugin;

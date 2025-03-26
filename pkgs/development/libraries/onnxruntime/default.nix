@@ -66,11 +66,11 @@ let
 
     nativeBuildInputs = [ cmake gbenchmark gtest ];
     cmakeFlags = [
-      "-DUSE_SYSTEM_GOOGLEBENCHMARK=ON"
-      "-DUSE_SYSTEM_GOOGLETEST=ON"
-      "-DUSE_SYSTEM_LIBS=ON"
+      (lib.cmakeBool "USE_SYSTEM_GOOGLEBENCHMARK" true)
+      (lib.cmakeBool "USE_SYSTEM_GOOGLETEST" true)
+      (lib.cmakeBool "USE_SYSTEM_LIBS" true)
       # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
-      "-DCLOG_BUILD_TESTS=OFF"
+      (lib.cmakeBool "CLOG_BUILD_TESTS" false)
     ];
   };
 
@@ -178,27 +178,27 @@ effectiveStdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-DABSL_ENABLE_INSTALL=ON"
-    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
-    "-DFETCHCONTENT_QUIET=OFF"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202407.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_DLPACK=${dlpack}"
-    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
-    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
-    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
-    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
+    (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeBool "FETCHCONTENT_QUIET" false)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202407.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint}")
+    (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    "-DONNX_CUSTOM_PROTOC_EXECUTABLE=${protobuf_21}/bin/protoc"
-    "-Donnxruntime_BUILD_SHARED_LIB=ON"
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" "${protobuf_21}/bin/protoc")
+    (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
-    "-Donnxruntime_ENABLE_LTO=ON"
-    "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
+    (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" false)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+    (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
   ] ++ lib.optionals pythonSupport [
-    "-Donnxruntime_ENABLE_PYTHON=ON"
+    (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ] ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")

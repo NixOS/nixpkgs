@@ -11705,6 +11705,12 @@
     github = "jonochang";
     githubId = 13179;
   };
+  jonocodes = {
+    name = "Jono Finger";
+    email = "jono@foodnotblogs.com";
+    github = "jonocodes";
+    githubId = 1310468;
+  };
   jopejoe1 = {
     email = "nixpkgs@missing.ninja";
     matrix = "@jopejoe1:matrix.org";
