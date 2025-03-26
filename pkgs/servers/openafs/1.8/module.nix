@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   which,
   autoconf,
   automake,
@@ -26,7 +27,20 @@ stdenv.mkDerivation {
   version = "${version}-${kernel.modDirVersion}";
   inherit src;
 
-  patches = [ ];
+  patches = [
+    # LINUX: Refactor afs_linux_dentry_revalidate()
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16276/revisions/c1d074317e5c8cb8212e0b19a29f7d710bcabb32/patch";
+      decode = "base64 -d";
+      hash = "sha256-8ga9ks9pr6pWaV2t67v+FaG0yVExhqELkvkpdLvO8Nc=";
+    })
+    # Linux-6.14: Handle dops.d_revalidate with parent
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16277/revisions/0051bd0ee82b05e8caacdc0596e5b62609bebd2e/patch";
+      decode = "base64 -d";
+      hash = "sha256-08jedwZ1KX1RSs8y9sh7BUvv5xK9tlzZ6uBOR4kS0Jo=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
