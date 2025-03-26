@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -64,7 +64,7 @@ let
 
       path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile} ${utils.escapeSystemdExecArgs cfg.additionalArgs}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -147,6 +147,16 @@ in
 
               To import an external config file, use the following definition:
               `config = "config /path/to/config.ovpn"`
+            '';
+          };
+
+          additionalArgs = mkOption {
+            default = [ ];
+            example = ["--pkcs11-id" "$PKCS11ID"];
+            type = types.listOf types.str;
+            description = ''
+              Additional arguments passed to openvpn.
+              Can be used for e.g. custom PKCS options.
             '';
           };
 
