@@ -38,7 +38,7 @@ lib.makeScope pkgs.newScope (
     libnspsl = pkgs.libnspsl;
     libnsutils = pkgs.libnsutils;
     libparserutils = pkgs.libparserutils;
-    libsvgtiny = callPackage ./libsvgtiny.nix { };
+    libsvgtiny = pkgs.libsvgtiny;
     libutf8proc = callPackage ./libutf8proc.nix { };
     libwapcaplet = pkgs.libwapcaplet;
     nsgenbind = callPackage ./nsgenbind.nix { };
