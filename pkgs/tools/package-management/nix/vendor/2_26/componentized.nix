@@ -7,7 +7,6 @@
   pkgs,
   stdenv,
   maintainers,
-  selfAttributeName,
   ...
 }:
 let
@@ -25,11 +24,7 @@ let
         inherit (nixDependencies) newScope;
       }
       {
-        otherSplices = generateSplicesForMkScope [
-          "nixVersions"
-          "components"
-          selfAttributeName
-        ];
+        otherSplices = generateSplicesForMkScope "nixComponents";
         f = import ./packaging/components.nix {
           inherit
             lib
@@ -50,17 +45,11 @@ let
         inherit newScope; # layered directly on pkgs, unlike nixComponents above
       }
       {
-        # Technically this should point to the nixDependencies set only, but
-        # this is ok as long as the scopes don't intersect.
-        otherSplices = generateSplicesForMkScope [
-          "nixVersions"
-          "components"
-          selfAttributeName
-        ];
+        otherSplices = generateSplicesForMkScope "nixDependencies";
         f = import ./dependencies.nix {
           inherit pkgs;
           inherit stdenv;
         };
       };
 in
-nixComponents.overrideSource src
+(nixComponents.overrideSource src).nix-everything
