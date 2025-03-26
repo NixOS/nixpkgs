@@ -37,7 +37,7 @@ lib.makeScope pkgs.newScope (
     libnslog = callPackage ./libnslog.nix { };
     libnspsl = callPackage ./libnspsl.nix { };
     libnsutils = callPackage ./libnsutils.nix { };
-    libparserutils = callPackage ./libparserutils.nix { };
+    libparserutils = pkgs.libparserutils;
     libsvgtiny = callPackage ./libsvgtiny.nix { };
     libutf8proc = callPackage ./libutf8proc.nix { };
     libwapcaplet = callPackage ./libwapcaplet.nix { };
