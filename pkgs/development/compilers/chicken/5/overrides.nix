@@ -71,6 +71,12 @@ in
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-incompatible-pointer-types"
+        "-Wno-int-conversion"
+      ];
+    }
     // lib.optionalAttrs stdenv.cc.isClang {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=incompatible-function-pointer-types"
@@ -98,6 +104,20 @@ in
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
   gl-utils = addPkgConfig;
+  gl-math =
+    old:
+    {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-incompatible-pointer-types"
+        "-Wno-int-conversion"
+      ];
+    }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-function-pointer-types"
+        "-Wno-error=int-conversion"
+      ];
+    };
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
