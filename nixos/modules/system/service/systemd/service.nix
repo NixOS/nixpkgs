@@ -63,6 +63,7 @@ in
         ExecStart = [
           (lib.escapeShellArgs ([ config.process.executable ] ++ config.process.args))
         ];
+        Environment = lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") config.process.environment;
       };
     };
   };
