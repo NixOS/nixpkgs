@@ -100,7 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Python bindings depend on numpy at import time.
   propagatedBuildInputs = lib.optional withPython python3Packages.numpy;
 
+  separateDebugInfo = true;
+
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DBUILD_SHARED_LIBS=${if !withStatic then "ON" else "OFF"}"
     "-DNLOPT_CXX=ON"
     "-DNLOPT_PYTHON=${if withPython then "ON" else "OFF"}"
