@@ -10,6 +10,8 @@
   callPackage,
   testers,
   pulumi,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 buildGoModule rec {
   pname = "pulumi";
@@ -117,6 +119,21 @@ buildGoModule rec {
   passthru = {
     pkgs = callPackage ./plugins.nix { };
     withPackages = callPackage ./with-packages.nix { };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-go";
+        extraArgs = [ "--version=skip" ];
+      })
+      (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-nodejs";
+        extraArgs = [ "--version=skip" ];
+      })
+      (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-python";
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
     tests = {
       version = testers.testVersion {
         package = pulumi;
