@@ -810,6 +810,7 @@ with lib.maintainers;
     members = [
       _9999years
       Gabriella439
+      curran
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
