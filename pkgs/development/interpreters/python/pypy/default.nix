@@ -136,6 +136,13 @@ in with passthru; stdenv.mkDerivation rec {
     mkdir -p $out/${executable}-c/pypy/bin
     mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
     ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
+  ''
+  # _testcapi is compiled dynamically, into the store.
+  # This would fail if we don't do it here.
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    pushd /
+    $out/bin/${executable} -c "from test import support"
+    popd
   '';
 
   setupHook = python-setup-hook sitePackages;
