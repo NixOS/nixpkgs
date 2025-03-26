@@ -18,6 +18,8 @@
           decode = true;
           listenHttp = "[::1]:80";
           backends = [ "badger+file:///var/cache/eris.badger?get&put" ];
+          mountpoint = "/eris";
+          securityWrapperDir = config.security.wrapperDir;
         };
       };
     };

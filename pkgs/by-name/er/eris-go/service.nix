@@ -61,6 +61,24 @@ in
         "coap+tcp://eris.example.com:5683?get"
       ];
     };
+
+    mountpoint = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      example = "/eris";
+      description = ''
+        Mountpoint for FUSE namespace that exposes "urn:eris:…" files.
+      '';
+    };
+
+    securityWrapperDir = lib.mkOption {
+      type = lib.types.path;
+      description = ''
+        Path of a directory directory containing the fusermount3 executable.
+        Required when the mountpoint option is set.
+      '';
+      example = lib.literalExample "config.sercurity.wrappedDir";
+    };
   };
 
   config = {
@@ -85,10 +103,14 @@ in
           "--http"
           cfg.listenHttp
         ])
+        ++ (lib.optionals (cfg.mountpoint != null) [
+          "--mountpoint"
+          cfg.mountpoint
+        ])
         ++ (lib.optional cfg.decode "--decode");
       environment = {
         ERIS_STORE_URL = toString cfg.backends;
-      };
+      } // (lib.optionalAttrs (cfg.mountpoint != null) { PATH = cfg.securityWrapperDir; });
     };
 
     systemd.service = {
