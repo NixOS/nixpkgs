@@ -28,7 +28,7 @@ lib.makeScope pkgs.newScope (
     browser = callPackage ./browser.nix { };
 
     buildsystem = pkgs.netsurf-buildsystem;
-    libcss = callPackage ./libcss.nix { };
+    libcss = pkgs.libcss;
     libdom = callPackage ./libdom.nix { };
     libhubbub = callPackage ./libhubbub.nix { };
     libnsbmp = callPackage ./libnsbmp.nix { };
