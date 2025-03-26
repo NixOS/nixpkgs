@@ -289,7 +289,7 @@ in
 
             containers.matrix-synapse = {
               autoStart = true;
-              nixpkgs = system.autoUpgrade.desync.for-synapse.pkgs;
+              nixpkgs = config.system.autoUpgrade.desync.for-synapse.path;
               config = {
                 services.matrix-synapse = {
                   # ...
