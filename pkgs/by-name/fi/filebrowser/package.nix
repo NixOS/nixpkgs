@@ -3,10 +3,9 @@
   stdenv,
   fetchFromGitHub,
   buildGo123Module,
-  buildNpmPackage,
 
   nodejs,
-  pnpm
+  pnpm,
 }:
 
 let
@@ -39,15 +38,11 @@ let
     installPhase = ''
       runHook preInstall
 
-      cd frontend/
-      
-      pnpm install --frozen-lockfile
-      pnpm run build
+      pnpm install -C frontend --frozen-lockfile
+      pnpm run -C frontend build
 
       mkdir $out
-      mv dist $out
-      
-      cd ..
+      mv frontend/dist $out
 
       runHook postInstall
     '';
@@ -65,6 +60,10 @@ buildGo123Module {
   preBuild = ''
     cp -r ${frontend}/dist frontend/
   '';
+
+  ldflags = [
+    "-X github.com/filebrowser/filebrowser/v2/version.Version=v${version}"
+  ];
 
   passthru = {
     inherit frontend;
