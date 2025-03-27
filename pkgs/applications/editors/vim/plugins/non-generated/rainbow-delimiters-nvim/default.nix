@@ -15,7 +15,7 @@ vimUtils.buildVimPlugin {
     hash = "sha256-zWHXYs3XdnoszqOFY3hA2L5mNn1a44OAeKv3lL3EMEw=";
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # rainbow-delimiters.types.lua
     "rainbow-delimiters.types"
     # Test that requires an unpackaged dependency

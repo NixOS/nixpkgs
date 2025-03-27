@@ -11021,8 +11021,8 @@ with pkgs;
   jetty_12 = callPackage ../servers/http/jetty/12.x.nix { };
   jetty_11 = callPackage ../servers/http/jetty/11.x.nix { };
 
-  kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { };
-  kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { };
+  kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { kanidm = kanidm_1_4; };
+  kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
 
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
 

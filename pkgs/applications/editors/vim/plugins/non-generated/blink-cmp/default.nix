@@ -61,7 +61,7 @@ vimUtils.buildVimPlugin {
     ];
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Module for reproducing issues
     "repro"
   ];

@@ -10058,6 +10058,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-dap-vscode-js = buildVimPlugin {
+    pname = "nvim-dap-vscode-js";
+    version = "2023-03-06";
+    src = fetchFromGitHub {
+      owner = "mxsdev";
+      repo = "nvim-dap-vscode-js";
+      rev = "03bd29672d7fab5e515fc8469b7d07cc5994bbf6";
+      sha256 = "1nj299by3qs0dbsv1lxb19ia9pbpspw22kdlrilwl8vqixl77ngi";
+    };
+    meta.homepage = "https://github.com/mxsdev/nvim-dap-vscode-js/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-docs-view = buildVimPlugin {
     pname = "nvim-docs-view";
     version = "2025-03-24";
