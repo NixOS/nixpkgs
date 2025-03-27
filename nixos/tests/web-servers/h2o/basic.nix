@@ -110,7 +110,6 @@ in
         };
       };
   };
-
   testScript =
     let
       portStrHTTP = builtins.toString port.HTTP;
@@ -122,23 +121,19 @@ in
       server.wait_for_open_port(${portStrHTTP})
       server.wait_for_open_port(${portStrTLS})
 
-      http_hello_world_body = server.succeed("curl --fail-with-body 'http://${domain.HTTP}:${portStrHTTP}/hello_world.txt'")
-      assert "${sawatdi_chao_lok}" in http_hello_world_body
+      assert "${sawatdi_chao_lok}" in server.succeed("curl --fail-with-body 'http://${domain.HTTP}:${portStrHTTP}/hello_world.txt'")
 
       tls_hello_world_head = server.succeed("curl -v --head --compressed --http2 --tlsv1.3 --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'").lower()
       assert "http/2 200" in tls_hello_world_head
       assert "server: h2o" in tls_hello_world_head
       assert "content-type: text/x-rst" in tls_hello_world_head
 
-      tls_hello_world_body = server.succeed("curl -v --http2 --tlsv1.3 --compressed --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'")
-      assert "${sawatdi_chao_lok}" in tls_hello_world_body
+      assert "${sawatdi_chao_lok}" in server.succeed("curl -v --http2 --tlsv1.3 --compressed --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'")
 
-      tls_hello_world_head_redirected = server.succeed("curl -v --head --fail-with-body 'http://${domain.TLS}:${builtins.toString port.HTTP}/hello_world.rst'").lower()
-      assert "redirected" in tls_hello_world_head_redirected
+      assert "redirected" in server.succeed("curl -v --head --fail-with-body 'http://${domain.TLS}:${portStrHTTP}/hello_world.rst'").lower()
 
       server.fail("curl --location --max-redirs 0 'http://${domain.TLS}:${portStrHTTP}/hello_world.rst'")
 
-      tls_hello_world_body_redirected = server.succeed("curl -v --location --fail-with-body 'http://${domain.TLS}:${portStrHTTP}/hello_world.rst'")
-      assert "${sawatdi_chao_lok}" in tls_hello_world_body_redirected
+      assert "${sawatdi_chao_lok}" in server.succeed("curl -v --location --fail-with-body 'http://${domain.TLS}:${portStrHTTP}/hello_world.rst'")
     '';
 }
