@@ -69,8 +69,6 @@ rustPlatform.buildRustPackage {
   '';
 
   # The "Validate appstream file" test fails.
-  # TODO: This appears to have been fixed upstream
-  # so checks should be enabled with the next version.
   doCheck = false;
 
   preFixup = ''
