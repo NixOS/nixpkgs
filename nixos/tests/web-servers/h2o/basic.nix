@@ -43,6 +43,10 @@ in
     server =
       { pkgs, ... }:
       {
+        environment.systemPackages = [
+          pkgs.curlHTTP3
+        ];
+
         services.h2o = {
           enable = true;
           defaultHTTPListenPort = port.HTTP;
@@ -60,6 +64,9 @@ in
             "${domain.TLS}" = {
               tls = {
                 policy = "force";
+                quic = {
+                  retry = "ON";
+                };
                 identity = [
                   {
                     key-file = ../../common/acme/server/acme.test.key.pem;
@@ -99,10 +106,15 @@ in
         ];
 
         networking = {
-          firewall.allowedTCPPorts = with port; [
-            HTTP
-            TLS
-          ];
+          firewall = {
+            allowedTCPPorts = with port; [
+              HTTP
+              TLS
+            ];
+            allowedUDPPorts = with port; [
+              TLS
+            ];
+          };
           extraHosts = ''
             127.0.0.1 ${domain.HTTP}
             127.0.0.1 ${domain.TLS}
@@ -129,6 +141,13 @@ in
       assert "content-type: text/x-rst" in tls_hello_world_head
 
       assert "${sawatdi_chao_lok}" in server.succeed("curl -v --http2 --tlsv1.3 --compressed --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'")
+
+      quic_hello_world_head = server.succeed("curl -v --head --compressed --http3-only --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'").lower()
+      assert "http/3 200" in quic_hello_world_head
+      assert "server: h2o" in quic_hello_world_head
+      assert "content-type: text/x-rst" in quic_hello_world_head
+
+      assert "${sawatdi_chao_lok}" in server.succeed("curl -v --http3-only --compressed --fail-with-body 'https://${domain.TLS}:${portStrTLS}/hello_world.rst'")
 
       assert "redirected" in server.succeed("curl -v --head --fail-with-body 'http://${domain.TLS}:${portStrHTTP}/hello_world.rst'").lower()
 
