@@ -2550,8 +2550,8 @@ let
         mktplcRef = {
           name = "ionic";
           publisher = "ionic";
-          version = "1.102.0";
-          hash = "sha256-c1K4yQJt5f65T/GygX6i0w7Hbx5FyGaYdiwRjywYTic=";
+          version = "1.103.0";
+          hash = "sha256-TjtMkFCKu30LUvYv7nKav9EZlnmm3iXb9LlRYPPfKB0=";
         };
         meta = {
           description = "Official VSCode extension for Ionic and Capacitor development";
