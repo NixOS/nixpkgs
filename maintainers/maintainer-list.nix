@@ -10482,13 +10482,6 @@
     github = "jacbart";
     githubId = 7909687;
   };
-  jacekpoz = {
-    name = "Jacek Poziemski";
-    email = "jacek@poz.pet";
-    matrix = "@jacek:poz.pet";
-    github = "jacekpoz";
-    githubId = 64381190;
-  };
   jacfal = {
     name = "Jakub Pravda";
     email = "me@jakubpravda.net";
