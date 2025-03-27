@@ -4,12 +4,15 @@
   fetchFromGitHub,
   buildGo123Module,
 
-  nodejs,
-  pnpm,
+  nodejs_22,
+  pnpm_9,
 }:
 
 let
   version = "2.32.0";
+
+  pnpm = pnpm_9;
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "filebrowser";
@@ -30,9 +33,9 @@ let
     pnpmRoot = "frontend";
 
     pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version;
-      sourceRoot = "${finalAttrs.pnpmRoot}";
-      hash = "sha256-rjV6DwLrT+52BSjV08rWKYtZBhhmJd6M+MVxd/ypZVE=";
+      inherit (finalAttrs) pname version src;
+      sourceRoot = "${src.name}/frontend";
+      hash = "sha256-L3cKAp0vvLW5QPz6vYTtZwzuIN70EObU3SyJOlA0Ehc=";
     };
 
     installPhase = ''
