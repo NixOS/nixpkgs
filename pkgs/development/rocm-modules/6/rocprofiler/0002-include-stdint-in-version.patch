@@ -1,0 +1,12 @@
+diff --git a/src/tools/versioning/version.cpp b/src/tools/versioning/version.cpp
+index 11bdd00..339743c 100644
+--- a/src/tools/versioning/version.cpp
++++ b/src/tools/versioning/version.cpp
+@@ -1,6 +1,7 @@
+ #include <rocm-core/rocm_version.h>
+ #include <iostream>
+ #include <sstream>
++#include <stdint.h>
+ 
+ 
+ int main() {

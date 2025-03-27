@@ -1,0 +1,11 @@
+--- Device-OUI-1.04/lib/Device/OUI.pm.orig	2009-03-07 02:23:17.000000000 +0000
++++ Device-OUI-1.04/lib/Device/OUI.pm	2016-08-09 08:19:00.642799675 +0100
+@@ -54,7 +54,7 @@
+         for my $x ( keys %hash ) {
+             if ( not defined $hash{ $x } ) { $hash{ $x } = '' }
+         }
+-        return $handle->{ $oui } = join( "\0", %hash );
++        return $handle->{ $oui } = join( "\0", map {$_,$hash{$_}} sort keys %hash );
+     } elsif ( my $x = $handle->{ $oui } ) {
+         return { split( "\0", $x ) };
+     }

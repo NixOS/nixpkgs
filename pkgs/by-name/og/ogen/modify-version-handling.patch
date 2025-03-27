@@ -1,0 +1,16 @@
+diff --git a/internal/ogenversion/ogenversion.go b/internal/ogenversion/ogenversion.go
+index 5db622d3..fe71f95e 100644
+--- a/internal/ogenversion/ogenversion.go
++++ b/internal/ogenversion/ogenversion.go
+@@ -17,9 +17,9 @@ var getOnce struct {
+ 
+ func getOgenVersion(m *debug.Module) (string, bool) {
+ 	if m == nil || m.Path != "github.com/ogen-go/ogen" {
+-		return "", false
++		return "1.4.1", true
+ 	}
+-	return m.Version, true
++	return "1.4.1", true
+ }
+ 
+ func getInfo() (Info, bool) {

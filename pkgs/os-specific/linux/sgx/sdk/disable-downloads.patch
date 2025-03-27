@@ -1,0 +1,28 @@
+diff --git a/Makefile b/Makefile
+index 73502a7..f24bd11 100644
+--- a/Makefile
++++ b/Makefile
+@@ -50,18 +50,18 @@ tips:
+ preparation:
+ # As SDK build needs to clone and patch openmp, we cannot support the mode that download the source from github as zip.
+ # Only enable the download from git
+-	git submodule update --init --recursive
+-	./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
++	# git submodule update --init --recursive
++	# ./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
+ 	cd external/openmp/openmp_code && git apply ../0001-Enable-OpenMP-in-SGX.patch >/dev/null 2>&1 ||  git apply ../0001-Enable-OpenMP-in-SGX.patch --check -R
+ 	cd external/protobuf/protobuf_code && git apply ../sgx_protobuf.patch >/dev/null 2>&1 ||  git apply ../sgx_protobuf.patch --check -R
+-	cd external/protobuf/protobuf_code && git submodule update --init --recursive && cd third_party/abseil-cpp && git apply ../../../sgx_abseil.patch>/dev/null 2>&1 || git apply ../../../sgx_abseil.patch --check -R
++	cd external/protobuf/protobuf_code && cd third_party/abseil-cpp && git apply ../../../sgx_abseil.patch>/dev/null 2>&1 || git apply ../../../sgx_abseil.patch --check -R
+ 	./external/sgx-emm/create_symlink.sh
+ 	cd external/mbedtls/mbedtls_code && git apply ../sgx_mbedtls.patch >/dev/null 2>&1 || git apply ../sgx_mbedtls.patch --check -R
+ 	cd external/cbor && cp -r libcbor sgx_libcbor
+ 	cd external/cbor/libcbor && git apply ../raw_cbor.patch >/dev/null 2>&1 || git apply ../raw_cbor.patch --check -R
+ 	cd external/cbor/sgx_libcbor && git apply ../sgx_cbor.patch >/dev/null 2>&1 || git apply ../sgx_cbor.patch --check -R
+-	./download_prebuilt.sh
+-	./external/dcap_source/QuoteGeneration/download_prebuilt.sh
++	# ./download_prebuilt.sh
++	# ./external/dcap_source/QuoteGeneration/download_prebuilt.sh
+ 
+ psw:
+ 	$(MAKE) -C psw/ USE_OPT_LIBS=$(USE_OPT_LIBS)

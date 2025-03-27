@@ -1,0 +1,17 @@
+diff --git a/src/views/about.nim b/src/views/about.nim
+index e7e8de9..54a6050 100644
+--- a/src/views/about.nim
++++ b/src/views/about.nim
+@@ -3,10 +3,8 @@ import os, strformat
+ import karax/[karaxdsl, vdom]
+ 
+ const
+-  date = staticExec("git show -s --format=\"%cd\" --date=format:\"%Y.%m.%d\"")
+-  hash = staticExec("git show -s --format=\"%h\"")
+-  link = "https://github.com/zedeus/nitter/commit/" & hash
+-  version = &"{date}-{hash}"
++  link = "@url@"
++  version = "@version@-@rev@"
+ 
+ var aboutHtml: string
+ 
