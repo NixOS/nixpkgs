@@ -25,5 +25,6 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ kinzoku ];
     mainProgram = "mapscii";
     platforms = platforms.all;
+    broken = true;
   };
 }
