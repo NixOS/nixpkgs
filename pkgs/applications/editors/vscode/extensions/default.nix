@@ -3607,8 +3607,8 @@ let
         mktplcRef = {
           name = "test-adapter-converter";
           publisher = "ms-vscode";
-          version = "0.1.9";
-          hash = "sha256-M53jhAVawk2yCeSrLkWrUit3xbDc0zgCK2snbK+BaSs=";
+          version = "0.2.1";
+          hash = "sha256-gyyl379atZLgtabbeo26xspdPjLvNud3cZ6kEmAbAjU=";
         };
         meta = {
           description = "Visual Studio Code extension that converts from the Test Explorer UI API into native VS Code testing";
