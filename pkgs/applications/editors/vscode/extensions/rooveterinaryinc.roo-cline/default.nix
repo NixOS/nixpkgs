@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "RooVeterinaryInc";
     name = "roo-cline";
-    version = "3.9.2";
-    hash = "sha256-zRVppwnYpw03L+socmxAtLnkD72Ag7Wz9B4BbxpdFrk=";
+    version = "3.10.5";
+    hash = "sha256-7A8BQHUu7CYA28fHv68Zvf6zhlJwwXZaNVLb+/cBAIg=";
   };
 
   meta = {
