@@ -306,6 +306,7 @@ filterAndCreateOverrides {
       qt5 ? null,
       qt6 ? null,
       rdma-core,
+      stdenv,
     }:
     prevAttrs:
     let
@@ -318,6 +319,12 @@ filterAndCreateOverrides {
         else
           lib.getLib qt.qtwayland;
       inherit (qt) wrapQtAppsHook qtwebview;
+      archDir =
+        {
+          aarch64-linux = "linux-desktop-t210-a64";
+          x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     in
     {
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ wrapQtAppsHook ];
@@ -328,16 +335,22 @@ filterAndCreateOverrides {
         rdma-core
       ];
       dontWrapQtApps = true;
+      preInstall = ''
+        rm -rf host/${archDir}/Mesa/
+      '';
       postInstall = ''
         moveToOutput 'ncu' "''${!outputBin}/bin"
         moveToOutput 'ncu-ui' "''${!outputBin}/bin"
-        moveToOutput 'host/*' "''${!outputBin}/bin"
-        moveToOutput 'target/*' "''${!outputBin}/bin"
-        wrapQtApp "''${!outputBin}/bin/host/linux-desktop-glibc_2_11_3-x64/ncu-ui.bin"
+        moveToOutput 'host/${archDir}' "''${!outputBin}/bin"
+        moveToOutput 'target/${archDir}' "''${!outputBin}/bin"
+        wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
+      '';
+      preFixup = ''
+        # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+        patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
       '';
       autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
         "libnvidia-ml.so.1"
-        "libtiff.so.5"
       ];
       brokenConditions = prevAttrs.brokenConditions // {
         "Qt 5 missing (<2022.2.0)" = !(versionOlder version "2022.2.0" -> qt5 != null);
@@ -358,6 +371,7 @@ filterAndCreateOverrides {
       qt5 ? null,
       qt6 ? null,
       rdma-core,
+      stdenv,
       ucx,
       wayland,
       xorg,
@@ -373,19 +387,31 @@ filterAndCreateOverrides {
         else
           lib.getLib qt.qtwayland;
       qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+      hostDir =
+        {
+          aarch64-linux = "host-linux-armv8";
+          x86_64-linux = "host-linux-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      targetDir =
+        {
+          aarch64-linux = "target-linux-sbsa-armv8";
+          x86_64-linux = "target-linux-x64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      versionString = with lib.versions; "${majorMinor version}.${patch version}";
     in
     {
       # An ad hoc replacement for
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
-        "nsight-systems/*/*/lib{arrow,jpeg}*"
-        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
-        "nsight-systems/*/*/libboost*"
-        "nsight-systems/*/*/libexec"
-        "nsight-systems/*/*/libstdc*"
-        "nsight-systems/*/*/libgbm"
-        "nsight-systems/*/*/python/bin/python"
-        "nsight-systems/*/*/Mesa"
+        "nsight-systems/${versionString}/${hostDir}/lib{arrow,jpeg}*"
+        "nsight-systems/${versionString}/${hostDir}/lib{ssl,ssh,crypto}*"
+        "nsight-systems/${versionString}/${hostDir}/libboost*"
+        "nsight-systems/${versionString}/${hostDir}/libexec"
+        "nsight-systems/${versionString}/${hostDir}/libstdc*"
+        "nsight-systems/${versionString}/${hostDir}/python/bin/python"
+        "nsight-systems/${versionString}/${hostDir}/Mesa"
       ];
       postPatch =
         prevAttrs.postPatch or ""
@@ -427,21 +453,22 @@ filterAndCreateOverrides {
       postInstall =
         # 1. Move dependencies of nsys, nsys-ui binaries to bin output
         # 2. Fix paths in wrapper scripts
-        let
-          versionString = with lib.versions; "${majorMinor version}.${patch version}";
-        in
         ''
-          moveToOutput 'nsight-systems/${versionString}/host-linux-*' "''${!outputBin}"
-          moveToOutput 'nsight-systems/${versionString}/target-linux-*' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/${hostDir}' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/${targetDir}' "''${!outputBin}"
           moveToOutput 'nsight-systems/${versionString}/bin' "''${!outputBin}"
           substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
             --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
-          wrapQtApp "$bin/nsight-systems/${versionString}/host-linux-x64/nsys-ui.bin"
+          wrapQtApp "$bin/nsight-systems/${versionString}/${hostDir}/nsys-ui.bin"
         '';
+
+      preFixup = ''
+        # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+        patchelf --replace-needed libtiff.so.5 libtiff.so $bin/nsight-systems/${versionString}/${hostDir}/Plugins/imageformats/libqtiff.so
+      '';
 
       autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
         "libnvidia-ml.so.1"
-        "libtiff.so.5"
       ];
 
       brokenConditions = prevAttrs.brokenConditions // {
