@@ -146,7 +146,6 @@
 , "serve"
 , "sloc"
 , "smartdc"
-, "socket.io"
 , "speed-test"
 , "svelte-check"
 , "svgo"
