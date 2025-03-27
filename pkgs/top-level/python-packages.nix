@@ -314,6 +314,8 @@ self: super: with self; {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aiohttp-utils = callPackage ../development/python-modules/aiohttp-utils { };
+
   aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
 
   aiohue = callPackage ../development/python-modules/aiohue { };
@@ -1052,6 +1054,8 @@ self: super: with self; {
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
+
+  attrs-strict = callPackage ../development/python-modules/attrs-strict { };
 
   aubio = callPackage ../development/python-modules/aubio { };
 
@@ -17348,6 +17352,16 @@ self: super: with self; {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swh-auth = callPackage ../development/python-modules/swh-auth { };
+
+  swh-core = callPackage ../development/python-modules/swh-core { };
+
+  swh-model = callPackage ../development/python-modules/swh-model { };
+
+  swh-scanner = callPackage ../development/python-modules/swh-scanner { };
+
+  swh-web-client = callPackage ../development/python-modules/swh-web-client { };
 
   swift = callPackage ../development/python-modules/swift { };
 
