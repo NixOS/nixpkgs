@@ -1053,6 +1053,8 @@ self: super: with self; {
 
   attrs = callPackage ../development/python-modules/attrs { };
 
+  attrs-strict = callPackage ../development/python-modules/attrs-strict { };
+
   aubio = callPackage ../development/python-modules/aubio { };
 
   audible = callPackage ../development/python-modules/audible { };
@@ -17348,6 +17350,16 @@ self: super: with self; {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swh-auth = callPackage ../development/python-modules/swh-auth { };
+
+  swh-core = callPackage ../development/python-modules/swh-core { };
+
+  swh-model = callPackage ../development/python-modules/swh-model { };
+
+  swh-scanner = callPackage ../development/python-modules/swh-scanner { };
+
+  swh-web-client = callPackage ../development/python-modules/swh-web-client { };
 
   swift = callPackage ../development/python-modules/swift { };
 
