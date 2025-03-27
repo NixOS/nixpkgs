@@ -12,8 +12,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "beets-copyartifacts";
     owner = "adammillerio";
-    rev = "v${version}";
-    sha256 = "sha256-UTZh7T6Z288PjxFgyFxHnPt0xpAH3cnr8/jIrlJhtyU=";
+    tag = "v${version}";
+    sha = "sha256-UTZh7T6Z288PjxFgyFxHnPt0xpAH3cnr8/jIrlJhtyU=";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/adammillerio/beets-copyartifacts";
+    changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
   };
