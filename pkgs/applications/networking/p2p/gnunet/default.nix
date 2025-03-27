@@ -1,22 +1,22 @@
 { lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson, libsodium
+, libpulseaudio, libopus, libogg, jansson, libsodium, meson, ninja
 
 , postgresqlSupport ? true, libpq }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
-    hash = "sha256-b9BbaQdrOxqOfiCyVOBE/dTG2lMTGWMX894Ij30CXPI=";
+    hash = "sha256-BoUvn0gz5ssGvu3fhyerlMQ4U69yOnY4etdxYS4WPFc=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
+  nativeBuildInputs = [ pkg-config libtool makeWrapper meson ninja ];
   buildInputs = [
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libunistring libxml2 ncurses gettext libsodium
