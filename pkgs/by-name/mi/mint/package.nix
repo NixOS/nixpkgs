@@ -8,13 +8,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "mint";
-  version = "0.22.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    hash = "sha256-82Oi9UJ530rZNGa6XxC1hNvRfZQx3fTZxhfSQeZmz54=";
+    hash = "sha256-oSDg/tOdF/nk164jl7OZOINNWfAZmjAT/HFFFJNr3pk=";
   };
 
   format = "shards";
