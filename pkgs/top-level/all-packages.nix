@@ -13179,9 +13179,6 @@ with pkgs;
 
   inherit (xorg) xlsfonts;
 
-  freerdp3 = freerdp;
-  freerdpUnstable = freerdp;
-
   gimp = callPackage ../applications/graphics/gimp {
     autoreconfHook = buildPackages.autoreconfHook269;
     lcms = lcms2;
