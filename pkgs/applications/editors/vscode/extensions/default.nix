@@ -1692,8 +1692,8 @@ let
         mktplcRef = {
           name = "adwaita-github-theme";
           publisher = "egirlcatnip";
-          version = "1.0.5";
-          hash = "sha256-OvonS6137ICRUV5Tx4gD3we8nrza6ZgnRSs2SxFiCjU=";
+          version = "1.0.6";
+          hash = "sha256-6xooF8petGLn8Zlh8rCXG2RJdAcdt8t8GPwhfgc5Gxs=";
         };
         meta = {
           description = "Adwaita VS Code theme with Github syntax highlighting";
@@ -3823,7 +3823,7 @@ let
         mktplcRef = {
           name = "dark-molokai-theme";
           publisher = "nonylene";
-          version = "1.0.5";
+          version = "1.0.6";
           hash = "sha256-2qjV6iSz8DDU1yP1II9sxGSgiETmEtotFvfNjm+cTuI=";
         };
         meta = {
