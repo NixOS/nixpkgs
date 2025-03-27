@@ -27,7 +27,7 @@
 # Community
 
 * [Discourse Forum](https://discourse.nixos.org/)
-* [Matrix Chat](https://matrix.to/#/#community:nixos.org)
+* [Matrix Chat](https://matrix.to/#/#space:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
