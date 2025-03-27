@@ -3962,8 +3962,8 @@ let
         mktplcRef = {
           name = "material-product-icons";
           publisher = "PKief";
-          version = "1.5.0";
-          hash = "sha256-gKU21OS2ZFyzCQVQ1fa3qlahLBAcJaHDEcz7xof3P4A=";
+          version = "1.7.1";
+          hash = "sha256-knYRG4j8cU6frLXSpwvaSyE+EWFd1ne/ctYa5kqp5bw=";
         };
         meta = {
           license = lib.licenses.mit;
