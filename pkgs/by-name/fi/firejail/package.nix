@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/include/common.h \
       --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
 
-    # Workaround for regression introduced in 0.9.74 preventing usage of
+    # Workaround for regression introduced in 0.9.72 preventing usage of
     # end-of-options indicator "--"
     # See https://github.com/netblue30/firejail/issues/5659
     substituteInPlace src/firejail/sandbox.c \
