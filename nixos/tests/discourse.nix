@@ -104,7 +104,6 @@ import ./make-test-python.nix (
         services.dovecot2 = {
           enable = true;
           protocols = [ "imap" ];
-          modules = [ pkgs.dovecot_pigeonhole ];
         };
 
         services.postfix = {
