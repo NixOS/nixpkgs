@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   attrs,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,10 +13,11 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "attrs_strict";
-    hash = "sha256-5wSGNiAUbF8qi2Ac1FdNFIkT2yb8Bjb5Qf5CEuQl6v4=";
+  src = fetchFromGitHub {
+    owner = "bloomberg";
+    repo = "attrs-strict";
+    tag = version;
+    hash = "sha256-dDOD4Y57E+i8D0S4q+C6t7zjBTsS8q2UFiS22Dsp0Z8=";
   };
 
   build-system = [
@@ -29,8 +31,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "attrs_strict" ];
 
-  # No tests in the pypi archive
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     changelog = "https://github.com/bloomberg/attrs-strict/releases/tag/${version}";

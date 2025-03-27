@@ -314,6 +314,8 @@ self: super: with self; {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aiohttp-utils = callPackage ../development/python-modules/aiohttp-utils { };
+
   aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
 
   aiohue = callPackage ../development/python-modules/aiohue { };

@@ -13,11 +13,14 @@
   tenacity,
   setuptools,
   setuptools-scm,
+  aiohttp-utils,
   flask,
   hypothesis,
   iso8601,
   lzip,
   msgpack,
+  postgresql,
+  postgresqlTestHook,
   psycopg,
   pylzma,
   pytestCheckHook,
@@ -26,6 +29,7 @@
   pytest-postgresql,
   pytz,
   requests-mock,
+  systemd,
   types-deprecated,
   types-psycopg2,
   types-pytz,
@@ -70,12 +74,15 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    aiohttp-utils
     flask
     hypothesis
     iso8601
     lzip
     msgpack
-    psycopg
+    postgresql
+    postgresqlTestHook
+    psycopg.optional-dependencies.pool
     pylzma
     pytestCheckHook
     pytest-aiohttp
@@ -83,6 +90,7 @@ buildPythonPackage rec {
     pytest-postgresql
     pytz
     requests-mock
+    systemd
     types-deprecated
     types-psycopg2
     types-pytz
@@ -92,29 +100,14 @@ buildPythonPackage rec {
     pkgs.zstd
   ];
 
-  disabledTests =
-    [
-      # ValueError: Unable to configure handler 'systemd'
-      "test_logging_configure_from_yaml"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # FileExistsError: [Errno 17] File exists:
-      "test_uncompress_upper_archive_extension"
-      # AssertionError: |500 - 632.1152460000121| not within 100
-      "test_timed_coroutine"
-      "test_timed_start_stop_calls"
-      "test_timed"
-      "test_timed_no_metric"
-    ];
-
-  disabledTestPaths = [
-    # ModuleNotFoundError: No module named 'aiohttp_utils'
-    "swh/core/api/tests/test_async.py"
-    "swh/core/api/tests/test_rpc_server_asynchronous.py"
-    # ModuleNotFoundError: No module named 'systemd'
-    "swh/core/tests/test_logger.py"
-    # ModuleNotFoundError: No module named 'psycopg_pool'
-    "swh/core/db/tests"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # FileExistsError: [Errno 17] File exists:
+    "test_uncompress_upper_archive_extension"
+    # AssertionError: |500 - 632.1152460000121| not within 100
+    "test_timed_coroutine"
+    "test_timed_start_stop_calls"
+    "test_timed"
+    "test_timed_no_metric"
   ];
 
   meta = {
