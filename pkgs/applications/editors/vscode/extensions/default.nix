@@ -1770,8 +1770,8 @@ let
         mktplcRef = {
           name = "tokyo-night";
           publisher = "enkia";
-          version = "1.0.0";
-          hash = "sha256-/fM+aUDUzVJ6P38i+GrxhLv2eLJNa8OFkKsM4yPBy4c=";
+          version = "1.1.2";
+          hash = "sha256-oW0bkLKimpcjzxTb/yjShagjyVTUFEg198oPbY5J2hM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/enkia.tokyo-night/changelog";
