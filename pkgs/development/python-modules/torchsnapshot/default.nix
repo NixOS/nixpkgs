@@ -67,9 +67,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

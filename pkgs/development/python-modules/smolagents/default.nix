@@ -136,12 +136,6 @@ buildPythonPackage rec {
       "test_new_instance"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    "tests/test_final_answer.py"
-    "tests/test_types.py"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = {
