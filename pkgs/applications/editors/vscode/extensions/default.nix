@@ -893,8 +893,8 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "1.16.0";
-            hash = "sha256-caIOQ2/NafUFp2J4odIM55kzOS3Of+WO84M5xNfkhf4=";
+            version = "1.20.0";
+            hash = "sha256-jkoa5X5vswJBvA69gstl/GUDHAvk94SVSV4lCy2yyWw=";
           };
           meta = {
             changelog = "https://marketplace.visualstudio.com/items/Catppuccin.catppuccin-vsc-icons/changelog";
