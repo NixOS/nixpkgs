@@ -5566,8 +5566,8 @@ let
         mktplcRef = {
           publisher = "yzhang";
           name = "dictionary-completion";
-          version = "1.2.2";
-          hash = "sha256-dpJcJARRKzRNHfXs/qknud8OQ8xIyeaVnt/EcDq0k4E=";
+          version = "1.3.1";
+          hash = "sha256-sin2kTx7aXFPhtraKUjsowuV8Z2z237RIePL4F/JiPM=";
         };
         meta = {
           description = "Visual Studio Code extension to help user easyly finish long words ";
