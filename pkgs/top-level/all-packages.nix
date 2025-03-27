@@ -7782,8 +7782,6 @@ with pkgs;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
-  mdl = callPackage ../development/tools/misc/mdl { };
-
   meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
 
   python-matter-server = with python3Packages; toPythonApplication (
@@ -7868,9 +7866,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  patchelf = callPackage ../development/tools/misc/patchelf { };
-
-  patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
+  patchelfUnstable = lowPrio (callPackage ../by-name/pa/patchelf/unstable.nix { });
 
   pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
@@ -9773,8 +9769,6 @@ with pkgs;
     ogre_13 ogre_14;
 
   ogre = ogre_14;
-
-  one_gadget = callPackage ../development/tools/misc/one_gadget { };
 
   oneDNN = callPackage ../development/libraries/oneDNN { };
 
