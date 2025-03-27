@@ -20,14 +20,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.24";
+  version = "0.5.4.25";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
     rev = version;
-    hash = "sha256-OTm53kUZa/65JHRAiN3VWEGWhKwzstNZ1dxwTSPZ04g=";
+    hash = "sha256-pLNAgyYqujk+xvHZjq98kzTG47G4C2JvSTDoS7UTNeo=";
   };
 
   nativeBuildInputs = [
