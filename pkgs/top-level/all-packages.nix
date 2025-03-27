@@ -10179,8 +10179,9 @@ with pkgs;
   };
 
   SDL = SDL_compat;
+  SDL2 = sdl2-compat;
 
-  SDL2 = callPackage ../development/libraries/SDL2 {
+  SDL2_classic = callPackage ../by-name/sd/SDL2_classic/package.nix {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
@@ -15756,7 +15757,7 @@ with pkgs;
 
   devilutionx = callPackage ../games/devilutionx {
     fmt = fmt_9;
-    SDL2 = SDL2.override {
+    SDL2_classic = SDL2_classic.override {
       withStatic = true;
     };
   };
