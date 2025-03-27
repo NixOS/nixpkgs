@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.243.0";
+  version = "0.245.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-U1ZQFRPL9iYtCHJXBdgCgaE1LZgKOWdYJ1gFAsgWPI8=";
+    hash = "sha256-4EWBDfDCiOF9LcON5XT77kNcAXBd57ZjsSGB+hzRgOw=";
   };
 
-  vendorHash = "sha256-InVmtV3PH75exsftC3sxz9/xt9drJPlXgRYqvqnp+yM=";
+  vendorHash = "sha256-XkUkCraKR9AP0lRZa+u1YMWzLZV+xxWZgbAlxkVjsXM=";
 
   excludedPackages = [
     "bundle/internal"
@@ -39,6 +39,7 @@ buildGoModule rec {
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
       # Use venv
+      "TestPatchWheel"
       "TestVenvSuccess"
     ]);
 
