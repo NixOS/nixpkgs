@@ -4,6 +4,7 @@
   fetchFromGitHub,
   callPackage,
   makeWrapper,
+  removeReferencesTo,
   runCommand,
   writeText,
   targetPackages,
@@ -153,6 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${targetPackages.stdenv.cc}/bin \
       --set-default CC ${targetPackages.stdenv.cc}/bin/cc
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${ldcBootstrap} '{}' +
+  '';
+
+  disallowedReferences = [ ldcBootstrap ];
 
   meta = with lib; {
     description = "LLVM-based D compiler";
