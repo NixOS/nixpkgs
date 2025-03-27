@@ -12,7 +12,7 @@
 # Export templates version should be kept in sync with Godot version.
 # https://docs.godotengine.org/en/stable/tutorials/export/exporting_projects.html#export-templates
 stdenvNoCC.mkDerivation {
-  pname = "godot-export-templates";
+  pname = "godot-export-templates-bin";
   version = version;
 
   src = fetchurl {
