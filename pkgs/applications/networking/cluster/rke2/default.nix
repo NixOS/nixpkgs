@@ -25,13 +25,19 @@ in
     }
   ) extraArgs;
 
-  rke2_testing = common (
-    (import ./testing/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "testing"
-      ];
-    }
-  ) extraArgs;
+  rke2_testing =
+    (common (
+      (import ./testing/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "testing"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        meta.knownVulnerabilities = [
+          "The RKE2 testing channel no longer serves releases, this package will not receive updates."
+        ];
+      };
 }
