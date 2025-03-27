@@ -3918,8 +3918,8 @@ let
         mktplcRef = {
           name = "phoenix";
           publisher = "phoenixframework";
-          version = "0.1.2";
-          hash = "sha256-T+YNRR8jAzNagmoCDzjbytBDFtPhNn289Kywep/w8sw=";
+          version = "0.1.3";
+          hash = "sha256-UuGqYLz/4lc5WngrRLkAbEXnOW5pvTlDhHO0aB+LRgk=";
         };
         meta = {
           description = "Syntax highlighting support for HEEx / Phoenix templates";
