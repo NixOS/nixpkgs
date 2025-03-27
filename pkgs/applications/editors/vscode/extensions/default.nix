@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.1.9";
-          hash = "sha256-6/UV3Q5FToF+OXCe2Z4oPYTKKGVoXSXgyk8dBd5kp7E=";
+          version = "8.2.3";
+          hash = "sha256-QOYTJSO0kGXSjvLnkbmbXSaKZcvWqO07yvZ/PNe8Fmc=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
