@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
-    hash = "sha256-bmU3799pZVUyrsJ92MKgn5NIqCW76ml4N42Ewi+VWvI=";
+    hash = "sha256-rsQzMvOoQEuushd0jBGQt9j6zXj2G1SMax8d4QoDV6s=";
   };
 
   nativeBuildInputs = [
