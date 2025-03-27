@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  tbb_2022_0,
+  tbb_2021_11,
   useTBB ? true,
 }:
 
@@ -22,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals useTBB [ tbb_2022_0 ];
+  buildInputs = lib.optionals useTBB [
+    # 2022.0 crashes on macOS at the moment
+    tbb_2021_11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BLAKE3_USE_TBB" useTBB)

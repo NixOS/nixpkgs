@@ -3383,8 +3383,6 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
-  graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
-
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
   graylogPlugins = recurseIntoAttrs (
@@ -7269,9 +7267,10 @@ with pkgs;
   inherit (callPackages ../servers/apache-kafka { })
     apacheKafka_3_7
     apacheKafka_3_8
-    apacheKafka_3_9;
+    apacheKafka_3_9
+    apacheKafka_4_0;
 
-  apacheKafka = apacheKafka_3_8;
+  apacheKafka = apacheKafka_4_0;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
@@ -13178,20 +13177,6 @@ with pkgs;
 
   inherit (xorg) xlsfonts;
 
-  inherit
-    ({
-      freerdp = callPackage ../applications/networking/remote/freerdp {
-        inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
-        inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
-      };
-      freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {};
-    })
-    freerdp
-    freerdp3
-    ;
-
-  freerdpUnstable = freerdp;
-
   gimp = callPackage ../applications/graphics/gimp {
     autoreconfHook = buildPackages.autoreconfHook269;
     lcms = lcms2;
@@ -17322,7 +17307,7 @@ with pkgs;
     ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_25;
+    nix = nixVersions.nix_2_26;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
