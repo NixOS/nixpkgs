@@ -34,7 +34,8 @@ buildGoModule rec {
       SimpleHTTPServer but with many features.
     '';
     homepage = "https://github.com/nodauf/Swego";
-    license = with licenses; [ gpl2Only ];
+    changelog = "https://github.com/nodauf/Swego/releases/tag/${src.tag}";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
