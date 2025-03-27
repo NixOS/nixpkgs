@@ -3159,8 +3159,8 @@ let
         mktplcRef = {
           name = "caddyfile-support";
           publisher = "matthewpi";
-          version = "0.3.0";
-          hash = "sha256-1yiOnvC2w33kiPRdQYskee38Cid/GOj9becLadP1fUY=";
+          version = "0.4.0";
+          hash = "sha256-J4O112VM3Ullyy39ZLw9ieBxVCJQ6yBxdiKtvXyOULo=";
         };
         meta = {
           description = "Rich Caddyfile support for Visual Studio Code";
