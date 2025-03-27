@@ -56,9 +56,15 @@ stdenv.mkDerivation rec {
       libX11
     ];
 
+  strictDeps = true;
+
   postPatch = ''
     patchShebangs .
   '';
+
+  configureFlags = [
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+  ];
 
   enableParallelBuilding = true;
   doCheck = (!stdenv.hostPlatform.isDarwin); # times out
