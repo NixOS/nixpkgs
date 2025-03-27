@@ -2,6 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
+  makeWrapper,
+  runCommand,
+  writeText,
+  targetPackages,
   cmake,
   ninja,
   llvm_18,
@@ -11,11 +16,6 @@
   gdb,
   unzip,
   darwin,
-  callPackage,
-  makeWrapper,
-  runCommand,
-  writeText,
-  targetPackages,
 
   ldcBootstrap ? callPackage ./bootstrap.nix { },
 }:
