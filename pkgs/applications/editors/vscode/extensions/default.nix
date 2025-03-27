@@ -4692,10 +4692,10 @@ let
 
       supermaven.supermaven = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          hash = "sha256-O3AN8fy28ZSun+k6MJnJdFcmwDDE21ib+I9HtDE0JwU=";
+          hash = "sha256-/fZungx+wdtKo80KCGZa4WfHMTT6Imb5MBgQ8gAGhfQ=";
           name = "supermaven";
           publisher = "supermaven";
-          version = "0.1.42";
+          version = "1.1.12";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/supermaven.supermaven/changelog";
