@@ -1,4 +1,14 @@
 {
+  abbrev = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0hj2qyx7rzpc7awhvqlm597x7qdxwi4kkml4aqnp5jylmsm4w6xd";
+      type = "gem";
+    };
+    version = "0.1.2";
+  };
   addressable = {
     dependencies = [ "public_suffix" ];
     groups = [ "default" ];
@@ -45,10 +55,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0lmnx4sa9wm9ffqsjbybxzlgz6h4clf96s694sdn2lz1qcx0fq2i";
+      sha256 = "1jb72jj18a9l98ghmi8ny9nys4w3hcny0xyi0dzl3ms0knsrrn3i";
       type = "gem";
     };
-    version = "1.1068.0";
+    version = "1.1075.0";
   };
   aws-sdk-core = {
     dependencies = [
@@ -57,15 +67,16 @@
       "aws-sigv4"
       "base64"
       "jmespath"
+      "logger"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0cjdqmy5hjbgzc0iac1i143va76qgp7jc7hg1aviy1n8cgywq44y";
+      sha256 = "0jmd8rf68jf99ksklwaflym07issvr1il1qpzmpaf59avhcxgjjy";
       type = "gem";
     };
-    version = "3.220.1";
+    version = "3.221.0";
   };
   aws-sdk-kms = {
     dependencies = [
@@ -673,6 +684,16 @@
     };
     version = "2.10.1";
   };
+  logger = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "00q2zznygpbls8asz5knjvvj2brr3ghmqxgr83xnrdj4rk3xwvhr";
+      type = "gem";
+    };
+    version = "1.7.0";
+  };
   mini_magick = {
     groups = [ "default" ];
     platforms = [ ];
@@ -1034,10 +1055,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1lbwk77g28jjhin3qjrh7ldfsgf7aszi9j60mp8yz10i3wyqgvqj";
+      sha256 = "14iqgwrdfzc00b3dc5pal4gm9n7w5hn3wdgmsvirwn7n47km0k5i";
       type = "gem";
     };
-    version = "0.4.0";
+    version = "0.4.1";
   };
   xcpretty-travis-formatter = {
     dependencies = [ "xcpretty" ];
