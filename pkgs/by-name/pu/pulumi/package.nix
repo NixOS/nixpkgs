@@ -10,6 +10,7 @@
   callPackage,
   testers,
   pulumi,
+  python3Packages,
   nix-update-script,
   _experimental-update-script-combinators,
 }:
@@ -140,6 +141,16 @@ buildGoModule rec {
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+      # Pulumi currently requires protobuf4, but Nixpkgs defaults to a newer
+      # version. Test that we can actually build the package with protobuf4.
+      # https://github.com/pulumi/pulumi/issues/16828
+      # https://github.com/NixOS/nixpkgs/issues/351751#issuecomment-2462163436
+      pythonPackage =
+        (python3Packages.overrideScope (
+          final: _: {
+            protobuf = final.protobuf4;
+          }
+        )).pulumi;
       pulumiTestHookShellcheck = testers.shellcheck {
         name = "pulumi-test-hook-shellcheck";
         src = ./extra/pulumi-test-hook.sh;
