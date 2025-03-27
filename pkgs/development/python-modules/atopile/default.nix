@@ -2,6 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  cmake,
+  ninja,
   # build-system
   hatchling,
   scikit-build-core,
@@ -14,8 +17,8 @@
   cattrs,
   click,
   deepdiff,
+  atopile-easyeda2ato,
   easyeda2ato,
-  eseries,
   fake-useragent,
   fastapi,
   gitpython,
@@ -39,6 +42,24 @@
   uvicorn,
   watchfiles,
   pyyaml,
+  black,
+  cookiecutter,
+  dataclasses-json,
+  deprecated,
+  freetype-py,
+  kicadcliwrapper,
+  matplotlib,
+  more-itertools,
+  pathvalidate,
+  psutil,
+  pydantic-settings,
+  questionary,
+  ruff,
+  sexpdata,
+  shapely,
+  typer,
+  pythonOlder,
+
   # tests
   pytestCheckHook,
   pytest-xdist,
@@ -47,21 +68,30 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.2.69";
+  version = "0.3.20";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-mQYnaWch0lVzz1hV6WboYxBGe3ruw+mK2AwMx13DQJM=";
+    hash = "sha256-ejzTzSip/96eUNhBzGaLiOWs8l3SWBeDa9Ry6nkxCNw=";
   };
 
   build-system = [
     hatchling
     scikit-build-core
     hatch-vcs
-    nanobind
+    (nanobind.override { withCheck = false; })
+  ];
+
+  dontConfigure = true; # skip cmake configure invocation
+
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
 
   dependencies = [
@@ -72,7 +102,7 @@ buildPythonPackage rec {
     click
     deepdiff
     easyeda2ato
-    eseries
+    # eseries
     fake-useragent
     fastapi
     gitpython
@@ -96,16 +126,46 @@ buildPythonPackage rec {
     uvicorn
     watchfiles
     pyyaml # required for ato
+
+    atopile-easyeda2ato
+    black # used as a ddependency
+    cookiecutter
+    dataclasses-json
+    deprecated
+    freetype-py
+    kicadcliwrapper
+    matplotlib
+    more-itertools
+    pathvalidate
+    psutil
+    pydantic-settings
+    questionary
+    ruff
+    sexpdata
+    shapely
+    typer
   ];
 
-  pythonRelaxDeps = [ "antlr4-python3-runtime" ];
+  preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "scikit-build-core==0.9.2" "scikit-build-core>=0.9.2"
+  '';
+
+  pythonRelaxDeps = [
+    "antlr4-python3-runtime"
+    "black"
+    "psutil"
+  ];
 
   pythonImportsCheck = [ "atopile" ];
 
   preCheck = ''
+    substituteInPlace test/conftest.py \
+      --replace-fail "worker_id =" "worker_id = None #"
+
     substituteInPlace pyproject.toml \
       --replace-fail "--html=artifacts/test-report.html" "" \
-      --replace-fail "--self-contained-html" ""
+      --replace-fail "--self-contained-html" "" \
   '';
 
   nativeCheckInputs = [
