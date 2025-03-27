@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "azure-storage-azcopy";
-  version = "10.28.0";
+  version = "10.28.1";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-azcopy";
     tag = "v${version}";
-    hash = "sha256-dRS96M4KMEQaKYVA0fNgmmfH2JYVFbEjH8C3xA9knes=";
+    hash = "sha256-9TWccJYcQrl986GyLAvQPTubg7P6lT+OjdkTdjww7nU=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-TwzcjhL8STH8tASTp2kQjn6bYyn/Ab+EJwvIGOBT+1A=";
+  vendorHash = "sha256-Cno1H6p4qr+0CDGSd6TyCVEi+lLGoruwGVkDe8lMg08=";
 
   doCheck = false;
 
