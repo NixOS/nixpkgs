@@ -1,6 +1,7 @@
 { lib, config, newScope, dbus, IOKit, CoreFoundation, Foundation, Security }:
 
 lib.makeScope newScope (self: with self; {
+  bash_env = callPackage ./bash-env.nix { inherit IOKit Foundation; };
   gstat = callPackage ./gstat.nix { inherit Security; };
   formats = callPackage ./formats.nix { inherit IOKit Foundation; };
   polars = callPackage ./polars.nix { inherit IOKit Foundation; };
