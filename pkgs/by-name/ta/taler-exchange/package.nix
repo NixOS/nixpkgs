@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "0.14.1";
+  version = "0.14.6-unstable-2025-03-02";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "v${finalAttrs.version}";
+    rev = "13e058a902a3dbee9d7fe327030b88c2d126675b";
     fetchSubmodules = true;
-    hash = "sha256-DD6fX54K1q4f2d/IqC+urVpMkypDRaL3lrBoQieGviI=";
+    hash = "sha256-fqlYpFggQkB/IqD6V01ec+G4EtoNaA/FXigM+jqIMe0=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
