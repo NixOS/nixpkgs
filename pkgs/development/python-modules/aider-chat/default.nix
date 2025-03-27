@@ -188,57 +188,43 @@ let
     };
 
     passthru = {
-      withPlaywright = aider-chat.overridePythonAttrs (
+      withOptional =
         {
-          dependencies,
-          makeWrapperArgs,
-          propagatedBuildInputs ? [ ],
+          withPlaywright ? false,
+          withBrowser ? false,
+          withHelp ? false,
+          withAll ? false,
           ...
         }:
-        {
-          dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
-          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
-          makeWrapperArgs = makeWrapperArgs ++ [
-            "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
-            "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
-          ];
-        }
-      );
+        aider-chat.overridePythonAttrs (
+          {
+            dependencies,
+            makeWrapperArgs,
+            propagatedBuildInputs ? [ ],
+            ...
+          }:
+          let
+            playwrightDeps =
+              if withPlaywright || withAll then aider-chat.optional-dependencies.playwright else [ ];
+            browserDeps = if withBrowser || withAll then aider-chat.optional-dependencies.browser else [ ];
+            helpDeps = if withHelp || withAll then aider-chat.optional-dependencies.help else [ ];
 
-      withBrowser = aider-chat.overridePythonAttrs (
-        { dependencies, ... }:
-        {
-          dependencies = dependencies ++ aider-chat.optional-dependencies.browser;
-        }
-      );
-
-      withHelp = aider-chat.overridePythonAttrs (
-        { dependencies, ... }:
-        {
-          dependencies = dependencies ++ aider-chat.optional-dependencies.help;
-        }
-      );
-
-      withOptional = aider-chat.overridePythonAttrs (
-        {
-          dependencies,
-          makeWrapperArgs,
-          propagatedBuildInputs ? [ ],
-          ...
-        }:
-        {
-          dependencies =
-            dependencies
-            ++ aider-chat.optional-dependencies.playwright
-            ++ aider-chat.optional-dependencies.browser
-            ++ aider-chat.optional-dependencies.help;
-          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
-          makeWrapperArgs = makeWrapperArgs ++ [
-            "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
-            "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
-          ];
-        }
-      );
+            playwrightInputs = if withPlaywright || withAll then [ playwright-driver.browsers ] else [ ];
+            playwrightArgs =
+              if withPlaywright || withAll then
+                [
+                  "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
+                  "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
+                ]
+              else
+                [ ];
+          in
+          {
+            dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps;
+            propagatedBuildInputs = propagatedBuildInputs ++ playwrightInputs;
+            makeWrapperArgs = makeWrapperArgs ++ playwrightArgs;
+          }
+        );
     };
 
     meta = {
