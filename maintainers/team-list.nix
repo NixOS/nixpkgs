@@ -810,16 +810,20 @@ with lib.maintainers;
     members = [
       _9999years
       Gabriella439
+      curran
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
   };
 
+  # same as https://github.com/orgs/NixOS/teams/nix-team
   nix = {
     members = [
       eelco
-      grahamc
-      pierron
+      mic92
+      tomberek
+      roberth
+      ericson2314
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
