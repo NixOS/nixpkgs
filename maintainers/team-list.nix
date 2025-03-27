@@ -331,6 +331,7 @@ with lib.maintainers;
       AndersonTorres
       adisbladis
       linj
+      panchoh
     ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
