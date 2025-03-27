@@ -18932,6 +18932,13 @@
     githubId = 24578572;
     name = "Blake North";
   };
+  poz = {
+    name = "Jacek Poziemski";
+    email = "poz@poz.pet";
+    matrix = "@poz:poz.pet";
+    github = "imnotpoz";
+    githubId = 64381190;
+  };
   ppenguin = {
     name = "Jeroen Versteeg";
     email = "hieronymusv@gmail.com";
