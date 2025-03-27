@@ -18554,6 +18554,8 @@ self: super: with self; {
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
 
+  unstructured-client = callPackage ../development/python-modules/unstructured-client { };
+
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
   untangle = callPackage ../development/python-modules/untangle { };
