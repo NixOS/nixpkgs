@@ -14554,6 +14554,23 @@ with pkgs;
 
   gimpPlugins = recurseIntoAttrs (callPackage ../applications/graphics/gimp/plugins { });
 
+  gimp2 = callPackage ../applications/graphics/gimp/2.0 {
+    autoreconfHook = buildPackages.autoreconfHook269;
+    lcms = lcms2;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
+
+  gimp2-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
+    gimpPlugins = gimp2Plugins;
+    plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
+  };
+
+  gimp2Plugins = recurseIntoAttrs (
+    callPackage ../applications/graphics/gimp/plugins {
+      gimp = gimp2;
+    }
+  );
+
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
   };
