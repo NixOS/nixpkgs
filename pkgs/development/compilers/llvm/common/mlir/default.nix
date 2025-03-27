@@ -45,6 +45,13 @@ stdenv.mkDerivation rec {
     ./gnu-install-dirs.patch
   ];
 
+  # Don't clobber the MLIR_TABLEGEN_EXE that we pass in, and instead let the
+  # installed MLIRConfig.cmake refer to the mlir-tblgen we pass in cmakeFlags.
+  postPatch = ''
+    substituteInPlace cmake/modules/CMakeLists.txt \
+      --replace-fail 'set(MLIR_CONFIG_TABLEGEN_EXE mlir-tblgen)' ""
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
