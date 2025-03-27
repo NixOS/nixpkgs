@@ -24669,6 +24669,12 @@
     github = "TyberiusPrime";
     githubId = 1257580;
   };
+  Tygo-van-den-Hurk = {
+    name = "Tygo van den Hurk";
+    github = "Tygo-van-den-Hurk";
+    githubId = 91738110;
+    keys = [ { fingerprint = "1AAE 628A 2D49 0597 17AE  A7F8 7CA2 CBB2 7505 8A44"; } ];
+  };
   tylerjl = {
     email = "tyler+nixpkgs@langlois.to";
     github = "tylerjl";
