@@ -56,12 +56,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.0a1";
+  version = "6.0.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Yjii1YUmdWdrrSLe3trAoATJXt2bfjc0JX5CBMVIEq8=";
+    hash = "sha256-yqMVtwCbDdbLVbw9iYmhUQLteF3PeTrlhfXnbft6UZ4=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -69,6 +69,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "spyder-kernels"
+  ];
 
   dependencies = [
     aiohttp
