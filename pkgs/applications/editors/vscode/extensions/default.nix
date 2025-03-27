@@ -4431,8 +4431,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.7";
-          hash = "sha256-7vLT5vvqqwT0Tlt/iHXW0ktp2It7l+lxUWNJEljIp4c=";
+          version = "0.9.12";
+          hash = "sha256-ahfVRbTAKmmqOWV7vHK0+KLwYSUVgKqlIG1+lV3E5c4=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
