@@ -23,7 +23,6 @@ let
         buildGoModule = buildGo123Module;
       }
     );
-    teleport = teleport_16;
     teleport_17 = import ./17 (
       args
       // {
@@ -31,6 +30,7 @@ let
         buildGoModule = buildGo123Module;
       }
     );
+    teleport = teleport_17;
   };
   # Ensure the following callPackages invocation includes everything 'generic' needs.
   f' = lib.setFunctionArgs f (builtins.functionArgs (import ./generic.nix));
