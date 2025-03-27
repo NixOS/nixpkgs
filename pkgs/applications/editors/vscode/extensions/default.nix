@@ -5603,8 +5603,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.10";
-          hash = "sha256-K1nczR059BsiHpT1xdtJjpFLl5krt4H9+CrEsIycq9U=";
+          version = "0.1.13";
+          hash = "sha256-Si8/piNNktcyRY8o8o9my9sP9NEwrNuySVjlyadDjtU=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";
