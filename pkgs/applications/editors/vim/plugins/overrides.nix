@@ -1768,6 +1768,7 @@ in
     checkInputs = [
       # optional cmp integration
       self.nvim-cmp
+      self.lualine-nvim
     ];
     dependencies = with self; [ plenary-nvim ];
     nvimSkipModule = [
@@ -2107,6 +2108,9 @@ in
       plenary-nvim
       nui-nvim
     ];
+    nvimSkipModule = [
+      "neo-tree.types.fixes.compat-0.10"
+    ];
   };
 
   netman-nvim = super.netman-nvim.overrideAttrs {
@@ -2274,7 +2278,12 @@ in
 
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
-    nvimSkipModule = [ "nvim-highlight-colors.color.converters_spec" ];
+    nvimSkipModule = [
+      "nvim-highlight-colors.buffer_utils_spec"
+      "nvim-highlight-colors.color.converters_spec"
+      "nvim-highlight-colors.color.patterns_spec"
+      "nvim-highlight-colors.color.utils_spec"
+    ];
   };
 
   nvim-java = super.nvim-java.overrideAttrs {
@@ -2314,6 +2323,15 @@ in
 
   nvim-java-test = super.nvim-java-test.overrideAttrs {
     dependencies = [ self.nvim-java-core ];
+  };
+
+  nvim-lilypond-suite = super.nvim-lilypond-suite.overrideAttrs {
+    nvimSkipModule = [
+      # Option not set immediately
+      "nvls.errors.lilypond-book"
+      "nvls.tex"
+      "nvls.texinfo"
+    ];
   };
 
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
