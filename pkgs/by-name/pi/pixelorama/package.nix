@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot.export-templates-bin}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "${godot.export-templates-bin}"/share/godot/export_templates "$HOME"/.local/share/godot/
     mkdir -p build
     godot4 --headless --export-release "${preset}" ./build/pixelorama
 

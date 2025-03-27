@@ -326,8 +326,8 @@ let
               runHook preBuild
 
               export HOME=$(mktemp -d)
-              mkdir -p $HOME/.local/share/godot/export_templates
-              ln -s "${pkg.export-templates-bin}" "$HOME/.local/share/godot/export_templates/${dottedVersion}"
+              mkdir -p $HOME/.local/share/godot/
+              ln -s "${pkg.export-templates-bin}"/share/godot/export_templates "$HOME"/.local/share/godot/
 
               godot --headless -s create-scene.gd
 

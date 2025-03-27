@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       GODOT = lib.getExe godot_4_4;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
-      EXPORT_TEMPLATE = "${godot_4_4.export-templates-bin}";
+      EXPORT_TEMPLATE = "${godot_4_4.export-templates-bin}/share/godot/export_templates";
       BUILD_TYPE = "${finalAttrs.buildType}";
     };
 
@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     # Godot looks for export templates in HOME
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4_4.export-templates-bin}" "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.$GODOT_RELEASE"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "$EXPORT_TEMPLATE" "$HOME"/.local/share/godot/
   '';
 
   postInstall = ''
