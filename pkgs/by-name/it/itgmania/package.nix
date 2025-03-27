@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of StepMania 5.1, improved for the post-ITG community";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ftsimas ];
+    maintainers = with lib.maintainers; [
+      ftsimas
+      maxwell-lt
+    ];
     mainProgram = "itgmania";
   };
 })
