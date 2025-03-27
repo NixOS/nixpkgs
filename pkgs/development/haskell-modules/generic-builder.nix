@@ -687,13 +687,11 @@ stdenv.mkDerivation ({
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
 
     ${optionalString jsexe.shouldCopy ''
-      if [ -d ${binDir} ]; then
-        for jsexeDir in dist/build/*/*.jsexe; do
-          bn=$(basename $jsexeDir)
-          exe="''${bn%.jsexe}"
-          cp -r dist/build/$exe/$exe.jsexe ${binDir}
-        done
-      fi
+      for jsexeDir in dist/build/*/*.jsexe; do
+        bn=$(basename $jsexeDir)
+        exe="''${bn%.jsexe}"
+        cp -r dist/build/$exe/$exe.jsexe ${binDir}
+      done
     ''}
 
     ${optionalString enableSeparateDocOutput ''
@@ -716,13 +714,11 @@ stdenv.mkDerivation ({
     runHook postInstallIntermediates
 
     ${optionalString jsexe.shouldSymlink ''
-      if [ -d ${binDir} ]; then
-        for jsexeDir in $installIntermediatesDir/build/*/*.jsexe; do
-          bn=$(basename $jsexeDir)
-          exe="''${bn%.jsexe}"
-          (cd ${binDir} && ln -s $installIntermediatesDir/build/$exe/$exe.jsexe)
-        done
-      fi
+      for jsexeDir in $installIntermediatesDir/build/*/*.jsexe; do
+        bn=$(basename $jsexeDir)
+        exe="''${bn%.jsexe}"
+        (cd ${binDir} && ln -s $installIntermediatesDir/build/$exe/$exe.jsexe)
+      done
     ''}
   '';
 
