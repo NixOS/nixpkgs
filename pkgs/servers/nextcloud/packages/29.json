@@ -369,6 +369,16 @@
       "agpl"
     ]
   },
+  "twofactor_admin": {
+    "hash": "sha256-zZvH7xfSooKBG4CKvSuf8D/6KnKEunLa+DRLAkWGoow=",
+    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.8.0/twofactor_admin.tar.gz",
+    "version": "4.8.0",
+    "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "twofactor_nextcloud_notification": {
     "hash": "sha256-4fXWgDeiup5/Gm9hdZDj/u07rp/Nzwly53aLUT/d0IU=",
     "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.9.0/twofactor_nextcloud_notification-v3.9.0.tar.gz",
