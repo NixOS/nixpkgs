@@ -71,9 +71,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }
