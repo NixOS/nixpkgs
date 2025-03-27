@@ -1220,8 +1220,8 @@ let
         mktplcRef = {
           publisher = "daohong-emilio";
           name = "yash";
-          version = "0.2.9";
-          hash = "sha256-5JX6Z7xVPoqGjD1/ySc9ObD14O1sWDpvBj9VbtGO1Cg=";
+          version = "0.3.0";
+          hash = "sha256-vQ0r1/DEfA6ebB4NmUciO5d4zRWS4pZeTXspWVRfe4g=";
         };
         meta = {
           license = lib.licenses.mit;
