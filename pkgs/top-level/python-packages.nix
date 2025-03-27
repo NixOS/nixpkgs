@@ -3945,7 +3945,7 @@ self: super: with self; {
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
-    abseil-cpp = pkgs.abseil-cpp.override { cxxStandard = "14"; };
+    inherit (pkgs) abseil-cpp;
   };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
