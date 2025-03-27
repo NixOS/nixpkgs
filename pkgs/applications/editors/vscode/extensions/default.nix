@@ -1545,8 +1545,8 @@ let
         mktplcRef = {
           name = "dotenv-vscode";
           publisher = "dotenv";
-          version = "0.28.0";
-          hash = "sha256-KiQgFvbfLsA/ADROoG6y6c/i0XHuTNH2AN+6mWEm0P8=";
+          version = "0.28.1";
+          hash = "sha256-Ye3T/u/2mmezAi1ErtJBX7M/3rAb7Mc3wvMGJaX3r5s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dotenv.dotenv-vscode/changelog";
