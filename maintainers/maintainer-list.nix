@@ -18166,6 +18166,14 @@
     githubId = 20342389;
     name = "paneku";
   };
+  panchoh = {
+    name = "pancho horrillo";
+    email = "pancho@pancho.name";
+    matrix = "@panchoh:matrix.org";
+    github = "panchoh";
+    githubId = 471059;
+    keys = [ { fingerprint = "4430 F502 8B19 FAF4 A40E  C4E8 11E0 447D 4ABB A7D0"; } ];
+  };
   panda2134 = {
     email = "me+nixpkgs@panda2134.site";
     github = "panda2134";
