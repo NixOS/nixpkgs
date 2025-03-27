@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
 
-  meta = with lib; {
+  meta = {
     description = "Extended cp(1)";
     homepage = "https://github.com/tarka/xcp";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ lom ];
     mainProgram = "xcp";
   };
 })
