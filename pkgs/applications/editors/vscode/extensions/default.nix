@@ -107,8 +107,8 @@ let
         mktplcRef = {
           name = "vscode-ron";
           publisher = "a5huynh";
-          version = "0.10.0";
-          hash = "sha256-DmyYE7RHOX/RrbIPYCq/x0l081SzmyBAd7yHSUOPkOA=";
+          version = "0.11.0";
+          hash = "sha256-xIGOgK/kcdwm8EicAGIac5zPqRxw6ZTRLwteC03NKQ8=";
         };
         meta = {
           license = lib.licenses.mit;
