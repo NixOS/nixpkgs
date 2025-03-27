@@ -165,8 +165,8 @@ let
         mktplcRef = {
           name = "vscode-hie-server";
           publisher = "alanz";
-          version = "0.0.27"; # see the note above
-          sha256 = "1mz0h5zd295i73hbji9ivla8hx02i4yhqcv6l4r23w3f07ql3i8h";
+          version = "0.2.1"; # see the note above
+          sha256 = "sha256-/RA+7OnoR5Nu2bK6dFEL8aZW+CJkTeM0bKG6k5X1g+I=";
         };
         meta = {
           license = lib.licenses.mit;
