@@ -21,7 +21,7 @@ let
 
   owner = "kaii-lb";
   name = "overskride";
-  version = "0.6.1";
+  version = "0.6.2";
 
 in
 rustPlatform.buildRustPackage {
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = name;
     rev = "v${version}";
-    hash = "sha256-SqaPhub/HwZz7uBg/kevH8LvPDVLgRd/Rvi03ivNrRc=";
+    hash = "sha256-eMT0wNTpW75V08rmwFtU6NkmZ4auiujzYgbcktewNcI=";
   };
 
   useFetchCargoVendor = true;
