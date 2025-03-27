@@ -2982,8 +2982,8 @@ let
         mktplcRef = {
           name = "vscode-publint";
           publisher = "Kravets";
-          version = "0.0.3";
-          hash = "sha256-1KVqfCVyCn5LJOdazp3W6FECRGOviVC4+FHn6vTn5DI=";
+          version = "0.1.0";
+          hash = "sha256-GfIbQajdBpC0i8x7YlKYgpBwweWop4OBUU7dIDi9Yvk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Kravets.vscode-publint/changelog";
