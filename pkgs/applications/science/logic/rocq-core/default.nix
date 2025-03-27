@@ -12,7 +12,7 @@
 , version, rocq-version ? null
 }@args:
 let
-  lib = import ../../../../build-support/coq/extra-lib.nix { inherit (args) lib; };
+  lib = import ../../../../build-support/rocq/extra-lib.nix { inherit (args) lib; };
 
   release = {
    "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";

@@ -21,6 +21,9 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  # renable after https://github.com/nametake/golangci-lint-langserver/pull/52
+  doCheck = false;
+
   nativeCheckInputs = [
     golangci-lint
     writableTmpDirAsHomeHook

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bt0WCmnk/DAEuQeEvBe5Vdk/AxpfRAafPiEJ7v8HK8Y=";
+    hash = "sha256-DrHoVAIPD/F6pY04QXVilXiwD/nWzeVquuHzRiq2sRY=";
   };
 
   # remove if updating to rust 1.85
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-BxJmoJbnGfsA+YCvzUvgnkoHl/ClrwHoE3NjlctjCxA=";
+  cargoHash = "sha256-Jyus5L0z0Z6Qf9vBcO6/h+py0JNKG1FS6qXONUM26BM=";
 
   env.RUSTC_BOOTSTRAP = 1;
 

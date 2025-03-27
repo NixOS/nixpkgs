@@ -7269,9 +7269,10 @@ with pkgs;
   inherit (callPackages ../servers/apache-kafka { })
     apacheKafka_3_7
     apacheKafka_3_8
-    apacheKafka_3_9;
+    apacheKafka_3_9
+    apacheKafka_4_0;
 
-  apacheKafka = apacheKafka_3_8;
+  apacheKafka = apacheKafka_4_0;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
@@ -17322,7 +17323,7 @@ with pkgs;
     ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_25;
+    nix = nixVersions.nix_2_26;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

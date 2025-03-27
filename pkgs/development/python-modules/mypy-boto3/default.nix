@@ -470,8 +470,8 @@ rec {
       "sha256-uKccWDS0zhFrs6CQ9ve6by4rYL43T6iFZ3rjNy7SiyI=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.37.4"
-      "sha256-KuV/D7dQ87HL+smlqSrpGgi3/uw0zbP/SZ2PHgH1h/s=";
+    buildMypyBoto3Package "eks" "1.37.20"
+      "sha256-jFap7gKOZHeBtIKRz7BfEbm2EidERQhU7qohKjnYb9Y=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -726,8 +726,8 @@ rec {
       "sha256-WL8F1hFsE+GyJvWY8CFrDHN14KD98RcsSv3+1uwAVQM=";
 
   mypy-boto3-keyspaces =
-    buildMypyBoto3Package "keyspaces" "1.37.0"
-      "sha256-VuV6WmCMyUIbMm84kjAvxE8Pd9xUpSF9RkO3XHVg6PU=";
+    buildMypyBoto3Package "keyspaces" "1.37.20"
+      "sha256-zHtz1D1IqSJseHBWTQFekj6QlhsiHInPy15Wd35yjng=";
 
   mypy-boto3-kinesis =
     buildMypyBoto3Package "kinesis" "1.37.0"
@@ -850,8 +850,8 @@ rec {
       "sha256-c8b/bdAfTYFJPJaK3q8+N5jQvV6/aMsoDbOxGY1OZL0=";
 
   mypy-boto3-marketplace-entitlement =
-    buildMypyBoto3Package "marketplace-entitlement" "1.37.0"
-      "sha256-f7Ds+IyF+94s563loNxTAiOv1bPqTLEjckk/mPXJ+r8=";
+    buildMypyBoto3Package "marketplace-entitlement" "1.37.20"
+      "sha256-+B/0n8wPQ6OixrHwCzHUeMZiFPFf2MgRdImqonyRvbQ=";
 
   mypy-boto3-marketplacecommerceanalytics =
     buildMypyBoto3Package "marketplacecommerceanalytics" "1.37.0"
@@ -902,8 +902,8 @@ rec {
       "sha256-88OSler+2SJ2zDYtLmM5NeOPafKIf5zaLV8MMLRb5es=";
 
   mypy-boto3-meteringmarketplace =
-    buildMypyBoto3Package "meteringmarketplace" "1.37.0"
-      "sha256-0lsfrJZ0a7+otX7jd2uSwBbbL5ogyFbnsibRI1bowPs=";
+    buildMypyBoto3Package "meteringmarketplace" "1.37.20"
+      "sha256-Bpcsx33TRawi+ZzseMkkYxVbkTo+PYahe8kj7TwcwIs=";
 
   mypy-boto3-mgh =
     buildMypyBoto3Package "mgh" "1.37.0"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-c0vXkW5sR7JkdzvsS/rMFme9EwY1x5eZAbRWYKew0v4=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.37.18"
-      "sha256-kgcGaU90+TvFcxPCotm8dutYkk/GL2qTOtmMyxNzkgs=";
+    buildMypyBoto3Package "sagemaker" "1.37.20"
+      "sha256-fncIq3N1qd+d0cvnecyn9LKd6ehjqwE8/EVnPhk/t5E=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.37.0"

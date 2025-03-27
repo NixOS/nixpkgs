@@ -5095,6 +5095,12 @@
     githubId = 202474;
     name = "Jens Reimann";
   };
+  curran = {
+    email = "curran@mercury.com";
+    github = "curranosaurus";
+    githubId = 148147150;
+    name = "Curran McConnell";
+  };
   cust0dian = {
     email = "serg@effectful.software";
     github = "cust0dian";
@@ -6688,6 +6694,12 @@
     github = "earldouglas";
     githubId = 424946;
     name = "James Earl Douglas";
+  };
+  EarthGman = {
+    email = "earthgman@protonmail.com";
+    name = "EarthGman";
+    github = "EarthGman";
+    githubId = 117403037;
   };
   EBADBEEF = {
     name = "EBADBEEF";
@@ -24718,6 +24730,12 @@
     matrix = "@uku:m.uku.moe";
     github = "uku3lig";
     githubId = 61147779;
+  };
+  ulic-youthlic = {
+    name = "youthlic";
+    email = "ulic.youthlic+nixpkgs@gmail.com";
+    github = "ulic-youthlic";
+    githubId = 121918198;
   };
   ulinja = {
     email = "julian@lobbes.dev";
