@@ -2,6 +2,7 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  acl,
   nix-update-script,
 }:
 
@@ -16,11 +17,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-tAECD3gNx6RDzEJhGt2nrykxHfh4S1qJKt9yNdZpuGs=";
   };
 
-  # no such file or directory errors
-  doCheck = false;
-
   useFetchCargoVendor = true;
   cargoHash = "sha256-plWq+p6NqOjonkdsGAL7hHBwVzFtkkgTNWNKEOBNZeU=";
+
+  checkInputs = [ acl ];
+
+  # disable tests depending on special filesystem features
+  checkNoDefaultFeatures = true;
+  checkFeatures = [
+    "test_no_reflink"
+    "test_no_sparse"
+    "test_no_extents"
+    "test_no_acl"
+    "test_no_xattr"
+    "test_no_perms"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
