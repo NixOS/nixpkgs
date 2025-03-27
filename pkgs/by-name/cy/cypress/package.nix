@@ -19,7 +19,7 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-1W13AfXVRWTmDSRdsaPfSSJNlf59JXdI92tXBbYwdDI=";
+      hash = "sha256-qa/mwsUsULKc/OvCJXoGUVElTxnken80ttMOpScSAFo=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
@@ -39,7 +39,7 @@ let
   inherit (binary) platform hash;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.17.0";
+  version = "14.2.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
