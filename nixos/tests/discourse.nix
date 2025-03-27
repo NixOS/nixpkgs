@@ -59,7 +59,7 @@ import ./make-test-python.nix (
 
         environment.systemPackages = [ pkgs.jq ];
 
-        services.postgresql.package = pkgs.postgresql_13;
+        services.postgresql.package = pkgs.postgresql_15;
 
         services.discourse = {
           enable = true;
