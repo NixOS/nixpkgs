@@ -61563,46 +61563,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "@prisma/language-server" = nodeEnv.buildNodePackage {
-    name = "_at_prisma_slash_language-server";
-    packageName = "@prisma/language-server";
-    version = "6.5.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@prisma/language-server/-/language-server-6.5.0.tgz";
-      sha512 = "Cot58P6uJ9IJ5MHJBakSLe87jSj2zC54jJuBjYQ9rJFsNy4Y/bQ605BC1TbxXqJjgpzrYOjTbkLCCU/XIG7PbA==";
-    };
-    dependencies = [
-      sources."@prisma/config-6.5.0"
-      sources."@prisma/prisma-schema-wasm-6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60"
-      sources."@prisma/schema-files-loader-6.5.0"
-      sources."@types/js-levenshtein-1.1.3"
-      sources."debug-4.4.0"
-      sources."esbuild-0.25.1"
-      sources."esbuild-register-3.6.0"
-      sources."fs-extra-11.3.0"
-      sources."graceful-fs-4.2.11"
-      sources."js-levenshtein-1.1.6"
-      sources."jsonfile-6.1.0"
-      sources."klona-2.0.6"
-      sources."ms-2.1.3"
-      sources."universalify-2.0.1"
-      sources."vscode-jsonrpc-8.1.0"
-      sources."vscode-languageserver-8.1.0"
-      sources."vscode-languageserver-protocol-3.17.3"
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.17.3"
-      sources."vscode-uri-3.1.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Prisma Language Server";
-      homepage = "https://github.com/prisma/language-tools#readme";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   pscid = nodeEnv.buildNodePackage {
     name = "pscid";
     packageName = "pscid";
