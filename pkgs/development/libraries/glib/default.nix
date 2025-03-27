@@ -46,7 +46,7 @@ let
                   else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
                   else "2.0-0.lib";
 
-  systemtap' = buildPackages.linuxPackages.systemtap.override { withStap = false; };
+  systemtap' = buildPackages.systemtap-sdt;
   withDtrace =
     lib.meta.availableOn stdenv.buildPlatform systemtap' &&
     # dtrace support requires sys/sdt.h header
