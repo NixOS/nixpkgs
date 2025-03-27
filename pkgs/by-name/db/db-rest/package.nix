@@ -8,7 +8,7 @@
 }:
 buildNpmPackage rec {
   pname = "db-rest";
-  version = "6.0.6";
+  version = "6.1.0";
 
   nodejs = nodejs_18;
 
@@ -16,10 +16,10 @@ buildNpmPackage rec {
     owner = "derhuerst";
     repo = pname;
     rev = version;
-    hash = "sha256-Rwy36hi5p/EDLBbfi1M0DEKD+2/eiJsqo0r2Et/3Oa4=";
+    hash = "sha256-1iJ26l6C6GevNkoDVMztPHiH3YsutJa3xWAsfYvgR9U=";
   };
 
-  npmDepsHash = "sha256-Drwmnu23PvrT/cw42hl+mu/S/Dn5nzybWGCDCUF7+R8=";
+  npmDepsHash = "sha256-ELVVsysNjkXuX4i6i5P3irn6twVDu6YiPYqy2hbIlIs=";
 
   preConfigure = ''
     patchShebangs ./build/index.js
