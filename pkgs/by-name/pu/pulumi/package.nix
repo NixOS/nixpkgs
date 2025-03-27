@@ -10,6 +10,7 @@
   callPackage,
   testers,
   pulumi,
+  pulumiPackages,
   # updateScript
   writers,
   python3Packages,
@@ -142,6 +143,8 @@ buildGoModule rec {
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+      # Test building packages that reuse our version and src.
+      inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
       # Pulumi currently requires protobuf4, but Nixpkgs defaults to a newer
       # version. Test that we can actually build the package with protobuf4.
       # https://github.com/pulumi/pulumi/issues/16828
