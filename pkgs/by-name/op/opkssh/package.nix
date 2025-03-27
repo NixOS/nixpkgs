@@ -33,7 +33,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/openpubkey/opkssh";
     description = "Integrating SSO with SSH - short-lived SSH keys with an OpenID provider";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.johnrichardrinehart ];
+    maintainers = with lib.maintainers; [
+      johnrichardrinehart
+      sarcasticadmin
+    ];
     mainProgram = "opkssh";
   };
 })
