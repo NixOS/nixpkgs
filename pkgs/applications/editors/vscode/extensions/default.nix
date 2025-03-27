@@ -2872,8 +2872,8 @@ let
         mktplcRef = {
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
-          version = "1.7.3";
-          hash = "sha256-P2WJQJA9mulXvZZtYvIermBXU8O3C/2IwdU2D0ErfSY=";
+          version = "1.7.4";
+          hash = "sha256-oyQS8c7Vzh61jtPuWBnTZ6qGUxGbz1b+z0GLvXOZtsU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/k--kato.intellij-idea-keybindings/changelog";
