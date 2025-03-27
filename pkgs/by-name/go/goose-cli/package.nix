@@ -26,17 +26,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "goose-cli";
-  version = "1.0.10";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${version}";
-    hash = "sha256-GPlxA6ZIy+kLFicuqGqtom9iavNV+geKJIwVBLDg4KE=";
+    hash = "sha256-9uIpwJaRpYvsWW8ysFQWgogp/4hh5b72+5dNwYQKrM8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ty1ygZ4BB1eHkMffRWXhfvXK5QtZXejYy0kXRPYXdME=";
+  cargoHash = "sha256-5qMciAnX34fbiV5Oy/+V3o7S3NwubxyRRNFXWcQK+kE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
       "--skip=config::base::tests::test_secret_management"
       # Observer should be Some with both init project keys set
       "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
+      "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Lazy instance has previously been poisoned

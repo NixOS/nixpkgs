@@ -8,7 +8,7 @@
 }:
 let
   rev-prefix = "ena_linux_";
-  version = "2.13.2";
+  version = "2.13.3";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "${rev-prefix}${version}";
-    hash = "sha256-v4S23lG3DGcsLcxwl4F11UlN7xD69mg0yS4fWs89+kM=";
+    hash = "sha256-rxogTQ2zNyzuOY5P87NGZQHVJPvv1T+g5nwh6SLLf50=";
   };
 
   hardeningDisable = [ "pic" ];

@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -17,6 +18,10 @@ php.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-QwZoEGE7oAm1Ha1EB/E1quMMSSTmsayOpO3JgGISQjE=";
   composerStrictValidation = false;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";

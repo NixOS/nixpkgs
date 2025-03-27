@@ -116,6 +116,9 @@
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
   ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
   ],

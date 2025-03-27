@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-iYObxjWJUKgZKGTkqtYgQK4758k0EYZGhIAM/oLxxso=";
 
   postPatch = ''
-    substituteInPlace Justfile \
-      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-session'
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
@@ -45,9 +43,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--set"
     "cosmic_dconf_profile"
     "cosmic"
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
+
+  postInstall = ''
+    dconf_profile_dst=$out/etc/dconf/profile/cosmic
+    if [ ! -f $dconf_profile_dst ]; then
+        install -Dm0644 data/dconf/profile/cosmic $dconf_profile_dst
+    else
+        # future proofing
+        echo 'The Justfile is now correctly installing the dconf profile.'
+        echo 'Please remove the dconf profile from the `postInstall` phase.'
+        exit 1
+    fi
+  '';
 
   passthru.providedSessions = [ "cosmic" ];
 
@@ -60,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       a-kenji
       nyabinary
       thefossguy
+      HeitorAugustoLN
     ];
     platforms = lib.platforms.linux;
   };
