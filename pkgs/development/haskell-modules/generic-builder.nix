@@ -688,9 +688,10 @@ stdenv.mkDerivation ({
 
     ${optionalString jsexe.shouldCopy ''
       if [ -d ${binDir} ]; then
-        for exeDir in dist/build/*; do
-          exe=$(basename $exeDir)
-          cp -r $exeDir/$exe.jsexe ${binDir}
+        for jsexeDir in dist/build/*/*.jsexe; do
+          bn=$(basename $jsexeDir)
+          exe="''${bn%.jsexe}"
+          cp -r dist/build/$exe/$exe.jsexe ${binDir}
         done
       fi
     ''}
@@ -716,9 +717,10 @@ stdenv.mkDerivation ({
 
     ${optionalString jsexe.shouldSymlink ''
       if [ -d ${binDir} ]; then
-        for exeDir in $installIntermediatesDir/build/*; do
-          exe=$(basename $exeDir)
-          (cd ${binDir} && ln -s $exeDir/$exe.jsexe)
+        for jsexeDir in $installIntermediatesDir/build/*/*.jsexe; do
+          bn=$(basename $jsexeDir)
+          exe="''${bn%.jsexe}"
+          (cd ${binDir} && ln -s $installIntermediatesDir/build/$exe/$exe.jsexe)
         done
       fi
     ''}
