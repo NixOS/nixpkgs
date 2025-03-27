@@ -2,6 +2,7 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Extended cp(1)";
