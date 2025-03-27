@@ -18,6 +18,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-Scper1eR6I4pCXus/jytSpW8a1omg7sJIPvOn3jYcLM=";
 
+  subPackages = [ "." ];
+
   ldflags = [
     "-s"
     "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}"
