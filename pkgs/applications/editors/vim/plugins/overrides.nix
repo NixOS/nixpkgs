@@ -2227,6 +2227,10 @@ in
     dependencies = [ self.nvim-dap ];
   };
 
+  nvim-dap-vscode-js = super.nvim-dap-vscode-js.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   nvim-dap-lldb = super.nvim-dap-lldb.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
