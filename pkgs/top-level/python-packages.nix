@@ -14703,6 +14703,8 @@ self: super: with self; {
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
 
+  python-oxmsg = callPackage ../development/python-modules/python-oxmsg { };
+
   python-packer = callPackage ../development/python-modules/python-packer { };
 
   python-pae = callPackage ../development/python-modules/python-pae { };
