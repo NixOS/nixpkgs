@@ -165,25 +165,34 @@ let
 
                 hasTLSRecommendations = tlsRecommendations != null && mozTLSRecs != null;
 
-                # NOTE: Let’s Encrypt has sunset OCSP stapling. Mozilla’s
-                # ssl-config-generator is at present still recommending this setting, but
-                # this module will skip setting a stapling value as Let’s Encrypt +
-                # ACME is the most likely use case.
-                #
-                # See: https://github.com/mozilla/ssl-config-generator/issues/323
-                tlsRecAttrs = lib.optionalAttrs hasTLSRecommendations (
-                  let
-                    recs = mozTLSRecs.${tlsRecommendations};
-                  in
-                  {
-                    min-version = builtins.head recs.tls_versions;
-                    cipher-preference = "server";
-                    "cipher-suite-tls1.3" = recs.ciphersuites;
+                # ATTENTION: Let’s Encrypt has sunset OCSP stapling.
+                tlsRecAttrs =
+                  # If using ACME, this module will disable H2O’s default OCSP
+                  # stapling.
+                  #
+                  # See: https://letsencrypt.org/2024/12/05/ending-ocsp/
+                  lib.optionalAttrs (builtins.elem names.cert certNames.all) {
+                    ocsp-update-interval = 0;
                   }
-                  // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
-                    cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
-                  }
-                );
+                  # Mozilla’s ssl-config-generator is at present still
+                  # recommending this setting as well, but this module will
+                  # skip setting a stapling value as Let’s Encrypt + ACME is
+                  # the most likely use case.
+                  #
+                  # See: https://github.com/mozilla/ssl-config-generator/issues/323
+                  // lib.optionalAttrs hasTLSRecommendations (
+                    let
+                      recs = mozTLSRecs.${tlsRecommendations};
+                    in
+                    {
+                      min-version = builtins.head recs.tls_versions;
+                      cipher-preference = "server";
+                      "cipher-suite-tls1.3" = recs.ciphersuites;
+                    }
+                    // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
+                      cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
+                    }
+                  );
 
                 headerRecAttrs =
                   lib.optionalAttrs
