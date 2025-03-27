@@ -46,7 +46,6 @@ buildPythonPackage rec {
     limits
     ordered-set
     rich
-    typing-extensions
   ];
 
   optional-dependencies = {
