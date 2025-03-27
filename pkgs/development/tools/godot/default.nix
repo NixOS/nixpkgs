@@ -58,14 +58,14 @@ in
 
   godot_4_3 = godotPackages_4_3.godot;
   godot_4_3-mono = godotPackages_4_3.godot-mono;
-  godot_4_3-export-templates = godotPackages_4_3.export-templates-bin;
+  godot_4_3-export-templates-bin = godotPackages_4_3.export-templates-bin;
   godot_4_4 = godotPackages_4_4.godot;
   godot_4_4-mono = godotPackages_4_4.godot-mono;
-  godot_4_4-export-templates = godotPackages_4_4.export-templates-bin;
+  godot_4_4-export-templates-bin = godotPackages_4_4.export-templates-bin;
   godot_4 = godotPackages_4.godot;
   godot_4-mono = godotPackages_4.godot-mono;
-  godot_4-export-templates = godotPackages_4.export-templates-bin;
+  godot_4-export-templates-bin = godotPackages_4.export-templates-bin;
   godot = godotPackages.godot;
   godot-mono = godotPackages.godot-mono;
-  godot-export-templates = godotPackages.export-templates-bin;
+  godot-export-templates-bin = godotPackages.export-templates-bin;
 }
