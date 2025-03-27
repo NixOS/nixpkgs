@@ -11,14 +11,14 @@
     "vue": "^2.7.15"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/eslint-parser": "^7.25.9",
     "@material/mwc-button": "^0.27.0",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-standard": "^8.0.1",
-    "@babel/core": "^7.0.0",
-    "@babel/eslint-parser": "^7.0.0",
-    "eslint": "^8.42.0",
-    "eslint-plugin-vue": "^9.14.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^9.32.0",
     "lodash.isequal": "^4.5.0",
     "vue-d3-network": "^0.1.28"
   }
