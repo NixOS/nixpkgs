@@ -2,8 +2,48 @@
   lib,
   stdenvNoCC,
   fetchurl,
+
+  # build
   appimageTools,
+
+  # linux dependencies
+  alsa-lib,
+  at-spi2-atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curlWithGnuTls,
+  egl-wayland,
+  expat,
+  fontconfig,
+  freetype,
+  ffmpeg,
+  glib,
+  glibc,
+  glibcLocales,
+  gtk3,
+  libappindicator-gtk3,
+  libdrm,
+  libgbm,
+  libGL,
+  libnotify,
+  libva-minimal,
+  libxkbcommon,
+  libxkbfile,
   makeWrapper,
+  nspr,
+  nss,
+  pango,
+  pciutils,
+  pulseaudio,
+  vivaldi-ffmpeg-codecs,
+  vulkan-loader,
+  wayland,
+
+  # linux installation
+  rsync,
+
+  # darwin build
   undmg,
 }:
 let
@@ -37,6 +77,14 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit version pname;
     src = source;
+
+    # Fix the missing keymap issue
+    postExtract = ''
+      echo $out
+      native_keymap="$out/usr/share/cursor/resources/app/node_modules/native-keymap"
+      ln -s $native_keymap/build/Release $native_keymap/build/Debug
+    '';
+
   };
 
   wrappedAppimage = appimageTools.wrapType2 {
@@ -51,8 +99,54 @@ stdenvNoCC.mkDerivation {
   src = if hostPlatform.isLinux then wrappedAppimage else source;
 
   nativeBuildInputs =
-    lib.optionals hostPlatform.isLinux [ makeWrapper ]
+    lib.optionals hostPlatform.isLinux [
+      autoPatchelfHook
+      glibcLocales
+      makeWrapper
+      rsync
+    ]
     ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+  buildInputs = lib.optionals hostPlatform.isLinux [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    curlWithGnuTls
+    egl-wayland
+    expat
+    ffmpeg
+    glib
+    gtk3
+    libdrm
+    libgbm
+    libGL
+    libGL
+    libva-minimal
+    libxkbcommon
+    libxkbfile
+    nspr
+    nss
+    pango
+    pulseaudio
+    vivaldi-ffmpeg-codecs
+    vulkan-loader
+    wayland
+  ];
+
+  runtimeDependencies = lib.optionals hostPlatform.isLinux [
+    egl-wayland
+    ffmpeg
+    glibc
+    libappindicator-gtk3
+    libnotify
+    libxkbfile
+    pciutils
+    pulseaudio
+    wayland
+    fontconfig
+    freetype
+  ];
 
   sourceRoot = lib.optionalString hostPlatform.isDarwin ".";
 
@@ -67,13 +161,17 @@ stdenvNoCC.mkDerivation {
 
     ${lib.optionalString hostPlatform.isLinux ''
       cp -r bin $out/bin
-      mkdir -p $out/share/cursor
-      cp -a ${appimageContents}/locales $out/share/cursor
-      cp -a ${appimageContents}/resources $out/share/cursor
-      cp -a ${appimageContents}/usr/share/icons $out/share/
-      install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
+      # mkdir -p $out/share/cursor
+      # cp -ar ${appimageContents}/usr/share $out/
 
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
+      rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
+
+      # # Replace the supplied libraries with nixpkgs versions
+      # rm $out/share/cursor/{libEGL.sl,libffmpeg.so,libGLESv2.so,libvk_swiftshader.so,libvulkan.so.1}
+      # ln -s ${egl-wayland}/lib/libEGL.so $out/share/cursor/libEGL.so
+
+      # Fix the desktop file to point to the correct location
+      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/share/cursor/cursor"
 
       wrapProgram $out/bin/cursor \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
