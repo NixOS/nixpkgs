@@ -68,6 +68,8 @@ in
                 ];
                 extraSettings = {
                   minimum-version = "TLSv1.3";
+                  # when using common ACME certs, disable talking to CA
+                  ocsp-update-interval = 0;
                 };
               };
               settings = {
