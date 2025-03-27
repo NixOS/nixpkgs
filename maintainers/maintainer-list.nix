@@ -9102,6 +9102,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  grosheth = {
+    email = "salledelavager@gmail.com";
+    github = "grosheth";
+    githubId = 90095152;
+    name = "Alex Hethrington";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
