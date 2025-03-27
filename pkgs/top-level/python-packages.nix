@@ -14553,6 +14553,8 @@ self: super: with self; {
 
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
+  python-iso639 = callPackage ../development/python-modules/python-iso639 { };
+
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
