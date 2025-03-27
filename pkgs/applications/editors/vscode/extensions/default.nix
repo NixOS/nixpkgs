@@ -3823,8 +3823,8 @@ let
         mktplcRef = {
           name = "dark-molokai-theme";
           publisher = "nonylene";
-          version = "1.0.6";
-          hash = "sha256-2qjV6iSz8DDU1yP1II9sxGSgiETmEtotFvfNjm+cTuI=";
+          version = "1.0.8";
+          hash = "sha256-GQNv3QWzb0xSnaR8GOnAOZF/wOg0LaWHN3goIYq7JmI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nonylene.dark-molokai-theme/changelog";
