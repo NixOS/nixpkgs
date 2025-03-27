@@ -13179,18 +13179,7 @@ with pkgs;
 
   inherit (xorg) xlsfonts;
 
-  inherit
-    ({
-      freerdp = callPackage ../applications/networking/remote/freerdp {
-        inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
-        inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
-      };
-      freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {};
-    })
-    freerdp
-    freerdp3
-    ;
-
+  freerdp3 = freerdp;
   freerdpUnstable = freerdp;
 
   gimp = callPackage ../applications/graphics/gimp {
