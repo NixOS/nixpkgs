@@ -446,8 +446,8 @@ let
         mktplcRef = {
           name = "scaladex-search";
           publisher = "baccata";
-          version = "0.3.3";
-          hash = "sha256-+793uA+cSBHV6t4wAM4j4GeWggLJTl2GENkn8RFIwr0=";
+          version = "0.3.5";
+          hash = "sha256-ff4mqEqO07z/pV2U/R4NsFW7czG+5+M/a2x7vv1ly7E=";
         };
         meta = {
           license = lib.licenses.asl20;
