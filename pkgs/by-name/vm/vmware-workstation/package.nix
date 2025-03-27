@@ -1,6 +1,6 @@
 { stdenv
 , buildFHSEnv
-, fetchzip
+, requireFile
 , lib
 , zlib
 , gdbm
@@ -30,9 +30,8 @@
 
 let
   # base - versions
-  version = "17.6.1";
-  build = "24319023";
-  baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
+  version = "17.6.3";
+  build = "24583834";
 
   # macOS - versions
   unlockerVersion = "3.0.5";
@@ -99,11 +98,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
     ++ lib.optionals enableMacOSGuests [ unzip ];
 
-  src = fetchzip {
-    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
-    stripRoot = false;
-  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
+  src = requireFile {
+    name = "VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
+    hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
+  };
 
   unpackPhase =
   ''
