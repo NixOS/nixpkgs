@@ -185,6 +185,9 @@ let
         llama-index-embeddings-huggingface
         torch
       ];
+      bedrock = [
+        boto3
+      ];
     };
 
     passthru = {
@@ -193,6 +196,7 @@ let
           withPlaywright ? false,
           withBrowser ? false,
           withHelp ? false,
+          withBedrock ? false,
           withAll ? false,
           ...
         }:
@@ -208,6 +212,7 @@ let
               if withPlaywright || withAll then aider-chat.optional-dependencies.playwright else [ ];
             browserDeps = if withBrowser || withAll then aider-chat.optional-dependencies.browser else [ ];
             helpDeps = if withHelp || withAll then aider-chat.optional-dependencies.help else [ ];
+            bedrockDeps = if withBedrock || withAll then aider-chat.optional-dependencies.bedrock else [ ];
 
             playwrightInputs = if withPlaywright || withAll then [ playwright-driver.browsers ] else [ ];
             playwrightArgs =
@@ -220,7 +225,7 @@ let
                 [ ];
           in
           {
-            dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps;
+            dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps ++ bedrockDeps;
             propagatedBuildInputs = propagatedBuildInputs ++ playwrightInputs;
             makeWrapperArgs = makeWrapperArgs ++ playwrightArgs;
           }
