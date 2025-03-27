@@ -1,7 +1,8 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchzip,
+  autoPatchelfHook,
   nix-update-script,
 }:
 
@@ -13,8 +14,7 @@ let
       x86_64-darwin = "x64";
       x86_64-linux = "x64";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   os =
     {
       aarch64-darwin = "darwin";
@@ -22,11 +22,10 @@ let
       x86_64-darwin = "darwin";
       x86_64-linux = "linux";
     }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
   version = "1.290.0";
 
@@ -36,7 +35,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  npmDepsHash = "sha256-PLX/mN7xu8gMh2BkkyTncP3+rJ3nBmX+pHxl0ONXbe4=";
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+  buildInputs = [ stdenv.cc.cc.lib ];
+
+  dontStrip = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -44,8 +49,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  dontStrip = true;
 
   passthru.updateScript = nix-update-script { };
 
