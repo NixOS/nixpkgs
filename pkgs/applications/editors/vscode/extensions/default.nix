@@ -3864,8 +3864,8 @@ let
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.28.1";
-          hash = "sha256-UAKMSmvqcSMYPmRfdtNKKUem9bHMhVhkAhy9cxx2Zyg=";
+          version = "1.28.2";
+          hash = "sha256-j49r7lhJkHZHkeFXTC/hQNLw4ICQ2JW/ahYUVYwLJd4=";
         };
       };
 
