@@ -2,31 +2,35 @@
   lib,
   stdenv,
   fetchurl,
+
+  # build-time deps
+  libtool,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+
+  # runtime deps
   adns,
   curl,
   gettext,
   gmp,
   gnutls,
+  jansson,
   libextractor,
   libgcrypt,
   libgnurl,
   libidn,
   libmicrohttpd,
-  libtool,
+  libogg,
+  libopus,
+  libpulseaudio,
+  libsodium,
   libunistring,
-  makeWrapper,
-  ncurses,
-  pkg-config,
   libxml2,
+  ncurses,
   sqlite,
   zlib,
-  libpulseaudio,
-  libopus,
-  libogg,
-  jansson,
-  libsodium,
-  meson,
-  ninja,
 
   postgresqlSupport ? true,
   libpq,
@@ -44,33 +48,34 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkg-config
     libtool
     makeWrapper
     meson
     ninja
+    pkg-config
   ];
+
   buildInputs = [
     adns
     curl
+    gettext
     gmp
     gnutls
+    jansson
     libextractor
     libgcrypt
     libgnurl
     libidn
     libmicrohttpd
+    libogg
+    libopus
+    libpulseaudio
+    libsodium
     libunistring
     libxml2
     ncurses
-    gettext
-    libsodium
     sqlite
     zlib
-    libpulseaudio
-    libopus
-    libogg
-    jansson
   ] ++ lib.optional postgresqlSupport libpq;
 
   preConfigure = ''
