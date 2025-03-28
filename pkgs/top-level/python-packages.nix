@@ -2575,6 +2575,8 @@ self: super: with self; {
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
+  comicapi = callPackage ../development/python-modules/comicapi { };
+
   comicon = callPackage ../development/python-modules/comicon { };
 
   comm = callPackage ../development/python-modules/comm { };
@@ -4730,6 +4732,8 @@ self: super: with self; {
   flask-compress = callPackage ../development/python-modules/flask-compress { };
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
+
+  flask-dance = callPackage ../development/python-modules/flask-dance { };
 
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
@@ -10020,6 +10024,8 @@ self: super: with self; {
   nethsm = callPackage ../development/python-modules/nethsm { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
+
+  netifaces-plus = callPackage ../development/python-modules/netifaces-plus { };
 
   netifaces2 = callPackage ../development/python-modules/netifaces2 { };
 
@@ -15318,6 +15324,8 @@ self: super: with self; {
 
   schiene = callPackage ../development/python-modules/schiene { };
 
+  scholarly = callPackage ../development/python-modules/scholarly { };
+
   schwifty = callPackage ../development/python-modules/schwifty { };
 
   scienceplots = callPackage ../development/python-modules/scienceplots { };
@@ -16894,6 +16902,8 @@ self: super: with self; {
 
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textacy = callPackage ../development/python-modules/textacy { };
 
   textdistance = callPackage ../development/python-modules/textdistance { };
@@ -17746,6 +17756,8 @@ self: super: with self; {
 
   urlman = callPackage ../development/python-modules/urlman { };
 
+  urlobject = callPackage ../development/python-modules/urlobject { };
+
   urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
@@ -18218,6 +18230,8 @@ self: super: with self; {
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wordninja = callPackage ../development/python-modules/wordninja { };
 
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 

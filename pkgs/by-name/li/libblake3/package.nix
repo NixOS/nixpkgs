@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  tbb_2022_0,
+  tbb_2021_11,
   useTBB ? true,
   darwinMinVersionHook,
 }:
@@ -24,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs =
-    lib.optionals useTBB [ tbb_2022_0 ]
+    lib.optionals useTBB [
+      # 2022.0 crashes on macOS at the moment
+      tbb_2021_11
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.13") ];
 
   cmakeFlags = [
