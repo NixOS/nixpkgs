@@ -139,7 +139,7 @@ in
 
   config = {
     environment = {
-      systemPackages = lib.mkIf (cfg.enable && cfg.package != null) [ cfg.package ];;
+      systemPackages = lib.mkIf (cfg.enable && cfg.package != null) [ cfg.package ];
 
       etc = lib.mkIf cfg.enable {
         # for chromium
