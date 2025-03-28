@@ -4,13 +4,11 @@
   fetchFromGitHub,
   cmake,
   gettext,
-  msgpack-c,
   libuv,
   lua,
   pkg-config,
   unibilium,
   utf8proc,
-  libvterm-neovim,
   tree-sitter,
   fetchurl,
   buildPackages,
@@ -135,13 +133,11 @@ stdenv.mkDerivation (
     buildInputs =
       [
         libuv
-        libvterm-neovim
         # This is actually a c library, hence it's not included in neovimLuaEnv,
         # see:
         # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
         # and it's definition at: pkgs/development/lua-modules/overrides.nix
         lua.pkgs.libluv
-        msgpack-c
         neovimLuaEnv
         tree-sitter
         unibilium
