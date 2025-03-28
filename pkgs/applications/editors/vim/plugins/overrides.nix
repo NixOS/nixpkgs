@@ -3727,6 +3727,13 @@ in
     nvimSkipModules = "virt-column.config.types";
   };
 
+  vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
   };

@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  yq,
   pkg-config,
   openssl,
   versionCheckHook,
@@ -20,19 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-KdFgY54vXLmq6IZfJzZ1IeZ2eQuNJoCRZUV3rVuPpcY=";
   };
 
-  postPatch = ''
-    tomlq -ti '.dependencies.openssl.features[] |= select(.!="vendored")' countryfetch/Cargo.toml
-  '';
-
   useFetchCargoVendor = true;
   cargoHash = "sha256-XJI9k/5hdak8p0/J/x9u6lqJu/DIbX93Wwm3LALkAAw=";
 
-  env.RUSTC_BOOTSTRAP = 1;
+  env = {
+    RUSTC_BOOTSTRAP = 1;
+    OPENSSL_NO_VENDOR = true;
+  };
 
-  nativeBuildInputs = [
-    pkg-config
-    yq # for `tomlq`
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 

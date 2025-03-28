@@ -95,6 +95,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  aml = {
+    spdxId = "AML";
+    fullName = "Apple MIT License";
+  };
+
   ampas = {
     spdxId = "AMPAS";
     fullName = "Academy of Motion Picture Arts and Sciences BSD";
