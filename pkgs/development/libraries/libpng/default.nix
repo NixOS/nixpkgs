@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  validatePkgConfig,
+  autoPatchPcHook,
   fetchurl,
   zlib,
   apngSupport ? true,
@@ -40,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputBin = "dev";
 
+  nativeBuildInputs = [
+    validatePkgConfig
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [ zlib ];
 
   doCheck = true;

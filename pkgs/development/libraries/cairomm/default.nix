@@ -3,6 +3,7 @@
   stdenv,
   lib,
   pkg-config,
+  autoPatchPcHook,
   darwin,
   boost,
   cairo,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

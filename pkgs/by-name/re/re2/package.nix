@@ -11,6 +11,8 @@
   lib,
   mercurial,
   ninja,
+  validatePkgConfig,
+  autoPatchPcHook,
   python3Packages,
   stdenv,
 }:
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   buildInputs = [

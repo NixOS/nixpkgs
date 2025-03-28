@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   glib,
   Carbon,
   AppKit,
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "10mrl5k3l2hxjhz4w93n50xwywp6y890rw2vsjcgai8627x5f1df";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     AppKit

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   removeReferencesTo,
   zlib,
   libjpeg,
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     removeReferencesTo
   ];
 

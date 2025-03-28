@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   qttools,
   packagekit,
 }:
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     qttools
   ];
 

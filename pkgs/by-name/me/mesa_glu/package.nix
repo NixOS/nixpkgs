@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   libGLX,
   testers,
   gitUpdater,
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
   propagatedBuildInputs = [ libGLX ];
 

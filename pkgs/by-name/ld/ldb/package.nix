@@ -4,6 +4,7 @@
   fetchurl,
   python3,
   pkg-config,
+  autoPatchPcHook,
   readline,
   tdb,
   talloc,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     python3
     wafHook
     libxslt

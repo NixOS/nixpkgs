@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libxml2,
   glibmm,
   perl,
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     perl
   ];
 

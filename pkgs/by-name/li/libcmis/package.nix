@@ -6,6 +6,7 @@
   boost,
   libxml2,
   pkg-config,
+  autoPatchPcHook,
   docbook2x,
   curl,
   autoreconfHook,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
     docbook2x
   ];
   buildInputs = [

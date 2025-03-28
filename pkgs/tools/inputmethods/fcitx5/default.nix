@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   extra-cmake-modules,
   wayland-scanner,
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    autoPatchPcHook
     wayland-scanner
     gettext
   ];

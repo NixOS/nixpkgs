@@ -4,6 +4,7 @@
   fetchurl,
   boost,
   pkg-config,
+  autoPatchPcHook,
   librevenge,
   zlib,
 }:
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xVEdlAngO446F50EZcHMKW7aBvyDcTVu9Egs2oaIadE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     boost
     librevenge

@@ -1,5 +1,6 @@
 {
   cmake,
+  autoPatchPcHook,
   doxygen,
   fetchFromGitHub,
   graphviz,
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    autoPatchPcHook
     doxygen
     graphviz
     pandoc

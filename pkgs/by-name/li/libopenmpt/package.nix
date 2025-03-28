@@ -5,6 +5,7 @@
   fetchurl,
   zlib,
   pkg-config,
+  autoPatchPcHook,
   mpg123,
   libogg,
   libvorbis,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

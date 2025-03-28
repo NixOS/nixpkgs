@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gi-docgen,
   gobject-introspection,
   lcms2,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gi-docgen
     gobject-introspection
     vala

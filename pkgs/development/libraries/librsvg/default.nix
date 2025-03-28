@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   glib,
@@ -110,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       installShellFiles
       pkg-config
+      autoPatchPcHook
       meson
       ninja
       rustc

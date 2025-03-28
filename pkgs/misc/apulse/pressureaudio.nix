@@ -1,8 +1,10 @@
 {
   stdenv,
   apulse,
+  glib,
   libpulseaudio,
   pkg-config,
+  autoPatchPcHook,
   intltool,
 }:
 
@@ -14,8 +16,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     intltool
   ];
+  buildInputs = [ glib ];
 
   dontConfigure = true;
   dontBuild = true;

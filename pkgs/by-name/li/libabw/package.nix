@@ -6,6 +6,7 @@
   doxygen,
   gperf,
   pkg-config,
+  autoPatchPcHook,
   librevenge,
   libxml2,
   perl,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     gperf
     perl
     pkg-config
+    autoPatchPcHook
   ];
   buildInputs = [
     boost

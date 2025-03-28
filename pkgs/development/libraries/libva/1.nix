@@ -5,6 +5,7 @@
   autoreconfHook,
   libX11,
   pkg-config,
+  autoPatchPcHook,
   libXext,
   libdrm,
   libXfixes,
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
     wayland-scanner
   ];
 

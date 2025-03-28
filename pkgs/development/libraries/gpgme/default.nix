@@ -6,6 +6,7 @@
   libgpg-error,
   gnupg,
   pkg-config,
+  autoPatchPcHook,
   glib,
   pth,
   libassuan,
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gnupg
     pkg-config
+    autoPatchPcHook
     texinfo
   ];
 

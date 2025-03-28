@@ -9,6 +9,7 @@
   libtool,
   libusb1,
   pkg-config,
+  autoPatchPcHook,
   buildPackages,
 }:
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     libtool
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [ libiconv ];

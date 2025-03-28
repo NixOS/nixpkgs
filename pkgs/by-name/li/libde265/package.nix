@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  autoPatchPcHook,
 
   callPackage,
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   enableParallelBuilding = true;

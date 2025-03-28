@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   docutils,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     ninja
     docutils

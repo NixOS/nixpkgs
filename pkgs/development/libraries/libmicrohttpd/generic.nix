@@ -5,6 +5,7 @@
   curl,
   gnutls,
   pkg-config,
+  autoPatchPcHook,
   libiconv,
   libintl,
   version,
@@ -22,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
     "info"
   ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     libgcrypt
     curl

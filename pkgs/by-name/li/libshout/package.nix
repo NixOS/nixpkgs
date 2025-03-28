@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   openssl,
   libvorbis,
   libtheora,
@@ -41,7 +42,10 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [
     openssl
     libvorbis

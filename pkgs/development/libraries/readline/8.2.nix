@@ -3,6 +3,8 @@
   stdenv,
   fetchpatch,
   fetchurl,
+  validatePkgConfig,
+  autoPatchPcHook,
   updateAutotoolsGnuConfigScriptsHook,
   ncurses,
   termcap,
@@ -28,7 +30,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   propagatedBuildInputs = [ curses-library ];
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+    validatePkgConfig
+    autoPatchPcHook
+  ];
 
   patchFlags = [ "-p0" ];
 

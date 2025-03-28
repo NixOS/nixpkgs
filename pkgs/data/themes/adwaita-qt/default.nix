@@ -3,6 +3,8 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  validatePkgConfig,
+  autoPatchPcHook,
   cmake,
   ninja,
   qtbase,
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   buildInputs =

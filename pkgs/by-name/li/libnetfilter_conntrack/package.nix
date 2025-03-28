@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libnfnetlink,
   libmnl,
 }:
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   enableParallelBuilding = true;
 

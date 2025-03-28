@@ -5,6 +5,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   coreutils,
   libuuid,
   libaio,
@@ -46,7 +47,10 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs =
     [
       libaio

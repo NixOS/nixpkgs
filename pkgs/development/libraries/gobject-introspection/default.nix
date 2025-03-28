@@ -12,6 +12,7 @@
   docbook-xsl-nons,
   docbook_xml_dtd_45,
   pkg-config,
+  autoPatchPcHook,
   libffi,
   python3,
   cctools,
@@ -95,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       flex
       bison
       gtk-doc

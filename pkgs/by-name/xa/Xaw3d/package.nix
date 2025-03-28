@@ -7,6 +7,7 @@
   bison,
   flex,
   pkg-config,
+  autoPatchPcHook,
   libXext,
   libXmu,
   libXpm,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   dontUseImakeConfigure = true;
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     bison
     flex
     imake

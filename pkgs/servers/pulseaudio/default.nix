@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libsndfile,
   libtool,
   makeWrapper,
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       meson
       ninja
       makeWrapper

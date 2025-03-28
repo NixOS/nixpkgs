@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   bison,
   doxygen,
   xkeyboard_config,
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     bison
     doxygen
     xorg.xvfb

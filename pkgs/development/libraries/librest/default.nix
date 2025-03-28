@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   glib,
   libsoup_2_4,
   libxml2,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       gobject-introspection
     ]
     ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

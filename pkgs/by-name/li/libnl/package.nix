@@ -7,6 +7,7 @@
   bison,
   flex,
   pkg-config,
+  autoPatchPcHook,
   doxygen,
   graphviz,
   mscgen,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     bison
     flex
     pkg-config
+    autoPatchPcHook
     file
     doxygen
     graphviz

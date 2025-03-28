@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   gtk-doc,
   gtk3,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     cmake
     gtk-doc
     vala

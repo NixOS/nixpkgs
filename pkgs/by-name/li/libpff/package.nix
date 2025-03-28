@@ -3,6 +3,7 @@
   lib,
   fetchzip,
   pkg-config,
+  autoPatchPcHook,
   autoreconfHook,
 }:
 
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
   ];
   outputs = [

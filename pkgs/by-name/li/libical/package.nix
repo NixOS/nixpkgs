@@ -11,6 +11,7 @@
   ninja,
   perl,
   pkg-config,
+  autoPatchPcHook,
   libical,
   python3,
   tzdata,
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       perl
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection

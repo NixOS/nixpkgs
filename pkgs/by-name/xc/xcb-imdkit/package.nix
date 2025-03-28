@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  validatePkgConfig,
+  autoPatchPcHook,
   extra-cmake-modules,
   uthash,
   xcbutil,
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     cmake
     xorgproto
     uthash
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   buildInputs = [

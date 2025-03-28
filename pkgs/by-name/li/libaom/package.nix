@@ -7,6 +7,7 @@
   perl,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   python3,
   enableVmaf ? true,
   libvmaf,
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     perl
     cmake
     pkg-config
+    autoPatchPcHook
     python3
   ];
 

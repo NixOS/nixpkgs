@@ -3,6 +3,7 @@
   lib,
   replaceVars,
   pkg-config,
+  autoPatchPcHook,
   fetchurl,
   python3Packages,
   gettext,
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
     gettext
     libtool

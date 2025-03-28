@@ -7,6 +7,7 @@
   harfbuzz,
   libGL,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
   testers,
   # Boolean flags
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     SDL2
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

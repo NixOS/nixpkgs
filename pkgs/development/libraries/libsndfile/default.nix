@@ -5,6 +5,7 @@
   autoreconfHook,
   autogen,
   pkg-config,
+  autoPatchPcHook,
   python3,
   flac,
   lame,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     autogen
     pkg-config
+    autoPatchPcHook
     python3
   ];
   buildInputs =

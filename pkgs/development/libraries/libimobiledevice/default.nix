@@ -5,6 +5,7 @@
   fetchpatch,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   openssl,
   libgcrypt,
   libplist,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   propagatedBuildInputs =

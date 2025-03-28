@@ -9,6 +9,7 @@
   zlib,
   doxygen,
   pkg-config,
+  autoPatchPcHook,
   cppunit,
 }:
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     doxygen
     pkg-config
+    autoPatchPcHook
   ];
   configureFlags = [ "--disable-werror" ];
 

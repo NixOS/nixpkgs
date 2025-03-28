@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   vala,
   gtk-doc,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gobject-introspection
     vala
     libxml2

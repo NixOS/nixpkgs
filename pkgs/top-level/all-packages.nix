@@ -660,6 +660,7 @@ with pkgs;
           };
           openssl = buildPackages.openssl.override {
             fetchurl = stdenv.fetchurlBoot;
+            patchPcFiles = false;
             buildPackages = {
               coreutils = buildPackages.coreutils.override {
                 fetchurl = stdenv.fetchurlBoot;
@@ -675,6 +676,7 @@ with pkgs;
           };
           libssh2 = buildPackages.libssh2.override {
             fetchurl = stdenv.fetchurlBoot;
+            patchPcFiles = false;
             inherit zlib openssl;
           };
           # On darwin, libkrb5 needs bootstrap_cmds which would require
@@ -3187,6 +3189,7 @@ with pkgs;
       idnSupport = true;
       pslSupport = true;
       zstdSupport = true;
+      patchPcFiles = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;

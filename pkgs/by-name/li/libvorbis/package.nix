@@ -4,6 +4,7 @@
   fetchurl,
   libogg,
   pkg-config,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [ libogg ];
 
   doCheck = true;

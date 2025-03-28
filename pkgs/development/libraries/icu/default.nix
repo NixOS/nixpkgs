@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchpatch,
+  autoPatchPcHook,
   fixDarwinDylibNames,
   testers,
   buildPackages,
@@ -16,6 +17,7 @@ let
       lib
       buildPackages
       fetchurl
+      autoPatchPcHook
       fixDarwinDylibNames
       testers
       updateAutotoolsGnuConfigScriptsHook

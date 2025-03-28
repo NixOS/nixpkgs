@@ -6,6 +6,7 @@
 
   cmake,
   pkg-config,
+  autoPatchPcHook,
   sphinx,
 
   lerc,
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     sphinx
   ];
 

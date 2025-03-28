@@ -4,6 +4,7 @@
   fetchFromGitHub,
   meson,
   pkg-config,
+  autoPatchPcHook,
   ninja,
   wayland-scanner,
   libdrm,
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     pkg-config
+    autoPatchPcHook
     ninja
   ] ++ lib.optional (!minimal) wayland-scanner;
 

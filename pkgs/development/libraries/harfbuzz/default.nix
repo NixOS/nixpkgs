@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   glib,
   freetype,
   libintl,
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     libintl
     pkg-config
+    autoPatchPcHook
     python3
     glib
     gtk-doc

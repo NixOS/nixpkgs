@@ -4,6 +4,7 @@
   fetchurl,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   hidapi,
   libcbor,
   openssl,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

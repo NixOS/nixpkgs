@@ -7,6 +7,7 @@
   mesonEmulatorHook,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   asciidoc,
   gobject-introspection,
   buildPackages,
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       asciidoc
       gettext
       glib
