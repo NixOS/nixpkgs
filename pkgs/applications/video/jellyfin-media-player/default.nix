@@ -27,13 +27,13 @@
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-Jsn4kWQzUaQI9MpbsLJr6JSJk9ZSnMEcrebQ2DYegSU=";
+    sha256 = "sha256-IXinyenadnW+a+anQ9e61h+N8vG2r77JPboHm5dN4Iw=";
   };
 
   patches = [

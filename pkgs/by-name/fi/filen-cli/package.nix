@@ -3,39 +3,71 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  versionCheckHook,
+  makeWrapper,
   nix-update-script,
+  versionCheckHook,
+  darwin,
+  libsecret,
+  nodejs,
+  perl,
+  pkg-config,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "filen-cli";
-  version = "0.0.29";
+  version = "0.0.32";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ftbRv75x6o1HgElY4oLBBe5SRuLtxdrjpjZznSCyroI=";
+    hash = "sha256-sSwRgtjBfmvZ8jEzMoiqGNSaxE+bRvx1udGf9g8EwfM=";
   };
 
-  npmDepsHash = "sha256-a+sq0vFsk4c7bl0Nn2KfBFxyq3ZF2HPvt8d1vxegnHg=";
+  npmDepsHash = "sha256-RXA/kVvLrmrsxj6T6H2soTMYmC6VRWNjuQfefgVB/qY=";
+
+  inherit nodejs;
+
+  env.npm_config_build_from_source = "true";
+
+  nativeBuildInputs =
+    [
+      makeWrapper
+      pkg-config # for keytar
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      # for utf-8-validate
+      # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
+      perl
+    ];
+
+  # for keytar
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ libsecret ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postPatch = ''
-    # The filen-cli repository does not contain the correct version string;
-    # it is replaced during publishing in the same way:
+    # The version string is substituted during publishing:
     # https://github.com/FilenCloudDienste/filen-cli/blob/c7d5eb2a2cd6d514321992815f16475f6909af36/.github/workflows/build-and-publish.yml#L24
     substituteInPlace package.json \
-      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
+      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"' \
+      --replace-fail '\"--external:*keytar.node\" --external:keytar' \
+        '--loader:.node=copy'
   '';
 
-  # A special random 256-bit string called CRYPTO_BASE_KEY has to be injected
-  # during build. It can be randomly generated using the generateKey.mjs
-  # script, however, generating a key here will invalidate the session on every
-  # rebuild, and hence we need to provide a constant key. The key below is
-  # extracted from the official filen-cli releases. Example:
-  # $ strings filen-cli-v0.0.29-linux-x64 | grep checkInjectedBuildInfo -A 6
-  # That also makes the session data compatible with the official distribution.
-  env.FILEN_CLI_CRYPTO_BASE_KEY = "f47fb2011c90d8aad21f7415d19989cea2c1ac8bc674daf36af48de8697a83e0";
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/lib
+    install -T -m755 dist/bundle.js $out/lib/index.js
+    install -D -m755 dist/*.node $out/lib
+    install -D -m644 package.json $out/lib
+    makeWrapper "${lib.getExe nodejs}" $out/bin/filen \
+      --add-flags $out/lib/index.js
+    runHook postInstall
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/filen";
