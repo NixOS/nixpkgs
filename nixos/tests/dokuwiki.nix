@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ config, ... }:
 
 let
+  pkgs = config.node.pkgs;
+
   template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
     name = "bootstrap3";
     version = "2022-07-27";
@@ -163,4 +165,4 @@ in {
             "curl -sSfL http://site1.local/rewrite-test | grep 'Hello, NixOS!'",
           )
   '';
-})
+}
