@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
@@ -68,6 +69,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests" ];
+
+  # These tests fail when MPS devices are detected
+  disabledTests = lib.optional stdenv.isDarwin [
+    "gpu"
+  ];
 
   disabledTestPaths = [
     # ValueError: Can't find 'adapter_config.json'
