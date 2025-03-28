@@ -2233,21 +2233,7 @@ with pkgs;
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { inherit systemd; };
 
-  cloudflared = callPackage ../applications/networking/cloudflared {
-    # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
-    buildGoModule = buildGoModule.override {
-      go = buildPackages.go_1_22.overrideAttrs {
-        pname = "cloudflare-go";
-        version = "1.22.2-devel-cf";
-        src = fetchFromGitHub {
-          owner = "cloudflare";
-          repo = "go";
-          rev = "ec0a014545f180b0c74dfd687698657a9e86e310";
-          sha256 = "sha256-oQQ9Jyh8TphZSCaHqaugTL7v0aeZjyOdVACz86I2KvU=";
-        };
-      };
-    };
-  };
+  cloudflared = callPackage ../applications/networking/cloudflared { };
 
   clingo = callPackage ../applications/science/logic/potassco/clingo.nix { };
 
