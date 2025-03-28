@@ -8,18 +8,16 @@
 
 buildGoModule rec {
   pname = "yarr";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
     rev = "v${version}";
-    hash = "sha256-ZMQ+IX8dZuxyxQhD/eWAe4bGGCVcaCeVgF+Wqs79G+k=";
+    hash = "sha256-yII0KV4AKIS1Tfhvj588O631JDArnr0/30rNynTSwzk=";
   };
 
   vendorHash = null;
-
-  subPackages = [ "src" ];
 
   ldflags = [
     "-s"
@@ -30,12 +28,9 @@ buildGoModule rec {
 
   tags = [
     "sqlite_foreign_keys"
-    "release"
+    "sqlite_json"
   ];
 
-  postInstall = ''
-    mv $out/bin/{src,yarr}
-  '';
 
   passthru.tests.version = testers.testVersion {
     package = yarr;
