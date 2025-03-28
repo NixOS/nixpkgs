@@ -147,21 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
           sed -i "$i" -e 's|ln |ln -s |'
       done
-
-      # autoreconfHook is not included for all targets.
-      # Call it here explicitly as well.
-      ${finalAttrs.postAutoreconf}
     '';
-
-  postAutoreconf = ''
-    # As we regenerated configure build system tries hard to use
-    # texinfo to regenerate manuals. Let's avoid the dependency
-    # on texinfo in bootstrap path and keep manuals unmodified.
-    touch gas/doc/.dirstamp
-    touch gas/doc/asconfig.texi
-    touch gas/doc/as.1
-    touch gas/doc/as.info
-  '';
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
@@ -246,6 +232,13 @@ stdenv.mkDerivation (finalAttrs: {
         "LDFLAGS=-Wl,--undefined-version"
       ]
     );
+
+  makeFlags = [
+    # As we regenerated configure build system tries hard to use
+    # texinfo to regenerate manuals. Let's avoid the dependency
+    # on texinfo in bootstrap path and keep manuals unmodified.
+    "MAKEINFO=true"
+  ];
 
   # Fails
   doCheck = false;
