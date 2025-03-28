@@ -15142,6 +15142,9 @@ with pkgs;
 
   vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
+
+  vscode-extensions-update-script = callPackage ../by-name/vs/vscode-extensions-update/vscode-extensions-update-script.nix { };
+
   vscode-js-debug = callPackage ../by-name/vs/vscode-js-debug/package.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
