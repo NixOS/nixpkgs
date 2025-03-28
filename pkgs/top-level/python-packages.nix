@@ -17502,6 +17502,8 @@ self: super: with self; {
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 
+  tuya-vacuum = callPackage ../development/python-modules/tuya-vacuum { };
+
   tuyaha = callPackage ../development/python-modules/tuyaha { };
 
   tvdb-api = callPackage ../development/python-modules/tvdb-api { };
