@@ -647,6 +647,7 @@ in
       let dmConf = cfg.displayManager;
           default = !(dmConf.gdm.enable
                     || config.services.displayManager.sddm.enable
+                    || config.services.displayManager.aporia.enable
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
                     || dmConf.startx.enable

@@ -581,6 +581,7 @@
   ./services/display-managers/greetd.nix
   ./services/display-managers/sddm.nix
   ./services/display-managers/ly.nix
+  ./services/display-managers/aporia.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
