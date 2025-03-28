@@ -38,6 +38,36 @@ let
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  # gas isn't multi-target, even with --enable-targets=all, so we do
+  # separate builds of just gas for each target.
+  #
+  # There's no way to do this exhaustively, so feel free to add
+  # additional targets here as required.
+  allGasTargets =
+    allGasTargets'
+    ++ lib.optional (!lib.elem targetPlatform.config allGasTargets') targetPlatform.config;
+  allGasTargets' = [
+    "aarch64-unknown-linux-gnu"
+    "alpha-unknown-linux-gnu"
+    "arm-unknown-linux-gnu"
+    "avr-unknown-linux-gnu"
+    "cris-unknown-linux-gnu"
+    "hppa-unknown-linux-gnu"
+    "i686-unknown-linux-gnu"
+    "ia64-unknown-linux-gnu"
+    "m68k-unknown-linux-gnu"
+    "mips-unknown-linux-gnu"
+    "mips64-unknown-linux-gnu"
+    "msp430-unknown-linux-gnu"
+    "powerpc-unknown-linux-gnu"
+    "powerpc64-unknown-linux-gnu"
+    "s390-unknown-linux-gnu"
+    "sparc-unknown-linux-gnu"
+    "vax-unknown-linux-gnu"
+    "x86_64-unknown-linux-gnu"
+    "xscale-unknown-linux-gnu"
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -210,7 +240,11 @@ stdenv.mkDerivation (finalAttrs: {
       # path to force users to declare their use of these libraries.
       "--with-lib-path=:"
     ]
-    ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+    ++ lib.optionals withAllTargets [
+      "--enable-targets=all"
+      # gas will be built separately for each target.
+      "--disable-gas"
+    ]
     ++ lib.optionals enableGold [
       "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
       "--enable-plugins"
@@ -238,12 +272,29 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
+  postConfigure = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      mkdir "$NIX_BUILD_TOP/build-$target"
+      env -C "$NIX_BUILD_TOP/build-$target" \
+        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        --enable-gas --program-prefix "$target-"  --target "$target"
+    done
+  '';
+
   makeFlags = [
     # As we regenerated configure build system tries hard to use
     # texinfo to regenerate manuals. Let's avoid the dependency
     # on texinfo in bootstrap path and keep manuals unmodified.
     "MAKEINFO=true"
   ];
+
+  postBuild = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
+        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        TARGET-gas=as-new all-gas
+    done
+  '';
 
   # Fails
   doCheck = false;
@@ -267,10 +318,19 @@ stdenv.mkDerivation (finalAttrs: {
   #   $out/$host/$target/include/* to $dev/include/*
   # TODO(trofi): fix installation paths upstream so we could remove this
   # code and have "lib" output unconditionally.
-  postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
-  '';
+  postInstall =
+    lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+    ''
+    + lib.optionalString withAllTargets ''
+      for target in ${lib.escapeShellArgs allGasTargets}; do
+        make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
+          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          install-exec-bindir
+      done
+      ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
+    '';
 
   passthru = {
     inherit targetPrefix;
