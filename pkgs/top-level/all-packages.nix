@@ -17843,10 +17843,6 @@ with pkgs;
     libsoup = libsoup_3;
   };
 
-  wings = callPackage ../by-name/wi/wings/package.nix {
-    erlang = erlang_25;
-  };
-
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
