@@ -3815,8 +3815,6 @@ with pkgs;
 
   maubot = with python3Packages; toPythonApplication maubot;
 
-  mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
-
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   m2r = with python3Packages; toPythonApplication m2r;
@@ -17840,10 +17838,6 @@ with pkgs;
 
   clash-verge-rev = callPackage ../by-name/cl/clash-verge-rev/package.nix {
     libsoup = libsoup_3;
-  };
-
-  wings = callPackage ../by-name/wi/wings/package.nix {
-    erlang = erlang_25;
   };
 
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
