@@ -97,5 +97,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
+    # builds but needs tree-sitter-sql at runtime
+    # "LanguageDoesNotExist: tree-sitter is available, but no built-in or user-registered language called 'sql'"
+    broken = lib.versionAtLeast python3Packages.textual.version "3.0.0";
   };
 }
