@@ -36,7 +36,7 @@ runTest (
           networking.firewall.allowedTCPPorts = [ 9000 ];
           environment.systemPackages = [ pkgs.minio-client ];
 
-          services.nextcloud.config.dbtype = "sqlite";
+          services.nextcloud.settings.dbtype = "sqlite";
 
           services.nextcloud.config.objectstore.s3 = {
             enable = true;

@@ -11,6 +11,7 @@ runTest (
   { config, lib, ... }:
   let
     inherit (config) adminuser;
+    databasePassword = "secret";
   in
   {
     inherit name;
@@ -43,11 +44,10 @@ runTest (
             extraApps.notify_push = config.services.nextcloud.package.packages.apps.notify_push;
             # This test also validates that we can use an "external" database
             database.createLocally = false;
-            config = {
+            settings = {
               dbtype = "pgsql";
               dbname = "nextcloud";
               dbuser = adminuser;
-              dbpassFile = config.services.nextcloud.config.adminpassFile;
             };
 
             secretFile = "/etc/nextcloud-secrets.json";
@@ -77,10 +77,9 @@ runTest (
           services.postgresql = {
             enable = true;
           };
-          systemd.services.postgresql.postStart = lib.mkAfter ''
-            password=$(cat ${config.services.nextcloud.config.dbpassFile})
+          systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
             ${config.services.postgresql.package}/bin/psql <<EOF
-              CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
+              CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '${databasePassword}' CREATEDB;
               CREATE DATABASE nextcloud;
               ALTER DATABASE nextcloud OWNER to ${adminuser};
             EOF
@@ -93,7 +92,8 @@ runTest (
             {
               "redis": {
                 "password": "secret"
-              }
+              },
+              "dbpass": "${databasePassword}"
             }
           '';
         };
