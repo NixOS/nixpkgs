@@ -13427,6 +13427,8 @@ self: super: with self; {
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
 
+  pytest-archon = callPackage ../development/python-modules/pytest-archon { };
+
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
