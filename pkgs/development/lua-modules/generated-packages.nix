@@ -3470,15 +3470,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luv";
-      version = "1.48.0-2";
+      version = "1.50.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luv-1.48.0-2.rockspec";
-          sha256 = "0353bjn9z90a1hd7rksdfrd9fbdd31hbvdaxr1fb0fh0bc1cpy94";
+          url = "mirror://luarocks/luv-1.50.0-1.rockspec";
+          sha256 = "01i6hs3nllbdwlwcfgjdbxmzgww2yk6a8bn0s5q4lkv67dx89g90";
         }).outPath;
       src = fetchurl {
-        url = "https://github.com/luvit/luv/releases/download/1.48.0-2/luv-1.48.0-2.tar.gz";
-        sha256 = "0yivq14dw0vjyl8ibrgdgrj9fbhjyy4yf3m4jc15bxmlxggisfic";
+        url = "https://github.com/luvit/luv/releases/download/1.50.0-1/luv-1.50.0-1.tar.gz";
+        sha256 = "0d5wnn35asqg3ixmyqq80s7ibhbdzl9kxn7dy9a1v64w9l1c6ryq";
       };
 
       disabled = luaOlder "5.1";
