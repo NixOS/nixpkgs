@@ -7,6 +7,7 @@
   rustPlatform,
   Security,
   SystemConfiguration,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage rec {
 
   # Tests require network access
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Fast, simple, recursive content discovery tool";
