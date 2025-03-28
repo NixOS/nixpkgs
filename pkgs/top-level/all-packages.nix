@@ -16515,15 +16515,10 @@ with pkgs;
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
     python = python3;
-    protobuf = protobuf_26.override {
+    protobuf = protobuf_29.override {
       abseil-cpp = abseil-cpp_202407;
     };
-    # or-tools builds with -std=c++17, so abseil-cpp must
-    # also be built that way
-    abseil-cpp = abseil-cpp_202407.override {
-      static = true;
-      cxxStandard = "17";
-    };
+    abseil-cpp = abseil-cpp_202407;
   };
 
   p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {

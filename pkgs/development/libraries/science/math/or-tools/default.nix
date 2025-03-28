@@ -23,21 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "9.11";
+  version = "9.12";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     tag = "v${version}";
-    hash = "sha256-aRhUAs9Otvra7VPJvrf0fhDCGpYhOw1//BC4dFJ7/xI=";
+    hash = "sha256-5rFeAK51+BfjIyu/5f5ptaKMD7Hd20yHa2Vj3O3PkLU=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch";
-      url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch?rev=19";
-      hash = "sha256-QHQ9E3mhTznJVKB+nP/9jct3uz+SPcOZ7w5tjOQ8iuk=";
-    })
+    # Rebased from https://build.opensuse.org/public/source/science/google-or-tools/0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch?rev=19
+    ./0001-Do-not-try-to-copy-pybind11_abseil-status-extension-.patch
     (fetchpatch {
       name = "0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch";
       url = "https://build.opensuse.org/public/source/science/google-or-tools/0001-Revert-python-Fix-python-install-on-windows-breaks-L.patch?rev=19";
