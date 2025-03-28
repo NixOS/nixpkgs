@@ -6,8 +6,7 @@
   pkg-config,
   rustPlatform,
   stdenv,
-  Security,
-  SystemConfiguration,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,9 +26,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
       libiconv
+      zlib
     ];
 
   useFetchCargoVendor = true;
