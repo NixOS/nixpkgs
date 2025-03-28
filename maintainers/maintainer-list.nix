@@ -7119,13 +7119,6 @@
     githubId = 13485450;
     name = "Emmanuel Rosa";
   };
-  emneo = {
-    name = "emneo";
-    email = "emneo@kreog.com";
-    github = "emneo-dev";
-    githubId = 44233177;
-    keys = [ { fingerprint = "5FD0 400D 0E78 EAF9 8431  4880 8EBF C4B9 24C6 2D20"; } ];
-  };
   emptyflask = {
     email = "jon@emptyflask.dev";
     github = "emptyflask";
@@ -10639,13 +10632,6 @@
     email = "jacbart@gmail.com";
     github = "jacbart";
     githubId = 7909687;
-  };
-  jacekpoz = {
-    name = "Jacek Poziemski";
-    email = "jacek@poz.pet";
-    matrix = "@jacek:poz.pet";
-    github = "jacekpoz";
-    githubId = 64381190;
   };
   jacfal = {
     name = "Jakub Pravda";
@@ -18173,6 +18159,14 @@
     githubId = 20342389;
     name = "paneku";
   };
+  panchoh = {
+    name = "pancho horrillo";
+    email = "pancho@pancho.name";
+    matrix = "@panchoh:matrix.org";
+    github = "panchoh";
+    githubId = 471059;
+    keys = [ { fingerprint = "4430 F502 8B19 FAF4 A40E  C4E8 11E0 447D 4ABB A7D0"; } ];
+  };
   panda2134 = {
     email = "me+nixpkgs@panda2134.site";
     github = "panda2134";
@@ -19177,6 +19171,13 @@
     github = "PowerUser64";
     githubId = 24578572;
     name = "Blake North";
+  };
+  poz = {
+    name = "Jacek Poziemski";
+    email = "poz@poz.pet";
+    matrix = "@poz:poz.pet";
+    github = "imnotpoz";
+    githubId = 64381190;
   };
   ppenguin = {
     name = "Jeroen Versteeg";
