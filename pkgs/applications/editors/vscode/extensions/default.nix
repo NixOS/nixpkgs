@@ -3802,6 +3802,8 @@ let
         };
       };
 
+      nimlang.nimlang = callPackage ./nimlang.nimlang { };
+
       njpwerner.autodocstring = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "autodocstring";
