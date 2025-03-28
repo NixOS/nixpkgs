@@ -106,7 +106,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.paramiko
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # reach the Internet

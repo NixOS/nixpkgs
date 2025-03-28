@@ -39,7 +39,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   patches = [ ./dont_download_glfw_client.patch ];
 
   # Path hard-coded paths.
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
       --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
       --replace-fail /usr/bin/zenity ${lib.getExe zenity}
