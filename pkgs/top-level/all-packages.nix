@@ -4874,9 +4874,7 @@ with pkgs;
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix { };
 
-  pingu = callPackage ../tools/networking/pingu {
-    buildGoModule = buildGo122Module;
-  };
+  pingu = callPackage ../tools/networking/pingu { };
 
   pinnwand = callPackage ../servers/pinnwand { };
 
