@@ -1146,7 +1146,7 @@ with pkgs;
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
-  inherit (callPackages ../tools/networking/ivpn/default.nix { buildGoModule = buildGo122Module; })
+  inherit (callPackages ../tools/networking/ivpn/default.nix { })
     ivpn
     ivpn-service
     ;
