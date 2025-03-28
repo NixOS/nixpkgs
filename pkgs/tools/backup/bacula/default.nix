@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bacula";
-  version = "15.0.2";
+  version = "15.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VVFcKmavmoa5VdrqQIk3i4ZNBRsubjA4O+825pOs6no=";
+    sha256 = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
   };
 
   # libtool.m4 only matches macOS 10.*
