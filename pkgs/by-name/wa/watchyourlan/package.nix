@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "watchyourlan";
-  version = "2.0.4";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "aceberg";
     repo = "WatchYourLAN";
     rev = version;
-    hash = "sha256-nJYDGCkT8vCkxySLONG3OkWVkaBqXqSFgd7N1TTMAf4=";
+    hash = "sha256-xiwDcqEfuNuqNQO2wtJ2XK0mPf91C1bapEqKKmKxw4c=";
   };
 
-  vendorHash = "sha256-urSFoFkYllV+bsKIRV/azkbL30mbGeciYR7jy/fOE/w=";
+  vendorHash = "sha256-NUv90wq3nFHDtfk3BitwJ3ZfciPESUIDzS5S/6zafEQ=";
 
   ldflags = [
     "-s"
