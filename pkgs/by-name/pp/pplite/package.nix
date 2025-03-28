@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  flint,
+  flint3,
   gmp,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    flint
+    flint3
     gmp
   ];
 
