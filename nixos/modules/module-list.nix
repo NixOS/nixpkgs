@@ -513,6 +513,7 @@
   ./services/databases/pgbouncer.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
+  ./services/databases/postgrest.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
   ./services/databases/tigerbeetle.nix
