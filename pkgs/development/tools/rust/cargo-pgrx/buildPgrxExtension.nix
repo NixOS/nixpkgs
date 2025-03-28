@@ -47,6 +47,7 @@
 #                      If the generated rust bindings aren't needed to use the extension, its a
 #                      unnecessary and heavy dependency. If you set this to true, you also
 #                      have to add `rustfmt` to `nativeBuildInputs`.
+#   - `usePgTestCheckFeature` Whether to enable the `pg_test` feature during the check phase.
 lib.extendMkDerivation {
   constructDrv = rustPlatform.buildRustPackage;
 
@@ -80,10 +81,10 @@ lib.extendMkDerivation {
 
     assert lib.asserts.assertMsg (
       (args.installPhase or "") == ""
-    ) "buildPgrxExtensions overwrites the installPhase, so providing one does nothing";
+    ) "buildPgrxExtension overwrites the installPhase, so providing one does nothing";
     assert lib.asserts.assertMsg (
       (args.buildPhase or "") == ""
-    ) "buildPgrxExtensions overwrites the buildPhase, so providing one does nothing";
+    ) "buildPgrxExtension overwrites the buildPhase, so providing one does nothing";
     assert lib.asserts.assertMsg (useFakeRustfmt -> !rustfmtInNativeBuildInputs)
       "The parameter useFakeRustfmt is set to true, but rustfmt is included in nativeBuildInputs. Either set useFakeRustfmt to false or remove rustfmt from nativeBuildInputs.";
     assert lib.asserts.assertMsg (!useFakeRustfmt -> rustfmtInNativeBuildInputs)
