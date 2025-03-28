@@ -23,6 +23,8 @@
   pytestCheckHook,
   syrupy,
   time-machine,
+  tree-sitter-python,
+  tree-sitter-markdown,
 }:
 
 buildPythonPackage rec {
@@ -63,6 +65,8 @@ buildPythonPackage rec {
     syrupy
     time-machine
     tree-sitter
+    tree-sitter-python
+    tree-sitter-markdown
   ];
 
   disabledTestPaths = [
@@ -75,16 +79,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion issues
+    # Depends on textual-dev which we can't add as it depends on this package
     "test_textual_env_var"
-
-    # Requirements for tests are not quite ready
-    "test_register_language"
-
-    # Requires python bindings for tree-sitter languages
-    # https://github.com/Textualize/textual/issues/5449
-    "test_setting_unknown_language"
-    "test_update_highlight_query"
   ];
 
   # Some tests in groups require state from previous tests
