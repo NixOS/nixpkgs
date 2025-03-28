@@ -17388,6 +17388,8 @@ self: super: with self; {
 
   tree-sitter-make = callPackage ../development/python-modules/tree-sitter-make { };
 
+  tree-sitter-markdown = callPackage ../development/python-modules/tree-sitter-markdown { };
+
   tree-sitter-python = callPackage ../development/python-modules/tree-sitter-python { };
 
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
