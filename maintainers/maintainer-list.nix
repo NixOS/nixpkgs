@@ -21403,6 +21403,12 @@
     githubId = 64630479;
     name = "Schweber";
   };
+  SchweGELBin = {
+    email = "abramjannikmichael06@gmail.com";
+    name = "Jannik Michael Abram";
+    github = "SchweGELBin";
+    githubId = 67663319;
+  };
   sciencentistguy = {
     email = "jamie@quigley.xyz";
     name = "Jamie Quigley";
