@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  yarr,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -31,11 +30,9 @@ buildGoModule rec {
     "sqlite_json"
   ];
 
-
-  passthru.tests.version = testers.testVersion {
-    package = yarr;
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Yet another rss reader";
