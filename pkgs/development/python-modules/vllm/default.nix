@@ -246,7 +246,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.6.6";
+  version = "0.7.3";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -255,13 +255,13 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-PVuMu/w2WFpZoNw/3oklV/MPypFbk5phqKU6jSPyDl4="; # 0.6.6
+    hash = "sha256-gudlikAjwZNkniKRPJYm7beoti8eHp5LaRV2/UNEibo=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
-    #./0003-propagate-pythonpath.patch
-    #./0004-drop-lsmod.patch
+    ./0003-propagate-pythonpath.patch
+    ./0004-drop-lsmod.patch
   ];
 
   # Ignore the python version check because it hard-codes minor versions and
@@ -306,10 +306,12 @@ buildPythonPackage rec {
         'and torch.version.hip is not None' \
         ' '
 
+      # Instead of getting the version number via looking at the .so, let's
+      # just use the version via the Nix expression.
       substituteInPlace setup.py \
         --replace-fail \
-        'hipcc_version = get_hipcc_rocm_version()' \
-        'hipcc_version = "0.0"'
+        'rocm_version = get_rocm_version()' \
+        'rocm_version = "${rocmPackages.rocm-core.version}"'
 
       # Relax torch dependency manually because the nonstandard requirements format
       # is not caught by pythonRelaxDeps
