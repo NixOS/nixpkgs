@@ -31,8 +31,12 @@ buildPythonPackage rec {
     langgraph-checkpoint
   ];
 
-  # Checkpoint clients are lagging behind langgraph-checkpoint
-  pythonRelaxDeps = [ "langgraph-checkpoint" ];
+  pythonRelaxDeps = [
+    "aiosqlite"
+
+    # Checkpoint clients are lagging behind langgraph-checkpoint
+    "langgraph-checkpoint"
+  ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.sqlite" ];
 
