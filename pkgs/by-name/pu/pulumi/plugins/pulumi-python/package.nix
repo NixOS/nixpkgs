@@ -1,12 +1,13 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   pulumi,
   bash,
   python3,
 }:
 buildGoModule rec {
-  pname = "pulumi-language-python";
+  pname = "pulumi-python";
   inherit (pulumi) version src;
 
   sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
@@ -44,6 +45,8 @@ buildGoModule rec {
       ../../dist/pulumi-resource-pulumi-python \
       ../../dist/pulumi-analyzer-policy-python
   '';
+
+  passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
 
   meta = {
     homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
