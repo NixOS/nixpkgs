@@ -20,11 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/NgGlXYMxGxpX93SJ6gWgZW21cSSZsgo/WMvRuLw+Bw=";
   };
 
-  # disable linker overrides on aarch64-linux
-  postPatch = ''
-    rm .cargo/config
-  '';
-
   useFetchCargoVendor = true;
   cargoHash = "sha256-L5s+P9eerv+O2vBUczGmn0rUMbHQtnF8hVa22wOrTGo=";
 
