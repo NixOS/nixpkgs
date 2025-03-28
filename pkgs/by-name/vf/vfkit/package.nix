@@ -1,6 +1,6 @@
 {
   lib,
-  apple-sdk_14,
+  apple-sdk_15,
   buildGoModule,
   darwin,
   fetchFromGitHub,
@@ -36,7 +36,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    apple-sdk_14
+    apple-sdk_15
   ];
 
   postFixup = ''
