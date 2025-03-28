@@ -147,6 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
       for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
           sed -i "$i" -e 's|ln |ln -s |'
       done
+
+      configureScript="$PWD/configure"
+      mkdir $NIX_BUILD_TOP/build
+      cd $NIX_BUILD_TOP/build
     '';
 
   # As binutils takes part in the stdenv building, we don't want references
