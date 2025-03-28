@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -86,7 +85,6 @@ let
   ];
 
   ibisTestingData = fetchFromGitHub {
-    name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
     # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
@@ -100,12 +98,9 @@ buildPythonPackage rec {
   version = "9.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
-    name = "ibis-source";
-    repo = "ibis";
     owner = "ibis-project";
+    repo = "ibis";
     tag = version;
     hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
   };
@@ -344,11 +339,11 @@ buildPythonPackage rec {
     examples = [ pins ] ++ pins.optional-dependencies.gcs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }
