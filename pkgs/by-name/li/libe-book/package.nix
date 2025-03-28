@@ -4,6 +4,7 @@
   fetchurl,
   gperf,
   pkg-config,
+  autoPatchPcHook,
   librevenge,
   libxml2,
   boost,
@@ -28,7 +29,10 @@ stdenv.mkDerivation rec {
       "TRUE, TRUE, &status)" \
       "true, true, &status)"
   '';
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   buildInputs = [
     gperf

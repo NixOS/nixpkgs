@@ -9,6 +9,7 @@
   lndir,
   perl,
   pkg-config,
+  autoPatchPcHook,
   which,
   cmake,
   ninja,
@@ -180,6 +181,7 @@ stdenv.mkDerivation rec {
     lndir
     perl
     pkg-config
+    autoPatchPcHook
     which
     cmake
     xmlstarlet

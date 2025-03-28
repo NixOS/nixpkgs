@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   cmake,
+  autoPatchPcHook,
   cacert,
   fetchpatch,
   buildShared ? !stdenv.hostPlatform.isStatic,
@@ -27,7 +28,10 @@ let
         inherit hash;
       };
 
-      nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [
+        cmake
+        autoPatchPcHook
+      ];
 
       cmakeFlags = [
         "-DENABLE_NC=ON"

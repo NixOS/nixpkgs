@@ -13,6 +13,7 @@
   systemd,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
   pkg-config,
+  autoPatchPcHook,
   docutils,
   doxygen,
   graphviz,
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3
     glib
   ];

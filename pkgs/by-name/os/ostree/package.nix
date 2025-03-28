@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   gtk-doc,
   nixosTests,
   pkgsCross,
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
       automake
       libtool
       pkg-config
+      autoPatchPcHook
       glib
       gtk-doc
       which

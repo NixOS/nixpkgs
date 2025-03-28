@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
 
   enablePython ? false,
   python3,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = lib.optionals enablePython [

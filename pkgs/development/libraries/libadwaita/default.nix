@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   sassc,
   vala,
   gobject-introspection,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     sassc
     vala
     gobject-introspection

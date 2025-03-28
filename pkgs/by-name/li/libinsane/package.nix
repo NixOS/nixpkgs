@@ -5,6 +5,7 @@
   ninja,
   fetchFromGitLab,
   pkg-config,
+  autoPatchPcHook,
   glib,
   docbook_xsl,
   sane-backends,
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     pkg-config
+    autoPatchPcHook
     ninja
     doxygen
     gtk-doc

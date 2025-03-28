@@ -3,6 +3,7 @@
   cmake,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   strictDeps = true;

@@ -10,6 +10,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3,
   shared-mime-info,
   nixosTests,
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       shared-mime-info
     ]

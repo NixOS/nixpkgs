@@ -6,6 +6,7 @@
   imath,
   libdeflate,
   pkg-config,
+  autoPatchPcHook,
   libjxl,
   pkgsCross,
 }:
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
   propagatedBuildInputs = [
     imath

@@ -3,6 +3,7 @@
   fetchurl,
   stdenv,
   slang,
+  autoPatchPcHook,
   popt,
   python3,
   gettext,
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    autoPatchPcHook
+  ];
   buildInputs =
     [
       slang

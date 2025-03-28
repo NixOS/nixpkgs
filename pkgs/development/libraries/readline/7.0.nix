@@ -3,6 +3,7 @@
   lib,
   stdenv,
   ncurses,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+  nativeBuildInputs = [ autoPatchPcHook ];
   propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];

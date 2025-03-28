@@ -5,6 +5,8 @@
   openssl,
   zlib,
   windows,
+  autoPatchPcHook,
+  patchPcFiles ? true,
 
   # for passthru.tests
   aria2,
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
+  nativeBuildInputs = lib.optionals patchPcFiles [ autoPatchPcHook ];
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 

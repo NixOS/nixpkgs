@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  autoPatchPcHook,
   fmt,
   catch2_3,
   staticBuild ? stdenv.hostPlatform.isStatic,
@@ -24,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4QZVCounDbtkP+58fejHGWjquWT3b03b9TNGs45dN7c=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
   # Required to build tests, even if they aren't executed
   buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ fmt ];

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  autoPatchPcHook,
   libmd,
   gitUpdater,
 }:
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [ libmd ];
 
   patches = [

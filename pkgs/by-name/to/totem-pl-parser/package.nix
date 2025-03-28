@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   libxml2,
   gobject-introspection,
@@ -38,7 +39,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [
+    pkg-config
+    autoPatchPcHook
+  ];
   nativeBuildInputs = [
     meson
     ninja

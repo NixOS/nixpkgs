@@ -2,6 +2,7 @@
   cmake,
   lib,
   stdenv,
+  autoPatchPcHook,
   fetchFromGitHub,
   gitUpdater,
 }:
@@ -19,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

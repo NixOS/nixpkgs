@@ -8,6 +8,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   protobuf,
   protobufc,
   systemd,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     (buildPackages.python3.withPackages (
       ps: with ps; [
         attrs

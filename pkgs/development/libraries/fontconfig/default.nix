@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   python3,
   freetype,
   expat,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gperf
     libxslt
     pkg-config
+    autoPatchPcHook
     python3
   ];
 

@@ -9,6 +9,7 @@
   openssl,
   perl,
   pkg-config,
+  autoPatchPcHook,
   python3,
   stdenv,
   swig,
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl # for kernel-doc
     pkg-config
+    autoPatchPcHook
     python3.pythonOnBuildForHost
     swig
   ];

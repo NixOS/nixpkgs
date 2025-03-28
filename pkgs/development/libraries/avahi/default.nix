@@ -5,6 +5,7 @@
   config,
   stdenv,
   pkg-config,
+  autoPatchPcHook,
   libdaemon,
   dbus,
   libpcap,
@@ -148,6 +149,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     gettext
     glib
     autoreconfHook

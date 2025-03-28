@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchPcHook,
   gettext,
   libgpg-error,
   enableCapabilities ? false,
@@ -38,7 +39,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = lib.optional stdenv.cc.isClang "fortify";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-
+  nativeBuildInputs = [
+    autoPatchPcHook
+  ];
   buildInputs =
     [ libgpg-error ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gettext

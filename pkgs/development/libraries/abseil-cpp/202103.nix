@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  autoPatchPcHook,
   static ? stdenv.hostPlatform.isStatic,
   cxxStandard ? null,
 }:
@@ -57,7 +58,10 @@ stdenv.mkDerivation rec {
       "-DCMAKE_CXX_STANDARD=${cxxStandard}"
     ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
 
   meta = with lib; {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";

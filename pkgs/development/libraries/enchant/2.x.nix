@@ -5,6 +5,7 @@
   aspell,
   groff,
   pkg-config,
+  autoPatchPcHook,
   glib,
   hunspell,
   hspell,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     groff
+    autoPatchPcHook
     pkg-config
   ];
 

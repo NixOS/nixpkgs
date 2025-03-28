@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   findutils,
+  autoPatchPcHook,
   fixDarwinDylibNames,
   updateAutotoolsGnuConfigScriptsHook,
   sslSupport ? true,
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
+    autoPatchPcHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs =

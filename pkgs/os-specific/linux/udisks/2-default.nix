@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   pkg-config,
+  autoPatchPcHook,
   gnused,
   autoreconfHook,
   gtk-doc,
@@ -88,6 +89,7 @@ stdenv.mkDerivation rec {
     which
     gobject-introspection
     pkg-config
+    autoPatchPcHook
     gtk-doc
     libxslt
     docbook_xml_dtd_412

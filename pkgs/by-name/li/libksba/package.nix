@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchPcHook,
   gettext,
   libgpg-error,
 }:
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
+  nativeBuildInputs = [ autoPatchPcHook ];
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ libgpg-error ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];

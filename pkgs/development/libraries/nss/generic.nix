@@ -9,6 +9,7 @@
   zlib,
   sqlite,
   ninja,
+  autoPatchPcHook,
   cctools,
   fixDarwinDylibNames,
   buildPackages,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     [
       perl
       ninja
+      autoPatchPcHook
       (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
       installShellFiles
     ]

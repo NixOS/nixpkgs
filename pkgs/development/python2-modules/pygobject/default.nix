@@ -6,6 +6,7 @@
   python,
   buildPythonPackage,
   pkg-config,
+  autoPatchPcHook,
   glib,
   isPy3k,
   pythonAtLeast,
@@ -38,7 +39,10 @@ buildPythonPackage rec {
 
   configureFlags = [ "--disable-introspection" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [ glib ];
 
   # in a "normal" setup, pygobject and pygtk are installed into the

@@ -11,6 +11,7 @@
   lib,
   mercurial,
   ninja,
+  autoPatchPcHook,
   python3Packages,
   stdenv,
 }:
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    autoPatchPcHook
   ];
 
   buildInputs = [

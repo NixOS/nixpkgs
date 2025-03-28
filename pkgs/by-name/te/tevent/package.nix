@@ -4,6 +4,7 @@
   fetchurl,
   python3,
   pkg-config,
+  autoPatchPcHook,
   cmocka,
   readline,
   talloc,
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     which
     python3
     libxslt

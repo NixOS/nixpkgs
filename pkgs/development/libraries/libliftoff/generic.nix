@@ -3,6 +3,7 @@
   stdenv,
   meson,
   pkg-config,
+  autoPatchPcHook,
   ninja,
   libdrm,
   version,
@@ -17,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     pkg-config
+    autoPatchPcHook
     ninja
   ];
 

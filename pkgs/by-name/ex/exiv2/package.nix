@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  autoPatchPcHook,
   doxygen,
   gettext,
   graphviz,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    autoPatchPcHook
     doxygen
     gettext
     graphviz

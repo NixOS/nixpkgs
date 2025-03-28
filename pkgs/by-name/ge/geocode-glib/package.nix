@@ -6,6 +6,7 @@
   mesonEmulatorHook,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   gtk-doc,
   docbook-xsl-nons,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       gettext
       gtk-doc
       docbook-xsl-nons

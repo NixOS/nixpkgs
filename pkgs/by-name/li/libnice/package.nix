@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3,
   gobject-introspection,
   gtk-doc,
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3
     gobject-introspection
 

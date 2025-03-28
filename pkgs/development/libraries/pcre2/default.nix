@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchPcHook,
   updateAutotoolsGnuConfigScriptsHook,
   withJitSealloc ? true,
 }:
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-008C4RPPcZOh6/J3DTrFJwiNSF1OBH7RDl0hfG713pY=";
   };
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+    autoPatchPcHook
+  ];
 
   configureFlags =
     [

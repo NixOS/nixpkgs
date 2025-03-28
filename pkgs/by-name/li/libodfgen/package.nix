@@ -4,6 +4,7 @@
   fetchurl,
   boost,
   pkg-config,
+  autoPatchPcHook,
   cppunit,
   zlib,
   libwpg,
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     boost
     cppunit

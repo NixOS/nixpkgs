@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchPcHook,
   zlib,
   testers,
 }:
@@ -27,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  nativeBuildInputs = [
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [ zlib ];
 
   configureFlags = [ "--enable-static" ];

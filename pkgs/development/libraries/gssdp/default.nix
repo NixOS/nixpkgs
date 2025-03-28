@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   vala,
   gi-docgen,
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       glib
       python3
     ]

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   dav1d,
   rav1e,
   libde265,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     cmake
   ];
 

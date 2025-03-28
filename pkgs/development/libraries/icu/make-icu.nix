@@ -3,6 +3,7 @@
   lib,
   buildPackages,
   fetchurl,
+  autoPatchPcHook,
   fixDarwinDylibNames,
   testers,
   updateAutotoolsGnuConfigScriptsHook,
@@ -100,7 +101,10 @@ let
     outputBin = "dev";
 
     nativeBuildInputs =
-      [ updateAutotoolsGnuConfigScriptsHook ]
+      [
+        updateAutotoolsGnuConfigScriptsHook
+        autoPatchPcHook
+      ]
       ++
       # FIXME: This fixes dylib references in the dylibs themselves, but
       # not in the programs in $out/bin.

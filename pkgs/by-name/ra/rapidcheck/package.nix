@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  autoPatchPcHook,
   unstableGitUpdater,
   testers,
 }:
@@ -23,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))

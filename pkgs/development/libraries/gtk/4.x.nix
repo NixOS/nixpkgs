@@ -6,6 +6,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   docutils,
   gettext,
   graphene,
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       sassc
       gi-docgen

@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   gettext,
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       gettext
       orc

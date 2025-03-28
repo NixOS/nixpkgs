@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   libsodium,
   asciidoc,
   xmlto,
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     asciidoc
     xmlto
   ];

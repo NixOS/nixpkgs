@@ -5,6 +5,7 @@
   nix-update-script,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   curl,
   leptonica,
   libarchive,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
   ];
 

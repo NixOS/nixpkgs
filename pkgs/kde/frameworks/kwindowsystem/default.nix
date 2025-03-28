@@ -4,6 +4,7 @@
   qtdeclarative,
   qtwayland,
   pkg-config,
+  autoPatchPcHook,
 }:
 mkKdeDerivation {
   pname = "kwindowsystem";
@@ -11,6 +12,7 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     qttools
     pkg-config
+    autoPatchPcHook
   ];
   extraBuildInputs = [
     qtdeclarative

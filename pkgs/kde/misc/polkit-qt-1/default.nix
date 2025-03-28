@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   polkit,
   glib,
 }:
@@ -17,7 +18,10 @@ mkKdeDerivation rec {
 
   patches = [ ./full-paths.patch ];
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   extraBuildInputs = [
     glib
     polkit

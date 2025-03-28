@@ -41,6 +41,7 @@
   ostree,
   p11-kit,
   pkg-config,
+  autoPatchPcHook,
   polkit,
   python3,
   runCommand,
@@ -175,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
       validatePkgConfig
+      autoPatchPcHook
       wayland-scanner
       wrapGAppsNoGuiHook
     ]

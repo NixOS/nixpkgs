@@ -5,6 +5,7 @@
   ruby,
   opencl-headers,
   autoreconfHook,
+  autoPatchPcHook,
   windows,
 }:
 
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     ruby
+    autoPatchPcHook
   ];
 
   buildInputs = [ opencl-headers ] ++ lib.optionals stdenv.hostPlatform.isWindows [ windows.dlfcn ];

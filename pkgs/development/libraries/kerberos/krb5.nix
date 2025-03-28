@@ -9,6 +9,8 @@
   openssl,
   perl,
   pkg-config,
+  patchPcFiles ? true,
+  autoPatchPcHook,
 
   # for passthru.tests
   bind,
@@ -82,7 +84,8 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
+    ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds
+    ++ lib.optional patchPcFiles autoPatchPcHook;
 
   buildInputs =
     [ openssl ]

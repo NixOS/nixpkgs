@@ -4,6 +4,7 @@
   fetchurl,
   replaceVars,
   pkg-config,
+  autoPatchPcHook,
   libxslt,
   ninja,
   gnome,
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     ninja
     gettext

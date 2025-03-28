@@ -4,6 +4,7 @@
   fetchurl,
   alsa-topology-conf,
   alsa-ucm-conf,
+  autoPatchPcHook,
   testers,
 }:
 
@@ -15,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-jE/zdVPL6JYY4Yfkx3n3GpuyqLJ7kfh+1AmHzJIz2PY=";
   };
+
+  nativeBuildInputs = [ autoPatchPcHook ];
 
   patches =
     [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "sha256-8hBQFEXOIb9ge6Ue+MEl4Q4i3/3/7Dd2RkYt9fAZFew=";
   };
+
+  nativebuildInputs = [ autoPatchPcHook ];
 
   configureFlags = [
     "--disable-gui"

@@ -6,6 +6,7 @@
   # dependencies
   cyrus_sasl,
   groff,
+  autoPatchPcHook,
   libsodium,
   libtool,
   openssl,
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     groff
+    autoPatchPcHook
   ];
 
   buildInputs =

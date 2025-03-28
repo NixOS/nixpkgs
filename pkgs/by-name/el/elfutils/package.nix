@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   musl-fts,
   musl-obstack,
   m4,
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
       flex
       gettext
       bzip2
+      autoPatchPcHook
     ]
     ++ lib.optional enableDebuginfod pkg-config
     ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;

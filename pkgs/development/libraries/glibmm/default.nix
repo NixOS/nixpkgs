@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   gnum4,
   glib,
   libsigcxx,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     pkg-config
+    autoPatchPcHook
     ninja
     gnum4
     glib # for glib-compile-schemas

@@ -13,6 +13,7 @@
   m4,
   perl,
   pkg-config,
+  autoPatchPcHook,
   python3,
   python311,
   rust-cbindgen,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       m4
       perl
       pkg-config
+      autoPatchPcHook
       # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
       # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
       (if lib.versionOlder version "115" then python311 else python3)

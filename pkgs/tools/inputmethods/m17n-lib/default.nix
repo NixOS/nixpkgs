@@ -5,6 +5,7 @@
   m17n_db,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
     # requires m17n-db tool at build time
     m17n_db
   ];

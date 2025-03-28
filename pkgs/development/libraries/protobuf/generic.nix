@@ -9,6 +9,7 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
+  autoPatchPcHook,
   gtest,
   zlib,
   version,
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    autoPatchPcHook
   ];
 
   buildInputs = [

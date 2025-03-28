@@ -5,6 +5,7 @@
   cmake,
   pandoc,
   pkg-config,
+  autoPatchPcHook,
   icu,
   catch2_3,
 }:
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     cmake
     pandoc
     pkg-config
+    autoPatchPcHook
   ];
   buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ icu ];

@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   cjson,
   cmocka,
   mbedtls,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [

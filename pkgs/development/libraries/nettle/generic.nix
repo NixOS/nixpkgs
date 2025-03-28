@@ -4,7 +4,7 @@
   buildPackages,
   gmp,
   gnum4,
-
+  autoPatchPcHook,
   # Version specific args
   version,
   src,
@@ -22,7 +22,10 @@ stdenv.mkDerivation {
   outputBin = "dev";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ gnum4 ];
+  nativeBuildInputs = [
+    gnum4
+    autoPatchPcHook
+  ];
   propagatedBuildInputs = [ gmp ];
 
   configureFlags =

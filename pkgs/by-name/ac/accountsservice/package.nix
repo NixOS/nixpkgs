@@ -4,6 +4,7 @@
   fetchurl,
   replaceVars,
   pkg-config,
+  autoPatchPcHook,
   glib,
   shadow,
   gobject-introspection,
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       vala
     ]

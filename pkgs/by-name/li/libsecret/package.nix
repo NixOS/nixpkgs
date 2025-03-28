@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   libxslt,
   python3,
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       gettext
       libxslt # for xsltproc for building man pages
       docbook-xsl-nons

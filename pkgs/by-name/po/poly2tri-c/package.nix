@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   glib,
 }:
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [

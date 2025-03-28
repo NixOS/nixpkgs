@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   m4,
+  autoPatchPcHook,
   cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm,
   buildPackages,
   withStatic ? stdenv.hostPlatform.isStatic,
@@ -43,7 +44,10 @@ let
 
     strictDeps = true;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ m4 ];
+    nativeBuildInputs = [
+      m4
+      autoPatchPcHook
+    ];
 
     configureFlags =
       [

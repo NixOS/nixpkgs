@@ -4,6 +4,7 @@
   fetchurl,
   meson,
   pkg-config,
+  autoPatchPcHook,
   ninja,
   wayland-scanner,
   withTests ? stdenv.hostPlatform.isLinux,
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       meson
       pkg-config
+      autoPatchPcHook
       ninja
       wayland-scanner
     ]

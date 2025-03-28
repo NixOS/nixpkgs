@@ -4,6 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
+    autoPatchPcHook
   ];
 
   meta = with lib; {

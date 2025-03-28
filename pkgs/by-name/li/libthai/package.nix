@@ -4,6 +4,7 @@
   fetchurl,
   installShellFiles,
   pkg-config,
+  autoPatchPcHook,
   libdatrie,
 }:
 
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     installShellFiles
     (lib.getBin libdatrie)
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [ libdatrie ];

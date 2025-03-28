@@ -7,6 +7,7 @@
   glib,
   polkit,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   gusb,
   lcms2,
@@ -88,6 +89,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       shared-mime-info
       vala
       wrapGAppsNoGuiHook

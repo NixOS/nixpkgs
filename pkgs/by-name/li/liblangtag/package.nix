@@ -7,6 +7,7 @@
   gtk-doc,
   gettext,
   pkg-config,
+  autoPatchPcHook,
   glib,
   libxml2,
   gobject-introspection,
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     pkg-config
+    autoPatchPcHook
     unzip
     gobject-introspection
   ];

@@ -3,6 +3,7 @@
   lib,
   stdenv,
   pkg-config,
+  autoPatchPcHook,
   autoreconfHook,
   gettext,
   glib,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
     glib # required to satisfy AM_PATH_GLIB_2_0
   ];

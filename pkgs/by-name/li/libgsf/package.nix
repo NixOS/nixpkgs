@@ -5,6 +5,7 @@
   autoreconfHook,
   gtk-doc,
   pkg-config,
+  autoPatchPcHook,
   intltool,
   gettext,
   glib,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gtk-doc
     pkg-config
+    autoPatchPcHook
     intltool
     libintl
   ];

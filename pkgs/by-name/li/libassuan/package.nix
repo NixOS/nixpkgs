@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  autoPatchPcHook,
   gettext,
   npth,
   libgpg-error,
@@ -26,9 +27,11 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # libassuan-config
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoPatchPcHook ];
   buildInputs = [
     npth
     gettext
+    libgpg-error
   ];
 
   configureFlags = [

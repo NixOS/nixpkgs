@@ -4,6 +4,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   itstool,
   wrapGAppsHook4,
@@ -43,6 +44,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gobject-introspection
     itstool
     desktop-file-utils

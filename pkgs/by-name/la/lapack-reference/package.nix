@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gfortran,
+  autoPatchPcHook,
   cmake,
   shared ? true,
   # Compile with ILP64 interface
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gfortran
     cmake
+    autoPatchPcHook
   ];
 
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.

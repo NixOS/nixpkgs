@@ -8,6 +8,7 @@
 
   cmake,
   ninja,
+  autoPatchPcHook,
   perl, # Project uses Perl for scripting and testing
   python3,
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    autoPatchPcHook
     perl
     python3
   ];

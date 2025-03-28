@@ -5,6 +5,7 @@
   autoreconfHook,
   autoconf-archive,
   pkg-config,
+  autoPatchPcHook,
   doxygen,
   perl,
   openssl,
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     autoconf-archive
     pkg-config
+    autoPatchPcHook
     doxygen
     perl
   ];

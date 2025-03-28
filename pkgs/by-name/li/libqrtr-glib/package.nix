@@ -6,6 +6,7 @@
   mesonEmulatorHook,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   gtk-doc,
   docbook-xsl-nons,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [
     pkg-config
+    autoPatchPcHook
   ];
 
   nativeBuildInputs =

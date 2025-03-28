@@ -14,6 +14,7 @@
   lndir,
   perl,
   pkg-config,
+  autoPatchPcHook,
   python3,
   which,
   # darwin support
@@ -172,6 +173,7 @@ stdenv.mkDerivation (
           lndir
           perl
           pkg-config
+          autoPatchPcHook
           which
         ]
         ++ lib.optionals (mysqlSupport) [ libmysqlclient ]

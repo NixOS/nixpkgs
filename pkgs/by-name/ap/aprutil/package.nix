@@ -16,6 +16,7 @@
   libxcrypt,
   cyrus_sasl,
   autoreconfHook,
+  autoPatchPcHook,
 }:
 
 assert sslSupport -> openssl != null;
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     autoreconfHook
+    autoPatchPcHook
   ];
 
   configureFlags =

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  autoPatchPcHook,
   gtest,
   static ? stdenv.hostPlatform.isStatic,
   cxxStandard ? null,
@@ -48,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
 
   buildInputs = [ gtest ];
 

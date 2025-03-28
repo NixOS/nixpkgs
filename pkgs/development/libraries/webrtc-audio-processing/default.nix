@@ -8,6 +8,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
 
   propagatedBuildInputs = [

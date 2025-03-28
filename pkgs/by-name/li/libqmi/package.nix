@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   gtk-doc,
   docbook-xsl-nons,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
     ]
     ++ lib.optionals withMan [

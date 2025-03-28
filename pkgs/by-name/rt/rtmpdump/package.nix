@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  autoPatchPcHook,
   zlib,
   gnutlsSupport ? false,
   gnutls,
@@ -36,6 +37,7 @@ stdenv.mkDerivation {
     ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
     ++ lib.optional stdenv.hostPlatform.isDarwin "SYS=darwin";
 
+  nativeBuildInputs = [ autoPatchPcHook ];
   propagatedBuildInputs =
     [ zlib ]
     ++ lib.optionals gnutlsSupport [

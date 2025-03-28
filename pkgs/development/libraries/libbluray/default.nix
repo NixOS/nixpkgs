@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   fontconfig,
   autoreconfHook,
   DiskArbitration,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       autoreconfHook
     ]
     ++ lib.optionals withJava [
