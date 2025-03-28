@@ -70,7 +70,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # don't let the tests depend on `hostname`
-    substituteInPlace Tst/regress.cmd --replace 'mysystem_catch("hostname")' 'nix_test_runner'
+    substituteInPlace Tst/regress.cmd \
+      --replace-fail 'mysystem_catch("hostname")' 'nix_test_runner'
+
+    # ld: file not found: @rpath/libquadmath.0.dylib
+    substituteInPlace m4/p-procs.m4 \
+      --replace-fail "-flat_namespace" ""
 
     patchShebangs .
   '';
