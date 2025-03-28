@@ -74,14 +74,14 @@ let
   (lib.pipe {
     # The attributes below are the only ones that are different for devices /
     # folders.
-    devs = {
+    device = {
       new_conf_IDs = map (v: v.id) devices;
       GET_IdAttrName = "deviceID";
       override = cfg.overrideDevices;
       conf = devices;
       baseAddress = curlAddressArgs "/rest/config/devices";
     };
-    dirs = {
+    folder = {
       new_conf_IDs = map (v: v.id) folders;
       GET_IdAttrName = "id";
       override = cfg.overrideFolders;
@@ -92,9 +92,17 @@ let
     # Now for each of these attributes, write the curl commands that are
     # identical to both folders and devices.
     (mapAttrs (conf_type: s:
+      ''
+        declare -A existing_${conf_type}_ids
+        declare -a array # work around expansion issues
+        eval "array=($(curl -X GET ${s.baseAddress} | ${jq} --raw-output '.[].${s.GET_IdAttrName} | @sh'))"
+        for id in "''${array[@]}"; do
+          existing_${conf_type}_ids["$id"]=1;
+        done
+      ''
       # We iterate the `conf` list now, and run a curl -X POST command for each, that
       # should update that device/folder only.
-      lib.pipe s.conf [
+      + lib.pipe s.conf [
         # Quoting https://docs.syncthing.net/rest/config.html:
         #
         # > PUT takes an array and POST a single object. In both cases if a
@@ -105,24 +113,46 @@ let
         # don't exist in the array given. That's why we use here `POST`, and
         # only if s.override == true then we DELETE the relevant folders
         # afterwards.
-        (map (new_cfg: ''
-          curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
-        ''))
+        #
+        # Moreover, since existing folder/device are replaced (and not
+        # updated), if override is set to true, then we need to skip existing
+        # entries, and only create entries that do not exist.
+        (map (new_cfg:
+        let
+          createItem = ''
+            curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
+          '';
+        in
+          if s.override then ''
+            printf "Overriding ${conf_type}: ${new_cfg.id}\n"
+            ${createItem}
+          '' else ''
+            cfg_id=${lib.escapeShellArg new_cfg.id}
+            if [ -z "''${existing_${conf_type}_ids["$cfg_id"]}" ]; then
+              printf "Creating ${conf_type}: %s\n" "$cfg_id"
+              ${createItem}
+            else
+              printf "Not overriding ${conf_type}: %s already exists in Syncthing\n" "$cfg_id"
+            fi
+          ''
+        ))
         (lib.concatStringsSep "\n")
       ]
-      /* If we need to override devices/folders, we iterate all currently configured
-      IDs, via another `curl -X GET`, and we delete all IDs that are not part of
-      the Nix configured list of IDs
-      */
+      # If we need to override devices/folders, we iterate all currently
+      # configured IDs, and delete all IDs that are not part of the Nix
+      # configured list of IDs.
       + lib.optionalString s.override ''
-        stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
-          --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
-          --raw-output \
-          '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
-        )"
-        for id in ''${stale_${conf_type}_ids}; do
-          >&2 echo "Deleting stale device: $id"
-          curl -X DELETE ${s.baseAddress}/$id
+        declare -A new_${conf_type}_ids
+        new_${conf_type}_ids=(${lib.concatMapStringsSep " " (id: "[${lib.escapeShellArg id}]=1") s.new_conf_IDs})
+        for existing_id in ''${existing_${conf_type}_ids[@]}; do
+          if ! [[ -v new_${conf_type}_ids["$existing_id"] ]]; then
+            printf "Deleting stale ${conf_type}: %s\n" "$existing_id"
+            # NOTE(lopter@2025-03-28):
+            # Regarding https://github.com/NixOS/nixpkgs/issues/259748 I am
+            # wondering if doing some url encoding would solve the issue? We
+            # could do it with the @uri jq filter.
+            curl -X DELETE ${s.baseAddress}/"$existing_id"
+          fi
         done
       ''
     ))
