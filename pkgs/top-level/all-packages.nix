@@ -4405,9 +4405,7 @@ with pkgs;
 
   pipecontrol = libsForQt5.callPackage ../applications/audio/pipecontrol { };
 
-  pulumiPackages = recurseIntoAttrs (
-    callPackage ../tools/admin/pulumi-packages { }
-  );
+  pulumiPackages = recurseIntoAttrs pulumi.pkgs;
 
   pulumi-bin = callPackage ../tools/admin/pulumi-bin { };
 
@@ -5779,7 +5777,7 @@ with pkgs;
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat-bootstrap14
-      else buildPackages.gnat13;
+      else buildPackages.gnat14;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
@@ -7684,7 +7682,7 @@ with pkgs;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gradle-packages = import ../development/tools/build-managers/gradle {
-    inherit jdk17 jdk21;
+    inherit jdk11 jdk17 jdk21 jdk23;
   };
   gradleGen = gradle-packages.gen;
   wrapGradle = callPackage gradle-packages.wrapGradle { };
@@ -15144,6 +15142,9 @@ with pkgs;
 
   vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
+
+  vscode-extensions-update-script = callPackage ../by-name/vs/vscode-extensions-update/vscode-extensions-update-script.nix { };
+
   vscode-js-debug = callPackage ../by-name/vs/vscode-js-debug/package.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -16515,15 +16516,10 @@ with pkgs;
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
     python = python3;
-    protobuf = protobuf_26.override {
+    protobuf = protobuf_29.override {
       abseil-cpp = abseil-cpp_202407;
     };
-    # or-tools builds with -std=c++17, so abseil-cpp must
-    # also be built that way
-    abseil-cpp = abseil-cpp_202407.override {
-      static = true;
-      cxxStandard = "17";
-    };
+    abseil-cpp = abseil-cpp_202407;
   };
 
   p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {
