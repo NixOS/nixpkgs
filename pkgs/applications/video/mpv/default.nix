@@ -309,6 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
       fpletz
       globin
       ma27
+      SchweGELBin
     ];
     platforms = lib.platforms.unix;
   };
