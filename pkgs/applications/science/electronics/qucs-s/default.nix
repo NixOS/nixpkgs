@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
   buildInputs = [ qtbase qttools qtcharts qtsvg gperf adms ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland libX11 ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland libX11 ]
     ++ kernels;
 
   cmakeFlags = [

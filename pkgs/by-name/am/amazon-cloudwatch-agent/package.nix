@@ -48,7 +48,7 @@ buildGoModule rec {
   versionCheckProgramArg = "-version";
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) amazon-cloudwatch-agent;
     };
 
