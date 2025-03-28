@@ -1387,9 +1387,7 @@ with pkgs;
 
   gitlint = python3Packages.callPackage ../applications/version-management/gitlint { };
 
-  gitmux = callPackage ../applications/version-management/gitmux {
-    buildGoModule = buildGo122Module;
-  };
+  gitmux = callPackage ../applications/version-management/gitmux { };
 
   gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
 
