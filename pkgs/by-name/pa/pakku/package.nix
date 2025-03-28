@@ -57,15 +57,14 @@ stdenv.mkDerivation {
       --zsh <($out/bin/pakku --generate-completion=zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A multiplatform modpack manager for Minecraft: Java Edition. Create modpacks for CurseForge, Modrinth or both simultaneously";
     homepage = "https://github.com/juraj-hrivnak/Pakku";
-
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.eupl12;
+    license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ Squawkykaka ];
     mainProgram = "pakku";
     platforms = lib.platforms.all;
