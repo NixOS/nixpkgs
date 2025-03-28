@@ -486,29 +486,6 @@ in
     '';
   };
 
-  # note that you need version >= v3.16.14.8,
-  # otherwise the gem will fail to link to the libv8 binary.
-  # see: https://github.com/cowboyd/libv8/pull/161
-  libv8 = attrs: {
-    buildInputs = [ which nodejs.libv8 python2 ];
-    buildFlags = [ "--with-system-v8=true" ];
-    dontBuild = false;
-    # The gem includes broken symlinks which are ignored during unpacking, but
-    # then fail during build. Since the content is missing anyway, touching the
-    # files is enough to unblock the build.
-    preBuild = ''
-      touch vendor/depot_tools/cbuildbot vendor/depot_tools/chrome_set_ver vendor/depot_tools/cros_sdk
-    '';
-    postPatch = ''
-      substituteInPlace ext/libv8/extconf.rb \
-        --replace "location = Libv8::Location::Vendor.new" \
-                  "location = Libv8::Location::System.new"
-    '';
-    meta.broken = true; # At 2023-01-20, errors as:
-                        #   "Failed to build gem native extension."
-                        # Requires Python 2. Project is abandoned.
-  };
-
   execjs = attrs: {
     propagatedBuildInputs = [ nodejs.libv8 ];
   };
