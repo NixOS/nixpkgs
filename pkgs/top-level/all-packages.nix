@@ -6869,7 +6869,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php83;
+  php = php84;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
