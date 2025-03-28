@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6ddPma6B4hNgtILavJFz/wtSzLViABkluZ5BTXpbcEE=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     glib # glib-compile-schemas
     meson
