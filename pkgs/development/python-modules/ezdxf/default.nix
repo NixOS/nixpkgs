@@ -14,6 +14,8 @@
   matplotlib,
   pymupdf,
   pyqt5,
+  withGui ? false,
+  qt6,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-p8wvnBIOOcZ8XKPN1b9wsWF9eutSNeeoGSkgLfA/kjQ=";
   };
 
+  nativeBuildInputs = lib.optionals withGui [ qt6.wrapQtAppsHook ];
+
   dependencies = [
     pyparsing
     typing-extensions
     numpy
     fonttools
-  ];
+  ] ++ lib.optionals withGui ([ qt6.qtbase ] ++ optional-dependencies.draw);
 
   optional-dependencies = {
     draw = [
@@ -55,6 +59,12 @@ buildPythonPackage rec {
     setuptools
     cython
   ];
+
+  dontWrapQtApps = true;
+
+  preFixup = lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   checkInputs = [ pillow ];
 
