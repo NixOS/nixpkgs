@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   nixosTests,
   bash-completion,
   glib,
@@ -31,11 +31,12 @@
   gtk-doc,
   libxslt,
   enableDaemon ? true,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colord";
-  version = "1.4.6";
+  version = "1.4.7";
 
   outputs = [
     "out"
@@ -45,9 +46,11 @@ stdenv.mkDerivation rec {
     "installedTests"
   ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
-    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "colord";
+    tag = finalAttrs.version;
+    hash = "sha256-/lAj8T2V23V6F8IhNNeJAq5BDWCeaMaxVd2igZP6oMo=";
   };
 
   patches = [
@@ -130,6 +133,7 @@ stdenv.mkDerivation rec {
     tests = {
       installedTests = nixosTests.installed-tests.colord;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -139,4 +143,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
     platforms = platforms.linux;
   };
-}
+})
