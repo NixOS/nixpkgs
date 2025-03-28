@@ -16765,10 +16765,6 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
-  warp-plus = callPackage ../by-name/wa/warp-plus/package.nix {
-    buildGoModule = buildGo122Module;
-  };
-
   # Should always be the version with the most features
   w3m-full = w3m;
 
