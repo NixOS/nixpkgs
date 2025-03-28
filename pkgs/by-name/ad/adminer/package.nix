@@ -8,13 +8,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.0.5";
+  version = "5.1.0";
   pname = "adminer";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
     url = "https://github.com/vrana/adminer/releases/download/v${finalAttrs.version}/adminer-${finalAttrs.version}.zip";
-    hash = "sha256-7VAy9bE9dUZpkKtRMUa/boA6NlfZ7tBT/2x1POtazoM=";
+    hash = "sha256-SLu7NJoCkfEL9WhYQSHEx5QZmD6cjkBXpwEnp7d6Elo=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     php.packages.composer
     unzip
   ];
+
+  # Patch composer.json by inserting a "version" field using the derivation’s version.
+  patchPhase = ''
+    sed -i '1a\  "version": "'${finalAttrs.version}'",' composer.json
+  '';
 
   buildPhase = ''
     runHook preBuild
