@@ -1,34 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchFromGitHub,
   argon2-cffi,
   bcrypt,
   cryptography,
+  hatchling,
   pytestCheckHook,
-  pythonOlder,
+  pytest-archon,
   pytest-xdist,
-  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "passlib";
-  version = "1.7.4";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitLab {
-    domain = "foss.heptapod.net";
-    owner = "python-libs";
+  src = fetchFromGitHub {
+    owner = "ThirVondukr";
     repo = "passlib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Mx2Xg/KAEfvfep2B/gWATTiAPJc+f22MTcsEdRpt3n8=";
+    tag = version;
+    hash = "sha256-Q5OEQkty0/DugRvF5LA+PaDDlF/6ysx4Nel5K2kH5s4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  dependencies = [ setuptools ];
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
     argon2 = [ argon2-cffi ];
@@ -36,21 +34,11 @@ buildPythonPackage rec {
     totp = [ cryptography ];
   };
 
-  # Fix for https://foss.heptapod.net/python-libs/passlib/-/issues/190
-  postPatch = ''
-    substituteInPlace passlib/handlers/bcrypt.py \
-      --replace-fail "version = _bcrypt.__about__.__version__" \
-      "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
-  '';
-
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-xdist
-    ]
-    ++ optional-dependencies.argon2
-    ++ optional-dependencies.bcrypt
-    ++ optional-dependencies.totp;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-archon
+    pytest-xdist
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "passlib" ];
 
@@ -58,22 +46,13 @@ buildPythonPackage rec {
     # timming sensitive
     "test_dummy_verify"
     "test_encrypt_cost_timing"
-    # These tests fail because they don't expect support for algorithms provided through libxcrypt
-    "test_82_crypt_support"
-  ];
-
-  pytestFlagsArray = [
-    # hashing algorithms we don't support anymore
-    "--deselect=passlib/tests/test_handlers.py::des_crypt_os_crypt_test::test_82_crypt_support"
-    "--deselect=passlib/tests/test_handlers.py::md5_crypt_os_crypt_test::test_82_crypt_support"
-    "--deselect=passlib/tests/test_handlers.py::sha256_crypt_os_crypt_test::test_82_crypt_support"
   ];
 
   meta = {
-    changelog = "https://foss.heptapod.net/python-libs/passlib/-/blob/${version}/docs/history/${lib.versions.majorMinor version}.rst";
+    changelog = "https://github.com/ThirVondukr/passlib/blob/${src.tag}/CHANGELOG.md";
     description = "Password hashing library for Python";
-    homepage = "https://foss.heptapod.net/python-libs/passlib";
-    license = lib.licenses.bsdOriginal;
+    homepage = "https://github.com/ThirVondukr/passlib";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
