@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
 
   # dependencies
   atpublic,
   parsy,
   python-dateutil,
-  pytz,
   sqlglot,
   toolz,
   typing-extensions,
+  tzdata,
 
   # tests
   pytestCheckHook,
@@ -32,6 +30,9 @@
   writableTmpDirAsHomeHook,
 
   # optional-dependencies
+  # - athena
+  pyathena,
+  fsspec,
   # - bigquery
   db-dtypes,
   google-cloud-bigquery,
@@ -44,6 +45,8 @@
   rich,
   # - clickhouse
   clickhouse-connect,
+  # - databricks
+  # databricks-sql-connector-core, (unpackaged)
   # - datafusion
   datafusion,
   # - druid
@@ -87,7 +90,7 @@ let
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
+    # https://github.com/ibis-project/ibis/blob/10.4.0/nix/overlay.nix#L94-L100
     rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
     hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
@@ -95,56 +98,32 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "9.5.0";
+  version = "10.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
     tag = version;
-    hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
+    hash = "sha256-N6T3Hx4UIb08P+Xqg6RFb9q/pmAHvldW0yaFoRxmMv0=";
   };
 
-  patches = [
-    # remove after the 10.0 release
-    (fetchpatch {
-      name = "ibis-framework-duckdb-1.1.1.patch";
-      url = "https://github.com/ibis-project/ibis/commit/a54eceabac1d6592e9f6ab0ca7749e37a748c2ad.patch";
-      hash = "sha256-j5BPYVqnEF9GQV5N3/VhFUCdsEwAIOQC0KfZ5LNBSRg=";
-    })
-
-    # remove after the 10.0 release
-    (fetchpatch {
-      name = "ibis-framework-arrow-18.patch";
-      url = "https://github.com/ibis-project/ibis/commit/5dc549b22c2eca29a11a31fb29deef7c1466a204.patch";
-      hash = "sha256-4i/g2uixdlkbE6x659wzZJ91FZpzwOVkF6ZeXkiCP3I=";
-      excludes = [
-        "poetry.lock"
-        "requirements-dev.txt"
-      ];
-    })
-  ];
-
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
   ];
-
-  dontBypassPoetryDynamicVersioning = true;
-  env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
 
   pythonRelaxDeps = [
-    "toolz"
+    # "toolz"
   ];
 
   dependencies = [
     atpublic
     parsy
     python-dateutil
-    pytz
     sqlglot
     toolz
     typing-extensions
+    tzdata
   ];
 
   nativeCheckInputs = [
@@ -174,8 +153,12 @@ buildPythonPackage rec {
     "test_attach_sqlite"
     "test_connect_extensions"
     "test_load_extension"
+    "test_read_csv_with_types"
     "test_read_sqlite"
     "test_register_sqlite"
+    "test_roundtrip_xlsx"
+    # AssertionError: value does not match the expected value in snapshot
+    "test_union_aliasing"
     # requires network connection
     "test_s3_403_fallback"
     "test_hugging_face"
@@ -204,6 +187,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ibis" ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
   optional-dependencies = {
+    athena = [
+      pyathena
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+      packaging
+      fsspec
+    ];
     bigquery = [
       db-dtypes
       google-cloud-bigquery
@@ -217,6 +210,14 @@ buildPythonPackage rec {
     ];
     clickhouse = [
       clickhouse-connect
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    databricks = [
+      # databricks-sql-connector-core (unpackaged)
       pyarrow
       pyarrow-hotfix
       numpy
@@ -244,9 +245,9 @@ buildPythonPackage rec {
       pyarrow
       pyarrow-hotfix
       numpy
-      packaging
       pandas
       rich
+      packaging
     ];
     flink = [
       pyarrow
