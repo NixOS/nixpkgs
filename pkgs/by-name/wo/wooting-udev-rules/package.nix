@@ -19,7 +19,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = "unknown";
     maintainers = with maintainers; [
-      davidtwco
       returntoreality
     ];
   };
