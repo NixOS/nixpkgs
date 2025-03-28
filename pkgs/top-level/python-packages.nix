@@ -994,6 +994,8 @@ self: super: with self; {
 
   asynccmd = callPackage ../development/python-modules/asynccmd { };
 
+  asyncer = callPackage ../development/python-modules/asyncer { };
+
   asyncinotify = callPackage ../development/python-modules/asyncinotify { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
@@ -14734,6 +14736,8 @@ self: super: with self; {
   releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
+
+  rembg = callPackage ../development/python-modules/rembg { };
 
   remctl = callPackage ../development/python-modules/remctl { remctl-c = pkgs.remctl; };
 
