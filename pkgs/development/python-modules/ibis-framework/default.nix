@@ -30,6 +30,7 @@
   pytest-snapshot,
   pytest-timeout,
   pytest-xdist,
+  writableTmpDirAsHomeHook,
 
   # optional-dependencies
   # - bigquery
@@ -165,6 +166,7 @@ buildPythonPackage rec {
     # this dependency is still needed due to use of strict markers and
     # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
+    writableTmpDirAsHomeHook
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
@@ -194,7 +196,6 @@ buildPythonPackage rec {
   '';
 
   preCheck = ''
-    HOME="$TMPDIR"
     export IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
 
     # copy the test data to a directory
