@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "CLI tool that brings currency exchange rates right into your terminal";

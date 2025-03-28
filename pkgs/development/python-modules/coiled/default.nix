@@ -87,7 +87,7 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Python client for coiled.io dask clusters";

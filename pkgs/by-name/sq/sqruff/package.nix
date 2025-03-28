@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

@@ -57,7 +57,7 @@ buildGoModule.override { go = go_1_24; } rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bao";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

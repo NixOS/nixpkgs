@@ -44,7 +44,7 @@ beamPackages.mixRelease rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;
