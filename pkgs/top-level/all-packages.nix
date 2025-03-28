@@ -11553,6 +11553,7 @@ with pkgs;
     armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     armTrustedFirmwareRK3399
+    armTrustedFirmwareRK3568
     armTrustedFirmwareRK3588
     armTrustedFirmwareS905
     ;
