@@ -1183,6 +1183,36 @@ rec {
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
+    # Apply a function after merging.
+    #
+    # A safe alternative to `t // { merge = f t.merge; }` that refuses to be
+    # forgotten by type merging.
+    #
+    # Try to avoid post-composing functions to types, because it does not
+    # support type merging and may hide information that could be relevant for
+    # other modules and for debugging.
+    #
+    # However, if you do need to post-compose a function to a type, use this
+    # combinator, as it won't cause the post-composition to be forgotten by
+    # the type merging algorithm; a problem which occurs with `//`-based
+    # type modifications on type-mergeable types.
+    #
+    # One known use case is usage inside `freeformType`, where the freeform
+    # values are deprecated and need special treatment.
+    postTransform = f: type: mkOptionType {
+      name = "postTransform";
+      description = "transformed ${type.description}";
+      check = type.check;
+      merge = loc: defs: f (type.merge loc defs);
+      nestedTypes.type = type;
+      # Does not support type-merging, as functions do not compose commutatively.
+      # That said, we could treat null as the identity function and treat
+      # it specially, as it does compose.
+      # However, that does not solve the problem that we can't type-merge a
+      # `postTransform $x` and an `$x`, as one may expect to be able to.
+      # For the best ux, postTransform should probably get special treatment
+      # in the type merging algorithm.
+    };
   };
 
   /**
