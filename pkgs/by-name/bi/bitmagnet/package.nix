@@ -1,22 +1,22 @@
 {
   lib,
-  buildGo122Module, # builds, but does not start on 1.23
+  buildGo123Module,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGo122Module rec {
+buildGo123Module rec {
   pname = "bitmagnet";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-so9GD9hyGfuqqYq61OD1WJXba22cR4msOPp1wLI5vAU=";
+    hash = "sha256-KgpKpnOVtS3VoIqKhIzDvbdR54M014tQj2/ufhWMZDo=";
   };
 
-  vendorHash = "sha256-aauXgHPZbSiTW9utuHXzJr7GsWs/2aFiGuukA/B9BRc=";
+  vendorHash = "sha256-Scper1eR6I4pCXus/jytSpW8a1omg7sJIPvOn3jYcLM=";
 
   ldflags = [
     "-s"
@@ -33,7 +33,7 @@ buildGo122Module rec {
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';
-    homepage = "https://bitmagnet.io/";
+    homepage = "https://bitmagnet.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
