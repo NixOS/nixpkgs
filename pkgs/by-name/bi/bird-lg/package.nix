@@ -9,13 +9,13 @@ let
     { modRoot, vendorHash }:
     buildGoModule rec {
       pname = "bird-lg-${modRoot}";
-      version = "1.3.5";
+      version = "1.3.8";
 
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
         rev = "v${version}";
-        hash = "sha256-lWpTIuN+wCSDBHmpRIfVG8Z1Qx1s55MnJomQPjczB5k=";
+        hash = "sha256-j81cfHqXNsTM93ofxXz+smkjN8OdJXxtm9z5LdzC+r8=";
       };
 
       doDist = false;
@@ -41,12 +41,12 @@ let
 
   bird-lg-frontend = generic {
     modRoot = "frontend";
-    vendorHash = "sha256-+M9Mlqck2E/ETW+NXsKwIeWlmZAaBU07fgDhKUU9PAI=";
+    vendorHash = "sha256-luJuIZ0xN8mdtWwTlfEDnAwMgt+Tzxlk2ZIDPIwHpcY=";
   };
 
   bird-lg-proxy = generic {
     modRoot = "proxy";
-    vendorHash = "sha256-nBTLQUX68f98D0RTlyX0gnvhQ+bu8d3Vv67J/YoXJxs=";
+    vendorHash = "sha256-OVyfPmLTHV5RFdLgRHEH/GqxuG5MnGt9Koz0DxpSg+4=";
   };
 in
 symlinkJoin {
