@@ -1,39 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   pythonOlder,
-  pytestCheckHook,
-  atpublic,
-  black,
-  clickhouse-connect,
-  datafusion,
-  db-dtypes,
-  duckdb,
+  fetchFromGitHub,
   fetchpatch,
-  filelock,
-  geopandas,
-  google-cloud-bigquery,
-  google-cloud-bigquery-storage,
-  graphviz,
-  hypothesis,
-  numpy,
-  oracledb,
-  packaging,
-  pandas,
-  parsy,
-  pins,
+
+  # build-system
   poetry-core,
   poetry-dynamic-versioning,
-  polars,
-  psycopg2,
-  pyarrow,
-  pyarrow-hotfix,
-  pydata-google-auth,
-  pydruid,
-  pymysql,
-  pyodbc,
-  pyspark,
+
+  # dependencies
+  atpublic,
+  parsy,
+  python-dateutil,
+  pytz,
+  sqlglot,
+  toolz,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  black,
+  filelock,
+  hypothesis,
   pytest-benchmark,
   pytest-httpserver,
   pytest-mock,
@@ -41,17 +30,53 @@
   pytest-snapshot,
   pytest-timeout,
   pytest-xdist,
-  python-dateutil,
-  pytz,
-  regex,
+
+  # optional-dependencies
+  # - bigquery
+  db-dtypes,
+  google-cloud-bigquery,
+  google-cloud-bigquery-storage,
+  pyarrow,
+  pyarrow-hotfix,
+  pydata-google-auth,
+  numpy,
+  pandas,
   rich,
+  # - clickhouse
+  clickhouse-connect,
+  # - datafusion
+  datafusion,
+  # - druid
+  pydruid,
+  # - duckdb
+  duckdb,
+  packaging,
+  # - flink
+  # - geospatial
+  geopandas,
   shapely,
+  # - mssql
+  pyodbc,
+  # - mysql
+  pymysql,
+  # - oracle
+  oracledb,
+  # - polars
+  polars,
+  # - postgres
+  psycopg2,
+  # - pyspark
+  pyspark,
+  # - snowflake
   snowflake-connector-python,
-  sqlglot,
-  sqlite,
-  toolz,
+  # sqlite
+  regex,
+  # - trino
   trino-python-client,
-  typing-extensions,
+  # - visualization
+  graphviz,
+  # examples
+  pins,
 }:
 let
   testBackends = [
