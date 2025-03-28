@@ -2166,16 +2166,6 @@
     };
     version = "3.17.0.3";
   };
-  libv8 = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0kd4d5x9sxsbpbsk4xp66rxbmj2x3iglwirqws56wp7dzf7cd978";
-      type = "gem";
-    };
-    version = "8.4.255.0.1";
-  };
   libxml-ruby = {
     groups = ["default"];
     platforms = [];
