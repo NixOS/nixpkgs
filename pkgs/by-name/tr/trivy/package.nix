@@ -2,14 +2,14 @@
   lib,
   stdenv,
   buildPackages,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   trivy,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "trivy";
   version = "0.60.0";
 

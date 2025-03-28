@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   restic,
@@ -9,7 +9,7 @@
   resticprofile,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "resticprofile";
   version = "0.29.1";
 

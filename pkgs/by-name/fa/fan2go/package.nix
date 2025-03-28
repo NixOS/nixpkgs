@@ -1,11 +1,11 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   lm_sensors,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "fan2go";
   version = "0.9.0";
 

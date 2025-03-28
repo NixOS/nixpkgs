@@ -1,13 +1,13 @@
 {
   lib,
   # broken with go 1.24 for some reason
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "ko";
   version = "0.15.4";
 

@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   git,
   nix-update-script,
   installShellFiles,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "git-spice";
   version = "0.12.0";
 

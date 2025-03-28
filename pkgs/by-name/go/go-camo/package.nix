@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   scdoc,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "go-camo";
   version = "2.6.2";
 

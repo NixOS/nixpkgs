@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "peroxide";
   version = "0.5.0";
 

@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGoModule,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "redli";
   version = "0.15.0";
 

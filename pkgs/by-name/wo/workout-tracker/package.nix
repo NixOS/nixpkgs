@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
@@ -34,7 +34,7 @@ let
     '';
   };
 in
-buildGo124Module {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = null;

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   go-swag,
   versionCheckHook,
@@ -51,7 +51,7 @@ let
       ++ map mkTemplate withThemes
     );
 in
-buildGo124Module {
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {

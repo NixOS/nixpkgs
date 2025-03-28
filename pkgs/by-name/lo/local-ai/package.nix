@@ -15,7 +15,7 @@
   ffmpeg,
   cmake,
   pkg-config,
-  buildGo123Module,
+  buildGoModule,
   makeWrapper,
   ncurses,
   which,
@@ -352,7 +352,7 @@ let
       ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
-  self = buildGo123Module.override { stdenv = effectiveStdenv; } {
+  self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
     vendorHash = "sha256-6loR8bvt5BlijufUBVDpxNS/cVCMmbaCwEhYpJKwGys=";

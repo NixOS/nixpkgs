@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   stdenv,
   copyDesktopItems,
@@ -13,7 +13,7 @@
   wrapGAppsHook3,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "picocrypt";
   version = "1.47";
 

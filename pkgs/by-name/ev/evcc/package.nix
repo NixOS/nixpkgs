@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   fetchNpmDeps,
   cacert,
@@ -33,7 +33,7 @@ let
     maintainers = with maintainers; [ hexa ];
   };
 
-  decorate = buildGo124Module {
+  decorate = buildGoModule {
     pname = "evcc-decorate";
     inherit version src vendorHash;
 
@@ -46,7 +46,7 @@ let
   };
 in
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "evcc";
   inherit version src vendorHash;
 
