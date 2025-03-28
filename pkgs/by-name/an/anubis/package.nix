@@ -43,7 +43,10 @@ buildGo124Module rec {
     homepage = "https://github.com/TecharoHQ/anubis/";
     changelog = "https://github.com/TecharoHQ/anubis/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ knightpp ];
+    maintainers = with lib.maintainers; [
+      knightpp
+      soopyc
+    ];
     mainProgram = "anubis";
   };
 }
