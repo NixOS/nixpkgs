@@ -58,6 +58,7 @@
   depyf,
   opencv-python-headless,
   python-multipart,
+  python-amdsmi,
 
   awscli,
   boto3,
@@ -118,6 +119,7 @@ let
       rocm-runtime
       clr.icd
       hipify
+      amdsmi
     ];
 
     # Fix `setuptools` not being found
@@ -413,6 +415,9 @@ buildPythonPackage rec {
     ++ lib.optionals cudaSupport [
       cupy
       pynvml
+    ]
+    ++ lib.optionals rocmSupport [
+      python-amdsmi
     ];
 
   dontUseCmakeConfigure = true;
@@ -475,6 +480,12 @@ buildPythonPackage rec {
 
   # updates the cutlass fetcher instead
   passthru.skipBulkUpdate = true;
+
+  postFixup =
+    # expose runtime libraries necessary to use the gpu
+    lib.optionalString rocmSupport ''
+      wrapProgram "$out/bin/vllm" --set-default ROCM_PATH '${rocmtoolkit_joined}'
+    '';
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
