@@ -10,6 +10,7 @@
 , gnugrep
 , gnutls
 , gsasl
+, inetutils
 , libidn2
 , netcat-gnu
 , texinfo
@@ -110,15 +111,22 @@ let
           gnugrep
           netcat-gnu
           which
-        ] ++ optionals withSystemd [ systemd ];
+        ]
+        ++ optionals stdenv.isDarwin [ inetutils ]
+        ++ optionals withSystemd [ systemd ];
         execer = [
           "cannot:${getBin binaries}/bin/msmtp"
           "cannot:${getBin netcat-gnu}/bin/nc"
-        ] ++ optionals withSystemd [
+        ]
+        ++ optionals stdenv.isDarwin [
+          "cannot:${getBin inetutils}/bin/ping"
+        ]
+        ++ optionals withSystemd [
           "cannot:${getBin systemd}/bin/systemd-cat"
         ];
         fix."$MSMTP" = [ "msmtp" ];
-        fake.external = [ "ping" ]
+        fake.external = [ ]
+          ++ optionals stdenv.isLinux [ "ping" ]
           ++ optionals (!withSystemd) [ "systemd-cat" ];
         keep.source = [ "~/.msmtpqrc" ];
       };
