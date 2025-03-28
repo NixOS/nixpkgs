@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix curl jq nix-update
 
+set -x
+
 # check if composer2nix is installed
 if ! command -v composer2nix &> /dev/null; then
   echo "Please install composer2nix (https://github.com/svanderburg/composer2nix) to run this script."
@@ -20,6 +22,11 @@ fi
 
 curl -LO "$BOOKSTACK/composer.json"
 curl -LO "$BOOKSTACK/composer.lock"
+
+# this will fix the faulty url of htmldiff in composer.lock. 
+# If you dont see "https://codeberg.org/api/v1/repos/danb/HtmlDiff/archive/%prettyVersion%.zip" in "ssddanbrown/htmldiff" section of compose.lock AND the build is breaking, try removing below line.
+sed -i 's/%prettyVersion%/main/g' composer.lock
+
 
 composer2nix --name "bookstack" \
   --composition=composition.nix \
