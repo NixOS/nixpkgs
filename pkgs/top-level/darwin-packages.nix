@@ -170,6 +170,8 @@ makeScopeWithSplicing' {
       # Removes propagated packages from the stdenv, so those packages can be built without depending upon themselves.
       bootstrapStdenv = mkBootstrapStdenv pkgs.stdenv;
 
+      CoreSymbolication-headers = pkgs.callPackage ../os-specific/darwin/core-symbolication-headers { };
+
       libSystem = callPackage ../os-specific/darwin/libSystem { };
 
       DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };

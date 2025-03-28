@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  apple-sdk,
 }:
 stdenv.mkDerivation rec {
   pname = "autoraise";
@@ -15,15 +14,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-OsvmNHpQ46+cWkR4Nz/9oIgSFSWLfCwZnAnRKRiNm5E=";
   };
 
-  buildInputs = [
-    apple-sdk.privateFrameworksHook
+  makeTargets = [ "AutoRaise.app" ];
+
+  makeFlags = [
+    "SKYLIGHT_AVAILABLE=1"
+    "CXXFLAGS=-std=c++03"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    $CXX -std=c++03 -fobjc-arc -D"NS_FORMAT_ARGUMENT(A)=" -D"SKYLIGHT_AVAILABLE=1" -o AutoRaise AutoRaise.mm -framework AppKit -framework SkyLight
-    bash create-app-bundle.sh
-    runHook postBuild
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail g++ '$(CXX)'
   '';
 
   installPhase = ''
@@ -33,6 +32,8 @@ stdenv.mkDerivation rec {
     ln -s $out/Applications/AutoRaise.app/Contents/MacOS/AutoRaise $out/bin/autoraise
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "AutoRaise (and focus) a window when hovering over it with the mouse";
