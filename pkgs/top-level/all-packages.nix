@@ -1006,6 +1006,33 @@ with pkgs;
     ];
   } ../build-support/setup-hooks/validate-pkg-config.sh;
 
+  autoPatchPcHook =
+    makeSetupHook
+      {
+        name = "auto-patch-pc-hook";
+      }
+      (
+        writeScript "patch-pc.sh" ''
+          fixupOutputHooks+=(autoPatchPcHook)
+
+          autoPatchPcHook() {
+              # Some packages list their own libraries as deps
+              addToSearchPath PKG_CONFIG_PATH "$prefix/lib/pkgconfig"
+              addToSearchPath PKG_CONFIG_PATH "$prefix/share/pkgconfig"
+
+              for pc in $(${lib.getExe findutils} "$prefix" -name '*.pc' -type f); do
+                  if ! ${lib.getExe python3Minimal} \
+                    ${../build-support/setup-hooks/patch-pc.py} \
+                    ${lib.getExe pkgconf} "$pc" > "$pc.patched"; then
+                      exit 1
+                  fi
+                  mv "$pc.patched" "$pc"
+              done
+          }
+
+        ''
+      );
+
   #package writers
   writers = callPackage ../build-support/writers { };
 
