@@ -53,6 +53,7 @@
   llvmPackages,
   makeWrapper,
   mesa,
+  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
   opencollada-blender,
   opencolorio,
@@ -92,7 +93,6 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
-  openUsdSupport = !stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
