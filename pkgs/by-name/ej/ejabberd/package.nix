@@ -53,21 +53,21 @@ let
 
   provider_asn1 = buildRebar3 {
     name = "provider_asn1";
-    version = "0.3.0";
+    version = "0.4.1";
     src = fetchHex {
       pkg = "provider_asn1";
-      version = "0.3.0";
-      sha256 = "sha256-MuelWYZi01rBut8jM6a5alMZizPGZoBE/LveSRu/+wU=";
+      version = "0.4.1";
+      sha256 = "sha256-HqR6IyJyJinvbPJJlhJE14yEiBbNmTGOmR0hqonrOR0=";
     };
     beamDeps = [ ];
   };
   rebar3_hex = buildRebar3 {
     name = "rebar3_hex";
-    version = "7.0.7";
+    version = "7.0.8";
     src = fetchHex {
       pkg = "rebar3_hex";
-      version = "7.0.7";
-      sha256 = "sha256-1S2igSwiInATUgULZ1E6e2dK6YI5gvRffHRfF1Gg5Ok=";
+      version = "7.0.8";
+      sha256 = "sha256-aEY0EEZwRHp6AAuE1pSfm5RjBjU+PaaJuKp7fvXRiBc=";
     };
     beamDeps = [ ];
   };
@@ -141,7 +141,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "24.12";
+  version = "25.03";
 
   nativeBuildInputs = [
     makeWrapper
@@ -170,16 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-9TyIgsinUpUbirwqg61EYnPB/OyE5vhl3MBMRihqAtE=";
+    hash = "sha256-VEH1V8v2wQ9qf6Xcj00xHw30tWo0s9AhPyoB7d5B8k8=";
   };
-
-  patches = [
-    # Fix json_encode_with_kv_list used in mod_matrix_gw
-    (fetchpatch2 {
-      url = "https://github.com/processone/ejabberd/commit/056635119c8b9f169f1c59cccbf81faab88a6712.patch?full_index=1";
-      hash = "sha256-53NMT/SwPtaeo8zaJ1JHW6HUZrxkITi731UOdsFAlJ4=";
-    })
-  ];
 
   passthru.tests = {
     inherit (nixosTests) ejabberd;
