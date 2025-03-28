@@ -430,6 +430,10 @@
                   "file": "hooks/autopatchelf.section.md"
                 },
                 {
+                  "id": "autopatchpc",
+                  "file": "hooks/autoPatchPkgConfigHook.section.md"
+                },
+                {
                   "id": "aws-c-common",
                   "file": "hooks/aws-c-common.section.md"
                 },
