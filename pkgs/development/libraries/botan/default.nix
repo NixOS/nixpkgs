@@ -122,8 +122,8 @@ let
 in
 {
   botan3 = common {
-    version = "3.6.1";
-    hash = "sha256-fLhXXYjSMsdxdHadf54ku0REQWBYWYbuvWbnScuakIk=";
+    version = "3.7.1";
+    hash = "sha256-/AYgRjRhyq6o5g8GcR1+Q3o60e69beSsKcFLvZAczRs=";
   };
 
   botan2 = common {
