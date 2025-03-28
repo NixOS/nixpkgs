@@ -8928,7 +8928,7 @@ with pkgs;
   };
 
   yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
-    jre = jdk17;
+    jre = jdk21;
   };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
