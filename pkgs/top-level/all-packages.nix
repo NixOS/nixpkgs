@@ -3273,6 +3273,10 @@ with pkgs;
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
+  globalplatform = callPackage ../by-name/gl/globalplatform/package.nix {
+    inherit (darwin.apple_sdk.frameworks) PCSC;
+  };
+
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
