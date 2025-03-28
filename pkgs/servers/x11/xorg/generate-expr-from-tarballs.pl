@@ -321,7 +321,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
-    unshift @arguments, "stdenv", "pkg-config", "fetchurl";
+    unshift @arguments, "stdenv", "pkg-config", "autoPatchPcHook", "fetchurl";
     my $argumentsStr = join ", ", uniq @arguments;
 
     my $extraAttrsStr = "";
@@ -346,7 +346,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
+    nativeBuildInputs = [ pkg-config autoPatchPcHook $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
