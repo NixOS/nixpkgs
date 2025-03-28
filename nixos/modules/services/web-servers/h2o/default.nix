@@ -52,7 +52,7 @@ let
 
   # Attrset with the ACME certificate names split by whether or not they depend
   # on H2O serving challenges.
-  certNames =
+  acmeCertNames =
     let
       partition =
         acc: vhostSettings:
@@ -67,14 +67,14 @@ let
         else
           acc;
 
-      certNames' = lib.lists.foldl partition {
+      certNames = lib.lists.foldl partition {
         dependent = [ ];
         independent = [ ];
       } acmeEnabledHostsConfigs;
     in
-    certNames'
+    certNames
     // {
-      all = certNames'.dependent ++ certNames'.independent;
+      all = certNames.dependent ++ certNames.independent;
     };
 
   mozTLSRecs =
@@ -115,7 +115,7 @@ let
 
       names = getNames name value;
 
-      acmeSettings = lib.optionalAttrs (builtins.elem names.cert certNames.dependent) (
+      acmeSettings = lib.optionalAttrs (builtins.elem names.cert acmeCertNames.dependent) (
         let
           acmePort = 80;
           acmeChallengePath = "/.well-known/acme-challenge";
@@ -171,7 +171,7 @@ let
                   # stapling.
                   #
                   # See: https://letsencrypt.org/2024/12/05/ending-ocsp/
-                  lib.optionalAttrs (builtins.elem names.cert certNames.all) {
+                  lib.optionalAttrs (builtins.elem names.cert acmeCertNames.all) {
                     ocsp-update-interval = 0;
                   }
                   # Mozilla’s ssl-config-generator is at present still
@@ -229,7 +229,7 @@ let
                   let
                     identity =
                       value.tls.identity
-                      ++ lib.optional (builtins.elem names.cert certNames.all) {
+                      ++ lib.optional (builtins.elem names.cert acmeCertNames.all) {
                         key-file = "${certs.${names.cert}.directory}/key.pem";
                         certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
                       };
@@ -411,9 +411,9 @@ in
           groups = config.users.groups;
           services = [
             config.systemd.services.h2o
-          ] ++ lib.optional (certNames.all != [ ]) config.systemd.services.h2o-config-reload;
+          ] ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
         }
-      ) certNames.all;
+      ) acmeCertNames.all;
 
     users = {
       users.${cfg.user} =
@@ -429,13 +429,13 @@ in
     systemd.services.h2o = {
       description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) certNames.all);
+      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) acmeCertNames.all);
       # Since H2O will be hosting the challenges, H2O must be started
-      before = builtins.map (certName: "acme-${certName}.service") certNames.dependent;
+      before = builtins.map (certName: "acme-${certName}.service") acmeCertNames.dependent;
       after =
         [ "network.target" ]
-        ++ builtins.map (certName: "acme-selfsigned-${certName}.service") certNames.all
-        ++ builtins.map (certName: "acme-${certName}.service") certNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
+        ++ builtins.map (certName: "acme-selfsigned-${certName}.service") acmeCertNames.all
+        ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
 
       serviceConfig = {
         ExecStart = "${h2oExe} --mode 'master'";
@@ -488,15 +488,17 @@ in
     # of certs end-to-end.
     systemd.services.h2o-config-reload =
       let
-        tlsTargets = map (certName: "acme-${certName}.target") certNames.all;
-        tlsServices = map (certName: "acme-${certName}.service") certNames.all;
+        tlsTargets = map (certName: "acme-${certName}.target") acmeCertNames.all;
+        tlsServices = map (certName: "acme-${certName}.service") acmeCertNames.all;
       in
-      mkIf (certNames.all != [ ]) {
+      mkIf (acmeCertNames.all != [ ]) {
         wantedBy = tlsServices ++ [ "multi-user.target" ];
         before = tlsTargets;
         after = tlsServices;
         unitConfig = {
-          ConditionPathExists = map (certName: "${certs.${certName}.directory}/fullchain.pem") certNames.all;
+          ConditionPathExists = map (
+            certName: "${certs.${certName}.directory}/fullchain.pem"
+          ) acmeCertNames.all;
           # Disable rate limiting for this since it may be triggered quickly
           # a bunch of times if a lot of certificates are renewed in quick
           # succession. The reload itself is cheap, so even doing a lot of them
