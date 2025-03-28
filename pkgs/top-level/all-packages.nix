@@ -1000,6 +1000,36 @@ with pkgs;
     ];
   } ../build-support/setup-hooks/validate-pkg-config.sh;
 
+  autoPatchPcHook =
+    makeSetupHook
+      {
+        name = "auto-patch-pc-hook";
+        propagatedBuildInputs = [ pkg-config ];
+      }
+      (
+        writeScript "patch-pc.sh" ''
+          fixupOutputHooks+=(autoPatchPcHook)
+
+          autoPatchPcHook() (
+              # Some packages list their own libraries as deps, they should be searched first in case of cyclic deps
+              export PKG_CONFIG_PATH_${pkgconf.suffixSalt}="$prefix/lib/pkgconfig:$prefix/share/pkgconfig:$PKG_CONFIG_PATH"
+
+              shopt -s nullglob
+              for pc in $prefix/{lib,lib64,share}/pkgconfig/*.pc; do
+                  echo Fixing require paths in $pc file
+
+                  if ! ${lib.getExe python3Minimal} \
+                    ${../build-support/setup-hooks/patch-pc.py} \
+                    ${lib.getExe pkgconf} "$pc" > "$pc.patched"; then
+                      exit 1
+                  fi
+                  mv "$pc.patched" "$pc"
+              done
+          )
+
+        ''
+      );
+
   #package writers
   writers = callPackage ../build-support/writers { };
 
