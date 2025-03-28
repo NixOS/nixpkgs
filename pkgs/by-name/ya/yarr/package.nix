@@ -43,6 +43,9 @@ buildGoModule rec {
     homepage = "https://github.com/nkanaev/yarr";
     changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [
+      sikmir
+      christoph-heiss
+    ];
   };
 }
