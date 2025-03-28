@@ -8040,9 +8040,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  tarmac = callPackage ../development/tools/tarmac {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  tarmac = callPackage ../development/tools/tarmac { };
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
