@@ -23,10 +23,9 @@ fi
 curl -LO "$BOOKSTACK/composer.json"
 curl -LO "$BOOKSTACK/composer.lock"
 
-# this will fix the faulty url of htmldiff in composer.lock. 
+# this will fix the faulty url of htmldiff in composer.lock.
 # If you dont see "https://codeberg.org/api/v1/repos/danb/HtmlDiff/archive/%prettyVersion%.zip" in "ssddanbrown/htmldiff" section of compose.lock AND the build is breaking, try removing below line.
 sed -i 's/%prettyVersion%/main/g' composer.lock
-
 
 composer2nix --name "bookstack" \
   --composition=composition.nix \
