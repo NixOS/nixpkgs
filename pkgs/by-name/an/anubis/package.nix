@@ -7,16 +7,16 @@
 }:
 buildGo124Module rec {
   pname = "anubis";
-  version = "1.14.2";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${version}";
-    hash = "sha256-K4VXTO8F3GTOA9jOrI0OF6CYTRaDUlUT9/HujYmnHpM=";
+    hash = "sha256-n70H2FBvp7hxvRqU1+bvef9UrOzkSpg9QtFoqGyXiaM=";
   };
 
-  vendorHash = "sha256-t+E3sILEwXGkTaBtKLO2kFEntivY9fVK8o86arvMaOU=";
+  vendorHash = "sha256-Rcra5cu7zxGm2LhL2x9Kd3j/uQaEb8OOh/j5Rhh8S1k=";
 
   subPackages = [
     "cmd/anubis"
