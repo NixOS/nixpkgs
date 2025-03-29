@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     description = "Output management utility for Sway and Hyprland";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qf0xb ];
     mainProgram = "nwg-displays";
   };
 }
