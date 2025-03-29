@@ -93,6 +93,8 @@ let
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/${pname}/tools"
       cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
+    '' + lib.optionalString (lib.versionAtLeast release_version "21") ''
+      cp -r ${monorepoSrc}/libc "$out"
     '') else src;
 in
 

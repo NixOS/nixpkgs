@@ -6,7 +6,6 @@
   freetype,
   pillow,
   setuptools,
-  glibcLocales,
   python,
   isPyPy,
 }:
@@ -49,12 +48,10 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ glibcLocales ];
-
   checkPhase = ''
     runHook preCheck
     pushd tests
-    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
+    ${python.interpreter} runAll.py
     popd
     runHook postCheck
   '';

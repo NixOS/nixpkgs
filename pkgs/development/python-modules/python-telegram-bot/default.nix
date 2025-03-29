@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.11.1";
+  version = "22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     tag = "v${version}";
-    hash = "sha256-ro3v7JXTxhxmxS0/TXTgV6ZixR5UaJ4zQ+UCt2oel9w=";
+    hash = "sha256-/8sWlq2f71B3Y2fAsdluGqW5I07KNfFmqtXtk+7crE4=";
   };
 
   build-system = [

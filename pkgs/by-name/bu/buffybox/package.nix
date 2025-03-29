@@ -1,5 +1,6 @@
 {
   fetchFromGitLab,
+  fetchpatch2,
   inih,
   lib,
   libdrm,
@@ -15,16 +16,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2025-03-12";
+  version = "3.2.0-unstable-2025-03-16";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "3196e47d519c78b56a8d4b75ad7a280c92c91d23";
-    hash = "sha256-Zl/QmOJbY/lxoCYD6SpUHiiTTDOStUSn3+6xOuiGGBo=";
+    rev = "56a9867e90ece88596e330774da64cf277069b59";
+    hash = "sha256-4lSgswcvvV6W1KN6QhsjeHY8MMXXC4fRYBmPE/hb0vA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/42
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/commit/1f0c30e88dc61b8b508696cd890393c3b7911b58.patch?full_index=1";
+      hash = "sha256-hQ6Hjfyj059j2cRfrFz9Se6xRowIGW1HVHULLYtHcS8=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config

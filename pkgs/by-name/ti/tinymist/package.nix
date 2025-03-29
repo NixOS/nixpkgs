@@ -18,17 +18,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.13.8";
+  version = "0.13.10";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dKLHZyFkTo6iCw/s73asJqXoNBpYx7UC/r2qVp5dLjs=";
+    hash = "sha256-/mlocw9AYoaR3meGYbSJ/qCrusxIIC3Gtmz+doXTDXI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XbPqddmVv5zubnbT5IewAcvPJWQMIumWgGI+q/r1Ip4=";
+  cargoHash = "sha256-L1Krw6dbH3M1SU1ei4GYEJVMkuv2OOk2QrAJpoSHeP4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=semantic_tokens_full::tests::test"
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -74,7 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/tinymist completion bash) \
         --fish <(${emulator} $out/bin/tinymist completion fish) \
         --zsh <(${emulator} $out/bin/tinymist completion zsh)
-    '';
+    ''
+  );
 
   nativeInstallCheckInputs = [
     versionCheckHook

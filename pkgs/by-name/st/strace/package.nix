@@ -11,14 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.13";
+  version = "6.14";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-4gna8O4DjKWtzEwnfpJztNUfRqL/htpXXTZ0KsNQihc=";
+    hash = "sha256-JE87XCCjKFTKm3yno+4JHdPUvSCTOhcezujbSGx308k=";
   };
 
   separateDebugInfo = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];

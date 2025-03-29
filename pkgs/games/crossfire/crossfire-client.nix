@@ -9,6 +9,8 @@
   gtk2,
   pcre,
   zlib,
+  libGL,
+  libGLU,
   libpng,
   fribidi,
   harfbuzzFull,
@@ -45,6 +47,8 @@ stdenv.mkDerivation {
     gtk2
     pcre
     zlib
+    libGL
+    libGLU
     libpng
     fribidi
     harfbuzzFull

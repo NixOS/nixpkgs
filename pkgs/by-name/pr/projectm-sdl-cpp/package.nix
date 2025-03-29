@@ -60,5 +60,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "projectMSDL";
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # TODO build probably needs some fixing
   };
 }

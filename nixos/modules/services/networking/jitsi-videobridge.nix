@@ -280,6 +280,7 @@ in
           User = "jitsi-videobridge";
           Group = "jitsi-meet";
 
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "";
           NoNewPrivileges = true;
           ProtectSystem = "strict";

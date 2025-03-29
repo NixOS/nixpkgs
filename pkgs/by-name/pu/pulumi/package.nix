@@ -7,26 +7,24 @@
   git,
   buildPackages,
   # passthru
-  runCommand,
-  makeWrapper,
+  callPackage,
   testers,
   pulumi,
-  pulumiPackages,
 }:
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.152.0";
+  version = "3.156.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${version}";
-    hash = "sha256-/cRWj7y6d5sNQRUXg9l7eDAOkUqNGXTzgpWDQdPP8zw=";
+    hash = "sha256-1iML+WCEkLMdAJ7e+F5XwBzM+pn3eZQsCaSi3Ui/JdM=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-JhIyivD+YpUUr9T8roNpINb3Tx8ZElHa+BrpJkyFx60=";
+  vendorHash = "sha256-2hpn1IKJvWtXgNKgf56dZABA4VO1aT0cDsHOmCEPrGo=";
 
   sourceRoot = "${src.name}/pkg";
 
@@ -117,24 +115,17 @@ buildGoModule rec {
   '';
 
   passthru = {
-    pkgs = pulumiPackages;
-    withPackages =
-      f:
-      runCommand "${pulumi.name}-with-packages"
-        {
-          nativeBuildInputs = [ makeWrapper ];
-        }
-        ''
-          mkdir -p $out/bin
-          makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-            --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
-            --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
-        '';
+    pkgs = callPackage ./plugins.nix { };
+    withPackages = callPackage ./with-packages.nix { };
     tests = {
       version = testers.testVersion {
         package = pulumi;
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
+      };
+      pulumiTestHookShellcheck = testers.shellcheck {
+        name = "pulumi-test-hook-shellcheck";
+        src = ./extra/pulumi-test-hook.sh;
       };
     };
   };

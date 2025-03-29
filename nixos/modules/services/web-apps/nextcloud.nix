@@ -1058,7 +1058,7 @@ in {
             '') [ "nix-apps" "apps" ]}
 
             # Do not install if already installed
-            if [[ ! -e ${datadir}/config/config.php ]]; then
+            if [[ ! -s ${datadir}/config/config.php ]]; then
               ${occInstallCmd}
             fi
 

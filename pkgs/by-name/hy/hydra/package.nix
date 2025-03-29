@@ -46,6 +46,7 @@
 , fetchFromGitHub
 , nixosTests
 , unstableGitUpdater
+, nixVersions
 }:
 
 let
@@ -124,7 +125,9 @@ let
       ];
   };
 
-  nix-eval-jobs' = nix-eval-jobs.overrideAttrs (_: {
+  nix-eval-jobs' = (nix-eval-jobs.override {
+    nix = nixVersions.nix_2_25;
+  }).overrideAttrs (_: {
     version = "2.25.0-unstable-2025-02-13";
     src = fetchFromGitHub {
       owner = "nix-community";

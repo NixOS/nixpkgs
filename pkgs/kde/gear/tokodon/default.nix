@@ -5,7 +5,6 @@
   qtsvg,
   qtwebsockets,
   qtwebview,
-  mpv-unwrapped,
   sonnet,
 }:
 mkKdeDerivation {
@@ -17,8 +16,10 @@ mkKdeDerivation {
     qtsvg
     qtwebsockets
     qtwebview
-    mpv-unwrapped
     sonnet
   ];
+
+  extraCmakeFlags = [ "-DUSE_QTMULTIMEDIA=1" ];
+
   meta.mainProgram = "tokodon";
 }

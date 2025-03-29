@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
-    hash = "sha256-neeSATQwAaYN1QGBUXphqqJp9lP3HG2OH4aLdt1cOho=";
+    hash = "sha256-+jt+if9aAbEd2XDMC7RpZmJpm4VUEZMt5xoLOP/esMg=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";
-    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
     badPlatforms = [

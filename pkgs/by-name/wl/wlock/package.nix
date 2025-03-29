@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/sewn/wlock";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fliegendewurst ];
+    mainProgram = "wlock";
   };
 }

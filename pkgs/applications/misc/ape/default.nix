@@ -43,6 +43,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = description;
+    homepage = "https://github.com/Attempto/APE";
     license = license;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yrashk ];

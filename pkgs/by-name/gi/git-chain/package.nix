@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "git-chain";
-  version = "0-unstable-2025-03-10";
+  version = "0-unstable-2025-03-25";
 
   src = fetchFromGitHub {
     owner = "dashed";
     repo = "git-chain";
-    rev = "d06b022b7bccf612fc5651c7ae119b37f69ac4ca";
-    hash = "sha256-lfiwRJSzOlWdj9BfPfb/Vnd2NtzyK7HAHhERKFYOjM8=";
+    rev = "f6a6d365e6e3cce15e74649a421044a01fb4f68f";
+    hash = "sha256-lOAURUhR2Ts1DF8yW0WnovSWeZFC8UwR6j4cxoreonY=";
   };
 
   useFetchCargoVendor = true;

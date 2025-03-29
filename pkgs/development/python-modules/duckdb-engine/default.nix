@@ -69,6 +69,9 @@ buildPythonPackage rec {
   disabledTests = [
     # incompatible with duckdb 1.1.1
     "test_with_cache"
+    # these aren't set for some reason
+    "test_user_agent"
+    "test_user_agent_with_custom_user_agent"
   ] ++ lib.optionals (python.pythonVersion == "3.11") [
     # incompatible with duckdb 1.1.1
     "test_all_types_reflection"

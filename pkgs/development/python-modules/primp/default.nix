@@ -38,7 +38,7 @@ let
     # Remove bazel specific build file to make way for build directory
     # This is a problem on Darwin because of case-insensitive filesystem
     preBuild =
-      (lib.optionalString stdenv.isDarwin ''
+      (lib.optionalString stdenv.hostPlatform.isDarwin ''
         rm ../BUILD
       '')
       + oa.preBuild;

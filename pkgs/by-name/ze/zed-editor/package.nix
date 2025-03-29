@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.178.5";
+  version = "0.179.3";
 
   outputs =
     [ "out" ]
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkoIOBoR5hMt99D1bJ1yWLv7C/rY6VKC5J/7c5SMUFs=";
+    hash = "sha256-9NJQ0uPID+YVtxDorh3tbokWmqIXNGqzUzIG5ConbWw=";
   };
 
   patches = [
@@ -123,14 +123,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "script/patches/use-cross-platform-livekit.patch"
   ];
 
-  # Dynamically link WebRTC instead of static
-  postPatch = ''
-    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
-      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-  '';
+  postPatch =
+    # Dynamically link WebRTC instead of static
+    ''
+      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+    ''
+    # nixpkgs ships cargo-about 0.7, which is a seamless upgrade from 0.6
+    + ''
+      substituteInPlace script/generate-licenses \
+        --replace-fail 'CARGO_ABOUT_VERSION="0.6"' 'CARGO_ABOUT_VERSION="0.7"'
+    '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xJaiHngsm74RdcEUXaDrc/Hwy4ywZrEiJt7JYTc/NpM=";
+  cargoHash = "sha256-45yY18I+n5RevPgvgXROAxS4Ub7+TzlAL7qKqEeYMTI=";
 
   nativeBuildInputs =
     [

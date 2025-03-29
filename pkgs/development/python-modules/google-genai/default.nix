@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "websockets" ];
+
   dependencies = [
     google-auth
     httpx

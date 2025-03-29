@@ -1,6 +1,6 @@
 {
-  version = "4.4-stable";
-  hash = "sha256-lCWz0FLSlqUZLA4APgcxuc4wupkMcXcvZ9TUzREAM4U=";
-  exportTemplatesHash = "sha256-ayY1euO7WJJhZcF0NfobuD1Pcr8LeV/3g/opaZ2wniQ=";
+  version = "4.4.1-stable";
+  hash = "sha256-O4TdPYu1K2zWKMBP/7xd0UPLDb7/4dBnkGM7QydD3Yo=";
+  exportTemplatesHash = "sha256-KV4sDBZPiMf7IORaNFR2uEK1midnyyjCUfG9hl6AwHY=";
   nugetDeps = ./deps.json;
 }

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       makeWrapper
       pkg-config
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
     ];
 
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
       libgcc
       libxkbcommon
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       xorg.libX11
       xorg.libXcursor
       xorg.libXi

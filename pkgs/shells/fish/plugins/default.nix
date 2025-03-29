@@ -54,6 +54,8 @@ lib.makeScope newScope (self: with self; {
 
   hydro = callPackage ./hydro.nix { };
 
+  macos = callPackage ./macos.nix { };
+
   nvm = callPackage ./nvm.nix { };
 
   pisces = callPackage ./pisces.nix { };

@@ -178,6 +178,11 @@ let
       (args.checkFeatures or [ ])
       ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ])
       ++ [ "pg${pgrxPostgresMajor}" ];
+
+    meta = (args.meta or { }) // {
+      # See comment in postgresql's generic.nix doInstallCheck section
+      broken = (args.meta.broken or false) || stdenv.hostPlatform.isDarwin;
+    };
   };
 in
 rustPlatform.buildRustPackage finalArgs

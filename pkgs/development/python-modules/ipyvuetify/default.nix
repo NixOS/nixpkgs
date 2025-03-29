@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ipyvuetify";
-  version = "1.11.0";
+  version = "1.11.1";
   pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j3LUVLNaioVa4ul9RkRApt4oH8CFrObQLipDcfW7fkQ=";
+    hash = "sha256-voAD6ZrUL2Vjx3jMYECEhPtdffsXlSuU2wWu3S8NoYs=";
   };
 
   # drop pynpm which tries to install node_modules
