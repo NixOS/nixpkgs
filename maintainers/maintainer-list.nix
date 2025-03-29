@@ -19336,6 +19336,11 @@
     githubId = 15833376;
     name = "Pierre ROux";
   };
+  provokateurin = {
+    name = "Kate Döen";
+    github = "provokateurin";
+    githubId = 26026535;
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
