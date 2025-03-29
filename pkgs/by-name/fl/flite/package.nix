@@ -31,13 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Tq5pyg3TiQt8CPqGXTyLOaGgaeLTmPp+Duw3+2VAF9g=";
   };
 
-  # https://github.com/festvox/flite/pull/60.
-  # Replaces `ar` with `$(AR)` in config/common_make_rules.
-  # Improves cross-compilation compatibility.
   patches = [
+    # https://github.com/festvox/flite/pull/60.
+    # Replaces `ar` with `$(AR)` in config/common_make_rules.
+    # Improves cross-compilation compatibility.
     (fetchpatch {
       url = "https://github.com/festvox/flite/commit/54c65164840777326bbb83517568e38a128122ef.patch";
       hash = "sha256-hvKzdX7adiqd9D+9DbnfNdqEULg1Hhqe1xElYxNM1B8=";
+    })
+    # patch missing bsd conditions in configure
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/0d316feccaf89c1bd804d6001274426a7135c93a/audio/flite/files/patch-configure";
+      hash = "sha256-D2wOtmHFcuA8JRtIds03yPrBGtMuhLJHuufEQdpcB58=";
+      extraPrefix = "";
     })
   ];
 

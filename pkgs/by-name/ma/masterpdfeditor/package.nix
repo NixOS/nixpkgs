@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  preFixup = ''
+    patchelf $out/opt/masterpdfeditor/masterpdfeditor5 --add-needed libsmime3.so
+  '';
+
   meta = {
     description = "Master PDF Editor";
     homepage = "https://code-industry.net/free-pdf-editor/";

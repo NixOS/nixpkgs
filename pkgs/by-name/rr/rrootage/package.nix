@@ -3,6 +3,8 @@
   stdenv,
   fetchpatch,
   fetchurl,
+  libGL,
+  libGLU,
   SDL,
   SDL_mixer,
   bulletml,
@@ -47,6 +49,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
+    libGL
+    libGLU
     SDL
     SDL_mixer
     bulletml

@@ -44,7 +44,7 @@ in buildGo122Module rec {
 
   doCheck = false;
 
-  vendorHash = if stdenv.isDarwin
+  vendorHash = if stdenv.hostPlatform.isDarwin
                then "sha256-3Piq5DPMTZUEjqNkw5HZY25An2kATX6Jac9unQfZnZc="
                else "sha256-FR0Et3DvjJhbYUPy9mpN0QCJ7QDU4VRZFUTL0J1FSXw=";
 

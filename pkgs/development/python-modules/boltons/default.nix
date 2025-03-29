@@ -2,14 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "24.1.0";
-  format = "setuptools";
+  version = "25.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,10 @@ buildPythonPackage rec {
     owner = "mahmoud";
     repo = "boltons";
     tag = version;
-    hash = "sha256-rKBuqJ4EAm0OH97oeGOgcTcMWsloyU2u/PaBEKhm8dA=";
+    hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
+
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

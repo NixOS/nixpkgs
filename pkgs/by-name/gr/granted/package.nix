@@ -31,6 +31,7 @@ buildGoModule rec {
     "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
     "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
     "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/common-fate/granted/internal/build.ConfigFolderName=.granted"
   ];
 
   subPackages = [

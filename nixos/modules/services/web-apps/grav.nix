@@ -102,24 +102,12 @@ in
         phpPackage = cfg.phpPackage.buildEnv {
           extensions =
             { all, enabled }:
-            with all;
-            [
+            enabled
+            ++ (with all; [
               apcu
-              ctype
-              curl
-              dom
-              exif
-              filter
-              gd
-              mbstring
-              opcache
-              openssl
-              session
-              simplexml
               xml
               yaml
-              zip
-            ];
+            ]);
 
           extraConfig = generators.toKeyValue { mkKeyValue = generators.mkKeyValueDefault { } " = "; } {
             output_buffering = "0";

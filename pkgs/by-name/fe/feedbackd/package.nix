@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.7.0";
+  version = "0.8.0";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qwyq1v+20Gotpk0CbUe6MdDJ5bmKmTHOen+rxWljjeA=";
+    hash = "sha256-Hn850+bRSNDe8ZgDRu52N7AR/yLNbV6zGROBYtetOZg=";
   };
 
   depsBuildBuild = [

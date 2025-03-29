@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       curl
       libarchive
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gpm
     ];
 

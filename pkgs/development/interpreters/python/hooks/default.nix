@@ -146,12 +146,59 @@ in
       };
 
   pytestCheckHook = callPackage (
-    { makePythonHook, pytest }:
+    {
+      makePythonHook,
+      pytest,
+      # For package tests
+      testers,
+      objprint,
+    }:
     makePythonHook {
       name = "pytest-check-hook";
       propagatedBuildInputs = [ pytest ];
       substitutions = {
         inherit pythonCheckInterpreter;
+      };
+      passthru = {
+        tests = {
+          basic = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-basic-${previousPythonAttrs.pname}";
+          });
+          disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTests-${previousPythonAttrs.pname}";
+            disabledTests = [
+              "test_print"
+            ] ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_basic.py"
+            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          disabledTestPaths-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-disabledTestPaths-nonexistent-${previousPythonAttrs.pname}";
+              disabledTestPaths = [
+                "tests/test_foo.py"
+              ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            })
+          );
+          disabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-glob-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_obj*.py"
+            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          disabledTestPaths-glob-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-disabledTestPaths-glob-nonexistent-${previousPythonAttrs.pname}";
+              disabledTestPaths = [
+                "tests/test_foo*.py"
+              ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            })
+          );
+        };
       };
     } ./pytest-check-hook.sh
   ) { };

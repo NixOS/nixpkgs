@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "7.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,9 +31,9 @@ buildPythonPackage rec {
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     build
     click
     pep517
@@ -68,6 +68,19 @@ buildPythonPackage rec {
     "test_cli_compile_all_extras_with_multiple_packages"
     # Deprecations
     "test_error_in_pyproject_toml"
+
+    # pip 25.0 compat issues
+    # https://github.com/jazzband/pip-tools/issues/2112
+    # requirement doesn't end with semicolon
+    "test_resolver"
+    "test_resolver__custom_unsafe_deps"
+    # constraints.txt is now in a tmpdir
+    "test_preserve_via_requirements_constrained_dependencies_when_run_twice"
+    "test_annotate_option"
+    # TypeError("'<' not supported between instances of 'InstallationCandidate' and 'InstallationCandidate'")>.exit_code
+    "test_no_candidates"
+    "test_no_candidates_pre"
+    "test_failure_of_legacy_resolver_prompts_for_backtracking"
   ];
 
   pythonImportsCheck = [ "piptools" ];

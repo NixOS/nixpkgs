@@ -5,6 +5,8 @@
   SDL2,
   fetchurl,
   gzip,
+  libGL,
+  libGLU,
   libvorbis,
   libmad,
   flac,
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       gzip
+      libGL
+      libGLU
       libvorbis
       libmad
       flac

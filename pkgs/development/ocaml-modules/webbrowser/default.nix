@@ -14,10 +14,10 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-webbrowser";
-  version = "0.6.1";
+  version = "0.6.2";
   src = fetchurl {
     url = "https://erratique.ch/software/webbrowser/releases/webbrowser-${version}.tbz";
-    sha256 = "137a948bx7b71zfv4za3hhznrn5lzbbrgzjy0das83zms508isx3";
+    sha256 = "sha256-4SYAf1Qo7aUiCp5587wO1VvjcQHP3NBXeFfAaHE/s+A=";
   };
 
   nativeBuildInputs = [

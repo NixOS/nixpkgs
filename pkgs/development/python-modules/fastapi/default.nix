@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.115.6";
+  version = "0.115.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-yNYjFD77q5x5DtcYdywmScuuVdyWhBoxbLYJhu1Fmno=";
+    hash = "sha256-fE6Bp8iaoamVe2RrFNSVUiiNzt84P1WGum1dfWAX9hk=";
   };
 
   build-system = [ pdm-backend ];

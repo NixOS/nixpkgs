@@ -15,7 +15,7 @@
   libxkbfile,
   libX11,
   python3,
-  freerdp3,
+  freerdp,
   libssh,
   libgcrypt,
   gnutls,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       gettext
       libxkbfile
       libX11
-      freerdp3
+      freerdp
       libssh
       libgcrypt
       gnutls

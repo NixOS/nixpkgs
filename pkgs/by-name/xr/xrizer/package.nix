@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libGL,
   libxkbcommon,
   nix-update-script,
   openxr-loader,
@@ -11,17 +12,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${version}";
-    hash = "sha256-0szkc/EURm4N0gl+tSFhLeQTYPX7ZgBHXwpP11Ju8Ng=";
+    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xyiEKPnko9mpEsUfl7wuAAsobRTwBHhZuKuU/HP4Ujs=";
+  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace Cargo.toml \
       --replace-fail 'features = ["static"]' 'features = ["linked"]'
+    substituteInPlace src/graphics_backends/gl.rs \
+      --replace-fail 'libGLX.so.0' '${lib.getLib libGL}/lib/libGLX.so.0'
   '';
 
   postInstall = ''

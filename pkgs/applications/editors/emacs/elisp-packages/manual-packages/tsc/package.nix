@@ -21,12 +21,8 @@ let
       hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
     };
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "tree-sitter-0.20.0" = "sha256-hGiJZFrQpO+xHXosbEKV2k64e2D8auNGEtdrFk2SsOU=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
 
     sourceRoot = "${src.name}/core";
 

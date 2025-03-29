@@ -21,6 +21,9 @@ in
         list of strings. The latter is concatenated, interspersed with
         colon characters.
 
+        Setting a variable to `null` does nothing. You can override a
+        variable set by another module to `null` to unset it.
+
         Note, due to limitations in the PAM format values may not
         contain the `"` character.
 

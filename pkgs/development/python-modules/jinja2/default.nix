@@ -2,7 +2,6 @@
   lib,
   stdenv,
   python,
-  pythonAtLeast,
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
@@ -21,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "jinja2";
-  version = "3.1.5";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j+//jcMDTie7gNZ8Zx64qbxCTA70wIJu2/8wTM7/Q7s=";
+    hash = "sha256-ATf7BZkNNfEnWlh+mu5tVtqCH8g0kaD7g4GDvkP2bW0=";
   };
 
   postPatch = ''

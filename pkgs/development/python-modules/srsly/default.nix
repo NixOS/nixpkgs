@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  cython_0,
+  cython,
   catalogue,
   mock,
   numpy,
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
   };
 
-  nativeBuildInputs = [
-    cython_0
+  build-system = [
+    cython
     setuptools
   ];
 
-  propagatedBuildInputs = [ catalogue ];
+  dependencies = [ catalogue ];
 
   nativeCheckInputs = [
     mock

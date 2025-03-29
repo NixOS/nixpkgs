@@ -21,7 +21,7 @@ let
   baseAttrs = finalAttrs: {
     releaseName = "ICU";
 
-    sourceRoot = "source/icu/icu4c/source";
+    sourceRoot = "${finalAttrs.src.name}/icu/icu4c/source";
 
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.

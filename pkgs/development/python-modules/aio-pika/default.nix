@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.5.4";
+  version = "9.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = "aio-pika";
     tag = version;
-    hash = "sha256-/73bFhhcailC05hn0xW49oFVS6Ezaiohh3ykYOjhQOI=";
+    hash = "sha256-Gs01y1VRVgk5i4JI+fqtRo6mOyzBzHM/2hJPVenc+3g=";
   };
 
   build-system = [ poetry-core ];

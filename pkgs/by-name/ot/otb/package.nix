@@ -32,7 +32,7 @@
   enableLearning ? true,
   enableMiscellaneous ? true,
   enableOpenMP ? false,
-  enablePython ? false,
+  enablePython ? true,
   extraPythonPackages ? ps: with ps; [ ],
   enableRemote ? true,
   enableShark ? true,
@@ -49,11 +49,23 @@ let
   # ITK configs for OTB requires 5.3.0 and
   # filter out gdcm, libminc from list of ITK deps as it's not needed for OTB
   itkVersion = "5.3.0";
+  itkMajorMinorVersion = lib.versions.majorMinor itkVersion;
   itkDepsToRemove = [
     "gdcm"
     "libminc"
   ];
   itkIsInDepsToRemove = dep: builtins.any (d: d == dep.name) itkDepsToRemove;
+
+  # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
+  otbSwig = swig.overrideAttrs (oldArgs: {
+    version = "4.2.1";
+    src = fetchFromGitHub {
+      owner = "swig";
+      repo = "swig";
+      tag = "v4.2.1";
+      hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
+    };
+  });
 
   # override the ITK version with OTB version
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L145
@@ -77,6 +89,13 @@ let
         hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
       })
     ];
+
+    # fix the CMake config files for ITK which contains double slashes
+    postInstall =
+      (oldArgs.postInstall or "")
+      + ''
+        sed -i 's|''${ITK_INSTALL_PREFIX}//nix/store|/nix/store|g' $out/lib/cmake/ITK-${itkMajorMinorVersion}/ITKConfig.cmake
+      '';
 
     cmakeFlags = oldArgs.cmakeFlags or [ ] ++ [
       (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" true)
@@ -205,12 +224,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056/diffs.patch";
       hash = "sha256-Zj/wkx0vxn5vqj0hszn7NxoYW1yf63G3HPVKbSdZIOY=";
     })
+    ./1-otb-swig-include-itk.diff
   ];
+
+  postPatch = (
+    "substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt --replace-fail '''$''{ITK_INCLUDE_DIRS}' ${otb-itk}/include/ITK-${itkMajorMinorVersion}"
+  );
 
   nativeBuildInputs = [
     cmake
     makeWrapper
-    swig
     which
   ];
 
@@ -246,11 +269,16 @@ stdenv.mkDerivation (finalAttrs: {
       otb-itk
       otb-shark
       perl
-      swig
       tinyxml
     ]
     ++ otb-itk.propagatedBuildInputs
-    ++ optionals enablePython ([ python3 ] ++ pythonInputs)
+    ++ optionals enablePython (
+      [
+        python3
+        otbSwig
+      ]
+      ++ pythonInputs
+    )
     ++ optionals enableShark [ otb-shark ];
 
   doInstallCheck = true;

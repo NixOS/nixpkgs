@@ -71,7 +71,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/kubernetes/helm";
+    homepage = "https://github.com/helm/helm";
     description = "Package manager for kubernetes";
     mainProgram = "helm";
     license = licenses.asl20;

@@ -5,32 +5,26 @@
   poetry-core,
   elementpath,
   pyyaml,
-  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.5.6";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "yangson";
     tag = version;
-    hash = "sha256-/9MxCkcPGRNZkuwAAvlr7gtGcyxXtliski7bNtFhVBE=";
+    hash = "sha256-gGunbQVRV9cFRnwGDIaGi/NM75rtw5vYVz2PiPiZlQo=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "setuptools"
-  ];
-
   dependencies = [
     elementpath
     pyyaml
-    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
