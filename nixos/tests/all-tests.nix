@@ -725,7 +725,7 @@ in {
   mollysocket = handleTest ./mollysocket.nix { };
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
-  monica = handleTest ./web-apps/monica.nix {};
+  monica = runTest ./web-apps/monica.nix;
   mongodb = runTest ./mongodb.nix;
   mongodb-ce = runTest ({ config, ... }: {
     imports = [ ./mongodb.nix ];
