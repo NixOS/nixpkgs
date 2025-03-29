@@ -801,7 +801,7 @@ in {
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
-  nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
+  nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = handleTest ./nginx-http3.nix {};
   nginx-mime = handleTest ./nginx-mime.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
