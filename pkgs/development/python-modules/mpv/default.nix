@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
   mpv,
   setuptools,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-2sYWTzj7+ozezNX0uFdJW+A0K6bwAmiVvqo/lr9UToA=";
   };
+
+  patches = [
+    # https://github.com/jellyfin/jellyfin-mpv-shim/issues/448
+    (fetchpatch {
+      url = "https://github.com/jaseg/python-mpv/commit/12850b34bd3b64704f8abd30341a647a73719267.patch";
+      hash = "sha256-2O7w8PeWinCzrigGX3IV+9PVCtU9KCM2UJ32Y1kE6m0=";
+    })
+  ];
 
   disabled = pythonOlder "3.9";
 
