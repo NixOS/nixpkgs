@@ -25,7 +25,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "authenticator";
   version = "4.6.2";
 
@@ -33,24 +33,16 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-UvHIVUed4rxmjliaZ7jnwCjiHyvUDihoJyG3G+fYtow=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-iOIGm3egVtVM6Eb3W5/ys9nQV5so0dnv2ZODjQwrVyw=";
   };
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
+  strictDeps = true;
 
   nativeBuildInputs = [
     appstream-glib
@@ -82,6 +74,15 @@ stdenv.mkDerivation rec {
     zbar
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -94,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ austinbutler ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
-}
+})
