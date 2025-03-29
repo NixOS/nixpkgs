@@ -12,6 +12,7 @@
   importlib-resources,
   pytest-asyncio,
   pytest-tornasync,
+  cacert,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,9 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-tornasync
   ];
+
+  # httpx 0.28+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   disabledTests = [
     # Require internet connection
