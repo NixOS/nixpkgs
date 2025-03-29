@@ -17,8 +17,8 @@ let
   headers = fetchgit {
     url = "https://pdfium.googlesource.com/pdfium";
     # The latest revision on the chromium/${pdfiumVersion} branch
-    rev = "9afffebfa895ea6cdcc05516908c50bd7fe72797";
-    hash = "sha256-n7Xio1hEZqZX2FFKWqjVXEcOWPpkcVfBKXGPxDUL4cs=";
+    rev = "9232d7c94a0007377a8034222f47683fe391d474";
+    hash = "sha256-dI3jTyVYc0EmMLHTiVjGSf3C2noS9Ru5WijEJFtiSFk=";
     sparseCheckout = [
       "public"
     ];
