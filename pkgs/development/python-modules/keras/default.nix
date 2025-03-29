@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -36,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.9.0";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-T1QY1GwE0X5ARtAueB6kF310kTaeOA+8Obdzx0NrOUs=";
+    hash = "sha256-e4jHa+/HAe+bKUngcdF6zpI6+l7NvnjCEtNCAA5QHCo=";
   };
 
   build-system = [
