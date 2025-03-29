@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swell-foop";
-  version = "48.alpha";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/swell-foop/${lib.versions.major finalAttrs.version}/swell-foop-${finalAttrs.version}.tar.xz";
-    hash = "sha256-h0AxrchfUtYzz2fVEkM0jyPmYOvkgvUIMldu+xPTebU=";
+    hash = "sha256-NL3uWJRqFMmGMVPJsQBs+8UfBCP8y82xLEXmDWbbvew=";
   };
 
   nativeBuildInputs = [
