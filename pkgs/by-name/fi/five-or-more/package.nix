@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "five-or-more";
-  version = "48.alpha";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${lib.versions.major finalAttrs.version}/five-or-more-${finalAttrs.version}.tar.xz";
-    hash = "sha256-L98o7qVvctKpmRAT89FVjRCG4lFMCw/tPM4Hp9GKa74=";
+    hash = "sha256-3/w3XAcVC8igBc+nTA6PC6UevLAoVkgiyxH+z9WZrnQ=";
   };
 
   nativeBuildInputs = [
