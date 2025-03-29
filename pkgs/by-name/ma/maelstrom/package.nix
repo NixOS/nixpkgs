@@ -7,12 +7,12 @@
   SDL2_net,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maelstrom";
   version = "3.0.7";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/Maelstrom/src/Maelstrom-${version}.tar.gz";
+    url = "http://www.libsdl.org/projects/Maelstrom/src/Maelstrom-${finalAttrs.version}.tar.gz";
     sha256 = "0dm0m5wd7amrsa8wnrblkv34sq4v4lglc2wfx8klfkdhyhi06s4k";
   };
 
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Arcade-style game resembling Asteroids";
     mainProgram = "maelstrom";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tmountain ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tmountain ];
   };
-}
+})
