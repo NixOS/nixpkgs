@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-fcitx5";
-  version = "0-unstable-2024-09-01";
+  version = "0-unstable-2025-03-22";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "fcitx5";
-    rev = "3471b918d4b5aab2d3c3dd9f2c3b9c18fb470e8e";
-    hash = "sha256-1IqFVTEY6z8yNjpi5C+wahMN1kpt0OJATy5echjPXmc=";
+    rev = "383c27ac46cbb55aa5f58acbd32841c1ed3a78a0";
+    hash = "sha256-n83f9ge4UhBFlgCPRCXygcVJiDp7st48lAJHTm1ohR4=";
   };
 
   dontConfigure = true;
