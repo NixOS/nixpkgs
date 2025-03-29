@@ -23,7 +23,6 @@
 , ldacbt
 , liblc3
 , libass
-, libkate
 , lrdf
 , ladspaH
 , lcms2
@@ -165,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     ldacbt
     liblc3
     libass
-    libkate
     webrtc-audio-processing_1
     libbs2b
     libmodplug
