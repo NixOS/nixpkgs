@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,13 +32,13 @@ buildPythonPackage rec {
     owner = "Instagram";
     repo = "LibCST";
     tag = "v${version}";
-    hash = "sha256-OuokZvdaCTgZI1VoXInqs6YNLsVUohaat5IjYYvUeVE=";
+    hash = "sha256-KqiB1LieRJJ34kJgIlqyMKCzO7iDen8j9+s0ZmrHe+c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-PrWcnhfhc3ZTVwTjzp7cIVlUYeXo164AO687rBI/IoY=";
+    hash = "sha256-EPS506x8KUFAbZ47ZWtH1q0ndXutM2fOqcsYpXRc0+c=";
   };
 
   cargoRoot = "native";
