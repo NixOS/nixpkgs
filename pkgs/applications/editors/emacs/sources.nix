@@ -31,19 +31,13 @@ let
               inherit rev hash;
             }
           );
-          "macport" =
-            if lib.versionAtLeast version "30" then
-              (fetchFromGitHub {
-                owner = "jdtsmith";
-                repo = "emacs-mac";
-                inherit rev hash;
-              })
-            else
-              (fetchFromBitbucket {
-                owner = "mituharu";
-                repo = "emacs-mac";
-                inherit rev hash;
-              });
+          "macport" = (
+            fetchFromGitHub {
+              owner = "jdtsmith";
+              repo = "emacs-mac";
+              inherit rev hash;
+            }
+          );
         }
         .${variant};
 
@@ -126,43 +120,6 @@ in
         hash = "sha256-AEvsQfpdR18z6VroJkWoC3sBoApIYQQgeF/P2DprPQ8=";
       })
     ];
-  });
-
-  emacs28-macport = import ./make-emacs.nix (mkArgs {
-    pname = "emacs-mac";
-    version = "28.2";
-    variant = "macport";
-    rev = "emacs-28.2-mac-9.1";
-    hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
-    patches = fetchpatch: [
-      # CVE-2022-45939
-      (fetchpatch {
-        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
-        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
-      })
-
-      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
-      })
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
-      })
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
-      })
-    ];
-  });
-
-  emacs29-macport = import ./make-emacs.nix (mkArgs {
-    pname = "emacs-mac";
-    version = "29.1";
-    variant = "macport";
-    rev = "emacs-29.1-mac-10.0";
-    hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
   });
 
   emacs30-macport = import ./make-emacs.nix (mkArgs {

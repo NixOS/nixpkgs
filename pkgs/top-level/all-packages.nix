@@ -14197,8 +14197,6 @@ with pkgs;
     emacs30-nox
     emacs30-pgtk
 
-    emacs28-macport
-    emacs29-macport
     emacs30-macport
     ;
 
