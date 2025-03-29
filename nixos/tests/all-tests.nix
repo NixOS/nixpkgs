@@ -800,7 +800,7 @@ in {
   nginx = runTest ./nginx.nix;
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-etag = runTest ./nginx-etag.nix;
-  nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
+  nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
   nginx-mime = handleTest ./nginx-mime.nix {};
