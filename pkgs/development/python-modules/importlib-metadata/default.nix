@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "8.5.0";
+  version = "8.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-cVImVvCrrOHQcrnlSBpI8HwTjgDwecOMj4g4I/nCa9c=";
+    hash = "sha256-MQtB11VEXXRWn5k8z8IoOCldn+AFQlCU+tlT1/FchYA=";
   };
 
   build-system = [

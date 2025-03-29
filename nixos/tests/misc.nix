@@ -19,7 +19,6 @@ import ./make-test-python.nix (
           }
         ];
         environment.variables.EDITOR = lib.mkOverride 0 "emacs";
-        documentation.nixos.enable = lib.mkOverride 0 true;
         systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
         systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = { };
         virtualisation.fileSystems = {

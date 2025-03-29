@@ -51,7 +51,7 @@ buildNpmPackage rec {
   npmFlags = [ "--legacy-peer-deps" ];
 
   npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    # we'll run npm rebuild manually later
     "--ignore-scripts"
   ];
 
@@ -60,6 +60,11 @@ buildNpmPackage rec {
     shopt -s globstar
     rm -r node_modules/**/prebuilds
     shopt -u globstar
+
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
+
+    npm rebuild --verbose
   '';
 
   postBuild = ''

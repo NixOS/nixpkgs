@@ -39,6 +39,15 @@ buildPythonPackage rec {
     hash = "sha256-uudBzxVGt3RW4ppDrFYfA9LMa2xPfs3FTBzVS19FjB4=";
   };
 
+  # ImportError: cannot import name 'quote' from 'dask.base'
+  # https://github.com/dask/dask/issues/11843
+  postPatch = ''
+    substituteInPlace odc/loader/_builder.py \
+      --replace-fail \
+        "from dask.base import quote, tokenize" \
+        "from dask.base import tokenize; from dask.core import quote"
+  '';
+
   build-system = [
     setuptools
   ];

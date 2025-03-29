@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -62,6 +63,9 @@ buildPythonPackage rec {
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
     "numpy"
     "tenacity"
   ];
@@ -144,10 +148,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain==([0-9.]+)$"
+    ];
   };
 
   meta = {

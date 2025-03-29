@@ -17,18 +17,19 @@
   onnx,
   pytestCheckHook,
   torchvision,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     tag = "v${version}";
-    hash = "sha256-6KHVsUHN2KDKAaMdhBpZgTq0XILWUsHJPgeRD0m9m20=";
+    hash = "sha256-FQwCdn9zUWHyUYAGHPNxQXN7O0bSLBHJrByxzCxUtio=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +61,11 @@ buildPythonPackage rec {
       # where 4 = <MagicMock id='140733587469184'>.call_count
       "test_lr_scheduler_wait_for_first_optimizer_step"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_register"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # torch.distributed is not available on darwin
       "test_create_distributed_evaluator"
       "test_distributed_evaluation"
@@ -108,7 +113,7 @@ buildPythonPackage rec {
   meta = {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
-    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/v${version}";
+    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };

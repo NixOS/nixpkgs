@@ -19,12 +19,31 @@ let
 
   initialPackages = self: { };
 
-  plugins = callPackage ./generated.nix {
+  cocPlugins = callPackage ./cocPlugins.nix {
     inherit buildVimPlugin;
+  };
+
+  luaPackagePlugins = callPackage ./luaPackagePlugins.nix {
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
-  extras = callPackage ./extras.nix {
+  nodePackagePlugins = callPackage ./nodePackagePlugins.nix {
+    inherit buildVimPlugin;
+  };
+
+  nonGeneratedPlugins =
+    self: super:
+    let
+      root = ./non-generated;
+      call = name: callPackage (root + "/${name}") { };
+    in
+    lib.pipe root [
+      builtins.readDir
+      (lib.filterAttrs (_: type: type == "directory"))
+      (builtins.mapAttrs (name: _: call name))
+    ];
+
+  plugins = callPackage ./generated.nix {
     inherit buildVimPlugin;
     inherit (neovimUtils) buildNeovimPlugin;
   };
@@ -44,7 +63,10 @@ let
 in
 lib.pipe initialPackages [
   (extends plugins)
-  (extends extras)
+  (extends cocPlugins)
+  (extends luaPackagePlugins)
+  (extends nodePackagePlugins)
+  (extends nonGeneratedPlugins)
   (extends overrides)
   (extends aliases)
   lib.makeExtensible

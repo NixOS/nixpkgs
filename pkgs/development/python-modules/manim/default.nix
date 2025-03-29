@@ -183,6 +183,16 @@ let
       cbfonts-fd
     ]
   );
+  # https://github.com/ManimCommunity/manim/pull/4037
+  av_13_1 = av.overridePythonAttrs (rec {
+    version = "13.1.0";
+    src = fetchFromGitHub {
+      owner = "PyAV-Org";
+      repo = "PyAV";
+      tag = "v${version}";
+      hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+    };
+  });
 in
 buildPythonPackage rec {
   pname = "manim";
@@ -206,7 +216,7 @@ buildPythonPackage rec {
   buildInputs = [ cairo ];
 
   dependencies = [
-    av
+    av_13_1
     beautifulsoup4
     click
     cloup
@@ -268,8 +278,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
-    # https://github.com/ManimCommunity/manim/pull/4037
-    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -277,9 +285,10 @@ buildPythonPackage rec {
       3Blue1Brown on YouTube. This is the community maintained version of
       manim.
     '';
+    mainProgram = "manim";
     changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ osbm ];
   };
 }

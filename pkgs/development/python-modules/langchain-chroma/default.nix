@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   chromadb,
   langchain-core,
   langchain-tests,
@@ -29,7 +30,12 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+    "numpy"
+  ];
 
   dependencies = [
     chromadb
@@ -50,10 +56,11 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-chroma==([0-9.]+)$"
+    ];
   };
 
   meta = {

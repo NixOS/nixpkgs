@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-+PaSLq++tKA6dy4CI1EYrEDdXi2TI9XHjvMLfwDp/HA=";
 
+  cargoBuildFlags = [ "--package trippy" ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/trip"
     installShellCompletion --cmd trip \

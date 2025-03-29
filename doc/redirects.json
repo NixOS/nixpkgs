@@ -17,6 +17,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -62,6 +65,12 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
+  ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -106,6 +115,9 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -316,6 +328,30 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"

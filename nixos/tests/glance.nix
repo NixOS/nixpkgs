@@ -40,7 +40,7 @@
     machine_custom_port.wait_for_open_port(5678)
 
     soup = BeautifulSoup(machine_default.succeed("curl http://localhost:8080"))
-    expected_version = "${config.nodes.machine_default.services.glance.package.version}"
+    expected_version = "v${config.nodes.machine_default.services.glance.package.version}"
     assert any(a.text == expected_version for a in soup.select(".footer a"))
   '';
 

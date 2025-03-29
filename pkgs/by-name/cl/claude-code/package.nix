@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "claude-code";
-  version = "0.2.41";
+  version = "0.2.54";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-HxPdULdggaFeNkRnrqIU2Y7HC6F8UdqRLTl8QiLV8wg=";
+    hash = "sha256-zeHaEqcUcxvF0xu2ZViL0m3v8v0UFB/xvBsEWR03F9I=";
   };
 
-  npmDepsHash = "sha256-VcB39pBEVF0PFOPDZVS6FH2UpSrIATjGueoZAxb33DA=";
+  npmDepsHash = "sha256-e0vVEtJC1QIlGS6XQA0eMLdd7wFYWRuyC0Ynpu/Iw88=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -22,6 +22,14 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   AUTHORIZED = "1";
+
+  # `claude-code` tries to auto-update by default, this disables that functionality.
+  # Note that the `DISABLE_AUTOUPDATER` environment variable is not documented, so this trick may
+  # not continue to work.
+  postInstall = ''
+    wrapProgram $out/bin/claude \
+      --set DISABLE_AUTOUPDATER 1
+  '';
 
   passthru.updateScript = ./update.sh;
 

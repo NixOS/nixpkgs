@@ -121,13 +121,3 @@
      createSwDoc();
      SwDoc* pDoc = getSwDoc();
      CPPUNIT_ASSERT(pDoc);
---- a/sw/qa/extras/odfexport/odfexport2.cxx
-+++ b/sw/qa/extras/odfexport/odfexport2.cxx
-@@ -1711,6 +1711,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
-     // - Error: "2001-01-01" does not satisfy the "dateTime" type
-     // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
-     loadAndReload("midnight_redline.fodt");
-+    return; // fails on aarch64
- 
-     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-     assertXPathContent(pXmlDoc,

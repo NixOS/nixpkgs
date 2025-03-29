@@ -3,6 +3,7 @@
   stdenv,
   config,
   alsa-lib,
+  apple-sdk_11,
   cmake,
   dbus,
   fetchFromGitHub,
@@ -23,17 +24,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifyd";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YBh5lcHXqYjyo/MjNNxnycY5AXjvlu+2gAzG6gM4Gjc=";
+    hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-waZ9XNYZ/scyMsNT7bZYqN4Ch4GbuQtwxAYaWTjNZwg=";
+  cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     # The `dbus_mpris` feature works on other platforms, but only requires `dbus` on Linux
     ++ lib.optional (withMpris && stdenv.hostPlatform.isLinux) dbus
     ++ lib.optional (withALSA || withJack) alsa-lib
@@ -60,6 +62,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional withMpris "dbus_mpris"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend";
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # `assertion failed: shell.is_some()`
+    # Internally it's trying to query the user's shell through `dscl`. This is bad
+    # https://github.com/Spotifyd/spotifyd/blob/8777c67988508d3623d3f6b81c9379fb071ac7dd/src/utils.rs#L45-L47
+    "--skip=utils::tests::test_ffi_discovery"
+  ];
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };

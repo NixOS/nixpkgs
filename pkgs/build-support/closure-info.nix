@@ -1,15 +1,42 @@
-# This derivation builds two files containing information about the
-# closure of 'rootPaths': $out/store-paths contains the paths in the
-# closure, and $out/registration contains a file suitable for use with
-# "nix-store --load-db" and "nix-store --register-validity
-# --hash-given".
-
 {
   stdenvNoCC,
   coreutils,
   jq,
 }:
 
+/**
+  Produces metadata about the closure of the given root paths.
+
+  1. Total NAR size in `$out/total-nar-size`.
+  2. Registration, suitable for `nix-store --load-db`, in `$out/registration`.
+     Can also be used with `nix-store --register-validity --hash-given`.
+  3. All store paths for the closure in `$out/store-paths`.
+
+  # Inputs
+
+  `rootPaths` ([Path])
+
+  : List of root paths to include in the closure information.
+
+  # Type
+
+  ```
+  closureInfo :: { rootPaths :: [Path]; } -> Derivation
+  ```
+
+  # Examples
+  :::{.example}
+  ## `pkgs.closureInfo` usage example
+  ```
+  pkgs.closureInfo {
+    rootPaths = [ pkgs.hello pkgs.bc pkgs.dwarf2json ];
+  }
+  =>
+  «derivation /nix/store/...-closure-info.drv»
+  ```
+
+  :::
+*/
 { rootPaths }:
 
 assert builtins.langVersion >= 5;

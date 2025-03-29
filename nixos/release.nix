@@ -1,6 +1,6 @@
 with import ../lib;
 
-{ nixpkgs ? { outPath = cleanSource ./..; revCount = 708350; shortRev = "1d95cb5"; }
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 708350; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
@@ -12,7 +12,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "beta") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
@@ -164,42 +164,14 @@ in rec {
   });
 
   iso_minimal = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-combined.nix;
     type = "minimal";
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
-    type = "plasma5";
-    inherit system;
-  });
-
-  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
-    type = "plasma6";
-    inherit system;
-  });
-
-  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
-    type = "gnome";
-    inherit system;
-  });
-
-  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
-  # This variant keeps zfs support enabled, hoping it will build and work.
-  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
-    type = "minimal-new-kernel";
-    inherit system;
-  });
-
-  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
-  # ZFS support disabled since it is unlikely to support the latest kernel.
-  iso_minimal_new_kernel_no_zfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix;
-    type = "minimal-new-kernel-no-zfs";
+  iso_graphical = forAllSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-combined.nix;
+    type = "graphical";
     inherit system;
   });
 

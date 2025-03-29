@@ -19,6 +19,7 @@ let
     kernel = config.system.modulesTree;
     firmware = config.hardware.firmware;
     allowMissing = false;
+    inherit (config.boot.initrd) extraFirmwarePaths;
   };
 
 
@@ -481,6 +482,14 @@ in
       type = types.listOf types.str;
       description = ''
         Other initrd files to prepend to the final initrd we are building.
+      '';
+    };
+
+    boot.initrd.extraFirmwarePaths = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Other firmware files (relative to `"''${config.hardware.firmware}/lib/firmware"`) to include in the final initrd we are building.
       '';
     };
 

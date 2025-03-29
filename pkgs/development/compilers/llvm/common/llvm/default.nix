@@ -93,6 +93,8 @@ let
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/${pname}/tools"
       cp -r ${monorepoSrc}/polly "$out/${pname}/tools"
+    '' + lib.optionalString (lib.versionAtLeast release_version "21") ''
+      cp -r ${monorepoSrc}/libc "$out"
     '') else src;
 in
 
@@ -513,12 +515,19 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ [
       "-DLLVM_TABLEGEN=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
     ];
+
+    triple =
+      if stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "20" then
+        # JIT tests expect the triple to use Darwin arch's naming for CPU architectures.
+        "${stdenv.hostPlatform.darwinArch}-apple-${stdenv.hostPlatform.darwinPlatform}"
+      else
+        stdenv.hostPlatform.config;
   in flagsForLlvmConfig ++ [
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_HOST_TRIPLE=${triple}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${triple}"
     "-DLLVM_ENABLE_DUMP=ON"
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
   ] ++ optionals (!finalAttrs.finalPackage.doCheck) [

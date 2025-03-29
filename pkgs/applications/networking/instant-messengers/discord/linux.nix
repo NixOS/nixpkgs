@@ -65,12 +65,11 @@
   withMoonlight ? false,
   moonlight,
   withTTS ? true,
+  enableAutoscroll ? false,
 }:
-
 assert lib.assertMsg (
   !(withMoonlight && withVencord)
 ) "discord: Moonlight and Vencord can not be enabled at the same time";
-
 let
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -86,7 +85,6 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
-
 stdenv.mkDerivation rec {
   inherit
     pname
@@ -176,6 +174,7 @@ stdenv.mkDerivation rec {
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
         --run "${lib.getExe disableBreakingUpdates}"

@@ -7,7 +7,7 @@ let
   mkGodotPackages =
     versionPrefix:
     let
-      attrs = import ./${versionPrefix};
+      attrs = import (./. + "/${versionPrefix}/default.nix");
       inherit (attrs)
         version
         hash

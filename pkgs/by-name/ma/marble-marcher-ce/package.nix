@@ -13,7 +13,7 @@
   eigen,
   glew,
   glm,
-  sfml,
+  sfml_2,
 
   makeDesktopItem,
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     glew
     glm
-    sfml
+    sfml_2
   ];
 
   installFlags = [ "DESTDIR=$(out)" ];

@@ -6,6 +6,7 @@
   bubblewrap,
   cairo,
   cargo,
+  gettext,
   git,
   gnome,
   gtk4,
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
+    gettext # for msgfmt
     git
     meson
     ninja
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibglycin=false"
     "-Dvapi=false"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -147,7 +147,5 @@ stdenv.mkDerivation (finalAttrs: {
       qbisi
     ];
     platforms = lib.platforms.unix;
-    # Dependency of scalapack for mpiSupport is broken on darwin platform
-    broken = mpiSupport && stdenv.hostPlatform.isDarwin;
   };
 })

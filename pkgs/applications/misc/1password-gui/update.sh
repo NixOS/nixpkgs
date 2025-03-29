@@ -30,8 +30,8 @@ mk_url() {
 }
 
 cleanup() {
-  if [[ -f ${GPG_KEYRING-} ]]; then
-    rm "${GPG_KEYRING}"
+  if [[ -d ${TMP_GNUPGHOME-} ]]; then
+    rm -r "${TMP_GNUPGHOME}"
   fi
 
   if [[ -f ${JSON_HEAP-} ]]; then
@@ -42,14 +42,14 @@ cleanup() {
 trap cleanup EXIT
 
 # Get channel versions from versions.json
-declare -A version=(
-  ["stable"]=$(jq -r '.stable.version' versions.json)
-  ["beta"]=$(jq -r '.beta.version' versions.json)
-)
+declare -A versions
+while IFS='=' read -r key value; do
+  versions["${key}"]="${value}"
+done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' versions.json)
 
-#
-GPG_KEYRING=$(mktemp -t 1password.kbx.XXXXXX)
-gpg --no-default-keyring --keyring "${GPG_KEYRING}" \
+TMP_GNUPGHOME=$(mktemp -dt 1password-gui.gnupghome.XXXXXX)
+export GNUPGHOME="${TMP_GNUPGHOME}"
+gpg --no-default-keyring --keyring trustedkeys.kbx \
   --keyserver keyserver.ubuntu.com \
   --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22
 
@@ -57,7 +57,8 @@ JSON_HEAP=$(mktemp -t 1password-gui.jsonheap.XXXXXX)
 for channel in stable beta; do
   for os in linux darwin; do
     for arch in x86_64 aarch64; do
-      url=$(mk_url ${os} ${channel} ${arch} "${version[${channel}]}")
+      version="${versions[${channel}-${os}]}"
+      url=$(mk_url ${os} ${channel} ${arch} ${version})
       nix store prefetch-file --json "${url}" | jq "
         {
           \"${channel}\": {
@@ -71,7 +72,7 @@ for channel in stable beta; do
 
       # For some reason 1Password PGP signs only Linux binaries.
       if [[ ${os} == "linux" ]]; then
-         gpgv --keyring "${GPG_KEYRING}" \
+         gpgv \
            $(nix store prefetch-file --json "${url}.sig" | jq -r .storePath) \
            $(jq -r --slurp ".[-1].[].[].storePath" "${JSON_HEAP}")
       fi

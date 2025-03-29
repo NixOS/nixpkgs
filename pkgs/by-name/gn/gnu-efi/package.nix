@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit
       fwupd-efi
-      ipxe
       syslinux
       ;
   };

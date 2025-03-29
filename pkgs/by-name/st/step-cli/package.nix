@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 let
-  version = "0.28.5";
+  version = "0.28.6";
 in
 buildGoModule {
   pname = "step-cli";
@@ -16,7 +16,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-cuD66Llk0789mYL0x17jKjSmAxCcCvwPEz3/BHXJ5NQ=";
+    hash = "sha256-9tw/d6n6tzhBhBqizDG1dGhj8se9GF2DtrfYwwhvsLs=";
     # this file change depending on git branch status (via .gitattributes)
     # https://github.com/NixOS/nixpkgs/issues/84312
     postFetch = ''
@@ -35,7 +35,7 @@ buildGoModule {
     rm command/certificate/remote_test.go
   '';
 
-  vendorHash = "sha256-iOtW5uioDDHR7ZJFX3pBdrQlWV6LnfjjHinQppmX5Fo=";
+  vendorHash = "sha256-+pHc2uBgQwMkJ7BTgHGHDPgfBpLlN0Yxf+6Enhb7cys=";
 
   nativeBuildInputs = [ installShellFiles ];
 

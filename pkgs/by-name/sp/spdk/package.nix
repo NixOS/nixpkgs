@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    python3.pkgs.configshell
+    python3.pkgs.configshell-fb
   ];
 
   postPatch = ''

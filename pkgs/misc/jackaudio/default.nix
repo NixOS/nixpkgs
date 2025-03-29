@@ -19,6 +19,9 @@
   libobjc,
   Accelerate,
 
+  # BSD Dependencies
+  freebsd,
+
   # Optional Dependencies
   dbus ? null,
   libffado ? null,
@@ -84,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
       CoreAudio
       Accelerate
       libobjc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      freebsd.libsysinfo
     ];
 
   patches = [
@@ -106,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (optDbus != null) "--dbus"
     ++ lib.optional (optLibffado != null) "--firewire"
-    ++ lib.optional (optAlsaLib != null) "--alsa";
+    ++ lib.optional (optAlsaLib != null) "--alsa"
+    ++ lib.optional (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
 
   postInstall = (
     if libOnly then

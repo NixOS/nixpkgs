@@ -94,6 +94,8 @@ stdenv'.mkDerivation rec {
     ]
     ++ lib.optionals cudaSupport [
       autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+      (lib.getDev cudaPackages.cuda_cudart)
     ];
 
   buildInputs =

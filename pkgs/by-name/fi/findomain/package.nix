@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "9.0.3";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "findomain";
     repo = "findomain";
     tag = version;
-    hash = "sha256-M6i62JI4HjaM0C2rSK8P5O19JeugFP5xIy1E6vE8KP4=";
+    hash = "sha256-5jbKDMULig6j3D5KEQQrHWtsc59x0Tj6n/7kwK/8IME=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-2CB7xmZFqej+vOx90kOPcI4FNpj1z4wnW90n7yEFpNA=";
+  cargoHash = "sha256-4+nRQ8HL4dQMCgeSOrgkaRj0E4HPAC3Nm82AEr1KWJo=";
 
   nativeBuildInputs = [
     installShellFiles

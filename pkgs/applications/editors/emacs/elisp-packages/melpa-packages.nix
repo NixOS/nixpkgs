@@ -1061,6 +1061,13 @@ let
         # missing optional dependencies
         ekg = addPackageRequires super.ekg [ self.denote ];
 
+        elfeed = super.elfeed.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace elfeed-curl.el \
+              --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
+          '';
+        });
+
         elisp-sandbox = ignoreCompilationError super.elisp-sandbox; # elisp error
 
         elnode = ignoreCompilationError super.elnode; # elisp error
@@ -1093,7 +1100,7 @@ let
         enotify = ignoreCompilationError super.enotify; # elisp error
 
         # https://github.com/leathekd/ercn/issues/6
-        ercn = addPackageRequires super.ercn [ self.dash ];
+        ercn = addPackageRequiresIfOlder super.ercn [ self.dash ] "20250317.2338";
 
         # missing optional dependencies
         eval-in-repl = addPackageRequires super.eval-in-repl (
@@ -1294,6 +1301,15 @@ let
 
         # https://github.com/fred-o/jekyll-modes/issues/6
         jekyll-modes = addPackageRequires super.jekyll-modes [ self.poly-markdown ];
+
+        jq-mode = super.jq-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace jq-mode.el \
+              --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
+            substituteInPlace ob-jq.el \
+              --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
+          '';
+        });
 
         jss = ignoreCompilationError super.jss; # elisp error
 

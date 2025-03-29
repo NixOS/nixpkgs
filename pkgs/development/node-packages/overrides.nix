@@ -54,13 +54,6 @@ final: prev: {
     '';
   };
 
-  ijavascript = prev.ijavascript.override (oldAttrs: {
-    preRebuild = ''
-      export npm_config_zmq_external=true
-    '';
-    buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
@@ -247,30 +240,6 @@ final: prev: {
 
   rush = prev."@microsoft/rush".override {
     name = "rush";
-  };
-
-  thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-  };
-
-  thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-  };
-
-  thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
-    preRebuild = ''
-      rm -r node_modules/node-gyp
-    '';
-  };
-
-  thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
-    # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
-    preRebuild = ''
-      rm -r node_modules/node-gyp
-    '';
   };
 
   ts-node = prev.ts-node.override {

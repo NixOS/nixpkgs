@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     tag = version;
-    hash = "sha256-aeyoBfl5x9Jo35vESMmLBbl72Qx5F3JwZHZaBr3c0Jk=";
+    hash = "sha256-lDwQjQepMTmsnGh/wreUfweT1xih/z3tiBPHaY+mBTI=";
   };
 
   nativeBuildInputs = [

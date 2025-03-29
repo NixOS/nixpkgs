@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "ignite-cli";
-  version = "28.8.1";
+  version = "28.8.2";
 
   src = fetchFromGitHub {
     repo = "cli";
     owner = "ignite";
     rev = "v${version}";
-    hash = "sha256-tecoeYQ+rWH36AwkcvO5W7mqVxc9fGHcUiQ+dZvUQP0=";
+    hash = "sha256-d7+T0VlmKQgmAJ8eyDg8JDL9HHJbU+nOTvJP0GTuIRY=";
   };
 
-  vendorHash = "sha256-4Ab3xgP1fK2QA+qL3DyNESkOl6MeQlhhjpaWO6oRFlg=";
+  vendorHash = "sha256-EaOs3m5AN0EYMO8j3mkKPOQwapi0WRaTIUJKTjDpmCo=";
 
   nativeBuildInputs = [ makeWrapper ];
 

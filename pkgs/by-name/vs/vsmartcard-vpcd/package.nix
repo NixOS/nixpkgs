@@ -46,18 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       ))
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.PCSC
     ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--enable-infoplist";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--enable-infoplist";
 
   meta = {
     description = "Emulates a smart card and makes it accessible through PC/SC";
     homepage = "http://frankmorgner.github.io/vsmartcard/virtualsmartcard/README.html";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
 })

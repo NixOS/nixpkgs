@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps, nixosTests }:
+{ lib, stdenv, fetchurl, jdk17_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps, nixosTests }:
 
 let
   versionMap = {
+    "4_0" = {
+      kafkaVersion = "4.0.0";
+      scalaVersion = "2.13";
+      sha256 = "sha256-e4Uuk4vAneEM2W7KN1UljH0l+4nb3XYwVxdgfhg14qo=";
+      jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_4_0;
+    };
     "3_9" = {
       kafkaVersion = "3.9.0";
       scalaVersion = "2.13";

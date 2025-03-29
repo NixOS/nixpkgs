@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuckr";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
     rev = version;
-    hash = "sha256-ez27IEdOPryyIQCGATjKGeos3stLHP4BkwnJBLk+1W8=";
+    hash = "sha256-0ZPBJ2MNeoGCvYW6HswVZ5SyjZpdR21lp9ebceIhsfw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4F54N+r/er3j9zAzfSkXiwl5iEjh47PPzHByMZ0jA+Y=";
+  cargoHash = "sha256-vgwO1N7FuqZaY+ShkQHmCEYwiKZRkkqDNAU7SnTg1rw=";
 
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 

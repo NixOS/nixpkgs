@@ -35,5 +35,8 @@ curPkgs
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
     nixpkgs-review
+    # Command-line utility for working with GitHub
+    # Used by nixpkgs-review to fetch eval results
+    gh
   ];
 }

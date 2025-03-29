@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.12.1";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-te2YMKOnvmo2FCdIB1lvqcVsHBD4k5KK10E2Bol6uEg=";
+    hash = "sha256-CawBLQstWLZ7AOmoOxsU7W7bZnnqvMmZacBC9CI/h+M=";
   };
 
   build-system = [

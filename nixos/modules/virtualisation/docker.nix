@@ -1,6 +1,6 @@
 # Systemd services for docker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -271,11 +271,15 @@ in
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
 
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
-        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = utils.escapeSystemdExecArgs ([
+            (lib.getExe cfg.package)
+            "system"
+            "prune"
+            "-f"
+          ] ++ cfg.autoPrune.flags);
+        };
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
         after = [ "docker.service" ];

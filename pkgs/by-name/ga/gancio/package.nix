@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gancio";
-  version = "1.24.0";
+  version = "1.24.4";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "les";
     repo = "gancio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PczJFh4tODwtocDSY0UHok8tgBmVvSVHDRjLG6Cor5s=";
+    hash = "sha256-LbXTzptkAYQ/86DtHHJvZP45YMVcqyrK4RD7AYvwGoM=";
   };
 
   offlineCache = fetchYarnDeps {

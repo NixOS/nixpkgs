@@ -7,15 +7,15 @@
 
 buildGoModule rec {
   pname = "systemd_exporter";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  vendorHash = "sha256-D5ASUP6XHNeHZqH/ui5GvxWis/NQrRpN/+wkO4fKkA8=";
+  vendorHash = "sha256-4hsQ1417jLNOAqGkfCkzrmEtYR4YLLW2j0CiJtPg6GI=";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zLg4cOZUh50OFPp4mKR/FY0JfzVmXmDFcKkhB6DalGc=";
+    sha256 = "sha256-wWXtAyQ48fsh/9BBo2tHXf4QS3Pbsmj6rha28TdBRWI=";
   };
 
   ldflags = [

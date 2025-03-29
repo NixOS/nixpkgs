@@ -1592,6 +1592,9 @@
   "sec-option-types-string": [
     "index.html#sec-option-types-string"
   ],
+  "sec-option-types-specialised": [
+    "index.html#sec-option-types-specialised"
+  ],
   "sec-option-types-submodule": [
     "index.html#sec-option-types-submodule"
   ],
@@ -1942,6 +1945,9 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

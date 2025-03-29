@@ -1,13 +1,13 @@
 {
-  buildPostgresqlExtension,
   fetchFromGitHub,
   file,
   lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_byteamagic";
   version = "0.2.4";
 

@@ -85,6 +85,7 @@ with lib.maintainers;
 
   beam = {
     members = [
+      adamcstephens
       ankhers
       Br1ght0ne
       DianaOlympos
@@ -218,6 +219,7 @@ with lib.maintainers;
   cuda = {
     members = [
       connorbaker
+      prusnak
       samuela
       SomeoneSerge
     ];
@@ -330,6 +332,7 @@ with lib.maintainers;
       AndersonTorres
       adisbladis
       linj
+      panchoh
     ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
@@ -760,7 +763,6 @@ with lib.maintainers;
 
   marketing = {
     members = [
-      garbas
       tomberek
     ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
@@ -784,7 +786,6 @@ with lib.maintainers;
       ma27
       fadenb
       mguentner
-      ralith
       dandellion
       nickcao
       teutat3s
@@ -810,16 +811,20 @@ with lib.maintainers;
     members = [
       _9999years
       Gabriella439
+      curran
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
   };
 
+  # same as https://github.com/orgs/NixOS/teams/nix-team
   nix = {
     members = [
       eelco
-      grahamc
-      pierron
+      mic92
+      tomberek
+      roberth
+      ericson2314
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
@@ -1018,8 +1023,9 @@ with lib.maintainers;
 
   rocm = {
     members = [
-      Madouura
       Flakebi
+      GZGavinZhao
+      LunNova
       mschwaig
     ];
     githubTeams = [ "rocm-maintainers" ];

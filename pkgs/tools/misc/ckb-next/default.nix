@@ -21,14 +21,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.1";
+  version = "0.6.2";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    hash = "sha256-xOt+yvdrN6wBkvz1OfkdAPSz5F4qWg5kIgCw8JlXd10=";
+    hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
   };
 
   buildInputs = [

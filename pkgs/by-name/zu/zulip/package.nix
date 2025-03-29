@@ -1,7 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildNpmPackage
-, electron_32
+, python3
+, electron_35
 , makeDesktopItem
 , makeShellWrapper
 , copyDesktopItems
@@ -9,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "zulip";
-  version = "5.11.1";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
-    rev = "v${version}";
-    hash = "sha256-ELuQ/K5QhtS4QiTR35J9VtYNe1qBrS56Ay6mtcGL+FI=";
+    tag = "v${version}";
+    hash = "sha256-YDb69tJCR58DARssnZgdVxtRpR8vHsawCTv7kQ56y+8=";
   };
 
-  npmDepsHash = "sha256-13Rlqa7TC2JUq6q1b2U5X3EXpOJGZ62IeF163/mTo68=";
+  npmDepsHash = "sha256-MKKN6prUdWaHm27GybdbswDMNJH0xVffXsT2ZwroOHI=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -27,6 +28,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     makeShellWrapper
     copyDesktopItems
+    (python3.withPackages (ps: with ps; [ distutils ]))
   ];
 
   dontNpmBuild = true;
@@ -34,8 +36,8 @@ buildNpmPackage rec {
     runHook preBuild
 
     npm run pack -- \
-      -c.electronDist=${electron_32}/libexec/electron \
-      -c.electronVersion=${electron_32.version}
+      -c.electronDist=${electron_35}/libexec/electron \
+      -c.electronVersion=${electron_35.version}
 
     runHook postBuild
   '';
@@ -48,7 +50,7 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_32}' "$out/bin/zulip" \
+    makeShellWrapper '${lib.getExe electron_35}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0

@@ -23,9 +23,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-M+OapPHQ/WxlkUzHPx+ELstVyGoZanCxCL0N8hDWSN8=";
+  sha256 = "sha256-CY9KCCbKBAuoYAJtPHlQj04dUuCZAovnyJsBgjzzQkI=";
 
   nativeBuildInputs =
     [

@@ -86,8 +86,8 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
-    "version": "0.29.0",
-    "hash": "sha256-hhyLzVyNO7lAm9RbQao15+d8gt9yYK2+Rem3yAoA+zw="
+    "version": "0.29.1",
+    "hash": "sha256-bhkxMzJs1eOdrgWsiyUxJy3D9nKe1w3ajSCn1AVCggw="
   },
   {
     "pname": "FSharp.Compiler.Service",

@@ -144,6 +144,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+  env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
     homepage = "https://mesonbuild.com";

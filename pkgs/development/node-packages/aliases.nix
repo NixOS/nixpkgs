@@ -49,6 +49,7 @@ mapAliases {
   "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
   "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
@@ -117,6 +118,7 @@ mapAliases {
   inherit (pkgs) gramma; # added 2024-06-26
   grammarly-languageserver = throw "grammarly-languageserver was removed because it requires EOL Node.js 16"; # added 2024-07-15
   inherit (pkgs) graphite-cli; # added 2024-01-25
+  inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
@@ -126,6 +128,7 @@ mapAliases {
   inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
+  ijavascript = throw "ijavascript has been removed because it was broken"; # added 2025-03-18
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
@@ -140,6 +143,7 @@ mapAliases {
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
+  lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
@@ -160,6 +164,7 @@ mapAliases {
   npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  orval = throw "orval has been removed because it was broken"; # added 2025-03-23
   parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
   parcel-bundler = self.parcel; # added 2023-09-04
   inherit (pkgs) patch-package; # added 2024-06-29
@@ -167,6 +172,7 @@ mapAliases {
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) prisma; # added 2024-08-31
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
@@ -176,12 +182,14 @@ mapAliases {
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
   remod-cli = pkgs.remod; # added 2024-12-04
+  "reveal.js" = throw "reveal.js was removed because it provides no executable"; # added 2025-03-23
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
   inherit (pkgs) serverless; # Added 2023-11-29
   shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
   inherit (pkgs) snyk; # Added 2023-08-30
+  "socket.io" = throw "socket.io was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
@@ -210,6 +218,45 @@ mapAliases {
   inherit (pkgs) textlint-rule-unexpanded-acronym; # Added 2024-05-17
   inherit (pkgs) textlint-rule-write-good; # Added 2024-05-16
   thelounge = pkgs.thelounge; # Added 2023-05-22
+  thelounge-plugin-closepms = throw "thelounge-plugin-closepms has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-plugin-giphy = throw "thelounge-plugin-giphy has been removed because thelounge moved out of nodePackages"; # added 2025-03-12
+  thelounge-plugin-shortcuts = throw "thelounge-plugin-shortcuts has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-abyss = throw "thelounge-theme-abyss has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-amoled = throw "thelounge-theme-amoled has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-amoled-sourcecodepro = throw "thelounge-theme-amoled-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-bdefault = throw "thelounge-theme-bdefault has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-bmorning = throw "thelounge-theme-bmorning has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-chord = throw "thelounge-theme-chord has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-classic = throw "thelounge-theme-classic has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-common = throw "thelounge-theme-common has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-crypto = throw "thelounge-theme-crypto has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-discordapp = throw "thelounge-theme-discordapp has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-dracula = throw "thelounge-theme-dracula has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-dracula-official = throw "thelounge-theme-dracula-official has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-flat-blue = throw "thelounge-theme-flat-blue has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-flat-dark = throw "thelounge-theme-flat-dark has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-gruvbox = throw "thelounge-theme-gruvbox has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-hexified = throw "thelounge-theme-hexified has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-ion = throw "thelounge-theme-ion has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-light = throw "thelounge-theme-light has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-midnight = throw "thelounge-theme-midnight has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-mininapse = throw "thelounge-theme-mininapse has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-monokai-console = throw "thelounge-theme-monokai-console has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-mortified = throw "thelounge-theme-mortified has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-neuron-fork = throw "thelounge-theme-neuron-fork has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-new-morning = throw "thelounge-theme-new-morning has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-new-morning-compact = throw "thelounge-theme-new-morning-compact has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-nologo = throw "thelounge-theme-nologo has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-nord = throw "thelounge-theme-nord has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-onedark = throw "thelounge-theme-onedark has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-purplenight = throw "thelounge-theme-purplenight has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-scoutlink = throw "thelounge-theme-scoutlink has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-seraphimrp = throw "thelounge-theme-seraphimrp has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-solarized = throw "thelounge-theme-solarized has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-solarized-fork-monospace = throw "thelounge-theme-solarized-fork-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn = throw "thelounge-theme-zenburn has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn-monospace = throw "thelounge-theme-zenburn-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn-sourcecodepro = throw "thelounge-theme-zenburn-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21

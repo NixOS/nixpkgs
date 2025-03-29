@@ -129,11 +129,15 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with lib; {
-    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
+    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
+    # Cross build is broken due to attempt to execute cert-sync built for the host.
     broken =
-      stdenv.hostPlatform.isDarwin
-      && stdenv.hostPlatform.isAarch64
-      && lib.versionOlder version "6.12.0.129";
+      (
+        stdenv.hostPlatform.isDarwin
+        && stdenv.hostPlatform.isAarch64
+        && lib.versionOlder version "6.12.0.129"
+      )
+      || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;

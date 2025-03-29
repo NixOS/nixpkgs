@@ -1,11 +1,12 @@
 {
-  rke2Version = "1.29.13+rke2r1";
-  rke2Commit = "00803ef95072be9d13b6e52a56fa9b6d9e7b0a51";
-  rke2TarballHash = "sha256-1OphaTrEU2MvV0kdEyxomRGgbl/YSVikcYtLuL3QnBI=";
-  rke2VendorHash = "sha256-6XczvyQMqYqHHu+cSsmXsi7zMG128ZwiAHr482qQqpI=";
-  k8sImageTag = "v1.29.13-rke2r1-build20250117";
-  etcdVersion = "v3.5.16-k3s1-build20241106";
+  rke2Version = "1.29.15+rke2r1";
+  rke2Commit = "c228232895f83b6c3e17a9741e0c8d8e4439894d";
+  rke2TarballHash = "sha256-ZvujSxuTsM6oBNEehQSMmCkbSTsp8sBZd00vwJGx5Lk=";
+  rke2VendorHash = "sha256-PhJgHvVCZAxWK78cn0pURC/Oy63/V41k0ZFn4sveCPY=";
+  k8sImageTag = "v1.29.15-rke2r1-build20250312";
+  etcdVersion = "v3.5.19-k3s1-build20250306";
   pauseVersion = "3.6";
   ccmVersion = "v1.29.10-0.20241016053521-9510ac25fefb-build20241016";
-  dockerizedVersion = "v1.29.13-rke2r1";
+  dockerizedVersion = "v1.29.15-rke2r1";
+  imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }

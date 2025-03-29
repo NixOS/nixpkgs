@@ -135,6 +135,7 @@ mapAliases ({
   command_runner = command-runner; # added 2024-03-06
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
+  configshell = configshell-fb; # added 2025-03-14
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
   covCore = throw "covCore was renamed to cov-core and subsequently removed since it has ben unmaintained since 2014"; # added 2024-05-20
   cov-core = throw "cov-core has been removed, it was archived and unmaintained since 2014"; # added 2024-05-21
@@ -205,6 +206,7 @@ mapAliases ({
   email_validator = email-validator; # added 2022-06-22
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   enum-compat = throw "enum-compat is a virtual package providing enum34, which does not do anything since Python 3.4"; # added 2025-02-15
+  enum34 = throw "enum34 is no longer needed since Python 3.4"; # added 2025-03-06
   et_xmlfile = et-xmlfile; # added 2023-10-16
   etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
@@ -386,6 +388,7 @@ mapAliases ({
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
+  mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
@@ -599,6 +602,7 @@ mapAliases ({
   pytorchWithCuda = torchWithCuda; # added 2022-09-30
   pytorchWithoutCuda = torchWithoutCuda; # added 2022-09-30
   pytwitchapi = twitchapi; # added 2022-03-07
+  pytzdata = throw "pytzdata has been removed, because iit is unmaintained upstream. Use pytz or tzdata instead."; # added 2025-03-03
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyunifiprotect = throw "pyunifiprotect has disappeared from GitHub and PyPI, use uiprotect instead"; # added 2024-09-17
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
@@ -647,6 +651,7 @@ mapAliases ({
   ronin = throw "ronin has been removed because it was unmaintained since 2018"; # added 2024-08-21
   ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
+  rtslib = rtslib-fb; # added 2025-03-14
   ruamel_base = ruamel-base; # added 2021-11-01
   ruamel_yaml = ruamel-yaml; # added 2021-11-01
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
