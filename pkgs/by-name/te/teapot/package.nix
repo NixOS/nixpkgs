@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libtirpc
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libtirpc,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
       systems.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "teapot";
   };

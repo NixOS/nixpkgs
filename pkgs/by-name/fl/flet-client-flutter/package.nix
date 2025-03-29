@@ -1,37 +1,42 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, flutter
+, flutter327
 , gst_all_1
 , libunwind
 , makeWrapper
 , mimalloc
 , orc
-, yq
-, runCommand
+, python3
+, nix
 , gitUpdater
+, nix-prefetch-git
 , mpv-unwrapped
 , libplacebo
 , _experimental-update-script-combinators
-, flet-client-flutter
+, fletTarget ? "linux"
 }:
 
-flutter.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.24.1";
+  version = "0.27.6";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
-    rev = "v${version}";
-    hash = "sha256-cT1cWxMVpZ0fXoIaJpW96ifQKNe7+PLUXjIFJ3ALdyo=";
+    tag = "v${version}";
+    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
   };
 
   sourceRoot = "${src.name}/client";
 
+  gitHashes = lib.importJSON ./git_hashes.json;
+
   cmakeFlags = [
     "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o"
   ];
+
+  targetFlutterPlatform = fletTarget;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -56,16 +61,12 @@ flutter.buildFlutterApplication rec {
   ;
 
   passthru = {
-    pubspecSource = runCommand "pubspec.lock.json" {
-        buildInputs = [ yq ];
-        inherit (flet-client-flutter) src;
-      } ''
-      cat $src/client/pubspec.lock | yq > $out
-    '';
-
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "flet-client-flutter.pubspecSource" ./pubspec.lock.json)
+      {
+        command = ["env" "PATH=${lib.makeBinPath [(python3.withPackages (p: [p.pyyaml])) nix-prefetch-git nix]}" "python3" ./update-lockfiles.py ];
+        supportedFeatures = ["silent"];
+      }
     ];
   };
 

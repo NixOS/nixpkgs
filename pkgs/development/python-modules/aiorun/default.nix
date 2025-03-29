@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  fetchpatch,
   flit-core,
   pygments,
   pytestCheckHook,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2023.7.2";
+  version = "2025.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,18 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "aiorun";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3AGsT8IUNi5SZHBsBfd7akj8eQ+xb0mrR7ydIr3T8gs=";
+    tag = "v${version}";
+    hash = "sha256-YqUlWf79EbC47BETBDjo8hzg5jhL4LiWLKGr1Qy4AbM=";
   };
-
-  patches = [
-    # Raise flit-core version constrains
-    (fetchpatch {
-      # https://github.com/cjrh/aiorun/pull/85
-      url = "https://github.com/cjrh/aiorun/commit/a0c027ea331167712738e35ca70fefcd794e16d5.patch";
-      hash = "sha256-M1rcrkdFcoFa3IncPnJaRhnXbelyk56QnMGtmgB6bvk=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
@@ -42,7 +32,6 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  # allow for writable directory for darwin
   preBuild = ''
     export HOME=$TMPDIR
   '';

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch2
 , zlib
 , lzo
 , libtasn1
@@ -60,11 +59,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.6";
+  version = "3.8.9";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-LhWIquU8sy1Dk38fTsoo/r2cDHqhc0/F3WGn6B4OvN0=";
+    hash = "sha256-aeET2ALRZwxNWsG5kECx8tXHwF2uxQA4E8BJtRhIIO0=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -76,15 +75,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
-    # Revert https://gitlab.com/gnutls/gnutls/-/merge_requests/1800
-    # dlopen isn't as easy in NixPkgs, as noticed in tests broken by this.
-    # Without getting the libs into RPATH they won't be found.
-    (fetchpatch2 {
-      name = "revert-dlopen-compression.patch";
-      url = "https://gitlab.com/gnutls/gnutls/-/commit/8584908d6b679cd4e7676de437117a793e18347c.diff";
-      revert = true;
-      hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
-    })
   ];
 
   # Skip some tests:
@@ -98,7 +88,8 @@ stdenv.mkDerivation rec {
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
-  '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # See https://gitlab.com/gnutls/gnutls/-/issues/945
     sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '2iexit 77' -i tests/{ktls,ktls_keyupdate}.sh
@@ -119,6 +110,10 @@ stdenv.mkDerivation rec {
       "--enable-ktls"
     ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && tpmSupport) [
+      "--with-trousers-lib=${trousers}/lib/libtspi.so"
+    ] ++ [ # do not dlopen in nixpkgs
+        "--with-zlib=link"
     ];
 
   enableParallelBuilding = true;

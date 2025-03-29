@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "epi052";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3cznGVpZISLD2TbsHYyYYUTD55NmgBdNJ44V4XfZ40k=";
   };
 
@@ -24,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoHash = "sha256-hOIOcz7YyZbQNScsY0jdxGLZQnWRBsFOzmRdu8oWIN8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DjmMoATagWGK2DHMc6YB0u2X5x5hnqgCwIGe3+Wmdic=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -32,12 +34,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   # Tests require network access
   doCheck = false;
@@ -52,4 +56,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "feroxbuster";
   };
 }
-

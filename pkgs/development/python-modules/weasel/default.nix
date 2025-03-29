@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gXPHEoEY0qKcpAtqHlUw5c43/6hKseCx+vBNzEXFF2A=";
   };
 
@@ -39,9 +39,7 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cloudpathlib
@@ -70,10 +68,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Small and easy workflow system";
-    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    mainProgram = "weasel";
   };
 }

@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "voidmap";
   version = "1.1.5-unstable-2023-09-13";
 
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+P83psu+BYzgC/I/Ul7vrbZ99KIybd410/ycsIY1pGI=";
   };
 
-  cargoHash = "sha256-+UhqGl7w2jtGBFgX4u/g8tGO0NJTkDAJdNfwe8RobPQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H2KyqphEleEnWNfPdswns5QOLAlhO4UnmolnHcsV5FU=";
 
   checkFlags = [
     # The test utilizes a redirect stdout to file with dup2 and breaks sandbox assumptions

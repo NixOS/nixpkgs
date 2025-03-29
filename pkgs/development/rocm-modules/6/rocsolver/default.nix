@@ -1,32 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocblas
-, rocsparse
-, clr
-, fmt
-, gtest
-, gfortran
-, lapack-reference
-, buildTests ? false
-, buildBenchmarks ? false
-, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx906:xnack-" ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocblas,
+  rocsparse,
+  clr,
+  fmt,
+  gtest,
+  gfortran,
+  lapack-reference,
+  buildTests ? false,
+  buildBenchmarks ? false,
+  gpuTargets ? [ ], # gpuTargets = [ "gfx803" "gfx900" "gfx906:xnack-" ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver";
   version = "6.0.2";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ] ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -35,49 +39,61 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tglQpwCSFABRuEDiJrzQVFIdx9p85E2MiUYN0aoTAXo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    rocm-cmake
-    clr
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    gfortran
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      rocm-cmake
+      clr
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      gfortran
+    ];
 
-  buildInputs = [
-    rocblas
-    rocsparse
-    fmt
-  ] ++ lib.optionals buildTests [
-    gtest
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    lapack-reference
-  ];
+  buildInputs =
+    [
+      rocblas
+      rocsparse
+      fmt
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      lapack-reference
+    ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DCMAKE_CXX_FLAGS=-Wno-switch" # Way too many warnings
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_CLIENTS_TESTS=ON"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_BENCHMARKS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DCMAKE_CXX_FLAGS=-Wno-switch" # Way too many warnings
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_CLIENTS_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ];
 
-  postInstall = lib.optionalString buildTests ''
-    mkdir -p $test/bin
-    mv $out/bin/rocsolver-test $test/bin
-  '' + lib.optionalString buildBenchmarks ''
-    mkdir -p $benchmark/bin
-    mv $out/bin/rocsolver-bench $benchmark/bin
-  '' + lib.optionalString (buildTests || buildBenchmarks) ''
-    rmdir $out/bin
-  '';
+  postInstall =
+    lib.optionalString buildTests ''
+      mkdir -p $test/bin
+      mv $out/bin/rocsolver-test $test/bin
+    ''
+    + lib.optionalString buildBenchmarks ''
+      mkdir -p $benchmark/bin
+      mv $out/bin/rocsolver-bench $benchmark/bin
+    ''
+    + lib.optionalString (buildTests || buildBenchmarks) ''
+      rmdir $out/bin
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -95,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

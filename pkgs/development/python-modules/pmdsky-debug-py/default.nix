@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-#This package is auto-generated. It could totally be possible to generate it from upstream, but seems unecessary
+#This package is auto-generated. It could totally be possible to generate it from upstream, but seems unnecessary
 buildPythonPackage rec {
   pname = "pmdsky-debug-py";
   version = "10.0.21";

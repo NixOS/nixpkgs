@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  gitUpdater,
+  testers,
+  tkey-ssh-agent,
+}:
 
 buildGoModule rec {
   pname = "tkey-ssh-agent";
@@ -17,11 +24,20 @@ buildGoModule rec {
     "cmd/tkey-ssh-agent"
   ];
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      tkey-ssh-agent-version = testers.testVersion {
+        package = tkey-ssh-agent;
+      };
+    };
+  };
+
   meta = with lib; {
     description = "SSH Agent for TKey, the flexible open hardware/software USB security key";
-    homepage    = "https://tillitis.se/app/tkey-ssh-agent/";
-    license     = licenses.gpl2;
+    homepage = "https://tillitis.se/app/tkey-ssh-agent/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ bbigras ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

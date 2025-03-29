@@ -1,37 +1,37 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
-  cargo-tauri,
+  cargo-tauri_1,
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   dbus,
   glib,
   glib-networking,
-  libayatana-appindicator,
   webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.2";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-W8WSnfUqWTtyb6x0Kmej5sAxsi1Kh/uDkIx6SZhgSvw=";
+    tag = "v${version}";
+    hash = "sha256-xWHR0lg/3w2K+hExKCD84hdQ7UCZRrOnH2dNybaYMFE=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-rg4NdxyJfnEPmFjb2wKJcF7ga7t5WNX/LB0haOvGbXU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iI0oWuETVVPuoKlWplsgocF7DEvwTVSp5r1WmQd7R04=";
 
   postPatch =
     let
@@ -47,13 +47,9 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       substituteInPlace tauri.conf.json \
-        --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
       substituteInPlace tauri.conf.json \
-        --replace '"cd cinny && npm run build"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+        --replace-warn '"cd cinny && npm run build"' '""'
     '';
 
   postInstall =
@@ -67,28 +63,29 @@ rustPlatform.buildRustPackage rec {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/cinny.desktop
     '';
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/cinny" \
+      --inherit-argv0 \
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
     pkg-config
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
+    makeBinaryWrapper
   ];
 
   buildInputs =
     [
       openssl
-      dbus
-      glib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      glib
       glib-networking
-      libayatana-appindicator
       webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.apple_sdk.frameworks.WebKit
     ];
 
   meta = {

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   buildPackages,
-  gnu-efi,
   mtools,
   openssl,
   perl,
@@ -14,6 +13,7 @@
   embedScript ? null,
   additionalTargets ? { },
   additionalOptions ? [ ],
+  firmwareBinary ? "ipxe.efirom",
 }:
 
 let
@@ -48,10 +48,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2024-09-27";
+  version = "1.21.1-unstable-2025-02-28";
 
   nativeBuildInputs = [
-    gnu-efi
     mtools
     openssl
     perl
@@ -66,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "3f4f843920afdc1d808a8b20354cf3eca481401a";
-    hash = "sha256-+Zpl8xhiWrnkFVL+DLuV0N9pn6hjw5JxDMxeDmfcNS4=";
+    rev = "be3a78eaf804a2c437aa055d5c1e2f4a1310a0c1";
+    hash = "sha256-W1nLhFc3OttPbDyf8e7OM+kHQajamvNJ550YdTwlOHA=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -111,27 +110,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = lib.attrNames targets;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
-      ) targets
-    )}
-
-    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
-    # let's provide it as a symlink to be compatible in this case.
-    ln -s undionly.kpxe $out/undionly.kpxe.0
-
-    runHook postInstall
-  '';
+      mkdir -p $out
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
+        ) targets
+      )}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+      # let's provide it as a symlink to be compatible in this case.
+      ln -s undionly.kpxe $out/undionly.kpxe.0
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
+  passthru = {
+    firmware = "${finalAttrs.finalPackage}/${firmwareBinary}";
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   meta = {

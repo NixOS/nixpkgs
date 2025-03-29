@@ -6,7 +6,7 @@
   wineRelease,
   patches,
   moltenvk,
-  buildScript ? null, configureFlags ? [], mainProgram ? "wine"
+  buildScript ? null, configureFlags ? [], mainProgram ? "wine",
 }:
 
 with import ./util.nix { inherit lib; };
@@ -23,12 +23,10 @@ let
     };
   } ./setup-hook-darwin.sh;
 
-  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
-    toBuildInputs pkgArches (pkgs: with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
-      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
-    ])
-  );
+  # Using the 14.4 SDK allows Wine to use `os_sync_wait_on_address` for its futex implementation on Darwin.
+  # It does an availability check, so older systems will still work.
+  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (toBuildInputs pkgArches (pkgs: [ pkgs.apple-sdk_14 ]));
+
   # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
   darwinUnsupportedFlags = [
@@ -100,14 +98,14 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals (openglSupport && !stdenv.hostPlatform.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals (openglSupport && !stdenv.hostPlatform.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.libdrm ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
   ++ lib.optionals (x11Support) (with pkgs.xorg; [
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland wayland-scanner libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
-     mesa # for libgbm
+     libgbm
   ])));
 
   inherit patches;

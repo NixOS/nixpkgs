@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pgbouncer-exporter";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "pgbouncer_exporter";
     rev = "v${version}";
-    hash = "sha256-9Sa9BimyKwYTjh0ELlDlUS3kc5gnkK1i7xiO84vVPYA=";
+    hash = "sha256-8ChYYJIHdzH2vWxqnzS6sz9fDeLe+Y29fzia3/aBkgc=";
   };
 
   vendorHash = "sha256-PjoS56MdYpDOuSTHHo5lGL9KlWlu3ycA08qim8jrnSU=";

@@ -8,22 +8,23 @@
   pythonOlder,
   pytest-xdist,
   pytestCheckHook,
+  distro,
 }:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.29.0";
+  version = "0.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0cSeH0T/+v2aVeGpsQFZCFnYgdY56ikiUW9dnFEtNU4=";
+    hash = "sha256-xVHpkoq2cHYC9EgRgX+CujxEbgGL/h06vsyLpfPqyFE=";
   };
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = postgresql.doInstallCheck;
 
   # required for compatibility with Python versions older than 3.11
   # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
@@ -34,11 +35,15 @@ buildPythonPackage rec {
     postgresql
     pytest-xdist
     pytestCheckHook
+    distro
   ];
 
   preCheck = ''
     rm -rf asyncpg/
   '';
+
+  # https://github.com/MagicStack/asyncpg/issues/1236
+  disabledTests = [ "test_connect_params" ];
 
   pythonImportsCheck = [ "asyncpg" ];
 

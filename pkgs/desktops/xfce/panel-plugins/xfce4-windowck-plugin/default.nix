@@ -1,33 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, intltool
-, pkg-config
-, libwnck
-, libxfce4ui
-, xfce4-panel
-, xfconf
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gettext,
+  pkg-config,
+  glib,
+  gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-windowck-plugin";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     # Use dist tarballs to avoid pulling extra deps and generating images ourselves.
     url = "mirror://xfce/src/panel-plugins/xfce4-windowck-plugin/${lib.versions.majorMinor version}/xfce4-windowck-plugin-${version}.tar.bz2";
-    sha256 = "sha256-p4FEi3gemE072lmw2qsNGE1M7CJSMW9zcKxKmO/kgfQ=";
+    sha256 = "sha256-3E7V3JS9Bd5UlUQfDKuyYKs+H2ziex+skuN/kJwM/go=";
   };
 
   nativeBuildInputs = [
-    intltool
+    gettext
     pkg-config
   ];
 
   buildInputs = [
+    glib
+    gtk3
     libwnck
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
   ];

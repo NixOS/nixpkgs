@@ -1,14 +1,16 @@
-{ lib, stdenv
-, substituteAll
-, autoreconfHook
-, pkg-config
-, fetchurl
-, python3
-, dropbox
-, gtk4
-, nautilus
-, gdk-pixbuf
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  replaceVars,
+  autoreconfHook,
+  pkg-config,
+  fetchurl,
+  python3,
+  dropbox,
+  gtk4,
+  nautilus,
+  gdk-pixbuf,
+  gobject-introspection,
 }:
 
 let
@@ -19,7 +21,10 @@ stdenv.mkDerivation {
   pname = "dropbox-cli";
   inherit version;
 
-  outputs = [ "out" "nautilusExtension" ];
+  outputs = [
+    "out"
+    "nautilusExtension"
+  ];
 
   src = fetchurl {
     url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
@@ -29,9 +34,10 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   patches = [
-    (substituteAll {
-      src = ./fix-cli-paths.patch;
+    (replaceVars ./fix-cli-paths.patch {
       inherit dropboxd;
+      # patch context
+      DESKTOP_FILE_DIR = null;
     })
   ];
 
@@ -42,10 +48,12 @@ stdenv.mkDerivation {
     gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
     # but we are using Nix for installation so we will not need that.
-    (python3.withPackages (ps: with ps; [
-      docutils
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        docutils
+        pygobject3
+      ]
+    ))
   ];
 
   buildInputs = [

@@ -13,14 +13,15 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.9.0";
+  version = "4.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CGMtzW7OKGVyBOmiVq1kNp/isOOF7UM0n5MvAH2J93Q=";
+    pname = "azure_keyvault_keys";
+    inherit version;
+    hash = "sha256-URIGrpCuwXJqTW/1qS11S9DA8eh1GJE2jTD7cLYpVfE=";
   };
 
   build-system = [ setuptools ];

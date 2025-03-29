@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.16.3";
+  version = "0.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IrGOhUnWTtCI5juFFuNdWSWxeFr7s8bRNT8sUludGo0=";
+    tag = version;
+    hash = "sha256-49Lryp9xBiQK1Jb+CVPvH2Z2yzAsbYsZwgkkEhVjrPQ=";
   };
 
   build-system = [

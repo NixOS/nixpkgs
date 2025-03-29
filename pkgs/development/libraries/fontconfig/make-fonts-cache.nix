@@ -1,8 +1,20 @@
-{ runCommand, lib, fontconfig, fontDirectories }:
+{
+  buildPackages,
+  fontconfig,
+  lib,
+  runCommand,
+  stdenv,
+}:
+let
+  fontconfig' = fontconfig;
+in
+{
+  fontconfig ? fontconfig',
+  fontDirectories,
+}:
 
 runCommand "fc-cache"
   {
-    nativeBuildInputs = [ fontconfig.bin ];
     preferLocalBuild = true;
     allowSubstitutes = false;
     passAsFile = [ "fontDirs" ];
@@ -24,8 +36,11 @@ runCommand "fc-cache"
     cat "$fontDirsPath" >> fonts.conf
     echo "</fontconfig>" >> fonts.conf
 
+    # N.B.: fc-cache keys its cache entries by architecture.
+    # We must invoke the host `fc-cache` (not the build fontconfig) if we want
+    # the cache to be usable by the host.
     mkdir -p $out
-    fc-cache -sv
+    ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe' fontconfig "fc-cache"} -sv
 
     # This is not a cache dir in the normal sense -- it won't be automatically
     # recreated.

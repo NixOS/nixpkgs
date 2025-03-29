@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   bison,
   cmake,
   pkg-config,
@@ -42,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.37-29";
+  version = "8.0.41-32";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-zZgq3AxCRYdte3dTUJiuMvVGdl9U01s8jxcAqDxZiNM=";
+    hash = "sha256-3ua/8X0vzbBzjRNhmMjdz3Wfk7ECs67bPoCYBBNXywc=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -140,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "lib/*.a" $static
     so=${stdenv.hostPlatform.extensions.sharedLibrary}
-    ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+    ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
     wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
       lib.makeBinPath [
@@ -182,7 +184,13 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests.percona-server = nixosTests.mysql.percona-server_8_0;
+    tests.percona-server =
+      nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
+    updateScript = gitUpdater {
+      url = "https://github.com/percona/percona-server";
+      rev-prefix = "Percona-Server-";
+      allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+    };
   };
 
   meta = with lib; {

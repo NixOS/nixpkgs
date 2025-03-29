@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 appimageTools.wrapType2 rec {

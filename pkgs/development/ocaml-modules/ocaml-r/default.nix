@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, dune-configurator, stdio, R
-, alcotest
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  pkg-config,
+  dune-configurator,
+  stdio,
+  R,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -17,7 +25,7 @@ buildDunePackage rec {
     sha256 = "sha256-jPyVMxjeh9+xu0dD1gelAxcOhxouKczyvzVoKZ5oSrs=";
   };
 
-  # Finds R and Rmathlib separatley
+  # Finds R and Rmathlib separately
   patches = [
     (fetchpatch {
       url = "https://github.com/pveber/ocaml-r/commit/aa96dc5.patch";
@@ -25,8 +33,15 @@ buildDunePackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config R ];
-  buildInputs = [ dune-configurator stdio R ];
+  nativeBuildInputs = [
+    pkg-config
+    R
+  ];
+  buildInputs = [
+    dune-configurator
+    stdio
+    R
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

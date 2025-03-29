@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -10,18 +10,19 @@
   wayland-scanner,
   hyprlang,
   sdbus-cpp_2,
-  systemd,
+  systemdLibs,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-20a3pg94dyLFflbBIN+EYJ04nWfWldTfd2YmB/rcrqY=";
+    hash = "sha256-esE2L7+9CsmlSjTIHwU9VAhzvsFSMC3kO7EiutCPQpg=";
   };
 
   nativeBuildInputs = [
@@ -34,19 +35,24 @@ stdenv.mkDerivation (finalAttrs: {
     hyprlang
     hyprutils
     sdbus-cpp_2
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      iogamaster
-      khaneliman
-    ];
+    maintainers =
+      lib.teams.hyprland.members
+      ++ (with lib.maintainers; [
+        iogamaster
+      ]);
     mainProgram = "hypridle";
     platforms = [
       "aarch64-linux"

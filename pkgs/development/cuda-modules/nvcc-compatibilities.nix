@@ -22,28 +22,6 @@ let
   # attrs :: AttrSet CudaVersion CompilerCompatibilities
   attrs = {
     # Our baseline
-    # https://docs.nvidia.com/cuda/archive/10.0/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.0" = {
-      clangMaxMajorVersion = "6";
-      clangMinMajorVersion = "6";
-      gccMaxMajorVersion = "7";
-      gccMinMajorVersion = "5";
-    };
-
-    # Added support for Clang 7 and GCC 8
-    # https://docs.nvidia.com/cuda/archive/10.1/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.1" = attrs."10.0" // {
-      clangMaxMajorVersion = "7";
-      gccMaxMajorVersion = "8";
-    };
-
-    # Added clang 8
-    # https://docs.nvidia.com/cuda/archive/10.2/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.2" = attrs."10.1" // {
-      clangMaxMajorVersion = "8";
-    };
-
-    # Added support for Clang 9 and GCC 9
     # https://docs.nvidia.com/cuda/archive/11.0/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
     "11.0" = {
       clangMaxMajorVersion = "9";
@@ -120,10 +98,27 @@ let
     # No changes from 12.2 to 12.3
     "12.3" = attrs."12.2";
 
-    # No changes from 12.2 to 12.3
+    # Added support for Clang 17 and GCC 13
+    # https://docs.nvidia.com/cuda/archive/12.4.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "12.4" = attrs."12.3" // {
       clangMaxMajorVersion = "17";
       gccMaxMajorVersion = "13";
+    };
+
+    # No changes from 12.4 to 12.5
+    "12.5" = attrs."12.4";
+
+    # Added support for Clang 18
+    # https://docs.nvidia.com/cuda/archive/12.6.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "12.6" = attrs."12.4" // {
+      clangMaxMajorVersion = "18";
+    };
+
+    # Added support for Clang 19 and GCC 14
+    # https://docs.nvidia.com/cuda/archive/12.8.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "12.8" = attrs."12.6" // {
+      clangMaxMajorVersion = "19";
+      gccMaxMajorVersion = "14";
     };
   };
 in

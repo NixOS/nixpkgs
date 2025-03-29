@@ -7,13 +7,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "morewaita-icon-theme";
-  version = "45";
+  version = "47.4";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
-    rev = "v${version}";
-    hash = "sha256-UtwigqJjkin53Wg3PU14Rde6V42eKhmP26a3fDpbJ4Y=";
+    tag = "v${version}";
+    hash = "sha256-AcEQVIlv+ar0dvqoTDFq06P3dCZx/sS/HUXxuBUvRoo=";
   };
 
   nativeBuildInputs = [

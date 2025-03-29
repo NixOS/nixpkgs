@@ -1,24 +1,25 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, charset-normalizer
-, pycountry
-, xmltodict
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  charset-normalizer,
+  pycountry,
+  xmltodict,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "ollo69";
   domain = "smartthinq_sensors";
-  version = "0.40.3";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-smartthinq-sensors";
     rev = "v${version}";
-    hash = "sha256-mcxXBnVGrlVxbSi+IwmGJiWqy5PlQmHQl+hgW6i7NFc=";
+    hash = "sha256-L0diABbUq/0wmwvhHeMOg6ieNrvM+LWZ/ynezEpBblk=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     pycountry
     xmltodict

@@ -1,36 +1,33 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, xorg
-, stdenv
-, python3
-, makeBinaryWrapper
-, libsixel
-, mpv
-, CoreFoundation
-, Security
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  xorg,
+  stdenv,
+  python3,
+  makeBinaryWrapper,
+  libsixel,
+  mpv,
+  CoreFoundation,
+  Security,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "youtube-tui";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = "youtube-tui";
-    rev = "v${version}";
-    hash = "sha256-FOiK3yQcQuwdCEjBtRPW4iBd+8uNsvZ6l5tclHVzL+M=";
+    tag = "v${version}";
+    hash = "sha256-PAQkFg9SV6q3No5drYPPJZXzQ/XqtOhMr3eQOCnM+7Q=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmpv-2.0.1" = "sha256-efbXk0oXkzlIqgbP4wKm7sWlVZBT2vzDSN3iwsw2vL0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AjqxuNEyuDkYYuvi6Oii3/BfKFNUoJiBH4cS8cb7yMs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,21 +35,23 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    openssl
-    xorg.libxcb
-    libsixel
-    mpv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-    AppKit
-  ];
+  buildInputs =
+    [
+      openssl
+      xorg.libxcb
+      libsixel
+      mpv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+      AppKit
+    ];
 
   # sixel-sys is dynamically linked to libsixel
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapProgram $out/bin/youtube-tui \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
   '';
 
   meta = with lib; {

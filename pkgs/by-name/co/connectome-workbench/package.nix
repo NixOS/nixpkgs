@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchpatch,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "connectome-workbench";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "workbench";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-d0J5bXp6mJlUQBmInxPXPkd5P5H+3F6fE9fc8pD1fUc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M5iverVDhBI/ijbgwfa6gHrthY4wrUi+/2A/443jBqg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -40,23 +41,31 @@ stdenv.mkDerivation (finalAttrs: {
   # ld: ../Brain/libBrain.a(BrainOpenGLVolumeObliqueSliceDrawing.cxx.o): undefined reference to symbol 'glGetFloatv'
   # ld: /nix/store/a5vcvrkh1c2ng5kr584g3zw3991vnhks-libGL-1.7.0/lib/libGL.so.1: error adding symbols: DSO missing from command line
 
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+
   nativeBuildInputs = [
     cmake
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libGL
-    libGLU
-  ] ++ (with libsForQt5; [
-    qtbase
-  ]);
+  buildInputs =
+    [
+      libGL
+      libGLU
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+    ]);
   # note: we should be able to unvendor a few libs (ftgl, quazip, qwt) but they aren't detected properly
 
   meta = {
     description = "Visualization and discovery tool used to map neuroimaging data";
     homepage = "https://www.humanconnectome.org/software/connectome-workbench";
-    license = with lib.licenses; [ gpl2Plus gpl3Plus mit ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      mit
+    ];
     changelog = "https://github.com/Washington-University/workbench/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "wb_command";

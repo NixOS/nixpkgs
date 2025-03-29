@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  networkmanager,
+  iw,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
@@ -11,20 +20,23 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
-  cargoHash = "sha256-TL7ZsRbpRdYymJHuoCUCqe/U3Vacb9mtKFh85IOl+PA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oxuOc9FSKYq6UjimZPLayJ+5xsWzh3gZV/mVpPbPWHk=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     wrapProgram "$out/bin/ifwifi" \
-      --prefix PATH : "${lib.makeBinPath (
-        # `ifwifi` runtime dep
-        [ networkmanager ]
-        # `wifiscanner` crate's runtime deps
-        ++ (lib.optional stdenv.hostPlatform.isLinux iw)
-        # ++ (lib.optional stdenv.hostPlatform.isDarwin airport) # airport isn't packaged
-      )}"
+      --prefix PATH : "${
+        lib.makeBinPath (
+          # `ifwifi` runtime dep
+          [ networkmanager ]
+          # `wifiscanner` crate's runtime deps
+          ++ (lib.optional stdenv.hostPlatform.isLinux iw)
+          # ++ (lib.optional stdenv.hostPlatform.isDarwin airport) # airport isn't packaged
+        )
+      }"
   '';
 
   doCheck = true;
@@ -42,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/araujobsd/ifwifi";
     license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
     # networkmanager doesn't work on darwin
     # even though the `wifiscanner` crate would work
     platforms = with platforms; linux; # ++ darwin;

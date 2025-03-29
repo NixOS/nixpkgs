@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   linuxHeaders,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.7.1";
+  version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DHLDcL2inYV+GI2TEBnDJlGpweqXfAjI2TmxztFjf94=";
+    hash = "sha256-3GQKBkyxyf4fi5cNwgOZRaKidde37mIoS/QnI4q+Re4=";
   };
 
   patchPhase = ''

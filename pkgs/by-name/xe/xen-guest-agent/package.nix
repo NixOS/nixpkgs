@@ -2,26 +2,25 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  llvmPackages,
   pkg-config,
   xen,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "xen-guest-agent";
   version = "0.4.0-unstable-2024-05-31";
 
   src = fetchFromGitLab {
     owner = "xen-project";
-    repo = pname;
+    repo = "xen-guest-agent";
     rev = "03aaadbe030f303b1503e172ee2abb6d0cab7ac6";
     hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
 
-  cargoHash = "sha256-E6QKh4FFr6sLAByU5n6sLppFwPHSKtKffhQ7FfdXAu4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o4eQ1ORI7Rw097m6CsvWLeCW5Dtl75uRXi/tcv/Xq0Q=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    llvmPackages.clang
     pkg-config
   ];
 

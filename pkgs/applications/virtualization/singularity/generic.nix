@@ -14,8 +14,9 @@
 }:
 
 let
-  # Workaround for vendor-related attributes not overridable (#86349)
-  # should be removed when the issue is resolved
+  # Backward compatibility layer for the obsolete workaround of
+  # the "vendor-related attributes not overridable" issue (#86349),
+  # whose solution is merged and released.
   _defaultGoVendorArgs = {
     inherit vendorHash deleteVendor proxyVendor;
   };
@@ -24,7 +25,7 @@ in
   lib,
   buildGoModule,
   runCommandLocal,
-  substituteAll,
+  replaceVars,
   # Native build inputs
   addDriverRunpath,
   makeWrapper,
@@ -45,6 +46,7 @@ in
   libseccomp,
   libuuid,
   mount,
+  versionCheckHook,
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
@@ -63,7 +65,7 @@ in
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
   enableSeccomp ? true,
   # Whether the configure script treat SUID support as default
-  # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
+  # When equal to enableSuid, it suppress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
   defaultToSuid ? true,
@@ -76,14 +78,6 @@ in
   # inside the upstream source code.
   # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
   systemBinPaths ? [ "/run/wrappers/bin" ],
-  # Path to SUID-ed newuidmap executable
-  # Deprecated in favour of systemBinPaths
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
-  newuidmapPath ? null,
-  # Path to SUID-ed newgidmap executable
-  # Deprecated in favour of systemBinPaths
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
-  newgidmapPath ? null,
   # External LOCALSTATEDIR
   externalLocalStateDir ? null,
   # Remove the symlinks to `singularity*` when projectName != "singularity"
@@ -110,40 +104,13 @@ in
 }@args:
 
 let
-  # Backward compatibility for privileged-un-utils.
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
-  privileged-un-utils =
-    if ((newuidmapPath == null) && (newgidmapPath == null)) then
-      null
-    else
-      lib.warn
-        "${pname}: arguments newuidmapPath and newgidmapPath is deprecated in favour of systemBinPaths."
-        (
-          runCommandLocal "privileged-un-utils" { } ''
-            mkdir -p "$out/bin"
-            ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
-            ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-          ''
-        );
-
-  # Backward compatibility for privileged-un-utils.
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
-  systemBinPaths =
-    lib.optional (privileged-un-utils != null) (lib.makeBinPath [ privileged-un-utils ])
-    ++ args.systemBinPaths or [ "/run/wrappers/bin" ];
-
-  concatMapStringAttrsSep =
-    sep: f: attrs:
-    lib.concatMapStringsSep sep (name: f name attrs.${name}) (lib.attrNames attrs);
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
   inherit pname version src;
 
   patches = lib.optionals (projectName == "apptainer") [
-    (substituteAll {
-      src = ./apptainer/0001-ldCache-patch-for-driverLink.patch;
+    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];
@@ -240,24 +207,17 @@ in
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
 
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    ${concatMapStringAttrsSep "\n" (fileName: originalDefaultPaths: ''
+    ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
-        ${
-          lib.concatMapStringsSep " \\\n  " (
-            originalDefaultPath:
-            lib.concatStringsSep " " [
-              "--replace-fail"
-              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
-            ]
-          ) originalDefaultPaths
-        }
+        ${lib.concatMapStringsSep " \\\n  " (
+          originalDefaultPath:
+          lib.concatStringsSep " " [
+            "--replace-fail"
+            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+          ]
+        ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
-
-    substituteInPlace internal/pkg/util/gpu/nvidia.go \
-      --replace \
-        'return fmt.Errorf("/usr/bin not writable in the container")' \
-        ""
   '';
 
   postConfigure = ''
@@ -286,20 +246,22 @@ in
 
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
-      --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+      --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+
     # Respect PATH from the environment/the user.
     # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
       --suffix PATH : "$systemDefaultPath" \
       --suffix PATH : "$inputsDefaultPath"
+
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+        --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
     ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+        --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
@@ -325,6 +287,13 @@ in
       ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
     ''}
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Application containers for linux" + extraDescription;

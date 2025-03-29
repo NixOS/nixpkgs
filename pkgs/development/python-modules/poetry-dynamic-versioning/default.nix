@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "1.4.0";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dhAqDRMRcIYUluYgBlhyPPDZTnLlDrhcAOnT0dHk3Mo=";
+    tag = "v${version}";
+    hash = "sha256-V5UuODRwm829c1KPdQm9oqeN6YdcCo1ODDsEHbm4e/Y=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
     mainProgram = "poetry-dynamic-versioning";
     homepage = "https://github.com/mtkennerly/poetry-dynamic-versioning";
-    changelog = "https://github.com/mtkennerly/poetry-dynamic-versioning/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mtkennerly/poetry-dynamic-versioning/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

@@ -1,41 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, pkg-config
-, curl
-, expat
-, gumbo
-, ncurses
-, sqlite
-, yajl
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  pkg-config,
+  curl,
+  expat,
+  gumbo,
+  ncurses,
+  sqlite,
+  yajl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.27";
+  version = "0.29";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-MtdFnoB6Dc3xvTCc2PMIp5VsZiU5JE58q6WctM3mDZw=";
+    hash = "sha256-6rDnGVOApSURuXom+XxPPOG7lxMbHGTL+4Oqrx+Jq2w=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl expat gumbo ncurses sqlite yajl ];
+  buildInputs = [
+    curl
+    expat
+    gumbo
+    ncurses
+    sqlite
+    yajl
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Feed reader for terminal";
     homepage = "https://codeberg.org/grisha/newsraft";
-    license = licenses.isc;
-    maintainers = with maintainers; [ arthsmn ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
+      arthsmn
+      luftmensch-luftmensch
+    ];
     mainProgram = "newsraft";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "izar";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-MseV1ucDCzSM36zx04g9v5euDX0t74KqUSB4+brHzt8=";
   };
 

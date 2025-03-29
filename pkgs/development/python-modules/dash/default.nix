@@ -16,6 +16,7 @@
   dash-core-components,
   dash-table,
   importlib-metadata,
+  stringcase,
   typing-extensions,
   requests,
   retrying,
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.18.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2LwM1lrJNdekoDN+wDHgaSlGOnpK618r65UHj7cP59E=";
+    tag = "v${version}";
+    hash = "sha256-plGYBMwVQLBar48nv2BIH7ttfXM8Dnb3E0sPOZ2Et2M=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +54,7 @@ buildPythonPackage rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
+    hash = "sha256-Nvm9BS55q/HW9ArpHD01F5Rmx8PLS3yqaz1yDK8Sg68=";
   };
 
   # as of writing this yarnConfigHook has no parameter that changes in which directory it will be run
@@ -82,10 +83,16 @@ buildPythonPackage rec {
     dash-core-components
     dash-table
     importlib-metadata
+    stringcase
     typing-extensions
     requests
     retrying
     nest-asyncio
+  ];
+
+  pythonRelaxDeps = [
+    "werkzeug"
+    "flask"
   ];
 
   optional-dependencies = {

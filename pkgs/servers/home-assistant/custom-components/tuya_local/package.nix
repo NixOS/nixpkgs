@@ -1,22 +1,23 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 
-# dependencies
-, tinytuya
-, tuya-device-sharing-sdk
+  # dependencies
+  tinytuya,
+  tuya-device-sharing-sdk,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "make-all";
   domain = "tuya_local";
-  version = "2024.8.0";
+  version = "2025.2.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "tuya-local";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IHTWcNxmNXJk7SNnrLNFbaXJQSg6VYkAgAVmyt3JmRw=";
+    tag = version;
+    hash = "sha256-RwPbFIDXSXFzR2sck1EUvQL+1o8Ppb5clsIAHhYxX5o=";
   };
 
   dependencies = [

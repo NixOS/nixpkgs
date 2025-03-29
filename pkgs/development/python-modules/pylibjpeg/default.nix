@@ -9,6 +9,7 @@
   pydicom,
   pylibjpeg-data,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MA1A/hTIx95MYZ2LGOifnHn77wbv0ydAgQSzNZRykVg=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [ numpy ];
+
+  optional-dependencies = {
+    libjpeg = [ pylibjpeg-libjpeg ];
+    openjpeg = [ pylibjpeg-openjpeg ];
+    #rle = [ pylibjpeg-rle ]; # not in Nixpkgs
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

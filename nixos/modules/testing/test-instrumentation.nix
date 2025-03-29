@@ -19,8 +19,19 @@ let
         export HOME=/root
         export DISPLAY=:0.0
 
+        # Determine if this script is ran with nounset
+        strict="false"
+        if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
+            strict="true"
+        fi
+
         if [[ -e /etc/profile ]]; then
+            # TODO: Currently shell profiles are not checked at build time,
+            # so we need to unset stricter options to source them
+            set +o nounset
+            # shellcheck disable=SC1091
             source /etc/profile
+            [ "$strict" = "true" ] && set -o nounset
         fi
 
         # Don't use a pager when executing backdoor
@@ -45,7 +56,7 @@ let
         # we can also run non-NixOS guests during tests. This, however, is
         # mostly futureproofing as the test instrumentation is still very
         # tightly coupled to NixOS.
-        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+        PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
@@ -142,13 +153,10 @@ in
     # be set.
     virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
       qemu = {
-        # Only use a serial console, no TTY.
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
-        #       we avoid defining consoles if not possible.
+        #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
-        #       or declare virtualisation.qemu.console option in a module that's always imported
-        consoles = [ qemu-common.qemuSerialDevice ];
         package  = lib.mkDefault pkgs.qemu_test;
       };
     };
@@ -228,7 +236,7 @@ in
     services.qemuGuest.package = pkgs.qemu_test.ga;
 
     # Squelch warning about unset system.stateVersion
-    system.stateVersion = lib.mkDefault lib.trivial.release;
+    system.stateVersion = (lib.mkOverride 1200) lib.trivial.release;
   };
 
 }

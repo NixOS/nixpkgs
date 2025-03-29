@@ -24,7 +24,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresqlSupport ? false,
-  postgresql,
+  libpq,
   ipmiSupport ? false,
   openipmi,
 }:
@@ -67,7 +67,7 @@ import ./versions.nix (
       ++ optional snmpSupport net-snmp
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql
+      ++ optional postgresqlSupport libpq
       ++ optional ipmiSupport openipmi;
 
     configureFlags =
@@ -90,6 +90,10 @@ import ./versions.nix (
       ++ optional mysqlSupport "--with-mysql"
       ++ optional postgresqlSupport "--with-postgresql"
       ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (
+      lib.versions.major version <= "5"
+    ) "-Wno-error=incompatible-pointer-types";
 
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +

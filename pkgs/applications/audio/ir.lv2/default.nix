@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchgit, fftw, gtk2, lv2, libsamplerate, libsndfile, pkg-config, zita-convolver }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fftw,
+  gtk2,
+  lv2,
+  libsamplerate,
+  libsndfile,
+  pkg-config,
+  zita-convolver,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ir.lv2";
   version = "0-unstable-2018-06-21";
 
@@ -10,9 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5toZYQX2oIAfQ5XPMMN+HGNE4FOE/t6mciih/OpU1dw=";
   };
 
-  buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile zita-convolver ];
+  buildInputs = [
+    fftw
+    gtk2
+    lv2
+    libsamplerate
+    libsndfile
+    zita-convolver
+  ];
 
-  nativeBuildInputs = [  pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libGL
-, libX11
-, libXext
-, libXrandr
-, pkg-config
-, python3
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libGL,
+  libX11,
+  libXext,
+  libXrandr,
+  pkg-config,
+  python3,
+  Cocoa,
 }:
 stdenv.mkDerivation rec {
   pname = "master_me";
@@ -22,9 +23,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libGL python3 ]
+  buildInputs =
+    [
+      libGL
+      python3
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXext libXrandr ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXext
+      libXrandr
+    ];
 
   enableParallelBuilding = true;
 

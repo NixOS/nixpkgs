@@ -4,7 +4,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   go,
   lib,
   libcap,
@@ -23,31 +22,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.26.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-BKD8X4nPLyTtY0x06nCSRRK36XKucpnhvjJN8aZssUs=";
   };
-  patches = [
-    # Fix build errors from deprecated QByteArray::count()
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/1b358d27d4bf29567b5d58f3591146bf639b99e1.patch";
-      hash = "sha256-LeDgwZaQDgS8HNf9k2fC0RYQy4nGEq0DMNjY7muNads=";
-    })
-    # Fix build errors from deprecated QVariant::type()
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/ebdd38ce19ef6eb80f076acf93299bd7d24ae6db.patch";
-      hash = "sha256-ZWl0wHH5Foxlttj/GK5phr/C6qJv39U2GWIofZR+Rto=";
-    })
-    # Fix build errors from deprecated QEventPoint::pos and friends
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/10b1c98517dac4eacffd6890c551b817aedd4a19.patch";
-      hash = "sha256-DHOtvVDEdQ+k2ggg4HGpcv1EmKzlijNRTi1yJ7a1bWU=";
-    })
-  ];
+  patches = [ ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -60,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-tVTXlGO969qPR9/TbOJbDdOiwOI1PT11MvNYdLqgDlo=";
   };
 
   buildInputs = [
@@ -93,13 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/cmake/addons.cmake \
+      --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
+
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' "$out/etc"
+
+    substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';

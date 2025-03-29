@@ -1,24 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.778";
+  version = "0.3.850";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
     rev = "v${version}";
-    hash = "sha256-lU8aVTw73HX0lNGPyD8Xnvtnr2VFTXv/S6xCVn6Lg74=";
+    hash = "sha256-kH7nVXL6pINqOBPK5E5j9scw38lvnhyiQqMOe0MwUy8=";
   };
 
-  vendorHash = "sha256-ZWY19f11+UI18jeHYIEZjdb9Ii74mD6w+dYRLPkdfBU=";
+  vendorHash = "sha256-JVOsjBn1LV8p6HHelfAO1Qcqi/tPg1S3xBffo+0aplE=";
 
   subPackages = [ "cmd/templ" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

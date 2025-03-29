@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  # propagated build input
+
+  # dependencies
   faiss,
   torch,
   transformers,
@@ -12,61 +14,80 @@
   numpy,
   pyyaml,
   regex,
+
   # optional-dependencies
+  # ann
+  annoy,
+  hnswlib,
+  pgvector,
+  sqlalchemy,
+  sqlite-vec,
+  # api
   aiohttp,
   fastapi,
-  uvicorn,
-  # TODO add apache-libcloud
-  # , apache-libcloud
-  rich,
-  duckdb,
   pillow,
+  python-multipart,
+  uvicorn,
+  # cloud
+  # apache-libcloud, (unpackaged)
+  # console
+  rich,
+  # database
+  duckdb,
+  # graph
+  # grand-cypher (unpackaged)
+  # grand-graph (unpackaged)
   networkx,
   python-louvain,
+  # model
   onnx,
   onnxruntime,
+  # pipeline-audio
+  # model2vec,
+  sounddevice,
   soundfile,
   scipy,
   ttstokenizer,
+  webrtcvad,
+  # pipeline-data
   beautifulsoup4,
   nltk,
   pandas,
   tika,
+  # pipeline-image
   imagehash,
   timm,
+  # pipeline-llm
+  litellm,
+  # llama-cpp-python, (unpackaged)
+  # pipeline-text
   fasttext,
   sentencepiece,
+  # pipeline-train
   accelerate,
+  bitsandbytes,
   onnxmltools,
-  annoy,
-  hnswlib,
-  # TODO add pymagnitude-lite
-  #, pymagnitude-lite
+  peft,
+  skl2onnx,
+  # vectors
+  # pymagnitude-lite, (unpackaged)
   scikit-learn,
   sentence-transformers,
+  skops,
+  # workflow
+  # apache-libcloud (unpackaged)
   croniter,
   openpyxl,
   requests,
   xmltodict,
-  pgvector,
-  sqlite-vec,
-  python-multipart,
-  # native check inputs
-  pytestCheckHook,
-  # check inputs
+
+  # tests
   httpx,
   msgpack,
-  sqlalchemy,
+  pytestCheckHook,
 }:
 let
-  version = "7.4.0";
-  api = [
-    aiohttp
-    fastapi
-    pillow
-    python-multipart
-    uvicorn
-  ];
+  version = "8.2.0";
   ann = [
     annoy
     hnswlib
@@ -74,30 +95,39 @@ let
     sqlalchemy
     sqlite-vec
   ];
+  api = [
+    aiohttp
+    fastapi
+    pillow
+    python-multipart
+    uvicorn
+  ];
   # cloud = [ apache-libcloud ];
   console = [ rich ];
-
   database = [
     duckdb
     pillow
+    sqlalchemy
   ];
-
   graph = [
+    # grand-cypher
+    # grand-graph
     networkx
     python-louvain
+    sqlalchemy
   ];
-
   model = [
     onnx
     onnxruntime
   ];
-
   pipeline-audio = [
     onnx
     onnxruntime
-    soundfile
     scipy
+    sounddevice
+    soundfile
     ttstokenizer
+    webrtcvad
   ];
   pipeline-data = [
     beautifulsoup4
@@ -110,25 +140,40 @@ let
     pillow
     timm
   ];
+  pipeline-llm = [
+    litellm
+    # llama-cpp-python
+  ];
   pipeline-text = [
     fasttext
     sentencepiece
   ];
   pipeline-train = [
     accelerate
+    bitsandbytes
     onnx
     onnxmltools
     onnxruntime
+    peft
+    skl2onnx
   ];
-  pipeline = pipeline-audio ++ pipeline-data ++ pipeline-image ++ pipeline-text ++ pipeline-train;
-
-  similarity = [
-    annoy
+  pipeline =
+    pipeline-audio
+    ++ pipeline-data
+    ++ pipeline-image
+    ++ pipeline-llm
+    ++ pipeline-text
+    ++ pipeline-train;
+  scoring = [ sqlalchemy ];
+  vectors = [
     fasttext
-    hnswlib
+    litellm
+    # llama-cpp-python
+    # model2vec
     # pymagnitude-lite
     scikit-learn
     sentence-transformers
+    skops
   ];
   workflow = [
     # apache-libcloud
@@ -139,7 +184,18 @@ let
     requests
     xmltodict
   ];
-  all = api ++ ann ++ console ++ database ++ graph ++ model ++ pipeline ++ similarity ++ workflow;
+  similarity = ann ++ vectors;
+  all =
+    api
+    ++ ann
+    ++ console
+    ++ database
+    ++ graph
+    ++ model
+    ++ pipeline
+    ++ scoring
+    ++ similarity
+    ++ workflow;
 
   optional-dependencies = {
     inherit
@@ -151,31 +207,30 @@ let
       model
       pipeline-audio
       pipeline-image
+      pipeline-llm
       pipeline-text
       pipeline-train
       pipeline
+      scoring
       similarity
       workflow
       all
       ;
   };
-in
-buildPythonPackage {
-  pname = "txtai";
-  inherit version;
-  pyproject = true;
-
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "txtai";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DQB12mFUMsKJ8cACowI1Vc7k2n1npdTOQknRmHd5EIM=";
+    tag = "v${version}";
+    hash = "sha256-fMzCYw9eqlpGI5FKoyYyxT17EhUFmFP9lrCn/LFC6ks=";
   };
+in
+buildPythonPackage {
+  pname = "txtai";
+  inherit version src;
+  pyproject = true;
 
-  buildTools = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.
@@ -184,12 +239,13 @@ buildPythonPackage {
 
   dependencies = [
     faiss
-    torch
-    transformers
     huggingface-hub
+    msgpack
     numpy
     pyyaml
     regex
+    torch
+    transformers
   ];
 
   optional-dependencies = optional-dependencies;
@@ -203,21 +259,19 @@ buildPythonPackage {
   pythonImportsCheck = [ "txtai" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.ann ++ optional-dependencies.api ++ optional-dependencies.similarity;
-
-  checkInputs = [
     httpx
     msgpack
+    pytestCheckHook
     python-multipart
     sqlalchemy
-  ];
+  ] ++ optional-dependencies.ann ++ optional-dependencies.api ++ optional-dependencies.similarity;
 
   # The deselected paths depend on the huggingface hub and should be run as a passthru test
   # disabledTestPaths won't work as the problem is with the classes containing the tests
   # (in other words, it fails on __init__)
   pytestFlagsArray = [
     "test/python/test*.py"
+    "--deselect=test/python/testagent.py"
     "--deselect=test/python/testcloud.py"
     "--deselect=test/python/testconsole.py"
     "--deselect=test/python/testembeddings.py"
@@ -244,7 +298,7 @@ buildPythonPackage {
 
   meta = {
     description = "Semantic search and workflows powered by language models";
-    changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
+    changelog = "https://github.com/neuml/txtai/releases/tag/${src.tag}";
     homepage = "https://github.com/neuml/txtai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];

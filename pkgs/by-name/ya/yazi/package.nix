@@ -7,9 +7,9 @@
   extraPackages ? [ ],
   optionalDeps ? [
     jq
-    poppler_utils
+    poppler-utils
     _7zz
-    ffmpegthumbnailer
+    ffmpeg
     fd
     ripgrep
     fzf
@@ -24,9 +24,9 @@
 
   # optional deps
   jq,
-  poppler_utils,
+  poppler-utils,
   _7zz,
-  ffmpegthumbnailer,
+  ffmpeg,
   fd,
   ripgrep,
   fzf,

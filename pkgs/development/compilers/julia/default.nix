@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, fetchpatch2 }:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -29,23 +29,23 @@ in
     { });
   julia_110-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
-      version = "1.10.4";
+      version = "1.10.9";
       sha256 = {
-        x86_64-linux = "079f61757c3b5b40d2ade052b3cc4816f50f7ef6df668825772562b3746adff1";
-        aarch64-linux = "ae4ae6ade84a103cdf30ce91c8d4035a0ef51c3e2e66f90a0c13abeb4e100fc4";
-        x86_64-darwin = "259c18a5294dd41cc60117ecb9fc5a8b2f659807284903a65439fb9d3818c763";
-        aarch64-darwin = "97b88d7f9b5724118769f3a3bd259f8f7ada48cdecf3d584cf68162dd873dd10";
+        x86_64-linux = "5a2d2c5224594b683c97e7304cb72407fbcf0be4a0187789cba1a2f73f0cbf09";
+        aarch64-linux = "be222882e3674f960f43b6842f7bbb52a369977e40d5dcd26498793e1cd2dfb6";
+        x86_64-darwin = "f80c93c30a18d8a5dc7f37d0cc94757fd3857651268e4a9e2d42d3b1ea3372f1";
+        aarch64-darwin = "e62e00b22408159cba3d669f2d9e8b60c1d23b5c2d1c22ec25f4957d15ca98ef";
       };
     })
     { });
   julia_111-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
-      version = "1.11.1";
+      version = "1.11.4";
       sha256 = {
-        x86_64-linux = "cca8d13dc4507e4f62a129322293313ee574f300d4df9e7db30b7b41c5f8a8f3";
-        aarch64-linux = "bd623ef3801c5a56103464d349c7901d5cc034405ad289332c67f1e8ecc05840";
-        x86_64-darwin = "59885de9310788c1ed12f41e7d2c2f05eabd314888cd105d299837b76a4a7240";
-        aarch64-darwin = "e09d13e1c6c98452e91e698220688dd784ec8e5367e9e6443099c5f9aa2add78";
+        x86_64-linux = "fb3d3c5fccef82158a70677c0044ac5ae40410eceb0604cdc8e643eeff21df8d";
+        aarch64-linux = "859f1a8cc4bce6911bc912f0e226a6ba2b1c144110b9d559d88f5077513d0e37";
+        x86_64-darwin = "7e693914399f2ebe1fafe5c670af0373474145cfe2bfda661f370559a680720a";
+        aarch64-darwin = "5adfb4482bba9610405c0f9b5a3c1aa09cabf70c8751d75970f2dab0fa819488";
       };
     })
     { });
@@ -60,17 +60,25 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.4";
-      hash = "sha256-8y5Sd/XYKmOCSILN6/rBWBmbuEgUw8AZo/7MNgFYYZE=";
+      version = "1.10.9";
+      hash = "sha256-u9by+X76fcXs+w159KTSvw43JeYwJ9Wvn0VyoEfniTM=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
+        # Revert https://github.com/JuliaLang/julia/pull/55354
+        # [build] Some improvements to the LLVM build system
+        # Related: https://github.com/JuliaLang/julia/issues/55617
+        (fetchpatch2 {
+          url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
+          revert = true;
+          hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
+        })
       ];
     })
     { });
   julia_111 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.11.1";
-      hash = "sha256-pJuATeboagP+Jsc/WIUeruH/JD1yBPK1rk28XB3CdY0=";
+      version = "1.11.4";
+      hash = "sha256-xJNlYtBRKIQtf+K+MHNDM1GeqUpUhhtdC/440QPpa1s=";
       patches = [
         ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
       ];

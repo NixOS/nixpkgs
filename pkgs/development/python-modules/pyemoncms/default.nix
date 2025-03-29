@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Open-Building-Management";
     repo = "pyemoncms";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IBrYys0i9pTAw9ul8bqni0H3KNSvKQYNU6D4OSfR6ZE=";
   };
 

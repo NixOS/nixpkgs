@@ -8,6 +8,7 @@
   bootstrapSdkFile,
   allowPrerelease ? false,
   depsFile,
+  fallbackTargetPackages,
   pkgsBuildHost,
   buildDotnetSdk,
 }:
@@ -25,10 +26,11 @@ let
       releaseManifestFile
       tarballHash
       depsFile
+      fallbackTargetPackages
       ;
-    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
+    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
       passthru = old.passthru or { } // {
-        artifacts = stdenvNoCC.mkDerivation rec {
+        artifacts = stdenvNoCC.mkDerivation {
           name = lib.nameFromURL artifactsUrl ".tar.gz";
 
           src = fetchurl {

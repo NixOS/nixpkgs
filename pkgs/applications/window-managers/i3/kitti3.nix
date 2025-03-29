@@ -1,8 +1,9 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, poetry-core
-, i3ipc
-, lib
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  poetry-core,
+  i3ipc,
+  lib,
 }:
 
 buildPythonApplication rec {

@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
+  inherit (pkgs) cups-pk-helper libcupsfilters cups-filters xdg-utils;
 
   cfg = config.services.printing;
   cups = cfg.package;
@@ -35,7 +35,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups.out additionalBackends cups-filters pkgs.ghostscript ]
+      [ cups.out additionalBackends libcupsfilters cups-filters pkgs.ghostscript ]
       ++ cfg.drivers;
     pathsToLink = [ "/lib" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
@@ -278,6 +278,8 @@ in
         '';
       };
 
+      browsed.package = lib.mkPackageOption pkgs "cups-browsed" {};
+
       browsedConf = mkOption {
         type = types.lines;
         default = "";
@@ -384,14 +386,12 @@ in
         preStart = lib.optionalString cfg.stateless ''
           rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
         '' + ''
-            mkdir -m 0700 -p /var/cache/cups
-            mkdir -m 0700 -p /var/spool/cups
-            mkdir -m 0755 -p ${cfg.tempDir}
-
-            mkdir -m 0755 -p /var/lib/cups
+            (umask 022 && mkdir -p /var/cache /var/lib /var/spool)
+            (umask 077 && mkdir -p /var/cache/cups /var/spool/cups)
+            (umask 022 && mkdir -p ${cfg.tempDir} /var/lib/cups)
             # While cups will automatically create self-signed certificates if accessed via TLS,
             # this directory to store the certificates needs to be created manually.
-            mkdir -m 0700 -p /var/lib/cups/ssl
+            (umask 077 && mkdir -p /var/lib/cups/ssl)
 
             # Backwards compatibility
             if [ ! -L /etc/cups ]; then
@@ -419,7 +419,7 @@ in
 
             ${optionalString (containsGutenprint cfg.drivers) ''
               if [ -d /var/lib/cups/ppd ]; then
-                ${getGutenprint cfg.drivers}/bin/cups-genppdupdate -p /var/lib/cups/ppd
+                ${getGutenprint cfg.drivers}/bin/cups-genppdupdate -x -p /var/lib/cups/ppd
               fi
             ''}
           '';
@@ -438,7 +438,7 @@ in
 
         path = [ cups ];
 
-        serviceConfig.ExecStart = "${cups-filters}/bin/cups-browsed";
+        serviceConfig.ExecStart = "${cfg.browsed.package}/bin/cups-browsed";
 
         restartTriggers = [ browsedFile ];
       };

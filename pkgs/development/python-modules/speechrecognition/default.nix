@@ -2,31 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cacert,
+  faster-whisper,
   flac,
-  openai,
+  google-cloud-speech,
+  groq,
+  httpx,
   openai-whisper,
+  openai,
   pocketsphinx,
   pyaudio,
   pytestCheckHook,
   pythonOlder,
   requests,
+  respx,
   setuptools,
   soundfile,
+  standard-aifc,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.10.4";
+  version = "3.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    rev = "refs/tags/${version}";
-    hash = "sha256-icXZUg2lVLo8Z5t9ptDj67BjQLnEgrG8geYZ/lZeJt4=";
+    tag = version;
+    hash = "sha256-4FrFiDRqTZnLB3hTy8hZovlakZsRFEg2ZGitJhJ6DA0=";
   };
 
   postPatch = ''
@@ -41,13 +48,24 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    pyaudio
-    requests
+    standard-aifc
     typing-extensions
   ];
 
   optional-dependencies = {
-    whisper-api = [ openai ];
+    assemblyai = [ requests ];
+    audio = [ pyaudio ];
+    faster-whisper = [ faster-whisper ];
+    google-cloud = [ google-cloud-speech ];
+    groq = [
+      groq
+      httpx
+    ];
+    openai = [
+      httpx
+      openai
+    ];
+    pocketsphinx = [ pocketsphinx ];
     whisper-local = [
       openai-whisper
       soundfile
@@ -55,9 +73,16 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    groq
     pytestCheckHook
     pocketsphinx
-  ] ++ optional-dependencies.whisper-local ++ optional-dependencies.whisper-api;
+    respx
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  preCheck = ''
+    # httpx since 0.28.0+ depends on SSL_CERT_FILE
+    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -69,7 +94,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
     license = with licenses; [
       gpl2Only
       bsd3

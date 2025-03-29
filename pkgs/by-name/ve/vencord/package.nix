@@ -7,52 +7,51 @@
   lib,
   nix-update,
   nodejs,
-  pnpm,
+  pnpm_10,
   stdenv,
   writeShellScript,
   buildWebExtension ? false,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.10.5";
+  version = "1.11.7";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pzb2x5tTDT6yUNURbAok5eQWZHaxP/RUo8T0JECKHJ4=";
+    hash = "sha256-WzmRz0wf/Ss90FmXXp6gaylC0k/k/QkFaFddlnLo+Xk=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-
-    hash = "sha256-YBWe4MEmFu8cksOIxuTK0deO7q0QuqgOUc9WkUNBwp0=";
+    hash = "sha256-g9BSVUKpn74D9eIDj/lS1Y6w/+AnhCw++st4s4REn+A=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm.configHook
+    pnpm_10.configHook
   ];
 
   env = {
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.overrideAttrs (
         final: _: {
-          version = "0.15.18";
+          version = "0.25.0";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             rev = "v${final.version}";
-            hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
+            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
       )
     );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
-    # TODO: somehow update this automatically
-    VENCORD_HASH = "deadbeef";
+    VENCORD_HASH = "${finalAttrs.version}";
   };
 
   buildPhase = ''
@@ -90,15 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$latestTag" "$@"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      donteatoreo
       FlafyDev
       NotAShelf
       Scrumplex
-      donteatoreo
     ];
   };
 })

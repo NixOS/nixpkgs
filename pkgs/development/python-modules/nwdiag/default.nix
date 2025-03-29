@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "nwdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 

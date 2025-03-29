@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   cmake-extras,
   dbus,
@@ -18,50 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
-    rev = finalAttrs.version;
-    hash = "sha256-nA2jkyNQC1YIMpJkfJt2F97txGUT4UO7+aSgzr7IUU0=";
+    tag = finalAttrs.version;
+    hash = "sha256-U4NNPBuLhe+m5WvfOYq5ZFE70OYJ/mn69wyK+ALebRE=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/2 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-polkit-agent-Fix-authentication-test-with-libnotify-gteq-0.8.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/commit/415d897735b9005426ec29348a882b9080fcd808.patch";
-      hash = "sha256-fAJJ5Bz4P76arhSmiWVa/8S+mb/NqPr65Nm3MkwKtjA=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/9 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-polkit-agent-Make-tests-optional-and-use-BUILD_TESTING.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/commit/908177fa24b79b06161116c3c274357122984d36.patch";
-      hash = "sha256-duHx4iNqgAlS649BO1s6D5E2SX9MPRCKb+mit+2cybM=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/10 merged & in release
-    (fetchpatch {
-      name = "0003-lomiri-polkit-agent-Explicitly-look-for-properties-cpp.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/commit/08bf36e50025aeefc5ba388d6d0f84d760add9cb.patch";
-      hash = "sha256-OFzj/FFXm1fX6+1GY97CON7Nne9wVPmQAxVFpP9rIpU=";
-    })
-  ];
-
-  postPatch = ''
-    # Partial application of still-under-discussion https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/8
-    substituteInPlace data/lomiri-polkit-agent.service.in \
-      --replace-fail 'After=lomiri-full-greeter.service lomiri-full-shell.service lomiri-greeter.service lomiri-shell.service' 'After=graphical-session.target' \
-      --replace-fail 'PartOf=' 'PartOf=lomiri.service ' \
-      --replace-fail 'WantedBy=' 'WantedBy=lomiri.service '
-
-    # Workaround to avoid coredump on logout
-    # https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/issues/1
-    substituteInPlace service/main.cpp \
-      --replace-fail 'retval.set_value(0);' 'try { retval.set_value(0); } catch (const std::future_error& ex) {}'
-  '';
 
   strictDeps = true;
 
@@ -92,11 +56,20 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallelism breaks dbus during tests
   enableParallelChecking = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    # Involves a test to check polkit agent functionality.
+    # The pop-up dialogue times out after awhile, and OCR can't find it in time.
+    # Please check the screenshots after running that test, to verify that the pop-up actually happened!
+    tests.vm = nixosTests.lomiri.desktop-appinteractions;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Policy kit agent for the Lomiri desktop";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;

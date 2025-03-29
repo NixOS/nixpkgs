@@ -10,18 +10,23 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
-  version = "0-unstable-2024-10-08";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsunset";
-    rev = "f535c1894d71d7639d19b52f5b72e1ac840c2512";
-    hash = "sha256-SVkcePzX9PAlWsPSGBaxiNFCouiQmGOezhMo0+zhDIQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EIJka3UtSEtmkDBjYiGeR/hO6s6R4x3K+rbUlc9KPBE=";
   };
+
+  postPatch = ''
+    # hyprwayland-scanner is not required at runtime
+    substituteInPlace CMakeLists.txt --replace-fail "hyprwayland-scanner>=0.4.0" ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -37,8 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+  strictDeps = true;
+
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -46,10 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "hyprsunset";
   };
 })

@@ -12,12 +12,17 @@ let
   pname = "roslyn-ls";
   dotnet-sdk =
     with dotnetCorePackages;
-    combinePackages [
-      sdk_6_0
-      sdk_7_0
-      sdk_8_0
-      sdk_9_0
-    ];
+    sdk_9_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   # need sdk on runtime as well
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
@@ -27,23 +32,32 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.49.25";
+  vsVersion = "2.69.22";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-1amL+K6gf7qJtODxyBtaswhJSLbMrl2LqpmLAArNpW0=";
+    hash = "sha256-z3DDbLFKH5u0w6LswZcghLkkqDYEtCRFNIfoq7N+P2c=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.12.0-3.24470.4";
+  version = "4.14.0-3.25156.1";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ jq ];
+
+  patches = [
+    # until upstream updates net6.0 here:
+    # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
+    ./force-sdk_8_0.patch
+    # until made configurable/and or different location
+    # https://github.com/dotnet/roslyn/issues/76892
+    ./cachedirectory.patch
+  ];
 
   postPatch = ''
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
@@ -52,12 +66,9 @@ buildDotnetModule rec {
   '';
 
   dotnetFlags = [
+    "-p:TargetRid=${rid}"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
-    # see this comment: https://github.com/NixOS/nixpkgs/pull/318497#issuecomment-2256096471
-    # we can remove below line after https://github.com/dotnet/roslyn/issues/73439 is fixed
-    "-p:UsingToolMicrosoftNetCompilers=false"
-    "-p:TargetRid=${rid}"
   ];
 
   # two problems solved here:

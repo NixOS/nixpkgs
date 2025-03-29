@@ -1,21 +1,21 @@
 {
-  lib
-, buildGoModule
-, fetchFromGitHub
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "sbom-utility";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "sbom-utility";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EqK2TGlv2RGfvR95lzYz3EHJkfq4q4Ty5H2zFdd9cME=";
+    tag = "v${version}";
+    hash = "sha256-LiHCA5q9IJ67jZ2JUcbCFVCYnT36nyq9QzgH9PMr9kM=";
   };
 
-  vendorHash = "sha256-qh8kIwgrlmHkocM5ZoGnOY7ISJlct/TV7dAxvXlPw68=";
+  vendorHash = "sha256-vyYSir5u6d5nv+2ScrHpasQGER4VFSoLb1FDUDIrtDM=";
 
   preCheck = ''
     cd test

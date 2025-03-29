@@ -25,34 +25,33 @@
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
-  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.11.0";
+  version = "1.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    # Unfortunatly, upstream doesn't tag commits on GitHub, and the pypi source
+    # Unfortunately, upstream doesn't tag commits on GitHub, and the pypi source
     # doesn't include tests. TODO: Write an update script that will detect the
     # version from `dbt_common/__about__.py`.
-    rev = "ed11c6ceb4f29d4a79489469309d9ce9dd1757e6";
-    hash = "sha256-JA6hFQwF7h1tXyCxBVKGgyevdTxyYeN3I/Bwy9uoC0Y=";
+    rev = "965ad815f0dd546678d2595a3010d81f344f8b73";
+    hash = "sha256-63gWkETi52uOrO0FTPwM831UHECqcyCtb7wVHQuujnc=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
-    "protobuf"
     "agate"
     "deepdiff"
+    # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
+    # https://pypi.org/project/isodate/0.7.2/
+    "isodate"
   ];
 
   dependencies = [
@@ -75,12 +74,14 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-mock
   ];
+
   disabledTests = [
     # Assertion errors (TODO: Notify upstream)
     "test_create_print_json"
     "test_events"
     "test_extra_dict_on_event"
   ];
+
   pythonImportsCheck = [ "dbt_common" ];
 
   meta = {

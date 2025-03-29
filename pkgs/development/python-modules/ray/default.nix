@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   pythonAtLeast,
@@ -8,144 +9,202 @@
   autoPatchelfHook,
 
   # dependencies
-  aiohttp,
-  aiohttp-cors,
   aiosignal,
-  attrs,
   click,
-  cloudpickle,
-  colorama,
-  colorful,
-  cython,
   filelock,
   frozenlist,
-  gpustat,
-  grpcio,
   jsonschema,
   msgpack,
-  numpy,
-  opencensus,
   packaging,
-  prometheus-client,
-  psutil,
-  pydantic,
-  py-spy,
+  protobuf,
   pyyaml,
   requests,
-  setproctitle,
-  smart-open,
-  virtualenv,
+  watchfiles,
 
   # optional-dependencies
+  # cgraph
+  cupy,
+  # client
+  grpcio,
+  # data
   fsspec,
+  numpy,
   pandas,
   pyarrow,
+  # default
+  aiohttp,
+  aiohttp-cors,
+  colorful,
+  opencensus,
+  prometheus-client,
+  pydantic,
+  py-spy,
+  smart-open,
+  virtualenv,
+  # observability
+  memray,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
+  # rllib
   dm-tree,
-  gym,
+  gymnasium,
   lz4,
-  matplotlib,
-  scikit-image,
+  # ormsgpack,
   scipy,
-  aiorwlock,
+  typer,
+  rich,
+  # serve
   fastapi,
   starlette,
   uvicorn,
-  tabulate,
+  # serve-grpc
+  pyopenssl,
+  # tune
   tensorboardx,
 }:
 
 let
   pname = "ray";
-  version = "2.38.0";
+  version = "2.44.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      platforms = {
+        aarch64-darwin = "macosx_11_0_arm64";
+        aarch64-linux = "manylinux2014_aarch64";
+        x86_64-darwin = "macosx_10_15_x86_64";
+        x86_64-linux = "manylinux2014_x86_64";
+      };
+      # ./pkgs/development/python-modules/ray/prefetch.sh
+      # Results are in ./ray-hashes.nix
+      hashes = {
+        x86_64-linux = {
+          cp39 = "sha256-Ucy9W/gEXWnx+NL4WpL2aoKBjz2S1wx3xmJ1eYHDDZ8=";
+          cp310 = "sha256-tP29SytbReQT3Bahmkq/UADTbDxYVJCNykaXMj/11+E=";
+          cp311 = "sha256-hk8KabPNfKTrcEP3953JzotxosmC7ux/EX9I8oRrcTw=";
+          cp312 = "sha256-DWWsUjgB5Ao5e79VL0BoZ7uUad0mEEbKY83C7DEQ24c=";
+        };
+        aarch64-linux = {
+          cp39 = "sha256-Lxj0j8N95kAxXZNgECbfqiPwr0y6jwd9sT8dd+mR2a8=";
+          cp310 = "sha256-qZ+7mtLBryIYcNhrio49WcGKVROt3p1wiKSiddxZ2n8=";
+          cp311 = "sha256-wzcjfnqKHYcC3PZ+CpjqjNTsA1fSiL8IFviZDCWNi8M=";
+          cp312 = "sha256-KpEeaZ5IOsSHkRC2CLBrNeYCGRwOe5cybKSXxcqv5qg=";
+        };
+        x86_64-darwin = {
+          cp39 = "sha256-4373wSlDArrp2SFoCi2jR5iMHh4qmCo+coktEa4A4j4=";
+          cp310 = "sha256-YyeQwyfmkxp6jMrd6P06+utzrTgvh99N1HpSyov+BRw=";
+          cp311 = "sha256-++SDLLLvz8BJPqR0K0gosesNq8/t+H9kvmvh0M6HTGk=";
+          cp312 = "sha256-U9x16itP2GnqSmzKneXgKqJPLw0Y4KCLinZasr5l3Rw=";
+        };
+        aarch64-darwin = {
+          cp39 = "sha256-Ef62eG+CAQRke2aiklRVNsA36Cl/FP4BI0t7JN2PJzk=";
+          cp310 = "sha256-XfvyazCuw35dRCXGYBReVSApmohVMkaG4vF/yGAb9Mg=";
+          cp311 = "sha256-Uzcifcn4CEKAwpRWmIokTKm0zg+8c4XXMHASD0fkaXk=";
+          cp312 = "sha256-OY6b4ZPJf3NK8Bnw76zh9FyUGVuW7MSmR61gdlDfVyw=";
+        };
+      };
     in
-    fetchPypi (
-      {
-        inherit pname version format;
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
-      }
-      // binary-hash
-    );
+    fetchPypi {
+      inherit pname version format;
+      dist = pyShortVersion;
+      python = pyShortVersion;
+      abi = pyShortVersion;
+      platform = platforms.${stdenv.hostPlatform.system} or { };
+      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+    };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "grpcio"
-    "protobuf"
-    "virtualenv"
-  ];
-
   dependencies = [
-    aiohttp
-    aiohttp-cors
-    aiosignal
-    attrs
     click
-    cloudpickle
-    colorama
-    colorful
-    cython
+    aiosignal
     filelock
     frozenlist
-    gpustat
-    grpcio
     jsonschema
     msgpack
-    numpy
-    opencensus
     packaging
-    prometheus-client
-    psutil
-    pydantic
-    py-spy
+    protobuf
     pyyaml
     requests
-    setproctitle
-    smart-open
-    virtualenv
+    watchfiles
   ];
 
   optional-dependencies = rec {
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-    data-deps = [
+    adag = cgraph;
+    air = lib.unique (data ++ serve ++ tune ++ train);
+    all = lib.flatten (builtins.attrValues optional-dependencies);
+    cgraph = [
+      cupy
+    ];
+    client = [ grpcio ];
+    data = [
       fsspec
+      numpy
       pandas
       pyarrow
     ];
-    rllib-deps = tune-deps ++ [
+    default = [
+      aiohttp
+      aiohttp-cors
+      colorful
+      grpcio
+      opencensus
+      prometheus-client
+      pydantic
+      py-spy
+      requests
+      smart-open
+      virtualenv
+    ];
+    observability = [
+      memray
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp
+    ];
+    rllib = [
       dm-tree
-      gym
+      gymnasium
       lz4
-      matplotlib
+      # ormsgpack
       pyyaml
-      scikit-image
       scipy
+      typer
+      rich
     ];
-    serve-deps = [
-      aiorwlock
-      fastapi
+    serve = lib.unique (
+      [
+        fastapi
+        requests
+        starlette
+        uvicorn
+        watchfiles
+      ]
+      ++ default
+    );
+    serve-grpc = lib.unique (
+      [
+        grpcio
+        pyopenssl
+      ]
+      ++ serve
+    );
+    train = tune;
+    tune = [
+      fsspec
       pandas
-      starlette
-      uvicorn
-    ];
-    tune-deps = [
-      tabulate
+      pyarrow
+      requests
       tensorboardx
     ];
   };
@@ -163,6 +222,11 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 }

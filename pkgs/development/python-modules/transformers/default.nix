@@ -58,14 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.46.0";
+  version = "4.50.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R+uHo98K+uOXbxE4Axam/FONZgeFyyPfe0IZiOCpFF4=";
+    tag = "v${version}";
+    hash = "sha256-PIJB4iW493I3932Yq3tyGom82cMY1uduc53bs1xCPgU=";
   };
 
   build-system = [ setuptools ];
@@ -154,7 +154,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [

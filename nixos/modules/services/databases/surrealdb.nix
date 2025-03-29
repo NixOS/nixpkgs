@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.surrealdb;
-in {
+in
+{
 
   options = {
     services.surrealdb = {
@@ -14,9 +20,9 @@ in {
         type = lib.types.str;
         description = ''
           The path that surrealdb will write data to. Use null for in-memory.
-          Can be one of "memory", "file://:path", "tikv://:addr".
+          Can be one of "memory", "rocksdb://:path", "surrealkv://:path", "tikv://:addr", "fdb://:addr".
         '';
-        default = "file:///var/lib/surrealdb/";
+        default = "rocksdb:///var/lib/surrealdb/";
         example = "memory";
       };
 
@@ -40,11 +46,16 @@ in {
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
+        default = [ ];
+        example = [
+          "--allow-all"
+          "--user"
+          "root"
+          "--pass"
+          "root"
+        ];
         description = ''
-          Specify a list of additional command line flags,
-          which get escaped and are then passed to surrealdb.
+          Specify a list of additional command line flags.
         '';
       };
     };
@@ -53,7 +64,7 @@ in {
   config = lib.mkIf cfg.enable {
 
     # Used to connect to the running service
-    environment.systemPackages = [ cfg.package ] ;
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.surrealdb = {
       description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
@@ -61,7 +72,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
+        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${lib.strings.concatStringsSep " " cfg.extraFlags} -- ${cfg.dbPath}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";
@@ -82,7 +93,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

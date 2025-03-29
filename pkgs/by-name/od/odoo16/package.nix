@@ -1,9 +1,10 @@
-{ lib
-, fetchzip
-, python310
-, rtlcss
-, wkhtmltopdf
-, nixosTests
+{
+  lib,
+  fetchzip,
+  python310,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
@@ -12,7 +13,8 @@ let
   python = python310.override {
     self = python;
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
@@ -26,7 +28,13 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

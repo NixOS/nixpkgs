@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -80,13 +85,16 @@ in
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
-    security.pam.services.ocserv = {};
+    security.pam.services.ocserv = { };
 
     systemd.services.ocserv = {
       description = "OpenConnect SSL VPN server";
       documentation = [ "man:ocserv(8)" ];
       wants = [ "network-online.target" ];
-      after = [ "dbus.service" "network-online.target" ];
+      after = [
+        "dbus.service"
+        "network-online.target"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

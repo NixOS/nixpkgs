@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.45.0";
+  version = "1.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-OWoMqJlf0vmBHWWsW6mF4u5X9USzxkFmCJyX7Ws0dD0=";
+    hash = "sha256-ZNJsxbQcW5g/bKqN18z+BspKyI34+vkj6vQ9akE1Ook=";
   };
 
   build-system = [ setuptools ];
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = pythonOlder "3.13" && !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Issue with the asseration
@@ -112,7 +112,7 @@ buildPythonPackage rec {
 
   disabledTestPaths =
     [
-      # Varius integration tests fail every once in a while when we
+      # Various integration tests fail every once in a while when we
       # upgrade dependencies, so don't bother testing them.
       "tests/integrations/"
     ]
@@ -130,7 +130,6 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       fab
-      gebner
     ];
   };
 }

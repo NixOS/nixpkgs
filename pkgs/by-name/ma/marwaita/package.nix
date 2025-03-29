@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "marwaita";
-  version = "22";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "marwaita";
     rev = version;
-    hash = "sha256-Aa6qJGLQ+MLn/QeZzjMj/O5vEp/Cr/g7n8JFFlSgfOc=";
+    hash = "sha256-NFXvaKASWltskCSOidXDNVZpFpdpCTnuWjpfETxiI8U=";
   };
 
   buildInputs = [

@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, accountsservice
-, cmake
-, cmake-extras
-, deviceinfo
-, libgbinder
-, libglibutil
-, pkg-config
-, qtbase
-, qtdeclarative
-, qtfeedback
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  accountsservice,
+  cmake,
+  cmake-extras,
+  deviceinfo,
+  libgbinder,
+  libglibutil,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtfeedback,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfd-service";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/hfd-service";
     rev = finalAttrs.version;
-    hash = "sha256-OpT1vNjnyq66v54EoGOZOUb4HECD4WRJRh9hYMB0GI0=";
+    hash = "sha256-PvZPdisqpKl9OSuQXIJW1y6EJ5moesJiEAQjpQjzyWQ=";
   };
 
   postPatch = ''

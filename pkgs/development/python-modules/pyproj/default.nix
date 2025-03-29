@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   certifi,
   cython,
@@ -19,21 +18,20 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.7.0";
+  version = "3.7.1";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
+    tag = version;
+    hash = "sha256-tVzifc+Y5u9Try5FHt67rj/+zaok0JNn3M8plMqX90g=";
   };
 
   # force pyproj to use ${proj}
   patches = [
-    (substituteAll {
-      src = ./001.proj.patch;
+    (replaceVars ./001.proj.patch {
       proj = proj;
       projdev = proj.dev;
     })

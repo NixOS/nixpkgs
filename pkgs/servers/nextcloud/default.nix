@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud28Packages,
   nextcloud29Packages,
   nextcloud30Packages,
+  nextcloud31Packages,
 }:
 
 let
@@ -49,6 +49,7 @@ let
           bachp
           globin
           ma27
+          britter
         ];
         license = lib.licenses.agpl3Plus;
         platforms = lib.platforms.linux;
@@ -58,22 +59,22 @@ let
     };
 in
 {
-  nextcloud28 = generic {
-    version = "28.0.11";
-    hash = "sha256-S6rs7GpvFFgy28PGNdcuIM1IBKytmmZOanS5CnmB40g=";
-    packages = nextcloud28Packages;
-  };
-
   nextcloud29 = generic {
-    version = "29.0.8";
-    hash = "sha256-CrVLUX92zSbyvTi2/hhLn7rtMvc0JGxYwaz4NHPApLk=";
+    version = "29.0.14";
+    hash = "sha256-mjMuAywSnD6Sp6EBkktfJnsJNvaJdJxF0DE0PIikavs=";
     packages = nextcloud29Packages;
   };
 
   nextcloud30 = generic {
-    version = "30.0.1";
-    hash = "sha256-eewv+tYjG9j8xKuqzBLlrFHmcNCJr/s3lINZLNoP3Ms=";
+    version = "30.0.8";
+    hash = "sha256-uwhqES+zUW50SSHXrhSCzBvVN+39HxQFHBNI1LatWKI=";
     packages = nextcloud30Packages;
+  };
+
+  nextcloud31 = generic {
+    version = "31.0.2";
+    hash = "sha256-ALVyERt8K5iELZXARt5570Y8z63IoEtUAGx4bh+UwxA=";
+    packages = nextcloud31Packages;
   };
 
   # tip: get the sha with:

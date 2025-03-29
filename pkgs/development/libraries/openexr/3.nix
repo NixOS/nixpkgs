@@ -5,6 +5,7 @@
 , imath
 , libdeflate
 , pkg-config
+, libjxl
 , pkgsCross
 }:
 
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isAarch32;
 
   passthru.tests = {
+    inherit libjxl;
     musl = pkgsCross.musl64.openexr_3;
   };
 

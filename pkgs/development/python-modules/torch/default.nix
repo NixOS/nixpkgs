@@ -2,8 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchFromGitLab,
+  git-unroll,
   buildPythonPackage,
   python,
+  runCommand,
+  writeShellScript,
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -35,20 +39,23 @@
   removeReferencesTo,
 
   # Build inputs
-  darwin,
+  apple-sdk_13,
   numactl,
 
   # dependencies
   astunparse,
-  fsspec,
+  expecttest,
   filelock,
+  fsspec,
+  hypothesis,
   jinja2,
   networkx,
-  sympy,
-  numpy,
+  packaging,
+  psutil,
   pyyaml,
-  cffi,
-  click,
+  requests,
+  sympy,
+  types-dataclasses,
   typing-extensions,
   # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.hostPlatform.isDarwin),
@@ -65,10 +72,6 @@
   _tritonEffective ? if cudaSupport then triton-cuda else triton,
   triton-cuda,
 
-  # Unit tests
-  hypothesis,
-  psutil,
-
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
   # this is also what official pytorch build does
   mklDnnSupport ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
@@ -83,7 +86,6 @@
   # dependencies for torch.utils.tensorboard
   pillow,
   six,
-  future,
   tensorboard,
   protobuf,
 
@@ -91,6 +93,11 @@
   rocmSupport ? config.rocmSupport,
   rocmPackages_5,
   gpuTargets ? [ ],
+
+  vulkanSupport ? false,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
 }:
 
 let
@@ -141,6 +148,8 @@ let
   # For CUDA
   supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
   unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
@@ -219,11 +228,24 @@ let
     "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
       rocmSupport;
   };
+
+  unroll-src = writeShellScript "unroll-src" ''
+    echo "{
+      version,
+      fetchFromGitLab,
+      fetchFromGitHub,
+      runCommand,
+    }:
+    assert version == "'"'$1'"'";"
+    ${lib.getExe git-unroll} https://github.com/pytorch/pytorch v$1
+    echo
+    echo "# Update using: unroll-src [version]"
+  '';
 in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   outputs = [
@@ -234,28 +256,27 @@ buildPythonPackage rec {
   ];
   cudaPropagateToOutput = "cxxdev";
 
-  src = fetchFromGitHub {
-    owner = "pytorch";
-    repo = "pytorch";
-    rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-z41VAN4l/6hyHsxNOnJORy5EQK93kSMkDHRVQrdxv7k=";
+  src = callPackage ./src.nix {
+    inherit
+      version
+      fetchFromGitHub
+      fetchFromGitLab
+      runCommand
+      ;
   };
 
   patches =
     lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # pthreadpool added support for Grand Central Dispatch in April
-      # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
-      # that is available starting with macOS 10.13. However, our current
-      # base is 10.12. Until we upgrade, we can fall back on the older
-      # pthread support.
-      ./pthreadpool-disable-gcd.diff
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
       ./pytorch-pr-108847.patch
+    ]
+    ++ lib.optionals (lib.getName blas.provider == "mkl") [
+      # The CMake install tries to add some hardcoded rpaths, incompatible
+      # with the Nix store, which fails. Simply remove this step to get
+      # rpaths that point to the Nix store.
+      ./disable-cmake-mkl-rpath.patch
     ];
 
   postPatch =
@@ -269,6 +290,9 @@ buildPythonPackage rec {
           "# Upstream: set(CUDAToolkit_ROOT"
       substituteInPlace third_party/gloo/cmake/Cuda.cmake \
         --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
+
+      # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+      sed -i -e "/from __future__ import/d" **.py
     ''
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
@@ -305,17 +329,7 @@ buildPythonPackage rec {
     # until https://github.com/pytorch/pytorch/issues/76082 is addressed
     + lib.optionalString cudaSupport ''
       rm cmake/Modules/FindCUDAToolkit.cmake
-    ''
-    # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
-    # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0")
-        ''
-          substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
-          inline void *aligned_alloc(size_t align, size_t size)' '#if 0
-          inline void *aligned_alloc(size_t align, size_t size)'
-        '';
+    '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
   # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
@@ -363,6 +377,9 @@ buildPythonPackage rec {
 
   # NB technical debt: building without NNPACK as workaround for missing `six`
   USE_NNPACK = 0;
+
+  # Explicitly enable MPS for Darwin
+  USE_MPS = setBool stdenv.hostPlatform.isDarwin;
 
   cmakeFlags =
     [
@@ -412,58 +429,18 @@ buildPythonPackage rec {
   # https://github.com/pytorch/pytorch/commit/3d617333e
   PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
 
-  # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
-  # (upstream seems to have fixed this in the wrong place?)
-  # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
-  # https://github.com/pytorch/pytorch/issues/22346
-  #
-  # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
-  # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-  env.NIX_CFLAGS_COMPILE = toString (
-    (
-      lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
-      # Suppress gcc regression: avx512 math function raises uninitialized variable warning
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
-      # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12.0.0") [
-        "-Wno-error=maybe-uninitialized"
-        "-Wno-error=uninitialized"
-      ]
-      # Since pytorch 2.0:
-      # gcc-12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:33: error: ‘void operator delete(void*, std::size_t)’
-      # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
-      ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "12") [
-        "-Wno-error=free-nonheap-object"
-      ]
-      # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
-      # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-      ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16") [
-        "-Wno-error=cast-function-type-strict"
-        # Suppresses the most spammy warnings.
-        # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
-      ]
-      ++ lib.optionals rocmSupport [
-        "-Wno-#warnings"
-        "-Wno-cpp"
-        "-Wno-unknown-warning-option"
-        "-Wno-ignored-attributes"
-        "-Wno-deprecated-declarations"
-        "-Wno-defaulted-function-deleted"
-        "-Wno-pass-failed"
-      ]
-      ++ [
-        "-Wno-unused-command-line-argument"
-        "-Wno-uninitialized"
-        "-Wno-array-bounds"
-        "-Wno-free-nonheap-object"
-        "-Wno-unused-result"
-      ]
-      ++ lib.optionals stdenv.cc.isGNU [
-        "-Wno-maybe-uninitialized"
-        "-Wno-stringop-overflow"
-      ]
-    )
-  );
+  env =
+    {
+      # disable warnings as errors as they break the build on every compiler
+      # bump, among other things.
+      # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
+      # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
+      NIX_CFLAGS_COMPILE = "-Wno-error";
+      USE_VULKAN = setBool vulkanSupport;
+    }
+    // lib.optionalAttrs vulkanSupport {
+      VULKAN_SDK = shaderc.bin;
+    };
 
   nativeBuildInputs =
     [
@@ -480,6 +457,7 @@ buildPythonPackage rec {
         cuda_nvcc
       ]
     )
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
@@ -519,9 +497,7 @@ buildPythonPackage rec {
     ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.libobjc
+      apple-sdk_13
     ]
     ++ lib.optionals tritonSupport [ _tritonEffective ]
     ++ lib.optionals MPISupport [ mpi ]
@@ -530,31 +506,38 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "sympy"
   ];
-  dependencies = [
-    astunparse
-    cffi
-    click
-    numpy
-    pyyaml
+  dependencies =
+    [
+      astunparse
+      expecttest
+      filelock
+      fsspec
+      hypothesis
+      jinja2
+      networkx
+      ninja
+      packaging
+      psutil
+      pyyaml
+      requests
+      sympy
+      types-dataclasses
+      typing-extensions
 
-    # From install_requires:
-    fsspec
-    filelock
-    typing-extensions
-    sympy
-    networkx
-    jinja2
+      # the following are required for tensorboard support
+      pillow
+      six
+      tensorboard
+      protobuf
 
-    # the following are required for tensorboard support
-    pillow
-    six
-    future
-    tensorboard
-    protobuf
-
-    # torch/csrc requires `pybind11` at runtime
-    pybind11
-  ] ++ lib.optionals tritonSupport [ _tritonEffective ];
+      # torch/csrc requires `pybind11` at runtime
+      pybind11
+    ]
+    ++ lib.optionals tritonSupport [ _tritonEffective ]
+    ++ lib.optionals vulkanSupport [
+      vulkan-headers
+      vulkan-loader
+    ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -669,6 +652,7 @@ buildPythonPackage rec {
       cudaPackages
       rocmSupport
       rocmPackages
+      unroll-src
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.

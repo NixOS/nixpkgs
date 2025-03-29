@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "frser-sqlite-datasource";
   version = "3.5.0";
   zipHash = "sha256-BwAurFpMyyR318HMzVXCnOEQWM8W2vPPisXhhklFLBY=";

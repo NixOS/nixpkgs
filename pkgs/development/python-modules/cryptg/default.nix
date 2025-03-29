@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -9,12 +8,11 @@
   rustc,
   setuptools,
   setuptools-rust,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.5";
+  version = "0.5.post0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,12 +21,12 @@ buildPythonPackage rec {
     owner = "cher-nov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uJfMetplTyRT95P/8ljz4H4ASYMXEM7jROWSpjftKjU=";
+    hash = "sha256-GCTVxCJQvpvHpzaU+OaFM/AKoRvxLyA0u6VIV+94UTY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-HDMztt7/ZpPlpy0IMGuWGGo4vwKhraFTmTTPr9tC+Ok=";
+    hash = "sha256-+RNH9h40UTGUcr0PPJLllhAg81LM1IQnYKmrNxfPPv8=";
   };
 
   build-system = [
@@ -41,8 +39,6 @@ buildPythonPackage rec {
     rustc
     cargo
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # has no tests
   doCheck = false;

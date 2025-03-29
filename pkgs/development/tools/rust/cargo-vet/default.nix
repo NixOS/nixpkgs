@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-vet";
@@ -11,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-VnOqQ1dKgNZSHTzJrD7stoCzNGrSkYxcLDJAsrJUsEQ=";
   };
 
-  cargoHash = "sha256-M8sZzgSEMIB6pPVaE+tC18MCbwYaYpHOnhrEvm9JTso=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8QbXZtf5kry0/QDrnUVQCtqK4/6EMliOI4Z410QR2Ec=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
@@ -24,7 +31,14 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to help projects ensure that third-party Rust dependencies have been audited by a trusted source";
     mainProgram = "cargo-vet";
     homepage = "https://mozilla.github.io/cargo-vet";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda jk ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      jk
+      matthiasbeyer
+    ];
   };
 }

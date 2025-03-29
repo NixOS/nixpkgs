@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "airgradient";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "airgradienthq";
     repo = "python-airgradient";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-al0DLsub3xLU1BWLNn0cMI87O0mcQJ0Y4Boj2Xwk1r0=";
+    tag = "v${version}";
+    hash = "sha256-llhdLqVueATKCb4wyPYjnsdOpbbE2BnUU0PH0jwHPMU=";
   };
 
   build-system = [ poetry-core ];

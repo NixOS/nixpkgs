@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6PD5wjp7fLmd7WTmw6bz5wHXj1DFXgArg53qciXP98w=";
+    hash = "sha256-zpxDLtoNyRz2GKXO3xpOFCZRGWu80sgOie1akH5c+vE=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -59,6 +59,12 @@ buildPythonPackage rec {
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
   ];
+
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
 
   pythonImportsCheck = [ "dns" ];
 

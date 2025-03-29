@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, caf
-, openssl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  caf,
+  openssl,
 }:
 let
   inherit (stdenv.hostPlatform) isStatic;
@@ -38,7 +39,10 @@ in
 stdenv.mkDerivation rec {
   pname = "zeek-broker";
   version = "6.2.0";
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   strictDeps = true;
 
@@ -66,8 +70,14 @@ stdenv.mkDerivation rec {
     substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
   '';
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ openssl python3.pkgs.pybind11 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
+  buildInputs = [
+    openssl
+    python3.pkgs.pybind11
+  ];
   propagatedBuildInputs = [ caf' ];
 
   cmakeFlags = [
@@ -75,8 +85,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_STATIC_ONLY:BOOL=${if isStatic then "ON" else "OFF"}"
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   meta = with lib; {
     description = "Zeek's Messaging Library";

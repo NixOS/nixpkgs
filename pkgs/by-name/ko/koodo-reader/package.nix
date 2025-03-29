@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.6.7";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZHRU8dJjKQFLIB1t2VK/COy6a3nShUeWR8iAM9YJdto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper ${lib.getExe electron} $out/bin/koodo-reader \
       --add-flags $out/share/lib/koodo-reader/resources/app.asar \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities

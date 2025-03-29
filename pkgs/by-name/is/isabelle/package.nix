@@ -30,14 +30,11 @@ let
       hash = "sha256-DB/ETVZhbT82IMZA97TmHG6gJcGpFavxDKDTwPzIF80=";
     };
 
-    buildPhase = (if stdenv.hostPlatform.isDarwin then ''
-      LDFLAGS="-dynamic -undefined dynamic_lookup -lSystem"
-    '' else ''
-      LDFLAGS="-fPIC -shared"
-    '') + ''
+    buildPhase = ''
       CFLAGS="-fPIC -I."
+      LDFLAGS="-fPIC -shared"
       $CC $CFLAGS -c sha1.c -o sha1.o
-      $LD $LDFLAGS sha1.o -o libsha1.so
+      $CC $LDFLAGS sha1.o -o libsha1.so
     '';
 
     installPhase = ''
@@ -73,8 +70,9 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ java ];
 
-  buildInputs = [ polyml veriT vampire eprover-ho nettools ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ java procps ];
+  buildInputs = [ polyml veriT vampire eprover-ho nettools ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
 
   sourceRoot = "${dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
@@ -129,6 +127,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
     for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
       rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
+    rm -rf contrib/*/src
 
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
@@ -151,10 +150,10 @@ in stdenv.mkDerivation (finalAttrs: rec {
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do
-      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
+      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${lib.getLib stdenv.cc.cc}/lib" ]}" $d/*.so
     done
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib" contrib/z3-*/$arch/z3
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
   '';
 
   buildPhase = ''
@@ -221,7 +220,6 @@ in stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru.withComponents = f:

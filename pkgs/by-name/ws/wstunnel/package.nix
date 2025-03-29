@@ -2,15 +2,13 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   nixosTests,
   nix-update-script,
   versionCheckHook,
-  darwin,
 }:
 
 let
-  version = "10.1.5";
+  version = "10.1.10";
 in
 
 rustPlatform.buildRustPackage {
@@ -20,22 +18,17 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
-    rev = "v${version}";
-    hash = "sha256-MomT9iwIsdou7lIfI7zBU9nEjjYGcsHKTlrYbK4p3BQ=";
+    tag = "v${version}";
+    hash = "sha256-7HW2AtMTNE05qSBhltj+ZxJhoMJmaMynko8+wIgpqCc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NujasFigZ+BETg3J8fOKu5QAm68ZzP7uIXwv7bI+2uM=";
+
+  cargoBuildFlags = [ "--package wstunnel-cli" ];
 
   nativeBuildInputs = [ versionCheckHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   checkFlags = [

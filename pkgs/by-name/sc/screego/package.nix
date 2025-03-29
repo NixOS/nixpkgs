@@ -10,13 +10,13 @@
 }:
 let
 
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-P8O3E7mNAqUid42XFaJBQm3ApxykYLCuHXDOFHrG9Fs=";
+    hash = "sha256-wFLoReqzLx6PEW/u9oz7VIYKtJkmwGTneeB6Ysgse7Q=";
   };
 
   ui = stdenv.mkDerivation {
@@ -53,7 +53,7 @@ buildGo123Module rec {
 
   pname = "screego-server";
 
-  vendorHash = "sha256-190Fp2QtnZis0sophGwhnWhXNWLhODWlnzE3bfScZ+Q=";
+  vendorHash = "sha256-zMb8MLS0KhwYNpfVeNMD9huEcpyyrZD0QAPmBNxMcQU=";
 
   ldflags = [
     "-s"

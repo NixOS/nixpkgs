@@ -1,6 +1,3 @@
-if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
-source $stdenv/setup
-
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
 # certificate (this isn't a security problem because we check the

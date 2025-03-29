@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.4.0";
+  version = "6.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-zbK0U7gEbKTjeY6x2E88zhRGoOjnte9O+2APGfw5gUU=";
+    hash = "sha256-GF+Hre9bzCiESdmPtPugfOp4vANkVd1ExfxKL+eP7Sw=";
   };
 
   build-system = [

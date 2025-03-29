@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "scripttest";
-  version = "1.3";
+  version = "2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "951cfc25219b0cd003493a565f2e621fd791beaae9f9a3bdd7024d8626419c38";
+    sha256 = "sha256-xbFdNcRlwLxjcCvYS6Q2U+EXl+rtx31er4bvwgEpk2A=";
   };
 
   buildInputs = [ pytest ];

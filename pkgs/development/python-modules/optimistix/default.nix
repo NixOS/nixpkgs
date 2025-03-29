@@ -13,7 +13,7 @@
   lineax,
   typing-extensions,
 
-  # checks
+  # tests
   beartype,
   jaxlib,
   optax,
@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "optimistix";
-  version = "0.0.9";
+  version = "0.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "optimistix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s8MRPyPObTpgLRm4bxU8F4Su7FKH+MHqtQsxIHb/DN4=";
+    tag = "v${version}";
+    hash = "sha256-stVPHzv0XNd0I31N2Cj0QYrMmhImyx0cablqZfKBFrM=";
   };
 
   build-system = [ hatchling ];
@@ -51,6 +51,13 @@ buildPythonPackage rec {
     optax
     pytestCheckHook
     pytest-xdist
+  ];
+
+  pytestFlagsArray = [
+    # Since jax 0.5.3:
+    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = {

@@ -1,36 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, SDL2
-, SDL2_ttf
-, copyDesktopItems
-, expat
-, flac
-, fontconfig
-, glm
-, installShellFiles
-, libXi
-, libXinerama
-, libjpeg
-, libpcap
-, libpulseaudio
-, makeDesktopItem
-, makeWrapper
-, papirus-icon-theme
-, pkg-config
-, portaudio
-, portmidi
-, pugixml
-, python3
-, qtbase
-, rapidjson
-, sqlite
-, utf8proc
-, which
-, writeScript
-, zlib
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  SDL2,
+  SDL2_ttf,
+  copyDesktopItems,
+  expat,
+  fetchurl,
+  flac,
+  fontconfig,
+  glm,
+  installShellFiles,
+  libXi,
+  libXinerama,
+  libjpeg,
+  libpcap,
+  libpulseaudio,
+  makeDesktopItem,
+  makeWrapper,
+  pkg-config,
+  portaudio,
+  portmidi,
+  pugixml,
+  python3,
+  qtbase,
+  rapidjson,
+  sqlite,
+  utf8proc,
+  versionCheckHook,
+  which,
+  writeScript,
+  zlib,
+  darwin,
 }:
 
 let
@@ -38,17 +40,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.270";
+  version = "0.275";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-l1mgkPhYO/U/77veC0Mpyzr6hzz/FSkn+4GMAdLSfOk=";
+    hash = "sha256-VD0T+zoR8fPZqRwTVrk2k5ui3tLQumEg1Fd64SJdszU=";
   };
 
-  outputs = [ "out" "tools" ];
+  outputs = [
+    "out"
+    "tools"
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -74,24 +79,35 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs = [
-    expat
-    zlib
-    flac
-    portmidi
-    portaudio
-    utf8proc
-    libjpeg
-    rapidjson
-    pugixml
-    glm
-    SDL2
-    SDL2_ttf
-    sqlite
-    qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs =
+    [
+      expat
+      zlib
+      flac
+      portmidi
+      portaudio
+      utf8proc
+      libjpeg
+      rapidjson
+      pugixml
+      glm
+      SDL2
+      SDL2_ttf
+      sqlite
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpulseaudio
+      libXinerama
+      libXi
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libpcap
+      CoreAudioKit
+      ForceFeedback
+    ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -125,36 +141,48 @@ stdenv.mkDerivation rec {
       type = "Application";
       genericName = "MAME is a multi-purpose emulation framework";
       comment = "Play vintage games using the MAME emulator";
-      categories = [ "Game" "Emulator" ];
-      keywords = [ "Game" "Emulator" "Arcade" ];
+      categories = [
+        "Game"
+        "Emulator"
+      ];
+      keywords = [
+        "Game"
+        "Emulator"
+        "Arcade"
+      ];
     })
   ];
 
   # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
   # to the final package after we figure out how they work
-  installPhase = let
-    icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      icon = fetchurl {
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
+      };
+    in
+    ''
+      runHook preInstall
 
-    # mame
-    mkdir -p $out/opt/mame
+      # mame
+      mkdir -p $out/opt/mame
 
-    install -Dm755 mame -t $out/bin
-    install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
-    installManPage docs/man/*.1 docs/man/*.6
-    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
+      install -Dm755 mame -t $out/bin
+      install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+      installManPage docs/man/*.1 docs/man/*.6
+      cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
 
-    # mame-tools
-    for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
-                 nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
-                 unidasm; do
-       install -Dm755 $_tool -t $tools/bin
-    done
-    mv $tools/bin/{,mame-}split
+      # mame-tools
+      for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
+                   nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
+                   unidasm; do
+         install -Dm755 $_tool -t $tools/bin
+      done
+      mv $tools/bin/{,mame-}split
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # man1 is the tools documentation, man6 is the emulator documentation
   # Need to be done in postFixup otherwise multi-output hook will move it back to $out
@@ -163,6 +191,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "-h" ];
 
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell
@@ -174,7 +206,7 @@ stdenv.mkDerivation rec {
     update-source-version mame "''${latest_version/mame0/0.}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mamedev.org/";
     description = "Multi-purpose emulation framework";
     longDescription = ''
@@ -192,10 +224,15 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [ bsd3 gpl2Plus ];
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    license = with lib.licenses; [
+      bsd3
+      gpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
 }

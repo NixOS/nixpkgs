@@ -4,7 +4,7 @@
 let
   inside = (self:
   let callPackage = pkgs.newScope self;
-  in rec {
+  in {
     interpreter = callPackage ./factor99.nix { inherit (pkgs) stdenv; };
 
     # Convenience access for using the returned attribute the same way as the

@@ -85,6 +85,17 @@ in
   # fixed in https://git.savannah.gnu.org/cgit/emacs/elpa.git/commit/?h=externals/dbus-codegen&id=cfc46758c6252a602eea3dbc179f8094ea2a1a85
   dbus-codegen = ignoreCompilationErrorIfOlder super.dbus-codegen "0.1.0.20201127.221326"; # elisp error
 
+  debbugs = super.debbugs.overrideAttrs (old: {
+    preInstall =
+      old.preInstall or ""
+      + "\n"
+      + ''
+        tmp_src_dir=$(mktemp -d)
+        tar --extract --verbose --file $src --directory $tmp_src_dir --strip-components 1
+        EMACSLOADPATH=$tmp_src_dir/test:$EMACSLOADPATH
+      '';
+  });
+
   ebdb = super.ebdb.overrideAttrs (
     finalAttrs: previousAttrs:
     let
@@ -210,7 +221,7 @@ in
   poke = addPackageRequires super.poke [ self.poke-mode ];
 
   pq = super.pq.overrideAttrs (old: {
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.libpq ];
   });
 
   preview-auto = mkHome super.preview-auto;
@@ -257,6 +268,10 @@ in
   tex-parens = mkHomeIfOlder super.tex-parens "0.4.0.20240630.70456";
 
   timerfunctions = ignoreCompilationErrorIfOlder super.timerfunctions "1.4.2.0.20201129.225252";
+
+  # kv is required in triples-test.el
+  # Alternatively, we can delete that file.  But adding a dependency is easier.
+  triples = addPackageRequires super.triples [ self.kv ];
 
   wisitoken-grammar-mode = ignoreCompilationError super.wisitoken-grammar-mode; # elisp error
 

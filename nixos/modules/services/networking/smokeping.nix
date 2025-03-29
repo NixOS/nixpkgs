@@ -119,7 +119,8 @@ in
               MAX  0.5 144   7200
               MIN  0.5 144   7200
         '';
-        description = ''Configure the ping frequency and retention of the rrd files.
+        description = ''
+          Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };

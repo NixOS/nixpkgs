@@ -4,6 +4,8 @@ with lib;
 with utils;
 
 let
+  # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+  escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
@@ -30,6 +32,10 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
+      enable = mkEnableOption "the filesystem mount" // {
+        default = true;
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
@@ -62,7 +68,10 @@ let
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = "Options used to mount the file system.";
+        description = ''
+          Options used to mount the file system.
+          See {manpage}`mount(8)` for common options.
+        '';
         type = types.nonEmptyListOf nonEmptyStr;
       };
 
@@ -136,6 +145,8 @@ let
 
     };
 
+    config.device = lib.mkIf (config.label != null) (lib.mkDefault "/dev/disk/by-label/${escape config.label}");
+
     config.options = let
       inInitrd = utils.fsNeededForBoot config;
     in mkMerge [
@@ -196,11 +207,8 @@ let
       ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
-      # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-      escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
     in fstabFileSystems: { }: concatMapStrings (fs:
       (if fs.device != null then escape fs.device
-         else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
@@ -233,6 +241,7 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (`mountPoint = "/"`).  Each
@@ -279,6 +288,7 @@ in
     boot.specialFileSystems = mkOption {
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;
       description = ''
         Special filesystems that are mounted very early during boot.
@@ -290,7 +300,7 @@ in
       example = "32m";
       type = types.str;
       description = ''
-        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -300,7 +310,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev/shm tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -310,7 +320,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /run tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -345,15 +355,21 @@ in
       }
       {
         assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
-        message = let
-          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
-        in ''
+        message = ''
           'fileSystems.<name>.formatOptions' has been removed, since
           systemd-makefs does not support any way to provide formatting
           options.
         '';
       }
-    ];
+    ] ++ lib.map (fs: {
+      assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
+      message = ''
+        The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+          label: ${toString fs.label}
+          device: ${toString fs.device}
+        'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+      '';
+    }) fileSystems;
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
@@ -384,7 +400,7 @@ in
         # Filesystems.
         ${makeFstabEntries fileSystems {}}
 
-        # Swap devices.
+        ${lib.optionalString (config.swapDevices != []) "# Swap devices."}
         ${flip concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}

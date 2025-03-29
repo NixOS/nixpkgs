@@ -20,20 +20,15 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2024.2";
+  version = "2025.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ixw9U4WqcXBW6KGBOsUImjsxmvG5XKCv4jCbTjJ4pjg=";
+    tag = "v${version}";
+    hash = "sha256-F+qF/pX/1rFZiDVK71FYNatWuVkcvl62+EriTHzAfHw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail "setuptools>=42,<64;python_version<'3.12'" "setuptools>=42"
-  '';
 
   build-system = [
     cmake
@@ -56,7 +51,7 @@ buildPythonPackage rec {
 
   # Force resolving the package from $out to make generated ext files usable by tests
   preCheck = ''
-    mv islpy islpy.hidden
+    rm -rf islpy
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -66,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
+    changelog = "https://github.com/inducer/islpy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

@@ -14,6 +14,7 @@
   dissect-extfs,
   dissect-fat,
   dissect-ffs,
+  dissect-fve,
   dissect-hypervisor,
   dissect-jffs,
   dissect-ntfs,
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.16.1";
+  version = "3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OpTznjOVV3hyreJv4WCHwP09ULMTz+vjjcmBtYL685E=";
+    tag = version;
+    hash = "sha256-3yy7BA6FJgAdn2lMSJgyFeVDxJg0f0RWsekkqiqxd7M=";
   };
 
   pythonRelaxDeps = true;
@@ -68,6 +69,7 @@ buildPythonPackage rec {
     dissect-extfs
     dissect-fat
     dissect-ffs
+    dissect-fve
     dissect-hypervisor
     dissect-jffs
     dissect-ntfs
@@ -91,7 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
-    changelog = "https://github.com/fox-it/dissect/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

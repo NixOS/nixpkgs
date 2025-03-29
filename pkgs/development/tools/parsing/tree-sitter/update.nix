@@ -77,12 +77,23 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # this is the swift language bindings, tree-sitter-swift is the (abandoned) grammar
+    "swift-tree-sitter"
     # abandoned
     "tree-sitter-agda"
     # abandoned
     "tree-sitter-fluent"
     # to unblock my update
     "csharp-tree-sitter"
+    # (experimental) java bindings to the Tree-sitter parsing library
+    "java-tree-sitter"
+    # go bindings to the Tree-sitter parsing library
+    "go-tree-sitter"
+    # kotlin bindings to the Tree-sitter parsing library
+    "kotlin-tree-sitter"
+    # not ready to be used
+    "zig-tree-sitter"
+
 
     # Non-grammar repositories
     ".github"
@@ -444,6 +455,26 @@ let
     "tree-sitter-earthfile" = {
       orga = "glehmann";
       repo = "tree-sitter-earthfile";
+    };
+    "tree-sitter-river" = {
+      orga = "grafana";
+      repo = "tree-sitter-river";
+    };
+    "tree-sitter-twig" = {
+      orga = "kaermorchen";
+      repo = "tree-sitter-twig";
+    };
+    "tree-sitter-hyprlang" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-hyprlang";
+    };
+    "tree-sitter-kdl" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-kdl";
+    };
+    "tree-sitter-tera" = {
+      orga = "uncenter";
+      repo = "tree-sitter-tera";
     };
   };
 

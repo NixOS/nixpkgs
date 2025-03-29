@@ -1,25 +1,21 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 , buildPackages
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , adwaita-icon-theme
-, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
-, tridactyl-native
-, fx-cast-bridge
-, keepassxc
+, pipewire
 , udev
 , libkrb5
 , libva
-, mesa # firefox wants gbm for drm+dmabuf
+, libgbm
 , cups
 , pciutils
 , vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
-, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -27,17 +23,15 @@
 browser:
 
 let
+  isDarwin = stdenv.hostPlatform.isDarwin;
   wrapper =
-    { applicationName ? browser.binaryName or (lib.getName browser)
+    { applicationName ? browser.binaryName or (lib.getName browser) # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
     , pname ? applicationName
     , version ? lib.getVersion browser
-    , desktopName ? # applicationName with first letter capitalized
-      (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
     , wmClass ? applicationName
     , nativeMessagingHosts ? []
-    , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , useGlvnd ? true
     , cfg ? config.${applicationName} or {}
@@ -53,6 +47,7 @@ let
     , extraPoliciesFiles ? []
     , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
+    , hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname)
     }:
 
     let
@@ -65,29 +60,12 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      deprecatedNativeMessagingHost = option: pkg:
-        if (cfg.${option} or false)
-          then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
-            [pkg]
-          else [];
+      allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
 
-      allNativeMessagingHosts = builtins.map lib.getBin (
-        nativeMessagingHosts
-          ++ deprecatedNativeMessagingHost "enableBrowserpass" browserpass
-          ++ deprecatedNativeMessagingHost "enableBukubrow" bukubrow
-          ++ deprecatedNativeMessagingHost "enableTridactylNative" tridactyl-native
-          ++ deprecatedNativeMessagingHost "enableGnomeExtensions" gnome-browser-connector
-          ++ deprecatedNativeMessagingHost "enableUgetIntegrator" uget-integrator
-          ++ deprecatedNativeMessagingHost "enablePlasmaBrowserIntegration" plasma5Packages.plasma-browser-integration
-          ++ deprecatedNativeMessagingHost "enableFXCastBridge" fx-cast-bridge
-          ++ deprecatedNativeMessagingHost "enableKeePassXC" keepassxc
-          ++ (if extraNativeMessagingHosts != []
-                then lib.warn "The extraNativeMessagingHosts argument for the Firefox wrapper is deprecated, please use `nativeMessagingHosts`" extraNativeMessagingHosts
-                else [])
-       );
-
-      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva libgbm libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -99,12 +77,12 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
-      launcherName = "${applicationName}${nameSuffix}";
+      # Darwin does not rename bundled binaries
+      launcherName = "${applicationName}${lib.optionalString (!isDarwin) nameSuffix}";
 
       #########################
       #                       #
@@ -117,7 +95,7 @@ let
 
       nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
-      # Check that every extension has a unqiue .name attribute
+      # Check that every extension has a unique .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
@@ -169,7 +147,7 @@ let
         // to be able to install addons that do not have an extid
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
-        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
+        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false);'' }
       '';
 
       #############################
@@ -178,14 +156,15 @@ let
       #                           #
       #############################
 
-    in stdenv.mkDerivation {
+    in stdenv.mkDerivation (finalAttrs: {
+      __structuredAttrs = true;
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
         name = launcherName;
         exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        inherit desktopName;
+        desktopName = browser.applicationName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -240,14 +219,78 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
+      makeWrapperArgs = [
+        "--prefix"
+        "LD_LIBRARY_PATH"
+        ":"
+        "${finalAttrs.libs}"
 
-      buildCommand = ''
-        if [ ! -x "${browser}/bin/${applicationName}" ]
+        "--suffix"
+        "GTK_PATH"
+        ":"
+        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+
+        "--suffix" "PATH"
+        ":"
+        "${placeholder "out"}/bin"
+
+        "--set"
+        "MOZ_APP_LAUNCHER"
+        launcherName
+
+        "--set"
+        "MOZ_LEGACY_PROFILES"
+        "1"
+
+        "--set"
+        "MOZ_ALLOW_DOWNGRADE"
+        "1"
+
+        "--suffix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${adwaita-icon-theme}/share"
+
+        "--set-default"
+        "MOZ_ENABLE_WAYLAND"
+        "1"
+
+      ] ++ lib.optionals (!xdg-utils.meta.broken) [
+        # make xdg-open overridable at runtime
+        "--suffix"
+        "PATH"
+        ":"
+        "${lib.makeBinPath [ xdg-utils ]}"
+
+      ] ++ lib.optionals hasMozSystemDirPatch [
+        "--set"
+        "MOZ_SYSTEM_DIR"
+        "${placeholder "out"}/lib/mozilla"
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
+        "--run"
+        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+
+      ] ++ lib.optionals (!hasMozSystemDirPatch) (lib.concatMap (ext: [
+        "--run"
+        ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+      ]) allNativeMessagingHosts);
+
+      buildCommand = let
+        appPath = "Applications/${browser.applicationName}.app";
+        executablePrefix = if isDarwin then "${appPath}/Contents/MacOS" else "bin";
+        executablePath="${executablePrefix}/${applicationName}";
+        finalBinaryPath = "${executablePath}" + lib.optionalString (!isDarwin) "${nameSuffix}";
+        sourceBinary="${browser}/${executablePath}";
+        libDir = if isDarwin then "${appPath}/Contents/Resources" else "lib/${libName}";
+        prefsDir = if isDarwin then "${libDir}/browser/defaults/preferences" else "${libDir}/defaults/pref";
+      in ''
+        if [ ! -x "${sourceBinary}" ]
         then
-            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
+            echo "cannot find executable file \`${sourceBinary}'"
             exit 1
         fi
 
@@ -279,10 +322,31 @@ let
 
         cd "$out"
 
+      '' + lib.optionalString isDarwin ''
+        cd "${appPath}"
+
+        # These files have to be copied and not symlinked, otherwise tabs crash.
+        # Maybe related to how omni.ja file is mmapped into memory. See:
+        # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
+        for file in $(find . -type l -name "omni.ja"); do
+          rm "$file"
+          cp "${browser}/${appPath}/$file" "$file"
+        done
+
+        # Copy any embedded .app directories; plugin-container fails to start otherwise.
+        for dir in $(find . -type d -name '*.app'); do
+          rm -r "$dir"
+          cp -r "${browser}/${appPath}/$dir" "$dir"
+        done
+
+        cd ..
+
+      '' + ''
+
         # create the wrapper
 
-        executablePrefix="$out/bin"
-        executablePath="$executablePrefix/${applicationName}"
+        executablePrefix="$out/${executablePrefix}"
+        executablePath="$out/${executablePath}"
         oldWrapperArgs=()
 
         if [[ -L $executablePath ]]; then
@@ -311,27 +375,17 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
-        # make xdg-open overrideable at runtime
-        makeWrapper "$oldExe" \
-          "''${executablePath}${nameSuffix}" \
-            --prefix LD_LIBRARY_PATH ':' "$libs" \
-            --suffix-each GTK_PATH ':' "$gtk_modules" \
-            ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
-            --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${launcherName}" \
-            --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            --set MOZ_LEGACY_PROFILES 1 \
-            --set MOZ_ALLOW_DOWNGRADE 1 \
-            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
-            --set-default MOZ_ENABLE_WAYLAND 1 \
-            "''${oldWrapperArgs[@]}"
+        appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        concatTo makeWrapperArgs oldWrapperArgs
+
+        makeWrapper "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
+
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
-
+      '' + lib.optionalString (!isDarwin) ''
         if [ -e "${browser}/share/icons" ]; then
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
@@ -347,10 +401,12 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
+      '' + lib.optionalString hasMozSystemDirPatch ''
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString allNativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
+      '' + ''
 
         mkdir -p $out/lib/mozilla/pkcs11-modules
         for ext in ${toString pkcs11Modules}; do
@@ -364,12 +420,12 @@ let
         #                       #
         #########################
         # user customization
-        mkdir -p $out/lib/${libName}
+        libDir="$out/${libDir}"
 
         # creating policies.json
-        mkdir -p "$out/lib/${libName}/distribution"
+        mkdir -p "$libDir/distribution"
 
-        POL_PATH="$out/lib/${libName}/distribution/policies.json"
+        POL_PATH="$libDir/distribution/policies.json"
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
 
@@ -380,25 +436,26 @@ let
         done
 
         # preparing for autoconfig
-        mkdir -p "$out/lib/${libName}/defaults/pref"
+        prefsDir="$out/${prefsDir}"
+        mkdir -p "$prefsDir"
 
-        echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
-        echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
+        echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
+        echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        cat > "$libDir/mozilla.cfg" << EOF
         ${mozillaCfg}
         EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
-          cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
+          cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
         done
 
-        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        cat >> "$libDir/mozilla.cfg" << EOF
         ${extraPrefs}
         EOF
 
-        mkdir -p $out/lib/${libName}/distribution/extensions
+        mkdir -p "$libDir/distribution/extensions"
 
         #############################
         #                           #
@@ -415,14 +472,11 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-      postInstall = ''
-        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
-    };
+    });
 in lib.makeOverridable wrapper

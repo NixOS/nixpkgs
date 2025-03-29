@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, libX11
-, libXrandr
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  libX11,
+  libXrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "faf0";
     repo = "sct";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-L93Gk7/jcRoUWogWhrOiBvWCCj+EbyGKxBR5oOVjPPU=";
   };
 

@@ -12,11 +12,11 @@
 
 python311Packages.buildPythonApplication rec {
   pname = "pysolfc";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchzip {
     url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
-    hash = "sha256-LPOm83K4bdzmmQskmAnSyYpz+5y9ktQAhYCkXpODYKI=";
+    hash = "sha256-0Thvg9sNNXkF0GJ03A4qt3yobezVtBsGT4U4Nd44Ftg=";
   };
 
   cardsets = stdenv.mkDerivation rec {
@@ -69,10 +69,6 @@ python311Packages.buildPythonApplication rec {
   patches = [ ./pysolfc-datadir.patch ];
 
   nativeBuildInputs = [ desktop-file-utils ];
-  postPatch = ''
-    desktop-file-edit --set-key Icon --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
-    desktop-file-edit --set-key Comment --set-value "${meta.description}" data/pysol.desktop
-  '';
 
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets

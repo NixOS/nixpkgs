@@ -74,8 +74,8 @@ with lib;
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
     services.openssh = {
-      enable = true;
-      settings.PermitRootLogin = "yes";
+      enable = mkDefault true;
+      settings.PermitRootLogin = mkDefault "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.
@@ -102,10 +102,10 @@ with lib;
         stdenv
         stdenvNoCC # for runCommand
         busybox
-        jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-      ];
+      ]
+      ++ jq.all; # for closureInfo
 
     boot.swraid.enable = true;
     # remove warning about unset mail

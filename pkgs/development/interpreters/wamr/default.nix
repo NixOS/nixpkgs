@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     rev = "WAMR-${finalAttrs.version}";
-    hash = "sha256-/DQ+dZ3VoijL7FdgRgPg3H7whhXhjIzjhCaqpjPYw4k=";
+    hash = "sha256-Rhn26TRyjkR30+zyosfooOGjhvG+ztYtJVQlRfzWEFo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,13 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
   ];
 
-  sourceRoot = let
-    platform = if stdenv.hostPlatform.isLinux then
-        "linux"
-      else if stdenv.hostPlatform.isDarwin then
-        "darwin"
-      else throw "unsupported platform";
-  in "${finalAttrs.src.name}/product-mini/platforms/${platform}";
+  sourceRoot =
+    let
+      platform =
+        if stdenv.hostPlatform.isLinux then
+          "linux"
+        else if stdenv.hostPlatform.isDarwin then
+          "darwin"
+        else
+          throw "unsupported platform";
+    in
+    "${finalAttrs.src.name}/product-mini/platforms/${platform}";
 
   meta = with lib; {
     description = "WebAssembly Micro Runtime";

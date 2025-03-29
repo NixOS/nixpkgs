@@ -5,11 +5,11 @@
 }:
 mkKdeDerivation rec {
   pname = "oxygen-icons";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/oxygen-icons/oxygen-icons-${version}.tar.xz";
-    hash = "sha256-KOwYKHXcwV2SePRc7RECaqOSR28fRUhxueLINwCOV3Q=";
+    hash = "sha256-FsqXEHnFBnxFB8q/G2GdyH3Wsyb9XC3Z9dQ4EPIXTWg=";
   };
 
   dontStrip = true;

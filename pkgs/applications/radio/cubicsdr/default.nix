@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fftw, hamlib, libpulseaudio, libGL, libX11,
-  liquid-dsp, pkg-config, soapysdr-with-plugins, wxGTK32, enableDigitalLab ? false,
-  Cocoa, WebKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  fftw,
+  hamlib,
+  libpulseaudio,
+  libGL,
+  libX11,
+  liquid-dsp,
+  pkg-config,
+  soapysdr-with-plugins,
+  wxGTK32,
+  enableDigitalLab ? false,
+  Cocoa,
+  WebKit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
@@ -21,14 +37,34 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ fftw hamlib liquid-dsp soapysdr-with-plugins wxGTK32 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio libGL libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa WebKit ];
+  buildInputs =
+    [
+      fftw
+      hamlib
+      liquid-dsp
+      soapysdr-with-plugins
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libpulseaudio
+      libGL
+      libX11
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+      WebKit
+    ];
 
-  cmakeFlags = [ "-DUSE_HAMLIB=ON" ]
-    ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
+  cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -change libliquid.dylib ${lib.getLib liquid-dsp}/lib/libliquid.dylib ''${out}/bin/CubicSDR
+  '';
 
   meta = with lib; {
     homepage = "https://cubicsdr.com";

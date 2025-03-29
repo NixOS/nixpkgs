@@ -4,7 +4,7 @@
   fetchPypi,
   libpulseaudio,
   glibc,
-  substituteAll,
+  replaceVars,
   stdenv,
   pulseaudio,
   unittestCheckHook,
@@ -12,18 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "24.8.0";
+  version = "24.12.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sFFQbQ1z08xDV879PeF7uFnX7PAE6ZSw98+oeFG8cVY=";
+    hash = "sha256-KI1nFSMqxvPc2xI/vsqiwLmlDqQIfm6Hw/hBqwqKB/w=";
   };
 
   patches = [
     # substitute library paths for libpulse and librt
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       libpulse = "${libpulseaudio.out}/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}";
       librt = "${glibc.out}/lib/librt${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

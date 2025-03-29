@@ -1,6 +1,13 @@
-{ config, lib, pkgs, ... }: let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
   cfg = config.boot.bcache;
-in {
+in
+{
   options.boot.bcache.enable = lib.mkEnableOption "bcache mount support" // {
     default = true;
     example = false;

@@ -1,58 +1,66 @@
-{ lib
-, fetchFromGitHub
-, flatpak
-, fuse3
-, bubblewrap
-, docbook_xml_dtd_412
-, docbook_xml_dtd_43
-, docbook_xsl
-, docutils
-, systemdMinimal
-, geoclue2
-, glib
-, gsettings-desktop-schemas
-, json-glib
-, libportal
-, libxml2
-, meson
-, ninja
-, nixosTests
-, pipewire
-, gdk-pixbuf
-, librsvg
-, gobject-introspection
-, python3
-, pkg-config
-, stdenv
-, runCommand
-, wrapGAppsHook3
-, xmlto
-, bash
-, enableGeoLocation ? true
-, enableSystemd ? true
+{
+  lib,
+  fetchFromGitHub,
+  flatpak,
+  fuse3,
+  bubblewrap,
+  docutils,
+  systemdMinimal,
+  geoclue2,
+  glib,
+  gsettings-desktop-schemas,
+  json-glib,
+  meson,
+  ninja,
+  nixosTests,
+  pipewire,
+  gdk-pixbuf,
+  librsvg,
+  gobject-introspection,
+  python3,
+  pkg-config,
+  stdenv,
+  runCommand,
+  wrapGAppsNoGuiHook,
+  bash,
+  dbus,
+  gst_all_1,
+  libgudev,
+  umockdev,
+  substituteAll,
+  enableGeoLocation ? true,
+  enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.4";
+  version = "1.20.0";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
-    rev = finalAttrs.version;
-    hash = "sha256-o+aO7uGewDPrtgOgmp/CE2uiqiBLyo07pVCFrtlORFQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
   };
 
   patches = [
     # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
     # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (runCommand "icon-validator.patch" { } ''
-      # Flatpak uses a different path
-      substitute "${flatpak.icon-validator-patch}" "$out" \
-        --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
-    '')
+    (substituteAll {
+      src = ./fix-icon-validation.patch;
+      inherit (builtins) storeDir;
+    })
+
+    # Same for the sound validator, except the gdk-pixbuf part.
+    (substituteAll {
+      src = ./fix-sound-validation.patch;
+      inherit (builtins) storeDir;
+    })
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
@@ -64,78 +72,87 @@ stdenv.mkDerivation (finalAttrs: {
 
     # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
     ./trash-test.patch
-
-    # Install files required to be in XDG_DATA_DIR of the installed tests
-    # Merged PR https://github.com/flatpak/xdg-desktop-portal/pull/1444
-    ./installed-tests-share.patch
   ];
 
-  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
-  '';
-
   nativeBuildInputs = [
-    docbook_xml_dtd_412
-    docbook_xml_dtd_43
-    docbook_xsl
     docutils # for rst2man
-    libxml2
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
-    xmlto
+    wrapGAppsNoGuiHook
   ];
 
-  buildInputs = [
-    flatpak
-    fuse3
-    bubblewrap
-    glib
-    gsettings-desktop-schemas
-    json-glib
-    libportal
-    pipewire
+  buildInputs =
+    [
+      flatpak
+      fuse3
+      bubblewrap
+      glib
+      gsettings-desktop-schemas
+      json-glib
+      pipewire
+      gst_all_1.gst-plugins-base
+      libgudev
+      umockdev
 
-    # For icon validator
-    gdk-pixbuf
-    librsvg
-
-    # For document-fuse installed test.
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
-    bash
-  ] ++ lib.optionals enableGeoLocation [
-    geoclue2
-  ] ++ lib.optionals enableSystemd [
-    systemdMinimal # libsystemd
-  ];
+      # For icon validator
+      gdk-pixbuf
+      librsvg
+      bash
+    ]
+    ++ lib.optionals enableGeoLocation [
+      geoclue2
+    ]
+    ++ lib.optionals enableSystemd [
+      systemdMinimal # libsystemd
+    ];
 
   nativeCheckInputs = [
+    dbus
+    gdk-pixbuf
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
     gobject-introspection
-    python3.pkgs.pytest
-    python3.pkgs.python-dbusmock
-    python3.pkgs.pygobject3
-    python3.pkgs.dbus-python
+
+    # NB: this Python is used both for build-time tests
+    # and for installed (VM) tests, so it includes dependencies
+    # for both
+    (python3.withPackages (ps: [
+      ps.pytest
+      ps.python-dbusmock
+      ps.pygobject3
+      ps.dbus-python
+    ]))
+    umockdev
   ];
 
-  mesonFlags = [
-    "--sysconfdir=/etc"
-    "-Dinstalled-tests=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    (lib.mesonEnable "systemd" enableSystemd)
-  ] ++ lib.optionals (!enableGeoLocation) [
-    "-Dgeoclue=disabled"
-  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dpytest=disabled"
-  ];
+  mesonFlags =
+    [
+      "--sysconfdir=/etc"
+      "-Dinstalled-tests=true"
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
+      (lib.mesonEnable "systemd" enableSystemd)
+    ]
+    ++ lib.optionals (!enableGeoLocation) [
+      "-Dgeoclue=disabled"
+    ]
+    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+      "-Dtests=disabled"
+    ];
 
   strictDeps = true;
 
   doCheck = true;
+
+  postPatch = ''
+    # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+
+    patchShebangs src/generate-method-info.py
+    patchShebangs tests/run-test.sh
+  '';
 
   preCheck = ''
     # For test_trash_file
@@ -145,22 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     # be flaky. Let's disable those downstream as hydra exhibits similar
     # flakes:
     #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
-    export TEST_IN_CI=1
-  '';
+    export XDP_TEST_IN_CI=1
 
-  postFixup = let
-    documentFuse = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-document-fuse.py";
-    testPortals = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-portals";
-
-  in ''
-    if [ -x '${documentFuse}' ] ; then
-      wrapGApp '${documentFuse}'
-      wrapGApp '${testPortals}'
-      # (xdg-desktop-portal:995): xdg-desktop-portal-WARNING **: 21:21:55.673: Failed to get GeoClue client: Timeout was reached
-      # xdg-desktop-portal:ERROR:../tests/location.c:22:location_cb: 'res' should be TRUE
-      # https://github.com/flatpak/xdg-desktop-portal/blob/1d6dfb57067dec182b546dfb60c87aa3452c77ed/tests/location.c#L21
-      rm $installedTests/share/installed-tests/xdg-desktop-portal/test-portals-location.test
-    fi
+    # need to set this ourselves, because the tests will set LD_PRELOAD=libumockdev-preload.so,
+    # which can't be found because it's not in default rpath
+    export LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so
   '';
 
   passthru = {
@@ -168,17 +174,17 @@ stdenv.mkDerivation (finalAttrs: {
       installedTests = nixosTests.installed-tests.xdg-desktop-portal;
 
       validate-icon = runCommand "test-icon-validation" { } ''
-        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --ruleset=desktop --sandbox --path=${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
         grep format=svg "$out"
       '';
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop integration portals for sandboxed apps";
-    homepage = "https://flatpak.github.io/xdg-desktop-portal/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    homepage = "https://flatpak.github.io/xdg-desktop-portal";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.linux;
   };
 })

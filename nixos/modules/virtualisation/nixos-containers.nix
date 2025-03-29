@@ -92,7 +92,7 @@ let
       chmod 0755 "$root/etc" "$root/var/lib"
       mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
       chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
-      if ! [ -e "$root/etc/os-release" ]; then
+      if ! [ -e "$root/etc/os-release" ] && ! [ -h "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
 
@@ -115,6 +115,16 @@ let
         extraFlags+=("--private-network")
       fi
 
+      NIX_BIND_OPT=""
+      if [ -n "$PRIVATE_USERS" ]; then
+        extraFlags+=("--private-users=$PRIVATE_USERS")
+        if [ "$PRIVATE_USERS" = "pick" ] || { [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ]; }; then
+          # when user namespacing is enabled, we use `idmap` mount option
+          # so that bind mounts under /nix get proper owner (and not nobody/nogroup).
+          NIX_BIND_OPT=":idmap"
+        fi
+      fi
+
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
          [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
         extraFlags+=("--network-veth")
@@ -132,6 +142,10 @@ let
 
       if [ -n "$HOST_BRIDGE" ]; then
         extraFlags+=("--network-bridge=$HOST_BRIDGE")
+      fi
+
+      if [ -n "$NETWORK_NAMESPACE_PATH" ]; then
+        extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
       fi
 
       extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
@@ -164,16 +178,16 @@ let
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" "''${extraFlags[@]}" \
-        $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
-        --bind-ro=/nix/store \
-        --bind-ro=/nix/var/nix/db \
-        --bind-ro=/nix/var/nix/daemon-socket \
-        --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
-        --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
+        --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
+        --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
+        --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
+        --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
+        --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
         ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
+        --setenv PRIVATE_USERS="$PRIVATE_USERS" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
         --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
@@ -188,6 +202,7 @@ let
         ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
           ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
+        $EXTRA_NSPAWN_FLAGS \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
 
@@ -345,7 +360,7 @@ let
           Device node access modifier. Takes a combination
           `r` (read), `w` (write), and
           `m` (mknod). See the
-          `systemd.resource-control(5)` man page for more
+          {manpage}`systemd.resource-control(5)` man page for more
           information.'';
       };
     };
@@ -559,7 +574,7 @@ in
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = ''
                 Grant additional capabilities to the container.  See the
-                capabilities(7) and systemd-nspawn(1) man pages for more
+                {manpage}`capabilities(7)` and {manpage}`systemd-nspawn(1)` man pages for more
                 information.
               '';
             };
@@ -629,6 +644,41 @@ in
                 on the host.  If this option is not set, then the
                 container shares the network interfaces of the host,
                 and can bind to any port on any interface.
+              '';
+            };
+
+            networkNamespace = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                Takes the path to a file representing a kernel network namespace that the container
+                shall run in. The specified path should refer to a (possibly bind-mounted) network
+                namespace file, as exposed by the kernel below /proc/<PID>/ns/net. This makes the
+                container enter the given network namespace. One of the typical use cases is to give
+                a network namespace under /run/netns created by {manpage}`ip-netns(8)`.
+                Note that this option cannot be used together with other network-related options,
+                such as --private-network or --network-interface=.
+              '';
+            };
+
+            privateUsers = mkOption {
+              type = types.either types.ints.u32 (types.enum [ "no" "identity" "pick" ]);
+              default = "no";
+              description = ''
+                Whether to give the container its own private UIDs/GIDs space (user namespacing).
+                Disabled by default (`no`).
+
+                If set to a number (usually above host's UID/GID range: 65536),
+                user namespacing is enabled and the container UID/GIDs will start at that number.
+
+                If set to `identity`, mostly equivalent to `0`, this will only provide
+                process capability isolation (no UID/GID isolation, as they are the same as host).
+
+                If set to `pick`, user namespacing is enabled and the UID/GID range is automatically chosen,
+                so that no overlapping UID/GID ranges are assigned to multiple containers.
+                This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
+
+                See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
               '';
             };
 
@@ -705,7 +755,7 @@ in
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
-              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
               '';
@@ -719,7 +769,7 @@ in
                 Mounts a set of tmpfs file systems into the container.
                 Multiple paths can be specified.
                 Valid items must conform to the --tmpfs argument
-                of systemd-nspawn. See systemd-nspawn(1) for details.
+                of systemd-nspawn. See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 
@@ -729,7 +779,7 @@ in
               example = [ "--drop-capability=CAP_SYS_CHROOT" ];
               description = ''
                 Extra flags passed to the systemd-nspawn command.
-                See systemd-nspawn(1) for details.
+                See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 
@@ -793,6 +843,11 @@ in
     {
       warnings = optional (!config.boot.enableContainers && config.containers != {})
         "containers.<name> is used, but boot.enableContainers is false. To use containers.<name>, set boot.enableContainers to true.";
+
+      assertions = let
+        mapper = name: cfg: optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
+          "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+      in mkMerge (mapAttrsToList mapper config.containers);
     }
 
     (mkIf (config.boot.enableContainers) (let
@@ -835,9 +890,16 @@ in
             optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
-                  ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
+              }
+            ) // (
+            optionalAttrs (!cfg.enableTun && cfg.privateNetwork
+              && (cfg.privateUsers == "pick" || (builtins.isInt cfg.privateUsers && cfg.privateUsers > 0 )))
+              {
+                allowedDevices = cfg.allowedDevices
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               }
             );
           in
@@ -897,6 +959,10 @@ in
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
               ''}
+              ${optionalString (cfg.networkNamespace != null) ''
+                NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
+              ''}
+              PRIVATE_USERS=${toString cfg.privateUsers}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"
               ${optionalString cfg.autoStart ''

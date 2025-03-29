@@ -1,29 +1,35 @@
-{ lib, stdenv
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, itstool
-, wrapGAppsHook4
-, glib
-, accountsservice
-, dbus
-, flatpak
-, malcontent
-, gtk4
-, libadwaita
-, appstream
-, desktop-file-utils
-, polkit
-, glib-testing
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  itstool,
+  wrapGAppsHook4,
+  glib,
+  accountsservice,
+  dbus,
+  flatpak,
+  malcontent,
+  gtk4,
+  libadwaita,
+  appstream,
+  desktop-file-utils,
+  polkit,
+  glib-testing,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "malcontent-ui";
 
   inherit (malcontent) version src;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   patches = [
     # Allow installing installed tests to a separate output.

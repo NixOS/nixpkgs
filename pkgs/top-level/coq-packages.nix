@@ -22,6 +22,7 @@ let
       async-test = callPackage ../development/coq-modules/async-test {};
       atbr = callPackage ../development/coq-modules/atbr {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
+      autosubst-ocaml = callPackage ../development/coq-modules/autosubst-ocaml {};
       bbv = callPackage ../development/coq-modules/bbv {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
@@ -41,12 +42,13 @@ let
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
-      coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
+      CoqMatrix = callPackage ../development/coq-modules/coq-matrix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
+      coq-tactical = callPackage ../development/coq-modules/coq-tactical {};
       coqeal = callPackage ../development/coq-modules/coqeal (
         (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
@@ -63,6 +65,7 @@ let
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       ElmExtraction = callPackage ../development/coq-modules/ElmExtraction {};
       equations = callPackage ../development/coq-modules/equations { };
+      ExtLib = callPackage ../development/coq-modules/ExtLib {};
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
@@ -85,7 +88,9 @@ let
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
+      jasmin = callPackage ../development/coq-modules/jasmin {};
       json = callPackage ../development/coq-modules/json {};
+      lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
@@ -100,25 +105,37 @@ let
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       MenhirLib = callPackage ../development/coq-modules/MenhirLib {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
-      metacoq-template-coq = self.metacoq.template-coq;
-      metacoq-pcuic        = self.metacoq.pcuic;
-      metacoq-safechecker  = self.metacoq.safechecker;
-      metacoq-erasure      = self.metacoq.erasure;
+      metacoq-utils              = self.metacoq.utils;
+      metacoq-common             = self.metacoq.common;
+      metacoq-template-coq       = self.metacoq.template-coq;
+      metacoq-pcuic              = self.metacoq.pcuic;
+      metacoq-safechecker        = self.metacoq.safechecker;
+      metacoq-template-pcuic     = self.metacoq.template-pcuic;
+      metacoq-erasure            = self.metacoq.erasure;
+      metacoq-quotation          = self.metacoq.quotation;
+      metacoq-safechecker-plugin = self.metacoq.safechecker-plugin;
+      metacoq-erasure-plugin     = self.metacoq.erasure-plugin;
+      metacoq-translations       = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
       mtac2 = callPackage ../development/coq-modules/mtac2 {};
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
+      Ordinal = callPackage ../development/coq-modules/Ordinal {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       parsec = callPackage ../development/coq-modules/parsec {};
@@ -136,6 +153,7 @@ let
       ssprove = callPackage ../development/coq-modules/ssprove {};
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck {};
       stalmarck = self.stalmarck-tactic.stalmarck;
+      stdlib = callPackage ../development/coq-modules/stdlib {};
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
@@ -155,7 +173,7 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version = with lib.versions; lib.switch self.coq.version [
-              { case = range "8.15" "8.19"; out = "3.13.1"; }
+              { case = range "8.15" "8.18"; out = "3.13.1"; }
               { case = isEq "8.14"; out = "3.11"; }
             ] null;
           };
@@ -195,7 +213,7 @@ in rec {
    * a set of libraries built with that specific Coq. More libraries are known to
    * this function than what is compatible with that version of Coq. Therefore,
    * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * the resulting set. For meta-programming purposes (inspecting the derivations
    * rather than building the libraries) this filtering can be disabled by setting
    * a `dontFilter` attribute into the Coq derivation.
    */
@@ -219,6 +237,7 @@ in rec {
   coq_8_18 = mkCoq "8.18";
   coq_8_19 = mkCoq "8.19";
   coq_8_20 = mkCoq "8.20";
+  coq_9_0  = mkCoq "9.0";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -236,7 +255,8 @@ in rec {
   coqPackages_8_18 = mkCoqPackages coq_8_18;
   coqPackages_8_19 = mkCoqPackages coq_8_19;
   coqPackages_8_20 = mkCoqPackages coq_8_20;
+  coqPackages_9_0 = mkCoqPackages coq_9_0;
 
-  coqPackages = recurseIntoAttrs coqPackages_8_20;
+  coqPackages = recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;
 }

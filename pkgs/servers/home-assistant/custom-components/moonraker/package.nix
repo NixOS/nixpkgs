@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, moonraker-api
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  moonraker-api,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.3.7";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Mz78wCBP3U1CWbr3KajZ5RjQOIqhjFvmL9Walx+xxzQ=";
+    tag = version;
+    hash = "sha256-J/MHT+yzV08sJMJCDoH6tpE86Mgz4fxpgbyWNge0n54=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     moonraker-api
   ];
 

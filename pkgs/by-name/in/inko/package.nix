@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvm_16
-, libffi
-, libz
-, libxml2
-, ncurses
-, stdenv
-, makeWrapper
-, callPackage
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvm_16,
+  libffi,
+  libz,
+  libxml2,
+  ncurses,
+  stdenv,
+  makeWrapper,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,14 +23,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Iojv8pTyILYpLFnoTlgUGmlfWWH0DgsGBRxzd3oRNwA=";
   };
 
-  cargoHash = "sha256-PaZD7wwcami6EWvOHLislNkwQhCZItN9XZkPSExwo0U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BTfg3uPLvbeKPgb7qF9WFYLzUCZ6AVRk9I0T2hxuVqU=";
 
   buildInputs = [
     libffi
     libz
     libxml2
     ncurses
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [

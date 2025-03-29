@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.leaps;
   stateDir = "/var/lib/leaps/";
@@ -29,11 +34,11 @@ in
   config = lib.mkIf cfg.enable {
     users = {
       users.leaps = {
-        uid             = config.ids.uids.leaps;
-        description     = "Leaps server user";
-        group           = "leaps";
-        home            = stateDir;
-        createHome      = true;
+        uid = config.ids.uids.leaps;
+        description = "Leaps server user";
+        group = "leaps";
+        home = stateDir;
+        createHome = true;
       };
 
       groups.leaps = {
@@ -42,9 +47,9 @@ in
     };
 
     systemd.services.leaps = {
-      description   = "leaps service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "leaps service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         User = "leaps";

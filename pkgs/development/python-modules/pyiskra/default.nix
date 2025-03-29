@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyiskra";
-  version = "0.1.14";
+  version = "0.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Iskramis";
     repo = "pyiskra";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OLNUa11UULiW6E8nVy5rUyN7iAD7KdM+R76m2zaDOgc=";
+    tag = "v${version}";
+    hash = "sha256-LpiylQe/8bBIlFLmrbIEOyeqHgHzW9SaG71O7y28Rkg=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/Iskramis/pyiskra/releases/tag/v${version}";
+    changelog = "https://github.com/Iskramis/pyiskra/releases/tag/${src.tag}";
     description = "Python Iskra devices interface";
     homepage = "https://github.com/Iskramis/pyiskra";
     license = lib.licenses.gpl3Only;

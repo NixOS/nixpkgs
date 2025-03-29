@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.24";
+  version = "1.0.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DnU3u7h/sPCjKLTFppAuPcY8CC0PNdFIlmeGd4xgy3M=";
+    tag = version;
+    hash = "sha256-3a3HuyKT7Df7y/QzJETxd8cUY2QtrVo15cNogKWt8/U=";
   };
 
   build-system = [

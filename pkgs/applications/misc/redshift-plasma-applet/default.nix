@@ -1,6 +1,18 @@
-{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, fetchpatch, }:
+{
+  lib,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  plasma-framework,
+  kwindowsystem,
+  redshift,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
-let version = "1.0.18"; in
+let
+  version = "1.0.18";
+in
 
 stdenv.mkDerivation {
   pname = "redshift-plasma-applet";
@@ -20,7 +32,7 @@ stdenv.mkDerivation {
     #     Without it scrolling makes the screen gets darker and darker until it is impossible to see anything.
     (fetchpatch {
       url = "https://invent.kde.org/plasma/plasma-redshift-control/-/commit/898c3a4cfc6c317915f1e664078d8606497c4049.patch";
-      sha256 =  "0b6pa3fcj698mgqnc85jbbmcl3qpf418mh06qgsd3c4v237my0nv";
+      sha256 = "0b6pa3fcj698mgqnc85jbbmcl3qpf418mh06qgsd3c4v237my0nv";
     })
   ];
 
@@ -53,6 +65,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kotelnik/plasma-applet-redshift-control";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ benley zraexy ];
+    maintainers = with maintainers; [
+      benley
+      zraexy
+    ];
   };
 }

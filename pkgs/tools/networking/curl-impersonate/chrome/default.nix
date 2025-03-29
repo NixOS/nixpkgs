@@ -95,13 +95,13 @@ stdenv.mkDerivation rec {
 
   postUnpack =
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} source/${name}") (
+      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
         lib.filterAttrs (n: v: v ? outPath) passthru.deps
       )
     )
     + ''
 
-      curltar=$(realpath -s source/curl-*.tar.gz)
+      curltar=$(realpath -s ${src.name}/curl-*.tar.gz)
 
       pushd "$(mktemp -d)"
 

@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gettext
-, python3
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  python3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "folder-color-switcher";
-  version = "1.6.4";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "folder-color-switcher";
     # They don't really do tags, this is just a named commit.
-    rev = "c9d1a2b9c7f40ff7bb77ee74a277988bb8a4adf2";
-    hash = "sha256-5k0YybA40MefqQixNFyQFMuy7t4aSGsI3BK0RbZDu28=";
+    rev = "5bd94d3ffdb9585c09832f0beabb14f0e67e8d58";
+    hash = "sha256-77+b7yVcTvBjtmXGOUIrh88IaxvCiBNM+hbZoN0+zoI=";
   };
 
   nativeBuildInputs = [

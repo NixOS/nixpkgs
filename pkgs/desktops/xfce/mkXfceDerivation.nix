@@ -58,4 +58,4 @@ let
 in
 
 stdenv.mkDerivation (publicArgs // template // concatAttrLists [ template args ])
-# TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256
+

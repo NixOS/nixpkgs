@@ -1,34 +1,35 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchzip,
   appimageTools,
   makeWrapper,
+  nativeWayland ? false,
 }:
 
 let
   pname = "osu-lazer-bin";
-  version = "2024.1009.1";
+  version = "2025.321.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-fH7cuk879nS8FDIZ8p29pg2aXLJUT+j6Emb39Y6FXq4=";
+        hash = "sha256-oc5IbLhOGn7nug47YHpEqTkQoGWQXrVS77xQMW9khqw=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-kIH+zlNaqMVbr8FVDiLUh19gfrFUDPGBvMOrZqkMZAE=";
+        hash = "sha256-c1EHrkLbxYUwwgMdgGTHHkop6STFLVH8vRQ41MzGeeI=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-2H2SPcUm/H/0D9BqBiTFvaCwd0c14/r+oWhyeZdNpoU=";
+        hash = "sha256-mNxoEx/wgJ1OUm7y9JLd5vHSwfcB49QjKDVQWZaMDJQ=";
       };
     }
-    .${stdenv.system} or (throw "osu-lazer-bin: ${stdenv.system} is unsupported.");
+    .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
 
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
@@ -42,6 +43,7 @@ let
     maintainers = with lib.maintainers; [
       gepbird
       stepbrobd
+      Guanran928
     ];
     mainProgram = "osu!";
     platforms = [
@@ -53,8 +55,8 @@ let
 
   passthru.updateScript = ./update.sh;
 in
-if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+if stdenvNoCC.isDarwin then
+  stdenvNoCC.mkDerivation {
     inherit
       pname
       version
@@ -90,11 +92,14 @@ else
       ''
         . ${makeWrapper}/nix-support/setup-hook
         mv -v $out/bin/${pname} $out/bin/osu!
+
         wrapProgram $out/bin/osu! \
+          ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
           --set OSU_EXTERNAL_UPDATE_PROVIDER 1
+
         install -m 444 -D ${contents}/osu!.desktop -t $out/share/applications
         for i in 16 32 48 64 96 128 256 512 1024; do
-          install -D ${contents}/osu!.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
+          install -D ${contents}/osu.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
         done
       '';
   }

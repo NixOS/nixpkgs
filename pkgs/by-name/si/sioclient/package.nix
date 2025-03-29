@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, asio
-, rapidjson
-, websocketpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asio,
+  rapidjson,
+  websocketpp,
 }:
 
 stdenv.mkDerivation {

@@ -192,7 +192,7 @@ let
 
   mkDictFromXuxen =
     { shortName, srcs, shortDescription, longDescription, dictFileName }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "hunspell-dict-${shortName}-xuxen";
       version = "5-2015.11.10";
 
@@ -213,7 +213,7 @@ let
       '';
 
       meta = with lib; {
-        homepage = "http://xuxen.eus/";
+        homepage = "https://xuxen.eus/";
         description = shortDescription;
         longDescription = longDescription;
         license = licenses.gpl2;
@@ -669,6 +669,28 @@ rec {
     shortDescription = "Swedish (Finland)";
   };
 
+  /* ESTONIAN */
+
+  et_EE = et-ee;
+  et-ee = mkDict rec {
+    pname = "hunspell-dict-et-ee";
+    name = pname;
+    version = "20030606";
+
+    src = fetchzip {
+      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
+      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+    };
+
+    dictFileName = "et_EE";
+    readmeFile = "README";
+
+    preInstall = ''
+      mv latin-1/${dictFileName}.dic ./
+      mv latin-1/${dictFileName}.aff ./
+    '';
+  };
+
   /* GERMAN */
 
   de_DE = de-de;
@@ -697,12 +719,12 @@ rec {
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
     pname = "hunspell-dict-uk-ua";
-    version = "4.6.3";
-    _version = "4-6.3";
+    version = "6.5.3";
+    _version = "1727974630";
 
     src = fetchurl {
-      url = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/${_version}/@@download/file/dict-uk_UA-${version}.oxt";
-      sha256 = "14rd07yx4fx2qxjr5xqc8qy151idd8k2hr5yi18d9r8gccnm9w50";
+      url = "https://extensions.libreoffice.org/assets/downloads/521/${_version}/dict-uk_UA-${version}.oxt";
+      hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
     };
 
     dictFileName = "uk_UA";
@@ -844,6 +866,18 @@ rec {
       maintainers = with maintainers; [ toastal ]; # looking for a native speaker
       platforms = platforms.all;
     };
+  };
+
+  /* INDONESIA */
+
+  id_ID = id_id;
+  id_id = mkDictFromLibreOffice {
+    shortName = "id-id";
+    dictFileName = "id_ID";
+    sourceRoot = "id";
+    shortDescription = "Bahasa Indonesia (Indonesia)";
+    readmeFile = "README-dict.md";
+    license = with lib.licenses; [ lgpl21Only lgpl3Only ];
   };
 
   /* CROATIAN */
@@ -999,7 +1033,7 @@ rec {
 
   /* Turkish */
   tr_TR = tr-tr;
-  tr-tr = mkDict rec {
+  tr-tr = mkDict {
     pname = "hunspell-dict-tr-tr";
     version = "1.1.1";
 
@@ -1031,5 +1065,36 @@ rec {
     shortDescription = "Greek (Greece)";
     readmeFile = "README_el_GR.txt";
     license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
+  };
+
+  /* KOREAN */
+  ko_KR = ko-kr;
+  ko-kr = mkDict rec {
+    pname = "hunspell-dict-ko-kr";
+    version = "0.7.94";
+
+    src = fetchFromGitHub {
+      owner = "spellcheck-ko";
+      repo = "hunspell-dict-ko";
+      rev = version;
+      hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
+    };
+
+    dictFileName = "ko_KR";
+    readmeFile = "README.md";
+
+    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+
+    preInstall = ''
+      mv ko.aff ko_KR.aff
+      mv ko.dic ko_KR.dic
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for Korean (South Korea)";
+      homepage = "https://github.com/spellcheck-ko/hunspell-dict-ko";
+      license = with lib.licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+      maintainers = with lib.maintainers; [ honnip ];
+    };
   };
 }

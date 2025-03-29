@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_31,
+  electron_33,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.11.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-fHaNluLes25P/mSTSYFt97pC6uKYuBI/3PUHc84zoWg=";
+    hash = "sha256-Tjh68b+41YrMNB14AZ3jXqBXDOmaaOYQKXJOyTUF474=";
   };
 
-  electron = electron_31;
+  electron = electron_33;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-8xFB47PJpa+3U+Xy+DEdWoW3/f+naFKtLQsDDVgUccA=";
+  npmDepsHash = "sha256-KZsxKDAQ7UTnEemr6S9rqKtqPeTvqrhfxURSGTKkMMM=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-gufOUBfHTDkIqRTdPqXuuk1ZT0y80y/GyI7ssvHnBYo=";
+        npmDepsHash = "sha256-98P2dNmWcp8Hc8Xe43LM3dtxye7myhp1bHucKoKEcjI=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -115,7 +115,7 @@ buildNpmPackage {
       # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
       makeWrapper ${lib.getExe electron} $out/bin/feishin \
         --add-flags $out/share/feishin/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set ELECTRON_FORCE_IS_PACKAGED=1 \
         --inherit-argv0
 

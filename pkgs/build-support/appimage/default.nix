@@ -11,23 +11,29 @@
 }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  appimage-exec = pkgs.replaceVarsWith {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = lib.makeBinPath [
-      bash
-      binutils-unwrapped
-      coreutils
-      gawk
-      libarchive
-      pv
-      squashfsTools
-    ];
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      path = lib.makeBinPath [
+        bash
+        binutils-unwrapped
+        coreutils
+        gawk
+        libarchive
+        pv
+        squashfsTools
+      ];
+    };
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
+  extract = args@{ pname, version, name ? null, postExtract ? "", src, ... }:
+    assert lib.assertMsg (name == null) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    pkgs.runCommand "${pname}-${version}-extracted" {
+      nativeBuildInputs = [ appimage-exec ];
+      strictDeps = true;
     } ''
       appimage-exec.sh -x $out ${src}
       ${postExtract}
@@ -58,7 +64,7 @@ rec {
   wrapType2 = args@{ src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
       inherit extraPkgs;
-      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" "src" ]) args);
+      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "pname" "version" "src" ]) args);
 
       # passthru src to make nix-update work
       # hack to keep the origin position (unsafeGetAttrPos)
@@ -150,14 +156,13 @@ rec {
       libuuid
       libogg
       libvorbis
-      SDL
       SDL2_image
       glew110
       openssl
       libidn
       tbb
       wayland
-      mesa
+      libgbm
       libxkbcommon
       vulkan-loader
 
@@ -173,9 +178,6 @@ rec {
       libtiff
       pixman
       speex
-      SDL_image
-      SDL_ttf
-      SDL_mixer
       SDL2_ttf
       SDL2_mixer
       libappindicator-gtk2
@@ -201,12 +203,12 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
-      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
 
       libsecret # For bitwarden
+      libmpg123 # Slippi launcher
     ];
   };
 }

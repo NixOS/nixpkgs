@@ -1,25 +1,47 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, python3
-, hadoop
-, RSupport ? true
-, R
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  python3,
+  hadoop,
+  RSupport ? true,
+  R,
+  nixosTests,
 }:
 
 let
-  spark = { pname, version, hash, extraMeta ? {}, pysparkPython ? python3 }:
+  spark =
+    {
+      pname,
+      version,
+      hash,
+      extraMeta ? { },
+      pysparkPython ? python3,
+    }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname version hash hadoop R pysparkPython;
+      inherit
+        pname
+        version
+        hash
+        hadoop
+        R
+        pysparkPython
+        ;
       inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
-        url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        url =
+          with finalAttrs;
+          "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
         inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = with finalAttrs; [ jdk pysparkPython ]
+      buildInputs =
+        with finalAttrs;
+        [
+          jdk
+          pysparkPython
+        ]
         ++ lib.optional RSupport finalAttrs.R;
 
       installPhase = ''
@@ -30,10 +52,8 @@ let
             --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
             ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${finalAttrs.R}/bin/R"''} \
             --prefix PATH : "${
-              lib.makeBinPath (
-                [ finalAttrs.pysparkPython ] ++
-                (lib.optionals RSupport [ finalAttrs.R ])
-              )}"
+              lib.makeBinPath ([ finalAttrs.pysparkPython ] ++ (lib.optionals RSupport [ finalAttrs.R ]))
+            }"
         done
         ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
         ${lib.optionalString RSupport ''ln -s ${finalAttrs.R} "$out/opt/R"''}
@@ -44,9 +64,11 @@ let
           sparkPackage = finalAttrs.finalPackage;
         };
         # Add python packages to PYSPARK_PYTHON
-        withPythonPackages = f: finalAttrs.finalPackage.overrideAttrs (old: {
-          pysparkPython = old.pysparkPython.withPackages f;
-        });
+        withPythonPackages =
+          f:
+          finalAttrs.finalPackage.overrideAttrs (old: {
+            pysparkPython = old.pysparkPython.withPackages f;
+          });
       };
 
       meta = {
@@ -55,7 +77,12 @@ let
         sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
+        maintainers = with lib.maintainers; [
+          thoughtpolice
+          offline
+          kamilchm
+          illustris
+        ];
       } // extraMeta;
     });
 in
@@ -68,14 +95,14 @@ in
   # we strictly adhere to the EOL timeline, despite 3.3.4 being released one day before (2023-12-08).
   # A better policy is to keep these versions around, and clean up EOL versions just before
   # a new NixOS release.
-  spark_3_5 = spark rec {
+  spark_3_5 = spark {
     pname = "spark";
-    version = "3.5.1";
-    hash = "sha256-ez6Hm8Ss3nl4mxOHyh67ugYH81/thNRMCja6MQ+9Tpg=";
+    version = "3.5.4";
+    hash = "sha256-rSr7UH1dZIkUYW6ehc/dYxlmN9yVjEKwrwLMT+uMd/0=";
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.3";
-    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
+    version = "3.4.4";
+    hash = "sha256-GItHmthLhG7y0XSF3QINCyE7wYFb0+lPZmYLUuMa4Ww=";
   };
 }

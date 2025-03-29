@@ -5,16 +5,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tpi";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "turing-machines";
     repo = "tpi";
     rev = "v${version}";
-    hash = "sha256-rkqkb3iJL4obHjTkGEUbVPJmUmfT9KKP4yoQ71cbpKs=";
+    hash = "sha256-se5+8Zf+RKtvfkmDDxKiUVp5J+bQ9j9RFedDK/pxCgA=";
   };
 
-  cargoHash = "sha256-hSWDr1XuD6x96QV2QIdhGPQ00Sg7G5O5bkFNTdUx0ug=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-neXFAMeo/LG3beNoR9q2gAZhlNrk0T4A5IdqR2cZocs=";
 
   meta = {
     description = "CLI tool to control your Turing Pi 2 board";

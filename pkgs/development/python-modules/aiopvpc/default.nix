@@ -7,6 +7,7 @@
   poetry-core,
   pytest-asyncio,
   pytest-timeout,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   python-dotenv,
@@ -22,14 +23,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "azogue";
     repo = "aiopvpc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov --cov-report term --cov-report html" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];

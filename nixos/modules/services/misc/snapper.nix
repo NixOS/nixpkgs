@@ -36,7 +36,7 @@ let
   };
 
   intOrNumberOrRange = lib.types.either lib.types.ints.unsigned (
-    lib.types.strMatching "[[:digit:]]+(\-[[:digit:]]+)?"
+    lib.types.strMatching "[[:digit:]]+(-[[:digit:]]+)?"
     // {
       description = "string containing either a number or a range";
       descriptionClass = "conjunction";
@@ -55,10 +55,15 @@ let
     };
 
     FSTYPE = lib.mkOption {
-      type = lib.types.enum [ "btrfs" ];
+      type = lib.types.enum [
+        "btrfs"
+        "bcachefs"
+      ];
       default = "btrfs";
       description = ''
         Filesystem type. Only btrfs is stable and tested.
+
+        bcachefs support is experimental.
       '';
     };
 

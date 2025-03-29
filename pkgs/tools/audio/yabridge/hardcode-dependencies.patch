@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index c602c5ad..a52e20a1 100644
+index 9e69128d..8c53ac88 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -226,7 +226,7 @@ if is_64bit_system
@@ -12,7 +12,7 @@ index c602c5ad..a52e20a1 100644
  
  # These are all headers-only libraries, and thus won't require separate 32-bit
 diff --git a/src/common/notifications.cpp b/src/common/notifications.cpp
-index 66e08527..685c54af 100644
+index 654b6c83..78ba2fe7 100644
 --- a/src/common/notifications.cpp
 +++ b/src/common/notifications.cpp
 @@ -29,8 +29,8 @@
@@ -27,7 +27,7 @@ index 66e08527..685c54af 100644
  std::atomic<void*> libdbus_handle = nullptr;
  std::mutex libdbus_mutex;
 diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
-index 82db99a5..491f005d 100644
+index 441345c6..f3e51cff 100644
 --- a/src/plugin/utils.cpp
 +++ b/src/plugin/utils.cpp
 @@ -103,7 +103,7 @@ std::string PluginInfo::wine_version() const {

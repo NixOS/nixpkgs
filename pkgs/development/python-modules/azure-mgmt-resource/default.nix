@@ -4,21 +4,23 @@
   fetchPypi,
   azure-mgmt-core,
   azure-mgmt-common,
-  msrest,
+  isodate,
   pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource";
-  version = "23.1.1";
+  version = "23.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ILawBrVE/bGWB/P2o4EQViXgu2D78wNvOYhcRkbTND4=";
+    pname = "azure_mgmt_resource";
+    inherit version;
+    hash = "sha256-/E8f2Laq0j+K9O0fkT319ckt8RdEncNU/qaAKigp/qQ=";
   };
 
   build-system = [ setuptools ];
@@ -26,7 +28,8 @@ buildPythonPackage rec {
   dependencies = [
     azure-mgmt-common
     azure-mgmt-core
-    msrest
+    isodate
+    typing-extensions
   ];
 
   # Module has no tests
@@ -38,7 +41,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource_${version}/sdk/resources/azure-mgmt-resource/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       olcai

@@ -101,7 +101,7 @@ in
     assertions = [
       {
         assertion = cfg.enable32Bit -> pkgs.stdenv.hostPlatform.isx86_64;
-        message = "`hardware.graphics.enable32Bit` only makes sense on a 64-bit system.";
+        message = "`hardware.graphics.enable32Bit` is only supported on an x86_64 system.";
       }
       {
         assertion = cfg.enable32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
@@ -120,7 +120,7 @@ in
           { "r" = {}; };
     };
 
-    hardware.graphics.package = lib.mkDefault pkgs.mesa.drivers;
-    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+    hardware.graphics.package = lib.mkDefault pkgs.mesa;
+    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa;
   };
 }

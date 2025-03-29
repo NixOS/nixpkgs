@@ -13,23 +13,22 @@
   libstartup_notification,
   libxml2,
   pkg-config,
-  substituteAll,
+  replaceVars,
   wrapGAppsHook3,
   zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "metacity";
-  version = "3.52.0";
+  version = "3.54.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor version}/metacity-${version}.tar.xz";
-    hash = "sha256-pyQ4rObVkDrnkzjGCYsbNauRyKl8QyNwHTvvHz7rGRw=";
+    hash = "sha256-WHifKLbzhSL9iMIkKRChB9ppNCF7LH3VKn1RLTlB1kM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];

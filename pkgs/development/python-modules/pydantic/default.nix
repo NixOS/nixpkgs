@@ -20,6 +20,7 @@
   cloudpickle,
   email-validator,
   dirty-equals,
+  jsonschema,
   pytestCheckHook,
   pytest-mock,
   eval-type-backport,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.8.2";
+  version = "2.10.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9Tbm5Y1wSPa3lTdI8y95csYHua7nKUIYAfxSn+3J5zI=";
+    tag = "v${version}";
+    hash = "sha256-vkXvHQ5ipcLfx4qJKY6J4rKXCAfP2rj88GnwGMjM2go=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     [
       cloudpickle
       dirty-equals
+      jsonschema
       pytest-mock
       pytestCheckHook
       rich
@@ -100,7 +102,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

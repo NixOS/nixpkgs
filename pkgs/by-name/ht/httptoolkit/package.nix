@@ -12,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.19.0";
+  version = "1.19.4";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e+ngBZMwMTvwzY1K7IaxlNoRkZUPDdJvKxvxuCsc9pw=";
+    tag = "v${version}";
+    hash = "sha256-oDwAosyFY4ff9MP82O8q5o+mN/X6+J7hM3b7myfOq7k=";
   };
 
-  npmDepsHash = "sha256-XgJIs4P1ezCEPPitIIfYpNkX0/3dPdajeIiDwHm7DSU=";
+  npmDepsHash = "sha256-4kREJgw7OjKkOF/J1HpD3uPn+awtQIfUGWqJctwq3N0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -62,7 +62,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/httptoolkit \
           --add-flags $out/share/httptoolkit/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 

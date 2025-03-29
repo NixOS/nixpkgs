@@ -145,7 +145,7 @@ in
         PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
         PRISMA_INTROSPECTION_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/introspection-engine";
         PRISMA_FMT_BINARY = "${pkgs.prisma-engines}/bin/prisma-fmt";
-        PORT = toString cfg.backend.port;
+        BACKEND_PORT = toString cfg.backend.port;
         DATABASE_URL = "file:${cfg.dataDir}/pingvin-share.db?connection_limit=1";
         DATA_DIRECTORY = cfg.dataDir;
       };

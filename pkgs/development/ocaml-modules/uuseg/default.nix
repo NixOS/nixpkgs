@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
-, version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0"
-, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uucp,
+  uutf,
+  cmdliner,
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0",
+  cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
 }:
 
 let
@@ -15,15 +25,24 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = {
-      "16.0.0" = "sha256-WAP9uyofhtw6ag6/U4GQAanIFoKWvyA4NgeVweTs/iQ=";
-      "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
-    }."${version}";
+    hash =
+      {
+        "16.0.0" = "sha256-WAP9uyofhtw6ag6/U4GQAanIFoKWvyA4NgeVweTs/iQ=";
+        "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
+      }
+      ."${version}";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [  topkg uutf ]
-  ++ lib.optional cmdlinerSupport cmdliner;
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [
+    topkg
+    uutf
+  ] ++ lib.optional cmdlinerSupport cmdliner;
   propagatedBuildInputs = [ uucp ];
 
   strictDeps = true;

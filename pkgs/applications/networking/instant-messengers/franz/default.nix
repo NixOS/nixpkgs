@@ -1,4 +1,8 @@
-{ lib, mkFranzDerivation, fetchurl }:
+{
+  lib,
+  mkFranzDerivation,
+  fetchurl,
+}:
 
 mkFranzDerivation rec {
   pname = "franz";
@@ -13,7 +17,7 @@ mkFranzDerivation rec {
     homepage = "https://meetfranz.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.free;
-    maintainers = [ maintainers.davidtwco ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
   };

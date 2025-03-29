@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchFromGitHub,
+  haxe,
+  neko,
+  jdk,
+  mono,
+}:
 
 let
   withCommas = lib.replaceStrings [ "." ] [ "," ];
@@ -11,50 +20,64 @@ let
     export HAXELIB_PATH="$HAXELIB_PATH:$devrepo"
   '';
 
-  installLibHaxe = { libname, version, files ? "*" }: ''
-    mkdir -p "$out/lib/haxe/${withCommas libname}/${withCommas version}"
-    echo -n "${version}" > $out/lib/haxe/${withCommas libname}/.current
-    cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${withCommas version}/"
-  '';
+  installLibHaxe =
+    {
+      libname,
+      version,
+      files ? "*",
+    }:
+    ''
+      mkdir -p "$out/lib/haxe/${withCommas libname}/${withCommas version}"
+      echo -n "${version}" > $out/lib/haxe/${withCommas libname}/.current
+      cp -dpR ${files} "$out/lib/haxe/${withCommas libname}/${withCommas version}/"
+    '';
 
   buildHaxeLib =
-    { libname
-    , version
-    , sha256
-    , meta
-    , ...
-    } @ attrs:
-    stdenv.mkDerivation (attrs // {
-      name = "${libname}-${version}";
-
-      buildInputs = (attrs.buildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
-      src = fetchzip rec {
+    {
+      libname,
+      version,
+      sha256,
+      meta,
+      ...
+    }@attrs:
+    stdenv.mkDerivation (
+      attrs
+      // {
         name = "${libname}-${version}";
-        url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
-        inherit sha256;
-        stripRoot = false;
-      };
 
-      installPhase = attrs.installPhase or ''
-        runHook preInstall
-        (
-          if [ $(ls $src | wc -l) == 1 ]; then
-            cd $src/* || cd $src
-          else
-            cd $src
-          fi
-          ${installLibHaxe { inherit libname version; }}
-        )
-        runHook postInstall
-      '';
+        buildInputs = (attrs.buildInputs or [ ]) ++ [
+          haxe
+          neko
+        ]; # for setup-hook.sh to work
+        src = fetchzip rec {
+          name = "${libname}-${version}";
+          url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
+          inherit sha256;
+          stripRoot = false;
+        };
 
-      meta = {
-        homepage = "http://lib.haxe.org/p/${libname}";
-        license = lib.licenses.bsd2;
-        platforms = lib.platforms.all;
-        description = throw "please write meta.description";
-      } // attrs.meta;
-    });
+        installPhase =
+          attrs.installPhase or ''
+            runHook preInstall
+            (
+              if [ $(ls $src | wc -l) == 1 ]; then
+                cd $src/* || cd $src
+              else
+                cd $src
+              fi
+              ${installLibHaxe { inherit libname version; }}
+            )
+            runHook postInstall
+          '';
+
+        meta = {
+          homepage = "http://lib.haxe.org/p/${libname}";
+          license = lib.licenses.bsd2;
+          platforms = lib.platforms.all;
+          description = throw "please write meta.description";
+        } // attrs.meta;
+      }
+    );
 in
 {
   format = buildHaxeLib {
@@ -93,7 +116,7 @@ in
       for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
         chmod +w "$f"
         patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
-        patchelf --set-rpath ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
+        patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc ]}  "$f" || true
       done
     '';
     meta.description = "Runtime support library for the Haxe C++ backend";

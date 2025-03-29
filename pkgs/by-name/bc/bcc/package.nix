@@ -1,47 +1,59 @@
-{ audit
-, bash
-, bison
-, cmake
-, elfutils
-, fetchFromGitHub
-, flex
-, iperf
-, lib
-, libbpf
-, llvmPackages
-, luajit
-, makeWrapper
-, netperf
-, nixosTests
-, python3Packages
-, stdenv
-, zip
+{
+  audit,
+  bash,
+  bison,
+  cmake,
+  elfutils,
+  fetchFromGitHub,
+  flex,
+  iperf,
+  lib,
+  libbpf,
+  llvmPackages,
+  luajit,
+  makeWrapper,
+  netperf,
+  nixosTests,
+  python3Packages,
+  readline,
+  stdenv,
+  zip,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.31.0";
+  version = "0.33.0";
 
   disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ludgmHFOyBu1CwUiaqczmNui0J8bUBAA5QGBiado8yw=";
+    tag = "v${version}";
+    hash = "sha256-6dT3seLuEVQNKWiYGLK1ajXzW7pb62S/GQ0Lp4JdGjc=";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    llvm
+    llvm.dev
+    libclang
+    elfutils
+    luajit
+    netperf
+    iperf
+    flex
+    bash
+    libbpf
   ];
 
   patches = [
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+    # Quick & dirty fix for bashreadline
+    # https://github.com/NixOS/nixpkgs/issues/328743
+    ./bashreadline.py-remove-dependency-on-elftools.patch
   ];
 
   propagatedBuildInputs = [ python3Packages.netaddr ];
@@ -77,7 +89,10 @@ python3Packages.buildPythonApplication rec {
 
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+
+    substituteInPlace tools/bashreadline.py \
+      --replace-fail '/bin/bash' '${readline}/lib/libreadline.so'
   '';
 
   preInstall = ''
@@ -107,7 +122,10 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -115,9 +133,15 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ryan4yin ];
-    platforms   = platforms.linux;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      ragge
+      mic92
+      thoughtpolice
+      martinetd
+      ryan4yin
+    ];
+    platforms = platforms.linux;
   };
 }

@@ -33,23 +33,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.3.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N9K1n2ttxhD0q2BXprt/nQdQseUtpaFmEZUcxRJV5C8=";
+    hash = "sha256-HewKW2yezsc7mYZ6r3c0w/M3ybPzXqLPUL8N+plqE8o=";
   };
 
   bazelapi = fetchurl {
     url = "https://github.com/bazelbuild/remote-apis/archive/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz";
-    hash = "sha256-dCGr1TUsz5J8IFBFOk2/ofexxxcOw+hwK2/i05uIBf4=";
+    hash = "sha256:1zh5i2dx7qkg5dqfihqf2z3v3xx1px6kliah41y95krc6pasn8bl";
   };
 
   googleapi = fetchurl {
-    url = "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz";
-    hash = "sha256-W7awJTzPZLU9bHJJYlp+P2w7xkAqvVLTd4v6SCWHA6A=";
+    url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
+    hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
 
   nativeBuildInputs = [
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
-      sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
+      sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
+      sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
       jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.json > etc/repos.json.patched
       mv etc/repos.json.patched etc/repos.json
       jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
+      sed -i -e 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
     '';
 
   /*
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
     mkdir .distfiles
     ln -s ${bazelapi} .distfiles/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz
-    ln -s ${googleapi} .distfiles/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz
+    ln -s ${googleapi} .distfiles/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz
 
     mkdir .pkgconfig
     cat << __EOF__ > .pkgconfig/gsl.pc
@@ -160,6 +160,7 @@ stdenv.mkDerivation rec {
     install -m 755 -Dt "$out/bin" "../build/out/bin/just-mr"
     install -m 755 -DT "bin/just-import-git.py" "$out/bin/just-import-git"
     install -m 755 -DT "bin/just-deduplicate-repos.py" "$out/bin/just-deduplicate-repos"
+    install -m 755 -DT "bin/just-lock.py" "$out/bin/just-lock"
 
     mkdir -p "$out/share/bash-completion/completions"
     install -m 0644 ./share/just_complete.bash "$out/share/bash-completion/completions/just"

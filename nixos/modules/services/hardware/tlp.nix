@@ -2,7 +2,6 @@
 let
   cfg = config.services.tlp;
   enableRDW = config.networking.networkmanager.enable;
-  tlp = pkgs.tlp.override { inherit enableRDW; };
   # TODO: Use this for having proper parameters in the future
   mkTlpConfig = tlpConfig: lib.generators.toKeyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault {
@@ -41,6 +40,13 @@ in
           DEPRECATED: use services.tlp.settings instead.
         '';
       };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.tlp.override { inherit enableRDW; };
+        defaultText = "pkgs.tlp.override { enableRDW = config.networking.networkmanager.enable; }";
+        description = "The tlp package to use.";
+      };
     };
   };
 
@@ -64,10 +70,10 @@ in
       "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
     } // lib.optionalAttrs enableRDW {
       "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
-        "${tlp}/usr/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
+        "${cfg.package}/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
     };
 
-    environment.systemPackages = [ tlp ];
+    environment.systemPackages = [ cfg.package ];
 
 
     services.tlp.settings = let
@@ -82,13 +88,13 @@ in
       CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
     };
 
-    services.udev.packages = [ tlp ];
+    services.udev.packages = [ cfg.package ];
 
     systemd = {
       # use native tlp instead because it can also differentiate between AC/BAT
       services.cpufreq.enable = false;
 
-      packages = [ tlp ];
+      packages = [ cfg.package ];
       # XXX: These must always be disabled/masked according to [1].
       #
       # [1]: https://github.com/linrunner/TLP/blob/a9ada09e0821f275ce5f93dc80a4d81a7ff62ae4/tlp-stat.in#L319

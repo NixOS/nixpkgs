@@ -1,68 +1,77 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, qmake
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtserialport
-, qtwayland
-, qt5compat
-, boost
-, libngspice
-, libgit2
-, quazip
-, clipper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qmake,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtserialport,
+  qtwayland,
+  qt5compat,
+  boost,
+  libngspice,
+  libgit2,
+  quazip,
+  clipper,
 }:
 
 let
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "015626e6cafb1fc7831c2e536d97ca2275a83d32";
+  partsSha = "76235099ed556e52003de63522fdd74e61d53a36";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    hash = "sha256-5jw56cqxpT/8bf1q551WG53J6Lw5pH0HEtRUoNNMc+A=";
+    hash = "sha256-1QVcPbRBOSYnNFsp7B2OyPXYuPaINRv9yEqGZFd662Y=";
   };
 
   # Header-only library
   svgpp = fetchFromGitHub {
     owner = "svgpp";
     repo = "svgpp";
-    rev = "v1.3.0";
-    hash = "sha256-kJEVnMYnDF7bThDB60bGXalYgpn9c5/JCZkRSK5GoE4=";
+    tag = "v1.3.1";
+    hash = "sha256-nW0ns06XWfUi22nOKZzFKgAOHVIlQqChW8HxUDOFMh4=";
   };
 in
 
 stdenv.mkDerivation {
   pname = "fritzing";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-app";
-    rev = "dbdbe34c843677df721c7b3fc3e32c0f737e7e95";
-    hash = "sha256-Xi5sPU2RGkqh7T+EOvwxJJKKYDhJfccyEZ8LBBTb2s4=";
+    rev = "a8c6ef7cf66f7a42b9b233d6137f1b70a9573a25";
+    hash = "sha256-a/bWAUeDPj3g8BECOlXuqyCi4JgGLLs1605m380Drt0=";
   };
 
-  nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
-  buildInputs = [
-    qtbase
-    qtsvg
-    qtserialport
-    qt5compat
-    boost
-    libgit2
-    quazip
-    libngspice
-    clipper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
   ];
+
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      qtserialport
+      qt5compat
+      boost
+      libgit2
+      quazip
+      libngspice
+      clipper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice
@@ -78,16 +87,21 @@ stdenv.mkDerivation {
     substituteInPlace phoenix.pro \
       --replace-fail "6.5.10" "${qtbase.version}"
 
+    substituteInPlace src/simulation/ngspice_simulator.cpp \
+      --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
+
     mkdir parts
     cp -a ${parts}/* parts/
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
-    "-I${svgpp}/include"
-    "-I${clipper}/include/polyclipping"
-  ];
-  env.NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+      "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
+      "-I${svgpp}/include"
+      "-I${clipper}/include/polyclipping"
+    ];
+    NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
+  };
 
   qmakeFlags = [
     "phoenix.pro"
@@ -108,12 +122,18 @@ stdenv.mkDerivation {
       -folder "$out/share/fritzing"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source prototyping tool for Arduino-based projects";
-    homepage = "https://fritzing.org/";
-    license = with licenses; [ gpl3 cc-by-sa-30 ];
-    maintainers = with maintainers; [ robberer muscaln ];
-    platforms = platforms.unix;
+    homepage = "https://fritzing.org";
+    license = with lib.licenses; [
+      gpl3
+      cc-by-sa-30
+    ];
+    maintainers = with lib.maintainers; [
+      robberer
+      muscaln
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "Fritzing";
   };
 }

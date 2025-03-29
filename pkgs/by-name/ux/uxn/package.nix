@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  SDL2,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2024-09-20";
+  version = "1.0-unstable-2025-03-08";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "f8c53f59b012dd56d44ae50cdf90dd1dad6cce23";
-    hash = "sha256-Ee4hN3OnqF/OhKieGtzT4XOhNJIhywCgP6Us0DZTVBI=";
+    rev = "d95abf22b763b5f2f6156592e8ac97b82bd9dd10";
+    hash = "sha256-foSrRTPJfKTGqpFBD7p1rwlCZX9YeTWMt2W73ly9QFo=";
   };
 
-  outputs = [ "out" "projects" ];
+  outputs = [
+    "out"
+    "projects"
+  ];
 
   nativeBuildInputs = [
     SDL2
@@ -61,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "Assembler and emulator for the Uxn stack machine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;

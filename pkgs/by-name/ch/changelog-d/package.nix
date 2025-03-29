@@ -8,13 +8,12 @@
 let
   hsPkg = haskellPackages.changelog-d;
 
-  addCompletions = haskellPackages.generateOptparseApplicativeCompletions ["changelog-d"];
+  addCompletions = haskellPackages.generateOptparseApplicativeCompletions [ "changelog-d" ];
 
-  haskellModifications =
-    lib.flip lib.pipe [
-      addCompletions
-      haskell.lib.justStaticExecutables
-    ];
+  haskellModifications = lib.flip lib.pipe [
+    addCompletions
+    haskell.lib.justStaticExecutables
+  ];
 
   mkDerivationOverrides = finalAttrs: oldAttrs: {
 
@@ -30,4 +29,4 @@ let
 
   };
 in
-  (haskellModifications hsPkg).overrideAttrs mkDerivationOverrides
+(haskellModifications hsPkg).overrideAttrs mkDerivationOverrides

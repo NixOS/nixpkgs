@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.10";
+  version = "2.4.11";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-11dXwrwPeiiwLuTVLKnksaoboq/+FrmFhU9TNpQOWtc=";
+    hash = "sha256-moj+HaOimpF8P8Z85usxeDmdaOGlSMbYbHDZsTZR/XE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -138,8 +138,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests)
+      cups-pdf
       printing-service
       printing-socket
+      printing-service-notcp
+      printing-socket-notcp
     ;
   };
 

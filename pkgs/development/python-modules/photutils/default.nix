@@ -23,22 +23,17 @@
 
 buildPythonPackage rec {
   pname = "photutils";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "photutils";
-    rev = "refs/tags/${version}";
-    hash = "sha256-slrg1iByOhW1jiSG7nKHWj0ZSOP8v3LhCCr+DLLspKM=";
+    tag = version;
+    hash = "sha256-DNdbCISuBAy3jbKgwWA0Adq2gpRP3AacU1ZorcBkjZo=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "'numpy>=2.0.0'," ""
-  '';
 
   build-system = [
     setuptools

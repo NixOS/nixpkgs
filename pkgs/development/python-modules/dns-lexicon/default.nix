@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Analogj";
     repo = "lexicon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
 

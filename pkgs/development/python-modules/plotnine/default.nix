@@ -2,31 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  geopandas,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   matplotlib,
   mizani,
   pandas,
   patsy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-misc,
   scipy,
-  setuptools-scm,
   statsmodels,
+
+  # tests
+  geopandas,
+  pytestCheckHook,
+  scikit-misc,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.6";
+  version = "0.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
+    tag = "v${version}";
+    hash = "sha256-3ImNLmZ8RhhqRGv/FtdjbHmdOtgQC7hjUsViEQYE8Ao=";
   };
 
   postPatch = ''
@@ -35,8 +38,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools-scm ];
-
-  pythonRelaxDeps = [ "mizani" ];
 
   dependencies = [
     matplotlib
@@ -102,7 +103,7 @@ buildPythonPackage rec {
     "tests/test_stat_summary.py"
     "tests/test_theme.py"
 
-    # Linting / formatting: useless as it has nothing to do with the package functionning
+    # Linting / formatting: useless as it has nothing to do with the package functioning
     # Disabling this prevents adding a dependency on 'ruff' and 'black'.
     "tests/test_lint_and_format.py"
   ];
@@ -110,7 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
-    changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };

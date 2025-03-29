@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchzip
-, autoreconfHook
-, pkg-config
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  qtbase,
 }:
 
 mkDerivation {

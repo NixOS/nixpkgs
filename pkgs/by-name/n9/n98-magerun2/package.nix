@@ -2,20 +2,25 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
-  version = "7.4.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun2";
-    rev = finalAttrs.version;
-    hash = "sha256-OPvyZ0r7Zt4PC+rmRtBm9EkbaE4PeovnUHrhzXUqT8E=";
+    tag = finalAttrs.version;
+    hash = "sha256-MzJJkbT3AgSX+lLEfKlfg0zTY/79CcFelOK83NnSWI0=";
   };
 
-  vendorHash = "sha256-E2V5ARNCmGOmGGctfcjpW49cxFBcWyJEodBNjHhKQ+w=";
+  vendorHash = "sha256-4w4HqYSSeVZnsgMGt+m8XN98RuAv7XmVo1vHtEXA0Uk=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";

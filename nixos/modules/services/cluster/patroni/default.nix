@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.patroni;
   defaultUser = "patroni";
@@ -114,7 +119,10 @@ in
 
     otherNodesIps = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      example = [ "192.168.1.2" "192.168.1.3" ];
+      example = [
+        "192.168.1.2"
+        "192.168.1.3"
+      ];
       description = ''
         IP addresses of the other nodes.
       '';
@@ -148,7 +156,15 @@ in
     };
 
     environmentFiles = lib.mkOption {
-      type = with lib.types; attrsOf (nullOr (oneOf [ str path package ]));
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
       default = { };
       example = {
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
@@ -185,7 +201,6 @@ in
       };
     };
 
-
     users = {
       users = lib.mkIf (cfg.user == defaultUser) {
         patroni = {
@@ -206,7 +221,11 @@ in
         after = [ "network.target" ];
 
         script = ''
-          ${lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles))}
+          ${lib.concatStringsSep "\n" (
+            lib.attrValues (
+              lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles
+            )
+          )}
           exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
@@ -220,10 +239,16 @@ in
             ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
             KillMode = "process";
           }
-          (lib.mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
-            StateDirectoryMode = "0750";
-          })
+          (lib.mkIf
+            (
+              cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}"
+              && cfg.dataDir == "/var/lib/patroni"
+            )
+            {
+              StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+              StateDirectoryMode = "0750";
+            }
+          )
         ];
       };
     };

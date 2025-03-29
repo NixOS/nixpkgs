@@ -16,7 +16,6 @@
 , isocodes
 , libjpeg
 , libpng
-, libvisual
 , tremor # provides 'virbisidec'
 , libGL
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -49,7 +48,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.24.7";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-FSjRdGo5Mpn1rBfr8ToypmAgLx4p0KhSoiUPagWaL9o=";
+    hash = "sha256-69V7G+kkxuJPMn3VW6udj7quvl4dyPynhBgqsrEtI+s=";
   };
 
   strictDeps = true;
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libdrm
     libGL
-    libvisual
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenGL
   ] ++ lib.optionals enableAlsa [
@@ -124,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "libvisual" false)
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
   ]
@@ -132,10 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableGl) "-Dgl=disabled"
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Ddrm=disabled"
-    "-Dlibvisual=disabled"
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
 
   postPatch = ''
     patchShebangs \

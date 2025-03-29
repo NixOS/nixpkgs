@@ -21,7 +21,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "TomSchimansky";
     repo = "CustomTkinter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1g2wdXbUv5xNnpflFLXvU39s16kmwvuegKWd91E3qm4=";
   };
 

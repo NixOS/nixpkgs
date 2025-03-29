@@ -32,6 +32,12 @@ let
      ${cfg.extraCgroupConfig}
    '';
 
+  mpiConf =  pkgs.writeTextDir "mpi.conf"
+   ''
+     PMIxCliTmpDirBase=${cfg.mpi.PmixCliTmpDirBase}
+     ${cfg.mpi.extraMpiConfig}
+   '';
+
   slurmdbdConf = pkgs.writeText "slurmdbd.conf"
    ''
      DbdHost=${cfg.dbdserver.dbdHost}
@@ -45,7 +51,7 @@ let
   # in the same directory as slurm.conf
   etcSlurm = pkgs.symlinkJoin {
     name = "etc-slurm";
-    paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
+    paths = [ configFile cgroupConfig plugStackConfig mpiConf ] ++ cfg.extraConfigPaths;
   };
 in
 
@@ -242,6 +248,24 @@ in
         '';
       };
 
+      mpi = {
+        PmixCliTmpDirBase = lib.mkOption {
+          default = "/tmp/pmix";
+          type = lib.types.str;
+          description = ''
+            Base path for PMIx temporary files.
+          '';
+        };
+
+        extraMpiConfig = lib.mkOption {
+          default = "";
+          type = lib.types.lines;
+          description = ''
+            Extra configuration for that will be added to `mpi.conf`.
+          '';
+        };
+      };
+
       extraPlugstackConfig = lib.mkOption {
         default = "";
         type = lib.types.lines;
@@ -307,7 +331,6 @@ in
         name = "wrappedSlurm";
 
         builder = pkgs.writeText "builder.sh" ''
-          source $stdenv/setup
           mkdir -p $out/bin
           find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
           do
@@ -372,8 +395,9 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = lib.mkIf cfg.client.enable [
+    systemd.tmpfiles.rules = lib.optionals cfg.client.enable [
       "d /var/spool/slurmd 755 root root -"
+      "d ${cfg.mpi.PmixCliTmpDirBase} 755 root root -"
     ];
 
     services.openssh.settings.X11Forwarding = lib.mkIf cfg.client.enable (lib.mkDefault true);

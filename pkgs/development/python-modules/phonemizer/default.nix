@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   buildPythonPackage,
   fetchPypi,
   joblib,
@@ -10,25 +10,24 @@
   dlinfo,
   typing-extensions,
   espeak-ng,
+  setuptools,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
+    hash = "sha256-Xgw4Ei7/4LMxok5nSv8laHTs4WnXCpzxEgM3tW+OPQw=";
   };
 
-  postPatch = ''
-    sed -i '/pytest-runner/d' setup.py
-  '';
-
   patches = [
-    (substituteAll {
-      src = ./backend-paths.patch;
+    (replaceVars ./backend-paths.patch {
       libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
       # FIXME package festival
     })
@@ -46,12 +45,12 @@ buildPythonPackage rec {
   # so let's disable related tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
     mainProgram = "phonemize";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

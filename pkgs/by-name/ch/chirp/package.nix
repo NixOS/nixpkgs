@@ -1,41 +1,69 @@
-{ lib
-, fetchFromGitHub
-, writeShellScript
-, glib
-, gsettings-desktop-schemas
-, python3
-, unstableGitUpdater
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  writeShellScript,
+  glib,
+  gsettings-desktop-schemas,
+  python3Packages,
+  unstableGitUpdater,
+  wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "chirp";
-  version = "0.4.0-unstable-2024-10-03";
+  version = "0.4.0-unstable-2025-03-17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "387d8f63535140779864e8973fbde0bad17f8512";
-    hash = "sha256-kJ2Cr2ks901GUVFscyCInsTSTM7g42NRYYxjTZsh1Lw=";
+    rev = "7d0a609a24efa7861a9cedd0abe057a250857d97";
+    hash = "sha256-BL5+z3CFInCEXgwyx4sHaHbUXLWwe/JWevD1ZDxQStQ=";
   };
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ];
+
   buildInputs = [
     glib
     gsettings-desktop-schemas
   ];
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ];
-  propagatedBuildInputs = with python3.pkgs; [
-    future
-    pyserial
-    requests
-    six
-    suds
-    wxpython
-    yattag
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
-  # "running build_ext" fails with no output
+  dependencies = with python3Packages; [
+    pyserial
+    requests
+    yattag
+    suds
+    lark
+    wxpython
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-xdist
+    ddt
+    pyyaml
+  ];
+
+  postPatch = ''
+    substituteInPlace chirp/locale/Makefile \
+      --replace-fail /usr/bin/find find
+  '';
+
+  preBuild = ''
+    make -C chirp/locale
+  '';
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  # many upstream test failures
   doCheck = false;
 
   passthru.updateScript = unstableGitUpdater {
@@ -44,11 +72,16 @@ python3.pkgs.buildPythonApplication rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emantor wrmilling ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      emantor
+      wrmilling
+      nickcao
+      ethancedwards8
+    ];
+    platforms = lib.platforms.unix;
   };
 }

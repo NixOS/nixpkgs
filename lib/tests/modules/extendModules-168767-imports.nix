@@ -1,6 +1,7 @@
-{ lib
-, extendModules
-, ...
+{
+  lib,
+  extendModules,
+  ...
 }:
 
 let
@@ -17,9 +18,10 @@ in
       options.sub = mkOption {
         default = { };
         type = types.submodule (
-          { config
-          , extendModules
-          , ...
+          {
+            config,
+            extendModules,
+            ...
           }:
           {
             options.value = mkOption {
@@ -30,11 +32,14 @@ in
               default = { };
               inherit
                 (extendModules {
-                  modules = [{
-                    specialisation = mkOverride 0 { };
-                  }];
+                  modules = [
+                    {
+                      specialisation = mkOverride 0 { };
+                    }
+                  ];
                 })
-                type;
+                type
+                ;
             };
           }
         );
@@ -42,7 +47,6 @@ in
     }
 
     { config.sub.value = 1; }
-
 
   ];
 }

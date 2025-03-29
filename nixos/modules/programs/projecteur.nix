@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.projecteur;
@@ -15,6 +20,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ benneti drupol ];
+    maintainers = with lib.maintainers; [
+      benneti
+      drupol
+    ];
   };
 }

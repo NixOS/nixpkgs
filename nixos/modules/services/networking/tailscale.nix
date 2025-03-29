@@ -29,6 +29,12 @@ in {
       description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
+    disableTaildrop = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to disable the Taildrop feature for sending files between nodes.";
+    };
+
     package = lib.mkPackageOption pkgs "tailscale" {};
 
     openFirewall = mkOption {
@@ -129,6 +135,8 @@ in {
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ]) ++ (lib.optionals (cfg.disableTaildrop) [
+        "TS_DISABLE_TAILDROP=true"
       ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later

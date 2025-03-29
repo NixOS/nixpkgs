@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, pkg-config
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  pkg-config,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-menu-generator";
-  version = "0.1.0-unstable-2024-09-19";
+  version = "0.1.0-unstable-2025-03-08";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-menu-generator";
-    rev = "ebb8240bfd39ab2ffbe98d5cfe26f9c1b678822d";
-    hash = "sha256-4WGBrqY30wVXmnjZ5QPhfNfauvnxqrTE6DFuITfTI4M=";
+    rev = "f1aa43d776b702f29b7d1e32440f233927a1dfa9";
+    hash = "sha256-tjfFE2RJVOhJFw29+CZkLApVS4BTjGpT3cI2WStYAOo=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc-menu-generator";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

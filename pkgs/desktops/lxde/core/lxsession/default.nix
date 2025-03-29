@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, docbook_xml_dtd_412
-, docbook_xsl
-, intltool
-, libxml2
-, libxslt
-, pkg-config
-, wrapGAppsHook3
-, gtk2-x11
-, libX11
-, polkit
-, vala
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  docbook_xml_dtd_412,
+  docbook_xsl,
+  intltool,
+  libxml2,
+  libxslt,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk2-x11,
+  libX11,
+  polkit,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +29,17 @@ stdenv.mkDerivation rec {
     sha256 = "17sqsx57ymrimm5jfmcyrp7b0nzi41bcvpxsqckmwbhl19g6c17d";
   };
 
-  patches = [ ./xmlcatalog_patch.patch ];
+  patches = [
+    ./xmlcatalog_patch.patch
+
+    # lxsession compilation is broken upstream as of GCC 14
+    # https://sourceforge.net/p/lxde/bugs/973/
+    (fetchpatch {
+      name = "0001-Fix-build-on-GCC-14.patch";
+      url = "https://sourceforge.net/p/lxde/bugs/973/attachment/0001-Fix-build-on-GCC-14.patch";
+      hash = "sha256-lxF3HZy5uLK7Cfu8W1A03syZf7OWXpHiU2Fk+xBl39g=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf

@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, arp
-, ethernet
-, ipaddr
-, tcpip
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  arp,
+  ethernet,
+  ipaddr,
+  tcpip,
 }:
 
 buildDunePackage rec {
@@ -18,7 +19,12 @@ buildDunePackage rec {
     hash = "sha256-UDCR4Jq3tw9P/Ilw7T4+3+yi9Q7VFqnHhXeSCvg9dyw=";
   };
 
-  propagatedBuildInputs = [ arp ethernet ipaddr tcpip ];
+  propagatedBuildInputs = [
+    arp
+    ethernet
+    ipaddr
+    tcpip
+  ];
 
   meta = {
     description = "MirageOS signatures for network protocols";
@@ -27,5 +33,3 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 }
-
-

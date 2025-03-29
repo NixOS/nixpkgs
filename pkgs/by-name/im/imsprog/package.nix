@@ -1,14 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config, bash, libusb1, qt5, wget, zenity }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  bash,
+  libusb1,
+  qt5,
+  wget,
+  zenity,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imsprog";
-  version = "1.4.4";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "bigbigmdm";
     repo = "IMSProg";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-dhBg0f7pIbBS8IiUXd1UlAxgGrv6HapzooXafkHIEK8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G2hD9h9hcuUO35z/k46+24KTgqGiufa3dwa4LQVA1yY=";
   };
 
   strictDeps = true;
@@ -40,14 +52,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/IMSProg_database_update \
-      --prefix PATH : "${lib.makeBinPath [ wget zenity ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          wget
+          zenity
+        ]
+      }"
   '';
 
   meta = {
     changelog = "https://github.com/bigbigmdm/IMSProg/releases/tag/v${finalAttrs.version}";
     description = "A free I2C EEPROM programmer tool for CH341A device";
     homepage = "https://github.com/bigbigmdm/IMSProg";
-    license = with lib.licenses; [ gpl3Plus gpl2Plus lgpl21Only ];
+    license = with lib.licenses; [
+      gpl3Plus
+      gpl2Plus
+      lgpl21Only
+    ];
     mainProgram = "IMSProg";
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.unix;

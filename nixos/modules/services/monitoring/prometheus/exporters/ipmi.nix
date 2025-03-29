@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   logPrefix = "services.prometheus.exporter.ipmi";
@@ -10,7 +16,8 @@ let
     optionals
     escapeShellArg
     ;
-in {
+in
+{
   port = 9290;
 
   extraOpts = {
@@ -32,16 +39,27 @@ in {
   };
 
   serviceOpts.serviceConfig = {
-    ExecStart = with cfg; concatStringsSep " " ([
-      "${pkgs.prometheus-ipmi-exporter}/bin/ipmi_exporter"
-      "--web.listen-address ${listenAddress}:${toString port}"
-    ] ++ optionals (cfg.webConfigFile != null) [
-      "--web.config.file ${escapeShellArg cfg.webConfigFile}"
-    ] ++ optionals (cfg.configFile != null) [
-      "--config.file ${escapeShellArg cfg.configFile}"
-    ] ++ extraFlags);
+    ExecStart =
+      with cfg;
+      concatStringsSep " " (
+        [
+          "${pkgs.prometheus-ipmi-exporter}/bin/ipmi_exporter"
+          "--web.listen-address ${listenAddress}:${toString port}"
+        ]
+        ++ optionals (cfg.webConfigFile != null) [
+          "--web.config.file ${escapeShellArg cfg.webConfigFile}"
+        ]
+        ++ optionals (cfg.configFile != null) [
+          "--config.file ${escapeShellArg cfg.configFile}"
+        ]
+        ++ extraFlags
+      );
 
     ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-    RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+    RestrictAddressFamilies = [
+      "AF_INET"
+      "AF_INET6"
+      "AF_UNIX"
+    ];
   };
 }

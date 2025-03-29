@@ -10,16 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aiken";
-  version = "1.1.4";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
     rev = "v${version}";
-    hash = "sha256-PTC7qn8Z1PGcBTNK5MtMvThIEhmAqTj23B/cHHhiDFE=";
+    hash = "sha256-aydujI8yPfUEEonasOT0uFCpLKOXSh/c9iw12kACLuw=";
   };
 
-  cargoHash = "sha256-p//1TZJ6sJUUDPPpxRBKL7w7MBTUQppbQedj2x4T17w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D7N9liDcthV4YLH+XzG4E1PAcLg9PQlTeGBmUcGOYes=";
 
   buildInputs =
     [ openssl ]

@@ -261,6 +261,7 @@ in
         CapabilityBoundingSet = [
           "CAP_CHOWN"
           "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
           "CAP_KILL"
           "CAP_SETUID"
           "CAP_SETGID"
@@ -293,7 +294,7 @@ in
         UMask = "0027";
       } // lib.optionalAttrs (!cfg.allowNetworking) {
         PrivateNetwork = true; # e.g. mail delivery
-        RestrictAddressFamilies = "none";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
       };
     };
     systemd.services.logrotate-checkconf = {

@@ -33,7 +33,7 @@
   libuuid,
   at-spi2-core,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   libxshmfence,
 }:
@@ -42,8 +42,8 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.131.0.202";
-  revision = "370";
+  version = "8.138.0.213";
+  revision = "392";
 
   rpath =
     lib.makeLibraryPath [
@@ -79,7 +79,7 @@ let
 
       libv4l
       libdrm
-      mesa
+      libgbm
       libxkbcommon
       libxshmfence
       xorg.libxkbfile
@@ -96,14 +96,14 @@ let
       xorg.libXScrnSaver
       xorg.libxcb
     ]
-    + ":${stdenv.cc.cc.lib}/lib64";
+    + ":${lib.getLib stdenv.cc.cc}/lib64";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         name = "skypeforlinux-${version}-${revision}.snap";
         url = "https://api.snapcraft.io/api/v1/snaps/download/QRDEfjn4WJYnm0FzDKwqqRZZI77awQEV_${revision}.snap";
-        hash = "sha512-POCDkJe58ie78PIze6qADPIbjfFxNhLJt5z7ooHNIna6IrJoeqpFYIrRo9uosHkUURu83MfueeyYd6z0j+P/RQ==";
+        hash = "sha512-ZLqmJMkIVlBvflHAXCStEt1T3eZgw/KMBlR754sR7mljIsr0liddGxFu2fjSijEBkx1mzoB+4ErOB/Il0KCXEA==";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";

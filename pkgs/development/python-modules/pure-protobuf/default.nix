@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AsiJDi3SF3nlWKFvZujUsoHY8AJ21JKzEuTdR9FtFQI=";
   };
 

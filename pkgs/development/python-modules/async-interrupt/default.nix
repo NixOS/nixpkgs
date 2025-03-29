@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "async-interrupt";
-  version = "1.2.0";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "async_interrupt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-opV5h3aLDDpjlRZRZ9OnrPjUOf/i7g+B9T6msk8wtgI=";
+    tag = "v${version}";
+    hash = "sha256-M0ftyHstBP7+6M2b6yV33mSuO4B8QF3ixRvNJ/WeSEA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Context manager to raise an exception when a future is done";
     homepage = "https://github.com/bdraco/async_interrupt";
-    changelog = "https://github.com/bdraco/async_interrupt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/async_interrupt/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

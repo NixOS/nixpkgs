@@ -7,11 +7,12 @@
   cmake,
   protobuf,
   installShellFiles,
-  libiconv,
-  darwin,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
+  libffi,
+  sqlite,
+  lld,
 }:
 
 let
@@ -19,47 +20,48 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.0.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nbwLkkO1ucRmlgGDRCJLHPpu4lk0xLQvz3wWpq7rics=";
+    tag = "v${version}";
+    hash = "sha256-gcUd4N2rTVYprBxx5T2RjG+0uZ090KjXPswYzGU5+14=";
   };
 
-  cargoHash = "sha256-y/hAEu8c/CFS4mfp4f/pvPJRz4cxGoi39uIUbn5J+Pw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-V2dKiiTYAsUhq6Pr+z/ga3qtKI43mfzqgBDSAhcBVKo=";
 
   postPatch = ''
-    # upstream uses lld on aarch64-darwin for faster builds
-    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace "-fuse-ld=lld " ""
+    # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
+    substituteInPlace Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
-  nativeBuildInputs = [
-    # required by libz-ng-sys crate
-    cmake
-    # required by deno_kv crate
-    protobuf
-    installShellFiles
-  ];
-  buildInputs = lib.optionals stdenv.isDarwin (
+  nativeBuildInputs =
     [
-      libiconv
-      darwin.libobjc
+      rustPlatform.bindgenHook
+      # required by libz-ng-sys crate
+      cmake
+      # required by deno_kv crate
+      protobuf
+      installShellFiles
     ]
-    ++ (with darwin.apple_sdk_11_0.frameworks; [
-      Security
-      CoreServices
-      Metal
-      MetalPerformanceShaders
-      Foundation
-      QuartzCore
-    ])
-  );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld
+    ];
 
+  configureFlags = lib.optionals stdenv.cc.isClang [
+    # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
+    "--disable-multi-os-directory"
+  ];
+
+  buildInputs = [
+    libffi
+    # required by libsqlite3-sys
+    sqlite.dev
+  ];
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
@@ -76,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (canExecute) ''
+  postInstall = lib.optionalString canExecute ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
@@ -84,7 +86,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString (canExecute) ''
+  installCheckPhase = lib.optionalString canExecute ''
     runHook preInstallCheck
     $out/bin/deno --help
     $out/bin/deno --version | grep "deno ${version}"
@@ -109,15 +111,15 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [
+      jk
+      ofalvai
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # NOTE: `aligned_alloc` error on darwin SDK < 10.15. Can't do usual overrideSDK with rust toolchain in current implementation.
-    # Should be fixed with darwin SDK refactor and can be revisited.
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

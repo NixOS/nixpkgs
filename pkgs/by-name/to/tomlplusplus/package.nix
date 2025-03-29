@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
@@ -44,11 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
   ];
 
-  doCheck = true;
   mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dbuild_examples=true"
   ];
+
+  # almost all tests fail on Darwin with the following exception:
+  # libc++abi: terminating due to uncaught exception of type std::runtime_error: collate_byname<char>::collate_byname failed to construct for
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = nix-update-script { };

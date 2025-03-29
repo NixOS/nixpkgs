@@ -11,21 +11,21 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.82.0";
+  version = "0.95.1";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-kNc+Z+v4fvuWO/Ibr9VOekMDT39YEwA/fReP+e3C74U=";
+    hash = "sha256-ShiknNLbBAyNcXK3k+yhnqilkAovuwFaY3iWa5Plsbo=";
   };
 
-  vendorHash = "sha256-fnx0EAGxau0+ktnuUb8ljolNAlwu2595FMjsDbM2MiY=";
+  vendorHash = "sha256-iuE8rphRnedYg0G2kG1WGXL1rJ/k54Oc4fp2ExP2Rro=";
 
   # tests require network access
   doCheck = false;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

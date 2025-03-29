@@ -4,7 +4,8 @@
   fetchFromGitHub,
   libcouchbase,
   zlib,
-  substituteAll,
+  replaceVars,
+  php,
 }:
 let
   pname = "couchbase";
@@ -28,8 +29,7 @@ buildPecl {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./libcouchbase.patch;
+    (replaceVars ./libcouchbase.patch {
       inherit libcouchbase;
     })
   ];
@@ -40,5 +40,6 @@ buildPecl {
     license = licenses.asl20;
     homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";
     maintainers = teams.php.members;
+    broken = lib.versionAtLeast php.version "8.3";
   };
 }

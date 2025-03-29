@@ -1,5 +1,13 @@
-{ lib, mkCoqDerivation, coq, mathcomp-ssreflect, mathcomp-algebra, mathcomp-fingroup, paramcoq
-, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  mathcomp-ssreflect,
+  mathcomp-algebra,
+  mathcomp-fingroup,
+  paramcoq,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "addition-chains";
@@ -11,12 +19,25 @@ mkCoqDerivation {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.13" "8.18"; out = "0.6"; }
-    { case = range "8.11" "8.12"; out = "0.4"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.13" "8.18";
+        out = "0.6";
+      }
+      {
+        case = range "8.11" "8.12";
+        out = "0.4";
+      }
+    ] null;
 
-  propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra mathcomp-fingroup paramcoq ];
+  propagatedBuildInputs = [
+    mathcomp-ssreflect
+    mathcomp-algebra
+    mathcomp-fingroup
+    paramcoq
+  ];
 
   useDune = true;
 

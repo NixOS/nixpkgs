@@ -19,7 +19,7 @@
   opencv,
   vigra,
   pdal,
-  postgresql,
+  libpq,
   darwin,
   unixODBC,
   poppler,
@@ -34,14 +34,22 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.6.0";
+  version = "9.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-M4228GDo9jIVJMfl61n7cgTAmBYZrmHdXb+mD40vWqY";
+    hash = "sha256-1nWpFGRBS49uzKl7m/4YWFI+3lvm2zKByYpR9llxsgY=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
+
+  patches = [
+    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
+    # These are needed to fix building on Darwin (technically the first is not
+    # required, but the second doesn't apply without it).
+    ./darwin-patch-1.patch
+    ./darwin-patch-2.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +71,7 @@ stdenv.mkDerivation rec {
       libharu
       opencv
       vigra
-      postgresql
+      libpq
       libiodbc
       xz
       qhull

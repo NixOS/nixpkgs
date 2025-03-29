@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-legacy";
-  version = "0.9.48.post3";
+  version = "0.9.48.post4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_legacy";
     inherit version;
-    hash = "sha256-9pafEIXvsKvr1jZ+RvNRICDz9rnAhvRYpRmDDdYeggY=";
+    hash = "sha256-+Kl2Tn4TSlK/715T0tYlYb/AH8CYdMUcwAHfb1MCrjA=";
   };
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 
@@ -29,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for files";
-    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-legacy";
+    homepage = "https://github.com/run-llama/llama_index/tree/v0.9.48";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

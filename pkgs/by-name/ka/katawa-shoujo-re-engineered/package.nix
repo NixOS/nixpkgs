@@ -10,7 +10,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
-  version = "1.4.8";
+  version = "2.0.1-1";
 
   src = fetchFromGitea {
     # GitHub mirror at fleetingheart/ksre
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y128bnRZtW5DgiP43OAnkhhq3f5F88jUl1Bku6wef+w=";
+    hash = "sha256-5AK6QtF47EGiKDihiUv4FHsw1sjraq/Mh838wbb1hac=";
   };
 
   desktopItems = [
@@ -62,7 +62,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cc-by-nc-nd-30
     ];
     mainProgram = "katawa-shoujo-re-engineered";
-    maintainers = with lib.maintainers; [ quantenzitrone rapiteanu ];
+    maintainers = with lib.maintainers; [
+      quantenzitrone
+      rapiteanu
+    ];
     platforms = renpy.meta.platforms;
   };
 })

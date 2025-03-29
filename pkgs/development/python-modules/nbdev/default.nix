@@ -15,16 +15,15 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.31";
+  version = "2.3.34";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a0BOBwzlZ1HFvpamqQHn8rtgghdkTfr9778wW84q7Xo=";
+    hash = "sha256-oHZjN+Qu4I9HyR1ReATgCdheTfvphJUcvs7od1OOTvc=";
   };
-
 
   pythonRelaxDeps = [ "ipywidgets" ];
 

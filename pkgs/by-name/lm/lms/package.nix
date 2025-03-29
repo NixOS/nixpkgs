@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
   cmake,
   pkg-config,
   gtest,
@@ -22,20 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.58.0";
+  version = "3.64.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-sWlD/n9Qjwiu/UfZrxRxwv2rc4XwRZN35fyjIriGZPY=";
+    hash = "sha256-+DSMqe1TNFCjZrfuhLggymno9OjYONc5ZweREgMsh60=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ];
   buildInputs = [
     gtest
@@ -54,28 +52,16 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/lms/main.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/recommendation/LmsRecommendation.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/db-generator/LmsDbGenerator.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/cover/LmsCover.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
+    substituteInPlace src/libs/core/include/core/SystemPaths.hpp --replace-fail "/etc" "$out/share/lms"
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${ffmpeg}/bin/ffmpeg"
+    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${lib.getExe ffmpeg}"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/docroot" "$out/share/lms/docroot"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/approot" "$out/share/lms/approot"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"
     install -Dm444 $out/share/lms/default.service -T $out/lib/systemd/system/lmsd.service
-  '';
-
-  preFixup = ''
-    wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
-    wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
-    wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
   '';
 
   meta = {

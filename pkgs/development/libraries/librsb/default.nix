@@ -1,17 +1,23 @@
-{ lib, stdenv, fetchurl
-, gfortran
-, pkg-config, libtool
-, m4, gnum4
-, file
-# Memory Hierarchy (End-user can provide this.)
-, memHierarchy ? ""
-# Headers/Libraries
-, blas, zlib
-# RPC headers (rpc/xdr.h)
-, openmpi
-, help2man
-, doxygen
-, octave
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gfortran,
+  pkg-config,
+  libtool,
+  m4,
+  gnum4,
+  file,
+  # Memory Hierarchy (End-user can provide this.)
+  memHierarchy ? "",
+  # Headers/Libraries
+  blas,
+  zlib,
+  # RPC headers (rpc/xdr.h)
+  openmpi,
+  help2man,
+  doxygen,
+  octave,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,17 +45,26 @@ stdenv.mkDerivation rec {
   ];
 
   # Ensure C/Fortran code is position-independent.
-  env.NIX_CFLAGS_COMPILE = toString [ "-fPIC" "-Ofast" ];
-  FCFLAGS = [ "-fPIC" "-Ofast" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-fPIC"
+    "-Ofast"
+  ];
+  FCFLAGS = [
+    "-fPIC"
+    "-Ofast"
+  ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     gfortran
-    pkg-config libtool
-    m4 gnum4
+    pkg-config
+    libtool
+    m4
+    gnum4
     file
-    blas zlib
+    blas
+    zlib
     openmpi
     octave
     help2man # Turn "--help" into a man-page

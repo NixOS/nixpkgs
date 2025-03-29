@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, libgee
-, libhandy
-, libsecret
-, libsoup
-, meson
-, ninja
-, nix-update-script
-, pantheon
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  libgee,
+  libhandy,
+  libsecret,
+  libsoup_2_4,
+  meson,
+  ninja,
+  nix-update-script,
+  pantheon,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = pname;
+    repo = "taxi";
     rev = version;
     sha256 = "1a4a14b2d5vqbk56drzbbldp0nngfqhwycpyv8d3svi2nchkvpqa";
   };
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libsecret
-    libsoup
+    libsoup_2_4
     pantheon.granite
   ];
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Alecaddd/taxi";
     description = "FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.alecaddd.taxi";
   };

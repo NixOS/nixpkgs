@@ -4,21 +4,24 @@
   fetchFromGitHub,
   hyprland,
   mkHyprlandPlugin,
+  nix-update-script,
 }:
 mkHyprlandPlugin hyprland rec {
   pluginName = "hy3";
-  version = "0.44.0";
+  version = "0.47.0-1";
 
   src = fetchFromGitHub {
     owner = "outfoxxed";
     repo = "hy3";
     rev = "refs/tags/hl${version}";
-    hash = "sha256-6TVaB+nWVanqZWqievg+m7tVNrSpQ9CQcwXJQeyU/Q0=";
+    hash = "sha256-fkYjCOyZ9z3mjId/RrXH5FjML7ULFyCNv1EQXhv0Kgo=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   dontStrip = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/outfoxxed/hy3";

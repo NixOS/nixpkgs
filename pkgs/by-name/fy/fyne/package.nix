@@ -17,16 +17,16 @@
 
 buildGoModule rec {
   pname = "fyne";
-  version = "2.5.1";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "fyne";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-21/52Uub5+l0TcuWZ9QSyckgR1kKNfDvro1CF5QuZWA=";
+    tag = "v${version}";
+    hash = "sha256-cttw4Al7zn7hlKu8n7by+m2p9Xm7ZoCtMb9VuAFdP6k=";
   };
 
-  vendorHash = "sha256-+g11BRf9xRXjtF8InzdTHGOGOf8lJgLKEdBR5DcpEmo=";
+  vendorHash = "sha256-X6K7IV+yjKXw/1A5HikS0T8rtrn7gLZM2d0VoyIdOT4=";
 
   nativeBuildInputs = [ pkg-config ];
 

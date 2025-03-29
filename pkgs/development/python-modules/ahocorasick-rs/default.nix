@@ -1,11 +1,13 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   rustPlatform,
   pytestCheckHook,
   pyahocorasick,
   hypothesis,
+  typing-extensions,
   pytest-benchmark,
 }:
 
@@ -21,16 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-lzRwODlJlymMSih3CqNIeR+HrUbgVhroM1JuHFfW848=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-CIt/ChNcoqKln6PgeTGp9pfmIWlJj+c5SCPtBhsnT6U=";
+    hash = "sha256-Oslf85uI3pO9br7s1J9Y9I/UZ5KDOvJZ/30BMudVBZ0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     maturinBuildHook
     cargoSetupHook
   ];
+
+  dependencies = lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-benchmark

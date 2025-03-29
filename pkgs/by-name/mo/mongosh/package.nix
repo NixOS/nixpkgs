@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, testers
-, mongosh
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  testers,
+  mongosh,
 }:
 
 let
@@ -34,11 +35,11 @@ buildNpmPackage {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mongodb.com/try/download/shell";
     description = "MongoDB Shell";
-    maintainers = with maintainers; [ aaronjheng ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
     mainProgram = "mongosh";
   };
 }

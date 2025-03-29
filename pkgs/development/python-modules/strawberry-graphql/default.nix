@@ -10,7 +10,6 @@
   email-validator,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
   flask,
   freezegun,
   graphql-core,
@@ -45,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.237.3";
+  version = "0.258.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,18 +52,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    rev = "refs/tags/${version}";
-    hash = "sha256-w9ADHKpYijUtN/tB9ANN2ebTMNw8wvqMuYP9fNkisQw=";
+    tag = version;
+    hash = "sha256-gv/P7pz2wcIKXP5SChTlsM2j2GPuRK+iuLZil8/VvJk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/strawberry-graphql/strawberry/pull/2199
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
-      hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -157,11 +147,11 @@ buildPythonPackage rec {
     "tests/cli/"
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
+    "tests/experimental/pydantic/test_fields.py"
     "tests/http/"
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
-    "tests/starlite/"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
@@ -173,7 +163,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
     mainProgram = "strawberry";

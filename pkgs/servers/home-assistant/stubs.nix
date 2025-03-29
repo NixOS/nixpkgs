@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, home-assistant
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  home-assistant,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2024.10.4";
+  version = "2025.3.4";
   pyproject = true;
 
   disabled = python.version != home-assistant.python.version;
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "homeassistant-stubs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MjHqX1OP1mEEypAxZ8Xc+ZWBsfj4yiFG9oItFnf/svk=";
+    tag = version;
+    hash = "sha256-HO1A1uLGNnFdigmoZVL+T28f1Oh+6t1pDUa+nh84MLA=";
   };
 
   build-system = [
@@ -40,11 +41,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for Home Assistant Core";
     homepage = "https://github.com/KapJI/homeassistant-stubs";
-    changelog = "https://github.com/KapJI/homeassistant-stubs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    changelog = "https://github.com/KapJI/homeassistant-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

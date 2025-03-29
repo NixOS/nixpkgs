@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.2.1";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,16 +21,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-x/kgdISfxZsQBJ1JakrlJmmr/LFZoZnZoROFKi/tcLg=";
+    hash = "sha256-UBGf3/t/WqRjjdoiJ8ea1qXzJrnFWn5GBU35n0anCeA=";
   };
 
   pythonRelaxDeps = [
     "pymupdf"
     "pypdf"
+    "striprtf"
   ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     beautifulsoup4

@@ -279,6 +279,11 @@ in
             lib.mapCartesianProduct
             ({dm, wm}: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
+              prettyName =
+                if dm.name != "none" then
+                  "${dm.prettyName or dm.name}${optionalString (wm.name != "none") (" (" + (wm.prettyName or wm.name) + ")")}"
+                else
+                  (wm.prettyName or wm.name);
               script = xsession dm wm;
               desktopNames = if dm ? desktopNames
                              then lib.concatStringsSep ";" dm.desktopNames
@@ -297,7 +302,7 @@ in
                     Type=XSession
                     TryExec=${script}
                     Exec=${script}
-                    Name=${sessionName}
+                    Name=${prettyName}
                     DesktopNames=${desktopNames}
                   '';
                 } // {

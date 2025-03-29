@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
+, apple-sdk ? null
 , netbsd ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -42,6 +43,7 @@
     "fortify3"
     "pic"
     "relro"
+    "stackclashprotection"
     "stackprotector"
     "strictoverflow"
     "zerocallusedregs"
@@ -106,7 +108,8 @@ let
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config
+    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -341,16 +344,12 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString targetPlatform.isDarwin ''
-      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
-    ''
-
     ##
     ## GNU specific extra strip flags
     ##
 
     # TODO(@sternenseemann): make a generic strip wrapper?
-    + optionalString (bintools.isGNU or false || bintools.isCCTools or false) ''
+    + optionalString (bintools.isGNU or false || bintools.isLLVM or false || bintools.isCCTools or false) ''
       wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
         "${bintools_bin}/bin/${targetPrefix}strip"
     ''
@@ -370,24 +369,27 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
     ''
 
     ###
     ### Ensure consistent LC_VERSION_MIN_MACOSX
     ###
-    + optionalString targetPlatform.isDarwin (
-      let
-        inherit (targetPlatform)
-          darwinPlatform darwinSdkVersion
-          darwinMinVersion darwinMinVersionVariable;
-      in ''
-        export darwinPlatform=${darwinPlatform}
-        export darwinMinVersion=${darwinMinVersion}
-        export darwinSdkVersion=${darwinSdkVersion}
-        export darwinMinVersionVariable=${darwinMinVersionVariable}
-        substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
-      ''
-    )
+    + optionalString targetPlatform.isDarwin ''
+      substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
+    ''
+
+    ##
+    ## LLVM ranlab lacks -t option that libtool expects. We can just
+    ## skip it
+    ##
+
+    + optionalString (isLLVM && targetPlatform.isOpenBSD) ''
+      rm $out/bin/${targetPrefix}ranlib
+      wrap \
+        ${targetPrefix}ranlib ${./llvm-ranlib-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}ranlib"
+    ''
 
     ##
     ## Extra custom steps
@@ -401,10 +403,20 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = (getBin runtimeShell + runtimeShell.shellPath or "");
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+    # These will become empty strings when not targeting Darwin.
+    inherit (targetPlatform)
+      darwinPlatform darwinSdkVersion
+      darwinMinVersion darwinMinVersionVariable;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

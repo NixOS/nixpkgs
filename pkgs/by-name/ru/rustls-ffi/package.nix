@@ -1,38 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, rustPlatform
-, cargo-c
-, validatePkgConfig
-, rust
-, libiconv
-, darwin
-, curl
-, apacheHttpd
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  cargo-c,
+  validatePkgConfig,
+  rust,
+  libiconv,
+  darwin,
+  curl,
+  apacheHttpd,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rustls-ffi";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "rustls-ffi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bc9bVZ2pDsG118l/SlElZpgh9F1JEgPF8LzBX7d4mhE=";
+    hash = "sha256-ZKAyKcKwhnPE6PrfBFjLJKkTlGbdLcmW1EP/xSv2cpM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-gDQ9AFrJuV7SrzKCAHQBkKj6clXuPLO0DHhnvcBqRLs=";
+    hash = "sha256-cZ92wSKoygt9x6O/ginOEiCiarlR5qGVFOHrIFdWOWE=";
   };
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
-  nativeBuildInputs = [ cargo rustPlatform.cargoSetupHook cargo-c validatePkgConfig ];
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+    cargo-c
+    validatePkgConfig
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,8 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    curl = curl.override { opensslSupport = false; rustlsSupport = true; rustls-ffi = finalAttrs.finalPackage; };
-    apacheHttpd = apacheHttpd.override { modTlsSupport = true; rustls-ffi = finalAttrs.finalPackage; };
+    curl = curl.override {
+      opensslSupport = false;
+      rustlsSupport = true;
+      rustls-ffi = finalAttrs.finalPackage;
+    };
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
@@ -62,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
     pkgConfigModules = [ "rustls" ];
-    license = with lib.licenses; [ mit asl20 isc ];
+    license = with lib.licenses; [
+      mit
+      asl20
+      isc
+    ];
     maintainers = [ maintainers.lesuisse ];
   };
 })

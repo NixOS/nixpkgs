@@ -1,9 +1,10 @@
-{ writeShellScript
-, nix
-, curl
-, gzip
-, xmlstarlet
-, common-updater-scripts
+{
+  writeShellScript,
+  nix,
+  curl,
+  gzip,
+  xmlstarlet,
+  common-updater-scripts,
 }:
 
 { attrPath }:
@@ -20,4 +21,7 @@ let
     ${common-updater-scripts}/bin/update-source-version "$attrPath" "$version"
   '';
 in
-  [ updateScript attrPath ]
+[
+  updateScript
+  attrPath
+]

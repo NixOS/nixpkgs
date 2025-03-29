@@ -1,11 +1,12 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 
-# for patching bundled 7z binary from the 7zip-bin node module
-# at lib/node_modules/igir/node_modules/7zip-bin/linux/x64/7za
-, autoPatchelfHook
-, stdenv
+  # for patching bundled 7z binary from the 7zip-bin node module
+  # at lib/node_modules/igir/node_modules/7zip-bin/linux/x64/7za
+  autoPatchelfHook,
+  stdenv,
 }:
 
 buildNpmPackage rec {
@@ -28,7 +29,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # from lib/node_modules/igir/node_modules/@node-rs/crc32-linux-x64-musl/crc32.linux-x64-musl.node
   # Irrelevant to our use

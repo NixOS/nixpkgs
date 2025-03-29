@@ -1,5 +1,10 @@
 # dleyna-renderer service.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   ###### interface
   options = {
@@ -14,7 +19,6 @@
       };
     };
   };
-
 
   ###### implementation
   config = lib.mkIf config.services.dleyna-renderer.enable {

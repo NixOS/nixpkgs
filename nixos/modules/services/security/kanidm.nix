@@ -31,6 +31,7 @@ let
     mkOption
     mkPackageOption
     optional
+    optionals
     optionalString
     splitString
     subtractLists
@@ -45,10 +46,23 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
-  certPaths = builtins.map builtins.dirOf [
-    cfg.serverSettings.tls_chain
-    cfg.serverSettings.tls_key
-  ];
+  provisionSecretFiles = filter (x: x != null) (
+    [
+      cfg.provision.idmAdminPasswordFile
+      cfg.provision.adminPasswordFile
+    ]
+    ++ optional (cfg.provision.extraJsonFile != null) cfg.provision.extraJsonFile
+    ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
+  );
+  secretDirectories = unique (
+    map builtins.dirOf (
+      [
+        cfg.serverSettings.tls_chain
+        cfg.serverSettings.tls_key
+      ]
+      ++ optionals cfg.provision.enable provisionSecretFiles
+    )
+  );
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -169,6 +183,12 @@ let
         fi
       '';
 
+  finalJson =
+    if cfg.provision.extraJsonFile != null then
+      "<(${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${provisionStateJson} ${cfg.provision.extraJsonFile})"
+    else
+      provisionStateJson;
+
   postStartScript = pkgs.writeShellScript "post-start" ''
     set -euo pipefail
 
@@ -194,20 +214,23 @@ let
         ${optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
         ${optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
         --url "${cfg.provision.instanceUrl}" \
-        --state ${provisionStateJson}
+        --state ${finalJson}
   '';
 
   serverPort =
+    let
+      address = cfg.serverSettings.bindaddress;
+    in
     # ipv6:
-    if hasInfix "]:" cfg.serverSettings.bindaddress then
-      last (splitString "]:" cfg.serverSettings.bindaddress)
+    if hasInfix "]:" address then
+      last (splitString "]:" address)
     else
     # ipv4:
-    if hasInfix "." cfg.serverSettings.bindaddress then
-      last (splitString ":" cfg.serverSettings.bindaddress)
+    if hasInfix "." address then
+      last (splitString ":" address)
     # default is 8443
     else
-      "8443";
+      throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
   options.services.kanidm = {
@@ -215,7 +238,10 @@ in
     enableServer = mkEnableOption "the Kanidm server";
     enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
 
-    package = mkPackageOption pkgs "kanidm" { };
+    package = mkPackageOption pkgs "kanidm" {
+      example = "kanidm_1_4";
+      extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
+    };
 
     serverSettings = mkOption {
       type = types.submodule {
@@ -225,6 +251,7 @@ in
           bindaddress = mkOption {
             description = "Address/port combination the webserver binds to.";
             example = "[::1]:8443";
+            default = "127.0.0.1:8443";
             type = types.str;
           };
           # Should be optional but toml does not accept null
@@ -411,6 +438,19 @@ in
         default = true;
       };
 
+      extraJsonFile = mkOption {
+        description = ''
+          A JSON file for provisioning persons, groups & systems.
+          Options set in this file take precedence over values set using the other options.
+          In the case of duplicates, `jq` will remove all but the last one
+          when merging this file with the options.
+          The accepted JSON schema can be found at <https://github.com/oddlama/kanidm-provision#json-schema>.
+          Note: theoretically `jq` cannot merge nested types, but this does not pose an issue as kanidm-provision's JSON scheme does not use nested types.
+        '';
+        type = types.nullOr types.path;
+        default = null;
+      };
+
       groups = mkOption {
         description = "Provisioning of kanidm groups";
         default = { };
@@ -498,13 +538,13 @@ in
               };
 
               originUrl = mkOption {
-                description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
+                description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*/$";
+                    originStrType = types.strMatching ".*://.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
-                example = "https://someservice.example.com/";
+                example = "https://someservice.example.com/auth/login";
               };
 
               originLanding = mkOption {
@@ -717,7 +757,7 @@ in
             -> cfg.package.enableSecretProvisioning;
           message = ''
             Specifying an admin account password or oauth2 basicSecretFile requires kanidm to be built with the secret provisioning patches.
-            You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
+            You may want to set `services.kanidm.package = pkgs.kanidmWithSecretProvisioning;`.
           '';
         }
         # Entity names must be globally unique:
@@ -736,38 +776,46 @@ in
           }
         )
       ]
-      ++ flip mapAttrsToList (filterPresent cfg.provision.persons) (
-        person: personCfg:
-        assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
-      )
-      ++ flip mapAttrsToList (filterPresent cfg.provision.groups) (
-        group: groupCfg:
-        assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
-      )
+      ++ (optionals (cfg.provision.extraJsonFile == null) (
+        flip mapAttrsToList (filterPresent cfg.provision.persons) (
+          person: personCfg:
+          assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
+        )
+      ))
+      ++ (optionals (cfg.provision.extraJsonFile == null) (
+        flip mapAttrsToList (filterPresent cfg.provision.groups) (
+          group: groupCfg:
+          assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
+        )
+      ))
       ++ concatLists (
         flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
           oauth2: oauth2Cfg:
-          [
-            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
+          (optional (cfg.provision.extraJsonFile == null) (
+            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
               attrNames oauth2Cfg.scopeMaps
-            ))
-            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
+            )
+          ))
+          ++ (optional (cfg.provision.extraJsonFile == null) (
+            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
               attrNames oauth2Cfg.supplementaryScopeMaps
-            ))
-          ]
+            )
+          ))
           ++ concatLists (
             flip mapAttrsToList oauth2Cfg.claimMaps (
               claim: claimCfg: [
-                (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
-                  attrNames claimCfg.valuesByGroup
+                (mkIf (cfg.provision.extraJsonFile == null) (
+                  assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
+                    attrNames claimCfg.valuesByGroup
+                  )
                 ))
                 # At least one group must map to a value in each claim map
-                {
+                (mkIf (cfg.provision.extraJsonFile == null) {
                   assertion =
                     (cfg.provision.enable && cfg.enableServer)
                     -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
                   message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
-                }
+                })
                 # Public clients cannot define a basic secret
                 {
                   assertion =
@@ -794,6 +842,16 @@ in
         )
       );
 
+    services.kanidm.package =
+      let
+        pkg =
+          if lib.versionAtLeast config.system.stateVersion "24.11" then
+            pkgs.kanidm_1_4
+          else
+            lib.warn "No default kanidm package found for stateVersion = '${config.system.stateVersion}'. Using unpinned version. Consider setting `services.kanidm.package = pkgs.kanidm_1_x` to avoid upgrades introducing breaking changes." pkgs.kanidm;
+      in
+      lib.mkDefault pkg;
+
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
     systemd.tmpfiles.settings."10-kanidm" = {
@@ -813,7 +871,7 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretDirectories);
           }
         )
         {
@@ -825,12 +883,16 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths = [
-            # To create the socket
-            "/run/kanidmd:/run/kanidmd"
-            # To store backups
-            cfg.serverSettings.online_backup.path
-          ];
+          BindPaths =
+            [
+              # To create the socket
+              "/run/kanidmd:/run/kanidmd"
+              # To store backups
+              cfg.serverSettings.online_backup.path
+            ]
+            ++ optional (
+              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+            ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

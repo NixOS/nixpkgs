@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "plumber";
-  version = "2.7.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "streamdal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-L8vpaqt9yCIP3TLPSNUrOC6hXc71mzl4lqiaoNS6zls=";
+    hash = "sha256-0pyeCTkmS7gG51Xm4Gc62p+I5DRUA2F9tPHaZjO+/WE=";
   };
 
   vendorHash = null;

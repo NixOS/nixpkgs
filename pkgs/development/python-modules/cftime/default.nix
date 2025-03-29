@@ -4,25 +4,22 @@
   cython,
   fetchPypi,
   numpy,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.6.4";
+  version = "1.6.4.post1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4yVAYZN1in7WcwjetS5yd4KhnjhOGDN45/9iCYvgrtw=";
+    hash = "sha256-UKx2zJ8Qq3vUbkSnHFGmknBRtJm0QH308pqxPXQblC8=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   nativeBuildInputs = [
     cython
@@ -31,7 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "cftime" ];
 

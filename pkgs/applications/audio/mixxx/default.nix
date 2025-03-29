@@ -1,74 +1,76 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, chromaprint
-, cmake
-, faad2
-, ffmpeg
-, fftw
-, flac
-, gbenchmark
-, glibcLocales
-, gtest
-, hidapi
-, lame
-, libebur128
-, libdjinterop
-, libGLU
-, libid3tag
-, libkeyfinder
-, libmad
-, libmodplug
-, libopus
-, libsecret
-, libshout
-, libsndfile
-, libusb1
-, libvorbis
-, libxcb
-, lilv
-, lv2
-, microsoft-gsl
-, mp4v2
-, opusfile
-, pcre
-, pkg-config
-, portaudio
-, portmidi
-, protobuf
-, qtbase
-, qtkeychain
-, qtscript
-, qtsvg
-, qtx11extras
-, rubberband
-, serd
-, sord
-, soundtouch
-, sratom
-, sqlite
-, taglib
-, upower
-, vamp-plugin-sdk
-, wavpack
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  chromaprint,
+  cmake,
+  faad2,
+  ffmpeg,
+  fftw,
+  flac,
+  gbenchmark,
+  glibcLocales,
+  gtest,
+  hidapi,
+  lame,
+  libebur128,
+  libdjinterop,
+  libGLU,
+  libid3tag,
+  libkeyfinder,
+  libmad,
+  libmodplug,
+  libopus,
+  libsecret,
+  libshout,
+  libsndfile,
+  libusb1,
+  libvorbis,
+  libxcb,
+  lilv,
+  lv2,
+  microsoft-gsl,
+  mp4v2,
+  opusfile,
+  pcre,
+  pkg-config,
+  portaudio,
+  portmidi,
+  protobuf,
+  qt5compat,
+  qtbase,
+  qtdeclarative,
+  qtkeychain,
+  qtsvg,
+  rubberband,
+  serd,
+  sord,
+  soundtouch,
+  sratom,
+  sqlite,
+  taglib,
+  upower,
+  vamp-plugin-sdk,
+  wavpack,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mixxx";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-BOdXgA+z3sFE4ngAEhSbp1gDbsti1STJY2Yy6Hp+zTE=";
+    hash = "sha256-1ZE2hVwacZve0+IOQs+htK/kl7zFsOWkh/KcrnI6u/M=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
-
-  dontWrapGApps = true;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     chromaprint
@@ -104,11 +106,11 @@ mkDerivation rec {
     portaudio
     portmidi
     protobuf
+    qt5compat
     qtbase
+    qtdeclarative
     qtkeychain
-    qtscript
     qtsvg
-    qtx11extras
     rubberband
     serd
     sord
@@ -121,9 +123,7 @@ mkDerivation rec {
     wavpack
   ];
 
-  preFixup=''
-    qtWrapperArgs+=(--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive ''${gappsWrapperArgs[@]})
-  '';
+  qtWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
@@ -146,8 +146,12 @@ mkDerivation rec {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bfortz benley ];
+    changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      benley
+      bfortz
+    ];
     platforms = platforms.linux;
   };
 }

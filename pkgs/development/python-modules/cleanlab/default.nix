@@ -13,7 +13,7 @@
   tqdm,
   pandas,
 
-  # test dependencies
+  # tests
   cleanvision,
   datasets,
   fasttext,
@@ -27,21 +27,26 @@
   torch,
   torchvision,
   wget,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
+    tag = "v${version}";
+    hash = "sha256-KzVqBOLTxxkgvoGPYMeYb7zMuG8VwQwX6SYR/FUhfBw=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     numpy
@@ -74,10 +79,23 @@ buildPythonPackage rec {
     wget
   ];
 
-  disabledTests = [
-    # Requires the datasets we prevent from downloading
-    "test_create_imagelab"
-  ];
+  disabledTests =
+    [
+      # Requires the datasets we prevent from downloading
+      "test_create_imagelab"
+
+      # Non-trivial numpy2 incompatibilities
+      # assert np.float64(0.492) == 0.491
+      "test_duplicate_points_have_similar_scores"
+      # AssertionError: assert 'Annotators [1] did not label any examples.'
+      "test_label_quality_scores_multiannotator"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # AttributeError: 'called_once_with' is not a valid assertion.
+      # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
+      # Did you mean: 'assert_called_once_with'?
+      "test_custom_issue_manager_not_registered"
+    ];
 
   disabledTestPaths = [
     # Requires internet

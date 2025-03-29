@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchgit
-, makeWrapper
-, mpv
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  makeWrapper,
+  mpv,
 }:
 buildGoModule rec {
   pname = "ff2mpv-go";

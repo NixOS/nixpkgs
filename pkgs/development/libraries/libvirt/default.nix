@@ -32,9 +32,9 @@
 , readline
 , rpcsvc-proto
 , stdenv
-, substituteAll
+, replaceVars
 , xhtml1
-, yajl
+, json_c
 , writeScript
 , nixosTests
 
@@ -108,27 +108,23 @@ assert enableCeph -> isLinux;
 assert enableGlusterfs -> isLinux;
 assert enableZfs -> isLinux;
 
-# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  # NOTE: You must also bump:
-  # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
-  # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.5.0";
+  # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
+  version = "11.0.0";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Nku4l1f34NOUr23KWDH9uZu72OgMK3KfYjsRRbuTvf8=";
+    owner = "libvirt";
+    repo = "libvirt";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-QxyOc/RbWZnjA4XIDNK7xZqBcP2ciHsOlszaa5pl6XA=";
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
   ] ++ lib.optionals enableZfs [
-    (substituteAll {
-      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+    (replaceVars ./0002-substitute-zfs-and-zpool-commands.patch {
       zfs = "${zfs}/bin/zfs";
       zpool = "${zfs}/bin/zpool";
     })
@@ -163,6 +159,9 @@ stdenv.mkDerivation rec {
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
+    # virshtest frequently times out on Darwin
+    substituteInPlace tests/meson.build \
+      --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
   '' + lib.optionalString enableXen ''
     # Has various hardcoded paths that don't exist outside of a Xen dom0.
     sed -i '/libxlxml2domconfigtest/d' tests/meson.build
@@ -202,7 +201,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     xhtml1
-    yajl
+    json_c
   ] ++ lib.optionals isLinux [
     acl
     attr
@@ -312,7 +311,7 @@ stdenv.mkDerivation rec {
       (feat "ssh_proxy" isLinux)
       (feat "tests" true)
       (feat "udev" isLinux)
-      (feat "yajl" true)
+      (feat "json_c" true)
 
       (driver "ch" isLinux)
       (driver "esx" true)
@@ -349,10 +348,14 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/virt-xml-validate \
       --replace xmllint ${libxml2}/bin/xmllint
 
+    # Enable to set some options from the corresponding NixOS module (or other
+    # places) via environment variables.
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
       --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
+      --replace 'SHUTDOWN_TIMEOUT=300'  'SHUTDOWN_TIMEOUT=''${SHUTDOWN_TIMEOUT:-300}' \
+      --replace 'START_DELAY=0'         'START_DELAY=''${START_DELAY:-0}' \
       --replace "$out/bin"              '${gettext}/bin' \
       --replace 'lock/subsys'           'lock' \
       --replace 'gettext.sh'            'gettext.sh

@@ -68,7 +68,7 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
@@ -151,6 +151,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
@@ -164,11 +166,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
-  libqglviewer = callPackage ../development/libraries/libqglviewer {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
-  };
+  libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
   libqofono = callPackage ../development/libraries/libqofono { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
   libquotient = callPackage ../development/libraries/libquotient { };
 
@@ -179,6 +181,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
@@ -267,6 +271,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
 
+  sailfish-access-control-plugin = callPackage ../development/libraries/sailfish-access-control-plugin { };
+
   sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -283,6 +289,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
 
+  timed = callPackage ../applications/system/timed { };
+
   xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
 
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
@@ -290,8 +298,5 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
 
   yuview = callPackage ../applications/video/yuview { };
-}) // lib.optionalAttrs pkgs.config.allowAliases {
-  # Remove completely before 24.11
-  overrideScope' = builtins.throw "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
-}));
+})));
 }

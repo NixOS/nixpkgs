@@ -3,11 +3,13 @@
   stdenv,
   fetchurl,
   pkg-config,
+  curl,
   libevent,
   libiconv,
   openssl,
   pcre,
   zlib,
+  buildPackages,
   odbcSupport ? true,
   unixODBC,
   snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
@@ -19,7 +21,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresqlSupport ? false,
-  postgresql,
+  libpq,
 }:
 
 # ensure exactly one database type is selected
@@ -29,6 +31,23 @@ assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 
 let
   inherit (lib) optional optionalString;
+
+  fake_pg_config = buildPackages.writeShellScript "pg_config" ''
+    if [[ "$1" == "--version" ]]; then
+      $PKG_CONFIG libpq --modversion
+    else
+      $PKG_CONFIG libpq --variable="''${1//--/}"
+    fi
+  '';
+
+  fake_mysql_config = buildPackages.writeShellScript "mysql_config" ''
+    if [[ "$1" == "--version" ]]; then
+      $PKG_CONFIG mysqlclient --modversion
+    else
+      $PKG_CONFIG mysqlclient $@
+    fi
+  '';
+
 in
 import ./versions.nix (
   { version, hash, ... }:
@@ -44,6 +63,7 @@ import ./versions.nix (
     nativeBuildInputs = [ pkg-config ];
     buildInputs =
       [
+        curl
         libevent
         libiconv
         openssl
@@ -55,13 +75,14 @@ import ./versions.nix (
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql;
+      ++ optional postgresqlSupport libpq;
 
     configureFlags =
       [
         "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
+        "--with-libcurl"
         "--with-libevent"
         "--with-libpcre"
         "--with-openssl=${openssl.dev}"
@@ -71,8 +92,8 @@ import ./versions.nix (
       ++ optional snmpSupport "--with-net-snmp"
       ++ optional sqliteSupport "--with-sqlite3=${sqlite.dev}"
       ++ optional sshSupport "--with-ssh2=${libssh2.dev}"
-      ++ optional mysqlSupport "--with-mysql"
-      ++ optional postgresqlSupport "--with-postgresql";
+      ++ optional mysqlSupport "--with-mysql=${fake_mysql_config}"
+      ++ optional postgresqlSupport "--with-postgresql=${fake_pg_config}";
 
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +

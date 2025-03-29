@@ -21,7 +21,7 @@
   libopus,
   libxkbcommon,
   gdk-pixbuf,
-  freerdp3,
+  freerdp,
   fdk_aac,
   tpm2-tss,
   fuse3,
@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "46.4";
+  version = "47.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-KLwH6W2qFJy45NCldN8KLObsbOZHutyGFUzmEoIsxR4=";
+    hash = "sha256-QE2wiHLmkDlD4nUam2Myf2NZcKnKodL2dTCcpEV8+cI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    freerdp3
+    freerdp
     fdk_aac
     tpm2-tss
     fuse3
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
     "-Dtests=false" # Too deep of a rabbit hole.
     # TODO: investigate who should be fixed here.
-    "-Dc_args=-I${freerdp3}/include/winpr3"
+    "-Dc_args=-I${freerdp}/include/winpr3"
   ];
 
   passthru = {

@@ -1,41 +1,48 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, alsa-lib
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXxf86vm
-, go-licenses
-, pkg-config
-, zip
-, advancecomp
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXxf86vm,
+  go-licenses,
+  pkg-config,
+  zip,
+  advancecomp,
+  makeWrapper,
+  nixosTests,
+  strip-nondeterminism,
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.208";
+  version = "1.6.64";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VfF8bQP7pFaTezOJpda4N9KbCHr5ST/wCvdNRiojio0=";
+    hash = "sha256-0geit1ZDsNOPhpdmOeT1xSnQ3oitMiMY14zoGG8hsGU=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-PBwI3S8ZvmVD57/ICALe+HvgtbPQpJKNPfkWo+uUeSo=";
+  vendorHash = "sha256-1osdAkUMmkBoLpKhoESUh2URMi3OYhLfRs+N9fDnnKQ=";
 
   buildInputs = [
     alsa-lib
     libGL
-    libX11 libXcursor libXext libXi libXinerama libXrandr
+    libX11
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
     libXxf86vm
   ];
 
@@ -45,9 +52,13 @@ buildGoModule rec {
     zip
     advancecomp
     makeWrapper
+    strip-nondeterminism
   ];
 
-  outputs = [ "out" "testing_infra" ];
+  outputs = [
+    "out"
+    "testing_infra"
+  ];
 
   postPatch = ''
     # Without patching, "go run" fails with the error message:
@@ -64,24 +75,26 @@ buildGoModule rec {
       'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
   '';
 
-  overrideModAttrs = (_: {
-    # We can't patch in the path to libGL directly because
-    # this is a fixed output derivation and when the path to libGL
-    # changes, the hash would change.
-    # To work around this, use environment variables.
-    postBuild = ''
-      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
-        --replace-fail \
-        'import (' \
-        'import ("os"' \
-        --replace-fail \
-        '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
-        '{os.Getenv("EBITENGINE_LIBGL")}' \
-        --replace-fail \
-        '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
-        '{os.Getenv("EBITENGINE_LIBGLESv2")}'
-    '';
-  });
+  overrideModAttrs = (
+    _: {
+      # We can't patch in the path to libGL directly because
+      # this is a fixed output derivation and when the path to libGL
+      # changes, the hash would change.
+      # To work around this, use environment variables.
+      postBuild = ''
+        substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+          --replace-fail \
+          'import (' \
+          'import ("os"' \
+          --replace-fail \
+          '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
+          '{os.Getenv("EBITENGINE_LIBGL")}' \
+          --replace-fail \
+          '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
+          '{os.Getenv("EBITENGINE_LIBGLESv2")}'
+      '';
+    }
+  );
 
   makeFlags = [
     "BUILDTYPE=release"

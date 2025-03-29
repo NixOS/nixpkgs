@@ -1,5 +1,5 @@
 diff --git a/setup.py b/setup.py
-index 1bfba237..414bb4d5 100644
+index d16a27c5..a7e407e1 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -12,7 +12,6 @@ import sys
@@ -27,7 +27,7 @@ index 1bfba237..414bb4d5 100644
          long_description=long_description,
          long_description_content_type="text/markdown",
 diff --git a/src/debugpy/public_api.py b/src/debugpy/public_api.py
-index 9d0f705a..ee0b26ca 100644
+index c61a2607..f26f8272 100644
 --- a/src/debugpy/public_api.py
 +++ b/src/debugpy/public_api.py
 @@ -7,8 +7,6 @@ from __future__ import annotations
@@ -39,7 +39,7 @@ index 9d0f705a..ee0b26ca 100644
  
  # Expose debugpy.server API from subpackage, but do not actually import it unless
  # and until a member is invoked - we don't want the server package loaded in the
-@@ -191,4 +189,4 @@ def trace_this_thread(__should_trace: bool):
+@@ -192,4 +190,4 @@ def trace_this_thread(__should_trace: bool):
      """
  
  

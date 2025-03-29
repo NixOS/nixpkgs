@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "momepy";
-  version = "0.8.1";
+  version = "0.9.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9GVX+OaBkLb3Q/RRHbGOlAJ3gu2K+V07ez6v9dWU6JU=";
+    tag = "v${version}";
+    hash = "sha256-9bFPxpopmrwNKdCEF+jlPRoNiVFrngW+sMeshq2EDYU=";
   };
 
   build-system = [ setuptools-scm ];

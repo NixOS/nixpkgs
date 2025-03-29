@@ -1,40 +1,26 @@
-#! /usr/bin/env nix-shell
-#! nix-shell update-shell.nix -i bash
-
-# Update script for the vscode versions and hashes.
-# Usually doesn't need to be called by hand,
-# but is called by a bot: https://github.com/samuela/nixpkgs-upkeep/actions
-# Call it by hand if the bot fails to automatically update the versions.
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p bash nix curl coreutils jq common-updater-scripts
 
 set -eou pipefail
 
-ROOT="$(dirname "$(readlink -f "$0")")"
-if [ ! -f "$ROOT/vscodium.nix" ]; then
-  echo "ERROR: cannot find vscodium.nix in $ROOT"
-  exit 1
+latestVersion=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL https://api.github.com/repos/VSCodium/vscodium/releases/latest | jq -r ".tag_name")
+currentVersion=$(nix-instantiate --eval -E "with import ./. {}; vscodium.version or (lib.getVersion vscodium)" | tr -d '"')
+
+echo "latest  version: $latestVersion"
+echo "current version: $currentVersion"
+
+if [[ "$latestVersion" == "$currentVersion" ]]; then
+    echo "package is up-to-date"
+    exit 0
 fi
 
-update_vscodium () {
-  VSCODIUM_VER=$1
-  ARCH=$2
-  ARCH_LONG=$3
-  ARCHIVE_FMT=$4
-  VSCODIUM_URL="https://github.com/VSCodium/vscodium/releases/download/${VSCODIUM_VER}/VSCodium-${ARCH}-${VSCODIUM_VER}.${ARCHIVE_FMT}"
-  VSCODIUM_SHA256=$(nix-prefetch-url ${VSCODIUM_URL})
-  sed -i "s/${ARCH_LONG} = \".\{52\}\"/${ARCH_LONG} = \"${VSCODIUM_SHA256}\"/" "$ROOT/vscodium.nix"
-}
-
-# VSCodium
-
-VSCODIUM_VER=$(curl -Ls -w %{url_effective} -o /dev/null https://github.com/VSCodium/vscodium/releases/latest | awk -F'/' '{print $NF}')
-sed -i "s/version = \".*\"/version = \"${VSCODIUM_VER}\"/" "$ROOT/vscodium.nix"
-
-update_vscodium $VSCODIUM_VER linux-x64 x86_64-linux tar.gz
-
-update_vscodium $VSCODIUM_VER darwin-x64 x86_64-darwin zip
-
-update_vscodium $VSCODIUM_VER linux-arm64 aarch64-linux tar.gz
-
-update_vscodium $VSCODIUM_VER darwin-arm64 aarch64-darwin zip
-
-update_vscodium $VSCODIUM_VER linux-armhf armv7l-linux tar.gz
+for i in \
+    "x86_64-linux linux-x64 tar.gz" \
+    "aarch64-linux linux-arm64 tar.gz" \
+    "armv7l-linux linux-armhf tar.gz" \
+    "aarch64-darwin darwin-arm64 zip" \
+    "x86_64-darwin darwin-x64 zip"; do
+    set -- $i
+    hash=$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url "https://github.com/VSCodium/vscodium/releases/download/$latestVersion/VSCodium-$2-$latestVersion.$3"))
+    update-source-version vscodium $latestVersion $hash --system=$1 --ignore-same-version
+done

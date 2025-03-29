@@ -7,15 +7,18 @@
   setuptools,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.66.1";
-  format = "setuptools";
+  version = "1.70.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-UFX/6EDqj1BcMDeL4Cr7Tb7LM0gOVU3r4Qtj1rL2QcM=";
+    hash = "sha256-5Xj+58HCE8jkcXUNkmMdAPF4oVR5+yyzuTmgf8ElzNM=";
   };
 
   outputs = [

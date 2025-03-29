@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "python-pinyin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NGW94Labk3vAv4bfq/+ba2lnL/uebg0ODZWEi2yNIjg=";
   };
 

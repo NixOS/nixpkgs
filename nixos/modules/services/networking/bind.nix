@@ -38,9 +38,6 @@ let
         description = ''
           List of address ranges allowed to query this zone. Instead of the address(es), this may instead
           contain the single string "any".
-
-          NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
-          of `cachenetworks`.
         '';
         default = [ "any" ];
       };
@@ -65,7 +62,7 @@ let
       options {
         listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
         listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query { cachenetworks; };
+        allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
         forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
@@ -249,29 +246,68 @@ in
       };
     users.groups.${bindUser} = {};
 
+    systemd.tmpfiles.settings."bind" = lib.mkIf (cfg.directory != "/run/named") {
+      ${cfg.directory} = {
+        d = {
+          user = bindUser;
+          group = bindUser;
+          age = "-";
+        };
+      };
+    };
     systemd.services.bind = {
       description = "BIND Domain Name Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
         fi
-
-        ${pkgs.coreutils}/bin/mkdir -p /run/named
-        chown ${bindUser} /run/named
-
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.directory}
-        chown ${bindUser} ${cfg.directory}
       '';
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
+        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        User = bindUser;
+        RuntimeDirectory = "named";
+        RuntimeDirectoryPreserve = "yes";
+        ConfigurationDirectory = "bind";
+        ReadWritePaths = [
+          (lib.mapAttrsToList (name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else "") cfg.zones)
+          cfg.directory
+        ];
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
+        ReadOnlyPaths = "/sys";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6 AF_NETLINK" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictNamespaces = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@mount @debug @clock @reboot @resources @privileged @obsolete acct modify_ldt add_key adjtimex clock_adjtime delete_module fanotify_init finit_module get_mempolicy init_module io_destroy io_getevents iopl ioperm io_setup io_submit io_cancel kcmp kexec_load keyctl lookup_dcookie migrate_pages move_pages open_by_handle_at perf_event_open process_vm_readv process_vm_writev ptrace remap_file_pages request_key set_mempolicy swapoff swapon uselib vmsplice";
       };
 
       unitConfig.Documentation = "man:named(8)";

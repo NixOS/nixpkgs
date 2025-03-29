@@ -2,11 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lazarus-qt,
+  lazarus-qt5,
   fpc,
   autoPatchelfHook,
   libsForQt5,
-  libqt5pas,
   xorg,
   python3,
 }:
@@ -25,7 +24,7 @@ let
     hash = "sha256-5L05eGVN+xncd0/0XLFN6EL2ux4aAOsiU0BMoy0dKgg=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lazpaint";
   version = "7.2.2-unstable-2024-01-23";
 
@@ -37,15 +36,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    lazarus-qt
+    lazarus-qt5
     fpc
     libsForQt5.wrapQtAppsHook
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    libsForQt5.qtbase
-    libqt5pas
+  buildInputs = with libsForQt5; [
+    qtbase
+    libqtpas
   ];
 
   runtimeDependencies = [
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap
     cp -r --no-preserve=mode ${bgracontrols} bgracontrols
 
-    lazbuild --lazarusdir=${lazarus-qt}/share/lazarus \
+    lazbuild --lazarusdir=${lazarus-qt5}/share/lazarus \
       --build-mode=ReleaseQt5 \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       bgracontrols/bgracontrols.lpk \

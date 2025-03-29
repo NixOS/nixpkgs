@@ -3,29 +3,29 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "6.4.3";
-  format = "setuptools";
+  version = "7.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qbv9ngwIt94H6G72TmnLlqKcIQWkO/gyzYsWL6HiL0Q=";
+    hash = "sha256-pWNRWAnLORGXXeWlQgmFXwtv23ymkSpegd4mUp9wQow=";
   };
 
-  # Circular dependency
-  doCheck = false;
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "traits" ];
 
-  meta = with lib; {
+  meta = {
     description = "Explicitly typed attributes for Python";
     homepage = "https://pypi.python.org/pypi/traits";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

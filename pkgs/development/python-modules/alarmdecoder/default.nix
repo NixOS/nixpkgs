@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
-  version = "1.13.11";
+  version = "1.13.12";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
     rev = version;
-    hash = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
+    hash = "sha256-d9xNXPhFX2TUjnzZlhvqq/YASITBn6lMVTzqi+TPNjI=";
   };
 
   postPatch = ''

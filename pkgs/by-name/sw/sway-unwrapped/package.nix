@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, replaceVars, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
@@ -13,24 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.9";
+  version = "1.10.1";
 
   inherit enableXWayland isNixOS systemdSupport trayEnabled;
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-/6+iDkQfdLcL/pTJaqNc6QdP4SRVOYLjfOItEu/bZtg=";
+    hash = "sha256-uBtQk8uhW/i8lSbv6zwsRyiiImFBw1YCQHVWQ8jot5w=";
   };
 
   patches = [
     ./load-configuration-from-etc.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit swaybg;
     })
-
   ] ++ lib.optionals (!finalAttrs.isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
     # copying the default configuration:
@@ -71,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     sd-bus-provider =  if systemdSupport then "libsystemd" else "basu";
     in [
       (mesonOption "sd-bus-provider" sd-bus-provider)
-      (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 

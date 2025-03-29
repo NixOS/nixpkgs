@@ -28,7 +28,7 @@ buildDotnetModule rec {
     mv "$out/bin/Test" "$out/bin/WiseUnpacker"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "Test/Test.csproj";
 

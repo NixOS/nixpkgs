@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OvWdKr8RlXRnAUMHSPhJDacvKeRa8QGPmGPQWLG2ouk=";
   };
 

@@ -1,30 +1,54 @@
-{ lib, buildDunePackage, fetchurl
-, mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
-, x509, cstruct, cstruct-unix, eqaf
-, mtime, logs, fmt, cmdliner, base64
-, zarith
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-rng,
+  mirage-crypto-pk,
+  x509,
+  cstruct,
+  cstruct-unix,
+  eqaf,
+  mtime,
+  logs,
+  fmt,
+  cmdliner,
+  base64,
+  zarith,
 }:
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.4.0";
+  version = "0.5.0";
 
   minimalOCamlVersion = "4.10";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    hash = "sha256-uATKGr+J18jBx5vErB93Q9+BCR7ezi1Q+ueQGolpybQ=";
+    hash = "sha256-SYSkhB43KmYaCEYGwFihMPLvh1Zr9xeWFio5atY19A8=";
   };
 
   propagatedBuildInputs = [
-    mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
-    cstruct mtime
-    logs base64 zarith
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-rng
+    mirage-crypto-pk
+    x509
+    cstruct
+    mtime
+    logs
+    base64
+    zarith
     eqaf
   ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix cmdliner fmt ];
+  checkInputs = [
+    cstruct-unix
+    cmdliner
+    fmt
+  ];
 
   meta = with lib; {
     description = "SSH implementation in OCaml";

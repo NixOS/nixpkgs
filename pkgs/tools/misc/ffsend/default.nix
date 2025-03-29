@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, rustPlatform, pkg-config, openssl
-, installShellFiles
-, Security, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  Security,
+  AppKit,
 
-, x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD
-, xclip ? null, xsel ? null
-, preferXsel ? false # if true and xsel is non-null, use it instead of xclip
+  x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD,
+  xclip ? null,
+  xsel ? null,
+  preferXsel ? false, # if true and xsel is non-null, use it instead of xclip
 }:
 
 let
@@ -24,7 +33,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
-  cargoHash = "sha256-r1yIPV2sW/EpHJpdaJyi6pzE+rtNkBIxSUJF+XA8kbA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Gv70H3SLgiO7SWKYfCKzBhgAHxhjx3Gv7ZPLrGeQ+HY=";
 
   cargoPatches = [
 
@@ -57,18 +67,27 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ Security AppKit ]
-    else [ openssl ];
+    if stdenv.hostPlatform.isDarwin then
+      [
+        Security
+        AppKit
+      ]
+    else
+      [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (
-    if preferXsel && xsel != null then ''
-      export XSEL_PATH="${xsel}/bin/xsel"
-    '' else ''
-      export XCLIP_PATH="${xclip}/bin/xclip"
-    ''
+    if preferXsel && xsel != null then
+      ''
+        export XSEL_PATH="${xsel}/bin/xsel"
+      ''
+    else
+      ''
+        export XCLIP_PATH="${xclip}/bin/xclip"
+      ''
   );
 
   postInstall = ''

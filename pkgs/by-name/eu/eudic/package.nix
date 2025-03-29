@@ -1,27 +1,27 @@
-{ fetchurl
-, stdenv
-, autoPatchelfHook
-, makeWrapper
-, lib
-, copyDesktopItems
-, libnotify
-, libX11
-, libXScrnSaver
-, libXext
-, libXtst
-, libuuid
-, libsecret
-, xdg-utils
-, xdg-utils-cxx
-, at-spi2-atk
-# additional dependencies autoPatchelfHook discovered
-, gtk3
-, alsa-lib
-, e2fsprogs
-, nss
-, libgpg-error
-, libjack2
-, mesa
+{
+  fetchurl,
+  stdenv,
+  autoPatchelfHook,
+  makeWrapper,
+  lib,
+  libnotify,
+  libX11,
+  libXScrnSaver,
+  libXext,
+  libXtst,
+  libuuid,
+  libsecret,
+  xdg-utils,
+  xdg-utils-cxx,
+  at-spi2-atk,
+  # additional dependencies autoPatchelfHook discovered
+  gtk3,
+  alsa-lib,
+  e2fsprogs,
+  nss,
+  libgpg-error,
+  libjack2,
+  libgbm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     libgpg-error
     libjack2
-    mesa
+    libgbm
   ];
 
   unpackPhase = ''
@@ -70,9 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out
     cp -r usr/* $out/
 
-    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic
+    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic \
+      --inherit-argv0
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/eusoft-eudic.desktop \
+      --replace-fail '/usr/share/eusoft-eudic/AppRun' 'eudic'
   '';
 
   meta = {

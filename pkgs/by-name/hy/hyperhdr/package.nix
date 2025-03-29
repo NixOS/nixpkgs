@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, flatbuffers
-, libjpeg_turbo
-, mbedtls
-, mdns
-, pipewire
-, qt6Packages
-, qmqtt
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  flatbuffers,
+  libjpeg_turbo,
+  mbedtls,
+  mdns,
+  pipewire,
+  qt6Packages,
+  qmqtt,
+  xz,
 }:
 
 let
   inherit (lib)
     cmakeBool
-  ;
+    ;
 in
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awawa-dev";
     repo = "HyperHDR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-agIWtDlMwjD0sGX2ntFwqROzUsl8tY3nRbmFvvOVh4o=";
   };
 

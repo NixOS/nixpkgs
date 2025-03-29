@@ -2,57 +2,85 @@
 , buildPythonApplication
 , fetchPypi
 # build inputs
+, about-time
 , aiofiles
 , aiohttp
+, aiosignal
+, alive-progress
+, async-timeout
 , attrs
 , certifi
+, charset-normalizer
 , cssselect
+, frozenlist
 , html5lib
+, idna
 , isodate
 , json-home-client
+, kdl-py
 , lxml
+, multidict
 , pillow
 , pygments
 , requests
 , result
 , setuptools
+, six
 , tenacity
+, typing-extensions
+, uri-template
+, urllib3
+, webencodings
 , widlparser
+, yarl
 }:
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "3.7.0";
+  version = "5.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
+    hash = "sha256-ck3Ucv39w+EL1r+IzMbnqVfBqtqBVq4kxdpZVDWpM3U=";
   };
 
-  # Relax requirements from "==" to ">="
-  # https://github.com/tabatkins/bikeshed/issues/2178
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "==" ">="
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = true;
+
+  dependencies = [
+    about-time
     aiofiles
     aiohttp
+    aiosignal
+    alive-progress
+    async-timeout
     attrs
     certifi
+    charset-normalizer
     cssselect
+    frozenlist
     html5lib
+    idna
     isodate
     json-home-client
+    kdl-py
     lxml
+    multidict
     pillow
     pygments
     requests
     result
     setuptools
+    six
     tenacity
+    typing-extensions
+    uri-template
+    urllib3
+    webencodings
     widlparser
+    yarl
   ];
 
   checkPhase = ''

@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, glib
-, meson
-, ninja
-, pkg-config
-, rustc
-, libbsd
-, libcamera
-, gtk3
-, libtiff
-, zbar
-, libjpeg
-, libexif
-, libraw
-, libpulseaudio
-, ffmpeg-headless
-, v4l-utils
-, makeWrapper
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  libbsd,
+  libcamera,
+  gtk3,
+  libtiff,
+  zbar,
+  libjpeg,
+  libexif,
+  libraw,
+  libpulseaudio,
+  ffmpeg-headless,
+  v4l-utils,
+  makeWrapper,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "Librem5";
-    repo = pname;
+    repo = "millipixels";
     rev = "v${version}";
     domain = "source.puri.sm";
     hash = "sha256-pRREQRYyD9+dpRvcfsNiNthFy08Yeup9xDn+x+RWDrE=";
@@ -65,7 +66,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/millipixels \
-      --prefix PATH : ${lib.makeBinPath [ v4l-utils ffmpeg-headless ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          v4l-utils
+          ffmpeg-headless
+        ]
+      }
   '';
 
   meta = with lib; {

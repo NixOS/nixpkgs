@@ -4,12 +4,10 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   cython,
   ninja,
   scikit-build-core,
-  setuptools,
   numpy,
   hypothesis,
   pandas,
@@ -20,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.10.0";
+  version = "3.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,23 +26,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hLYidU09nCSOi42zgSh7dW83glxIjFY4C6BTmy/sf60=";
+    tag = "v${version}";
+    hash = "sha256-keV+IBBHkdDpKuT1o6xNA5UAHlG1I9vkt13W8dafiDw=";
   };
-
-  patches = [
-    # https://github.com/rapidfuzz/RapidFuzz/pull/414
-    (fetchpatch2 {
-      name = "support-taskflow-3.8.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/8f0429bbd970ccc036018b87108845c384911ff7.patch";
-      hash = "sha256-1wizdCkXYEMe5JWXUHCOCuDdS0z76FKimR47B3s2oVU=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
-  '';
 
   build-system = [
     cmake
@@ -97,7 +81,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "kasa-crypt";
-  version = "0.4.4";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "kasa-crypt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9uDloaf9w75O+7r27PK/xOf0TrK43ndxnTUcm4CmOXo=";
+    tag = "v${version}";
+    hash = "sha256-eP8GgogyvmrPbsXGWq9RqkinezNGVlDXC/BfgO+dUJ0=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast kasa crypt";
     homepage = "https://github.com/bdraco/kasa-crypt";
-    changelog = "https://github.com/bdraco/kasa-crypt/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/kasa-crypt/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

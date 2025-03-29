@@ -14,13 +14,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "xmoji";
+  pname = "xmoji";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "Zirias";
     repo = "xmoji";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uYynbzexj1MDHcU8tryJLCGmqTfYOmY0vXrHZ3MlZa0=";
     fetchSubmodules = true;
   };

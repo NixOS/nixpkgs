@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  fetchpatch
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lunarmagpie";
     repo = "sigparse";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VzWDqplYgwrJXXd5IUzEIp0YRuofybqmGrNKPaGqQFM=";
   };
 

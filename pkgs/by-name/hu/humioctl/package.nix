@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "humioctl";
@@ -13,7 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-vGX77+I/zdTBhVSywd7msjrJ0KtcdZRgvWZWQC9M9og=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   callPackage,
   fetchgit,
@@ -15,16 +14,18 @@
   version,
   hashes,
   url,
+  hostPlatform,
+  targetPlatform,
+  buildPlatform,
 }@pkgs:
 let
-  target-constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
-  build-constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
-  tools = pkgs.tools or (callPackage ./tools.nix { });
+  target-constants = callPackage ./constants.nix { platform = targetPlatform; };
+  build-constants = callPackage ./constants.nix { platform = buildPlatform; };
+  tools = pkgs.tools or (callPackage ./tools.nix { inherit hostPlatform buildPlatform; });
 
   boolOption = value: if value then "True" else "False";
 in
-runCommand
-  "flutter-engine-source-${version}-${stdenv.buildPlatform.system}-${stdenv.targetPlatform.system}"
+runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPlatform.system}"
   {
     pname = "flutter-engine-source";
     inherit version;
@@ -47,12 +48,12 @@ runCommand
     gclient = writeText "flutter-engine-${version}.gclient" ''
       solutions = [{
         "managed": False,
-        "name": "src/flutter",
+        "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
         "url": "${url}",
         "custom_vars": {
           "download_fuchsia_deps": False,
           "download_android_deps": False,
-          "download_linux_deps": ${boolOption stdenv.targetPlatform.isLinux},
+          "download_linux_deps": ${boolOption targetPlatform.isLinux},
           "setup_githooks": False,
           "download_esbuild": False,
           "download_dart_sdk": False,
@@ -82,26 +83,47 @@ runCommand
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash =
-      (hashes."${stdenv.buildPlatform.system}" or { })."${stdenv.targetPlatform.system}"
-        or (throw "Hash not set for ${stdenv.targetPlatform.system} on ${stdenv.buildPlatform.system}");
+      (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
+        or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
   }
-  ''
-    source ${../../../../build-support/fetchgit/deterministic-git}
-    export -f clean_git
-    export -f make_deterministic_repo
+  (
+    ''
+      source ${../../../../build-support/fetchgit/deterministic-git}
+      export -f clean_git
+      export -f make_deterministic_repo
 
-    mkdir -p $out
-    cp $gclient $out/.gclient
-    cd $out
+    ''
+    + (
+      if lib.versionAtLeast flutterVersion "3.29" then
+        ''
+          mkdir -p source
+          cp $gclient source/.gclient
+          cd source
+        ''
+      else
+        ''
+          mkdir -p $out
+          cp $gclient $out/.gclient
+          cd $out
+        ''
+    )
+    + ''
 
-    export PATH=$PATH:$depot_tools
-    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
-    find $out -name '.git' -exec rm -rf {} \; || true
+      export PATH=$PATH:$depot_tools
+      python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
+    ''
+    + lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      cp -r engine/src/flutter/third_party/* engine/src/flutter/engine/src/flutter/third_party/
+      mv engine/src/flutter/engine $out
+    ''
+    + ''
+      find $out -name '.git' -exec rm -rf {} \; || true
 
-    rm -rf $out/src/{buildtools,fuchsia}
-    rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
-    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja}
-    rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
+      rm -rf $out/src/{buildtools,fuchsia}
+      rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
+      rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
+      rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
 
-    rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
-  ''
+      rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
+    ''
+  )

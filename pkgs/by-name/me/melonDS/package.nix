@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-09-29";
+  version = "1.0rc-unstable-2025-03-09";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "e9446fa9dc3ba64c22f8e5bb611ad394b5729eda";
-    hash = "sha256-0YNF9NPKaaKzC3d8cXG4Od3AUc1zxVtuB5u2Q8ruwr0=";
+    rev = "0fcf1f6e3a443cb249f85d948ff6e58dc58501d6";
+    hash = "sha256-llRmW596UHs/q/DjqG8qQ1RqjvmGMsOO1IUkpjPW4h4=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "melonDS";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       artemist
       benley
       shamilton

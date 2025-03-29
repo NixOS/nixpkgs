@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "charm-freeze";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "freeze";
     rev = "v${version}";
-    hash = "sha256-HLlMUOLDvNLVl4dvtyRwuLhp3pOlpm/naUXK2NiIAg8=";
+    hash = "sha256-eV8X/vftF/GGuM0RnLCkIStSR98fN6nmW3BzoASPLH0=";
   };
 
-  vendorHash = "sha256-AUFzxmQOb/h0UgcprY09IVI7Auitn3JTDU/ptKicIAU=";
+  vendorHash = "sha256-Y/UsqYtzXtOCE4bGf/mRAqJ0GxEtKq0qYecbitn0EhM=";
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Tool to generate images of code and terminal output";
@@ -21,6 +29,9 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/freeze";
     changelog = "https://github.com/charmbracelet/freeze/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ caarlos0 maaslalani ];
+    maintainers = with maintainers; [
+      caarlos0
+      maaslalani
+    ];
   };
 }

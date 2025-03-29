@@ -1,10 +1,15 @@
-{ config, lib, pkgs, options, type, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  type,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters."exportarr-${type}";
-  exportarrEnvironment = (
-    lib.mapAttrs (_: toString) cfg.environment
-  ) // {
+  exportarrEnvironment = (lib.mapAttrs (_: toString) cfg.environment) // {
     PORT = toString cfg.port;
     URL = cfg.url;
     API_KEY_FILE = lib.mkIf (cfg.apiKeyFile != null) "%d/api-key";
@@ -48,7 +53,10 @@ in
       ExecStart = ''${cfg.package}/bin/exportarr ${type} "$@"'';
       ProcSubset = "pid";
       ProtectProc = "invisible";
-      SystemCallFilter = ["@system-service" "~@privileged"];
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+      ];
     };
     environment = exportarrEnvironment;
   };

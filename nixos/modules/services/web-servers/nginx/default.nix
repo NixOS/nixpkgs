@@ -7,7 +7,9 @@ let
   inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
-  dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
   virtualHosts = mapAttrs (vhostName: vhostConfig:
     let
       serverName = if vhostConfig.serverName != null
@@ -94,7 +96,7 @@ let
     REDIRECT_STATUS   = "200";
   };
 
-  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy_set_header-headers.conf" ''
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -236,6 +238,14 @@ let
         # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
         proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
+      ''}
+
+      ${optionalString cfg.recommendedUwsgiSettings ''
+        uwsgi_connect_timeout   ${cfg.uwsgiTimeout};
+        uwsgi_send_timeout      ${cfg.uwsgiTimeout};
+        uwsgi_read_timeout      ${cfg.uwsgiTimeout};
+        uwsgi_param             HTTP_CONNECTION "";
+        include ${cfg.package}/conf/uwsgi_params;
       ''}
 
       ${optionalString (cfg.mapHashBucketSize != null) ''
@@ -442,6 +452,13 @@ let
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
       ''}
+      ${optionalString (config.uwsgiPass != null && !cfg.uwsgiResolveWhileRunning)
+        "uwsgi_pass ${config.uwsgiPass};"
+      }
+      ${optionalString (config.uwsgiPass != null && cfg.uwsgiResolveWhileRunning) ''
+        set $nix_proxy_target "${config.uwsgiPass}";
+        uwsgi_pass $nix_proxy_target;
+      ''}
       ${concatStringsSep "\n"
         (mapAttrsToList (n: v: ''fastcgi_param ${n} "${v}";'')
           (optionalAttrs (config.fastcgiParams != {})
@@ -453,6 +470,7 @@ let
       ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${optionalString (config.uwsgiPass != null && config.recommendedUwsgiSettings) "include ${cfg.package}/conf/uwsgi_params;"}
       ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
@@ -471,7 +489,7 @@ let
     '') authDef)
   );
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
   oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic"));
 in
@@ -550,6 +568,23 @@ in
         example = "20s";
         description = ''
           Change the proxy related timeouts in recommendedProxySettings.
+        '';
+      };
+
+      recommendedUwsgiSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to enable recommended uwsgi settings if a vhost does not specify the option manually.
+        '';
+      };
+
+      uwsgiTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = ''
+          Change the uwsgi related timeouts in recommendedUwsgiSettings.
         '';
       };
 
@@ -862,6 +897,16 @@ in
         '';
       };
 
+      uwsgiResolveWhileRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Resolves domains of uwsgi targets at runtime
+          and not only at start, you have to set
+          services.nginx.resolver, too.
+        '';
+      };
+
       mapHashBucketSize = mkOption {
         type = types.nullOr (types.enum [ 32 64 128 ]);
         default = null;
@@ -1007,7 +1052,8 @@ in
             };
             ipv6 = mkOption {
               type = types.bool;
-              default = true;
+              default = config.networking.enableIPv6;
+              defaultText = lib.literalExpression "config.networking.enableIPv6";
               description = ''
                 By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
                 If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
@@ -1159,6 +1205,16 @@ in
       }
 
       {
+        assertion = all (host:
+          all (location: !(location.proxyPass != null && location.uwsgiPass != null)) (attrValues host.locations))
+        (attrValues virtualHosts);
+        message = ''
+          Options services.nginx.service.virtualHosts.<name>.proxyPass and
+          services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
+        '';
+      }
+
+      {
         assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
         message = ''
           services.nginx.enableQuicBPF requires using nginxQuic package,
@@ -1209,10 +1265,10 @@ in
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) dependentCertNames;
+      services = [ config.systemd.services.nginx ] ++ lib.optional (cfg.enableReload || vhostCertNames != []) config.systemd.services.nginx-config-reload;
+    }) vhostCertNames;
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
@@ -1236,8 +1292,10 @@ in
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
-      after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
+      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      after = [ "network.target" ]
+        ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
       # Nginx needs to be started in order to be able to request certificates
       # (it's hosting the acme challenge after all)
       # This fixes https://github.com/NixOS/nixpkgs/issues/81842
@@ -1301,8 +1359,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
-          ++ optional cfg.enableQuicBPF [ "bpf" ]
-          ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
+          ++ optional cfg.enableQuicBPF [ "bpf" ];
       };
     };
 
@@ -1316,9 +1373,9 @@ in
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
-    in mkIf (cfg.enableReload || sslServices != []) {
+      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+    in mkIf (cfg.enableReload || vhostCertNames != []) {
       wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
@@ -1329,7 +1386,14 @@ in
       restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);
+      unitConfig = {
+        ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
+        # Disable rate limiting for this, because it may be triggered quickly a bunch of times
+        # if a lot of certificates are renewed in quick succession. The reload itself is cheap,
+        # so even doing a lot of them in a short burst is fine.
+        # FIXME: there's probably a better way to do this.
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;
@@ -1374,7 +1438,7 @@ in
     ];
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
-      files = "/var/log/nginx/*.log";
+      files = [ "/var/log/nginx/*.log" ];
       frequency = "weekly";
       su = "${cfg.user} ${cfg.group}";
       rotate = 26;

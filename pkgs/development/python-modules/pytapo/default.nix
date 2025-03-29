@@ -2,30 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pycryptodome,
+  python-kasa,
+  pythonOlder,
   requests,
   rtp,
-  urllib3,
   setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pytapo";
-  version = "3.3.30";
+  version = "3.3.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zSeDeGD/78bIoKm6B8BN4qWQE1ivNgyvnrGtgsekM3M=";
+    hash = "sha256-wToCKRmFyhsrRxDLcOtWagVVEPn4mYzfWxz3qwTnP2I=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     pycryptodome
+    python-kasa
     requests
     rtp
     urllib3

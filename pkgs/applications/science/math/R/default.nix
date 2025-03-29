@@ -15,25 +15,33 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.4.1";
+  version = "4.4.3";
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-tMtnXequtymdOyZdIYzeQ/GSlRzluJt7saUUijay2U0=";
+    sha256 = "sha256-DZPSJEQt6iU8KwhvCI220NPP2bWSzVSW6MshQ+kPyeg=";
   };
 
   outputs = [ "out" "tex" ];
 
   dontUseImakeConfigure = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    bison
+    imake
+    perl
+    pkg-config
+    tzdata
+    which
+  ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre2 perl readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
-    bison imake which blas lapack curl tcl tk jdk tzdata
+    pango pcre2 readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
+    which blas lapack curl tcl tk jdk
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  strictDeps = true;
 
   patches = [
     ./no-usr-local-search-paths.patch
@@ -75,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
       r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -101,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
-  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+  postFixup = ''
+    echo ${which} > $out/nix-support/undetected-runtime-dependencies
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''find $out -name "*.so" -exec patchelf {} --add-rpath $out/lib/R/lib \;''}
+  '';
 
   doCheck = true;
   preCheck = "export HOME=$TMPDIR; export TZ=CET; bin/Rscript -e 'sessionInfo()'";

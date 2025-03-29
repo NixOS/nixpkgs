@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, intltool, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  intltool,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
@@ -9,11 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [ gtk2 xorg.libX11 xorg.libXres ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs = [
+    gtk2
+    xorg.libX11
+    xorg.libXres
+  ];
   # ?another optional: startup-notification
 
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK

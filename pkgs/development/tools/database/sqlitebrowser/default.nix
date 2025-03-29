@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, qtbase, qttools, sqlcipher, wrapQtAppsHook, qtmacextras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  sqlcipher,
+  wrapQtAppsHook,
+  qtmacextras,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,13 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
   # but qscintilla is currently in a bit of a mess as some consumers expect a
   # -qt4 or -qt5 prefix while others do not.
   # We *really* should get that cleaned up.
-  buildInputs = [ qtbase sqlcipher ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
+  buildInputs = [
+    qtbase
+    sqlcipher
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   cmakeFlags = [
     "-Dsqlcipher=1"
-    (lib.cmakeBool "ENABLE_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "ENABLE_TESTING" (finalAttrs.finalPackage.doCheck or false))
   ];
 
   doCheck = true;

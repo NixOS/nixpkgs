@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radio-cli";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "margual56";
     repo = "radio-cli";
     rev = "v${version}";
-    hash = "sha256-XN0IzU7+V0zUUXfOygWrZXQX09IEpVo2Rhwfv+Lny/E=";
+    hash = "sha256-De/3tkvHf8dp04A0hug+aCbiXUc+XUYeHWYOiJ/bac0=";
   };
 
-  cargoHash = "sha256-XCzDNUZpyfu4gJr1lUx1/VbLkEv3OnJvYku0eEJbK5s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mxSlyQpMzLbiIbcVQUILHDyLsCf/9fanX9/yf0hyXHA=";
 
   buildInputs = [ openssl ];
 
@@ -39,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "radio-cli";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

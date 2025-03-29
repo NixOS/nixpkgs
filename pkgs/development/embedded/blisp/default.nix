@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, argtable
-, cmake
-, libserialport
-, pkg-config
-, testers
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  argtable,
+  cmake,
+  libserialport,
+  pkg-config,
+  testers,
+  IOKit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cN35VLbdQFA3KTZ8PxgpbsLGXqfFhw5eh3nEBRZqAm4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     argtable

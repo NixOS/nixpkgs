@@ -41,8 +41,6 @@ import ./versions.nix (
       zlib
     ];
 
-    inherit (buildGoModule.go) GOOS GOARCH;
-
     # need to provide GO* env variables & patch for reproducibility
     postPatch = ''
       substituteInPlace src/go/Makefile.am \

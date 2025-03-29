@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.12.1";
+  version = "1.13.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KHewP5mM2MCPB80N5bdnEZzT70DQn0HDDXIvZoaw+4g=";
+    hash = "sha256-sn/SxlMOCrOeJ1/JtoOJU2flHV2pG6qNPWTbJWX+xNk=";
   };
 
   nativeCheckInputs = [ glibcLocales ];
@@ -26,10 +26,6 @@ buildPythonPackage rec {
   # tests take ~1h
   doCheck = false;
   pythonImportsCheck = [ "sympy" ];
-
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
 
   passthru.tests = {
     inherit sage;

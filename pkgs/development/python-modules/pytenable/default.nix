@@ -7,6 +7,8 @@
   gql,
   graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
@@ -26,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.5.3";
+  version = "1.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kau350L2WCyuxwsmnD85iWte6LIIqprSVe0yNn+BikE=";
+    tag = version;
+    hash = "sha256-kIjAmGtfOZSNqSKOmagttfzVt2onqVwrCkYM6SCOlCg=";
   };
 
   pythonRelaxDeps = [
@@ -46,12 +48,14 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    defusedxml
-    marshmallow
-    python-box
     cryptography
+    defusedxml
     gql
     graphql-core
+    marshmallow
+    pydantic
+    pydantic-extra-types
+    python-box
     python-dateutil
     requests
     requests-toolbelt

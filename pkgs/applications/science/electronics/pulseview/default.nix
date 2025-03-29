@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchgit
-, pkg-config
-, cmake
-, glib
-, boost
-, libsigrok
-, libsigrokdecode
-, libserialport
-, libzip
-, libftdi1
-, hidapi
-, glibmm
-, pcre
-, python3
-, qtsvg
-, qttools
-, bluez
-, wrapQtAppsHook
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libsigrokdecode,
+  libserialport,
+  libzip,
+  libftdi1,
+  hidapi,
+  glibmm,
+  pcre,
+  python3,
+  qtsvg,
+  qttools,
+  bluez,
+  wrapQtAppsHook,
+  desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pulseview";
   version = "0.4.2-unstable-2024-03-14";
 
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
     mainProgram = "pulseview";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor vifino ];
+    maintainers = with maintainers; [
+      bjornfor
+      vifino
+    ];
     platforms = platforms.unix;
   };
 }

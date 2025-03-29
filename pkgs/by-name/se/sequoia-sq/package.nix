@@ -1,29 +1,32 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, darwin
-, nettle
-, nix-update-script
-, rustPlatform
-, pkg-config
-, capnproto
-, installShellFiles
-, openssl
-, sqlite
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  darwin,
+  nettle,
+  nix-update-script,
+  rustPlatform,
+  pkg-config,
+  capnproto,
+  installShellFiles,
+  openssl,
+  cacert,
+  sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
-  version = "0.38.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
-    rev = "v${version}";
-    hash = "sha256-Zzk7cQs5zD+houNjK8s3tP9kZ2/eAUV/OE3/GrNAXk8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1jssSlyjbrGgkxGC1gieZooVVI42Qvz0q+pIfcZRIj0=";
   };
 
-  cargoHash = "sha256-Ou+YKfEOmMTZVg9unqoOibMQYsdNAYTq4ZoOANLRk2Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tATxGaoF/+cUDywvlnW1N2sKo/FbKhJM7yUb74mxB5s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,20 +35,25 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-    nettle
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
-
-  checkFlags = [
-    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
-    "--skip=sq_autocrypt_import"
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      nettle
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
+  # Needed for avoiding "OpenSSL error" since 1.2.0
   preCheck = ''
     export HOME=$(mktemp -d)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   env.ASSET_OUT_DIR = "/tmp/";
@@ -64,11 +72,15 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Cool new OpenPGP implementation";
+    description = "Command line application exposing a useful set of OpenPGP functionality for common tasks";
     homepage = "https://sequoia-pgp.org/";
-    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ minijackson doronbehar ];
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
+      minijackson
+      doronbehar
+      dvn0
+    ];
     mainProgram = "sq";
   };
-}
+})

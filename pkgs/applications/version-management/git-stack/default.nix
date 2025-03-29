@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-, testers
-, git-stack
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  testers,
+  git-stack,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
-  version = "0.10.17";
+  version = "0.10.18";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-stack";
     rev = "v${version}";
-    hash = "sha256-foItJSZ6jsLuWkO/c1Ejb45dSdzZ/ripieyVIYsEyy0=";
+    hash = "sha256-iFoxYq4NHC/K0ruPDXHfayZDglebBJE00V57HUH9Y84=";
   };
 
-  cargoHash = "sha256-MEhUmy4ijR/zHm/qMt4PqNGYnCfIgjNaL9SlMmXCMmc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-338iRd6zoy2O55sZ0h+s6i8kg4yXFBowRQLge9R9Bqs=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security

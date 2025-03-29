@@ -54,6 +54,8 @@ in
             --no-update True
         '';
         Restart = "on-failure";
+        KillSignal = "SIGINT";
+        SuccessExitStatus = "0 156";
       };
     };
 

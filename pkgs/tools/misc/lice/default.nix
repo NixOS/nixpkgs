@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "lice";

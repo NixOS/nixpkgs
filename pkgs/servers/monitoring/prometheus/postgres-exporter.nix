@@ -1,23 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "postgres_exporter";
-  version = "0.15.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "postgres_exporter";
     rev = "v${version}";
-    sha256 = "sha256-fxVU2z1RGgI8AoKiJb+3LIEa1KDhPptmdP21/ESzmgw=";
+    sha256 = "sha256-F7nLz6NkvWSeZTzjo1/wNWCPn3Veo9/SkJdlFRwdlo4=";
   };
 
-  vendorHash = "sha256-/AL9Qkcrp5Kvj2epJMuNrtwqBbyCy4P6oVGUfODXS/Q=";
+  vendorHash = "sha256-Dl44VTaDE90nhOU0zxZvd/zrVe8bLRnT16ISqJMpzpU=";
 
   ldflags =
     let
       t = "github.com/prometheus/common/version";
     in
-    [ "-s" "-w"
+    [
+      "-s"
+      "-w"
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
@@ -34,6 +41,11 @@ buildGoModule rec {
     description = "Prometheus exporter for PostgreSQL";
     mainProgram = "postgres_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz globin willibutz ma27 ];
+    maintainers = with maintainers; [
+      fpletz
+      globin
+      willibutz
+      ma27
+    ];
   };
 }

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.restic;
@@ -10,6 +16,7 @@ let
     mapAttrs'
     splitString
     toUpper
+    optional
     optionalAttrs
     nameValuePair
     ;
@@ -18,11 +25,20 @@ in
   port = 9753;
   extraOpts = {
     repository = mkOption {
-      type = types.str;
+      type = with lib.types; nullOr str;
+      default = null;
       description = ''
         URI pointing to the repository to monitor.
       '';
       example = "sftp:backup@192.168.1.100:/backups/example";
+    };
+
+    repositoryFile = mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = ''
+        Path to the file containing the URI for the repository to monitor.
+      '';
     };
 
     passwordFile = mkOption {
@@ -38,7 +54,7 @@ in
       default = null;
       description = ''
         File containing the credentials to access the repository, in the
-        format of an EnvironmentFile as described by systemd.exec(5)
+        format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
       '';
     };
 
@@ -52,7 +68,12 @@ in
     };
 
     rcloneOptions = mkOption {
-      type = with types; attrsOf (oneOf [ str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          bool
+        ]);
       default = { };
       description = ''
         Options to pass to rclone to control its behavior.
@@ -65,7 +86,12 @@ in
     };
 
     rcloneConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          bool
+        ]);
       default = { };
       description = ''
         Configuration for the rclone remote being used for backup.
@@ -103,13 +129,22 @@ in
 
   serviceOpts = {
     script = ''
+      export RESTIC_REPOSITORY=${
+        if cfg.repositoryFile != null then
+          "$(cat $CREDENTIALS_DIRECTORY/RESTIC_REPOSITORY)"
+        else
+          "${cfg.repository}"
+      }
       export RESTIC_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/RESTIC_PASSWORD_FILE
       ${pkgs.prometheus-restic-exporter}/bin/restic-exporter.py \
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     serviceConfig = {
+      CacheDirectory = "restic-exporter";
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-      LoadCredential = [ "RESTIC_PASSWORD_FILE:${cfg.passwordFile}" ];
+      LoadCredential = [
+        "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
+      ] ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
     };
     environment =
       let
@@ -119,23 +154,19 @@ in
         toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
       in
       {
-        RESTIC_REPOSITORY = cfg.repository;
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
+        RESTIC_CACHE_DIR = "$CACHE_DIRECTORY";
       }
-      // (mapAttrs'
-        (name: value:
-          nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-        )
-        cfg.rcloneOptions)
+      // (mapAttrs' (
+        name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+      ) cfg.rcloneOptions)
       // optionalAttrs (cfg.rcloneConfigFile != null) {
         RCLONE_CONFIG = cfg.rcloneConfigFile;
       }
-      // (mapAttrs'
-        (name: value:
-          nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
-        )
-        cfg.rcloneConfig);
+      // (mapAttrs' (
+        name: value: nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+      ) cfg.rcloneConfig);
   };
 }

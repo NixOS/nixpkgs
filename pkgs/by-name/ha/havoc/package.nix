@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libxkbcommon
-, pkg-config
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxkbcommon,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,9 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/ii8/havoc";
     description = "Minimal terminal emulator for Wayland";
-    license = with lib.licenses; [ mit publicDomain ];
+    license = with lib.licenses; [
+      mit
+      publicDomain
+    ];
     mainProgram = "havoc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };

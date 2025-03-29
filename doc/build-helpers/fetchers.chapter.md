@@ -728,7 +728,7 @@ buildPythonPackage rec {
     (fetchDebianPatch {
       inherit pname version;
       debianRevision = "5";
-      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
+      patch = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
       hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
     })
   ];
@@ -755,25 +755,66 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
-Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
+If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
+This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
 
-If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information:
+Additionally, the following optional arguments can be given:
 
-```nix
-{ stdenv, fetchgit }:
+*`fetchSubmodules`* (Boolean)
 
-stdenv.mkDerivation {
-  name = "hello";
-  src = fetchgit {
-    url = "https://...";
-    sparseCheckout = [
-      "directory/to/be/included"
-      "another/directory"
-    ];
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-}
-```
+: Whether to also fetch the submodules of a repository.
+
+*`fetchLFS`* (Boolean)
+
+: Whether to fetch LFS objects.
+
+*`postFetch`* (String)
+
+: Shell code executed after the file has been fetched successfully.
+  This can do things like check or transform the file.
+
+*`leaveDotGit`* (Boolean)
+
+: Whether the `.git` directory of the clone should *not* be removed after checkout.
+
+  Be warned though that the git repository format is not stable and this flag is therefore not suitable for actual use by itself.
+  Only use this for testing purposes or in conjunction with removing the `.git` directory in `postFetch`.
+
+*`deepClone`* (Boolean)
+
+: Clone the entire repository as opposing to just creating a shallow clone.
+  This implies `leaveDotGit`.
+
+*`sparseCheckout`* (List of String)
+
+: Prevent git from fetching unnecessary blobs from server.
+  This is useful if only parts of the repository are needed.
+
+  ::: {.example #ex-fetchgit-sparseCheckout}
+
+  # Use `sparseCheckout` to only include some directories:
+
+  ```nix
+  { stdenv, fetchgit }:
+
+  stdenv.mkDerivation {
+    name = "hello";
+    src = fetchgit {
+      url = "https://...";
+      sparseCheckout = [
+        "directory/to/be/included"
+        "another/directory"
+      ];
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  }
+  ```
+  :::
+
+  See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
+
+Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
+Future parameters additions might also happen without immediately being documented here.
 
 ## `fetchfossil` {#fetchfossil}
 
@@ -795,7 +836,7 @@ A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are m
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. If you need to fetch a tag however, you should prefer to use the `tag` parameter which achieves this in a safer way with less boilerplate. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
 
 To use a different GitHub instance, use `githubBase` (defaults to `"github.com"`).
 

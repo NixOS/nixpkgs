@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "packageurl-python";
-  version = "0.15.6";
+  version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "packageurl_python";
     inherit version;
-    hash = "sha256-y8ia/RXV9NBdtPG2EpfluXpD9h8oeZ9tKCr/Rn7S7pY=";
+    hash = "sha256-aeO/ijky/pwkAPVqrrn4aRHs7i+TmNvhtY7DQ0C+Nl0=";
   };
 
   build-system = [ setuptools ];

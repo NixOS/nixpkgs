@@ -1,0 +1,12 @@
+diff --git a/share/config.fish b/share/config.fish
+index d85fd1e185..c564e45b27 100644
+--- a/share/config.fish
++++ b/share/config.fish
+@@ -158,6 +158,7 @@
+ #
+ if status --is-login
+     if command -sq /usr/libexec/path_helper
++        and not set -q __NIX_DARWIN_SET_ENVIRONMENT_DONE
+         # Adapt construct_path from the macOS /usr/libexec/path_helper
+         # executable for fish; see
+         # https://opensource.apple.com/source/shell_cmds/shell_cmds-203/path_helper/path_helper.c.auto.html .

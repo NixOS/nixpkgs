@@ -40,6 +40,7 @@ let
     "flow"
     "fritz"
     "fritzbox"
+    "frr"
     "graphite"
     "idrac"
     "imap-mailstat"
@@ -52,18 +53,22 @@ let
     "keylight"
     "klipper"
     "knot"
+    "libvirt"
     "lnd"
     "mail"
     "mikrotik"
     "modemmanager"
     "mongodb"
+    "mqtt"
     "mysqld"
     "nats"
     "nextcloud"
     "nginx"
     "nginxlog"
     "node"
+    "node-cert"
     "nut"
+    "nvidia-gpu"
     "pgbouncer"
     "php-fpm"
     "pihole"
@@ -73,6 +78,7 @@ let
     "process"
     "pve"
     "py-air-control"
+    "rasdaemon"
     "redis"
     "restic"
     "rspamd"
@@ -88,9 +94,7 @@ let
     "statsd"
     "surfboard"
     "systemd"
-    "tor"
     "unbound"
-    "unifi"
     "unpoller"
     "v2ray"
     "varnish"
@@ -299,6 +303,9 @@ in
           The Minio exporter has been removed, as it was broken and unmaintained.
           See the 24.11 release notes for more information.
         '')
+        (lib.mkRemovedOptionModule [ "tor" ] ''
+          The Tor exporter has been removed, as it was broken and unmaintained.
+        '')
       ];
     };
     description = "Prometheus exporter configuration";
@@ -330,6 +337,13 @@ in
       message = ''
         Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
           not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
+      assertion =
+        cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
+      message = ''
+        Please specify either 'services.prometheus.exporters.restic.repository'
+          or 'services.prometheus.exporters.restic.repositoryFile'.
       '';
     } {
       assertion = cfg.snmp.enable -> (

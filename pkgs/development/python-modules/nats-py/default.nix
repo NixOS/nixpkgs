@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r94dDXPpkLS1PsB9L4qlDw15tPa2vpxOS52eqJk2dNU=";
   };
 
@@ -34,9 +34,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     aiohttp = [ aiohttp ];
     nkeys = [ nkeys ];
-    # fast_parse = [
-    #   fast-mail-parser
-    # ];
+    # fast_parse = [ fast-mail-parser ];
   };
 
   nativeCheckInputs = [
@@ -47,6 +45,8 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # Timeouts
+      "ClientTLS"
       # AssertionError
       "test_fetch_n"
       "test_kv_simple"

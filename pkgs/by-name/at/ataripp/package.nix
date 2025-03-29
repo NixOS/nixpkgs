@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, SDL
-, alsa-lib
-, fetchurl
-, gcc-unwrapped
-, libICE
-, libSM
-, libX11
-, libXext
+{
+  lib,
+  stdenv,
+  SDL,
+  alsa-lib,
+  fetchurl,
+  gcc-unwrapped,
+  libICE,
+  libSM,
+  libX11,
+  libXext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       and the Atari 5200 game console. The emulator is auto-configurable and
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.unix;
   };

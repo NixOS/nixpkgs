@@ -80,6 +80,9 @@ in {
     (lib.mkRemovedOptionModule [ "services" "mailman" "package" ] ''
       Didn't have an effect for several years.
     '')
+    (lib.mkRemovedOptionModule [ "services" "mailman" "extraPythonPackages" ] ''
+      Didn't have an effect for several years.
+    '')
   ];
 
   options = {
@@ -263,6 +266,15 @@ in {
       serve = {
         enable = lib.mkEnableOption "automatic nginx and uwsgi setup for mailman-web";
 
+        uwsgiSettings = lib.mkOption {
+          default = { };
+          example = { uwsgi.buffer-size = 8192; };
+          inherit (pkgs.formats.json {}) type;
+          description = ''
+            Extra configuration to merge into uwsgi config.
+          '';
+        };
+
         virtualRoot = lib.mkOption {
           default = "/";
           example = lib.literalExpression "/lists";
@@ -271,12 +283,6 @@ in {
             Path to mount the mailman-web django application on.
           '';
         };
-      };
-
-      extraPythonPackages = lib.mkOption {
-        description = "Packages to add to the python environment used by mailman and mailman-web";
-        type = lib.types.listOf lib.types.package;
-        default = [];
       };
 
       settings = lib.mkOption {
@@ -441,7 +447,7 @@ in {
       enable = lib.mkDefault true;
       virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
-          ${cfg.serve.virtualRoot}.extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
+          ${cfg.serve.virtualRoot}.uwsgiPass = "unix:/run/mailman-web.socket";
           "${lib.removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
@@ -460,6 +466,16 @@ in {
       ignoreCollisions = true;
       postBuild = ''
         find $out/bin/ -mindepth 1 -not -name "mailman*" -delete
+      '' + lib.optionalString config.security.sudo.enable ''
+        mv $out/bin/mailman $out/bin/.mailman-wrapped
+        echo '#!${pkgs.runtimeShell}
+        sudo=exec
+        if [[ "$USER" != mailman ]]; then
+          sudo="exec /run/wrappers/bin/sudo -u mailman"
+        fi
+        $sudo ${placeholder "out"}/bin/.mailman-wrapped "$@"
+        ' > $out/bin/mailman
+        chmod +x $out/bin/mailman
       '';
     }) ];
 
@@ -570,18 +586,21 @@ in {
       };
 
       mailman-uwsgi = lib.mkIf cfg.serve.enable (let
-        uwsgiConfig.uwsgi = {
-          type = "normal";
-          plugins = ["python3"];
-          home = webEnv;
-          http = "127.0.0.1:18507";
-        }
-        // (if cfg.serve.virtualRoot == "/"
-          then { module = "mailman_web.wsgi:application"; }
-          else {
-            mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
-            manage-script-name = true;
+        uwsgiConfig = lib.recursiveUpdate {
+          uwsgi = {
+            type = "normal";
+            plugins = ["python3"];
+            home = webEnv;
+            http = "127.0.0.1:18507";
+            buffer-size = 8192;
+          }
+          // (if cfg.serve.virtualRoot == "/"
+            then { module = "mailman_web.wsgi:application"; }
+            else {
+              mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
+              manage-script-name = true;
           });
+        } cfg.serve.uwsgiSettings;
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
         wantedBy = ["multi-user.target"];

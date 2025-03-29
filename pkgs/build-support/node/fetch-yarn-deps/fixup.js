@@ -23,7 +23,7 @@ const fixupYarnLock = async (lockContents, verbose) => {
 			}
 			const [ url, hash ] = pkg.resolved.split("#", 2)
 
-			if (hash || url.startsWith("https://codeload.github.com")) {
+			if (hash || url.startsWith("https://codeload.github.com/")) {
 				if (verbose) console.log(`Removing integrity for git dependency ${dep}`)
 				delete pkg.integrity
 			}

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # dependencies
   appdirs,
@@ -26,9 +27,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
   };
+
+  patches = [
+    # TODO: this has been merged in master and will thus be included in the next release.
+    (fetchpatch {
+      name = "migrate-from-nose-to-pytest";
+      url = "https://github.com/openvax/mhcflurry/commit/8e9f35381a476362ca41cb71eb0a90f6573fe4b3.patch";
+      hash = "sha256-PyyxGrjE3OZR8dKHEQBQGiRG9A8kcz/e14PRyrVvqrE=";
+    })
+  ];
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
   dependencies = [
@@ -94,7 +104,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/openvax/mhcflurry/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    # Requires a recent version of tensorflow
-    broken = lib.versionOlder tensorflow.version "2.15.0";
   };
 }

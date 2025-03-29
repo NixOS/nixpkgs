@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "yesoreyeram-infinity-datasource";
   version = "2.11.0";
   zipHash = {

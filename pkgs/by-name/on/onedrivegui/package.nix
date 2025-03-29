@@ -1,6 +1,7 @@
 {
   lib,
   python3Packages,
+  qt6,
   fetchFromGitHub,
   writeText,
   copyDesktopItems,
@@ -10,7 +11,7 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.1.1a";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -32,12 +33,18 @@ python3Packages.buildPythonApplication rec {
     owner = "bpozdena";
     repo = "OneDriveGUI";
     rev = "v${version}";
-    hash = "sha256-d5NAcT3x9R/2DVQKZsw4GH63nTlVFsvkWwMrb42s18s=";
+    hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
+    qt6.wrapQtAppsHook
     makeWrapper
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -47,6 +54,7 @@ python3Packages.buildPythonApplication rec {
 
   # wrap manually to avoid having a bash script in $out/bin with a .py extension
   dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
 
   doCheck = false; # No tests defined
   pythonImportsCheck = [ "OneDriveGUI" ];
@@ -79,6 +87,7 @@ python3Packages.buildPythonApplication rec {
     rm -r $out/bin/*
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
+      ''${qtWrapperArgs[@]} \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
       --prefix PYTHONPATH : ${
         python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
@@ -91,7 +100,7 @@ python3Packages.buildPythonApplication rec {
     description = "Simple GUI for Linux OneDrive Client, with multi-account support";
     mainProgram = "onedrivegui";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ chewblacka ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,37 +1,44 @@
 {
   lib,
+  azure-common,
+  azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
   msrest,
-  msrestazure,
-  azure-common,
-  azure-mgmt-nspkg,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-scheduler";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "7.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "c6e6edd386ddc4c21d54b1497c3397b970bc127b71809b51bd2391cb1f3d1a14";
+    pname = "azure_mgmt_scheduler";
+    inherit version;
+    hash = "sha256-hzabrRKnOzxk2e0/HlJvS7QvWnibgLfqn8EW+vsFH6U=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
+    msrest
   ];
 
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.scheduler" ];
+
   meta = with lib; {
     description = "This is the Microsoft Azure Scheduler Management Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-scheduler_7.0.0/sdk/scheduler/azure-mgmt-scheduler/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-scheduler_${version}/sdk/scheduler/azure-mgmt-scheduler/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

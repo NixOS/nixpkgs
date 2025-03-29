@@ -1,4 +1,12 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  libkdegames,
+}:
 
 mkDerivation {
   pname = "klines";

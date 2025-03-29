@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "4.4.1";
+  version = "5.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9pqp9DJKvzOzApWuSXNn7uQ4bxdPmQ9QtOEAlbrT9Eg=";
+    tag = version;
+    hash = "sha256-VT28O67s69pzmy3e6F3teRKzsPFnRT1Z2b3ngjQg5Og=";
   };
 
   pythonRelaxDeps = true;
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-rdbms
     azure-mgmt-resource
     azure-mgmt-security
+    azure-mgmt-search
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
@@ -73,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "prowler";

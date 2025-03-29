@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jceb";
-    repo = pname;
+    repo = "yeahconsole";
     rev = "v${version}";
     hash = "sha256-Ea6erNF9hEhDHlWLctu1SHFVoXXXsPeWUbvCBSZwn4s=";
   };

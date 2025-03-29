@@ -10,6 +10,7 @@
   httpx,
   httpx-sse,
   orjson,
+  typing-extensions,
 
   # passthru
   writeScript,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.32";
+  version = "0.1.53";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/sdk==${version}";
-    hash = "sha256-qOxtrRbdK0M4aFWJX0SFn7U27rvAyqu53iCbYZX3s8A=";
+    tag = "sdk==${version}";
+    hash = "sha256-Mx/36+FYZi/XNHJwlNRKE/lVo6nRTXUQwtYkq7HmBu0=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -35,23 +36,27 @@ buildPythonPackage rec {
     httpx
     httpx-sse
     orjson
+    typing-extensions
   ];
+
+  disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    # python3Packages.langgraph-sdk depends on python3Packages.langgraph. langgraph-cli is independent of both.
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -eu -o pipefail +e
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
       nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
+      nix-update --commit --version-regex 'checkpointduckdb==(.*)' python3Packages.langgraph-checkpoint-duckdb
       nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
       nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

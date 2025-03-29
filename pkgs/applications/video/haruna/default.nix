@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, breeze-icons
-, breeze
-, cmake
-, extra-cmake-modules
-, ffmpeg-headless
-, kconfig
-, kcoreaddons
-, kfilemetadata
-, ki18n
-, kiconthemes
-, kio
-, kirigami
-, kxmlgui
-, kdoctools
-, mpvqt
-, pkg-config
-, wrapQtAppsHook
-, qqc2-desktop-style
-, qtbase
-, yt-dlp
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  breeze-icons,
+  breeze,
+  cmake,
+  extra-cmake-modules,
+  ffmpeg-headless,
+  kconfig,
+  kcoreaddons,
+  kfilemetadata,
+  ki18n,
+  kiconthemes,
+  kio,
+  kirigami,
+  kxmlgui,
+  kdoctools,
+  mpvqt,
+  pkg-config,
+  wrapQtAppsHook,
+  qqc2-desktop-style,
+  qtbase,
+  yt-dlp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "1.1.2";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-PjELW0evn53gIbScrM2bYEpb9U/TE/lOCD2DiJ1aodo=";
+    hash = "sha256-EoB8qoCiB6jvHqfhkGHhiq9/79MBLt6GguvRIwY90B0=";
     domain = "invent.kde.org";
   };
 
@@ -70,8 +71,19 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
-    license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
-    maintainers = with maintainers; [ jojosch kashw2 ];
+    license = with licenses; [
+      bsd3
+      cc-by-40
+      cc-by-sa-40
+      cc0
+      gpl2Plus
+      gpl3Plus
+      wtfpl
+    ];
+    maintainers = with maintainers; [
+      jojosch
+      kashw2
+    ];
     mainProgram = "haruna";
   };
 }

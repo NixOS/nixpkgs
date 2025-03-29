@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gtts";
-  version = "2.5.3";
+  version = "2.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8FPKAMVXqw/4X050tAnOAx/wGboZPPJs72VwwaOEamE=";
+    tag = "v${version}";
+    hash = "sha256-ryTR7cESDO9pH5r2FBz+6JuNMEQr39hil/FSklgaIGg=";
   };
 
   build-system = [ setuptools ];

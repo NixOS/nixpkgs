@@ -10,16 +10,18 @@
 
 buildGoModule rec {
   pname = "harbor-cli";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
     rev = "v${version}";
-    hash = "sha256-WSADuhr6p8N0Oh1xIG7yItM6t0EWUiAkzNbdKsSc4WA=";
+    hash = "sha256-Vfr7e5UQ34TkirywuYJPrkxRA6yJp3/ivfCJOnh34MY=";
   };
 
-  vendorHash = "sha256-UUD9/5+McR1t5oO4/6TSScT7hhSKM0OpBf94LVQG1Pw=";
+  vendorHash = "sha256-zQV3YJJ5cu24SVS6LCuZbM5EfGZyNPt8f1N0B3befD0=";
+
+  excludedPackages = [ "dagger" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +31,11 @@ buildGoModule rec {
     "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${version}"
   ];
 
+  doCheck = false; # Network required
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export HOME="$(mktemp -d)"
+
     installShellCompletion --cmd harbor \
       --bash <($out/bin/harbor completion bash) \
       --fish <($out/bin/harbor completion fish) \
@@ -38,7 +44,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = harbor-cli;
-    command = "harbor version";
+    command = "HOME=\"$(mktemp -d)\" harbor version";
   };
 
   meta = {

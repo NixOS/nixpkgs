@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
-  boost,
+  boost186,
   libsodium,
   miniupnpc,
   openssl,
@@ -22,7 +23,7 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf_21,
+  protobuf,
   udev,
 }:
 
@@ -40,7 +41,6 @@ let
     rev = "bff7fdfe436c727982cc553bdfb29a9021b423b0";
     hash = "sha256-VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
   };
-
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
@@ -53,7 +53,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-nDiFJjhsISYM8kTgJUaPYL44iyccnz5+Pd5beBh+lsM=";
   };
 
-  patches = [ ./use-system-libraries.patch ];
+  patches = [
+    ./use-system-libraries.patch
+    # https://github.com/monero-project/monero/pull/9462
+    (fetchpatch2 {
+      url = "https://github.com/monero-project/monero/commit/65568d3a884857ce08d1170f5801a6891a5c187c.patch?full_index=1";
+      hash = "sha256-Btuy69y02UyVMmsOiCRPZhM7qW5+FRNujOZjNMRdACQ=";
+    })
+  ];
 
   postPatch = ''
     # manually install submodules
@@ -71,7 +78,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186 # uses boost/asio/io_service.hpp
       libsodium
       miniupnpc
       openssl
@@ -89,11 +96,9 @@ stdenv.mkDerivation rec {
       python3
       hidapi
       libusb1
-      protobuf_21
+      protobuf
     ]
-    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
-      udev
-    ];
+    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [ udev ];
 
   cmakeFlags =
     [
@@ -133,5 +138,7 @@ stdenv.mkDerivation rec {
       rnhmjoj
     ];
     mainProgram = "monero-wallet-cli";
+    # internal build tool generate_translations_header is tricky to compile for the build platform
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

@@ -1,12 +1,8 @@
 {
-  bash,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
-
-  withFish ? false,
-  fish,
 
   lib,
   makeWrapper,
@@ -15,16 +11,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.35.2";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8Ou1TkPGAsrRfV75ntPKpXTUEhVkwgtaXErrRX8hR0E=";
+    sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
   };
 
-  vendorHash = "sha256-XCq+hDxK7C9XYlKe+lUArQlPheWALx806o1IeCRD7vs=";
+  vendorHash = "sha256-Y8g5495IYgQ2lvq5qbnQmoxwEYfzzx12KfMS6wF2QXE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -35,6 +31,7 @@ buildGoModule rec {
     "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
     "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
     "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/common-fate/granted/internal/build.ConfigFolderName=.granted"
   ];
 
   subPackages = [
@@ -76,12 +73,11 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-    ''
-    + lib.optionalString withFish ''
+
       # Install fish script
       install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
       substituteInPlace $out/share/assume.fish \
-        --replace /bin/fish ${fish}/bin/fish
+        --replace-fail "#!/bin/fish" "#!/usr/bin/env fish"
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

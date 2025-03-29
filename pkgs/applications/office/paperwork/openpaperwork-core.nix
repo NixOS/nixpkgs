@@ -1,22 +1,23 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{
+  buildPythonPackage,
+  lib,
+  callPackage,
 
-, isPy3k
-, isPyPy
+  isPy3k,
+  isPyPy,
 
-, distro
-, setuptools
-, psutil
-, certifi
-, setuptools-scm
+  distro,
+  setuptools,
+  psutil,
+  certifi,
+  setuptools-scm,
 
-, pkgs
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "openpaperwork-core";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/openpaperwork-core";
@@ -54,7 +55,10 @@ buildPythonPackage rec {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
     platforms = lib.platforms.linux;
   };
 }

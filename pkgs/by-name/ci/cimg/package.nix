@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmic
-, gmic-qt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmic,
+  gmic-qt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
-  version = "3.4.3";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
-    rev = "refs/tags/v.${finalAttrs.version}";
-    hash = "sha256-Abe7mSbdj06MossUQXCKZPzzfyvJyRVeLfzINYNPv4g=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-iGpLVsS8o8BqxEu63mZeeB49+lnYmdi2X5ISip89UDY=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -45,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       processing applications.
     '';
     license = lib.licenses.cecill-c;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pandoc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pandoc,
 }:
 
 buildGoModule rec {
   pname = "seilfahrt";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Nerdbergev";
     repo = "seilfahrt";
     rev = "v${version}";
-    hash = "sha256-eQcRS3xyqdtjRki+EPnHIaqUJufniFJCh5qU2Za9kyg=";
+    hash = "sha256-pn3EsYPhggViL067nk6UhmIULGsf8IYm/dXSDudiZRA=";
   };
 
-  vendorHash = "sha256-JU77EFk8SWgZkN4DEtkKS2MsBH16my4j9X/NJC/r6mI=";
+  vendorHash = "sha256-CUxUxumji0j9cwrYksJqHq891VlotMrGIrF0vr6wSMs=";
 
   buildInputs = [ pandoc ];
 

@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "4.99.2";
+  version = "4.99.16";
   geph-meta = with lib; {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://geph.io";
@@ -35,10 +35,11 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-aZFm4+oUQungCPbxs7j1J8hLcCYoIodIEQEiQfjoLUw=";
+      hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
-    cargoHash = "sha256-ypnjVoscGqVifkjzFh2KE+3EVFWIiyahTNTil3nu/+s=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-igIYTlI3hqvlOTgdwouA9YussP9h0pOHUUTCjA2LE5U=";
 
     nativeBuildInputs = [ perl ];
 
@@ -54,8 +55,8 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = "gephgui-pkg";
-      rev = "3b045e21b8c587c26f9d5f0f2b4bdf0a34bfee80";
-      hash = "sha256-p+AxAOznUsG45Ibm1kczapfmbK+aeex2js463eqZ8gY=";
+      rev = "9f0d5c689c2cae67a4750a68295676f449724a98";
+      hash = "sha256-/aHd1EDrFp1kXen5xRCCl8LVlMVH0pY8buILZri81II=";
       fetchSubmodules = true;
     };
 
@@ -65,13 +66,8 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
-      cargoLock = {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "tao-0.5.2" = "sha256-HyQyPRoAHUcgtYgaAW7uqrwEMQ45V+xVSxmlAZJfhv0=";
-          "wry-0.12.2" = "sha256-kTMXvignEF3FlzL0iSlF6zn1YTOCpyRUDN8EHpUS+yI=";
-        };
-      };
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-pCj4SulUVEC4QTPBrPQBn5xJ+sHPs6KfjsdVRcsRapY=";
 
       pnpmDeps = pnpm.fetchDeps {
         inherit (finalAttrs) pname version src;

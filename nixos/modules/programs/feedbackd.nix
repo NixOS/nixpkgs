@@ -1,8 +1,14 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.programs.feedbackd;
-in {
+in
+{
   options = {
     programs.feedbackd = {
       enable = lib.mkEnableOption ''
@@ -19,6 +25,8 @@ in {
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    users.groups.feedbackd = {};
+    # TODO: also enable systemd unit fbd-alert-slider for OnePlus 6/6T devices, see release notes of feedbackd v0.5.0
+
+    users.groups.feedbackd = { };
   };
 }

@@ -523,15 +523,17 @@ rec {
   writeFishBin = name: writeFish "/bin/${name}";
 
   /**
-    Like writeScript but the first line is a shebang to babashka
+    writeBabashka takes a name, an attrset with babashka interpreter and linting check (both optional)
+    and some babashka source code and returns an executable.
 
-    Can be called with or without extra arguments.
+    `pkgs.babashka-unwrapped` is used as default interpreter for small closure size. If dependencies needed, use `pkgs.babashka` instead. Pass empty string to check to disable the default clj-kondo linting.
 
+    # Examples
     :::{.example}
-    ## `pkgs.writers.writeBabashka` without arguments
+    ## `pkgs.writers.writeBabashka` with empty arguments
 
     ```nix
-    writeBabashka "example" ''
+    writeBabashka "example" { } ''
       (println "hello world")
     ''
     ```
@@ -553,57 +555,192 @@ rec {
     ''
     ```
     :::
-  */
-  writeBabashka =
-    name: argsOrScript:
-    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (
-        argsOrScript
-        // {
-          interpreter = "${lib.getExe pkgs.babashka}";
-          check = "${lib.getExe pkgs.clj-kondo} --lint";
-        }
-      ) name
-    else
-      makeScriptWriter {
-        interpreter = "${lib.getExe pkgs.babashka}";
-        check = "${lib.getExe pkgs.clj-kondo} --lint";
-      } name argsOrScript;
 
-  /**
-    Like writeScriptBin but the first line is a shebang to babashka
+    :::{.note}
+    Babashka needs Java for fetching dependencies. Wrapped babashka contains jdk,
+    pass wrapped version `pkgs.babashka` to babashka if dependencies are required.
 
-    Can be called with or without extra arguments.
-
-    # Examples
-    :::{.example}
-    ## `pkgs.writers.writeBabashkaBin` without arguments
+    For example:
 
     ```nix
-    writeBabashkaBin "example" ''
+    writeBabashka "example"
+    {
+      babashka = pkgs.babashka;
+    }
+    ''
+      (require '[babashka.deps :as deps])
+      (deps/add-deps '{:deps {medley/medley {:mvn/version "1.3.0"}}})
+      (require '[medley.core :as m])
+      (prn (m/index-by :id [{:id 1} {:id 2}]))
+    ''
+    ```
+    :::
+
+    :::{.note}
+    Disable clj-kondo linting:
+
+    ```nix
+    writeBabashka "example"
+    {
+      check = "";
+    }
+    ''
       (println "hello world")
     ''
     ```
     :::
+  */
+  writeBabashka =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      babashka ? pkgs.babashka-unwrapped,
+      check ? "${lib.getExe pkgs.clj-kondo} --lint",
+      ...
+    }@args:
+    makeScriptWriter (
+      (builtins.removeAttrs args [
+        "babashka"
+      ])
+      // {
+        interpreter = "${lib.getExe babashka}";
+      }
+    ) name;
+
+  /**
+    writeBabashkaBin takes the same arguments as writeBabashka but outputs a directory
+    (like writeScriptBin)
+  */
+  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+
+  /**
+    `writeGuile` returns a derivation that creates an executable Guile script.
+
+    # Inputs
+
+    `nameOrPath` (String)
+    : Name of or path to the script. The semantics is the same as that of
+     `makeScriptWriter`.
+
+    `config` (AttrSet)
+    : `guile` (Optional, Derivation, Default: `pkgs.guile`)
+      : Guile package used for the script.
+    : `libraries` (Optional, [ Derivation ], Default: [])
+      : Extra Guile libraries exposed to the script.
+    : `r6rs` and `r7rs` (Optional, Boolean, Default: false)
+      : Whether to adapt Guile’s initial environment to better support R6RS/
+        R7RS. See the [Guile Reference Manual](https://www.gnu.org/software/guile/manual/html_node/index.html)
+        for details.
+    : `srfi` (Optional, [ Int ], Default: [])
+      : SRFI module to be loaded into the interpreter before evaluating a
+        script file or starting the REPL. See the Guile Reference Manual to
+        know which SRFI are supported.
+    : Other attributes are directly passed to `makeScriptWriter`.
+
+    `content` (String)
+    : Content of the script.
+
+    # Examples
 
     :::{.example}
-    ## `pkgs.writers.writeBabashkaBin` with arguments
+    ## `pkgs.writers.writeGuile` with default config
 
     ```nix
-    writeBabashkaBin "example"
-    {
-      makeWrapperArgs = [
-        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
-      ];
+    writeGuile "guile-script" { }
+    ''
+      (display "Hello, world!")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeGuile` with SRFI-1 enabled and extra libraries
+
+    ```nix
+    writeGuile "guile-script" {
+      libraries = [ pkgs.guile-semver ];
+      srfi = [ 1 ];
     }
     ''
-      (require '[babashka.tasks :as tasks])
-      (tasks/shell "hello" "-g" "Hello babashka!")
+      (use-modules (semver))
+      (make-semver 1 (third '(2 3 4)) 5) ; => #<semver 1.4.5>
     ''
     ```
     :::
   */
-  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+  writeGuile =
+    nameOrPath:
+    {
+      guile ? pkgs.guile,
+      libraries ? [ ],
+      r6rs ? false,
+      r7rs ? false,
+      srfi ? [ ],
+      ...
+    }@config:
+    content:
+    assert builtins.all builtins.isInt srfi;
+    let
+      finalGuile = pkgs.buildEnv {
+        name = "guile-env";
+        paths = [ guile ] ++ libraries;
+        passthru = {
+          inherit (guile) siteDir siteCcacheDir;
+        };
+        meta.mainProgram = guile.meta.mainProgram or "guile";
+      };
+    in
+    makeScriptWriter
+      (
+        (builtins.removeAttrs config [
+          "guile"
+          "libraries"
+          "r6rs"
+          "r7rs"
+          "srfi"
+        ])
+        // {
+          interpreter = "${lib.getExe finalGuile} \\";
+          makeWrapperArgs = [
+            "--set"
+            "GUILE_LOAD_PATH"
+            "${finalGuile}/${finalGuile.siteDir}:${finalGuile}/lib/scheme-libs"
+            "--set"
+            "GUILE_LOAD_COMPILED_PATH"
+            "${finalGuile}/${finalGuile.siteCcacheDir}:${finalGuile}/lib/libobj"
+            "--set"
+            "LD_LIBRARY_PATH"
+            "${finalGuile}/lib/ffi"
+            "--set"
+            "DYLD_LIBRARY_PATH"
+            "${finalGuile}/lib/ffi"
+          ];
+        }
+      )
+      nameOrPath
+      /*
+        Spaces, newlines and tabs are significant for the "meta switch" of Guile, so
+        certain complication must be made to ensure correctness.
+      */
+      (
+        lib.concatStringsSep "\n" [
+          (lib.concatStringsSep " " (
+            [ "--no-auto-compile" ]
+            ++ lib.optional r6rs "--r6rs"
+            ++ lib.optional r7rs "--r7rs"
+            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," builtins.toString srfi)
+            ++ [ "-s" ]
+          ))
+          "!#"
+          content
+        ]
+      );
+
+  /**
+    writeGuileBin takes the same arguments as writeGuile but outputs a directory
+    (like writeScriptBin)
+  */
+  writeGuileBin = name: writeGuile "/bin/${name}";
 
   /**
     writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
@@ -970,7 +1107,7 @@ rec {
       ''
         # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
         awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
-        gixy $out
+        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
@@ -1173,11 +1310,17 @@ rec {
       };
 
       fsi = writeBash "fsi" ''
+        set -euo pipefail
         export HOME=$NIX_BUILD_TOP/.home
         export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
         export DOTNET_NOLOGO=1
+        export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1
         script="$1"; shift
+        (
+          ${lib.getExe dotnet-sdk} new nugetconfig
+          ${lib.getExe dotnet-sdk} nuget disable source nuget
+        ) > /dev/null
         ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
       '';
 

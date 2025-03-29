@@ -6,11 +6,9 @@
 , bison
 , util-linux
 
-  # patch for cygwin requires readline support
-, interactive ? stdenv.hostPlatform.isCygwin
+, interactive ? true
 , readline
-, withDocs ? false
-, texinfo
+, withDocs ? null
 , forFHSEnv ? false
 
 , pkgsStatic
@@ -22,6 +20,9 @@ let
     inherit sha256;
   });
 in
+lib.warnIf (withDocs != null) ''
+  bash: `.override { withDocs = true; }` is deprecated, the docs are always included.
+''
 stdenv.mkDerivation rec {
   pname = "bash${lib.optionalString interactive "-interactive"}";
   version = "5.2${patch_suffix}";
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+    -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
   '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
@@ -79,8 +81,8 @@ stdenv.mkDerivation rec {
     "bash_cv_getcwd_malloc=yes"
     # This check cannot be performed when cross compiling. The "yes"
     # default is fine for static linking on Linux (weak symbols?) but
-    # not with OpenBSD, when it does clash with the regular `getenv`.
-    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && isOpenBSD) then "yes" else "no"}"
+    # not with BSDs, when it does clash with the regular `getenv`.
+    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"
@@ -100,7 +102,6 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook bison ]
-    ++ lib.optional withDocs texinfo
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
   buildInputs = lib.optional interactive readline;

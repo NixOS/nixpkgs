@@ -1,6 +1,7 @@
 {
   lib,
   SDL2,
+  autoreconfHook,
   darwin,
   fetchurl,
   giflib,
@@ -22,15 +23,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-  version = "2.8.2";
+  version = "2.8.5";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw=";
+    hash = "sha256-i8TFf0HiwNt/m3SbJT72zs3G8LaJ7L427pe1ARX/9kU=";
   };
 
   nativeBuildInputs = [
     SDL2
+    autoreconfHook
     pkg-config
   ];
 
@@ -45,19 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
-  configureFlags = [
-    # Disable dynamically loaded dependencies
-    (lib.enableFeature false "jpg-shared")
-    (lib.enableFeature false "png-shared")
-    (lib.enableFeature false "tif-shared")
-    (lib.enableFeature false "webp-shared")
-    (lib.enableFeature enableSdltest "sdltest")
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Don't use native macOS frameworks
-    # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
-    # outside Darwin - and ImageIO does not exist outisde Darwin
-    (lib.enableFeature false "imageio")
-  ];
+  configureFlags =
+    [
+      # Disable dynamically loaded dependencies
+      (lib.enableFeature false "jpg-shared")
+      (lib.enableFeature false "png-shared")
+      (lib.enableFeature false "tif-shared")
+      (lib.enableFeature false "webp-shared")
+      (lib.enableFeature enableSdltest "sdltest")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Don't use native macOS frameworks
+      # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
+      # outside Darwin - and ImageIO does not exist outside Darwin
+      (lib.enableFeature false "imageio")
+    ];
 
   strictDeps = true;
 

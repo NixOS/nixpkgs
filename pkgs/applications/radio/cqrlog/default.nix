@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fpc
-, lazarus
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk2-x11
-, libX11
-, pango
-, hamlib
-, mariadb
-, tqsl
-, xdg-utils
-, xplanet
-, autoPatchelfHook
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fpc,
+  lazarus,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk2-x11,
+  libX11,
+  pango,
+  hamlib,
+  mariadb,
+  tqsl,
+  xdg-utils,
+  xplanet,
+  autoPatchelfHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zzcg0bl6mq4wfifj998x9x09w8sigbh46synpqx034fpr0swyhb";
   };
 
-  # Adds the possiblity to change the lazarus directory,
+  # Adds the possibility to change the lazarus directory,
   # otherwise, we would get error : "directory lcl not found"
   patches = [ ./fix-makefile-lazarusdir.patch ];
 
@@ -62,7 +63,12 @@ stdenv.mkDerivation rec {
     ! grep -C src -RC0 "/usr"
   '';
 
-  nativeBuildInputs = [ lazarus fpc autoPatchelfHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    lazarus
+    fpc
+    autoPatchelfHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     atk
     cairo

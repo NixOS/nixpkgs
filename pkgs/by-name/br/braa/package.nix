@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-GS3kk432BdGx/sLzzjXvotD9Qn4S3U4XtMmM0fWMhGA=";
   };
 
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   installPhase = ''
     runHook preInstall
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://s-tech.elsat.net.pl";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [bycEEE];
+    maintainers = with maintainers; [ bycEEE ];
     mainProgram = "braa";
   };
 }

@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "misyltoad";
     repo = "frog-protocols";
-    rev = "17be81da707722b4f907c5287def442351b219b0";
-    hash = "sha256-N8a+o5I7CRoONCvjMHVmPkJTVncczuFVRHEtMFzMzss=";
+    rev = "38db7e30e62a988f701a2751447e0adffd68bb3f";
+    hash = "sha256-daWGw6mRmiz6f81JkMacPipXppRxbjL6gS1VqYlfec8=";
   };
 
   nativeBuildInputs = [

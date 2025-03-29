@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "duet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P7JxUigD7ZyhtocV+YuAVxuUYVa4F7PpXuA1CCmcMvg=";
   };
 
@@ -29,6 +29,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "duet" ];
+
+  disabledTests = [
+    # test fails because builder is too busy and cannot finish quickly enough
+    "test_repeated_sleep"
+  ];
 
   meta = with lib; {
     description = "Simple future-based async library for python";

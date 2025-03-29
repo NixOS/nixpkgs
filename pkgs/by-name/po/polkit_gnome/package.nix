@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, polkit, gtk3, pkg-config, intltool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  polkit,
+  gtk3,
+  pkg-config,
+  intltool,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "polkit-gnome";
   version = "0.105";
@@ -8,8 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-F4RJSWO4v5oA7txs06KGj7EjuKXlFuZsXtpI3xerk2k=";
   };
 
-  buildInputs = [ polkit gtk3 ];
-  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [
+    polkit
+    gtk3
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   configureFlags = [ "--disable-introspection" ];
 
