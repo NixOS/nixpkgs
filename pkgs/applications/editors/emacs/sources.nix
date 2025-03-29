@@ -89,7 +89,9 @@ let
               matthewbauer
               panchoh
             ];
-            "macport" = with lib.maintainers; [ ];
+            "macport" = with lib.maintainers; [
+              lactose
+            ];
           }
           .${variant};
         platforms =
