@@ -798,7 +798,7 @@ in {
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = runTest ./nginx.nix;
-  nginx-auth = handleTest ./nginx-auth.nix {};
+  nginx-auth = runTest ./nginx-auth.nix;
   nginx-etag = handleTest ./nginx-etag.nix {};
   nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
