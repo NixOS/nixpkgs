@@ -35,7 +35,10 @@ stdenv.mkDerivation {
     "-Wno-error=incompatible-pointer-types"
   ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
+  cmakeFlags = [
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
+    (lib.cmakeFeature "PERL_EXECUTABLE" (lib.getExe perlPackages.perl))
+  ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 
   postFixup = ''

@@ -101,7 +101,7 @@ in
   };
   # EOL 2025-09-15
   varnish76 = common {
-    version = "7.6.1";
-    hash = "sha256-Wpu1oUn/J4Z7VKZs4W0qS5Pt/6VHPLh8nHH3aZz4Rbo=";
+    version = "7.6.2";
+    hash = "sha256-OFxhDsxj3P61PXb0fMRl6J6+J9osCSJvmGHE+o6dLJo=";
   };
 }
