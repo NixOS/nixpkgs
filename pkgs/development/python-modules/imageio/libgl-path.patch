@@ -1,0 +1,13 @@
+diff --git a/tests/test_core.py b/tests/test_core.py
+index 2cdbb3a..032974c 100644
+--- a/tests/test_core.py
++++ b/tests/test_core.py
+@@ -129,7 +129,7 @@ def test_findlib2():
+     open(os.path.join(fi_dir, "notalib.test.so"), "wb")
+ 
+     # Loading libs
+-    gllib = ctypes.util.find_library("GL")
++    gllib = "@libgl@"
+     core.load_lib([gllib], [])
+     # Fail
+     raises(ValueError, core.load_lib, [], [])  # Nothing given

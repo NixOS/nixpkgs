@@ -1,0 +1,13 @@
+diff --git a/vrc-get-gui/Tauri.toml b/vrc-get-gui/Tauri.toml
+index ff969dbb..1339d861 100644
+--- a/vrc-get-gui/Tauri.toml
++++ b/vrc-get-gui/Tauri.toml
+@@ -34,8 +34,6 @@ icon = [
+ resources = []
+ publisher = "anatawa12"
+ 
+-createUpdaterArtifacts = "v1Compatible"  # remove if ci # we do not generate updater artifacts in CI
+-
+ [bundle.linux.deb]
+ desktopTemplate = "alcom.desktop"
+ 

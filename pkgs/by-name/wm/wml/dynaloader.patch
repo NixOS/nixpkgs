@@ -1,0 +1,11 @@
+--- a/wml_backend/p3_eperl/configure	2009-10-03 19:12:29.000000000 -0500
++++ b/wml_backend/p3_eperl/configure	2009-10-03 19:12:45.000000000 -0500
+@@ -678,7 +678,7 @@
+ #define HAVE_PERL_DYNALOADER 1
+ EOF
+ 
+-        perl_dla=$perl_archlib/auto/DynaLoader/DynaLoader.a
++        perl_dla=$perl_archlib/CORE/libperl.so
+         ;;
+     * )
+         rc=no
