@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gaw";
   version = "20220315";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/gaw/download/gaw3-${version}.tar.gz";
+    url = "https://download.tuxfamily.org/gaw/download/gaw3-${finalAttrs.version}.tar.gz";
     sha256 = "0j2bqi9444s1mfbr7x9rqp232xf7ab9z7ifsnl305jsklp6qmrbg";
   };
 
@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  meta = with lib; {
+  # gawmenus.c:1227:14: error: assignment to 'GMenuModel *' {aka 'struct _GMenuModel *'} from incompatible pointer type 'GObject *' {aka 'struct _GObject *'} []
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  meta = {
     description = "Gtk Analog Wave viewer";
     mainProgram = "gaw";
     longDescription = ''
@@ -29,8 +32,8 @@ stdenv.mkDerivation rec {
       direct tcp/ip connection or directly from the sound card.
     '';
     homepage = "http://gaw.tuxfamily.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux;
   };
-}
+})
