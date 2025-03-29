@@ -73,6 +73,10 @@ buildGoModule rec {
         "TestGenerateOnlyProjectCheck"
         "TestPulumiNewSetsTemplateTag"
         "TestPulumiPromptRuntimeOptions"
+        "TestPulumiNewOrgTemplate"
+        "TestPulumiNewWithOrgTemplates"
+        "TestPulumiNewWithoutPulumiAccessToken"
+        "TestPulumiNewWithoutTemplateSupport"
 
         # Connects to https://pulumi-testing.vault.azure.net/…
         "TestAzureCloudManager"
