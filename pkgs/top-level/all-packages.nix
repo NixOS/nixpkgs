@@ -10033,7 +10033,7 @@ with pkgs;
     });
 
   libsForQt5 = (recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
+    inherit lib config __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
   })) // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
