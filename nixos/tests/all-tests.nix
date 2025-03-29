@@ -314,7 +314,7 @@ in {
   darling = handleTest ./darling.nix {};
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix {};
-  davis = handleTest ./davis.nix {};
+  davis = runTest ./davis.nix;
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
   ddns-updater = handleTest ./ddns-updater.nix {};
