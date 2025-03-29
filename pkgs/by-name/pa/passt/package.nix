@@ -5,6 +5,7 @@
 , getconf
 , gitUpdater
 , testers
+, unixtools
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
+      command = "${unixtools.script}/bin/script -c 'passt --version'";
     };
 
     updateScript = gitUpdater {
