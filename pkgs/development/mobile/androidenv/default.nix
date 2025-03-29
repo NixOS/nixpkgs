@@ -18,7 +18,8 @@ lib.recurseIntoAttrs rec {
   };
 
   androidPkgs = composeAndroidPackages {
-    minPlatformVersion = 28;
+    # Support roughly the last 5 years of Android packages and system images by default in nixpkgs.
+    numLatestPlatformVersions = 5;
     includeEmulator = "if-supported";
     includeSystemImages = "if-supported";
     includeNDK = "if-supported";
