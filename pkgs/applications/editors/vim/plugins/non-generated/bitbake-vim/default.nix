@@ -5,7 +5,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "bitbake-vim";
-  version = "2025-03-24";
+  version = "2024-04.8-scarthgap";
 
   src = fetchFromGitHub {
     owner = "openembedded";
