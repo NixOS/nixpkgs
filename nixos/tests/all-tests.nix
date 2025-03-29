@@ -804,7 +804,7 @@ in {
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = handleTest ./nginx-http3.nix {};
   nginx-mime = runTest ./nginx-mime.nix;
-  nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
+  nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
