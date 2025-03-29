@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index a81350d..cfa1977 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -6,7 +6,6 @@ description = "Scriv changelog management tool"
+ authors = [
+     {name = "Ned Batchelder", email = "ned@nedbatchelder.com"},
+ ]
+-license = "Apache-2.0"
+ classifiers = [
+     "Development Status :: 5 - Production/Stable",
+     "Intended Audience :: Developers",
