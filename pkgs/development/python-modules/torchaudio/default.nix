@@ -80,6 +80,8 @@ buildPythonPackage rec {
   version = "2.6.0";
   pyproject = true;
 
+  stdenv = torch.stdenv;
+
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";

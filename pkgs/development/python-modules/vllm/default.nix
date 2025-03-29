@@ -58,14 +58,12 @@
   depyf,
   opencv-python-headless,
 
-  config,
-
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
   cudaPackages ? { },
-  rocmSupport ? config.rocmSupport,
+  rocmSupport ? torch.rocmSupport,
   rocmPackages ? { },
   gpuTargets ? [ ],
-}@args:
+}:
 
 let
   inherit (lib)
@@ -117,7 +115,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.4.0/torch/utils/cpp_extension.py#L1953
+  # https://github.com/pytorch/pytorch/blob/v2.6.0/torch/utils/cpp_extension.py#L2046-L2048
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -138,6 +136,7 @@ let
         "8.9"
         "9.0"
         "9.0a"
+        "10.0"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -200,7 +199,7 @@ buildPythonPackage rec {
   version = "0.7.3";
   pyproject = true;
 
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
+  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
