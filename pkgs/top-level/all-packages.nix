@@ -8687,14 +8687,6 @@ with pkgs;
     pkg-config = pkg-config-unwrapped;
   };
 
-  pkg-configUpstream = lowPrio (
-    pkg-config.override (old: {
-      pkg-config = old.pkg-config.override {
-        vanilla = true;
-      };
-    })
-  );
-
   pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
 
   portableService = callPackage ../build-support/portable-service { };
