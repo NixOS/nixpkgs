@@ -27,6 +27,8 @@ python3.pkgs.buildPythonApplication rec {
     toml
   ];
 
+  pythonRelaxDeps = [ "black" ];
+
   pythonImportsCheck = [ "snakefmt" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
