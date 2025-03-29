@@ -1576,6 +1576,7 @@ mapAliases {
   libtransmission = lib.warnOnInstantiate (transmission3Warning {prefix = "lib";}) libtransmission_3; # Added 2024-06-10
   tracker = lib.warnOnInstantiate "tracker has been renamed to tinysparql" tinysparql; # Added 2024-09-30
   tracker-miners = lib.warnOnInstantiate "tracker-miners has been renamed to localsearch" localsearch; # Added 2024-09-30
+  transcode = throw "transcode has been removed as it is unmaintained"; # Added 2024-12-11
   transfig = fig2dev; # Added 2022-02-15
   transifex-client = transifex-cli; # Added 2023-12-29
   trfl = throw "trfl has been removed, because it has not received an update for 3 years and was broken"; # Added 2024-07-25
