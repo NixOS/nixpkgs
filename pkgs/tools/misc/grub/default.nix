@@ -8,6 +8,7 @@
 , fuse # only needed for grub-mount
 , runtimeShell
 , zfs ? null
+, corebootSupport ? false
 , efiSupport ? false
 , zfsSupport ? false
 , xenSupport ? false
@@ -555,6 +556,7 @@ stdenv.mkDerivation rec {
     "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
   ] ++ lib.optional zfsSupport "--enable-libzfs"
+    ++ lib.optionals corebootSupport [ "--with-platform=coreboot" "--program-prefix=" ]
     ++ lib.optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
     ++ lib.optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
