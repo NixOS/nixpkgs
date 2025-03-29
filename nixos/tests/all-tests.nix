@@ -1278,7 +1278,6 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
   varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
   varnish77 = handleTest ./varnish.nix { package = pkgs.varnish77; };
   vault = handleTest ./vault.nix {};

@@ -2,7 +2,6 @@
   callPackages,
   callPackage,
   varnish60,
-  varnish75,
   varnish76,
   varnish77,
 }:
@@ -20,10 +19,6 @@
       version = "0.4";
       sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
     };
-  };
-  varnish75Packages = rec {
-    varnish = varnish75;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules24;
   };
   varnish76Packages = rec {
     varnish = varnish76;
