@@ -1276,7 +1276,7 @@ self: super: {
   beam-postgres = lib.pipe super.beam-postgres [
     # Requires pg_ctl command during tests
     (addTestToolDepends [pkgs.postgresql])
-    (dontCheckIf (!pkgs.postgresql.doCheck || !self.testcontainers.doCheck))
+    (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
   ];
 
   users-postgresql-simple = addTestToolDepends [
@@ -1337,7 +1337,7 @@ self: super: {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (!pkgs.postgresql.doCheck) super.esqueleto);
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.esqueleto);
 
   # Requires API keys to run tests
   algolia = dontCheck super.algolia;
@@ -1434,7 +1434,7 @@ self: super: {
         ];
       })
       # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (!pkgs.postgresql.doCheck) super.persistent-postgresql);
+      (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
   # Needs matching lsp-types
   # Allow lens >= 5.3

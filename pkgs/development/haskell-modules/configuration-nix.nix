@@ -1115,7 +1115,7 @@ self: super: builtins.intersectAttrs super {
   rel8 = pkgs.lib.pipe super.rel8 [
     (addTestToolDepend pkgs.postgresql)
     # https://github.com/NixOS/nixpkgs/issues/198495
-    (dontCheckIf (!pkgs.postgresql.doCheck))
+    (dontCheckIf (!pkgs.postgresql.doInstallCheck))
   ];
 
   cloudy =
