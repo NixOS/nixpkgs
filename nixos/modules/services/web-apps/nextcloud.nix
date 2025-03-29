@@ -130,10 +130,17 @@ let
           --quiet \
           ${command}
       elif [[ "$USER" != nextcloud ]]; then
-        exec /run/wrappers/bin/sudo \
-          --preserve-env=CREDENTIALS_DIRECTORY \
-          --user=nextcloud \
-          ${command}
+        if [[ -x /run/wrappers/bin/sudo ]]; then
+          exec /run/wrappers/bin/sudo \
+            --preserve-env=CREDENTIALS_DIRECTORY \
+            --user=nextcloud \
+            ${command}
+        else
+          exec ${lib.getExe' pkgs.util-linux "runuser"} \
+            --whitelist-environment=CREDENTIALS_DIRECTORY \
+            --user=nextcloud \
+            ${command}
+        fi
       else
         exec ${command}
       fi
