@@ -864,6 +864,7 @@ with lib.maintainers;
       britter
       dotlambda
       ma27
+      provokateurin
     ];
     scope = "Maintain Nextcloud, its tests and the integration of applications.";
     shortName = "Nextcloud";
