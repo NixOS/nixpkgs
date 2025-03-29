@@ -83,7 +83,6 @@
 , xvidcore
 , gnutls
 , mjpegtools
-, libGLU
 , libGL
 , addDriverRunpath
 , gtk3
@@ -250,7 +249,6 @@ stdenv.mkDerivation rec {
     sratom
 
     libGL
-    libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
