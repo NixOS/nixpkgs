@@ -1,6 +1,5 @@
 {
   cmake,
-  darwin,
   fetchFromGitHub,
   fetchurl,
   lib,
@@ -46,10 +45,6 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ AGL ]
-  );
 
   propagatedBuildInputs = [
     libxml2
