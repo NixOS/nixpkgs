@@ -2351,6 +2351,7 @@ buildLuarocksPackage {
     homepage = "https://github.com/f4z3r/luatext/tree/main";
     description = "A small library to print colored text";
     license.fullName = "MIT";
+    maintainers = with lib.maintainers; [ f4z3r ];
   };
 }) {};
 
@@ -3373,6 +3374,32 @@ buildLuarocksPackage {
     license.fullName = "MIT";
   };
 }) {};
+
+sofa = callPackage({ argparse, buildLuarocksPackage, luatext, compat53, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder, lyaml }:
+buildLuarocksPackage {
+  pname = "sofa";
+  version = "0.5.1-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/sofa-0.5.1-0.rockspec";
+    sha256 = "1qlg7ba8gxisvcppapvj73n090bmhxrgcxncr9ddjlqw8kbhd4sq";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "f4z3r";
+    repo = "sofa";
+    rev = "v0.5.1";
+    hash = "sha256-xMy1sbgWDtKP0PkfP7X3zP4BzZHbfwSzB1Dvc7hQa+Y=";
+  };
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ argparse compat53 luatext lyaml ];
+
+  meta = {
+    homepage = "https://github.com/f4z3r/sofa";
+    description = "A command execution engine powered by rofi.";
+    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+    maintainers = with lib.maintainers; [ f4z3r ];
+  };
+}){};
 
 serpent = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
