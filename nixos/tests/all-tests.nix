@@ -557,7 +557,7 @@ in {
   hub = handleTest ./git/hub.nix {};
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
-  icingaweb2 = handleTest ./icingaweb2.nix {};
+  icingaweb2 = runTest ./icingaweb2.nix;
   ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
   immich = handleTest ./web-apps/immich.nix {};
