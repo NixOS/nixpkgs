@@ -23,15 +23,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.72.0";
+  version = "1.76.1";
   pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
-    hash = "sha256-Kdt4nEWdxfZB7rmPbCegbj4abfv1nMSvAAC6mmUcv44=";
+    tag = "v${version}";
+    hash = "sha256-js9mywNlv13ZDmvoBt9yuXJePaSuKOimek3uNlVIeHM=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     brotli
-    colorthief
+    modern-colorthief
     dateparser
     emoji
     keyring
