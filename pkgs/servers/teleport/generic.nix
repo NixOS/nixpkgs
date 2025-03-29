@@ -15,6 +15,7 @@
   openssl,
   pkg-config,
   pnpm_9,
+  pnpm_10,
   rustc,
   Security,
   stdenv,
@@ -91,10 +92,16 @@ let
 
     pnpmDeps =
       if pnpmHash != null then
-        pnpm_9.fetchDeps {
-          inherit src pname version;
-          hash = pnpmHash;
-        }
+        if lib.versionAtLeast version "17" then
+          pnpm_10.fetchDeps {
+            inherit src pname version;
+            hash = pnpmHash;
+          }
+        else
+          pnpm_9.fetchDeps {
+            inherit src pname version;
+            hash = pnpmHash;
+          }
       else
         null;
 
@@ -111,7 +118,9 @@ let
         wasm-pack
       ]
       ++ (
-        if lib.versionAtLeast version "16" then
+        if lib.versionAtLeast version "17" then
+          [ pnpm_10.configHook ]
+        else if lib.versionAtLeast version "16" then
           [ pnpm_9.configHook ]
         else
           [

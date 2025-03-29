@@ -5,6 +5,8 @@
   rustPlatform,
   pkg-config,
   libudev-zero,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -38,8 +40,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/lib/systemd/user
     substitute bitbox-bridge/release/linux/bitbox-bridge.service $out/lib/systemd/user/bitbox-bridge.service \
       --replace-fail /opt/bitbox-bridge/bin/bitbox-bridge $out/bin/bitbox-bridge
-    install -Dm644 bitbox-bridge/release/linux/hid-digitalbitbox.rules $out/lib/udev/rules.d/50-hid-digitalbitbox.rules
+    install -Dm644 bitbox-bridge/release/linux/hid-digitalbitbox.rules $out/etc/udev/rules.d/50-hid-digitalbitbox.rules
   '';
+
+  passthru = {
+    tests.basic = nixosTests.bitbox-bridge;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "A bridge service that connects web wallets like Rabby to BitBox02";
