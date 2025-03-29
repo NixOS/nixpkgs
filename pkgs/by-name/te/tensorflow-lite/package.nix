@@ -10,11 +10,11 @@ let
   pythonEnv = buildPackages.python3.withPackages (ps: with ps; [ distutils numpy ]);
   bazelDepsSha256ByBuildAndHost = {
     x86_64-linux = {
-      x86_64-linux = "sha256-61qmnAB80syYhURWYJOiOnoGOtNa1pPkxfznrFScPAo=";
-      aarch64-linux = "sha256-sOIYpp98wJRz3RGvPasyNEJ05W29913Lsm+oi/aq/Ag=";
+      x86_64-linux = lib.fakeHash; # TODO
+      aarch64-linux = lib.fakeHash; # TODO
     };
     aarch64-linux = {
-      aarch64-linux = "sha256-MJU4y9Dt9xJWKgw7iKW+9Ur856rMIHeFD5u05s+Q7rQ=";
+      aarch64-linux = lib.fakeHash; # TODO
     };
   };
   bazelHostConfigName.aarch64-linux = "elinux_aarch64";

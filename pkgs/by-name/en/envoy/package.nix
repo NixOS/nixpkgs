@@ -42,8 +42,8 @@ let
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-4CQkHlXbDpRiqzeyserVf9PpLx3ME7TtZ2H88ggog6U=";
-      aarch64-linux = "sha256-FxkfBWiG0NIInl28w+l4YvaV2VFuCtjn5VBAKvJoxM8=";
+      x86_64-linux = lib.fakeHash; # TODO
+      aarch64-linux = lib.fakeHash; # TODO
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
