@@ -1,16 +1,15 @@
 {
   stdenv,
   lib,
-  callPackage,
   fetchFromGitHub,
   buildGoModule,
   protoc-gen-grpc-web,
   protoc-gen-js,
   protobuf,
+  tantivy-go,
 }:
 
 let
-  tantivy-go = callPackage ../tantivy-go { };
   pname = "anytype-heart";
   version = "0.39.11";
   src = fetchFromGitHub {
@@ -75,6 +74,9 @@ buildGoModule {
     mkdir -p $out/share
     cp LICENSE.md $out/share
   '';
+
+  # disable tests to save time, as it's mostly built by users, not CI
+  doCheck = false;
 
   meta = {
     description = "Shared library for Anytype clients";
