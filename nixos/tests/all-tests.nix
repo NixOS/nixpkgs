@@ -799,7 +799,7 @@ in {
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = runTest ./nginx.nix;
   nginx-auth = runTest ./nginx-auth.nix;
-  nginx-etag = handleTest ./nginx-etag.nix {};
+  nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
