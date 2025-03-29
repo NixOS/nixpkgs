@@ -55,13 +55,15 @@ let
 
     curl() {
         # get the api key by parsing the config.xml
-        while
-            ! ${pkgs.libxml2}/bin/xmllint \
-                --xpath 'string(configuration/gui/apikey)' \
-                ${cfg.configDir}/config.xml \
-                >"$RUNTIME_DIRECTORY/api_key"
-        do sleep 1; done
-        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+        if [ ! -f "$RUNTIME_DIRECTORY/headers" ]; then
+          while
+              ! ${pkgs.libxml2}/bin/xmllint \
+                  --xpath 'string(configuration/gui/apikey)' \
+                  ${cfg.configDir}/config.xml \
+                  >"$RUNTIME_DIRECTORY/api_key"
+          do sleep 1; done
+          (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+        fi
         ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
