@@ -96,6 +96,7 @@ let
         );
         addresses = forEach (interfaceIps i) (ip: {
           Address = "${ip.address}/${toString ip.prefixLength}";
+          Peer = mkIf (ip.peer != null) ip.peer;
         });
         routes = forEach (interfaceRoutes i) (
           route:

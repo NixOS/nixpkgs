@@ -72,6 +72,17 @@ let
             bits in the prefix (`${if v == 4 then "24" else "64"}`).
           '';
         };
+
+        peer = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            IPv${toString v} address of the remote endpoint for a
+            `pointopoint` connection (Linux `IFF_POINTOPOINT`;
+            note it's `pointopoint`, not `pointtopoint`).
+            See e.g. `man ip address` section `peer`.
+          '';
+        };
       };
     };
 

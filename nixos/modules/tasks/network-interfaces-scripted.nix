@@ -200,14 +200,16 @@ let
                 ${flip concatMapStrings ips (ip:
                   let
                     cidr = "${ip.address}/${toString ip.prefixLength}";
+                    optionalPeer = lib.optionalString (ip.peer != null) (" " + ''peer "${ip.peer}"'');
+                    optionalPeerForEcho = lib.optionalString (ip.peer != null) (" " + ''peer \"${ip.peer}\"'');
                   in
                   ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
-                    if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
+                    if out=$(ip addr replace "${cidr}"${optionalPeer} dev "${i.name}" 2>&1); then
                       echo "done"
                     else
-                      echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' failed: $out"
+                      echo "'ip addr replace \"${cidr}\"${optionalPeerForEcho} dev \"${i.name}\"' failed: $out"
                       exit 1
                     fi
                   ''
