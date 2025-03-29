@@ -1,18 +1,17 @@
 {
-  lib,
-  stdenv,
+  cmake,
+  darwin,
   fetchFromGitHub,
   fetchurl,
-  cmake,
-  pkg-config,
+  lib,
   libxml2,
   pcre,
-  darwin,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencollada";
-
   version = "1.6.68";
 
   src = fetchFromGitHub {
@@ -32,19 +31,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ AGL ]
-  );
-
-  propagatedBuildInputs = [
-    libxml2
-    pcre
-  ];
-
   postPatch =
     ''
       # Drop blanket -Werror as it tends to fail on newer toolchain for
@@ -55,6 +41,20 @@ stdenv.mkDerivation rec {
       substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
         --replace math.h cmath
     '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks; [ AGL ]
+  );
+
+  propagatedBuildInputs = [
+    libxml2
+    pcre
+  ];
 
   meta = {
     description = "Library for handling the COLLADA file format";
