@@ -5615,7 +5615,7 @@ with pkgs;
     varnish76Packages
     varnish77Packages
     ;
-  varnishPackages = varnish75Packages;
+  varnishPackages = varnish77Packages;
   varnish = varnishPackages.varnish;
 
   viceroy = callPackage ../development/tools/viceroy {
