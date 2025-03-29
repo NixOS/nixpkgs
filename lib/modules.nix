@@ -381,7 +381,20 @@ let
           if m._type or "module" == "module" then
             unifyModuleSyntax fallbackFile fallbackKey m
           else if m._type == "if" || m._type == "override" then
-            loadModule args fallbackFile fallbackKey { config = m; }
+            let
+              inner = loadModule args fallbackFile fallbackKey m.content;
+            in
+            inner
+            // {
+              # We only push down into `imports` and `config`.
+              # It doesn't make any sense for the others.
+              imports = m // {
+                content = inner.imports;
+              };
+              config = m // {
+                content = inner.config;
+              };
+            }
           else
             throw (
               messages.not_a_module {
