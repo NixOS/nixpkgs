@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     yajl
   ];
 
+  nativeBuildInputs = [
+    postgresql_16.pg_config
+  ];
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "ACME=1"
