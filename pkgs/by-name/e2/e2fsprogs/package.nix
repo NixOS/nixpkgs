@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libuuid,
   gettext,
@@ -12,8 +13,17 @@
   shared ? !stdenv.hostPlatform.isStatic,
   e2fsprogs,
   runCommand,
+  withLibarchive ? true,
+  libarchive,
 }:
 
+let
+  # Break the cyclic dependency with libarchive; will disable ext2 things during config.
+  # Remove when https://github.com/NixOS/nixpkgs/pull/420658 is merged.
+  libarchive' = libarchive.override {
+    e2fsprogs = null;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
   version = "1.47.2";
@@ -22,6 +32,20 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
     hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
   };
+
+  # 2025-05-31: Fix libarchive, from https://github.com/tytso/e2fsprogs/pull/230
+  patches = lib.optionals withLibarchive [
+    (fetchpatch {
+      name = "0001-create_inode_libarchive.c-define-libarchive-dylib-for-darwin.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/e86c65bc7ee276cd9ca920d96e18ed0cddab3412.patch";
+      hash = "sha256-HFZAznaNl5rzgVEvYx1LDKh2jd/VEXD/o0wypIh4TR8=";
+    })
+    (fetchpatch {
+      name = "0002-mkgnutar.pl-avoid-uninitialized-username-variable.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/9217c359db1d1b6d031a0e2ca9a885634fed00da.patch";
+      hash = "sha256-iDXmLq77eJolH1mkXSbvZ9tRVtGQt2F45CdkVphUZSs=";
+    })
+  ];
 
   # fuse2fs adds 14mb of dependencies
   outputs = [
@@ -37,30 +61,35 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ];
-  buildInputs = [
-    libuuid
-    gettext
-  ] ++ lib.optionals withFuse [ fuse3 ];
+  buildInputs =
+    [
+      libuuid
+      gettext
+    ]
+    ++ lib.optionals withFuse [ fuse3 ]
+    ++ lib.optionals withLibarchive [ libarchive' ];
 
   configureFlags =
-    if stdenv.hostPlatform.isLinux then
-      [
-        # It seems that the e2fsprogs is one of the few packages that cannot be
-        # build with shared and static libs.
-        (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
-        "--enable-symlink-install"
-        "--enable-relative-symlinks"
-        "--with-crond-dir=no"
-        # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
-        "--disable-fsck"
-        "--disable-libblkid"
-        "--disable-libuuid"
-        "--disable-uuidd"
-      ]
-    else
-      [
-        "--enable-libuuid --disable-e2initrd-helper"
-      ];
+    lib.optionals stdenv.hostPlatform.isLinux [
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
+      "--enable-symlink-install"
+      "--enable-relative-symlinks"
+      "--with-crond-dir=no"
+      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+      "--disable-fsck"
+      "--disable-libblkid"
+      "--disable-libuuid"
+      "--disable-uuidd"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--enable-libuuid"
+      "--disable-e2initrd-helper"
+    ]
+    ++ lib.optionals withLibarchive [
+      "--with-libarchive=direct"
+    ];
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
