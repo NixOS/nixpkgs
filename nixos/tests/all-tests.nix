@@ -275,6 +275,7 @@ in {
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   code-server = handleTest ./code-server.nix {};
   coder = handleTest ./coder.nix {};
+  colord = runTest ./colord.nix;
   collectd = handleTest ./collectd.nix {};
   commafeed = handleTest ./commafeed.nix {};
   conduwuit = runTest ./matrix/conduwuit.nix;
