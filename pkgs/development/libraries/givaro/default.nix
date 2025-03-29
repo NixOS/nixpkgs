@@ -12,12 +12,14 @@
 stdenv.mkDerivation rec {
   pname = "givaro";
   version = "4.2.0";
+
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = pname;
-    rev = "v${version}";
+    repo = "givaro";
+    tag = "v${version}";
     sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
+
   patches = [
     # Pull upstream fix for gcc-13:
     #   https://github.com/linbox-team/givaro/pull/218
@@ -83,6 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ library for arithmetic and algebraic computations";
+    homepage = "https://casys.gricad-pages.univ-grenoble-alpes.fr/givaro/";
     mainProgram = "givaro-config";
     license = lib.licenses.cecill-b;
     maintainers = [ lib.maintainers.raskin ];
