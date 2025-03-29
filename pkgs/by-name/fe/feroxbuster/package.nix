@@ -6,6 +6,7 @@
   pkg-config,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,12 +26,19 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    versionCheckHook
+  ];
 
   buildInputs = [ openssl ];
 
   # Tests require network access
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
