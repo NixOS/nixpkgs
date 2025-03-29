@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -36,7 +38,10 @@ buildGoModule rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = [ "--version" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.yarr;
+  };
 
   meta = with lib; {
     description = "Yet another rss reader";
