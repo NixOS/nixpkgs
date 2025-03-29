@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     ./fix-compilation.patch
     # removes register keyword
     ./c++17-fixes.diff
+    # fix build with gcc14
+    ./add-maelstrom-netd-include-time.diff
   ];
 
   buildInputs = [
