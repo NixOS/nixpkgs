@@ -247,12 +247,16 @@ let
     echo
     echo "# Update using: unroll-src [version]"
   '';
+
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
   version = "2.6.0";
   pyproject = true;
+
+  stdenv = stdenv';
 
   outputs = [
     "out" # output standard python package
