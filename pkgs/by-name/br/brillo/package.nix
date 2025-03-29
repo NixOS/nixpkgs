@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
-      licenses.gpl3
+      licenses.gpl3Only
       licenses.bsd0
     ];
     platforms = platforms.linux;
