@@ -1,0 +1,13 @@
+diff -Naur gpsd-3.25.orig/SConscript gpsd-3.25/SConscript
+--- gpsd-3.25.orig/SConscript	2025-03-29 13:33:34
++++ gpsd-3.25/SConscript	2025-03-29 13:34:24
+@@ -398,11 +398,7 @@
+ else:
+     def_group = "dialout"
+
+-# darwin and BSDs do not have /run, maybe others.
+-if os.path.exists("/run"):
+-    rundir = "/run"
+-else:
+-    rundir = "/var/run"
++rundir = "/run"
