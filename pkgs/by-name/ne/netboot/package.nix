@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # mgllex.l:398:53: error: passing argument 1 of 'copy_string' from incompatible pointer type []
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   # Disable parallel build, errors:
   #  link: `parseopt.lo' is not a valid libtool object
   enableParallelBuilding = false;
