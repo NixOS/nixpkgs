@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linbox-team/givaro/commit/a18baf5227d4f3e81a50850fe98e0d954eaa3ddb.patch";
       hash = "sha256-IR0IHhCqbxgtsST30vxM9ak1nGtt0apxcLUQ1kS1DHw=";
     })
+    # skip gmp version check for cross-compiling, our version is new enough
+    ./skip-gmp-check.patch
   ];
 
   enableParallelBuilding = true;
@@ -59,6 +61,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [
       "--without-archnative"
+      "CCNAM=${stdenv.cc.cc.pname}"
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       # disable SIMD instructions (which are enabled *when available* by default)
