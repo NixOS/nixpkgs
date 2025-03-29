@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bG4MxeGCJeckbjMZyyc0bOzPTQaFmacfQBtbP4ru4lc=";
   };
 
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
     colorthief
@@ -92,12 +92,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-    )
-  '';
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   passthru = {
     updateScript = nix-update-script { };
