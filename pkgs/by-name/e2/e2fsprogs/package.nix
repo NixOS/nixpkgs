@@ -12,8 +12,17 @@
   shared ? !stdenv.hostPlatform.isStatic,
   e2fsprogs,
   runCommand,
+  withLibarchive ? true,
+  libarchive,
 }:
 
+let
+  # Break the cyclic dependency with libarchive.
+  # Will disable ext2fs/ext2_fs.h and EXT2_IOC_GETFLAGS during config.
+  libarchive' = libarchive.override {
+    e2fsprogs = null;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
   version = "1.47.2";
@@ -37,10 +46,13 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ];
-  buildInputs = [
-    libuuid
-    gettext
-  ] ++ lib.optionals withFuse [ fuse3 ];
+  buildInputs =
+    [
+      libuuid
+      gettext
+    ]
+    ++ lib.optionals withFuse [ fuse3 ]
+    ++ lib.optionals withLibarchive [ libarchive' ];
 
   configureFlags =
     if stdenv.hostPlatform.isLinux then
@@ -64,6 +76,22 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
+
+  preConfigure = lib.optionalString withLibarchive ''
+    # Replace the hardcoded macro LIBARCHIVE_SO which always resolves to "libarchive.so.13".
+    substituteInPlace misc/create_inode_libarchive.c \
+      --replace-fail \
+        'dlopen(LIBARCHIVE_SO, RTLD_NOW)' \
+        'dlopen("${lib.getLib libarchive'}/lib/libarchive.${
+          if stdenv.isDarwin then "dylib" else "so"
+        }", RTLD_NOW)'
+
+    # The username will an uninitialized variable and fails the test when auto-allocate-uids.
+    substituteInPlace tests/m_rootgnutar/mkgnutar.pl \
+      --replace-fail \
+        'my $username = $ENV{LOGNAME} || $ENV{USER} || getpwuid($<);' \
+        'my $username = "root";'
+  '';
 
   postInstall =
     ''
