@@ -6804,6 +6804,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  lf-nvim = buildVimPlugin {
+    pname = "lf.nvim";
+    version = "2023-10-03";
+    src = fetchFromGitHub {
+      owner = "lmburns";
+      repo = "lf.nvim";
+      rev = "69ab1efcffee6928bf68ac9bd0c016464d9b2c8b";
+      sha256 = "0hwd90ahqm3hh78qhz7id064bkx8xrinfn133d74ws30gf0y9kfa";
+    };
+    meta.homepage = "https://github.com/lmburns/lf.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lf-vim = buildVimPlugin {
     pname = "lf.vim";
     version = "2024-03-18";

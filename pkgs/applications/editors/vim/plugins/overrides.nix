@@ -1560,6 +1560,10 @@ in
     ];
   };
 
+  lf-nvim = super.lf-nvim.overrideAttrs {
+    dependencies = [ self.toggleterm-nvim ];
+  };
+
   lf-vim = super.lf-vim.overrideAttrs {
     dependencies = [ self.vim-floaterm ];
   };
