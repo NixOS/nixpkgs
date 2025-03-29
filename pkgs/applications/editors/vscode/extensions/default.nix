@@ -720,8 +720,8 @@ let
         mktplcRef = {
           publisher = "bmalehorn";
           name = "vscode-fish";
-          version = "1.0.38";
-          hash = "sha256-QEifCTlzYMX+5H6+k2o1lsQrhW3vxVpn+KFg/3WVVFo=";
+          version = "1.0.39";
+          hash = "sha256-T5wD4btQ2HSq3vB1m/qHM7VcvHfZmMD9OV93ZwxXcQg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bmalehorn.vscode-fish/changelog";
