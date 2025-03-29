@@ -18,6 +18,7 @@ let
     getAttrFromPath
     genericClosure
     head
+    init
     id
     imap1
     isAttrs
@@ -959,11 +960,22 @@ let
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
-    mergedValue =
+    mergedValue = _mergedValueWithContext "unspecified";
+
+    # internal, unstable interface, only used locally
+    _mergedValueWithContext = parentTypeName:
       if isDefined then
         if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
         else let allInvalid = filter (def: ! type.check def.value) defsFinal;
-        in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+        in if parentTypeName == "listOf" && type.name != "functionTo" && any (def: isFunction def.value) defsFinal
+        then throw ''
+          A list element definition for option `${showOption (init loc)}' is not of type `${type.description}', but a function. Definition values:${showDefs allInvalid}
+          Did you mean to apply the function to the next element instead? Add parenthesis to do so, e.g. like this:
+              ${showOption (init loc)} = [
+                (neovim.override { vimAlias = true; })
+              ]''
+        else
+          throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
@@ -973,6 +985,12 @@ let
 
     optionalValue =
       if isDefined then { value = mergedValue; }
+      else {};
+
+    # internal, unstable interface, currently only used by the listOf type to
+    # provide a better error message
+    _optionalValueWithContext = parentTypeName:
+      if isDefined then { value = _mergedValueWithContext parentTypeName; }
       else {};
   };
 
