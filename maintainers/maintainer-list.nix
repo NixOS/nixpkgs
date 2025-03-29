@@ -7851,6 +7851,12 @@
     githubId = 11705326;
     name = "Max Kochurov";
   };
+  fettgoenner = {
+    email = "paulmatti@protonmail.com";
+    github = "fettgoenner";
+    githubId = 92429150;
+    name = "Paul Meinhold";
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";

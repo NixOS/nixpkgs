@@ -7,6 +7,7 @@
 
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -47,7 +48,7 @@ makeScopeWithSplicing' {
   kdeGear = let
     mkGear = import ../applications/kde;
     attrs = {
-      inherit libsForQt5;
+      inherit config libsForQt5;
       inherit (pkgs) lib fetchurl;
     };
   in (lib.makeOverridable mkGear attrs);
