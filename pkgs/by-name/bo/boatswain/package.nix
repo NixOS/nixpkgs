@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boatswain";
-  version = "0.4.0";
+  version = "5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "boatswain";
-    rev = version;
-    hash = "sha256-Yqf7NJMyE6mg1zJJCLrIr6Emwt/nvlLHLAEtCXqFT8M=";
+    tag = version;
+    hash = "sha256-XE4MxaV9BXl5EQjumO/6HhRHfAyjjc5BeYFPAa+mdWY=";
   };
 
   nativeBuildInputs = [
