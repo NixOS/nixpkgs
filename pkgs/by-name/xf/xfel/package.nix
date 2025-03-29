@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixsinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "xfel";
   };
 }
