@@ -7869,9 +7869,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  patchelf = callPackage ../development/tools/misc/patchelf { };
-
-  patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
+  patchelfUnstable = lowPrio (callPackage ../by-name/pa/patchelf/unstable.nix { });
 
   pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
