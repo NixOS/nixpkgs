@@ -4,6 +4,7 @@
   varnish60,
   varnish75,
   varnish76,
+  varnish77,
 }:
 {
   varnish60Packages = rec {
@@ -27,5 +28,9 @@
   varnish76Packages = rec {
     varnish = varnish76;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules25;
+  };
+  varnish77Packages = rec {
+    varnish = varnish77;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules26;
   };
 }

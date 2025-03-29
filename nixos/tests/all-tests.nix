@@ -1410,6 +1410,7 @@ in
   user-activation-scripts = handleTest ./user-activation-scripts.nix { };
   user-enable-option = runTest ./user-enable-option.nix;
   user-expiry = runTest ./user-expiry.nix;
+<<<<<<< HEAD
   user-home-mode = handleTest ./user-home-mode.nix { };
   ustreamer = handleTest ./ustreamer.nix { };
   uwsgi = handleTest ./uwsgi.nix { };
@@ -1430,6 +1431,20 @@ in
   vault-agent = handleTest ./vault-agent.nix { };
   vault-dev = handleTest ./vault-dev.nix { };
   vault-postgresql = handleTest ./vault-postgresql.nix { };
+=======
+  user-home-mode = handleTest ./user-home-mode.nix {};
+  ustreamer = handleTest ./ustreamer.nix {};
+  uwsgi = handleTest ./uwsgi.nix {};
+  v2ray = handleTest ./v2ray.nix {};
+  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
+  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
+  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
+  varnish77 = handleTest ./varnish.nix { package = pkgs.varnish77; };
+  vault = handleTest ./vault.nix {};
+  vault-agent = handleTest ./vault-agent.nix {};
+  vault-dev = handleTest ./vault-dev.nix {};
+  vault-postgresql = handleTest ./vault-postgresql.nix {};
+>>>>>>> 0a00164b4295 (varnish77: init at 7.7.0)
   vaultwarden = discoverTests (import ./vaultwarden.nix);
   vdirsyncer = handleTest ./vdirsyncer.nix { };
   vector = handleTest ./vector { };
