@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAtrs: {
   pname = "hardinfo2";
-  version = "2.2.7";
+  version = "2.2.10";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
     tag = "release-${finalAtrs.version}";
-    hash = "sha256-IIH2SH4Ph25VFx652RQFZX8rL0ZlwjjfVrb+txLF3Ks=";
+    hash = "sha256-Ea1uhzAQEn8oDvWslGzrqoI2yzVDGxwTqbthfKEkYyQ=";
   };
 
   nativeBuildInputs = [
