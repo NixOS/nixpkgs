@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,15 +15,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-1Grjj2uaEjr2YKvkd8cxJfUpR8OYqmtuSvIW4tSdIyM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk_11_0.frameworks;
-    [
-      DiskArbitration
-      Foundation
-      IOKit
-    ]
-  );
 
   meta = with lib; {
     description = "Graph the number of crates that depend on your crate over time";

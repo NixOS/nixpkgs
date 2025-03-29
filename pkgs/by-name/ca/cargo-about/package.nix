@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   zstd,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ zstd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ zstd ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

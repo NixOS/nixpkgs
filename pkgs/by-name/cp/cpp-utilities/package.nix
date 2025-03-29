@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   cppunit,
-  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,9 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ cppunit ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
-  ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 

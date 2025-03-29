@@ -12,7 +12,6 @@
   python3,
   rustPlatform,
   stdenv,
-  darwin,
   testers,
   deltachat-desktop,
   yq,
@@ -64,10 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
     ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";

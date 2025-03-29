@@ -8,7 +8,6 @@
   cmake,
   ninja,
   ffmpeg-headless,
-  darwin,
   zlib,
   testers,
   validatePkgConfig,
@@ -55,17 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [ ffmpeg-headless ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Accelerate
-        CoreGraphics
-        CoreVideo
-        zlib
-      ]
-    );
+  buildInputs = [ ffmpeg-headless ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_EXAMPLES" withExamples)

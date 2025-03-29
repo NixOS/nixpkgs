@@ -12,7 +12,6 @@
   libssh2,
   openssl,
   zlib,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   postBuild = ''

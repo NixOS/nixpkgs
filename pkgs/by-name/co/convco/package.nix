@@ -1,13 +1,10 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   cmake,
-  libiconv,
   openssl,
   pkg-config,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,12 +26,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   checkFlags = [
     # disable test requiring networking

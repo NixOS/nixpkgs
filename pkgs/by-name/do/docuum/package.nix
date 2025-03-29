@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,10 +21,6 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # fails, no idea why
     "--skip=format::tests::code_str_display"
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
   ];
 
   meta = with lib; {

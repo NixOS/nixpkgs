@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-uuY0nh4VHzyM7+cbgyycr5I3IjE0OeQ0eg12qVXe4BQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      SystemConfiguration
-    ]
-  );
 
   meta = with lib; {
     description = "Connect A to B - Send Data";

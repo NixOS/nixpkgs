@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-LTvCExHQnQIbGGeh4bK6b3r9XXOxREMTOlRQv+BjKrM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
 
   ldflags = [
     "-w"

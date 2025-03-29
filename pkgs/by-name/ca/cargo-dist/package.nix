@@ -7,8 +7,6 @@
   bzip2,
   xz,
   zstd,
-  stdenv,
-  darwin,
   git,
   rustup,
 }:
@@ -31,15 +29,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    xz
+    zstd
+  ];
 
   nativeCheckInputs = [
     git
