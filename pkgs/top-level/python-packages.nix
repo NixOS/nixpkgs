@@ -10311,6 +10311,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-requests
       { };
 
+  opentelemetry-instrumentation-sqlalchemy =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy
+      { };
+
   opentelemetry-instrumentation-wsgi =
     callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi
       { };
@@ -17475,6 +17479,8 @@ self: super: with self; {
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
+
+  ttkbootstrap = callPackage ../development/python-modules/ttkbootstrap { };
 
   ttls = callPackage ../development/python-modules/ttls { };
 
