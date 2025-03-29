@@ -57,6 +57,10 @@
   blake3,
   depyf,
   opencv-python-headless,
+  cachetools,
+  llguidance,
+  python-json-logger,
+  python-multipart,
 
   cudaSupport ? torch.cudaSupport,
   cudaPackages ? { },
@@ -82,8 +86,35 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.7.0";
-    hash = "sha256-GUTRXmv3DiM/GN5Bvv2LYovMLKZMlMhoKv4O0g627gs=";
+    tag = "v3.8.0";
+    hash = "sha256-oIzlbKRdOh6gp6nRZ8udLSqleBFoFtgM7liCBlHZLOk=";
+  };
+
+  flashmla = stdenv.mkDerivation {
+    pname = "flashmla";
+    # https://github.com/vllm-project/FlashMLA/blob/${src.rev}/setup.py
+    version = "1.0.0";
+
+    # grep for GIT_TAG in the following file
+    # https://github.com/vllm-project/vllm/blob/${version}/cmake/external_projects/flashmla.cmake
+    src = fetchFromGitHub {
+      owner = "vllm-project";
+      repo = "FlashMLA";
+      rev = "575f7724b9762f265bbee5889df9c7d630801845";
+      hash = "sha256-8WrKMl0olr0nYV4FRJfwSaJ0F5gWQpssoFMjr9tbHBk=";
+    };
+
+    dontConfigure = true;
+
+    # flashmla normally relies on `git submodule update` to fetch cutlass
+    buildPhase = ''
+      rm -rf csrc/cutlass
+      ln -sf ${cutlass} csrc/cutlass
+    '';
+
+    installPhase = ''
+      cp -rva . $out
+    '';
   };
 
   vllm-flash-attn = stdenv.mkDerivation {
@@ -91,13 +122,13 @@ let
     # https://github.com/vllm-project/flash-attention/blob/${src.rev}/vllm_flash_attn/__init__.py
     version = "2.7.2.post1";
 
-    # see CMakeLists.txt, grepping for GIT_TAG near vllm-flash-attn
-    # https://github.com/vllm-project/vllm/blob/${version}/CMakeLists.txt
+    # grep for GIT_TAG in the following file
+    # https://github.com/vllm-project/vllm/blob/${version}/cmake/external_projects/vllm_flash_attn.cmake
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "720c94869cf2e0ff5a706e9c7f1dce0939686ade";
-      hash = "sha256-UXbBfzBCOBjRRAAOhIzt0E27VjC6xu4G1CkZfu9LKRs=";
+      rev = "dc9d410b3e2d6534a4c70724c2515f4def670a22";
+      hash = "sha256-ZQ0bOBIb+8IMmya8dmimKQ17KTBplX81IirdnBJpX5M=";
     };
 
     dontConfigure = true;
@@ -196,7 +227,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.7.3";
+  version = "0.8.2";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -205,7 +236,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-gudlikAjwZNkniKRPJYm7beoti8eHp5LaRV2/UNEibo=";
+    hash = "sha256-U28xoJeEG7MVJKn0LFf+02QBF4gJgG5+vSVRSIpLEgI=";
   };
 
   patches = [
@@ -222,12 +253,6 @@ buildPythonPackage rec {
         --replace-fail \
           'set(PYTHON_SUPPORTED_VERSIONS' \
           'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
-
-      # Relax torch dependency manually because the nonstandard requirements format
-      # is not caught by pythonRelaxDeps
-      substituteInPlace requirements*.txt pyproject.toml \
-        --replace-warn 'torch==2.5.1' 'torch==${lib.getVersion torch}' \
-        --replace-warn 'torch == 2.5.1' 'torch == ${lib.getVersion torch}'
     ''
     + lib.optionalString (nccl == null) ''
       # On platforms where NCCL is not supported (e.g. Jetson), substitute Gloo (provided by Torch)
@@ -291,8 +316,10 @@ buildPythonPackage rec {
     [
       aioprometheus
       blake3
+      cachetools
       depyf
       fastapi
+      llguidance
       lm-format-enforcer
       numpy
       openai
@@ -304,6 +331,8 @@ buildPythonPackage rec {
       py-cpuinfo
       pyarrow
       pydantic
+      python-json-logger
+      python-multipart
       pyzmq
       ray
       sentencepiece
@@ -336,6 +365,7 @@ buildPythonPackage rec {
   cmakeFlags =
     [
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
+      (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
       (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn}")
     ]
     ++ lib.optionals cudaSupport [
@@ -391,8 +421,5 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
-
-    # CPU support relies on unpackaged dependency `intel_extension_for_pytorch`
-    broken = cpuSupport;
   };
 }
