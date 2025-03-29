@@ -1306,7 +1306,7 @@ in {
   weblate = handleTest ./web-apps/weblate.nix {};
   whisparr = handleTest ./whisparr.nix {};
   whoogle-search = handleTest ./whoogle-search.nix {};
-  wiki-js = handleTest ./wiki-js.nix {};
+  wiki-js = runTest ./wiki-js.nix;
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};
   wg-access-server = handleTest ./wg-access-server.nix {};
