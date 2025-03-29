@@ -2263,8 +2263,8 @@ let
         mktplcRef = {
           name = "vscode-graphql-syntax";
           publisher = "GraphQL";
-          version = "1.3.6";
-          hash = "sha256-74Y/LpOhAj3TSplohhJqBwJDT87nCAiKrWsF90bc8jU=";
+          version = "1.3.8";
+          hash = "sha256-10x2kX9Gc7O/tGRDPZfy1cKdCIvGTCXcD2bDokIz7TU=";
         };
         meta = {
           description = "Adds full GraphQL syntax highlighting and language support such as bracket matching";
