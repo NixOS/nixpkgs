@@ -78,7 +78,6 @@
 , svt-av1
 , fluidsynth
 , libva
-, libvdpau
 , wayland
 , libwebp
 , xvidcore
@@ -196,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     soundtouch
     srtp
     fluidsynth
-    libvdpau
     libwebp
     xvidcore
     gnutls
