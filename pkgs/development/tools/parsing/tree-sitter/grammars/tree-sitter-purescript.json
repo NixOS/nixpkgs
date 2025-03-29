@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/postsolar/tree-sitter-purescript",
+  "rev": "daf9b3e2be18b0b2996a1281f7783e0d041d8b80",
+  "date": "2024-02-26T10:32:18+02:00",
+  "path": "/nix/store/2vxvsy2jik7kxnjrqz44c93bsfmch313-tree-sitter-purescript",
+  "sha256": "0vpfz8kpb3i7g413j0hsbka1n7v1amr68n9wswjrazgld4brd3br",
+  "hash": "sha256-eY2WF2n0fZUl1zxZZHJVYR8b1FwaAjkCeSeOdSf67m4=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
