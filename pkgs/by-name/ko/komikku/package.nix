@@ -54,14 +54,14 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
-    modern-colorthief
     dateparser
     emoji
     keyring
     lxml
+    modern-colorthief
     natsort
     piexif
     pillow
@@ -92,12 +92,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-    )
-  '';
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   passthru = {
     updateScript = nix-update-script { };
