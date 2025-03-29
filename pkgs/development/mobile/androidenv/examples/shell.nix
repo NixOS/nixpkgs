@@ -47,12 +47,13 @@ let
 
   androidComposition = androidEnv.composeAndroidPackages {
     includeSources = true;
-    includeSystemImages = true;
+    includeSystemImages = false;
     includeEmulator = "if-supported";
     includeNDK = "if-supported";
     useGoogleAPIs = true;
 
-    minPlatformVersion = 23;
+    # Make sure everything from the last decade works since we are not using system images.
+    numLatestPlatformVersions = 10;
 
     # If you want to use a custom repo JSON:
     # repoJson = ../repo.json;
@@ -100,6 +101,7 @@ let
 
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  firstSdk = pkgs.lib.foldl' pkgs.lib.min 100 androidComposition.platformVersions;
   latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
@@ -171,19 +173,12 @@ pkgs.mkShell rec {
             "extras;google;gcm"
           )
 
-          for x in $(seq 23 ${toString latestSdk}); do
+          for x in $(seq ${toString firstSdk} ${toString latestSdk}); do
             if [ $x -ne 34 ]; then
               # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
               packages+=("platforms;android-$x")
             fi
             packages+=("sources;android-$x")
-            if [ $x -ge 28 ]; then
-              if [ $x -lt 34 ]; then
-                packages+=("system-images;android-$x;google_apis_playstore;x86_64")
-              else
-                packages+=("system-images;android-$x;google_apis;x86_64")
-              fi
-            fi
           done
 
           ${pkgs.lib.optionalString includeAuto ''packages+=("extras;google;auto")''}

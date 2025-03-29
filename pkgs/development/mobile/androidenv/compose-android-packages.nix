@@ -82,6 +82,7 @@ in
   emulatorVersion ? repo.latest.emulator,
   minPlatformVersion ? null,
   maxPlatformVersion ? coerceInt repo.latest.platforms,
+  numLatestPlatformVersions ? 1,
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
       let
@@ -92,7 +93,14 @@ in
         lib.max minPlatformVersionInt maxPlatformVersionInt
       )
     else
-      map coerceInt [ repo.latest.platforms ],
+      let
+        minPlatformVersionInt = if minPlatformVersion == null then 1 else coerceInt minPlatformVersion;
+        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
+        firstPlatformVersionInt = lib.max minPlatformVersionInt (
+          latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
+        );
+      in
+      lib.range firstPlatformVersionInt latestPlatformVersionInt,
   includeSources ? false,
   includeSystemImages ? false,
   systemImageTypes ? [
