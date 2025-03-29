@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nixosTests,
   bash-completion,
   glib,
@@ -56,6 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Put installed tests into its own output
     ./installed-tests-path.patch
+    (fetchpatch {
+      # Fix writing to the database with ProtectSystem=strict, can be dropped on 1.4.8
+      url = "https://github.com/hughsie/colord/commit/08a32b2379fb5582f4312e59bf51a2823df56276.patch?full_index=1";
+      hash = "sha256-E8EXgvyd9jMXhQOO97ZOgv3oCTWcrbtS8IR0yQNyhyo=";
+    })
+    # Fix USB scanners not working with RestrictAddressFamilies, can be dropped on 1.4.8
+    (fetchpatch {
+      url = "https://github.com/hughsie/colord/commit/9283abd9c00468edb94d2a06d6fa3681cae2700d.patch?full_index=1";
+      hash = "sha256-hDA4bTuTJJxmSnmPUkVnYl2FYLoGFEBAeSDhVyr+Nhw=";
+    })
   ];
 
   postPatch = ''
