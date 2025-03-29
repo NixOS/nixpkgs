@@ -9,7 +9,7 @@ OWNER = 'osquery'
 REPO = 'osquery'
 OPENSSL_VERSION_PAT = re.compile(r'^set\(OPENSSL_VERSION "(.*)"\)')
 OPENSSL_SHA256_PAT = re.compile(r'^set\(OPENSSL_ARCHIVE_SHA256 "(.*)"\)')
-INFO_PATH = 'pkgs/tools/system/osquery/info.json'
+INFO_PATH = 'pkgs/by-name/os/osquery/info.json'
 
 
 def download_str(url):
