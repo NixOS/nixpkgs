@@ -16,12 +16,12 @@ buildPythonPackage rec {
   version = "0.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "flz";
     repo = "iaqualink-py";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2DqZJlsbDWo9fxIDg5P0CvZs8AuAh8XrhNiwIvuRm80=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Jandy iAqualink";
     homepage = "https://github.com/flz/iaqualink-py";
-    changelog = "https://github.com/flz/iaqualink-py/releases/tag/v${version}";
+    changelog = "https://github.com/flz/iaqualink-py/releases/tag/v${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
