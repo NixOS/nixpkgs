@@ -1257,7 +1257,7 @@ in {
   umurmur = handleTest ./umurmur.nix {};
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
-  unit-php = handleTest ./web-servers/unit-php.nix {};
+  unit-php = runTest ./web-servers/unit-php.nix;
   unit-perl = handleTest ./web-servers/unit-perl.nix {};
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
