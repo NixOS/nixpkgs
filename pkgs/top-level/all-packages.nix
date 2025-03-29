@@ -16060,7 +16060,7 @@ with pkgs;
   };
 
   starsector = callPackage ../games/starsector {
-    openjdk = openjdk8;
+    openjdk = openjdk17;
   };
 
   scummvm = callPackage ../games/scummvm {
