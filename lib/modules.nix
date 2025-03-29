@@ -1607,6 +1607,21 @@ let
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
       toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
+      prefix = lib.take (lib.length options._module.args.loc - 2) options._module.args.loc;
+      # Memoized warning
+      # This can be triggered in two ways, and this `let` binding ensures that it
+      # only triggers once.
+      # We trigger the evaluation of this warning in two places:
+      #   - When the new option is accessed.
+      #     This ensures that a warning is shown also in submodules that don't have
+      #     a `warnings` option.
+      #   - When the `warnings` option is evaluated.
+      #     This ensures that even if the value is not used, a warning is shown.
+      definitionWarning =
+        lib.warnIf
+          (warn && fromOpt.isDefined)
+          "The option `${showOption (prefix ++ from)}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption (prefix ++ to)}'."
+          null;
     in
     {
       options = setAttrByPath from (mkOption {
@@ -1618,12 +1633,14 @@ let
       });
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
-          warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          # NOTE: We use the warning option to trigger the warning immediately, instead of adding to the list.
+          #       Otherwise, we could show the warning twice; see `definitionWarning`.
+          warnings = mkIf (builtins.seq definitionWarning false) (lib.mkOverride 10000 []);
         })
         (if withPriority
-          then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
-          else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+          then mkAliasAndWrapDefsWithPriority (d: setAttrByPath to (builtins.seq definitionWarning d)) fromOpt
+          else mkAliasAndWrapDefinitions (d: setAttrByPath to (builtins.seq definitionWarning d)) fromOpt
+        )
       ]);
     };
 

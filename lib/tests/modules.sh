@@ -51,11 +51,13 @@ logFailure() {
     printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
 }
 
+extraArgs=""
+
 evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json $extraArgs
 }
 
 reportFailure() {
@@ -107,6 +109,34 @@ checkConfigError() {
     fi
 }
 
+checkConfigWarning() {
+    local outputContains=$1
+    local errContains=$2
+    local err=""
+    shift
+    shift
+    if err="$((evalConfig "$@" | grep -E --silent "$outputContains") 2>&1 >/dev/null)"; then
+        if echo "$err" | grep -zP --silent "$errContains" ; then
+            ((++pass))
+        else
+            logStartFailure
+            echo "ACTUAL:"
+            reportFailure "$@"
+            echo "EXPECTED: log matching '$errContains'"
+            logFailure
+            logEndFailure
+        fi
+
+    else
+        logStartFailure
+        echo "ACTUAL:"
+        reportFailure "$@"
+        echo "EXPECTED: result matching '$outputContains'"
+        logFailure
+        logEndFailure
+    fi
+}
+
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
@@ -138,6 +168,12 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
 checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
+
+# mkRenamedOptionModule
+checkConfigOutput '^true$' config.result ./mkRenamedOptionModule.nix
+# Check the warning. This abuses checkConfigError to check for a warning.
+extraArgs="--strict" \
+checkConfigWarning '{"a":1,"b":2}' '.*The option .basic\.old. defined in .*/modules/mkRenamedOptionModule\.nix. has been renamed to .basic\.new..*' config.basic.new ./mkRenamedOptionModule.nix
 
 # https://github.com/NixOS/nixpkgs/pull/131205
 # We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
