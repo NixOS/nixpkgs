@@ -1606,6 +1606,8 @@ self: super: with self; {
 
   bangla = callPackage ../development/python-modules/bangla { };
 
+  banks = callPackage ../development/python-modules/banks { };
+
   bap = callPackage ../development/python-modules/bap {
     inherit (pkgs.ocaml-ng.ocamlPackages_4_14) bap;
   };
