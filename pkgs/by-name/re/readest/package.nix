@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
     platforms = lib.platforms.linux;
   };
 })
