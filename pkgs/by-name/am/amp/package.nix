@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
@@ -9,46 +8,36 @@
   xorg,
   cmake,
   libgit2,
-  darwin,
   curl,
   writableTmpDirAsHomeHook,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = "amp";
     tag = version;
-    hash = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
+    hash = "sha256-YK+HSWTtSVLK8n7NDiif3bBqp/dQW2UTYo3yYcZ5cIA=";
   };
 
-  cargoPatches = [ ./update_time_crate.patch ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4lYywaPTfoOHEYHy+h7HfWn+OaDdk166tQ8ZFx9XZK0=";
+  cargoHash = "sha256-6enFOmIAYOgOdoeA+pk37+BobI5AGPBxjp73Gd4C+gI=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
+    git
   ];
-  buildInputs =
-    [
-      openssl
-      xorg.libxcb
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        curl
-        Security
-        AppKit
-      ]
-    );
+  buildInputs = [
+    openssl
+    xorg.libxcb
+    libgit2
+  ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
