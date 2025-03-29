@@ -80,7 +80,6 @@
 , libva
 , wayland
 , libwebp
-, xvidcore
 , gnutls
 , mjpegtools
 , libGL
@@ -196,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     srtp
     fluidsynth
     libwebp
-    xvidcore
     gnutls
     game-music-emu
     openssl
