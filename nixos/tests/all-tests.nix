@@ -1140,6 +1140,8 @@ in {
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
+  syncthing-guiPassword = handleTest ./syncthing-guiPassword.nix {};
+  syncthing-guiPasswordFile = handleTest ./syncthing-guiPasswordFile.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-many-devices = handleTest ./syncthing-many-devices.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
