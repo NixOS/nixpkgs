@@ -23,15 +23,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.72.0";
+  version = "1.75.0";
   pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
-    hash = "sha256-Kdt4nEWdxfZB7rmPbCegbj4abfv1nMSvAAC6mmUcv44=";
+    tag = "v${version}";
+    hash = "sha256-sjfIfsYbPfpZGIFs3yXm+ixxXj8eH0HPYTm5Q0pv/20=";
   };
 
   nativeBuildInputs = [
