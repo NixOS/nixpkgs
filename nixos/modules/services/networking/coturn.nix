@@ -363,7 +363,7 @@ in
               chmod 640 ${runConfig}
             '';
             serviceConfig = rec {
-              Type = "simple";
+              Type = "notify";
               ExecStart = utils.escapeSystemdExecArgs [
                 (lib.getExe' pkgs.coturn "turnserver")
                 "-c"
