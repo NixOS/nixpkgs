@@ -5,38 +5,29 @@
   openssl,
   pkg-config,
   rustPlatform,
-  Security,
-  SystemConfiguration,
   nix-update-script,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
   version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "epi052";
-    repo = pname;
+    repo = "feroxbuster";
     tag = "v${version}";
     hash = "sha256-/NgGlXYMxGxpX93SJ6gWgZW21cSSZsgo/WMvRuLw+Bw=";
   };
 
   useFetchCargoVendor = true;
+
   cargoHash = "sha256-L5s+P9eerv+O2vBUczGmn0rUMbHQtnF8hVa22wOrTGo=";
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   # Tests require network access
   doCheck = false;
@@ -44,10 +35,10 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Fast, simple, recursive content discovery tool";
+    description = "Recursive content discovery tool";
     homepage = "https://github.com/epi052/feroxbuster";
-    changelog = "https://github.com/epi052/feroxbuster/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/epi052/feroxbuster/releases/tag/v${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
     mainProgram = "feroxbuster";
