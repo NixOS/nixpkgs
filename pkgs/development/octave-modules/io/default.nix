@@ -25,7 +25,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/io/index.html";
+    homepage = "https://gnu-octave.github.io/packages/io/";
     license = with lib.licenses; [
       gpl3Plus
       bsd2

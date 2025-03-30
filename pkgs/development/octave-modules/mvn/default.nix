@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/mvn/index.html";
+    homepage = "https://gnu-octave.github.io/packages/mvn/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Multivariate normal distribution clustering and utility functions";

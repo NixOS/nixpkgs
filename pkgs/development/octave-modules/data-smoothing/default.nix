@@ -19,7 +19,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/data-smoothing/index.html";
+    homepage = "https://gnu-octave.github.io/packages/data-smoothing/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Algorithms for smoothing noisy data";

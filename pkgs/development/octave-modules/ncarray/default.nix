@@ -24,7 +24,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/ncarray/index.html";
+    homepage = "https://gnu-octave.github.io/packages/ncarray/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Access a single or a collection of NetCDF files as a multi-dimensional array";

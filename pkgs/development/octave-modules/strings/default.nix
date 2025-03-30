@@ -35,7 +35,7 @@ buildOctavePackage rec {
   '';
 
   meta = {
-    homepage = "https://octave.sourceforge.io/strings/index.html";
+    homepage = "https://gnu-octave.github.io/packages/strings/";
     license = lib.licenses.gpl3Plus;
     # Claims to have a freebsd license, but I found none.
     maintainers = with lib.maintainers; [ KarlJoad ];

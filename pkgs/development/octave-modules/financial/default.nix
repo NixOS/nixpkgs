@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/financial/index.html";
+    homepage = "https://gnu-octave.github.io/packages/financial/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Monte Carlo simulation, options pricing routines, financial manipulation, plotting functions and additional date manipulation tools";

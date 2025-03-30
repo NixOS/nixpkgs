@@ -32,7 +32,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/vrml/index.html";
+    homepage = "https://gnu-octave.github.io/packages/vrml/";
     license = with lib.licenses; [
       gpl3Plus
       fdl12Plus

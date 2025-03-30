@@ -28,7 +28,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/audio/index.html";
+    homepage = "https://gnu-octave.github.io/packages/audio/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Audio and MIDI Toolbox for GNU Octave";

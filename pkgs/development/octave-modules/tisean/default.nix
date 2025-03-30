@@ -26,7 +26,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/tisean/index.html";
+    homepage = "https://gnu-octave.github.io/packages/tisean/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Port of TISEAN 3.0.1";

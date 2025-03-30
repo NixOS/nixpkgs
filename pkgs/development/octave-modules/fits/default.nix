@@ -34,7 +34,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/fits/index.html";
+    homepage = "https://gnu-octave.github.io/packages/fits/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions for reading, and writing FITS (Flexible Image Transport System) files using cfitsio";
