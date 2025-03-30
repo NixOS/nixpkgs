@@ -132,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       qbit
       spikespaz
+      QF0xB
     ];
     platforms = lib.platforms.linux;
     mainProgram = "tidal-hifi";
