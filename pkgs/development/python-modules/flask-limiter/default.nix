@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.10.1";
+  version = "3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
     tag = version;
-    hash = "sha256-AfreBLyJDogXnxB5cIoT766VFiHIIoVKAoBIra6Q+xs=";
+    hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
   };
 
   postPatch = ''
@@ -46,7 +46,6 @@ buildPythonPackage rec {
     limits
     ordered-set
     rich
-    typing-extensions
   ];
 
   optional-dependencies = {

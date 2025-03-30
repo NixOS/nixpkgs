@@ -214,6 +214,7 @@ in {
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
+  bitbox-bridge = runTest ./bitbox-bridge.nix;
   bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
@@ -340,8 +341,8 @@ in {
   documize = handleTest ./documize.nix {};
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
-  dokuwiki = handleTest ./dokuwiki.nix {};
-  dolibarr = handleTest ./dolibarr.nix {};
+  dokuwiki = runTest ./dokuwiki.nix;
+  dolibarr = runTest ./dolibarr.nix;
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
@@ -450,6 +451,7 @@ in {
   freetube = discoverTests (import ./freetube.nix);
   freshrss = handleTest ./freshrss {};
   frigate = runTest ./frigate.nix;
+  froide-govplan = runTest ./web-apps/froide-govplan.nix;
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
@@ -461,6 +463,7 @@ in {
   garage = handleTest ./garage {};
   gatus = runTest ./gatus.nix;
   gemstash = handleTest ./gemstash.nix {};
+  geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
@@ -508,7 +511,7 @@ in {
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
-  h2o = discoverTests (import ./web-servers/h2o { inherit handleTestOn; });
+  h2o = import ./web-servers/h2o { inherit recurseIntoAttrs runTest; };
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_3 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_3; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
@@ -554,7 +557,7 @@ in {
   hub = handleTest ./git/hub.nix {};
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
-  icingaweb2 = handleTest ./icingaweb2.nix {};
+  icingaweb2 = runTest ./icingaweb2.nix;
   ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
   immich = handleTest ./web-apps/immich.nix {};
@@ -722,7 +725,7 @@ in {
   mollysocket = handleTest ./mollysocket.nix { };
   monado = handleTest ./monado.nix {};
   monetdb = handleTest ./monetdb.nix {};
-  monica = handleTest ./web-apps/monica.nix {};
+  monica = runTest ./web-apps/monica.nix;
   mongodb = runTest ./mongodb.nix;
   mongodb-ce = runTest ({ config, ... }: {
     imports = [ ./mongodb.nix ];
@@ -794,15 +797,15 @@ in {
   nfs3 = handleTest ./nfs { version = 3; };
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = handleTest ./nghttpx.nix {};
-  nginx = handleTest ./nginx.nix {};
-  nginx-auth = handleTest ./nginx-auth.nix {};
-  nginx-etag = handleTest ./nginx-etag.nix {};
-  nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
-  nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
+  nginx = runTest ./nginx.nix;
+  nginx-auth = runTest ./nginx-auth.nix;
+  nginx-etag = runTest ./nginx-etag.nix;
+  nginx-etag-compression = runTest ./nginx-etag-compression.nix;
+  nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = handleTest ./nginx-http3.nix {};
-  nginx-mime = handleTest ./nginx-mime.nix {};
-  nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
-  nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
+  nginx-mime = runTest ./nginx-mime.nix;
+  nginx-modsecurity = runTest ./nginx-modsecurity.nix;
+  nginx-moreheaders = runTest ./nginx-moreheaders.nix;
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
@@ -1254,7 +1257,7 @@ in {
   umurmur = handleTest ./umurmur.nix {};
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
-  unit-php = handleTest ./web-servers/unit-php.nix {};
+  unit-php = runTest ./web-servers/unit-php.nix;
   unit-perl = handleTest ./web-servers/unit-perl.nix {};
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
@@ -1294,7 +1297,7 @@ in {
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
   waagent = handleTest ./waagent.nix {};
-  wakapi = handleTest ./wakapi.nix {};
+  wakapi = runTest ./wakapi.nix;
   warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wastebin = handleTest ./wastebin.nix {};
@@ -1303,7 +1306,7 @@ in {
   weblate = handleTest ./web-apps/weblate.nix {};
   whisparr = handleTest ./whisparr.nix {};
   whoogle-search = handleTest ./whoogle-search.nix {};
-  wiki-js = handleTest ./wiki-js.nix {};
+  wiki-js = runTest ./wiki-js.nix;
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};
   wg-access-server = handleTest ./wg-access-server.nix {};
@@ -1311,7 +1314,7 @@ in {
   wmderland = handleTest ./wmderland.nix {};
   workout-tracker = handleTest ./workout-tracker.nix {};
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
-  wordpress = handleTest ./wordpress.nix {};
+  wordpress = runTest ./wordpress.nix;
   wrappers = handleTest ./wrappers.nix {};
   writefreely = handleTest ./web-apps/writefreely.nix {};
   wstunnel = runTest ./wstunnel.nix;

@@ -371,7 +371,7 @@ If the you're interested in can be distinguished without a label, you may simpli
                 options.destination = mkOption { … };
               };
             };
-            ignore = types.mkOption {
+            drop = types.mkOption {
               description = "Drop the packet without sending anything back.";
               type = types.submodule {};
             };

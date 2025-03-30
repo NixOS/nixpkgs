@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromGitLab,
   pkg-config,
   gtk3,
   wrapGAppsHook3,
@@ -9,11 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
-  version = "unstable-2024-05-21";
+  version = "unstable-2024-12-19";
 
-  src = fetchFromGitea {
-    domain = "git.exozy.me";
-    owner = "a";
+  src = fetchFromGitLab {
+    owner = "shdwchn10";
     repo = "zenmonitor3";
     rev = "a09f0b25d33967fd32f3831304be049b008cdabf";
     sha256 = "sha256-5N1Hhv2s0cv4Rujw4wFGHyIy7NyKAFThVvAo+xXqSyk=";
