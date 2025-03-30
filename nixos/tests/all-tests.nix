@@ -802,7 +802,7 @@ in {
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
-  nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
@@ -813,8 +813,8 @@ in {
   nginx-sso = runTest ./nginx-sso.nix;
   nginx-status-page = runTest ./nginx-status-page.nix;
   nginx-tmpdir = runTest ./nginx-tmpdir.nix;
-  nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
-  nginx-variants = handleTest ./nginx-variants.nix {};
+  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
+  nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
   nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
