@@ -44,8 +44,8 @@
   zsh,
   fish,
   nixosTests,
-  go_1_23,
-  buildGo123Module,
+  go_1_24,
+  buildGo124Module,
   nix-update-script,
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
@@ -56,21 +56,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.40.1";
+  version = "0.41.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-ta9MTbSkIkowkd5zBUbtauFNGVRDgxof1SSQXuEgFTQ=";
+    hash = "sha256-oTkzFEPgbFa2wPBJxh/9ZbK8liM9isWGEwExJq5/h2o=";
   };
 
   goModules =
-    (buildGo123Module {
+    (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-wr5R2X+lV8vVVWsDYLLSaz7HRNOB7Zzk/a7knsdDlXs=";
+      vendorHash = "sha256-ld3cGJUjoi3od6gINyGE7fQodl9CSKmakJ1CPLMX+Ss=";
     }).goModules;
 
   buildInputs =
@@ -124,7 +124,7 @@ buildPythonApplication rec {
       sphinx-copybutton
       sphinxext-opengraph
       sphinx-inline-tabs
-      go_1_23
+      go_1_24
       fontconfig
       makeBinaryWrapper
     ]
