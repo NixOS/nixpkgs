@@ -813,7 +813,7 @@ in {
   nginx-sso = runTest ./nginx-sso.nix;
   nginx-status-page = runTest ./nginx-status-page.nix;
   nginx-tmpdir = runTest ./nginx-tmpdir.nix;
-  nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
+  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
   nginx-variants = handleTest ./nginx-variants.nix {};
   nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
