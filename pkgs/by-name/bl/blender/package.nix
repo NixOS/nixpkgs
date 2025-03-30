@@ -18,8 +18,6 @@
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchgit,
-  fetchpatch2,
   fetchzip,
   ffmpeg,
   fftw,
@@ -56,7 +54,7 @@
   makeWrapper,
   mesa,
   openal,
-  opencollada,
+  opencollada-blender,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -114,42 +112,15 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.3.2";
+  version = "4.4.0";
 
-  srcs = [
-    (fetchzip {
-      name = "source";
-      url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-LCU2JpQbvQ+W/jC+H8J2suh+X5sTLOG9TcE2EeHqVh4=";
-    })
-    (fetchgit {
-      name = "assets";
-      url = "https://projects.blender.org/blender/blender-assets.git";
-      rev = "v${finalAttrs.version}";
-      fetchLFS = true;
-      hash = "sha256-B/UibETNBEUAO1pLCY6wR/Mmdk2o9YyNs6z6pV8dBJI=";
-    })
-  ];
+  srcs = fetchzip {
+    name = "source";
+    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
+    hash = "sha256-pAzOayAPyRYgTixAyg2prkUtI70uFulRuBYhgU9ZNw4=";
+  };
 
-  postUnpack = ''
-    chmod -R u+w *
-    rm -r assets/working
-    mv assets --target-directory source/release/datafiles/
-  '';
-
-  sourceRoot = "source";
-
-  patches = [
-    ./draco.patch
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-1.patch";
-      hash = "sha256-YXXqP/+79y3f41n3cJ3A1RBzgdoYqfKZD/REqmWYdgQ=";
-    })
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-2.patch";
-      hash = "sha256-mF6IA/dbHdNEkBN5XXCRcLIZ/8kXoirNwq7RDuLRAjw=";
-    })
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
+  patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -201,6 +172,7 @@ stdenv'.mkDerivation (finalAttrs: {
       "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
       "-DWITH_OPENSUBDIV=ON"
       "-DWITH_OPENVDB=ON"
+      "-DWITH_PIPEWIRE=OFF"
       "-DWITH_PULSEAUDIO=OFF"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
@@ -330,7 +302,7 @@ stdenv'.mkDerivation (finalAttrs: {
       wayland
       wayland-protocols
     ]
-    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional colladaSupport opencollada-blender
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optional spaceNavSupport libspnav
     ++ lib.optionals vulkanSupport [
@@ -364,9 +336,6 @@ stdenv'.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir $out/Applications
       mv $out/Blender.app $out/Applications
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv $out/share/blender/${lib.versions.majorMinor finalAttrs.version}/python{,-ext}
     ''
     + ''
       buildPythonPath "$pythonPath"
