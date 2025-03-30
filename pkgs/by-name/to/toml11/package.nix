@@ -19,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  # FIXME: Remove after upgrading to a newer version of toml11.
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/ToruNiina/toml11";
     description = "TOML for Modern C++";
