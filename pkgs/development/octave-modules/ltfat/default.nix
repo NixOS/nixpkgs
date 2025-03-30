@@ -46,5 +46,7 @@ buildOctavePackage rec {
       Gabor and wavelet transforms along with routines for constructing windows
       (filter prototypes) and routines for manipulating coefficients.
     '';
+    # https://github.com/ltfat/ltfat/issues/203
+    broken = true;
   };
 }
