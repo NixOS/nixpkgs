@@ -28,7 +28,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/optim/index.html";
+    homepage = "https://gnu-octave.github.io/packages/optim/";
     license = with lib.licenses; [
       gpl3Plus
       publicDomain

@@ -47,7 +47,7 @@ buildOctavePackage rec {
 
   meta = {
     name = "Level Set";
-    homepage = "https://octave.sourceforge.io/level-set/index.html";
+    homepage = "https://gnu-octave.github.io/packages/level-set/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Routines for calculating the time-evolution of the level-set equation and extracting geometric information from the level-set function";

@@ -27,7 +27,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/video/index.html";
+    homepage = "https://gnu-octave.github.io/packages/video/";
     license = with lib.licenses; [
       gpl3Plus
       bsd3

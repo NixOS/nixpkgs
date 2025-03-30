@@ -20,7 +20,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/gsl/index.html";
+    homepage = "https://gnu-octave.github.io/packages/gsl/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Octave bindings to the GNU Scientific Library";

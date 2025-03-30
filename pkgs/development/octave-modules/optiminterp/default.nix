@@ -19,7 +19,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/optiminterp/index.html";
+    homepage = "https://gnu-octave.github.io/packages/optiminterp/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Optimal interpolation toolbox for octave";

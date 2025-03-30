@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/dataframe/index.html";
+    homepage = "https://gnu-octave.github.io/packages/dataframe/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Data manipulation toolbox similar to R data.frame";

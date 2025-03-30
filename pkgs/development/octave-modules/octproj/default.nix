@@ -27,7 +27,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/octproj/index.html";
+    homepage = "https://gnu-octave.github.io/packages/octproj/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "GNU Octave bindings to PROJ library for cartographic projections and CRS transformations";

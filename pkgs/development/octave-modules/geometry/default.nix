@@ -20,7 +20,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/geometry/index.html";
+    homepage = "https://gnu-octave.github.io/packages/geometry/";
     license = with lib.licenses; [
       gpl3Plus
       boost

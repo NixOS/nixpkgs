@@ -24,7 +24,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/image-acquisition/index.html";
+    homepage = "https://gnu-octave.github.io/packages/image-acquisition/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions to capture images from connected devices";

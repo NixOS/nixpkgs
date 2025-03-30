@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/generate_html/index.html";
+    homepage = "https://gnu-octave.github.io/packages/generate_html/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Provides functions for generating HTML pages that contain the help texts for a set of functions";

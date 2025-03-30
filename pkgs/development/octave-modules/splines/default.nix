@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/splines/index.html";
+    homepage = "https://gnu-octave.github.io/packages/splines/";
     license = with lib.licenses; [
       gpl3Plus
       publicDomain

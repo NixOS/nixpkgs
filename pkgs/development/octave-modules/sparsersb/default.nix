@@ -19,7 +19,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/sparsersb/index.html";
+    homepage = "https://gnu-octave.github.io/packages/sparsersb/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Interface to the librsb package implementing the RSB sparse matrix format for fast shared-memory sparse matrix computations";

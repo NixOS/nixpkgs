@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/linear-algebra/index.html";
+    homepage = "https://gnu-octave.github.io/packages/linear-algebra/";
     license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
