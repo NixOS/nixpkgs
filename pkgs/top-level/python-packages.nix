@@ -5599,8 +5599,6 @@ self: super: with self; {
 
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
 
-  goobook = callPackage ../development/python-modules/goobook { };
-
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   goodwe = callPackage ../development/python-modules/goodwe { };
@@ -12763,6 +12761,8 @@ self: super: with self; {
   pyosmium = callPackage ../development/python-modules/pyosmium { inherit (pkgs) lz4; };
 
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
+
+  pyotb = callPackage ../development/python-modules/pyotb { };
 
   pyotgw = callPackage ../development/python-modules/pyotgw { };
 

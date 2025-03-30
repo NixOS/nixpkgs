@@ -1,46 +1,39 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   docutils,
   installShellFiles,
-  poetry-core,
-  google-api-python-client,
-  simplejson,
-  oauth2client,
-  setuptools,
-  pyxdg,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "goobook";
   version = "3.5.2";
-
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "goobook";
     repo = "goobook";
-    rev = version;
+    tag = version;
     hash = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'setuptools = "^62.6.0"' 'setuptools = "*"' \
-      --replace 'google-api-python-client = "^1.7.12"' 'google-api-python-client = "*"' \
-      --replace 'pyxdg = "^0.28"' 'pyxdg = "*"'
-  '';
+  build-system = with python3Packages; [
+    poetry-core
+  ];
 
   nativeBuildInputs = [
     docutils
     installShellFiles
-    poetry-core
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "google-api-python-client"
+    "pyxdg"
+    "setuptools"
+  ];
+
+  dependencies = with python3Packages; [
     google-api-python-client
     simplejson
     oauth2client
@@ -58,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goobook" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access your Google contacts from the command line";
     mainProgram = "goobook";
     longDescription = ''
@@ -66,9 +59,9 @@ buildPythonPackage rec {
       from the command-line and from MUAs such as Mutt.
       It can be used from Mutt the same way as abook.
     '';
-    homepage = "https://pypi.org/project/goobook/";
-    changelog = "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ primeos ];
+    homepage = "https://gitlab.com/goobook/goobook";
+    changelog = "https://gitlab.com/goobook/goobook/-/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

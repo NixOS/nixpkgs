@@ -1,16 +1,9 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
+{ pkgs, runTest, ... }:
 builtins.listToAttrs (
   builtins.map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
-      value = makeTest {
+      value = runTest {
         name = "nginx-variant-${pkgs.lib.getName nginxPackage}";
 
         nodes.machine =
