@@ -1091,6 +1091,11 @@ lib.mapAttrs mkLicense ({
     fullName = "PHP License v3.01";
   };
 
+  polyFormShield = {
+    fullName = "PolyForm Shield License 1.0.0";
+    free = false;
+  };
+
   postgresql = {
     spdxId = "PostgreSQL";
     fullName = "PostgreSQL License";

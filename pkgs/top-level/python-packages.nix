@@ -9679,6 +9679,8 @@ self: super: with self; {
 
   netbox-contract = callPackage ../development/python-modules/netbox-contract { };
 
+  netbox-diode-plugin = callPackage ../development/python-modules/netbox-diode-plugin { };
+
   netbox-dns = callPackage ../development/python-modules/netbox-dns { };
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
