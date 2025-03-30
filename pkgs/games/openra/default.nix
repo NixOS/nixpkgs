@@ -7,6 +7,5 @@ in
 {
   engines = {
     release = callPackage' ./engines/release;
-    devtest = callPackage' ./engines/devtest;
   };
 }
