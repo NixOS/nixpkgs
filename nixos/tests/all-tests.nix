@@ -815,7 +815,7 @@ in {
   nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
   nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
-  nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
+  nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
