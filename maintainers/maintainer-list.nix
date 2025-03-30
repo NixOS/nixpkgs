@@ -7612,6 +7612,12 @@
     github = "hatch01";
     githubId = 42416805;
   };
+  ezibenroc = {
+    email = "tom.cornebize@gmail.com";
+    github = "Ezibenroc";
+    githubId = 8900834;
+    name = "Tom Cornebize";
+  };
   f2k1de = {
     name = "f2k1de";
     email = "hi@f2k1.de";
