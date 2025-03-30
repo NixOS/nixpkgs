@@ -379,6 +379,7 @@ dont-distribute-packages:
  - TreeCounter
  - Treiber
  - TrieMap
+ - TypeClass
  - TypeIlluminator
  - UMM
  - URLT
@@ -678,6 +679,7 @@ dont-distribute-packages:
  - botan-low
  - both
  - bound-gen
+ - breakout
  - bricks
  - bricks-internal-test
  - bricks-parsec
@@ -783,6 +785,8 @@ dont-distribute-packages:
  - chp-plus
  - chp-spec
  - chp-transformers
+ - chr-core
+ - chr-data
  - chr-lang
  - chromatin
  - chu2
@@ -1197,6 +1201,7 @@ dont-distribute-packages:
  - extract-dependencies
  - factual-api
  - fair
+ - fallingblocks
  - family-tree
  - fast-arithmetic
  - fast-bech32
@@ -1424,6 +1429,9 @@ dont-distribute-packages:
  - gps
  - gps2htmlReport
  - gpu-vulkan
+ - gpu-vulkan-khr-surface
+ - gpu-vulkan-khr-surface-glfw
+ - gpu-vulkan-khr-swapchain
  - grab-form
  - graflog
  - grammar-combinators
@@ -1555,6 +1563,7 @@ dont-distribute-packages:
  - hashable-accelerate
  - hashflare
  - hask-home
+ - haskanoid
  - haskdeep
  - haskeem
  - haskell-admin
@@ -1609,6 +1618,7 @@ dont-distribute-packages:
  - haskelm
  - haskey
  - haskey-mtl
+ - haskgame
  - hasklepias
  - haskoin-bitcoind
  - haskoin-crypto
@@ -1635,6 +1645,7 @@ dont-distribute-packages:
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
+ - hasql-streams-example
  - hastache-aeson
  - haste-app
  - haste-gapi
@@ -1818,7 +1829,6 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
- - hsparql
  - hspec-dirstream
  - hspec-expectations-pretty
  - hspec-pg-transact
@@ -2246,6 +2256,7 @@ dont-distribute-packages:
  - luachunk
  - lucid-colonnade
  - lucienne
+ - lui
  - luminance-samples
  - lvish
  - lz4-conduit
@@ -2867,6 +2878,7 @@ dont-distribute-packages:
  - rds-data
  - react-flux-servant
  - reactive
+ - reactive-banana-sdl
  - reactive-banana-wx
  - reactive-fieldtrip
  - reactive-glut
@@ -2914,6 +2926,7 @@ dont-distribute-packages:
  - regular-web
  - regular-xmlpickler
  - reheat
+ - rel8
  - relative-date
  - remote-json
  - remote-json-client
@@ -3134,6 +3147,7 @@ dont-distribute-packages:
  - shady-gen
  - shady-graphics
  - shake-ats
+ - shake-language-c
  - shake-minify-css
  - shakebook
  - shaker
@@ -3575,7 +3589,6 @@ dont-distribute-packages:
  - vault-tool-server
  - vault-trans
  - vaultaire-common
- - vaultenv
  - vcache-trie
  - vcard
  - vcsgui
