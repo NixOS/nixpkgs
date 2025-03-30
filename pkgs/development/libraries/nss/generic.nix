@@ -121,8 +121,10 @@ stdenv.mkDerivation rec {
         ]
         ++ lib.optional enableFIPS "--enable-fips"
         ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
-        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+        ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
           "-DOS=${target_system}"
+        ]
+        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
           "--disable-tests"
         ];
     in
