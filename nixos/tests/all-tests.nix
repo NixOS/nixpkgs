@@ -1277,9 +1277,18 @@ in {
   ustreamer = handleTest ./ustreamer.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
-  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
-  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
+  varnish60 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish60;
+  };
+  varnish75 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish75;
+  };
+  varnish76 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish76;
+  };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
