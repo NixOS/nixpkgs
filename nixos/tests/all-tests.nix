@@ -802,7 +802,7 @@ in {
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
-  nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
