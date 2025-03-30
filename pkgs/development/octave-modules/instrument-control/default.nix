@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-AfrQQy1EuMpO6qGYz+sh4EW5eYi6fE6KaRxro0psSN8=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/instrument-control/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Low level I/O functions for serial, i2c, spi, parallel, tcp, gpib, vxi11, udp and usbtmc interfaces";
   };
 }

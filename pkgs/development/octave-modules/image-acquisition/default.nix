@@ -23,10 +23,10 @@ buildOctavePackage rec {
     libv4l
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/image-acquisition/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Functions to capture images from connected devices";
     longDescription = ''
       The Octave-forge Image Aquisition package provides functions to

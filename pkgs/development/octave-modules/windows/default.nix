@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "sha256-j/goQc57jcfxlCsbf31Mx8oNud1vNE0D/hNfXyvVmTc=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/windows/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Provides COM interface and additional functionality on Windows";
   };
 }

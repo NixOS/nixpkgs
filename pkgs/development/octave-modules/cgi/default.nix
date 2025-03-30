@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "0hygj7cpwrs2w9bfb7qrvv7gq410bfiddqvza8smg766pqmfp1s1";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/cgi/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Common Gateway Interface for Octave";
   };
 }

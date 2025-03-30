@@ -31,13 +31,13 @@ buildOctavePackage rec {
     statistics
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/vrml/index.html";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       fdl12Plus
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "3D graphics using VRML";
     # Marked this way until KarlJoad gets freewrl as a runtime dependency.
     broken = true;
