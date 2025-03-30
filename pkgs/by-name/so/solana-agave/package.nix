@@ -7,7 +7,8 @@
   installShellFiles,
   pkg-config,
   apple-sdk_11,
-  libssl,
+  udev,
+  openssl,
   libz,
   protobuf,
   cmake,
@@ -15,9 +16,6 @@
   clang,
   llvm,
   llvmPackages,
-
-  # withPCRE2 ? true,
-  # pcre2,
 }:
 
 let
@@ -29,21 +27,22 @@ rustPlatform.buildRustPackage rec {
   version = "2.1.16";
 
   src = fetchFromGitHub {
-    owner = "anza";
+    owner = "anza-xyz";
     repo = "agave";
-    rev = version;
-    hash = "";
+    rev = "v${version}";
+    hash = "sha256-ysH4krWr0U6YnuAlq0EmqCoTpMrrEV40wUb5daOAVS8=";
   };
 
-  cargoHash = "";
+  # Because crossbeam-epoch in Cargo.lock uses a git rev instead of a locked checksum
+  useFetchCargoVendor = true;
 
-  nativeBuildInputs = [ installShellFiles protobuf cmake gnumake clang llvm llvmPackages.bintools ] ++ lib.optional withPCRE2 pkg-config;
+  cargoHash = "sha256-PWt5vDDnfnu+9HTVr3hHHxzhpmxZF5T2q1ZMaV7t2Ic=";
+
+  nativeBuildInputs = [ installShellFiles protobuf cmake gnumake clang llvm llvmPackages.bintools openssl.dev pkg-config ];
   buildInputs =
-    [ libssl libz pkg-config ]
-    # ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
-
-  # buildFeatures = lib.optional withPCRE2 "pcre2";
+    [ openssl libz rustPlatform.bindgenHook ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   preFixup = lib.optionalString canRun ''
     ${agave} --generate man > agave.1
@@ -69,4 +68,7 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "agave";
   };
+
+  # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
+  OPENSSL_NO_VENDOR = 1;
 }
