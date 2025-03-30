@@ -23,5 +23,7 @@ buildOctavePackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Algorithms for smoothing noisy data";
+    # Hasn't been updated since 2012, and fails to build with octave >= 10.1.0
+    broken = true;
   };
 }
