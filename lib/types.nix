@@ -558,7 +558,11 @@ rec {
       descriptionClass = "noun";
       check = x: isDerivation x || isStorePath x;
       merge = loc: defs:
-        let res = mergeOneOption loc defs;
+        # See https://github.com/NixOS/nixpkgs/issues/222753 for design details.
+        # Reconcile packages using `outPath` equality
+        # `meta` attribute is ignored as it is not supposed
+        # to have any role in the actual contents of the derivation.
+        let res = mergeEqualOption loc (map (def: def.outPath) defs);
         in if builtins.isPath res || (builtins.isString res && ! builtins.hasContext res)
           then toDerivation res
           else res;
