@@ -41,7 +41,7 @@
   IMGUI_FREETYPE ? false,
   IMGUI_FREETYPE_LUNASVG ? false,
   IMGUI_USE_WCHAR32 ? false,
-}@args:
+}:
 
 let
   vcpkgSource = applyPatches {
@@ -56,9 +56,9 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgui";
-  version = "1.91.4";
+  version = "1.91.9b";
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
-    tag = "v${version}";
-    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
   };
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
@@ -142,7 +142,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
+      ivyfanchiang
     ];
     platforms = lib.platforms.all;
   };
-}
+})
