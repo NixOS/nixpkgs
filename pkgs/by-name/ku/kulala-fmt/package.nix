@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kulala-fmt";
-  version = "1.4.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
     rev = "v${version}";
-    hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
+    hash = "sha256-RvcSJipsME2C7AqMTR/XE1V99Z776Gk3elnafAEWZTc=";
   };
 
-  vendorHash = "sha256-GazDEm/qv0nh8vYT+Tf0n4QDGHlcYtbMIj5rlZBvpKo=";
+  vendorHash = null;
 
   env.CGO_ENABLED = 0;
 
