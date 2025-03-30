@@ -17394,6 +17394,8 @@ self: super: with self; {
 
   tree-sitter-languages = callPackage ../development/python-modules/tree-sitter-languages { };
 
+  tree-sitter-language-pack = callPackage ../development/python-modules/tree-sitter-language-pack { };
+
   tree-sitter-make = callPackage ../development/python-modules/tree-sitter-make { };
 
   tree-sitter-python = callPackage ../development/python-modules/tree-sitter-python { };
