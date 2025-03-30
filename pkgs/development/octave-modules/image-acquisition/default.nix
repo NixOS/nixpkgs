@@ -8,11 +8,11 @@
 
 buildOctavePackage rec {
   pname = "image-acquisition";
-  version = "0.2.6";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Uehwk68GZ/M4WL5M3GF++mCPUg3M08Y0gkdO36/yhNI=";
+    sha256 = "sha256-vgLDbqFGlbXjDaxRtaBHAYYJ+wUjtB0NYYkQFIqTOgU=";
   };
 
   buildInputs = [
