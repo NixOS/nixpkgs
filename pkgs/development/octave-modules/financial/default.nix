@@ -13,10 +13,10 @@ buildOctavePackage rec {
     sha256 = "0f963yg6pwvrdk5fg7b71ny47gzy48nqxdzj2ngcfrvmb5az4vmf";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/financial/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Monte Carlo simulation, options pricing routines, financial manipulation, plotting functions and additional date manipulation tools";
   };
 }
