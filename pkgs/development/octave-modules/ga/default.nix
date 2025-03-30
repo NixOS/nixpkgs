@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/ga/index.html";
+    homepage = "https://gnu-octave.github.io/packages/ga/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Genetic optimization code";

@@ -32,7 +32,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/database/index.html";
+    homepage = "https://gnu-octave.github.io/packages/database/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Interface to SQL databases, currently only postgresql using libpq";

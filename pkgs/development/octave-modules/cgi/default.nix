@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/cgi/index.html";
+    homepage = "https://gnu-octave.github.io/packages/cgi/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Common Gateway Interface for Octave";

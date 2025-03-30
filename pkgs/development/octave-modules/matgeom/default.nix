@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/matgeom/index.html";
+    homepage = "https://gnu-octave.github.io/packages/matgeom/";
     license = with lib.licenses; [
       bsd2
       gpl3Plus

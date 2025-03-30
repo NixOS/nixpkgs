@@ -26,7 +26,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/fem-fenics/index.html";
+    homepage = "https://gnu-octave.github.io/packages/fem-fenics/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Package for the resolution of partial differential equations based on fenics";

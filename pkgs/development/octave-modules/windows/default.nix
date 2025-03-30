@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/windows/index.html";
+    homepage = "https://gnu-octave.github.io/packages/windows/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Provides COM interface and additional functionality on Windows";

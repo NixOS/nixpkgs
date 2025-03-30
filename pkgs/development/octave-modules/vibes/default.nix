@@ -19,7 +19,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/vibes/index.html";
+    homepage = "https://gnu-octave.github.io/packages/vibes/";
     license = with lib.licenses; [
       gpl3Plus
       mit

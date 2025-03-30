@@ -32,7 +32,7 @@ buildOctavePackage rec {
   ];
 
   meta = {
-    homepage = "https://octave.sourceforge.io/parallel/index.html";
+    homepage = "https://gnu-octave.github.io/packages/parallel/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Parallel execution package";

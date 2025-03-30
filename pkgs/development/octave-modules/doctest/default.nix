@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/doctest/index.html";
+    homepage = "https://gnu-octave.github.io/packages/doctest/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Find and run example code within documentation";

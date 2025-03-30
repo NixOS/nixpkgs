@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   meta = {
-    homepage = "https://octave.sourceforge.io/stk/index.html";
+    homepage = "https://gnu-octave.github.io/packages/stk/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "STK is a (not so) Small Toolbox for Kriging";
