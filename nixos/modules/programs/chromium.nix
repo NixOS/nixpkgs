@@ -25,8 +25,8 @@ in
       enable = lib.mkEnableOption "{command}`chromium` policies";
 
       package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.chromium;
+        type = types.nullOr lib.types.package;
+        default = null;
         description = "Chromium package to install, `programs.chromium.enable` must be `true`.";
         defaultText = lib.literalExpression "pkgs.chromium";
         relatedPackages = [
