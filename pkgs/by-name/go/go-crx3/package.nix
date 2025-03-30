@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-crx3";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mmadfox";
     repo = "go-crx3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J3v3/Rz6rPTJnIEahWvJO6KGIC6idqJ/39wPC4zApbE=";
+    hash = "sha256-XNUOnm898GtCIojWR4tCHZNDHhh+DfJvvBvTDBI8Wzg=";
   };
 
   vendorHash = "sha256-LEIB/VZA3rqTeH9SesZ/jrfVddl6xtmoRWHP+RwGmCk=";
