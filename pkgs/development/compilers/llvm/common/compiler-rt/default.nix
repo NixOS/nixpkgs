@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional (lib.versionOlder release_version "15") (getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
     ++ [
       (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
+      # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+      # extra `/`.
+      (getVersionFile "compiler-rt/normalize-var.patch")
+      # Fix build on armv6l
+      ./armv6-no-ldrexd-strexd.patch
     ]
     ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
       # fixes the parallel build on aarch64 darwin
@@ -95,11 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
           stripLen = 1;
           hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
         })
-    ++ [
-      # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
-      # extra `/`.
-      (getVersionFile "compiler-rt/normalize-var.patch")
-    ]
     ++
       lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
         # Prevent a compilation error on darwin
@@ -126,10 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
           # Fix build on armv6l
           ./armv6-scudo-no-yield.patch
         ]
-    ++ [
-      # Fix build on armv6l
-      ./armv6-no-ldrexd-strexd.patch
-    ]
     ++ lib.optionals (lib.versionAtLeast release_version "13") [
       (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
     ]
