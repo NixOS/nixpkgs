@@ -342,7 +342,7 @@ in {
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
   dokuwiki = runTest ./dokuwiki.nix;
-  dolibarr = handleTest ./dolibarr.nix {};
+  dolibarr = runTest ./dolibarr.nix;
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
