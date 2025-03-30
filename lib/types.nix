@@ -968,6 +968,23 @@ rec {
         in mergedOption.type;
     };
 
+    # A type that is one of several submodules, similiar to types.oneOf but is usable inside attrsOf or listOf
+    # submodules need an option with a type str which is used to find the corresponding type
+    taggedSubmodules =
+      { types
+      , specialArgs ? {}
+      }: mkOptionType rec {
+      name = "taggedSubmodules";
+      description = "one of ${concatStringsSep "," (attrNames types)}";
+      check = x: if x ? type then types.${x.type}.check x else throw "No type option set in:\n${lib.generators.toPretty {} x}";
+      merge = loc: foldl'
+        (res: def: types.${def.value.type}.merge loc [
+          (lib.recursiveUpdate { value._module.args = specialArgs; } def)
+        ])
+        { };
+      nestedTypes = types;
+    };
+
     submoduleWith =
       { modules
       , specialArgs ? {}

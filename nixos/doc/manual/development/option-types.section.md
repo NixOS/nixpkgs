@@ -251,6 +251,57 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
 
+`types.taggedSubmodules` { *`types`*, *`specialArgs`* ? {} }
+
+:   Like `types.oneOf`, but takes an attrsSet of submodule in types. Those need to have a type option
+    which is used to find the correct submodule.
+
+::: {#ex-tagged-submodules .example}
+### Tagged submodules
+```nix
+let
+  submoduleA = submodule {
+    options = {
+      type = mkOption {
+        type = str;
+      };
+      foo = mkOption {
+        type = int;
+      };
+    };
+  };
+  submoduleB = submodule {
+    options = {
+      type = mkOption {
+        type = str;
+      };
+      bar = mkOption {
+        type = int;
+      };
+    };
+  };
+in
+options.mod = mkOption {
+  type = attrsOf (taggedSubmodule {
+    types = {
+      a = submoduleA;
+      b = submoduleB;
+    };
+  });
+};
+config.mod = {
+  someA = {
+    type = "a";
+    foo = 123;
+  };
+  someB = {
+    type = "b";
+    foo = 456;
+  };
+};
+```
+:::
+
 `types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
 
 :   Like `types.submodule`, but more flexible and with better defaults.
