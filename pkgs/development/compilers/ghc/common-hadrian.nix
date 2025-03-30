@@ -173,13 +173,14 @@
         in
 
         # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-        lib.optionals (lib.versionOlder version "9.8") [
+        lib.optionals (lib.versionOlder version "9.6.7") [
            ./docs-sphinx-7.patch
         ]
 
         ++ lib.optional (
           # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
           lib.versionOlder version "9.11"
+          && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
           && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
         ) [
           # Determine size of time related types using hsc2hs instead of assuming CLong.
