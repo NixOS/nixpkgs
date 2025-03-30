@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ttkbootstrap";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "israel-dryer";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-aUqr30Tgz3ZLjLbNIt9yi6bqhXj+31heZoOLOZHYUiU=";
+    hash = "sha256-uwzakINR49jrxoAGUjJgokjoNJdnSvLv1UBpbto5URA=";
   };
 
   build-system = [
