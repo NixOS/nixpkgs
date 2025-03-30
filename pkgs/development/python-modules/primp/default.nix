@@ -9,7 +9,6 @@
   boringssl,
   libiconv,
   SystemConfiguration,
-  patchelf,
   gcc-unwrapped,
   python,
   fetchpatch,
@@ -87,7 +86,7 @@ buildPythonPackage rec {
 
   # TODO: Can we improve this?
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${lib.getExe patchelf} --add-rpath ${lib.getLib gcc-unwrapped.lib} --add-needed libstdc++.so.6 $out/${python.sitePackages}/primp/primp.abi3.so
+    patchelf --add-rpath ${lib.getLib gcc-unwrapped.lib} --add-needed libstdc++.so.6 $out/${python.sitePackages}/primp/primp.abi3.so
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -109,7 +108,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/deedy5/primp/releases/tag/${version}";
-    description = "PRIMP (Python Requests IMPersonate). The fastest python HTTP client that can impersonate web browsers.";
+    description = "Python Requests IMPersonate, the fastest Python HTTP client that can impersonate web browsers";
     homepage = "https://github.com/deedy5/primp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];

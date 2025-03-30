@@ -20,13 +20,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/kclvm";
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "inkwell-0.2.0" = "sha256-JxSlhShb3JPhsXK8nGFi2uGPp8XqZUSiqniLBrhr+sM=";
-      "protoc-bin-vendored-3.2.0" = "sha256-cYLAjjuYWat+8RS3vtNVS/NAJYw2NGeMADzGBL1L2Ww=";
-    };
-  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xQgCiNt0lUvB5XmVB45l0GuIiVp5Jm6dZY7396Rsnqw=";
 
   buildInputs =
     [ rustc ]

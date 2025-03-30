@@ -10030,7 +10030,7 @@ with pkgs;
     });
 
   libsForQt5 = (recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
+    inherit lib config __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
   })) // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
@@ -12909,8 +12909,6 @@ with pkgs;
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
-
-  fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
   fetchmail_7 = callPackage ../applications/misc/fetchmail/v7.nix { };
