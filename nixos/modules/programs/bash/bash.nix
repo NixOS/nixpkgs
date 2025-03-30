@@ -111,6 +111,13 @@ in
         internal = true;
       };
 
+      logout = lib.mkOption {
+        default = "";
+        description = ''
+          Shell script code called during login bash shell logout.
+        '';
+        type = lib.types.lines;
+      };
     };
 
   };
@@ -194,6 +201,21 @@ in
         # Read system-wide modifications.
         if test -f /etc/bashrc.local; then
             . /etc/bashrc.local
+        fi
+      '';
+
+      environment.etc.bash_logout.text = ''
+        # /etc/bash_logout: DO NOT EDIT -- this file has been generated automatically.
+
+        # Only execute this file once per shell.
+        if [ -n "$__ETC_BASHLOGOUT_SOURCED" ] || [ -n "$NOSYSBASHLOGOUT" ]; then return; fi
+        __ETC_BASHLOGOUT_SOURCED=1
+
+        ${cfg.logout}
+
+        # Read system-wide modifications.
+        if test -f /etc/bash_logout.local; then
+            . /etc/bash_logout.local
         fi
       '';
 
