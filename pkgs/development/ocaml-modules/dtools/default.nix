@@ -20,7 +20,7 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-dtools";
     description = "Library providing various helper functions to make daemons";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ dandellion ];
   };
 }
