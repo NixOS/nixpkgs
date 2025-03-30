@@ -18,7 +18,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "5.19.3.9730";
+  version = "5.21.1.9799";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
