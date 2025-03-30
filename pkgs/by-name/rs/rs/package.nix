@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ${stdenv.cc}/bin/cc utf8.c rs.c -o rs -lbsd
+    ${stdenv.cc}/bin/cc -DNEED_STRTONUM utf8.c rs.c -o rs -lbsd
 
     runHook postBuild
   '';
