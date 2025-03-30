@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -39,14 +40,10 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/crx3 completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/crx3";
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/crx3 --help >/dev/null
-
-    runHook postInstallCheck
-  '';
 
   passthru.updateScript = nix-update-script { };
 
