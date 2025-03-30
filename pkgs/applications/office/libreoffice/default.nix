@@ -1,4 +1,5 @@
 { stdenv
+, runCommand
 , fetchurl
 , fetchgit
 , fetchpatch2
@@ -112,6 +113,7 @@
 , kio ? null
 , kwindowsystem ? null
 , variant ? "fresh"
+, debugLogging ? variant == "fresh"
 , symlinkJoin
 , postgresql
 , makeFontsConf
@@ -126,6 +128,7 @@
 , libertine
 , libertine-g
 , noto-fonts
+, noto-fonts-lgc-plus
 , noto-fonts-cjk-sans
 , rhino
 , lp_solve
@@ -174,7 +177,7 @@ let
       libertine-g
       noto-fonts
       noto-fonts-cjk-sans
-    ];
+    ] ++ lib.optionals (variant == "fresh") [ noto-fonts-lgc-plus ];
   };
 
   jre' = jre17_minimal.override {
@@ -536,7 +539,9 @@ in stdenv.mkDerivation (finalAttrs: {
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
     # from rasqal's .pc file. Needs more investigation.
-    NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
+    NIX_CFLAGS_COMPILE =
+      "-I${librdf_rasqal}/include/rasqal"
+      + (lib.optionalString debugLogging " -DSAL_LOG_WARN=1 -DSAL_LOG_INFO=1 ");
 
     # Provide all the fonts used in tests.
     FONTCONFIG_FILE = fontsConf;
