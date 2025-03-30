@@ -7,12 +7,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ttf2pt1";
   version = "3.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ttf2pt1/ttf2pt1-${version}.tgz";
+    url = "mirror://sourceforge/ttf2pt1/ttf2pt1-${finalAttrs.version}.tgz";
     sha256 = "1l718n4k4widx49xz7qrj4mybzb8q67kp2jw7f47604ips4654mf";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = "ttf2pt1";
     platforms = lib.platforms.linux;
   };
-}
+})
