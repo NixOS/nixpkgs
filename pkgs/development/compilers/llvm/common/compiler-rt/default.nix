@@ -48,8 +48,6 @@ let
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 
-  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
-
   src' =
     if monorepoSrc != null then
       runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
@@ -68,7 +66,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
+  inherit version;
 
   src = src';
   sourceRoot = "${finalAttrs.src.name}/compiler-rt";
