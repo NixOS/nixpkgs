@@ -5199,11 +5199,11 @@ with pkgs;
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish75 varnish76;
+    varnish60 varnish76 varnish77;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish75Packages varnish76Packages;
+    varnish60Packages varnish76Packages varnish77Packages;
 
-  varnishPackages = varnish75Packages;
+  varnishPackages = varnish77Packages;
   varnish = varnishPackages.varnish;
 
   viceroy = callPackage ../development/tools/viceroy {
