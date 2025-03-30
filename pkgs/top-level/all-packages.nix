@@ -8489,7 +8489,7 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  flint = callPackage ../development/libraries/flint { };
+  flint = flint3;
 
   flint3 = callPackage ../development/libraries/flint/3.nix { };
 
