@@ -33,9 +33,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ysH4krWr0U6YnuAlq0EmqCoTpMrrEV40wUb5daOAVS8=";
   };
 
-  # Because crossbeam-epoch in Cargo.lock uses a git rev instead of a locked checksum
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-PWt5vDDnfnu+9HTVr3hHHxzhpmxZF5T2q1ZMaV7t2Ic=";
 
   nativeBuildInputs = [ installShellFiles protobuf cmake gnumake clang llvm llvmPackages.bintools openssl.dev pkg-config ];
@@ -68,6 +65,12 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "agave";
   };
+
+  # Perhaps a nix bug, but the no_atomic.rs file is entirely missing after unpackPhase
+  patches = [ ./crossbeam.patch ];
+
+  # Because crossbeam-epoch in Cargo.lock uses a git rev instead of a locked checksum
+  useFetchCargoVendor = true;
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
