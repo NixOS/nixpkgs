@@ -36,5 +36,7 @@ buildOctavePackage rec {
     # Modified BSD code seems removed
     maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Non-linear optimization toolkit";
+    # Hasn't been updated since 2022, and fails to build with octave >= 10.1.0
+    broken = true;
   };
 }
