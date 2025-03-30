@@ -10268,6 +10268,12 @@
     githubId = 26341736;
     name = "Vishal Das";
   };
+  imsuck = {
+    email = "imsuck12@gmail.com";
+    github = "imsuck";
+    githubId = 49095435;
+    name = "imsuck";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
