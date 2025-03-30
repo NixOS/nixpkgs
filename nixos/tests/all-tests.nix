@@ -802,19 +802,19 @@ in {
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
-  nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
   nginx-njs = handleTest ./nginx-njs.nix {};
-  nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
-  nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
-  nginx-redirectcode = handleTest ./nginx-redirectcode.nix {};
-  nginx-sso = handleTest ./nginx-sso.nix {};
-  nginx-status-page = handleTest ./nginx-status-page.nix {};
-  nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
-  nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
-  nginx-variants = handleTest ./nginx-variants.nix {};
+  nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
+  nginx-pubhtml = runTest ./nginx-pubhtml.nix;
+  nginx-redirectcode = runTest ./nginx-redirectcode.nix;
+  nginx-sso = runTest ./nginx-sso.nix;
+  nginx-status-page = runTest ./nginx-status-page.nix;
+  nginx-tmpdir = runTest ./nginx-tmpdir.nix;
+  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
+  nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
   nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
@@ -1277,9 +1277,18 @@ in {
   ustreamer = handleTest ./ustreamer.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
-  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
-  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
+  varnish60 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish60;
+  };
+  varnish75 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish75;
+  };
+  varnish76 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish76;
+  };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};

@@ -22,6 +22,8 @@
   tensorflow-bin,
   jax,
   jaxlib,
+
+  nanobind,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
@@ -49,6 +51,11 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
+  # nanobind check requires heavy dependencies such as tensorflow
+  # which are less than ideal to be imported in children packages that
+  # use it as build-system parameter.
+  doCheck = false;
+
   preCheck = ''
     # TODO: added 2.2.0, re-enable on next bump
     # https://github.com/wjakob/nanobind/issues/754
@@ -73,6 +80,10 @@ buildPythonPackage rec {
       jax
       jaxlib
     ];
+
+  passthru.tests = {
+    pytest = nanobind.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
