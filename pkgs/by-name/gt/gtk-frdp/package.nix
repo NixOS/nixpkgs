@@ -9,7 +9,7 @@
   gobject-introspection,
   glib,
   gtk3,
-  freerdp3,
+  freerdp,
   fuse3,
   unstableGitUpdater,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   buildInputs = [
     glib
     gtk3
-    freerdp3
+    freerdp
     fuse3
   ];
 

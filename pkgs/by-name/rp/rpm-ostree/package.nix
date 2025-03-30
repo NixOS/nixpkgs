@@ -29,7 +29,7 @@
   librepo,
   polkit,
   bubblewrap,
-  pcre,
+  pcre2,
   check,
   python3,
   json_c,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     libarchive
     libsolv
     librepo
-    pcre
+    pcre2
     check
 
     # libdnf # vendored unstable branch

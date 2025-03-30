@@ -24,10 +24,13 @@ buildPythonPackage rec {
 
   dependencies = [
     cryptography
-    gssapi
     pyasn1
     pycryptodomex
   ];
+
+  optional-dependencies = {
+    kerberos = [ gssapi ];
+  };
 
   pythonImportsCheck = [ "ldap3" ];
 

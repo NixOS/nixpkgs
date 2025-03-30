@@ -21,8 +21,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.20.7";
-  sha256 = "9a89659fad80c1b6da33d29f43f5865483ccb1952ddad434ee22f8193607277f";
+  version = "18.20.8";
+  sha256 = "36a7bf1a76d62ce4badd881ee5974a323c70e1d8d19165732684e145632460d9";
   patches = [
     ./configure-emulator-node18.patch
     ./configure-armv6-vfpv2.patch
@@ -77,10 +77,5 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
       hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
     })
-
-    # Fix tests on OpenSSL 3.4
-    # Manual backport of https://github.com/nodejs/node/commit/7895b8eae9e4f2919028fe81e38790af07b4cc92
-    # FIXME: remove after a minor point release
-    ./openssl-3.4-v18.patch
   ] ++ gypPatches;
 }

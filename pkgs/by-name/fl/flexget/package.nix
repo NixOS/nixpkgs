@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.15.25";
+  version = "3.15.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-7+QSt+W6M3AjF3eLq1aqZPyQs2LrZD0RlVTBTUJngAc=";
+    hash = "sha256-iGEGQxzvyyOeL/v0j1TiAjx2fa2tCZeRJ7VQByWpxJg=";
   };
 
   pythonRelaxDeps = true;
@@ -71,6 +71,7 @@ python3Packages.buildPythonApplication rec {
     cloudscraper
     python-telegram-bot
     boto3
+    libtorrent-rasterbar
   ];
 
   pythonImportsCheck = [
@@ -105,7 +106,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.paramiko
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # reach the Internet

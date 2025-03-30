@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c0bReW8rSTEEcvotBy9h8SXq0p+Xq1YhXGVYLBvP8VE=";
+    hash = "sha256-gD5sEeALbGwMBP2UDc28TnVBlbCRMIeqWkrq0oi97Nw=";
   };
 
   nativeBuildInputs = [

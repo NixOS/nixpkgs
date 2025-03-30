@@ -26,6 +26,9 @@
 # Many thanks to Arnon Shimoni for maintaining a list of these architectures and capabilities.
 # Without your work, this would have been much more difficult.
 # https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+#
+# https://en.wikipedia.org/wiki/CUDA#GPUs_supported
+
 [
   {
     # Tesla K40
@@ -55,7 +58,7 @@
     maxCudaVersion = null;
   }
   {
-    # Quadro M6000 , GeForce 900, GTX-970, GTX-980, GTX Titan X
+    # Quadro M6000, GeForce 900, GTX-970, GTX-980, GTX Titan X
     archName = "Maxwell";
     computeCapability = "5.2";
     isJetson = false;
@@ -199,7 +202,7 @@
     computeCapability = "10.0a";
     isJetson = false;
     minCudaVersion = "12.8";
-    dontDefaultAfter = null;
+    dontDefaultAfter = "12.0"; # disable to reduce size of OnnxRuntime and Torch CUDA binaries
     maxCudaVersion = null;
   }
   {
@@ -208,7 +211,7 @@
     computeCapability = "10.1";
     isJetson = false;
     minCudaVersion = "12.8";
-    dontDefaultAfter = null;
+    dontDefaultAfter = "12.0"; # disable to reduce size of OnnxRuntime and Torch CUDA binaries
     maxCudaVersion = null;
   }
   {
@@ -217,7 +220,7 @@
     computeCapability = "10.1a";
     isJetson = false;
     minCudaVersion = "12.8";
-    dontDefaultAfter = null;
+    dontDefaultAfter = "12.0"; # disable to reduce size of OnnxRuntime and Torch CUDA binaries
     maxCudaVersion = null;
   }
   {
@@ -235,7 +238,7 @@
     computeCapability = "12.0a";
     isJetson = false;
     minCudaVersion = "12.8";
-    dontDefaultAfter = null;
+    dontDefaultAfter = "12.0"; # disable to reduce size of OnnxRuntime and Torch CUDA binaries
     maxCudaVersion = null;
   }
 ]

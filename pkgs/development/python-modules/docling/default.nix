@@ -26,6 +26,7 @@
   pyarrow,
   pydantic,
   pydantic-settings,
+  pylatexenc,
   pypdfium2,
   python-docx,
   python-pptx,
@@ -49,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.26.0";
+  version = "2.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-MFMOxNXA/QwQJt/WZmtmmD+OxYxY2LCnutPT4PkZzkw=";
+    hash = "sha256-YCZhLrukuQ0Y/4h7v6CfD0oMAfcbioqfs5mU9ImtnNM=";
   };
 
   build-system = [
@@ -82,6 +83,7 @@ buildPythonPackage rec {
     pyarrow
     pydantic
     pydantic-settings
+    pylatexenc
     pypdfium2
     python-docx
     python-pptx
@@ -156,6 +158,7 @@ buildPythonPackage rec {
 
     # requires network access
     "test_page_range"
+    "test_parser_backends"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

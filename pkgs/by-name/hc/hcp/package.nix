@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "hcp";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcp";
     tag = "v${version}";
-    hash = "sha256-YOOaQh1OsRn5EV9RmUdWWdHx5bMFC+a1qFzUGb6lpew=";
+    hash = "sha256-DyfrT4Z4pF7o6nBoacpEE0jT/dxRRm7nr3KsXJTwtOQ=";
   };
 
-  vendorHash = "sha256-/Nf180odZB5X3Fj4cfz0TdYEfGKtkkh4qI9eRfz+meQ=";
+  vendorHash = "sha256-Tq7Lu9rZCLpy7CiZQey5/y1hZPEvdSsy1BgEFWNVeAk=";
 
   preCheck = ''
     export HOME=$TMPDIR

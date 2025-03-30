@@ -65,7 +65,7 @@ let
     else
       "2.0-0.lib";
 
-  systemtap' = buildPackages.linuxPackages.systemtap.override { withStap = false; };
+  systemtap' = buildPackages.systemtap-sdt;
 
   withDtrace =
     lib.meta.availableOn stdenv.buildPlatform systemtap'

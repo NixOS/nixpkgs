@@ -2,10 +2,10 @@ args:
 import ../generic.nix (
   args
   // {
-    version = "16.4.17";
-    hash = "sha256-NLWISsh0zoTn849VK5YL2zxp7zuu7xFqLdbP/cPeNFc=";
-    vendorHash = "sha256-OoGx3ae69NCY6OFs/Ez4Lc8NVcgxl4bRoicFAVHicdQ=";
-    pnpmHash = "sha256-OpCUYn69UNs6cplM74oNO4hQ5wiYBbjqGN3bJfbrsqk=";
-    cargoHash = "sha256-oavJSszi6uWfUIzD+wRZL3wAFgmPvFwGeNHZexOlup4=";
+    version = "16.5.0";
+    hash = "sha256-d634UB/YGDdAeBEJcRsRE5gqd31oQX3P4HJ+PoMQUmk=";
+    vendorHash = "sha256-0/ZYG8mYv3B0YJ89NJVG7M29/hU2zBtSXmoD32VEqpk=";
+    pnpmHash = "sha256-dqCfwMzSnEPQXz1bsroqSihkvw2Kcvyz+A4fpa52LVk=";
+    cargoHash = "sha256-NASNBk4QVoqe2cz4l94aXo6pUtF8Qxwb61XRI/ErjTs=";
   }
 )

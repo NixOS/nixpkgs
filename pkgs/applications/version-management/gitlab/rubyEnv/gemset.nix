@@ -2314,10 +2314,10 @@ src:
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06ivc4cbr5lc6lja947flzlppp3d9s44fwd3x8an0yvrq31yfg12";
+      sha256 = "05i3jvgjv3rqyiwyfjpk0mp419f5jl5gn2m0grsgak09jaw7vh05";
       type = "gem";
     };
-    version = "0.0.25";
+    version = "0.0.27";
   };
   gitlab-markup = {
     groups = ["default"];
@@ -4226,10 +4226,10 @@ src:
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gzqcs1kkykj8lrnbxc1iwr1wqmmaml8l6wyxdvy0vqq6gxiqyck";
+      sha256 = "0npx535cs8qc33n0lpbbwl0p9fi3a5bczn6ayqhxvknh9yqw77vb";
       type = "gem";
     };
-    version = "1.18.2";
+    version = "1.18.3";
   };
   notiffany = {
     dependencies = ["nenv" "shellany"];
@@ -6944,10 +6944,10 @@ src:
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0k4wdj2l6p4ax4y6qxbywkglmbhvfs4j1k868nkd2px39yhfingy";
+      sha256 = "1073j47fypwmc4myqzcd9rbipf1250qx2mnki4iqksv7q11ijqil";
       type = "gem";
     };
-    version = "0.7.12";
+    version = "0.7.13";
   };
   tty-color = {
     groups = ["default" "development" "test"];

@@ -21,7 +21,7 @@
   libopus,
   libxkbcommon,
   gdk-pixbuf,
-  freerdp3,
+  freerdp,
   fdk_aac,
   tpm2-tss,
   fuse3,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    freerdp3
+    freerdp
     fdk_aac
     tpm2-tss
     fuse3
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
     "-Dtests=false" # Too deep of a rabbit hole.
     # TODO: investigate who should be fixed here.
-    "-Dc_args=-I${freerdp3}/include/winpr3"
+    "-Dc_args=-I${freerdp}/include/winpr3"
   ];
 
   passthru = {

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "flex-ncat";
-  version = "0.4-20240817.1";
+  version = "0.5-2025031901";
 
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nCAT";
     rev = "v${version}";
-    hash = "sha256-OjivRCWSGdzko31KwiYb1FcIE+1W94XOYiE/GS4Ky3s=";
+    hash = "sha256-hbsrs9lgpxNqG8mmXsft01LmpX4dBpl1ncpdTWBgrUQ=";
   };
 
   vendorHash = "sha256-RqQMCP9rmdTG5AXLXkIQz0vE7qF+3RZ1BDdVRYoHHQs=";
