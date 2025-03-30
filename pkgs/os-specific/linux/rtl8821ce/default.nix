@@ -6,6 +6,7 @@
   kernelModuleMakeFlags,
   bc,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "1bbfc35ece57cbdfb8473c49d3c6464eede54191";
     hash = "sha256-n9g98qORHdFVTU6jlMnCFvqW/xz6SDKqIBjT+IFEiHU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-on-6.14.patch";
+      url = "https://github.com/tomaspinho/rtl8821ce/commit/1f1809775e686a524c8eb8ebcf5957ed8e697f74.patch";
+      hash = "sha256-p8lQS98i7lGMiNtmsWMKCLtwbFRJkLImUYCOLCfARTI=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 

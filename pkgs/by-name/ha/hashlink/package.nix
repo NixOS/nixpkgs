@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hashlink";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
+    sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
   # incompatible pointer type error: const char ** -> const void **

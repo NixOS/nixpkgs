@@ -68,25 +68,23 @@ let
     || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
-    tag = "v${version}";
-    hash = "sha256-dsqW0XpZN2FGZlmNKgAEYGcdY5iGvRwNUko2OuU87Gw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mkxgssJUBtM1DYOhFfj8YKlW61/gd0cgPtMze7YZ9L8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Fp/5xQ1ib2TTBSayxR5EDKkk7G+5c1QdnVW+kzcE5Jo=";
+  patches = [
+    ./no-native-cpu.patch
+  ];
 
-  # Otherwise, fails with
-  # failed to get `anyhow` as a dependency of package
-  postPatch = ''
-    rm "$cargoDepsCopy"/llguidance-*/build.rs
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -165,7 +163,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -188,7 +186,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Blazingly fast LLM inference";
     homepage = "https://github.com/EricLBuehler/mistral.rs";
-    changelog = "https://github.com/EricLBuehler/mistral.rs/releases/tag/v${version}";
+    changelog = "https://github.com/EricLBuehler/mistral.rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "mistralrs-server";
@@ -203,4 +201,4 @@ rustPlatform.buildRustPackage rec {
         lib.platforms.unix;
     broken = mklSupport;
   };
-}
+})

@@ -219,7 +219,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = !postgresqlTestHook.meta.broken;
 
   checkPhase = ''
     runHook preCheck

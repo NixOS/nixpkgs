@@ -5,7 +5,7 @@
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
+, maintainers ? lib.teams.nix.members ++ [ lib.maintainers.lovesegfault lib.maintainers.artturin ]
 , self_attribute_name
 }@args:
 assert (hash == null) -> (src != null);

@@ -6,7 +6,6 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
-, fetchpatch
 , file
 , flex
 , glslang
@@ -142,12 +141,6 @@ in stdenv.mkDerivation {
   patches = [
     ./opencl.patch
     ./system-gbm.patch
-    # Fix graphical corruption in FFXIV
-    # Remove when updating to 25.0.2
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/0ec174afd56fe48bcfa071d4b8ed704106f46f91.patch";
-      hash = "sha256-6A9AkCa+DeUO683hlsNTvSWGFJJ+zfqYA2BThaqCEoU=";
-    })
   ];
 
   postPatch = ''
@@ -221,9 +214,6 @@ in stdenv.mkDerivation {
 
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
-
-    # Clover, old OpenCL frontend
-    (lib.mesonOption "gallium-opencl" "icd")
 
     # Rusticl, new OpenCL frontend
     (lib.mesonBool "gallium-rusticl" true)
@@ -328,9 +318,8 @@ in stdenv.mkDerivation {
     moveToOutput bin/vtn_bindgen $cross_tools
 
     moveToOutput "lib/lib*OpenCL*" $opencl
-    # Construct our own .icd files that contain absolute paths.
+    # Construct our own .icd file that contains an absolute path.
     mkdir -p $opencl/etc/OpenCL/vendors/
-    echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
     moveToOutput bin/spirv2dxil $spirv2dxil

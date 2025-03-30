@@ -434,6 +434,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
     done
+  '' + optionalString (stdenv.hostPlatform.isDarwin && pythonOlder "3.12") ''
+    # Fix _ctypes module compilation
+    export NIX_CFLAGS_COMPILE+=" -DUSING_APPLE_OS_LIBFFI=1"
   '' + optionalString stdenv.hostPlatform.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}

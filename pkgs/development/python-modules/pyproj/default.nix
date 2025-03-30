@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.7.0";
+  version = "3.7.1";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pyproj4";
     repo = "pyproj";
     tag = version;
-    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
+    hash = "sha256-tVzifc+Y5u9Try5FHt67rj/+zaok0JNn3M8plMqX90g=";
   };
 
   # force pyproj to use ${proj}

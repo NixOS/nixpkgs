@@ -59,7 +59,7 @@ let
 
       passthru = {
         tests = {
-          inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+          inherit (nixosTests) syncthing syncthing-init syncthing-many-devices syncthing-no-settings syncthing-relay;
         };
         updateScript = nix-update-script { };
       };

@@ -71,7 +71,15 @@ let
     getLabels
     ;
 
-  getAttrs = dir: builtins.fromJSON (builtins.readFile "${dir}/outpaths.json");
+  getAttrs =
+    dir:
+    let
+      raw = builtins.readFile "${dir}/outpaths.json";
+      # The file contains Nix paths; we need to ignore them for evaluation purposes,
+      # else there will be a "is not allowed to refer to a store path" error.
+      data = builtins.unsafeDiscardStringContext raw;
+    in
+    builtins.fromJSON data;
   beforeAttrs = getAttrs beforeResultDir;
   afterAttrs = getAttrs afterResultDir;
 

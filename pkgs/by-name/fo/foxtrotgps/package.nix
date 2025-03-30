@@ -65,6 +65,8 @@ stdenv.mkDerivation {
     ))
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postUnpack = ''
     cp -R ${srcs.screenshots} $sourceRoot/doc/screenshots
     chmod -R u+w $sourceRoot/doc/screenshots

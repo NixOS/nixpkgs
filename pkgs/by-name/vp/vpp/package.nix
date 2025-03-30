@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     patchShebangs ../vpp-api/
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized";

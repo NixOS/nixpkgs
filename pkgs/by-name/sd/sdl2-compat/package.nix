@@ -40,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ];
 
-  checkInputs = [
-    libGL
-  ];
+  checkInputs = [ libGL ];
 
   outputs = [
     "out"
@@ -66,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
+
+  postFixup = ''
+    # allow as a drop in replacement for SDL2
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $dev/lib/pkgconfig/sdl2_compat.pc $dev/lib/pkgconfig/sdl2.pc
+  '';
 
   passthru = {
     tests =

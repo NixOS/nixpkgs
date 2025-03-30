@@ -5,15 +5,16 @@
 , getconf
 , gitUpdater
 , testers
+, unixtools
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2024_12_11.09478d5";
+  version = "2025_03_20.32f6212";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IE0BMM24lrl5NHeQGkAZZVwmAsvkhDN64pARdEiOM6s=";
+    hash = "sha256-TRtFwBUUOnRwcLtB3vwU5nG/ufi9D36waXW5Yuboowk=";
   };
 
   postPatch = ''
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
+      command = "${unixtools.script}/bin/script -c 'passt --version'";
     };
 
     updateScript = gitUpdater {

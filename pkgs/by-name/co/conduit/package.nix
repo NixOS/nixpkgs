@@ -7,6 +7,7 @@
 
   # passthru
   conduit,
+  python3Packages,
   nix-update-script,
 
   mpiSupport ? false,
@@ -50,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       withMpi = conduit.override { mpiSupport = true; };
+      pythonModule = python3Packages.conduit;
+      pythonModuleWithMpi = python3Packages.conduit-mpi;
     };
     updateScript = nix-update-script { };
   };

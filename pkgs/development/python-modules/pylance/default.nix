@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.24.1";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-tfpHW36ESCXffoRI3QbeoKArycIMnddtk5fUXO5p9us=";
+    hash = "sha256-mAVHpQfuAr4RQ8ZwsJHwKtlAtWO3ssm0ic6Y2/c1tZk=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-5NoIuev3NoXfgifm7ALDRfNNQc6uTflBcBfAnRQ481E=";
+    hash = "sha256-auL8d8gu2V7kCb4LKdP7mmJZys4YLi2s856/aE73e7Q=";
   };
 
   nativeBuildInputs = [

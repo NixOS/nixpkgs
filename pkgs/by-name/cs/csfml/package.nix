@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  sfml,
+  sfml_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ sfml ];
+  buildInputs = [ sfml_2 ];
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${sfml}/share/SFML/cmake/Modules/")
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${sfml_2}/share/SFML/cmake/Modules/")
   ];
 
   meta = {

@@ -23,14 +23,8 @@ let
       hash = "sha256-iQ+Vv9kx/pWHoa/WZChBK+FD2r1avzWWz57bnnzRjUg=";
     };
 
-    # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "lber-0.4.3" = "sha256-smElQyP8aWlV+/GvaTAx+BJWRtzQuis4XOUCOgebEF4=";
-        "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-qXYgr9uRswuo9hwVROUX9KUKpkzR0VEcXImbdyOgxsY=";
 
   };
 

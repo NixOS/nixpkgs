@@ -7,7 +7,7 @@
 }:
 let
   pname = "netscanner";
-  version = "0.6.2";
+  version = "0.6.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "Chleba";
     repo = "netscanner";
     tag = "v${version}";
-    hash = "sha256-/8UhnJ4ZPaJ+CQPCeKr1uH0Iw6A4/DARiSukK6+ZZeY=";
+    hash = "sha256-z39450ebIBHwdiC1FLF6v23la45ad5h5iupF6PAAjzc=";
   };
 
   useFetchCargoVendor = true;

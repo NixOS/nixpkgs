@@ -104,6 +104,7 @@ else
         # Provide a setup hook that injects our library into every process.
         mkdir -p "$hook/nix-support"
         cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
+        echo "Setting up libredirect"
         ${
           if stdenv.hostPlatform.isDarwin then
             ''

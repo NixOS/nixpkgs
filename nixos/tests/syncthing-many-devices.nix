@@ -149,7 +149,7 @@ import ./make-test-python.nix (
     '';
   in
   {
-    name = "syncthing-init";
+    name = "syncthing-many-devices";
     meta.maintainers = with lib.maintainers; [ doronbehar ];
 
     nodes.machine = {

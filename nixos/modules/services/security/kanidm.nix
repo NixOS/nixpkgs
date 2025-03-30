@@ -51,6 +51,7 @@ let
       cfg.provision.idmAdminPasswordFile
       cfg.provision.adminPasswordFile
     ]
+    ++ optional (cfg.provision.extraJsonFile != null) cfg.provision.extraJsonFile
     ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
   );
   secretDirectories = unique (

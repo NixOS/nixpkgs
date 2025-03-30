@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl
+, fetchsvn
 , autoreconfHook
 , dbus
 , gettext
@@ -20,13 +20,14 @@
 , Security
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.67.0";
+  version = "3.68.1";
 
-  src = fetchurl {
-    url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.xz";
-    hash = "sha256-5drcgH25mc60ZJhPl00+9ZtWLFlUZlgFfpsgEYOtr5o=";
+  src = fetchsvn {
+    url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
+    rev = "11205";
+    hash = "sha256-izaNfagJYUcPRPihZ1yXwLUTHunzVXuiMITW69KPSFE=";
   };
 
   configureFlags = [

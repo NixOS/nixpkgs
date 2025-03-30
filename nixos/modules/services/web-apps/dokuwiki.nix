@@ -128,10 +128,29 @@ let
 
   siteOpts = { options, config, lib, name, ... }:
     {
+      # TODO: Remove in time for 25.11 and/or simplify once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
+      imports = [
+        ({config, options, ... }: let
+          removalNote = "The option has had no effect for 3+ years. There is no replacement available.";
+          optPath = lib.options.showOption [ "services" "dokuwiki" "sites" name "enable" ];
+        in {
+          options.enable = mkOption {
+            visible = false;
+            apply = x: throw "The option `${optPath}' can no longer be used since it's been removed. ${removalNote}";
+          };
+          config.assertions = [
+            {
+              assertion = !options.enable.isDefined;
+              message = ''
+                The option definition `${optPath}' in ${showFiles options.enable.files} no longer has any effect; please remove it.
+              ${removalNote}
+              '';
+            }
+          ];
+        })
+      ];
 
       options = {
-        enable = mkEnableOption "DokuWiki web application";
-
         package = mkPackageOption pkgs "dokuwiki" { };
 
         stateDir = mkOption {
@@ -342,6 +361,13 @@ let
           '';
         };
 
+        # TODO: Remove when no submodule-level assertions are needed anymore
+        assertions = mkOption {
+          type = types.listOf types.unspecified;
+          default = [ ];
+          visible = false;
+          internal = true;
+        };
     };
   };
 in
@@ -374,6 +400,8 @@ in
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
+    # TODO: Remove when no submodule-level assertions are needed anymore
+    assertions = flatten (mapAttrsToList (_: cfg: cfg.assertions) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {

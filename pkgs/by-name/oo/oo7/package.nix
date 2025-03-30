@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oo7";
-  version = "0.4.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "oo7";
     rev = version;
-    hash = "sha256-4QEFlQJt2qMf1SxP4OUP2rkmx6OjvNJ/tibuwZLRwus=";
+    hash = "sha256-P20hxwTT/O4o+Z1LnXJJkeEHv1IILfj4/pPMNde55mY=";
   };
 
   # TODO: this won't cover tests from the client crate
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = "cli";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WqEHYywkFcHyoT55IuTFt5tfeeEtVhNc7VhuEc0nFfk=";
+  cargoHash = "sha256-VNgbdvX5ttW+/V2Zzkd3rGIjVe1ENRE6WLg7M48ij7o=";
 
   nativeBuildInputs = [ pkg-config ];
 

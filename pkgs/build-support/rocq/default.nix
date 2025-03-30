@@ -9,7 +9,7 @@
 }@args:
 
 let
-  lib = import ../coq/extra-lib.nix {
+  lib = import ./extra-lib.nix {
     inherit (args) lib;
   };
 

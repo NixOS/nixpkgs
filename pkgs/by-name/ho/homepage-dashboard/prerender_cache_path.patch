@@ -1,0 +1,111 @@
+diff --git c/package.json i/package.json
+index 7f0fbdf7..3b5f5607 100644
+--- c/package.json
++++ i/package.json
+@@ -62,5 +62,10 @@
+   },
+   "optionalDependencies": {
+     "osx-temperature-sensor": "^1.0.8"
++  },
++  "pnpm": {
++    "patchedDependencies": {
++      "next": "patches/next.patch"
++    }
+   }
+ }
+diff --git c/patches/next.patch i/patches/next.patch
+new file mode 100644
+index 00000000..6280dbfa
+--- /dev/null
++++ i/patches/next.patch
+@@ -0,0 +1,13 @@
++diff --git a/dist/server/lib/incremental-cache/file-system-cache.js b/dist/server/lib/incremental-cache/file-system-cache.js
++index ac711f168d85032d43cfa2b6872655d571596a7b..ee1f79868d38ae623b0599e8cc3b9e03697833e5 100644
++--- a/dist/server/lib/incremental-cache/file-system-cache.js
+++++ b/dist/server/lib/incremental-cache/file-system-cache.js
++@@ -23,7 +23,7 @@ class FileSystemCache {
++     constructor(ctx){
++         this.fs = ctx.fs;
++         this.flushToDisk = ctx.flushToDisk;
++-        this.serverDistDir = ctx.serverDistDir;
+++        this.serverDistDir = require("path").join((process.env.NIXPKGS_HOMEPAGE_CACHE_DIR || "/var/cache/homepage-dashboard"), "homepage");
++         this.revalidatedTags = ctx.revalidatedTags;
++         this.debug = !!process.env.NEXT_PRIVATE_DEBUG_CACHE;
++         if (ctx.maxMemoryCacheSize) {
+diff --git c/pnpm-lock.yaml i/pnpm-lock.yaml
+index 2848e239..3c0e760a 100644
+--- c/pnpm-lock.yaml
++++ i/pnpm-lock.yaml
+@@ -4,6 +4,11 @@ settings:
+   autoInstallPeers: true
+   excludeLinksFromLockfile: false
+ 
++patchedDependencies:
++  next:
++    hash: 2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49
++    path: patches/next.patch
++
+ importers:
+ 
+   .:
+@@ -52,10 +57,10 @@ importers:
+         version: 1.2.2
+       next:
+         specifier: ^15.2.3
+-        version: 15.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 15.2.3(patch_hash=2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       next-i18next:
+         specifier: ^12.1.0
+-        version: 12.1.0(next@15.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 12.1.0(next@15.2.3(patch_hash=2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       ping:
+         specifier: ^0.4.4
+         version: 0.4.4
+@@ -101,10 +106,6 @@ importers:
+       xml-js:
+         specifier: ^1.6.11
+         version: 1.6.11
+-    optionalDependencies:
+-      osx-temperature-sensor:
+-        specifier: ^1.0.8
+-        version: 1.0.8
+     devDependencies:
+       '@tailwindcss/forms':
+         specifier: ^0.5.10
+@@ -151,6 +152,10 @@ importers:
+       typescript:
+         specifier: ^5.7.3
+         version: 5.7.3
++    optionalDependencies:
++      osx-temperature-sensor:
++        specifier: ^1.0.8
++        version: 1.0.8
+ 
+ packages:
+ 
+@@ -4695,7 +4700,7 @@ snapshots:
+ 
+   natural-compare@1.4.0: {}
+ 
+-  next-i18next@12.1.0(next@15.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next-i18next@12.1.0(next@15.2.3(patch_hash=2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+     dependencies:
+       '@babel/runtime': 7.26.9
+       '@types/hoist-non-react-statics': 3.3.6
+@@ -4703,14 +4708,14 @@ snapshots:
+       hoist-non-react-statics: 3.3.2
+       i18next: 21.10.0
+       i18next-fs-backend: 1.2.0
+-      next: 15.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++      next: 15.2.3(patch_hash=2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+       react: 18.3.1
+       react-i18next: 11.18.6(i18next@21.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+     transitivePeerDependencies:
+       - react-dom
+       - react-native
+ 
+-  next@15.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next@15.2.3(patch_hash=2cf73b70a6661c14b83ebd01d193260f13fcc654e74e5658ffc191f538863a49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+     dependencies:
+       '@next/env': 15.2.3
+       '@swc/counter': 0.1.3

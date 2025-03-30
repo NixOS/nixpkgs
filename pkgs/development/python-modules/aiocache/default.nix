@@ -71,7 +71,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    ${lib.getBin pkgs.redis}/bin/redis-server &
+    ${lib.getBin pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
 
     ${lib.getBin pkgs.memcached}/bin/memcached &

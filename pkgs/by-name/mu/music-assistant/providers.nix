@@ -89,8 +89,10 @@
         bidict
         snapcast
       ];
-    sonos = ps: [
-    ]; # missing aiosonos
+    sonos =
+      ps: with ps; [
+        aiosonos
+      ];
     sonos_s1 =
       ps: with ps; [
         defusedxml

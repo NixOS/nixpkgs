@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij";
-  version = "0.42.0";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qvm8mRm/YYcuNX2Rv0tYjcIXjaF9dkwd7wpL++ho3t0=";
+    hash = "sha256-EK+eQfNhfVxjIsoyj43tcRjHDT9O8/n7hUz24BC42nw=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-cAO8A/e6tkUY7pm/T4Riz4UPIc22oj5FFC6sQL1QIuc=";
+  cargoHash = "sha256-0+cU2C6zjVv2G8h7oK0ztMDdukVR6QRzN81/SfLZapY=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs

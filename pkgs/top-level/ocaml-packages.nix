@@ -1252,6 +1252,8 @@ let
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
+    monolith = callPackage ../development/ocaml-modules/monolith { };
+
     mopsa = callPackage ../development/ocaml-modules/mopsa { };
 
     morbig = callPackage ../development/ocaml-modules/morbig { };
@@ -1543,6 +1545,10 @@ let
     pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
     pbrt = callPackage ../development/ocaml-modules/pbrt { };
+
+    pcre2 = callPackage ../development/ocaml-modules/pcre2 {
+      inherit (pkgs) pcre2;
+    };
 
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 

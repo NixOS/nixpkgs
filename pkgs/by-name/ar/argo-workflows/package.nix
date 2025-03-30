@@ -34,16 +34,16 @@ let
 in
 buildGoModule rec {
   pname = "argo-workflows";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     tag = "v${version}";
-    hash = "sha256-R6njT6Lae+8KiTyXjxE5/U922pP0VqgCIRwGhWBOZUI=";
+    hash = "sha256-LvFpYVylVwWhoVtMDldalSHa5KGdbKVB6yFnP5ha4gg=";
   };
 
-  vendorHash = "sha256-uCIdZkoPgppJtrFf7nOVIyEXo1bVILYXNs5LtLLLmsY=";
+  vendorHash = "sha256-hMegxeUFSBf32dnXmD7QagkvWgWDeB4Fu4nlKNoePWY=";
 
   doCheck = false;
 

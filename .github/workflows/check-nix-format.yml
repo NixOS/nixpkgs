@@ -44,7 +44,7 @@ jobs:
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
           echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
 
-      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
         with:
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=${{ env.url }}

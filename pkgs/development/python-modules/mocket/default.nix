@@ -29,7 +29,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   redis,
-  redis-server,
+  valkey,
   requests,
   sure,
 
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${redis-server}/bin/redis-server &
+    ${valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 

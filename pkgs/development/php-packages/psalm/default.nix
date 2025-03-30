@@ -33,11 +33,9 @@ php.buildComposerProject2 (finalAttrs: {
   '';
   vendorHash = "sha256-QObqXzazypumDnFtfNiFSZdpZ7PbsBZZBUsS3fseZok=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     broken = lib.versionOlder php.version "8.2";

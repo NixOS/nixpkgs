@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.15.0";
+  version = "3.15.1";
 
   pyproject = true;
   build-system = [ setuptools-scm ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "translate_toolkit";
     inherit version;
-    hash = "sha256-16evXSr6Znwber/UNSMVd86toWZGswPSQO7Y5ySCYIY=";
+    hash = "sha256-Omapbrcv6+A5fGb34xLdlmoh3QAXN1+5VxoCRdyX9mM=";
   };
 
   dependencies = [
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${version}.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erictapen ];
   };

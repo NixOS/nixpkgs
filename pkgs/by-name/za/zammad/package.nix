@@ -14,7 +14,7 @@
   nodejs,
   pnpm_9,
   cacert,
-  redis,
+  valkey,
   dataDir ? "/var/lib/zammad",
 }:
 
@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    redis
+    valkey
     postgresql
     pnpm_9.configHook
     nodejs

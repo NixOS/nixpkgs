@@ -90,7 +90,7 @@
   withKvazaar ? withFullDeps, # HEVC encoding
   withLadspa ? withFullDeps, # LADSPA audio filtering
   withLc3 ? withFullDeps && lib.versionAtLeast version "7.1", # LC3 de/encoding
-  withLcevcdec ? false && lib.versionAtLeast version "7.1", # LCEVC decoding # FIXME currently makes ffmpeg crash in any operation on non-AVX CPUs
+  withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1", # LCEVC decoding
   withLcms2 ? withFullDeps, # ICC profile support via lcms2
   withLzma ? withHeadlessDeps, # xz-utils
   withMetal ? false, # Unfree and requires manual downloading of files
@@ -462,9 +462,10 @@ stdenv.mkDerivation (
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1") [
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
         ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";

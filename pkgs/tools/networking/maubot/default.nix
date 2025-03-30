@@ -93,9 +93,6 @@ let
       rm $out/example-config.yaml
     '';
 
-    # Setuptools is trying to do python -m maubot test
-    dontUseSetuptoolsCheck = true;
-
     pythonImportsCheck = [
       "maubot"
     ];

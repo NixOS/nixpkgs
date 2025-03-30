@@ -2,7 +2,7 @@
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_14
 , fetchpatch, makeWrapper,
 }@args:
-let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
+let lib = import ../build-support/rocq/extra-lib.nix {inherit (args) lib;}; in
 let
   mkRocqPackages' = self: rocq-core:
     let callPackage = self.callPackage; in {

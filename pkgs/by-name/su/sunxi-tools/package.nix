@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "sunxi-tools";
-  version = "0-unstable-2024-10-13";
+  version = "0-unstable-2025-03-07";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";
     repo = "sunxi-tools";
-    rev = "29d48c3c39d74200fb35b5750f99d06a4886bf2e";
-    sha256 = "sha256-IUgAM/wVHGbidJ2bfLcTIdXg7wxEjxCg1IA8FtDFpR4=";
+    rev = "4390ca668f3b2e62f885edb6952b189c4489d83d";
+    sha256 = "sha256-TwMV+hsbfARrns1ZimYTXNdGS8E9gIal6NqXBzsQjAc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

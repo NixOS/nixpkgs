@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     [
       flexmock
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
     ]
     ++ optional-dependencies.apprise;
 
@@ -39,11 +39,6 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '--cov-fail-under=100' ""
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 

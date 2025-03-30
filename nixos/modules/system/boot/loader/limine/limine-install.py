@@ -29,10 +29,12 @@ def config(*path: List[str]) -> Optional[Any]:
 
 
 def get_system_path(profile: str = 'system', gen: Optional[str] = None, spec: Optional[str] = None) -> str:
+    basename = f'{profile}-{gen}-link' if gen is not None else profile
+    profiles_dir = '/nix/var/nix/profiles'
     if profile == 'system':
-        result = os.path.join('/nix', 'var', 'nix', 'profiles', 'system')
+        result = os.path.join(profiles_dir, basename)
     else:
-        result = os.path.join('/nix', 'var', 'nix', 'profiles', 'system-profiles', profile + f'-{gen}-link' if gen is not None else '')
+        result = os.path.join(profiles_dir, 'system-profiles', basename)
 
     if spec is not None:
         result = os.path.join(result, 'specialisation', spec)
@@ -169,8 +171,8 @@ def generate_config_entry(profile: str, gen: str) -> str:
     boot_spec = bootjson_to_bootspec(boot_json)
 
     entry = config_entry(2, boot_spec, f'Generation {gen}', time)
-    for spec in boot_spec.specialisations:
-        entry += config_entry(2, boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
+    for spec, spec_boot_spec in boot_spec.specialisations.items():
+        entry += config_entry(2, spec_boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
     return entry
 
 

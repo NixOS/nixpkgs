@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.9.1";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-DsLse1EDxnkS4C0vwMEdY5//jIxerdDxzTrIsG3eSVI=";
+    hash = "sha256-2zzDVUZc+H2tBO5scRUjwz859uaQIbpvCaC0bm4B7NM=";
   };
 
   pythonRelaxDeps = [
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Text-based terminal client for Ollama";
     homepage = "https://github.com/ggozad/oterm";
-    changelog = "https://github.com/ggozad/oterm/releases/tag/${version}";
+    changelog = "https://github.com/ggozad/oterm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelj ];
     mainProgram = "oterm";

@@ -6,6 +6,7 @@
   autoreconfHook,
   allegro,
   libsamplerate,
+  libGLU,
   libX11,
   libXext,
   SDL,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     allegro
     libsamplerate
+    libGLU
     libX11
     libXext
     SDL

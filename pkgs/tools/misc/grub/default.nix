@@ -164,11 +164,8 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=048777bc29043403d077d41a81d0183767b8bc71";
       hash = "sha256-Mm49MSLqCq143r8ruLJm1QoyCoLtOlCBfqoAPwPlv8E=";
     })
-    (fetchpatch {
-      name = "18_fs_ntfs_implement_attribute_verification.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=067b6d225d482280abad03944f04e30abcbdafa1";
-      hash = "sha256-u1+K7WIw3uJG4OhMVP5aYsgJoXpgA5rcp3nJ0/aDU6I=";
-    })
+    # Patch 18 (067b6d225d482280abad03944f04e30abcbdafa1) has been removed because it causes regressions
+    # https://lists.gnu.org/archive/html/grub-devel/2025-03/msg00067.html
     (fetchpatch {
       name = "19_fs_xfs_fix_out-of-bounds_read.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=6ccc77b59d16578b10eaf8a4fe85c20b229f0d8a";

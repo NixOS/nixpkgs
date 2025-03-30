@@ -170,13 +170,12 @@ To only check a specific module, add it manually to the plugin definition [overr
   };
 ```
 Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we dont want to test requiring.
-We can skip specific modules using `nvimSkipModule`. Similar to `nvimRequireCheck`, it accepts a single string or a list of strings.
-- `nvimSkipModule = MODULE;`
-- `nvimSkipModule = [ MODULE1 MODULE2 ];`
+We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireCheck`, it accepts a list of strings.
+- `nvimSkipModules = [ MODULE1 MODULE2 ];`
 
 ```nix
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
-    nvimSkipModule = [
+    nvimSkipModules = [
       # vim plugin with optional toggleterm integration
       "asyncrun.toggleterm"
       "asyncrun.toggleterm2"

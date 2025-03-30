@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20250208";
+  version = "20250313";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
     tag = version;
-    hash = "sha256-nL2zvlu/xPW4CmwqWP2V9KOPdUJ/vCBtlG7rKDiwtgg=";
+    hash = "sha256-AiQ5+HTosVOR+Z5+uT6COMLvkGS3zvXtkCkg16MhVf4=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
