@@ -807,7 +807,7 @@ in {
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
   nginx-njs = handleTest ./nginx-njs.nix {};
-  nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
+  nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-redirectcode = handleTest ./nginx-redirectcode.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
