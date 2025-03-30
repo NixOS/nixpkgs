@@ -814,7 +814,7 @@ in {
   nginx-status-page = runTest ./nginx-status-page.nix;
   nginx-tmpdir = runTest ./nginx-tmpdir.nix;
   nginx-unix-socket = runTest ./nginx-unix-socket.nix;
-  nginx-variants = handleTest ./nginx-variants.nix {};
+  nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
   nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
