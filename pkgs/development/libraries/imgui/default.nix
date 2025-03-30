@@ -41,9 +41,27 @@
   IMGUI_FREETYPE ? false,
   IMGUI_FREETYPE_LUNASVG ? false,
   IMGUI_USE_WCHAR32 ? false,
+  # Enable docking and multi-viewports features[^2]
+  # [^2]: https://github.com/ocornut/imgui/wiki/Docking
+  dockingSupport ? false,
 }:
 
 let
+  version = "1.91.9b";
+  srcs = {
+    master = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v${version}";
+      hash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
+    };
+    docking = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v${version}-docking";
+      hash = "sha256-mQOJ6jCN+7VopgZ61yzaCnt4R1QLrW7+47xxMhFRHLQ=";
+    };
+  };
   vcpkgSource = applyPatches {
     inherit (vcpkg) src;
     patches = [
@@ -58,7 +76,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgui";
-  version = "1.91.9b";
+  inherit version;
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -66,12 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  src = fetchFromGitHub {
-    owner = "ocornut";
-    repo = "imgui";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
-  };
+  src = if dockingSupport then srcs.docking else srcs.master;
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
   postPatch = ''
