@@ -809,7 +809,7 @@ in {
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = runTest ./nginx-pubhtml.nix;
-  nginx-redirectcode = handleTest ./nginx-redirectcode.nix {};
+  nginx-redirectcode = runTest ./nginx-redirectcode.nix;
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-status-page = handleTest ./nginx-status-page.nix {};
   nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
