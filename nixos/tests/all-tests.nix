@@ -314,7 +314,7 @@ in {
   darling = handleTest ./darling.nix {};
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix {};
-  davis = handleTest ./davis.nix {};
+  davis = runTest ./davis.nix;
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
   ddns-updater = handleTest ./ddns-updater.nix {};
@@ -678,7 +678,7 @@ in {
   maestral = handleTest ./maestral.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   magnetico = handleTest ./magnetico.nix {};
-  mailcatcher = handleTest ./mailcatcher.nix {};
+  mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix {};
   mailpit = handleTest ./mailpit.nix {};
   mailman = handleTest ./mailman.nix {};
@@ -815,7 +815,7 @@ in {
   nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
   nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
-  nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
+  nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
@@ -846,7 +846,7 @@ in {
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
-  node-red = handleTest ./node-red.nix {};
+  node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
   non-switchable-system = runTest ./non-switchable-system.nix;
@@ -1231,7 +1231,7 @@ in {
   tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   tpm-ek = handleTest ./tpm-ek {};
-  traefik = handleTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix {};
+  traefik = runTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix;
   trafficserver = handleTest ./trafficserver.nix {};
   transfer-sh = handleTest ./transfer-sh.nix {};
   transmission_3 = handleTest ./transmission.nix { transmission = pkgs.transmission_3; };

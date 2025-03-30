@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2025.2.1";
+  version = "2025.3.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-aae01fDMjNETdweTwDsblUFNKuEJRF68JQSTR/FyzGE=";
+    hash = "sha256-tMYw+nkyEEK7AqG9AvMchCGzzKWlfut4poXc1WK6vkA=";
   };
 
   nativeBuildInputs = [
