@@ -257,6 +257,7 @@ let
                     config
                     specialArgs
                     ;
+                  _class = class;
                 }
                 // specialArgs
               );
