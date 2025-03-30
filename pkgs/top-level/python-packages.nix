@@ -11554,6 +11554,8 @@ self: super: with self; {
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
+  py-dactyl = callPackage ../development/python-modules/py-dactyl { };
+
   py-datastruct = callPackage ../development/python-modules/py-datastruct { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
