@@ -1,51 +1,59 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, makeWrapper
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libappindicator-gtk3
-, libdbusmenu
-, libdrm
-, libnotify
-, libpulseaudio
-, libsecret
-, libuuid
-, libxkbcommon
-, libgbm
-, nss
-, pango
-, systemd
-, xdg-utils
-, xorg
-, libGL
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  libdbusmenu,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libsecret,
+  libuuid,
+  libxkbcommon,
+  libgbm,
+  nss,
+  pango,
+  systemd,
+  xdg-utils,
+  xorg,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.18.0";
+  version = "5.18.1";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-R5Xw9uIptVPYEZ73TtdWarQNtn8nhAUN+zA5tnzTaCU=";
+    sha256 = "sha256-tVAgYolxHY/I1ewH1RCAGfFOpGxiaRNnktVrGz8ZPnU=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook3 ];
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     alsa-lib
@@ -89,8 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ];
 
-  runtimeDependencies =
-    [ (lib.getLib systemd) libnotify libdbusmenu xdg-utils ];
+  runtimeDependencies = [
+    (lib.getLib systemd)
+    libnotify
+    libdbusmenu
+    xdg-utils
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -117,7 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qbit spikespaz ];
+    maintainers = with lib.maintainers; [
+      qbit
+      spikespaz
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "tidal-hifi";
   };
