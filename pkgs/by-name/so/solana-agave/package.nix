@@ -4,6 +4,7 @@
   buildPackages,
   fetchFromGitHub,
   rustPlatform,
+  rustfmt,
   installShellFiles,
   pkg-config,
   apple-sdk_11,
@@ -33,22 +34,25 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ysH4krWr0U6YnuAlq0EmqCoTpMrrEV40wUb5daOAVS8=";
   };
 
-  cargoHash = "sha256-PWt5vDDnfnu+9HTVr3hHHxzhpmxZF5T2q1ZMaV7t2Ic=";
+  cargoHash = "sha256-Kjh1Tvze7mDomLFt3bN+ZbTtuKr12Mbo1hDjTa9hFKU=";
+  # Because crossbeam-epoch in Cargo.lock uses a git rev instead of a locked checksum
+  useFetchCargoVendor = true;
 
-  nativeBuildInputs = [ installShellFiles protobuf cmake gnumake clang llvm llvmPackages.bintools openssl.dev pkg-config ];
+  nativeBuildInputs = [ installShellFiles protobuf cmake gnumake clang llvm llvmPackages.bintools openssl.dev pkg-config rustfmt ];
   buildInputs =
     [ openssl libz rustPlatform.bindgenHook ]
     ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
     ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   preFixup = lib.optionalString canRun ''
-    ${agave} --generate man > agave.1
-    installManPage agave.1
+    # ex as done for rg:
+    # ${agave} --generate man > agave.1
+    # installManPage agave.1
 
-    installShellCompletion --cmd agave \
-      --bash <(${agave} --generate complete-bash) \
-      --fish <(${agave} --generate complete-fish) \
-      --zsh <(${agave} --generate complete-zsh)
+    # installShellCompletion --cmd agave \
+    #   --bash <(${agave} --generate complete-bash) \
+    #   --fish <(${agave} --generate complete-fish) \
+    #   --zsh <(${agave} --generate complete-zsh)
   '';
 
   doInstallCheck = false;
@@ -66,11 +70,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "agave";
   };
 
-  # Perhaps a nix bug, but the no_atomic.rs file is entirely missing after unpackPhase
-  patches = [ ./crossbeam.patch ];
-
-  # Because crossbeam-epoch in Cargo.lock uses a git rev instead of a locked checksum
-  useFetchCargoVendor = true;
+  # For the same reason as discussed in solana-cli derivation (crossbeam softlink), the no_atomic file is missing
+  # and either must somehow be rendered unneeded (using an upstream package) or replaced. A cleaner, non-behavior-changing,
+  # solution would be to commit the file to the repo fork (replacing the softlink).
+  cargoPatches = [ ./crossbeam-epoch.patch ];
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
