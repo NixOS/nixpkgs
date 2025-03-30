@@ -1,5 +1,6 @@
 {
   lib,
+  pkgsBuildBuild,
   stdenv,
   fetchFromSourcehut,
   fetchurl,
@@ -95,10 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preBuild
 
-      ./bootstrap.sh stage-1
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./bootstrap.sh stage-1
 
-      ./stage-1/muon-bootstrap setup ${cmdlineForMuon} stage-2
-      ./stage-1/muon-bootstrap samu ${cmdlineForSamu} -C stage-2
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./stage-1/muon-bootstrap setup ${cmdlineForMuon} stage-2
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./stage-1/muon-bootstrap samu ${cmdlineForSamu} -C stage-2
 
       ./stage-2/muon setup -Dprefix=$out ${cmdlineForMuon} stage-3
       ${lib.optionalString embedSamurai "./stage-2/muon"} samu ${cmdlineForSamu} -C stage-3
