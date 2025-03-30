@@ -812,7 +812,7 @@ in {
   nginx-redirectcode = runTest ./nginx-redirectcode.nix;
   nginx-sso = runTest ./nginx-sso.nix;
   nginx-status-page = runTest ./nginx-status-page.nix;
-  nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
+  nginx-tmpdir = runTest ./nginx-tmpdir.nix;
   nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
   nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
