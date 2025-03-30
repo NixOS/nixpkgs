@@ -13791,8 +13791,6 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  goobook = with python3Packages; toPythonApplication goobook;
-
   lumail = callPackage ../applications/networking/mailreaders/lumail {
     lua = lua5_1;
   };
