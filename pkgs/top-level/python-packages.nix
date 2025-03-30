@@ -12195,6 +12195,8 @@ self: super: with self; {
 
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
+  pyotb = callPackage ../development/python-modules/pyotb { };
+
   pyotgw = callPackage ../development/python-modules/pyotgw { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
