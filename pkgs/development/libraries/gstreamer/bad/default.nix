@@ -23,7 +23,6 @@
 , ldacbt
 , liblc3
 , libass
-, libkate
 , lrdf
 , ladspaH
 , lcms2
@@ -78,10 +77,8 @@
 , svt-av1
 , fluidsynth
 , libva
-, libvdpau
 , wayland
 , libwebp
-, xvidcore
 , gnutls
 , mjpegtools
 , libGL
@@ -167,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     ldacbt
     liblc3
     libass
-    libkate
     webrtc-audio-processing_1
     libbs2b
     libmodplug
@@ -196,9 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     soundtouch
     srtp
     fluidsynth
-    libvdpau
     libwebp
-    xvidcore
     gnutls
     game-music-emu
     openssl
