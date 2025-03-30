@@ -11697,6 +11697,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  pckr-nvim = buildVimPlugin {
+    pname = "pckr.nvim";
+    version = "2025-03-30";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "pckr.nvim";
+      rev = "d299abb91f2cf1aa0e4733dfd76ed2f98b915e55";
+      sha256 = "17n71x66vpixialjpx8hayknn3f6h2crbcpmn3chxfczsjvqkhhz";
+    };
+    meta.homepage = "https://github.com/lewis6991/pckr.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   pear-tree = buildVimPlugin {
     pname = "pear-tree";
     version = "2024-11-29";
