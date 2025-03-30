@@ -231,6 +231,25 @@ in {
           excluded_interfaces = [ "lo" "lo0" ]; } ];
       };
     };
+
+    permissions = mkOption {
+      description = "User and group permissions for datadog-agent";
+      type = with types; submodule {
+        options = {
+          User = mkOption {
+            description = "User permissions";
+            type = types.str;
+            default = "datadog";
+          };
+          Group = mkOption {
+            description = "Group permissions";
+            type = types.str;
+            default = "datadog";
+          };
+        };
+      };
+    };
+
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
@@ -250,8 +269,8 @@ in {
         path = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = "datadog";
-          Group = "datadog";
+          User = cfg.permissions.User;
+          Group = cfg.permissions.Group;
           Restart = "always";
           RestartSec = 2;
         };
@@ -261,7 +280,7 @@ in {
       datadog-agent = makeService {
         description = "Datadog agent monitor";
         preStart = ''
-          chown -R datadog: /etc/datadog-agent
+          chown -R ${cfg.permissions.User}: /etc/datadog-agent
           rm -f /etc/datadog-agent/auth_token
         '';
         script = ''
