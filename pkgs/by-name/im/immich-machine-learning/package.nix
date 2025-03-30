@@ -23,7 +23,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [
-    poetry-core
+    hatchling
     cython
   ];
 
