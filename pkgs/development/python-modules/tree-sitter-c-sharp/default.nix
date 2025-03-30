@@ -2,30 +2,25 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
-  cargo,
   rustPlatform,
+  cargo,
   rustc,
   setuptools,
-  wheel,
   tree-sitter,
+  pytestCheckHook,
 }:
 
-let
+buildPythonPackage rec {
+  pname = "tree-sitter-c-sharp";
   version = "0.23.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-c-sharp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-weH0nyLpvVK/OpgvOjTuJdH2Hm4a1wVshHmhUdFq3XA=";
   };
-in
-buildPythonPackage {
-  pname = "tree-sitter-c-sharp";
-  inherit version src;
-  pyproject = true;
-  disabled = pythonOlder "3.9";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
@@ -37,7 +32,6 @@ buildPythonPackage {
     rustPlatform.cargoSetupHook
     rustc
     setuptools
-    wheel
   ];
 
   optional-dependencies = {
@@ -46,8 +40,11 @@ buildPythonPackage {
     ];
   };
 
-  pythonImportsCheck = [
-    "tree_sitter_c_sharp"
+  pythonImportsCheck = [ "tree_sitter_c_sharp" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tree-sitter
   ];
 
   meta = {
