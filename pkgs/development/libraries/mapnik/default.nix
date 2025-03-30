@@ -25,6 +25,7 @@
   libpq,
   protozero,
   sparsehash,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +64,12 @@ stdenv.mkDerivation rec {
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
     ./use-sparsehash-package.patch
+
+    (fetchpatch {
+      name = "boost-u32regex-str";
+      url = "https://github.com/mapnik/mapnik/commit/102cf2b2c4b58d3540b3ff15c65ad90335f3a80d.patch";
+      hash = "sha256-+s5MaFHV2ulgEX61bVRkCVclipbUg8VhzSCb2sIA0mU=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -134,15 +141,5 @@ stdenv.mkDerivation rec {
       ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-
-    # 29-03-2025: On darwin, the libc++ standard library is used to compile C++ programs.
-    # 29-03-2025: Since the base template for `std::char_traits` was removed in LLVM 19,
-    # 29-03-2025: usages of `boost::u32regex` will no longer compile.
-    # 29-03-2025: Linux builds do not fail as they use libstdc++, which has not removed
-    # 29-03-2025: such `std::char_trait` declarations.
-    #
-    # 29-03-2025: See https://github.com/mapnik/mapnik/issues/4499 for more information
-    # 29-03-2025: and a Minimal Reproducible Example.
-    badPlatforms = platforms.darwin;
   };
 }
