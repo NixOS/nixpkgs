@@ -1191,10 +1191,6 @@ with pkgs;
 
   git-publish = python3Packages.callPackage ../applications/version-management/git-publish { };
 
-  git-quickfix = callPackage ../applications/version-management/git-quickfix {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   git-recent = callPackage ../applications/version-management/git-recent {
     util-linux = if stdenv.hostPlatform.isLinux then util-linuxMinimal else util-linux;
   };
