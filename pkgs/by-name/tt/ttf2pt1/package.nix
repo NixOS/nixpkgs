@@ -4,6 +4,7 @@
   fetchurl,
   perl,
   freetype,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype ];
   nativeBuildInputs = [ perl ];
 
-  patches = ./gentoo-makefile.patch; # also contains the freetype patch
+  patches = [
+    ./gentoo-makefile.patch # also contains the freetype patch
+
+    # fix build with c99
+    # https://src.fedoraproject.org/rpms/ttf2pt1/c/070de5269475785d27ae7996513bee12cb9a0f53
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/ttf2pt1/raw/070de5269475785d27ae7996513bee12cb9a0f53/f/ttf2pt1-c99.patch";
+      hash = "sha256-7+RnExqxED+fUJSj3opfYi0eQ5zqswOZnKjQMvlF020=";
+    })
+
+    # fix build with gcc14
+    # https://src.fedoraproject.org/rpms/ttf2pt1/c/1ebb612acb7088095c6bd7242209f0ce848895fb
+    ./ttf2pt1-gcc14.patch
+  ];
 
   meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
