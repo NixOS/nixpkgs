@@ -44,21 +44,23 @@
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
 , hotdoc
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.24.10";
+  version = "1.26.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   separateDebugInfo = true;
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-69V7G+kkxuJPMn3VW6udj7quvl4dyPynhBgqsrEtI+s=";
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
+    hash = "sha256-4jGJ++0uxIZpA4LRBVwZ7q9arj6V4ldvxMiE2WqQ5p4=";
   };
 
   strictDeps = true;
@@ -117,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
@@ -160,6 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
     # vs what was built) and to make them easier to search for.
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
+
+    updateScript = directoryListingUpdater { };
   };
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

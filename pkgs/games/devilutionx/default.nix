@@ -8,7 +8,7 @@
   pkg-config,
   gettext,
   libsodium,
-  SDL2,
+  SDL2_classic,
   SDL2_image,
   SDL_audiolib,
   flac,
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     fmt
     libpng
     libsodium
-    SDL2
+    SDL2_classic
     SDL2_image
     SDL_audiolib'
   ];

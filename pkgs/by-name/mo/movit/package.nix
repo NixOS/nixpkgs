@@ -9,6 +9,8 @@
   darwin,
   eigen,
   libepoxy,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
       SDL2
       fftw
       gtest
+      libGL
+      libX11
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.OpenGL

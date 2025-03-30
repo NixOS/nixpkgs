@@ -73,8 +73,7 @@ let
 
     nativeBuildInputs = [
       cython
-      # needed to find pg_config with strictDeps
-      libpq
+      libpq.pg_config
       setuptools
       tomli
     ];

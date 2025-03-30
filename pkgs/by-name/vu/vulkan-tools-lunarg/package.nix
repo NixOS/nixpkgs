@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.4.304.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-nudyg5YF2j4kv0fCx3vV/jGsYrEaTMf0xydvdHF6XCU=";
+    hash = "sha256-M4DM9gUJXB+4npbtxPdVaxsh4AqKQ9J6nexa9y1an9w=";
   };
 
   nativeBuildInputs = [

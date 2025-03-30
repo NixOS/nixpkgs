@@ -117,18 +117,11 @@ stdenv.mkDerivation {
     "test"
   ];
 
-  patches = lib.optionals (version == "2.9.0") [
-    # get ROCm version directly
-    # https://github.com/icl-utk-edu/magma/pull/27
-    (fetchpatch {
-      url = "https://github.com/icl-utk-edu/magma/commit/10fe816b763c41099fa1c978a79d6869246671cf.patch";
-      hash = "sha256-qSY5ACMHyHofJdQKyPqx8sI8GbPD6IZezmCd8qOS5OM=";
-    })
-  ];
-
-  # Fixup for the python test runners
   postPatch =
     ''
+      # For rocm version script invoked by cmake
+      patchShebangs tools/
+      # Fixup for the python test runners
       patchShebangs ./testing/run_{tests,summarize}.py
     ''
     + lib.optionalString (strings.versionOlder version "2.9.0") ''
@@ -201,6 +194,10 @@ stdenv.mkDerivation {
       (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
     ]
     ++ lists.optionals rocmSupport [
+      # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
+      # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
+      # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
+      (strings.cmakeFeature "ROCM_CORE" "${effectiveRocmPackages.clr}")
       (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
       (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
     ];
