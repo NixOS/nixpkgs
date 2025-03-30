@@ -19,9 +19,7 @@
 , getVersionFile
 , fetchpatch
 }:
-
-let
-  self = stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
     pname = "clang";
     inherit version;
 
@@ -281,5 +279,4 @@ let
     '';
   } else {
     ninjaFlags = [ "docs-clang-man" ];
-  })));
-in self
+  })))
