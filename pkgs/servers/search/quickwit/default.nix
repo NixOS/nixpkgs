@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   nixosTests,
   nix-update-script,
@@ -72,10 +73,23 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
     substituteInPlace ./quickwit-proto/build.rs \
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
-    cp /build/cargo-vendor-dir/Cargo.lock /build/source/quickwit/Cargo.lock
   '';
 
   sourceRoot = "${src.name}/quickwit";
+
+  cargoPatches = [
+    # The project's own pulsar-rs fork has been deleted since the release of the current version.
+    # This patch includes the commit that moved back to using the non-forked crate
+    (fetchpatch {
+      name = "dont-depend-on-forked-pulsar-repo.patch";
+      url = "https://github.com/quickwit-oss/quickwit/commit/e7bcc90b6af0203ca926ddbfa8a3588539c563da.patch";
+      stripLen = 1;
+      hash = "sha256-3shgXEJdZjM0NF8TcStm8e2DuRu/+A65JfhS/lYiOCw=";
+    })
+
+    # fixes build failure with newer rust versions
+    ./update-time-crate.patch
+  ];
 
   preBuild = ''
     mkdir -p quickwit-ui/build
@@ -86,17 +100,8 @@ rustPlatform.buildRustPackage rec {
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chitchat-0.8.0" = "sha256-6K2noPoFaDnOxQIEV1WbmVPfRGwlI/WS1OWSBH2qb1Q=";
-      "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
-      "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
-      "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
-      "sasl2-sys-0.1.20+2.1.28" = "sha256-u4BsfmTDFxuY3i1amLCsr7MDv356YPThMHclura0Sxs=";
-      "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T8oDyRgE0ukJr3roNO9iZD5ipfGcgp6M4SFZB9hs3+0=";
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
