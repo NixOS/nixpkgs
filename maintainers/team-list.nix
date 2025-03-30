@@ -597,6 +597,7 @@ with lib.maintainers;
   jitsi = {
     members = [
       cleeyv
+      novmar
       ryantm
       lassulus
       yayayayaka
