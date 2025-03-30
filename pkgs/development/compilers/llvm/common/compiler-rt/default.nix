@@ -68,11 +68,11 @@ let
       src;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
-  sourceRoot = "${src'.name}/${baseName}";
+  sourceRoot = "${finalAttrs.src.name}/${baseName}";
 
   patches =
     lib.optional (lib.versionOlder release_version "15") (getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
@@ -369,4 +369,4 @@ stdenv.mkDerivation {
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-}
+})
