@@ -1,31 +1,26 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
-  cargo,
+  fetchFromGitHub,
   rustPlatform,
+  cargo,
   rustc,
   setuptools,
-  wheel,
   tree-sitter,
+  pytestCheckHook,
 }:
 
-let
+buildPythonPackage rec {
+  pname = "tree-sitter-embedded-template";
   version = "0.23.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-embedded-template";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-C2Lo3tT2363O++ycXiR6x0y+jy2zlmhcKp7t1LhvCe8=";
   };
-in
-buildPythonPackage {
-  pname = "tree-sitter-embedded-template";
-  inherit version src;
-  pyproject = true;
-  disabled = pythonOlder "3.9";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
@@ -37,7 +32,6 @@ buildPythonPackage {
     rustPlatform.cargoSetupHook
     rustc
     setuptools
-    wheel
   ];
 
   optional-dependencies = {
@@ -46,8 +40,11 @@ buildPythonPackage {
     ];
   };
 
-  pythonImportsCheck = [
-    "tree_sitter_embedded_template"
+  pythonImportsCheck = [ "tree_sitter_embedded_template" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tree-sitter
   ];
 
   meta = {
