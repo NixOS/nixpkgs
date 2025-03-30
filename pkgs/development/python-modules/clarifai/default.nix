@@ -36,6 +36,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "click"
     "fsspec"
     "schema"
   ];
