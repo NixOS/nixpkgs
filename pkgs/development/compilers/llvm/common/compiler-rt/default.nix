@@ -48,12 +48,11 @@ let
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 
-  baseName = "compiler-rt";
-  pname = baseName + lib.optionalString (haveLibc) "-libc";
+  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
 
   src' =
     if monorepoSrc != null then
-      runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (
+      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
         ''
           mkdir -p "$out"
         ''
@@ -61,7 +60,7 @@ let
           cp -r ${monorepoSrc}/cmake "$out"
         ''
         + ''
-          cp -r ${monorepoSrc}/${baseName} "$out"
+          cp -r ${monorepoSrc}/compiler-rt "$out"
         ''
       )
     else
@@ -72,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
-  sourceRoot = "${finalAttrs.src.name}/${baseName}";
+  sourceRoot = "${finalAttrs.src.name}/compiler-rt";
 
   patches =
     lib.optional (lib.versionOlder release_version "15") (getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
