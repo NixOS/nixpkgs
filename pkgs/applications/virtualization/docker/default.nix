@@ -239,9 +239,9 @@ rec {
       ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
     '' + ''
       # completion (cli)
-      installShellCompletion --bash ./contrib/completion/bash/docker
-      installShellCompletion --fish ./contrib/completion/fish/docker.fish
-      installShellCompletion --zsh  ./contrib/completion/zsh/_docker
+      installShellCompletion --bash --name docker <($out/bin/docker completion bash)
+      installShellCompletion --fish --name docker.fish <($out/bin/docker completion fish)
+      installShellCompletion --zsh --name _docker <($out/bin/docker completion zsh)
     '';
 
     passthru = {
