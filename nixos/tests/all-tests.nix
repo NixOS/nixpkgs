@@ -386,7 +386,7 @@ in {
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
   evcc = runTest ./evcc.nix;
-  fail2ban = handleTest ./fail2ban.nix { };
+  fail2ban = runTest ./fail2ban.nix;
   fakeroute = handleTest ./fakeroute.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fanout = handleTest ./fanout.nix {};
