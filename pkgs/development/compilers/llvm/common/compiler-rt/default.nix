@@ -188,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
     ++ lib.optionals (useLLVM && haveLibc) [
       (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
+      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
     ]
     ++ lib.optionals (noSanitizers) [
       (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
@@ -198,19 +199,14 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
       (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
     ]
-    ++ lib.optionals (useLLVM && haveLibc) [
-      (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
-    ]
     ++ lib.optionals (!haveLibc || bareMetal) [
       (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
-    ]
-    ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
-      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
-    ]
-    ++ lib.optionals (!haveLibc || bareMetal) [
       (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
       (lib.cmakeBool "COMPILER_RT_BAREMETAL_BUILD" true)
       (lib.cmakeFeature "CMAKE_SIZEOF_VOID_P" (toString (stdenv.hostPlatform.parsed.cpu.bits / 8)))
+    ]
+    ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
+      (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
     ]
     ++ lib.optionals (!haveLibc) [
       (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
