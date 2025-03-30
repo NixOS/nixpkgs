@@ -3120,10 +3120,6 @@ with pkgs;
 
   featherpad = qt5.callPackage ../applications/editors/featherpad { };
 
-  feroxbuster = callPackage ../tools/security/feroxbuster {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   ffsend = callPackage ../tools/misc/ffsend {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
