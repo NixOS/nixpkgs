@@ -60,6 +60,8 @@
   # A riscv64 cross-compiler fits into the limit comfortably.
 , enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64
 
+, hashUnitIds ? builtins.compareVersions version "9.8" >= 0
+
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
@@ -594,6 +596,7 @@ stdenv.mkDerivation ({
     "--flavour=${ghcFlavour}"
     "--bignum=${if enableNativeBignum then "native" else "gmp"}"
     "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
+    (if hashUnitIds then "--hash-unit-ids" else "")
   ];
 
   buildPhase = ''
