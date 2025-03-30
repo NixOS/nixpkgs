@@ -30,6 +30,6 @@ appimageTools.wrapType2 {
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
   };
 }
