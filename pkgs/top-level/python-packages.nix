@@ -4530,8 +4530,6 @@ self: super: with self; {
 
   events = callPackage ../development/python-modules/events { };
 
-  evernote = callPackage ../development/python-modules/evernote { };
-
   evohome-async = callPackage ../development/python-modules/evohome-async { };
 
   evolutionhttp = callPackage ../development/python-modules/evolutionhttp { };
@@ -5344,8 +5342,6 @@ self: super: with self; {
       python3 = python;
     }
   );
-
-  geeknote = callPackage ../development/python-modules/geeknote { };
 
   gehomesdk = callPackage ../development/python-modules/gehomesdk { };
 
@@ -8895,8 +8891,6 @@ self: super: with self; {
 
   moderngl-window = callPackage ../development/python-modules/moderngl-window { };
 
-  modestmaps = callPackage ../development/python-modules/modestmaps { };
-
   mohawk = callPackage ../development/python-modules/mohawk { };
 
   molbar = callPackage ../development/python-modules/molbar { };
@@ -11843,8 +11837,6 @@ self: super: with self; {
 
   pychannels = callPackage ../development/python-modules/pychannels { };
 
-  pychart = callPackage ../development/python-modules/pychart { };
-
   pychm = callPackage ../development/python-modules/pychm { };
 
   pychromecast = callPackage ../development/python-modules/pychromecast { };
@@ -14115,8 +14107,6 @@ self: super: with self; {
   python-watcherclient = callPackage ../development/python-modules/python-watcherclient { };
 
   python-whois = callPackage ../development/python-modules/python-whois { };
-
-  python-wifi = callPackage ../development/python-modules/python-wifi { };
 
   python-wink = callPackage ../development/python-modules/python-wink { };
 
@@ -17112,8 +17102,6 @@ self: super: with self; {
   tilequant = callPackage ../development/python-modules/tilequant { };
 
   tiler = callPackage ../development/python-modules/tiler { };
-
-  tilestache = callPackage ../development/python-modules/tilestache { };
 
   tilt-ble = callPackage ../development/python-modules/tilt-ble { };
 

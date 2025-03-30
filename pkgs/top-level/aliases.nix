@@ -471,6 +471,7 @@ mapAliases {
   fastnlo = throw "'fastnlo' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2024-10-17
   fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
   fcitx5-catppuccin = catppuccin-fcitx5; # Added 2024-06-19
+  fdr = throw "fdr has been removed, as it cannot be built from source and depends on Python 2.x"; # Added 2025-03-19
   inherit (luaPackages) fennel; # Added 2022-09-24
   ferdi = throw "'ferdi' has been removed, upstream does not exist anymore and the package is insecure"; # Added 2024-08-22
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve
