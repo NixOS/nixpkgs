@@ -370,6 +370,7 @@ dont-distribute-packages:
  - StockholmAlignment
  - Strafunski-Sdf2Haskell
  - SybWidget
+ - Synapse
  - SyntaxMacros
  - TV
  - TastyTLT
@@ -570,7 +571,7 @@ dont-distribute-packages:
  - axel
  - axiom
  - azimuth-hs
- - aztecs-sdl
+ - aztecs-sdl-image
  - azure-functions-worker
  - azure-service-api
  - azure-servicebus
@@ -685,8 +686,6 @@ dont-distribute-packages:
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
- - broadcast-chan-conduit
- - broadcast-chan-pipes
  - bronyradiogermany-streaming
  - btc-lsp
  - btree
@@ -733,6 +732,7 @@ dont-distribute-packages:
  - captcha-core
  - car-pool
  - carboncopy
+ - cardano-addresses
  - cartel
  - cas-hashable-s3
  - cas-store
@@ -908,6 +908,7 @@ dont-distribute-packages:
  - constraint-reflection
  - constructible
  - consumers
+ - consumers-metrics-prometheus
  - container
  - containers-accelerate
  - content-store
@@ -1079,6 +1080,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_2_0_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1441,6 +1443,7 @@ dont-distribute-packages:
  - grapefruit-ui
  - grapefruit-ui-gtk
  - grapesy
+ - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
@@ -1454,6 +1457,7 @@ dont-distribute-packages:
  - graphicstools
  - graphtype
  - graphula
+ - graphula_2_1_0_1
  - greencard-lib
  - grid-proto
  - gridbounds
@@ -1574,6 +1578,7 @@ dont-distribute-packages:
  - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
+ - haskell-language-server
  - haskell-lsp
  - haskell-lsp-client
  - haskell-pdf-presenter
@@ -1790,6 +1795,7 @@ dont-distribute-packages:
  - hplayground
  - hpqtypes-effectful
  - hpqtypes-extras
+ - hpqtypes-extras_1_17_0_1
  - hprotoc
  - hprotoc-fork
  - hps
@@ -2147,7 +2153,6 @@ dont-distribute-packages:
  - layouting
  - lazy-hash-cache
  - lda
- - ldap-client-og
  - ldap-scim-bridge
  - ldapply
  - leaky
@@ -2747,8 +2752,11 @@ dont-distribute-packages:
  - potoki-zlib
  - powerqueue-sqs
  - ppad-base58
+ - ppad-bip32
+ - ppad-bip39
  - ppad-hkdf
  - ppad-hmac-drbg
+ - ppad-pbkdf
  - ppad-secp256k1
  - pqueue-mtl
  - practice-room
@@ -3361,6 +3369,7 @@ dont-distribute-packages:
  - symantic-lib
  - symbiote
  - symmetry-operations-symbols
+ - synapse
  - syncthing-hs
  - syntaxnet-haskell
  - sys-process
@@ -3639,10 +3648,12 @@ dont-distribute-packages:
  - wavesurfer
  - wavy
  - weatherhs
+ - weave
  - web-mongrel2
  - web-routes-hsp
  - web-routes-regular
  - web-routing
+ - web-view-colonnade
  - web3
  - web3-bignum
  - web3-crypto
