@@ -120,9 +120,8 @@ let
           # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
           (getVersionFile "clang/aarch64-tblgen.patch");
 
-    nativeBuildInputs = [ cmake ]
+    nativeBuildInputs = [ cmake python3 ]
       ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ [ python3 ]
       ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -134,6 +133,8 @@ let
     ]) ++ [
       (lib.cmakeBool "CLANGD_BUILD_XPC" false)
       (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
     ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
       (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
     ] ++ lib.optionals enableManpages [
@@ -142,9 +143,6 @@ let
       (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
       (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
       (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
-    ] ++ [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
     ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
       # Added in LLVM15:
       # `clang-tidy-confusable-chars-gen`: https://github.com/llvm/llvm-project/commit/c3574ef739fbfcc59d405985a3a4fa6f4619ecdb
@@ -171,7 +169,6 @@ let
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
     '' + (lib.optionalString (lib.versions.major release_version == "17") ''
-
       mkdir -p $lib/lib/clang
       mv $lib/lib/17 $lib/lib/clang/17
     '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
