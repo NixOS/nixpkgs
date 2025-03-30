@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   vscode-utils,
+  vscode-extensions-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -31,13 +32,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
       publisher = "visualjj";
       version = "0.13.6";
     }
-    // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  passthru.updateScript = vscode-extensions-update-script { extraArgs = [ "--platforms" ]; };
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";
     downloadPage = "https://www.visualjj.com";
     homepage = "https://www.visualjj.com";
     license = lib.licenses.unfree;
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ lib.maintainers.drupol ];
   };
 }
