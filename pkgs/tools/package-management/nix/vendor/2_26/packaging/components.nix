@@ -414,5 +414,17 @@ in
     */
     overrideSource = src: (scope.overrideSource src).nix-everything;
 
+    /**
+      Override any internals of the Nix package set.
+
+      Single argument: the extension function to apply to the package set (finalScope: prevScope: { ... })
+
+      Example:
+      ```
+      overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
+      ```
+    */
+    overrideScope = f: (scope.overrideScope f).nix-everything;
+
   };
 }
