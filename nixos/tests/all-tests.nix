@@ -212,6 +212,7 @@ in {
   binary-cache-no-compression = handleTest ./binary-cache.nix { compression = "none"; };
   binary-cache-xz = handleTest ./binary-cache.nix { compression = "xz"; };
   bind = handleTest ./bind.nix {};
+  bind-test-module-test = runTest ./common/bind-dns-test.nix;
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
   bitbox-bridge = runTest ./bitbox-bridge.nix;
