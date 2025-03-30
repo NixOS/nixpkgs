@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rxp";
   version = "1.5.2";
 
   src = fetchurl {
-    url = "https://www.inf.ed.ac.uk/research/isddarch/admin/rxp-${version}.tar.gz";
+    url = "https://www.inf.ed.ac.uk/research/isddarch/admin/rxp-${finalAttrs.version}.tar.gz";
     hash = "sha256-+mQbSlGF0KHZYQyCRbnVr/WXLBoooNqU8+ONafbBRRM=";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "rxp";
   };
-}
+})
