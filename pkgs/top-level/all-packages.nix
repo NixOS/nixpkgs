@@ -9765,10 +9765,6 @@ with pkgs;
 
   one_gadget = callPackage ../development/tools/misc/one_gadget { };
 
-  oneDNN = callPackage ../development/libraries/oneDNN { };
-
-  oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
-
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
