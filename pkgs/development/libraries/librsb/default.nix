@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ lgpl3Plus ];
     maintainers = with lib.maintainers; [ KarlJoad ];
     platforms = lib.platforms.all;
-    # ./rsb_common.h:56:10: fatal error: 'omp.h' file not found
-    broken = stdenv.hostPlatform.isDarwin;
+    # linking errors such as 'undefined reference to `gzungetc'
+    broken = true;
   };
 }
