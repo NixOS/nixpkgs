@@ -13,8 +13,8 @@ let
   cfg = config.services.discourse;
   opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
-  upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/Dockerfile PG_MAJOR
+  upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_15;
 
   postgresqlPackage =
     if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
