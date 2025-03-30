@@ -2613,14 +2613,14 @@ buildLuarocksPackage {
 lzextras = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lzextras";
-  version = "0.2.5-1";
+  version = "0.3.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lzextras-0.2.5-1.rockspec";
-    sha256 = "0aqvly57k99fgcxhs1dfqyrf8bl7v6x75vdcjqpqsm3pkpvs1nl4";
+    url    = "mirror://luarocks/lzextras-0.3.0-1.rockspec";
+    sha256 = "1w8ar8qi1hnbnj70f3lhrzf0hp1d0jbvya9v318pqcd16wh7x6ii";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lzextras/archive/v0.2.5.zip";
-    sha256 = "1lk2k0iml8livwn1sjabn8d808alvd0axx6p9xcsb83x69g8a0dj";
+    url    = "https://github.com/BirdeeHub/lzextras/archive/v0.3.0.zip";
+    sha256 = "0942wnlk7cf74z2ni3dhv2zm8ld4nazs9ciaql00vvbswh4a9z2w";
   };
 
   disabled = luaOlder "5.1";
