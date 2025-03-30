@@ -136,12 +136,12 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
   nativeBuildInputs =
-    [ cmake ]
-    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [
+    [
+      cmake
       python3
       libllvm.dev
     ]
+    ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
