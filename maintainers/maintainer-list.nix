@@ -3639,6 +3639,11 @@
     githubId = 200617;
     name = "Ben Sima";
   };
+  bstanderline = {
+    name = "bstanderline";
+    github = "bstanderline";
+    githubId = 153822813;
+  };
   btlvr = {
     email = "btlvr@protonmail.com";
     github = "btlvr";
@@ -7850,6 +7855,12 @@
     github = "ferrine";
     githubId = 11705326;
     name = "Max Kochurov";
+  };
+  fettgoenner = {
+    email = "paulmatti@protonmail.com";
+    github = "fettgoenner";
+    githubId = 92429150;
+    name = "Paul Meinhold";
   };
   ffinkdevs = {
     email = "fink@h0st.space";
@@ -17372,6 +17383,12 @@
     githubId = 7191115;
     name = "Nova Leary";
   };
+  novmar = {
+    email = "novotny@marnov.cz";
+    github = "novmar";
+    githubId = 26750149;
+    name = "Marcel Novotny";
+  };
   novoxd = {
     email = "radnovox@gmail.com";
     github = "novoxd";
@@ -19575,6 +19592,13 @@
     email = "qdlmcfresh@gmail.com";
     github = "qdlmcfresh";
     githubId = 10837173;
+  };
+  qf0xb = {
+    name = "Quirin Brändli";
+    email = "development@qf0xb.de";
+    github = "QF0xB";
+    githubId = 37348361;
+    keys = [ { fingerprint = "9036 0B7D B6B7 8B75 E901  3D11 3FF8 C23C 46F2 CC90"; } ];
   };
   qjoly = {
     email = "github@une-pause-cafe.fr";
