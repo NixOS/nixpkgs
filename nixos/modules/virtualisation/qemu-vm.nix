@@ -385,6 +385,12 @@ in
 
   options = {
 
+    boot.isVM = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether this NixOS machine is a QEMU virtual machine";
+    };
+
     virtualisation.fileSystems = options.fileSystems;
 
     virtualisation.memorySize = mkOption {
@@ -1071,7 +1077,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf config.boot.isVM {
 
     assertions =
       lib.concatLists (

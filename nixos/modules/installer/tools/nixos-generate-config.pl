@@ -310,6 +310,7 @@ if ($virt eq "parallels") {
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "(modulesPath + \"/profiles/qemu-guest.nix\")";
+    push @attrs, "boot.isVM = true;";
 }
 
 # Also for Hyper-V.

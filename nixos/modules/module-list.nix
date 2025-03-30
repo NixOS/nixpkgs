@@ -1841,6 +1841,7 @@
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-guest-agent.nix
+  ./virtualisation/qemu-vm.nix
   ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
@@ -1853,7 +1854,6 @@
   ./virtualisation/xen-dom0.nix
   {
     documentation.nixos.extraModules = [
-      ./virtualisation/qemu-vm.nix
       ./image/repart.nix
     ];
   }

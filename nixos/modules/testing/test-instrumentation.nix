@@ -147,19 +147,7 @@ in
     systemd.services."serial-getty@${qemu-common.qemuSerialDevice}".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
-    # Only set these settings when the options exist. Some tests (e.g. those
-    # that do not specify any nodes, or an empty attr set as nodes) will not
-    # have the QEMU module loaded and thuse these options can't and should not
-    # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
-      qemu = {
-        # NOTE: optionalAttrs
-        #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
-        #       we avoid defining attributes if not possible.
-        # TODO: refactor such that test-instrumentation can import qemu-vm
-        package  = lib.mkDefault pkgs.qemu_test;
-      };
-    };
+    virtualisation.qemu.package = lib.mkDefault pkgs.qemu_test;
 
     boot.kernel.sysctl = {
       "kernel.hung_task_timeout_secs" = 600;
