@@ -413,6 +413,7 @@ in
                 [
                   "AF_INET"
                   "AF_INET6"
+                  "AF_UNIX"
                 ]
                 ++ lib.optionals (cfg.listening-ips == [ ]) [
                   # only used for interface discovery when no listening ips are configured
