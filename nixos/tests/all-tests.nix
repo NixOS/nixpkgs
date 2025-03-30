@@ -678,7 +678,7 @@ in {
   maestral = handleTest ./maestral.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   magnetico = handleTest ./magnetico.nix {};
-  mailcatcher = handleTest ./mailcatcher.nix {};
+  mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix {};
   mailpit = handleTest ./mailpit.nix {};
   mailman = handleTest ./mailman.nix {};
