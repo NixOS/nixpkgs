@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "librsb";
-  version = "1.2.0.10";
+  version = "1.3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7Enz94p8Q/yeEJdlk9EAqkmxhjMJ7Y+jzLt6rVLS97g=";
+    sha256 = "sha256-GMb8RD+hz9KoEQ99S4jVu8tJO56Fs6YgFLi7V6hI4E8=";
   };
 
   # The default configure flags are still present when building
