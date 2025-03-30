@@ -45,10 +45,10 @@ buildOctavePackage rec {
     splines
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/msh/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Create and manage triangular and tetrahedral meshes for Finite Element or Finite Volume PDE solvers";
     longDescription = ''
       Create and manage triangular and tetrahedral meshes for Finite Element or

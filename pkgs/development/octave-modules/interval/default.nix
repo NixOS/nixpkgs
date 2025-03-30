@@ -18,10 +18,10 @@ buildOctavePackage rec {
     mpfr
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://octave.sourceforge.io/interval/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Interval arithmetic to evaluate functions over subsets of their domain";
     longDescription = ''
       The interval package for real-valued interval arithmetic allows one to
