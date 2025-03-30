@@ -18,6 +18,7 @@
   texinfo,
   xz,
   zlib,
+  darwin,
   isBootstrap ? null,
   isMinimalBuild ? (
     if isBootstrap != null then
@@ -48,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.31.7";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ptLrHr65kTDf5j71o0DD/bEUMczj18oUhSTBJZJM6mg=";
+    hash = "sha256-sp9vGXM6oiS3djUHoQikJ+1Ixojh+vIrKcROHDBUkoI=";
   };
 
   patches = [
@@ -62,8 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
   ]
-  # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (replaceVars ./darwin-binary-paths.patch {
+      sw_vers = lib.getExe' darwin.DarwinTools "sw_vers";
+      vm_stat = lib.getExe' darwin.system_cmds "vm_stat";
+    })
+  ]
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
     replaceVars ./007-darwin-bsd-ps-abspath.diff {
