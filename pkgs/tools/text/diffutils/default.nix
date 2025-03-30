@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
         sed -i -E 's:test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
         sed -i -E 's:test-sigsegv-catch-stackoverflow[12]::g' gnulib-tests/Makefile.in
       ''
+    else if stdenv.hostPlatform.isFreeBSD then
+      ''
+        sed -i -E 's:test-time::g' gnulib-tests/Makefile.in
+      ''
     else
       null;
 
