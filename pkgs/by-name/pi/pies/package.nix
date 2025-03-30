@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pies";
-  version = "1.3";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://gnu/pies/${pname}-${version}.tar.bz2";
-    sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
+    hash = "sha256-ZSi00WmC6il4+aSohqFKrKjtp6xFXYE7IIRGVwFmHWw=";
   };
 
   buildInputs = [ libxcrypt ];
