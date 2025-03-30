@@ -21,7 +21,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (finalAttrs: rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "clang";
     inherit version;
 
@@ -35,7 +35,7 @@ let
         cp -r ${monorepoSrc}/clang-tools-extra "$out"
       '') else src;
 
-    sourceRoot = "${src.name}/clang";
+    sourceRoot = "${finalAttrs.src.name}/clang";
 
     patches =
       [
