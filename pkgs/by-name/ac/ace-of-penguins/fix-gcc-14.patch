@@ -1,0 +1,33 @@
+diff --git a/lib/imagelib.c b/lib/imagelib.c
+index f71b96a..49c7545 100644
+--- a/lib/imagelib.c
++++ b/lib/imagelib.c
+@@ -2,6 +2,7 @@
+ #include <string.h>
+ #include "imagelib.h"
+ #include "cards.h"
++#include <stdlib.h>
+
+ image_list *image_root = 0;
+
+diff --git a/lib/make-imglib.c b/lib/make-imglib.c
+index 84cda12..8edaa0f 100644
+--- a/lib/make-imglib.c
++++ b/lib/make-imglib.c
+@@ -7,6 +7,7 @@
+ #include <dirent.h>
+
+ #include <png.h>
++#include <ctype.h>
+
+ static int verbose = 0;
+ static char *basename = "images";
+@@ -202,7 +203,7 @@ tokenize(char *string)
+   char *rv;
+   if (string) {
+     next = string;
+-    return;
++    return NULL; // this value is unused, so it can be anything
+   }
+   while (*next && !isgraph(*next)) next++;
+   if (!*next) return 0;

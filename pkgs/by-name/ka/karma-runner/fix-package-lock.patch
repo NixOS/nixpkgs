@@ -1,0 +1,53 @@
+diff --git a/package-lock.json b/package-lock.json
+index 413cf4d1..1d03d9f5 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -5226,36 +5226,6 @@
+       "integrity": "sha512-ApcjaOdVTJ7y4r08xI5wIqpvwS48Q0PBG4DJROcEkH1f8MdAiNFyFxz3xoL0LWAVwjrwPYZdVHHxhRHcx/uGLA==",
+       "dev": true
+     },
+-    "karma": {
+-      "version": "file:",
+-      "dev": true,
+-      "requires": {
+-        "@colors/colors": "1.5.0",
+-        "body-parser": "^1.19.0",
+-        "braces": "^3.0.2",
+-        "chokidar": "^3.5.1",
+-        "connect": "^3.7.0",
+-        "di": "^0.0.1",
+-        "dom-serialize": "^2.2.1",
+-        "glob": "^7.1.7",
+-        "graceful-fs": "^4.2.6",
+-        "http-proxy": "^1.18.1",
+-        "isbinaryfile": "^4.0.8",
+-        "lodash": "^4.17.21",
+-        "log4js": "^6.4.1",
+-        "mime": "^2.5.2",
+-        "minimatch": "^3.0.4",
+-        "mkdirp": "^0.5.5",
+-        "qjobs": "^1.2.0",
+-        "range-parser": "^1.2.1",
+-        "rimraf": "^3.0.2",
+-        "socket.io": "^4.4.1",
+-        "source-map": "^0.6.1",
+-        "tmp": "^0.2.1",
+-        "ua-parser-js": "^0.7.30",
+-        "yargs": "^16.1.1"
+-      }
+-    },
+     "karma-browserify": {
+       "version": "7.0.0",
+       "resolved": "https://registry.npmjs.org/karma-browserify/-/karma-browserify-7.0.0.tgz",
+diff --git a/package.json b/package.json
+index 347d9e95..90f6d036 100644
+--- a/package.json
++++ b/package.json
+@@ -471,7 +471,6 @@
+     "eslint-plugin-standard": "^4.0.1",
+     "http2": "^3.3.6",
+     "jasmine-core": "^3.6.0",
+-    "karma": ".",
+     "karma-browserify": "^7.0.0",
+     "karma-browserstack-launcher": "^1.6.0",
+     "karma-chai": "^0.1.0",

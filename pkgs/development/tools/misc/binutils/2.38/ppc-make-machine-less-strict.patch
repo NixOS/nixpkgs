@@ -1,0 +1,51 @@
+From cebc89b9328eab994f6b0314c263f94e7949a553 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Mon, 21 Feb 2022 10:58:57 +1030
+Subject: [PATCH] binutils 2.38 vs. ppc32 linux kernel
+
+Commit b25f942e18d6 made .machine more strict.  Weaken it again.
+
+	* config/tc-ppc.c (ppc_machine): Treat an early .machine specially,
+	keeping sticky options to work around gcc bugs.
+---
+ gas/config/tc-ppc.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/gas/config/tc-ppc.c b/gas/config/tc-ppc.c
+index 054f9c72161..89bc7d3f9b9 100644
+--- a/gas/config/tc-ppc.c
++++ b/gas/config/tc-ppc.c
+@@ -5965,7 +5965,30 @@ ppc_machine (int ignore ATTRIBUTE_UNUSED)
+ 	     options do not count as a new machine, instead they add
+ 	     to currently selected opcodes.  */
+ 	  ppc_cpu_t machine_sticky = 0;
+-	  new_cpu = ppc_parse_cpu (ppc_cpu, &machine_sticky, cpu_string);
++	  /* Unfortunately, some versions of gcc emit a .machine
++	     directive very near the start of the compiler's assembly
++	     output file.  This is bad because it overrides user -Wa
++	     cpu selection.  Worse, there are versions of gcc that
++	     emit the *wrong* cpu, not even respecting the -mcpu given
++	     to gcc.  See gcc pr101393.  And to compound the problem,
++	     as of 20220222 gcc doesn't pass the correct cpu option to
++	     gas on the command line.  See gcc pr59828.  Hack around
++	     this by keeping sticky options for an early .machine.  */
++	  asection *sec;
++	  for (sec = stdoutput->sections; sec != NULL; sec = sec->next)
++	    {
++	      segment_info_type *info = seg_info (sec);
++	      /* Are the frags for this section perturbed from their
++		 initial state?  Even .align will count here.  */
++	      if (info != NULL
++		  && (info->frchainP->frch_root != info->frchainP->frch_last
++		      || info->frchainP->frch_root->fr_type != rs_fill
++		      || info->frchainP->frch_root->fr_fix != 0))
++		break;
++	    }
++	  new_cpu = ppc_parse_cpu (ppc_cpu,
++				   sec == NULL ? &sticky : &machine_sticky,
++				   cpu_string);
+ 	  if (new_cpu != 0)
+ 	    ppc_cpu = new_cpu;
+ 	  else
+-- 
+2.31.1

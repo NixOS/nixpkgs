@@ -1,0 +1,16 @@
+diff --git a/app/qml/MainWindow/Panes/Toolbar.qml b/app/qml/MainWindow/Panes/Toolbar.qml
+index 9b59c0c2..fa428a2f 100644
+--- a/app/qml/MainWindow/Panes/Toolbar.qml
++++ b/app/qml/MainWindow/Panes/Toolbar.qml
+@@ -320,7 +320,7 @@ Rectangle {
+       font: Cpp_Misc_CommonFonts.boldUiFont
+       Layout.minimumWidth: metrics.width + 16
+       Layout.maximumWidth: metrics.width + 16
+-      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MQTT_Client.isSubscribed
++      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen
+       text: checked ? qsTr("Disconnect") : qsTr("Connect")
+       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
+                              "qrc:/rcc/icons/toolbar/disconnect.svg"
+-- 
+2.47.2
+

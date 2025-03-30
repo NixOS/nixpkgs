@@ -1,0 +1,59 @@
+diff --git a/plugins/pptpd-logwtmp.c b/plugins/pptpd-logwtmp.c
+index ac5ecc2..9745177 100644
+--- a/plugins/pptpd-logwtmp.c
++++ b/plugins/pptpd-logwtmp.c
+@@ -12,9 +12,18 @@
+ #include <unistd.h>
+ #include <utmp.h>
+ #include <string.h>
++
++#define HAVE_STDARG_H 1
++#define HAVE_STDBOOL_H 1
++#define HAVE_STDDEF_H 1
+ #include <pppd/pppd.h>
++#include <pppd/options.h>
++#include <linux/ppp_defs.h>
++#include <linux/limits.h>
++
++int debug = 0;
+ 
+-char pppd_version[] = VERSION;
++char pppd_version[] = PPPD_VERSION;
+ 
+ static char pptpd_original_ip[PATH_MAX+1];
+ static bool pptpd_logwtmp_strip_domain = 0;
+@@ -42,25 +51,27 @@ static char *reduce(char *user)
+ 
+ static void ip_up(void *opaque, int arg)
+ {
++  char peer_authname[MAXNAMELEN];
++  ppp_peer_authname(peer_authname, MAXNAMELEN);
+   char *user = reduce(peer_authname);
+   if (debug)
+-    notice("pptpd-logwtmp.so ip-up %s %s %s", ifname, user, 
++    notice("pptpd-logwtmp.so ip-up %s %s %s", ppp_ifname(), user, 
+ 	   pptpd_original_ip);
+-  logwtmp(ifname, user, pptpd_original_ip);
++  logwtmp(ppp_ifname(), user, pptpd_original_ip);
+ }
+ 
+ static void ip_down(void *opaque, int arg)
+ {
+   if (debug) 
+-    notice("pptpd-logwtmp.so ip-down %s", ifname);
+-  logwtmp(ifname, "", "");
++    notice("pptpd-logwtmp.so ip-down %s", ppp_ifname());
++  logwtmp(ppp_ifname(), "", "");
+ }
+ 
+ void plugin_init(void)
+ {
+-  add_options(options);
+-  add_notifier(&ip_up_notifier, ip_up, NULL);
+-  add_notifier(&ip_down_notifier, ip_down, NULL);
++  ppp_add_options(options);
++  ppp_add_notify(NF_IP_UP, ip_up, NULL);
++  ppp_add_notify(NF_IP_DOWN, ip_down, NULL);
+   if (debug) 
+     notice("pptpd-logwtmp: $Version$");
+ }
