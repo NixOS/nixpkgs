@@ -31,8 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-5iJmtMnZKHAl/SkIjXlXkRA4ZME/ozpqFfxXKCAABoQ=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
