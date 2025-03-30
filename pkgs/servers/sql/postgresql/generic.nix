@@ -366,6 +366,7 @@ let
 
       postPatch = ''
         substituteInPlace "src/Makefile.global.in" --subst-var out
+        substituteInPlace "src/common/config_info.c" --subst-var dev
         cat ${./pg_config.env.mk} >> src/common/Makefile
       '';
 
@@ -373,7 +374,12 @@ let
         ''
           moveToOutput "bin/ecpg" "$dev"
           moveToOutput "lib/pgxs" "$dev"
-
+        ''
+        + lib.optionalString (stdenv'.buildPlatform.canExecute stdenv'.hostPlatform) ''
+          mkdir -p "$dev/nix-support"
+          "$out/bin/pg_config" > "$dev/nix-support/pg_config.expected"
+        ''
+        + ''
           rm "$out/bin/pg_config"
           make -C src/common pg_config.env
           install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
