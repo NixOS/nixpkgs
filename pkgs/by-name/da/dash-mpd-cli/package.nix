@@ -8,6 +8,7 @@
   ffmpeg,
   libxslt,
   shaka-packager,
+  nix-update-script,
 }:
 
 let
@@ -58,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest";
