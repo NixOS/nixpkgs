@@ -67,5 +67,6 @@ vimUtils.buildVimPlugin {
     homepage = "https://github.com/vyfor/cord.nvim";
     license = lib.licenses.asl20;
     changelog = "https://github.com/vyfor/cord.nvim/releases/tag/v${version}";
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
