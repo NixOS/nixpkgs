@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   # Patch all the necessary scripts
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
-    substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
+    substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
   '';
 
   # Fix mono DLLMap so it can find libX11 to run winforms apps
