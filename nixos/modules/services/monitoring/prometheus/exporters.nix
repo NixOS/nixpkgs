@@ -29,6 +29,7 @@ let
     "blackbox"
     "borgmatic"
     "buildkite-agent"
+    "chrony"
     "collectd"
     "deluge"
     "dmarc"
