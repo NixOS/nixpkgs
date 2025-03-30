@@ -135,6 +135,11 @@ stdenv.mkDerivation rec {
     # so we need to convince it to install all files to a temporary
     # location using DESTDIR and then move it to proper one in postInstall.
     DESTDIR = "dest";
+
+    # Set these to the default locations, so the builds with and
+    # without systemd can have the same installation path below.
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "/usr/lib/sysusers.d";
+    PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "/usr/lib/tmpfiles.d";
   };
 
   mesonFlags =
