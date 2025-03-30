@@ -3,6 +3,7 @@
   lib,
   vscode-utils,
   ruff,
+  vscode-extensions-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -32,7 +33,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
       publisher = "charliermarsh";
       version = "2025.14.0";
     }
-    // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
   postInstall = ''
     test -x "$out/$installPrefix/bundled/libs/bin/ruff" || {
@@ -43,12 +45,20 @@ vscode-utils.buildVscodeMarketplaceExtension {
     ln -sf ${lib.getExe ruff} "$out/$installPrefix/bundled/libs/bin/ruff"
   '';
 
+  passthru.updateScript = vscode-extensions-update-script { extraArgs = [ "--platforms" ]; };
+
   meta = {
     license = lib.licenses.mit;
     changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
     description = "Visual Studio Code extension with support for the Ruff linter";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
     homepage = "https://github.com/astral-sh/ruff-vscode";
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ lib.maintainers.azd325 ];
   };
 }
