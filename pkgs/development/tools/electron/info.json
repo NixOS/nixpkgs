@@ -1000,10 +1000,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-8VmE8o0YHV4C8S29ATDBUXvk1mq9VjD3f+iRTkTdyDI=",
+                "hash": "sha256-q4StFkSb6IbTJ7rC2qiKOyEwLCErNuK5r/iSFEmTSYo=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v34.3.4"
+                "rev": "v34.4.1"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1915,7 +1915,7 @@
         "electron_yarn_hash": "10ny8cj2m8wn8zb5ljsfc8rpv6y4rp049zv5i5slyk3lj2zpgr6y",
         "modules": "132",
         "node": "20.18.3",
-        "version": "34.3.4"
+        "version": "34.4.1"
     },
     "35": {
         "chrome": "134.0.6998.88",
