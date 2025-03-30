@@ -112,7 +112,14 @@ in
       };
 
       logout = lib.mkOption {
-        default = "";
+        # Reset the title bar when logging out.  This protects against a remote
+        # NixOS system clobbering your local terminal's title bar when you SSH
+        # into the remote NixOS system and then log out.
+        #
+        # For more details, see: https://superuser.com/a/339946
+        default = ''
+          printf '\e]0;\a'
+        '';
         description = ''
           Shell script code called during login bash shell logout.
         '';
