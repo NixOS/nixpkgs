@@ -23,20 +23,18 @@
 let
   pname = "clang";
 
-  src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
-      mkdir -p "$out"
-    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '' + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
-      cp -r ${monorepoSrc}/clang-tools-extra "$out"
-    '') else src;
-
   self = stdenv.mkDerivation (finalAttrs: rec {
     inherit pname version;
 
-    src = src';
+    src = if monorepoSrc != null then
+      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+        mkdir -p "$out"
+      '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
+        cp -r ${monorepoSrc}/cmake "$out"
+      '' + ''
+        cp -r ${monorepoSrc}/${pname} "$out"
+        cp -r ${monorepoSrc}/clang-tools-extra "$out"
+      '') else src;
 
     sourceRoot = "${src.name}/${pname}";
 
