@@ -5,12 +5,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pies";
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://gnu/pies/${pname}-${version}.tar.bz2";
+    url = "mirror://gnu/pies/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ZSi00WmC6il4+aSohqFKrKjtp6xFXYE7IIRGVwFmHWw=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
