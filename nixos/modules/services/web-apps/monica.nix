@@ -15,6 +15,8 @@ with lib; let
   user = cfg.user;
   group = cfg.group;
 
+  php = lib.getExe pkgs.php83;
+
   # shell script for local administration
   artisan = pkgs.writeScriptBin "monica" ''
     #! ${pkgs.runtimeShell}
@@ -26,7 +28,7 @@ with lib; let
         exec "$@"
       fi
     }
-    sudo ${pkgs.php}/bin/php artisan "$@"
+    sudo ${php} artisan "$@"
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -419,8 +421,8 @@ in {
         fi
 
         # migrate & seed db
-        ${pkgs.php}/bin/php artisan key:generate --force
-        ${pkgs.php}/bin/php artisan setup:production -v --force
+        ${php} artisan key:generate --force
+        ${php} artisan setup:production -v --force
       '';
     };
 
@@ -432,7 +434,7 @@ in {
         Type = "oneshot";
         User = user;
         WorkingDirectory = "${monica}";
-        ExecStart = "${pkgs.php}/bin/php ${monica}/artisan schedule:run -v";
+        ExecStart = "${php} ${monica}/artisan schedule:run -v";
       };
     };
 
@@ -465,4 +467,3 @@ in {
     };
   };
 }
-

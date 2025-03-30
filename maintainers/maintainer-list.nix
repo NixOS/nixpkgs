@@ -3639,6 +3639,11 @@
     githubId = 200617;
     name = "Ben Sima";
   };
+  bstanderline = {
+    name = "bstanderline";
+    github = "bstanderline";
+    githubId = 153822813;
+  };
   btlvr = {
     email = "btlvr@protonmail.com";
     github = "btlvr";
@@ -17377,6 +17382,12 @@
     github = "novaviper";
     githubId = 7191115;
     name = "Nova Leary";
+  };
+  novmar = {
+    email = "novotny@marnov.cz";
+    github = "novmar";
+    githubId = 26750149;
+    name = "Marcel Novotny";
   };
   novoxd = {
     email = "radnovox@gmail.com";
