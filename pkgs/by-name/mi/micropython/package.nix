@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
       prusnak
       sgo
     ];
+    mainProgram = "micropython";
   };
 }
