@@ -425,13 +425,13 @@ in
   mkRuby = generic;
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "6" "";
-    hash = "sha256-DQ2vuFnnZ2NDJXGjEJ0VN9l2JmvjCDRFZR3Gje7SXCI=";
+    version = rubyVersion "3" "1" "7" "";
+    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "6" "";
-    hash = "sha256-2ctl7N8/GGaWOfJji2M3ntb7sX2Trk5ybU6yv2ikg3A=";
+    version = rubyVersion "3" "2" "8" "";
+    hash = "sha256-d6zdjPu+H45XO15lNuA8UQPfmJ3AX6aMcPARgzw1YHU=";
     cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
   };
 
