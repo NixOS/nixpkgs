@@ -207,6 +207,12 @@ let
       cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen} $dev/bin
     '');
 
+    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM && lib.versionAtLeast release_version "15") {
+      # The following warning is triggered with (at least) gcc >=
+      # 12, but appears to occur only for cross compiles.
+      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
+    };
+
     passthru = {
       inherit libllvm;
       isClang = true;
@@ -279,12 +285,5 @@ let
     '';
   } else {
     ninjaFlags = [ "docs-clang-man" ];
-  }))
-  // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
-      # The following warning is triggered with (at least) gcc >=
-      # 12, but appears to occur only for cross compiles.
-      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
-    };
-  }));
+  })));
 in self
