@@ -11,6 +11,7 @@
 , libjxl
 , librsvg
 , meson
+, nautilus
 , ninja
 , pkg-config
 , wayland
@@ -63,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     }}"
   '';
+
+  propagatedUserEnvPkgs = [
+    nautilus
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {
