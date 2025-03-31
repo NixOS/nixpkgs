@@ -6,6 +6,7 @@
   boost,
   brotli,
   libarchive,
+  libblake3,
   libcpuid,
   libsodium,
   nlohmann_json,
@@ -40,11 +41,18 @@ mkMesonLibrary (finalAttrs: {
     (fileset.fileFilter (file: file.hasExt "hh") ./.)
   ];
 
-  buildInputs = [
-    brotli
-    libsodium
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
+  buildInputs =
+    [
+      brotli
+    ]
+    ++ lib.optional (lib.versionAtLeast version "2.27") [
+      libblake3
+    ]
+    ++ [
+      libsodium
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
 
   propagatedBuildInputs = [
     boost
@@ -56,7 +64,7 @@ mkMesonLibrary (finalAttrs: {
     (lib.mesonEnable "cpuid" stdenv.hostPlatform.isx86_64)
   ];
 
-  env = {
+  env = lib.optionalAttrs (!lib.versionAtLeast version "2.27") {
     # Needed for Meson to find Boost.
     # https://github.com/NixOS/nixpkgs/issues/86131.
     BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
