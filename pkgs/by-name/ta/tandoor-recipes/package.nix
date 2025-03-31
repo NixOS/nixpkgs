@@ -70,6 +70,10 @@ python.pkgs.pythonPackages.buildPythonPackage {
     aiohttp
     inflection
     redis
+    requests-oauthlib
+    pyjwt
+    python3-openid
+    python3-saml
   ];
 
   configurePhase = ''
