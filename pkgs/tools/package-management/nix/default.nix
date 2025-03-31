@@ -216,6 +216,7 @@ lib.makeExtensible (
 
       nixComponents_2_26 = (
         nixDependencies.callPackage ./vendor/2_26/componentized.nix {
+          version = "2.26.3";
           inherit (self.nix_2_24.meta) maintainers;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
         }

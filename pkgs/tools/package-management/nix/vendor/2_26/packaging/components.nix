@@ -4,6 +4,7 @@
   src,
   officialRelease,
   maintainers,
+  version,
 }:
 
 scope:
@@ -27,7 +28,7 @@ let
     pkg-config
     ;
 
-  baseVersion = lib.fileContents ../.version;
+  baseVersion = version;
 
   versionSuffix = lib.optionalString (!officialRelease) "pre";
 
