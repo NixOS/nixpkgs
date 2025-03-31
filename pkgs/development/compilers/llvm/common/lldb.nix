@@ -58,7 +58,8 @@ let
 in
 
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     passthru.monorepoSrc = monorepoSrc;
     pname = "lldb";
     inherit version;
@@ -73,7 +74,7 @@ stdenv.mkDerivation (
       "dev"
     ];
 
-    sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
+    sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${finalAttrs.src.name}/${finalAttrs.pname}";
 
     patches =
       let
