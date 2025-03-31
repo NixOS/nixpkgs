@@ -12,6 +12,7 @@
   pytest-asyncio,
   requests,
   sentry-sdk,
+  pyxdg,
   distro,
   pytestCheckHook,
   pytest-cov-stub,
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     pynacl
     proton-core
     sentry-sdk
+    pyxdg
   ];
 
   pythonImportsCheck = [
@@ -59,9 +61,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   disabledTests = [
