@@ -16,27 +16,6 @@
   getVersionFile,
 }:
 let
-  patches = lib.optional (lib.versionOlder release_version "17") (
-    getVersionFile "libunwind/gnu-install-dirs.patch"
-  );
-
-  hasPatches = builtins.length patches > 0;
-
-  prePatch =
-    lib.optionalString
-      (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-      ''
-        cd ../libunwind
-        chmod -R u+w .
-      '';
-
-  postPatch =
-    lib.optionalString
-      (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-      ''
-        cd ../runtimes
-      '';
-
   postInstall =
     lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
       ''
@@ -49,10 +28,32 @@ let
 in
 stdenv.mkDerivation (
   finalAttrs:
+  let
+    hasPatches = builtins.length finalAttrs.patches > 0;
+
+    prePatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../libunwind
+          chmod -R u+w .
+        '';
+
+    postPatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../runtimes
+        '';
+  in
   {
     pname = "libunwind";
 
-    inherit version patches;
+    inherit version;
+
+    patches = lib.optional (lib.versionOlder release_version "17") (
+      getVersionFile "libunwind/gnu-install-dirs.patch"
+    );
 
     src =
       if monorepoSrc != null then
