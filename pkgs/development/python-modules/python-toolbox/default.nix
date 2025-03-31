@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cool-RR";
     repo = "python_toolbox";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Y9RmVndgsBESrUCEORUwAdaFYBiunY3kWArhB9d7bw4=";
   };
 

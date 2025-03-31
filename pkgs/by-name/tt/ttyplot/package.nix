@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = version;
-    hash = "sha256-B95pd0hoesBDQwzN0h3kMBVcUFJVWQrpOKizKpdoiok=";
+    hash = "sha256-XPWfSL1395TBkUmAO5kB9TdAZHL011o6t/2s01W/kk8=";
   };
 
   nativeBuildInputs = [

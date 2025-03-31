@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "virter";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "LINBIT";
     repo = "virter";
     rev = "v${version}";
-    hash = "sha256-/AhC7eQE9ITvXcK228ZgcIOaSs0osjdFZI/0jHL7mqc=";
+    hash = "sha256-zEdG1n+tsDzyMTHBCikZaMalEhqdQiQvcsbElrbd1H4=";
   };
 
-  vendorHash = "sha256-v3rM45hijJKNxW43VhwcL3R2heZLA70RzqBXYeOYgRY=";
+  vendorHash = "sha256-67eFCrAs8oQ+PPEAB+hl5bipH0TpHvW07aqC0ljAlBM=";
 
   ldflags = [
     "-s"

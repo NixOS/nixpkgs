@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, catch2_3, libcpr_1_10_5, trompeloeil }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  catch2_3,
+  libcpr_1_10_5,
+  trompeloeil,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "influxdb-cxx";
@@ -7,18 +17,32 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "offa";
     repo = "influxdb-cxx";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UlCmaw2mWAL5PuNXXGQa602Qxlf5BCr7ZIiShffG74o=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/offa/influxdb-cxx/commit/c4b0d5a4df153232be542fbb073e857ff69ec78c.patch";
+      hash = "sha256-zPE7giDjWyQbGJxdZh2CEbAjouHUcAbQEzaOfCUSkfU=";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt --replace-warn "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost libcpr_1_10_5 ]
-    ++ lib.optionals finalAttrs.finalPackage.doCheck [ catch2_3 trompeloeil ];
+  buildInputs =
+    [
+      boost
+      libcpr_1_10_5
+    ]
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [
+      catch2_3
+      trompeloeil
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "INFLUXCXX_TESTING" finalAttrs.finalPackage.doCheck)
@@ -27,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "InfluxDB C++ client library";
     homepage = "https://github.com/offa/influxdb-cxx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })

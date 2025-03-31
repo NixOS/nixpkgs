@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, netlify-cli
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  netlify-cli,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "esbuild";
   version = "0.14.39";
 

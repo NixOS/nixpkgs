@@ -1,17 +1,21 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "controller-tools";
-  version = "0.16.5";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6It4C8TWA8V0YwUHoSoJK8IbjZ8yfBzR5iX9lzenIY0=";
+    repo = "controller-tools";
+    tag = "v${version}";
+    sha256 = "sha256-AUYduzIEWCJDskoChXmQViR5ON4YZr4MKvFys03hBkY=";
   };
 
-  vendorHash = "sha256-wS1+cUXZzfDz5BRHcqV8T050z54VrJB4FcWqRzwsYrc=";
+  vendorHash = "sha256-Y7xYmD3fxAIo/NyLzBuSdbHIrduJ33SpK2I6LfOzNac=";
 
   ldflags = [
     "-s"

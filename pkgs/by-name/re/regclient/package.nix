@@ -1,26 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lndir
-, testers
-, regclient
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lndir,
+  testers,
+  regclient,
 }:
 
-let bins = [ "regbot" "regctl" "regsync" ]; in
+let
+  bins = [
+    "regbot"
+    "regctl"
+    "regsync"
+  ];
+in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.7.2";
+  version = "0.8.2";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-Py/SmCptVfSJ8JA4mOxLcrkHcoiGgHHcDCdgophEOkw=";
+    sha256 = "sha256-Y+mO/DgJ7CqzDFTNyOMUEOZTnZmOjPu8O4xRO/qGVYY=";
   };
-  vendorHash = "sha256-9nPavlBdrQqvXp6yl8wgZtt8Qo7BfqwISBrb8AeH150=";
+  vendorHash = "sha256-SWkrPpjAA32XkToh7ujSPaRNvHtf2ymvx5E7iGD5B8k=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -30,26 +37,27 @@ buildGoModule rec {
     "-X github.com/regclient/regclient/internal/version.vcsTag=${tag}"
   ];
 
-  nativeBuildInputs = [ installShellFiles lndir ];
+  nativeBuildInputs = [
+    installShellFiles
+    lndir
+  ];
 
-  postInstall = lib.concatMapStringsSep "\n"
-    (bin: ''
-      export bin=''$${bin}
-      export outputBin=bin
+  postInstall = lib.concatMapStringsSep "\n" (bin: ''
+    export bin=''$${bin}
+    export outputBin=bin
 
-      mkdir -p $bin/bin
-      mv $out/bin/${bin} $bin/bin
+    mkdir -p $bin/bin
+    mv $out/bin/${bin} $bin/bin
 
-      installShellCompletion --cmd ${bin} \
-        --bash <($bin/bin/${bin} completion bash) \
-        --fish <($bin/bin/${bin} completion fish) \
-        --zsh <($bin/bin/${bin} completion zsh)
+    installShellCompletion --cmd ${bin} \
+      --bash <($bin/bin/${bin} completion bash) \
+      --fish <($bin/bin/${bin} completion fish) \
+      --zsh <($bin/bin/${bin} completion zsh)
 
-      lndir -silent $bin $out
+    lndir -silent $bin $out
 
-      unset bin outputBin
-    '')
-    bins;
+    unset bin outputBin
+  '') bins;
 
   checkFlags = [
     # touches network
@@ -57,15 +65,13 @@ buildGoModule rec {
   ];
 
   passthru.tests = lib.mergeAttrsList (
-    map
-      (bin: {
-        "${bin}Version" = testers.testVersion {
-          package = regclient;
-          command = "${bin} version";
-          version = tag;
-        };
-      })
-      bins
+    map (bin: {
+      "${bin}Version" = testers.testVersion {
+        package = regclient;
+        command = "${bin} version";
+        version = tag;
+      };
+    }) bins
   );
 
   __darwinAllowLocalNetworking = true;

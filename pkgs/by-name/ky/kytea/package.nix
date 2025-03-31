@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.4.7";
 
   src = fetchurl {
-    url    = "http://www.phontron.com/kytea/download/${pname}-${version}.tar.gz";
+    url = "http://www.phontron.com/kytea/download/${pname}-${version}.tar.gz";
     sha256 = "0ilzzwn5vpvm65bnbyb9f5rxyxy3jmbafw9w0lgl5iad1ka36jjk";
   };
 

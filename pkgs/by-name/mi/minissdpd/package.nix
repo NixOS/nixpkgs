@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libnfnetlink }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libnfnetlink,
+}:
 
 stdenv.mkDerivation rec {
   pname = "minissdpd";
@@ -16,7 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnfnetlink ];
 
-  installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "INSTALLPREFIX=$(out)"
+  ];
 
   enableParallelBuilding = true;
 

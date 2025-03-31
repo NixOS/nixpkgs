@@ -45,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-RhtdhMvseQUUFcKDuR1N5qc/86IxmQ/7owpjT+qweqc=";
+    hash = "sha256-WYvinfAbMxgF5Q9iB/itQTMsVmG83lY45JriUo3kzFg=";
   };
 
   buildIndi3rdParty =
@@ -67,7 +67,7 @@ let
         pname = "indi-3rdparty-${pname}";
         inherit src version;
 
-        sourceRoot = "source/${pname}";
+        sourceRoot = "${src.name}/${pname}";
 
         cmakeFlags =
           [
@@ -169,6 +169,14 @@ let
 
   libasi = buildIndi3rdParty {
     pname = "libasi";
+
+    postPatch = ''
+      substituteInPlace 99-asi.rules \
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}" \
+        --replace-fail "/bin/chmod" "${lib.getBin coreutils}/bin/chmod"
+    '';
+
     buildInputs = [
       libusb1
       (lib.getLib stdenv.cc.cc)
@@ -343,8 +351,8 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}"
     '';
 
     buildInputs = [
@@ -363,13 +371,13 @@ let
     pname = "libqhy";
 
     postPatch = ''
-      substituteInPlace --replace-fail CMakeLists.txt \
-        --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "/lib/firmware" "lib/firmware"
 
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware" \
-        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
+        --replace-fail "/bin/sleep" "${lib.getBin coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -457,6 +465,15 @@ let
     };
   };
 
+  libsvbonycam = buildIndi3rdParty {
+    pname = "libsvbonycam";
+    nativeBuildInputs = [ autoPatchelfHook ];
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    };
+  };
+
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -483,12 +500,21 @@ in
     buildInputs = [ indilib ];
   };
 
-  # libahc-xc needs libdfu, which is not packaged
-  # indi-ahp-xc = buildIndi3rdParty {
-  #   pname = "indi-ahp-xc";
-  #   buildInputs = [ cfitsio indilib libahp-xc libnova zlib ];
-  #   meta.platforms = libahp-xc.meta.platforms;
-  # };
+  indi-ahp-xc = buildIndi3rdParty {
+    pname = "indi-ahp-xc";
+    buildInputs = [
+      cfitsio
+      indilib
+      libahp-xc
+      libnova
+      zlib
+    ];
+    meta = {
+      platforms = libahp-xc.meta.platforms;
+      # libahc-xc needs libdfu, which is not packaged
+      broken = true;
+    };
+  };
 
   indi-aok = buildIndi3rdParty {
     pname = "indi-aok";
@@ -506,6 +532,7 @@ in
       libapogee
       zlib
     ];
+    propagatedBuildInputs = [ libapogee ];
     meta.platforms = libapogee.meta.platforms;
   };
 
@@ -529,6 +556,7 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libasi ];
     meta.platforms = libasi.meta.platforms;
   };
 
@@ -540,6 +568,11 @@ in
     meta.broken = true;
   };
 
+  indi-astarbox = buildIndi3rdParty {
+    pname = "indi-astarbox";
+    buildInputs = [ indilib ];
+  };
+
   indi-astroasis = buildIndi3rdParty {
     pname = "indi-astroasis";
     buildInputs = [
@@ -549,20 +582,8 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libastroasis ];
     meta.platforms = libastroasis.meta.platforms;
-  };
-
-  indi-astrolink4 = buildIndi3rdParty {
-    pname = "indi-astrolink4";
-    buildInputs = [ indilib ];
-  };
-
-  indi-astromechfoc = buildIndi3rdParty {
-    pname = "indi-astromechfoc";
-    buildInputs = [
-      indilib
-      zlib
-    ];
   };
 
   indi-atik = buildIndi3rdParty {
@@ -618,11 +639,6 @@ in
       libnova
       zlib
     ];
-  };
-
-  indi-dreamfocuser = buildIndi3rdParty {
-    pname = "indi-dreamfocuser";
-    buildInputs = [ indilib ];
   };
 
   indi-dsi = buildIndi3rdParty {
@@ -765,7 +781,6 @@ in
     meta.platforms = libinovasdk.meta.platforms;
   };
 
-  # broken, wants rpicam-apps
   indi-libcamera = buildIndi3rdParty {
     pname = "indi-libcamera";
     buildInputs = [
@@ -781,6 +796,7 @@ in
       zlib
     ];
     meta.platforms = [ ];
+    # broken, wants rpicam-apps
     meta.broken = true;
   };
 
@@ -882,6 +898,7 @@ in
       cfitsio
       indilib
       libraw
+      libjpeg
       zlib
     ];
     propagatedBuildInputs = [
@@ -978,15 +995,6 @@ in
     buildInputs = [ indilib ];
   };
 
-  indi-spectracyber = buildIndi3rdParty {
-    pname = "indi-spectracyber";
-    buildInputs = [
-      indilib
-      libnova
-      zlib
-    ];
-  };
-
   indi-starbook = buildIndi3rdParty {
     pname = "indi-starbook";
     buildInputs = [
@@ -1053,6 +1061,7 @@ in
       libogmacam
       libomegonprocam
       libstarshootg
+      libsvbonycam
       libtoupcam
       libtscam
     ];

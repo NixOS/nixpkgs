@@ -1,15 +1,16 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qtbase
-, qtquickcontrols2
-, SDL
-, python3
-, catch2_3
-, callPackage
-, nixosTests
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  qtbase,
+  qtquickcontrols2,
+  SDL,
+  python3,
+  catch2_3,
+  callPackage,
+  nixosTests,
 }:
 
 mkDerivation rec {
@@ -27,7 +28,13 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    (python3.withPackages (pp: with pp; [ pyyaml jinja2 setuptools ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pyyaml
+        jinja2
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs = [
@@ -47,7 +54,7 @@ mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
-    export-square-wave = callPackage ./test-export-square-wave {};
+    export-square-wave = callPackage ./test-export-square-wave { };
     sfxr-qt-starts = nixosTests.sfxr-qt;
   };
 

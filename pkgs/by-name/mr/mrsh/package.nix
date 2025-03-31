@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  readline,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mrsh-unstable";
   version = "2021-01-10";
 
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [ readline ];
 
   doCheck = true;

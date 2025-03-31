@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, kissfft
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kissfft,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "c4dm";
-    repo = pname;
+    repo = "qm-dsp";
     rev = "v${version}";
     sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
   };

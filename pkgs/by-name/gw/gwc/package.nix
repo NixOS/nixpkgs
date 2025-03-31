@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, alsa-lib
-, libpulseaudio
-, gtk2
-, hicolor-icon-theme
-, libsndfile
-, fftw
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  alsa-lib,
+  libpulseaudio,
+  gtk2,
+  hicolor-icon-theme,
+  libsndfile,
+  fftw,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AlisterH";
-    repo = pname;
+    repo = "gwc";
     rev = version;
     sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
   };

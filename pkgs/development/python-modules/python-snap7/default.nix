@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-snap7";
-  version = "1.4.1";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CqLG5/U2k7WdZL5LfcFAnV1Q8HcIU7l36gi51lgB39s=";
+    tag = version;
+    hash = "sha256-mcdzgR0z2P5inK9Q+ZQhP5H8vZSaPbRCSEnt+wzG+ro=";
   };
 
   prePatch = ''

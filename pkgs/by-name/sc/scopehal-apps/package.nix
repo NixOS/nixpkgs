@@ -22,8 +22,6 @@
   spirv-tools,
   ffts,
   moltenvk,
-  apple-sdk_11,
-  darwinMinVersionHook,
   llvmPackages,
 }:
 
@@ -73,8 +71,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.15")
       moltenvk
     ];
 

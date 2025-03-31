@@ -1,17 +1,33 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, openldap, libkrb5, db, gettext
-, pam, libxcrypt, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  openldap,
+  libkrb5,
+  db,
+  gettext,
+  pam,
+  libxcrypt,
+  fixDarwinDylibNames,
+  autoreconfHook,
+  enableLdap ? false,
+  buildPackages,
+  pruneLibtoolFiles,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
   version = "2.1.28";
 
   src = fetchurl {
-    urls =
-      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
-        "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
-        "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
-      ];
+    urls = [
+      "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
+      "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
+      "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
+    ];
     sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
 
@@ -25,23 +41,39 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "devdoc"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    autoreconfHook
+    pruneLibtoolFiles
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext libkrb5 libxcrypt ]
+    [
+      openssl
+      db
+      gettext
+      libkrb5
+      libxcrypt
+    ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.hostPlatform.isLinux pam;
 
-  configureFlags = [
-    "--with-openssl=${openssl.dev}"
-    "--with-plugindir=${placeholder "out"}/lib/sasl2"
-    "--with-saslauthd=/run/saslauthd"
-    "--enable-login"
-    "--enable-shared"
-  ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
+  configureFlags =
+    [
+      "--with-openssl=${openssl.dev}"
+      "--with-plugindir=${placeholder "out"}/lib/sasl2"
+      "--with-saslauthd=/run/saslauthd"
+      "--enable-login"
+      "--enable-shared"
+    ]
+    ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
     ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
       "--disable-sample"
       "CFLAGS=-DTIME_WITH_SYS_TIME"
@@ -51,7 +83,9 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  installFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+  installFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "framedir=$(out)/Library/Frameworks/SASL2.framework"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) parsedmarc postfix;

@@ -1,62 +1,70 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
-, appstream-glib
-, desktop-file-utils
-, intltool
+{
+  lib,
+  stdenv,
+  stdenvAdapters,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  libcosmicAppHook,
+  nix-update-script,
+
+  withMoldLinker ? stdenv.targetPlatform.isLinux,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-launcher";
-  version = "1.0.0-alpha.1";
+rustPlatform.buildRustPackage.override
+  { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
+  (finalAttrs: {
+    pname = "cosmic-launcher";
+    version = "1.0.0-alpha.6";
 
-  src = fetchFromGitHub {
-    owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
-    hash = "sha256-LzTVtXyNgaVKyARmrmb6YUi4dWa20EwM1SYMlnawtzk=";
-  };
+    src = fetchFromGitHub {
+      owner = "pop-os";
+      repo = "cosmic-launcher";
+      tag = "epoch-${finalAttrs.version}";
+      hash = "sha256-BtYnL+qkM/aw+Air5yOKH098V+TQByM5mh1DX7v+v+s=";
+    };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bHJUsXHnPH6aV2vTQv1Cdx+p4/Pplg6HMguw5BK9qJ8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-g7Qr3C8jQg65KehXAhftdXCpEukag0w12ClvZFkxfqs=";
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland appstream-glib desktop-file-utils intltool ];
+    nativeBuildInputs = [
+      just
+      libcosmicAppHook
+    ];
 
-  dontUseJustBuild = true;
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
 
-  justFlags = [
-    "--set"
-    "prefix"
-    (placeholder "out")
-    "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
-  ];
+    justFlags = [
+      "--set"
+      "prefix"
+      (placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
+    ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+    env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      "--cfg tokio_unstable${lib.optionalString withMoldLinker " -C link-arg=-fuse-ld=mold"}";
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
-  '';
+    passthru.updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
 
-  RUSTFLAGS = "--cfg tokio_unstable";
-
-  meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-launcher";
-    description = "Launcher for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-launcher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
-  };
-}
+    meta = {
+      homepage = "https://github.com/pop-os/cosmic-launcher";
+      description = "Launcher for the COSMIC Desktop Environment";
+      mainProgram = "cosmic-launcher";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [
+        nyabinary
+        HeitorAugustoLN
+      ];
+      platforms = lib.platforms.linux;
+    };
+  })

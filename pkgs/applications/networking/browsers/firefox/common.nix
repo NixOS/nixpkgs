@@ -5,7 +5,7 @@
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
-, applicationName ? "Mozilla Firefox"
+, applicationName ? "Firefox"
 , branding ? null
 , requireSigning ? true
 , allowAddonSideload ? false
@@ -25,6 +25,11 @@ let
   # Rename the variables to prevent infinite recursion
   requireSigningDefault = requireSigning;
   allowAddonSideloadDefault = allowAddonSideload;
+
+  # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
+  # This is declared here because it's used in the default value of elfhackSupport
+  isElfhackPlatform = stdenv: stdenv.hostPlatform.isElf &&
+    (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64);
 in
 
 { lib
@@ -62,7 +67,6 @@ in
 , glib
 , gnum4
 , gtk3
-, icu72
 , icu73
 , libGL
 , libGLU
@@ -110,10 +114,11 @@ in
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
-, waylandSupport ? true, libxkbcommon, libdrm
+, waylandSupport ? !stdenv.hostPlatform.isDarwin, libxkbcommon, libdrm
 
 ## privacy-related options
 
@@ -160,6 +165,7 @@ in
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+assert elfhackSupport -> isElfhackPlatform stdenv;
 
 let
   inherit (lib) enableFeature;
@@ -193,12 +199,15 @@ let
     done
   '';
 
-  distributionIni = pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
+  distributionIni = let
+    platform = if stdenv.hostPlatform.isDarwin then "Nix on MacOS" else "NixOS";
+  in
+    pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
     # Some light branding indicating this build uses our distro preferences
     Global = {
       id = "nixos";
       version = "1.0";
-      about = "${applicationName} for NixOS";
+      about = "${applicationName} for ${platform}";
     };
     Preferences = {
       # These values are exposed through telemetry
@@ -244,7 +253,8 @@ buildStdenv.mkDerivation {
   patches = lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
   ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
-  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121" && lib.versionOlder version "136") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
   ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
@@ -260,6 +270,34 @@ buildStdenv.mkDerivation {
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
+  ]
+  ++ lib.optionals ((lib.versionAtLeast version "129" && lib.versionOlder version "134") || lib.versionOlder version "128.6.0") [
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
+  ]
+  ++ [
+    # LLVM 19 turned on WASM reference types by default, exposing a bug
+    # that broke the Mozilla WASI build. Supposedly, it has been fixed
+    # upstream in LLVM, but the build fails in the same way for us even
+    # with LLVM 19 versions that contain the upstream patch.
+    #
+    # Apply the temporary patch Mozilla used to work around this bug
+    # for now until someone can investigate what’s going on here.
+    #
+    # TODO: Please someone figure out what’s up with this.
+    #
+    # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
+    # See: <https://github.com/llvm/llvm-project/pull/97451>
+    (fetchpatch {
+      name = "wasi-sdk-disable-reference-types.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
+      hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
+    })
+    # Fix for missing vector header on macOS
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
+    ./firefox-mac-missing-vector-header.patch
   ]
   ++ extraPatches;
 
@@ -390,6 +428,7 @@ buildStdenv.mkDerivation {
     "--disable-updater"
     "--enable-application=${application}"
     "--enable-default-toolkit=${toolkit}"
+    "--with-app-name=${binaryName}"
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
     "--with-wasi-sysroot=${wasiSysRoot}"
@@ -399,19 +438,18 @@ buildStdenv.mkDerivation {
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
-     "--enable-lto=cross" # Cross-Language LTO
+     "--enable-lto=cross,full" # Cross-Language LTO
      "--enable-linker=lld"
   ]
-  # elf-hack is broken when using clang+lld:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
     "--enable-system-pixman"
     "--with-system-ffi"
-    "--with-system-icu"
+    # Firefox 136 fails to link with our icu76.1
+    (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-libvpx"
@@ -443,7 +481,9 @@ buildStdenv.mkDerivation {
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  # As of Firefox 137 (https://bugzilla.mozilla.org/show_bug.cgi?id=1943009),
+  # the --enable-official-branding flag overrides the --with-branding flag.
+  ++ lib.optional (enableOfficialBranding && branding == null) "--enable-official-branding"
   ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
@@ -495,11 +535,7 @@ buildStdenv.mkDerivation {
     ++ lib.optional  sndioSupport sndio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ))
-  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  # icu74 fails to build on 127 and older
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
-  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
+  ++ lib.optionals (lib.versionOlder version "136") [ icu73 ]
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;
@@ -539,7 +575,7 @@ buildStdenv.mkDerivation {
   env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
     # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
-    # On musl we have to explicity set the rpath to include these libraries.
+    # On musl we have to explicitly set the rpath to include these libraries.
     LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
   };
 
@@ -561,11 +597,9 @@ buildStdenv.mkDerivation {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
-    cp -r dist/${binaryName}/*.app $out/Applications
+    cp -r dist/${binaryName}/*.app "$out/Applications/${applicationName}.app"
 
-    appBundlePath=(dist/${binaryName}/*.app)
-    appBundle=''${appBundlePath[0]#dist/${binaryName}}
-    resourceDir=$out/Applications/$appBundle/Contents/Resources
+    resourceDir="$out/Applications/${applicationName}.app/Contents/Resources"
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -590,7 +624,7 @@ buildStdenv.mkDerivation {
   # Some basic testing
   doInstallCheck = true;
   installCheckPhase = lib.optionalString buildStdenv.hostPlatform.isDarwin ''
-    bindir=$out/Applications/$appBundle/Contents/MacOS
+    bindir="$out/Applications/${applicationName}.app/Contents/MacOS"
   '' + lib.optionalString (!buildStdenv.hostPlatform.isDarwin) ''
     bindir=$out/bin
   '' + ''
@@ -598,6 +632,7 @@ buildStdenv.mkDerivation {
   '';
 
   passthru = {
+    inherit applicationName;
     inherit application extraPatches;
     inherit updateScript;
     inherit alsaSupport;

@@ -1,30 +1,36 @@
-{ lib
-, buildGoModule
-, cairo
-, fetchFromGitHub
-, gobject-introspection
-, gtk-layer-shell
-, gtk3
-, pkg-config
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  buildGoModule,
+  cairo,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  pkg-config,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 let
   pname = "nwg-drawer";
-  version = "0.5.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
     rev = "v${version}";
-    hash = "sha256-A/Rg7iUk8qpJ5lxumv4JNNJG1vN8wJIabJupp2c+nsw=";
+    hash = "sha256-uctM2fi3lfSrvKSinkjAXD3bLyJOVC0DTyDoAKXgB54=";
   };
 
-  vendorHash = "sha256-r4DtY06z0ZcPoHba4pqpCWqxYo7RbwCKi2g4jdoN1kg=";
+  vendorHash = "sha256-VW9K56pdzA6CAqyJ859WOCEtHTASW8lnQGuW1zBUJYw=";
 in
 buildGoModule {
-  inherit pname version src vendorHash;
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
   nativeBuildInputs = [
     gobject-introspection

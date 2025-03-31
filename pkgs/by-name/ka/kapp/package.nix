@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.63.3";
+  version = "0.64.1";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kapp";
     rev = "v${version}";
-    hash = "sha256-mOXjPdeDJKBEW7Jr0yMFpZ4WBciJBh0s2AEMtog6CIw=";
+    hash = "sha256-vgb4VtMKYncO4TPlMj2HrgZvjoOsOc2cYy+EBDKnGcM=";
   };
 
   vendorHash = null;
 
   subPackages = [ "cmd/kapp" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-X carvel.dev/kapp/pkg/kapp/version.Version=${version}"

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, glib
-, gst_all_1
-, libtool
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  glib,
+  gst_all_1,
+  libtool,
+  pkg-config,
+  which,
 }:
 stdenv.mkDerivation rec {
   pname = "v4l2-relayd";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/v4l2-relayd";
-    rev = "refs/tags/upstream/${version}";
+    tag = "upstream/${version}";
     hash = "sha256-oU6naDFZ0PQVHZ3brANfMULDqYMYxeJN+MCUCvN/DpU=";
   };
 

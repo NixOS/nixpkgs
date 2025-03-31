@@ -1,26 +1,30 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, rain
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  rain,
 }:
 
 buildGoModule rec {
   pname = "rain";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I5h09XbBDrMXQczpNoUENkOp3b4NxBR5Hr58nNVh1JM=";
+    sha256 = "sha256-2yb965fDzNgrPXT2xMRdqD/inyvlwdKlkMj16YSFHBk=";
   };
 
-  vendorHash = "sha256-6xSWaLnE9pD2d49OVjg2IIbhgdJ5R2I0fuRZ4wFudoI=";
+  vendorHash = "sha256-TlS9SfqMJa5w+JMUx+7ZMF0xk/VsnjOScSGXEw1dVkU=";
 
   subPackages = [ "cmd/rain" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = rain;

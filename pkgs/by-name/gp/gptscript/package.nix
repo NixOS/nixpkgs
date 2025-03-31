@@ -12,14 +12,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gptscript-ai";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9wyDcvY5JCjtvx6XtvHwOsZLCiN1fRn0wBGaIaw2iRQ=";
   };
 
   vendorHash = "sha256-ajglXWGJhSJtcrbSBmxmriXFTT+Vb4xYq0Ec9SYRlQk=";
 
-  propagatedBuildInputs = with darwin;
-    lib.optionals stdenv.hostPlatform.isDarwin [Security];
+  propagatedBuildInputs = with darwin; lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   ldflags = [
     "-s"

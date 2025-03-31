@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.6.4";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mOVX65YRDUac0GoB9+tHIYtvNDGyxT0BSsj8I3OzuBI=";
+    tag = "v${version}";
+    hash = "sha256-b+/Cy8F2xUsYOr8PGQxkdXD07pAECNmbeWbuysSAT2I=";
   };
 
   postPatch = ''
@@ -39,6 +39,8 @@ buildPythonPackage rec {
   env.PACKAGE_VERSION = version;
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   dependencies = [
     aiohttp

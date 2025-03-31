@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, coreutils, fltk, libjpeg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  fltk,
+  libjpeg,
+}:
 
 stdenv.mkDerivation rec {
-  version = "5.0.5";
+  version = "5.1";
   pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "sha256-zo9emLpHiDv6kekbx55NOibxWN2Zg7XngzGkUqSx+PI=";
+    sha256 = "sha256-tL9YQB4wgUOCyCWxOkw+6oyinDFO1cSh9DRZt47W+Ys=";
   };
 
-  buildInputs = [ fltk libjpeg ];
+  buildInputs = [
+    fltk
+    libjpeg
+  ];
 
   patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
   installPhase = "mkdir -p $out/bin; cp seaview $out/bin";

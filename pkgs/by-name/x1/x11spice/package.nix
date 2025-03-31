@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config
-, xorg, gtk2, spice, spice-protocol
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  xorg,
+  gtk2,
+  spice,
+  spice-protocol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x11spice";
   version = "2019-08-20";
 
@@ -14,11 +22,18 @@ stdenv.mkDerivation rec {
     sha256 = "0va5ix14vnqch59gq8wvrhw6q0w0n27sy70xx5kvfj2cl0h1xpg8";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
-    xorg.libxcb xorg.xcbutil xorg.utilmacros
-    gtk2 spice spice-protocol
+    xorg.libxcb
+    xorg.xcbutil
+    xorg.utilmacros
+    gtk2
+    spice
+    spice-protocol
   ];
 
   NIX_LDFLAGS = "-lpthread";

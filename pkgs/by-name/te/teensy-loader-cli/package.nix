@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, libusb-compat-0_1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  libusb-compat-0_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "redo-c";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
-    repo = pname;
+    repo = "redo-c";
     rev = "v${version}";
     sha256 = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
   };

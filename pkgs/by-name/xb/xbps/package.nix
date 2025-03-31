@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, zlib, openssl, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  zlib,
+  openssl,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xbps";
@@ -11,9 +20,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-3+LzFLDZ1zfRPBETMlpEn66zsfHRHQLlgeZPdMtmA14=";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
 
-  buildInputs = [ zlib openssl libarchive ];
+  buildInputs = [
+    zlib
+    openssl
+    libarchive
+  ];
 
   patches = [
     ./cert-paths.patch
@@ -27,6 +43,10 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/xbps-fbulk/main.c lib/util.c lib/external/dewey.c lib/external/fexec.c \
       --replace 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
       --replace '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
+
+    # fix calloc argument cause a build failure
+    substituteInPlace bin/xbps-fbulk/main.c \
+      --replace-fail 'calloc(sizeof(*depn), 1)' 'calloc(1UL, sizeof(*depn))'
 
     # fix unprefixed ranlib (needed on cross)
     substituteInPlace lib/Makefile \

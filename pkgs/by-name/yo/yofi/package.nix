@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "l4l";
     repo = "yofi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cepAZyA4RBgqeF20g6YOlZTM0aRqErw17yuQ3U24UEg=";
   };
 
@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-GA6rFet0GIYFR/8WsWteMDwVRz/KyyxlFQOz/lNX7Rk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UCJlBVQb4aLObi5hqXnh/FAD7l2VSocAlqmYMlxLUJc=";
 
   nativeBuildInputs = [
     autoPatchelfHook

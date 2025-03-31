@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, cmake
-, pkg-config
-, imagemagick
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  cmake,
+  pkg-config,
+  imagemagick,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rodlie";
-    repo = pname;
+    repo = "cyan";
     rev = version;
     hash = "sha256-R5sj8AN7UT9OIeUPNrdTIUQvtEitXp1A32l/Z2qRS94=";
   };

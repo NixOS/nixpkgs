@@ -1,4 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-monitor-attached";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+bgOOm1B513COcWdUIJ/+GREQH5CR8/RNOcZVkjO2hI=";
   };
 
-  cargoHash = "sha256-vQfDsP2Tc+Kj95wXIzPTlf6kRdBgdio0QkM9EJRjZjE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pBg5R7k3xEE1EoSdLO4jmibTnGE+ndZnkWeMO+UXN6Q=";
 
   meta = with lib; {
     description = "Automatically run a script when a monitor connects (or disconnects) in Hyprland";

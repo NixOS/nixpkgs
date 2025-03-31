@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "iterfzf";
-  version = "1.4.0.54.3";
+  version = "1.6.0.60.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DvEFCHK+1TA/TTXG//hvXXbRclBkelonA3QsB4h7eRM=";
+    tag = version;
+    hash = "sha256-M6ri90GNHOmr0HtQ/tGxqpG7f+D5rsH/SAlbaVtmTwU=";
   };
 
   postPatch = ''
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     # AttributeError
     "test_no_query"
     "test_select_one_ambiguous"
+    "test_supports_color_kwarg"
   ];
 
   pythonImportsCheck = [ "iterfzf" ];

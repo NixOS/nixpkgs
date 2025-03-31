@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, xdg-utils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  xdg-utils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "anarchism";
@@ -7,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
-    repo = pname;
+    repo = "anarchism";
     rev = "debian/${version}";
     sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
   };
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.anarchistfaq.org/";
+    homepage = "https://www.anarchistfaq.org/";
     changelog = "http://anarchism.pageabode.com/afaq/new.html";
     description = "Exhaustive exploration of Anarchist theory and practice";
     longDescription = ''

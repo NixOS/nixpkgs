@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "bundlewrap";
-  version = "4.21.0";
+  version = "4.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    rev = "refs/tags/${version}";
-    hash = "sha256-e9gpWLOiTUZYIybLIfcR5x/NzhJSBFsU0I8LzY9sI5k=";
+    tag = version;
+    hash = "sha256-F3Ipoep9ZmAqkh8mFLXpaEcYb4dpV9Dt/VgMa9X24Hw=";
   };
 
   build-system = [ setuptools ];

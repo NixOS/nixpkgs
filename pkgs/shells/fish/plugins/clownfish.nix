@@ -1,4 +1,8 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin {
   pname = "clownfish";
@@ -15,6 +19,6 @@ buildFishPlugin {
     description = "Fish function to mock the behaviour of commands";
     homepage = "https://github.com/IlanCosman/clownfish";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

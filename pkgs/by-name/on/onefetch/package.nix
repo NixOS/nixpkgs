@@ -8,7 +8,7 @@
   zstd,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -16,16 +16,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.22.0";
+  version = "2.23.1";
 
   src = fetchFromGitHub {
     owner = "o2sh";
-    repo = pname;
+    repo = "onefetch";
     rev = version;
-    hash = "sha256-Gk1hoC6qsLYm7DbbaRSur6GdC9yXQe+mYLUJklXIwZ4=";
+    hash = "sha256-lQxv2gwZOGtxJrXjxvjBnbl225ppSs3cVNCfePFeqEE=";
   };
 
-  cargoHash = "sha256-4YB10uj4ULhvhn+Yv0dRZO8fRxwm3lEAZ5v+MYHO7lI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-s1xA7UHArHeGaXrGQmqn9pKvtSW175ci4ipQEmKQQ5s=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''

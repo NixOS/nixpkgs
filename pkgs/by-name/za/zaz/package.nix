@@ -1,14 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, SDL
-, SDL_image
-, mesa
-, libtheora
-, libvorbis
-, libogg
-, ftgl
-, freetype
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  libgbm,
+  libGL,
+  libtheora,
+  libvorbis,
+  libogg,
+  ftgl,
+  freetype,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     (lib.getDev SDL)
     SDL_image
-    mesa
+    libgbm
+    libGL
     libtheora
     libvorbis.dev
     libogg

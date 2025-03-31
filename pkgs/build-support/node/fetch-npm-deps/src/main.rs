@@ -66,7 +66,7 @@ fn fixup_lockfile(
             {
                 if let Some(Value::String(resolved)) = package.get("resolved") {
                     if let Some(Value::String(integrity)) = package.get("integrity") {
-                        if resolved.starts_with("git+ssh://") {
+                        if resolved.starts_with("git+") {
                             fixed = true;
 
                             package

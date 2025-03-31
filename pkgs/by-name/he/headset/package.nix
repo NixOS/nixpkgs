@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, electron
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  electron,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  nativeBuildInputs = [
+    makeWrapper
+    dpkg
+  ];
 
   installPhase = ''
     runHook preInstall

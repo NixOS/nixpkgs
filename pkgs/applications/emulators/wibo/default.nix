@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, srcOnly
-, cmake
-, unzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  srcOnly,
+  cmake,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,20 +26,22 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
   # Test step from https://github.com/decompals/wibo/blob/main/.github/workflows/ci.yml
-  checkPhase = let
-    gc = srcOnly {
-      name = "GC_WII_COMPILERS";
-      src = fetchzip {
-        url = "https://files.decomp.dev/compilers_20230715.zip";
-        hash = "sha256-IX3byvEUVJB6Rmc+NqO9ZNt1jl95nQpEIqxbHI+uUio=";
-        stripRoot = false;
+  checkPhase =
+    let
+      gc = srcOnly {
+        name = "GC_WII_COMPILERS";
+        src = fetchzip {
+          url = "https://files.decomp.dev/compilers_20230715.zip";
+          hash = "sha256-IX3byvEUVJB6Rmc+NqO9ZNt1jl95nQpEIqxbHI+uUio=";
+          stripRoot = false;
+        };
+        meta.license = lib.licenses.unfree;
       };
-      meta.license = lib.licenses.unfree;
-    };
-  in lib.optionalString doCheck ''
-    MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
-    file test.o | grep "ELF 32-bit"
-  '';
+    in
+    lib.optionalString doCheck ''
+      MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
+      file test.o | grep "ELF 32-bit"
+    '';
 
   meta = with lib; {
     description = "Quick-and-dirty wrapper to run 32-bit windows EXEs on linux";

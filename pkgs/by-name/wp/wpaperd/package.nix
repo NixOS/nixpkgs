@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libxkbcommon, wayland, libGL }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  wayland,
+  libGL,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wpaperd";
@@ -11,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eCD+eNdiVWLEmpkt0EaID534t6eE2OIVCgWMie5kbFE=";
   };
 
-  cargoHash = "sha256-BlndjwvVYUaotCMKkArZ4EtFTLVcVhPDiY2QBnc5NUo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-AhIBTDtsyLoKRBE1V+DD9ofCz9XknWA4fn5AQ8O0upQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +42,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/danyspin97/wpaperd";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ DPDmancul fsnkty ];
+    maintainers = with maintainers; [
+      DPDmancul
+      fsnkty
+    ];
     mainProgram = "wpaperd";
   };
 }

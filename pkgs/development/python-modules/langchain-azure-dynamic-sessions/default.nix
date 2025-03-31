@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -33,13 +34,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-azure-dynamic-sessions==${version}";
+    tag = "langchain-azure-dynamic-sessions==${version}";
     hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     azure-identity
@@ -65,8 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-azure-dynamic-sessions==([0-9.]+)$"
+    ];
   };
 
   meta = {

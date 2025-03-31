@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitea }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sanctity";
@@ -7,12 +11,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
-    repo = pname;
+    repo = "sanctity";
     rev = "v${version}";
     hash = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };
 
-  cargoHash = "sha256-co58YBeFjP9DKzxDegQI7txuJ1smqJxdlRLae+Ppwh0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-r+0Qd88slA4ke90U1urVjdoiXwGWv42AViUpRCTucxs=";
 
   meta = with lib; {
     description = "Test the 16 terminal colors in all combinations";

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
-, useCCTweaked ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  useCCTweaked ? true,
 }:
 
 let
@@ -8,21 +14,22 @@ let
 
   baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
   jar =
-    if useCCTweaked
-    then fetchurl {
-      url = "${baseUrl}-cct.jar";
-      hash = "sha256-nna5KRp6jVLkbWKOHGtQqaPr3Zl05mVkCf/8X9C5lRY=";
-    }
-    else fetchurl {
-      url = "${baseUrl}-cc.jar";
-      hash = "sha256-2Z38O6z7OrHKe8GdLnexin749uJzQaCZglS+SwVD5YE=";
-    };
+    if useCCTweaked then
+      fetchurl {
+        url = "${baseUrl}-cct.jar";
+        hash = "sha256-nna5KRp6jVLkbWKOHGtQqaPr3Zl05mVkCf/8X9C5lRY=";
+      }
+    else
+      fetchurl {
+        url = "${baseUrl}-cc.jar";
+        hash = "sha256-2Z38O6z7OrHKe8GdLnexin749uJzQaCZglS+SwVD5YE=";
+      };
 
   desktopIcon = fetchurl {
     url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
     hash = "sha256-gqWURXaOFD/4aZnjmgtKb0T33NbrOdyRTMmLmV42q+4=";
   };
-  desktopItem =  makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "CCEmuX";
     exec = "ccemux";
     icon = desktopIcon;
@@ -63,7 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ CrazedProgrammer viluon ];
+    maintainers = with maintainers; [
+      CrazedProgrammer
+      viluon
+    ];
     mainProgram = "ccemux";
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, unzip
-, xdg-utils
-, gtk3
-, jdk
-, gradle_8
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle_8,
+  python3,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
@@ -101,6 +102,9 @@ stdenv.mkDerivation rec {
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 
+    # Temp fix: openjfx doesn't build with webkit
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+
     runHook postInstall
   '';
 
@@ -134,7 +138,12 @@ stdenv.mkDerivation rec {
       binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gebner linsui ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      linsui
+    ];
   };
 }

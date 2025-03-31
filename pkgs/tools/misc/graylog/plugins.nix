@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, graylog-5_1 }:
+{ lib, stdenv, fetchurl, unzip, graylogPackage }:
 
 let
   inherit (lib)
@@ -22,7 +22,7 @@ let
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = graylog-5_1.meta.platforms;
+        platforms = graylogPackage.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };

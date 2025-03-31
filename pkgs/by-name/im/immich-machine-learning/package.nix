@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,
@@ -23,7 +22,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [
-    poetry-core
+    hatchling
     cython
   ];
 

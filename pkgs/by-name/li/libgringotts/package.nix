@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, bzip2, libmcrypt, libmhash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  zlib,
+  bzip2,
+  libmcrypt,
+  libmhash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgringotts";
@@ -10,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib bzip2 libmcrypt libmhash ];
+  buildInputs = [
+    zlib
+    bzip2
+    libmcrypt
+    libmhash
+  ];
 
   meta = with lib; {
     description = "Small library to encapsulate data in an encrypted structure";

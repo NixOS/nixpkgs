@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnu-shepherd";
-  version = "0.9.3";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "mirror://gnu/shepherd/shepherd-${version}.tar.gz";
-    sha256 = "0qy2yq13xhf05an5ilz7grighdxicx56211yaarqq5qigiiybc32";
+    hash = "sha256-QOd561/9dvvoXN6VM9N/DamARihT4Bl0gWCT9VEL89g=";
   };
 
   configureFlags = [ "--localstatedir=/" ];

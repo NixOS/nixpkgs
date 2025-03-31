@@ -42,9 +42,11 @@
 , glibcLocales
 , meson
 , ninja
+, nix-eval-jobs
 , fetchFromGitHub
 , nixosTests
 , unstableGitUpdater
+, nixVersions
 }:
 
 let
@@ -122,16 +124,28 @@ let
         git
       ];
   };
+
+  nix-eval-jobs' = (nix-eval-jobs.override {
+    nix = nixVersions.nix_2_25;
+  }).overrideAttrs (_: {
+    version = "2.25.0-unstable-2025-02-13";
+    src = fetchFromGitHub {
+      owner = "nix-community";
+      repo = "nix-eval-jobs";
+      rev = "6d4fd5a93d7bc953ffa4dcd6d53ad7056a71eff7";
+      hash = "sha256-1dZLPw+nlFQzzswfyTxW+8VF1AJ4ZvoYvLTjlHiz1SA=";
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-11-25";
+  version = "0-unstable-2025-02-12";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "e75a4cbda86eed897ac853b256c8fd10829bc7e0";
-    hash = "sha256-CCiBM7jV/zLegMizyfRETiYE8XYMEqzPXFAWPwjjMFc=";
+    rev = "c6f98202cd1b091475ae51b6a093d00b4c8060d4";
+    hash = "sha256-CEDUtkA005PiLt1wSo3sgmxfxUBikQSE74ZudyWNxfE=";
   };
 
   outputs = [ "out" "doc" ];
@@ -152,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pixz
     boost
-    postgresql
     nlohmann_json
     prometheus-cpp
   ];
@@ -162,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
+      nix-eval-jobs'
       coreutils
       findutils
       pixz
@@ -194,7 +208,9 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     python3
     libressl.nc
+    nix-eval-jobs'
     openldap
+    postgresql
   ];
 
   env = {
@@ -202,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
+    PATH=$(pwd)/src/script:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
@@ -228,7 +244,8 @@ stdenv.mkDerivation (finalAttrs: {
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"} \
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs'.name or "unknown"}
     done
   '';
 

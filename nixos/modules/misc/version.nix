@@ -1,18 +1,34 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.system.nixos;
   opt = options.system.nixos;
 
   inherit (lib)
-    concatStringsSep mapAttrsToList toLower optionalString
-    literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
+    concatStringsSep
+    mapAttrsToList
+    toLower
+    optionalString
+    literalExpression
+    match
+    mkRenamedOptionModule
+    mkDefault
+    mkOption
+    trivial
+    types
+    ;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
-  escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
-  attrsToText = attrs:
-    concatStringsSep "\n"
-      (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+  escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "$" "\"" "\\" "`" ] s}"'';
+  attrsToText =
+    attrs:
+    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
     + "\n";
 
   osReleaseContents =
@@ -42,7 +58,8 @@ let
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
-    } // cfg.extraOSReleaseArgs;
+    }
+    // cfg.extraOSReleaseArgs;
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -172,9 +189,9 @@ in
         description = ''
           Image identifier.
 
-          This corresponds to the IMAGE_ID field in os-release. See the
+          This corresponds to the `IMAGE_ID` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';
@@ -186,9 +203,9 @@ in
         description = ''
           Image version.
 
-          This corresponds to the IMAGE_VERSION field in os-release. See the
+          This corresponds to the `IMAGE_VERSION` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';
@@ -200,7 +217,8 @@ in
       type = types.str;
       # TODO Remove this and drop the default of the option so people are forced to set it.
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
-      apply = v:
+      apply =
+        v:
         lib.warnIf (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
           "system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
           v;
@@ -246,6 +264,27 @@ in
 
   config = {
 
+    assertions = [
+      {
+        assertion = match "[0-9]{2}\\.[0-9]{2}" config.system.stateVersion != null;
+        message = ''
+          ${config.system.stateVersion} is an invalid value for 'system.stateVersion'; it must be in the format "YY.MM",
+          which corresponds to a prior release of NixOS.
+
+          If you want to switch releases or switch to unstable, you should change your channel and/or flake input URLs only.
+          *DO NOT* touch the 'system.stateVersion' option, as it will not help you upgrade.
+          Leave it exactly on the previous value, which is likely the value you had for it when you installed your system.
+
+          If you're unsure which value to set it to, use "${
+            if match "[0-9]{2}\\.[0-9]{2}" options.system.stateVersion.default != null then
+              options.system.stateVersion.default
+            else
+              options.system.nixos.release.default
+          }" as a default.
+        '';
+      }
+    ];
+
     system.nixos = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
@@ -256,13 +295,16 @@ in
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
     environment.etc = {
-      "lsb-release".text = attrsToText ({
-        LSB_VERSION = "${cfg.release} (${cfg.codeName})";
-        DISTRIB_ID = "${cfg.distroId}";
-        DISTRIB_RELEASE = cfg.release;
-        DISTRIB_CODENAME = toLower cfg.codeName;
-        DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-      } // cfg.extraLSBReleaseArgs);
+      "lsb-release".text = attrsToText (
+        {
+          LSB_VERSION = "${cfg.release} (${cfg.codeName})";
+          DISTRIB_ID = "${cfg.distroId}";
+          DISTRIB_RELEASE = cfg.release;
+          DISTRIB_CODENAME = toLower cfg.codeName;
+          DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
+        }
+        // cfg.extraLSBReleaseArgs
+      );
 
       "os-release".text = attrsToText osReleaseContents;
     };

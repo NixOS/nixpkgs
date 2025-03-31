@@ -1,26 +1,51 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook, pkg-config, pruneLibtoolFiles, flex, bison
-, libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
-, nftablesCompat ? true
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  pruneLibtoolFiles,
+  flex,
+  bison,
+  libmnl,
+  libnetfilter_conntrack,
+  libnfnetlink,
+  libnftnl,
+  libpcap,
+  nftablesCompat ? true,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.10";
+  version = "1.8.11";
   pname = "iptables";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    sha256 = "XMJVwYk1bjF9BwdVzpNx62Oht4PDRJj7jDAmTzzFnJw=";
+    sha256 = "2HMD1V74ySvK1N0/l4sm0nIBNkKwKUJXdfW60QCf57I=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  nativeBuildInputs = [
-    autoreconfHook pkg-config pruneLibtoolFiles flex bison
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
 
-  buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pruneLibtoolFiles
+    flex
+    bison
+  ];
+
+  buildInputs = [
+    libmnl
+    libnetfilter_conntrack
+    libnfnetlink
+    libnftnl
+    libpcap
+  ];
 
   configureFlags = [
     "--enable-bpf-compiler"

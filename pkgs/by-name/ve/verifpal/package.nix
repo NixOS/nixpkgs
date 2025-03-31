@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, pigeon
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pigeon,
 }:
 
 buildGoModule rec {

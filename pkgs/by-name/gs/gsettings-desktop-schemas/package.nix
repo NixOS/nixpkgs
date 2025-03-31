@@ -1,14 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  meson,
+  ninja,
   # just for passthru
-, gnome
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,14 +26,16 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [
-    glib
-    meson
-    ninja
-    pkg-config
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      glib
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)

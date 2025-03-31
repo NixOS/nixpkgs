@@ -19,6 +19,7 @@
   packaging,
   pygments,
   requests,
+  roman-numerals-py,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -28,7 +29,6 @@
   sphinxcontrib-serializinghtml,
   sphinxcontrib-websupport,
   tomli,
-  typing-extensions,
 
   # check phase
   defusedxml,
@@ -36,19 +36,23 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  typing-extensions,
+
+  # reverse dependencies to test
+  breathe,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.4.7";
+  version = "8.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     postFetch = ''
       # Change ä to æ in file names, since ä can be encoded multiple ways on different
       # filesystems, leading to different hashes on different platforms.
@@ -56,7 +60,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-/5zH9IdLmTGnn5MY4FFSuZOIeF/x1L9Ga/wp57XrAQo=";
+    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
   };
 
   build-system = [ flit-core ];
@@ -71,6 +75,7 @@ buildPythonPackage rec {
       packaging
       pygments
       requests
+      roman-numerals-py
       snowballstemmer
       sphinxcontrib-applehelp
       sphinxcontrib-devhelp
@@ -124,6 +129,11 @@ buildPythonPackage rec {
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
+      # ModuleNotFoundError: No module named 'fish_licence.halibut'
+      "test_import_native_module_stubs"
+      # Racy tex file creation
+      "test_literalinclude_namedlink_latex"
+      "test_literalinclude_caption_latex"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/sphinx-doc/sphinx/issues/12430
@@ -142,6 +152,10 @@ buildPythonPackage rec {
       "test_methoddescriptor"
       "test_partialfunction"
     ];
+
+  passthru.tests = {
+    inherit breathe;
+  };
 
   meta = {
     description = "Python documentation generator";

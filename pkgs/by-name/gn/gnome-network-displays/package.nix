@@ -1,28 +1,30 @@
-{ lib, stdenv
-, fetchurl
-# native
-, meson
-, ninja
-, pkg-config
-, gettext
-, desktop-file-utils
-, appstream-glib
-, wrapGAppsHook4
-, python3
-# Not native
-, gst_all_1
-, gsettings-desktop-schemas
-, gtk4
-, avahi
-, glib
-, networkmanager
-, json-glib
-, libadwaita
-, libportal-gtk4
-, libpulseaudio
-, libsoup_3
-, pipewire
-, protobufc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # native
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  desktop-file-utils,
+  appstream-glib,
+  wrapGAppsHook4,
+  python3,
+  # Not native
+  gst_all_1,
+  gsettings-desktop-schemas,
+  gtk4,
+  avahi,
+  glib,
+  networkmanager,
+  json-glib,
+  libadwaita,
+  libportal-gtk4,
+  libpulseaudio,
+  libsoup_3,
+  pipewire,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,13 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     protobufc
   ];
 
-  /* Without this flag, we get this include error:
+  /*
+    Without this flag, we get this include error:
 
-  /nix/store/...-gst-rtsp-server-1.22.8-dev/include/gstreamer-1.0/gst/rtsp-server/rtsp-media-factory.h:21:10: fatal error: gst/rtsp/gstrtspurl.h: No such file or directory
-  21 | #include <gst/rtsp/gstrtspurl.h>
+    /nix/store/...-gst-rtsp-server-1.22.8-dev/include/gstreamer-1.0/gst/rtsp-server/rtsp-media-factory.h:21:10: fatal error: gst/rtsp/gstrtspurl.h: No such file or directory
+    21 | #include <gst/rtsp/gstrtspurl.h>
 
-  Hence, this is not necessarily an upstream issue, but could be something
-  wrong with how our gst_all_1 depend on each other.
+    Hence, this is not necessarily an upstream issue, but could be something
+    wrong with how our gst_all_1 depend on each other.
   */
   CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 

@@ -14,12 +14,13 @@
 , libglvnd
 , alsa-lib
 , wayland
+, vulkan-loader
 , libpulseaudio
 , gobject-introspection
 }:
 
 let
-  version = "3.5.9";
+  version = "3.6.11";
   icon = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
     hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
-    hash = "sha256-iaOg0OiGEdS0E7UTanZkciWDHqeZoAdBM3ghH10Wbd8=";
+    hash = "sha256-ZQNJm7xbOdVSnxtx4krOnM9QBsxibFXo8wx1fCn1gJA=";
   };
 
   dontUnpack = true;
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
           glib
           openal
           libglvnd
+          vulkan-loader
         ] ++ lib.optionals stdenv.hostPlatform.isLinux [
           xorg.libX11
           xorg.libXxf86vm

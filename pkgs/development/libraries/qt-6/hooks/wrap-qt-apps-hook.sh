@@ -63,7 +63,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         qtHostPathHook "${!outputBin}"
     }
 
-    preFixupPhases+=" qtOwnPathsHook"
+    appendToVar preFixupPhases qtOwnPathsHook
 
     # Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
     wrapQtAppsHook() {
@@ -81,14 +81,14 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
             [ -d "$targetDir" ] || continue
 
             find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file; do
-                if [ -f "$file" ]; then
-                    echo "wrapping $file"
-                    wrapQtApp "$file"
-                elif [ -h "$file" ]; then
+                if [ -h "$file" ]; then
                     target="$(readlink -e "$file")"
                     echo "wrapping $file -> $target"
                     rm "$file"
                     makeQtWrapper "$target" "$file"
+                elif [ -f "$file" ]; then
+                    echo "wrapping $file"
+                    wrapQtApp "$file"
                 fi
             done
         done

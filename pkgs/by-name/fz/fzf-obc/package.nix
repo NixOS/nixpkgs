@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fzf-obc";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rockandska";
-    repo = pname;
+    repo = "fzf-obc";
     rev = version;
     sha256 = "sha256-KIAlDpt1Udl+RLp3728utgQ9FCjZz/OyoG92MOJmgPI=";
   };

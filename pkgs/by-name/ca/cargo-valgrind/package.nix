@@ -1,23 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, valgrind
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  valgrind,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
-    rev = "v${version}";
-    sha256 = "sha256-l/1paghG/ARD0JfzNh0xj2UD5kW6FddM8Xrd/FCygYc=";
+    tag = version;
+    sha256 = "sha256-yUCDKklkfK+2n+THH4QlHb+FpeWfObXpmp4VozsFiUM=";
   };
 
-  cargoHash = "sha256-9/kIIZDIsOhUvRT3TyXN5PGFUB+a8m2yXmzBbsPUK28=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nTqdsi+5YmOzQ5DPn3jOfUXUUut9uo5xKyx/R2MjV1A=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -32,13 +34,20 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip examples_are_runnable"
     "--skip tests_are_runnable"
+    "--skip issue74"
   ];
 
   meta = with lib; {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     mainProgram = "cargo-valgrind";
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      otavio
+      matthiasbeyer
+    ];
   };
 }

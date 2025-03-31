@@ -1,17 +1,18 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitLab
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libspelling
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libspelling,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libspelling
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
   preFixup = ''

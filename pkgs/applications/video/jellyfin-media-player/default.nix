@@ -21,21 +21,24 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-web
 , withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-Jsn4kWQzUaQI9MpbsLJr6JSJk9ZSnMEcrebQ2DYegSU=";
+    sha256 = "sha256-IXinyenadnW+a+anQ9e61h+N8vG2r77JPboHm5dN4Iw=";
   };
 
   patches = [
+    # fix the location of the jellyfin-web path
+    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -74,6 +77,11 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
+  preConfigure = ''
+    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
+    ln -s ${jellyfin-web}/share/jellyfin-web .
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
@@ -85,7 +93,7 @@ mkDerivation rec {
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch kranzes ];
+    maintainers = with maintainers; [ jojosch kranzes paumr ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

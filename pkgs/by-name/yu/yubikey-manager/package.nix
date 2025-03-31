@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3Packages
-, installShellFiles
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  installShellFiles,
+  procps,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.5.1";
+  version = "5.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-m/B5G83XZROoCNq/ZT0U0MUth2IC99e3LWc8FcOq1ig=";
+    hash = "sha256-qEEAByg6Smn1Wk8U4VA6MIJDLWBtM+S+qTDIcgPUGA0=";
   };
 
   postPatch = ''
@@ -61,7 +62,12 @@ python3Packages.buildPythonPackage rec {
 
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ benley lassulus pinpox nickcao ];
+    maintainers = with lib.maintainers; [
+      benley
+      lassulus
+      pinpox
+      nickcao
+    ];
     mainProgram = "ykman";
   };
 }

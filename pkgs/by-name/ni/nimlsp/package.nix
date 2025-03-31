@@ -1,4 +1,11 @@
-{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-2_0, nim-unwrapped-2_0 }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  srcOnly,
+  nim-2_0,
+  nim-unwrapped-2_0,
+}:
 
 let
   buildNimPackage' = buildNimPackage.override {
@@ -37,7 +44,12 @@ buildNimPackage' (finalAttrs: {
     "-d:tempDir=/tmp"
   ];
 
-  nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+  nimDefines = [
+    "nimcore"
+    "nimsuggest"
+    "debugCommunication"
+    "debugLogging"
+  ];
 
   doCheck = false;
 

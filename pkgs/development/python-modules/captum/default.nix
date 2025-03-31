@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "captum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1VOvPqxn6CNnmv7M8fl7JrqRfJQUH2tnXRCUqKnl7i0=";
   };
 

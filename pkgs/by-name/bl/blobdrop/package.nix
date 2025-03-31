@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vimpostor";
     repo = "blobdrop";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o2+qtkyu2qcwXpum3KiogyO8D6aY7bRJ6y4FWQKQY/o=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;

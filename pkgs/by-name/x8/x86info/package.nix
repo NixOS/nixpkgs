@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pciutils
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pciutils,
+  pkg-config,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x86info";
   version = "unstable-2021-08-07";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
-    repo = pname;
+    repo = "x86info";
     rev = "061ea35ecb0697761b6260998fa2045b8bb0be68";
     hash = "sha256-/qWioC4dV1bQkU4SiTR8duYqoGIMIH7s8vuAXi75juo=";
   };
@@ -48,7 +49,10 @@ stdenv.mkDerivation rec {
       registers (MSRs) via the msr kernel module.  it will approximate processor
       frequency, and identify the cache sizes and layout.
     '';
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/kernelslacker/x86info";
     maintainers = with lib.maintainers; [ jcumming ];

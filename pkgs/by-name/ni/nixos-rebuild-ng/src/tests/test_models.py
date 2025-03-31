@@ -1,8 +1,9 @@
 import platform
 import subprocess
 from pathlib import Path
-from typing import Any
-from unittest.mock import patch
+from unittest.mock import Mock, patch
+
+from pytest import MonkeyPatch
 
 import nixos_rebuild.models as m
 
@@ -30,7 +31,7 @@ def test_build_attr_to_attr() -> None:
     )
 
 
-def test_flake_parse() -> None:
+def test_flake_parse(tmpdir: Path, monkeypatch: MonkeyPatch) -> None:
     assert m.Flake.parse("/path/to/flake#attr") == m.Flake(
         Path("/path/to/flake"), "nixosConfigurations.attr"
     )
@@ -40,9 +41,31 @@ def test_flake_parse() -> None:
     assert m.Flake.parse("/path/to/flake", lambda: "hostname") == m.Flake(
         Path("/path/to/flake"), "nixosConfigurations.hostname"
     )
-    assert m.Flake.parse(".#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
-    assert m.Flake.parse("#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
-    assert m.Flake.parse(".") == m.Flake(Path("."), "nixosConfigurations.default")
+    # change directory to tmpdir
+    with monkeypatch.context() as patch_context:
+        patch_context.chdir(tmpdir)
+        assert m.Flake.parse(".#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
+        assert m.Flake.parse("#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
+        assert m.Flake.parse(".") == m.Flake(Path("."), "nixosConfigurations.default")
+    assert m.Flake.parse("path:/to/flake#attr") == m.Flake(
+        "path:/to/flake", "nixosConfigurations.attr"
+    )
+    assert m.Flake.parse("github:user/repo/branch") == m.Flake(
+        "github:user/repo/branch", "nixosConfigurations.default"
+    )
+    git_root = tmpdir / "git_root"
+    git_root.mkdir()
+    (git_root / ".git").mkdir()
+    assert m.Flake.parse(str(git_root)) == m.Flake(
+        f"git+file://{git_root}", "nixosConfigurations.default"
+    )
+
+    work_tree = tmpdir / "work_tree"
+    work_tree.mkdir()
+    (work_tree / ".git").write_text("gitdir: /path/to/git", "utf-8")
+    assert m.Flake.parse(str(work_tree)) == m.Flake(
+        "git+file:///path/to/git", "nixosConfigurations.default"
+    )
 
 
 def test_flake_to_attr() -> None:
@@ -55,7 +78,9 @@ def test_flake_to_attr() -> None:
 
 
 @patch(get_qualified_name(platform.node), autospec=True)
-def test_flake_from_arg(mock_node: Any) -> None:
+def test_flake_from_arg(
+    mock_node: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
+) -> None:
     mock_node.return_value = "hostname"
 
     # Flake string
@@ -67,9 +92,11 @@ def test_flake_from_arg(mock_node: Any) -> None:
     assert m.Flake.from_arg(False, None) is None
 
     # True
-    assert m.Flake.from_arg(True, None) == m.Flake(
-        Path("."), "nixosConfigurations.hostname"
-    )
+    with monkeypatch.context() as patch_context:
+        patch_context.chdir(tmpdir)
+        assert m.Flake.from_arg(True, None) == m.Flake(
+            Path("."), "nixosConfigurations.hostname"
+        )
 
     # None when we do not have /etc/nixos/flake.nix
     with patch(
@@ -91,9 +118,14 @@ def test_flake_from_arg(mock_node: Any) -> None:
             autospec=True,
             return_value=False,
         ),
+        patch(
+            get_qualified_name(m.discover_git, m),
+            autospec=True,
+            return_value="/etc/nixos",
+        ),
     ):
         assert m.Flake.from_arg(None, None) == m.Flake(
-            Path("/etc/nixos"), "nixosConfigurations.hostname"
+            "git+file:///etc/nixos", "nixosConfigurations.hostname"
         )
 
     with (
@@ -108,7 +140,7 @@ def test_flake_from_arg(mock_node: Any) -> None:
             return_value=True,
         ),
         patch(
-            get_qualified_name(m.Path.readlink, m),
+            get_qualified_name(m.Path.resolve, m),
             autospec=True,
             return_value=Path("/path/to/flake.nix"),
         ),
@@ -130,11 +162,12 @@ def test_flake_from_arg(mock_node: Any) -> None:
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
-def test_profile_from_arg(mock_mkdir: Any) -> None:
+def test_profile_from_arg(mock_mkdir: Mock) -> None:
     assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
+    mock_mkdir.assert_not_called()
 
     assert m.Profile.from_arg("something") == m.Profile(
         "something",

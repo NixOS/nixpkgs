@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, mbedtls, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  mbedtls,
+  meson,
+  ninja,
+}:
 let
   webManModVersion = "1.47.42";
 in
@@ -11,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ynFuCD+tp8E/DDdB/HU9BCmwKcmQy6NBx26MKnP4W0o=";
   };
 
-  sourceRoot = "./source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   buildInputs = [
     meson

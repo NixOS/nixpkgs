@@ -1,12 +1,17 @@
-{ lib, appimageTools, makeWrapper, fetchurl }:
+{
+  lib,
+  appimageTools,
+  makeWrapper,
+  fetchurl,
+}:
 
 let
   pname = "altair";
-  version = "8.0.4";
+  version = "8.2.1";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-OimWSzVOL1JlBeZthw9Ybpfhd5TOkjIWoXbIny1lha4=";
+    sha256 = "sha256-DO4T/NgLSxZIxVK4oEz6QNsQJRacF8KRcwAvWToxIy8=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

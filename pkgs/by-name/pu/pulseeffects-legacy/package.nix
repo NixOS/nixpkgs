@@ -1,37 +1,39 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, itstool
-, python3
-, libxml2
-, desktop-file-utils
-, wrapGAppsHook3
-, gst_all_1
-, pulseaudio
-, gtk3
-, glib
-, glibmm
-, gtkmm3
-, lilv
-, lv2
-, serd
-, sord
-, sratom
-, libbs2b
-, libsamplerate
-, libsndfile
-, libebur128
-, rnnoise
-, boost
-, dbus
-, fftwFloat
-, calf
-, zita-convolver
-, zam-plugins
-, rubberband
-, lsp-plugins
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  itstool,
+  python3,
+  libxml2,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  gst_all_1,
+  pulseaudio,
+  gtk3,
+  glib,
+  glibmm,
+  gtkmm3,
+  lilv,
+  lv2,
+  serd,
+  sord,
+  sratom,
+  libbs2b,
+  libsamplerate,
+  libsndfile,
+  libebur128,
+  rnnoise,
+  boost,
+  dbus,
+  fftwFloat,
+  calf,
+  zita-convolver,
+  zam-plugins,
+  rubberband,
+  lsp-plugins,
 }:
 
 let
@@ -43,15 +45,16 @@ let
     rubberband # pitch shifting
     zam-plugins # maximizer
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "pulseeffects";
-  version = "4.8.7";
+  version = "4.8.7-unstable-2024-09-17";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
-    rev = "v${version}";
-    sha256 = "sha256-ldvcA8aTHOgaascH6MF4CzmJ8I2rYOiR0eAkCZzvK/M=";
+    rev = "fbe0a724c1405cee624802f381476cf003dfcfa";
+    hash = "sha256-tyVUWc8w08WUnJRTjJVTIiG/YBWTETNYG+4amwEYezY=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +78,11 @@ in stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base # gst-fft
     gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
-    lilv lv2 serd sord sratom
+    lilv
+    lv2
+    serd
+    sord
+    sratom
     libbs2b
     libebur128
     libsamplerate

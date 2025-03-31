@@ -17,7 +17,7 @@
   libGL,
   libva,
   xorg,
-  mesa,
+  libgbm,
   pango,
   pciutils,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-t0LApaU13tT/14nvRpnWZwFyWiJq+WfZNgVyhNayMcs=";
+    hash = "sha256-0WqKyiNWLAJeB+J0Uk+/fMEiX2f2B1sZWOyJbutFI78=";
   };
 
   dontPatchELF = true;
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
       xorg.libXrandr
       xorg.libXtst
       xorg.libxcb
-      mesa
+      libgbm
       pango
       pciutils
     ]
     + ":"
-    + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+    + lib.makeSearchPathOutput "lib" "lib" [ stdenv.cc.cc ];
 
   desktopItem = makeDesktopItem {
     name = "zotero";

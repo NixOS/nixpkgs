@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, zsh }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zsh,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zthrottle";
   version = "unstable-2017-7-24";
 
   src = fetchFromGitHub {
     owner = "anko";
-    repo = pname;
+    repo = "zthrottle";
     rev = "f62066661e49375baeb891fa8e43ad4527cbd0a0";
     sha256 = "1ipvwmcsigzmxlg7j22cxpvdcgqckkmfpsnvzy18nbybd5ars9l5";
   };

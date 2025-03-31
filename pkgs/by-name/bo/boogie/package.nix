@@ -8,18 +8,18 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.2.5";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    hash = "sha256-36aGVJEzaAwQgR11NI+v8c4cXm24iiXtiwjW6qd3qsE=";
+    hash = "sha256-IWtYbb1IFB6DLIYYTP+q7q+h/0aqonxr/mWwf+83aRo=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
   projectFile = [ "Source/Boogie.sln" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   # [...]Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/NUnit3.TestAdapter.pdb" to "[...]/NUnit3.TestAdapter.pdb". Access to the path '[...]/NUnit3.TestAdapter.pdb' is denied. [[...]/ExecutionEngineTests.csproj]
   enableParallelBuilding = false;

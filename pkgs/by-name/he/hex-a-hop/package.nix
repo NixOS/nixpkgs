@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchzip, SDL, SDL_mixer, SDL_ttf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  SDL,
+  SDL_mixer,
+  SDL_ttf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hex-a-hop";
@@ -21,7 +29,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j6gKRq+8b1NDwP1WcCaScfmwNxAl78CfK6pemROrRak=";
   };
 
-  buildInputs = [ SDL SDL_mixer SDL_ttf ];
+  buildInputs = [
+    SDL
+    SDL_mixer
+    SDL_ttf
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

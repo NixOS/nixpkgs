@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchsvn, fetchurl, cups, cups-filters, jbigkit, zlib }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  fetchurl,
+  cups,
+  cups-filters,
+  jbigkit,
+  zlib,
+}:
 
 let
 
@@ -17,7 +26,8 @@ let
     '';
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "splix-svn";
   version = "315";
 
@@ -42,7 +52,11 @@ in stdenv.mkDerivation rec {
     "CUPSPROFILE=${color-profiles}/share/cups/profiles"
   ];
 
-  buildInputs = [ cups zlib jbigkit ];
+  buildInputs = [
+    cups
+    zlib
+    jbigkit
+  ];
 
   meta = with lib; {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";

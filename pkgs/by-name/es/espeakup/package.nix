@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, espeak-ng
-, fetchFromGitHub
-, pkg-config
-, ronn
-, alsa-lib
-, systemd
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  espeak-ng,
+  fetchFromGitHub,
+  pkg-config,
+  ronn,
+  alsa-lib,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

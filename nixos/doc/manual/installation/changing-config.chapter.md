@@ -5,13 +5,12 @@ configuration of your machine. Whenever you've [changed
 something](#ch-configuration) in that file, you should do
 
 ```ShellSession
-$ nixos-rebuild switch --use-remote-sudo
+# nixos-rebuild switch
 ```
 
-to build the new configuration as your current user, and as the root user,
-make it the default configuration for booting. `switch` will also try to
-realise the configuration in the running system (e.g., by restarting system
-services).
+to build the new configuration, make it the default configuration for
+booting, and try to realise the configuration in the running system
+(e.g., by restarting system services).
 
 ::: {.warning}
 This command doesn't start/stop [user services](#opt-systemd.user.services)
@@ -20,23 +19,14 @@ user services.
 :::
 
 ::: {.warning}
-Applying a configuration is an action that must be done by the root user, so the
-`switch`, `boot` and `test` commands should be ran with the `--use-remote-sudo`
-flag. Despite its odd name, this flag runs the activation script with elevated
-permissions, regardless of whether or not the target system is remote, without
-affecting the other stages of the `nixos-rebuild` call. This allows unprivileged
-users to rebuild the system and only elevate their permissions when necessary.
-
-Alternatively, one can run the whole command as root while preserving user
-environment variables by prefixing the command with `sudo -E`. However, this
-method may create root-owned files in `$HOME/.cache` if Nix decides to use the
-cache during evaluation.
+These commands must be executed as root, so you should either run them
+from a root shell or by prefixing them with `sudo -i`.
 :::
 
 You can also do
 
 ```ShellSession
-$ nixos-rebuild test --use-remote-sudo
+# nixos-rebuild test
 ```
 
 to build the configuration and switch the running system to it, but
@@ -47,7 +37,7 @@ configuration.
 There is also
 
 ```ShellSession
-$ nixos-rebuild boot --use-remote-sudo
+# nixos-rebuild boot
 ```
 
 to build the configuration and make it the boot default, but not switch
@@ -57,7 +47,7 @@ You can make your configuration show up in a different submenu of the
 GRUB 2 boot screen by giving it a different *profile name*, e.g.
 
 ```ShellSession
-$ nixos-rebuild switch -p test --use-remote-sudo
+# nixos-rebuild switch -p test
 ```
 
 which causes the new configuration (and previous ones created using
@@ -68,7 +58,7 @@ configurations.
 A repl, or read-eval-print loop, is also available. You can inspect your configuration and use the Nix language with
 
 ```ShellSession
-$ nixos-rebuild repl
+# nixos-rebuild repl
 ```
 
 Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl.html) to learn more.

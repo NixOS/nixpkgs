@@ -1,7 +1,9 @@
 { stdenv
 , lib
+, buildPackages
 , fetchurl
-, substituteAll
+, pkgsCross
+, replaceVars
 , pkg-config
 , gi-docgen
 , gobject-introspection
@@ -16,6 +18,9 @@
 , gnome
 }:
 
+let
+  luaEnv = lua5_1.withPackages (ps: with ps; [ lgi ]);
+in
 stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "2.0.5";
@@ -29,8 +34,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
@@ -53,8 +57,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gjs
     glib
-    lua5_1
-    lua5_1.pkgs.lgi
+    luaEnv
     python3
     python3.pkgs.pygobject3
     spidermonkey_128
@@ -70,11 +73,22 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
   ];
 
+  # required for locating lua dependencies at build time (when cross compiling):
+  env.LUA_CPATH = "${luaEnv}/lib/lua/${luaEnv.luaversion}/?.so";
+  env.LUA_PATH = "${luaEnv}/share/lua/${luaEnv.luaversion}/?.lua";
+
+  strictDeps = true;
+
   postPatch = ''
-    # Checks lua51 and lua5.1 executable but we have non of them.
-    substituteInPlace meson.build --replace \
-      "find_program('lua51', required: false)" \
-      "find_program('lua', required: false)"
+    # Checks lua51 and lua5.1 executable but we have none of them.
+    # Then it tries to invoke lua to check for LGI, which requires emulation for cross.
+    substituteInPlace meson.build \
+      --replace-fail \
+        "find_program('lua51', required: false)" \
+        "find_program('${lib.getExe' lua5_1 "lua"}', required: false)" \
+      --replace-fail \
+        "run_command(lua_prg, [" \
+        "run_command('${stdenv.hostPlatform.emulator buildPackages}', [lua_prg, "
   '';
 
   postFixup = ''
@@ -88,6 +102,8 @@ stdenv.mkDerivation rec {
       packageName = "libpeas";
       versionPolicy = "odd-unstable";
     };
+
+    tests.cross = pkgsCross.aarch64-multiplatform.libpeas2;
   };
 
   meta = with lib; {

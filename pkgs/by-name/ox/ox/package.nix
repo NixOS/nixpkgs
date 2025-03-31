@@ -1,31 +1,33 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  testers,
+  versionCheckHook,
   nix-update-script,
-  ox,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
-  version = "0.7.2";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
-    repo = pname;
-    rev = version;
-    hash = "sha256-yAToibHhvHAry7WVZ5uD84CbUTp06RyZ9J12/2deM1I=";
+    repo = "ox";
+    tag = version;
+    hash = "sha256-h4oC+TRLPKgXid4YIn2TdTxgEBvbBDy66jfbyA5ia4o=";
   };
 
-  cargoHash = "sha256-YAy5vCxcHUL0wM9+Y3GDqV/V1utL3V05heT92/zQ/X8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Vf5Y/rXykaYkrnTjVMShnGYikDIu2b1l2oDOiB0O95I=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = ox;
-    };
-
     updateScript = nix-update-script { };
   };
 
@@ -34,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/curlpipe/ox";
     changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ moni ];
+    maintainers = with maintainers; [
+      moni
+      kachick
+    ];
     mainProgram = "ox";
   };
 }

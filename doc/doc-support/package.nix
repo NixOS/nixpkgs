@@ -25,16 +25,22 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [ nixos-render-docs ];
 
-    src = lib.fileset.toSource {
-      root = ../.;
-      fileset = lib.fileset.unions [
-        (lib.fileset.fileFilter (file: file.hasExt "md" || file.hasExt "md.in") ../.)
-        ../style.css
-        ../anchor-use.js
-        ../anchor.min.js
-        ../manpage-urls.json
-        ../redirects.json
-      ];
+    src = lib.cleanSourceWith {
+      src = ../.;
+      filter =
+        path: type:
+        type == "directory"
+        || lib.hasSuffix ".md" path
+        || lib.hasSuffix ".md.in" path
+        || lib.elem path (
+          map toString [
+            ../style.css
+            ../anchor-use.js
+            ../anchor.min.js
+            ../manpage-urls.json
+            ../redirects.json
+          ]
+        );
     };
 
     postPatch = ''
@@ -104,7 +110,7 @@ stdenvNoCC.mkDerivation (
       shell =
         let
           devmode' = devmode.override {
-            buildArgs = "./.";
+            buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/manual.html";
           };
           nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";

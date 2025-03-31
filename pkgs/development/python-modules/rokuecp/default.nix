@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GotVSRSMdbAtDmVEXNizf5Pf/02sva1R/6ULL6h7ciY=";
   };
 

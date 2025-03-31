@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ncurses, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation {
   pname = "kermit";
@@ -9,7 +15,10 @@ stdenv.mkDerivation {
     sha256 = "0487mh6s99ijqf1pfmbm302pa5i4pzmm8s439hdl1ffs5g8jqpqd";
   };
 
-  buildInputs = [ ncurses libxcrypt ];
+  buildInputs = [
+    ncurses
+    libxcrypt
+  ];
 
   unpackPhase = ''
     mkdir -p src
@@ -29,6 +38,8 @@ stdenv.mkDerivation {
     mkdir -p $out/man/man1
     make -f makefile install
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
 
   meta = with lib; {
     homepage = "https://www.kermitproject.org/ck90.html";

@@ -2,15 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  removeReferencesTo,
   cmake,
   gettext,
-  msgpack-c,
   libuv,
   lua,
   pkg-config,
   unibilium,
-  libvterm-neovim,
+  utf8proc,
   tree-sitter,
   fetchurl,
   buildPackages,
@@ -18,6 +16,8 @@
   fixDarwinDylibNames,
   glibcLocales ? null,
   procps ? null,
+  versionCheckHook,
+  nix-update-script,
 
   # now defaults to false because some tests can be flaky (clipboard etc), see
   # also: https://github.com/neovim/neovim/issues/16233
@@ -95,15 +95,15 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.10.2";
+    version = "0.11.0";
 
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "refs/tags/v${finalAttrs.version}";
-      hash = "sha256-+qjjelYMB3MyjaESfCaGoeBURUzSVh/50uxUqStxIfY=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-UVMRHqyq3AP9sV79EkPUZnVkj0FpbS+XDPPOppp2yFE=";
     };
 
     patches = [
@@ -133,16 +133,15 @@ stdenv.mkDerivation (
     buildInputs =
       [
         libuv
-        libvterm-neovim
         # This is actually a c library, hence it's not included in neovimLuaEnv,
         # see:
         # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
         # and it's definition at: pkgs/development/lua-modules/overrides.nix
         lua.pkgs.libluv
-        msgpack-c
         neovimLuaEnv
         tree-sitter
         unibilium
+        utf8proc
       ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [
         glibcLocales
@@ -163,7 +162,6 @@ stdenv.mkDerivation (
       cmake
       gettext
       pkg-config
-      removeReferencesTo
     ];
 
     # extra programs test via `make functionaltest`
@@ -189,22 +187,8 @@ stdenv.mkDerivation (
       sed -i src/nvim/po/CMakeLists.txt \
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
-    postInstall = ''
-      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    '';
     # check that the above patching actually works
-    outputChecks =
-      let
-        disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
-      in
-      {
-        out = {
-          inherit disallowedRequisites;
-        };
-        debug = {
-          inherit disallowedRequisites;
-        };
-      };
+    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags =
       [
@@ -212,14 +196,21 @@ stdenv.mkDerivation (
         # can spot that cmake says this option was "not used by the project".
         # That's because all dependencies were found and
         # third-party/CMakeLists.txt is not read at all.
-        "-DUSE_BUNDLED=OFF"
+        (lib.cmakeBool "USE_BUNDLED" false)
+        (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
       ]
-      ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
-      ++ lib.optionals lua.pkgs.isLuaJIT [
-        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
-        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
-        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
-      ];
+      ++ (
+        if lua.pkgs.isLuaJIT then
+          [
+            (lib.cmakeFeature "LUAC_PRG" "${lib.getExe' codegenLua "luajit"} -b -s %s -")
+            (lib.cmakeFeature "LUA_GEN_PRG" (lib.getExe' codegenLua "luajit"))
+            (lib.cmakeFeature "LUA_PRG" (lib.getExe' neovimLuaEnvOnBuild "luajit"))
+          ]
+        else
+          [
+            (lib.cmakeBool "PREFER_LUA" true)
+          ]
+      );
 
     preConfigure =
       ''
@@ -246,6 +237,17 @@ stdenv.mkDerivation (
 
     separateDebugInfo = true;
 
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgram = "${placeholder "out"}/bin/nvim";
+    versionCheckProgramArg = "--version";
+    doInstallCheck = true;
+
+    passthru = {
+      updateScript = nix-update-script { };
+    };
+
     meta = {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
@@ -257,6 +259,7 @@ stdenv.mkDerivation (
         - Improve extensibility with a new plugin architecture
       '';
       homepage = "https://www.neovim.io";
+      changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
@@ -267,10 +270,7 @@ stdenv.mkDerivation (
         asl20
         vim
       ];
-      maintainers = with lib.maintainers; [
-        manveru
-        rvolosatovs
-      ];
+      maintainers = lib.teams.neovim.members;
       platforms = lib.platforms.unix;
     };
   }

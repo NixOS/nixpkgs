@@ -13,33 +13,24 @@
   darwin,
   nix-update-script,
   nixosTests,
-  rocksdb_8_11,
+  rocksdb,
   callPackage,
 }:
 
-let
-  # Stalwart depends on rocksdb crate:
-  # https://github.com/stalwartlabs/mail-server/blob/v0.8.0/crates/store/Cargo.toml#L10
-  # which expects a specific rocksdb versions:
-  # https://github.com/rust-rocksdb/rust-rocksdb/blob/v0.22.0/librocksdb-sys/Cargo.toml#L3
-  # See upstream issue for rocksdb 9.X support
-  # https://github.com/stalwartlabs/mail-server/issues/407
-  rocksdb = rocksdb_8_11;
-  version = "0.10.6";
-in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
-  inherit version;
+  version = "0.11.6-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/mY8WNQMp15LoFhNJjNzT/SB4dJya6SXvO9A4ZR8WGM=";
-    fetchSubmodules = true;
+    # release 0.11.6 broken, see https://github.com/stalwartlabs/mail-server/issues/1150
+    rev = "fa6483b6df57513582425119027bc4fce8f03d65";
+    hash = "sha256-mB3Vm07b+eKDlQ95pmVk14Q7jXTBbV1jTbN+6hcFt0s=";
   };
 
-  cargoHash = "sha256-Bd88dJo7Bf/6tmt+x/tkeWecKEZtFVYhyHhGU+/qPIs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PHr73GQ/6d5ulJzntSHIilGzdF4Y8Np9jSFa6F2Nwao=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,9 +52,9 @@ rustPlatform.buildRustPackage {
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
-  # skip defaults on darwin because foundationdb is not available
-  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
-  buildFeatures = lib.optional (stdenv.hostPlatform.isDarwin) [
+  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
     "sqlite"
     "postgres"
     "mysql"
@@ -82,8 +73,6 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     mkdir -p $out/etc/stalwart
-    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
-    cp -r resources/config/spamfilter $out/etc/stalwart/
 
     mkdir -p $out/lib/systemd/system
 
@@ -97,8 +86,10 @@ rustPlatform.buildRustPackage {
     "--skip=directory::internal::internal_directory"
     "--skip=directory::ldap::ldap_directory"
     "--skip=directory::sql::sql_directory"
+    "--skip=directory::oidc::oidc_directory"
     "--skip=store::blob::blob_tests"
     "--skip=store::lookup::lookup_tests"
+    "--skip=smtp::lookup::sql::lookup_sql"
     # thread 'directory::smtp::lmtp_directory' panicked at tests/src/store/mod.rs:122:44:
     # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
     "--skip=directory::smtp::lmtp_directory"

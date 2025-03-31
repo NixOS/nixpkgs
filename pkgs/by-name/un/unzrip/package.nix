@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, zstd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "unzrip";
   version = "unstable-2023-04-16";
 
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QYu4PXWQGagj7r8lLs0IngIXzt6B8uq2qonycaGDg6g=";
   };
 
-  cargoHash = "sha256-9CjKSdd+E2frI8VvdOawYQ3u+KF22xw9kBpnAufRUG0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3EbZv4mguNT3FtqcDBJriqRGGzz/093AMHqH6c2xYvQ=";
 
   nativeBuildInputs = [
     pkg-config

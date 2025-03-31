@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, wayland-scanner
-, wayland
-, libinput
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  libinput,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "way-displays";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = version;
-    sha256 = "sha256-uJsamTsfxpFoKOSgNs6+VQpB7/ec4NoHJsjtDa5Dex8=";
+    sha256 = "sha256-Og0SQOA5sny1N0llOiScmfqvRuplCE89z38YWNRtPho=";
   };
 
   strictDeps = true;

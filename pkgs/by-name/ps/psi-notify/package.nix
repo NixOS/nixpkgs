@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, systemd, libnotify, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  systemd,
+  libnotify,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "psi-notify";
@@ -6,12 +13,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cdown";
-    repo = pname;
+    repo = "psi-notify";
     rev = version;
     sha256 = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
   };
 
-  buildInputs = [ systemd libnotify ];
+  buildInputs = [
+    systemd
+    libnotify
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   installPhase = ''

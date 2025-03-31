@@ -1,6 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ config, ... }:
 
 let
+  pkgs = config.node.pkgs;
+
   template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
     name = "bootstrap3";
     version = "2022-07-27";
@@ -76,6 +78,11 @@ let
           };
         };
       };
+    };
+
+    services.caddy.virtualHosts = {
+      "site1.local".hostName = "http://site1.local";
+      "site2.local".hostName = "http://site2.local";
     };
 
     networking.firewall.allowedTCPPorts = [ 80 ];
@@ -158,4 +165,4 @@ in {
             "curl -sSfL http://site1.local/rewrite-test | grep 'Hello, NixOS!'",
           )
   '';
-})
+}

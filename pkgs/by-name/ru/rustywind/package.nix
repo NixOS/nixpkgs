@@ -1,22 +1,24 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustywind";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
     rev = "v${version}";
-    hash = "sha256-NRIWjmKjteJibqnOjkkUY9eKIM65H7NaRX8rn1MdXmY=";
+    hash = "sha256-3cLpyY2Ec3XUDUoq4QLyDx8Nr85TOevBkfoReguVGII=";
   };
 
-  cargoHash = "sha256-yUODUAhWtRGCj3U9nBlw3+5dNv6vGHXmJzUd8hGKnu0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jq8d+ndPOu07YO5PJ5YfWTeG70bZnr0i8vMwv7Dw5GY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

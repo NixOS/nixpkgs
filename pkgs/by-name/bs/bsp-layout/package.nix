@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, git
-, bc
-, bspwm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bc,
+  bspwm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bsp-layout";
   version = "unstable-2022-06-19";
 
   src = fetchFromGitHub {
     owner = "phenax";
-    repo = pname;
+    repo = "bsp-layout";
     rev = "9d60fc271454ea1bfca598575207a06d8d172d3e";
     sha256 = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
   };
 
-  nativeBuildInputs = [ makeWrapper git bc ];
+  nativeBuildInputs = [
+    makeWrapper
+    git
+    bc
+  ];
   buildInputs = [ bspwm ];
 
   makeFlags = [ "PREFIX=$(out)" ];

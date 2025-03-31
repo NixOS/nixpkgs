@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libsodium }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsodium,
+}:
 
 stdenv.mkDerivation rec {
   pname = "minisign";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
+    sha256 = "sha256-qhAzhht9p4bsa2ntJwhcNurm8QgYYiKi3dA3ifpT8aw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ libsodium ];
 
   meta = with lib; {

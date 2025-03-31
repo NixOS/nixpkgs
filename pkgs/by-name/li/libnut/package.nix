@@ -1,6 +1,7 @@
-{ stdenv
-, lib
-, fetchgit
+{
+  stdenv,
+  lib,
+  fetchgit,
 }:
 stdenv.mkDerivation rec {
   pname = "libnut";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "${src.name}/src/trunk";
-  makeFlags = ["prefix=$(out)"];
+  makeFlags = [ "prefix=$(out)" ];
   installTargets = [
     "install-libnut"
     "install-nututils"
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Library to read/write the NUT video container format";
     homepage = "https://git.ffmpeg.org/gitweb/nut.git";
     license = licenses.mit;
-    maintainers = with maintainers; [quag];
+    maintainers = with maintainers; [ quag ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  gmp,
+  gcc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mkcl";

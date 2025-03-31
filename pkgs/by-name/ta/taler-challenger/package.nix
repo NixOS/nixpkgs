@@ -13,7 +13,7 @@
   libmicrohttpd,
   libsodium,
   libtool,
-  postgresql,
+  libpq,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-challenger";
-  version = "0.13.0";
+  version = "0.14.3-unstable-2025-02-17";
 
   src = fetchgit {
     url = "https://git.taler.net/challenger.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-OlUgE40Qo7on9VaMGKJ/MRWActDBqPe7Ja95dv1OFhA=";
+    rev = "e49e33a13df92c6a1d6f119775baa31778163531";
+    hash = "sha256-AOtCx/r6JzwOSF3b3lDeY0/S+dGGNrJELerFoQ/K4tA=";
   };
 
   # https://git.taler.net/challenger.git/tree/bootstrap
@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgnurl
     libmicrohttpd
+    libpq
     libsodium
     libtool
-    postgresql
     taler-exchange
     taler-merchant
   ];

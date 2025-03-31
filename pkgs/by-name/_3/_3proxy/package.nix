@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "3proxy";
-    repo = pname;
+    repo = "3proxy";
     rev = version;
-    sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
+    sha256 = "sha256-uy6flZ1a7o02pr5O0pgl9zCjh8mE9W5JxotJeBMB16A=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.
@@ -30,15 +35,18 @@ stdenv.mkDerivation rec {
     rm -fr $out/var
   '';
 
+  # common.c:208:9: error: initialization of 'int (*)(struct pollfd *, unsigned int,  int)' from incompatible pointer type 'int (*)(struct pollfd *, nfds_t,  int)' {aka 'int (*)(struct pollfd *, long unsigned int,  int)'}
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   passthru.tests = {
     smoke-test = nixosTests._3proxy;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny free proxy server";
     homepage = "https://github.com/3proxy/3proxy";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.libreswan;
@@ -6,33 +11,49 @@ let
   libexec = "${pkgs.libreswan}/libexec/ipsec";
   ipsec = "${pkgs.libreswan}/sbin/ipsec";
 
-  trim = chars: str:
-  let
-    nonchars = lib.filter (x : !(lib.elem x.value chars))
-               (lib.imap0 (i: v: {ind = i; value = v;}) (lib.stringToCharacters str));
-  in
-    lib.optionalString (nonchars != [ ])
-      (lib.substring (lib.head nonchars).ind (lib.add 1 (lib.sub (lib.last nonchars).ind (lib.head nonchars).ind)) str);
-  indent = str: lib.concatStrings (lib.concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (lib.splitString "\n" str));
+  trim =
+    chars: str:
+    let
+      nonchars = lib.filter (x: !(lib.elem x.value chars)) (
+        lib.imap0 (i: v: {
+          ind = i;
+          value = v;
+        }) (lib.stringToCharacters str)
+      );
+    in
+    lib.optionalString (nonchars != [ ]) (
+      lib.substring (lib.head nonchars).ind (lib.add 1 (
+        lib.sub (lib.last nonchars).ind (lib.head nonchars).ind
+      )) str
+    );
+  indent =
+    str:
+    lib.concatStrings (
+      lib.concatMap (s: [
+        "  "
+        (trim [ " " "\t" ] s)
+        "\n"
+      ]) (lib.splitString "\n" str)
+    );
   configText = indent (toString cfg.configSetup);
-  connectionText = lib.concatStrings (lib.mapAttrsToList (n: v:
-    ''
+  connectionText = lib.concatStrings (
+    lib.mapAttrsToList (n: v: ''
       conn ${n}
       ${indent v}
-    '') cfg.connections);
+    '') cfg.connections
+  );
 
-  configFile = pkgs.writeText "ipsec-nixos.conf"
-    ''
-      config setup
-      ${configText}
+  configFile = pkgs.writeText "ipsec-nixos.conf" ''
+    config setup
+    ${configText}
 
-      ${connectionText}
-    '';
+    ${connectionText}
+  '';
 
-  policyFiles = lib.mapAttrs' (name: text:
-    { name = "ipsec.d/policies/${name}";
-      value.source = pkgs.writeText "ipsec-policy-${name}" text;
-    }) cfg.policies;
+  policyFiles = lib.mapAttrs' (name: text: {
+    name = "ipsec.d/policies/${name}";
+    value.source = pkgs.writeText "ipsec-policy-${name}" text;
+  }) cfg.policies;
 
 in
 
@@ -49,20 +70,20 @@ in
       configSetup = lib.mkOption {
         type = lib.types.lines;
         default = ''
-            protostack=netkey
-            virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
+          protostack=netkey
+          virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
         '';
         example = ''
-            secretsfile=/root/ipsec.secrets
-            protostack=netkey
-            virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
+          secretsfile=/root/ipsec.secrets
+          protostack=netkey
+          virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
         '';
         description = "Options to go in the 'config setup' section of the Libreswan IPsec configuration";
       };
 
       connections = lib.mkOption {
         type = lib.types.attrsOf lib.types.lines;
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           { myconnection = '''
               auto=add
@@ -81,7 +102,7 @@ in
 
       policies = lib.mkOption {
         type = lib.types.attrsOf lib.types.lines;
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           { private-or-clear = '''
               # Attempt opportunistic IPsec for the entire Internet
@@ -113,13 +134,15 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     # Install package, systemd units, etc.
-    environment.systemPackages = [ pkgs.libreswan pkgs.iproute2 ];
+    environment.systemPackages = [
+      pkgs.libreswan
+      pkgs.iproute2
+    ];
     systemd.packages = [ pkgs.libreswan ];
     systemd.tmpfiles.packages = [ pkgs.libreswan ];
 
@@ -151,7 +174,7 @@ in
       '';
       serviceConfig = {
         StateDirectory = "ipsec/nss";
-        StateDirectoryMode = 0700;
+        StateDirectoryMode = 700;
       };
     };
 

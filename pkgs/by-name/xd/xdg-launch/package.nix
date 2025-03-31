@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, libtool
-, perl
-, pkg-config
-, glib
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  perl,
+  pkg-config,
+  glib,
+  xorg,
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bbidulock";
-    repo = pname;
+    repo = "xdg-launch";
     rev = version;
     sha256 = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
   };

@@ -1,21 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, libax25
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libax25,
+  ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ax25-apps";
-  version = "0.0.8-rc5";
+  version = "0.0.8-rc5-unstable-2021-05-13";
 
-  buildInputs = [ libax25 ncurses ];
+  buildInputs = [
+    autoreconfHook
+    libax25
+    ncurses
+  ];
 
-  # Due to recent unsolvable administrative domain problems with linux-ax25.org,
-  # the new domain is linux-ax25.in-berlin.de
-  src = fetchurl {
-    url = "https://linux-ax25.in-berlin.de/pub/ax25-apps/ax25-apps-${version}.tar.gz";
-    sha256 = "sha256-MzQOIyy5tbJKmojMrgtOcsaQTFJvs3rqt2hUgholz5Y=";
+  # src from linux-ax25.in-berlin.de remote has been
+  # unreliable, pointing to github mirror from the radiocatalog
+  src = fetchFromGitHub {
+    owner = "radiocatalog";
+    repo = "ax25-apps";
+    rev = "afc4a5faa01a24c4da1d152b901066405f36adb6";
+    hash = "sha256-RLeFndis2OhIkJPLD+YfEUrJdZL33huVzlHq+kGq7dA=";
   };
 
   configureFlags = [
@@ -24,11 +32,11 @@ stdenv.mkDerivation rec {
     "--program-transform-name=s@^call$@ax&@;s@^listen$@ax&@"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AX.25 ham radio applications";
     homepage = "https://linux-ax25.in-berlin.de/wiki/Main_Page";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ sarcasticadmin ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    platforms = lib.platforms.linux;
   };
 }

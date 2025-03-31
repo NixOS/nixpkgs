@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchpatch
-, coreutils
-, gnused
-, libnotify
-, pulseaudio
-, sound-theme-freedesktop
-, xprop
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchpatch,
+  coreutils,
+  gnused,
+  libnotify,
+  pulseaudio,
+  sound-theme-freedesktop,
+  xprop,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "undistract-me";
   version = "unstable-2020-08-09";
 
   src = fetchFromGitHub {
     owner = "jml";
-    repo = pname;
+    repo = "undistract-me";
     rev = "2f8ac25c6ad8efcf160d2b480825b1cbb6772aab";
     hash = "sha256-Qw7Cu9q0ZgK/RTvyDdHM5N3eBaKjtYqYH0J+hKMUZX8=";
   };

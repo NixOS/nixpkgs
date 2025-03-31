@@ -18,7 +18,7 @@
   libnotify,
   libsForQt5,
   libxkbcommon,
-  mesa,
+  libgbm,
   nspr,
   nss,
   openssl,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     autoPatchelfHook
     rpmextract
-    mesa
+    libgbm
   ];
 
   buildInputs = [
@@ -112,14 +112,14 @@ stdenv.mkDerivation rec {
     rpmextract $src
     mv $out/usr/* $out
     rm -r $out/usr
+    rm -r $out/lib/.build-id
 
     runHook postInstall
   '';
 
   #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
-  postInstall = ''
-    substituteInPlace share/applications/Plasticity.desktop \
-      --replace-fail 'Exec=Plasticity %U' "Exec=Plasticity --use-gl=egl %U"
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
   meta = with lib; {

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchzip, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchzip,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "phylactery";
@@ -11,7 +16,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.phylactery = nixosTests.phylactery;
 

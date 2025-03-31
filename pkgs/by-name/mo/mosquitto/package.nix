@@ -1,41 +1,44 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, docbook_xsl
-, libxslt
-, c-ares
-, cjson
-, libuuid
-, libuv
-, libwebsockets
-, openssl
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, uthash
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  docbook_xsl,
+  libxslt,
+  c-ares,
+  cjson,
+  libuuid,
+  libuv,
+  libwebsockets,
+  openssl,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  uthash,
+  nixosTests,
 }:
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
-  libwebsockets' = (libwebsockets.override {
-    withExternalPoll = true;
-  }).overrideAttrs (old: {
-    # Avoid bug in firefox preventing websockets being created over http/2 connections
-    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
-    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
-  });
+  libwebsockets' =
+    (libwebsockets.override {
+      withExternalPoll = true;
+    }).overrideAttrs
+      (old: {
+        # Avoid bug in firefox preventing websockets being created over http/2 connections
+        # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+        cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+      });
 
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.20";
+  version = "2.0.21";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
+    hash = "sha256-E47NqiaMk67pNgf151DMhQ4DMyLvfzrECEQtk3jASPU=";
   };
 
   postPatch = ''
@@ -45,9 +48,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ cmake docbook_xsl libxslt ];
+  nativeBuildInputs = [
+    cmake
+    docbook_xsl
+    libxslt
+  ];
 
   buildInputs = [
     c-ares
@@ -78,7 +89,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mosquitto.org/";
     changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      sikmir
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mosquitto";
   };

@@ -1,14 +1,14 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, glibcLocales
-, adwaita-icon-theme
-, gobject-introspection
-, gtk3
-, intltool
-, python311Packages
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  adwaita-icon-theme,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  python311Packages,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 python311Packages.buildPythonApplication rec {
@@ -34,7 +34,6 @@ python311Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     intltool
     wrapGAppsHook3
-    glibcLocales
     gobject-introspection
   ];
 
@@ -62,6 +61,7 @@ python311Packages.buildPythonApplication rec {
     podcastparser
     html5lib
     mutagen
+    yt-dlp # for use by gpodder's builtin "youtube-dl" extension
   ];
 
   makeFlags = [
@@ -71,10 +71,6 @@ python311Packages.buildPythonApplication rec {
     "share/dbus-1/services/org.gpodder.service"
   ];
 
-  preBuild = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
-
   installCheckPhase = ''
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
@@ -82,7 +78,7 @@ python311Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Podcatcher written in python";

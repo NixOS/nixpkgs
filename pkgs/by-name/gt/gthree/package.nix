@@ -1,25 +1,31 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, ninja
-, meson
-, pkg-config
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, gtk3
-, graphene
-, libepoxy
-, json-glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ninja,
+  meson,
+  pkg-config,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  gtk3,
+  graphene,
+  libepoxy,
+  json-glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gthree";
   version = "0.9.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "alexlarsson";

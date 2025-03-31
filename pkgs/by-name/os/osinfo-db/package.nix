@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, osinfo-db-tools
-, gettext
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  osinfo-db-tools,
+  gettext,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "osinfo-db";
-  version = "20240701";
+  version = "20250124";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    hash = "sha256-HXOBpy8MRfRzvvpKkvoBCjf8T3srtdH2jgbaRA72kF0=";
+    hash = "sha256-fKcX8JdaeYE1orOe790UNqCwaC4paFx/0B73+DolclA=";
   };
 
   nativeBuildInputs = [

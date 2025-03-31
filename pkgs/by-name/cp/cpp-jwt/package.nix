@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, gtest, nlohmann_json }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  gtest,
+  nlohmann_json,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpp-jwt";
@@ -6,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "arun11299";
-    repo = pname;
+    repo = "cpp-jwt";
     rev = "v${version}";
     sha256 = "sha256-5hVsFanTCT/uLLXrnb2kMvmL6qs9RXVkvxdWaT6m4mk=";
   };
@@ -21,7 +29,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gtest openssl nlohmann_json ];
+  buildInputs = [
+    gtest
+    openssl
+    nlohmann_json
+  ];
 
   doCheck = true;
 

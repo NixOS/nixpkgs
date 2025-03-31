@@ -10,6 +10,7 @@
 , mypy
 , systemd
 , fakeroot
+, util-linux
 
   # filesystem tools
 , dosfstools
@@ -23,6 +24,7 @@
   # compression tools
 , zstd
 , xz
+, zeekstd
 
   # arguments
 , name
@@ -80,6 +82,7 @@ let
     "erofs" = [ erofs-utils ];
     "btrfs" = [ btrfs-progs ];
     "xfs" = [ xfsprogs ];
+    "swap" = [ util-linux ];
   };
 
   fileSystemTools = builtins.concatMap (f: fileSystemToolMapping."${f}") fileSystems;
@@ -87,11 +90,13 @@ let
   compressionPkg = {
     "zstd" = zstd;
     "xz" = xz;
+    "zstd-seekable" = zeekstd;
   }."${compression.algorithm}";
 
   compressionCommand = {
     "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
     "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "zstd-seekable" = "zeekstd --quiet --max-frame-size 2M --compression-level ${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:
@@ -108,6 +113,7 @@ in
 
   nativeBuildInputs = [
     systemd
+    util-linux
     fakeroot
   ] ++ lib.optionals (compression.enable) [
     compressionPkg
@@ -153,7 +159,7 @@ in
     runHook preBuild
 
     echo "Building image with systemd-repart..."
-    fakeroot systemd-repart \
+    unshare --map-root-user fakeroot systemd-repart \
       ''${systemdRepartFlags[@]} \
       ${imageFileBasename}.raw \
       | tee repart-output.json

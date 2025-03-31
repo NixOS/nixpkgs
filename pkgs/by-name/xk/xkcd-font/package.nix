@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xkcd-font";
   version = "unstable-2017-08-24";
 
   src = fetchFromGitHub {
     owner = "ipython";
-    repo = pname;
+    repo = "xkcd-font";
     rev = "5632fde618845dba5c22f14adc7b52bf6c52d46d";
     hash = "sha256-1DgSx2L+OpXuPVSXbbl/hcZUyBK9ikPyGWuk6wNzlwc=";
   };

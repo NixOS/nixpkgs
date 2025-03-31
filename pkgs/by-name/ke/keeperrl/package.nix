@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, requireFile
-, openal
-, curl
-, libogg
-, libvorbis
-, SDL2
-, SDL2_image
-, zlib
-, clang
-, libtheora
-, unfree_assets ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  requireFile,
+  openal,
+  curl,
+  libogg,
+  libvorbis,
+  SDL2,
+  SDL2_image,
+  zlib,
+  clang,
+  libtheora,
+  unfree_assets ? false,
+}:
 
 let
   pname = "keeperrl";
@@ -54,11 +56,19 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    openal curl libogg libvorbis libtheora SDL2 SDL2_image zlib clang
+    openal
+    curl
+    libogg
+    libvorbis
+    libtheora
+    SDL2
+    SDL2_image
+    zlib
+    clang
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${SDL2.dev}/include/SDL2"
+    "-I${lib.getInclude SDL2}/include/SDL2"
   ];
 
   enableParallelBuilding = true;
@@ -87,6 +97,9 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny ];
     # TODO: Add OS X
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

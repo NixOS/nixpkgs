@@ -1,22 +1,28 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "bump";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DFgNx0H9/hZ+wUdPkEybRCIjnLsmuoYWruYgbDuFRhU=";
+    sha256 = "sha256-a+vmpmWb/jICNdErkvCQKNIdaKtSrIJZ3BApLvKG/hg=";
   };
 
-  vendorHash = "sha256-AiXbCS3RXd6KZwIo7qzz3yM28cJloLRR+gdWqEpyims=";
+  vendorHash = "sha256-VHVChqQXmCcw2ymTJbQLDtzBycTeXkuHPz52vuKen0w=";
 
   doCheck = false;
 
   ldflags = [
-    "-X main.buildVersion=${version}" "-X main.buildCommit=${version}" "-X main.buildDate=1970-01-01"
+    "-X main.buildVersion=${version}"
+    "-X main.buildCommit=${version}"
+    "-X main.buildDate=1970-01-01"
   ];
 
   meta = with lib; {

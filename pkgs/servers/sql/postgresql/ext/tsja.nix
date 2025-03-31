@@ -1,9 +1,10 @@
-{ lib
-, fetchzip
-, nixosTests
-, stdenv
-, mecab
-, postgresql
+{
+  fetchzip,
+  lib,
+  mecab,
+  nixosTests,
+  postgresql,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,10 @@ stdenv.mkDerivation rec {
     substituteInPlace tsja.c --replace-fail /usr/local/lib/mecab ${mecab}/lib/mecab
   '';
 
-  buildInputs = [ mecab postgresql ];
+  buildInputs = [
+    mecab
+    postgresql
+  ];
 
   installPhase = ''
     mkdir -p $out/lib $out/share/postgresql/extension
@@ -33,12 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.postgresql.tsja.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension implementing Japanese text search";
     homepage = "https://www.amris.jp/tsja/index.html";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
     # GNU-specific linker options are used
-    platforms = platforms.gnu;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.gnu;
+    license = lib.licenses.gpl2Only;
   };
 }

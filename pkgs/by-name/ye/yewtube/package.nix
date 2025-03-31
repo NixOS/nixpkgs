@@ -1,14 +1,18 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "yewtube";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-66cGnEEISC+lZAYhFXuVdDtwh1TgwvCP6nBD84z2z0I=";
+    tag = "v${version}";
+    hash = "sha256-+V9t71Z8PKioM7HWlzTB6X7EokAWgqC3fQJr5tkPdq8=";
   };
 
   postPatch = ''
@@ -43,6 +47,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt";
     homepage = "https://github.com/mps-youtube/yewtube";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz koral ];
+    maintainers = with maintainers; [
+      fgaz
+      koral
+    ];
   };
 }

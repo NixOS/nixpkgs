@@ -23,29 +23,30 @@
   libnotify,
   qt6,
   xkeyboard_config,
-  openssl,
   wayland-protocols,
   wayland,
   libsysprof-capture,
   lerc,
   doxygen,
+  writableTmpDirAsHomeHook,
 }:
+
 stdenv.mkDerivation rec {
   pname = "deskflow";
-  version = "1.17.2";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CHlvL/MC9clFrMxlfIXaCFoTkcLS7QsYK7MXMFW0188=";
+    tag = "v${version}";
+    hash = "sha256-lX8K7HuC/Sxa5M0h+r5NmdFf032nVrE9JF6H+IBWPUA=";
   };
 
   postPatch = ''
     substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
       --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
-    substituteInPlace src/lib/gui/tls/TlsCertificate.cpp \
-      --replace-fail "\"openssl\"" "\"${lib.getBin openssl}/bin/openssl\""
+    substituteInPlace deploy/linux/deploy.cmake \
+      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
   '';
 
   nativeBuildInputs = [
@@ -93,11 +94,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   checkPhase = ''
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    export HOME=$(mktemp -d)
     ./bin/unittests
     ./bin/integtests
 
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl

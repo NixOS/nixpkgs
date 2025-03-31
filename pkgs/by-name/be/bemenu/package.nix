@@ -1,8 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pkg-config, scdoc
-, ncursesSupport ? true, ncurses
-, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
-, x11Support ? true, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cairo,
+  libxkbcommon,
+  pango,
+  fribidi,
+  harfbuzz,
+  pkg-config,
+  scdoc,
+  ncursesSupport ? true,
+  ncurses,
+  waylandSupport ? true,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  x11Support ? true,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,25 +31,37 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config scdoc ]
-    ++ lib.optionals waylandSupport [ wayland-scanner ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ] ++ lib.optionals waylandSupport [ wayland-scanner ];
 
-  buildInputs = [
-    cairo
-    fribidi
-    harfbuzz
-    libxkbcommon
-    pango
-  ] ++ lib.optional ncursesSupport ncurses
-    ++ lib.optionals waylandSupport [ wayland wayland-protocols ]
+  buildInputs =
+    [
+      cairo
+      fribidi
+      harfbuzz
+      libxkbcommon
+      pango
+    ]
+    ++ lib.optional ncursesSupport ncurses
+    ++ lib.optionals waylandSupport [
+      wayland
+      wayland-protocols
+    ]
     ++ lib.optionals x11Support [
-      xorg.libX11 xorg.libXinerama xorg.libXft
-      xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
+      xorg.libX11
+      xorg.libXinerama
+      xorg.libXft
+      xorg.libXdmcp
+      xorg.libpthreadstubs
+      xorg.libxcb
     ];
 
-  makeFlags = ["PREFIX=$(out)"];
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags = ["clients"]
+  buildFlags =
+    [ "clients" ]
     ++ lib.optional ncursesSupport "curses"
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";

@@ -1,7 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) getExe mkIf mkOption mkEnableOption types;
+  inherit (lib)
+    getExe
+    mkIf
+    mkOption
+    mkEnableOption
+    types
+    ;
 
   cfg = config.services.mollysocket;
   configuration = format.generate "mollysocket.conf" cfg.settings;
@@ -9,7 +20,8 @@ let
   package = pkgs.writeShellScriptBin "mollysocket" ''
     MOLLY_CONF=${configuration} exec ${getExe pkgs.mollysocket} "$@"
   '';
-in {
+in
+{
   options.services.mollysocket = {
     enable = mkEnableOption ''
       [MollySocket](https://github.com/mollyim/mollysocket) for getting Signal
@@ -114,12 +126,19 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };

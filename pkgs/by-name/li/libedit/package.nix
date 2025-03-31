@@ -1,7 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,10 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XwVzNJ13xKSJZxkc3WY03Xql9jmMalf+A3zAJpbWCZ8=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     ./01-cygwin.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
   ];
 
   propagatedBuildInputs = [
@@ -30,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   # fine with GCC and Musl.
   # There is a DR to fix this issue with Clang which is not merged yet.
   # https://reviews.llvm.org/D137043
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (stdenv.targetPlatform.isMusl && stdenv.cc.isClang)
-      "-D__STDC_ISO_10646__=201103L";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.targetPlatform.isMusl && stdenv.cc.isClang
+  ) "-D__STDC_ISO_10646__=201103L";
 
   postFixup = ''
     find $out/lib -type f | \
@@ -45,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.thrysoee.dk/editline/#changelog";
     description = "Port of the NetBSD Editline library (libedit)";
     longDescription = ''
-       This is an autotool- and libtoolized port of the NetBSD Editline library
-       (libedit). This Berkeley-style licensed command line editor library
-       provides generic line editing, history, and tokenization functions,
-       similar to those found in GNU Readline.
+      This is an autotool- and libtoolized port of the NetBSD Editline library
+      (libedit). This Berkeley-style licensed command line editor library
+      provides generic line editing, history, and tokenization functions,
+      similar to those found in GNU Readline.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, clang
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, openssl
-, libpcap
+{
+  lib,
+  stdenv,
+  clang,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  openssl,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "joswr1ght";
-    repo = pname;
+    repo = "cowpatty";
     rev = version;
     sha256 = "0fvwwghhd7wsx0lw2dj9rdsjnirawnq3c6silzvhi0yfnzn5fs0s";
   };
@@ -55,7 +56,10 @@ stdenv.mkDerivation rec {
     description = "Offline dictionary attack against WPA/WPA2 networks";
     homepage = "https://github.com/joswr1ght/cowpatty";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nico202 fab ];
+    maintainers = with maintainers; [
+      nico202
+      fab
+    ];
     platforms = platforms.linux;
   };
 }

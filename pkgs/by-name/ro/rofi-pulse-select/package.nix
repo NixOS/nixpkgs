@@ -1,9 +1,10 @@
-{ stdenv
-, fetchFromGitLab
-, lib
-, makeWrapper
-, ponymix
-, rofi-unwrapped
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  makeWrapper,
+  ponymix,
+  rofi-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
-    repo = pname;
+    repo = "rofi-pulse-select";
     rev = version;
     sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
   };
@@ -23,7 +24,12 @@ stdenv.mkDerivation rec {
     install -D --target-directory=$out/bin/ ./rofi-pulse-select
 
     wrapProgram $out/bin/rofi-pulse-select \
-      --prefix PATH ":" ${lib.makeBinPath [ rofi-unwrapped ponymix ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          rofi-unwrapped
+          ponymix
+        ]
+      }
 
     runHook postInstall
   '';

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, curl
-, jansson
-, perl
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  curl,
+  jansson,
+  perl,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pooler";
-    repo = pname;
+    repo = "cpuminer";
     rev = "v${version}";
     sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
   };
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
   postPatch = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ curl jansson ];
+  buildInputs = [
+    curl
+    jansson
+  ];
 
   configureFlags = [ "CFLAGS=-O3" ];
 

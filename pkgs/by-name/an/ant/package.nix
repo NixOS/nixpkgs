@@ -24,27 +24,27 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib/ant
-    mv * $out/lib/ant/
+    mkdir -p $out/bin $out/share/ant
+    mv * $out/share/ant/
 
     # Get rid of the manual (35 MiB).  Maybe we should put this in a
     # separate output.  Keep the antRun script since it's vanilla sh
     # and needed for the <exec/> task (but since we set ANT_HOME to
     # a weird value, we have to move antRun to a weird location).
     # Get rid of the other Ant scripts since we provide our own.
-    mv $out/lib/ant/bin/antRun $out/bin/
-    rm -rf $out/lib/ant/{manual,bin,WHATSNEW}
-    mkdir $out/lib/ant/bin
-    mv $out/bin/antRun $out/lib/ant/bin/
+    mv $out/share/ant/bin/antRun $out/bin/
+    rm -rf $out/share/ant/{manual,bin,WHATSNEW}
+    mkdir $out/share/ant/bin
+    mv $out/bin/antRun $out/share/ant/bin/
 
     # Install ant-contrib.
     unpackFile $contrib
-    cp -p ant-contrib/ant-contrib-*.jar $out/lib/ant/lib/
+    cp -p ant-contrib/ant-contrib-*.jar $out/share/ant/lib/
 
     cat >> $out/bin/ant <<EOF
     #! ${stdenv.shell} -e
 
-    ANT_HOME=$out/lib/ant
+    ANT_HOME=$out/share/ant
 
     # Find the JDK by looking for javac.  As a fall-back, find the
     # JRE by looking for java.  The latter allows just the JRE to be
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    home = "${finalAttrs.finalPackage}/share/ant";
     updateScript = gitUpdater {
       rev-prefix = "rel/";
       url = "https://gitbox.apache.org/repos/asf/ant";

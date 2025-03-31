@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -31,7 +32,7 @@ buildGoModule rec {
       specified inventory sources.
     '';
     homepage = "https://github.com/ns1/waitron";
-    license =  licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ guibert ];
     platforms = platforms.linux;
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check

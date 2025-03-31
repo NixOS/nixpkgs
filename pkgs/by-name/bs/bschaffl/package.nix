@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cairo, libX11, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  libX11,
+  lv2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bschaffl";
@@ -6,13 +14,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sjaehn";
-    repo = pname;
+    repo = "bschaffl";
     rev = version;
     sha256 = "sha256-zfhPYH4eUNWHV27ZtX2IIvobyPdKs5yGr/ryJRQa6as=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo libX11 lv2 ];
+  buildInputs = [
+    cairo
+    libX11
+    lv2
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

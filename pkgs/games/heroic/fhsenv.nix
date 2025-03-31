@@ -26,14 +26,16 @@ buildFHSEnv {
       curl
       gawk
       zenity
-      plasma5Packages.kdialog
+      kdePackages.kdialog
       mangohud
       nettools
       opencl-headers
       p7zip
+      pciutils
       perl
       psmisc
       python3
+      umu-launcher
       unzip
       which
       xorg.xrandr
@@ -112,7 +114,7 @@ buildFHSEnv {
       libpulseaudio
       libselinux
       libsndfile
-      libsoup
+      libsoup_2_4
       libtheora
       libtiff
       libunwind

@@ -5,12 +5,11 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "import-expression";
-  version = "2.1.0.post1";
+  version = "2.2.1.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,12 +17,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "import_expression";
     inherit version;
-    hash = "sha256-mclYGeuISXUDrOS1mhpVgDp1439KnHAwzHKIbRtdibQ=";
+    hash = "sha256-HIMb8mvvft82qXs0xoe5Yuer4GEWxm8A4U+aMhhiPU8=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

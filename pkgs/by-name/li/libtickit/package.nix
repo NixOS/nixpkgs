@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libtool
-, perl
-, libtermkey
-, unibilium
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libtool,
+  perl,
+  libtermkey,
+  unibilium,
 }:
 let
-  version = "0.4.3";
+  version = "0.4.5";
 in
 stdenv.mkDerivation {
   pname = "libtickit";
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
     owner = "leonerd";
     repo = "libtickit";
     rev = "v${version}";
-    hash = "sha256-QCrym8g5J1qwsFpU/PB8zZIWdM3YzOySknISSbQE4Sc=";
+    hash = "sha256-q8JMNFxmnyOiUso4nXLZjJIBFYR/EF6g45lxVeY0f1s=";
   };
 
   patches = [

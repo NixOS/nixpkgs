@@ -1,5 +1,26 @@
-{ lib, stdenv, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
-, nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg, requireFile }:
+{
+  lib,
+  stdenv,
+  patchelf,
+  makeWrapper,
+  gtk2,
+  glib,
+  udev,
+  alsa-lib,
+  atk,
+  nspr,
+  fontconfig,
+  cairo,
+  pango,
+  nss,
+  freetype,
+  gnome2,
+  gdk-pixbuf,
+  curl,
+  systemd,
+  xorg,
+  requireFile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "planetary-annihalation";
@@ -11,7 +32,10 @@ stdenv.mkDerivation rec {
     sha256 = "0imi3k5144dsn3ka9khx3dj76klkw46ga7m6rddqjk4yslwabh3k";
   };
 
-  nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [
+    patchelf
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
@@ -23,12 +47,58 @@ stdenv.mkDerivation rec {
     ln -s ${systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/PA"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXdamage xorg.libXfixes gtk2 glib stdenv.cc.libc "$out" xorg.libXext pango udev xorg.libX11 xorg.libXcomposite alsa-lib atk nspr fontconfig cairo pango nss freetype gnome2.GConf gdk-pixbuf xorg.libXrender ]}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" "$out/host/CoherentUI_Host"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${
+      lib.makeLibraryPath [
+        stdenv.cc.cc
+        xorg.libXdamage
+        xorg.libXfixes
+        gtk2
+        glib
+        stdenv.cc.libc
+        "$out"
+        xorg.libXext
+        pango
+        udev
+        xorg.libX11
+        xorg.libXcomposite
+        alsa-lib
+        atk
+        nspr
+        fontconfig
+        cairo
+        pango
+        nss
+        freetype
+        gnome2.GConf
+        gdk-pixbuf
+        xorg.libXrender
+      ]
+    }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" "$out/host/CoherentUI_Host"
 
-    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc xorg.libX11 xorg.libXcursor gtk2 glib curl "$out" ]}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64"
+    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [
+        stdenv.cc.cc
+        stdenv.cc.libc
+        xorg.libX11
+        xorg.libXcursor
+        gtk2
+        glib
+        curl
+        "$out"
+      ]
+    }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64"
 
     for f in $out/lib/*; do
-      patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc curl xorg.libX11 stdenv.cc.libc xorg.libXcursor "$out" ]}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" $f
+      patchelf --set-rpath "${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          curl
+          xorg.libX11
+          stdenv.cc.libc
+          xorg.libXcursor
+          "$out"
+        ]
+      }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" $f
     done
   '';
 

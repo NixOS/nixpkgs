@@ -3,11 +3,8 @@ let
   cfg = config.services.hickory-dns;
   toml = pkgs.formats.toml { };
 
-  configFile = toml.generate "hickory-dns.toml" (
-    lib.filterAttrsRecursive (_: v: v != null) cfg.settings
-  );
-
   zoneType = lib.types.submodule ({ config, ... }: {
+    freeformType = toml.type;
     options = with lib; {
       zone = mkOption {
         type = types.str;
@@ -16,14 +13,13 @@ let
         '';
       };
       zone_type = mkOption {
-        type = types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
+        type = types.enum [ "Primary" "Secondary" "External" ];
         default = "Primary";
         description = ''
           One of:
           - "Primary" (the master, authority for the zone).
           - "Secondary" (the slave, replicated from the primary).
-          - "Hint" (a cached zone with recursive resolver abilities).
-          - "Forward" (a cached zone where all requests are forwarded to another resolver).
+          - "External" (a cached zone that queries other nameservers).
 
           For more details about these zone types, consult the documentation for BIND,
           though note that hickory-dns supports only a subset of BIND's zone types:
@@ -31,13 +27,13 @@ let
         '';
       };
       file = mkOption {
-        type = types.either types.path types.str;
-        default = "${config.zone}.zone";
-        defaultText = literalExpression ''"''${config.zone}.zone"'';
+        type = types.nullOr (types.either types.path types.str);
+        default = if config.zone_type != "External" then "${config.zone}.zone" else null;
+        defaultText = literalExpression ''if config.zone_type != "External" then "''${config.zone}.zone" else null'';
         description = ''
           Path to the .zone file.
           If not fully-qualified, this path will be interpreted relative to the `directory` option.
-          If omitted, defaults to the value of the `zone` option suffixed with ".zone".
+          If omitted, defaults to the value of the `zone` option suffixed with ".zone" when `zone_type` isn't External; otherwise, defaults to `null`.
         '';
       };
     };
@@ -80,6 +76,22 @@ in
           Log DEBUG, INFO, WARN and ERROR messages.
           This option is mutually exclusive with the `debug` option.
           If neither `quiet` nor `debug` are enabled, logging defaults to the INFO level.
+        '';
+      };
+      configFile = mkOption {
+        type = types.path;
+        default = toml.generate "hickory-dns.toml" (
+          lib.mapAttrs (_: v: if builtins.isList v then map (v: if builtins.isAttrs v then lib.filterAttrs (_: v: v != null) v else v) v else v) (lib.filterAttrsRecursive (_: v: v != null) cfg.settings)
+        );
+        defaultText = lib.literalExpression ''
+          let toml = pkgs.formats.toml { }; in toml.generate "hickory-dns.toml" cfg.settings
+        '';
+        description = ''
+          Path to an existing toml file to configure hickory-dns with.
+
+          This can usually be left unspecified, in which case it will be
+          generated from the values in `settings`.
+          If manually specified, then the options in `settings` are ignored.
         '';
       };
       settings = mkOption {
@@ -142,7 +154,7 @@ in
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${lib.getExe cfg.package} --config ${configFile} ${flagsStr}
+          ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";

@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkg-config, autoconf-archive, makeWrapper, which
-, tpm2-tss, glib, dbus
-, cmocka
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  autoconf-archive,
+  makeWrapper,
+  which,
+  tpm2-tss,
+  glib,
+  dbus,
+  cmocka,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
-    repo = pname;
+    repo = "tpm2-abrmd";
     rev = version;
     sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
   };
@@ -23,7 +32,11 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
-  buildInputs = [ tpm2-tss glib dbus ];
+  buildInputs = [
+    tpm2-tss
+    glib
+    dbus
+  ];
   nativeCheckInputs = [ cmocka ];
 
   enableParallelBuilding = true;

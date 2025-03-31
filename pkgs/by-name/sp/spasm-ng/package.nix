@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, gmp, gcc, openssl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  gmp,
+  gcc,
+  openssl,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spasm-ng";
 
   version = "unstable-2022-07-05";
@@ -13,8 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   # GCC is needed for Darwin
-  nativeBuildInputs = [ makeWrapper gcc ];
-  buildInputs = [ gmp openssl zlib ];
+  nativeBuildInputs = [
+    makeWrapper
+    gcc
+  ];
+  buildInputs = [
+    gmp
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
@@ -32,11 +48,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/alberthdev/spasm-ng";
+    homepage = "https://github.com/alberthdev/spasm-ng";
     description = "Z80 assembler with extra features to support development for TI calculators";
     mainProgram = "spasm";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

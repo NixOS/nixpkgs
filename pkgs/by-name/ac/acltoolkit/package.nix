@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage {
   pname = "acltoolkit";
   version = "unstable-2023-02-03";
   format = "setuptools";

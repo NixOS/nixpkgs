@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, curl, openssl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  curl,
+  openssl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
@@ -6,13 +14,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ZerBea";
-    repo = pname;
+    repo = "hcxtools";
     rev = version;
     sha256 = "sha256-8VfGiIXl/F2wgCMuS3+lt9sT/re9YgoRKwzgSHCir04=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl openssl zlib ];
+  buildInputs = [
+    curl
+    openssl
+    zlib
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

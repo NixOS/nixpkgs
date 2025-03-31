@@ -1,49 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, cairo
-, cinnamon-desktop
-, dbus
-, desktop-file-utils
-, egl-wayland
-, glib
-, gobject-introspection
-, graphene
-, gtk3
-, json-glib
-, libcanberra
-, libdrm
-, libgnomekbd
-, libgudev
-, libinput
-, libstartup_notification
-, libwacom
-, libxcvt
-, libXdamage
-, libxkbcommon
-, libXtst
-, mesa
-, meson
-, ninja
-, pipewire
-, pkg-config
-, python3
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wrapGAppsHook3
-, xorgserver
-, xwayland
-, zenity
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  cairo,
+  cinnamon-desktop,
+  dbus,
+  desktop-file-utils,
+  egl-wayland,
+  glib,
+  gobject-introspection,
+  graphene,
+  gtk3,
+  json-glib,
+  libcanberra,
+  libdrm,
+  libgbm,
+  libgnomekbd,
+  libgudev,
+  libinput,
+  libstartup_notification,
+  libwacom,
+  libxcvt,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  mesa-gl-headers,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  python3,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wrapGAppsHook3,
+  xorgserver,
+  xwayland,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
   version = "6.4.1";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
@@ -53,15 +59,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
     meson
     ninja
     pkg-config
@@ -81,6 +85,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -101,6 +106,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa-gl-headers
   ];
 
   mesonFlags = [

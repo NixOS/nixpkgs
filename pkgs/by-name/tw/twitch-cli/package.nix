@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, testers
-, twitch-cli
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  twitch-cli,
 }:
 
 buildGoModule rec {

@@ -9,19 +9,17 @@ let
   fontsInfo = lib.trivial.importJSON ./manifests/fonts.json;
   checksums = lib.trivial.importJSON ./manifests/checksums.json;
 
+  releaseVersion = lib.removePrefix "v" releaseInfo.tag_name;
+
   convertAttrName =
     name:
     let
       lowerName = lib.strings.toLower name;
     in
-    if builtins.match "[[:digit:]].*" lowerName != null then "_" + lowerName else lowerName;
+    if builtins.match "^[[:digit:]].*" lowerName != null then "_" + lowerName else lowerName;
 
   convertVersion =
-    version: date:
-    if builtins.match "[[:digit:]].*" version != null then
-      version
-    else
-      "0-unstable-" + builtins.head (lib.strings.splitString "T" date);
+    version: if builtins.match "^[[:digit:]].*" version != null then "+" + version else "";
 
   convertLicense = import ./convert-license.nix lib;
 
@@ -36,8 +34,8 @@ let
       ...
     }:
     stdenvNoCC.mkDerivation {
-      pname = lib.strings.toLower caskName;
-      version = convertVersion version releaseInfo.published_at;
+      pname = "nerd-fonts-" + lib.strings.toLower caskName;
+      version = releaseVersion + convertVersion version;
 
       src =
         let
@@ -67,14 +65,25 @@ let
           runHook postInstall
         '';
 
-      passthru.updateScript = {
-        command = ./update.py;
-        supportedFeatures = [ "commit" ];
+      passthru = {
+        inherit releaseVersion;
+        updateScript = {
+          command = ./update.py;
+          supportedFeatures = [ "commit" ];
+        };
       };
 
       meta = {
         description = "Nerd Fonts: " + description;
-        license = convertLicense licenseId;
+        license = lib.unique (
+          (with lib.licenses; [
+            # > Nerd Fonts source fonts, patched fonts, and folders with explicit OFL SIL files
+            ofl
+            # > Nerd Fonts original source code files (such as `.sh`, `.py`, `font-patcher` and others)
+            mit
+          ])
+          ++ lib.toList (convertLicense licenseId)
+        );
         homepage = "https://nerdfonts.com/";
         changelog = "https://github.com/ryanoasis/nerd-fonts/blob/${releaseInfo.tag_name}/changelog.md";
         platforms = lib.platforms.all;
@@ -86,7 +95,7 @@ let
     };
 
   nerdFonts = lib.trivial.pipe fontsInfo [
-    (map (font: lib.attrsets.nameValuePair (convertAttrName font.caskName) (makeNerdFont font)))
+    (map (font: lib.nameValuePair (convertAttrName font.caskName) (makeNerdFont font)))
     builtins.listToAttrs
   ];
 in

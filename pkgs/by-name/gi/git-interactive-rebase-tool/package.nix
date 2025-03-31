@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, apple-sdk_11 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
@@ -6,14 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "MitMaro";
-    repo = pname;
+    repo = "git-interactive-rebase-tool";
     rev = version;
     hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv apple-sdk_11 ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WTg1o2iF5/UOVIqKFqGbC28B4HrKJWM0+XCHgaA1lc4=";
 
   # Compilation during tests fails if this env var is not set.
   preCheck = "export GIRT_BUILD_GIT_HASH=${version}";
@@ -24,7 +27,11 @@ rustPlatform.buildRustPackage rec {
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 zowoq ma27 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      zowoq
+      ma27
+    ];
     mainProgram = "interactive-rebase-tool";
   };
 }

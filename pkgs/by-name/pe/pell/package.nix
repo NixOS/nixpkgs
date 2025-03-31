@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, scsh, sox, libnotify }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scsh,
+  sox,
+  libnotify,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pell";
   version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
-    repo = pname;
+    repo = "pell";
     rev = "f251625ece6bb5517227970287119e7d2dfcea8b";
     sha256 = "0k8m1lv2kyrs8fylxmbgxg3jn65g57frf2bndc82gkr5svwb554a";
   };

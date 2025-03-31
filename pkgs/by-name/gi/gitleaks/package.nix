@@ -3,24 +3,24 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  gitleaks,
   installShellFiles,
-  testers,
   nix-update-script,
+  versionCheckHook,
+  git,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.21.2";
+  version = "8.24.2";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1MCSGFpjYD4XdES+kJTz/NTN/B00TWMQ1Rmk/nsKf2Q=";
+    tag = "v${version}";
+    hash = "sha256-5Bx+suC24r2v9WaBzhkGJTAnh1TeQyjkVj+YVCviYOc=";
   };
 
-  vendorHash = "sha256-iIgS0fXdiVMYKr3FZTYlCSEqqaH9sxZh1MFry9pGET8=";
+  vendorHash = "sha256-MSF9N9kXsIM2WKsjKAVztYypwGPng2EElHx7p6vADqc=";
 
   ldflags = [
     "-s"
@@ -28,10 +28,12 @@ buildGoModule rec {
     "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
-  # With v8 the config tests are blocking
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
@@ -40,10 +42,7 @@ buildGoModule rec {
       --zsh <($out/bin/${pname} completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = gitleaks;
-    command = "${pname} version";
-  };
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

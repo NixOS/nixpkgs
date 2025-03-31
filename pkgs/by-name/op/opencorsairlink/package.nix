@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libusb1, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libusb1,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OpenCorsairLink";
   version = "unstable-2019-12-23";
 
@@ -16,6 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "1nizicl0mc9pslc6065mnrs0fnn8sh7ca8iiw7w9ix57zrhabpld";
   };
 
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   patches = [
     # Pull upstream fix for -fno-common toolchain
     (fetchpatch {
@@ -30,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
     mainProgram = "OpenCorsairLink.elf";
   };
 }

@@ -2,23 +2,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncons";
-  version = "0.176.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "danielaparker";
     repo = "jsoncons";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RDF5HL6utM/6wna1TxCefl7X8B1qp6nsEDrguTLrtgA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EafFoS54svxY9zaFqzWYQ8QUxN2dHy2wI5UugxKnyUk=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-std=c++20 -Wno-error";
+
+  meta = {
     description = "C++, header-only library for constructing JSON and JSON-like data formats";
     homepage = "https://danielaparker.github.io/jsoncons/";
-    changelog = "https://github.com/danielaparker/jsoncons/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.all;
+    changelog = "https://github.com/danielaparker/jsoncons/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.all;
   };
 })

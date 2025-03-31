@@ -9,7 +9,7 @@
 
 <!-- FIXME: more stuff, like maintainer? -->
 
-PostgreSQL is an advanced, free relational database.
+PostgreSQL is an advanced, free, relational database.
 <!-- MORE -->
 
 ## Configuring {#module-services-postgres-configuring}
@@ -45,9 +45,9 @@ By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlS
 
 ## Initializing {#module-services-postgres-initializing}
 
-As of NixOS 23.11,
+As of NixOS 24.05,
 `services.postgresql.ensureUsers.*.ensurePermissions` has been
-deprecated, after a change to default permissions in PostgreSQL 15
+removed, after a change to default permissions in PostgreSQL 15
 invalidated most of its previous use cases:
 
 - In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where
@@ -67,7 +67,7 @@ name. This can be done with
 If the database user name equals the connecting system user name,
 postgres by default will accept a passwordless connection via unix
 domain socket. This makes it possible to run many postgres-backed
-services without creating any database secrets at all
+services without creating any database secrets at all.
 
 ### Assigning extra permissions {#module-services-postgres-initializing-extra-permissions}
 
@@ -178,7 +178,7 @@ These instructions are also applicable to other versions.
 :::
 
 Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
-each major version has some internal changes in the databases' state during major releases. Because of that,
+each major version has some internal changes in the databases' state. Because of that,
 NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
 can be obtained like this:
 ```
@@ -203,19 +203,18 @@ For an upgrade, a script like this can be used to simplify the process:
       systemctl stop postgresql
 
       export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
-
       export NEWBIN="${newPostgres}/bin"
 
       export OLDDATA="${cfg.dataDir}"
-      export OLDBIN="${cfg.package}/bin"
+      export OLDBIN="${cfg.finalPackage}/bin"
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
+      sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
-      sudo -u postgres $NEWBIN/pg_upgrade \
+      sudo -u postgres "$NEWBIN/pg_upgrade" \
         --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
+        --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
         "$@"
     '')
   ];
@@ -224,11 +223,11 @@ For an upgrade, a script like this can be used to simplify the process:
 
 The upgrade process is:
 
-  1. Rebuild nixos configuration with the configuration above added to your {file}`configuration.nix`. Alternatively, add that into separate file and reference it in `imports` list.
-  2. Login as root (`sudo su -`)
-  3. Run `upgrade-pg-cluster`. It will stop old postgresql, initialize a new one and migrate the old one to the new one. You may supply arguments like `--jobs 4` and `--link` to speedup migration process. See <https://www.postgresql.org/docs/current/pgupgrade.html> for details.
-  4. Change postgresql package in NixOS configuration to the one you were upgrading to via [](#opt-services.postgresql.package). Rebuild NixOS. This should start new postgres using upgraded data directory and all services you stopped during the upgrade.
-  5. After the upgrade it's advisable to analyze the new cluster.
+  1. Add the above to your {file}`configuration.nix` and rebuild. Alternatively, add that into a separate file and reference it in the `imports` list.
+  2. Login as root (`sudo su -`).
+  3. Run `upgrade-pg-cluster`. This will stop the old postgresql cluster, initialize a new one and migrate the old one to the new one. You may supply arguments like `--jobs 4` and `--link` to speedup the migration process. See <https://www.postgresql.org/docs/current/pgupgrade.html> for details.
+  4. Change the postgresql package in NixOS configuration to the one you were upgrading to via [](#opt-services.postgresql.package). Rebuild NixOS. This should start the new postgres version using the upgraded data directory and all services you stopped during the upgrade.
+  5. After the upgrade it's advisable to analyze the new cluster:
 
        - For PostgreSQL ≥ 14, use the `vacuumdb` command printed by the upgrades script.
        - For PostgreSQL < 14, run (as `su -l postgres` in the [](#opt-services.postgresql.dataDir), in this example {file}`/var/lib/postgresql/13`):
@@ -256,7 +255,7 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 - After that a version is considered end-of-life (EOL).
 - Around February each year is the first time an EOL-release will not have received regular updates anymore.
 
-Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in Februrary of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
+Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in February of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
 
 Thus:
 - In September/October the new major version will be released and added to nixos-unstable.
@@ -273,7 +272,7 @@ A complete list of options for the PostgreSQL module may be found [here](#opt-se
 
 ## Plugins {#module-services-postgres-plugins}
 
-Plugins collection for each PostgreSQL version can be accessed with `.pkgs`. For example, for `pkgs.postgresql_15` package, its plugin collection is accessed by `pkgs.postgresql_15.pkgs`:
+The collection of plugins for each PostgreSQL version can be accessed with `.pkgs`. For example, for the `pkgs.postgresql_15` package, its plugin collection is accessed by `pkgs.postgresql_15.pkgs`:
 ```ShellSession
 $ nix repl '<nixpkgs>'
 
@@ -301,7 +300,7 @@ To add plugins via NixOS configuration, set `services.postgresql.extensions`:
 }
 ```
 
-You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
+You can build a custom `postgresql-with-plugins` (to be used outside of NixOS) using the function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like this:
 ```nix
 self: super: {
   postgresql_custom = self.postgresql_17.withPackages (ps: [
@@ -331,7 +330,7 @@ self: super: {
 ## JIT (Just-In-Time compilation) {#module-services-postgres-jit}
 
 [JIT](https://www.postgresql.org/docs/current/jit-reason.html)-support in the PostgreSQL package
-is disabled by default because of the ~300MiB closure-size increase from the LLVM dependency. It
+is disabled by default because of the ~600MiB closure-size increase from the LLVM dependency. It
 can be optionally enabled in PostgreSQL with the following config option:
 
 ```nix
@@ -374,9 +373,17 @@ several common hardening options from `systemd`, most notably:
 * A system call filter (see {manpage}`systemd.exec(5)` for details on `@system-service`).
 * A stricter default UMask (`0027`).
 * Only sockets of type `AF_INET`/`AF_INET6`/`AF_NETLINK`/`AF_UNIX` allowed.
-* Restricted filesystem access (private `/tmp`, most of the file-system hierachy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+* Restricted filesystem access (private `/tmp`, most of the file-system hierarchy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+  * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
+    ```nix
+    {
+      systemd.services.postgresql.serviceConfig.ReadWritePaths = [
+        "/path/to/tablespace/location"
+      ];
+    }
+    ```
 
-The NixOS module also contains necessary adjustments for extensions from `nixpkgs`
+The NixOS module also contains necessary adjustments for extensions from `nixpkgs`,
 if these are enabled. If an extension or a postgresql feature from `nixpkgs` breaks
 with hardening, it's considered a bug.
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.48.0";
+  version = "3.52.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NYDmDhsgYNMZZDiSZ5ZtRauTzzckjqtETbfs8OvkgE4=";
+    tag = version;
+    hash = "sha256-BjfpohzVbtPk2AjhSeTVgyJ5BF2m/HeXr3pjfJx+Qws=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage = "https://github.com/globus/globus-sdk-python";
-    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
+    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };

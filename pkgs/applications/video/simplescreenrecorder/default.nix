@@ -1,8 +1,29 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg, libjack2, libX11, libXext, libXinerama, qtx11extras
-, libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja, nix-update-script
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  alsa-lib,
+  ffmpeg,
+  libjack2,
+  libX11,
+  libXext,
+  libXinerama,
+  qtx11extras,
+  libXfixes,
+  libGLU,
+  libGL,
+  pkg-config,
+  libpulseaudio,
+  libv4l,
+  qtbase,
+  qttools,
+  cmake,
+  ninja,
+  nix-update-script,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "simplescreenrecorder";
   version = "0.4.4-unstable-2024-08-13";
 
@@ -27,10 +48,26 @@ mkDerivation rec {
       --replace-fail "libssr-glinject.so" "$out/lib/libssr-glinject.so"
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+  ];
   buildInputs = [
-    alsa-lib ffmpeg libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
-    libpulseaudio libv4l qtbase qttools qtx11extras
+    alsa-lib
+    ffmpeg
+    libjack2
+    libX11
+    libXext
+    libXfixes
+    libXinerama
+    libGLU
+    libGL
+    libpulseaudio
+    libv4l
+    qtbase
+    qttools
+    qtx11extras
   ];
 
   passthru.updateScript = nix-update-script { };

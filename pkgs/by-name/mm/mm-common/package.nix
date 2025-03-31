@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, bash
-, gnome
-, meson
-, python3
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  gnome,
+  meson,
+  python3,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {

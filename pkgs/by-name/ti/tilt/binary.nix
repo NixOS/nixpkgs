@@ -1,14 +1,20 @@
-{ lib
-, buildGoModule
-, src, version
-, tilt-assets
+{
+  lib,
+  buildGoModule,
+  src,
+  version,
+  tilt-assets,
+  stdenv,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "tilt";
-  /* Do not use "dev" as a version. If you do, Tilt will consider itself
+  /*
+    Do not use "dev" as a version. If you do, Tilt will consider itself
     running in development environment and try to serve assets from the
-    source tree, which is not there once build completes.  */
+    source tree, which is not there once build completes.
+  */
   inherit src version;
 
   vendorHash = null;
@@ -16,6 +22,15 @@ buildGoModule rec {
   subPackages = [ "cmd/tilt" ];
 
   ldflags = [ "-X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tilt \
+      --bash <($out/bin/tilt completion bash) \
+      --fish <($out/bin/tilt completion fish) \
+      --zsh <($out/bin/tilt completion zsh)
+  '';
 
   preBuild = ''
     mkdir -p pkg/assets/build

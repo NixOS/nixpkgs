@@ -3,24 +3,36 @@
   dotnetCorePackages,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
-  pname = "VrcAdvert";
-  version = "1.0.0";
+  pname = "vrcadvert";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "VrcAdvert";
-    rev = "v${version}";
-    hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
+    tag = "v${version}";
+    hash = "sha256-lrRH+BBeVpYVAdFdlsYVxsBOENZseBVoAxb5v9+E7g8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnetFlags = [ "-p:RuntimeFrameworkVersion=${dotnet-runtime.version}" ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "VrcAdvert" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/VrcAdvert";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advertise your OSC app through OSCQuery";

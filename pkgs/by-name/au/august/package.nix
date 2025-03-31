@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage {
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-58DZMoRH9PBbM4sok/XbUcwSXBeqUAmFZpffdMKQ+dE=";
   };
 
-  cargoHash = "sha256-/GvBbsSL0dZ0xTystIpb8sk1nNg5hmP4yceCHlh7EQE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E1M/Soaz4+Gyxizc4VReZlfJB5gxrSz2ue3WI9fcNJA=";
 
   postInstall = ''
     mv $out/bin/{august-cli,ag}
@@ -23,7 +25,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Emmet-like language that produces JSON, TOML, or YAML";
     homepage = "https://github.com/yoav-lavi/august";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "ag";
   };

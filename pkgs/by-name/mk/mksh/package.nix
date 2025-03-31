@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,10 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    license = with lib.licenses; [ miros isc unicode-dfs-2016 ];
-    maintainers = with lib.maintainers; [ AndersonTorres joachifm ];
+    license = with lib.licenses; [
+      miros
+      isc
+      unicode-dfs-2016
+    ];
+    maintainers = with lib.maintainers; [
+      joachifm
+    ];
     platforms = lib.platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: lksh
-# TODO [ AndersonTorres ]: a more accurate licensing info

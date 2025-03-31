@@ -1,16 +1,18 @@
-{ lib, gitUpdater
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, wrapGAppsHook3
-, gobject-introspection
-, pango
-, gdk-pixbuf
-, python3
-, atk
-, gtk3
-, hicolor-icon-theme
+{
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  wrapGAppsHook3,
+  gobject-introspection,
+  pango,
+  gdk-pixbuf,
+  python3,
+  atk,
+  gtk3,
+  hicolor-icon-theme,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -59,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
   DESTDIR = "/";
 
   makeWrapperArgs = [
-      "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+    "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
   ];
 
   passthru = {

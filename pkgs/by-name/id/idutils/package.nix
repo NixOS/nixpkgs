@@ -1,4 +1,19 @@
-{ fetchurl, lib, stdenv, emacs, gnulib, autoconf, bison, automake, gettext, gperf, texinfo, perl, rsync, darwin }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  emacs,
+  gnulib,
+  autoconf,
+  bison,
+  automake,
+  gettext,
+  gperf,
+  texinfo,
+  perl,
+  rsync,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "idutils";
@@ -14,15 +29,27 @@ stdenv.mkDerivation rec {
     bash -O extglob -c "cd gnulib-tests; rm -r !(Makefile.am)"
     substituteInPlace ./configure.ac --replace "AC_PREREQ(2.61)" "AC_PREREQ(2.64)"
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
-    '';
+  '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    emacs
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      emacs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
+
+  nativeBuildInputs = [
+    gnulib
+    autoconf
+    bison
+    automake
+    gettext
+    gperf
+    texinfo
+    perl
+    rsync
   ];
-
-  nativeBuildInputs = [ gnulib autoconf bison automake gettext gperf texinfo perl rsync ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

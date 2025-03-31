@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, inputstreamhelper, plugin-cache }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  inputstreamhelper,
+  plugin-cache,
+}:
 
 buildKodiAddon rec {
   pname = "raiplay";

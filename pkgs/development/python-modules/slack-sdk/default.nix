@@ -2,11 +2,11 @@
   lib,
   aiodns,
   aiohttp,
+  aiosqlite,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
   flake8,
-  flask-sockets,
   moto,
   psutil,
   pytest-asyncio,
@@ -15,30 +15,27 @@
   sqlalchemy,
   websocket-client,
   websockets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.33.4";
+  version = "3.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WIUhkIFWbIcxjTjzZ2C3VNFhGftBmyYO3iaHpz6d+Sc=";
+    tag = "v${version}";
+    hash = "sha256-yjYpALyHSTLQSuwd6xth7nqfi3m1C9tqnWrrVRmI220=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "pytest-runner"' ""
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiodns
     aiohttp
+    aiosqlite
     boto3
     sqlalchemy
     websocket-client
@@ -49,22 +46,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flake8
-    flask-sockets
     moto
     psutil
     pytest-asyncio
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Requires internet access (to slack API)
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
     # Requires network access: [Errno 111] Connection refused
     "test_send_message_while_disconnection"
+  ];
+
+  disabledTestPaths = [
+    # Event loop issues
+    "tests/slack_sdk/oauth/installation_store/test_file.py"
+    "tests/slack_sdk/oauth/state_store/test_file.py"
   ];
 
   __darwinAllowLocalNetworking = true;

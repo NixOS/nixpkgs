@@ -1,4 +1,8 @@
-{ lib, stdenv, coreutils }:
+{
+  lib,
+  stdenv,
+  coreutils,
+}:
 
 stdenv.mkDerivation {
   pname = "teensy-udev-rules";

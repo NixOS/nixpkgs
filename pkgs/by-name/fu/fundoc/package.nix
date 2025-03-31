@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fundoc";
@@ -6,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "daynin";
-    repo = pname;
+    repo = "fundoc";
     rev = "v${version}";
     hash = "sha256-8WWaYgfqGWrTV2EEeSPz1BN2ur7gsxFiHeDNMJdVDcw=";
   };
@@ -20,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-yapFUkG2JfGb3N3iVEDpQunOyRnbNTs+q3zQ23B23/s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-17PzGHSwruHPRKjyiHWBMqHANR5ulb+/J5UoVsOrbyc=";
 
   meta = with lib; {
     description = "Language agnostic documentation generator";

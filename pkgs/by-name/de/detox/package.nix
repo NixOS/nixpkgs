@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, flex, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  flex,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "detox";
@@ -6,12 +12,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dharple";
-    repo = pname;
+    repo = "detox";
     rev = "v${version}";
     hash = "sha256-cTuK5EIimRVZ1nfuTa1ds6xrawYIAbwNNIkNONd9y4Q=";
   };
 
-  nativeBuildInputs = [ flex autoreconfHook ];
+  nativeBuildInputs = [
+    flex
+    autoreconfHook
+  ];
 
   hardeningDisable = [ "format" ];
 

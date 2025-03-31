@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "8.16.0";
+  version = "8.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "elasticsearch_dsl";
     inherit version;
-    hash = "sha256-Bb1QUO730HBqRIfNIoZNPBWMjhy8omtT7xpHO97hNFk=";
+    hash = "sha256-2BcGmb/bT+f6s4VM2sMZotbd26opyep5k9LsIgVttaA=";
   };
 
   build-system = [ setuptools ];

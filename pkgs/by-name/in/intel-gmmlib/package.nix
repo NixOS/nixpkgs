@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-# for passthru.tests
-, intel-compute-runtime
-, intel-media-driver
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  # for passthru.tests
+  intel-compute-runtime,
+  intel-media-driver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.5.4";
+  version = "22.7.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
-    rev = "intel-gmmlib-${version}";
-    hash = "sha256-BxWWTUVAvU3dpbcPvCvXbh5npRT5t4S3d4m2/cCj36g=";
+    tag = "intel-gmmlib-${version}";
+    hash = "sha256-Wm9bHe65ak7ERSEgrSO9x9hUV6ypRbODoY4eodebOVE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
       and buffer management for the Intel(R) Graphics Compute Runtime for
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

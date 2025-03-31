@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, freeimage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  freeimage,
+}:
 
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "myint";
-    repo = pname;
+    repo = "perceptualdiff";
     rev = "v${version}";
     sha256 = "176n518xv0pczf1yyz9r5a8zw5r6sh5ym596kmvw30qznp8n4a8j";
   };

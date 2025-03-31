@@ -120,11 +120,20 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf config.console.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
+
+    systemd.additionalUpstreamSystemUnits = [
+      "getty.target"
+      "getty-pre.target"
+      "getty@.service"
+      "serial-getty@.service"
+      "console-getty.service"
+      "container-getty@.service"
+    ];
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [

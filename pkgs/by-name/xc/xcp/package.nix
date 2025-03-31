@@ -1,20 +1,25 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xcp";
-  version = "0.22.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "tarka";
-    repo = pname;
+    repo = "xcp";
     rev = "v${version}";
-    hash = "sha256-3Y8/zRdWD6GSkhp1UabGyDrU62h1ZADYd4D1saED1ug=";
+    hash = "sha256-LtIPuktZYl3JdudsiOtOumR7omF9u5Z4lR1+a2W4qiI=";
   };
 
   # no such file or directory errors
   doCheck = false;
 
-  cargoHash = "sha256-08Yw0HOaV8XKwzrODaBcHato6TfKBeVBa55MWzINAE0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I1v4DDWflroZwp0vprWP0SXj2PnlCgQ5dusFykoT3zg=";
 
   meta = with lib; {
     description = "Extended cp(1)";

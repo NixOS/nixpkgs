@@ -12,6 +12,7 @@
   datashaper,
   devtools,
   environs,
+  fnllm,
   graspologic,
   json-repair,
   lancedb,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.5.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QK6ZdBDSSKi/WUsDQeEY5JfxgsmW/vK7yDfjMseAO/k=";
+    tag = "v${version}";
+    hash = "sha256-z3gO0wV8YBNi2Z53avujAt/Es9mSzugEFa/qRgq7ItM=";
   };
 
   build-system = [
@@ -65,6 +66,7 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
+    fnllm
     graspologic
     json-repair
     lancedb
@@ -113,7 +115,7 @@ buildPythonPackage rec {
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
-    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/graphrag/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

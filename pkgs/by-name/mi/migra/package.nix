@@ -1,9 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "migra";
@@ -54,6 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Like diff but for PostgreSQL schemas";
     homepage = "https://github.com/djrobstep/migra";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with maintainers; [ bpeetz ];
   };
 }

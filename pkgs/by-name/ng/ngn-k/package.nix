@@ -1,50 +1,39 @@
 { lib
 , stdenv
-, stdenvNoLibs
 , fetchFromGitea
 , runtimeShell
-, doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform
-, withLibc ? true
 }:
 
-let
-  # k itself can be compiled with -ffreestanding, but tests require a libc;
-  # if we want to build k-libc we need a libc obviously
-  useStdenv = if withLibc || doCheck then stdenv else stdenvNoLibs;
-in
-
-useStdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "ngn-k";
-  version = "unstable-2022-11-28";
+  version = "0-unstable-2025-01-04";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ngn";
     repo = "k";
-    rev = "e5138f182a8ced07dd240e3fe58274130842a85d";
-    sha256 = "1pn416znrdndb8iccprzx4zicmsx8c6i9dm3wq5z3jg8nan53p69";
+    rev = "feb51a61443dac03213c4e97edd8df679a4a3aaa";
+    sha256 = "14v2bwbgaxi1rsq5xabp5dmv0bl0vga3lhzwdxyvsyl9q7qybf55";
   };
 
   patches = [
     ./repl-license-path.patch
+    ./repl-argv-1.patch
   ];
 
   postPatch = ''
-    patchShebangs --build a19/a.sh a20/a.sh a21/a.sh dy/a.sh e/a.sh
-
     # don't use hardcoded /bin/sh
-    for f in repl.k repl-bg.k m.c;do
-      substituteInPlace "$f" --replace "/bin/sh" "${runtimeShell}"
+    for f in repl.k m.c;do
+      substituteInPlace "$f" --replace-fail "/bin/sh" "${runtimeShell}"
     done
   '';
 
   makeFlags = [ "-e" ];
   buildFlags = [
-    (if withLibc then "k-libc" else "k")
+    "k"
     "libk.so"
   ];
   checkTarget = "t";
-  inherit doCheck;
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -56,7 +45,7 @@ useStdenv.mkDerivation {
     install -Dm755 libk.so "$lib/lib/libk.so"
     install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
-    substituteInPlace "$out/bin/k-repl" --replace "#!k" "#!$out/bin/k"
+    substituteInPlace "$out/bin/k-repl" --replace-fail "#!k" "#!$out/bin/k"
     runHook postInstall
   '';
 

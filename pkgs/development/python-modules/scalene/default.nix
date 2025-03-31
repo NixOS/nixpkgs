@@ -11,7 +11,6 @@
   nvidia-ml-py,
   psutil,
   pydantic,
-  pynvml,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -32,22 +31,22 @@ let
     owner = "mpaland";
     repo = "printf";
     name = "printf";
-    rev = "v4.0.0";
+    tag = "v4.0.0";
     sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
 in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.47";
+  version = "1.5.52";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
-    rev = "v${version}";
-    hash = "sha256-NrXXwzp+NYdie7p5xsJa7lMGgKED3FCzeAjO7x+USHU=";
+    tag = "v${version}";
+    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
   };
 
   patches = [
@@ -59,8 +58,8 @@ buildPythonPackage rec {
     mkdir vendor/printf
     cp ${printf-src}/printf.c vendor/printf/printf.cpp
     cp -r ${printf-src}/* vendor/printf
-    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
-    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
   '';
 
   nativeBuildInputs = [
@@ -75,7 +74,6 @@ buildPythonPackage rec {
     numpy
     psutil
     pydantic
-    pynvml
     rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
@@ -111,5 +109,15 @@ buildPythonPackage rec {
     mainProgram = "scalene";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarahec ];
+    badPlatforms = [
+      # The scalene doesn't seem to account for arm64 linux
+      "aarch64-linux"
+
+      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
+      # x86 and the other as arm64 then tries to link them into a single binary
+      # which fails.
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

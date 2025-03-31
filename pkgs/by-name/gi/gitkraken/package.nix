@@ -44,7 +44,7 @@
   e2fsprogs,
   krb5,
   libdrm,
-  mesa,
+  libgbm,
   unzip,
   copyDesktopItems,
   libxshmfence,
@@ -57,24 +57,24 @@
 
 let
   pname = "gitkraken";
-  version = "10.5.0";
+  version = "10.8.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-zgzKwQCt1FoBgzVn1WrllANuBvYxKjPJNhVq0JqiXCM=";
+      hash = "sha256-BsNrCnRqgUPSEgYTCLj4Rz8tG/iehgmDhfllG7UEBW8=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-H1rxvCGo0m8g5XSUcuREMfe+Im/QsL6nsDbPQDo09j4=";
+      hash = "sha256-YuRj9uR3BnFJHtZ4Y/RcQbI+4e5YPpadhnlNnoHC5oA=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-OsCbTtGNo+heQQL6OEeUq64Dlbs86FUpfqEJ80PnV2o=";
+      hash = "sha256-Xn+RLGafIVDRLtT7gHUlREax5CxPHWIpZOLFPNnm5cg=";
     };
   };
 
@@ -87,10 +87,8 @@ let
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [
-      xnwdd
-      evanjs
-      arkivm
       nicolas-goudry
+      Rishik-Y
     ];
     mainProgram = "gitkraken";
   };
@@ -145,7 +143,7 @@ let
       e2fsprogs
       krb5
       libdrm
-      mesa
+      libgbm
       libxshmfence
       libxkbcommon
       libGL

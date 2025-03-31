@@ -7,7 +7,7 @@
   pytestCheckHook,
   pyyaml,
   setuptools-scm,
-  substituteAll,
+  replaceVars,
   tomlkit,
   xmltodict,
 }:
@@ -23,8 +23,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./jq-path.patch;
+    (replaceVars ./jq-path.patch {
       jq = "${lib.getBin jq}/bin/jq";
     })
   ];

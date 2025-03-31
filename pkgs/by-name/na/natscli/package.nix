@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, versionCheckHook
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "natscli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hLjiY4+01t1ZlP+N8qBG0YiDiw6VdTdeNkrwHwthrjk=";
+    tag = "v${version}";
+    hash = "sha256-kdoBHTJq/Sj27BOD4NFDVpMlywG5H7vGRS6uUbPscOY=";
   };
 
-  vendorHash = "sha256-T6VcyklwfRS012ZRzqxkahn9YYrQGky/znTqLIkAoK0=";
+  vendorHash = "sha256-RM0PskgKT+n2EQkoIwIbCAwh03TLdcwj7g8AjXBeZPY=";
 
   ldflags = [
     "-X main.version=${version}"

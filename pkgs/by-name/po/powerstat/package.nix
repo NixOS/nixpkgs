@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "powerstat";
-  version = "0.04.03";
+  version = "0.04.04";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "powerstat";
     rev = "V${version}";
-    hash = "sha256-Y9djoy2RaEe4j+1g+9Q2MxEpVzPMA8oyJ92hlQm3Lqg=";
+    hash = "sha256-M0DgY70EDGPOyLHVTEgLFJ1k9qoi2hgVV0WryIJeGOI=";
   };
 
   installFlags = [

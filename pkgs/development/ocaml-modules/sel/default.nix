@@ -1,14 +1,20 @@
-{ lib, fetchurl, ppxlib, ppx_deriving, buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  ppxlib,
+  ppx_deriving,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "sel";
-  version = "0.4.0";
+  version = "0.6.0";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/gares/sel/releases/download/v${version}/sel-${version}.tbz";
-    hash = "sha256-Sp0eSeKyFmMvOQrebqLKP+HbHQB0D0eAmEjDzxnFL1I=";
+    hash = "sha256-AUnO7PZ7fAuyFQnHzeb7buLbSpfZw1NSywaMurjAqDM=";
   };
 
   buildInputs = [

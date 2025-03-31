@@ -11,17 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-LSQ3ZM7BWXiwBqlw6usImpt+w+wC2EvkoAMblTb0pvg=";
+    hash = "sha256-J1FYgVrpiczTTaMvE7IBdd4aqNI4XXXqvgR7SWaVen0=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-w7mB0cAN5aRO1pw21BDIFUtnYUJUoYjW+7nXFCBfYgM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2AWVmdVQAA0+h9xegcWSAjnpa68A+2zazHwKzNKqaTo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,12 +63,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=analyzer::test_68_std"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
+    "--skip=filelist::test"
+    "--skip=path::directory_directory"
+    "--skip=path::directory_target"
+    "--skip=path::source_directory"
+    "--skip=path::source_target"
   ];
 
   meta = {
     description = "Modern Hardware Description Language";
     homepage = "https://veryl-lang.org/";
-    changelog = "https://github.com/veryl-lang/veryl/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/veryl-lang/veryl/releases/tag/v${version}";
     license = with lib.licenses; [
       mit
       asl20

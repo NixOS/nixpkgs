@@ -30,7 +30,7 @@
   libxshmfence,
   libGL,
   libappindicator-gtk3,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
           libxshmfence
           libGL
           libappindicator-gtk3
-          mesa
+          libgbm
           nspr
           nss
           pango

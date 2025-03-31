@@ -1,18 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, SDL, which, installTool ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libGL,
+  SDL,
+  which,
+  installTool ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "azimuth";
   version = "1.0.3";
 
   src = fetchFromGitHub {
-    owner  = "mdsteele";
-    repo   = "azimuth";
-    rev    = "v${version}";
+    owner = "mdsteele";
+    repo = "azimuth";
+    rev = "v${version}";
     sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
   };
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ SDL ];
+  buildInputs = [
+    libGL
+    SDL
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
 
@@ -25,8 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "BUILDTYPE=release"
     "INSTALLDIR=$(out)"
-  ] ++ (if installTool then ["INSTALLTOOL=true"] else ["INSTALLTOOL=false"]);
-
+  ] ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
 
   enableParallelBuilding = true;
 

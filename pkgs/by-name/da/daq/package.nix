@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, flex, bison, libpcap, libdnet, libnfnetlink, libnetfilter_queue}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  libpcap,
+  libdnet,
+  libnfnetlink,
+  libnetfilter_queue,
+}:
 
 stdenv.mkDerivation rec {
   pname = "daq";
@@ -10,13 +20,22 @@ stdenv.mkDerivation rec {
     sha256 = "0yvzscy7vqj7s5rccza0f7p6awghfm3yaxihx1h57lqspg51in3w";
   };
 
-  buildInputs = [ flex bison libpcap libdnet libnfnetlink libnetfilter_queue];
+  buildInputs = [
+    flex
+    bison
+    libpcap
+    libdnet
+    libnfnetlink
+    libnetfilter_queue
+  ];
 
   configureFlags = [
     "--enable-nfq-module=yes"
     "--with-dnet-includes=${libdnet}/includes"
     "--with-dnet-libraries=${libdnet}/lib"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";

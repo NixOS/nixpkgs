@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.tautulli;
 in
@@ -73,7 +78,10 @@ in
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     users.users = lib.mkIf (cfg.user == "plexpy") {
-      plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
+      plexpy = {
+        group = cfg.group;
+        uid = config.ids.uids.plexpy;
+      };
     };
   };
 }

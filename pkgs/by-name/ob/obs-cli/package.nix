@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "obs-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4tjS+PWyP/T0zs4IGE6VQ5c+3tuqxlBwfpPBVEcim6c=";
   };
 

@@ -40,13 +40,13 @@
 , libpulseaudio
 , libuuid
 , libxshmfence
-, mesa
+, libgbm
 , nspr
 , pango
 , systemd
 , at-spi2-atk
 , at-spi2-core
-, libqt5pas
+, libsForQt5
 , qt6
 , vivaldi-ffmpeg-codecs
 , edition ? "stable"
@@ -125,12 +125,12 @@ in stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango
     (lib.getLib stdenv.cc.cc)
-    libqt5pas
+    libsForQt5.libqtpas
     qt6.qtbase
   ];
 

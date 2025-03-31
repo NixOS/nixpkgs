@@ -1,37 +1,39 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, gjs
-, glib
-, glib-networking
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk4
-, libadwaita
-, gst_all_1
-, hicolor-icon-theme
-, meson
-, ninja
-, pkg-config
-, python3
-, webkitgtk_6_0
-, blueprint-compiler
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  gjs,
+  glib,
+  glib-networking,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk4,
+  libadwaita,
+  gst_all_1,
+  hicolor-icon-theme,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  webkitgtk_6_0,
+  blueprint-compiler,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tangram";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
     rev = "v${version}";
-    hash = "sha256-vN9zRc8Ac9SI0lIcuf01A2WLqLGtV3DUiNzCSmc2ri4=";
+    hash = "sha256-OtQN8Iigu92iKa7CAaslIpbS0bqJ9Vus++inrgV/eeM=";
     fetchSubmodules = true;
   };
 
@@ -49,22 +51,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gjs
-    glib
-    glib-networking
-    gsettings-desktop-schemas
-    gtk4
-    libadwaita
-    webkitgtk_6_0
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      gdk-pixbuf
+      gjs
+      glib
+      glib-networking
+      gsettings-desktop-schemas
+      gtk4
+      libadwaita
+      webkitgtk_6_0
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+    ]);
 
   dontPatchShebangs = true;
 
@@ -80,12 +84,22 @@ stdenv.mkDerivation rec {
       -i $out/bin/re.sonny.Tangram
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Run web apps on your desktop";
     mainProgram = "re.sonny.Tangram";
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler chuangzhu ];
+    maintainers =
+      with maintainers;
+      [
+        austinbutler
+        chuangzhu
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

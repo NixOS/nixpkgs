@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ivankorobkov";
     repo = "python-inject";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ws296ESjb+a322imiRRWTS43w32rJc/7Y//OBQXOwnw=";
   };
 

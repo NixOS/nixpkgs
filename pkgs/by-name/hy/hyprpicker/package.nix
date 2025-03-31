@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gu26MSYbTlRLMUpZ9PeYXtqqhzPDQXxEDkjiJgwzIIc=";
+    hash = "sha256-uxPknq5vuSl5h3kV1s+PzrCul2m8jgXcFEx/OMTchlg=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -61,10 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      khaneliman
-    ];
+    maintainers = lib.teams.hyprland.members;
     platforms = wayland.meta.platforms;
     mainProgram = "hyprpicker";
   };

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "3.3.4"; # Check whether the version is compatible with pylint
+  version = "3.3.8"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/VpGniyKzFToDNSnnbYvpUFJjx0Rx9N7x56BJnR0lpk=";
+    tag = "v${version}";
+    hash = "sha256-KKQuLomCHhVYMX1gE9WuqbXOfsf2izGlLE0Ml62gY3k=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/PyCQA/astroid/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;

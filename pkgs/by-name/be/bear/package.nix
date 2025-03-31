@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bear";
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "bear";
     rev = finalAttrs.version;
-    hash = "sha256-pwdjytP+kmTwozRl1Gd0jUqRs3wfvcYPqiQvVwa6s9c=";
+    hash = "sha256-fWNMjqF5PCjGfFGReKIUiJ5lv8z6j7HeBn5hvbnV2V4=";
   };
 
   strictDeps = true;
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # /usr/bin/env is used in test commands and embedded scripts.
     find test -name '*.sh' \
-      -exec sed -ie 's|/usr/bin/env|${coreutils}/bin/env|g' {} +
+      -exec sed -i -e 's|/usr/bin/env|${coreutils}/bin/env|g' {} +
   '';
 
   # Functional tests use loopback networking.

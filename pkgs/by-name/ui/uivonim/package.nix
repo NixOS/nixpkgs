@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, electron
-, makeWrapper
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  electron,
+  makeWrapper,
 }:
 
 buildNpmPackage rec {
@@ -36,7 +37,7 @@ buildNpmPackage rec {
   meta = with lib; {
     homepage = "https://github.com/smolck/uivonim";
     description = "Cross-platform GUI for neovim based on electron";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.agpl3Only;
     mainProgram = "uivonim";

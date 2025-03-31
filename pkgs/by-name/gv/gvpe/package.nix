@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, openssl, gmp, zlib, iproute2, nettools, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  gmp,
+  zlib,
+  iproute2,
+  nettools,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gvpe";
@@ -10,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl gmp zlib ];
+  buildInputs = [
+    openssl
+    gmp
+    zlib
+  ];
 
   configureFlags = [
     "--enable-tcp"

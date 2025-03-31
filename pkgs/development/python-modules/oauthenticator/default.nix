@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "17.2.0";
+  version = "17.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YovSUu5o4dJ2wO1hXEe6Hc0Mf7hIH24DefBi5JV3H6c=";
+    hash = "sha256-5dkMskEf/z3G/MFjNGgjPA4OAjlCLAh8dzTRaFBVuPM=";
   };
 
   build-system = [ setuptools ];

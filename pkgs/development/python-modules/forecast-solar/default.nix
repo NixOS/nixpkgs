@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lWP4ZG195IuP8E9n53EkvdIs3aVTYeEc171Yh3EngOI=";
   };
 

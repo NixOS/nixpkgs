@@ -1,24 +1,28 @@
-{ fetchFromGitHub
-, lib
-, libnl
-, libpcap
-, pkg-config
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  libnl,
+  libpcap,
+  pkg-config,
+  stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
-  version = "0.9.24";
+  version = "0.9.25";
 
   src = fetchFromGitHub {
     owner = "jclehner";
     repo = "nmrpflash";
     rev = "v${version}";
-    hash = "sha256-WneKImWEQQHBFEw/ABE7wA8ZFIvh2t5nJkfviq1fH4M=";
+    hash = "sha256-5oj+sIrVNAbLmmKHiBSDSVdJFrobK41UfWBmU0WRG3c=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnl libpcap ];
+  buildInputs = [
+    libnl
+    libpcap
+  ];
 
   PREFIX = "${placeholder "out"}";
   STANDALONE_VERSION = version;

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, autoreconfHook
-, hfst-ospell
-, fetchFromGitHub
-, pkg-config
-, python3
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  hfst-ospell,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "voikko";
     repo = "corevoikko";
-    rev = "refs/tags/rel-libvoikko-${finalAttrs.version}";
+    tag = "rel-libvoikko-${finalAttrs.version}";
     hash = "sha256-0MIQ54dCxyAfdgYWmmTVF+Yfa15K2sjJyP1JNxwHP2M=";
   };
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.zammad;
@@ -226,7 +231,8 @@ in
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
+        assertion =
+          cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
@@ -263,14 +269,17 @@ in
         # loading all the gems takes time
         TimeoutStartSec = 1200;
       };
-      after = [
-        "network.target"
-        "systemd-tmpfiles-setup.service"
-      ] ++ lib.optionals (cfg.database.createLocally) [
-        "postgresql.service"
-      ] ++ lib.optionals cfg.redis.createLocally [
-        "redis-${cfg.redis.name}.service"
-      ];
+      after =
+        [
+          "network.target"
+          "systemd-tmpfiles-setup.service"
+        ]
+        ++ lib.optionals (cfg.database.createLocally) [
+          "postgresql.service"
+        ]
+        ++ lib.optionals cfg.redis.createLocally [
+          "redis-${cfg.redis.name}.service"
+        ];
       requires = lib.optionals (cfg.database.createLocally) [
         "postgresql.service"
       ];
@@ -280,17 +289,17 @@ in
         # config file
         cat ${databaseConfig} > ${cfg.dataDir}/config/database.yml
         ${lib.optionalString (cfg.database.passwordFile != null) ''
-        {
-          echo -n "  password: "
-          cat ${cfg.database.passwordFile}
-        } >> ${cfg.dataDir}/config/database.yml
+          {
+            echo -n "  password: "
+            cat ${cfg.database.passwordFile}
+          } >> ${cfg.dataDir}/config/database.yml
         ''}
         ${lib.optionalString (cfg.secretKeyBaseFile != null) ''
-        {
-          echo "production: "
-          echo -n "  secret_key_base: "
-          cat ${cfg.secretKeyBaseFile}
-        } > ${cfg.dataDir}/config/secrets.yml
+          {
+            echo "production: "
+            echo -n "  secret_key_base: "
+            cat ${cfg.secretKeyBaseFile}
+          } > ${cfg.dataDir}/config/secrets.yml
         ''}
 
         # needed for cleanup
@@ -349,5 +358,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ taeer netali ];
+  meta.maintainers = with lib.maintainers; [
+    taeer
+    netali
+  ];
 }

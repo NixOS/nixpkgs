@@ -112,7 +112,7 @@ let
             description = ''
               MySQL *exact* version string. Not used if `createdLocally` is set,
               but must be set otherwise. See
-              https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous
+              <https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous>
               for how to set this value, especially if you're using MariaDB.
             '';
           };
@@ -238,6 +238,7 @@ in
       services.phpfpm.pools = mapAttrs' (
         hostName: cfg:
         (nameValuePair "kimai-${hostName}" {
+          phpPackage = cfg.package.php;
           inherit user;
           group = webserver.group;
           settings = {
@@ -319,9 +320,17 @@ in
 
                 umask $oldUmask
 
+                # Ensure that our local.yaml is valid (see kimai:reload command).
+                ${pkg hostName cfg}/bin/console lint:yaml --parse-tags \
+                  ${pkg hostName cfg}/share/php/kimai/config
+
                 # Run kimai:install to ensure database is created or updated.
                 # Note that kimai:update is an alias to kimai:install.
-                ${pkg hostName cfg}/bin/console kimai:install
+                ${pkg hostName cfg}/bin/console kimai:install --no-cache
+                # Clear cache and warmup cache separately, to avoid "Cannot declare
+                # class App\Entity\Timesheet" error on first init after upgrade.
+                ${pkg hostName cfg}/bin/console cache:clear --env=prod
+                ${pkg hostName cfg}/bin/console cache:warmup --env=prod
               '';
 
             serviceConfig = {
@@ -335,7 +344,7 @@ in
 
         (mapAttrs' (
           hostName: cfg:
-          (nameValuePair "phpfpm-kimai-${hostName}.service" {
+          (nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
               EnvironmentFile = [ cfg.environmentFile ];
             };

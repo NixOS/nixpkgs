@@ -1,5 +1,7 @@
 import ./generic.nix {
-  version = "1.4.4";
-  hash = "sha256-AXgq9ohnSeQvq1IIhxMhe+FhX6/hyvRsJCI4VaiN/MQ=";
-  cargoHash = "sha256-/PsQ9yqyhSub1Qg2A3wOsgucq4rM0CU4uA8tEOJhtAU=";
+  version = "1.4.6";
+  hash = "sha256-pjJyq52wO5p34LN2Jmt0npgWBDcWin8gIX4skZ7Ff8E=";
+  cargoHash = "sha256-33HRoH/vWPe/wOZJtQLWV9eBocbj0iR/XUu4zMehu8M=";
+  patchDir = ./patches/1_4;
+  unsupported = true;
 }

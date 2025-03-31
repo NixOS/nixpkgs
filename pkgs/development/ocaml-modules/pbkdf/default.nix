@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchzip
-, digestif
-, mirage-crypto
-, alcotest
-, ohex
+{
+  lib,
+  buildDunePackage,
+  fetchzip,
+  digestif,
+  mirage-crypto,
+  alcotest,
+  ohex,
 }:
 
 buildDunePackage rec {
@@ -17,8 +18,14 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
-  propagatedBuildInputs = [ digestif mirage-crypto ];
-  checkInputs = [ alcotest ohex ];
+  propagatedBuildInputs = [
+    digestif
+    mirage-crypto
+  ];
+  checkInputs = [
+    alcotest
+    ohex
+  ];
   doCheck = true;
 
   meta = {
@@ -28,4 +35,3 @@ buildDunePackage rec {
     homepage = "https://github.com/abeaumont/ocaml-pbkdf";
   };
 }
-

@@ -1,44 +1,54 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, cmake
-, runCommandLocal
-, bison
-, flex
-, intel-compute-runtime
-, llvmPackages_14
-, opencl-clang
-, python3
-, spirv-tools
-, spirv-headers
-, spirv-llvm-translator
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  runCommandLocal,
+  bison,
+  flex,
+  intel-compute-runtime,
+  llvmPackages_14,
+  opencl-clang,
+  python3,
+  spirv-tools,
+  spirv-headers,
+  spirv-llvm-translator,
 
-, buildWithPatches ? true
+  buildWithPatches ? true,
 }:
 
 let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.19.0";
-    hash = "sha256-vOK7xfOR+aDpdGd8oOFLJc1Ct1S5BCJmLN6Ubn5wlkQ=";
+    rev = "v0.22.1";
+    hash = "sha256-dSK+kNEZoF4bBx24S0No9aZLZiHK0U9TR1jRyEBL+2U=";
   };
 
   inherit (llvmPackages_14) lld llvm;
   inherit (if buildWithPatches then opencl-clang else llvmPackages_14) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
-in
 
+  # Handholding the braindead build script
+  # cmake requires an absolute path
+  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
+    mkdir $out
+    ln -s ${clang}/bin/clang $out/
+    ln -s ${opencl-clang}/lib/* $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.17384.11";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
-    rev = "igc-${version}";
-    hash = "sha256-O4uMaPauRv2aMgM2B7XdzCcjI5JghsjX5XbkeloLyck=";
+    tag = "v${version}";
+    hash = "sha256-1YzvzVmMW5s4keQfa7r6xfyVg7RWSdKNgBtdTN6SADg=";
   };
 
   postPatch = ''
@@ -50,24 +60,31 @@ stdenv.mkDerivation rec {
     patchShebangs --build IGC/Scripts/igc_create_linker_script.sh
   '';
 
-  nativeBuildInputs = [ bash bison cmake flex (python3.withPackages (ps : with ps; [ mako pyyaml ])) ];
+  nativeBuildInputs = [
+    bash
+    bison
+    cmake
+    flex
+    (python3.withPackages (
+      ps: with ps; [
+        mako
+        pyyaml
+      ]
+    ))
+  ];
 
-  buildInputs = [ lld llvm spirv-headers spirv-llvm-translator' spirv-tools ];
+  buildInputs = [
+    lld
+    llvm
+    spirv-headers
+    spirv-llvm-translator'
+    spirv-tools
+  ];
 
   strictDeps = true;
 
   # testing is done via intel-compute-runtime
   doCheck = false;
-
-  # Handholding the braindead build script
-  # cmake requires an absolute path
-  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
-    mkdir $out
-    ln -s ${clang}/bin/clang $out/
-    ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
-  '';
 
   cmakeFlags = [
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"

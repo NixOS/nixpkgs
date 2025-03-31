@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, fuse
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fuse,
 }:
 
 let
@@ -20,20 +21,23 @@ let
 
     buildInputs = [ fuse ];
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
 
     subPackages = [ "pkg/main" ];
   };
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.20.2";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-MwAet+UJ6BNEj6/NYN9HBxTGbw2CS2ASUJQrKtpoV1I=";
+    hash = "sha256-Bae77Kzc2cWxIb1yYKXctffuiC3ICPfi0qYP6fgaqvQ=";
   };
 
   propagatedBuildInputs = [
@@ -47,10 +51,12 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-i9quHeAb8PCG1KQGKaOkxTxjImiuK6oMJcRI443/mkI=";
+  vendorHash = "sha256-toqQDa3hY2EvWjYpFXWafV9yj1U5CZXZOqQAQtOMITo=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/telepresence" ];
@@ -59,7 +65,10 @@ buildGoModule rec {
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://telepresence.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch vilsol ];
+    maintainers = with maintainers; [
+      mausch
+      vilsol
+    ];
     mainProgram = "telepresence";
   };
 }

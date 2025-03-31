@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "udis86";
   version = "unstable-2014-12-25";
 
@@ -25,13 +26,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    python3
+  ];
 
   configureFlags = [
     "--enable-shared"
   ];
 
-  outputs = [ "bin" "out" "dev" "lib" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "lib"
+  ];
 
   meta = with lib; {
     homepage = "https://udis86.sourceforge.net";

@@ -15,6 +15,8 @@ with lib; let
   user = cfg.user;
   group = cfg.group;
 
+  php = lib.getExe pkgs.php83;
+
   # shell script for local administration
   artisan = pkgs.writeScriptBin "monica" ''
     #! ${pkgs.runtimeShell}
@@ -26,7 +28,7 @@ with lib; let
         exec "$@"
       fi
     }
-    sudo ${pkgs.php}/bin/php artisan "$@"
+    sudo ${php} artisan "$@"
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -296,7 +298,7 @@ in {
       DB_USERNAME = db.user;
       MAIL_DRIVER = mail.driver;
       MAIL_FROM_NAME = mail.fromName;
-      MAIL_FROM = mail.from;
+      MAIL_FROM_ADDRESS = mail.from;
       MAIL_HOST = mail.host;
       MAIL_PORT = mail.port;
       MAIL_USERNAME = mail.user;
@@ -355,10 +357,10 @@ in {
               index = "index.php";
               tryFiles = "$uri $uri/ /index.php?$query_string";
             };
-            "~ \.php$".extraConfig = ''
+            "~ \\.php$".extraConfig = ''
               fastcgi_pass unix:${config.services.phpfpm.pools."monica".socket};
             '';
-            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+            "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
               extraConfig = "expires 365d;";
             };
           };
@@ -419,8 +421,8 @@ in {
         fi
 
         # migrate & seed db
-        ${pkgs.php}/bin/php artisan key:generate --force
-        ${pkgs.php}/bin/php artisan setup:production -v --force
+        ${php} artisan key:generate --force
+        ${php} artisan setup:production -v --force
       '';
     };
 
@@ -432,7 +434,7 @@ in {
         Type = "oneshot";
         User = user;
         WorkingDirectory = "${monica}";
-        ExecStart = "${pkgs.php}/bin/php ${monica}/artisan schedule:run -v";
+        ExecStart = "${php} ${monica}/artisan schedule:run -v";
       };
     };
 
@@ -465,4 +467,3 @@ in {
     };
   };
 }
-

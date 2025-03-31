@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, tk, makeWrapper }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  tk,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cbrowser";

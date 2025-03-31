@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, bashInteractive
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-t+fdnDJMFiFqN23dSY3TnsZsIDcravtwdNKJ5MiZosE=";
   };
 
-  buildInputs = [ coreutils bashInteractive ];
+  buildInputs = [
+    coreutils
+    bashInteractive
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    rev = "refs/tags/gmpy2-${version}";
+    tag = "gmpy2-${version}";
     hash = "sha256-luLEDEY1cezhzZo4fXmM/MUg2YyAaz7n0HwSpbNayP8=";
   };
 

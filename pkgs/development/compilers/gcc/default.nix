@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -21,7 +21,7 @@
 , libucontext ? null
 , gnat-bootstrap ? null
 , enableMultilib ? false
-, enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
+, enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
@@ -77,14 +77,14 @@ let
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-    targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+    targetConfig = if (! lib.systems.equals targetPlatform hostPlatform) then targetPlatform.config else null;
 
     patches = callFile ./patches {};
 
     /* Cross-gcc settings (build == host != target) */
-    crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
+    crossMingw = (! lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
     stageNameAddon = optionalString withoutTargetLibc "-nolibc";
-    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
+    crossNameAddon = optionalString (! lib.systems.equals targetPlatform hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
 
     callFile = callPackageWith {
       # lets
@@ -164,7 +164,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
-# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
+# TODO: fixup D bootstrapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
 assert atLeast12 -> !langD;
 
@@ -180,7 +180,13 @@ pipe ((callFile ./common/builder.nix {}) ({
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+    url = "mirror://gcc/${
+      # TODO: Remove this before 25.05.
+      if version == "14-20241116" then
+        "snapshots/"
+      else
+        "releases/gcc-"
+    }${version}/gcc-${version}.tar.xz";
     ${if is10 || is11 || is13 then "hash" else "sha256"} =
       gccVersions.srcHashForVersion version;
   };
@@ -202,6 +208,29 @@ pipe ((callFile ./common/builder.nix {}) ({
       patchShebangs $configureScript
     done
   ''
+  # Copy the precompiled `gcc/gengtype-lex.cc` from the 14.2.0 tarball.
+  # Since the `gcc/gengtype-lex.l` file didn’t change between 14.2.0
+  # and 14-2024116, this is safe. If it changes and we update the
+  # snapshot, we might need to vendor the compiled output in Nixpkgs.
+  #
+  # TODO: Remove this before 25.05.
+  + optionalString (version == "14-20241116") ''
+    cksum -c <<EOF
+    SHA256 (gcc/gengtype-lex.l) = 05acceeda02e673eaef47d187d3a68a1632508112fbe31b5dc2b0a898998d7ec
+    EOF
+
+    (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < ${fetchurl {
+      url = "mirror://gcc/releases/gcc-14.2.0/gcc-14.2.0.tar.xz";
+      hash = "sha256-p7Obxpy/niWCbFpgqyZHcAH3wI2FzsBLwOKcq+1vPMk=";
+    }}; true) | tar xf - \
+      --mode=+w \
+      --warning=no-timestamp \
+      --strip-components=1 \
+      gcc-14.2.0/gcc/gengtype-lex.cc
+
+    # Make sure Make knows it’s up‐to‐date.
+    touch gcc/gengtype-lex.cc
+  ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
   + optionalString hostPlatform.isDarwin ''
@@ -215,7 +244,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   ''
   + (
-    optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
+    optionalString ((! lib.systems.equals targetPlatform hostPlatform) || stdenv.cc.libc != null)
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       (let
@@ -267,11 +296,11 @@ pipe ((callFile ./common/builder.nix {}) ({
     if atLeast11
     then let target =
                optionalString (profiledCompiler) "profiled" +
-               optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+               optionalString ((lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform) && !disableBootstrap) "bootstrap";
          in optional (target != "") target
     else
       optional
-        (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
+        ((lib.systems.equals targetPlatform hostPlatform) && (lib.systems.equals hostPlatform buildPlatform))
         (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit (callFile ./common/strip-attributes.nix { })
@@ -290,7 +319,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
     # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-    # library headers and binaries, regarless of the language being compiled.
+    # library headers and binaries, regardless of the language being compiled.
     #
     # The LTO code doesn't find zlib, so we just add it to $CPATH and
     # $LIBRARY_PATH in this case.
@@ -299,11 +328,11 @@ pipe ((callFile ./common/builder.nix {}) ({
     # compiler (after the specs for the cross-gcc are created). Having
     # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-    CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+    CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (makeSearchPathOutput "dev" "include" ([]
       ++ optional (zlib != null) zlib
     ));
 
-    LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+    LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (makeLibraryPath (
       optional (zlib != null) zlib
     ));
 
@@ -313,7 +342,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       EXTRA_FLAGS_FOR_TARGET
       EXTRA_LDFLAGS_FOR_TARGET
       ;
-  } // optionalAttrs (!atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
+  } // optionalAttrs (!atLeast12 && stdenv.cc.isClang && (! lib.systems.equals targetPlatform hostPlatform)) {
     NIX_CFLAGS_COMPILE = "-Wno-register";
   });
 
@@ -347,7 +376,7 @@ pipe ((callFile ./common/builder.nix {}) ({
   } // optionalAttrs (!atLeast11) {
     badPlatforms = [ "aarch64-darwin" ];
   } // optionalAttrs is10 {
-    badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
+    badPlatforms = if (! lib.systems.equals targetPlatform hostPlatform) then [ "aarch64-darwin" ] else [ ];
   };
 } // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
   # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.

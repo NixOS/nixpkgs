@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sondr3";
-    repo = pname;
+    repo = "git-ignore";
     rev = "v${version}";
     hash = "sha256-KIdhsbD9v2kCM2C/kSJCleyniEz4Bw7UxBsF762fnJs=";
   };
 
-  cargoHash = "sha256-UicChl0wD2GSCCHAqF4/FKVq15g9qusNOnNJJW2B/nw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Zdy6bUgpaDBiAavSlAAH7LyYbNm7UU1qz0wAnVXQzpY=";
 
   nativeBuildInputs = [
     installShellFiles

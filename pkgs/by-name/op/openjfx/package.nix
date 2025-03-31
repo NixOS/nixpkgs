@@ -5,8 +5,6 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
   gradle_8,
   gradle_7,
   perl,
@@ -115,6 +113,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion";
   env.config = writeText "gradle.properties" ''
     CONF = Release
     JDK_HOME = ${jdk-bootstrap.home}

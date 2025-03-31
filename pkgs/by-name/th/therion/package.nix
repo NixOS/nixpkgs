@@ -1,40 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, perl
-, tcl
-, tclPackages
-, tk
-, expat
-, python3
-, texliveTeTeX
-, survex
-, makeWrapper
-, fmt
-, proj
-, wxGTK32
-, vtk
-, freetype
-, libjpeg
-, gettext
-, libGL
-, libGLU
-, sqlite
-, libtiff
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  perl,
+  tcl,
+  tclPackages,
+  tk,
+  expat,
+  python3,
+  texliveTeTeX,
+  survex,
+  makeWrapper,
+  fmt,
+  proj,
+  wxGTK32,
+  vtk,
+  freetype,
+  libjpeg,
+  gettext,
+  libGL,
+  libGLU,
+  sqlite,
+  libtiff,
+  curl,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "therion";
-  version = "6.1.8";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
-    rev = "v${version}";
-    hash = "sha256-bmp0IZ4uAqDpe2e8UeIDUdFaaocx4OBIYuhnaHirqGc=";
+    tag = "v${version}";
+    hash = "sha256-yxY4rYaDmDK0mJH60FS12ILjntsjxhFNeijTFrNKSzU=";
   };
 
   nativeBuildInputs = [
@@ -74,22 +76,30 @@ stdenv.mkDerivation rec {
     tcl
     tclPackages.tcllib
     tclPackages.bwidget
+    catch2
   ];
 
   fixupPhase = ''
     runHook preFixup
+
     wrapProgram $out/bin/therion \
-      --prefix PATH : ${lib.makeBinPath [ survex texliveTeTeX ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          survex
+          texliveTeTeX
+        ]
+      }
     wrapProgram $out/bin/xtherion \
       --prefix PATH : ${lib.makeBinPath [ tk ]}
+
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Therion – cave surveying software";
     homepage = "https://therion.speleo.sk/";
     changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

@@ -1,6 +1,11 @@
-{lib, stdenv, fetchFromGitHub, cmake}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fasttext";
   version = "0.9.2-unstable-2023-11-28";
 

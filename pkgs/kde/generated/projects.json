@@ -401,6 +401,12 @@
     "project_path": "kde/workspace/aura-browser",
     "repo_path": "plasma/aura-browser"
   },
+  "aurorae": {
+    "description": "Aurorae is a themeable window decoration for KWin",
+    "name": "aurorae",
+    "project_path": "playground/base/aurorae",
+    "repo_path": "plasma/aurorae"
+  },
   "automoc": {
     "description": "Automoc",
     "name": "automoc",
@@ -840,7 +846,7 @@
     "repo_path": "graphics/digikam-test-data"
   },
   "discover": {
-    "description": "KDE and Plasma resources management GUI",
+    "description": "Helps you find and install applications, games, and tools",
     "name": "discover",
     "project_path": "kde/workspace/discover",
     "repo_path": "plasma/discover"
@@ -874,6 +880,12 @@
     "name": "documentation-docs-krita-org",
     "project_path": "documentation/docs-krita-org",
     "repo_path": "documentation/docs-krita-org"
+  },
+  "documentation-docs-labplot-org": {
+    "description": "Documentation for Labplot",
+    "name": "documentation-docs-labplot-org",
+    "project_path": "documentation/docs-labplot-org",
+    "repo_path": "documentation/docs-labplot-org"
   },
   "documentation-docs-plasma-mobile-org": {
     "description": "Plasma Mobile documentation based on Sphinx",
@@ -1106,7 +1118,7 @@
   "glaxnimate": {
     "description": "Simple vector animation program.",
     "name": "glaxnimate",
-    "project_path": "kdereview/glaxnimate",
+    "project_path": "graphics/glaxnimate",
     "repo_path": "graphics/glaxnimate"
   },
   "gluon": {
@@ -1296,7 +1308,7 @@
     "repo_path": "multimedia/kaffeine"
   },
   "kaidan": {
-    "description": "Simple and user-friendly Jabber/XMPP client for every device and platform",
+    "description": "Modern chat app for every device",
     "name": "kaidan",
     "project_path": "kdereview/kaidan",
     "repo_path": "network/kaidan"
@@ -1421,6 +1433,12 @@
     "project_path": "playground/edu/kard",
     "repo_path": "education/kard"
   },
+  "karp": {
+    "description": "Simple PDF editor to arrange, merge and improve PDF file(s)",
+    "name": "karp",
+    "project_path": "playground/graphics/karp",
+    "repo_path": "graphics/karp"
+  },
   "kartesio": {
     "description": "Calculate best fit curves with experimental points using regression or neural networks",
     "name": "kartesio",
@@ -1440,7 +1458,7 @@
     "repo_path": "libraries/kasync"
   },
   "kate": {
-    "description": "Modern text editor built on the KDE Frameworks and Qt",
+    "description": "Advanced text editor",
     "name": "kate",
     "project_path": "kde/applications/kate",
     "repo_path": "utilities/kate"
@@ -1738,6 +1756,12 @@
     "name": "kde-gtk-config",
     "project_path": "kde/workspace/kde-gtk-config",
     "repo_path": "plasma/kde-gtk-config"
+  },
+  "kde-gui-test": {
+    "description": "Tool for emulating user behaviour for energy consumption measurements",
+    "name": "kde-gui-test",
+    "project_path": "playground/sdk/kde-gui-test",
+    "repo_path": "sdk/kde-gui-test"
   },
   "kde-inotify-survey": {
     "description": "Tooling for monitoring inotify limits and informing the user when they have been or about to be reached.",
@@ -3263,6 +3287,12 @@
     "project_path": "kde/kdenetwork/konversation",
     "repo_path": "network/konversation"
   },
+  "konvex": {
+    "description": "3D Model Viewer",
+    "name": "konvex",
+    "project_path": "playground/base/konvex",
+    "repo_path": "graphics/konvex"
+  },
   "kooka": {
     "description": "Scanning application and libkscan library",
     "name": "kooka",
@@ -3467,6 +3497,12 @@
     "project_path": "frameworks/kpty",
     "repo_path": "frameworks/kpty"
   },
+  "kpublicalerts": {
+    "description": "Public emergency and weather alert notification.",
+    "name": "kpublicalerts",
+    "project_path": "playground/utils/kpublicalerts",
+    "repo_path": "utilities/kpublicalerts"
+  },
   "kpublictransport": {
     "description": "Library to assist with accessing public transport timetables and other data",
     "name": "kpublictransport",
@@ -3581,6 +3617,12 @@
     "project_path": "extragear/graphics/krita-extensions/krita-analogies",
     "repo_path": "unmaintained/krita-analogies"
   },
+  "krita-ci-utilities": {
+    "description": "CI/CD utilities for Krita builds",
+    "name": "krita-ci-utilities",
+    "project_path": "playground/packaging/krita-ci-utilities",
+    "repo_path": "packaging/krita-ci-utilities"
+  },
   "krita-cimg": {
     "description": "Extension based on the cimg library. http://cimg.sourceforge.net/",
     "name": "krita-cimg",
@@ -3592,6 +3634,12 @@
     "name": "krita-ctlbrush",
     "project_path": "extragear/graphics/krita-extensions/krita-ctlbrush",
     "repo_path": "unmaintained/krita-ctlbrush"
+  },
+  "krita-deps-management": {
+    "description": "Dependencies management for Krita builds across the various platforms it supports",
+    "name": "krita-deps-management",
+    "project_path": "playground/packaging/krita-deps-management",
+    "repo_path": "packaging/krita-deps-management"
   },
   "krita-deskew": {
     "description": "Deskew rotates an image such that text is straight, which is useful when dealing with scanned images.",
@@ -4236,10 +4284,16 @@
     "repo_path": "frameworks/kwidgetsaddons"
   },
   "kwin": {
-    "description": "Easy to use, but flexible, X Window Manager and Wayland Compositor",
+    "description": "Easy to use, but flexible, Wayland Compositor",
     "name": "kwin",
     "project_path": "kde/workspace/kwin",
     "repo_path": "plasma/kwin"
+  },
+  "kwin-x11": {
+    "description": "Easy to use, but flexible, X Window Manager",
+    "name": "kwin-x11",
+    "project_path": "kde/workspace/kwin-x11",
+    "repo_path": "plasma/kwin-x11"
   },
   "kwindowsaddons": {
     "description": "Runtime components for KDE software on Windows",
@@ -5471,6 +5525,12 @@
     "project_path": "kde/workspace/plasma-integration",
     "repo_path": "plasma/plasma-integration"
   },
+  "plasma-keyboard": {
+    "description": "Virtual Keyboard for Qt based desktops",
+    "name": "plasma-keyboard",
+    "project_path": "playground/workspace/plasma-keyboard",
+    "repo_path": "plasma/plasma-keyboard"
+  },
   "plasma-lionmail": {
     "description": "A Plasma widget displaying new and important email",
     "name": "plasma-lionmail",
@@ -5645,6 +5705,12 @@
     "project_path": "kde/workspace/plasma-vault",
     "repo_path": "plasma/plasma-vault"
   },
+  "plasma-wallpaper-updater": {
+    "description": "Tooling to assist with updating wallpapers across Plasma repositories",
+    "name": "plasma-wallpaper-updater",
+    "project_path": "plasma/plasma-wallpaper-updater",
+    "repo_path": "plasma/plasma-wallpaper-updater"
+  },
   "plasma-wayland-protocols": {
     "description": "Plasma-specific protocols for Wayland",
     "name": "plasma-wayland-protocols",
@@ -5748,7 +5814,7 @@
     "repo_path": "plasma/powerdevil"
   },
   "powerplant": {
-    "description": "A verry WIP app to keep track of your plant's needs",
+    "description": "An app to keep track of your plants' needs",
     "name": "powerplant",
     "project_path": "playground/utils/powerplant",
     "repo_path": "utilities/powerplant"
@@ -6185,6 +6251,12 @@
     "project_path": "kde/kdebindings/smoke/smokeqt",
     "repo_path": "unmaintained/smokeqt"
   },
+  "snap-kcm": {
+    "description": "KCM allowing changing permissions which have granted to installed Snap applications.",
+    "name": "snap-kcm",
+    "project_path": "kdereview/snap-kcm",
+    "repo_path": "plasma/snap-kcm"
+  },
   "snap-kf5": {
     "description": "Content Snap for Qt5 and KF5",
     "name": "snap-kf5",
@@ -6431,6 +6503,12 @@
     "project_path": "sysadmin/bugzilla-bot",
     "repo_path": "sysadmin/bugzilla-bot"
   },
+  "sysadmin-ci-images": {
+    "description": "Images for use on the KDE CI System",
+    "name": "sysadmin-ci-images",
+    "project_path": "sysadmin/ci-images",
+    "repo_path": "sysadmin/ci-images"
+  },
   "sysadmin-ci-management": {
     "description": "Contains all management jobs and other data needed to run our Gitlab CI infrastructure.",
     "name": "sysadmin-ci-management",
@@ -6635,6 +6713,12 @@
     "project_path": "sysadmin/neon-sftp-bridge",
     "repo_path": "sysadmin/neon-sftp-bridge"
   },
+  "sysadmin-neon-tooling": {
+    "description": "",
+    "name": "sysadmin-neon-tooling",
+    "project_path": "sysadmin/neon-tooling",
+    "repo_path": "sysadmin/neon-tooling"
+  },
   "sysadmin-projects-api": {
     "description": "",
     "name": "sysadmin-projects-api",
@@ -6808,6 +6892,12 @@
     "name": "umbrello",
     "project_path": "kde/kdesdk/umbrello",
     "repo_path": "sdk/umbrello"
+  },
+  "union": {
+    "description": "A Qt style supporting both QtQuick and QtWidgets.",
+    "name": "union",
+    "project_path": "playground/workspace/union",
+    "repo_path": "plasma/union"
   },
   "upnp-lib-qt": {
     "description": "UPnP wrapper for Qt",
@@ -7180,6 +7270,12 @@
     "name": "websites-elisa-kde-org",
     "project_path": "websites/elisa-kde-org",
     "repo_path": "websites/elisa-kde-org"
+  },
+  "websites-endof10-org": {
+    "description": "Website for the EndOf10 initative",
+    "name": "websites-endof10-org",
+    "project_path": "websites/endof10-org",
+    "repo_path": "websites/endof10-org"
   },
   "websites-ev-kde-org": {
     "description": "Website for KDE e.V. - ev.kde.org",

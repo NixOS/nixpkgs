@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, dtc, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  dtc,
+  installShellFiles,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "argononed";
   version = "unstable-2022-03-26";
 
   src = fetchFromGitLab {
     owner = "DarkElvenAngel";
-    repo = pname;
+    repo = "argononed";
     rev = "97c4fa07fc2c09ffc3bd86e0f6319d50fa639578";
     hash = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
   };

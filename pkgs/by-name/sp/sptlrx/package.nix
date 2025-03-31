@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, sptlrx }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  sptlrx,
+}:
 
 buildGoModule rec {
   pname = "sptlrx";
@@ -13,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-pExSQcYjqliZZg/91t52yk6UJ4QCbpToMpONIFUNkwc=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   checkFlags =
     let
@@ -33,8 +43,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Spotify lyrics in your terminal";
     homepage = "https://github.com/raitonoberu/sptlrx";
-    changelog =
-      "https://github.com/raitonoberu/sptlrx/releases/tag/v${version}";
+    changelog = "https://github.com/raitonoberu/sptlrx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
     mainProgram = "sptlrx";

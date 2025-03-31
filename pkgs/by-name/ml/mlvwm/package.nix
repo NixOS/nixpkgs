@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gccmakedep, libX11, libXext, libXpm, imake, installShellFiles, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gccmakedep,
+  libX11,
+  libXext,
+  libXpm,
+  imake,
+  installShellFiles,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "mlvwm";
@@ -6,14 +17,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "morgant";
-    repo = pname;
+    repo = "mlvwm";
     rev = version;
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ gccmakedep libX11 libXext libXpm imake ];
+  buildInputs = [
+    gccmakedep
+    libX11
+    libXext
+    libXpm
+    imake
+  ];
 
   buildPhase = ''
     (cd man && xmkmf)

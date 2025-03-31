@@ -1,19 +1,31 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  shared-mime-info,
+  libiconv,
+  installShellFiles,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "handlr";
   version = "unstable-2021-08-29";
 
   src = fetchFromGitHub {
     owner = "chmln";
-    repo = pname;
+    repo = "handlr";
     rev = "90e78ba92d0355cb523abf268858f3123fd81238";
     sha256 = "sha256-wENhlUBwfNg/r7yMKa1cQI1fbFw+qowwK8EdO912Yys=";
   };
 
-  cargoHash = "sha256-30fSOzWq1CoIabPWGWndi/SaCN/ckxjlbtzuwV8rk6M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/Kk2vuFkgtHarLrjqc5PkRZL2pV1Y7Gb02mWwtaVpDI=";
 
-  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  nativeBuildInputs = [
+    installShellFiles
+    shared-mime-info
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''

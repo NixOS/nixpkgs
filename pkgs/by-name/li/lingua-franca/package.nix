@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, jdk17_headless }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk17_headless,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lfc";

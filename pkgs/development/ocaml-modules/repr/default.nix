@@ -1,4 +1,14 @@
-{ lib, buildDunePackage, fetchFromGitHub, base64, either, fmt, jsonm, uutf, optint }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  base64,
+  either,
+  fmt,
+  jsonm,
+  uutf,
+  optint,
+}:
 
 buildDunePackage rec {
   pname = "repr";

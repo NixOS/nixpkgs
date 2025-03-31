@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, makeWrapper
-, networkmanager
-, rofi-unwrapped
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  makeWrapper,
+  networkmanager,
+  rofi-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
-    repo = pname;
+    repo = "rofi-vpn";
     rev = "v${version}";
     sha256 = "04jcfb2jy8yyrk4mg68krwh3zb5qcyj1aq1bwk96fhybrq9k2hhp";
   };
@@ -23,7 +24,12 @@ stdenv.mkDerivation rec {
     install -D --target-directory=$out/bin/ ./rofi-vpn
 
     wrapProgram $out/bin/rofi-vpn \
-      --prefix PATH ":" ${lib.makeBinPath [ rofi-unwrapped networkmanager ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          rofi-unwrapped
+          networkmanager
+        ]
+      }
 
     runHook postInstall
   '';

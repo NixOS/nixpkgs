@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.botamusique;
 
-  format = pkgs.formats.ini {};
+  format = pkgs.formats.ini { };
   configFile = format.generate "botamusique.ini" cfg.settings;
 in
 {
@@ -14,36 +19,38 @@ in
     package = lib.mkPackageOption pkgs "botamusique" { };
 
     settings = lib.mkOption {
-      type = with lib.types; submodule {
-        freeformType = format.type;
-        options = {
-          server.host = lib.mkOption {
-            type = types.str;
-            default = "localhost";
-            example = "mumble.example.com";
-            description = "Hostname of the mumble server to connect to.";
-          };
+      type =
+        with lib.types;
+        submodule {
+          freeformType = format.type;
+          options = {
+            server.host = lib.mkOption {
+              type = types.str;
+              default = "localhost";
+              example = "mumble.example.com";
+              description = "Hostname of the mumble server to connect to.";
+            };
 
-          server.port = lib.mkOption {
-            type = types.port;
-            default = 64738;
-            description = "Port of the mumble server to connect to.";
-          };
+            server.port = lib.mkOption {
+              type = types.port;
+              default = 64738;
+              description = "Port of the mumble server to connect to.";
+            };
 
-          bot.username = lib.mkOption {
-            type = types.str;
-            default = "botamusique";
-            description = "Name the bot should appear with.";
-          };
+            bot.username = lib.mkOption {
+              type = types.str;
+              default = "botamusique";
+              description = "Name the bot should appear with.";
+            };
 
-          bot.comment = lib.mkOption {
-            type = types.str;
-            default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
-            description = "Comment displayed for the bot.";
+            bot.comment = lib.mkOption {
+              type = types.str;
+              default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
+              description = "Comment displayed for the bot.";
+            };
           };
         };
-      };
-      default = {};
+      default = { };
       description = ''
         Your {file}`configuration.ini` as a Nix attribute set. Look up
         possible options in the [configuration.example.ini](https://github.com/azlux/botamusique/blob/master/configuration.example.ini).

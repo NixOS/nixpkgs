@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, numpy
-, scipy
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage {

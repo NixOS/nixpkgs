@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, wl-clipboard, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wl-clipboard,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard-x11";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brunelli";
-    repo = pname;
+    repo = "wl-clipboard-x11";
     rev = "v${version}";
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };

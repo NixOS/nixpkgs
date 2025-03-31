@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.test";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jbnU6PFVUd/eD9CWHyJvaTFkcZaIIwztkN9UbQZH1RU=";
   };
 

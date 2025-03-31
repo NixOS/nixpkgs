@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libcxxCmakeModule ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libcxxCmakeModule ? false,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cpptoml";
   version = "0.4.0";
 

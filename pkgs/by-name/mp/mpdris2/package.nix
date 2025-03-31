@@ -1,12 +1,13 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, libnotify
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  libnotify,
+  python3,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

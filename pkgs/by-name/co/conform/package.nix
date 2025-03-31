@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, git }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+}:
 
 buildGoModule rec {
   pname = "conform";
@@ -25,7 +30,10 @@ buildGoModule rec {
     description = "Policy enforcement for your pipelines";
     homepage = "https://github.com/siderolabs/conform";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jmgilman jk ];
+    maintainers = with maintainers; [
+      jmgilman
+      jk
+    ];
     mainProgram = "conform";
   };
 }

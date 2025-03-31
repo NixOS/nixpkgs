@@ -1,17 +1,21 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "envsubst";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "a8m";
     repo = "envsubst";
     rev = "v${version}";
-    sha256 = "sha256-gfzqf/CXSwGXBK5VHJnepFZ1wB3WElpEp6ra9JI4WtY=";
+    sha256 = "sha256-eByxrLf/F8Ih8v+0TunghF4m42TLPeRRFnqN3Ib6e14=";
   };
 
-  vendorHash = "sha256-L0MbABgUniuI5NXc4ffBUsQRI716W/FiH38bGthpXzI=";
+  vendorHash = null;
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/envsubst LICENSE *.md

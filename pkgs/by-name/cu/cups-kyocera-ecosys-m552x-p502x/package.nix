@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchzip
+{
+  stdenv,
+  lib,
+  fetchzip,
   # can either be "EU" or "Global"; it's unclear what the difference is
-, region ? "Global"
+  region ? "Global",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyocera-ecosys-m552x-p502x";
   version = "8.1602";
 

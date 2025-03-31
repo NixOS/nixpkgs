@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+}:
 
 stdenv.mkDerivation rec {
   pname = "orion";
@@ -7,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "Orion";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1116yawv3fspkiq1ykk2wj0gza3l04b5nhldy0bayzjaj0y6fd89";
   };
 

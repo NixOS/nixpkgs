@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, fftwFloat, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  fftwFloat,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spectrojack";
@@ -9,13 +17,17 @@ stdenv.mkDerivation rec {
     sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 fftwFloat gtk2 ];
-  configurePhase= ''
+  buildInputs = [
+    libjack2
+    fftwFloat
+    gtk2
+  ];
+  configurePhase = ''
     sed -i 's/.*home.*/#&/' ./Makefile
     substituteInPlace ./Makefile \
       --replace "/usr/share" "$out/usr/share"
   '';
-  installPhase= ''
+  installPhase = ''
     install -Dm755 spectrojack $out/bin/spectrojack
     install -Dm644 spectrojack_icon.svg $out/usr/share/spectrojack/icon.svg
     install -Dm644 -t $out/usr/share/spectrojack/colormaps colormaps/*

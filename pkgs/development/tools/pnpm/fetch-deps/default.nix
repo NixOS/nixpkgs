@@ -68,6 +68,13 @@
             fi
 
             export HOME=$(mktemp -d)
+
+            # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
+            # any pnpm command would fail in that directory, the following disables this
+            pushd ..
+            pnpm config set manage-package-manager-versions false
+            popd
+
             pnpm config set store-dir $out
             # Some packages produce platform dependent outputs. We do not want to cache those in the global store
             pnpm config set side-effects-cache false
@@ -92,7 +99,7 @@
             runHook preFixup
 
             # Remove timestamp and sort the json files
-            rm -rf $out/v3/tmp
+            rm -rf $out/{v3,v10}/tmp
             for f in $(find $out -name "*.json"); do
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done

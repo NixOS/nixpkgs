@@ -1,21 +1,22 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-, adwaita-icon-theme
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+  adwaita-icon-theme,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.7.9";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "mint-y-icons";
     rev = version;
-    hash = "sha256-LmFsU6rqkxfZPdvonFgWhoeCfKI+gCSotZ7o2KcGLIs=";
+    hash = "sha256-xGPihqXUraJy9lDCSVjQlNxrhETEcjBTYhyFsZGJRGo=";
   };
 
   propagatedBuildInputs = [

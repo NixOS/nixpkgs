@@ -1,27 +1,28 @@
-import ./make-test-python.nix ({ ... }: {
-  name = "trilium-server";
-  nodes = {
-    default = {
-      services.trilium-server.enable = true;
-    };
-    configured = {
-      services.trilium-server = {
-        enable = true;
-        dataDir = "/data/trilium";
+import ./make-test-python.nix (
+  { ... }:
+  {
+    name = "trilium-server";
+    nodes = {
+      default = {
+        services.trilium-server.enable = true;
+      };
+      configured = {
+        services.trilium-server = {
+          enable = true;
+          dataDir = "/data/trilium";
+        };
+      };
+
+      nginx = {
+        services.trilium-server = {
+          enable = true;
+          nginx.enable = true;
+          nginx.hostName = "trilium.example.com";
+        };
       };
     };
 
-    nginx = {
-      services.trilium-server = {
-        enable = true;
-        nginx.enable = true;
-        nginx.hostName = "trilium.example.com";
-      };
-    };
-  };
-
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       with subtest("by default works without configuration"):
@@ -50,4 +51,5 @@ import ./make-test-python.nix ({ ... }: {
               "curl --resolve 'trilium.example.com:80:127.0.0.1' http://trilium.example.com/"
           )
     '';
-})
+  }
+)

@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "frei";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "alexcoder04";
     repo = "frei";
     rev = "v${version}";
-    sha256 = "sha256-9CV6B7fRHXl73uI2JRv3RiaFczLHHBOd7/8UoCAwK6w=";
+    sha256 = "sha256-289idsn/PhLK2FOUTQj6eS4O73LgX5v5qn3ZRvn/XRo=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-N5k/2wB46oRfM4ShjVQ23tAgCMmyBaGfIslUqYUJYrc=";
 
   meta = with lib; {
     description = "Modern replacement for free";

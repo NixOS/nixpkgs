@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchpatch
-, zlib
-, zopfli
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchpatch,
+  zlib,
+  zopfli,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
-  NIX_CFLAGS_COMPILE="-DENABLE_LOCAL_ZOPFLI";
+  NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
 
   installPhase = ''
     runHook preInstall

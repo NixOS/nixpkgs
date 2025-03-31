@@ -1,12 +1,17 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "shellnoob";
   version = "unstable-2022-03-16";
 
   src = fetchFromGitHub {
     owner = "reyammer";
-    repo = pname;
+    repo = "shellnoob";
     rev = "72cf49804d8ea3de1faa7fae5794449301987bff";
     sha256 = "xF9OTFFe8godW4+z9MFaFEkjE9FB42bKWwdl9xRcmEo=";
   };

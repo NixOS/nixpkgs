@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
 
-, enablePython ? false
-, python3
+  enablePython ? false,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplist";
   version = "2.6.0";
 
-  outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ] ++ lib.optional enablePython "py";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
+    repo = "libplist";
     rev = version;
     hash = "sha256-hitRcOjbF+L9Og9/qajqFqOhKfRn9+iWLoCKmS9dT80=";
   };
@@ -35,11 +40,13 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  configureFlags = [
-    "--enable-debug"
-  ] ++ lib.optionals (!enablePython) [
-    "--without-cython"
-  ];
+  configureFlags =
+    [
+      "--enable-debug"
+    ]
+    ++ lib.optionals (!enablePython) [
+      "--without-cython"
+    ];
 
   doCheck = true;
 

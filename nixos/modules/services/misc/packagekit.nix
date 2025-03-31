@@ -1,26 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.packagekit;
 
   inherit (lib)
-    mkEnableOption mkOption mkIf mkRemovedOptionModule types
-    listToAttrs recursiveUpdate;
+    mkEnableOption
+    mkOption
+    mkIf
+    mkRemovedOptionModule
+    types
+    listToAttrs
+    recursiveUpdate
+    ;
 
   iniFmt = pkgs.formats.ini { };
 
   confFiles = [
-    (iniFmt.generate "PackageKit.conf" (recursiveUpdate
-      {
+    (iniFmt.generate "PackageKit.conf" (
+      recursiveUpdate {
         Daemon = {
           DefaultBackend = "test_nop";
           KeepCache = false;
         };
-      }
-      cfg.settings))
+      } cfg.settings
+    ))
 
-    (iniFmt.generate "Vendor.conf" (recursiveUpdate
-      {
+    (iniFmt.generate "Vendor.conf" (
+      recursiveUpdate {
         PackagesNotFound = rec {
           DefaultUrl = "https://github.com/NixOS/nixpkgs";
           CodecUrl = DefaultUrl;
@@ -28,14 +39,18 @@ let
           FontUrl = DefaultUrl;
           MimeUrl = DefaultUrl;
         };
-      }
-      cfg.vendorSettings))
+      } cfg.vendorSettings
+    ))
   ];
 
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to test_nop, Nix backend is broken see #177946.")
+    (mkRemovedOptionModule [
+      "services"
+      "packagekit"
+      "backend"
+    ] "Always set to test_nop, Nix backend is broken see #177946.")
   ];
 
   options.services.packagekit = {
@@ -66,9 +81,8 @@ in
 
     systemd.packages = with pkgs; [ packagekit ];
 
-    environment.etc = listToAttrs (map
-      (e:
-        lib.nameValuePair "PackageKit/${e.name}" { source = e; })
-      confFiles);
+    environment.etc = listToAttrs (
+      map (e: lib.nameValuePair "PackageKit/${e.name}" { source = e; }) confFiles
+    );
   };
 }

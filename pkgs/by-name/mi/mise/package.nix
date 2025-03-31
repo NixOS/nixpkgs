@@ -11,30 +11,35 @@
   git,
   pkg-config,
   openssl,
+  cacert,
   Security,
   SystemConfiguration,
   usage,
   mise,
   testers,
+  runCommand,
+  jq,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.11.37";
+  version = "2025.3.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-9hBBEuSjE1WMmjb+UfA2rroMwzb2cuZ3TzVRZfvwvvI=";
+    hash = "sha256-n7A6LGjcVz6LWz8fkkG5XS2WZf3FFkbidnt/S5jxy5g=";
   };
 
-  cargoHash = "sha256-PP1alyUmsqGjzUGnx1M8QYNBqELwil7NtH+W706PD2s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-On2+ROA71RyZdFPvH4Zem/494Q4uCYS4EZSvQL1DDWQ=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
+
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -63,6 +68,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
+  nativeCheckInputs = [ cacert ];
+
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
@@ -89,7 +96,32 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mise; };
+    tests = {
+      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
+      });
+      usageCompat =
+        # should not crash
+        runCommand "mise-usage-compatibility"
+          {
+            nativeBuildInputs = [
+              mise
+              usage
+              jq
+            ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+
+            spec="$(mise usage)"
+            for shl in bash fish zsh; do
+              echo "testing $shl"
+              usage complete-word --shell $shl --spec "$spec"
+            done
+
+            touch $out
+          '';
+    };
   };
 
   meta = {

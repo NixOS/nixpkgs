@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, halibut }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  halibut,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xtruss";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ikuKHtXEn2UVLE62l7qD9qc9ZUk6jiAqj5ru36vgdHk=";
   };
 
-  nativeBuildInputs = [ cmake halibut ];
+  nativeBuildInputs = [
+    cmake
+    halibut
+  ];
 
   meta = with lib; {
     description = "easy-to-use X protocol tracing program";

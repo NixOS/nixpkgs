@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gtk_engines
-, gtk-engine-murrine
-, librsvg
-, sassc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gdk-pixbuf,
+  gtk_engines,
+  gtk-engine-murrine,
+  librsvg,
+  sassc,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
+    repo = "plano-theme";
     rev = "v${version}";
     sha256 = "sha256-slGr2nsdKng6zaVDeXWFAWKIxZbcnOLU6RH6wM0293E=";
   };

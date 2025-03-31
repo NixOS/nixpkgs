@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   name = "updfparser";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     extension = "zip";
   };
 
-  makeFlags = [ "BUILD_STATIC=1" "BUILD_SHARED=1" ];
+  makeFlags = [
+    "BUILD_STATIC=1"
+    "BUILD_SHARED=1"
+  ];
 
   installPhase = ''
     runHook preInstall

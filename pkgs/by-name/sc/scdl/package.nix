@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
-  version = "2.12.1";
+  version = "2.12.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8BMO5/XJdAkz/E1ZDXavJudNSOiZdYLcZVMk1S8g9nU=";
+    hash = "sha256-5+3ok7UcJEdUW45bdPGkkvk+k/NYIpEi0URNuQ6e0vk=";
   };
 
   build-system = [ python3Packages.setuptools ];

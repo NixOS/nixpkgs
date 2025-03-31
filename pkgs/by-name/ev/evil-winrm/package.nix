@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , bundlerEnv
+, bundlerUpdateScript
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
   };
 
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp evil-winrm.rb $out/bin/evil-winrm
   '';
+
+  passthru.updateScript = bundlerUpdateScript "evil-winrm";
 
   meta = with lib; {
     description = "WinRM shell for hacking/pentesting";

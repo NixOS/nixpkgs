@@ -74,7 +74,7 @@
 }:
 
 let
-  version = "1.3.7";
+  version = "1.3.20";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -118,18 +118,18 @@ let
         tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
       );
   };
-in
-buildPythonPackage {
-  pname = "bentoml";
-  inherit version;
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-98SVW7f/Yn+NMfS6UIicQcoatMSm4XSJzbuJ0S/p3sg=";
+    tag = "v${version}";
+    hash = "sha256-zc/JvnEEoV21EbBHhLBWvilidXHx1pxYsBYISFg16Us=";
   };
+in
+buildPythonPackage {
+  pname = "bentoml";
+  inherit version src;
+  pyproject = true;
 
   pythonRelaxDeps = [
     "cattrs"
@@ -229,7 +229,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
-    changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
+    changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       happysalada

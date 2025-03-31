@@ -1,7 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, sqlite, gmp, libffi, cairo,
-  ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline, libsndfile,
-  libxml2, libglut, libsamplerate, pcre, libevent, libedit, yajl,
-  python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  sqlite,
+  gmp,
+  libffi,
+  cairo,
+  ncurses,
+  freetype,
+  libGLU,
+  libGL,
+  libpng,
+  libtiff,
+  libjpeg,
+  readline,
+  libsndfile,
+  libxml2,
+  libglut,
+  libsamplerate,
+  pcre,
+  libevent,
+  libedit,
+  yajl,
+  python3,
+  openssl,
+  glfw,
+  pkg-config,
+  libpthreadstubs,
+  libXdmcp,
+  libmemcached,
 }:
 
 stdenv.mkDerivation {
@@ -28,18 +58,40 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    zlib sqlite gmp libffi cairo ncurses freetype
-    libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
-    libglut libsamplerate pcre libevent libedit yajl
-    glfw openssl libpthreadstubs libXdmcp
-    libmemcached python3
+    zlib
+    sqlite
+    gmp
+    libffi
+    cairo
+    ncurses
+    freetype
+    libGLU
+    libGL
+    libpng
+    libtiff
+    libjpeg
+    readline
+    libsndfile
+    libxml2
+    libglut
+    libsamplerate
+    pcre
+    libevent
+    libedit
+    yajl
+    glfw
+    openssl
+    libpthreadstubs
+    libXdmcp
+    libmemcached
+    python3
   ];
 
   preConfigure = ''
     # The Addon generation (AsyncRequest and a others checked) seems to have
     # trouble with building on Virtual machines. Disabling them until it
     # can be fully investigated.
-    sed -ie \
+    sed -i -e \
           "s/add_subdirectory(addons)/#add_subdirectory(addons)/g" \
           CMakeLists.txt
     # Bind Libs STATIC to avoid a segfault when relinking

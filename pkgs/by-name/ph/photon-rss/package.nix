@@ -1,6 +1,11 @@
-{ buildGoModule, fetchFromSourcehut, lib, xorg }:
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+  xorg,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "photon";
   version = "unstable-2022-01-11";
 

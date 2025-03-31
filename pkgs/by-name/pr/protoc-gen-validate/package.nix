@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "protoc-gen-validate";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protoc-gen-validate";
     rev = "v${version}";
-    sha256 = "sha256-QY7MqggMNYq6x1VkkWVGN07VZgkexe7mGj/+6QvJiHs=";
+    sha256 = "sha256-kGnfR8o12bvjJH+grAwlYezF6UzWt7lgjGslq+07p3k=";
   };
 
-  vendorHash = "sha256-DqM+Am7Pi0UTz7NxYOCMN9W3H6WipX4oRRa8ceMsYZ0=";
+  vendorHash = "sha256-c7zi1y3HWGyjE2xG60msCUdKCTkwhWit2x5gU/bLoec=";
 
   excludedPackages = [ "tests" ];
 

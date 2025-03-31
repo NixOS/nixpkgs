@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, plasma5Packages, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  plasma5Packages,
+  hicolor-icon-theme,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "oranchelo-icon-theme";
@@ -6,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
-    repo = pname;
+    repo = "oranchelo-icon-theme";
     rev = "v${version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, nodejs
-, yarn
-, fixup-yarn-lock
-, python311
-, npmHooks
-, cctools
-, sqlite
-, srcOnly
-, buildPackages
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  python311,
+  npmHooks,
+  cctools,
+  sqlite,
+  srcOnly,
+  buildPackages,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Distutils was deprecated in 3.10, and removed in 3.12. This build needs it. An alternative could be adding
   # setuptools, but testing with that and 3.12 still fails.
-  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python311 npmHooks.npmInstallHook ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    fixup-yarn-lock
+    python311
+    npmHooks.npmInstallHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -87,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern, responsive, cross-platform, self-hosted web IRC client";
     homepage = "https://thelounge.chat";
     changelog = "https://github.com/thelounge/thelounge/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ winter raitobezarius ];
+    maintainers = with maintainers; [
+      winter
+      raitobezarius
+    ];
     license = licenses.mit;
     inherit (nodejs.meta) platforms;
     mainProgram = "thelounge";

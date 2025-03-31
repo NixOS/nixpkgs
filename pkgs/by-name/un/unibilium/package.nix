@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libtool,
+  pkg-config,
+  perl,
+  ncurses,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "unibilium";
@@ -14,7 +23,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl libtool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    perl
+    libtool
+  ];
   buildInputs = [ ncurses ];
 
   meta = with lib; {

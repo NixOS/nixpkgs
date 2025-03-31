@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, nodejs_20
-, fetchFromGitHub
-, cctools
-, nix-update-script
-, nixosTests
-, perl
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  nodejs_20,
+  fetchFromGitHub,
+  cctools,
+  nix-update-script,
+  nixosTests,
+  perl,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.11.1";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "cli-v${version}";
-    hash = "sha256-J7gmrSAiu59LLP9pKfbv9+H00vXGQCrjkd4GBhkcyTY=";
+    tag = "cli-v${version}";
+    hash = "sha256-Ls30yeqMDBA4HjQdnICJy0HVHm7VfZarsKUHn3KTatA=";
   };
 
   postPatch = ''
@@ -28,7 +29,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-MZoreHKmiUUxhq3tmL4lPp6vPmoQIqG3IPpZE56Z1Kc=";
+  npmDepsHash = "sha256-V77I2ZzmcCo06vq76lGkRa+NmTEUe2urD0D1HQ/gBJA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -49,21 +50,56 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
+  npmRebuildFlags = [
+    # we'll run npm rebuild manually later
+    "--ignore-scripts"
+  ];
+
+  postConfigure = ''
+    # we want to build everything from source
+    shopt -s globstar
+    rm -r node_modules/**/prebuilds
+    shopt -u globstar
+
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
+
+    npm rebuild --verbose
+  '';
+
+  postBuild = ''
+    # remove build artifacts that bloat the closure
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+  '';
+
+  postInstall = ''
+    # The @bitwarden modules are actually npm workspaces inside the source tree, which
+    # leave dangling symlinks behind. They can be safely removed, because their source is
+    # bundled via webpack and thus not needed at run-time.
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+  '';
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^cli-v(.*)$"
+      ];
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

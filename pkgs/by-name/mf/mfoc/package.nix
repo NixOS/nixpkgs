@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libnfc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libnfc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfoc";
@@ -6,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nfc-tools";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "mfoc";
+    rev = "mfoc-${version}";
     sha256 = "0hbg1fn4000qdg1cfc7y8l0vh1mxlxcz7gapkcq54xp2l6kk1z65";
   };
 
@@ -22,7 +30,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ libnfc ];
 
   meta = with lib; {

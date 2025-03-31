@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchzip
-, pkg-config
-, autoPatchelfHook
-, installShellFiles
-, ocl-icd
-, zlib
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  autoPatchelfHook,
+  installShellFiles,
+  ocl-icd,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +21,16 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ocl-icd zlib ];
-  nativeBuildInputs = [ autoPatchelfHook pkg-config installShellFiles ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    ocl-icd
+    zlib
+  ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -39,11 +49,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description =
-      "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
+    description = "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
     homepage = "https://www.codeplay.com/products/computesuite/computecpp";
     license = licenses.unfree;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

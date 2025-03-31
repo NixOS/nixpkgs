@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, gtk2
-, libX11
-, libXext
-, libXi
-, libXtst
-, texinfo
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fetchDebianPatch,
+  autoreconfHook,
+  pkg-config,
+  gtk2,
+  libX11,
+  libXext,
+  libXi,
+  libXtst,
+  texinfo,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,20 +32,27 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://savannah.gnu.org/bugs/download.php?file_id=49534";
       hash = "sha256-Ar5SyVIEp8/knDHm+4f0KWAH+A5gGhXGezEqL7xkQhI=";
     })
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "9.2";
+      patch = "fix-implicit-declarations.patch";
+      hash = "sha256-ct/ATuiC6b7rw9n2wsRNKvfj02i7V20bMOzL7pKDd0A=";
+    })
   ];
 
-  postPatch = ''
-    for i in `find cnee/test -name \*.sh`; do
-      sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
-    done
-  ''
-  # Fix for glibc-2.34. For some reason, `LIBSEMA="CCC"` is added
-  # if `sem_init` is part of libc which causes errors like
-  # `gcc: error: CCC: No such file or directory` during the build.
-  + ''
-    substituteInPlace configure* \
-      --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
-  '';
+  postPatch =
+    ''
+      for i in `find cnee/test -name \*.sh`; do
+        sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
+      done
+    ''
+    # Fix for glibc-2.34. For some reason, `LIBSEMA="CCC"` is added
+    # if `sem_init` is part of libc which causes errors like
+    # `gcc: error: CCC: No such file or directory` during the build.
+    + ''
+      substituteInPlace configure* \
+        --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
+    '';
 
   strictDeps = true;
 

@@ -12,22 +12,22 @@
   pytestCheckHook,
   pythonOlder,
   redis,
-  redis-server,
+  valkey,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.26.1";
+  version = "2.26.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eBWdrN6QfrZaavKGuVMaU0s+k0VpsBCIaIzuxC7HyYE=";
+    tag = "v${version}";
+    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
   };
 
   build-system = [ poetry-core ];
@@ -35,13 +35,6 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
-  ];
-
-  nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
   ];
 
   optional-dependencies = {
@@ -52,23 +45,25 @@ buildPythonPackage rec {
     probabilistic = [ pyprobables ];
   };
 
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "fakeredis" ];
 
   pytestFlagsArray = [ "-m 'not slow'" ];
 
   preCheck = ''
-    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    ${lib.getExe' valkey "redis-server"} --port 6390 &
     REDIS_PID=$!
   '';
 
   postCheck = ''
     kill $REDIS_PID
   '';
-
-  disabledTests = [
-    # AssertionError
-    "test_command"
-  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

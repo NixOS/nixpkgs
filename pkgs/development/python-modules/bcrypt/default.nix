@@ -5,7 +5,7 @@
   rustPlatform,
   rustc,
   setuptools,
-  setuptools-rust,
+  setuptoolsRustBuildHook,
   fetchPypi,
   pythonOlder,
   pytestCheckHook,
@@ -21,27 +21,27 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2nq9Rhf1Y8mj4BbUFzjH5ufwtZLN2ZCFk6SRFQMEiE=";
+    hash = "sha256-Oj/SIEF4ttKtzwnLT2Qm/+9UdiV3p8m1TBWQCMsojBg=";
   };
 
   cargoRoot = "src/_bcrypt";
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-dOS9A3pTwXYkzPFFNh5emxJw7pSdDyY+mNIoHdwNdmg=";
+    hash = "sha256-HgHvfMBspPsSYhllnKBg5XZB6zxFIqJj+4//xKG8HwA=";
   };
 
   nativeBuildInputs = [
     setuptools
-    setuptools-rust
+    setuptoolsRustBuildHook
     rustPlatform.cargoSetupHook
     cargo
     rustc

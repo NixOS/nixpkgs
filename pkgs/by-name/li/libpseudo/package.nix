@@ -1,4 +1,11 @@
-{lib, stdenv, fetchurl, pkg-config, glib, ncurses}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  ncurses,
+}:
 stdenv.mkDerivation rec {
   pname = "libpseudo";
   version = "1.2.0";
@@ -18,7 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib ncurses ];
+  buildInputs = [
+    glib
+    ncurses
+  ];
 
   meta = with lib; {
     homepage = "http://libpseudo.sourceforge.net/";

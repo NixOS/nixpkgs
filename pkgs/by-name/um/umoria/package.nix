@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, cmake
-, ncurses6
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  cmake,
+  ncurses6,
+  runtimeShell,
 }:
 
 let
@@ -106,7 +107,10 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     badPlatforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ aciceri kenran ];
+    maintainers = with maintainers; [
+      aciceri
+      kenran
+    ];
     license = licenses.gpl3Plus;
   };
 }

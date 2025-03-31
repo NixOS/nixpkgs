@@ -1,14 +1,28 @@
-{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert
-, curl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  makeWrapper,
+  nix,
+  openjdk,
+  writeScript,
+  nixosTests,
+  jq,
+  cacert,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.462.3";
+  version = "2.492.2";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    hash = "sha256-PlO1KoFkBeOxCtB/HEjNDLXLP4kyB+9/neKEFYBrk8E=";
+    hash = "sha256-rmD71fB8pM1COkc37XHztU7PFGZruYoMv/anc1QMInU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +56,6 @@ stdenv.mkDerivation rec {
           gnused
           jq
           nix
-          nixfmt-classic
         ]
       }
 
@@ -55,9 +68,6 @@ stdenv.mkDerivation rec {
 
       if [ ! "$oldVersion" = "$version" ]; then
         update-source-version jenkins "$version" "$hash"
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/development/tools/continuous-integration/jenkins/default.nix"
-        nixfmt "$default_nix"
       else
         echo "jenkins is already up-to-date"
       fi
@@ -69,7 +79,11 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins.io/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ coconnor earldouglas nequissimus ];
+    maintainers = with maintainers; [
+      coconnor
+      earldouglas
+      nequissimus
+    ];
     changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;

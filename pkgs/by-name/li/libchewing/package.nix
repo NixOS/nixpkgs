@@ -30,5 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       ShamrockLee
     ];
     platforms = platforms.all;
+    # compile time tools init_database, dump_database are built for host
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 })

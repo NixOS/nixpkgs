@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation {
   pname = "perf-tools";
@@ -13,27 +18,25 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  patchPhase =
-    ''
-      for i in execsnoop iolatency iosnoop kernel/funcslower killsnoop opensnoop; do
-        substituteInPlace $i \
-          --replace /usr/bin/gawk "$(type -p gawk)" \
-          --replace /usr/bin/mawk /no-such-path \
-          --replace /usr/bin/getconf "$(type -p getconf)" \
-          --replace awk=awk "awk=$(type -p gawk)"
-      done
+  patchPhase = ''
+    for i in execsnoop iolatency iosnoop kernel/funcslower killsnoop opensnoop; do
+      substituteInPlace $i \
+        --replace /usr/bin/gawk "$(type -p gawk)" \
+        --replace /usr/bin/mawk /no-such-path \
+        --replace /usr/bin/getconf "$(type -p getconf)" \
+        --replace awk=awk "awk=$(type -p gawk)"
+    done
 
-      rm -rf examples deprecated
-    '';
+    rm -rf examples deprecated
+  '';
 
-  installPhase =
-    ''
-      d=$out/libexec/perf-tools
-      mkdir -p $d $out/share
-      cp -prvd . $d/
-      ln -s $d/bin $out/bin
-      mv $d/man $out/share/
-    '';
+  installPhase = ''
+    d=$out/libexec/perf-tools
+    mkdir -p $d $out/share
+    cp -prvd . $d/
+    ln -s $d/bin $out/bin
+    mv $d/man $out/share/
+  '';
 
   meta = with lib; {
     platforms = platforms.linux;

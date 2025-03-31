@@ -1,13 +1,14 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, angstrom
-, base64
-, bigstringaf
-, faraday
-, gluten
-, httpun
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  angstrom,
+  base64,
+  bigstringaf,
+  faraday,
+  gluten,
+  httpun,
+  alcotest,
 }:
 
 buildDunePackage rec {

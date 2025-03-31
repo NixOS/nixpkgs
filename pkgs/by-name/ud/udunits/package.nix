@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, expat
-, file
-, flex
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  expat,
+  file,
+  flex,
+  texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "udunits";
   version = "unstable-2021-03-17";
 

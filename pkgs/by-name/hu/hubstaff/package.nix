@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
-, libXext , freetype, libXrender, fontconfig, libXft, libXinerama
+, libXext , freetype, libXrender, fontconfig, libXft, libXinerama, libXcursor, cairo
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
 , curl, writeShellScript, common-updater-scripts, xmlstarlet }:
 
 let
-  url = "https://app.hubstaff.com/download/8099-standard-linux-1-6-26-release";
-  version = "1.6.26-95441346";
-  sha256 = "sha256:0xxw2za1hmqff5y0vyrvccgldsgyb808dql548c2xqsc1qi9gbn9";
+  url = "https://app.hubstaff.com/download/9353-standard-linux-1-6-31-release/sh";
+  version = "1.6.31-a6da06ad";
+  sha256 = "sha256:07x8di08ln15mv3x7vp01wgs8zcd1rrzvmzygrl9anhx9zhgsr3b";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
       libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
-      curl libXfixes libXScrnSaver ];
+      curl libXfixes libXScrnSaver libXcursor cairo ];
 
 in
 

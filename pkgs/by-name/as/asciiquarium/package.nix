@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perlPackages,
+}:
 
-let version = "1.1";
-in stdenv.mkDerivation {
+let
+  version = "1.1";
+in
+stdenv.mkDerivation {
   pname = "asciiquarium";
   inherit version;
   src = fetchurl {
@@ -17,7 +25,7 @@ in stdenv.mkDerivation {
     cp asciiquarium $out/bin
     chmod +x $out/bin/asciiquarium
     wrapProgram $out/bin/asciiquarium \
-      --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ] }
+      --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ]}
   '';
 
   meta = with lib; {
@@ -26,6 +34,9 @@ in stdenv.mkDerivation {
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sigmasquadron utdemir ];
+    maintainers = with maintainers; [
+      sigmasquadron
+      utdemir
+    ];
   };
 }

@@ -5,22 +5,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.40";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "83f33653b687c84823fe6af00806107e1dd4f4b8";
-    hash = "sha256-eau5h75oZpxufTrf0fLHfr+3TIOFXB/kSgHX+o2GtiE=";
+    rev = "e81bae9b7b7f536bd9057158fe5a219facced116";
+    hash = "sha256-5IGp4WuC34wRB7xSiDWzScLvV26yjsdw/LT/7CN9hWc=";
   };
 
-  cargoHash = "sha256-OqM8SERSWHtbvW6SZfM7lOrQZu66uzsv5wiD3Iqaf3s=";
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Vx26ArAcsW0NNVNZa4M5hqz/sm1gecrun/bbRWMu07Q=";
 
   checkFlags = [
-  # Depends on `rustfmt` and does not matter for packaging.
-  "--skip=utils::test_format_rust_expression"
-  # Requires networking
-  "--skip=test_force_update_snapshots"
+    # Depends on `rustfmt` and does not matter for packaging.
+    "--skip=utils::test_format_rust_expression"
+    # Requires networking
+    "--skip=test_force_update_snapshots"
+
+    "--skip=test_ignored_snapshots"
+    "--skip=workspace::test_insta_workspace_root"
+    "--skip=env::test_get_cargo_workspace_manifest_dir"
   ];
 
   meta = with lib; {

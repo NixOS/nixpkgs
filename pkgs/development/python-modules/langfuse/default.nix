@@ -12,19 +12,20 @@
   packaging,
   poetry-core,
   pydantic,
+  requests,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.53.3";
+  version = "2.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uhbCLDjOU13KAJcCXz03IPNICG5ZI16KIShY2sXPkp4=";
+    tag = "v${version}";
+    hash = "sha256-POafeO7MqPnNp+kVSOCMJxV0Q6IDuEG9Kusb69dHtbo=";
   };
 
   build-system = [ poetry-core ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     idna
     packaging
     pydantic
+    requests
     wrapt
   ];
 
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

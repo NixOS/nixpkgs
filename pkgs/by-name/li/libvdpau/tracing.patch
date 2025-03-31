@@ -1,0 +1,24 @@
+diff --git a/src/vdpau_wrapper.c b/src/vdpau_wrapper.c
+index 79dcb94..6249af4 100644
+--- a/src/vdpau_wrapper.c
++++ b/src/vdpau_wrapper.c
+@@ -185,8 +185,7 @@ static VdpStatus _vdp_open_driver(
+     if (vdpau_trace && atoi(vdpau_trace)) {
+         SetDllHandle * set_dll_handle;
+
+-        _vdp_trace_dll = dlopen(VDPAU_MODULEDIR "/libvdpau_trace.so.1",
+-                                RTLD_NOW | RTLD_GLOBAL);
++        _vdp_trace_dll = dlopen("libvdpau_trace.so.1", RTLD_NOW | RTLD_GLOBAL);
+         if (!_vdp_trace_dll) {
+             fprintf(stderr, "Failed to open VDPAU trace library %s\n", dlerror());
+             _VDP_ERROR_BREAKPOINT();
+diff --git a/trace/meson.build b/trace/meson.build
+index 5381b8b..4af408f 100644
+--- a/trace/meson.build
++++ b/trace/meson.build
+@@ -4,5 +4,4 @@ trace = shared_library('vdpau_trace',
+     dependencies : libdl,
+     version : '1.0.0',
+     install : true,
+-    install_dir : moduledir,
+ )

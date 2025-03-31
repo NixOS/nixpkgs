@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, glib, dconf, pkg-config, dbus-glib, telepathy-glib, python3, libxslt, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  dconf,
+  pkg-config,
+  dbus-glib,
+  telepathy-glib,
+  python3,
+  libxslt,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-idle";
@@ -9,8 +21,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-g4fiXl+wtMvnAeXcCS1mbWUQuDP9Pn5GLpFw027DwV8=";
   };
 
-  nativeBuildInputs = [ pkg-config python3 makeWrapper ];
-  buildInputs = [ glib telepathy-glib dbus-glib libxslt (lib.getLib dconf) ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    makeWrapper
+  ];
+  buildInputs = [
+    glib
+    telepathy-glib
+    dbus-glib
+    libxslt
+    (lib.getLib dconf)
+  ];
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-idle" \

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, endlessh
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  endlessh,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "skeeto";
-    repo = pname;
+    repo = "endlessh";
     rev = version;
     hash = "sha256-yHQzDrjZycDL/2oSQCJjxbZQJ30FoixVG1dnFyTKPH4=";
   };

@@ -15,13 +15,14 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dra-cla";
-  version = "0-unstable-2024-06-07";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "CoolnsX";
     repo = "dra-cla";
-    rev = "24d7eaa5d433bc2cbbba4f23552cd812506fefee";
-    hash = "sha256-BmBQSkLSq+BaxkzXEy3hlI3qNq2NCIoGKDKt7gyDz+s=";
+    # upstream is not tagging releases
+    rev = "68e9868354bd9fefa72dbe1e7991bc1f6d184aa2";
+    hash = "sha256-CF9XSbkhTrfNE6iR6Q/VWA8x0eDxRKy0Bz0YUuOEEt4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -3,7 +3,12 @@
 # non-existent path (/nix/store/eeee...).  This is useful for getting rid of
 # dependencies that you know are not actually needed at runtime.
 
-{ lib, stdenvNoCC, signingUtils, shell ? stdenvNoCC.shell }:
+{
+  lib,
+  stdenvNoCC,
+  signingUtils,
+  shell ? stdenvNoCC.shell,
+}:
 
 let
   stdenv = stdenvNoCC;

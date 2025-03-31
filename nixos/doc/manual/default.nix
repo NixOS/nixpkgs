@@ -79,6 +79,8 @@ let
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
 
+    cp -r ${../../../doc/release-notes} ./release-notes-nixpkgs
+
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
     substituteInPlace ./configuration/configuration.md \

@@ -1,13 +1,19 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, libbsd }:
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  libbsd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
   version = "0.10.8";
-  underscoreVersion = lib.replaceStrings ["."] ["_"] version;
+  underscoreVersion = lib.replaceStrings [ "." ] [ "_" ] version;
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
-    repo = pname;
+    repo = "kcgi";
     rev = "VERSION_${underscoreVersion}";
     sha256 = "0ha6r7bcgf6pcn5gbd2sl7835givhda1jql49c232f1iair1yqyp";
   };
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ] ;
+  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
 
   dontAddPrefix = true;
 

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXext,
+  libXi,
+  libXmu,
+  libXt,
+  libXtst,
+}:
 
 stdenv.mkDerivation rec {
   pname = "imwheel";
@@ -9,7 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "2320ed019c95ca4d922968e1e1cbf0c075a914e865e3965d2bd694ca3d57cfe3";
   };
 
-  buildInputs = [ libX11 libXext libXi libXmu libXt libXtst ];
+  buildInputs = [
+    libX11
+    libXext
+    libXi
+    libXmu
+    libXt
+    libXtst
+  ];
 
   makeFlags = [
     "sysconfdir=/etc"

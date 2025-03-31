@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2BjLoGUWU0RaWVI9JA3s/Hf5aVtmv8hn+fB2jkWdQNY=";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip
+{ stdenv, lib, fetchFromGitHub, fetchzip, fetchpatch
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
@@ -18,7 +18,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
-, lirc
+, lirc, mesa-gl-headers
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
 , joystickSupport ? true, cwiid
@@ -33,7 +33,7 @@
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
 , waylandpp ?  null, libxkbcommon
-, gbmSupport ? false, mesa, libinput, libdisplay-info
+, gbmSupport ? false, libgbm, libinput, libdisplay-info
 , buildPackages
 }:
 
@@ -87,18 +87,23 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = "21.1";
+    version = "21.2";
     kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo  = "xbmc";
       rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash  = "sha256-NjId1T1cw9dl0Fx1QDsijiN1VUpuQ/EFl1kxWSESCR4=";
+      hash  = "sha256-RdTJcq6FPerQx05dU3r8iyaorT4L7162hg5RdywsA88=";
     };
 
     patches = [
-      ./no-python-lib.patch
+      # Backport to fix build with Pipewire 1.4
+      # FIXME: remove in the next update
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
+        hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -126,7 +131,7 @@ in stdenv.mkDerivation (finalAttrs: {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fstrcmp rapidjson
       lirc
-      mesa # for libEGL
+      mesa-gl-headers
     ]
     ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
@@ -151,7 +156,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals gbmSupport [
       libxkbcommon.dev
-      mesa.dev
+      libgbm
       libinput.dev
       libdisplay-info
     ];
@@ -214,15 +219,10 @@ in stdenv.mkDerivation (finalAttrs: {
       # Need these tools on the build system when cross compiling,
       # hacky, but have found no other way.
       CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder
-      cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
+      appendToVar cmakeFlags "-DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
       CXX=$CXX_FOR_BUILD LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
-      cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
-    '';
-
-    postPatch = ''
-      substituteInPlace xbmc/platform/posix/PosixTimezone.cpp \
-        --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
+      appendToVar cmakeFlags "-DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 
     postInstall = ''

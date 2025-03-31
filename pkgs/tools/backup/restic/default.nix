@@ -1,15 +1,24 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
-, nixosTests, rclone, python3 }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  nixosTests,
+  rclone,
+  python3,
+}:
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.17.3";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-PTy/YcojJGrYQhdp98e3rEMqHIWDMR5jiSC6BdzBT/M=";
+    hash = "sha256-odyKcpNAhk1dlVBhjrtmgKjWTOCMtooYOJ5p0J9OUFY=";
   };
 
   patches = [
@@ -17,11 +26,14 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-tU2msDHktlU0SvvxLQCU64p8DpL8B0QiliVCuHlLTHQ=";
+  vendorHash = "sha256-cxOwVf1qZXJbDZC/7cGnKPNpwJnAk3OunKVZpwtI8pI=";
 
   subPackages = [ "cmd/restic" ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -33,17 +45,19 @@ buildGoModule rec {
     rm cmd/restic/cmd_mount_integration_test.go
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
-  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    $out/bin/restic generate \
-      --bash-completion restic.bash \
-      --fish-completion restic.fish \
-      --zsh-completion restic.zsh \
-      --man .
-    installShellCompletion restic.{bash,fish,zsh}
-    installManPage *.1
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
+    ''
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      $out/bin/restic generate \
+        --bash-completion restic.bash \
+        --fish-completion restic.fish \
+        --zsh-completion restic.zsh \
+        --man .
+      installShellCompletion restic.{bash,fish,zsh}
+      installManPage *.1
+    '';
 
   meta = with lib; {
     homepage = "https://restic.net";
@@ -51,7 +65,10 @@ buildGoModule rec {
     description = "Backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
-    maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
+    maintainers = [
+      maintainers.mbrgm
+      maintainers.dotlambda
+    ];
     mainProgram = "restic";
   };
 }

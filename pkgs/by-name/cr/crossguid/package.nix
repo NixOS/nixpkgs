@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libuuid, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libuuid,
+  unstableGitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossguid";
   version = "0.2.2-unstable-2019-05-29";
 
   src = fetchFromGitHub {
     owner = "graeme-hill";
-    repo = pname;
+    repo = "crossguid";
     rev = "ca1bf4b810e2d188d04cb6286f957008ee1b7681";
     hash = "sha256-37tKPDo4lukl/aaDWWSQYfsBNEnDjE7t6OnEZjBhcvQ=";
   };

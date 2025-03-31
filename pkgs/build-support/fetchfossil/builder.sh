@@ -1,5 +1,3 @@
-if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
-source $stdenv/setup
 echo "Cloning Fossil $url [$rev] into $out"
 
 # Fossil, bless its adorable little heart, wants to write global configuration

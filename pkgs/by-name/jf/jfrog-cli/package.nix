@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nodejs
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nodejs,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.71.4";
+  version = "2.73.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pC56OlSo05nMH+Adkg1v0Lba7Vd+bXeHRP4+Phvhlu8=";
+    tag = "v${version}";
+    hash = "sha256-GzxJAatMI7H4XaRgza8+nq4JtIlPN9H3WkdKr0PfXWM=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-d1VloSjvXAt10MsZwVJ0Fkg9pN+tcOE5vURy7hatg30=";
+  vendorHash = "sha256-tblmLEYHZt8manxuu5OpHeuAW18+0/kSvZIJmhEfQYQ=";
 
   postPatch = ''
     # Patch out broken test cleanup.
@@ -45,6 +46,9 @@ buildGoModule rec {
     changelog = "https://github.com/jfrog/jfrog-cli/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "jf";
-    maintainers = with maintainers; [ detegr aidalgol ];
+    maintainers = with maintainers; [
+      detegr
+      aidalgol
+    ];
   };
 }

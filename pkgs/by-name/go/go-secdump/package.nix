@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-secdump";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "jfjallid";
     repo = "go-secdump";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RdbrxnyP9QKkrWRLxnWljlwjJHbK++f/U0WdyB9XDc0=";
+    tag = version;
+    hash = "sha256-v/IqOjohlGs6MQX2BevboysqW6Lzz0NupDH6sb1TG7Q=";
   };
 
-  vendorHash = "sha256-RvbK0ps/5Jg/IAk71WGYEcjM6LrbCSkUueSOUFeELis=";
+  vendorHash = "sha256-H9oFvnyigjwEs24XGGH5mtDMMCo846y0nFIlsrbvLMk=";
 
   ldflags = [
     "-s"

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmpxx
-, flint
-, arb
-, nauty
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmpxx,
+  flint3,
+  nauty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,12 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmpxx
-    flint
-    arb
+    flint3
     nauty
   ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

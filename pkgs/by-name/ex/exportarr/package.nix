@@ -1,27 +1,31 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "exportarr";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "onedr0p";
     repo = "exportarr";
     rev = "v${version}";
-    hash = "sha256-A6G1b9hTGp35ZHsDaMAZdH0LkkEyXCWoV6e5Bo3UqI4=";
+    hash = "sha256-iNcdD2zigBZ2phtCkHRV0GZPrEjopV0K+vin1Zkb3Oo=";
   };
 
-  vendorHash = "sha256-8MrS/BMSjyWbBM8jVQYDsvLLaolgbP22Vp2PRX33Kfw=";
+  vendorHash = "sha256-F5WOSsjeOzMaj4Yze11OnqpgL1l87wpgl3OQEGya//M=";
 
   subPackages = [ "cmd/exportarr" ];
 
   CGO_ENABLE = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "netgo" ];
 

@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, git
-, gnupg
-, makeWrapper
-, openssl
-, lib
-, stdenv
-, libxslt
-, docbook_xsl
+{
+  fetchFromGitHub,
+  git,
+  gnupg,
+  makeWrapper,
+  openssl,
+  lib,
+  stdenv,
+  libxslt,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,14 +16,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AGWA";
-    repo = pname;
+    repo = "git-crypt";
     rev = version;
     sha256 = "sha256-GcGCX6hoKL+sNLAeGEzZpaM+cdFjcNlwYExfOFEPi0I=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ libxslt makeWrapper ];
+  nativeBuildInputs = [
+    libxslt
+    makeWrapper
+  ];
 
   buildInputs = [ openssl ];
 
@@ -44,7 +48,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/git-crypt \
-      --suffix PATH : ${lib.makeBinPath [ git gnupg ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          git
+          gnupg
+        ]
+      }
   '';
 
   meta = with lib; {

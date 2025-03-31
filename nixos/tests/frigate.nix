@@ -1,8 +1,12 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+{
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   name = "frigate";
-  meta.maintainers = with lib.maintainers; [ hexa ];
+  meta = { inherit (pkgs.frigate.meta) maintainers; };
 
   nodes = {
     machine = {
@@ -17,12 +21,14 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           cameras.test = {
             ffmpeg = {
               input_args = "-fflags nobuffer -strict experimental -fflags +genpts+discardcorrupt -r 10 -use_wallclock_as_timestamps 1";
-              inputs = [ {
-                path = "http://127.0.0.1:8080";
-                roles = [
-                  "record"
-                ];
-              } ];
+              inputs = [
+                {
+                  path = "http://127.0.0.1:8080";
+                  roles = [
+                    "record"
+                  ];
+                }
+              ];
             };
           };
 
@@ -63,10 +69,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     # login and store session
     machine.log(machine.succeed(f"http --check-status --session=frigate post http://localhost/api/login user=admin password={password}"))
 
-    # make authenticated api requested
+    # make authenticated api request
     machine.log(machine.succeed("http --check-status --session=frigate get http://localhost/api/version"))
+
+    # make unauthenticated api request
+    machine.log(machine.succeed("http --check-status get http://localhost:5000/api/version"))
 
     # wait for a recording to appear
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
   '';
-})
+}

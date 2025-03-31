@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "unparam";
-  version = "0-unstable-2024-05-28";
+  version = "0-unstable-2025-03-01";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "unparam";
-    rev = "8a5130ca722ffad18c95cc467b561f1668b9b0d2";
-    hash = "sha256-CYCXTriGUd4bNY6ZPfkX4puE1imcqYHnX1SXVdnXPGM=";
+    rev = "0df0534333a487d07b143c1b2c2e0046671d2d63";
+    hash = "sha256-k/BgHvjB3fXz4CWTHRFja/EiGlof/c80jhRb91FaINs=";
   };
 
-  vendorHash = "sha256-2lNC4V1WQkJdkagIlBu6tj4SA4KJKstHXc+B4emKu6s=";
+  vendorHash = "sha256-Q7q0NZgofxChaSpYL5dS4NDadwfrXlLtkG/F7tGJuhA=";
 
   subPackages = [ "." ];
 

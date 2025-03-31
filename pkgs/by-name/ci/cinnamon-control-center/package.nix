@@ -1,45 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, glib-networking
-, gettext
-, cinnamon-desktop
-, gtk3
-, libnotify
-, libxml2
-, colord
-, polkit
-, libxkbfile
-, cinnamon-menus
-, libgnomekbd
-, libxklavier
-, networkmanager
-, libgudev
-, libwacom
-, wrapGAppsHook3
-, glibc
-, libnma
-, modemmanager
-, xorg
-, gdk-pixbuf
-, meson
-, ninja
-, cinnamon-translations
-, python3
-, upower
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  glib-networking,
+  gettext,
+  cinnamon-desktop,
+  gtk3,
+  libnotify,
+  libxml2,
+  colord,
+  polkit,
+  libxkbfile,
+  cinnamon-menus,
+  libgnomekbd,
+  libxklavier,
+  networkmanager,
+  libgudev,
+  libwacom,
+  wrapGAppsHook3,
+  glibc,
+  libnma,
+  modemmanager,
+  xorg,
+  gdk-pixbuf,
+  meson,
+  ninja,
+  cinnamon-translations,
+  python3,
+  upower,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "6.4.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "cinnamon-control-center";
     rev = version;
-    hash = "sha256-hS1vFrwMYUinFLWx33nnlcXwcMkqDCivElI1HaZsSSE=";
+    hash = "sha256-1Z+kXvBmENNXIqdZgPDx7ZSwJMFAm2oMih6eFFAsA/A=";
   };
 
   buildInputs = [

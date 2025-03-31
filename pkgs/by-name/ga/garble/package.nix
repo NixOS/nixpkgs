@@ -3,7 +3,6 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  diffoscope,
   git,
   versionCheckHook,
   replaceVars,
@@ -12,13 +11,13 @@
 
 buildGoModule rec {
   pname = "garble";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = "garble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FtI5lAeqjRPN47iC46bcEsRLQb7mItw4svsnLkRpNxY=";
+    tag = "v${version}";
+    hash = "sha256-zS/K2kOpWhJmr0NuWSjEjNXV8ILt81yLIQWSPDuMwt8=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -38,11 +37,10 @@ buildGoModule rec {
     "TestScript/gogarble"
   ];
 
-  vendorHash = "sha256-mSdajYiMEg2ik0ocfmHK+XddEss1qLu6rDwzjocaaW0=";
+  vendorHash = "sha256-xxG1aQrALVuJ7oVn+Z+sH655eFQ7rcYFmymGCUZD1uU=";
 
   # Used for some of the tests.
   nativeCheckInputs = [
-    diffoscope
     git
     versionCheckHook
   ];

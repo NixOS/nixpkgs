@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, expat
-, fontconfig
-, freetype
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,12 +30,8 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "unic-0.9.0" = "sha256-ZE4C+rrtmHdqTmenP5c7QGNTW/n7pi8nh7lqLhHgi3w=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-D+CcUNVMgn8fiGcr+dYkQJoRHzpo3l5qTacCUKCydOQ=";
 
   meta = with lib; {
     description = "Unicode tool with a terminal user interface";

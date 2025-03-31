@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , makeWrapper
 , mkDerivation
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , wrapQtAppsHook
 
@@ -27,7 +27,7 @@
 , ninja
 , openssl
 , pdal
-, postgresql
+, libpq
 , proj
 , protobuf
 , python3
@@ -80,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.40.1";
+  version = "3.42.0";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-C86RwyeIZrflC5F2VQCw1LwF9VM4/OBEsLbGPiWKeco=";
+    hash = "sha256-vqT6ffqY1M6/2eW08VghysC+v7ZI9Yz0Zhk9UY/izZc=";
   };
 
   passthru = {
@@ -119,7 +119,7 @@ in mkDerivation rec {
     netcdf
     openssl
     pdal
-    postgresql
+    libpq
     proj
     protobuf
     qca-qt5
@@ -141,8 +141,7 @@ in mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })

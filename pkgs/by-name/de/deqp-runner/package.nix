@@ -1,4 +1,8 @@
-{ lib, fetchFromGitLab, rustPlatform }:
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "deqp-runner";
@@ -12,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5ngyONV7X3JyU0Kd7VE8XGgsAMb9OCSrZuAuFIbQjgs=";
   };
 
-  cargoHash = "sha256-xLtKrzjDwBxsg9YNlLQdteAkhuS1rpUbyMWdMwFTrf4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rVYRbaj+9nFVyo9Zjdmd5t7CoFfxtntXIW2bWp2L7DE=";
 
   meta = with lib; {
     description = "VK-GL-CTS/dEQP wrapper program to parallelize it across CPUs and report results against a baseline";

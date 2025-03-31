@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
   };
 

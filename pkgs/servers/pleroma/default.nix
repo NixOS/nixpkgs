@@ -13,19 +13,20 @@
   pkg-config,
   glib,
   darwin,
+  fetchpatch,
   ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.7.0";
+  version = "2.9.1";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-2uKVwjxMLC8jyZWW+ltBRNtOR7RaAb8SPO1iV2wyROc=";
+    sha256 = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -33,6 +34,38 @@ beamPackages.mixRelease rec {
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = final: prev: {
+      # Upstream is pointing to
+      # https://github.com/feld/phoenix/commits/v1.7.14-websocket-headers/
+      # which is v1.7.14 with an extra patch applied on top.
+      phoenix = beamPackages.buildMix {
+        name = "phoenix";
+        version = "1.7.14-websocket-headers";
+        src = fetchFromGitHub {
+          owner = "phoenixframework";
+          repo = "phoenix";
+          tag = "v1.7.14";
+          hash = "sha256-hb8k0bUl28re1Bv2AIs17VHOP8zIyCfbpaVydu1Dh24=";
+        };
+        patches = [
+          (fetchpatch {
+            name = "0001-Support-passing-through-the-value-of-the-sec-websocket-protocol-header.patch";
+            url = "https://github.com/feld/phoenix/commit/fb6dc76c657422e49600896c64aab4253fceaef6.patch";
+            hash = "sha256-eMla+D3EcVTc1WwlRaKvLPV5eXwGfAgZOxiYlGSkBIQ=";
+          })
+        ];
+        beamDeps = with final; [
+          phoenix_pubsub
+          plug
+          plug_crypto
+          telemetry
+          phoenix_template
+          websock_adapter
+          phoenix_view
+          castore
+          plug_cowboy
+          jason
+        ];
+      };
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
       captcha = beamPackages.buildMix {

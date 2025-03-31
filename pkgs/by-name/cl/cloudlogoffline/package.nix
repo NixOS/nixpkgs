@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt6
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 stdenv.mkDerivation (self: {
   pname = "cloudlogoffline";
@@ -17,13 +18,14 @@ stdenv.mkDerivation (self: {
     repo = "cloudLogOffline";
   };
 
-  nativeBuildInputs = [
-    qt6.qmake
-    qt6.wrapQtAppsHook
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      qt6.qmake
+      qt6.wrapQtAppsHook
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      copyDesktopItems
+    ];
 
   buildInputs = [
     qt6.qtbase
@@ -32,26 +34,30 @@ stdenv.mkDerivation (self: {
     qt6.qtsvg
   ];
 
-  postPatch = let
-    targetDir = if stdenv.hostPlatform.isDarwin then "Applications" else "bin";
-  in ''
-    substituteInPlace CloudLogOffline.pro \
-      --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
-  '';
+  postPatch =
+    let
+      targetDir = if stdenv.hostPlatform.isDarwin then "Applications" else "bin";
+    in
+    ''
+      substituteInPlace CloudLogOffline.pro \
+        --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
+    '';
 
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    install -d $out/share/pixmaps
-    install -m644 images/logo_circle.svg $out/share/pixmaps/cloudlogoffline.svg
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # FIXME: For some reason, the Info.plist isn't copied correctly to
-    # the application bundle when building normally, instead creating an
-    # empty file. This doesn't happen when building in a dev shell with
-    # genericBuild.
-    # So, just copy the file manually.
-    plistPath="$out/Applications/CloudLogOffline.app/Contents/Info.plist"
-    [[ -s "$plistPath" ]] && { echo "expected Info.plist to be empty; workaround no longer needed?"; exit 1; }
-    install -m644 macos/Info.plist $out/Applications/CloudLogOffline.app/Contents/Info.plist
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -d $out/share/pixmaps
+      install -m644 images/logo_circle.svg $out/share/pixmaps/cloudlogoffline.svg
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # FIXME: For some reason, the Info.plist isn't copied correctly to
+      # the application bundle when building normally, instead creating an
+      # empty file. This doesn't happen when building in a dev shell with
+      # genericBuild.
+      # So, just copy the file manually.
+      plistPath="$out/Applications/CloudLogOffline.app/Contents/Info.plist"
+      [[ -s "$plistPath" ]] && { echo "expected Info.plist to be empty; workaround no longer needed?"; exit 1; }
+      install -m644 macos/Info.plist $out/Applications/CloudLogOffline.app/Contents/Info.plist
+    '';
 
   desktopItems = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (makeDesktopItem {
@@ -61,7 +67,11 @@ stdenv.mkDerivation (self: {
       icon = "cloudlogoffline";
       comment = self.meta.description;
       genericName = "Ham radio contact logbook";
-      categories = [ "Network" "Utility" "HamRadio" ];
+      categories = [
+        "Network"
+        "Utility"
+        "HamRadio"
+      ];
     })
   ];
 

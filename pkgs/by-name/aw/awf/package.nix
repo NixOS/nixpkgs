@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk2, gtk3, pkg-config
-, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk2,
+  gtk3,
+  pkg-config,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "awf";
@@ -12,9 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "0jl2kxwpvf2n8974zzyp69mqhsbjnjcqm39y0jvijvjb1iy8iman";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [ gtk2 gtk3 ];
+  buildInputs = [
+    gtk2
+    gtk3
+  ];
 
   autoreconfPhase = ''
     patchShebangs ./autogen.sh

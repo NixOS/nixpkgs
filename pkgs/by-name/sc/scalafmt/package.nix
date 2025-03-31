@@ -1,8 +1,15 @@
-{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
+{
+  lib,
+  stdenv,
+  jre,
+  coursier,
+  makeWrapper,
+  setJavaClassPath,
+}:
 
 let
   baseName = "scalafmt";
-  version = "3.7.17";
+  version = "3.9.2";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -12,14 +19,17 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-8gK+fOnqwPFBbSWltNKInzXRJQ3WZxPlLqpvuTxF4fk=";
+    outputHash = "sha256-IACG6fiunbLP5wLPMePpk0QQnDS18ale+Lppri4jBmU=";
   };
 in
 stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  nativeBuildInputs = [
+    makeWrapper
+    setJavaClassPath
+  ];
   buildInputs = [ deps ];
 
   dontUnpack = true;
@@ -37,11 +47,11 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
-    license = licenses.asl20;
-    maintainers = [ maintainers.markus1189 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "scalafmt";
   };
 }

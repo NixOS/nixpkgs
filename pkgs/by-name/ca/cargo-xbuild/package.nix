@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-xbuild";
@@ -11,12 +15,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-29rCjmzxxIjR5nBN2J3xxP+r8NnPIJV90FkSQQEBbo4=";
   };
 
-  cargoHash = "sha256-tyPhKWDSDNxQy+vpWNS5VP5D8TkUR7MJSAlG8wZsDy4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8ceL4Ntb+P+BvLqlnSxKcyZREckyWAKDhxR6prjaxHM=";
 
   meta = with lib; {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";
     homepage = "https://github.com/rust-osdev/cargo-xbuild";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ johntitor xrelkd ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      johntitor
+      xrelkd
+    ];
   };
 }

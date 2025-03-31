@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
-, testers
-, sqlite3-to-mysql
-, mysql80
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+  testers,
+  sqlite3-to-mysql,
+  mysql80,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2zylVnPlptPCxUFwU9j9g//T5fzPJgXc3hQc6iMoLLE=";
   };
 

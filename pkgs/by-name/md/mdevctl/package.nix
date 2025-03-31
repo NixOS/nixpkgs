@@ -1,20 +1,27 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, docutils
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  docutils,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdevctl";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4K4NW3DOTtzZJ7Gg0mnRPr88YeqEjTtKX+C4P8i923E=";
+    hash = "sha256-Zh+Dj3X87tTpqT/weZMpf7f3obqikjPy9pi50ifp6wQ=";
   };
 
-  cargoHash = "sha256-hCqNy32uPLsKfUJqiG2DRcXfqdvlp4bCutQmt+FieXc=";
+  # https://github.com/mdevctl/mdevctl/issues/111
+  patches = [
+    ./script-dir.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LG5UaSUTF6pVx7BBLiZ/OmAZNCKswFlTqHymg3bDkuc=";
 
   nativeBuildInputs = [
     docutils

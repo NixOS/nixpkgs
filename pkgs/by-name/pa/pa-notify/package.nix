@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, glib
-, libnotify
-, libpulseaudio
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  glib,
+  libnotify,
+  libpulseaudio,
+  pkg-config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pa-notify";

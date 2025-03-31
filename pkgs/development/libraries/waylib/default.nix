@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland-scanner
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qwlroots
-, wayland
-, wayland-protocols
-, wlr-protocols
-, pixman
-, libdrm
-, libinput
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qwlroots,
+  wayland,
+  wayland-protocols,
+  wlr-protocols,
+  pixman,
+  libdrm,
+  libinput,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylib";
-  version = "0.3.0-alpha";
+  version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "waylib";
     rev = finalAttrs.version;
-    hash = "sha256-5IWe8VFpLwDSja4to/ugVS80s5+bcAbM6/fg1HPP52Q=";
+    hash = "sha256-djFwUe/+5CNEnOTKL5OAC8zVQqsT8BSqQEWjkbEt7xQ=";
   };
 
   depsBuildBuild = [
@@ -54,14 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Wrapper for wlroots based on Qt";
     homepage = "https://github.com/vioken/waylib";
-    license = with lib.licenses; [ gpl3Only lgpl3Only asl20 ];
+    license = with lib.licenses; [
+      gpl3Only
+      lgpl3Only
+      asl20
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rewine ];
   };
 })
-

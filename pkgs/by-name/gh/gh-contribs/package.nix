@@ -9,13 +9,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "gh-contribs";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "MintArchit";
     repo = "gh-contribs";
     rev = "v${version}";
-    hash = "sha256-yPJ9pmnbqR+fXH02Q5VMn0v2MuDQbPUpNzKw1awmKVE=";
+    hash = "sha256-fqyxq/lpMcLXOYY0MNI5uv8Go2erpg7dEIsEI+ExSVI=";
   };
 
   nativeBuildInputs = [

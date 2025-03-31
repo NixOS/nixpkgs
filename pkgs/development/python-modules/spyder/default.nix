@@ -4,6 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
+  pyqtwebengine,
 
   # build-system
   setuptools,
@@ -18,6 +19,7 @@
   diff-match-patch,
   fzf,
   intervaltree,
+  ipython-pygments-lexers,
   jedi,
   jellyfish,
   keyring,
@@ -32,7 +34,6 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
-  pyqtwebengine,
   python-lsp-black,
   python-lsp-server,
   pyuca,
@@ -55,23 +56,19 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.2";
+  version = "6.1.0a1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPUrAYFn3k5NQrsk7B2aPFnkAxKSKC4I97DnFPK1pvM=";
+    hash = "sha256-Yjii1YUmdWdrrSLe3trAoATJXt2bfjc0JX5CBMVIEq8=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [
-    pyqtwebengine.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -83,6 +80,7 @@ buildPythonPackage rec {
     diff-match-patch
     fzf
     intervaltree
+    ipython-pygments-lexers
     jedi
     jellyfish
     keyring
@@ -145,7 +143,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

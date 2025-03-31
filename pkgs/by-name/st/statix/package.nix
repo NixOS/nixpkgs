@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  withJson ? true,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "statix";
@@ -9,12 +15,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nerdypepper";
-    repo = pname;
+    repo = "statix";
     rev = "v${version}";
     sha256 = "sha256-bMs3XMiGP6sXCqdjna4xoV6CANOIWuISSzCaL5LYY4c=";
   };
 
-  cargoHash = "sha256-QF7P0CWlKfBzVQC//eKhf/u1qV9AfLIJDxWDDWzMG8g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pi1q2qNLjQYr3Wla7rqrktNm0StszB2klcfzwAnF3tE=";
 
   buildFeatures = lib.optional withJson "json";
 
@@ -26,6 +33,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nerdypepper/statix";
     license = licenses.mit;
     mainProgram = "statix";
-    maintainers = with maintainers; [ figsoda nerdypepper ];
+    maintainers = with maintainers; [
+      figsoda
+      nerdypepper
+    ];
   };
 }

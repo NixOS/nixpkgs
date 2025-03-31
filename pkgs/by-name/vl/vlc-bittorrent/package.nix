@@ -1,13 +1,14 @@
-{ lib
-, autoconf-archive
-, autoreconfHook
-, boost
-, fetchFromGitHub
-, libtorrent-rasterbar
-, libvlc
-, openssl
-, pkg-config
-, stdenv
+{
+  lib,
+  autoconf-archive,
+  autoreconfHook,
+  boost,
+  fetchFromGitHub,
+  libtorrent-rasterbar,
+  libvlc,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 # VLC does not know where the vlc-bittorrent package is installed.

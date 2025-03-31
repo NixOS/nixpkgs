@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, expect
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  expect,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "exe2hex";
   version = "1.5.2-unstable-2020-04-27";
   pyproject = false;

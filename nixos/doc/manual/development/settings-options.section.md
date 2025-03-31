@@ -191,8 +191,8 @@ have a predefined type and string generator already declared under
           in {
             a = 1;
             b = format.lib.mkSubstitution "a";
-            c = format.lib.mkSubstition "SOME_ENVVAR";
-            d = format.lib.mkSubstition {
+            c = format.lib.mkSubstitution "SOME_ENVVAR";
+            d = format.lib.mkSubstitution {
               value = "SOME_OPTIONAL_ENVVAR";
               optional = true;
             };
@@ -333,7 +333,7 @@ have a predefined type and string generator already declared under
     `{ sections = {}; globalSection = {}; }` where *sections* are several
     sections as with *pkgs.formats.ini* and *globalSection* being just a single
     attrset of key-value pairs for a single section, the global section which
-    preceedes the section definitions.
+    precedes the section definitions.
 
     The attribute `lib.type.atom` contains the used INI atom.
 
@@ -342,6 +342,27 @@ have a predefined type and string generator already declared under
 :   A function taking an empty attribute set (for future extensibility)
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
+
+`pkgs.formats.xml` { format ? "badgerfish", withHeader ? true}
+
+:   A function taking an attribute set with values
+    and returning a set with XML-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    `format`
+
+    :   Input format. Because XML can not be translated one-to-one, we have to use intermediate formats. Possible values:
+      - `"badgerfish"`: Uses [badgerfish](http://www.sklar.com/badgerfish/) conversion.
+
+    `withHeader`
+
+    :   Outputs the xml with header.
+
+`pkgs.formats.cdn` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with [CDN](https://github.com/dzikoysk/cdn)-specific
+    attributes `type` and `generate` as specified [below](#pkgs-formats-result).
 
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 
@@ -380,6 +401,31 @@ have a predefined type and string generator already declared under
 
     :   Outputs the given attribute set as an Elixir map, instead of the
         default Elixir keyword list
+
+`pkgs.formats.lua { asBindings ? false, multiline ? true, columnWidth ? 100, indentWidth ? 2, indentUsingTabs ? false }`
+
+:   A function taking an attribute set with values
+
+    `asBindings` (default `false`)
+
+    :   Whether to treat attributes as variable bindings
+
+    `multiline` (default `true`)
+
+    :   Whether to procude a multiline output. The output may still wrap across
+        multiple lines if it would otherwise exceed `columnWidth`.
+
+    `columnWidth` (default `100`)
+
+    :   The column width to use to attempt to wrap lines.
+
+    `indentWidth` (default `2`)
+
+    :   The width of a single indentation level.
+
+    `indentUsingTabs` (default `false`)
+
+    :   Whether the indentation should use tabs instead of spaces.
 
 `pkgs.formats.php { finalVariable }` []{#pkgs-formats-php}
 

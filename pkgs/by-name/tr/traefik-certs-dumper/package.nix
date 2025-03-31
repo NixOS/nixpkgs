@@ -1,17 +1,21 @@
-{ fetchFromGitHub, buildGoModule, lib }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "traefik-certs-dumper";
-  version = "2.8.3";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "ldez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dSVtowebmDA0X/PtLKktvb1+FhQ+evMoxFBXIXqZujw=";
+    sha256 = "sha256-zXbtabh5ZziELZHzvYisXETPUmhHAVo6sMuF4O3crBY=";
   };
 
-  vendorHash = "sha256-a23kTtjIaMYs3+S9rYZ6ttyCyyK6Wm2wUZQw+In/hG4=";
+  vendorHash = "sha256-WpYxI+7qBYibojPtYlWmDrmJYlRlVwTaqCMI5Vzh1RI=";
   excludedPackages = "integrationtest";
 
   meta = with lib; {

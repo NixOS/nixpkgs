@@ -13,19 +13,18 @@
   libXcursor,
   freetype,
   alsa-lib,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fire";
-  version = "1.0.1-unstable-2024-10-22";
+  version = "1.0.1-unstable-2025-03-12";
 
   src = fetchFromGitHub {
     owner = "jerryuhoo";
     repo = "Fire";
-    rev = "4c3275caa0dbd9e65c6c3d574cc5ac1c828e529a";
+    rev = "b7ded116ce7ab78a57bb9b6b61796cb2cf3a6e8b";
     fetchSubmodules = true;
-    hash = "sha256-DyYP/uDawa+m2FtNvEvu36iRl6zfMyGNMMad5f/rX4k=";
+    hash = "sha256-d8w+b4OpU2/kQdcAimR4ihDEgVTM1V7J0hj7saDrQpY=";
   };
 
   postPatch =
@@ -53,17 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      freetype
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    freetype
+    alsa-lib
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)

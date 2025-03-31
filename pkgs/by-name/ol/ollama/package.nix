@@ -4,22 +4,24 @@
   fetchFromGitHub,
   buildEnv,
   linkFarm,
-  overrideCC,
   makeWrapper,
   stdenv,
   addDriverRunpath,
   nix-update-script,
 
   cmake,
-  gcc12,
   gitMinimal,
   clblast,
   libdrm,
   rocmPackages,
+  rocmGpuTargets ? rocmPackages.clr.gpuTargets or [ ],
   cudaPackages,
+  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
   darwin,
   autoAddDriverRunpath,
+  versionCheckHook,
 
+  # passthru
   nixosTests,
   testers,
   ollama,
@@ -41,17 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.4.7";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
-    rev = "v${version}";
-    hash = "sha256-X1xGo054+MpThvZzeg/F+IBczY1wn/gTjcq+j1JztDg=";
+    tag = "v${version}";
+    hash = "sha256-ZQiBbVQbMYxC73DAPyWi6Yn/cPySpsPcTiCOHK3F35w=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-xz9v91Im6xTLPzmYoVecdF7XiPKBZk3qou1SGokgPXQ=";
+  vendorHash = "sha256-Zpzn2YWpiDAl4cwgrrSpN8CFy4GqqhE1mWsRxtYwdDA=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -127,7 +129,10 @@ let
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
-    if enableCuda then buildGoModule.override { stdenv = overrideCC stdenv gcc12; } else buildGoModule;
+    if enableCuda then
+      buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+    else
+      buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild {
@@ -144,9 +149,7 @@ goBuild {
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
       HIP_PATH = rocmPath;
     }
-    // lib.optionalAttrs enableCuda {
-      CUDA_PATH = cudaPath;
-    };
+    // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
   nativeBuildInputs =
     [
@@ -169,14 +172,10 @@ goBuild {
     ++ lib.optionals enableCuda cudaLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
-  patches = [
-    # ollama's build script is unable to find hipcc
-    ./rocm.patch
-  ];
-
+  # replace inaccurate version number with actual release version
   postPatch = ''
-    # replace inaccurate version number with actual release version
-    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+    substituteInPlace version/version.go \
+      --replace-fail 0.0.0 '${version}'
   '';
 
   overrideModAttrs = (
@@ -186,25 +185,46 @@ goBuild {
     }
   );
 
-  preBuild = ''
-    # build llama.cpp libraries for ollama
-    make -j $NIX_BUILD_CORES
-  '';
+  preBuild =
+    let
+      removeSMPrefix =
+        str:
+        let
+          matched = builtins.match "sm_(.*)" str;
+        in
+        if matched == null then str else builtins.head matched;
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # copy libggml_*.so and runners into lib
-    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
+      cudaArchitectures = builtins.concatStringsSep ";" (builtins.map removeSMPrefix cudaArches);
+      rocmTargets = builtins.concatStringsSep ";" rocmGpuTargets;
+
+      cmakeFlagsCudaArchitectures = lib.optionalString enableCuda "-DCMAKE_CUDA_ARCHITECTURES='${cudaArchitectures}'";
+      cmakeFlagsRocmTargets = lib.optionalString enableRocm "-DAMDGPU_TARGETS='${rocmTargets}'";
+
+    in
+    ''
+      cmake -B build \
+        -DCMAKE_SKIP_BUILD_RPATH=ON \
+        -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+        ${cmakeFlagsCudaArchitectures} \
+        ${cmakeFlagsRocmTargets} \
+
+      cmake --build build -j $NIX_BUILD_CORES
+    '';
+
+  # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
+  # https://github.com/ollama/ollama/blob/v0.5.11/docs/development.md#library-detection
+  postInstall = ''
     mkdir -p $out/lib
-    cp -r dist/*/lib/* $out/lib/
+    cp -r build/lib/ollama $out/lib/
   '';
 
   postFixup =
+    # the app doesn't appear functional at the moment, so hide it
     ''
-      # the app doesn't appear functional at the moment, so hide it
       mv "$out/bin/app" "$out/bin/.ollama-app"
     ''
+    # expose runtime libraries necessary to use the gpu
     + lib.optionalString (enableRocm || enableCuda) ''
-      # expose runtime libraries necessary to use the gpu
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
@@ -214,6 +234,12 @@ goBuild {
     "-X=github.com/ollama/ollama/version.Version=${version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheck = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests =
@@ -246,6 +272,7 @@ goBuild {
       abysssol
       dit7ya
       elohmeier
+      prusnak
       roydubnium
     ];
   };

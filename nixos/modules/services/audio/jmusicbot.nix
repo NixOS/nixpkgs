@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.jmusicbot;
 in
@@ -27,14 +32,16 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       description = "Discord music bot that's easy to set up and run yourself!";
-      serviceConfig = lib.mkMerge [{
-        ExecStart = "${cfg.package}/bin/JMusicBot";
-        WorkingDirectory = cfg.stateDir;
-        Restart = "always";
-        RestartSec = 20;
-        DynamicUser = true;
-      }
-        (lib.mkIf (cfg.stateDir == "/var/lib/jmusicbot") { StateDirectory = "jmusicbot"; })];
+      serviceConfig = lib.mkMerge [
+        {
+          ExecStart = "${cfg.package}/bin/JMusicBot";
+          WorkingDirectory = cfg.stateDir;
+          Restart = "always";
+          RestartSec = 20;
+          DynamicUser = true;
+        }
+        (lib.mkIf (cfg.stateDir == "/var/lib/jmusicbot") { StateDirectory = "jmusicbot"; })
+      ];
     };
   };
 

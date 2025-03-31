@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, boost
-, libsodium
-, openssl
-, rapidjson
-, readline
-, unbound
-, zeromq
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitea,
+  cmake,
+  python3,
+  boost186,
+  libsodium,
+  openssl,
+  rapidjson,
+  readline,
+  unbound,
+  zeromq,
+  darwin,
 }:
 
 let
@@ -27,49 +29,50 @@ let
     rev = "633500ad8c8759995049ccd022107d1fa8a1bbc9";
     hash = "sha256-26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
   };
-  randomwow = fetchFromGitHub {
-    owner = "wownero-project";
+  randomwow = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "wownero";
     repo = "RandomWOW";
-    rev = "607bad48f3687c2490d90f8c55efa2dcd7cbc195";
-    hash = "sha256-CJv96TbPv1k/C7MQWEntE6khIRX1iIEiF9wEdsQGiFQ=";
+    rev = "27b099b6dd6fef6e17f58c6dfe00009e9c5df587";
+    hash = "sha256-imiXr4irXeKiQ6VMd6f3MJ46zvdvymnRdHGgnEvkT+o=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "wownero";
-  version = "0.11.0.1";
+  version = "0.11.3.0";
 
-  src = fetchFromGitHub {
-    owner = "wownero-project";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "wownero";
     repo = "wownero";
-    rev = "v${version}";
-    fetchSubmodules = false;
-    hash = "sha256-zmGsSbPpVwL0AhCQkdMKORruM5kYrrLe/BYfMphph8c=";
+    tag = "v${version}";
+    hash = "sha256-EioXFfUQ+CV6+Ipef1wbmc+taKI98I420J7eqzz15Ss=";
   };
 
-  patches = [
-    # Fix gcc-13 build due to missing <cstdint> neaders
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://git.wownero.com/wownero/wownero/commit/f983ac77805a494ea4a05a00398c553e1359aefd.patch";
-      hash = "sha256-9acQ4bHAKFR+lMgrpQyBmb+9YZYi1ywHoo1jBcIgmGs=";
-    })
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cast-user-defined"
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
   ];
 
   nativeBuildInputs = [
     cmake
+    python3
   ];
 
-  buildInputs = [
-    boost
-    libsodium
-    openssl
-    rapidjson
-    readline
-    unbound
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
-  ];
+  buildInputs =
+    [
+      boost186
+      libsodium
+      openssl
+      rapidjson
+      readline
+      unbound
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.IOKit
+    ];
 
   postUnpack = ''
     rm -r $sourceRoot/external/miniupnp

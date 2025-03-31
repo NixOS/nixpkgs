@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libbfd
-, libnl
-, libpcap
-, ncurses
-, readline
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libbfd,
+  libnl,
+  libpcap,
+  ncurses,
+  readline,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = pname;
+    repo = "dropwatch";
     rev = "v${version}";
     sha256 = "sha256-TbhgcX5WzuigP5/Mj5JuK7O/UKcu70D7dcOcvo4fxeQ=";
   };

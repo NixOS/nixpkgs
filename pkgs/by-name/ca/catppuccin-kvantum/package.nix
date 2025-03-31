@@ -5,13 +5,33 @@
   unstableGitUpdater,
   accent ? "blue",
   variant ? "frappe",
-}: let
+}:
+let
   pname = "catppuccin-kvantum";
 in
-  lib.checkListOfEnum "${pname}: theme accent" ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"] [accent]
-  lib.checkListOfEnum "${pname}: color variant" ["latte" "frappe" "macchiato" "mocha"] [variant]
+lib.checkListOfEnum "${pname}: theme accent"
+  [
+    "blue"
+    "flamingo"
+    "green"
+    "lavender"
+    "maroon"
+    "mauve"
+    "peach"
+    "pink"
+    "red"
+    "rosewater"
+    "sapphire"
+    "sky"
+    "teal"
+    "yellow"
+  ]
+  [ accent ]
+  lib.checkListOfEnum
+  "${pname}: color variant" [ "latte" "frappe" "macchiato" "mocha" ] [ variant ]
 
-  stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation
+  {
     inherit pname;
     version = "0-unstable-2024-10-25";
 

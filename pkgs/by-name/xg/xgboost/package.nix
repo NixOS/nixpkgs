@@ -1,19 +1,19 @@
-{ config
-, stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, gtest
-, doCheck ? true
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, ncclSupport ? false
-, rLibrary ? false
-, cudaPackages
-, llvmPackages
-, R
-, rPackages
+{
+  config,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  doCheck ? true,
+  autoAddDriverRunpath,
+  cudaSupport ? config.cudaSupport,
+  ncclSupport ? false,
+  rLibrary ? false,
+  cudaPackages,
+  llvmPackages,
+  R,
+  rPackages,
 }@inputs:
 
 assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
@@ -48,30 +48,26 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
+    hash = "sha256-k1k6K11cWpG6PtzTt99q/rrkN3FyxCVEzfPI9fCTAjM=";
   };
 
-  patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
-    (fetchpatch { # https://github.com/dmlc/xgboost/pull/10123
-      name = "Fix compilation with the ctk 12.4.";
-      url = "https://github.com/dmlc/xgboost/commit/c760f85db0bc7bd6379901fbfb67ceccc2b37700.patch";
-      hash = "sha256-iP9mll9pg8T2ztCR7dBPnLP17/x3ImJFrr5G3e2dqHo=";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake ]
+  nativeBuildInputs =
+    [ cmake ]
     ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  buildInputs =
+    [ gtest ]
+    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optional cudaSupport cudaPackages.cuda_cudart
     ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
@@ -80,14 +76,16 @@ effectiveStdenv.mkDerivation rec {
     rPackages.Matrix
   ];
 
-  cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
+  cmakeFlags =
+    lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [
-    "-DUSE_CUDA=ON"
-    # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
-    # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${effectiveStdenv.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${effectiveStdenv.cc}/bin/g++"
-  ] ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
+      "-DUSE_CUDA=ON"
+      # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
+      # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
+      "-DCMAKE_C_COMPILER=${effectiveStdenv.cc}/bin/gcc"
+      "-DCMAKE_CXX_COMPILER=${effectiveStdenv.cc}/bin/g++"
+    ]
+    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
   preConfigure = lib.optionals rLibrary ''
@@ -100,9 +98,7 @@ effectiveStdenv.mkDerivation rec {
   # By default, cmake build will run ctests with all checks enabled
   # If we're building with cuda, we run ctest manually so that we can skip the GPU tests
   checkPhase = lib.optionalString cudaSupport ''
-    ctest --force-new-ctest-process ${
-      lib.optionalString cudaSupport "-E TestXGBoostLib"
-    }
+    ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
   '';
 
   # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
@@ -110,12 +106,61 @@ effectiveStdenv.mkDerivation rec {
   GTEST_FILTER =
     let
       # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      filteredTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+      xsimdTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
         "ThreadGroup.TimerThread"
         "ThreadGroup.TimerThreadSimple"
       ];
+      networkingTest = [
+        "AllgatherTest.Basic"
+        "AllgatherTest.VAlgo"
+        "AllgatherTest.VBasic"
+        "AllgatherTest.VRing"
+        "AllreduceGlobal.Basic"
+        "AllreduceGlobal.Small"
+        "AllreduceTest.Basic"
+        "AllreduceTest.BitOr"
+        "AllreduceTest.Restricted"
+        "AllreduceTest.Sum"
+        "Approx.PartitionerColumnSplit"
+        "BroadcastTest.Basic"
+        "CPUHistogram.BuildHistColSplit"
+        "CPUPredictor.CategoricalPredictLeafColumnSplit"
+        "CPUPredictor.CategoricalPredictionColumnSplit"
+        "ColumnSplit/ColumnSplitTrainingTest*"
+        "ColumnSplit/TestApproxColumnSplit*"
+        "ColumnSplit/TestHistColumnSplit*"
+        "ColumnSplitObjective/TestColumnSplit*"
+        "CommGroupTest.Basic"
+        "CommTest.Channel"
+        "CpuPredictor.BasicColumnSplit"
+        "CpuPredictor.IterationRangeColmnSplit"
+        "CpuPredictor.LesserFeaturesColumnSplit"
+        "CpuPredictor.SparseColumnSplit"
+        "DistributedMetric/TestDistributedMetric.BinaryAUCRowSplit/Dist_*"
+        "InitEstimation.FitStumpColumnSplit"
+        "MetaInfo.GetSetFeatureColumnSplit"
+        "Quantile.ColumnSplit"
+        "Quantile.ColumnSplitBasic"
+        "Quantile.ColumnSplitSorted"
+        "Quantile.ColumnSplitSortedBasic"
+        "Quantile.Distributed"
+        "Quantile.DistributedBasic"
+        "Quantile.SameOnAllWorkers"
+        "Quantile.SortedDistributed"
+        "Quantile.SortedDistributedBasic"
+        "QuantileHist.MultiPartitionerColumnSplit"
+        "QuantileHist.PartitionerColumnSplit"
+        "SimpleDMatrix.ColumnSplit"
+        "TrackerAPITest.CAPI"
+        "TrackerTest.AfterShutdown"
+        "TrackerTest.Bootstrap"
+        "TrackerTest.GetHostAddress"
+        "TrackerTest.Print"
+        "VectorAllgatherV.Basic"
+      ];
+      excludedTests = xsimdTests ++ networkingTest;
     in
-    "-${builtins.concatStringsSep ":" filteredTests}";
+    "-${builtins.concatStringsSep ":" excludedTests}";
 
   installPhase =
     ''
@@ -126,7 +171,8 @@ effectiveStdenv.mkDerivation rec {
     + lib.optionalString rLibrary ''
       mkdir -p $out/library
       export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-    '' + ''
+    ''
+    + ''
       cmake --install .
       cp -r ../rabit/include/rabit $out/include
       runHook postInstall
@@ -139,13 +185,15 @@ effectiveStdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
+    description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     broken = cudaSupport && cudaPackages.cudaOlder "11.4";
     license = licenses.asl20;
     mainProgram = "xgboost";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar nviets ];
+    maintainers = with maintainers; [
+      abbradar
+      nviets
+    ];
   };
 }

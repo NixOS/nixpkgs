@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre2, pkg-config, libgcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  libmhash,
+  zlib,
+  acl,
+  attr,
+  libselinux,
+  pcre2,
+  pkg-config,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aide";
@@ -9,7 +23,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FmYtxjLRfixWMLgBdS+XkSqOIml8Bl694XXxzDe4OmA=";
   };
 
-  buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre2 libgcrypt ];
+  buildInputs = [
+    flex
+    bison
+    libmhash
+    zlib
+    acl
+    attr
+    libselinux
+    pcre2
+    libgcrypt
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -18,7 +42,7 @@ stdenv.mkDerivation rec {
     "--with-selinux"
     "--with-xattr"
     "--sysconfdir=/etc"
-    ];
+  ];
 
   meta = with lib; {
     homepage = "https://aide.github.io/";

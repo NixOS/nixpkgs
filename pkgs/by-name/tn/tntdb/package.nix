@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cxxtools
-, postgresql
-, libmysqlclient
-, sqlite
-, zlib
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cxxtools,
+  libpq,
+  libmysqlclient,
+  sqlite,
+  zlib,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cxxtools
-    postgresql
+    libpq
     libmysqlclient
     sqlite
     zlib

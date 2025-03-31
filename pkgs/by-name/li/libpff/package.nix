@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchzip
-, pkg-config
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchzip,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UmGRBgi78nDSuuOXi/WmODojWU5AbQGKNQwLseoh714=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  outputs = [ "bin" "dev" "out" ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   meta = {
     description = "Library and tools to access the Personal Folder File (PFF) and the Offline Folder File (OFF) format";

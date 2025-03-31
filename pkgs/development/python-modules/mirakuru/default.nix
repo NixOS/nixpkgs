@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
   };
 
@@ -51,11 +51,14 @@ buildPythonPackage rec {
   # > ps: vsz: requires entitlement
   # > ps: rss: requires entitlement
   # > ps: time: requires entitlement
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    "test_forgotten_stop"
-    "test_mirakuru_cleanup"
-    "test_daemons_killing"
-  ];
+  disabledTests =
+    [
+      "test_forgotten_stop"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_mirakuru_cleanup"
+      "test_daemons_killing"
+    ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/mirakuru";

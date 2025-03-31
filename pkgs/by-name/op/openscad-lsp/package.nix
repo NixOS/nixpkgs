@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "openscad-lsp";
   version = "1.2.5";
 
@@ -14,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IPTBWX0kKmusijg4xAvS1Ysi9WydFaUWx/BkZbMvgJk=";
   };
 
-  cargoHash = "sha256-AQpjamyHienqB501lruxk56N6r8joocWrJ5srsm5baY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qHwtLZUM9FrzDmg9prVtSf19KtEp8cZO/7XoXtZb5IQ=";
 
   # no tests exist
   doCheck = false;

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, libtree
-, runCommand
-, coreutils
-, dieHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  libtree,
+  runCommand,
+  coreutils,
+  dieHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,12 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
       command = "libtree --version";
       version = finalAttrs.version;
     };
-    checkCoreUtils = runCommand "${finalAttrs.pname}-ls-test" {
-      nativeBuildInputs = [ finalAttrs.finalPackage dieHook ];
-    } ''
-      libtree ${coreutils}/bin/ls > $out || die "libtree failed to show dependencies."
-      [ -s $out ]
-    '';
+    checkCoreUtils =
+      runCommand "${finalAttrs.pname}-ls-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            dieHook
+          ];
+        }
+        ''
+          libtree ${coreutils}/bin/ls > $out || die "libtree failed to show dependencies."
+          [ -s $out ]
+        '';
   };
 
   meta = with lib; {
@@ -44,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/haampie/libtree";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ prusnak rardiol ];
+    maintainers = with maintainers; [
+      prusnak
+      rardiol
+    ];
   };
 })

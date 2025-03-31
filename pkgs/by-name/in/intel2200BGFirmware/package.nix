@@ -1,6 +1,8 @@
-{ stdenvNoCC
-, lib
-, fetchurl }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "intel2200BGFirmware";

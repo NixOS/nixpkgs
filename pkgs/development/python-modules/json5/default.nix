@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.9.25";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2JAZHayPyi2RI4apODQ9QDXSUI8n54SwQAxZiBhuJrE=";
+    tag = "v${version}";
+    hash = "sha256-J5xZN6o9UwvCdrzEY6o3NxYaxbtiUhmTtCQJia4JmI4=";
   };
 
   build-system = [ setuptools ];

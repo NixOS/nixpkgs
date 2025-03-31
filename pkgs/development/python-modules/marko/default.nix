@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "marko";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KqdBYmlVs00atXy7MSsriRBnL7w13io2oFZ0IyJ2Om4=";
   };
 
@@ -41,9 +41,12 @@ buildPythonPackage rec {
     "marko"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.toc ++ optional-dependencies.codehilite;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.toc
+    ++ optional-dependencies.codehilite;
 
   meta = {
     changelog = "https://github.com/frostming/marko/blob/${src.rev}/CHANGELOG.md";

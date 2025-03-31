@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, scdoc
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +12,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
-    repo = pname;
+    repo = "pipectl";
     rev = "v${version}";
     hash = "sha256-pNBw1ukNaqu40qPXnORUGApYpJ/0EAO9Tq5zAbDe33I=";
   };
 
-  nativeBuildInputs = [ cmake scdoc ];
+  nativeBuildInputs = [
+    cmake
+    scdoc
+  ];
 
   cmakeFlags = [
     "-DINSTALL_DOCUMENTATION=ON"

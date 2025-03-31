@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, glib
-, gtk3
-, nemo
-, file-roller
-, cinnamon-translations
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  glib,
+  gtk3,
+  nemo,
+  file-roller,
+  cinnamon-translations,
 }:
 
 stdenv.mkDerivation rec {

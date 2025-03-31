@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xml2";

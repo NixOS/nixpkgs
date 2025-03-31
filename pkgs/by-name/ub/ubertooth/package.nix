@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libbtbb, libpcap , libusb1, bluez
-, udevGroup ? "ubertooth"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libbtbb,
+  libpcap,
+  libusb1,
+  bluez,
+  udevGroup ? "ubertooth",
 }:
 
 stdenv.mkDerivation rec {
@@ -8,15 +17,23 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
-    repo = pname;
+    repo = "ubertooth";
     rev = version;
     sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 
   sourceRoot = "${src.name}/host";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libbtbb libpcap libusb1 bluez ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libbtbb
+    libpcap
+    libusb1
+    bluez
+  ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-DINSTALL_UDEV_RULES=TRUE"

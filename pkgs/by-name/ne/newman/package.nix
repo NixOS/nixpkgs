@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -10,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "postmanlabs";
     repo = "newman";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p0/uHrLiqw5VnboXzLKF+f56ZfW77m5aoopf2zqIpQE=";
   };
 

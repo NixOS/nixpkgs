@@ -3,34 +3,35 @@
   buildPythonPackage,
   fetchPypi,
   flit-core,
+  filetype,
   ipykernel,
   python,
   pexpect,
   bashInteractive,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "bash-kernel";
-  version = "0.9.3";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bash_kernel";
     inherit version;
-    hash = "sha256-n3oDgRyn2csfv/gIIjfPBFC5cYIlL9C4BYeha2XmbVg=";
+    hash = "sha256-LtWgpBbEGNHXUecVBb1siJ4SFXREtQxCh6aF2ndcKMo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./bash-path.patch;
+    (replaceVars ./bash-path.patch {
       bash = lib.getExe bashInteractive;
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     ipykernel
     pexpect
   ];
@@ -58,11 +59,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
     changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

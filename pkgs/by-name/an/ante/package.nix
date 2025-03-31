@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, libffi
-, libxml2
-, llvmPackages_16
-, ncurses
-, rustPlatform
+{
+  fetchFromGitHub,
+  lib,
+  libffi,
+  libxml2,
+  llvmPackages_16,
+  ncurses,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,12 +17,9 @@ rustPlatform.buildRustPackage {
     rev = "e38231ffa51b84a2ca53b4b0439d1ca5e0dea32a";
     hash = "sha256-UKEoOm+Jc0YUwO74Tn038MLeX/c3d2z8I0cTBVfX61U=";
   };
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "inkwell-0.2.0" = "sha256-eMoclRtekg8v+m5KsTcjB3zCdPkcJy42NALEEuT/fw8=";
-    };
-  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uOOSxRoc59XzJT5oVO2NOYC0BwrNq4X6Jd/gQz0ZBp8=";
 
   /*
      https://crates.io/crates/llvm-sys#llvm-compatibility
@@ -29,7 +27,11 @@ rustPlatform.buildRustPackage {
      that is not the same as the one included by default with rustPlatform.
   */
   nativeBuildInputs = [ llvmPackages_16.llvm ];
-  buildInputs = [ libffi libxml2 ncurses ];
+  buildInputs = [
+    libffi
+    libxml2
+    ncurses
+  ];
 
   postPatch = ''
     substituteInPlace tests/golden_tests.rs --replace \

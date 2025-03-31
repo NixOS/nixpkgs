@@ -120,7 +120,7 @@ in
           { "r" = {}; };
     };
 
-    hardware.graphics.package = lib.mkDefault pkgs.mesa.drivers;
-    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+    hardware.graphics.package = lib.mkDefault pkgs.mesa;
+    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa;
   };
 }

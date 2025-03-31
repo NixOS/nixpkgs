@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
@@ -47,10 +48,12 @@ buildPythonPackage rec {
   version = "2.30.25";
   pyproject = true;
 
+  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
+
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
   };
 

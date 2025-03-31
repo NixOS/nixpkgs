@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
 
   cfg = config.services.ihaskell;
@@ -19,7 +24,7 @@ in
 
       extraPackages = lib.mkOption {
         type = lib.types.functionTo (lib.types.listOf lib.types.package);
-        default = haskellPackages: [];
+        default = haskellPackages: [ ];
         defaultText = lib.literalExpression "haskellPackages: []";
         example = lib.literalExpression ''
           haskellPackages: [

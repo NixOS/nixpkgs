@@ -1,13 +1,15 @@
-{ lib
-, nix-update-script
-, fetchFromGitLab
-, buildNpmPackage
-, nodejs
+{
+  lib,
+  nix-update-script,
+  fetchFromGitLab,
+  buildNpmPackage,
+  nodejs,
 }:
 
 buildNpmPackage rec {
   pname = "math-preview";
   version = "5.1.1";
+  inherit nodejs;
 
   src = fetchFromGitLab {
     owner = "matsievskiysv";

@@ -12,20 +12,21 @@
 }:
 
 let
-  version = "2.6.2";
+  version = "2.8.1";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
+    hash = "sha256-d5XNfjDgtBkNkUMhShYTjKtMbwVa2tLXdvYi6sXQmIA=";
   };
 
-  portmod-rust = rustPlatform.buildRustPackage rec {
+  portmod-rust = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-sAjgGVVjgXaWbmN/eGEvatYjkHeFTZNX1GXFcJqs3GI=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [
       python3Packages.python
@@ -45,13 +46,13 @@ let
   ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";
   format = "pyproject";
 
-  # build the rust library independantly
+  # build the rust library independently
   prePatch = ''
     substituteInPlace setup.py \
       --replace "from setuptools_rust import Binding, RustExtension, Strip" "" \

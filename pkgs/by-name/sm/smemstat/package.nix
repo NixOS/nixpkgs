@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, ncurses }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smemstat";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "smemstat";
     rev = "V${version}";
     hash = "sha256-wxgw5tPdZAhhISbay8BwoL5zxZJV4WstDpOtv9umf54=";
   };

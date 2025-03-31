@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
-    repo = pname;
+    repo = "resvg";
     rev = "v${version}";
     hash = "sha256-XjWkzTdsnQZfBjf61dgGt/a7973ZljJG1rnCk0iGk6Y=";
   };
 
-  cargoHash = "sha256-HmMAYtL0qoUrtLRKrYx6VZsc0bVRS+DhIFweLbz9l+w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NHXcBKSuyL0bIriEOr1nuTnz4vra1bIYcNOGmnN5HnQ=";
 
   cargoBuildFlags = [
     "--package=resvg"

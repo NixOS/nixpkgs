@@ -1,4 +1,12 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook3, glib }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchurl,
+  jdk21,
+  wrapGAppsHook3,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";

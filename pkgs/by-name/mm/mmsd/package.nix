@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchzip
-, autoreconfHook
-, pkg-config
-, glib
-, dbus
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  dbus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mmsd";
   version = "unstable-2019-07-15";
 

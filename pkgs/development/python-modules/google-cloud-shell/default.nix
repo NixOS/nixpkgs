@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-shell";
-  version = "1.10.1";
+  version = "1.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_shell";
     inherit version;
-    hash = "sha256-JgKBwyQ/KlLqtQtvpjal7+3IT7oS6HHmIsZ/amIEFRk=";
+    hash = "sha256-nRuFxyxtJmKiI0BtV8VEu8mRZ5JU2S0gGU9aef9I6Zg=";
   };
 
   build-system = [ setuptools ];

@@ -1,40 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, ninja
-, python3
-, qtbase
-, qt5compat
-, qtdeclarative
-, qtdoc
-, qtquick3d
-, qtquicktimeline
-, qtserialport
-, qtsvg
-, qttools
-, qtwebengine
-, qtwayland
-, qtshadertools
-, wrapQtAppsHook
-, yaml-cpp
-, litehtml
-, libsecret
-, gumbo
-, llvmPackages
-, rustc-demangle
-, elfutils
-, perf
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  qtbase,
+  qt5compat,
+  qtdeclarative,
+  qtdoc,
+  qtquick3d,
+  qtquicktimeline,
+  qtserialport,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwayland,
+  qtshadertools,
+  wrapQtAppsHook,
+  yaml-cpp,
+  litehtml,
+  libsecret,
+  gumbo,
+  llvmPackages,
+  rustc-demangle,
+  elfutils,
+  perf,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "15.0.0";
+  version = "16.0.0";
 
   src = fetchurl {
     url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-I7HGtHjKdgmX7N3Uxyjw2igLBpYAipvd2aEGjxbUj3I=";
+    hash = "sha256-GLQ1PmijHAYnEwCMBc5/fuiKqvVtWsDG3lebq/soN9o=";
   };
 
   nativeBuildInputs = [

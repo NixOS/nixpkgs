@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "django-crossdomainmedia";
   version = "0.0.4";
   format = "setuptools";

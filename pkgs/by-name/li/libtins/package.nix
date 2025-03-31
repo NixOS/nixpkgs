@@ -1,4 +1,13 @@
-{ boost, cmake, fetchFromGitHub, gtest, libpcap, openssl, lib, stdenv }:
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  gtest,
+  libpcap,
+  openssl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtins";
@@ -6,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mfontanini";
-    repo = pname;
+    repo = "libtins";
     rev = "v${version}";
     sha256 = "sha256-zL4C2Cgs9Y3NebL8MPQBO5j8Bm6xhl8ZggQBPJLRn0o=";
   };
@@ -23,7 +32,10 @@ stdenv.mkDerivation rec {
     chmod -R a+w googletest
   '';
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ];
   buildInputs = [
     openssl
     libpcap
@@ -41,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
-    changelog = "https://raw.githubusercontent.com/mfontanini/${pname}/v${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/mfontanini/libtins/v${version}/CHANGES.md";
     license = lib.licenses.bsd2;
     maintainers = with maintainers; [ fdns ];
     platforms = lib.platforms.unix;

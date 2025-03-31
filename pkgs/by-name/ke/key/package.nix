@@ -1,35 +1,51 @@
-{ lib, stdenv
-, fetchFromGitHub
-, jdk
-, gradle_8
-, jre
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, testers
-, git
-, key
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  gradle_8,
+  jre,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  testers,
+  z3,
+  cvc5,
+  key,
+  substitute,
 }:
 
 let
   gradle = gradle_8;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.12.2";
+  version = "2.12.3";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    rev = "refs/tags/KeY-${version}";
-    hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
+    tag = "KEY-${version}";
+    hash = "sha256-1pN0lmr/teVitpMIM9M9lSTkmnVcZwdAQay2pzgJDCk=";
   };
+
+  patches = [
+    # Remove linting framework, causes issues with the update script.
+    (substitute {
+      src = ./remove-eisop-checker.patch;
+      substitutions = [
+        "--subst-var-by"
+        "version"
+        version
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     jdk
     gradle
     makeWrapper
     copyDesktopItems
-    git
   ];
 
   desktopItems = [
@@ -51,8 +67,7 @@ in stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # tests are broken on darwin
-  # TODO: on update to 2.12.3+, restore to !stdenv.hostPlatform.isDarwin;
+  # TODO: on update to 2.12.4+, try again
   # (currently some tests are failing)
   doCheck = false;
 
@@ -65,16 +80,21 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${lib.getExe jre} $out/bin/KeY \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          z3
+          cvc5
+        ]
+      } \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall
   '';
 
-  passthru.tests.version =
-    testers.testVersion {
-      package = key;
-      command = "KeY --help";
-    };
+  passthru.tests.version = testers.testVersion {
+    package = key;
+    command = "KeY --help";
+  };
 
   meta = {
     description = "Java formal verification tool";
@@ -88,7 +108,10 @@ in stdenv.mkDerivation rec {
       Dynamic Logic for Java with a user-friendly graphical interface.
     '';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ fgaz fliegendewurst ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      fliegendewurst
+    ];
     mainProgram = "KeY";
     platforms = jdk.meta.platforms;
   };

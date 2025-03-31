@@ -1,8 +1,9 @@
 { lib
 , stdenv
 , buildPackages
-, substituteAll
+, replaceVars
 , fetchurl
+, fetchpatch
 , pkg-config
 , docutils
 , gettext
@@ -53,15 +54,12 @@
 , libexecinfo
 , broadwaySupport ? true
 , testers
-, apple-sdk
-, apple-sdk_10_15
 , darwinMinVersionHook
 }:
 
 let
 
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-4.0";
     gtk_binary_version = "4.0.0";
   };
@@ -70,7 +68,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.16.3";
+  version = "4.16.12";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -82,8 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-LsU+B9GMnwA7OeSmqDgFTZJZ4Ei2xMBdgMDQWqch2UQ=";
+    hash = "sha256-7zG9vW8ILEQBY0ogyFCwBQyb8lLvHgeXZO6VoqDEyVo=";
   };
+
+  patches = [
+    # Fix rendering glitches on vulkan drivers which do not support mipmaps for VK_IMAGE_TILING_LINEAR (Asahi Honeykrisp)
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/8058
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/c9a3cdd396c5646382612ed25e93bb5f9664d043.patch";
+      hash = "sha256-K774FFu6eyyjnxBTy7oTDygkh8+7qp5/KssHkyEwRR8=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -162,11 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "10.15")
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin
-                   && lib.versionOlder apple-sdk.version "10.15") [
-      apple-sdk_10_15
   ];
 
   mesonFlags = [

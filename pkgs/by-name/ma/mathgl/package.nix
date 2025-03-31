@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, zlib
-, libpng
-, libGL
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  zlib,
+  libpng,
+  libGL,
 }:
 stdenv.mkDerivation rec {
   pname = "mathgl";
@@ -28,7 +29,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library for scientific data visualization";
     homepage = "https://mathgl.sourceforge.net/";
-    license = with licenses; [ gpl3 lgpl3 ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.GabrielDougherty ];
   };

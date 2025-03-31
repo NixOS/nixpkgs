@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, scsh, rsync, unison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scsh,
+  rsync,
+  unison,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "usync";
   version = "0.0.3";
 

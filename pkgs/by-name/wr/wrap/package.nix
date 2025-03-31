@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeWrapper, courier-prime }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  courier-prime,
+}:
 
 buildGoModule rec {
   pname = "wrap";

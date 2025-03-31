@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libtool,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ace";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+  ];
   buildInputs = [ perl ];
 
   env.NIX_CFLAGS_COMPILE = toString [

@@ -1,26 +1,26 @@
-{ lib
-, cmake
-, dbus
-, fetchFromGitHub
-, fetchYarnDeps
-, openssl
-, pkg-config
-, freetype
-, libsoup
-, gtk3
-, webkitgtk_4_0
-, perl
-, cyrus_sasl
-, stdenv
-, yarnConfigHook
-, nodejs-slim
-, cargo-tauri_1
-, cargo
-, rustPlatform
-, rustc
-, jq
-, moreutils
-, fetchpatch
+{
+  lib,
+  cmake,
+  dbus,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  openssl,
+  pkg-config,
+  freetype,
+  libsoup_2_4,
+  gtk3,
+  webkitgtk_4_0,
+  perl,
+  cyrus_sasl,
+  stdenv,
+  yarnConfigHook,
+  nodejs-slim,
+  cargo-tauri_1,
+  cargo,
+  rustPlatform,
+  rustc,
+  jq,
+  moreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "andrewinci";
-    repo = pname;
+    repo = "insulator2";
     rev = "v${version}";
     hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     dbus
     openssl.out
     freetype
-    libsoup
+    libsoup_2_4
     gtk3
     webkitgtk_4_0
   ];

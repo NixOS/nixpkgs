@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "stable2409-2";
+  version = "2412-3";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-${version}";
-    hash = "sha256-nCxnQ243afj9Bq8LMXEvn5ZGYw2SonfeJMd0OOi/GZ0=";
+    rev = "polkadot-stable${version}";
+    hash = "sha256-Bsy6CUDxtm5atkpp03edzWtZYuDKFdtBG6wfr+NPkng=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -45,19 +45,11 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9irbcL7wBlwYkWM5goLZx6AAFCOjMSEbZ+Va69Am3pc=";
 
   buildType = "production";
-
-  cargoBuildFlags = [
-    "-p"
-    "polkadot"
-  ];
+  buildAndTestSubdir = "polkadot";
 
   # NOTE: tests currently fail to compile due to an issue with cargo-auditable
   # and resolution of features flags, potentially related to this:
@@ -80,17 +72,19 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
-  # available for `rustc-wasm32`
-  WASM_BUILD_STD = 0;
+  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
+  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
+  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
+  # since the new wasmv1-none target won't require rebuilding std.
+  SKIP_WASM_BUILD = 1;
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {
-    description = "Polkadot Node Implementation";
-    homepage = "https://polkadot.network";
+    description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
+    homepage = "https://github.com/paritytech/polkadot-sdk";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       akru

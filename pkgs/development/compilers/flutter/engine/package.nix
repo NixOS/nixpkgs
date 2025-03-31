@@ -38,7 +38,7 @@
   ninja,
   python312,
   python39,
-  git,
+  gitMinimal,
   version,
   flutterVersion,
   dartSdkVersion,
@@ -174,9 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      python3
+      (python3.withPackages (
+        ps: with ps; [
+          pyyaml
+        ]
+      ))
       (tools.vpython python3)
-      git
+      gitMinimal
       pkg-config
       ninja
       dart
@@ -265,8 +269,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (!isOptimized) "--unoptimized"
     ++ lib.optional (runtimeMode == "debug") "--no-stripped"
-    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
-    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
+    ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
+    ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -295,6 +299,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     export TERM=dumb
 
+    ${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      # ValueError: ZIP does not support timestamps before 1980
+      substituteInPlace src/flutter/build/zip.py \
+        --replace-fail "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED)" "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False)"
+    ''}
+
     ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 
     runHook postBuild
@@ -309,35 +319,41 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/out/run_tests.log
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
-    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
-    find $out/out/$outName -name '*_unittests' -delete
-    find $out/out/$outName -name '*_benchmarks' -delete
-  '' + lib.optionalString (finalAttrs.doCheck) ''
-    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
-  '' + ''
-    runHook postInstall
-  '';
+      rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
+      rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
+      find $out/out/$outName -name '*_unittests' -delete
+      find $out/out/$outName -name '*_benchmarks' -delete
+    ''
+    + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru = {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
-    # Very broken on Darwin
-    broken = stdenv.hostPlatform.isDarwin;
-    description = "The Flutter engine";
-    homepage = "https://flutter.dev";
-    maintainers = with maintainers; [ RossComputerGuy ];
-    license = licenses.bsd3;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-  } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta =
+    with lib;
+    {
+      # Very broken on Darwin
+      broken = stdenv.hostPlatform.isDarwin;
+      description = "The Flutter engine";
+      homepage = "https://flutter.dev";
+      maintainers = with maintainers; [ RossComputerGuy ];
+      license = licenses.bsd3;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    }
+    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

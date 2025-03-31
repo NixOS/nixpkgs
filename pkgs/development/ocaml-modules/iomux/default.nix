@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, dune-configurator
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  alcotest,
 }:
 
 buildDunePackage rec {

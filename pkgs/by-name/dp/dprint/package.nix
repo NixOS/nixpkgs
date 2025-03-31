@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchCrate,
+  fetchFromGitHub,
   rustPlatform,
   installShellFiles,
   testers,
@@ -11,21 +11,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.47.6";
+  version = "0.49.1";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-7tGzSFp7Dnu27L65mqFd7hzeFFDfe1xJ6cMul3hGyJs=";
+  # Prefer repository rather than crate here
+  #   - They have Cargo.lock in the repository
+  #   - They have WASM files in the repository which will be used in checkPhase
+  src = fetchFromGitHub {
+    owner = "dprint";
+    repo = "dprint";
+    tag = version;
+    hash = "sha256-6ye9FqOGW40TqoDREQm6pZAQaSuO2o9SY5RSfpmwKV4=";
   };
 
-  cargoHash = "sha256-y3tV3X7YMOUGBn2hCmxsUUc9QQleKEioTIw7SGoBvSQ=";
-
-  # Tests fail because they expect a test WASM plugin. Tests already run for
-  # every commit upstream on GitHub Actions
-  doCheck = false;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OHRXujyewiDlY4AQEEqmcnmdec1lbWH/y6tPW1nNExE=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
+  ];
+
+  checkFlags = [
+    # Require creating directory and network access
+    "--skip=plugins::cache_fs_locks::test"
+    "--skip=utils::lax_single_process_fs_flag::test"
+    # Require cargo is running
+    "--skip=utils::process::test"
+    # Requires deno for the testing, and making unstable results on darwin
+    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -59,7 +71,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ khushraj ];
+    maintainers = with maintainers; [
+      khushraj
+      kachick
+    ];
     mainProgram = "dprint";
   };
 }

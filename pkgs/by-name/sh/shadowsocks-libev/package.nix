@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, libsodium, mbedtls_2, libev, c-ares, pcre
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libsodium,
+  mbedtls_2,
+  libev,
+  c-ares,
+  pcre,
+  asciidoc,
+  xmlto,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,17 +22,31 @@ stdenv.mkDerivation rec {
   # Git tag includes CMake build files which are much more convenient.
   src = fetchFromGitHub {
     owner = "shadowsocks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "shadowsocks-libev";
+    tag = "v${version}";
     sha256 = "1iqpmhxk354db1x08axg6wrdy9p9a4mz0h9351i3mf3pqd1v6fdw";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libsodium mbedtls_2 libev c-ares pcre ];
-  nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45
-                        docbook_xsl libxslt ];
+  buildInputs = [
+    libsodium
+    mbedtls_2
+    libev
+    c-ares
+    pcre
+  ];
+  nativeBuildInputs = [
+    cmake
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+  ];
 
-  cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  cmakeFlags = [
+    "-DWITH_STATIC=OFF"
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];

@@ -1,18 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, fuse3, testers, blobfuse }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fuse3,
+  testers,
+  blobfuse,
+  nix-update-script,
+}:
 
 let
-  version = "2.1.2";
+  version = "2.4.1";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-fuse";
     rev = "blobfuse2-${version}";
-    sha256 = "sha256-KzpD+6g1WwviydYE0v5pSH35zC41MrPlk5MitwAIgnE=";
+    sha256 = "sha256-QCrBsEh8o4GblCWNcJssm9c6uSQYVs+qrdzfmI9l278=";
   };
-in buildGoModule {
+in
+buildGoModule {
   pname = "blobfuse";
   inherit version src;
 
-  vendorHash = "sha256-+Z+mkTs/8qCtYcWZIMzsW9MQsC08KDJUHNbxyc6Ro5Y=";
+  vendorHash = "sha256-ZzpstCTABL9x5NM5tTiWZqOfI+BSKGZfb+ahbFUmcdo=";
 
   buildInputs = [ fuse3 ];
 
@@ -20,7 +29,10 @@ in buildGoModule {
   # https://github.com/NixOS/nixpkgs/pull/201196/files#diff-e669dbe391f8856f4564f26023fe147a7b720aeefe6869ab7a218f02a8247302R20
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion { package = blobfuse; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = blobfuse; };
+  };
 
   meta = with lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";

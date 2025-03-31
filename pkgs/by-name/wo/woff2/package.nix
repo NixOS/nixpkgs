@@ -1,5 +1,11 @@
-{ brotli, cmake, pkg-config, fetchFromGitHub, lib, stdenv
-, static ? stdenv.hostPlatform.isStatic
+{
+  brotli,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +19,19 @@ stdenv.mkDerivation rec {
     sha256 = "13l4g536h0pr84ww4wxs2za439s0xp1va55g6l478rfbb1spp44y";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   # Need to explicitly link to brotlicommon
   patches = lib.optional static ./brotli-static.patch;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"

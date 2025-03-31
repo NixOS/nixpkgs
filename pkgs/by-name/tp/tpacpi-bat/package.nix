@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, perl, kmod, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  kmod,
+  coreutils,
+}:
 
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [lib.maintainers.orbekk];
+    maintainers = [ lib.maintainers.orbekk ];
     platforms = lib.platforms.linux;
     description = "Tool to set battery charging thresholds on Lenovo Thinkpad";
     mainProgram = "tpacpi-bat";

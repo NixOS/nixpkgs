@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.uptime-kuma;
 in
@@ -19,7 +24,7 @@ in
         default = { };
         example = {
           PORT = "4000";
-          NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+          NODE_EXTRA_CA_CERTS = lib.literalExpression "config.security.pki.caBundle";
         };
         description = ''
           Additional configuration for Uptime Kuma, see
@@ -69,14 +74,18 @@ in
         ProtectProc = "noaccess";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        UMask = 027;
+        UMask = 27;
       };
     };
   };
 }
-

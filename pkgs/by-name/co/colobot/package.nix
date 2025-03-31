@@ -1,9 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
-, glew, gettext, libsndfile, libvorbis, libogg, physfs, openal
-, xmlstarlet, doxygen, python3, callPackage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  libpng,
+  glew,
+  gettext,
+  libsndfile,
+  libvorbis,
+  libogg,
+  physfs,
+  openal,
+  xmlstarlet,
+  doxygen,
+  python3,
+  callPackage,
+}:
 
 let
-  colobot-data = callPackage ./data.nix {};
+  colobot-data = callPackage ./data.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "colobot";
@@ -13,17 +32,35 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "colobot";
-    repo = pname;
+    repo = "colobot";
     rev = "colobot-gold-${version}";
     hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
 
-  nativeBuildInputs = [ cmake xmlstarlet doxygen python3 ];
-  buildInputs = [ boost SDL2 SDL2_image SDL2_ttf libpng glew gettext libsndfile libvorbis libogg physfs openal ];
+  nativeBuildInputs = [
+    cmake
+    xmlstarlet
+    doxygen
+    python3
+  ];
+  buildInputs = [
+    boost
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    libpng
+    glew
+    gettext
+    libsndfile
+    libvorbis
+    libogg
+    physfs
+    openal
+  ];
 
   enableParallelBuilding = false;
 
-  # The binary ends in games directoy
+  # The binary ends in games directory
   postInstall = ''
     mv $out/games $out/bin
     for contents in ${colobot-data}/share/games/colobot/*; do

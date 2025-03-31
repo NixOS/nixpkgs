@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitLab
-, meson
-, gobject-introspection
-, pkg-config
-, ninja
-, python3
-, wrapGAppsHook4
-, gtk4
-, gdk-pixbuf
-, webkitgtk_4_0
-, gtksourceview5
-, glib-networking
-, libadwaita
-, appstream
-, blueprint-compiler
+{
+  lib,
+  fetchFromGitLab,
+  meson,
+  gobject-introspection,
+  pkg-config,
+  ninja,
+  python3,
+  wrapGAppsHook4,
+  gtk4,
+  gdk-pixbuf,
+  webkitgtk_4_0,
+  gtksourceview5,
+  glib-networking,
+  libadwaita,
+  appstream,
+  blueprint-compiler,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";

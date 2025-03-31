@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -19,12 +20,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/cayley" ];
 
-  ldflags = let basename = "github.com/cayleygraph/cayley/version"; in [
-    "-s"
-    "-w"
-    "-X ${basename}.Version=${src.rev}"
-    "-X ${basename}.GitHash=${rev}"
-  ];
+  ldflags =
+    let
+      basename = "github.com/cayleygraph/cayley/version";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${basename}.Version=${src.rev}"
+      "-X ${basename}.GitHash=${rev}"
+    ];
 
   meta = with lib; {
     description = "Graph database designed for ease of use and storing complex data";

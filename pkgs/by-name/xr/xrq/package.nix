@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+}:
 
 stdenv.mkDerivation {
   pname = "xrq";
@@ -15,7 +20,10 @@ stdenv.mkDerivation {
     make PREFIX=$out install
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildInputs = [ libX11 ];
 

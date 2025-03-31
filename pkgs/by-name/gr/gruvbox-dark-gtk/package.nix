@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gruvbox-dark-gtk";
@@ -6,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jmattheis";
-    repo = pname;
+    repo = "gruvbox-dark-gtk";
     rev = "v${version}";
     sha256 = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
   };

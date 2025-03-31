@@ -22,13 +22,13 @@ let
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.80.5";
+  version = "1.86.0";
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
+    repo = "dart-sass";
     rev = version;
-    hash = "sha256-A9e3GxOg1xkmOXjNyhg2ihnxKiMb2vORpwvAy+JWFZY=";
+    hash = "sha256-TYjw3ACeScP1bf12mKB5U3DxPspkCsupQADc0CFDKLw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -45,6 +45,11 @@ buildDartApplication rec {
   '';
 
   dartCompileFlags = [ "--define=version=${version}" ];
+
+  postInstall = ''
+    # dedupe identiall binaries
+    ln -rsf $out/bin/{,dart-}sass
+  '';
 
   passthru = {
     inherit embedded-protocol-version embedded-protocol;

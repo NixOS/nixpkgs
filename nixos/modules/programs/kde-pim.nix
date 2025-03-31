@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.kde-pim;
@@ -12,19 +17,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs.kdePackages; [
-      # core packages
-      akonadi
-      kdepim-runtime
-    ] ++ lib.optionals cfg.kmail [
-      akonadiconsole
-      akonadi-search
-      kmail
-      kmail-account-wizard
-    ] ++ lib.optionals cfg.kontact [
-      kontact
-    ] ++ lib.optionals cfg.merkuro [
-      merkuro
-    ];
+    environment.systemPackages =
+      with pkgs.kdePackages;
+      [
+        # core packages
+        akonadi
+        kdepim-runtime
+      ]
+      ++ lib.optionals cfg.kmail [
+        akonadiconsole
+        akonadi-search
+        kmail
+        kmail-account-wizard
+      ]
+      ++ lib.optionals cfg.kontact [
+        kontact
+      ]
+      ++ lib.optionals cfg.merkuro [
+        merkuro
+      ];
   };
 }

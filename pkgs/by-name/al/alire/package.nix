@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gprbuild
-, gnat
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gprbuild,
+  gnat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-m4EPiqh7KCeNgq4G727jrW5ABb+uecvvpmZyskqtml4=";
+    hash = "sha256-DfzCQu9xOe9JgX6RTrYOGTIS6EcPimLnd5pfXMtfRss=";
 
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ gprbuild gnat ];
+  nativeBuildInputs = [
+    gprbuild
+    gnat
+  ];
 
   postPatch = ''
     patchShebangs ./dev/build.sh ./scripts/version-patcher.sh

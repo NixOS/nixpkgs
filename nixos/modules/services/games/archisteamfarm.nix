@@ -221,14 +221,16 @@ in
             RestrictSUIDSGID = true;
             SecureBits = "noroot-locked";
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" ];
+            SystemCallFilter = [ "@system-service" "~@privileged" "mincore" ];
             UMask = "0077";
           }
         ];
 
         preStart =
           let
-            createBotsScript = pkgs.runCommandLocal "ASF-bots" { } ''
+            createBotsScript = pkgs.runCommand "ASF-bots" {
+              preferLocalBuild = true;
+            } ''
               mkdir -p $out
               # clean potential removed bots
               rm -rf $out/*.json

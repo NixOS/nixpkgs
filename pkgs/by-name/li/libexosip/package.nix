@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchurl, libosip, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libosip,
+  openssl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
- pname = "libexosip2";
- version = "5.3.0";
+  pname = "libexosip2";
+  version = "5.3.0";
 
- src = fetchurl {
+  src = fetchurl {
     url = "mirror://savannah/exosip/${pname}-${version}.tar.gz";
     sha256 = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libosip openssl ];
+  buildInputs = [
+    libosip
+    openssl
+  ];
 
   meta = with lib; {
     license = licenses.gpl2Plus;

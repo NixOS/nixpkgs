@@ -52,7 +52,6 @@
   wavpack,
   wxGTK32,
   gtk3,
-  apple-sdk_11,
   libpng,
   libjpeg,
 }:
@@ -62,13 +61,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.0";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-jwsn/L9e1ViWLOh8Xc4lTS9FhanD4GK0BllCwtPamZc=";
+    hash = "sha256-j3rbcUUHXAQmn/7SzpKHvpxGZ3bBhIYrNOFLc7jMPlc=";
   };
 
   postPatch =
@@ -144,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
       libpng
       libjpeg
     ];
@@ -178,15 +176,17 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   # Replace audacity's wrapper, to:
-  # - put it in the right place, it shouldn't be in "$out/audacity"
+  # - Put it in the right place; it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
+  # - Use Xwayland by default on Wayland. See https://github.com/audacity/audacity/pull/5977
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram "$out/bin/audacity" \
         "''${gappsWrapperArgs[@]}" \
         --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg ]} \
         --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
-        --suffix AUDACITY_PATH : "$out/share/audacity"
+        --suffix AUDACITY_PATH : "$out/share/audacity" \
+        --set-default GDK_BACKEND x11
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}

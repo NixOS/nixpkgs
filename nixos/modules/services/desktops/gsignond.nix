@@ -5,7 +5,7 @@ let
 in
 {
 
-  meta.maintainers = lib.teams.pantheon.members;
+  meta.maintainers = [ ];
 
   ###### interface
 

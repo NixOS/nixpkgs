@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_net,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maelstrom";
   version = "3.0.7";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/Maelstrom/src/Maelstrom-${version}.tar.gz";
+    url = "http://www.libsdl.org/projects/Maelstrom/src/Maelstrom-${finalAttrs.version}.tar.gz";
     sha256 = "0dm0m5wd7amrsa8wnrblkv34sq4v4lglc2wfx8klfkdhyhi06s4k";
   };
 
@@ -14,9 +21,14 @@ stdenv.mkDerivation rec {
     ./fix-compilation.patch
     # removes register keyword
     ./c++17-fixes.diff
+    # fix build with gcc14
+    ./add-maelstrom-netd-include-time.diff
   ];
 
-  buildInputs = [ SDL2 SDL2_net ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -34,11 +46,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Arcade-style game resembling Asteroids";
     mainProgram = "maelstrom";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tmountain ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ tmountain ];
   };
-}
+})

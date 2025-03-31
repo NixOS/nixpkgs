@@ -1,5 +1,20 @@
-{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config, procps, ronn,
-libpng, uthash , which, xnee, xorg, python3Packages }:
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  procps,
+  ronn,
+  libpng,
+  uthash,
+  which,
+  xnee,
+  xorg,
+  python3Packages,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.7.1";
@@ -8,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sagb";
-    repo = pname;
+    repo = "alttab";
     rev = "v${version}";
     sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
   };

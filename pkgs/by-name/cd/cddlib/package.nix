@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gmp
-, autoreconfHook
-, texliveSmall
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  autoreconfHook,
+  texliveSmall,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "09s8323h5w9j6mpl1yc6lm770dkskfxd2ayyafkcjllmnncxzfa0";
   };
-  buildInputs = [gmp];
+  buildInputs = [ gmp ];
   nativeBuildInputs = [
     autoreconfHook
     texliveSmall # for building the documentation

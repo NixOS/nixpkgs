@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_net
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.3.8.2";
+  version = "4.4.0.4";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
-    hash = "sha256-e/aYjjnEM6MP14FGX+N92U9fRNEjIaDfE1znl6A+4As=";
+    hash = "sha256-/vm449Hg05AfPHRJx42mB6jQ48+MqOp9G+mFnJcD9k4=";
   };
 
   desktopItem = makeDesktopItem {
@@ -25,24 +26,37 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Rocks'n'Diamonds";
     genericName = "Tile-based puzzle";
-    categories = [ "Game" "LogicGame" ];
+    categories = [
+      "Game"
+      "LogicGame"
+    ];
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net zlib ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    zlib
+  ];
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
-    makeFlags+="BASE_PATH=$dataDir"
+    appendToVar makeFlags "BASE_PATH=$dataDir"
   '';
 
   installPhase = ''
+    runHook preInstall
+
     appDir=$out/share/applications
     iconDir=$out/share/icons/hicolor/32x32/apps
     mkdir -p $out/bin $appDir $iconDir $dataDir
     cp rocksndiamonds $out/bin/
     ln -s ${desktopItem}/share/applications/* $appDir/
-    ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
+    ln -s $dataDir/graphics/gfx_classic/icons/icon.png $iconDir/rocksndiamonds.png
     cp -r conf docs graphics levels music sounds $dataDir
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

@@ -1,5 +1,14 @@
-{ fetchgit, lib, stdenv, pkg-config, libnsl, libtirpc, autoreconfHook
-, useSystemd ? true, systemd }:
+{
+  fetchgit,
+  lib,
+  stdenv,
+  pkg-config,
+  libnsl,
+  libtirpc,
+  autoreconfHook,
+  useSystemd ? true,
+  systemd,
+}:
 
 stdenv.mkDerivation {
   pname = "rpcbind";
@@ -15,16 +24,23 @@ stdenv.mkDerivation {
     ./sunrpc.patch
   ];
 
-  buildInputs = [ libnsl libtirpc ]
-             ++ lib.optional useSystemd systemd;
+  buildInputs = [
+    libnsl
+    libtirpc
+  ] ++ lib.optional useSystemd systemd;
 
   configureFlags = [
-    "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"
+    "--with-systemdsystemunitdir=${
+      if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
+    }"
     "--enable-warmstarts"
     "--with-rpcuser=rpc"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "ONC RPC portmapper";

@@ -17,17 +17,17 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
-, libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
+{ lib, fetchurl, fetchpatch, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+, libiconv, libpq, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
+, file, libvirt, glib, vips, taglib_1, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
-, cargo, rustc, rustPlatform, libsysprof-capture
+, cargo, rustc, rustPlatform, libsysprof-capture, imlib2
 , autoSignDarwinBinariesHook
 }@args:
 
@@ -209,6 +209,17 @@ in
     '';
   };
 
+  mini_racer = attrs: {
+    buildFlags = [
+      "--with-v8-dir=\"${nodejs.libv8}\""
+    ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/mini_racer_extension/extconf.rb \
+        --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
+    '';
+  };
+
   do_sqlite3 = attrs: {
     buildInputs = [ sqlite ];
   };
@@ -307,8 +318,7 @@ in
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-    cargoRoot = "ext/fast_mmaped_file_rs";
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
           name
@@ -319,25 +329,27 @@ in
         dontBuilt = true;
         installPhase = ''
           cp -R ext/fast_mmaped_file_rs $out
+          cp Cargo.lock $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.1"
-        then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
-        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
     };
+
     nativeBuildInputs = [
       cargo
       rustc
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+
     disallowedReferences = [
       rustc.unwrapped
     ];
-    preBuild = ''
-      cat ../.cargo/config.toml > ext/fast_mmaped_file_rs/.cargo/config.toml
-      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
     '';
+
     postInstall = ''
       find $out -type f -name .rustc_info.json -delete
     '';
@@ -407,15 +419,18 @@ in
       ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    env.NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=stringop-overflow"
-      "-Wno-error=implicit-fallthrough"
-      "-Wno-error=sizeof-pointer-memaccess"
-      "-Wno-error=cast-function-type"
-      "-Wno-error=class-memaccess"
-      "-Wno-error=ignored-qualifiers"
-      "-Wno-error=tautological-compare"
-      "-Wno-error=stringop-truncation"
+    env = lib.optionalAttrs (lib.versionOlder attrs.version "1.68.1") {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+    patches = lib.optionals (lib.versionOlder attrs.version "1.65.0") [
+      (fetchpatch {
+        name = "gcc-14-fixes.patch";
+        url = "https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen=1;
+        extraPrefix = "third_party/boringssl-with-bazel/src/";
+        hash = "sha256-1QyQm5s55op268r72dfExNGV+UyV5Ty6boHa9DQq40U=";
+       })
     ];
     dontBuild = false;
     postPatch = ''
@@ -469,29 +484,6 @@ in
           -e 's@Exec.run("bundle", "install"@Exec.run("true"@' \
           -e 's@FileUtils.cp_r site_template + "/.", path@FileUtils.cp_r site_template + "/.", path; FileUtils.chmod_R "u+w", path@'
     '';
-  };
-
-  # note that you need version >= v3.16.14.8,
-  # otherwise the gem will fail to link to the libv8 binary.
-  # see: https://github.com/cowboyd/libv8/pull/161
-  libv8 = attrs: {
-    buildInputs = [ which nodejs.libv8 python2 ];
-    buildFlags = [ "--with-system-v8=true" ];
-    dontBuild = false;
-    # The gem includes broken symlinks which are ignored during unpacking, but
-    # then fail during build. Since the content is missing anyway, touching the
-    # files is enough to unblock the build.
-    preBuild = ''
-      touch vendor/depot_tools/cbuildbot vendor/depot_tools/chrome_set_ver vendor/depot_tools/cros_sdk
-    '';
-    postPatch = ''
-      substituteInPlace ext/libv8/extconf.rb \
-        --replace "location = Libv8::Location::Vendor.new" \
-                  "location = Libv8::Location::System.new"
-    '';
-    meta.broken = true; # At 2023-01-20, errors as:
-                        #   "Failed to build gem native extension."
-                        # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -548,6 +540,10 @@ in
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
       patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
+    ''  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.bundle"
+      install_name_tool -add_rpath "${lib.makeLibraryPath [ lasem glib cairo ]}/lib" "$soPath"
+      install_name_tool -change @rpath/liblasem.dylib "${lib.getLib lasem}/lib/liblasem-0.4.dylib" "$soPath"
     '';
   };
 
@@ -654,7 +650,15 @@ in
     # an unnecessary reference to the entire postgresql package.
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
+  };
+
+  rszr = attrs: {
+    buildInputs = [
+      imlib2
+      imlib2.dev
+    ];
+    buildFlags = [ "--without-imlib2-config" ];
   };
 
   psych = attrs: {
@@ -807,7 +811,7 @@ in
   };
 
   sequel_pg = attrs: {
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   snappy = attrs: {
@@ -827,6 +831,10 @@ in
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   rb-readline = attrs: {
@@ -838,7 +846,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib ];
+    buildInputs = [ taglib_1 ];
   };
 
   timfel-krb5-auth = attrs: {

@@ -1,26 +1,29 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openttd-ttf";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "zephyris";
     repo = "openttd-ttf";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Nr3oLiCEdpUhB/IczCEoLM8kb1hGDH/d6WYWRbjgOi8=";
+    tag = finalAttrs.version;
+    hash = "sha256-HKOG3Ov0LBCW7Z0FK5BrZRycn2S5gVRnwyU9fM3hb5M=";
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (pp: with pp; [
-      fontforge
-      pillow
-      setuptools
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        fontforge
+        pillow
+        setuptools
+      ]
+    ))
   ];
 
   postPatch = ''
@@ -43,12 +46,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zephyris/openttd-ttf";
     changelog = "https://github.com/zephyris/openttd-ttf/releases/tag/${finalAttrs.version}";
     description = "TrueType typefaces for text in a pixel art style, designed for use in OpenTTD";
-    license = [ licenses.gpl2 ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.sfrijters ];
+    license = [ lib.licenses.gpl2 ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sfrijters ];
   };
 })

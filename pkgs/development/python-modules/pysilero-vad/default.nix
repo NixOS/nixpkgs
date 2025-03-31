@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p0pPhQo/raZhlHettmoc7FwnlZH9n2NI4tYHvikJ8i4=";
+    tag = "v${version}";
+    hash = "sha256-v6Ok0JWhdp0oM6I87BVojJgMikdomUX/Vk2ZVje0z+w=";
   };
 
   build-system = [ setuptools ];

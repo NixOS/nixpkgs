@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, pam, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  pam,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pure-ftpd";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ESbzqVhW0IiJ/4lwPLGqnsmSTZOdFU6WkEySDwXcPHQ=";
   };
 
-  buildInputs = [ openssl pam libxcrypt ];
+  buildInputs = [
+    openssl
+    pam
+    libxcrypt
+  ];
 
   configureFlags = [ "--with-tls" ];
 

@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "myks";
-  version = "4.2.4";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RgVlr+POF5IUei/Rf5mHrjkw0wE5BjU3xwm1Ai1Pemw=";
+    tag = "v${version}";
+    hash = "sha256-xHWiE0SCv5LbObAa4Ha/U1uTFe9z11nhpB/eMj5qYoA=";
   };
 
-  vendorHash = "sha256-CE5sT7zXN4ZhIIODOUwqrD0GOvnSVvkMcgLbBmJocKo=";
+  vendorHash = "sha256-tgshaSrh5o28uiSMF7sv4AP57xYkaHq6B8sQTrnteqQ=";
 
   subPackages = ".";
 
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   passthru.tests.version = testers.testVersion { package = myks; };
 

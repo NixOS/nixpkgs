@@ -13,7 +13,7 @@
   python3,
   # Not really used for anything real, just at build time.
   git,
-  substituteAll,
+  replaceVars,
   which,
   z3,
   cctools,
@@ -67,8 +67,7 @@ stdenv.mkDerivation (rec {
       ./disable-networking-tests.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (substituteAll {
-        src = ./fix-darwin-build.patch;
+      (replaceVars ./fix-darwin-build.patch {
         libSystem = darwin.Libsystem;
       })
     ];
@@ -113,25 +112,29 @@ stdenv.mkDerivation (rec {
   # make: *** [Makefile:222: test-full-programs-release] Killed: 9
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  installPhase = ''
-    makeArgs=(config=release prefix=$out)
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeArgs+=(bits=64)
-  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && !lto) ''
-    makeArgs+=(lto=no)
-  '' + ''
-    make "''${makeArgs[@]}" install
-    wrapProgram $out/bin/ponyc \
-      --prefix PATH ":" "${stdenv.cc}/bin" \
-      --set-default CC "$CC" \
-      --prefix PONYPATH : "${
-        lib.makeLibraryPath [
-          pcre2
-          openssl
-          (placeholder "out")
-        ]
-      }"
-  '';
+  installPhase =
+    ''
+      makeArgs=(config=release prefix=$out)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeArgs+=(bits=64)
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && !lto) ''
+      makeArgs+=(lto=no)
+    ''
+    + ''
+      make "''${makeArgs[@]}" install
+      wrapProgram $out/bin/ponyc \
+        --prefix PATH ":" "${stdenv.cc}/bin" \
+        --set-default CC "$CC" \
+        --prefix PONYPATH : "${
+          lib.makeLibraryPath [
+            pcre2
+            openssl
+            (placeholder "out")
+          ]
+        }"
+    '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;

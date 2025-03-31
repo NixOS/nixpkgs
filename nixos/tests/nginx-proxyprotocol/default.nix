@@ -1,7 +1,8 @@
 let
   certs = import ./snakeoil-certs.nix;
 in
-import ../make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "nginx-proxyprotocol";
 
   meta = {
@@ -9,80 +10,93 @@ import ../make-test-python.nix ({ pkgs, ... }: {
   };
 
   nodes = {
-    webserver = { pkgs, lib, ... }: {
-      environment.systemPackages = [ pkgs.netcat ];
-      security.pki.certificateFiles = [
-        certs.ca.cert
-      ];
-
-      networking.extraHosts = ''
-        127.0.0.5 proxy.test.nix
-        127.0.0.5 noproxy.test.nix
-        127.0.0.3 direct-nossl.test.nix
-        127.0.0.4 unsecure-nossl.test.nix
-        127.0.0.2 direct-noproxy.test.nix
-        127.0.0.1 direct-proxy.test.nix
-      '';
-      services.nginx = {
-        enable = true;
-        defaultListen = [
-          { addr = "127.0.0.1"; proxyProtocol = true; ssl = true; }
-          { addr = "127.0.0.2"; }
-          { addr = "127.0.0.3"; ssl = false; }
-          { addr = "127.0.0.4"; ssl = false; proxyProtocol = true; }
+    webserver =
+      { pkgs, lib, ... }:
+      {
+        environment.systemPackages = [ pkgs.netcat ];
+        security.pki.certificateFiles = [
+          certs.ca.cert
         ];
-        commonHttpConfig = ''
-          log_format pcombined '(proxy_protocol=$proxy_protocol_addr) - (remote_addr=$remote_addr) - (realip=$realip_remote_addr) - (upstream=) - (remote_user=$remote_user) [$time_local] '
-                        '"$request" $status $body_bytes_sent '
-                        '"$http_referer" "$http_user_agent"';
-          access_log /var/log/nginx/access.log pcombined;
-          error_log /var/log/nginx/error.log;
+
+        networking.extraHosts = ''
+          127.0.0.5 proxy.test.nix
+          127.0.0.5 noproxy.test.nix
+          127.0.0.3 direct-nossl.test.nix
+          127.0.0.4 unsecure-nossl.test.nix
+          127.0.0.2 direct-noproxy.test.nix
+          127.0.0.1 direct-proxy.test.nix
         '';
-        virtualHosts =
-        let
-          commonConfig = {
-           locations."/".return = "200 '$remote_addr'";
-           extraConfig = ''
-            set_real_ip_from 127.0.0.5/32;
-            real_ip_header proxy_protocol;
-           '';
-         };
-        in
-        {
-          "*.test.nix" = commonConfig // {
-            sslCertificate = certs."*.test.nix".cert;
-            sslCertificateKey = certs."*.test.nix".key;
-            forceSSL = true;
-          };
-          "direct-nossl.test.nix" = commonConfig;
-          "unsecure-nossl.test.nix" = commonConfig // {
-            extraConfig = ''
-              real_ip_header proxy_protocol;
-            '';
-          };
+        services.nginx = {
+          enable = true;
+          defaultListen = [
+            {
+              addr = "127.0.0.1";
+              proxyProtocol = true;
+              ssl = true;
+            }
+            { addr = "127.0.0.2"; }
+            {
+              addr = "127.0.0.3";
+              ssl = false;
+            }
+            {
+              addr = "127.0.0.4";
+              ssl = false;
+              proxyProtocol = true;
+            }
+          ];
+          commonHttpConfig = ''
+            log_format pcombined '(proxy_protocol=$proxy_protocol_addr) - (remote_addr=$remote_addr) - (realip=$realip_remote_addr) - (upstream=) - (remote_user=$remote_user) [$time_local] '
+                          '"$request" $status $body_bytes_sent '
+                          '"$http_referer" "$http_user_agent"';
+            access_log /var/log/nginx/access.log pcombined;
+            error_log /var/log/nginx/error.log;
+          '';
+          virtualHosts =
+            let
+              commonConfig = {
+                locations."/".return = "200 '$remote_addr'";
+                extraConfig = ''
+                  set_real_ip_from 127.0.0.5/32;
+                  real_ip_header proxy_protocol;
+                '';
+              };
+            in
+            {
+              "*.test.nix" = commonConfig // {
+                sslCertificate = certs."*.test.nix".cert;
+                sslCertificateKey = certs."*.test.nix".key;
+                forceSSL = true;
+              };
+              "direct-nossl.test.nix" = commonConfig;
+              "unsecure-nossl.test.nix" = commonConfig // {
+                extraConfig = ''
+                  real_ip_header proxy_protocol;
+                '';
+              };
+            };
+        };
+
+        services.sniproxy = {
+          enable = true;
+          config = ''
+            error_log {
+              syslog daemon
+            }
+            access_log {
+              syslog daemon
+            }
+            listener 127.0.0.5:443 {
+              protocol tls
+              source 127.0.0.5
+            }
+            table {
+              ^proxy\.test\.nix$   127.0.0.1 proxy_protocol
+              ^noproxy\.test\.nix$ 127.0.0.2
+            }
+          '';
         };
       };
-
-      services.sniproxy = {
-        enable = true;
-        config = ''
-          error_log {
-            syslog daemon
-          }
-          access_log {
-            syslog daemon
-          }
-          listener 127.0.0.5:443 {
-            protocol tls
-            source 127.0.0.5
-          }
-          table {
-            ^proxy\.test\.nix$   127.0.0.1 proxy_protocol
-            ^noproxy\.test\.nix$ 127.0.0.2
-          }
-        '';
-      };
-    };
   };
 
   testScript = ''
@@ -145,4 +159,4 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     # spoof("1.1.1.1", "127.0.0.4", "direct-nossl.test.nix")
     # spoof("1.1.1.1", "127.0.0.4", "unsecure-nossl.test.nix", expect_failure=False)
   '';
-})
+}

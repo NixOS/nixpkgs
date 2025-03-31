@@ -6,7 +6,6 @@
   freetype,
   pillow,
   setuptools,
-  glibcLocales,
   python,
   isPyPy,
 }:
@@ -18,7 +17,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.2.4";
+  version = "4.3.1";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oAtXKS4VanvahO3zHWDCVXgVMHbI+5YzHQxZ7d2gUsg=";
+    hash = "sha256-Iw94shZnGU2EkKydEpWNXBRoY1Lbf74DuVFA+v31qpc=";
   };
 
   postPatch = ''
@@ -49,12 +48,10 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ glibcLocales ];
-
   checkPhase = ''
     runHook preCheck
     pushd tests
-    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
+    ${python.interpreter} runAll.py
     popd
     runHook postCheck
   '';

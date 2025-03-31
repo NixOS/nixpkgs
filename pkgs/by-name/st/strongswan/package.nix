@@ -5,6 +5,7 @@
 , systemd, pam
 , curl
 , enableTNC            ? false, trousers, sqlite, libxml2
+, enableTPM2           ? false, tpm2-tss
 , enableNetworkManager ? false, networkmanager
 , darwin
 , nixosTests
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
+    ++ lib.optional enableTPM2 tpm2-tss
     ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev pam iptables ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
     ++ lib.optionals enableNetworkManager [ networkmanager glib ];
@@ -49,7 +51,9 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags =
-    [ "--enable-swanctl"
+    [
+      "--sysconfdir=/etc"
+      "--enable-swanctl"
       "--enable-cmd"
       "--enable-openssl"
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
@@ -78,6 +82,8 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
+    ++ lib.optionals enableTPM2 [
+      "--enable-tpm" "--enable-tss-tss2" ]
     ++ lib.optionals enableNetworkManager [
          "--enable-nm"
          "--with-nm-ca-dir=/etc/ssl/certs" ]
@@ -93,10 +99,9 @@ stdenv.mkDerivation rec {
       "--disable-scripts"
     ];
 
-  postInstall = ''
-    # this is needed for l2tp
-    echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s" ;
 

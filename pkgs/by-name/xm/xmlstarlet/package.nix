@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, libxml2
-, libxslt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libxml2 libxslt ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libxml2
+    libxslt
+  ];
 
   patches = [
     (fetchpatch {

@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.2.9";
   pname = "yaft";
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
   src = fetchFromGitHub {
     owner = "uobikiemukot";
@@ -15,7 +23,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  installFlags = [ "PREFIX=$(out)" "MANPREFIX=$(out)/share/man" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "MANPREFIX=$(out)/share/man"
+  ];
 
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share

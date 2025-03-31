@@ -59,7 +59,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.1.2";
+  version = "2.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-E1MqCIIX+mJMmbhD7rVGQN4js0FLFKpm0COAXrcxBmw=";
+    hash = "sha256-29wV8MgWEZJfOC36l7O9C8LBzhnU/lBILLDdwSujACA=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -99,11 +99,6 @@ buildPythonPackage rec {
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
-  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
-  postConfigure = ''
-    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   buildInputs = [

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fltk13, ghostscript }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  ghostscript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flpsed";
@@ -16,6 +22,12 @@ stdenv.mkDerivation rec {
     sed -e '/exec_gs/ {n; s|"gs"|"${lib.getBin ghostscript}/bin/gs"|}' \
         -i src/GsWidget.cxx
   '';
+
+  configureFlags = [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+    "FLTKCONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+  ];
 
   meta = with lib; {
     description = "WYSIWYG PostScript annotator";

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libsndfile, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjack2,
+  libsndfile,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jack_capture";
   version = "0.9.73.2023-01-04";
 
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjack2 libsndfile ];
+  buildInputs = [
+    libjack2
+    libsndfile
+  ];
 
   buildPhase = "PREFIX=$out make jack_capture";
 

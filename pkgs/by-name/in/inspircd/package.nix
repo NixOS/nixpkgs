@@ -67,7 +67,7 @@ in
 , pkg-config
 , libargon2
 , openldap
-, postgresql
+, libpq
 , libmysqlclient
 , pcre
 , pcre2
@@ -97,7 +97,7 @@ let
     ];
     ldap            = [ openldap ];
     mysql           = [ libmysqlclient ];
-    pgsql           = [ postgresql ];
+    pgsql           = [ libpq ];
     regex_pcre      = [ pcre ];
     regex_pcre2     = [ pcre2 ];
     regex_re2       = [ re2 ];
@@ -145,13 +145,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.17.1";
+  version = "3.18.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "inspircd";
+    repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-4jtIh6wpZ/rexnwhqicU1gUk6DerGLXM9OY+GkmiEnI=";
+    sha256 = "sha256-Aulhg2CbtcpsxkH5kXkp4EoZF5/F9pOXJc1S08S5P08=";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];

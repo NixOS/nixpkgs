@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, fetchpatch }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fetchpatch,
+}:
 
 buildGoModule rec {
   pname = "shadowfox";

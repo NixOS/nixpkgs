@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "anewer";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ysf";
-    repo = pname;
+    repo = "anewer";
     rev = version;
     sha256 = "181mi674354bddnq894yyq587w7skjh35vn61i41vfi6lqz5dy3d";
   };
 
-  cargoHash = "sha256-LJ0l5CZM5NqdbCZe4ELkYf9EkKyBxL/LrNmFy+JS6gM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ojgm5LTOOhnGS7tUD1UUktviivp68u0c06gIJNhEO1E=";
 
   meta = with lib; {
     description = "Append lines from stdin to a file if they don't already exist in the file";

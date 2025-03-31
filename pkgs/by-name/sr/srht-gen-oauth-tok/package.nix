@@ -1,4 +1,10 @@
-{ stdenv, pkgs, lib, fetchFromSourcehut, nixosTests }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  fetchFromSourcehut,
+  nixosTests,
+}:
 
 let
   perl = pkgs.perl.withPackages (pps: [
@@ -14,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     domain = "entropic.network";
     owner = "~nessdoor";
-    repo = pname;
+    repo = "srht-gen-oauth-tok";
     rev = version;
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };

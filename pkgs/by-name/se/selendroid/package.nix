@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+  selenium-server-standalone,
+}:
 
 let
-    pname = "selendroid-standalone";
-    pluginName = "selendroid-grid-plugin-${version}";
-    version = "0.17.0";
-    srcs = {
-      jar = fetchurl {
-        url = "https://github.com/selendroid/selendroid/releases/download/${version}/selendroid-standalone-${version}-with-dependencies.jar";
-        sha256 = "10lxdsgp711pv8r6dk2aagnbvnn1b25zfqjvz7plc73zqhx1dxvw";
-      };
-      gridPlugin = fetchurl {
-        url = "https://search.maven.org/remotecontent?filepath=io/selendroid/selendroid-grid-plugin/${version}/${pluginName}.jar";
-        sha256 = "1x6cjmp2hpghbgbf8vss0qaj2n4sfl29wp3bc4k1s3hnnpccvz70";
-      };
+  pname = "selendroid-standalone";
+  pluginName = "selendroid-grid-plugin-${version}";
+  version = "0.17.0";
+  srcs = {
+    jar = fetchurl {
+      url = "https://github.com/selendroid/selendroid/releases/download/${version}/selendroid-standalone-${version}-with-dependencies.jar";
+      sha256 = "10lxdsgp711pv8r6dk2aagnbvnn1b25zfqjvz7plc73zqhx1dxvw";
     };
+    gridPlugin = fetchurl {
+      url = "https://search.maven.org/remotecontent?filepath=io/selendroid/selendroid-grid-plugin/${version}/${pluginName}.jar";
+      sha256 = "1x6cjmp2hpghbgbf8vss0qaj2n4sfl29wp3bc4k1s3hnnpccvz70";
+    };
+  };
 in
 stdenv.mkDerivation {
   inherit pname version;

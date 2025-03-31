@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, cargo
-, desktop-file-utils
-, itstool
-, meson
-, ninja
-, pkg-config
-, jq
-, moreutils
-, rustc
-, wrapGAppsHook4
-, gtk4
-, lcms2
-, libadwaita
-, libgweather
-, libseccomp
-, glycin-loaders
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cargo,
+  desktop-file-utils,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  jq,
+  moreutils,
+  rustc,
+  wrapGAppsHook4,
+  gtk4,
+  lcms2,
+  libadwaita,
+  libgweather,
+  libseccomp,
+  glycin-loaders,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "47.1";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9gNWmpThcwHy2sNLAsEsbY48pq65vmq1uYM5P5Ve2Ho=";
+    hash = "sha256-jckmgpqcM4gAyPQytaNHJG5ty9mtLdGiTEmOr90+ias=";
   };
 
   patches = [

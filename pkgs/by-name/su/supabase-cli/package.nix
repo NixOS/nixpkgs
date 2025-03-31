@@ -1,24 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, supabase-cli
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  supabase-cli,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "2.0.0";
+  version = "2.20.5";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-+5mcbI3pu9pahmUQnx8i2wctX/jF/CPTVaHJoH+Go4M=";
+    hash = "sha256-350b+79Jmrk8wsVQdE3gRAP3JZbgAtL1Cw46sOCyaok=";
   };
 
-  vendorHash = "sha256-nBUV8oeoZc7N8FqEbx2Cjw4XsZW3JShv3/H58qk8JEo=";
+  vendorHash = "sha256-7AilsV/TBvY/n1gR5SSc6+d68n0rhclo5hqDTC/VrkY=";
 
   ldflags = [
     "-s"
@@ -51,7 +52,10 @@ buildGoModule rec {
     description = "CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli kashw2 ];
+    maintainers = with maintainers; [
+      gerschtli
+      kashw2
+    ];
     mainProgram = "supabase";
   };
 }

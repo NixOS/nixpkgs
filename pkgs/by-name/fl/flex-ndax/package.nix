@@ -1,4 +1,11 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, libpulseaudio }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpulseaudio,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "flex-ndax";
@@ -15,12 +22,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-05LWJm4MoJqjJaFrBZvutKlqSTGl4dSp433AfHHO6LU=";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/kc2g-flex-tools/nDAX";
     description = "FlexRadio digital audio transport (DAX) connector for PulseAudio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "nDAX";
   };
 }

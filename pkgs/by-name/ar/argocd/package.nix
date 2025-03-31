@@ -1,27 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.13.1";
+  version = "2.14.7";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    hash = "sha256-0qL9CnEwEp7sJK7u6EKHVFY/hH8lTb182HZ3r+9nIyQ=";
+    hash = "sha256-ilXJWPvu3qwzuUN6AsQNyzrTHdQO51IFZcvZiQ/+/tU=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-p+9Q9VOdN7v7iK5oaO5f+B1iyOwVdk672zQsYsrb398=";
+  vendorHash = "sha256-sfyTXP2vKVJQdUti0TNW/vrKovvN1/PMhEOUI8IiY44=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
   subPackages = [ "cmd" ];
 
   ldflags =
-    let package_url = "github.com/argoproj/argo-cd/v2/common"; in
+    let
+      package_url = "github.com/argoproj/argo-cd/v2/common";
+    in
     [
-      "-s" "-w"
+      "-s"
+      "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
       "-X ${package_url}.gitCommit=${src.rev}"
@@ -61,6 +70,10 @@ buildGoModule rec {
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shahrukh330 bryanasdev000 qjoly ];
+    maintainers = with maintainers; [
+      shahrukh330
+      bryanasdev000
+      qjoly
+    ];
   };
 }

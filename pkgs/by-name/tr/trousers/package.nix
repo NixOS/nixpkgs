@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  pkg-config,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trousers";
@@ -9,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0zy7r9cnr2gvwr2fb1q4fc5xnvx405ymcbrdv7qsqwl3a4zfjnqy";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
   buildInputs = [ openssl ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];
@@ -22,9 +32,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Trusted computing software stack";
     mainProgram = "tcsd";
-    homepage    = "https://trousers.sourceforge.net/";
-    license     = licenses.bsd3;
+    homepage = "https://trousers.sourceforge.net/";
+    license = licenses.bsd3;
     maintainers = [ maintainers.ak ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

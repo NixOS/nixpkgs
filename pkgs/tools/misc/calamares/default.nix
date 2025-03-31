@@ -3,16 +3,18 @@
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
+# passthru.tests
+, calamares-nixos
 }:
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.3.10";
+  version = "3.3.13";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/calamares-${version}.tar.gz";
-    sha256 = "sha256-iBf8APBLNOpntyn+9WQWl+j8oQ4iR3pOwbcZlK86g5Q=";
+    sha256 = "sha256-5Jz32JTgK6BImM0HcMtXi04k39CAirdmC/lbskVmSNQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -78,6 +80,10 @@ mkDerivation rec {
     sed "s,\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR},''${out}/share/polkit-1/actions," \
         -i CMakeLists.txt
   '';
+
+  passthru.tests = {
+    inherit calamares-nixos;
+  };
 
   meta = with lib; {
     description = "Distribution-independent installer framework";

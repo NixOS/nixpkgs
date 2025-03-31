@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchzip
-, addDriverRunpath
-, cmake
-, glibc_multi
-, glibc
-, git
-, pkg-config
-, cudaPackages ? {}
-, withCuda ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  addDriverRunpath,
+  cmake,
+  glibc_multi,
+  glibc,
+  git,
+  pkg-config,
+  cudaPackages ? { },
+  withCuda ? false,
 }:
 
 let
@@ -46,7 +47,13 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "out" "lib" "dev" "doc" "man" ];
+    outputs = [
+      "out"
+      "lib"
+      "dev"
+      "doc"
+      "man"
+    ];
   };
 
 in
@@ -62,30 +69,41 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-    git
-    pkg-config
-  ] ++ lib.optionals withCuda [
-    addDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      git
+      pkg-config
+    ]
+    ++ lib.optionals withCuda [
+      addDriverRunpath
+    ];
 
-  buildInputs = [ hwloc ] ++ (if withCuda then
-    [ glibc_multi cudatoolkit ]
-  else
-    [ glibc.static ]);
+  buildInputs =
+    [ hwloc ]
+    ++ (
+      if withCuda then
+        [
+          glibc_multi
+          cudatoolkit
+        ]
+      else
+        [ glibc.static ]
+    );
 
   NIX_LDFLAGS = lib.optionals withCuda [
     "-L${cudatoolkit}/lib/stubs"
   ];
 
-  cmakeFlags = [
-    "-DFIRESTARTER_BUILD_HWLOC=OFF"
-    "-DCMAKE_C_COMPILER_WORKS=1"
-    "-DCMAKE_CXX_COMPILER_WORKS=1"
-  ] ++ lib.optionals withCuda [
-    "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
-  ];
+  cmakeFlags =
+    [
+      "-DFIRESTARTER_BUILD_HWLOC=OFF"
+      "-DCMAKE_C_COMPILER_WORKS=1"
+      "-DCMAKE_CXX_COMPILER_WORKS=1"
+    ]
+    ++ lib.optionals withCuda [
+      "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -103,7 +121,10 @@ stdenv.mkDerivation rec {
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ astro marenz ];
+    maintainers = with maintainers; [
+      astro
+      marenz
+    ];
     license = licenses.gpl3;
     mainProgram = "FIRESTARTER";
   };

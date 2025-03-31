@@ -1,18 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "padbuster";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "AonCyberLabs";
-    repo = pname;
+    repo = "padbuster";
     rev = "50e4a3e2bf5dfff5699440b3ebc61ed1b5c49bbe";
     sha256 = "VIvZ28MVnTSQru6l8flLVVqIIpxxXD8lCqzH81sPe/U=";
   };
 
   buildInputs = [
-    (perl.withPackages (ps: with ps; [ LWP LWPProtocolHttps CryptSSLeay ]))
+    (perl.withPackages (
+      ps: with ps; [
+        LWP
+        LWPProtocolHttps
+        CryptSSLeay
+      ]
+    ))
   ];
 
   installPhase = ''

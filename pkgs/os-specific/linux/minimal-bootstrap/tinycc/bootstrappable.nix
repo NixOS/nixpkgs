@@ -7,12 +7,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-{ lib
-, callPackage
-, fetchurl
-, kaem
-, mes
-, mes-libc
+{
+  lib,
+  callPackage,
+  fetchurl,
+  kaem,
+  mes,
+  mes-libc,
 }:
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;
@@ -24,17 +25,19 @@ let
     url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
     sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
   };
-  src = (kaem.runCommand "tinycc-bootstrappable-${version}-source" {} ''
-    ungz --file ${tarball} --output tinycc.tar
-    mkdir -p ''${out}
-    cd ''${out}
-    untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+  src =
+    (kaem.runCommand "tinycc-bootstrappable-${version}-source" { } ''
+      ungz --file ${tarball} --output tinycc.tar
+      mkdir -p ''${out}
+      cd ''${out}
+      untar --file ''${NIX_BUILD_TOP}/tinycc.tar
 
-    # Patch
-    cd tinycc-${rev}
-    # Static link by default
-    replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
-  '') + "/tinycc-${rev}";
+      # Patch
+      cd tinycc-${rev}
+      # Static link by default
+      replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
+    '')
+    + "/tinycc-${rev}";
 
   meta = with lib; {
     description = "Tiny C Compiler's bootstrappable fork";
@@ -47,43 +50,48 @@ let
   pname = "tinycc-boot-mes";
 
   tinycc-boot-mes = rec {
-    compiler = kaem.runCommand "${pname}-${version}" {
-      passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
-        ${result}/bin/tcc -version
-        mkdir ''${out}
-      '';
-    } ''
-      catm config.h
-      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
-        -S \
-        -o tcc.s \
-        -I . \
-        -D BOOTSTRAP=1 \
-        -I ${src} \
-        -D TCC_TARGET_I386=1 \
-        -D inline= \
-        -D CONFIG_TCCDIR=\"\" \
-        -D CONFIG_SYSROOT=\"\" \
-        -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
-        -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
-        -D CONFIG_TCC_LIBPATHS=\"{B}\" \
-        -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include\" \
-        -D TCC_LIBGCC=\"${mes-libc}/lib/x86-mes/libc.a\" \
-        -D CONFIG_TCC_LIBTCC1_MES=0 \
-        -D CONFIG_TCCBOOT=1 \
-        -D CONFIG_TCC_STATIC=1 \
-        -D CONFIG_USE_LIBGCC=1 \
-        -D TCC_MES_LIBC=1 \
-        -D TCC_VERSION=\"${version}\" \
-        -D ONE_SOURCE=1 \
-        ${src}/tcc.c
-      mkdir -p ''${out}/bin
-      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
-        -L ${mes.libs}/lib \
-        -l c+tcc \
-        -o ''${out}/bin/tcc \
-        tcc.s
-    '';
+    compiler =
+      kaem.runCommand "${pname}-${version}"
+        {
+          passthru.tests.get-version =
+            result:
+            kaem.runCommand "${pname}-get-version-${version}" { } ''
+              ${result}/bin/tcc -version
+              mkdir ''${out}
+            '';
+        }
+        ''
+          catm config.h
+          ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+            -S \
+            -o tcc.s \
+            -I . \
+            -D BOOTSTRAP=1 \
+            -I ${src} \
+            -D TCC_TARGET_I386=1 \
+            -D inline= \
+            -D CONFIG_TCCDIR=\"\" \
+            -D CONFIG_SYSROOT=\"\" \
+            -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
+            -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
+            -D CONFIG_TCC_LIBPATHS=\"{B}\" \
+            -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include\" \
+            -D TCC_LIBGCC=\"${mes-libc}/lib/x86-mes/libc.a\" \
+            -D CONFIG_TCC_LIBTCC1_MES=0 \
+            -D CONFIG_TCCBOOT=1 \
+            -D CONFIG_TCC_STATIC=1 \
+            -D CONFIG_USE_LIBGCC=1 \
+            -D TCC_MES_LIBC=1 \
+            -D TCC_VERSION=\"${version}\" \
+            -D ONE_SOURCE=1 \
+            ${src}/tcc.c
+          mkdir -p ''${out}/bin
+          ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+            -L ${mes.libs}/lib \
+            -l c+tcc \
+            -o ''${out}/bin/tcc \
+            tcc.s
+        '';
 
     libs = recompileLibc {
       inherit pname version;

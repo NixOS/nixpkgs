@@ -1,6 +1,17 @@
-{ lib, fetchFromGitHub, buildPythonApplication, fuse
-, appdirs, colorama, python-dateutil, requests, requests-toolbelt
-, fusepy, sqlalchemy, setuptools }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  fuse,
+  appdirs,
+  colorama,
+  python-dateutil,
+  requests,
+  requests-toolbelt,
+  fusepy,
+  sqlalchemy,
+  setuptools,
+}:
 
 buildPythonApplication rec {
   pname = "acd_cli";
@@ -15,8 +26,16 @@ buildPythonApplication rec {
     sha256 = "0a0fr632l24a3jmgla3b1vcm50ayfa9hdbp677ch1chwj5dq4zfp";
   };
 
-  propagatedBuildInputs = [ appdirs colorama python-dateutil fusepy requests
-                            requests-toolbelt setuptools sqlalchemy ];
+  propagatedBuildInputs = [
+    appdirs
+    colorama
+    python-dateutil
+    fusepy
+    requests
+    requests-toolbelt
+    setuptools
+    sqlalchemy
+  ];
 
   makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${lib.getLib fuse}/lib/libfuse.so" ];
 

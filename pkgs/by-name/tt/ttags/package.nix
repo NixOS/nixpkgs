@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, ttags }:
-let version = "0.4.1";
-in rustPlatform.buildRustPackage {
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  ttags,
+}:
+let
+  version = "0.4.2";
+in
+rustPlatform.buildRustPackage {
   pname = "ttags";
   inherit version;
 
@@ -8,10 +16,11 @@ in rustPlatform.buildRustPackage {
     owner = "npezza93";
     repo = "ttags";
     rev = "${version}";
-    hash = "sha256-yKg0KUA/Wa7B/sU1uxgGQR0Wat/bFv3ascqnUCdWKw0=";
+    hash = "sha256-z0IxGdveMtCXmCKD4jp/BEA6mtTl4CitIrVhM6BtHzA=";
   };
 
-  cargoHash = "sha256-MZ9QRF5yNw+YtSEu+Qc/J3Ap7+nRDZT7aitunk+x38Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XgtBcEVfeR0yYKJkpFfA8pXk1S1fg+2QS8o7n9G1CXU=";
 
   passthru.tests.version = testers.testVersion {
     package = ttags;

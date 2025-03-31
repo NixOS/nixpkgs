@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioacaia";
-  version = "0.1.10";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aioacaia";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Lp7sYnVzk1w7zgKDtoBMrzArTNAQ3jgt4Ch3uJ8ZDyY=";
+    tag = "v${version}";
+    hash = "sha256-7b5ZIrChMVPGREg7M+O8m2RDJGKgdTcEcGpTF6KBy1k=";
   };
 
   build-system = [ setuptools ];

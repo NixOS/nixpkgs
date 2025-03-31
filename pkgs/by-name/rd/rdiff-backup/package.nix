@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, librsync }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  librsync,
+}:
 
 let
   pypkgs = python3Packages;

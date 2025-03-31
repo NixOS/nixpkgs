@@ -1,6 +1,11 @@
-{ buildGoModule, fetchFromGitHub, fetchpatch, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "devd";
   version = "unstable-2020-04-27";
 
@@ -23,7 +28,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/devd" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Local webserver for developers";

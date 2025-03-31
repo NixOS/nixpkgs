@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-codspeed";
-  version = "3.0.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-06U7S0hRb0J4hO48DaKMQk8Uzl2rUi1thQ4lGorfqpU=";
+    tag = "v${version}";
+    hash = "sha256-SNVJtnanaSQTSeX3EFG+21GFC1WFCQTbaNyi7QjQROw=";
   };
 
   build-system = [ hatchling ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to create CodSpeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/pytest-codspeed";
-    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/v${version}";
+    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

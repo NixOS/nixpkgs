@@ -17,17 +17,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "5.0.3";
+  version = "6.3.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-c1s2n4s2LY4KvQrPZJpAnXzJCTe6Fbc0cf1plwHZPiA=";
+    hash = "sha256-eR7WsdnA9guEf/BXymWuJTy+4TTBUq9YxeFVKgvvAD8=";
   };
 
-  vendorHash = "sha256-DQcVknodbVlHygJkrGSfVGPKXR9kLGeyivNjYmjtFNs=";
+  vendorHash = "sha256-ZlXx0B2IdyeqPzQchmUI0peOZShUi0m9BMBQ1Xj2ftQ=";
 
   ldflags = [
     "-s"
@@ -57,7 +57,7 @@ buildGoModule rec {
     changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      kranzes
+      adamcstephens
       emilylange
       christoph-heiss
     ];

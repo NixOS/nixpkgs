@@ -16,7 +16,7 @@
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
+  gitMinimal,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -29,7 +29,6 @@
   protobuf,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -41,26 +40,26 @@
   toml,
   ufo2ft,
   ufolint,
+  ufomerge,
   unicodedata2,
   vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.12.10";
+  version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+9O7cAE6CUATvybG22qULNNHi94zSGqU9UjhvrF9R8k=";
+    hash = "sha256-NoUqR+u2GgjE+nj05AXvtprdWieT6XbGGcmOnEMolC4=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   pythonRelaxDeps = [
     "collidoscope"
+    "freetype-py"
     "protobuf"
     "vharfbuzz"
   ];
@@ -105,12 +104,13 @@ buildPythonPackage rec {
     toml
     ufo2ft
     ufolint
+    ufomerge
     unicodedata2
     vharfbuzz
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock
@@ -130,6 +130,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These require network access
+    "test_check_axes_match"
     "test_check_description_broken_links"
     "test_check_description_family_update"
     "test_check_metadata_designer_profiles"
@@ -156,6 +157,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "fontbakery";
     maintainers = with maintainers; [ danc86 ];
   };
 }

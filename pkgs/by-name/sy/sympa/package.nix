@@ -1,73 +1,83 @@
-{ lib, stdenv, perl, fetchFromGitHub, autoreconfHook, nixosTests }:
+{
+  lib,
+  stdenv,
+  perl,
+  fetchFromGitHub,
+  autoreconfHook,
+  nixosTests,
+}:
 
 let
   dataDir = "/var/lib/sympa";
   runtimeDir = "/run/sympa";
-  perlEnv = perl.withPackages (p: with p; [
-    ArchiveZip
-    CGI
-    CGIFast
-    ClassSingleton
-    DateTime
-    DBI
-    DateTimeFormatMail
-    DateTimeTimeZone
-    Encode
-    FCGI
-    FileCopyRecursive
-    FileNFSLock
-    FilePath
-    HTMLParser
-    HTMLFormatter
-    HTMLTree
-    HTMLStripScriptsParser
-    IO
-    IOStringy
-    LWP
-    libintl-perl
+  perlEnv = perl.withPackages (
+    p: with p; [
+      ArchiveZip
+      CGI
+      CGIFast
+      ClassSingleton
+      DateTime
+      DBI
+      DateTimeFormatMail
+      DateTimeTimeZone
+      Encode
+      FCGI
+      FileCopyRecursive
+      FileNFSLock
+      FilePath
+      HTMLParser
+      HTMLFormatter
+      HTMLTree
+      HTMLStripScriptsParser
+      IO
+      IOStringy
+      LWP
+      libintl-perl
 
-    MHonArc
-    MIMECharset
-    MIMETools
-    MIMEEncWords
-    MIMELiteHTML
-    MailTools
-    NetCIDR
-    ScalarListUtils
-    SysSyslog
-    TermProgressBar
-    TemplateToolkit
-    URI
-    UnicodeLineBreak
-    XMLLibXML
+      MHonArc
+      MIMECharset
+      MIMETools
+      MIMEEncWords
+      MIMELiteHTML
+      MailTools
+      NetCIDR
+      ScalarListUtils
+      SysSyslog
+      TermProgressBar
+      TemplateToolkit
+      URI
+      UnicodeLineBreak
+      UnicodeUTF8
+      XMLLibXML
 
-    ### Features
-    Clone
-    CryptEksblowfish
+      ### Features
+      Clone
+      CryptEksblowfish
 
-    DBDPg
-    DBDSQLite
-    DBDmysql
+      DBDPg
+      DBDSQLite
+      DBDmysql
 
-    DataPassword
-    EncodeLocale
-    IOSocketSSL
-    MailDKIM
-    NetDNS
-    perlldap
-    libnet
-    SOAPLite
-  ]);
+      DataPassword
+      EncodeLocale
+      IOSocketSSL
+      MailDKIM
+      NetDNS
+      perlldap
+      libnet
+      SOAPLite
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.72";
+  version = "6.2.76";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
-    repo = pname;
+    repo = "sympa";
     rev = version;
-    sha256 = "sha256-8G6MxpqVa3E5J/68E7tljcXF4w7OmNkI0nJwsgxJE28=";
+    sha256 = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
   };
 
   configureFlags = [
@@ -112,7 +122,9 @@ stdenv.mkDerivation rec {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sorki mmilata ];
+    maintainers = with maintainers; [
+      sorki
+    ];
     platforms = platforms.all;
   };
 }

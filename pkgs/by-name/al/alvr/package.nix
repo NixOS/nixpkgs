@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   pkg-config,
   autoAddDriverRunpath,
@@ -40,27 +40,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.11.0";
+  version = "20.13.0";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-zqeh9U0A/KHlRieq9Lf+7f04K3JG/vpE2gZ916ReXLc=";
+    hash = "sha256-h7/fuuolxbNkjUbqXZ7NTb1AEaDMFaGv/S05faO2HIc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "openxr-0.19.0" = "sha256-bnMSjJh+zjLw4Pdxr7LLm6qYAJOK7hz5xORKZ2pVcGw=";
-      "settings-schema-0.2.0" = "sha256-luEdAKDTq76dMeo5kA+QDTHpRMFUg3n0qvyQ7DkId0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A0ADPMhsREH1C/xpSxW4W2u4ziDrKRrQyY5kBDn//gQ=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-finding-libs.patch;
+    (replaceVars ./fix-finding-libs.patch {
       ffmpeg = lib.getDev ffmpeg;
       x264 = lib.getDev x264;
     })
@@ -130,7 +124,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm755 ${src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
-    install -Dm644 ${src}/resources/alvr.png $out/share/icons/hicolor/256x256/apps/alvr.png
+    install -Dm644 ${src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
 
     # Install SteamVR driver
     mkdir -p $out/{libexec,lib/alvr,share}
@@ -148,7 +142,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [ passivelemon ];
+    maintainers = with maintainers; [
+      luNeder
+      jopejoe1
+    ];
     platforms = platforms.linux;
   };
 }

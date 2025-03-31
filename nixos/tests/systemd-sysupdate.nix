@@ -14,26 +14,28 @@ in
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes = {
-    server = { pkgs, ... }: {
-      networking.firewall.enable = false;
-      services.nginx = {
-        enable = true;
-        virtualHosts."server" = {
-          root = pkgs.runCommand "sysupdate-artifacts" { buildInputs = [ pkgs.gnupg ]; } ''
-            mkdir -p $out
-            cd $out
+    server =
+      { pkgs, ... }:
+      {
+        networking.firewall.enable = false;
+        services.nginx = {
+          enable = true;
+          virtualHosts."server" = {
+            root = pkgs.runCommand "sysupdate-artifacts" { buildInputs = [ pkgs.gnupg ]; } ''
+              mkdir -p $out
+              cd $out
 
-            echo "nixos" > nixos_1.txt
-            sha256sum nixos_1.txt > SHA256SUMS
+              echo "nixos" > nixos_1.txt
+              sha256sum nixos_1.txt > SHA256SUMS
 
-            export GNUPGHOME="$(mktemp -d)"
-            cp -R ${gpgKeyring}/* $GNUPGHOME
+              export GNUPGHOME="$(mktemp -d)"
+              cp -R ${gpgKeyring}/* $GNUPGHOME
 
-            gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
-          '';
+              gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
+            '';
+          };
         };
       };
-    };
 
     target = {
       systemd.sysupdate = {

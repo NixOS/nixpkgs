@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.56.3";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "v${version}";
-    hash = "sha256-m/RtAjqB6YTwmzCUdKQx/e7vxqJOu1Y1N0u28i8gwEs=";
+    hash = "sha256-pqHfHWv8PoaMxEP90AbVM2u88D6VE3px+lxJfoZfMgk=";
   };
 
-  vendorHash = "sha256-4VAAka9FvKuoDZ1E1v9Es3r00GZeG8Jp4pJONYpB/t8=";
+  vendorHash = "sha256-WcrJfvY3GZLDuRr2PZR1ooNPJ6FQ4S3RvUc2+zePw5w=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   outputs = [ "out" "man" ];
 

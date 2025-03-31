@@ -1,28 +1,39 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.15.0";
-
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    hash = "sha256-Ba5Bjock3NmNI6XdnX7UOW35ytgnHzYAjX9Cu6iGILo=";
+    hash = "sha256-WClNupUW1Nd5Xnx58KYDRLz1/2kNCOR4AoAsUv78yPE=";
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.ImageRegistry=velero"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-FcyqCnOZSdoyOjBIrEC1AKM5KqWSkNxbgvXeG3Y0CO4=";
+  vendorHash = "sha256-Q3h39o78V5Lqzols3RmSDL9d5WevMnTt4bv4qBscnGs=";
 
-  excludedPackages = [ "issue-template-gen" "release-tools" "v1" "velero-restic-restore-helper" ];
+  excludedPackages = [
+    "issue-template-gen"
+    "release-tools"
+    "v1"
+    "velero-restic-restore-helper"
+  ];
 
   doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
   doInstallCheck = true;
@@ -38,12 +49,13 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
+    description = "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog =
-      "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
+    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
+    maintainers = [
+      maintainers.mbode
+      maintainers.bryanasdev000
+    ];
   };
 }

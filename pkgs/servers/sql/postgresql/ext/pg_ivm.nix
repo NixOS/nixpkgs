@@ -1,23 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+  stdenv,
+}:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_ivm";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "sraoss";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Qcie7sbXcMbQkMoFIYBfttmvlYooESdSk2DyebHKPlk=";
+    repo = "pg_ivm";
+    tag = "v${version}";
+    hash = "sha256-4/ftJkm2ZInm9lkjJG7y4ZULwlyVC19lP0wGXu56SGw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Materialized views with IVM (Incremental View Maintenance) for PostgreSQL";
     homepage = "https://github.com/sraoss/pg_ivm";
     changelog = "https://github.com/sraoss/pg_ivm/releases/tag/v${version}";
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with lib.maintainers; [ ivan ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
-    broken = versionOlder postgresql.version "13";
+    license = lib.licenses.postgresql;
+    broken = lib.versionOlder postgresql.version "13";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , release_version
-, patches ? []
 , src ? null
 , llvm_meta
 , version
@@ -13,11 +12,12 @@
 , libcxx
 , enableShared ? !stdenv.hostPlatform.isStatic
 , devExtraCmakeFlags ? []
+, getVersionFile
 }:
 let
   pname = "libunwind";
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -33,6 +33,10 @@ let
       cp -r ${monorepoSrc}/runtimes "$out"
     '') else src;
 
+  patches = lib.optional (lib.versionOlder release_version "17") (
+    getVersionFile "libunwind/gnu-install-dirs.patch"
+  );
+
   hasPatches = builtins.length patches > 0;
 
   prePatch = lib.optionalString (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18")) ''
@@ -44,9 +48,11 @@ let
     cd ../runtimes
   '';
 
-  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
+  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) ''
     # libcxxabi wants to link to libunwind_shared.so (?).
     ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+  '' + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
+    ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
   '';
 in
 stdenv.mkDerivation (rec {

@@ -1,24 +1,26 @@
-{ stdenv, lib
-, addDriverRunpath
-, alsa-lib
-, autoPatchelfHook
-, cairo
-, fetchurl
-, flac
-, gcc12
-, gssdp
-, gupnp
-, gupnp-av
-, lame
-, libgmpris
-, libusb-compat-0_1
-, llvmPackages_14
-, mpg123
-, rpmextract
-, wavpack
+{
+  stdenv,
+  lib,
+  addDriverRunpath,
+  alsa-lib,
+  autoPatchelfHook,
+  cairo,
+  fetchurl,
+  flac,
+  gcc12,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  lame,
+  libgmpris,
+  libusb-compat-0_1,
+  llvmPackages_14,
+  mpg123,
+  rpmextract,
+  wavpack,
 
-, callPackage
-, rygel ? null
+  callPackage,
+  rygel ? null,
 }@inputs:
 let
   # FIXME: Replace with gnome.rygel once hqplayerd releases a new version.
@@ -37,7 +39,11 @@ stdenv.mkDerivation rec {
     ${rpmextract}/bin/rpmextract $src
   '';
 
-  nativeBuildInputs = [ addDriverRunpath autoPatchelfHook rpmextract ];
+  nativeBuildInputs = [
+    addDriverRunpath
+    autoPatchelfHook
+    rpmextract
+  ];
 
   buildInputs = [
     alsa-lib

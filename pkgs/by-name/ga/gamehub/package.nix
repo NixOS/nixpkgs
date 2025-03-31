@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, desktop-file-utils
-, glib
-, gtk3
-, glib-networking
-, libgee
-, libsoup
-, json-glib
-, sqlite
-, webkitgtk_4_0
-, libmanette
-, libXtst
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  glib-networking,
+  libgee,
+  libsoup_2_4,
+  json-glib,
+  sqlite,
+  webkitgtk_4_0,
+  libmanette,
+  libXtst,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tkashkin";
-    repo = pname;
+    repo = "GameHub";
     rev = "${version}-master";
     hash = "sha256-dBGzXwDO9BvnEIcdfqlGnMzUdBqaVA96Ds0fY6eukes=";
   };
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libmanette
-    libsoup
+    libsoup_2_4
     libXtst
     sqlite
     webkitgtk_4_0

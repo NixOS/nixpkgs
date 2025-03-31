@@ -41,7 +41,7 @@
   libXcomposite,
   libXdamage,
   libXfixes,
-  mesa,
+  libgbm,
   gtk3,
   pango,
   cairo,
@@ -51,9 +51,9 @@
   cups,
   libxshmfence,
   udev,
+  systemd,
   libdecor,
   autoPatchelfHook,
-  makeWrapper,
 }:
 let
   rpath = lib.makeLibraryPath [
@@ -73,7 +73,7 @@ let
     libXext
     libXfixes
     libXrandr
-    mesa
+    libgbm
     gtk3
     pango
     cairo
@@ -83,38 +83,35 @@ let
     cups
     libxshmfence
     udev
+    systemd
   ];
   buildType = "Release";
-  platform =
-    {
-      "aarch64-linux" = "linuxarm64";
-      "x86_64-linux" = "linux64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  cef-bin-name = "cef_binary_120.1.10+g3ce3184+chromium-120.0.6099.129_${platform}";
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arch = selectSystem {
+    aarch64-linux = "arm64";
+    x86_64-linux = "x64";
+  };
+  cef-bin-name = "cef_binary_120.1.10+g3ce3184+chromium-120.0.6099.129_linux${arch}";
   cef-bin = stdenv.mkDerivation {
     pname = "cef-bin";
     version = "120.0.6099.129";
-    src =
-      let
-        hash =
-          {
-            "linuxarm64" = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
-            "linux64" = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
-          }
-          .${platform};
-        urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] cef-bin-name;
-      in
-      fetchzip {
-        url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-        inherit hash;
+
+    src = fetchzip {
+      url = "https://cef-builds.spotifycdn.com/${
+        builtins.replaceStrings [ "+" ] [ "%2B" ] cef-bin-name
+      }.tar.bz2";
+      hash = selectSystem {
+        aarch64-linux = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
+        x86_64-linux = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
       };
+    };
+
     installPhase = ''
       runHook preInstall
 
-      mkdir $out
-      cp -r ./* $out/
-      chmod +w -R $out/
+      cp --recursive --no-preserve=mode . $out
       patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
       patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
       patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
@@ -122,6 +119,7 @@ let
 
       runHook postInstall
     '';
+
     meta = {
       description = "Simple framework for embedding Chromium-based browsers in other applications";
       homepage = "https://cef-builds.spotifycdn.com/index.html";
@@ -131,8 +129,27 @@ let
         "x86_64-linux"
         "aarch64-linux"
       ];
+      hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
     };
   };
+in
+stdenv.mkDerivation rec {
+  pname = "linux-wallpaperengine";
+  version = "0-unstable-2024-11-08";
+
+  src = fetchFromGitHub {
+    owner = "Almamu";
+    repo = "linux-wallpaperengine";
+    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
+    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    autoPatchelfHook
+  ];
+
   buildInputs = [
     libdecor
     ffmpeg
@@ -157,54 +174,30 @@ let
     wayland-scanner
     libXrandr
   ];
-in
-stdenv.mkDerivation {
-  pname = "linux-wallpaperengine";
-  version = "0-unstable-2024-11-8";
-
-  src = fetchFromGitHub {
-    owner = "Almamu";
-    repo = "linux-wallpaperengine";
-    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
-    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
-  };
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    autoPatchelfHook
-    makeWrapper
-  ];
-
-  inherit buildInputs;
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${buildType}"
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/linux-wallpaperengine"
+    "-DCEF_ROOT=${cef-bin}"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
   ];
 
-  postPatch = ''
-    patchShebangs .
-    mkdir -p third_party/cef/
-    ln -s ${cef-bin} third_party/cef/${cef-bin-name}
-  '';
-
   preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/linux-wallpaperengine/linux-wallpaperengine
-    find $out -exec chmod 755 {} +
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/app/linux-wallpaperengine/linux-wallpaperengine
+    chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
-    makeWrapper $out/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
+    ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
   '';
 
   meta = {
     description = "Wallpaper Engine backgrounds for Linux";
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
-    license = lib.licenses.gpl3Plus;
+    license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "linux-wallpaperengine";
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+    hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
 }

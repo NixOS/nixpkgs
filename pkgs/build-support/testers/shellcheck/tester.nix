@@ -1,28 +1,35 @@
 # Dependencies (callPackage)
-{ lib, stdenv, shellcheck }:
+{
+  lib,
+  stdenvNoCC,
+  shellcheck,
+}:
 
 # testers.shellcheck function
 # Docs: doc/build-helpers/testers.chapter.md
 # Tests: ./tests.nix
-{ src }:
-let
-  inherit (lib) fileset pathType isPath;
-in
-stdenv.mkDerivation {
-  name = "run-shellcheck";
-  src =
-    if isPath src && pathType src == "regular" # note that for strings this would have been IFD, which we prefer to avoid
-    then fileset.toSource { root = dirOf src; fileset = src; }
-    else src;
+{
+  name ? null,
+  src,
+}:
+stdenvNoCC.mkDerivation {
+  __structuredAttrs = true;
+  strictDeps = true;
+  name =
+    if name == null then
+      lib.warn "testers.shellcheck: name will be required in a future release, defaulting to run-shellcheck" "run-shellcheck"
+    else
+      "shellcheck-${name}";
+  inherit src;
+  dontUnpack = true; # Unpack phase tries to extract an archive, which we don't want to do with source trees
   nativeBuildInputs = [ shellcheck ];
   doCheck = true;
   dontConfigure = true;
   dontBuild = true;
   checkPhase = ''
-    find . -type f -print0 \
-      | xargs -0 shellcheck
+    find "$src" -type f -print0 | xargs -0 shellcheck
   '';
   installPhase = ''
-    touch $out
+    touch "$out"
   '';
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg, libconfig }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorg,
+  libconfig,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xob";
@@ -6,13 +13,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "florentc";
-    repo = pname;
+    repo = "xob";
     rev = "v${version}";
     sha256 = "1x4aafiyd9k4y8cmvn7rgfif3g5s5hhlbj5nz71qsyqg21nn7hrw";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorg.libX11 xorg.libXrender libconfig ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXrender
+    libconfig
+  ];
 
   makeFlags = [ "prefix=$(out)" ];
 

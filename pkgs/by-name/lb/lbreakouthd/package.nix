@@ -1,11 +1,12 @@
-{ lib
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, directoryListingUpdater
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  directoryListingUpdater,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (SDL2.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

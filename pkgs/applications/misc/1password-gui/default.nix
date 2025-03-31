@@ -10,46 +10,12 @@
 
 let
   pname = "1password";
-  version = if channel == "stable" then "8.10.54" else "8.10.56-1.BETA";
 
-  sources = {
-    stable = {
-      x86_64-linux = {
-        url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-kpFO59DPBCgD3EdYxq1tom/5/misBsafbsJS+Wj2l3I=";
-      };
-      aarch64-linux = {
-        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-ZZKuPxshI9yLSUMccpXaQDbu8gTvFCaS68tqMstZHJE=";
-      };
-      x86_64-darwin = {
-        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-Xha7aOuBvG+R1K48gdPj/v4URuIEYv2le+TCxwDnCwk=";
-      };
-      aarch64-darwin = {
-        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-ukfx7V8totRIyHpmjWDR2O9IDkAY3uq/0jtGPXiZ5Bw=";
-      };
-    };
-    beta = {
-      x86_64-linux = {
-        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-25vBmc3AJv4NTI2oOrnTR5pMBMK+wx1s/eg5g8jjtb8=";
-      };
-      aarch64-linux = {
-        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-MLnXEqJM9E+2GAXlqX2dGUzFVk0xv5pmUzLdncakWf8=";
-      };
-      x86_64-darwin = {
-        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-W7VA7DFpIY2D+0ZqNaLfOzTTqryqpA1iy0+yACNrPlg=";
-      };
-      aarch64-darwin = {
-        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-ZH7xuL0SrkncxI/ngDIYHf4bLwUyTQC4Ki3HgUVza+I=";
-      };
-    };
-  };
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+  hostOs = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
+  version = versions."${channel}-${hostOs}" or (throw "unknown channel-os ${channel}-${hostOs}");
+
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
 
   src = fetchurl {
     inherit

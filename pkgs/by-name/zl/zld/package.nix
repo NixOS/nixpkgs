@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchzip }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zld";
@@ -19,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.rgnns ];
     platforms = platforms.darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

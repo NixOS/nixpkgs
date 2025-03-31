@@ -1,20 +1,21 @@
-{ boost
-, cmake
-, expat
-, fetchFromGitHub
-, fontconfig
-, freeimage
-, freetype
-, glfw3
-, glm
-, lib
-, libGLU
-, libGL
-, mesa
-, opencl-clhpp
-, pkg-config
-, stdenv
-, SDL2
+{
+  boost,
+  cmake,
+  expat,
+  fetchFromGitHub,
+  fontconfig,
+  freeimage,
+  freetype,
+  glfw3,
+  glm,
+  lib,
+  libGLU,
+  libGL,
+  libgbm,
+  opencl-clhpp,
+  pkg-config,
+  stdenv,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "arrayfire";
-    repo = pname;
+    repo = "forge";
     rev = "v1.0.8";
     sha256 = "sha256-lSZAwcqAHiuZkpYcVfwvZCfNmEF3xGN9S/HuZQrGeKU=";
   };
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     libGLU
     opencl-clhpp
     SDL2
-    mesa
+    libgbm
   ];
 
   meta = with lib; {
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://arrayfire.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chessai twesterhout ];
+    maintainers = with maintainers; [
+      chessai
+      twesterhout
+    ];
   };
 }

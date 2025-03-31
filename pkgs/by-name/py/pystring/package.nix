@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pystring";

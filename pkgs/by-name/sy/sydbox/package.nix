@@ -7,13 +7,12 @@
   pkg-config,
   rustPlatform,
   scdoc,
-  sydbox,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sydbox";
-  version = "3.28.3";
+  version = "3.32.6";
 
   outputs = [
     "out"
@@ -24,11 +23,12 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.exherbo.org";
     owner = "Sydbox";
     repo = "sydbox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9IegNFkOWYt+jdpN0rk4S/qyD/NSPaSqmFnMmCl/3Tk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7tU1H8Du2O4Ay+isZwSUcx+Ws9gr0Djq5uQeRPCuQEo=";
   };
 
-  cargoHash = "sha256-6/D//mkPDRW01SCLmQGWwFCClZ84aJUPhleWGVCJaKM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SukVs5VG7NEkwF78iliD0SZZgdT0Kz/yQV3LTBo2Nn0=";
 
   nativeBuildInputs = [
     mandoc
@@ -45,15 +45,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=fs::tests::test_relative_symlink_resolution"
     # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
     "--skip=proc::tests::test_proc_set_at_secure_test_32bit_dynamic"
+    # Flakey. May only fail on OfBorg/Hydra
+    # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "proc::tests::test_proc_set_at_secure_test_32bit_static"
+    # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "--skip=proc::tests::test_proc_set_at_secure_test_32bit_static_pie"
     # /bin/false: Os { code: 2, kind: NotFound, message: "No such file or directory" }
     "--skip=syd_test"
 
-    # Endlessly stall. Maybe a sandbox issue?
+    # Endlessly stall or use "invalid arguments". Maybe a sandbox issue?
     "--skip=caps"
-    "--skip=landlock::compat::Compatible::set_compatibility"
-    "--skip=landlock::fs::PathBeneath"
-    "--skip=landlock::fs::PathFd"
-    "--skip=landlock::fs::path_beneath_rules"
+    "--skip=landlock"
     "--skip=proc::proc_cmdline"
     "--skip=proc::proc_comm"
   ];
@@ -67,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = sydbox;
+      package = finalAttrs.finalPackage;
       command = "syd -V";
     };
 
@@ -77,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "seccomp-based application sandbox";
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
-    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
+    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       mvs
@@ -86,4 +88,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "syd";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, jq, nix, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  jq,
+  nix,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "terranix";
@@ -18,7 +25,12 @@ stdenv.mkDerivation rec {
     mv bin core modules lib share $out/
 
     wrapProgram $out/bin/terranix-doc-json \
-      --prefix PATH : ${lib.makeBinPath [ jq nix ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          nix
+        ]
+      }
   '';
 
   meta = with lib; {

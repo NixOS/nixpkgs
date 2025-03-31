@@ -38,7 +38,7 @@
 , version ? toString revision
 , extraRevision ? ""
 , extraVersion ? ""
-, sha512
+, sha512 ? { }
 , mirrors
 , fixedHashes ? { }
 , postUnpack ? ""
@@ -48,7 +48,7 @@
 , hasHyphens ? false
 , hasInfo ? false
 , hasManpages ? false
-, hasRunfiles ? false
+, hasRunfiles ? (sha512 ? run)
 , hasTlpkg ? false
 , hasCatalogue ? true
 , catalogue ? pname

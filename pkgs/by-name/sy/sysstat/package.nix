@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, bzip2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  bzip2,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +11,9 @@ stdenv.mkDerivation rec {
   version = "12.7.4";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    owner = "sysstat";
+    repo = "sysstat";
+    tag = "v${version}";
     hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
   };
 
@@ -26,14 +27,22 @@ stdenv.mkDerivation rec {
     export COMPRESS_MANPG=n
   '';
 
-  makeFlags = [ "SYSCONFIG_DIR=$(out)/etc" "IGNORE_FILE_ATTRIBUTES=y" "CHOWN=true" ];
-  installTargets = [ "install_base" "install_nls" "install_man" ];
+  makeFlags = [
+    "SYSCONFIG_DIR=$(out)/etc"
+    "IGNORE_FILE_ATTRIBUTES=y"
+    "CHOWN=true"
+  ];
+  installTargets = [
+    "install_base"
+    "install_nls"
+    "install_man"
+  ];
 
   patches = [ ./install.patch ];
 
   meta = {
     mainProgram = "iostat";
-    homepage = "http://sebastien.godard.pagesperso-orange.fr/";
+    homepage = "https://sysstat.github.io/";
     description = "Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

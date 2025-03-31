@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nowsecure";
     repo = "fsmon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m0Bu1lT3KH4ytkpEakI7fvRHV1kmgaXS71+wmNGmEl8=";
   };
 

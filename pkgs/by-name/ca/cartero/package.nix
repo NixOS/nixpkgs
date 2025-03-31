@@ -16,21 +16,20 @@
   gtksourceview5,
   openssl,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartero";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "danirod";
     repo = "cartero";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fXFrxaqHgf7XWX1guySsaP6PxmAPwVxoPaEOTpz4OqY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1pSOyVGGl+G6mspdzzYP/BoQueVvAHTP6Vwqt6zL80c=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hbByC2r48+Zm/On99m9VWj4TJi6aeM/km2vcfvMMz38=";
+    hash = "sha256-qqxoP/T9de4w2wQJaCtQGRsoD+/dF7ir4iwYY69R+/I=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cartero.danirod.es";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cartero";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      amerino
+    ];
     platforms = lib.platforms.linux;
   };
 })

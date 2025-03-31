@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, glew
-, glm
-, libGLU
-, libGL
-, libX11
-, libXext
-, libXrender
-, icu
-, libSM
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  glew,
+  glm,
+  libGLU,
+  libGL,
+  libX11,
+  libXext,
+  libXrender,
+  icu74,
+  libSM,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     libX11
     libXext
     libXrender
-    icu
+    icu74
     libSM
   ];
 

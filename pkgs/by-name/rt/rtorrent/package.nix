@@ -6,38 +6,27 @@
   cppunit,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
-  libsigcxx,
   libtool,
   libtorrent,
   ncurses,
   openssl,
   pkg-config,
-  xmlrpc_c,
   zlib,
   nixosTests,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
-  version = "0.10.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "v${version}";
-    hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
+    rev = "68fdb86c723a0ae67ebaffec416af99fec41dcbc";
+    hash = "sha256-/GWC28LsY7GcUH+SBzi01sOWVfA1lyM0r9OdUDTYbT8=";
   };
-
-  patches = [
-    # fix: use fsync for osx builds
-    (fetchpatch {
-      url = "https://github.com/rakshasa/rtorrent/commit/5ce84929e44fbe3f8d6cf142e3133f43afa4071f.patch";
-      hash = "sha256-bFDxbpkTZ6nIUT2zMxKMgV94vWlVNzBbIbhx4Bpr8gw=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -58,17 +47,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cppunit
     curl
-    libsigcxx
     libtool
     libtorrent
     ncurses
     openssl
-    xmlrpc_c
     zlib
   ];
 
   configureFlags = [
-    "--with-xmlrpc-c"
+    "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
   ];
 

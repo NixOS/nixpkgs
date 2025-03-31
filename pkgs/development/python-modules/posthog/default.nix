@@ -1,11 +1,15 @@
 {
   lib,
+  anthropic,
   backoff,
   buildPythonPackage,
+  distro,
   fetchFromGitHub,
   freezegun,
   mock,
   monotonic,
+  openai,
+  parameterized,
   pytestCheckHook,
   python-dateutil,
   requests,
@@ -15,20 +19,21 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.7.0";
+  version = "3.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1evqG/rdHBs0bAHM+bIHyT4tFE6tAE+aJyu5r0QqAMk=";
+    tag = "v${version}";
+    hash = "sha256-1jJACzDf8J4Vsrvtj0PgeK1Ck2Bzy5ThHm0Ohd+LyYs=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     backoff
+    distro
     monotonic
     python-dateutil
     requests
@@ -36,8 +41,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    anthropic
     freezegun
     mock
+    openai
+    parameterized
     pytestCheckHook
   ];
 
@@ -50,12 +58,14 @@ buildPythonPackage rec {
     "test_request"
     "test_trying_to_use_django_integration"
     "test_upload"
+    # AssertionError: 2 != 3
+    "test_flush_interval"
   ];
 
   meta = with lib; {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

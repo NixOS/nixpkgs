@@ -1,8 +1,9 @@
-{ fstar-dune
-, src
-, stdenv
-, version
-, z3
+{
+  fstar-dune,
+  src,
+  stdenv,
+  version,
+  z3,
 }:
 
 stdenv.mkDerivation {

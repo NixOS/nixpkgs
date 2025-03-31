@@ -33,7 +33,8 @@ let
     '';
 
   babelfishTranslate = path: name:
-    pkgs.runCommandLocal "${name}.fish" {
+    pkgs.runCommand "${name}.fish" {
+      preferLocalBuild = true;
       nativeBuildInputs = [ pkgs.babelfish ];
     } "babelfish < ${path} > $out;";
 
@@ -258,12 +259,14 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommandLocal
+          generateCompletions = package: pkgs.runCommand
             ( with lib.strings; let
                 storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
                 pathName = substring storeLength (stringLength package - storeLength) package;
               in (package.name or pathName) + "_fish-completions")
-            ( { inherit package; } //
+            ( { inherit package;
+                preferLocalBuild = true;
+              } //
               lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out

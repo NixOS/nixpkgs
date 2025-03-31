@@ -6,7 +6,7 @@
   mock,
   pytest-cov-stub,
   pytest-xdist,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V7xIvZ9vIXHPpkEeJZ6QedWk+4ZVNwCzj5ffLyixFz4=";
   };
 

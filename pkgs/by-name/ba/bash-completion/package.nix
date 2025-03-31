@@ -1,14 +1,17 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, perl
-, ps
-, python3Packages
-, bashInteractive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  perl,
+  ps,
+  python3Packages,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
-  version = "2.14.0";
+  version = "2.16.0";
 
   # Using fetchurl because fetchGithub or fetchzip will have trouble on
   # e.g. APFS filesystems (macOS) because of non UTF-8 characters in some of the
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
     url = "https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz";
-    sha256 = "sha256-XHSU+WgoCDLWrbWqGfdFpW8aed8xHlkzjF76b3KF4Wg=";
+    hash = "sha256-M2m9XkGKdfuZCGOSWu1bQgOYrOuzIOxMAwaz6uI/EHo=";
   };
 
   strictDeps = true;
@@ -61,9 +64,6 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
-  '' + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-    # please remove this next release!
-    touch completions/{pkg_delete,freebsd-update,kldload,kldunload,portinstall,portsnap,portupgrade}
   '';
 
   meta = with lib; {

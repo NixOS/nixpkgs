@@ -1,20 +1,30 @@
-{ lib
-, fetchFromGitHub
-, php81
+{
+  lib,
+  fetchFromGitHub,
+  php81,
+  nix-update-script,
 }:
 
-php81.buildComposerProject (finalAttrs: {
+php81.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-/RffdYgl2cs8mlq4vHtzUZ6j0viV8Ot/cB/cB1dstFM=";
   };
 
-  vendorHash = "sha256-n608AY6AQdVuN3hfVQk02vJQ6hl/0+4LVBOsBL5o3+8=";
+  vendorHash = "sha256-huYLbqJaxeSST2WGcSdk4gR3d3KWSkIK/6tzVpCw0oQ=";
+
+  passthru.updateScript = nix-update-script {
+    # Excludes 1.x versions from the Github tags list
+    extraArgs = [
+      "--version-regex"
+      "^(2\\.(.*))"
+    ];
+  };
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";

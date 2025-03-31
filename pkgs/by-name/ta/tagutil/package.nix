@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, pkg-config, cmake, libyaml
-, jansson, libvorbis, taglib
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libyaml,
+  jansson,
+  libvorbis,
+  taglib,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kaworu";
-    repo = pname;
+    repo = "tagutil";
     rev = "v${version}";
     sha256 = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
   };

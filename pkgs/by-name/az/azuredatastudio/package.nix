@@ -1,34 +1,36 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, cairo
-, cups
-, curl
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gnutar
-, gtk3
-, icu
-, libdrm
-, libunwind
-, libuuid
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, openssl
-, pango
-, systemd
-, xorg
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gnutar,
+  gtk3,
+  icu,
+  libdrm,
+  libunwind,
+  libuuid,
+  libxkbcommon,
+  libgbm,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  systemd,
+  wrapGAppsHook3,
+  xorg,
+  zlib,
 }:
 
 # from justinwoo/azuredatastudio-nix
@@ -44,8 +46,17 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "text/plain" "inode/directory" "application/x-azuredatastudio-workspace" ];
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+      "IDE"
+    ];
+    mimeTypes = [
+      "text/plain"
+      "inode/directory"
+      "application/x-azuredatastudio-workspace"
+    ];
     keywords = [ "azuredatastudio" ];
     actions.new-empty-window = {
       name = "New Empty Window";
@@ -63,7 +74,12 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+      "IDE"
+    ];
     mimeTypes = [ "x-scheme-handler/azuredatastudio" ];
     keywords = [ "azuredatastudio" ];
     noDisplay = true;
@@ -74,7 +90,10 @@ stdenv.mkDerivation rec {
   pname = "azuredatastudio";
   version = "1.49.1";
 
-  desktopItems = [ desktopItem urlHandlerDesktopItem ];
+  desktopItems = [
+    desktopItem
+    urlHandlerDesktopItem
+  ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
@@ -90,6 +109,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -140,7 +160,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
       glib
       gtk3
-      mesa
+      libgbm
       nss
       nspr
       libdrm
@@ -162,7 +182,7 @@ stdenv.mkDerivation rec {
     sqltoolsserviceRpath
   ];
 
-  fixupPhase = ''
+  preFixup = ''
     fix_sqltoolsservice()
     {
       mv ${sqltoolsservicePath}/$1 ${sqltoolsservicePath}/$1_old

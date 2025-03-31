@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "golines";
@@ -18,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/segmentio/golines";
     license = licenses.mit;
     maintainers = with maintainers; [ meain ];
+    mainProgram = "golines";
   };
 }

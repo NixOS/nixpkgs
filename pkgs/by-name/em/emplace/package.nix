@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tversteeg";
     repo = "emplace";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
   };
 
@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-0BYAJOHymBVAssNfU5nPYTSvPbLEDCKoRVovIm6evUQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nBpM8i4jlxtnaonOx71DWjbLS8tYznJkoR2JI/B25LM=";
 
   meta = {
     description = "Mirror installed software on multiple machines";

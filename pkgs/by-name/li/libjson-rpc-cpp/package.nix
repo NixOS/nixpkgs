@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, argtable, catch2
-, curl, doxygen, hiredis, jsoncpp, libmicrohttpd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  argtable,
+  catch2,
+  curl,
+  doxygen,
+  hiredis,
+  jsoncpp,
+  libmicrohttpd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libjson-rpc-cpp";
@@ -14,9 +26,20 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
 
-  nativeBuildInputs = [ pkg-config cmake doxygen ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    doxygen
+  ];
 
-  buildInputs = [ argtable catch2 curl hiredis jsoncpp libmicrohttpd ];
+  buildInputs = [
+    argtable
+    catch2
+    curl
+    hiredis
+    jsoncpp
+    libmicrohttpd
+  ];
 
   postPatch = ''
     for f in cmake/FindArgtable.cmake \
@@ -47,7 +70,12 @@ stdenv.mkDerivation rec {
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       q="$p:${
-        lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]
+        lib.makeLibraryPath [
+          jsoncpp
+          argtable
+          libmicrohttpd
+          curl
+        ]
       }:$out/lib"
       patchelf --set-rpath $q $1
     }

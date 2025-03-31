@@ -1,4 +1,9 @@
-{ fetchzip, lib, stdenv, which }:
+{
+  fetchzip,
+  lib,
+  stdenv,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "empty";

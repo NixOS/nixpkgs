@@ -6,10 +6,10 @@
 }:
 let
   pname = "bitcomet";
-  version = "2.11.0";
+  version = "2.12.1";
   src = fetchurl {
     url = "https://download.bitcomet.com/linux/x86_64/BitComet-${version}-x86_64.AppImage";
-    hash = "sha256-YBM4xeeqvzvGoGHqOPForqDYt9U9ooG31jG2ickeq4o=";
+    hash = "sha256-iaUPf9gSTd2m641Ja9/5v4wkO3H4+R08YXohLCeFuTQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -38,6 +38,6 @@ appimageTools.wrapType2 {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

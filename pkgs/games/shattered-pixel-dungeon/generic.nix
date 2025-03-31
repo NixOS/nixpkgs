@@ -1,23 +1,24 @@
 # Generic builder for shattered pixel forks/mods
-{ pname
-, version
-, src
-, meta
-, desktopName
-, patches ? [ ./disable-beryx.patch ]
-, depsPath ? null
+{
+  pname,
+  version,
+  src,
+  meta,
+  desktopName,
+  patches ? [ ./disable-beryx.patch ],
+  depsPath ? null,
 
-, lib
-, stdenv
-, makeWrapper
-, gradle_8
-, perl
-, jre
-, libGL
-, libpulseaudio
-, makeDesktopItem
-, copyDesktopItems
-, ...
+  lib,
+  stdenv,
+  makeWrapper,
+  gradle_8,
+  perl,
+  jre,
+  libGL,
+  libpulseaudio,
+  makeDesktopItem,
+  copyDesktopItems,
+  ...
 }@attrs:
 
 let
@@ -49,8 +50,15 @@ let
     icon = pname;
     exec = pname;
     terminal = false;
-    categories = [ "Game" "AdventureGame" ];
-    keywords = [ "roguelike" "dungeon" "crawler" ];
+    categories = [
+      "Game"
+      "AdventureGame"
+    ];
+    keywords = [
+      "roguelike"
+      "dungeon"
+      "crawler"
+    ];
   };
 
   depsPath' = if depsPath != null then depsPath else ./. + "/${pname}/deps.json";
@@ -58,59 +66,77 @@ let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
 
-in stdenv.mkDerivation (cleanAttrs // {
-  inherit pname version src patches postPatch;
+in
+stdenv.mkDerivation (
+  cleanAttrs
+  // {
+    inherit
+      pname
+      version
+      src
+      patches
+      postPatch
+      ;
 
-  mitmCache = gradle.fetchDeps {
-    inherit pname;
-    data = depsPath';
-  };
+    mitmCache = gradle.fetchDeps {
+      inherit pname;
+      data = depsPath';
+    };
 
-  __darwinAllowLocalNetworking = true;
+    __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    gradle
-    perl
-    makeWrapper
-    copyDesktopItems
-  ] ++ attrs.nativeBuildInputs or [];
+    nativeBuildInputs = [
+      gradle
+      perl
+      makeWrapper
+      copyDesktopItems
+    ] ++ attrs.nativeBuildInputs or [ ];
 
-  desktopItems = [ desktopItem ];
+    desktopItems = [ desktopItem ];
 
-  gradleBuildTask = "desktop:release";
+    gradleBuildTask = "desktop:release";
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    install -Dm644 desktop/build/libs/desktop-*.jar $out/share/${pname}.jar
-    mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libpulseaudio ]} \
-      --add-flags "-jar $out/share/${pname}.jar"
+      install -Dm644 desktop/build/libs/desktop-*.jar $out/share/${pname}.jar
+      mkdir $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            libGL
+            libpulseaudio
+          ]
+        } \
+        --add-flags "-jar $out/share/${pname}.jar"
 
-    for s in 16 32 48 64 128 256; do
-      # Some forks only have some icons and/or name them slightly differently
-      if [ -f desktop/src/main/assets/icons/icon_$s.png ]; then
-        install -Dm644 desktop/src/main/assets/icons/icon_$s.png \
-          $out/share/icons/hicolor/''${s}x$s/apps/${pname}.png
-      fi
-      if [ -f desktop/src/main/assets/icons/icon_''${s}x$s.png ]; then
-        install -Dm644 desktop/src/main/assets/icons/icon_''${s}x$s.png \
-          $out/share/icons/hicolor/''${s}x$s/apps/${pname}.png
-      fi
-    done
+      for s in 16 32 48 64 128 256; do
+        # Some forks only have some icons and/or name them slightly differently
+        if [ -f desktop/src/main/assets/icons/icon_$s.png ]; then
+          install -Dm644 desktop/src/main/assets/icons/icon_$s.png \
+            $out/share/icons/hicolor/''${s}x$s/apps/${pname}.png
+        fi
+        if [ -f desktop/src/main/assets/icons/icon_''${s}x$s.png ]; then
+          install -Dm644 desktop/src/main/assets/icons/icon_''${s}x$s.png \
+            $out/share/icons/hicolor/''${s}x$s/apps/${pname}.png
+        fi
+      done
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode  # deps
-    ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    mainProgram = pname;
-  } // meta;
-})
+    meta =
+      with lib;
+      {
+        sourceProvenance = with sourceTypes; [
+          fromSource
+          binaryBytecode # deps
+        ];
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ fgaz ];
+        platforms = platforms.all;
+        mainProgram = pname;
+      }
+      // meta;
+  }
+)

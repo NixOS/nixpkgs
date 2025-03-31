@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -9,38 +8,41 @@
 
   # dependencies
   absl-py,
+  distutils,
   h5py,
   ml-dtypes,
   namex,
   numpy,
+  tf2onnx,
+  onnxruntime,
   optree,
   packaging,
-  rich,
-  tensorflow,
   pythonAtLeast,
-  distutils,
+  rich,
+  scikit-learn,
+  tensorflow,
 
   # tests
   dm-tree,
   jax,
-  jaxlib,
   pandas,
   pydot,
   pytestCheckHook,
   tf-keras,
   torch,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.7.0";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qidY1OmlOYPKVoxryx1bEukA7IS6rPV4jqlnuf3y39w=";
+    tag = "v${version}";
+    hash = "sha256-e4jHa+/HAe+bKUngcdF6zpI6+l7NvnjCEtNCAA5QHCo=";
   };
 
   build-system = [
@@ -53,9 +55,12 @@ buildPythonPackage rec {
     ml-dtypes
     namex
     numpy
+    tf2onnx
+    onnxruntime
     optree
     packaging
     rich
+    scikit-learn
     tensorflow
   ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
@@ -66,35 +71,32 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-tree
-    jaxlib
     jax
     pandas
     pydot
     pytestCheckHook
     tf-keras
     torch
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  disabledTests = [
+    # Tries to install the package in the sandbox
+    "test_keras_imports"
 
-  disabledTests =
-    [
-      # Tries to install the package in the sandbox
-      "test_keras_imports"
-
-      # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
-      "test_reloading_default_saved_model"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # AttributeError: module 'numpy' has no attribute 'float128'. Did you mean: 'float16'?
-      "test_spectrogram_error"
-    ];
+    # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
+    "test_reloading_default_saved_model"
+  ];
 
   disabledTestPaths = [
-    # Datasets are downloaded from the internet
+    # These tests succeed when run individually, but crash within the full test suite:
+    # ImportError: /nix/store/4bw0x7j3wfbh6i8x3plmzknrdwdzwfla-abseil-cpp-20240722.1/lib/libabsl_cord_internal.so.2407.0.0:
+    # undefined symbol: _ZN4absl12lts_2024072216strings_internal13StringifySink6AppendESt17basic_string_viewIcSt11char_traitsIcEE
+    "keras/src/export/onnx_test.py"
+
+    # Require internet access
     "integration_tests/dataset_tests"
+    "keras/src/applications/applications_test.py"
 
     # TypeError: test_custom_fit.<locals>.CustomModel.train_step() missing 1 required positional argument: 'data'
     "integration_tests/jax_custom_fit_test.py"
@@ -110,15 +112,8 @@ buildPythonPackage rec {
     # AssertionError: 0 != 2
     "integration_tests/torch_workflow_test.py"
 
-    # Most tests require internet access
-    "keras/src/applications/applications_test.py"
-
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "keras/src/backend/tensorflow/saved_model_test.py"
-    "keras/src/export/export_lib_test.py"
-
-    # KeyError: 'Unable to synchronously open object (bad object header version number)'
-    "keras/src/saving/file_editor_test.py"
   ];
 
   meta = {

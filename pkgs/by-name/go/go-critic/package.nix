@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, nix-update-script
-, go-critic
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  nix-update-script,
+  go-critic,
 }:
 
 buildGoModule rec {
   pname = "go-critic";
-  version = "0.11.5";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "go-critic";
     repo = "go-critic";
     rev = "v${version}";
-    hash = "sha256-KH7jawMd73qdl1S+YQlQGW/2Vj8XjMLJ15Hz0cdwDO4=";
+    hash = "sha256-0AOhq7OhSHub4I6XXL018hg6i2ERkIbZCrO9osNjvHw=";
   };
 
-  vendorHash = "sha256-vBGCFnKKpMcM7RWmT05oPwCItR4QMHhTAZ8x2ejJpcI=";
+  vendorHash = "sha256-yTm5Hhqbk1aJ4ZAR+ie2NnDOAGpjijUKQxZW3Tp9bs8=";
 
   subPackages = [
     "cmd/gocritic"

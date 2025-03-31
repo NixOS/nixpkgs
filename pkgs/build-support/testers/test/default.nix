@@ -1,14 +1,35 @@
-{ testers, lib, pkgs, hello, runCommand, emptyFile, emptyDirectory, ... }:
+{
+  testers,
+  lib,
+  pkgs,
+  hello,
+  runCommand,
+  emptyFile,
+  emptyDirectory,
+  stdenvNoCC,
+  ...
+}:
 let
-  pkgs-with-overlay = pkgs.extend(final: prev: {
-    proof-of-overlay-hello = prev.hello;
-  });
+  pkgs-with-overlay = pkgs.extend (
+    final: prev: {
+      proof-of-overlay-hello = prev.hello;
+    }
+  );
 
   dummyVersioning = {
     revision = "test";
     versionSuffix = "test";
     label = "test";
   };
+
+  overrideStructuredAttrs =
+    enable: drv:
+    drv.overrideAttrs (old: {
+      failed = old.failed.overrideAttrs (oldFailed: {
+        name = oldFailed.name + "${lib.optionalString (!enable) "-no"}-structuredAttrs";
+        __structuredAttrs = enable;
+      });
+    });
 
 in
 lib.recurseIntoAttrs {
@@ -17,6 +38,8 @@ lib.recurseIntoAttrs {
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
+
+  shfmt = pkgs.callPackages ../shfmt/tests.nix { };
 
   runCommand = lib.recurseIntoAttrs {
     bork = pkgs.python3Packages.bork.tests.pytest-network;
@@ -41,87 +64,167 @@ lib.recurseIntoAttrs {
     };
   };
 
-  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
-    name = "runNixOSTest-test";
-    nodes.machine = { pkgs, ... }: {
-      system.nixos = dummyVersioning;
-      environment.systemPackages = [ pkgs.proof-of-overlay-hello pkgs.figlet ];
-    };
-    testScript = ''
-      machine.succeed("hello | figlet >/dev/console")
-    '';
-  });
+  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
+    { lib, ... }:
+    {
+      name = "runNixOSTest-test";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [
+            pkgs.proof-of-overlay-hello
+            pkgs.figlet
+          ];
+        };
+      testScript = ''
+        machine.succeed("hello | figlet >/dev/console")
+      '';
+    }
+  );
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
-  nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, ... }: {
-    name = "nixosTest-test";
-    nodes.machine = { pkgs, ... }: {
-      system.nixos = dummyVersioning;
-      environment.systemPackages = [ pkgs.proof-of-overlay-hello pkgs.figlet ];
-    };
-    testScript = ''
-      machine.succeed("hello | figlet >/dev/console")
-    '';
-  });
+  nixosTest-example = pkgs-with-overlay.testers.nixosTest (
+    { lib, ... }:
+    {
+      name = "nixosTest-test";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [
+            pkgs.proof-of-overlay-hello
+            pkgs.figlet
+          ];
+        };
+      testScript = ''
+        machine.succeed("hello | figlet >/dev/console")
+      '';
+    }
+  );
 
-  testBuildFailure = lib.recurseIntoAttrs {
-    happy = runCommand "testBuildFailure-happy" {
-      failed = testers.testBuildFailure (runCommand "fail" {} ''
-        echo ok-ish >$out
+  testBuildFailure = lib.recurseIntoAttrs rec {
+    happy =
+      runCommand "testBuildFailure-happy"
+        {
+          failed = testers.testBuildFailure (
+            runCommand "fail" { } ''
+              echo ok-ish >$out
 
-        echo failing though
-        echo also stderr 1>&2
-        echo 'line\nwith-\bbackslashes'
-        printf "incomplete line - no newline"
+              echo failing though
+              echo also stderr 1>&2
+              echo 'line\nwith-\bbackslashes'
+              printf "incomplete line - no newline"
 
-        exit 3
-      '');
-    } ''
-      grep -F 'ok-ish' $failed/result
+              exit 3
+            ''
+          );
+        }
+        ''
+          grep -F 'ok-ish' $failed/result
 
-      grep -F 'failing though' $failed/testBuildFailure.log
-      grep -F 'also stderr' $failed/testBuildFailure.log
-      grep -F 'line\nwith-\bbackslashes' $failed/testBuildFailure.log
-      grep -F 'incomplete line - no newline' $failed/testBuildFailure.log
+          grep -F 'failing though' $failed/testBuildFailure.log
+          grep -F 'also stderr' $failed/testBuildFailure.log
+          grep -F 'line\nwith-\bbackslashes' $failed/testBuildFailure.log
+          grep -F 'incomplete line - no newline' $failed/testBuildFailure.log
 
-      [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
 
-      touch $out
-    '';
+          touch $out
+        '';
 
-    helloDoesNotFail = runCommand "testBuildFailure-helloDoesNotFail" {
-      failed = testers.testBuildFailure (testers.testBuildFailure hello);
+    happyStructuredAttrs = overrideStructuredAttrs true happy;
 
-      # Add hello itself as a prerequisite, so we don't try to run this test if
-      # there's an actual failure in hello.
-      inherit hello;
-    } ''
-      echo "Checking $failed/testBuildFailure.log"
-      grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log >/dev/null
-      [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
-      touch $out
-      echo 'All good.'
-    '';
+    helloDoesNotFail =
+      runCommand "testBuildFailure-helloDoesNotFail"
+        {
+          failed = testers.testBuildFailure (testers.testBuildFailure hello);
 
-    multiOutput = runCommand "testBuildFailure-multiOutput" {
-      failed = testers.testBuildFailure (runCommand "fail" {
-        # dev will be the default output
-        outputs = ["dev" "doc" "out"];
-      } ''
-        echo i am failing
-        exit 1
-      '');
-    } ''
-      grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
-      [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          # Add hello itself as a prerequisite, so we don't try to run this test if
+          # there's an actual failure in hello.
+          inherit hello;
+        }
+        ''
+          echo "Checking $failed/testBuildFailure.log"
+          grep -F 'testBuildFailure: The builder did not fail, but a failure was expected' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          touch $out
+          echo 'All good.'
+        '';
 
-      # Checking our note that dev is the default output
-      echo $failed/_ | grep -- '-dev/_' >/dev/null
-      echo 'All good.'
-      touch $out
-    '';
+    multiOutput =
+      runCommand "testBuildFailure-multiOutput"
+        {
+          failed = testers.testBuildFailure (
+            runCommand "fail"
+              {
+                # dev will be the default output
+                outputs = [
+                  "dev"
+                  "doc"
+                  "out"
+                ];
+              }
+              ''
+                echo i am failing
+                exit 1
+              ''
+          );
+        }
+        ''
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+
+          # Checking our note that dev is the default output
+          echo $failed/_ | grep -- '-dev/_' >/dev/null
+          echo 'All good.'
+          touch $out
+        '';
+
+    multiOutputStructuredAttrs = overrideStructuredAttrs true multiOutput;
+
+    sideEffects =
+      runCommand "testBuildFailure-sideEffects"
+        {
+          failed = testers.testBuildFailure (
+            stdenvNoCC.mkDerivation {
+              name = "fail-with-side-effects";
+              src = emptyDirectory;
+
+              postHook = ''
+                echo touching side-effect...
+                # Assert that the side-effect doesn't exist yet...
+                # We're checking that this hook isn't run by expect-failure.sh
+                if [[ -e side-effect ]]; then
+                  echo "side-effect already exists"
+                  exit 1
+                fi
+                touch side-effect
+              '';
+
+              buildPhase = ''
+                echo i am failing
+                exit 1
+              '';
+            }
+          );
+        }
+        ''
+          grep -F 'touching side-effect...' $failed/testBuildFailure.log >/dev/null
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ ! -e side-effect ]]
+
+          touch $out
+        '';
+
+    sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
+
+  testBuildFailure' = lib.recurseIntoAttrs (
+    pkgs.callPackages ../testBuildFailurePrime/tests.nix { inherit overrideStructuredAttrs; }
+  );
 
   testEqualContents = lib.recurseIntoAttrs {
     equalDir = testers.testEqualContents {
@@ -255,4 +358,6 @@ lib.recurseIntoAttrs {
         touch -- "$out"
       '';
   };
+
+  testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
 }

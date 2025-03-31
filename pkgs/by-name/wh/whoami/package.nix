@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "whoami";
-  version = "1.10.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "whoami";
     rev = "v${version}";
-    hash = "sha256-wzxgmysqn4aWAZEaMjMwHdHLe4UZ4nwdNFJw5X7fuKQ=";
+    hash = "sha256-3jzLdCmmts/7S1Oxig9Dg3kRGh/H5l5UD7ztev0yvXY=";
   };
 
-  vendorHash = "sha256-qDfkYIAymkFUtbKka9OLoYjT+S9KhOra2UtOvhoz5Mw=";
+  vendorHash = "sha256-0Qxw+MUYVgzgWB8vi3HBYtVXSq/btfh4ZfV/m1chNrA=";
 
   ldflags = [ "-s" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   doCheck = false;
 

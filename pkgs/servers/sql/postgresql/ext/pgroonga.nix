@@ -1,18 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, postgresql, msgpack-c, groonga, buildPostgresqlExtension, xxHash }:
+{
+  fetchFromGitHub,
+  groonga,
+  lib,
+  msgpack-c,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  stdenv,
+  xxHash,
+}:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pgroonga";
-  version = "3.2.4";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    rev = "${version}";
-    hash = "sha256-ZHACMsQ+hneU68Y2jOpz16Mo0jzgXKaVSCZ/qAqCDdI=";
+    tag = "${version}";
+    hash = "sha256-a5nNtlUiFBuuqWAjIN0gU/FaoV3VpJh+/fab8R/77dw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ msgpack-c groonga xxHash ];
+  buildInputs = [
+    msgpack-c
+    groonga
+    xxHash
+  ];
 
   makeFlags = [
     "HAVE_XXHASH=1"
@@ -20,7 +34,7 @@ buildPostgresqlExtension rec {
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
@@ -30,8 +44,8 @@ buildPostgresqlExtension rec {
     '';
     homepage = "https://pgroonga.github.io/";
     changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [ DerTim1 ];
   };
 }

@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.31";
+  version = "1.6.35";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-INjTObj7H2x5zuIFWdxv+13+6E255Yn06yFPbSyHPvU=";
+    sha256 = "sha256-60UpMX7sgY78RDUt3R+Vn9IIgr7RrikqV4i9eklm98E=";
   };
 
   configureFlags = [

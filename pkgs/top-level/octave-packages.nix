@@ -11,12 +11,13 @@
 # Like python-packages.nix, packages from top-level.nix are not in the scope
 # of the `callPackage` used for packages here. So, when we do need packages
 # from outside, we can `inherit` them from `pkgs`.
-{ pkgs
-, lib
-, stdenv
-, fetchurl
-, newScope
-, octave
+{
+  pkgs,
+  lib,
+  stdenv,
+  fetchurl,
+  newScope,
+  octave,
 }:
 
 let
@@ -29,7 +30,8 @@ let
     ;
 in
 
-makeScope newScope (self:
+makeScope newScope (
+  self:
   let
     callPackage = self.callPackage;
 
@@ -41,18 +43,23 @@ makeScope newScope (self:
 
     # Given a list of required Octave package derivations, get a list of
     # ALL required Octave packages needed for the ones specified to run.
-    computeRequiredOctavePackages = drvs: let
-      # Check whether a derivation is an octave package
-      hasOctavePackage = drv: drv?isOctavePackage;
-      packages = filter hasOctavePackage drvs;
-    in unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
+    computeRequiredOctavePackages =
+      drvs:
+      let
+        # Check whether a derivation is an octave package
+        hasOctavePackage = drv: drv ? isOctavePackage;
+        packages = filter hasOctavePackage drvs;
+      in
+      unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
 
-  in {
+  in
+  {
 
     inherit callPackage buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
-      writeRequiredOctavePackagesHook;
+      writeRequiredOctavePackagesHook
+      ;
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino-core-unwrapped;
@@ -131,7 +138,12 @@ makeScope newScope (self:
     lssa = callPackage ../development/octave-modules/lssa { };
 
     ltfat = callPackage ../development/octave-modules/ltfat {
-      inherit (octave) fftw fftwSinglePrec portaudio jdk;
+      inherit (octave)
+        fftw
+        fftwSinglePrec
+        portaudio
+        jdk
+        ;
       inherit (pkgs) fftwFloat fftwLongDouble;
     };
 
@@ -218,4 +230,5 @@ makeScope newScope (self:
       inherit (pkgs) zeromq autoreconfHook;
     };
 
-  })
+  }
+)

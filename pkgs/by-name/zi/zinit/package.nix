@@ -1,48 +1,70 @@
-{ stdenvNoCC, lib, fetchFromGitHub, installShellFiles }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zinit";
   version = "3.13.1";
+
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
-    repo = pname;
-    rev = "v${version}";
+    repo = "zinit";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fnBV0LmC/wJm0pOITJ1mhiBqsg2F8AQJWvn0p/Bgo5Q=";
   };
-  # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
-  dontBuild = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   strictDeps = true;
+
   nativeBuildInputs = [ installShellFiles ];
+
   installPhase = ''
-    outdir="$out/share/$pname"
+    runHook preInstall
 
-    cd "$src"
+    # Source files
+    mkdir -p $out/share/zinit
+    install -m0644 zinit{,-side,-install,-autoload}.zsh _zinit $out/share/zinit
+    install -m0755 share/git-process-output.zsh $out/share/zinit
 
-    # Zplugin's source files
-    install -dm0755 "$outdir"
-    # Installing backward compatibility layer
-    install -m0644 zinit{,-side,-install,-autoload}.zsh "$outdir"
-    install -m0755 share/git-process-output.zsh "$outdir"
-
-    installManPage doc/zinit.1
-
-    # Zplugin autocompletion
+    # Autocompletion
     installShellCompletion --zsh _zinit
 
-    #TODO:Zplugin-module files
-    # find zmodules/ -type d -exec install -dm 755 "{}" "$outdir/{}" \;
-    # find zmodules/ -type f -exec install -m 744 "{}" "$outdir/{}" \;
-
-  '';
-  postInstall = ''
+    # Manpage
+    mkdir -p ${placeholder "man"}/share/man/man{1..9}
     installManPage doc/zinit.1
-  '';
-  #TODO:doc output
 
-  meta = with lib; {
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/zinit/zinit.zsh \
+      --replace-fail zinit.1 zinit.1.gz \
+      --replace-fail "\''${ZINIT[BIN_DIR]}/doc" ${placeholder "man"}/share/man/man1 \
+      --replace-fail "ZINIT[MAN_DIR]:=\''${ZPFX}/man" "ZINIT[MAN_DIR]:=${placeholder "man"}/share/man"
+  '';
+
+  #TODO: output doc through zshelldoc
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      pasqui23
+      sei40kr
+      moraxyc
+    ];
   };
-}
+})

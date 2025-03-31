@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, zlib, libpng, libjpeg, libwebp, libGLU, libGL, glm
-, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  zlib,
+  libpng,
+  libjpeg,
+  libwebp,
+  libGLU,
+  libGL,
+  glm,
+  libX11,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libXcomposite,
+  slop,
+  icu,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +32,35 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/tZqSJnKe8GiffSz9VIFKuxMktRld+hA4ZWP4TZQrlg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib libpng libjpeg libwebp libGLU libGL glm
-      libX11 libXext libXfixes libXrandr libXcomposite slop icu ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    zlib
+    libpng
+    libjpeg
+    libwebp
+    libGLU
+    libGL
+    glm
+    libX11
+    libXext
+    libXfixes
+    libXrandr
+    libXcomposite
+    slop
+    icu
+  ];
+
+  patches = [
+    # Use C++17 as required by icu
+    (fetchpatch {
+      name = "maim-c++-17.patch";
+      url = "https://github.com/naelstrof/maim/commit/e7fe09b6734baeb59081b8805be542c92178cf0f.patch";
+      sha256 = "0z9zvrr8msfli88jmhxm5knysi385s48j2w7zpacc7qhf4c5zh8c";
+    })
+  ];
 
   doCheck = false;
 

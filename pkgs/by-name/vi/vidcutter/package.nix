@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "ozmartian";
     repo = "vidcutter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MCltdvXgsZgPh0ezGvWFEa5vZVDBc6r0WxvXSLf4x2Y=";
   };
 

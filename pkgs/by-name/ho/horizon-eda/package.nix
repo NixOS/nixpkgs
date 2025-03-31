@@ -11,7 +11,7 @@
 let
   base = callPackage ./base.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (base)
     pname
     version

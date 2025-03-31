@@ -1,11 +1,12 @@
-{ lib
-, curl
-, rustPlatform
-, fetchurl
-, openssl
-, stdenv
-, pkg-config
-, darwin
+{
+  lib,
+  curl,
+  rustPlatform,
+  fetchurl,
+  openssl,
+  stdenv,
+  pkg-config,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoHash = "sha256-8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iDyGPE1BEh1uIf4K6ijtlqugWFtfM/2GGda0u/lCLJ0=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;

@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, alsa-lib, caps,
-  ladspaH
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  caps,
+  ladspaH,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bassdr";
     repo = "alsaequal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jI+w/jCFslQSNeIS7mwb+LZSawU4XjbSNNgpvuShH1g=";
   };
 

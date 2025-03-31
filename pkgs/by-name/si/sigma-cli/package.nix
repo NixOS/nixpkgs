@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bBKNKgS3V/sZ8lZMk2ZwTzOVaVecSR9GhNP2FNkWbw0=";
+    tag = "v${version}";
+    hash = "sha256-ywf7k2RsrAMUrDUv1nxTEixmP+NjtIyuBDhj4l9ZQCE=";
   };
 
   postPatch = ''
@@ -33,12 +33,16 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-backend-opensearch
     pysigma-backend-qradar
     pysigma-backend-splunk
+    pysigma-backend-loki
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
     pysigma-pipeline-windows
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_plugin_list"

@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dog";
@@ -11,7 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
+    sed -i '40i #include <time.h>' dog.c
   '';
 
   installPhase = ''

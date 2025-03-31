@@ -1,20 +1,23 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, gd, ncurses
-, sqlite
-, check
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gd,
+  ncurses,
+  sqlite,
+  check,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "vergoh";
-    repo = pname;
+    repo = "vnstat";
     rev = "v${version}";
-    sha256 = "sha256-JwVYhmCscEdbwNGa+aKdOt8cIclpvjl4tmWFU3zhcwc=";
+    sha256 = "sha256-Xd3s4Wrtfwis0dxRijeWhfloHcXPUNAj0P91uWi1C3M=";
   };
 
   postPatch = ''
@@ -22,7 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gd ncurses sqlite ];
+  buildInputs = [
+    gd
+    ncurses
+    sqlite
+  ];
 
   nativeCheckInputs = [ check ];
 

@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, python3
-, gettext
-, appstream-glib
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  python3,
+  gettext,
+  appstream-glib,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "XeqHVdTQ7PTzxkjwfzS/BTR7+k/M69sfUKdRXGOTmZE=";
+  outputHash = "sha256-OjHj4h3n+/ozbrLaiH4bGppQ+2LA2RB/sZQVO9EPOEw=";
 
   passthru = {
     updateScript = gnome.updateScript {

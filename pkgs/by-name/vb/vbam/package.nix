@@ -1,33 +1,40 @@
-{ lib, stdenv
-, cairo
-, cmake
-, fetchFromGitHub
-, ffmpeg
-, gettext
-, wxGTK32
-, gtk3
-, libGLU, libGL
-, openal
-, pkg-config
-, SDL2
-, sfml
-, zip
-, zlib
-, wrapGAppsHook3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  cairo,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  gettext,
+  wxGTK32,
+  gtk3,
+  libGLU,
+  libGL,
+  openal,
+  pkg-config,
+  SDL2,
+  sfml_2,
+  zip,
+  zlib,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "visualboyadvance-m";
   version = "2.1.11";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
-    rev = "v${version}";
-    sha256 = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     cairo
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
     libGL
     openal
     SDL2
-    sfml
+    sfml_2
     zip
     zlib
     wxGTK32
@@ -46,18 +53,21 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_FFMPEG='true'"
-    "-DENABLE_LINK='true'"
-    "-DSYSCONFDIR=etc"
-    "-DENABLE_SDL='true'"
+    (lib.cmakeBool "ENABLE_FFMPEG" true)
+    (lib.cmakeBool "ENABLE_LINK" true)
+    (lib.cmakeFeature "SYSCONFDIR" "etc")
+    (lib.cmakeBool "ENABLE_SDL" true)
   ];
 
-  meta =  with lib; {
+  meta = {
     description = "Merge of the original Visual Boy Advance forks";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus netali ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
+      lassulus
+      netali
+    ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
     mainProgram = "visualboyadvance-m";
   };
-}
+})

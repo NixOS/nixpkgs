@@ -13,6 +13,7 @@ let
 
   user = cfg.user;
   group = cfg.group;
+  php = lib.getExe pkgs.php82;
 
   # shell script for local administration
   artisan = pkgs.writeScriptBin "agorakit" ''
@@ -25,7 +26,7 @@ let
         exec "$@"
       fi
     }
-    sudo ${lib.getExe pkgs.php} artisan "$@"
+    sudo ${php} artisan "$@"
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -367,10 +368,10 @@ in
               index = "index.php";
               tryFiles = "$uri $uri/ /index.php?$query_string";
             };
-            "~ \.php$".extraConfig = ''
+            "~ \\.php$".extraConfig = ''
               fastcgi_pass unix:${config.services.phpfpm.pools."agorakit".socket};
             '';
-            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+            "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
               extraConfig = "expires 365d;";
             };
           };
@@ -447,9 +448,9 @@ in
           fi
 
           # migrate & seed db
-          ${pkgs.php}/bin/php artisan key:generate --force
-          ${pkgs.php}/bin/php artisan migrate --force
-          ${pkgs.php}/bin/php artisan config:cache
+          ${php} artisan key:generate --force
+          ${php} artisan migrate --force
+          ${php} artisan config:cache
         '';
     };
 

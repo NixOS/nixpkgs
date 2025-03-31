@@ -1,11 +1,26 @@
-{ lib, stdenv, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  asciidoc,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  libxslt,
+  libtraceevent,
+  libtracefs,
+  zstd,
+  sourceHighlight,
+  gitUpdater,
+}:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
   version = "3.3.1";
 
   src = fetchzip {
-    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
-    hash   = "sha256-kEji3qDqQsSK0tL8Fx2ycSd2lTXBXOHHTvsb6XDNSa8=";
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
+    hash = "sha256-kEji3qDqQsSK0tL8Fx2ycSd2lTXBXOHHTvsb6XDNSa8=";
   };
 
   # Don't build and install html documentation
@@ -15,13 +30,31 @@ stdenv.mkDerivation rec {
     patchShebangs check-manpages.sh
   '';
 
-  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
+  nativeBuildInputs = [
+    asciidoc
+    libxslt
+    pkg-config
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    sourceHighlight
+  ];
 
-  buildInputs = [ libtraceevent libtracefs zstd ];
+  buildInputs = [
+    libtraceevent
+    libtracefs
+    zstd
+  ];
 
-  outputs = [ "out" "lib" "dev" "man" "devman" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "devman"
+  ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
@@ -62,9 +95,16 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     mainProgram = "trace-cmd";
-    homepage    = "https://www.trace-cmd.org/";
-    license     = with licenses; [ lgpl21Only gpl2Only ];
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
+    homepage = "https://www.trace-cmd.org/";
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      thoughtpolice
+      basvandijk
+      wentasah
+    ];
   };
 }

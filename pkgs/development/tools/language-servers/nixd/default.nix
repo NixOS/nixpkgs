@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost182,
+  boost,
   gtest,
   llvmPackages,
   meson,
   ninja,
-  nix,
+  nixForLinking,
   nix-update-script,
   nixd,
   nixf,
@@ -21,13 +21,13 @@
 
 let
   common = rec {
-    version = "2.5.1";
+    version = "2.6.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
-      rev = version;
-      hash = "sha256-5+ul4PxMgPkmGLB8CYpJcIcRDY/pJgByvjIHDA1Gs5A=";
+      tag = version;
+      hash = "sha256-kxCUBgdIulW68H0ATOXsWp5977HFIF7wTw3qYYfgCAQ=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +72,7 @@ in
 
       buildInputs = [
         gtest
-        boost182
+        boost
         nlohmann_json
       ];
 
@@ -101,12 +101,12 @@ in
       ];
 
       buildInputs = [
-        nix
+        nixForLinking
         gtest
-        boost182
+        boost
       ];
 
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,17 +127,17 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nix
+        nixForLinking
         nixf
         nixt
         llvmPackages.llvm
         gtest
-        boost182
+        boost
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
 
-      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+      env.CXXFLAGS = "-include ${nixForLinking.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

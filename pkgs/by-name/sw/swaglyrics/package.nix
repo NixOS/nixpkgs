@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ncurses
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ncurses,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "swaglyrics";
   version = "unstable-2021-06-17";
   format = "setuptools";
@@ -30,27 +31,30 @@ python3.pkgs.buildPythonApplication rec {
     unidecode
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    blinker
-    flask
-    flask-testing
-    mock
-    pytestCheckHook
-  ] ++ [
-    ncurses
-  ];
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      blinker
+      flask
+      flask-testing
+      mock
+      pytestCheckHook
+    ]
+    ++ [
+      ncurses
+    ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
   disabledTests = [
-     # Disable tests which touch network
-     "test_database_for_unsupported_song"
-     "test_that_lyrics_works_for_unsupported_songs"
-     "test_that_get_lyrics_works"
-     "test_lyrics_are_shown_in_tab"
-     "test_songchanged_can_raise_songplaying"
+    # Disable tests which touch network
+    "test_database_for_unsupported_song"
+    "test_that_lyrics_works_for_unsupported_songs"
+    "test_that_get_lyrics_works"
+    "test_lyrics_are_shown_in_tab"
+    "test_songchanged_can_raise_songplaying"
   ];
 
   pythonImportsCheck = [

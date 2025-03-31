@@ -1,9 +1,18 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 let
   version = "1.3.9";
 
-  mkPretendard = { pname, typeface, hash }:
+  mkPretendard =
+    {
+      pname,
+      typeface,
+      hash,
+    }:
     stdenvNoCC.mkDerivation {
       inherit pname version;
 

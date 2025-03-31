@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "legacy-cgi";
-  version = "2.6.1";
+  version = "2.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "legacy-cgi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hhWZoRswkuwvgkcKthNhMkPPhhoRH4TjdNp+orluQTQ=";
+    tag = "v${version}";
+    hash = "sha256-unVD8gUnF0sP360y/wWT2AkicEZ8nKy7tUK5tcCpQuc=";
   };
 
   build-system = [ poetry-core ];

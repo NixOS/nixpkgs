@@ -1,6 +1,13 @@
 # cd nixpkgs
 # nix-build -A tests.testers.hasPkgConfigModules
-{ lib, testers, miniz, zlib, openssl, runCommand }:
+{
+  lib,
+  testers,
+  miniz,
+  zlib,
+  openssl,
+  runCommand,
+}:
 
 lib.recurseIntoAttrs {
 
@@ -9,15 +16,17 @@ lib.recurseIntoAttrs {
     versionCheck = true;
   };
 
-  miniz-versions-mismatch = testers.testBuildFailure (testers.hasPkgConfigModules {
-    package = miniz;
-    version = "1.2.3";  # Deliberately-incorrect version number
-    versionCheck = true;
-  });
+  miniz-versions-mismatch = testers.testBuildFailure (
+    testers.hasPkgConfigModules {
+      package = miniz;
+      version = "1.2.3"; # Deliberately-incorrect version number
+      versionCheck = true;
+    }
+  );
 
   miniz-no-versionCheck = testers.hasPkgConfigModules {
     package = miniz;
-    version = "1.2.3";  # Deliberately-incorrect version number
+    version = "1.2.3"; # Deliberately-incorrect version number
   };
 
   zlib-has-zlib = testers.hasPkgConfigModules {
@@ -38,28 +47,31 @@ lib.recurseIntoAttrs {
     package = openssl;
   };
 
-  zlib-does-not-have-ylib = runCommand "zlib-does-not-have-ylib" {
-    failed = testers.testBuildFailure (
-      testers.hasPkgConfigModules {
-      package = zlib;
-      moduleNames = [ "ylib" ];
+  zlib-does-not-have-ylib =
+    runCommand "zlib-does-not-have-ylib"
+      {
+        failed = testers.testBuildFailure (
+          testers.hasPkgConfigModules {
+            package = zlib;
+            moduleNames = [ "ylib" ];
+          }
+        );
       }
-    );
-  } ''
-    echo 'it logs a relevant error message'
-    {
-      grep -F "pkg-config module ylib was not found" $failed/testBuildFailure.log
-    }
+      ''
+        echo 'it logs a relevant error message'
+        {
+          grep -F "pkg-config module ylib was not found" $failed/testBuildFailure.log
+        }
 
-    echo 'it logs which pkg-config modules are available, to be helpful'
-    {
-      # grep -v: the string zlib does also occur in a store path in an earlier message, which isn't particularly helpful
-      grep -v "checking pkg-config module" < $failed/testBuildFailure.log \
-        | grep -F "zlib"
-    }
+        echo 'it logs which pkg-config modules are available, to be helpful'
+        {
+          # grep -v: the string zlib does also occur in a store path in an earlier message, which isn't particularly helpful
+          grep -v "checking pkg-config module" < $failed/testBuildFailure.log \
+            | grep -F "zlib"
+        }
 
-    # done
-    touch $out
-  '';
+        # done
+        touch $out
+      '';
 
 }

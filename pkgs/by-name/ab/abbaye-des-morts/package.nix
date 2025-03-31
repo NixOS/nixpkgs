@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, SDL2_mixer }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+}:
 
 stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
@@ -11,15 +18,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "DESTDIR=" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR="
+  ];
 
-  preBuild = lib.optionalString stdenv.cc.isClang
-    ''
-      substituteInPlace Makefile \
-        --replace -fpredictive-commoning ""
-    '';
+  preBuild = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace Makefile \
+      --replace -fpredictive-commoning ""
+  '';
 
   preInstall = ''
     mkdir -p $out/bin

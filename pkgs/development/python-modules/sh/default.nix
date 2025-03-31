@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "2.0.7";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
-    rev = "refs/tags/${version}";
-    hash = "sha256-O0jS/hO31ou9h0xsMSKAy76vEELjryaHKbvdfzYevJc=";
+    tag = version;
+    hash = "sha256-LeqhnQD3CqvKauf9JYN2jFO4gfNyVGeHNU9XzNrHHlk=";
   };
 
   nativeBuildInputs = [ poetry-core ];

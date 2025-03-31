@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libtasn1
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gettext
-, libffi
-, libintl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libtasn1,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gettext,
+  libffi,
+  libintl,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +20,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "p11-glue";
-    repo = pname;
+    repo = "p11-kit";
     rev = version;
     hash = "sha256-2xDUvXGsF8x42uezgnvOXLVUdNNHcaE042HDDEJeplc=";
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -51,18 +56,15 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "man" true)
     (lib.mesonEnable "systemd" false)
     (lib.mesonOption "bashcompdir" "${placeholder "bin"}/share/bash-completion/completions")
-    (lib.mesonOption "trust_paths" (lib.concatStringsSep ":" [
-      "/etc/ssl/trust-source" # p11-kit trust source
-      "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
-      "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
-      "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
-      "/etc/ssl/cert.pem" # Darwin/macOS
-    ]))
-  ];
-
-  ${if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 then "mesonCheckFlags" else null} = [
-    # Tests regularly exceed the default timeout on `x86_64-darwin`.
-    "--timeout-multiplier=0"
+    (lib.mesonOption "trust_paths" (
+      lib.concatStringsSep ":" [
+        "/etc/ssl/trust-source" # p11-kit trust source
+        "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
+        "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
+        "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
+        "/etc/ssl/cert.pem" # Darwin/macOS
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -93,6 +95,11 @@ stdenv.mkDerivation rec {
       "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
     ];
     platforms = platforms.all;
+    badPlatforms = [
+      # https://github.com/p11-glue/p11-kit/issues/355#issuecomment-778777141
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     license = licenses.bsd3;
+    mainProgram = "p11-kit";
   };
 }

@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, lcms
-, cmake
-, pkg-config
-, qt6
-, wrapGAppsHook3
-, openjpeg
-, tbb_2021_11
-, blend2d
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lcms,
+  cmake,
+  pkg-config,
+  qt6,
+  wrapGAppsHook3,
+  openjpeg,
+  tbb_2021_11,
+  blend2d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdf4qt";
-  version = "1.4.0.0";
+  version = "1.5.0.0";
 
   src = fetchFromGitHub {
     owner = "JakubMelka";
     repo = "PDF4QT";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NlIy/C4uHRG5wwXPuqCShe113qhhsQ5jp50zrOLLA2c=";
+    hash = "sha256-ELdmnOEKFGCtuf240R/0M6r8aPwRQiXurAxrqcCZvOI=";
   };
 
   patches = [

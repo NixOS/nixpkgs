@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fblog";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "brocode";
-    repo = pname;
+    repo = "fblog";
     rev = "v${version}";
     hash = "sha256-YOHLw8YCgOGB1Nn2tD+EnicKd/tiMk07OWv+49btbpw=";
   };
 
-  cargoHash = "sha256-+rhrvZ8EOYAFSvAvGyUwlDCWXVqgXPdmugBbrn12yLg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rMpqf3UE/vEiLkocEwVjSCYrJKrUufUjZ9ldlBY86yI=";
 
   meta = with lib; {
     description = "Small command-line JSON log viewer";

@@ -1,19 +1,27 @@
-{lib, stdenv, fetchFromGitHub, ghostscript}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ghostscript,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lout";
-  version = "3.43";
+  version = "3.43.1";
 
   src = fetchFromGitHub {
     owner = "william8000";
-    repo = pname;
+    repo = "lout";
     rev = version;
-    hash = "sha256-YUFrlM7BnDlG1rUV90yBvWG6lOKW5qKxs/xdq6I/kI0=";
+    hash = "sha256-bXLhkJqhv8pftDZYv6vn9ycy5u3vde+m3gCPvWJz2M8=";
   };
 
   buildInputs = [ ghostscript ];
 
-  makeFlags = [ "PREFIX=$(out)/" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "PREFIX=$(out)/"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = {
     description = "Document layout system similar in style to LaTeX";

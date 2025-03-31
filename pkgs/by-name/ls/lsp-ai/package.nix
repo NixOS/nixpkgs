@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "SilasMarvin";
     repo = "lsp-ai";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mBbaJn4u+Wlu/Y4G4a6YUBWnmN143INAGm0opiAjnIk=";
   };
 
@@ -49,13 +49,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_refactor_action_sequence"
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "hf-hub-0.3.2" = "sha256-1AcishEVkTzO3bU0/cVBI2hiCFoQrrPduQ1diMHuEwo=";
-      "tree-sitter-zig-0.0.1" = "sha256-UXJCh8GvXzn+sssTrIsLViXD3TiBZhLFABYCKM+fNMQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KR6BmYj3q9w0yGHFq9+l1x989XjiG3mkaZiyDGCYWPA=";
 
   nativeBuildInputs = [
     pkg-config

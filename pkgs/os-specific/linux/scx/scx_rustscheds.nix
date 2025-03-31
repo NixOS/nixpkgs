@@ -11,8 +11,9 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";
-  inherit (scx-common) version src;
+  inherit (scx-common) version src patches;
 
+  useFetchCargoVendor = true;
   inherit (scx-common.versionInfo.scx) cargoHash;
 
   # Copy compiled headers and libs from scx.cscheds

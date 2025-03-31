@@ -1,11 +1,15 @@
-{ stdenv
-, craftos-pc
-, gnugrep
+{
+  stdenv,
+  craftos-pc,
+  gnugrep,
 }:
 stdenv.mkDerivation {
   name = "craftos-pc-test-eval-periphemu";
   meta.timeout = 60;
-  nativeBuildInputs = [ craftos-pc gnugrep ];
+  nativeBuildInputs = [
+    craftos-pc
+    gnugrep
+  ];
   buildCommand = ''
     export HOME=$(pwd)
     mkdir $HOME/.local $HOME/.config

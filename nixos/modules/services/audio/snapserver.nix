@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   name = "snapserver";
@@ -24,23 +30,26 @@ let
     example = "flac";
   };
 
-  streamToOption = name: opt:
+  streamToOption =
+    name: opt:
     let
-      os = val:
-        lib.optionalString (val != null) "${val}";
-      os' = prefix: val:
-        lib.optionalString (val != null) (prefix + "${val}");
-      toQueryString = key: value:
-        "&${key}=${value}";
+      os = val: lib.optionalString (val != null) "${val}";
+      os' = prefix: val: lib.optionalString (val != null) (prefix + "${val}");
+      toQueryString = key: value: "&${key}=${value}";
     in
-      "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
-        + os' "&sampleformat=" opt.sampleFormat + os' "&codec=" opt.codec
-        + lib.concatStrings (lib.mapAttrsToList toQueryString opt.query) + "\"";
+    "--stream.stream=\"${opt.type}://"
+    + os opt.location
+    + "?"
+    + os' "name=" name
+    + os' "&sampleformat=" opt.sampleFormat
+    + os' "&codec=" opt.codec
+    + lib.concatStrings (lib.mapAttrsToList toQueryString opt.query)
+    + "\"";
 
-  optionalNull = val: ret:
-    lib.optional (val != null) ret;
+  optionalNull = val: ret: lib.optional (val != null) ret;
 
-  optionString = lib.concatStringsSep " " (lib.mapAttrsToList streamToOption cfg.streams
+  optionString = lib.concatStringsSep " " (
+    lib.mapAttrsToList streamToOption cfg.streams
     # global options
     ++ [ "--stream.bind_to_address=${cfg.listenAddress}" ]
     ++ [ "--stream.port=${toString cfg.port}" ]
@@ -53,17 +62,24 @@ let
     ++ [ "--tcp.enabled=${toString cfg.tcp.enable}" ]
     ++ lib.optionals cfg.tcp.enable [
       "--tcp.bind_to_address=${cfg.tcp.listenAddress}"
-      "--tcp.port=${toString cfg.tcp.port}" ]
-     # http json rpc
+      "--tcp.port=${toString cfg.tcp.port}"
+    ]
+    # http json rpc
     ++ [ "--http.enabled=${toString cfg.http.enable}" ]
     ++ lib.optionals cfg.http.enable [
       "--http.bind_to_address=${cfg.http.listenAddress}"
       "--http.port=${toString cfg.http.port}"
-    ] ++ lib.optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\"");
+    ]
+    ++ lib.optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\""
+  );
 
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "snapserver" "controlPort" ]
+      [ "services" "snapserver" "tcp" "port" ]
+    )
   ];
 
   ###### interface
@@ -196,62 +212,79 @@ in {
       };
 
       streams = lib.mkOption {
-        type = with lib.types; attrsOf (submodule {
-          options = {
-            location = lib.mkOption {
-              type = lib.types.oneOf [ lib.types.path lib.types.str ];
-              description = ''
-                For type `pipe` or `file`, the path to the pipe or file.
-                For type `librespot`, `airplay` or `process`, the path to the corresponding binary.
-                For type `tcp`, the `host:port` address to connect to or listen on.
-                For type `meta`, a list of stream names in the form `/one/two/...`. Don't forget the leading slash.
-                For type `alsa`, use an empty string.
-              '';
-              example = lib.literalExpression ''
-                "/path/to/pipe"
-                "/path/to/librespot"
-                "192.168.1.2:4444"
-                "/MyTCP/Spotify/MyPipe"
-              '';
+        type =
+          with lib.types;
+          attrsOf (submodule {
+            options = {
+              location = lib.mkOption {
+                type = lib.types.oneOf [
+                  lib.types.path
+                  lib.types.str
+                ];
+                description = ''
+                  For type `pipe` or `file`, the path to the pipe or file.
+                  For type `librespot`, `airplay` or `process`, the path to the corresponding binary.
+                  For type `tcp`, the `host:port` address to connect to or listen on.
+                  For type `meta`, a list of stream names in the form `/one/two/...`. Don't forget the leading slash.
+                  For type `alsa`, use an empty string.
+                '';
+                example = lib.literalExpression ''
+                  "/path/to/pipe"
+                  "/path/to/librespot"
+                  "192.168.1.2:4444"
+                  "/MyTCP/Spotify/MyPipe"
+                '';
+              };
+              type = lib.mkOption {
+                type = lib.types.enum [
+                  "pipe"
+                  "librespot"
+                  "airplay"
+                  "file"
+                  "process"
+                  "tcp"
+                  "alsa"
+                  "spotify"
+                  "meta"
+                ];
+                default = "pipe";
+                description = ''
+                  The type of input stream.
+                '';
+              };
+              query = lib.mkOption {
+                type = attrsOf str;
+                default = { };
+                description = ''
+                  Key-value pairs that convey additional parameters about a stream.
+                '';
+                example = lib.literalExpression ''
+                  # for type == "pipe":
+                  {
+                    mode = "create";
+                  };
+                  # for type == "process":
+                  {
+                    params = "--param1 --param2";
+                    logStderr = "true";
+                  };
+                  # for type == "tcp":
+                  {
+                    mode = "client";
+                  }
+                  # for type == "alsa":
+                  {
+                    device = "hw:0,0";
+                  }
+                '';
+              };
+              inherit sampleFormat;
+              inherit codec;
             };
-            type = lib.mkOption {
-              type = lib.types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
-              default = "pipe";
-              description = ''
-                The type of input stream.
-              '';
-            };
-            query = lib.mkOption {
-              type = attrsOf str;
-              default = {};
-              description = ''
-                Key-value pairs that convey additional parameters about a stream.
-              '';
-              example = lib.literalExpression ''
-                # for type == "pipe":
-                {
-                  mode = "create";
-                };
-                # for type == "process":
-                {
-                  params = "--param1 --param2";
-                  logStderr = "true";
-                };
-                # for type == "tcp":
-                {
-                  mode = "client";
-                }
-                # for type == "alsa":
-                {
-                  device = "hw:0,0";
-                }
-              '';
-            };
-            inherit sampleFormat;
-            inherit codec;
-          };
-        });
-        default = { default = {}; };
+          });
+        default = {
+          default = { };
+        };
         description = ''
           The definition for an input source.
         '';
@@ -269,22 +302,32 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     warnings =
       # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
-      lib.filter (w: w != "") (lib.mapAttrsToList (k: v: lib.optionalString (v.type == "spotify") ''
-        services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
-      '') cfg.streams);
+      lib.filter (w: w != "") (
+        lib.mapAttrsToList (
+          k: v:
+          lib.optionalString (v.type == "spotify") ''
+            services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
+          ''
+        ) cfg.streams
+      );
 
     systemd.services.snapserver = {
-      after = [ "network.target" "nss-lookup.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
       description = "Snapserver";
       wantedBy = [ "multi-user.target" ];
-      before = [ "mpd.service" "mopidy.service" ];
+      before = [
+        "mpd.service"
+        "mopidy.service"
+      ];
 
       serviceConfig = {
         DynamicUser = true;

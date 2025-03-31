@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 unpackPhase
 cd source
 # this helper downloads the videojs files and checks their checksums

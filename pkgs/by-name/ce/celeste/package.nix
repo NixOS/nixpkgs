@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, darwin
-, just
-, pkg-config
-, wrapGAppsHook4
-, cairo
-, dbus
-, gdk-pixbuf
-, glib
-, graphene
-, gtk4
-, libadwaita
-, librclone
-, pango
-, rclone
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
+  just,
+  pkg-config,
+  wrapGAppsHook4,
+  cairo,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  graphene,
+  gtk4,
+  libadwaita,
+  librclone,
+  pango,
+  rclone,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,10 +30,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
-  cargoHash = "sha256-nlYkFgm5r6nAbJvtrXW2VxzVYq1GrSs8bzHYWOglL1c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OBGDnhpVLOPdYhofWfeaueklt7KBkLhM02JNvuvUQ2Q=";
 
   postPatch = ''
-    pushd $cargoDepsCopy/librclone-sys
+    pushd $cargoDepsCopy/librclone-sys-*
     oldHash=$(sha256sum build.rs | cut -d " " -f 1)
     patch -p2 < ${./librclone-path.patch}
     substituteInPlace build.rs \
@@ -56,24 +58,28 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    cairo
-    dbus
-    gdk-pixbuf
-    glib
-    graphene
-    gtk4
-    libadwaita
-    librclone
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      cairo
+      dbus
+      gdk-pixbuf
+      glib
+      graphene
+      gtk4
+      libadwaita
+      librclone
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.Security
+    ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Wno-error=incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
 
   preFixup = ''
     gappsWrapperArgs+=(

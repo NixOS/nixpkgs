@@ -63,8 +63,7 @@ buildGoModule rec {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
     };
 
     generator = callPackage ./generator.nix { inherit src version; };

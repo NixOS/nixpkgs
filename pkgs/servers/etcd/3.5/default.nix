@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  symlinkJoin,
+  nixosTests,
+  k3s,
+}:
 
 let
   version = "3.5.16";
@@ -14,7 +21,9 @@ let
     hash = etcdSrcHash;
   };
 
-  CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+  };
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
@@ -24,10 +33,15 @@ let
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGoModule rec {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdServerVendorHash;
 
@@ -47,7 +61,12 @@ let
   etcdutl = buildGoModule rec {
     pname = "etcdutl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdUtlVendorHash;
 
@@ -57,7 +76,12 @@ let
   etcdctl = buildGoModule rec {
     pname = "etcdctl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdCtlVendorHash;
 

@@ -1,6 +1,30 @@
-{ stdenv, lib, fetchurl, perlPackages, makeWrapper, perl, which, nx-libs
-, util-linux, coreutils, glibc, gawk, gnused, gnugrep, findutils, xorg
-, nettools, iproute2, bc, procps, psmisc, lsof, pwgen, openssh, sshfs, bash
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perlPackages,
+  makeWrapper,
+  perl,
+  which,
+  nx-libs,
+  util-linux,
+  coreutils,
+  glibc,
+  gawk,
+  gnused,
+  gnugrep,
+  findutils,
+  xorg,
+  nettools,
+  iproute2,
+  bc,
+  procps,
+  psmisc,
+  lsof,
+  pwgen,
+  openssh,
+  sshfs,
+  bash,
 }:
 
 let
@@ -12,10 +36,13 @@ let
     sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
-  x2go-perl = perlPackages.buildPerlPackage rec {
+  x2go-perl = perlPackages.buildPerlPackage {
     pname = "X2Go";
     inherit version src;
-    makeFlags = [ "-f" "Makefile.perl" ];
+    makeFlags = [
+      "-f"
+      "Makefile.perl"
+    ];
     patchPhase = ''
       substituteInPlace X2Go/Config.pm --replace '/etc/x2go' '/var/lib/x2go/conf'
       substituteInPlace X2Go/Server/DB.pm \
@@ -25,21 +52,57 @@ let
     '';
   };
 
-  perlEnv = perl.withPackages (p: with p; [
-    x2go-perl DBI DBDSQLite FileBaseDir TryTiny CaptureTiny ConfigSimple Switch FileWhich
-  ]);
+  perlEnv = perl.withPackages (
+    p: with p; [
+      x2go-perl
+      DBI
+      DBDSQLite
+      FileBaseDir
+      TryTiny
+      CaptureTiny
+      ConfigSimple
+      Switch
+      FileWhich
+    ]
+  );
 
   binaryDeps = [
-    perlEnv which nx-libs util-linux coreutils glibc.bin gawk gnused gnugrep
-    findutils nettools iproute2 bc procps psmisc lsof pwgen openssh sshfs
-    xorg.xauth xorg.xinit xorg.xrandr xorg.xmodmap xorg.xwininfo xorg.fontutil
-    xorg.xkbcomp xorg.setxkbmap
+    perlEnv
+    which
+    nx-libs
+    util-linux
+    coreutils
+    glibc.bin
+    gawk
+    gnused
+    gnugrep
+    findutils
+    nettools
+    iproute2
+    bc
+    procps
+    psmisc
+    lsof
+    pwgen
+    openssh
+    sshfs
+    xorg.xauth
+    xorg.xinit
+    xorg.xrandr
+    xorg.xmodmap
+    xorg.xwininfo
+    xorg.fontutil
+    xorg.xkbcomp
+    xorg.setxkbmap
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
-  buildInputs = [ perlEnv bash ];
+  buildInputs = [
+    perlEnv
+    bash
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -62,7 +125,10 @@ stdenv.mkDerivation rec {
       --replace "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
   '';
 
-  makeFlags = [ "PREFIX=/" "NXLIBDIR=${nx-libs}/lib/nx" ];
+  makeFlags = [
+    "PREFIX=/"
+    "NXLIBDIR=${nx-libs}/lib/nx"
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -77,7 +143,7 @@ stdenv.mkDerivation rec {
     done
     # We're patching @INC of the setgid wrapper, because we can't mix
     # the perl wrapper (for PERL5LIB) with security.wrappers (for setgid)
-    sed -ie "s,.\+bin/perl,#!${perl}/bin/perl -I ${perlEnv}/lib/perl5/site_perl," \
+    sed -i -e "s,.\+bin/perl,#!${perl}/bin/perl -I ${perlEnv}/lib/perl5/site_perl," \
       $out/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl
   '';
 

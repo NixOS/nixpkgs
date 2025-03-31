@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "celery";
     repo = "pytest-celery";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TUtKfGOxvVkiMhsUqyNDK08OTuzzKHrBiPU4JCKsIKM=";
   };
 

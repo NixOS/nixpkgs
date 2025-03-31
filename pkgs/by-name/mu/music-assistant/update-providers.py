@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ])" -p pyright ruff isort
+#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p pyright ruff isort nixfmt-rfc-style
 import asyncio
 import json
 import os.path
@@ -17,6 +17,7 @@ from urllib.request import urlopen
 
 from jinja2 import Environment
 from mashumaro.exceptions import MissingField
+from music_assistant_models.provider import ProviderManifest  # type: ignore
 from packaging.requirements import Requirement
 
 TEMPLATE = """# Do not edit manually, run ./update-providers.py
@@ -49,6 +50,7 @@ ROOT: Final = (
     .strip()
 )
 
+PACKAGE_SET = "music-assistant.python.pkgs"
 PACKAGE_MAP = {
     "git+https://github.com/MarvinSchenkel/pytube.git": "pytube",
 }
@@ -111,11 +113,10 @@ async def get_provider_manifests(version: str = "master") -> List:
 
         basedir = Path(os.path.join(tmp, f"server-{version}"))
         sys.path.append(str(basedir))
-        from music_assistant.common.models.provider import ProviderManifest  # type: ignore
 
         for fn in basedir.glob("**/manifest.json"):
             try:
-                manifests.append(await ProviderManifest.parse(fn))
+                manifests.append(await ProviderManifest.parse(str(fn)))
             except MissingField as ex:
                 print(f"Error parsing {fn}", ex)
 
@@ -167,6 +168,11 @@ def resolve_package_attribute(package: str) -> str:
     return matches.pop()
 
 
+async def get_package_version(package: str) -> str:
+    version = cast(str, await Nix.eval(f"{PACKAGE_SET}.{package}.version"))
+    return version
+
+
 @dataclass
 class Provider:
     domain: str
@@ -180,7 +186,8 @@ class Provider:
         return hash(self.domain)
 
 
-def resolve_providers(manifests) -> Set:
+async def resolve_providers(manifests) -> Set:
+    errors = []
     providers = set()
     for manifest in manifests:
         provider = Provider(manifest.domain)
@@ -188,30 +195,44 @@ def resolve_providers(manifests) -> Set:
             # allow substituting requirement specifications that packaging cannot parse
             if requirement in PACKAGE_MAP:
                 requirement = PACKAGE_MAP[requirement]
+
             requirement = Requirement(requirement)
             try:
-                provider.available.append(resolve_package_attribute(requirement.name))
+                attr = resolve_package_attribute(requirement.name)
+                provider.available.append(attr)
             except TooManyMatches as ex:
                 print(ex, file=sys.stderr)
                 provider.missing.append(requirement.name)
+                continue
             except NoMatch:
                 provider.missing.append(requirement.name)
+                continue
+
+            version = await get_package_version(attr)
+            if version not in requirement.specifier:
+                errors.append(f"{requirement} not satisifed by version {version}")
         providers.add(provider)
+    if errors:
+        print("\n - ", end="")
+        print("\n - ".join(errors))
     return providers
 
 
-def render(version: str, providers: Set):
-    path = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
+def render(outpath: str, version: str, providers: Set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers).dump(path)
+    template.stream(version=version, providers=providers).dump(outpath)
 
 
 async def main():
     version: str = cast(str, await Nix.eval("music-assistant.version"))
     manifests = await get_provider_manifests(version)
-    providers = resolve_providers(manifests)
-    render(version, providers)
+    providers = await resolve_providers(manifests)
+
+    outpath = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
+    render(outpath, version, providers)
+
+    run_sync(["nixfmt", outpath])
 
 
 if __name__ == "__main__":

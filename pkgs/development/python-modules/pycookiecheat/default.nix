@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
 
   dependencies = [
     cryptography

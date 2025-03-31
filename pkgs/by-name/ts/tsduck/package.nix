@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, jdk
-, libedit
-, srt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  jdk,
+  libedit,
+  srt,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tsduck";
-    repo = pname;
+    repo = "tsduck";
     rev = "v${version}";
     sha256 = "sha256-268TKCh3naebbw+sOQ6d4N/zl7UEVtc3l3flFAYHDU4=";
   };
@@ -27,17 +28,17 @@ stdenv.mkDerivation rec {
 
   # remove tests which call out to https://tsduck.io/download/test/...
   postPatch = ''
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testMasterPlaylist);/ d' \
       -e '/TSUNIT_TEST(testMasterPlaylistWithAlternate);/ d' \
       -e '/TSUNIT_TEST(testMediaPlaylist);/ d' \
       src/utest/utestHLS.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testBetterSystemRandomGenerator);/ d' \
       src/utest/utestSystemRandomGenerator.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_ASSERT(request.downloadBinaryContent/ d' \
       -e '/TSUNIT_ASSERT(!request.downloadBinaryContent/ d' \
       -e '/TSUNIT_TEST(testGitHub);/ d' \
@@ -46,11 +47,11 @@ stdenv.mkDerivation rec {
       -e '/TSUNIT_TEST(testReadMeFile);/ d' \
       src/utest/utestWebRequest.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testHomeDirectory);/ d' \
       src/utest/utestSysUtils.cpp
 
-    sed -i"" \
+    sed -i \
       -e '/TSUNIT_TEST(testIPv4Address);/ d' \
       -e '/TSUNIT_TEST(testIPv4AddressConstructors);/ d' \
       -e '/TSUNIT_TEST(testIPv4SocketAddressConstructors);/ d' \
@@ -83,10 +84,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MPEG Transport Stream Toolkit";
-    homepage    = "https://github.com/tsduck/tsduck";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/tsduck/tsduck";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ siriobalmelli ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

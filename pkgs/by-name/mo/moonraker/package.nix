@@ -1,8 +1,17 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests, useGpiod ? false }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+  unstableGitUpdater,
+  nixosTests,
+  useGpiod ? false,
+}:
 
 let
-  pythonEnv = python3.withPackages (packages:
-    with packages; [
+  pythonEnv = python3.withPackages (
+    packages: with packages; [
       tornado
       pyserial-asyncio
       pillow
@@ -16,21 +25,23 @@ let
       zeroconf
       preprocess-cancellation
       jinja2
-      dbus-next
+      dbus-fast
       apprise
       python-periphery
       ldap3
+      importlib-metadata
     ]
   );
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "0.8.0-unstable-2023-12-27";
+  version = "0.9.3-unstable-2025-03-26";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "c226e9c1e44d65ff6ea400b81e3cedba7f637976";
-    sha256 = "sha256-wdf4uab8pJEWaX6PFN9Y9pykmylmxJ4Oo5pwSQcyjCc=";
+    rev = "b90c96524cd4aa5579ebc9899fd7812c1e756d86";
+    sha256 = "sha256-oXdZdSoxfDNGR2n1L41zAG1aRzxeLTHtTmIUe2nWu/I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "rdap";
@@ -14,7 +18,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X \"github.com/openrdap/rdap.version=OpenRDAP ${version}\"" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X \"github.com/openrdap/rdap.version=OpenRDAP ${version}\""
+  ];
 
   meta = with lib; {
     homepage = "https://www.openrdap.org/";

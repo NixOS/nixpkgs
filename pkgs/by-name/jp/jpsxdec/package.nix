@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk8 # the build script wants JAVA 8 for compilation
-, jre # version can be >= 8 (latest version by default)
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk8, # the build script wants JAVA 8 for compilation
+  jre, # version can be >= 8 (latest version by default)
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "jpsxdec";
       desktopName = "jPSXdec";
       comment = finalAttrs.meta.description;
-      categories = [ "AudioVideo" "Utility" ];
+      categories = [
+        "AudioVideo"
+        "Utility"
+      ];
     })
   ];
 

@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "corkscrew";
   version = "2.0";
   src = fetchFromGitHub {
     owner = "bryanpkc";
-    repo = pname;
+    repo = "corkscrew";
     rev = "v${version}";
     hash = "sha256-JiddvTbuOysenrVWGUEyKSzpCF1PJaYWQUdz3FuLCdw=";
   };
@@ -20,4 +25,3 @@ stdenv.mkDerivation rec {
     mainProgram = "corkscrew";
   };
 }
-

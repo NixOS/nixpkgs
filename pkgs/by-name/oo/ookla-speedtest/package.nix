@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 let
   stdenv = stdenvNoCC;
@@ -31,10 +35,11 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   sourceRoot = ".";
 

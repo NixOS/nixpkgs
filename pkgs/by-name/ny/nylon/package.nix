@@ -1,9 +1,18 @@
-{ lib, stdenv, fetchurl, libevent, buildEnv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libevent,
+  buildEnv,
+}:
 let
   # failed to find a better way to make it work
   libevent-comb = buildEnv {
     inherit (libevent.out) name;
-    paths = [ libevent.dev libevent.out ];
+    paths = [
+      libevent.dev
+      libevent.out
+    ];
   };
 in
 stdenv.mkDerivation rec {

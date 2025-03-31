@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ikill";
@@ -11,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hOQBBwxkVnTkAZJi84qArwAo54fMC0zS+IeYMV04kUs=";
   };
 
-  cargoHash = "sha256-zKa2FP0lBS2XjgPWfyPZ60aHyeAe0uNIFbmuX4Uo1rA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xbl9cQKWxtwNQqWW41mQrVAsvMLUkTb0irDLD/XstMI=";
 
   meta = with lib; {
     description = "Interactively kill running processes";

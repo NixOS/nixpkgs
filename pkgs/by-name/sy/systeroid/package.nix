@@ -1,19 +1,20 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, linux-doc
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  linux-doc,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "systeroid";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
+    repo = "systeroid";
     rev = "v${version}";
-    sha256 = "sha256-FnUXf2Ia/XIu9ESs71p0UrXC7y7n7SYpfU0+Es7KYqM=";
+    sha256 = "sha256-nyQFNPmPcguPGeArd+w1Jexj4/J53PXAeGDvoRSsh/k=";
   };
 
   postPatch = ''
@@ -21,7 +22,8 @@ rustPlatform.buildRustPackage rec {
       --replace '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
   '';
 
-  cargoHash = "sha256-TTxvkRRVPCycEtAmm5BIOVc9bUmdqQBPSORBxHzm9ms=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KopbqiQKHzz40SYJXexIAUCoF7224JtmQ0jkhFSTr4c=";
 
   buildInputs = [
     xorg.libxcb
@@ -34,7 +36,13 @@ rustPlatform.buildRustPackage rec {
     description = "More powerful alternative to sysctl(8) with a terminal user interface";
     homepage = "https://github.com/orhun/systeroid";
     changelog = "https://github.com/orhun/systeroid/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

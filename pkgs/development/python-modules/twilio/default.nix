@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.3.7";
+  version = "9.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ncLefK29GVhjiXi0zSXjUbL23oxoUH7Pu4cFttK4WrY=";
+    tag = version;
+    hash = "sha256-qmXvs9CjHjkd/DsbqMPA90wCDiS+pMwaHXCRBUNnv30=";
   };
 
   build-system = [ setuptools ];
@@ -59,16 +59,11 @@ buildPythonPackage rec {
     "test_set_user_agent_extensions"
   ];
 
-  disabledTestPaths =
-    [
-      # Tests require API token
-      "tests/cluster/test_webhook.py"
-      "tests/cluster/test_cluster.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # aiounittest is not supported on Python 3.12
-      "tests/unit/http/test_async_http_client.py"
-    ];
+  disabledTestPaths = [
+    # Tests require API token
+    "tests/cluster/test_webhook.py"
+    "tests/cluster/test_cluster.py"
+  ];
 
   pythonImportsCheck = [ "twilio" ];
 

@@ -1,26 +1,31 @@
-{ dbus
-, fetchFromGitLab
-, gobject-introspection
-, lib
-, libadwaita
-, meson
-, ninja
-, python3
-, stdenv
-, testers
-, xvfb-run
+{
+  dbus,
+  fetchFromGitLab,
+  gobject-introspection,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  python3,
+  stdenv,
+  testers,
+  xvfb-run,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pkbTxCN7LagIbOtpiUCkh40aHw6uRtalQVFa47waXjU=";
+    hash = "sha256-FnMQtqy+uejWn3tDeaj92h2x9TzyiK5KdlRm55ObgPg=";
   };
+
+  postPatch = ''
+    patchShebangs docs/collect-sections.py
+  '';
 
   nativeBuildInputs = [
     meson
@@ -29,9 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libadwaita
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
   propagatedBuildInputs = [
@@ -45,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # requires xvfb-run
-  doCheck = !stdenv.hostPlatform.isDarwin
-  && false;  # tests time out
+  doCheck = !stdenv.hostPlatform.isDarwin && false; # tests time out
 
   checkPhase = ''
     runHook preCheck
@@ -67,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "blueprint-compiler";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ranfdev ];
+    maintainers = with maintainers; [
+      benediktbroich
+      ranfdev
+    ];
     platforms = platforms.unix;
   };
 })

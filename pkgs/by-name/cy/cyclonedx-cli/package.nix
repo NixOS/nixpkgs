@@ -11,12 +11,12 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QU/MaT8iIf/9VpOb2mixOfOtG/J+sE7S0mT6BKYQnlI=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   preFixup = ''
     cd $out/bin

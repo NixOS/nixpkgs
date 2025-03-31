@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libjpeg
-, libtiff
-, proj
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libjpeg,
+  libtiff,
+  proj,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.4";
   pname = "libgeotiff";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "libgeotiff";
     rev = version;
-    hash = "sha256-FUvWZR5BrGEMnApxCBQBwmmi9NU7Tx6Ziq3mbIxjqfc=";
+    hash = "sha256-oiuooLejCRI1DFTjhgYoePtKS+OAGnW6OBzgITcY500=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   sourceRoot = "${src.name}/libgeotiff";
 
@@ -34,7 +38,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libtiff proj ];
+  buildInputs = [
+    libtiff
+    proj
+  ];
 
   #hardeningDisable = [ "format" ];
 

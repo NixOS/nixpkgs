@@ -7,14 +7,13 @@
   lib,
 }:
 let
-  version = "0.8.0";
-  rev = "a1e92b4bcdaf81d5b5e8f3edab60e33549e9009b";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     repo = "gose";
     owner = "stv0g";
-    inherit rev;
-    hash = "sha256-Vcp9gMJ296KS8OFOIcWvvYrS+LrOVlN3KN20yJxoo5U=";
+    tag = "v${version}";
+    hash = "sha256-xyAOag2/GaIVttTLnx/6ljkpWbJmsOfyYyWzOAHOQ2I=";
   };
 
   frontend = buildNpmPackage {
@@ -38,9 +37,9 @@ buildGoModule {
   inherit version;
   inherit src;
 
-  vendorHash = "sha256-U/umJ6McCuD0HARVMj1JXHOpVxcph16z7Y7i47Nf3cg=";
+  vendorHash = "sha256-/Drb5Mxz37rNYfHdydl3z+xvFtjGwuzSsG4gkbx/h1o=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/gose
@@ -51,7 +50,6 @@ buildGoModule {
     "-s"
     "-w"
     "-X main.version=${version}"
-    "-X main.commit=${rev}"
     "-X main.builtBy=Nix"
   ];
 

@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, python3 }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "python-launcher";
@@ -6,12 +11,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "brettcannon";
-    repo = pname;
+    repo = "python-launcher";
     rev = "v${version}";
     sha256 = "sha256-wRKTBvLLo0Vvvh1GtF9hOnUHNpOeX950y1U+8JYBGoE=";
   };
 
-  cargoHash = "sha256-+FtfL5jAGJrpnZaJDnDMvWC0D3Af0L466v9nqJkb+uA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rWawf1YYeTWKPaZwua/f4BNo56z3mkCBU4jyZIFNqP4=";
 
   nativeCheckInputs = [ python3 ];
 

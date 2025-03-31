@@ -1,6 +1,16 @@
-{ lib, stdenv, python3, fetchFromGitHub, makeWrapper, schedtool, sysctl, util-linux, fetchpatch }:
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  schedtool,
+  sysctl,
+  util-linux,
+  fetchpatch,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ananicy";
   version = "unstable-2023-03-21";
 
@@ -35,7 +45,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/ananicy \
-      --prefix PATH : ${lib.makeBinPath [ schedtool util-linux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          schedtool
+          util-linux
+        ]
+      }
 
     substituteInPlace $out/lib/systemd/system/ananicy.service \
       --replace "/sbin/sysctl" "${sysctl}/bin/sysctl" \

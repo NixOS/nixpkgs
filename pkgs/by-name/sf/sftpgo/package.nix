@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.6.2";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-76P4njY/Wb9l4LG+sZwiwQVrvfXCtAELju30GLi7kBE=";
+    tag = "v${version}";
+    hash = "sha256-SembD+BM5Zetexh0iLTfrq/I1tz2BCwGUn6OyFeTHF4=";
   };
 
-  vendorHash = "sha256-gBb+qpNFSFhCOYLxXkz3xmyx+3PvyOwLNqjT9zZQuc8=";
+  vendorHash = "sha256-7hS4E7PXlydHFi4ul5+hyUPOvozialXW/m1tDLqbQUs=";
 
   ldflags = [
     "-s"
@@ -58,7 +59,10 @@ buildGoModule rec {
       local filesystem, encrypted local filesystem, S3 (compatible) Object Storage,
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
-    license = with licenses; [ agpl3Only unfreeRedistributable ]; # Software is AGPLv3, web UI is unfree
+    license = with licenses; [
+      agpl3Only
+      unfreeRedistributable
+    ]; # Software is AGPLv3, web UI is unfree
     maintainers = with maintainers; [ thenonameguy ];
     mainProgram = "sftpgo";
   };

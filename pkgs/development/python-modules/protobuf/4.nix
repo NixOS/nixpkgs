@@ -9,7 +9,7 @@
   protobuf,
   pytestCheckHook,
   pythonAtLeast,
-  substituteAll,
+  replaceVars,
   tzdata,
 }:
 
@@ -31,8 +31,7 @@ buildPythonPackage {
   patches =
     lib.optionals (lib.versionAtLeast protobuf.version "22") [
       # Replace the vendored abseil-cpp with nixpkgs'
-      (substituteAll {
-        src = ./use-nixpkgs-abseil-cpp.patch;
+      (replaceVars ./use-nixpkgs-abseil-cpp.patch {
         abseil_cpp_include_path = "${lib.getDev protobuf.abseil-cpp}/include";
       })
     ]
@@ -130,7 +129,7 @@ buildPythonPackage {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }

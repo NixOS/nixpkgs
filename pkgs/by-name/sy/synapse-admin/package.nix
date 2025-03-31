@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, mkYarnPackage
-, baseUrl ? null
-, writeShellScriptBin
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  mkYarnPackage,
+  baseUrl ? null,
+  writeShellScriptBin,
 }:
 
 mkYarnPackage rec {
@@ -11,7 +12,7 @@ mkYarnPackage rec {
   version = "0.10.0";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
-    repo = pname;
+    repo = "synapse-admin";
     rev = version;
     sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
@@ -58,6 +59,9 @@ mkYarnPackage rec {
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mkg20001 ma27 ];
+    maintainers = with maintainers; [
+      mkg20001
+      ma27
+    ];
   };
 }

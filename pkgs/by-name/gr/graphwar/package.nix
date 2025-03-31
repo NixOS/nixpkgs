@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
-, jdk
-, makeDesktopItem
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  jdk,
+  makeDesktopItem,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t3Y576dXWp2Mj6OSQN5cm9FuNBWNqKq6xxkVRbjIBgE=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
   buildInputs = [ jdk ];
 
   buildPhase = ''
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.graphwar.com/";
+    homepage = "https://www.graphwar.com/";
     description = "Artillery game in which you must hit your enemies using mathematical functions";
     license = licenses.gpl3Plus;
     platforms = jdk.meta.platforms;

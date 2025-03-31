@@ -1,9 +1,10 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, lib
-, pkg-config
-, check
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lib,
+  pkg-config,
+  check,
 }:
 stdenv.mkDerivation rec {
   pname = "libcork";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dcreager";
-    repo = pname;
+    repo = "libcork";
     rev = version;
     sha256 = "152gqnmr6wfmflf5l6447am4clmg3p69pvy3iw7yhaawjqa797sk";
   };
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
       --replace '\$'{datarootdir}/'$'{base_docdir} '$'{CMAKE_INSTALL_FULL_DOCDIR}
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ check ];
 
   doCheck = false;

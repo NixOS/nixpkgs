@@ -3,10 +3,11 @@
   lib,
   fetchFromGitHub,
   fetchpatch2,
-  kernel
+  kernel,
+  kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gasket";
   version = "1.0-18-unstable-2024-04-25";
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(PWD)"
@@ -41,7 +42,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   meta = with lib; {

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, dbus-glib
-, glib
-, gtk3
-, gucharmap
-, libmateweather
-, libnl
-, libwnck
-, libgtop
-, libxml2
-, libnotify
-, mate-desktop
-, mate-panel
-, polkit
-, upower
-, wirelesstools
-, hicolor-icon-theme
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  dbus-glib,
+  glib,
+  gtk3,
+  gucharmap,
+  libmateweather,
+  libnl,
+  libwnck,
+  libgtop,
+  libxml2,
+  libnotify,
+  mate-desktop,
+  mate-panel,
+  polkit,
+  upower,
+  wirelesstools,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
     wirelesstools
   ];
 
-  configureFlags = [ "--enable-suid=no" "--enable-in-process" ];
+  configureFlags = [
+    "--enable-suid=no"
+    "--enable-in-process"
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -70,7 +74,10 @@ stdenv.mkDerivation rec {
     description = "Applets for use with the MATE panel";
     mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.linux;
     maintainers = teams.mate.members;
   };

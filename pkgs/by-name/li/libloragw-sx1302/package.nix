@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "brocaar";
     repo = "sx1302_hal";
-    rev = "refs/tags/V${finalAttrs.version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-NYu54UpMn2OZfGihBH9Kbp2kUcEy0epH1Tt5I3r6jTs=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
-    make -C libtools
+    make -C libtools CROSS_COMPILE=${stdenv.cc.targetPrefix}
   '';
 
   installPhase = ''

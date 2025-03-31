@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL
-, SDL_image
-, SDL_ttf
-, gtk3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_ttf,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pete-gordon";
     repo = "hivelytracker";
-    rev = "V${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
+    rev = "V${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "148p320sd8phcpmj4m85ns5zly2dawbp8kgx9ryjfdk24pa88xg6";
   };
 

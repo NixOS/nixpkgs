@@ -9,8 +9,6 @@
   libgit2,
   libssh2,
   openssl,
-  darwin,
-  libiconv,
   git,
   gnupg,
   openssh,
@@ -21,7 +19,7 @@
 }:
 
 let
-  version = "0.23.0";
+  version = "0.27.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -29,31 +27,31 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-NCeD+WA3uVl4l/KKFDtdG8+vpm10Y3rEAf8kY6SP0yo=";
+    tag = "v${version}";
+    hash = "sha256-fBgJrSglH46+NHu3spk5mC51ASDHWnOoW6veKZ0R2YA=";
   };
 
-  cargoHash = "sha256-lnfh9zMMZfHhYY7kgmxuqZwoEQxiInjmHjzLabbUijU=";
+  useFetchCargoVendor = true;
+
+  cargoPatches = [
+    # <https://github.com/jj-vcs/jj/pull/5315>
+    ./libgit2-1.9.0.patch
+  ];
+
+  cargoHash = "sha256-35DJdAUXc2gb/EXECScwinSzzp7uaxFbUxedjqRGfj8=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-      libgit2
-      libssh2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      libiconv
-    ];
+  buildInputs = [
+    zstd
+    libgit2
+    libssh2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeCheckInputs = [
     git
@@ -77,14 +75,6 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
-  checkFlags = [
-    # flaky test fixed upstream in 0.24+; the actual feature works reliably,
-    # it's just a false caching issue inside the test. skip it to allow the
-    # binary cache to be populated. https://github.com/martinvonz/jj/issues/4784
-    "--skip"
-    "test_shallow_commits_lack_parents"
-  ];
-
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -97,13 +87,13 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
-        --bash <(${jj} util completion bash) \
-        --fish <(${jj} util completion fish) \
-        --zsh <(${jj} util completion zsh)
+        --bash <(COMPLETE=bash ${jj}) \
+        --fish <(COMPLETE=fish ${jj}) \
+        --zsh <(COMPLETE=zsh ${jj})
     '';
 
   passthru = {
@@ -118,8 +108,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F

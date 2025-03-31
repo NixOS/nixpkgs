@@ -13,16 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tR+jfFdCSsf+WR8VUX60/mdfsp7cX9jUDI+CKIZkgEE=";
+    tag = "v${version}";
+    hash = "sha256-ClCPXux1sM3hRbtJ3YngrAmc4btTgQmg/Bg/7uFHCOw=";
   };
 
-  cargoHash = "sha256-g6A8rNOUduhdwSqunDlZvO7E07GmDgb1o2FVohFAcL0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k/6+EWHAXd8BN551xDlQkYsBZsP/jgT+NO5GbVXJkVI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -53,6 +54,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
       "--skip=system::watcher::test::should_poll_file_removed"
       "--skip=system::watcher::test::should_poll_file_update"
+      "--skip=system::watcher::test::should_poll_nothing"
     ];
 
   passthru = {

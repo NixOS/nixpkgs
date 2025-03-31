@@ -53,42 +53,86 @@ let
         "*"    # password unset
       ]);
 
+  overrideOrderMutable = ''{option}`initialHashedPassword` -> {option}`initialPassword` -> {option}`hashedPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderImmutable = ''{option}`initialHashedPassword` -> {option}`hashedPassword` -> {option}`initialPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderText = isMutable: ''
+    If the option {option}`users.mutableUsers` is
+    `${if isMutable then "true" else "false"}`, then the order of precedence is as shown
+    below, where values on the left are overridden by values on the right:
+    ${if isMutable then overrideOrderMutable else overrideOrderImmutable}
+  '';
+
+  multiplePasswordsWarning = ''
+    If multiple of these password options are set at the same time then a
+    specific order of precedence is followed, which can lead to surprising
+    results. The order of precedence differs depending on whether the
+    {option}`users.mutableUsers` option is set.
+  '';
+
+  overrideDescription = ''
+    ${multiplePasswordsWarning}
+
+    ${overrideOrderText false}
+
+    ${overrideOrderText true}
+  '';
+
   passwordDescription = ''
-    The options {option}`hashedPassword`,
-    {option}`password` and {option}`hashedPasswordFile`
-    controls what password is set for the user.
-    {option}`hashedPassword` overrides both
-    {option}`password` and {option}`hashedPasswordFile`.
-    {option}`password` overrides {option}`hashedPasswordFile`.
-    If none of these three options are set, no password is assigned to
-    the user, and the user will not be able to do password logins.
-    If the option {option}`users.mutableUsers` is true, the
-    password defined in one of the three options will only be set when
-    the user is created for the first time. After that, you are free to
-    change the password with the ordinary user management commands. If
-    {option}`users.mutableUsers` is false, you cannot change
-    user passwords, they will always be set according to the password
-    options.
+    The {option}`initialHashedPassword`, {option}`hashedPassword`,
+    {option}`initialPassword`, {option}`password` and
+    {option}`hashedPasswordFile` options all control what password is set for
+    the user.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `false`, typically
+    only one of {option}`hashedPassword`, {option}`password`, or
+    {option}`hashedPasswordFile` will be set.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `true`, typically
+    only one of {option}`initialPassword`, {option}`initialHashedPassword`,
+    or {option}`hashedPasswordFile` will be set.
+
+    If the option {option}`users.mutableUsers` is true, the password defined
+    in one of the above password options will only be set when the user is
+    created for the first time. After that, you are free to change the
+    password with the ordinary user management commands. If
+    {option}`users.mutableUsers` is false, you cannot change user passwords,
+    they will always be set according to the password options.
+
+    If none of the password options are set, then no password is assigned to
+    the user, and the user will not be able to do password-based logins.
+
+    ${overrideDescription}
   '';
 
   hashedPasswordDescription = ''
     To generate a hashed password run `mkpasswd`.
 
-    If set to an empty string (`""`), this user will
-    be able to log in without being asked for a password (but not via remote
-    services such as SSH, or indirectly via {command}`su` or
-    {command}`sudo`). This should only be used for e.g. bootable
-    live systems. Note: this is different from setting an empty password,
-    which can be achieved using {option}`users.users.<name?>.password`.
+    If set to an empty string (`""`), this user will be able to log in without
+    being asked for a password (but not via remote services such as SSH, or
+    indirectly via {command}`su` or {command}`sudo`). This should only be used
+    for e.g. bootable live systems. Note: this is different from setting an
+    empty password, which can be achieved using
+    {option}`users.users.<name?>.password`.
 
-    If set to `null` (default) this user will not
-    be able to log in using a password (i.e. via {command}`login`
-    command).
+    If set to `null` (default) this user will not be able to log in using a
+    password (i.e. via {command}`login` command).
   '';
 
   userOpts = { name, config, ... }: {
 
     options = {
+
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          If set to false, the user account will not be created. This is useful for when you wish to conditionally
+          disable user accounts.
+        '';
+      };
 
       name = mkOption {
         type = types.passwdEntry types.str;
@@ -170,7 +214,7 @@ let
       homeMode = mkOption {
         type = types.strMatching "[0-7]{1,5}";
         default = "700";
-        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
+        description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {
@@ -281,6 +325,7 @@ let
         default = null;
         description = ''
           Specifies the hashed password for the user.
+
           ${passwordDescription}
           ${hashedPasswordDescription}
         '';
@@ -294,6 +339,7 @@ let
           Warning: do not set confidential information here
           because it is world-readable in the Nix store. This option
           should only be used for public accounts.
+
           ${passwordDescription}
         '';
       };
@@ -307,6 +353,7 @@ let
           password. The password file is read on each system activation. The
           file should contain exactly one line, which should be the password in
           an encrypted form that is suitable for the `chpasswd -e` command.
+
           ${passwordDescription}
         '';
       };
@@ -329,9 +376,7 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
-          Note that the {option}`hashedPassword` option will override
-          this option if both are set.
-
+          ${passwordDescription}
           ${hashedPasswordDescription}
         '';
       };
@@ -351,8 +396,7 @@ let
           used for guest accounts or passwords that will be changed
           promptly.
 
-          Note that the {option}`password` option will override this
-          option if both are set.
+          ${passwordDescription}
         '';
       };
 
@@ -513,6 +557,7 @@ let
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
   usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
+  usersWithNullShells = attrNames (filterAttrs (name: cfg: cfg.shell == null) cfg.users);
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -523,7 +568,7 @@ let
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
-      }) cfg.users;
+      }) (filterAttrs (_: u: u.enable) cfg.users);
     groups = attrValues cfg.groups;
   });
 
@@ -866,12 +911,21 @@ in {
               ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
           '';
       }
+      {
+        assertion = !cfg.mutableUsers -> length usersWithNullShells == 0;
+        message = ''
+          users.mutableUsers = false has been set,
+          but found users that have their shell set to null.
+          If you wish to disable login, set their shell to pkgs.shadow (the default).
+          Misconfigured users: ${lib.concatStringsSep " " usersWithNullShells}
+        '';
+      }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.allowNoPasswordLogin
         # The check does not apply when users.mutableUsers
         assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
           any id (mapAttrsToList (name: cfg:
@@ -897,6 +951,21 @@ in {
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
+        (
+          let
+            # Things fail in various ways with especially non-ascii usernames.
+            # This regex mirrors the one from shadow's is_valid_name:
+            # https://github.com/shadow-maint/shadow/blob/bee77ffc291dfed2a133496db465eaa55e2b0fec/lib/chkname.c#L68
+            # though without the trailing $, because Samba 3 got its last release
+            # over 10 years ago and is not in Nixpkgs anymore,
+            # while later versions don't appear to require anything like that.
+            nameRegex = "[a-zA-Z0-9_.][a-zA-Z0-9_.-]*";
+          in
+          {
+            assertion = builtins.match nameRegex user.name != null;
+            message = "The username \"${user.name}\" is not valid, it does not match the regex \"${nameRegex}\".";
+          }
+        )
         {
         assertion = (user.hashedPassword != null)
         -> (match ".*:.*" user.hashedPassword == null);
@@ -907,8 +976,17 @@ in {
             Please check the value of option `users.users."${user.name}".hashedPassword`.'';
           }
           {
+            assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
+            message = ''
+              A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
+              Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
+              or users.users.${user.name}.uid must be changed to 1000 or above.
+            '';
+          }
+          {
             assertion = let
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
+              # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
@@ -960,12 +1038,11 @@ in {
           (filter (x: x != null) (map (flip getAttr user) passwordOptions));
       in optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
-        The options silently discard others by the order of precedence
-        given above which can lead to surprising results. To resolve this warning,
-        set at most one of the options above to a non-`null` value.
+        `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
+        & `hashedPasswordFile` set to a non-null value.
 
+        ${multiplePasswordsWarning}
+        ${overrideOrderText cfg.mutableUsers}
         The values of these options are:
         ${concatMapStringsSep
           "\n"

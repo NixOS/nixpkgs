@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, stanc
-, buildPackages
-, runtimeShell
-, runCommandCC
-, cmdstan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  stanc,
+  buildPackages,
+  runtimeShell,
+  runCommandCC,
+  cmdstan,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.35.0";
+  version = "2.36.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
-    repo = pname;
+    repo = "cmdstan";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-bmzkXbR4KSnpfXjs2MAx8mbNSbNrIWDP/O8S+JGWrcg=";
+    hash = "sha256-9Dan86C0nxxxkIXaOSKExY0hngAgWTpL4RlI3rTnBZo=";
   };
 
   postPatch = ''
@@ -31,23 +32,26 @@ stdenv.mkDerivation rec {
     stanc
   ];
 
-  preConfigure = ''
-    patchShebangs test-all.sh runCmdStanTests.py stan/
-  ''
-  # Fix inclusion of hardcoded paths in PCH files, by building in the store.
-  + ''
-    mkdir -p $out/opt
-    cp -R . $out/opt/cmdstan
-    cd $out/opt/cmdstan
-    mkdir -p bin
-    ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
-  '';
+  preConfigure =
+    ''
+      patchShebangs test-all.sh runCmdStanTests.py stan/
+    ''
+    # Fix inclusion of hardcoded paths in PCH files, by building in the store.
+    + ''
+      mkdir -p $out/opt
+      cp -R . $out/opt/cmdstan
+      cd $out/opt/cmdstan
+      mkdir -p bin
+      ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
+    '';
 
-  makeFlags = [
-    "build"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "arch=${stdenv.hostPlatform.darwinArch}"
-  ];
+  makeFlags =
+    [
+      "build"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "arch=${stdenv.hostPlatform.darwinArch}"
+    ];
 
   # Disable inclusion of timestamps in PCH files when using Clang.
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Xclang -fno-pch-timestamp";

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, libuuid, autoreconfHook, e2fsprogs, acl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libuuid,
+  autoreconfHook,
+  e2fsprogs,
+  acl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reiserfsprogs";
@@ -10,9 +18,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libuuid e2fsprogs acl ];
+  buildInputs = [
+    libuuid
+    e2fsprogs
+    acl
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu90" "-D_GNU_SOURCE" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-std=gnu90"
+    "-D_GNU_SOURCE"
+  ];
 
   meta = {
     inherit version;

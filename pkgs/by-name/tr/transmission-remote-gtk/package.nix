@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, appstream-glib
-, curl
-, desktop-file-utils
-, fetchFromGitHub
-, geoip
-, gettext
-, glib
-, glib-networking
-, gtk3
-, json-glib
-, libappindicator
-, libmrss
-, libproxy
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  appstream-glib,
+  curl,
+  desktop-file-utils,
+  fetchFromGitHub,
+  geoip,
+  gettext,
+  glib,
+  glib-networking,
+  gtk3,
+  json-glib,
+  libappindicator,
+  libmrss,
+  libproxy,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
   };
 

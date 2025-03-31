@@ -1,17 +1,29 @@
-{ lib, addonDir, buildKodiAddon, fetchFromGitHub, kodi, requests, dateutil, six, kodi-six, signals, websocket }:
+{
+  lib,
+  addonDir,
+  buildKodiAddon,
+  fetchFromGitHub,
+  kodi,
+  requests,
+  dateutil,
+  six,
+  kodi-six,
+  signals,
+  websocket,
+}:
 let
   python = kodi.pythonPackages.python.withPackages (p: with p; [ pyyaml ]);
 in
 buildKodiAddon rec {
   pname = "jellycon";
   namespace = "plugin.video.jellycon";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-60my7Y60KV5WWALQiamnmAJZJi82cV21rIGYPiV7T+A=";
+    sha256 = "sha256-dCPbPuUtiMhcECd3Aebs3ZGIM6jn6mmCd0rXS+1TQLs=";
   };
 
   nativeBuildInputs = [

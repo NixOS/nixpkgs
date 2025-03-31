@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "whisper";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "refresh-bio";
-    repo = pname;
+    repo = "whisper";
     rev = "v${version}";
     sha256 = "0wpx1w1mar2d6zq2v14vy6nn896ds1n3zshxhhrrj5d528504iyw";
   };

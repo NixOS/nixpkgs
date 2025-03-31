@@ -1,20 +1,30 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  gmp,
+  jdk8,
   # The JDK we use on Darwin currently makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
-  includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
+  includeJava ? !stdenv.hostPlatform.isDarwin,
+  includeGplCode ? true,
+}:
 
 let
   boolToCmake = x: if x then "ON" else "OFF";
 
-  rev    = "1.8.0";
+  rev = "1.8.0";
   sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
 
-  pname   = "monosat";
+  pname = "monosat";
   version = rev;
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo  = pname;
+    repo = pname;
     inherit rev sha256;
   };
 
@@ -39,7 +49,11 @@ let
     inherit src patches;
     postPatch = commonPostPatch;
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ zlib gmp jdk8 ];
+    buildInputs = [
+      zlib
+      gmp
+      jdk8
+    ];
 
     cmakeFlags = [
       "-DBUILD_STATIC=OFF"
@@ -60,39 +74,57 @@ let
     meta = with lib; {
       description = "SMT solver for Monotonic Theories";
       mainProgram = "monosat";
-      platforms   = platforms.unix;
-      license     = if includeGplCode then licenses.gpl2 else licenses.mit;
-      homepage    = "https://github.com/sambayless/monosat";
+      platforms = platforms.unix;
+      license = if includeGplCode then licenses.gpl2 else licenses.mit;
+      homepage = "https://github.com/sambayless/monosat";
       maintainers = [ maintainers.acairncross ];
     };
   };
 
-  python = { buildPythonPackage, cython, pytestCheckHook }: buildPythonPackage {
-    inherit pname version src patches;
+  python =
+    {
+      buildPythonPackage,
+      cython,
+      pytestCheckHook,
+    }:
+    buildPythonPackage {
+      inherit
+        pname
+        version
+        src
+        patches
+        ;
 
-    propagatedBuildInputs = [ core cython ];
+      propagatedBuildInputs = [
+        core
+        cython
+      ];
 
-    # This tells setup.py to use cython, which should produce faster bindings
-    MONOSAT_CYTHON = true;
+      # This tells setup.py to use cython, which should produce faster bindings
+      MONOSAT_CYTHON = true;
 
-    # After patching src, move to where the actually relevant source is. This could just be made
-    # the sourceRoot if it weren't for the patch.
-    postPatch = commonPostPatch + ''
-      cd src/monosat/api/python
-    '' +
-    # The relative paths here don't make sense for our Nix build
-    # TODO: do we want to just reference the core monosat library rather than copying the
-    # shared lib? The current setup.py copies the .dylib/.so...
-    ''
-      substituteInPlace setup.py \
-        --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
-    '';
+      # After patching src, move to where the actually relevant source is. This could just be made
+      # the sourceRoot if it weren't for the patch.
+      postPatch =
+        commonPostPatch
+        + ''
+          cd src/monosat/api/python
+        ''
+        +
+          # The relative paths here don't make sense for our Nix build
+          # TODO: do we want to just reference the core monosat library rather than copying the
+          # shared lib? The current setup.py copies the .dylib/.so...
+          ''
+            substituteInPlace setup.py \
+              --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
+          '';
 
-    nativeCheckInputs = [ pytestCheckHook ];
+      nativeCheckInputs = [ pytestCheckHook ];
 
-    disabledTests = [
-      "test_assertAtMostOne"
-      "test_assertEqual"
-    ];
-  };
-in core
+      disabledTests = [
+        "test_assertAtMostOne"
+        "test_assertEqual"
+      ];
+    };
+in
+core

@@ -1,16 +1,17 @@
-{ lib
-, pkg-config
-, dbus
-, dconf
-, fetchFromGitHub
-, glib
-, nautilus
-, nautilus-python
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk3
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  pkg-config,
+  dbus,
+  dconf,
+  fetchFromGitHub,
+  glib,
+  nautilus,
+  nautilus-python,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk3,
+  python3,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -21,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jKPqgd0sSt/qKPqbYbvdeGuo78R5gp1R5tSTPAzz+IU=";
   };
 

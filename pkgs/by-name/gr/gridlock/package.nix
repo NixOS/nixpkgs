@@ -1,17 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "gridlock";
   version = "unstable-2023-08-29";
 
-  outputs = [ "out" "nyarr" ];
+  outputs = [
+    "out"
+    "nyarr"
+  ];
 
   src = fetchFromGitHub {
     owner = "lf-";
@@ -20,17 +24,20 @@ rustPlatform.buildRustPackage {
     hash = "sha256-I4NGfgNX79ZhWXDeUDJyDzP2GxcNhHhazVmmmPlz5js=";
   };
 
-  cargoHash = "sha256-qz77c2IZGaWsinfkVTWqfEeBEtHng6W738jBwJAkrl4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CflDi1sjPBX+FOj74DWYKcg0O8Q7bnCFhzEnCrRi0g8=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postInstall = ''
     moveToOutput bin/nyarr $nyarr

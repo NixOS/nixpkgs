@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   pkgs,
 }:
 
@@ -19,8 +19,7 @@ buildPythonPackage rec {
 
   patches = [
     # substitute libusb path
-    (substituteAll {
-      src = ./hardcode-libusb.patch;
+    (replaceVars ./hardcode-libusb.patch {
       libusb = "${pkgs.hidapi}/lib/libhidapi-libusb${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

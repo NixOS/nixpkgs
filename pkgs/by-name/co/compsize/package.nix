@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, btrfs-progs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  btrfs-progs,
+}:
 
 let
   # https://github.com/kilobyte/compsize/issues/52
@@ -18,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kilobyte";
-    repo = pname;
+    repo = "compsize";
     rev = "v${version}";
     sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
   };

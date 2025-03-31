@@ -1,4 +1,11 @@
-{ fetchFromGitHub, buildGoModule, jq, buildNpmPackage, lib, makeWrapper }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  jq,
+  buildNpmPackage,
+  lib,
+  makeWrapper,
+}:
 
 let
   version = "0.13.2";
@@ -26,7 +33,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule {
   pname = "memos";
   inherit version src;
 

@@ -1,34 +1,33 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitLab,
   installShellFiles,
   stdenv,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.50.0";
+  version = "1.55.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-WQO+9Fmlzj21UPJ9cdFc6JC8mbkzOWxz077JR+11BXA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K1zjb4QCLBp7GwT2580DXYKx3yTaIyNytKObMbzjvlQ=";
   };
 
-  vendorHash = "sha256-nwHY0221nacHk4M+RKA8BEJLCoJJdIKwP0ZPjhYxc7Q=";
+  vendorHash = "sha256-ODTyWArYcCxsWbN9fuppAcRYtKGxcadeRPIwfPiAuOE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    # failed to read configuration:  mkdir /homeless-shelter: permission denied
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   subPackages = [ "cmd/glab" ];
 
@@ -43,15 +42,17 @@ buildGo123Module rec {
       --zsh <($out/bin/glab completion -s zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "GitLab CLI tool bringing GitLab to your command line";
     license = lib.licenses.mit;
     homepage = "https://gitlab.com/gitlab-org/cli";
-    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${version}";
+    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       freezeboy
       luftmensch-luftmensch
     ];
     mainProgram = "glab";
   };
-}
+})

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, pass }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  pass,
+}:
 
 stdenv.mkDerivation rec {
   pname = "passff-host";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "passff";
-    repo = pname;
+    repo = "passff-host";
     rev = version;
     sha256 = "sha256-P5h0B5ilwp3OVyDHIOQ23Zv4eLjN4jFkdZF293FQnNE=";
   };

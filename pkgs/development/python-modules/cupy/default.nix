@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   cython_0,
@@ -13,31 +14,46 @@
   addDriverRunpath,
   pythonOlder,
   symlinkJoin,
-  fetchpatch
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
-  outpaths = with cudaPackages; [
-      cuda_cccl # <nv/target>
-      cuda_cudart
-      cuda_nvcc # <crt/host_defines.h>
-      cuda_nvprof
-      cuda_nvrtc
-      cuda_nvtx
-      cuda_profiler_api
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
+  inherit (cudaPackages) cudnn;
 
-      # Missing:
-      # cusparselt
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
+  # some packages are not available on all platforms
+  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
+  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
+
+  outpaths = with cudaPackages; [
+    cuda_cccl # <nv/target>
+    cuda_cudart
+    cuda_nvcc # <crt/host_defines.h>
+    cuda_nvprof
+    cuda_nvrtc
+    cuda_nvtx
+    cuda_profiler_api
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
+
+    # Missing:
+    # cusparselt
   ];
   cudatoolkit-joined = symlinkJoin {
     name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
+    paths =
+      outpaths
+      ++ lib.concatMap (f: lib.map f outpaths) [
+        lib.getLib
+        lib.getDev
+        (lib.getOutput "static")
+        (lib.getOutput "stubs")
+      ];
   };
 in
 buildPythonPackage rec {
@@ -47,23 +63,17 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  stdenv = cudaPackages.backendStdenv;
+
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      url =
-        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
-      hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
-    })
-  ];
-
-  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
+  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
   # very short builds and a few extremely long ones, so setting both ends up
@@ -118,7 +128,10 @@ buildPythonPackage rec {
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ hyphon81 ];
   };
 }

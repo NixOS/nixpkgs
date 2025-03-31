@@ -6,19 +6,21 @@
 
   # build-system
   setuptools,
+  versioneer,
 
   # dependencies
-  spake2,
-  pynacl,
-  six,
   attrs,
-  twisted,
   autobahn,
   automat,
-  tqdm,
   click,
+  cryptography,
   humanize,
   iterable-io,
+  pynacl,
+  qrcode,
+  spake2,
+  tqdm,
+  twisted,
   txtorcon,
   zipstream-ng,
 
@@ -35,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
+    tag = version;
+    hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
   };
 
   postPatch =
@@ -57,23 +59,30 @@ buildPythonPackage rec {
       sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
-  dependencies = [
-    attrs
-    autobahn
-    automat
-    click
-    humanize
-    iterable-io
-    pynacl
-    six
-    spake2
-    tqdm
-    twisted
-    txtorcon
-    zipstream-ng
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  dependencies =
+    [
+      attrs
+      autobahn
+      automat
+      click
+      cryptography
+      humanize
+      iterable-io
+      pynacl
+      qrcode
+      spake2
+      tqdm
+      twisted
+      txtorcon
+      zipstream-ng
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];

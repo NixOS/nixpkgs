@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fftw
-, krita
-, libsForQt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fftw,
+  krita,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       translations/lrelease.sh
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     fftw

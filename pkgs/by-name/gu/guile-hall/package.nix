@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config
-, texinfo, makeWrapper, guile, guile-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  makeWrapper,
+  guile,
+  guile-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "guile-hall";
@@ -12,9 +21,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-TUCN8kW44X6iGbSJURurcz/Tc2eCH1xgmXH1sMOMOXs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo makeWrapper ];
+  strictDeps = true;
 
-  buildInputs = [ guile guile-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    guile
+    pkg-config
+    texinfo
+    makeWrapper
+  ];
+
+  buildInputs = [
+    guile
+    guile-config
+  ];
 
   enableParallelBuilding = true;
 

@@ -98,7 +98,7 @@ let
 
 in
 mkWrapper type (
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     # Some of these dependencies are `dlopen()`ed.
@@ -137,7 +137,7 @@ mkWrapper type (
               -i \$prev -t attr -n Project -v "${extraTargets}" \
               sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
           ''
-          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+          + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "10") ''
             codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
           ''
         )
@@ -194,19 +194,29 @@ mkWrapper type (
       {
         inherit icu hasILCompiler;
       }
-      // lib.optionalAttrs (type == "sdk") {
-        packages = commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid};
-        inherit targetPackages runtime aspnetcore;
+      // lib.optionalAttrs (type == "sdk") (
+        let
+          # force evaluation of the SDK package to ensure evaluation failures
+          # (e.g. due to vulnerabilities) propagate to the nuget packages
+          forceSDKEval = builtins.seq finalAttrs.finalPackage.drvPath;
+        in
+        {
+          packages = map forceSDKEval (
+            commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid}
+          );
+          targetPackages = lib.mapAttrs (_: map forceSDKEval) targetPackages;
+          inherit runtime aspnetcore;
 
-        updateScript =
-          let
-            majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
-          in
-          [
-            ./update.sh
-            majorVersion
-          ];
-      };
+          updateScript =
+            let
+              majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+            in
+            [
+              ./update.sh
+              majorVersion
+            ];
+        }
+      );
 
     meta = with lib; {
       description = builtins.getAttr type descriptions;
@@ -239,5 +249,5 @@ mkWrapper type (
             "Dotnet SDK ${version} is EOL, please use 8.0 (LTS) or 9.0 (Current)"
           ];
     };
-  }
+  })
 )

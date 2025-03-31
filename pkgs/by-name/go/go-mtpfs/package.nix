@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libusb1,
+}:
 
 buildGoModule rec {
   pname = "go-mtpfs";
@@ -13,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-OrAEvD2rF0Y0bvCD9TUv/E429lASsvC3uK3qNvbg734=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];

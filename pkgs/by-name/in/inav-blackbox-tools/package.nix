@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cairo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "inav-blackbox-tools";
   version = "unstable-2021-04-22";
 
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Tools for working with blackbox flight logs";
     homepage = "https://github.com/inavflight/blackbox-tools";
     license = licenses.gpl3Only;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/inav-blackbox-tools.x86_64-darwin
   };

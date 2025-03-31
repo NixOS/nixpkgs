@@ -1,10 +1,11 @@
-{ lib
-, nixosTests
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  nixosTests,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "haste-server";
   version = "unstable-2023-03-06";
 
@@ -21,6 +22,7 @@ buildNpmPackage rec {
 
   postInstall = ''
     install -Dt "$out/share/haste-server" about.md
+    rm -rf "$out/lib/node_modules/haste/node_modules/.bin/"
   '';
 
   passthru = {

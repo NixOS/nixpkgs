@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, makeWrapper
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  makeWrapper,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

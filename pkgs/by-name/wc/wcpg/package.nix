@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, blas
-, gmp
-, lapack
-, libf2c
-, mpfi
-, mpfr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  blas,
+  gmp,
+  lapack,
+  libf2c,
+  mpfi,
+  mpfr,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fixif";
-    repo = pname;
+    repo = "wcpg";
     rev = version;
     sha256 = "sha256-uA/ENjf4urEO+lqebkp/k54199o2434FYgPSmYCG4UA=";
   };

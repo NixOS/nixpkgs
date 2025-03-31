@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   xorg,
 
   # build-system
@@ -14,6 +14,7 @@
   entrypoint2,
   pillow,
   psutil,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   vncdo,
@@ -31,8 +32,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       xauth = lib.getExe xorg.xauth;
       xdpyinfo = lib.getExe xorg.xdpyinfo;
     })
@@ -47,13 +47,15 @@ buildPythonPackage rec {
     entrypoint2
     pillow
     psutil
-    pytest-xdist
+    pytest-timeout
     pytestCheckHook
     (vncdo.overridePythonAttrs { doCheck = false; })
     xorg.xorgserver
     xorg.xmessage
     xorg.xvfb
   ];
+
+  pytestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";

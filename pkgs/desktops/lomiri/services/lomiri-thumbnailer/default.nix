@@ -1,43 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, doxygen
-, gst_all_1
-, gdk-pixbuf
-, gtest
-, makeFontsConf
-, libapparmor
-, libexif
-, libqtdbustest
-, librsvg
-, lomiri-api
-, persistent-cache-cpp
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, shared-mime-info
-, taglib
-, validatePkgConfig
-, wrapGAppsHook3
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  nixosTests,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  doxygen,
+  gst_all_1,
+  gdk-pixbuf,
+  gtest,
+  makeFontsConf,
+  libapparmor,
+  libexif,
+  libqtdbustest,
+  librsvg,
+  lomiri-api,
+  persistent-cache-cpp,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  shared-mime-info,
+  taglib,
+  validatePkgConfig,
+  wrapGAppsHook3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
-    rev = finalAttrs.version;
-    hash = "sha256-BE/U4CT4z4WzEJXrVhX8ME/x9q7w8wNnJKTbfVku2VQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-pf/bzpooCcoIGb5JtSnowePcobcfVSzHyBaEkb51IOg=";
   };
 
   outputs = [
@@ -47,74 +49,47 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/19 merged & in release
+    # Fix compat with taglib 2.x
+    # Remove when version > 3.0.4
     (fetchpatch {
-      name = "0001-lomiri-thumbnailer-Add-more-better-GNUInstallDirs-variables-usage.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/0b9795a6313fd025d5646f2628a2cbb3104b0ebc.patch";
-      hash = "sha256-br99n2nDLjUfnjbjhOsWlvP62VmVjYeZ6yPs1dhPN/s=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/22 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-thumbnailer-Make-tests-optional.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/df7a3d1689f875d207a90067b957e888160491b9.patch";
-      hash = "sha256-gVxigpSL/3fXNdJBjh8Ex3/TYmQUiwRji/NmLW/uhE4=";
+      name = "0001-lomiri-thumbnailer-Fix-taglib-2.x-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/b7f1055e36cd6e33314bb9f6648f93e977a33267.patch";
+      hash = "sha256-9RHtxqsgdMkgIyswaeL5yS6+o/YvzT+HgRD8KL/RfNM=";
     })
 
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
-    (fetchpatch {
-      name = "0003-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DOCDIR.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/930a3b57e899f6eb65a96d096edaea6a6f6b242a.patch";
-      hash = "sha256-klYycUoQqA+Dfk/4fRQgdS4/G4o0sC1k98mbtl0iHkE=";
-    })
-    (fetchpatch {
-      name = "0004-lomiri-thumbnailer-Re-enable-documentation.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/2f9186f71fdd25e8a0852073f1da59ba6169cf3f.patch";
-      hash = "sha256-youaJfCeYVpLmruHMupuUdl0c/bSDPWqKPLgu5plBrw=";
-    })
-    (fetchpatch {
-      name = "0005-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_modules-usage.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/9e5cf09de626e73e6b8f180cbc1160ebd2f169e7.patch";
-      hash = "sha256-vfNCN7tqq6ngzNmb3qqHDHaDx/kI8/UXyyv7LqUWya0=";
-    })
-    (fetchpatch {
-      name = "0006-lomiri-thumbnailer-Re-enable-coverge-reporting.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/6a48831f042cd3ad34200f32800393d4eec2f84b.patch";
-      hash = "sha256-HZd4K0R1W6adOjKy7tODfQAD+9IKPcK0DnH1uKNd/Ak=";
-    })
-    (fetchpatch {
-      name = "0007-lomiri-thumbnailer-Make-GTest-available-to-example-test.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/657be3bd1aeb227edc04e26b597b2fe97b2dc51a.patch";
-      hash = "sha256-XEvdWV3JJujG16+87iewYor0jFK7NTeE5459iT96SkU=";
-    })
-    (fetchpatch {
-      name = "0008-fix-googletest-1-13.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri-thumbnailer/-/raw/debian/3.0.3-1/debian/patches/0001_fix_googletest_1_13.patch";
-      hash = "sha256-oBcdspQMhCxh4L/XotG9NRp/Ij2YzIjpC8xg/jdiptw=";
-    })
+    ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
+    ./1002-Re-enable-documentation.patch
+    ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
+    ./1004-Re-enable-coverge-reporting.patch
+    ./1005-Make-GTest-available-to-example-test.patch
+
+    # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
+    # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
+    ./2001-Raise-default-extraction-timeout.patch
   ];
 
   postPatch = ''
     patchShebangs tools/{parse-settings.py,run-xvfb.sh} tests/{headers,whitespace,server}/*.py
 
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
-      --replace '/usr/bin/test' 'test'
+      --replace-fail '/usr/bin/test' 'test'
 
     substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
     # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
     # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
     substituteInPlace tests/qml/CMakeLists.txt \
-      --replace 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
-      --replace 'powerpc-linux-gnu' 'ppc' \
-      --replace 's390x-linux-gnu' 's390x'
+      --replace-fail 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
+      --replace-fail 'powerpc-linux-gnu' 'ppc' \
+      --replace-fail 's390x-linux-gnu' 's390x'
 
     # Tests run in parallel to other builds, don't suck up cores
     substituteInPlace tests/headers/compile_headers.py \
-      --replace 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
+      --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
   '';
 
   strictDeps = true;
@@ -124,34 +99,40 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     gdk-pixbuf # setup hook
     pkg-config
-    (python3.withPackages (ps: with ps; lib.optionals finalAttrs.finalPackage.doCheck [
-      python-dbusmock
-      tornado
-    ]))
+    (python3.withPackages (
+      ps:
+      with ps;
+      lib.optionals finalAttrs.finalPackage.doCheck [
+        python-dbusmock
+        tornado
+      ]
+    ))
     validatePkgConfig
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    boost
-    cmake-extras
-    gdk-pixbuf
-    libapparmor
-    libexif
-    librsvg
-    lomiri-api
-    persistent-cache-cpp
-    qtbase
-    qtdeclarative
-    shared-mime-info
-    taglib
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    # maybe add ugly to cover all kinds of formats?
-  ]);
+  buildInputs =
+    [
+      boost
+      cmake-extras
+      gdk-pixbuf
+      libapparmor
+      libexif
+      librsvg
+      lomiri-api
+      persistent-cache-cpp
+      qtbase
+      qtdeclarative
+      shared-mime-info
+      taglib
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      # maybe add ugly to cover all kinds of formats?
+    ]);
 
   nativeCheckInputs = [
     shared-mime-info
@@ -170,10 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # QSignalSpy tests in QML suite always fail, pass when running interactively
-      "-E" "^qml"
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # QSignalSpy tests in QML suite always fail, pass when running interactively
+        "-E"
+        "^qml"
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -182,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     # Fontconfig warnings breaks some tests
-    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = []; }}
+    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ ]; }}
     export HOME=$TMPDIR
 
     # Some tests need Qt plugins
@@ -199,18 +183,29 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # gallery app delegates to thumbnailer, tests various formats
+      gallery-app = nixosTests.lomiri-gallery-app;
+
+      # music app relies on thumbnailer to extract embedded cover art
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus service for out of process thumbnailing";
     mainProgram = "lomiri-thumbnailer-admin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-thumbnailer-qt"
     ];

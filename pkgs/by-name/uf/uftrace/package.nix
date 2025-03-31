@@ -1,32 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, pandoc
-, capstone
-, elfutils
-, libtraceevent
-, ncurses
-, withLuaJIT ? false
-, luajit
-, withPython ? false
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pandoc,
+  capstone,
+  elfutils,
+  libtraceevent,
+  ncurses,
+  withLuaJIT ? false,
+  luajit,
+  withPython ? false,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
     rev = "v${version}";
-    sha256 = "sha256-JuBwyE6JH3CpJH863LbnWELUIIEKVaAcz8h8beeABGQ=";
+    sha256 = "sha256-xx/eABF1q5uZYDGWUQc1YO6qCqR7J2mCHHQTBsHxMVw=";
   };
 
-  nativeBuildInputs = [ pkg-config pandoc ];
+  nativeBuildInputs = [
+    pkg-config
+    pandoc
+  ];
   buildInputs =
-    [ capstone elfutils libtraceevent ncurses ]
+    [
+      capstone
+      elfutils
+      libtraceevent
+      ncurses
+    ]
     ++ lib.optional withLuaJIT luajit
     ++ lib.optional withPython python3;
 

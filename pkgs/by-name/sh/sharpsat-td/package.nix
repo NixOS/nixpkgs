@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, cmake
-, gmp
-, mpfr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  cmake,
+  gmp,
+  mpfr,
 }:
 
 let
@@ -22,13 +23,14 @@ let
     sha256 = "sha256-l61SKEx4pBocADrEGPVacQ6F2ep9IuvNZ8W08dKeZKg=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "sharpsat-td";
   version = "unstable-2021-09-05";
 
   src = fetchFromGitHub {
     owner = "Laakeri";
-    repo = pname;
+    repo = "sharpsat-td";
     rev = "b9bb015305ea5d4e1ac7141691d0fe55ca983d31";
     sha256 = "sha256-FE+DUd58eRr5w9RFw0fMHfjIiNDWIcG7XbyWJ/pI28U=";
   };
@@ -49,7 +51,10 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gmp mpfr ];
+  buildInputs = [
+    gmp
+    mpfr
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -75,9 +80,15 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Fast solver for the #SAT model counting problem";
     homepage = "https://github.com/Laakeri/sharpsat-td";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ ris ];
     # uses clhash, which is non-portable
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "hcl2json";
-  version = "0.6.4";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aYsE4Tmi2h+XiLZH0faoB17UA7xHht8bec5Kud+NLIk=";
+    sha256 = "sha256-fgRrIJnl7lV3a2+d9/F141xCAKOj0WmeNlrtEwdl1qA=";
   };
 
-  vendorHash = "sha256-Rjpru0SfGm9hdMQwvk8yM/E65YFB0NicaJ7a56/uwLE=";
+  vendorHash = "sha256-qG7n8OLpCknjjTxi4ojsvz6D7JXIK5Ac9B/JS8vf9fg=";
 
   subPackages = [ "." ];
 

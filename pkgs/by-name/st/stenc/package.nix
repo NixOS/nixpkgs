@@ -1,31 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  autoreconfHook,
+  pkg-config,
+  pandoc,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stenc";
-  version = "1.1.1";
+  version = "2.0.0";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "scsitape";
     repo = "stenc";
-    rev = version;
-    sha256 = "GcCRVkv+1mREq3MhMRn5fICthwI4WRQJSP6InuzxP1Q=";
+    tag = version;
+    sha256 = "sha256-L0g285H8bf3g+HDYUDRWBZMOBCnWz3Vm38Ijttu404U=";
   };
 
-  postPatch = ''
-    # Fix gcc-13 build by pulling missing header. UPstream also fixed it
-    # in next major version, but there are many other patch dependencies.
-    # TODO: remove on next major version update
-    sed -e '1i #include <cstdint>' -i src/scsiencrypt.h
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pandoc
+    installShellFiles
+  ];
+
+  doCheck = true;
+
+  postInstall = ''
+    installShellCompletion --bash bash-completion/stenc
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SCSI Tape Encryption Manager";

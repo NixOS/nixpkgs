@@ -18,6 +18,7 @@
   proxy-py,
   pytest-aiohttp,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-django,
   pytest-mock,
   pytest-sugar,
@@ -45,14 +46,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini --replace-fail \
-      "addopts = --black --cov=aiosonic --cov-report term --cov-report html --doctest-modules" \
-      "addopts = --doctest-modules"
+      "addopts = --black " \
+      "addopts = "
   '';
 
   build-system = [ poetry-core ];
@@ -74,6 +75,7 @@ buildPythonPackage rec {
     proxy-py
     pytest-aiohttp
     pytest-asyncio
+    pytest-cov-stub
     pytest-django
     pytest-mock
     pytest-sugar

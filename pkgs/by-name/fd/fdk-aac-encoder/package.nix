@@ -1,4 +1,11 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, fdk_aac }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  pkg-config,
+  fdk_aac,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fdkaac";
@@ -6,12 +13,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nu774";
-    repo = pname;
+    repo = "fdkaac";
     rev = "v${version}";
     hash = "sha256-nVVeYk7t4+n/BsOKs744stsvgJd+zNnbASk3bAgFTpk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ fdk_aac ];
 

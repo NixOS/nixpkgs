@@ -44,9 +44,11 @@ let
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
+      CoqMatrix = callPackage ../development/coq-modules/coq-matrix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
+      coq-tactical = callPackage ../development/coq-modules/coq-tactical {};
       coqeal = callPackage ../development/coq-modules/coqeal (
         (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
@@ -86,6 +88,7 @@ let
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
+      jasmin = callPackage ../development/coq-modules/jasmin {};
       json = callPackage ../development/coq-modules/json {};
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
@@ -150,6 +153,7 @@ let
       ssprove = callPackage ../development/coq-modules/ssprove {};
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck {};
       stalmarck = self.stalmarck-tactic.stalmarck;
+      stdlib = callPackage ../development/coq-modules/stdlib {};
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
@@ -169,7 +173,7 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version = with lib.versions; lib.switch self.coq.version [
-              { case = range "8.15" "8.19"; out = "3.13.1"; }
+              { case = range "8.15" "8.18"; out = "3.13.1"; }
               { case = isEq "8.14"; out = "3.11"; }
             ] null;
           };
@@ -209,7 +213,7 @@ in rec {
    * a set of libraries built with that specific Coq. More libraries are known to
    * this function than what is compatible with that version of Coq. Therefore,
    * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * the resulting set. For meta-programming purposes (inspecting the derivations
    * rather than building the libraries) this filtering can be disabled by setting
    * a `dontFilter` attribute into the Coq derivation.
    */
@@ -233,6 +237,7 @@ in rec {
   coq_8_18 = mkCoq "8.18";
   coq_8_19 = mkCoq "8.19";
   coq_8_20 = mkCoq "8.20";
+  coq_9_0  = mkCoq "9.0";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -250,7 +255,8 @@ in rec {
   coqPackages_8_18 = mkCoqPackages coq_8_18;
   coqPackages_8_19 = mkCoqPackages coq_8_19;
   coqPackages_8_20 = mkCoqPackages coq_8_20;
+  coqPackages_9_0 = mkCoqPackages coq_9_0;
 
-  coqPackages = recurseIntoAttrs coqPackages_8_20;
+  coqPackages = recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;
 }

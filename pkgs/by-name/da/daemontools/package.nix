@@ -1,4 +1,11 @@
-{ fetchurl, bash, glibc, lib, stdenv, installShellFiles }:
+{
+  fetchurl,
+  bash,
+  glibc,
+  lib,
+  stdenv,
+  installShellFiles,
+}:
 
 let
   man-pages = fetchurl {
@@ -15,21 +22,30 @@ stdenv.mkDerivation rec {
     sha256 = "07scvw88faxkscxi91031pjkpccql6wspk4yrlnsbrrb5c0kamd5";
   };
 
-  patches = [ ./fix-nix-usernamespace-build.patch ];
+  patches = [
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/daemontools/-/raw/1844f0e704ab66844da14354a16ea068eba0403f/debian/patches/0005-fix-ftbfs.patch";
+      hash = "sha256-Q7t0kwajjTW2Ms5m44E4spBwHi5Xi6Y39FQVsawr8LA=";
+    })
+    ./fix-nix-usernamespace-build.patch
+  ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
     cd daemontools-${version}
 
-    sed -ie '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
+    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
 
     substituteInPlace src/Makefile \
-      --replace '/bin/sh' '${bash}/bin/bash -oxtrace'
+      --replace-fail '/bin/sh' '${bash}/bin/bash -oxtrace'
 
-    sed -ie "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
+    sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
   '';

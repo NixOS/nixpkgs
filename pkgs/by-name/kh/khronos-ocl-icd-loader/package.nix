@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, opencl-headers, cmake, withTracing ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opencl-headers,
+  cmake,
+  withTracing ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencl-icd-loader";
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
     mainProgram = "cllayerinfo";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

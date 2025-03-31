@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libnet
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libnet,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "arping";
+    rev = "arping-${version}";
     hash = "sha256-SAdbgPmApmFToYrAm8acUapZMEMQr5MO7bQOTO2hd2c=";
   };
 

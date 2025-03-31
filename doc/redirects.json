@@ -1,6 +1,39 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
+  "chap-release-notes": [
+    "release-notes.html#chap-release-notes"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
+  "neovim": [
+    "index.html#neovim"
+  ],
+  "neovim-custom-configuration": [
+    "index.html#neovim-custom-configuration"
+  ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
+  ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
   ],
   "preface": [
     "index.html#preface"
@@ -29,6 +62,15 @@
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
   ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
+  ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
+  ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -49,6 +91,33 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -155,6 +224,9 @@
   "sec-functions-library-cli": [
     "index.html#sec-functions-library-cli"
   ],
+  "sec-functions-library-fetchers": [
+    "index.html#sec-functions-library-fetchers"
+  ],
   "sec-functions-library-generators": [
     "index.html#sec-functions-library-generators"
   ],
@@ -257,6 +329,30 @@
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
   ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
+  ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
   ],
@@ -280,6 +376,33 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -781,6 +904,12 @@
   ],
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
+  ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
   ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
@@ -1464,9 +1593,6 @@
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
   ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
-  ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
   ],
@@ -1914,6 +2040,9 @@
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
   ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
+  ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
   ],
@@ -2297,6 +2426,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"
@@ -3223,14 +3358,23 @@
   "manifest-file-via-maven-plugin": [
     "index.html#manifest-file-via-maven-plugin"
   ],
-  "nim": [
-    "index.html#nim"
+  "sec-language-nim": [
+    "index.html#sec-language-nim"
+  ],
+  "buildNimPackage": [
+    "index.html#buildNimPackage"
   ],
   "buildnimpackage-parameters": [
     "index.html#buildnimpackage-parameters"
   ],
   "nim-lockfiles": [
     "index.html#nim-lockfiles"
+  ],
+  "buildNimSbom": [
+    "index.html#buildNimSbom"
+  ],
+  "generating-nim-sboms": [
+    "index.html#generating-nim-sboms"
   ],
   "nim-overrides": [
     "index.html#nim-overrides"
@@ -3724,19 +3868,11 @@
   "sec-language-texlive-lualatex-font-cache": [
     "index.html#sec-language-texlive-lualatex-font-cache"
   ],
-  "titanium": [
-    "index.html#titanium"
-  ],
-  "building-a-titanium-app": [
-    "index.html#building-a-titanium-app"
-  ],
-  "emulating-or-simulating-the-app": [
-    "index.html#emulating-or-simulating-the-app"
-  ],
   "vim": [
     "index.html#vim"
   ],
-  "custom-configuration": [
+  "vim-custom-configuration": [
+    "index.html#vim-custom-configuration",
     "index.html#custom-configuration"
   ],
   "managing-plugins-with-vim-packages": [
@@ -3745,10 +3881,12 @@
   "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
     "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
   ],
-  "vim-plugin-specificities": [
-    "index.html#vim-plugin-specificities"
+  "neovim-plugin-specificities": [
+    "index.html#neovim-plugin-specificities",
+    "neovim-plugin-specificities#vim-plugin-specificities"
   ],
-  "vim-plugin-treesitter": [
+  "neovim-plugin-treesitter": [
+    "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
   "managing-plugins-with-vim-plug": [
@@ -3760,7 +3898,11 @@
   "testing-neovim-plugins": [
     "index.html#testing-neovim-plugins"
   ],
-  "vim-plugin-required-snippet": [
+  "testing-neovim-plugins-neovim-require-check": [
+    "index.html#testing-neovim-plugins-neovim-require-check"
+  ],
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [

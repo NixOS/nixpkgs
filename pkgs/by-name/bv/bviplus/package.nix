@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bviplus";
   version = "1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bviplus/bviplus/${version}/bviplus-${version}.tgz";
-    sha256 = "08q2fdyiirabbsp5qpn3v8jxp4gd85l776w6gqvrbjwqa29a8arg";
+    url = "mirror://sourceforge/project/bviplus/bviplus/${finalAttrs.version}/bviplus-${finalAttrs.version}.tgz";
+    hash = "sha256-LyukklCYy5U3foabc2hB7ZHbJdrDXlyuXkvlGH1zAiM=";
   };
 
   patches = [
@@ -15,26 +21,24 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://sourceforge.net/p/bviplus/bugs/7/attachment/bviplus-ncurses-6.2.patch";
-      sha256 = "1g3s2fdly3qliy67f3dlb12a03a21zkjbya6gap4mqxhyyjbp46x";
+      hash = "sha256-3ZC7pPew40quekb5JecPQg2gRFi0DXeMjxQPT5sTerw=";
       # svn patch, rely on prefix added by fetchpatch:
       extraPrefix = "";
     })
   ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildFlags = [ "CFLAGS=-fgnu89-inline" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int -fgnu89-inline";
 
-  meta = with lib; {
+  meta = {
     description = "Ncurses based hex editor with a vim-like interface";
     homepage = "https://bviplus.sourceforge.net";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "bviplus";
   };
-}
+})

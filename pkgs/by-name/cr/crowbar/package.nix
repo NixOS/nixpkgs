@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, freerdp
-, nmap
-, openvpn
-, python3Packages
-, lib
-, tigervnc
+{
+  fetchFromGitHub,
+  freerdp,
+  nmap,
+  openvpn,
+  python3Packages,
+  lib,
+  tigervnc,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "repren";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlevy";
     repo = "repren";
-    rev = "refs/tags/${version}";
-    hash = "sha256-X1+WIfa75KLhulAF5blnwbyXjFtZTwkM0nAqAvxwW5A=";
+    tag = version;
+    hash = "sha256-UqJC19EvhQsLlecPwy6ixkvQTi/6w6RLI5DTeNzVIqE=";
   };
 
   build-system = with python3Packages; [

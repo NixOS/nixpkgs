@@ -1,7 +1,23 @@
-{ buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf, mtime, lwt, optint
-, vector, hex, alcotest, qcheck-alcotest
+{
+  buildDunePackage,
+  astring,
+  digestif,
+  fmt,
+  jsonm,
+  logs,
+  ocamlgraph,
+  uri,
+  repr,
+  ppx_irmin,
+  bheap,
+  uutf,
+  mtime,
+  lwt,
+  optint,
+  vector,
+  hex,
+  alcotest,
+  qcheck-alcotest,
 }:
 
 buildDunePackage {

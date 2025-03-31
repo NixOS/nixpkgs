@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchurl, perl, gd, rrdtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gd,
+  rrdtool,
+}:
 
 let
-  perlWithPkgs = perl.withPackages (pp: with pp;[
-    Socket6
-    IOSocketINET6
-  ]);
+  perlWithPkgs = perl.withPackages (
+    pp: with pp; [
+      Socket6
+      IOSocketINET6
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "mrtg";

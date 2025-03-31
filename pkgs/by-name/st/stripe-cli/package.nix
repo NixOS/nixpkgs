@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.21.10";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "stripe";
-    repo = pname;
+    repo = "stripe-cli";
     rev = "v${version}";
-    hash = "sha256-L2ydkrm2foSIh67LsMYNvV53Hdj9TdV7C4tKeHe+AK0=";
+    hash = "sha256-WlLrWMDOwpSoHUixkJbCoewt/4UgnTbwIMBD5p5SI3c=";
   };
-  vendorHash = "sha256-TuxYJ3u4/5PJYRoRgom+M1au9XerZ+vj9X3jUWTPM58=";
+  vendorHash = "sha256-dWLrJ866R+yPEYs4vc8SRADZXC1xCO7sDosHbU1G63o=";
 
   nativeBuildInputs = [ installShellFiles ];
 

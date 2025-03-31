@@ -1,4 +1,15 @@
-{ stdenv, lib, fetchurl, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  patchelf,
+  makeWrapper,
+  libusb1,
+  avahi-compat,
+  glib,
+  libredirect,
+  nixosTests,
+}:
 let
   myPatchElf = file: ''
     patchelf --set-interpreter \
@@ -11,24 +22,34 @@ in
 stdenv.mkDerivation rec {
   pname = "brscan5";
   version = "1.3.1-0";
-  src = {
-    "i686-linux" = fetchurl {
-      url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-      hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
-    };
-    "x86_64-linux" = fetchurl {
-      url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-      hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
-    };
-  }."${system}" or (throw "Unsupported system: ${system}");
+  src =
+    {
+      "i686-linux" = fetchurl {
+        url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
+        hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
+      };
+      "x86_64-linux" = fetchurl {
+        url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
+        hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
+      };
+    }
+    ."${system}" or (throw "Unsupported system: ${system}");
 
   unpackPhase = ''
     ar x $src
     tar xfv data.tar.xz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf ];
-  buildInputs = [ libusb1 avahi-compat stdenv.cc.cc glib ];
+  nativeBuildInputs = [
+    makeWrapper
+    patchelf
+  ];
+  buildInputs = [
+    libusb1
+    avahi-compat
+    stdenv.cc.cc
+    glib
+  ];
   dontBuild = true;
 
   postPatch =
@@ -37,9 +58,12 @@ stdenv.mkDerivation rec {
       # to get the offset, run:
       # strings -n 10 --radix=d opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 | grep "/opt/brother/scanner/brscan5/models"
       patchOffsetBytes =
-        if system == "x86_64-linux" then 86592
-        else if system == "i686-linux" then 79236
-        else throw "Unsupported system: ${system}";
+        if system == "x86_64-linux" then
+          86592
+        else if system == "i686-linux" then
+          79236
+        else
+          throw "Unsupported system: ${system}";
     in
     ''
       ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
@@ -104,7 +128,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother brscan5 sane backend driver";
     homepage = "https://www.brother.com";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mattchrist ];

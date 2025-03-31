@@ -25,7 +25,7 @@ lib.makeOverridable (
       src = fetchurl {
         name = "${pname}.${version}.nupkg";
         # There is no need to verify whether both sha256 and hash are
-        # valid here, because nuget-to-nix does not generate a deps.nix
+        # valid here, because nuget-to-json does not generate a deps.nix
         # containing both.
         inherit
           url

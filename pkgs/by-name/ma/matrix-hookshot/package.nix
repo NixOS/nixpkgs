@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, matrix-sdk-crypto-nodejs
-, mkYarnPackage
-, cargo
-, rustPlatform
-, rustc
-, napi-rs-cli
-, pkg-config
-, nodejs
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  matrix-sdk-crypto-nodejs,
+  mkYarnPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  napi-rs-cli,
+  pkg-config,
+  nodejs_22,
+  openssl,
 }:
 
 let
@@ -29,20 +30,22 @@ mkYarnPackage rec {
   };
 
   packageJSON = ./package.json;
+  nodejs = nodejs_22;
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     sha256 = data.yarnHash;
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
     hash = data.cargoHash;
   };
 
   packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+    "@matrix-org/matrix-sdk-crypto-nodejs" =
+      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
   extraBuildInputs = [ openssl ];
@@ -68,7 +71,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
+    makeWrapper '${nodejs_22}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
         "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
   '';
 

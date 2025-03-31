@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ipaexfont";
@@ -28,6 +32,6 @@ stdenvNoCC.mkDerivation {
     '';
     homepage = "https://moji.or.jp/ipafont/";
     license = licenses.ipa;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

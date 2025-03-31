@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libf2c";
@@ -15,7 +20,16 @@ stdenv.mkDerivation rec {
     unzip ${src}
   '';
 
-  makeFlags = [ "-f" "makefile.u" ];
+  postPatch = ''
+    substituteInPlace makefile.u \
+      --replace-fail "ld" "${stdenv.cc.targetPrefix}ld"
+  '';
+
+  makeFlags = [
+    "-f"
+    "makefile.u"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installPhase = ''
     mkdir -p $out/include $out/lib
@@ -36,5 +50,9 @@ stdenv.mkDerivation rec {
     homepage = "http://www.netlib.org/f2c/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    # Generates arith.h at build time. Uses non-standard fpu_control.h.
+    broken =
+      (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "glibc");
   };
 }

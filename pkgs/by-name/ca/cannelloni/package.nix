@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lksctp-tools, sctpSupport ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lksctp-tools,
+  sctpSupport ? true,
+  versionCheckHook,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";
-  version = "1.1.0";
+  version = "1.2.1";
   src = fetchFromGitHub {
     owner = "mguentner";
     repo = "cannelloni";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-pAXHo9NCXMFKYcIJogytBiPkQE0nK6chU5TKiDNCKA8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dhrB3qg/ljAP7nX+WpX+g7HaUEGj5pTPdDhY2Mi7pUo=";
   };
 
   nativeBuildInputs = [
@@ -20,12 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}"
   ];
 
-  meta = with lib; {
+  nativeInstallInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "SocketCAN over Ethernet tunnel";
     mainProgram = "cannelloni";
     homepage = "https://github.com/mguentner/cannelloni";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.samw ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.samw ];
   };
 })

@@ -1,29 +1,34 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, camlp-streams
-, alcotest
-, qcheck
-, qcheck-alcotest
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  camlp-streams,
+  alcotest,
+  qcheck,
+  qcheck-alcotest,
 }:
 
 buildDunePackage rec {
-  version = "2.0.0";
+  version = "3.0.0";
   pname = "pratter";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner = "gabrielhdt";
+  src = fetchFromGitLab {
+    domain = "forge.tedomum.net";
+    owner = "koizel";
     repo = "pratter";
-    rev = version;
-    hash = "sha256-QEq8Zt2pfsRT04Zd+ugGKcHdzkqYcDDUg/iAFMMDdEE=";
+    tag = version;
+    hash = "sha256-O9loVYPJ9xoYf221vBbclqNNq2AA3ImUFGHxtfK3Jwc=";
   };
 
   propagatedBuildInputs = [ camlp-streams ];
 
-  checkInputs = [ alcotest qcheck qcheck-alcotest ];
+  checkInputs = [
+    alcotest
+    qcheck
+    qcheck-alcotest
+  ];
   doCheck = true;
 
   meta = with lib; {

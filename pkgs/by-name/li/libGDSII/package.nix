@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "HomerReid";
-    repo = pname;
+    repo = "libGDSII";
     rev = "v${version}";
     hash = "sha256-EXEt7l69etcBdDdEDlD1ODOdhTBZCVjgY1jhRUDd/W0=";
   };
@@ -27,7 +28,10 @@ stdenv.mkDerivation rec {
     mainProgram = "GDSIIConvert";
     homepage = "https://github.com/HomerReid/libGDSII";
     license = [ licenses.gpl2Only ];
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pest-ide-tools";
   version = "0.3.11";
-  cargoHash = "sha256-ZD8UQbkk5JhkanBkzo+c86DZE4aD44ma5cN97aKx97U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wLdVIAwrnAk8IRp4RhO3XgfYtNw2S07uAHB1mokZ2lk=";
 
   src = fetchFromGitHub {
     owner = "pest-parser";

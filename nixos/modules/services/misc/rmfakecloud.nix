@@ -145,5 +145,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ euxane ];
 }

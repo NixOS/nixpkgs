@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wI+xN6pyNoP4xknjHHDydHq275Gb1nyp7YtqmABlTBA=";
   };
 
-  cargoHash = "sha256-6CU2ff4o7Y3CmZSf/xs2SSGco2mu4oRLJYIciCld8zo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Bhxj77E/HXvAmTO3S7DW6ZGOk9lqpZMwGv7DN58skP0=";
 
   buildNoDefaultFeatures = stdenv.targetPlatform.isWasi;
 

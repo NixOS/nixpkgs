@@ -27,7 +27,7 @@
 , libsecret
 , libuuid
 , libxkbcommon
-, mesa
+, libgbm
 , nss
 , pango
 , systemd
@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.17.0";
+  version = "5.18.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-oM0hXimXSrV33tntV+DeYdV0WyyRqioKSm+rL+Oce6Y=";
+    sha256 = "sha256-R5Xw9uIptVPYEZ73TtdWarQNtn8nhAUN+zA5tnzTaCU=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook3 ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     pango
     systemd
-    mesa # for libgbm
+    libgbm
     nss
     libuuid
     libdrm

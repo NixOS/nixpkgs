@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pybrowsers";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "browsers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hjaQUfH7pNwC6+6liOUQQZU6NdhxLmtabvDD7JnQ3GU=";
+    tag = version;
+    hash = "sha256-x8sVWRT9KaKQ6obf7aFcnQFiG8FJAzu93yCzX3hnhFo=";
   };
 
   postPatch = ''

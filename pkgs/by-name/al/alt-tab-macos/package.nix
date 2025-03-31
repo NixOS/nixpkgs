@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "7.7.0";
+  version = "7.21.1";
 
   src = fetchurl {
     url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${finalAttrs.version}/AltTab-${finalAttrs.version}.zip";
-    hash = "sha256-ASFlOYOy1uAKPJyrohFmdCD0JwJybJahpaRTiz9rFUk=";
+    hash = "sha256-pFP2QvHcJoGBfTDI/8uYSs8k28BNgwQqjXAvuhaUUcQ=";
   };
 
   sourceRoot = ".";
@@ -34,7 +34,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Windows alt-tab on macOS";
     homepage = "https://alt-tab-macos.netlify.app";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ donteatoreo emilytrau ];
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -51,14 +51,17 @@ writeShellScriptBin "patch-nupkgs" (
       find "$x" -type f -print0 | while IFS= read -rd "" p; do
         if [[ "$p" != *.nix-patched ]] \
           && isELF "$p" \
-          && ${patchelf}/bin/patchelf --print-interpreter "$p" &>/dev/null; then
+          && interpreter=$(${patchelf}/bin/patchelf --print-interpreter "$p") \
+          && [ -n "$interpreter" ]; then
           tmp="$p".$$.nix-patched
           # if this fails to copy then another process must have patched it
           cp --reflink=auto "$p" "$tmp" || continue
           echo "Patchelfing $p as $tmp"
+
           ${patchelf}/bin/patchelf \
             --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-            "$tmp" ||:
+            "$tmp"
+
           # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
           # This fixes dotnet-built binaries like crossgen2
           ${patchelf}/bin/patchelf \
@@ -69,7 +72,8 @@ writeShellScriptBin "patch-nupkgs" (
             "$tmp"
           ${patchelf}/bin/patchelf \
             --add-rpath "${binaryRPath}" \
-            "$tmp" ||:
+            "$tmp"
+
           mv "$tmp" "$p"
         fi
       done

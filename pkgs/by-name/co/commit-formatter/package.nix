@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "commit-formatter";
@@ -6,17 +10,21 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Eliot00";
-    repo = pname;
+    repo = "commit-formatter";
     rev = "v${version}";
     sha256 = "EYzhb9jJ4MzHxIbaTb1MxeXUgoxTwcnq5JdxAv2uNcA=";
   };
 
-  cargoHash = "sha256-AeHQCoP1HOftlOt/Yala3AXocMlwwIXIO2i1AsFSvGQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uW+mmArQZ5Pl2TlKIRd00dB6615Nn/Q8KtRE/ahl5V4=";
 
   meta = with lib; {
     description = "CLI tool to help you write git commit";
     homepage = "https://github.com/Eliot00/commit-formatter";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "git-cf";
   };

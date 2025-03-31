@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
-, shen-sources
-, sbcl
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  sbcl,
 }:
-
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "3.0.3";
+  version = "39.1";
 
-  src = fetchurl {
-    url = "https://github.com/Shen-Language/shen-cl/releases/download/v${version}/shen-cl-v${version}-sources.tar.gz";
-    sha256 = "0mc10jlrxqi337m6ngwbr547zi4qgk69g1flz5dsddjy5x41j0yz";
+  src = fetchzip {
+    url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
+    hash = "sha256-reN9avgYGYCMiA5BeHLhRK51liKF2ctqIgxf+4IWjVY=";
   };
 
   nativeBuildInputs = [ sbcl ];
+  dontStrip = true; # necessary to prevent runtime errors with sbcl
 
-  preBuild = ''
-    ln -s ${shen-sources} kernel
+  buildPhase = ''
+    runHook preBuild
+
+    sbcl --noinform --no-sysinit --no-userinit --load install.lsp
+
+    runHook postBuild
   '';
-
-  buildFlags = [ "build-sbcl" ];
-
-  checkTarget = "test-sbcl";
-
-  doCheck = true;
 
   installPhase = ''
-    install -m755 -D bin/sbcl/shen $out/bin/shen-sbcl
+    runHook preInstall
+
+    install -Dm755 sbcl-shen.exe $out/bin/shen-sbcl
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shenlanguage.org";
     description = "Port of Shen running on Steel Bank Common Lisp";
-    changelog = "https://github.com/Shen-Language/shen-cl/raw/v${version}/CHANGELOG.md";
+    changelog = "https://shenlanguage.org/download.html#kernel";
     platforms = sbcl.meta.platforms;
-    maintainers = with maintainers; [ bsima ];
-    broken = true;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ hakujin ];
+    license = lib.licenses.bsd3;
+    mainProgram = "shen-sbcl";
   };
-}
+})

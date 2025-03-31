@@ -1,4 +1,4 @@
 {
   _class = "darwin";
-  config = {};
+  config = { };
 }

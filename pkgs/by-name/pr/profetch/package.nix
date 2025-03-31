@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, gprolog }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gprolog,
+}:
 
 stdenv.mkDerivation rec {
   pname = "profetch";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "RustemB";
-    repo = pname;
+    repo = "profetch";
     rev = "v${version}";
     sha256 = "sha256-JsjpPUXMN0jytRS4yzSjrseqHiEQ+YinklG+tIIy+Zo=";
   };

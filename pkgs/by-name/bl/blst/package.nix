@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation ( finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blst";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "supranational";
     repo = "blst";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+Ae2cCVVEXnV/ftVOApxDcXM3COf/4DXXd1AOuGS5uc=";
+    hash = "sha256-IlbNMLBjs/dvGogcdbWQIL+3qwy7EXJbIDpo4xBd4bY=";
   };
 
   buildPhase = ''
@@ -71,7 +75,10 @@ stdenv.mkDerivation ( finalAttrs: {
     description = "Multilingual BLS12-381 signature library";
     homepage = "https://github.com/supranational/blst";
     license = licenses.isc;
-    maintainers = with maintainers; [ iquerejeta yvan-sraka ];
+    maintainers = with maintainers; [
+      iquerejeta
+      yvan-sraka
+    ];
     platforms = platforms.all;
   };
 })

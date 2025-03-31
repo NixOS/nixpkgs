@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, gforth
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  gforth,
 }:
 
 stdenv.mkDerivation {

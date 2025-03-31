@@ -7,25 +7,25 @@
 let
   # make install will use dconf to find desktop background file uri.
   # consider adding an args to allow specify pictures manually.
-  # https://github.com/daniruiz/flat-remix-gnome/blob/20240922/Makefile#L38
+  # https://github.com/daniruiz/flat-remix-gnome/blob/20241208/Makefile#L38
   fake-dconf = writeScriptBin "dconf" "echo -n";
 in
 stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
-  version = "20240922";
+  version = "20241208";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
-    repo = pname;
+    repo = "flat-remix-gnome";
     rev = version;
-    hash = "sha256-/Md1CbEDe+N8Nu0WPrIUkEudqMvEARmHD9NtgE7sPLQ=";
+    hash = "sha256-pMxdx/D3M2DwEjrOZx/zY4zZjBUamo7+8/yvVOffxx0=";
   };
 
   nativeBuildInputs = [ glib fake-dconf ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   # make install will back up this file, it will fail if the file doesn't exist.
-  # https://github.com/daniruiz/flat-remix-gnome/blob/20240922/Makefile#L56
+  # https://github.com/daniruiz/flat-remix-gnome/blob/20241208/Makefile#L56
   preInstall = ''
     mkdir -p $out/share/gnome-shell/
     touch $out/share/gnome-shell/gnome-shell-theme.gresource

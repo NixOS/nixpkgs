@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
-  version = "20240109";
+  version = "20241231";
 
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
       "ftp://ftp.invisible-island.net/byacc/byacc-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-8ol3eQFxifGpR1dwXvb24V3JII7wee6n8oq+xXfghEY=";
+    hash = "sha256-GSwvrgSNTn9RS6RRYn+cTmEnZQmfgZwZGR+f3j5glnM=";
   };
 
   configureFlags = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://invisible-island.net/byacc/CHANGES.html";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

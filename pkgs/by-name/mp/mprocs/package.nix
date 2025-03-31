@@ -1,21 +1,33 @@
-{ lib, fetchFromGitHub, rustPlatform, nix-update-script, testers, mprocs }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  versionCheckHook,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mprocs";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "pvolok";
     repo = "mprocs";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-gK2kgc0Y0s1xys+pUadi8BhGeYxtyKRhNycCoqftmDI=";
+    tag = "v${version}";
+    hash = "sha256-bNA+P6Mnhxi6YH5gAUwvAPN7STUvwDnU/r/ZBYwzgrw=";
   };
 
-  cargoHash = "sha256-lcs+x2devOEZg5YwAzlZKJl6VpCJXzVqNUr6N5pCei8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UnrwAff7Eer5Bpn2CTL2XOyM8J2Z2xofcH6d9eTr2yQ=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mprocs; };
   };
 
   meta = {
@@ -23,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pvolok/mprocs";
     changelog = "https://github.com/pvolok/mprocs/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage pyrox0 ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      pyrox0
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mprocs";
   };

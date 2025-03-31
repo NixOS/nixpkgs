@@ -1,21 +1,22 @@
-{ fetchFromGitHub
-, lib
-, makeWrapper
-, python3
-, runCommand
-, stdenv
-, stress-ng
+{
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  python3,
+  runCommand,
+  stdenv,
+  stress-ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "2024120400";
+  version = "2025032100";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
     rev = finalAttrs.version;
-    hash = "sha256-VzP7JimAbFcp1HrSS3GArSRhxHaa1s49kFP22iDHt+8=";
+    hash = "sha256-8EIdJmnPdJgES+8QwWzL1oKVqO62CQdtjyMgFw+P0+g=";
   };
 
   nativeCheckInputs = [ python3 ];
@@ -104,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

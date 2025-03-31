@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "distribution";
-  version = "3.0.0-rc.1";
+  version = "3.0.0-rc.4";
 
   src = fetchFromGitHub {
     owner = "distribution";
     repo = "distribution";
-    rev = "v${version}";
-    hash = "sha256-dfy3P8zAFlni2heQcz61+sjivHE97Syh/ICreTgxUAM=";
+    tag = "v${version}";
+    hash = "sha256-aDvcwsA1J1S7haNGvb2PikN51PpDqM93NJQKRH/acwM=";
   };
 
   vendorHash = null;
@@ -25,6 +25,7 @@ buildGoModule rec {
     # TestInMemoryDriverSuite: timeout after 10 minutes, looks like a deadlock.
     "-skip=^TestHTTPChecker$|^TestInMemoryDriverSuite$"
   ];
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests.version = testers.testVersion {

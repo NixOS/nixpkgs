@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, xz }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "avfs";
-  version = "1.1.5";
+  version = "1.2.0";
   src = fetchurl {
     url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rZ87ZBBNYAmgWMcPZwiPeZMJv4UZsUsVSvrSJqRScs8=";
+    sha256 = "sha256-olqOxDwe4XJiThpMec5mobkwhBzbVFtyXx7GS8q+iJw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ fuse xz ];
+  buildInputs = [
+    fuse
+    xz
+  ];
 
   configureFlags = [
     "--enable-library"

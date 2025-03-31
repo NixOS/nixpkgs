@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "nheko.im";
     owner = "nheko-reborn";
-    repo = pname;
+    repo = "coeurl";
     rev = "v${version}";
     hash = "sha256-NGplM5c/dMGSQbhKeuPOTWL8KsqvMd/76YuwCxnqNNE=";
   };

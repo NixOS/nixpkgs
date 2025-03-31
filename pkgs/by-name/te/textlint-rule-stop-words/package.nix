@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "sapegin";
     repo = "textlint-rule-stop-words";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e9jTbDULOs0DwtT9UZp7k5+RR5Ab/x/sizIvs1MrmZs=";
   };
 
@@ -29,7 +29,7 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint rule to find filler words, buzzwords and clichés";
     homepage = "https://github.com/sapegin/textlint-rule-stop-words";
-    changelog = "https://github.com/sapegin/textlint-rule-stop-words/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/sapegin/textlint-rule-stop-words/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

@@ -8,19 +8,20 @@
   pkg-config,
   curl,
   openssl,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij";
-  version = "0.41.2";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xdWfaXWmqFJuquE7n3moUjGuFqKB90OE6lqPuC3onOg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EK+eQfNhfVxjIsoyj43tcRjHDT9O8/n7hUz24BC42nw=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -30,7 +31,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail ', "vendored_curl"' ""
   '';
 
-  cargoHash = "sha256-38hTOsa1a5vpR1i8GK1aq1b8qaJoCE74ewbUOnun+Qs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0+cU2C6zjVv2G8h7oK0ztMDdukVR6QRzN81/SfLZapY=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -46,14 +48,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  preCheck = ''
-    HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs
@@ -82,14 +84,15 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/zellij-org/zellij/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       therealansh
       _0x4A6F
       abbe
       pyrox0
+      matthiasbeyer
     ];
     mainProgram = "zellij";
   };
-}
+})

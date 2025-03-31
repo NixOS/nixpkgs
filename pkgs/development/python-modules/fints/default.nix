@@ -13,17 +13,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.0";
+  version = "4.2.3";
   pname = "fints";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-BM57Ov36DEJVH5DBm/mJife16iaFfjlQrF0IXRziM2A=";
+    tag = "v${version}";
+    hash = "sha256-QR5/mAll6vuP+hJo/oguynLLsGawhTQNaU6TCgww9yM=";
   };
 
   pythonRemoveDeps = [ "enum-tools" ];

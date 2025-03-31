@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let
   rpcSecret = "supersecret";
   rpc-listen-port = 6800;
@@ -9,7 +9,7 @@ let
     params = [ "token:${rpcSecret}" ];
   };
 in
-rec {
+{
   name = "aria2";
 
   nodes.machine = {
@@ -22,7 +22,16 @@ rec {
         allow-overwrite = false;
         check-integrity = true;
         console-log-level = "warn";
-        listen-port = [{ from = 20000; to = 20010; } { from = 22222; to = 22222; }];
+        listen-port = [
+          {
+            from = 20000;
+            to = 20010;
+          }
+          {
+            from = 22222;
+            to = 22222;
+          }
+        ];
         max-concurrent-downloads = 50;
         seed-ratio = 1.2;
         summary-interval = 0;
@@ -40,4 +49,4 @@ rec {
   '';
 
   meta.maintainers = [ pkgs.lib.maintainers.timhae ];
-})
+}

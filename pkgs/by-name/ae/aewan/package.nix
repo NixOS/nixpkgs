@@ -1,6 +1,14 @@
-{ lib, gccStdenv, fetchurl, fetchpatch, zlib, ncurses }:
+{
+  lib,
+  gccStdenv,
+  fetchurl,
+  fetchpatch,
+  zlib,
+  ncurses,
+}:
 
-let stdenv = gccStdenv;
+let
+  stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "aewan";
@@ -20,9 +28,24 @@ stdenv.mkDerivation rec {
       # patch is in CVS diff format, add 'a/' prefix
       extraPrefix = "";
     })
+    # https://sourceforge.net/p/aewan/bugs/14/
+    (fetchpatch {
+      url = "https://sourceforge.net/p/aewan/bugs/14/attachment/aewan-1.0.01-fix-incompatible-function-pointer-types.patch";
+      sha256 = "sha256-NlnsOe/OCMXCrehBq20e0KOMcWt5rUv9fIvu9eoOMqw=";
+    })
+    # https://sourceforge.net/p/aewan/bugs/16/
+    (fetchpatch {
+      url = "https://sourceforge.net/p/aewan/bugs/16/attachment/implicit-function-declaration.patch";
+      sha256 = "sha256-RWFJRDaYoiQySkB2L09JHSX90zgIJ9q16IrPhg03Ruc=";
+      # patch is in CVS diff format, add 'a/' prefix
+      extraPrefix = "";
+    })
   ];
 
-  buildInputs = [ zlib ncurses ];
+  buildInputs = [
+    zlib
+    ncurses
+  ];
 
   meta = {
     description = "Ascii-art Editor Without A Name";

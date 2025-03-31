@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "paperview";
   version = "unstable-2020-09-22";
 

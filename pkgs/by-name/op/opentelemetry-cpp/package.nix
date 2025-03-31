@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, protobuf
-, curl
-, grpc
-, prometheus-cpp
-, nlohmann_json
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  protobuf,
+  curl,
+  grpc,
+  prometheus-cpp,
+  nlohmann_json,
+  nix-update-script,
 }:
 
 let
@@ -64,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOTELCPP_PROTO_PATH=${opentelemetry-proto}"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp-target.cmake \

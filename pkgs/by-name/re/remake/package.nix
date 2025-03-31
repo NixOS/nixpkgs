@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, readline
-, guileSupport ? false
-, guile
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  readline,
+  guileSupport ? false,
+  guile,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = [ readline ]
-    ++ lib.optionals guileSupport [ guile ];
+  buildInputs = [ readline ] ++ lib.optionals guileSupport [ guile ];
 
   # make check fails, see https://github.com/rocky/remake/issues/117
 
@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     description = "GNU Make with comprehensible tracing and a debugger";
     mainProgram = "remake";
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ bjornfor shamilton ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      shamilton
+    ];
   };
 }

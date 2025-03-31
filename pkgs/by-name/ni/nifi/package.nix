@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nifi";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchzip {
     url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
-    hash = "sha256-EQqosdwNdaSUIcP3QlvzJZhDNu1JbHg08FlnZo6ogmQ=";
+    hash = "sha256-YFQIV2/B+8/fBmrWPs7Q3FkqaIxBqNBP0BIkIm4M7Zo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     mv $out/{LICENSE,NOTICE,README} $out/share/nifi
 
     substituteInPlace $out/bin/nifi.sh \
-      --replace "/bin/sh" "${stdenv.shell}"
+      --replace-fail "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/nifi-env.sh \
-      --replace "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jdk11}"
+      --replace-fail "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jdk11}"
   '';
 
   passthru = {

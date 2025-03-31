@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, weggli
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  weggli,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6XSedsTUjcZzFXaNitsXlUBpxC6TYVMCB+AfH3x7c5E=";
   };
 
-  cargoHash = "sha256-Cj/m4GRaqI/lHYFruj047B7FdGoVl/wC8I2o1dzhOTs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vJd+4cZuDSGThnkUULhwEUFbHlkiIGyxT+1fWRUsIJk=";
 
   passthru.tests.version = testers.testVersion {
     package = weggli;
@@ -30,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${version}";
     mainProgram = "weggli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arturcygan mfrw ];
+    maintainers = with maintainers; [
+      arturcygan
+      mfrw
+    ];
   };
 }

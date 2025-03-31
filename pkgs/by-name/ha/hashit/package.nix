@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, meson, ninja, pkg-config, vala, pantheon, python3, libgee, gtk3, desktop-file-utils, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  pantheon,
+  python3,
+  libgee,
+  gtk3,
+  desktop-file-utils,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hashit";
@@ -6,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
-    repo = pname;
+    repo = "hashit";
     rev = version;
     sha256 = "1s8fbzg1z2ypn55xg1pfm5xh15waq55fkp49j8rsqiq8flvg6ybf";
   };

@@ -1,4 +1,11 @@
-{lib, stdenv, fetchFromGitHub, cmake, zlib, ncurses}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "somatic-sniper";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
   patches = [ ./somatic-sniper.patch ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ncurses ];
+  buildInputs = [
+    zlib
+    ncurses
+  ];
 
   enableParallelBuilding = false;
 

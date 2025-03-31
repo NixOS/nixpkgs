@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, intltool
-, avahi
-, curl
-, dbus-glib
-, gettext
-, gtk3
-, libmpdclient
-, libsoup
-, libxml2
-, taglib
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  intltool,
+  avahi,
+  curl,
+  dbus-glib,
+  gettext,
+  gtk3,
+  libmpdclient,
+  libsoup_2_4,
+  libxml2,
+  taglib,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     dbus-glib
     gtk3
     libmpdclient
-    libsoup
+    libsoup_2_4
     libxml2
     taglib
   ];

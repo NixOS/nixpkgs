@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "lichess-org";
-    repo = pname;
+    repo = "fishnet";
     rev = "v${version}";
     hash = "sha256-JhllThFiHeC/5AAFwwZQ0mgbENIWP1cA7aD01DeDVL8=";
     fetchSubmodules = true;
@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage rec {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  cargoHash = "sha256-HuVEg8uJ1WbXzYaXCPBobmxhbhk+X8D/xFcM2wE8Lh0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aUSppXw0UDqCDX7YX+sYNEcmiABXDn0nrow0H9UjpaA=";
 
   passthru.tests.version = testers.testVersion {
     package = fishnet;

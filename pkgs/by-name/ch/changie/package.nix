@@ -1,27 +1,32 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.19.1";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
     rev = "v${version}";
-    hash = "sha256-FZR3KWBCulTbE1Rn6T1neJsjbps0HBPSzzZ57lngB/8=";
+    hash = "sha256-zLRMH5TxEz/fspMOPAMTEqO19fj9PZsRh6zddbTqSXM=";
   };
 
-  vendorHash = "sha256-2SkHId5BDAv525PISLjlrP862Z2fJDN4L839rz8rWaw=";
+  vendorHash = "sha256-LWf10MM9SBU9sHb59c6ILlsHs8E8ETYAR34296aeHlI=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd changie \
@@ -36,6 +41,9 @@ buildGoModule rec {
     homepage = "https://changie.dev";
     changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

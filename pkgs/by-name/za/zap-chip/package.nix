@@ -1,27 +1,25 @@
 {
   lib,
   buildNpmPackage,
-  electron_31,
+  electron,
   fetchFromGitHub,
   writers,
+  makeWrapper,
   withGui ? false,
 }:
 
-let
-  electron = electron_31;
-in
 buildNpmPackage rec {
   pname = "zap-chip";
-  version = "2024.09.27";
+  version = "2025.02.26";
 
   src = fetchFromGitHub {
     owner = "project-chip";
     repo = "zap";
     rev = "v${version}";
-    hash = "sha256-Dc5rU4jJ6aJpk8mwL+XNSmtisYxF86VzXd/Aacd4p0o=";
+    hash = "sha256-oYw1CxeCr4dUpw7hhXjtB+QwTfBI7rG9jgfxWKZYsSc=";
   };
 
-  npmDepsHash = "sha256-ZFksGwKlXkz6XTs2QdalGB0hR16HfB69XQOFWI9X/KY=";
+  npmDepsHash = "sha256-dcnJfxgF1S2gyR+wPnBD4AFzix5Sdq2ZqDlXvWAFb8s=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -58,6 +56,8 @@ buildNpmPackage rec {
       -c.electronVersion=${electron.version}
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postInstall =
     ''
       # this file is also used at runtime
@@ -66,6 +66,19 @@ buildNpmPackage rec {
     + lib.optionalString (!withGui) ''
       # home-assistant chip-* python packages need the executable under the name zap-cli
       mv $out/bin/zap $out/bin/zap-cli
+    ''
+    + lib.optionalString withGui ''
+      pushd dist/linux-*unpacked
+      mkdir -p $out/opt/zap-chip
+      cp -r locales resources{,.pak} $out/opt/zap-chip
+      popd
+
+      rm $out/bin/zap
+      makeWrapper '${lib.getExe electron}' "$out/bin/zap" \
+        --add-flags $out/opt/zap-chip/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
     '';
 
   meta = {

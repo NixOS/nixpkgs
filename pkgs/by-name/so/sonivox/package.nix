@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sonivox";
-  version = "3.6.13";
+  version = "3.6.15";
 
   src = fetchFromGitHub {
     owner = "pedrolcl";
-    repo = pname;
+    repo = "sonivox";
     rev = "v${version}";
-    hash = "sha256-QhXMmJbyqDxSJmT847Qbg1jbU3gLFsJ/FWVTy7MV2fE=";
+    hash = "sha256-k+EhhLFp+ehptjDS8ZHvo5tfFxmSCA2lFTjkWFLi+cs=";
   };
 
   nativeBuildInputs = [ cmake ];

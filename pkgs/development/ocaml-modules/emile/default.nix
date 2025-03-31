@@ -1,13 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, angstrom
-, ipaddr
-, base64
-, pecu
-, uutf
-, alcotest
-, cmdliner
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  angstrom,
+  ipaddr,
+  base64,
+  pecu,
+  uutf,
+  alcotest,
+  cmdliner,
 }:
 
 buildDunePackage rec {

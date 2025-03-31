@@ -1,45 +1,53 @@
-{ appstream
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gtk4
-, lib
-, libadwaita
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
+{
+  appstream,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gtk4,
+  lib,
+  libadwaita,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "raider";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "ADBeveridge";
     repo = "raider";
     rev = "v${version}";
-    hash = "sha256-LkGSEUoruWfEq/ttM3LkA/UjHc3ZrlvGF44HsJLntAo=";
+    hash = "sha256-fOv4Y5kBbZazFNkPrLS3D7LMLLvT/kIYmsCezsl/fxQ=";
   };
 
-  nativeBuildInputs = [
-    appstream
-    blueprint-compiler
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook4
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      appstream
+      blueprint-compiler
+      desktop-file-utils
+      meson
+      ninja
+      pkg-config
+      wrapGAppsHook4
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     gtk4
     libadwaita
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Permanently delete your files (also named File Shredder)";
@@ -57,7 +65,12 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Raider";
     license = licenses.gpl3Plus;
     mainProgram = "raider";
-    maintainers = with maintainers; [ benediktbroich aleksana ];
+    maintainers =
+      with maintainers;
+      [
+        benediktbroich
+      ]
+      ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
   };
 }

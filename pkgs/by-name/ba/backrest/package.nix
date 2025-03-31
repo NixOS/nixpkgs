@@ -1,29 +1,46 @@
 {
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
+  gzip,
   lib,
+  nodejs,
+  pnpm_9,
   restic,
-  util-linux,
   stdenv,
+  util-linux,
 }:
 let
   pname = "backrest";
-  version = "1.5.0";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qxEZkRKkwKZ+EZ3y3aGcX2ioKOz19SRdi3+9mjF1LpE=";
+    tag = "v${version}";
+    hash = "sha256-X3FiNor2q/JgyV05CIAls7MjMvongH5dGeutPz+CW9I=";
   };
 
-  frontend = buildNpmPackage {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "${pname}-webui";
     src = "${src}/webui";
 
-    npmDepsHash = "sha256-mS8G3+JuASaOkAYi+vgWztrSIIu7vfaasu+YeRJjWZw=";
+    nativeBuildInputs = [
+      nodejs
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-rBu+6QwTmQsjHh0yd8QjdHPc3VOmadJQ+NK9X6qbSx8=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      export BACKREST_BUILD_VERSION=${version}
+      pnpm build
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -31,16 +48,20 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
-  };
+  });
 in
 buildGoModule {
   inherit pname src version;
 
-  vendorHash = "sha256-YukcHnXa/QimfX3nDtQI6yfPkEK9j5SPXOPIT++eWsU=";
+  vendorHash = "sha256-OVJnJ5fdpa1vpYTCxtvRGbnICbfwZeYiCwAS8c4Tg2Y=";
+
+  nativeBuildInputs = [ gzip ];
 
   preBuild = ''
     mkdir -p ./webui/dist
     cp -r ${frontend}/* ./webui/dist
+
+    go generate -skip="npm" ./...
   '';
 
   nativeCheckInputs = [ util-linux ];
@@ -48,11 +69,10 @@ buildGoModule {
   checkFlags =
     let
       skippedTests =
-        [
-          "TestServeIndex" # Fails with handler returned wrong content encoding
-        ]
+        [ "TestRunCommand" ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "TestBackup" # relies on ionice
+          "TestCancelBackup"
         ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

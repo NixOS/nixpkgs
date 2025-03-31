@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ffmpeg-full
-, libaom
-, meson
-, nasm
-, ninja
-, testers
-, xxd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg-full,
+  libaom,
+  meson,
+  nasm,
+  ninja,
+  testers,
+  xxd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,11 +24,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/libvmaf";
 
-  nativeBuildInputs = [ meson ninja nasm xxd ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    nasm
+    xxd
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
+  '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
+  };
 
   mesonFlags = [ "-Denable_avx512=true" ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   doCheck = false;
 
   passthru.tests = {

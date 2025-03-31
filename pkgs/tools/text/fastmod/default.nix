@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +18,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-A/3vzfwaStoQ9gdNM8yjmL2J/pQjj6yb68WThiTF+1E=";
   };
 
-  cargoHash = "sha256-sFrABp4oYhel+GONFsTbunq+4We2DicvF9A3FT/ZArc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GpV7F0TQyIRowY8LqLTVuwJcRYyyu055+g7BmxT4TMQ=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    Security
+  ];
 
   meta = with lib; {
     description = "Utility that makes sweeping changes to large, shared code bases";

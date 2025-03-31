@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, bison
-, flex
-, gettext
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, expat
-, glew
-, freetype
-, libSM
-, libXext
-, libGL
-, libGLU
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+  gettext,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  expat,
+  glew,
+  freetype,
+  libSM,
+  libXext,
+  libGL,
+  libGLU,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

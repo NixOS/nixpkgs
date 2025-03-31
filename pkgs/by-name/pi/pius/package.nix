@@ -1,6 +1,14 @@
-{ fetchFromGitHub, lib, python3Packages, gnupg, perl }:
+{
+  fetchFromGitHub,
+  lib,
+  python3Packages,
+  gnupg,
+  perl,
+}:
 
-let version = "3.0.0"; in
+let
+  version = "3.0.0";
+in
 python3Packages.buildPythonApplication {
   pname = "pius";
   namePrefix = "";

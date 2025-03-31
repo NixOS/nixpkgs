@@ -21,18 +21,19 @@
 , runCommand
 , src ? null
 , monorepoSrc ? null
-, patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
-, apple-sdk_11
-, darwinMinVersionHook
+, getVersionFile
+, fetchpatch
+, fetchpatch2
+, replaceVars
 , ...
 }:
 
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } (''
+      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -54,13 +55,69 @@ stdenv.mkDerivation (rec {
   inherit version;
 
   src = src';
-  inherit patches;
 
-  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
-  # the `lib` output because that would create a cycle between it and the `out` output.
-  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "lib" ];
+  # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
+  # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
+  # Also, LLDB expects to find the path to `bin` relative to `lib` on Darwin.
+  outputs = [ "out" "dev" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
+
+  patches =
+    let
+      resourceDirPatch = (replaceVars (getVersionFile "lldb/resource-dir.patch") {
+        clangLibDir = "${lib.getLib libclang}/lib";
+      }).overrideAttrs
+        (_: _: { name = "resource-dir.patch"; });
+    in
+    lib.optionals (lib.versionOlder release_version "15") [
+      # Fixes for SWIG 4
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/81fc5f7909a4ef5a8d4b5da2a10f77f7cb01ba63.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-Znw+C0uEw7lGETQLKPBZV/Ymo2UigZS+Hv/j1mUo7p0=";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/f0a25fe0b746f56295d5c02116ba28d2f965c175.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-QzVeZzmc99xIMiO7n//b+RNAvmxghISKQD93U2zOgFI=";
+      })
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "16") [
+      # Fixes for SWIG 4
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-LXl+WbpmWZww5xMDrle3BM2Tw56v8k9LO1f1Z1/wDTs=";
+      })
+      (fetchpatch2 {
+        url = "https://github.com/llvm/llvm-project/commit/9ec115978ea2bdfc60800cd3c21264341cdc8b0a.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
+      })
+
+      # FIXME: do we need this after 15?
+      (getVersionFile "lldb/procfs.patch")
+    ]
+    ++ lib.optional (lib.versionOlder release_version "18") (fetchpatch {
+      name = "libcxx-19-char_traits.patch";
+      url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+      stripLen = 1;
+      hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+    })
+    ++ lib.optionals (lib.versionOlder release_version "17") [
+      resourceDirPatch
+      (fetchpatch {
+        name = "add-cstdio.patch";
+        url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+        stripLen = 1;
+        hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+      })
+    ]
+    ++ lib.optional (lib.versionOlder release_version "14") (
+      getVersionFile "lldb/gnu-install-dirs.patch"
+    )
+    ++ lib.optional (lib.versionAtLeast release_version "14") ./lldb/gnu-install-dirs.patch;
 
   nativeBuildInputs = [
     cmake
@@ -93,14 +150,6 @@ stdenv.mkDerivation (rec {
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-  ]
-  ++ lib.optionals
-    (
-      stdenv.targetPlatform.isDarwin
-        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-    ) [
-    apple-sdk_11
-    (darwinMinVersionHook "10.15")
   ];
 
   hardeningDisable = [ "format" ];
@@ -137,20 +186,20 @@ stdenv.mkDerivation (rec {
 
   # TODO: cleanup with mass-rebuild
   installCheckPhase = ''
-    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+    if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
         echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '' # Something lua is built on older versions but this file doesn't exist.
   + lib.optionalString (lib.versionAtLeast release_version "14") ''
-    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+    if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
         echo "ERROR: lua files not installed where expected!";
         return 1;
     fi
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
 
     # Editor support
     # vscode:

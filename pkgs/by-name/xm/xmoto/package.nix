@@ -1,7 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, makeWrapper, bzip2
-, curl, libjpeg, libxml2, xz, lua, ode, libGL, libGLU, libpng
-, pkg-config, SDL2, SDL2_mixer, SDL2_net , SDL2_ttf
-, sqlite, libxdg_basedir, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  makeWrapper,
+  bzip2,
+  curl,
+  libjpeg,
+  libxml2,
+  xz,
+  lua,
+  ode,
+  libGL,
+  libGLU,
+  libpng,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  sqlite,
+  libxdg_basedir,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
@@ -58,7 +80,10 @@ stdenv.mkDerivation rec {
       You need to control your bike to its limits, if you want to have a chance to finish the most difficult challenges.
     '';
     homepage = "https://xmoto.tuxfamily.org";
-    maintainers = with maintainers; [ raskin pSub ];
+    maintainers = with maintainers; [
+      raskin
+      pSub
+    ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };

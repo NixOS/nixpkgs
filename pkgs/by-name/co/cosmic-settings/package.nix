@@ -1,67 +1,108 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, makeBinaryWrapper
-, cosmic-icons
-, cosmic-randr
-, just
-, pkg-config
-, libxkbcommon
-, libinput
-, fontconfig
-, freetype
-, wayland
-, expat
-, udev
-, util-linux
+{
+  lib,
+  stdenv,
+  stdenvAdapters,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  just,
+  libcosmicAppHook,
+  pkg-config,
+  expat,
+  libinput,
+  fontconfig,
+  freetype,
+  pipewire,
+  pulseaudio,
+  udev,
+  util-linux,
+  cosmic-randr,
+  xkeyboard_config,
+  nix-update-script,
+
+  withMoldLinker ? stdenv.targetPlatform.isLinux,
 }:
-
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-settings";
-  version = "1.0.0-alpha.1";
-
-  src = fetchFromGitHub {
-    owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
-    hash = "sha256-gTzZvhj7oBuL23dtedqfxUCT413eMoDc0rlNeqCeZ6E=";
+let
+  libcosmicAppHook' = (libcosmicAppHook.__spliced.buildHost or libcosmicAppHook).override {
+    includeSettings = false;
   };
+in
+rustPlatform.buildRustPackage.override
+  { stdenv = if withMoldLinker then stdenvAdapters.useMoldLinker stdenv else stdenv; }
+  (finalAttrs: {
+    pname = "cosmic-settings";
+    version = "1.0.0-alpha.6";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-zMHJc6ytbOoi9E47Zsg6zhbQKObsaOtVHuPnLAu36I4=";
+    src = fetchFromGitHub {
+      owner = "pop-os";
+      repo = "cosmic-settings";
+      tag = "epoch-${finalAttrs.version}";
+      hash = "sha256-UKg3TIpyaqtynk6wLFFPpv69F74hmqfMVPra2+iFbvE=";
+    };
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-mf/Cw3/RLrCYgsk7JKCU2+oPn1VPbD+4JzkUmbd47m8=";
 
-  nativeBuildInputs = [ cmake just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon libinput fontconfig freetype wayland expat udev util-linux ];
+    nativeBuildInputs = [
+      cmake
+      just
+      libcosmicAppHook'
+      pkg-config
+      rustPlatform.bindgenHook
+      util-linux
+    ];
 
-  dontUseJustBuild = true;
+    buildInputs = [
+      expat
+      fontconfig
+      freetype
+      libinput
+      pipewire
+      pulseaudio
+      udev
+    ];
 
-  justFlags = [
-    "--set"
-    "prefix"
-    (placeholder "out")
-    "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
-  ];
+    dontUseJustBuild = true;
+    dontUseJustCheck = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-settings" \
-      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]} \
-      --suffix XDG_DATA_DIRS : "$out/share:${cosmic-icons}/share"
-  '';
+    justFlags = [
+      "--set"
+      "prefix"
+      (placeholder "out")
+      "--set"
+      "bin-src"
+      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
+    ];
 
-  meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-settings";
-    description = "Settings for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
-    mainProgram = "cosmic-settings";
-  };
-}
+    env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      lib.optionalString withMoldLinker "-C link-arg=-fuse-ld=mold";
+
+    preFixup = ''
+      libcosmicAppWrapperArgs+=(
+        --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+        --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
+        --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
+      )
+    '';
+
+    passthru.updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+
+    meta = {
+      description = "Settings for the COSMIC Desktop Environment";
+      homepage = "https://github.com/pop-os/cosmic-settings";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "cosmic-settings";
+      maintainers = with lib.maintainers; [
+        nyabinary
+        HeitorAugustoLN
+      ];
+      platforms = lib.platforms.linux;
+    };
+  })

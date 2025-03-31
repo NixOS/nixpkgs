@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchgit
-, wrapGAppsHook3
-, cairo
-, glib
-, gnome-common
-, gst_all_1
-, gtk3
-, intltool
-, libtool
-, pkg-config
-, which
-, xorg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  wrapGAppsHook3,
+  cairo,
+  glib,
+  gnome-common,
+  gst_all_1,
+  gtk3,
+  intltool,
+  libtool,
+  pkg-config,
+  which,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -32,33 +34,39 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=discarded-qualifiers"
   ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [
-    which
-    gnome-common
-    glib
-    libtool
-    cairo
-    gtk3
-    xorg.xwininfo
-    xorg.libXdamage
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-ugly
-    gst-libav
-    wrapGAppsHook3
-  ]);
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs =
+    [
+      which
+      gnome-common
+      glib
+      libtool
+      cairo
+      gtk3
+      xorg.xwininfo
+      xorg.libXdamage
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-libav
+      wrapGAppsHook3
+    ]);
 
-  meta = with lib; {
+  meta = {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
     homepage = "https://github.com/GNOME/byzanz";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

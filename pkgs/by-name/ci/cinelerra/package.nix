@@ -1,56 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, faad2
-, faac
-, a52dec
-, alsa-lib
-, fftw
-, lame
-, libavc1394
-, libiec61883
-, libraw1394
-, libsndfile
-, libvorbis
-, libogg
-, libjpeg
-, libtiff
-, freetype
-, mjpegtools
-, x264
-, gettext
-, openexr
-, libXext
-, libXxf86vm
-, libXv
-, libXi
-, libX11
-, libXft
-, xorgproto
-, libtheora
-, libpng
-, libdv
-, libuuid
-, file
-, nasm
-, perl
-, fontconfig
-, intltool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  faad2,
+  faac,
+  a52dec,
+  alsa-lib,
+  fftw,
+  lame,
+  libavc1394,
+  libiec61883,
+  libraw1394,
+  libsndfile,
+  libvorbis,
+  libogg,
+  libjpeg,
+  libtiff,
+  freetype,
+  mjpegtools,
+  x264,
+  gettext,
+  openexr,
+  libXext,
+  libXxf86vm,
+  libXv,
+  libXi,
+  libX11,
+  libXft,
+  xorgproto,
+  libtheora,
+  libpng,
+  libdv,
+  libuuid,
+  file,
+  nasm,
+  perl,
+  fontconfig,
+  intltool,
 }:
 
 stdenv.mkDerivation {
   pname = "cinelerra-cv";
-  version = "2.3-unstable-2024-03-20";
+  version = "2.3-unstable-2025-01-25";
 
   src = fetchFromGitHub {
     owner = "cinelerra-cv-team";
     repo = "cinelerra-cv";
-    rev = "18a693425f78f7c4c68b5a342efce3e8db2a30dc";
-    hash = "sha256-+47Xa63GoKiQzEXbxmKUwJLDIFUnzc/FfxRPXCCxzpE=";
+    rev = "fb6eb391fe907d0f3b48b90f87e7a416408054f3";
+    hash = "sha256-mu6yY44IlbmoBn1DUARQm5p16y6WShPc3gVML8+59xc=";
   };
 
   preConfigure = ''
@@ -66,7 +67,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ automake autoconf libtool pkg-config file intltool ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+    pkg-config
+    file
+    intltool
+  ];
 
   buildInputs = [
     faad2

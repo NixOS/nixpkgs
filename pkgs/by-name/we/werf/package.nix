@@ -3,36 +3,39 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
   btrfs-progs,
-  testers,
-  werf,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "2.12.1";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
-    rev = "v${version}";
-    hash = "sha256-EVFNUOvczsgU0t2hOfl4e5bFH4ByxmRsIk2idI+uquQ=";
+    tag = "v${version}";
+    hash = "sha256-eEdhAY3vN6hsgggakYpGFiVjR2BBGrg1UF18gFXc8g8=";
   };
 
-  vendorHash = "sha256-eJT3ROX/cAslWMNUdlFU6eQE8o2GlAFKrBaT//Pde1o=";
+  vendorHash = "sha256-g+QZI0mfXSIU+iBnKzMeTGuF5UB1cwOixvRhcrBGrpE=";
 
   proxyVendor = true;
 
   subPackages = [ "cmd/werf" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
     ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
 
-  CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
   ldflags =
     [
@@ -40,7 +43,7 @@ buildGoModule rec {
       "-w"
       "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "-extldflags=-static"
       "-linkmode external"
     ];
@@ -53,7 +56,7 @@ buildGoModule rec {
       "dfrunsecurity"
       "dfssh"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "cni"
       "exclude_graphdriver_devicemapper"
       "netgo"
@@ -62,44 +65,48 @@ buildGoModule rec {
       "static_build"
     ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   preCheck =
     ''
-      # Test all targets.
+      # Test all packages.
       unset subPackages
 
-      # Remove tests that require external services.
+      # Remove tests that require external services, usually a Docker daemon.
       rm -rf \
         integration/suites \
-        pkg/true_git/*test.go \
+        pkg/true_git/*_test.go \
         test/e2e
     ''
-    + lib.optionalString (CGO_ENABLED == 0) ''
+    + lib.optionalString (env.CGO_ENABLED == 0) ''
       # A workaround for osusergo.
       export USER=nixbld
     '';
 
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   postInstall = ''
-    installShellCompletion --cmd werf \
-      --bash <($out/bin/werf completion --shell=bash) \
-      --zsh <($out/bin/werf completion --shell=zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion \
+        --cmd werf \
+        --$shell <($out/bin/werf completion --shell=$shell)
+    done
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = werf;
-    command = "werf version";
-    version = src.rev;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "GitOps delivery tool";
-    mainProgram = "werf";
     longDescription = ''
-      The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
-      implement CI/CD and Giterminism.
+      werf is a CNCF Sandbox CLI tool to implement full-cycle CI/CD to
+      Kubernetes easily. werf integrates into your CI system and leverages
+      familiar and reliable technologies, such as Git, Dockerfile, Helm, and
+      Buildah.
     '';
     homepage = "https://werf.io";
     changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.azahi ];
+    mainProgram = "werf";
   };
 }

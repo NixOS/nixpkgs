@@ -1,4 +1,4 @@
-{ hostPkgs, ... }: {
+{ hostPkgs, lib, withNg, ... }: {
   name = "nixos-rebuild-specialisations";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
@@ -25,6 +25,7 @@
         pkgs.grub2
       ];
 
+      system.rebuild.enableNg = withNg;
       system.switch.enable = true;
 
       virtualisation = {
@@ -36,7 +37,7 @@
 
   testScript =
     let
-      configFile = hostPkgs.writeText "configuration.nix" ''
+      configFile = hostPkgs.writeText "configuration.nix" /* nix */ ''
         { lib, pkgs, ... }: {
           imports = [
             ./hardware-configuration.nix
@@ -54,6 +55,8 @@
           environment.systemPackages = [
             (pkgs.writeShellScriptBin "parent" "")
           ];
+
+          system.rebuild.enableNg = ${lib.boolToString withNg};
 
           specialisation.foo = {
             inheritParentConfig = true;
@@ -78,7 +81,7 @@
       '';
 
     in
-    ''
+    /* python */ ''
       machine.start()
       machine.succeed("udevadm settle")
       machine.wait_for_unit("multi-user.target")

@@ -1,20 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, git
-, installShellFiles
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  git,
+  installShellFiles,
 }:
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.4.8";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-PzoMDBoWAXVbK3itcpybpjZ+lWd8tS7UOFtWWMwTh5U=";
+    hash = "sha256-hWr4HOpcNXEpdboeHige5nliVCLY3RukMVh2xRKGIlI=";
   };
 
-  npmDepsHash = "sha256-mybKtbguxxHkPUm9oSYPjxGZxf6tEy4OKqyI5dNQFnE=";
+  npmDepsHash = "sha256-v/zIQvcFGHA4Jr7Hh+hTw8BqwBF7b65X9or230qCsMc=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -43,6 +44,6 @@ buildNpmPackage rec {
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ diegs ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

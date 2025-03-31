@@ -1,8 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fabric-installer";
@@ -15,7 +17,10 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [
+    jre
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib/fabric}

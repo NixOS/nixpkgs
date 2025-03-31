@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, enableShared ? !stdenv.hostPlatform.isStatic
-, windows
+{
+  lib,
+  stdenv,
+  fetchurl,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       (PMU) of modern processors.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pierron t4ccer ];
+    maintainers = with maintainers; [
+      pierron
+      t4ccer
+    ];
     platforms = platforms.linux ++ platforms.windows;
   };
 })

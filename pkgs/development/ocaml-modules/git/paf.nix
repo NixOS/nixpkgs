@@ -1,22 +1,21 @@
-{ buildDunePackage
-, git
-, mimic
-, paf
-, ca-certs-nss
-, fmt
-, ipaddr
-, logs
-, lwt
-, mirage-clock
-, mirage-time
-, rresult
-, tls
-, uri
-, bigstringaf
-, domain-name
-, httpaf
-, mirage-flow
-, tls-mirage
+{
+  buildDunePackage,
+  git,
+  mimic,
+  paf,
+  ca-certs-nss,
+  fmt,
+  ipaddr,
+  logs,
+  lwt,
+  rresult,
+  tls,
+  uri,
+  bigstringaf,
+  domain-name,
+  h1,
+  mirage-flow,
+  tls-mirage,
 }:
 
 buildDunePackage {
@@ -36,13 +35,11 @@ buildDunePackage {
     rresult
     ipaddr
     logs
-    mirage-clock
-    mirage-time
     tls
     uri
     bigstringaf
     domain-name
-    httpaf
+    h1
     mirage-flow
     tls-mirage
   ];

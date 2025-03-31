@@ -1,16 +1,27 @@
-{ copyDesktopItems, fetchurl, lib, makeDesktopItem, stdenv, tcl, tk }:
+{
+  copyDesktopItems,
+  fetchurl,
+  lib,
+  makeDesktopItem,
+  stdenv,
+  tcl,
+  tk,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dirdiff";
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://samba/paulus/${pname}-${version}.tar.gz";
-    sha256 = "0lljd8av68j70733yshzzhxjr1lm0vgmbqsm8f02g03qsma3cdyb";
+    url = "mirror://samba/paulus/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yzc2VNV4gCeAQ1XjVd8GlYYsO/wfaj/GAUcisxVqklI=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs = [ tcl tk ];
+  buildInputs = [
+    tcl
+    tk
+  ];
 
   # Some light path patching.
   patches = [ ./dirdiff-2.1-vars.patch ];
@@ -21,6 +32,8 @@ stdenv.mkDerivation rec {
           --subst-var-by tcl ${tcl} \
           --subst-var-by tk ${tk}
     done
+
+    sed -i "1i #include <unistd.h>" filecmp.c
   '';
 
   env = {
@@ -50,7 +63,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical directory tree diff and merge tool";
     mainProgram = "dirdiff";
     longDescription = ''
@@ -58,8 +71,7 @@ stdenv.mkDerivation rec {
       directory trees and for merging changes from one tree into another.
     '';
     homepage = "https://www.samba.org/ftp/paulus/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ khumba ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

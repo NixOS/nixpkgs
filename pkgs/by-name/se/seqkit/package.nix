@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
   pname = "seqkit";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "seqkit";
     rev = "v${version}";
-    sha256 = "sha256-xPlqS0tYx077YD/MIxGFn8Bdy4h25dY8idhypIj28rI=";
+    sha256 = "sha256-W272ymy56aHRSOmi/0nCaU+AeaC0U/RyxzHOKR9meo4=";
   };
 
-  vendorHash = "sha256-EzEomz9GVcirx+Uk1Ygmmb1/GkdUS9aBStLxuNzjHAU=";
+  vendorHash = "sha256-mmefX3SpQoSdpuwoxFmlYocE9ETOHz3fh/IDG5LlY7E=";
 
   meta = with lib; {
     description = "cross-platform and ultrafast toolkit for FASTA/Q file manipulation";

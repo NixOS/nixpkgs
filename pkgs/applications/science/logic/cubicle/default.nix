@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, which
-, ocamlPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  which,
+  ocamlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    which
-  ] ++ (with ocamlPackages; [
-    findlib
-    ocaml
-  ]);
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      which
+    ]
+    ++ (with ocamlPackages; [
+      findlib
+      ocaml
+    ]);
 
   buildInputs = with ocamlPackages; [
     functory

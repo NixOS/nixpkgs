@@ -1,17 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, testers, conceal }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  testers,
+  conceal,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "conceal";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
-    repo = pname;
+    repo = "conceal";
     rev = "v${version}";
-    sha256 = "sha256-N/KlxtxzEDwUvQMpgf2S6u7MaYiF0eXnMrGoowc08J0=";
+    sha256 = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
   };
 
-  cargoHash = "sha256-50EHc8ZHzbl5IFpi5k3/Katc3FaxBgnpf8COrpPHZWk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yCHN7N+hRrWfuCEBA6gh2S/rRP+ZkHCjFBGGY9/LTb4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     description = "Trash collector written in Rust";
     homepage = "https://github.com/TD-Sky/conceal";
     license = licenses.mit;
-    maintainers = with maintainers; [ jedsek kashw2 ];
+    maintainers = with maintainers; [
+      jedsek
+      kashw2
+    ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

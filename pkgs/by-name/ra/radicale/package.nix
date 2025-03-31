@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.3.1";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vHg5faXx7ILiI3tpQ38yxF96DzS7EZCSRHfIW9QbI9Q=";
+    tag = "v${version}";
+    hash = "sha256-OWOCwioW0TPVk6vIkfVuAaYJdIWJ6Do4NcYWR/b3sQs=";
   };
 
   build-system = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pika
       python-dateutil
       pytz # https://github.com/Kozea/Radicale/issues/816
+      ldap3
     ]
     ++ passlib.optional-dependencies.bcrypt;
 
@@ -46,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://radicale.org/v3.html";
-    changelog = "https://github.com/Kozea/Radicale/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Kozea/Radicale/blob/${src.tag}/CHANGELOG.md";
     description = "CalDAV and CardDAV server";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

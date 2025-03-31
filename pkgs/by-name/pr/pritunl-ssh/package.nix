@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
-  pname   = "pritunl-ssh";
+  pname = "pritunl-ssh";
   version = "1.0.3231.6";
 
   src = fetchFromGitHub {

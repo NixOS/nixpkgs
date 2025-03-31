@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, igraph
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  igraph,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vtraag";
     repo = "libleidenalg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hEES/OHvgN0yRDp5ZBZTCQfWr1j7s8NqE+Sp9WMHEEY=";
   };
 

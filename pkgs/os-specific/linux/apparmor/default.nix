@@ -29,7 +29,7 @@ let
     homepage = "https://apparmor.net/";
     description = "Mandatory access control system - ${component}";
     license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ julm thoughtpolice ];
+    maintainers = with maintainers; [ julm thoughtpolice grimmauld ];
     platforms = platforms.linux;
   };
 

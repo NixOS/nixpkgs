@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchCrate, python3 }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pipe-rename";
@@ -9,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-av/ig76O7t3dB4Irfi3yqyL30nkJJCzs5EayWRbpOI0=";
   };
 
-  cargoHash = "sha256-3p6Bf9UfCb5uc5rp/yuXixcDkuXfTiboLl8TI0O52hE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0+m11mPR/s45MeY90WM3vmnGk6Xb0j2DJnZrEZ/EX1g=";
 
   nativeCheckInputs = [ python3 ];
 

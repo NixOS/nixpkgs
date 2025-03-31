@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "collectd-exporter";
@@ -13,7 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-kr8mHprIfXc/Yj/w2UKBkqIYZHmWtBLjqYDvKSXlozQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) collectd; };
 

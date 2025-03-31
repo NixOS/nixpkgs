@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.13.3";
+  version = "1.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IDUDEXQVVh4gOqFFQXQGQ6YR9kFRfwIJ/K5j6foJ8aI=";
+    hash = "sha256-SW6IgkWlOt8UmPyrMXE6Rpxlg2+N524BOZqhw+kN0hM=";
   };
 
   build-system = [ setuptools ];

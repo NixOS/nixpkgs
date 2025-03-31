@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, postgresql, libgcrypt, pam, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libpq,
+  libgcrypt,
+  pam,
+  libxcrypt,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pam_pgsql";
   version = "unstable-2020-05-05";
 
@@ -11,8 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "1bvddrwyk1479wibyayzc24h62qzfnlbk9qvdhb31yw9yn17gp6k";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libgcrypt pam postgresql libxcrypt ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libgcrypt
+    pam
+    libpq
+    libxcrypt
+  ];
 
   meta = with lib; {
     description = "Support to authenticate against PostgreSQL for PAM-enabled appliations";

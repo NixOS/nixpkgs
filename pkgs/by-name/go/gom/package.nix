@@ -1,25 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, glib
-, python3
-, sqlite
-, gdk-pixbuf
-, gnome
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  python3,
+  sqlite,
+  gdk-pixbuf,
+  gnome,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gom";
-  version = "0.4";
+  version = "0.5.3";
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
+    url = "mirror://gnome/sources/gom/${lib.versions.majorMinor version}/gom-${version}.tar.xz";
+    sha256 = "Bp0JCfvca00n7feoeTZhlOOrUIsDVIv1uJ/2NUbSAXc=";
   };
 
   patches = [
@@ -49,8 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = "gom";
     };
   };
 

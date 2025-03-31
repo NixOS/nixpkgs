@@ -1,31 +1,37 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, libxml2
-, json-glib
-, glib
-, gettext
-, libsoup_3
-, gi-docgen
-, gobject-introspection
-, python3
-, tzdata
-, geocode-glib_2
-, vala
-, gnome
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  json-glib,
+  glib,
+  gettext,
+  libsoup_3,
+  gi-docgen,
+  gobject-introspection,
+  python3,
+  tzdata,
+  geocode-glib_2,
+  vala,
+  gnome,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
   version = "4.4.4";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -44,18 +50,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     glib
@@ -65,12 +73,14 @@ stdenv.mkDerivation rec {
     geocode-glib_2
   ];
 
-  mesonFlags = [
-    "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-    (lib.mesonBool "introspection" withIntrospection)
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Dc_args=-D_DARWIN_C_SOURCE"
-  ];
+  mesonFlags =
+    [
+      "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
+      (lib.mesonBool "introspection" withIntrospection)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Dc_args=-D_DARWIN_C_SOURCE"
+    ];
 
   postPatch = ''
     patchShebangs --build build-aux/meson/gen_locations_variant.py

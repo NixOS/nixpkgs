@@ -1,24 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "weaviate";
-  version = "1.26.6";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
     rev = "v${version}";
-    hash = "sha256-Vi8jcWfG3MvzXDcVFd6wC+KEpPQUL1uBCk7GJwyO0gU=";
+    hash = "sha256-Akg0iY5M3X6ztKxhNEkhi03VnbNpNW7/Vcbv2KB6X54=";
   };
 
-  vendorHash = "sha256-HzEnt/eagDw6/7HV0MRMQDcp56mLv1kE9HCfBouxDRs=";
+  vendorHash = "sha256-U2ean49ESKmcQ3fTtd6y9MwfWPr6tolvgioyKbQsBmU=";
 
   subPackages = [ "cmd/weaviate-server" ];
 
-  ldflags = [ "-w" "-extldflags" "-static" ];
+  ldflags = [
+    "-w"
+    "-extldflags"
+    "-static"
+  ];
 
   postInstall = ''
     ln -s $out/bin/weaviate-server $out/bin/weaviate

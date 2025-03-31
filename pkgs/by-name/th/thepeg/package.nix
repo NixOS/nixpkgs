@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, boost, fastjet, gsl, hepmc3, lhapdf, rivet, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  boost,
+  fastjet,
+  gsl,
+  hepmc3,
+  lhapdf,
+  rivet,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "thepeg";
@@ -19,7 +32,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ boost fastjet gsl hepmc3 lhapdf rivet zlib ];
+  buildInputs = [
+    boost
+    fastjet
+    gsl
+    hepmc3
+    lhapdf
+    rivet
+    zlib
+  ];
 
   configureFlags = [
     "--with-hepmc=${hepmc3}"

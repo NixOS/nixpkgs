@@ -1,9 +1,9 @@
 { lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
 , file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk_4_0, gtk2-x11, gtk3
-, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
-, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
+, heimdal, krb5, libsoup_2_4, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
+, gnome2, libgbm, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxx, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
+, libpulseaudio, pcsclite, glib-networking, llvmPackages, opencv4
 , libfaketime
 , libinput, libcap, libjson, libsecret, libcanberra-gtk3
 
@@ -103,16 +103,17 @@ stdenv.mkDerivation rec {
     libpng12
     libpulseaudio
     libsecret
-    libsoup
+    libsoup_2_4
     libvorbis
     libxml2
-    llvmPackages_12.libunwind
-    mesa
+    llvmPackages.libunwind
+    libgbm
     nspr
     nss
     opencv4'
     openssl'
     pango
+    pcsclite
     speex
     (lib.getLib systemd)
     stdenv.cc.cc

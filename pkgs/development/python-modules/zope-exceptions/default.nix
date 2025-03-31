@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.exceptions";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jbzUUB6ifTfxiGEiyAmsDoDLyRVuZPgIsN8mCNJkv4Q=";
   };
 

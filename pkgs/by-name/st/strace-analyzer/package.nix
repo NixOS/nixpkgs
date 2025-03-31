@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, strace
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  strace,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "wookietreiber";
-    repo = pname;
+    repo = "strace-analyzer";
     rev = "v${version}";
     sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 
-  cargoHash = "sha256-t1BFc5cNOQJIbufFH2hHI4f7SMrZ5mwVODXukdbHf3M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZvbWJSe/jQEswcdFM/Akb6hW/0iqMNbtEyzcxsbemFQ=";
 
   nativeCheckInputs = [ strace ];
 

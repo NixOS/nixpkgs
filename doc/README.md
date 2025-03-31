@@ -95,6 +95,7 @@ Inlining HTML is not allowed. Parts of the documentation gets rendered to variou
 #### Roles
 
 If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+Please keep the `manpage-urls.json` file alphabetically sorted.
 
 A few markups for other kinds of literals are also available:
 
@@ -107,6 +108,7 @@ A few markups for other kinds of literals are also available:
 These literal kinds are used mostly in NixOS option documentation.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
 

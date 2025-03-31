@@ -6,7 +6,6 @@
   SDL2,
   alsa-lib,
   catch2_3,
-  fetchpatch,
   fftw,
   glib,
   gobject-introspection,
@@ -16,6 +15,7 @@
   hyprland,
   iniparser,
   jsoncpp,
+  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -41,6 +41,7 @@
   sway,
   udev,
   upower,
+  versionCheckHook,
   wayland,
   wayland-scanner,
   wireplumber,
@@ -55,6 +56,7 @@
   jackSupport ? true,
   mpdSupport ? true,
   mprisSupport ? stdenv.hostPlatform.isLinux,
+  niriSupport ? true,
   nlSupport ? true,
   pipewireSupport ? true,
   pulseSupport ? true,
@@ -69,56 +71,36 @@
   wireplumberSupport ? true,
   withMediaPlayer ? mprisSupport && false,
   nix-update-script,
-  testers,
-  waybar,
 }:
 
-let
-  # Derived from subprojects/cava.wrap
-  libcava.src = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    rev = "0.10.3";
-    hash = "sha256-ZDFbI69ECsUTjbhlw2kHRufZbQMu+FQSMmncCJ5pagg=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
+    tag = finalAttrs.version;
+    hash = "sha256-VpT3ePqmo75Ni6/02KFGV6ltnpiV70/ovG/p1f2wKkU=";
   };
-
-  patches = [
-    # Fix a regression introduced in release 0.11.0
-    # TODO: remove this patch when updating to the next release
-    # Issue: https://github.com/Alexays/Waybar/issues/3597
-    # PR: https://github.com/Alexays/Waybar/pull/3604
-    (fetchpatch {
-      name = "fix-tray";
-      url = "https://github.com/Alexays/Waybar/commit/0d02f6877d88551ea2be0cd151c1e6354e208b1c.patch";
-      hash = "sha256-wpdK6AY+14jt85dOQy6xkh8tNGDN2F9GA9zOfAuOaIc=";
-    })
-  ];
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.2
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.3
     patchShebangs .
     popd
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-    wrapGAppsHook3
-  ] ++ lib.optional withMediaPlayer gobject-introspection ++ lib.optional enableManpages scdoc;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      wayland-scanner
+      wrapGAppsHook3
+    ]
+    ++ lib.optional withMediaPlayer gobject-introspection
+    ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
@@ -187,7 +169,10 @@ stdenv.mkDerivation (finalAttrs: {
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
     })
-    ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+    ++ (lib.mapAttrsToList lib.mesonBool {
+      "experimental" = experimentalPatches;
+      "niri" = niriSupport;
+    });
 
   env = lib.optionalAttrs systemdSupport {
     PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
@@ -205,12 +190,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = waybar;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {

@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromSourcehut, pkg-config, openssl, mailcap, scdoc }:
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  pkg-config,
+  openssl,
+  mailcap,
+  scdoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gmnisrv";
@@ -21,15 +29,24 @@ stdenv.mkDerivation rec {
   '';
 
   MIMEDB = "${mailcap}/etc/mime.types";
-  nativeBuildInputs = [ pkg-config scdoc ];
-  buildInputs = [ openssl mailcap ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ];
+  buildInputs = [
+    openssl
+    mailcap
+  ];
 
   meta = with lib; {
     description = "Simple Gemini protocol server";
     mainProgram = "gmnisrv";
     homepage = "https://git.sr.ht/~sircmpwn/gmnisrv";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bsima jb55 ];
+    maintainers = with maintainers; [
+      bsima
+      jb55
+    ];
     platforms = platforms.linux;
   };
 }

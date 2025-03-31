@@ -1,6 +1,12 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "skydns";
   version = "unstable-2019-10-15";
 
@@ -23,7 +29,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "Distributed service for announcement and discovery of services";

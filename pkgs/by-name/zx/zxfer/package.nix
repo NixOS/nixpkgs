@@ -1,16 +1,17 @@
-{ lib
-, bash
-, fetchFromGitHub
-, installShellFiles
-, coreutils
-, gawk
-, gnugrep
-, gnused
-, openssh
-, resholve
-, rsync
-, which
-, zfs
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  openssh,
+  resholve,
+  rsync,
+  which,
+  zfs,
 }:
 
 resholve.mkDerivation rec {
@@ -19,7 +20,7 @@ resholve.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "allanjude";
-    repo = pname;
+    repo = "zxfer";
     rev = "v${version}";
     hash = "sha256-11SQJcD3GqPYBIgaycyKkc62/diVKPuuj2Or97j+NZY=";
   };

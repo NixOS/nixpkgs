@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aha";
@@ -23,7 +27,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/theZiz/aha";
     changelog = "https://github.com/theZiz/aha/blob/${version}/CHANGELOG";
-    license = with licenses; [ lgpl2Plus mpl11 ];
+    license = with licenses; [
+      lgpl2Plus
+      mpl11
+    ];
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.all;
   };

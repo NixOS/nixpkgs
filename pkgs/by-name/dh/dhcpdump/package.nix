@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, installShellFiles
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  installShellFiles,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bbonev";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "dhcpdump";
+    tag = "v${version}";
     hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
   };
 

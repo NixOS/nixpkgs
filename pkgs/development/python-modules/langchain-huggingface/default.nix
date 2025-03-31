@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -36,13 +37,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-huggingface==${version}";
+    tag = "langchain-huggingface==${version}";
     hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     huggingface-hub
@@ -71,8 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-huggingface==([0-9.]+)$"
+    ];
   };
 
   meta = {

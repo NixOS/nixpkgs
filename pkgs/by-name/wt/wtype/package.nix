@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, meson
-, ninja
-, pkg-config
+  meson,
+  ninja,
+  pkg-config,
 
-, libxkbcommon
-, wayland
-, wayland-scanner
+  libxkbcommon,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +24,16 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
-  buildInputs = [ libxkbcommon wayland ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+  ];
 
   meta = with lib; {
     description = "xdotool type for wayland";

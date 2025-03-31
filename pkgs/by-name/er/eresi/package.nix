@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, which, openssl, readline, fetchpatch }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  which,
+  openssl,
+  readline,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eresi";
@@ -22,6 +30,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/thorkill/eresi/commit/bc5b9a75c326f277e5f89e01a3b8f7f0519a99f6.patch";
       sha256 = "0lqwrnkkhhd3vi1r8ngvziyqkk09h98h93rrs3ndqi048a898ys1";
+    })
+
+    # Fix compilation for gcc14 and newer
+    #   https://github.com/thorkill/eresi/pull/167
+    (fetchpatch {
+      url = "https://github.com/thorkill/eresi/commit/f85397c4dce633764fab29b0642f59fc4764658a.patch";
+      sha256 = "sha256-mKmJHjyWwCNh/pueB94Ndhj/3uZLBZNn/m9gXenP5ns=";
     })
   ];
 
@@ -58,14 +73,16 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ openssl readline ];
+  buildInputs = [
+    openssl
+    readline
+  ];
   enableParallelBuilding = true;
   # ln: failed to create symbolic link '...-eresi-0.83-a3-phoenix//bin/elfsh': No such file or directory
   # make: *** [Makefile:108: install64] Error 1
   enableParallelInstalling = false;
 
-  installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.hostPlatform.is64bit "install64";
+  installTargets = lib.singleton "install" ++ lib.optional stdenv.hostPlatform.is64bit "install64";
 
   meta = {
     description = "ERESI Reverse Engineering Software Interface";

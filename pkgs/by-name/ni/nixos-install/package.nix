@@ -1,24 +1,26 @@
 {
   lib,
-  substituteAll,
+  replaceVarsWith,
   runtimeShell,
   installShellFiles,
-  nix,
   jq,
   nixos-enter,
   util-linuxMinimal,
+  nixosTests,
 }:
-substituteAll {
+replaceVarsWith {
   name = "nixos-install";
   src = ./nixos-install.sh;
 
-  inherit runtimeShell nix;
+  replacements = {
+    inherit runtimeShell;
 
-  path = lib.makeBinPath [
-    jq
-    nixos-enter
-    util-linuxMinimal
-  ];
+    path = lib.makeBinPath [
+      jq
+      nixos-enter
+      util-linuxMinimal
+    ];
+  };
 
   dir = "bin";
   isExecutable = true;
@@ -28,6 +30,8 @@ substituteAll {
   postInstall = ''
     installManPage ${./nixos-install.8}
   '';
+
+  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 
   meta = {
     description = "Install bootloader and NixOS";

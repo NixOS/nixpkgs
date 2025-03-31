@@ -9,20 +9,20 @@
 }:
 buildGoModule rec {
   pname = "copacetic";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hvSbjkqrd//thUex2It31Z4Vrj1u07WEAQFAnWiPo6M=";
+    tag = "v${version}";
+    hash = "sha256-aLFRhmxJ5Hj2vvdYCwALBeK0avPF/jDWUgQiSw0fFGg=";
   };
 
-  vendorHash = "sha256-eefYbB88wXQME8ehm/ieVBtOmmtxHkZSsjE05yeQ7Gw=";
+  vendorHash = "sha256-+iS6nom52eofgcj/fZPVs2Eog9Un5ThSX+EBVmHTSlo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
     "-w"

@@ -10,14 +10,21 @@
 , curl
 , jq
 , common-updater-scripts
+, cctools
 , darwin
+, rcodesign
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.1.34";
+  version = "1.2.7";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+
+  sourceRoot = {
+    aarch64-darwin = "bun-darwin-aarch64";
+    x86_64-darwin = "bun-darwin-x64-baseline";
+  }.${stdenvNoCC.hostPlatform.system} or null;
 
   strictDeps = true;
   nativeBuildInputs = [ unzip installShellFiles makeWrapper ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
@@ -38,8 +45,9 @@ stdenvNoCC.mkDerivation rec {
   postPhases = [ "postPatchelf"];
   postPatchelf =
     lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      wrapProgram $out/bin/bun \
-        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ darwin.ICU ]}
+      '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/bin/bun \
+        -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
+      '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/bin/bun
     ''
     # We currently cannot generate completions for x86_64-darwin because bun requires avx support to run, which is:
     # 1. Not currently supported by the version of Rosetta on our aarch64 builders
@@ -68,19 +76,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-unFn4bexupfjtFA6Nxzi/vC1stzuBXYP5jPfwXbZDig=";
+        hash = "sha256-VxB20tZEoKSWchHphR9YTESmRcCgt7tRma/xIXL9WuQ=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-BIYlEyRuyUdvipsCVEHTORlJoAnH+rv1ogv10JUHyOA=";
+        hash = "sha256-nCS4Oky54tHiH8cdHNj4nz1vd3bqeR1CusjgPku1MZs=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
-        hash = "sha256-gpcDIY1IYHO0N9Quw79VonhFHdgb/NFZns2hGNuQe9g=";
+        hash = "sha256-C8LjwcdW/1H6NfzsJ0+X+xRzfYFNihzne8ePJGk1etE=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-S8AA/1CWxTSHZ60E2ZNQXyEAOalYgCc6dte9CvD8Lx8=";
+        hash = "sha256-hHsTjLGOq4Inyx87Fu3Kuvdk5Yp5pef5BeunaOo138s=";
       };
     };
     updateScript = writeShellScript "update-bun" ''

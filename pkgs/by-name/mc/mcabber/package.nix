@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, ncurses, pkg-config, glib, loudmouth, libotr
-, gpgme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  ncurses,
+  pkg-config,
+  glib,
+  loudmouth,
+  libotr,
+  gpgme,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +32,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ncurses glib loudmouth libotr gpgme ];
+  buildInputs = [
+    openssl
+    ncurses
+    glib
+    loudmouth
+    libotr
+    gpgme
+  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"

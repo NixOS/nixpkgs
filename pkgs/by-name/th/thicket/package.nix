@@ -1,6 +1,7 @@
-{ lib
-, crystal
-, fetchFromGitHub
+{
+  lib,
+  crystal,
+  fetchFromGitHub,
 }:
 
 crystal.buildCrystalPackage rec {
@@ -9,7 +10,7 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
-    repo = pname;
+    repo = "thicket";
     rev = "v${version}";
     sha256 = "sha256-sF+fNKEZEfjpW3buh6kFUpL1P0yO9g4SrTb0rhx1uNc=";
   };

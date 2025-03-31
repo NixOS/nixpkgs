@@ -1,7 +1,15 @@
-{ lib, fetchurl, desktop-file-utils, file, python3Packages }:
+{
+  lib,
+  fetchurl,
+  desktop-file-utils,
+  file,
+  python3Packages,
+}:
 
-let version = "2023";
-in python3Packages.buildPythonApplication {
+let
+  version = "2023";
+in
+python3Packages.buildPythonApplication {
   pname = "mimeo";
   inherit version;
 
@@ -10,7 +18,10 @@ in python3Packages.buildPythonApplication {
     hash = "sha256-CahvSypwR1aHVDHTdtty1ZfaKBWPolxc73uZ5OyeqZA=";
   };
 
-  buildInputs = [ file desktop-file-utils ];
+  buildInputs = [
+    file
+    desktop-file-utils
+  ];
 
   propagatedBuildInputs = [ python3Packages.pyxdg ];
 

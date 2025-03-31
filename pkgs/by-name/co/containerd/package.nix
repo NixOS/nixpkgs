@@ -16,7 +16,7 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.0.0";
+  version = "2.0.4";
 
   outputs = [
     "out"
@@ -26,8 +26,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DFAP+zjBYP2SpyD8KXGvI3i/PUZ6d4jdzGyFfr1lzj4=";
+    tag = "v${version}";
+    hash = "sha256-KW2fKdsJ590UPGcu2O3IGyJ+/iY0c8GQLirL8zK3F14=";
   };
 
   postPatch = "patchShebangs .";
@@ -89,7 +89,7 @@ buildGoModule rec {
   meta = {
     description = "Daemon to control runC";
     homepage = "https://containerd.io/";
-    changelog = "https://github.com/containerd/containerd/releases/tag/${version}";
+    changelog = "https://github.com/containerd/containerd/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       offline

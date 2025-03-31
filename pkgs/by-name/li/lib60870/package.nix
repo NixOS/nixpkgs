@@ -9,16 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib60870";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "lib60870";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9o+gWQbpCJb+UZzPNmzGqpWD0QbGjg41is/f1POUEQs=";
+    hash = "sha256-bPBDM+/1+mIj5BSLukV/nYwOGUo4riGCBC61z3YKAkQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/CMakeLists.txt --replace-warn "-lrt" ""
+  '';
 
   separateDebugInfo = true;
 

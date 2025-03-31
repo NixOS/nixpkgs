@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  asciidoctor,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "webcat";
@@ -13,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-duVp/obT+5M4Dl3BAdSgRaP3+LKmS0y51loMMdoGysw=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
   postInstall = ''
     make -C man man

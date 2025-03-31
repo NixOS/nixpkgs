@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchurl, installShellFiles, pkg-config, libdatrie }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  pkg-config,
+  libdatrie,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libthai";
   version = "0.1.29";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://github.com/tlwg/libthai/releases/download/v${version}/libthai-${version}.tar.xz";
@@ -13,7 +23,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ installShellFiles (lib.getBin libdatrie) pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    (lib.getBin libdatrie)
+    pkg-config
+  ];
 
   buildInputs = [ libdatrie ];
 

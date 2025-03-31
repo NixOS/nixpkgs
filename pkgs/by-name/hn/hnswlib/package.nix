@@ -1,13 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 let
-  python = python3.withPackages(ps: with ps; [
-    numpy
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      numpy
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nmslib";
     repo = "hnswlib";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1KkAX42j/I06KO4wCnDsDifN1JiENqYKR5NNHBjyuVA=";
   };
 
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/nmslib/hnswlib";
-    changelog = "https://github.com/nmslib/hnswlib/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
+    changelog = "https://github.com/nmslib/hnswlib/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

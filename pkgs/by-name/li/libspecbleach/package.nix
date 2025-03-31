@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, fftwFloat}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  fftwFloat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspecbleach";
@@ -6,20 +14,24 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lucianodato";
-    repo = pname;
+    repo = "libspecbleach";
     rev = "v${version}";
     sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [
     fftwFloat
   ];
 
   meta = with lib; {
     description = "C library for audio noise reduction";
-    homepage    = "https://github.com/lucianodato/libspecbleach";
-    license     = licenses.lgpl2;
+    homepage = "https://github.com/lucianodato/libspecbleach";
+    license = licenses.lgpl2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
   };

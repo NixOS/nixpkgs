@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, makeWrapper
-, rsync, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  makeWrapper,
+  rsync,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs-tools";

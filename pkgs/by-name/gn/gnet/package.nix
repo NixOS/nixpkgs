@@ -1,4 +1,13 @@
-{lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoconf,
+  automake,
+  glib,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnet";
@@ -6,12 +15,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "gnet";
-    rev = "GNET_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "GNET_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
-  buildInputs = [ glib libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    glib
+    libtool
+  ];
 
   preConfigure = "./autogen.sh";
 

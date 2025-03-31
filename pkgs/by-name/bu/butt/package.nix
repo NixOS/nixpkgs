@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, fltk13, portaudio, lame, libvorbis, libogg
-, flac, libopus, libsamplerate, fdk_aac, dbus, openssl, curl, portmidi }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fltk13,
+  portaudio,
+  lame,
+  libvorbis,
+  libogg,
+  flac,
+  libopus,
+  libsamplerate,
+  fdk_aac,
+  dbus,
+  openssl,
+  curl,
+  portmidi,
+  autoPatchelfHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "butt";
@@ -19,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'live365_logo, 124, 61, 4,' 'nullptr, 0, 0, 0,'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
 
   buildInputs = [
     fltk13
@@ -37,14 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
     portmidi
   ];
 
+  runtimeDependencies = [
+    fdk_aac
+  ];
+
   postInstall = ''
     cp -r usr/share $out/
   '';
 
   meta = {
     changelog = "https://danielnoethen.de/butt/Changelog.html";
-    description =
-      "butt (broadcast using this tool) is an easy to use, multi OS streaming tool";
+    description = "butt (broadcast using this tool) is an easy to use, multi OS streaming tool";
     homepage = "https://danielnoethen.de/butt/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ehmry ];

@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, SDL2, SDL2_image
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  SDL2_image,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,14 +14,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kometbomb";
-    repo = pname;
+    repo = "klystrack";
     rev = version;
     fetchSubmodules = true;
     sha256 = "1h99sm2ddaq483hhk2s3z4bjbgn0d2h7qna7l7qq98wvhqix8iyz";
   };
 
   buildInputs = [
-    SDL2 SDL2_image
+    SDL2
+    SDL2_image
   ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,7 +39,10 @@ stdenv.mkDerivation rec {
   # TODO: remove it for 1.7.7+ release as it was fixed upstream.
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  buildFlags = [ "PREFIX=${placeholder "out"}" "CFG=release" ];
+  buildFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CFG=release"
+  ];
 
   installPhase = ''
     install -Dm755 bin.release/klystrack $out/bin/klystrack

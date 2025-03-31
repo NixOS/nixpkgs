@@ -10,48 +10,57 @@
   rpcsvc-proto,
   libtirpc,
   makeWrapper,
-  substituteAll,
   removeReferencesTo,
   replaceVars,
-  go,
+  go_1_23,
+  applyPatches,
+  nvidia-modprobe,
 }:
 let
+  # https://github.com/NVIDIA/libnvidia-container/pull/297
+  go = go_1_23;
+
   modprobeVersion = "550.54.14";
-  nvidia-modprobe = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "nvidia-modprobe";
-    rev = modprobeVersion;
-    sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
-  };
-  modprobePatch = substituteAll {
-    src = ./modprobe.patch;
-    inherit modprobeVersion;
+  patchedModprobe = applyPatches {
+    src = nvidia-modprobe.src.override {
+      version = modprobeVersion;
+      hash = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
+    };
+    patches = [
+      (replaceVars ./modprobe.patch {
+        inherit modprobeVersion;
+      })
+    ];
   };
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.16.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     rev = "v${version}";
-    sha256 = "sha256-hX+2B+0kHiAC2lyo6kwe7DctPLJWgRdbhlc316OO3r8=";
+    hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
   };
 
   patches = [
     # Locations of nvidia driver libraries are not resolved via ldconfig which
     # doesn't get used on NixOS.
-    # TODO: The latter doesn't really apply anymore.
-    # Additional support binaries like nvidia-smi
-    # are not resolved via the environment PATH but via the derivation output
-    # path.
-    (replaceVars ./fix-library-resolving.patch {
+    (replaceVars ./0001-ldcache-don-t-use-ldcache.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
+
+    # Use both PATH and the legacy nvidia-docker paths (NixOS artifacts)
+    # for binary lookups.
+    # TODO: Remove the legacy compatibility once nvidia-docker is removed
+    # from NixOS.
+    (replaceVars ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch {
       inherit (addDriverRunpath) driverLink;
     })
 
     # fix bogus struct declaration
-    ./inline-c-struct.patch
+    ./0003-nvc-fix-struct-declaration.patch
   ];
 
   postPatch = ''
@@ -66,11 +75,10 @@ stdenv.mkDerivation rec {
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
-    cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
+    cp -r ${patchedModprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
     chmod -R u+w deps/src
     pushd deps/src
 
-    patch -p0 < ${modprobePatch}
     touch nvidia-modprobe-${modprobeVersion}/.download_stamp
     popd
 
@@ -81,12 +89,28 @@ stdenv.mkDerivation rec {
     #    libtirpc (for now)
     # 4. prevent installation of static libraries because of step 3
     # 5. prevent installation of libnvidia-container-go.so twice
+    # 6. Replace pkg-config and objcopy with target platform's one
+    # 7. Stub ldconfig
+    #
     sed -i Makefile \
       -e 's#DESTDIR=\$(DEPS_DIR)#DESTDIR=""#g' \
       -e 's#\$(DEPS_DIR)\$#\$#g' \
       -e 's#all: shared static tools#all: shared tools#g' \
       -e '/$(INSTALL) -m 644 $(LIB_STATIC) $(DESTDIR)$(libdir)/d' \
-      -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d'
+      -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d' \
+      -e "s,pkg-config,$PKG_CONFIG,g"
+    substituteInPlace mk/common.mk \
+      --replace-fail objcopy '$(OBJCOPY)' \
+      --replace-fail ldconfig true
+  '';
+
+  # Recreate library symlinks which ldconfig would have created
+  postFixup = ''
+    for lib in libnvidia-container libnvidia-container-go; do
+      rm -f "$out/lib/$lib.so"
+      ln -s "$out/lib/$lib.so.${version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -95,7 +119,12 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+    CGO_ENABLED = "1"; # Needed for cross-compilation
+    GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
+    inherit (go) GOARCH GOOS;
+  };
   NIX_LDFLAGS = [
     "-L${lib.getLib libtirpc}/lib"
     "-ltirpc"
@@ -146,6 +175,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      msanft
+    ];
   };
 }

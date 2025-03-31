@@ -1,27 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, gobject-introspection
-, intltool
-, shared-mime-info
-, gtk3
-, wrapGAppsHook3
-, libarchive
-, libxml2
-, xapp
-, meson
-, pkg-config
-, cairo
-, libsecret
-, poppler
-, libspectre
-, libgxps
-, webkitgtk_4_1
-, nodePackages
-, ninja
-, djvulibre
-, backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  intltool,
+  shared-mime-info,
+  gtk3,
+  wrapGAppsHook3,
+  libarchive,
+  libxml2,
+  xapp,
+  meson,
+  pkg-config,
+  cairo,
+  libsecret,
+  poppler,
+  libspectre,
+  libgxps,
+  webkitgtk_4_1,
+  nodePackages,
+  ninja,
+  djvulibre,
+  backends ? [
+    "pdf"
+    "ps" # "dvi" "t1lib"
+    "djvu"
+    "tiff"
+    "pixbuf"
+    "comics"
+    "xps"
+    "epub"
+  ],
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +57,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmathjax-directory=${nodePackages.mathjax}"
+    "-Dintrospection=true"
   ] ++ (map (x: "-D${x}=true") backends);
 
   buildInputs = [

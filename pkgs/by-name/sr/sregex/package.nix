@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sregex";
@@ -6,12 +10,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openresty";
-    repo = pname;
+    repo = "sregex";
     rev = "v${version}";
     hash = "sha256-HZ9O/3BQHHrTVLLlU0o1fLHxyRSesBhreT3IdGHnNsg=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "CC:=$(CC)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC:=$(CC)"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/openresty/sregex";

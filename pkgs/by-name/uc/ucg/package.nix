@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, callPackage
-, pkg-config
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  callPackage,
+  pkg-config,
+  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Osdyxp8DoEjcr2wQLCPqOQ2zQf/0JWYxaDpZB02ACWo=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -35,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =  {
+  meta = {
     homepage = "https://gvansickle.github.io/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''
@@ -46,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ucg";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin;
   };

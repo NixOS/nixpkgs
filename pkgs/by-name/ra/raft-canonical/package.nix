@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4, lxd-lts }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  file,
+  libuv,
+  lz4,
+  lxd-lts,
+}:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
@@ -7,12 +17,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ogTw0+ZFhMRaLAxAAXzHSlLRYFuX8W/zjqglXHfvUv4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkg-config ];
-  buildInputs = [ libuv lz4 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    file
+    pkg-config
+  ];
+  buildInputs = [
+    libuv
+    lz4
+  ];
 
   enableParallelBuilding = true;
 
@@ -30,7 +47,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   passthru.tests = {
     inherit lxd-lts;

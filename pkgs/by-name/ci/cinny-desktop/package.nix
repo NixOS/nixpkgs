@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   cargo-tauri_1,
@@ -14,25 +13,27 @@
   dbus,
   glib,
   glib-networking,
-  libayatana-appindicator,
   webkitgtk_4_0,
+  jq,
+  moreutils,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.3";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yNGzgkZXz/VroGGnZFqo5n2v3cE6/tvpQv5U4p27row=";
+    tag = "v${version}";
+    hash = "sha256-xWHR0lg/3w2K+hExKCD84hdQ7UCZRrOnH2dNybaYMFE=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-0EIKozFwy7XihFRpjLZ3Am7h1wOU7ZGcHSoTnFnYzTU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iI0oWuETVVPuoKlWplsgocF7DEvwTVSp5r1WmQd7R04=";
 
   postPatch =
     let
@@ -47,10 +48,9 @@ rustPlatform.buildRustPackage rec {
         };
     in
     ''
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"cd cinny && npm run build"' '""'
+      ${lib.getExe jq} \
+        'del(.tauri.updater) | .build.distDir = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
+        | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
   postInstall =
@@ -81,16 +81,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       openssl
-      dbus
-      glib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      glib
       glib-networking
       webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.apple_sdk.frameworks.WebKit
     ];
 
   meta = {

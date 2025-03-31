@@ -35,6 +35,7 @@
   networkx,
   packaging,
   pandas,
+  panel,
   pydantic,
   pygments,
   pyjwt,
@@ -49,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.14.0";
+  version = "2.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -57,8 +58,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9qTcXcgUxjSLbsWT7O9ilYuRRPPyN0v9NzUkbd4cIn0=";
+    tag = "v${version}";
+    hash = "sha256-At7jYWrMcMVb2rWoQbtSAAqw1WRKLndPtn9qgmg03oI=";
   };
 
   pythonRelaxDeps = [ "bokeh" ];
@@ -97,6 +98,7 @@ buildPythonPackage rec {
     networkx
     packaging
     pandas
+    panel
     pydantic
     pygments
     pyjwt

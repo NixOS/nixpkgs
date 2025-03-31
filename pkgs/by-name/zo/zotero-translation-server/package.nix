@@ -1,6 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nodejs }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
+}:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "zotero-translation-server";
   version = "unstable-2023-07-13";
 

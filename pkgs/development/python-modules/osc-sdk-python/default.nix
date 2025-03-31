@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.30.1";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HOYIt4kLKAR8zYmIhjLQoibL3qp9uruFKgkgfnmZOfc=";
+    tag = "v${version}";
+    hash = "sha256-5Ws/yPIw0H+FV9oRZLsywap1eqIkCOEK1yGhk0Ft6Ic=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SDK to perform actions on Outscale API";
-    homepage = "http://github.com/outscale/osc-sdk-python";
+    homepage = "https://github.com/outscale/osc-sdk-python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nicolas-goudry ];
   };

@@ -1,17 +1,18 @@
 # This combines together OCF definitions from other derivations.
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-{ stdenv
-, lib
-, runCommand
-, lndir
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, python3
-, glib
-, drbd
-, pacemaker
+{
+  stdenv,
+  lib,
+  runCommand,
+  lndir,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  python3,
+  glib,
+  drbd,
+  pacemaker,
 }:
 
 let
@@ -53,17 +54,22 @@ let
       python3
     ];
 
-    env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-      "-Wno-error=maybe-uninitialized"
-    ]);
+    env.NIX_CFLAGS_COMPILE = toString (
+      lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+        # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+        "-Wno-error=maybe-uninitialized"
+      ]
+    );
 
     meta = with lib; {
       homepage = "https://github.com/ClusterLabs/resource-agents";
       description = "Combined repository of OCF agents from the RHCS and Linux-HA projects";
       license = licenses.gpl2Plus;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ ryantm astro ];
+      maintainers = with maintainers; [
+        ryantm
+        astro
+      ];
     };
   };
 
@@ -71,19 +77,21 @@ in
 
 # This combines together OCF definitions from other derivations.
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
-runCommand "ocf-resource-agents" {
-  # Fix derivation location so things like
-  #   $ nix edit -f. ocf-resource-agents
-  # just work.
-  pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
+runCommand "ocf-resource-agents"
+  {
+    # Fix derivation location so things like
+    #   $ nix edit -f. ocf-resource-agents
+    # just work.
+    pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
 
-  # Useful to build and undate inputs individually:
-  passthru.inputs = {
-    inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
-  };
-} ''
-  mkdir -p $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
-''
+    # Useful to build and undate inputs individually:
+    passthru.inputs = {
+      inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
+    };
+  }
+  ''
+    mkdir -p $out/usr/lib/ocf
+    ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
+    ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+    ${lndir}/bin/lndir -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+  ''

@@ -1,4 +1,9 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 buildNpmPackage rec {
   pname = "terminal-stocks";
@@ -6,7 +11,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "shweshi";
-    repo = pname;
+    repo = "terminal-stocks";
     rev = "v${version}";
     hash = "sha256-6eDBcQfo6M+Z31ILLM4BbiOxoTD6t4LQJxawoJFEzhg=";
   };
@@ -14,7 +19,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-0k2+vdfOUF0zV6Tl7VGXS2dNLnCHgSdI12LqvGkbv+k=";
   dontNpmBuild = true;
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Terminal based application that provides stock price information";

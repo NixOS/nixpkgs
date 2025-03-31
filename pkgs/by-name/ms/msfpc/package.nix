@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, metasploit, curl, inetutils, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  metasploit,
+  curl,
+  inetutils,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "msfpc";
@@ -6,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "g0tmi1k";
-    repo = pname;
+    repo = "msfpc";
     rev = "v${version}";
     sha256 = "UIdE0oSaNu16pf+M96x8AnNju88hdzokv86wm8uBYDQ=";
   };
@@ -25,7 +34,14 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/msfpc \
-      --prefix PATH : "${lib.makeBinPath [ metasploit curl inetutils openssl ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          metasploit
+          curl
+          inetutils
+          openssl
+        ]
+      }"
   '';
 
   meta = with lib; {

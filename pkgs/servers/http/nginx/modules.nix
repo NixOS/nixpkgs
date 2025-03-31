@@ -1,9 +1,11 @@
 { lib
 , config
+, nixosTests
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchhg
 , runCommand
+, stdenv
 
 , arpa2common
 , brotli
@@ -432,14 +434,14 @@ let self = {
     name = "modsecurity";
     src = fetchFromGitHub {
       name = "modsecurity-nginx";
-      owner = "SpiderLabs";
+      owner = "owasp-modsecurity";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.3";
-      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
+      # unstable 2025-02-17
+      rev = "0b4f0cf38502f34a30c8543039f345cfc075670d";
+      hash = "sha256-P3IwKFR4NbaMXYY+O9OHfZWzka4M/wr8sJpX94LzQTU=";
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
-    disableIPC = true;
 
     meta = with lib; {
       description = "Open source, cross platform web application firewall (WAF)";
@@ -505,11 +507,11 @@ let self = {
 
   njs = rec {
     name = "njs";
-    src = fetchhg {
-      url = "https://hg.nginx.org/njs";
-      rev = "0.8.4";
-      sha256 = "sha256-SooPFx4WNEezPD+W/wmMLY+FdkGRoojLNUFbhn3Riyg=";
-      name = "nginx-njs";
+    src = fetchFromGitHub {
+      owner = "nginx";
+      repo = "njs";
+      rev = "0.8.9";
+      hash = "sha256-TalS9EJP+vB1o3BKaTvXXnudjKhNOcob3kDAyeKej3c=";
     };
 
     # njs module sources have to be writable during nginx build, so we copy them
@@ -519,17 +521,19 @@ let self = {
       mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
       cp --recursive "${src}" "$NJS_SOURCE_DIR"
       chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
-      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"}"
+      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"} --with-ld-opt='-lz'"
       unset NJS_SOURCE_DIR
     '';
 
-    inputs = [ which ];
+    inputs = [ which zlib ];
+
+    passthru.tests = nixosTests.nginx-njs;
 
     meta = with lib; {
       description = "Subset of the JavaScript language that allows extending nginx functionality";
       homepage = "https://nginx.org/en/docs/njs/";
       license = with licenses; [ bsd2 ];
-      maintainers = [ ];
+      maintainers = with maintainers; [ jvanbruegge ];
     };
   };
 
@@ -1020,14 +1024,33 @@ let self = {
     };
   };
 
+  zip = {
+    name = "zip";
+    src = fetchFromGitHub {
+      name = "zip";
+      owner = "evanmiller";
+      repo = "mod_zip";
+      rev = "8e65b82c82c7890f67a6107271c127e9881b6313";
+      hash = "sha256-2bUyGsLSaomzaijnAcHQV9TNSuV7Z3G9EUbrZzLG+mk=";
+    };
+
+    meta = with lib; {
+      description = "Streaming ZIP archiver for nginx";
+      homepage = "https://github.com/evanmiller/mod_zip";
+      license = with licenses; [ bsd3 ];
+      broken = stdenv.hostPlatform.isDarwin;
+      maintainers = teams.apm.members;
+    };
+  };
+
   zstd = {
     name = "zstd";
     src = fetchFromGitHub {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "0.1.1";
-      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
+      rev = "f4ba115e0b0eaecde545e5f37db6aa18917d8f4b";
+      hash = "sha256-N8D3KRpd79O8sdlPngtK9Ii7XT2imS4F+nkqsHMHw/w=";
     };
 
     inputs = [ zstd ];

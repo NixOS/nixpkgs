@@ -1,47 +1,42 @@
 {
-  "10.12": {
-    "url": "http://swcdn.apple.com/content/downloads/22/62/041-88607/wg8avdk0jo75k9a13gentz9stwqgrqmcv6/CLTools_SDK_OSX1012.pkg",
-    "version": "10.12.2",
-    "hash": "sha256-Jf2WIB9bY/rPwe0AOW3YWJY/6EqVe41yhezdTGOO3M8="
-  },
-  "10.13": {
-    "url": "http://swcdn.apple.com/content/downloads/33/36/041-90419-A_7JJ4H9ZHO2/xs88ob5wjz6riz7g6764twblnvksusg4ps/CLTools_SDK_macOS1013.pkg",
-    "version": "10.13.2",
-    "hash": "sha256-8nd55fiJLfRWABAbMaHXjp6i20RqupmKedwmhb3S0/A="
-  },
-  "10.14": {
-    "url": "http://swcdn.apple.com/content/downloads/41/57/061-26573-A_JMOA8GZGDR/lj8yrtu8dgs40fw9k8f5fkoviwkp0og6vs/CLTools_SDK_macOS1014.pkg",
-    "version": "10.14.6",
-    "hash": "sha256-NMNkycIl3AVZCw0ZpHNkaeYVS9LAZVSddHw5loL9dhk="
-  },
-  "10.15": {
-    "url": "https://swcdn.apple.com/content/downloads/50/51/071-29699-A_YC8SX0OHH3/7479xojqghsvgtnt3dxjpnxuz9sjpmbmds/CLTools_macOSLMOS_SDK.pkg",
-    "version": "10.15.6",
-    "hash": "sha256-mPJQC+v4yNiOCKLQfhidB2WH2MMclSCP1odvOoGdVPw="
-  },
   "11": {
-    "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg",
+    "urls": [
+      "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20250210235110/https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg"
+    ],
     "version": "11.3",
     "hash": "sha256-/go8utcx3jprf6c8V/DUbXwsmNYSFchOAai1OaJs3Bg="
   },
   "12": {
-    "url": "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOSNMOS_SDK.pkg",
+    "urls": [
+      "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20250210235341/https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOSNMOS_SDK.pkg"
+    ],
     "version": "12.3",
     "hash": "sha256-qG21ssNUmkqxPLTXALGP2N/RBHu8NMlI1dWvGlV+Wm8="
   },
   "13": {
-    "url": "https://swcdn.apple.com/content/downloads/15/62/032-84673-A_7A1TG1RF8Z/xpc8q44ggn2pkn82iwr0fi1zeb9cxi8ath/CLTools_macOSNMOS_SDK.pkg",
+    "urls": [
+      "https://swcdn.apple.com/content/downloads/15/62/032-84673-A_7A1TG1RF8Z/xpc8q44ggn2pkn82iwr0fi1zeb9cxi8ath/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20250210235949/https://swcdn.apple.com/content/downloads/15/62/032-84673-A_7A1TG1RF8Z/xpc8q44ggn2pkn82iwr0fi1zeb9cxi8ath/CLTools_macOSNMOS_SDK.pkg"
+    ],
     "version": "13.3",
     "hash": "sha256-zZ4pbgoXunLGwdYDemxOfyH4CE5WGfMy2s5jN+0q4B4="
   },
   "14": {
-    "url": "https://swcdn.apple.com/content/downloads/14/48/052-59890-A_I0F5YGAY0Y/p9n40hio7892gou31o1v031ng6fnm9sb3c/CLTools_macOSNMOS_SDK.pkg",
+    "urls": [
+      "https://swcdn.apple.com/content/downloads/14/48/052-59890-A_I0F5YGAY0Y/p9n40hio7892gou31o1v031ng6fnm9sb3c/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20250211001355/https://swcdn.apple.com/content/downloads/14/48/052-59890-A_I0F5YGAY0Y/p9n40hio7892gou31o1v031ng6fnm9sb3c/CLTools_macOSNMOS_SDK.pkg"
+    ],
     "version": "14.4",
     "hash": "sha256-QozDiwY0Czc0g45vPD7G4v4Ra+3DujCJbSads3fJjjM="
   },
   "15": {
-    "url": "https://swcdn.apple.com/content/downloads/33/46/042-32691-A_3MH7S3118O/3dblccqo9ws17dc5lk3hojfbt3s74q0ql6/CLTools_macOSNMOS_SDK.pkg",
-    "version": "15.0",
-    "hash": "sha256-JhaAPyfX46D+9sematdAYAORw40JP3xvleWRz7Hj/1s="
+    "urls": [
+      "https://swcdn.apple.com/content/downloads/36/33/072-44426-A_G1AII30AST/ddbss9h6gse6a32rg6luosbrm6vgniu033/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20250210234739/https://swcdn.apple.com/content/downloads/36/33/072-44426-A_G1AII30AST/ddbss9h6gse6a32rg6luosbrm6vgniu033/CLTools_macOSNMOS_SDK.pkg"
+    ],
+    "version": "15.2",
+    "hash": "sha256-OP5Ah/JnSZ6sD42BD5vGDmikgFzjsfFBmz1hvQD1dOI="
   }
 }

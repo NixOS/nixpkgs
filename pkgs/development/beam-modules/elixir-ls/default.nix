@@ -1,26 +1,38 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
+{
+  lib,
+  elixir,
+  fetchFromGitHub,
+  fetchMixDeps,
+  mixRelease,
+  nix-update-script,
+}:
 # Based on the work of Hauleth
 # None of this would have happened without him
 
 let
   pname = "elixir-ls";
-  version = "0.24.1";
+  version = "0.27.2";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-d5O7DGEKuwHbjxwJa3HNtaycQIzFTi74UxszRH7TVzQ=";
+    hash = "sha256-y1QT+wRFc+++OVFJwEheqcDIwaKHlyjbhEjhLJ2rYaI=";
   };
 in
 mixRelease {
-  inherit pname version src elixir;
+  inherit
+    pname
+    version
+    src
+    elixir
+    ;
 
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-OxQeIdqjY/k02q+nLQnZ+/Zxy/bdjjSCRrVu0usQcsc=";
+    hash = "sha256-een28zUukN8H/8bZNc3pqtg1NXmkU9zv89muCAF93Xk=";
   };
 
   # elixir-ls is an umbrella app

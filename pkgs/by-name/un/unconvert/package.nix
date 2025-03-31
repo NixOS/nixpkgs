@@ -1,6 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "unconvert";
   version = "0-unstable-2023-09-07";
 
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-vZDk+ZNCMP5RRNrgeIowdOKPot7rqM84JhlbfvcQbB4=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Remove unnecessary type conversions from Go source";

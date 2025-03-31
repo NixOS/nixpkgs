@@ -1,41 +1,50 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, glib
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, feedbackd
-, gtk4
-, libepoxy
-, xorg
-, zbar
-, tiffSupport ? true
-, libraw
-, jpgSupport ? true
-, graphicsmagick
-, exiftool
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  feedbackd,
+  gtk4,
+  libepoxy,
+  xorg,
+  zbar,
+  tiffSupport ? true,
+  libraw,
+  jpgSupport ? true,
+  graphicsmagick,
+  exiftool,
 }:
 
 assert jpgSupport -> tiffSupport;
 
 let
-  inherit (lib) makeBinPath optional optionals optionalString;
+  inherit (lib)
+    makeBinPath
+    optional
+    optionals
+    optionalString
+    ;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ graphicsmagick exiftool ]
+    ++ optionals jpgSupport [
+      graphicsmagick
+      exiftool
+    ]
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "megapixels";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitLab {
     owner = "megapixels-org";
     repo = "Megapixels";
     rev = finalAttrs.version;
-    hash = "sha256-odsOYrk//ZhodsumLpJjhPDcwF1gkE/no166u+IDxSY=";
+    hash = "sha256-ZXr0gmO72zKHwORn4p8zKuGcdICvb5+L/Q9d/ty8zwA=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # In the settings menu of Megapixels the user can select a different postprocessing script. The path to the script is then stored in a dconf setting. If the path changes, for example because it is in the Nix store and a dependency of the postprocessor changes, Megapixels will try to use this now non-existing old path. This will cause Megapixels to not save any images that were taken until the user opens the settings again and selects a postprocessor again. Using a global path allows the setting to keep working.
-    # Note that this patch only fixes the issue for external postprocessors like postprocessd but the postprocessor script that comes with Megapixels is still refered to by the Nix store path.
+    # Note that this patch only fixes the issue for external postprocessors like postprocessd but the postprocessor script that comes with Megapixels is still referred to by the Nix store path.
     ./search-for-postprocessors-in-NixOS-specific-global-location.patch
   ];
 
@@ -77,7 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/megapixels-org/Megapixels";
     changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda Luflosi ];
+    maintainers = with maintainers; [
+      dotlambda
+      Luflosi
+    ];
     platforms = platforms.linux;
     mainProgram = "megapixels";
   };

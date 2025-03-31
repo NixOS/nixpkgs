@@ -1,22 +1,23 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, runCommand
-, web-ext
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  runCommand,
+  web-ext,
 }:
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "8.3.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-Jlxfsyir1+vutfuHt6SxBkcn0PTtr9/cZzEGa6z6LU0=";
+    hash = "sha256-RT/K/fYMys1RAvnusAMuHtfZ7gndYf3FPuHBYCklBpw=";
   };
 
-  npmDepsHash = "sha256-MCK1bCWZpUk2Z/+ZWsY+iUCpz+n1UEcBqkAtiBtJl0k=";
+  npmDepsHash = "sha256-O8DmeT0wRNpuPU1K6kH97D9+mxOxCchAUrvOVPq4VPc=";
 
   npmBuildFlags = [ "--production" ];
 

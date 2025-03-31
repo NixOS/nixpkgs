@@ -55,6 +55,7 @@ in
       };
 
       wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
     };
     systemd.user.sockets.yubikey-touch-detector = {
       wantedBy = [ "sockets.target" ];

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, curlWithGnuTls
-, zlib
-, glib
-, xorg
-, dbus
-, fontconfig
-, libGL
-, freetype
-, xkeyboard_config
-, makeDesktopItem
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curlWithGnuTls,
+  zlib,
+  glib,
+  xorg,
+  dbus,
+  fontconfig,
+  libGL,
+  freetype,
+  xkeyboard_config,
+  makeDesktopItem,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
     comment = "Query GUI for mongodb";
     desktopName = "Robo3T";
     genericName = "MongoDB management tool";
-    categories = [ "Development" "IDE" ];
+    categories = [
+      "Development"
+      "IDE"
+    ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "unicode-rbnf";
-  version = "1.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "unicode-rbnf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dAoDO707qmdDzCbi7EWNaM9txdBV46NlLkOs7xyycz0=";
+    tag = "v${version}";
+    hash = "sha256-RRPQHU8UMVspbhqKVR165czbYY42JopF6Nrhm0up3hw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "unicode_rbnf" ];
 

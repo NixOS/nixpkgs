@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitMinimal,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,7 @@ buildGoModule rec {
   vendorHash = null;
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''

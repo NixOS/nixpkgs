@@ -1,4 +1,8 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rpg-cli";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "facundoolano";
-    repo = pname;
+    repo = "rpg-cli";
     rev = version;
     sha256 = "sha256-xNkM8qN9vg/WGRR/96aCQRVjIbSdSs2845l6oE6+tzg=";
   };
 
-  cargoHash = "sha256-AiNyyLEpVhNhDGq2vngna1ZJmPiI0rFT00gj7vXOW20=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GzVdcQzYmKwb3GWhmbTb9HdBPosKgbimgvwZTfBMEk8=";
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;

@@ -1,34 +1,68 @@
-{ lib, stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
-, libXi, libXmu, libXext, libGLU, libGL }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libtiff,
+  libxml2,
+  SDL_compat,
+  libX11,
+  libXi,
+  libXmu,
+  libXext,
+  libGLU,
+  libGL,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stardust";
   version = "0.1.13";
 
   src = fetchurl {
-    url = "http://iwar.free.fr/IMG/gz/${pname}-${version}.tar.gz";
-    sha256 = "19rs9lz5y5g2yiq1cw0j05b11digw40gar6rw8iqc7bk3s8355xp";
+    url = "http://iwar.free.fr/spip/IMG/gz/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-t5cykB5zHYYj4tlk9QDhL7YQVgEScBZw9OIVXz5NOqc=";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    SDL_compat
+    libxml2
+  ];
   buildInputs = [
-    zlib libtiff libxml2 SDL xorgproto libX11 libXi
-    libXmu libXext libGLU libGL
+    zlib
+    libtiff
+    libxml2
+    SDL_compat
+    libX11
+    libXi
+    libXmu
+    libXext
+    libGLU
+    libGL
   ];
 
-  installFlags = [ "bindir=\${out}/bin" ];
+  patches = [ ./pointer-fix.patch ];
+
+  installFlags = [ "bindir=${placeholder "out"}/bin" ];
 
   hardeningDisable = [ "format" ];
 
   postConfigure = ''
     substituteInPlace config.h \
-      --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
+      --replace-fail '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Space flight simulator";
+    homepage = "http://iwar.free.fr/spip/rubrique2.html";
     mainProgram = "stardust";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      raskin
+      marcin-serwin
+    ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, e2fsprogs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  e2fsprogs,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "e2tools";
   version = "0.1.0";
 
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0nlqynrhj6ww7bnfhhfcx6bawii8iyvhgp6vz60zbnpgd68ifcx7";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ e2fsprogs ];
 
   enableParallelBuilding = true;

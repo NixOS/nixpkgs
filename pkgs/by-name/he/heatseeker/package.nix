@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, coreutils }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  coreutils,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "heatseeker";
@@ -11,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SU5HLAFA7IHnVhsmVtxskteeKKIEvvVSqHIeEk5BkfA=";
   };
 
-  cargoHash = "sha256-RHD2/Uvj8NWpZ+xK16xTN5K/hDWYhwHnu2E5NslGFQI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1DquXOdtSGXSU9bYzSW1J3ElpUIYB71NVBcGxnREy/k=";
 
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple

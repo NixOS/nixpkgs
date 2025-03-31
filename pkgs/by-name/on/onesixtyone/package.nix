@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "onesixtyone";
   version = "unstable-2019-12-26";
 
@@ -28,4 +32,3 @@ stdenv.mkDerivation rec {
     mainProgram = "onesixtyone";
   };
 }
-

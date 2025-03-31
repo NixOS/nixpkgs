@@ -1,39 +1,57 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, libzip
-, glib
-, libusb1
-, libftdi1
-, check
-, libserialport
-, doxygen
-, glibmm
-, python
-, hidapi
-, libieee1284
-, bluez
-, sigrok-firmware-fx2lafw
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  libzip,
+  glib,
+  libusb1,
+  libftdi1,
+  check,
+  libserialport,
+  doxygen,
+  glibmm,
+  python,
+  hidapi,
+  libieee1284,
+  bluez,
+  sigrok-firmware-fx2lafw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsigrok";
-  version = "0.5.2-unstable-2024-01-03";
+  version = "0.5.2-unstable-2024-10-20";
 
   src = fetchgit {
     url = "git://sigrok.org/libsigrok";
-    rev = "b503d24cdf56abf8c0d66d438ccac28969f01670";
-    hash = "sha256-9EW0UCzU6MqBX6rkT5CrBsDkAi6/CLyS9MZHsDV+1IQ=";
+    rev = "f06f788118191d19fdbbb37046d3bd5cec91adb1";
+    hash = "sha256-8aco5tymkCJ6ya1hyp2ODrz+dlXvZmcYoo4o9YC6D6o=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook doxygen pkg-config python ];
-  buildInputs = [
-    libzip glib libusb1 libftdi1 check libserialport glibmm hidapi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libieee1284 bluez ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+    python
+  ];
+  buildInputs =
+    [
+      libzip
+      glib
+      libusb1
+      libftdi1
+      check
+      libserialport
+      glibmm
+      hidapi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libieee1284
+      bluez
+    ];
 
   strictDeps = true;
 
@@ -58,6 +76,9 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor vifino ];
+    maintainers = with maintainers; [
+      bjornfor
+      vifino
+    ];
   };
 }

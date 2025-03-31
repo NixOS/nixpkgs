@@ -1,15 +1,16 @@
-{ makeWrapper
-, nixosTests
-, symlinkJoin
+{
+  makeWrapper,
+  nixosTests,
+  symlinkJoin,
 
-, extraPythonPackages ? (ps: [ ])
+  extraPythonPackages ? (ps: [ ]),
 
-, libsForQt5
+  libsForQt5,
 
-# unwrapped package parameters
-, withGrass ? false
-, withServer ? false
-, withWebKit ? false
+  # unwrapped package parameters
+  withGrass ? false,
+  withServer ? false,
+  withWebKit ? false,
 }:
 let
   qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {
@@ -17,9 +18,10 @@ let
     withServer = withServer;
     withWebKit = withWebKit;
   };
-in symlinkJoin rec {
+in
+symlinkJoin rec {
 
-  inherit (qgis-unwrapped) version;
+  inherit (qgis-unwrapped) version src;
   name = "qgis-${version}";
 
   paths = [ qgis-unwrapped ];
@@ -45,6 +47,10 @@ in symlinkJoin rec {
   passthru = {
     unwrapped = qgis-unwrapped;
     tests.qgis = nixosTests.qgis;
+    updateScript = [
+      ./update.sh
+      "qgis"
+    ];
   };
 
   meta = qgis-unwrapped.meta;

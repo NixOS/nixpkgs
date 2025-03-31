@@ -1,39 +1,94 @@
-{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
-, libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson, libsodium
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, postgresqlSupport ? true, postgresql }:
+  # build-time deps
+  libtool,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
 
-stdenv.mkDerivation rec {
+  # runtime deps
+  adns,
+  curl,
+  gettext,
+  gmp,
+  gnutls,
+  jansson,
+  libextractor,
+  libgcrypt,
+  libgnurl,
+  libidn,
+  libmicrohttpd,
+  libogg,
+  libopus,
+  libpulseaudio,
+  libsodium,
+  libunistring,
+  libxml2,
+  ncurses,
+  sqlite,
+  zlib,
+
+  postgresqlSupport ? true,
+  libpq,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnunet";
-  version = "0.22.1";
+  version = "0.24.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
-    hash = "sha256-gWsgufvA4tLWosnpAYPdAIs4yJOWfjYj4E11/Ezgr6o=";
+    url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BoUvn0gz5ssGvu3fhyerlMQ4U69yOnY4etdxYS4WPFc=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
+  nativeBuildInputs = [
+    libtool
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+  ];
+
   buildInputs = [
-    adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
-    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
-    sqlite zlib libpulseaudio libopus libogg jansson
-  ] ++ lib.optional postgresqlSupport postgresql;
+    adns
+    curl
+    gettext
+    gmp
+    gnutls
+    jansson
+    libextractor
+    libgcrypt
+    libgnurl
+    libidn
+    libmicrohttpd
+    libogg
+    libopus
+    libpulseaudio
+    libsodium
+    libunistring
+    libxml2
+    ncurses
+    sqlite
+    zlib
+  ] ++ lib.optional postgresqlSupport libpq;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
     find . \( -name \*.c -or -name \*.conf \) | \
-      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
+      xargs sed -i -e 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
-      xargs sed -ie "s|/tmp|$TMPDIR|g"
+      xargs sed -i -e "s|/tmp|$TMPDIR|g"
   '';
 
   # unfortunately, there's still a few failures with impure tests
@@ -44,7 +99,7 @@ stdenv.mkDerivation rec {
     make -k check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -63,9 +118,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://gnunet.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ pstn ];
-    platforms = platforms.unix;
-    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ pstn ];
+    platforms = lib.platforms.unix;
+    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${finalAttrs.version}";
   };
-}
+})

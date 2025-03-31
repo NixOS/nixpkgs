@@ -13,24 +13,24 @@ let
       "linux-${arch}-unknown-linux-gnu";
 
   hashes = {
-    linux-aarch64-unknown-linux-gnu = "sha256-vWMrq/uFU/uyuDnsxZK0ZyvtraVCZwvGjzO1a5QjR8g=";
-    linux-x86_64-unknown-linux-gnu = "sha256-iE/zH6M51C6sFZrsUMwZTQ0+hzfpRFJtiKh3MS9bDto=";
-    macos-aarch64-apple-darwin = "sha256-55LSChvO0wRHGL0H29MLy/JW8V52GFr3z/qoxdIPun0=";
-    macos-x86_64-apple-darwin = "sha256-l9bzQ5z9hQ/N2dOkAjPAU4OfRbLCUoRt1eQB6EZE0NI=";
+    linux-aarch64-unknown-linux-gnu = "sha256-i6XsOK8csrJ/9TDzltA7mGjdutLZONFiYGV5tqSCy8o=";
+    linux-x86_64-unknown-linux-gnu = "sha256-gBIzG0LaP9qxivkr47JpBu1z9km7o/1Wppk/6k2WslE=";
+    macos-aarch64-apple-darwin = "sha256-8e5duQYDVFyZejMjuZPuWhg1on3CBku9eBuilG5p1BY=";
+    macos-x86_64-apple-darwin = "sha256-dnouUBUUAkMr1h+IJWYamxmk8IC7JdeIUS9/YI0GzOU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2024-07-16";
+  version = "2025-02-13";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/elp-${release}-otp-26.2.tar.gz";
     hash = hashes.${release};
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [ (lib.getLib stdenv.cc.cc) ];
 
   sourceRoot = ".";
 

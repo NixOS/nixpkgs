@@ -11,28 +11,28 @@
 , zlib
 , unstableGitUpdater
 , libseccomp
-, substituteAll
+, replaceVars
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-10-25";
+  version = "0-unstable-2025-03-27";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "28bf2922a33dd987a0a3095bc461589ef23ad37d";
-    hash = "sha256-Bxt9uovo69whyAtrpCDz3DyAYjCYaZfMZknnFW0WDao=";
-    fetchSubmodules = true;
+    rev = "b2d954b96f227597b62cfae1ac64785bd8f0fb37";
+    hash = "sha256-1kxqzzEMGDFNk25mQX8p7TuADuTMIz+hHZ7p+i7m494=";
   };
 
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    (substituteAll {
-      src = ./mancha-augment-path.diff;
-      out = placeholder "out";
-    })
-  ];
+  patches = [ ./mancha-augment-path.diff ];
+
+  # Include chawan's man pages in mancha's search path
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace adapter/protocol/man.nim \
+      --replace-fail '@out@' "$out"
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"

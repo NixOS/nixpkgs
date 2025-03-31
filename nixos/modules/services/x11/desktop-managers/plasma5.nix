@@ -39,12 +39,12 @@ let
     # on NixOS because the timestamp never changes. As a workaround, delete the
     # icon cache at login and session activation.
     # See also: http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
-    rm -fv $HOME/.cache/icon-cache.kcache
+    rm -fv "$HOME"/.cache/icon-cache.kcache
 
     # xdg-desktop-settings generates this empty file but
     # it makes kbuildsyscoca5 fail silently. To fix this
     # remove that menu if it exists.
-    rm -fv ''${XDG_CONFIG_HOME}/menus/applications-merged/xdg-desktop-menu-dummy.menu
+    rm -fv "''${XDG_CONFIG_HOME}"/menus/applications-merged/xdg-desktop-menu-dummy.menu
 
     # Qt writes a weird ‘libraryPath’ line to
     # ~/.config/Trolltech.conf that causes the KDE plugin
@@ -61,7 +61,7 @@ let
     # Remove the kbuildsyscoca5 cache. It will be regenerated
     # immediately after. This is necessary for kbuildsyscoca5 to
     # recognize that software that has been removed.
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME"/.cache/ksycoca*
 
     ${pkgs.plasma5Packages.kservice}/bin/kbuildsycoca5
   '';
@@ -168,6 +168,9 @@ in
   config = mkMerge [
     # Common Plasma dependencies
     (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
+      warnings = [
+        "Plasma 5 has been deprecated and will be removed in NixOS 25.11. Please migrate your configuration to Plasma 6."
+      ];
 
       security.wrappers = {
         kwin_wayland = {
@@ -292,7 +295,7 @@ in
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
-        ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+        ++ lib.optional config.services.pulseaudio.enable plasma-pa
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
@@ -477,7 +480,7 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
+          assertion = config.services.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
           message = "Plasma Mobile requires a Pulseaudio compatible sound server.";
         }
       ];

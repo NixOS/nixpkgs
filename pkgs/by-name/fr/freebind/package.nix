@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libnetfilter_queue, libnfnetlink }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libnetfilter_queue,
+  libnfnetlink,
+}:
 
 stdenv.mkDerivation {
   pname = "freebind";
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
     sha256 = "1iv2xiz9w8hbz684caw50fn4a9vc8ninfgaqafkh9sa8mzpfzcqr";
   };
 
-  buildInputs = [ libnetfilter_queue libnfnetlink ];
+  buildInputs = [
+    libnetfilter_queue
+    libnfnetlink
+  ];
 
   postPatch = ''
     substituteInPlace preloader.c --replace /usr/local/ $out/

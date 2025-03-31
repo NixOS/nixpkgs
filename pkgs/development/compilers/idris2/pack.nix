@@ -2,6 +2,12 @@
   lib,
   idris2Packages,
   fetchFromGitHub,
+  clang,
+  chez,
+  gmp,
+  zsh,
+  makeBinaryWrapper,
+  stdenv,
 }:
 let
   inherit (idris2Packages) idris2Api buildIdris;
@@ -41,6 +47,28 @@ let
       toml
       filepath
     ];
+
+    nativeBuildInputs = [ makeBinaryWrapper ];
+
+    buildInputs = [
+      gmp
+      clang
+      chez
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
+
+    postInstall = ''
+      wrapProgram $out/bin/pack \
+        --suffix C_INCLUDE_PATH : ${lib.makeIncludePath [ gmp ]} \
+        --suffix PATH : ${
+          lib.makeBinPath (
+            [
+              clang
+              chez
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ]
+          )
+        }
+    '';
 
     meta = {
       description = "An Idris2 Package Manager with Curated Package Collections";

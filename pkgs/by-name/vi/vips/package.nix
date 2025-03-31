@@ -10,6 +10,7 @@
   meson,
   ninja,
   pkg-config,
+  buildPackages,
 
   # Build inputs
   ApplicationServices,
@@ -37,11 +38,14 @@
   libtiff,
   libwebp,
   matio,
-  openexr,
+  openexr_3,
   openjpeg,
   openslide,
   pango,
   poppler,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 
   # passthru
   testers,
@@ -50,20 +54,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.15.5";
+  version = "8.16.0";
 
   outputs = [
     "bin"
     "out"
     "man"
     "dev"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "devdoc" ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Lwe4lu3kS1WxgbM0eRfrMf/UIpDebvooHKvyVv7lq24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cx657BEZecPeB9rCeVym3C/d+/u+YLJn9vwxfe8b0dM=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -79,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [
       gtk-doc
     ];
 
@@ -108,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtiff
       libwebp
       matio
-      openexr
+      openexr_3
       openjpeg
       openslide
       pango
@@ -128,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.mesonEnable "pdfium" false)
       (lib.mesonEnable "nifti" false)
+      (lib.mesonEnable "introspection" withIntrospection)
     ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) (lib.mesonBool "gtk_doc" true)
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (
+      lib.mesonBool "gtk_doc" true
+    )
     ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
 
   passthru = {

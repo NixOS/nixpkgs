@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {

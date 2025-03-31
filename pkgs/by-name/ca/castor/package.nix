@@ -1,14 +1,15 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, pkg-config
-, wrapGAppsHook3
-, openssl
-, gtk3
-, gdk-pixbuf
-, pango
-, atk
-, cairo
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  pkg-config,
+  wrapGAppsHook3,
+  openssl,
+  gtk3,
+  gdk-pixbuf,
+  pango,
+  atk,
+  cairo,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,12 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~julienxx";
-    repo = pname;
+    repo = "castor";
     rev = version;
     sha256 = "sha256-yYLDbxmUR86fdpbHQQTiHVUbicnOD75cl3Vhofw5qr0=";
   };
 
-  cargoHash = "sha256-AHhKfy2AAcDBcknzNb8DAzm51RQqFQDuWN+Hp5731Yk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6X3qZZ1iKXYtl59aGAnd4RzY/kBI4Q8zmX+JYMlKwJU=";
 
   nativeBuildInputs = [
     pkg-config

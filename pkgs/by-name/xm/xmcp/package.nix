@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmcp";
   version = "unstable-2020-10-10";
 

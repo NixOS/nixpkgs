@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lombok";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  outputs = [ "out" "bin" ];
+  outputs = [
+    "out"
+    "bin"
+  ];
 
   buildCommand = ''
     mkdir -p $out/share/java

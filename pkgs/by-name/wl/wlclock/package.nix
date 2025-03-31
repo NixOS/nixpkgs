@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, meson
-, ninja
-, cmake
-, pkg-config
-, wayland-scanner
-, wayland-protocols
-, wayland
-, cairo
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  wayland-protocols,
+  wayland,
+  cairo,
+  scdoc,
 }:
 
 stdenv.mkDerivation rec {

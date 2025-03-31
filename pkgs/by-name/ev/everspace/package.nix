@@ -1,12 +1,23 @@
 {
   # Packaging Dependencies
-  lib, stdenv, requireFile, autoPatchelfHook, unzip, copyDesktopItems, makeDesktopItem,
+  lib,
+  stdenv,
+  requireFile,
+  autoPatchelfHook,
+  unzip,
+  copyDesktopItems,
+  makeDesktopItem,
 
   # Everspace Dependencies
-  cairo, gdk-pixbuf, pango, gtk2-x11, libGL, openal,
+  cairo,
+  gdk-pixbuf,
+  pango,
+  gtk2-x11,
+  libGL,
+  openal,
 
   # Unreal Engine 4 Dependencies
-  xorg
+  xorg,
 }:
 
 # Known issues:

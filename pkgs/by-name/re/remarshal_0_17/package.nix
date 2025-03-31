@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "remarshal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
   };
 
@@ -58,5 +58,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "remarshal";
   };
 }

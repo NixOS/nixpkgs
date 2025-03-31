@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +61,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ mit ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

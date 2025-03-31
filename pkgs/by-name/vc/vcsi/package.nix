@@ -1,38 +1,62 @@
-{ lib, python3Packages, fetchFromGitHub, ffmpeg }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ffmpeg,
+  versionCheckHook,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
   version = "7.0.16";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amietn";
-    repo = pname;
-    rev = "v${version}";
+    repo = "vcsi";
+    tag = "v${version}";
     hash = "sha256-I0o6GX/TNMfU+rQtSqReblRplXPynPF6m2zg0YokmtI=";
   };
 
-  nativeBuildInputs = [ python3Packages.poetry-core ];
-
-  propagatedBuildInputs = with python3Packages; [
-    numpy
-    pillow
-    jinja2
-    texttable
-    parsedatetime
+  build-system = with python3Packages; [
+    poetry-core
   ];
 
-  doCheck = false;
+  pythonRelaxDeps = [
+    "numpy"
+    "pillow"
+  ];
+
+  dependencies = with python3Packages; [
+    jinja2
+    numpy
+    parsedatetime
+    pillow
+    texttable
+  ];
+
   pythonImportsCheck = [ "vcsi" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 
-  meta = with lib; {
+  nativeCheckInputs =
+    [
+      versionCheckHook
+    ]
+    ++ (with python3Packages; [
+      pytestCheckHook
+    ]);
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
     description = "Create video contact sheets";
     homepage = "https://github.com/amietn/vcsi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dandellion zopieux ];
+    changelog = "https://github.com/amietn/vcsi/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      dandellion
+      zopieux
+    ];
     mainProgram = "vcsi";
   };
 }

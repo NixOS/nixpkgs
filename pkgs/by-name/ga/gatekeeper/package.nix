@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.17.1";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
-    rev = "v${version}";
-    hash = "sha256-Tu4p0kY0UdU0++zLpj+6A5ky5OXEEN5iivHbiyvghw4=";
+    tag = "v${version}";
+    hash = "sha256-lO+z/6JRn0iKNoCMiMgYKZ8Jo53udoylleHFRyTF+4w=";
   };
 
   vendorHash = null;

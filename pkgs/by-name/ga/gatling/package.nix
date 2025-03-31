@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, libowfat, libcap, zlib, openssl, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libowfat,
+  libcap,
+  zlib,
+  openssl,
+  libxcrypt,
+}:
 
 let
   version = "0.16";
@@ -12,11 +21,19 @@ stdenv.mkDerivation rec {
     sha256 = "0nrnws5qrl4frqcsfa9z973vv5mifgr9z170qbvg3mq1wa7475jz";
   };
 
-  buildInputs = [ libowfat libcap zlib openssl libxcrypt ];
+  buildInputs = [
+    libowfat
+    libcap
+    zlib
+    openssl
+    libxcrypt
+  ];
 
   configurePhase = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
-    substituteInPlace GNUmakefile --replace "/opt/diet" "$out"
+    substituteInPlace Makefile --replace-fail "/usr/local" "$out"
+    substituteInPlace GNUmakefile --replace-fail "/opt/diet" "$out"
+    substituteInPlace tryalloca.c --replace-fail "main() {" "int main() {"
+    substituteInPlace trysocket.c --replace-fail "main() {" "int main() {"
   '';
 
   buildPhase = ''

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  tdb,
+  zlib,
+  flex,
+  bison,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fdm";
@@ -6,19 +16,25 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nicm";
-    repo = pname;
+    repo = "fdm";
     rev = version;
     hash = "sha256-Gqpz+N1ELU5jQpPJAG9s8J9UHWOJNhkT+s7+xuQazd0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl tdb zlib flex bison ];
+  buildInputs = [
+    openssl
+    tdb
+    zlib
+    flex
+    bison
+  ];
 
   postInstall = ''
     install fdm-sanitize $out/bin
-    mkdir -p $out/share/doc/${pname}
-    install -m644 MANUAL $out/share/doc/${pname}
-    cp -R examples $out/share/doc/${pname}
+    mkdir -p $out/share/doc/fdm
+    install -m644 MANUAL $out/share/doc/fdm
+    cp -R examples $out/share/doc/fdm
   '';
 
   meta = with lib; {

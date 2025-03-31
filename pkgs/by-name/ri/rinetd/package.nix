@@ -1,9 +1,10 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, rinetd
-, stdenv
-, testers
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  rinetd,
+  stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation rec {

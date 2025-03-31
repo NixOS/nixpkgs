@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, tetex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  tetex,
+}:
 
 stdenv.mkDerivation {
   pname = "mmixware";
@@ -25,7 +30,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ tetex ];
   enableParallelBuilding = true;
 
-  makeFlags = [ "all" "doc" "CFLAGS=-O2" ];
+  makeFlags = [
+    "all"
+    "doc"
+    "CFLAGS=-O2"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -39,10 +48,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description  = "MMIX simulator and assembler";
-    homepage     = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
-    maintainers  = with maintainers; [ siraben ];
-    platforms    = platforms.unix;
-    license      = licenses.publicDomain;
+    description = "MMIX simulator and assembler";
+    homepage = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+    license = licenses.publicDomain;
   };
 }

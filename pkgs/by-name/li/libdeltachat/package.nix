@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.151.4";
+  version = "1.158.0";
 
   src = fetchFromGitHub {
-    owner = "deltachat";
-    repo = "deltachat-core-rust";
-    rev = "v${version}";
-    hash = "sha256-GySzclwnplL6GwK01Msn4REzW2eiynLKtEjonvUzMto=";
+    owner = "chatmail";
+    repo = "core";
+    tag = "v${version}";
+    hash = "sha256-0po4nPCunq9cBaVFSsS1uo18dv6Y6IHGzL1zC2zwXdI=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "deltachat-core-rust";
     inherit version src;
-    hash = "sha256-vTmHF7qoAWfou27v6TRPSRvLB+ge/7/aBgW6Bb7tkkI=";
+    hash = "sha256-k8TN6YtCVPR8RnFoiGX9APvKwpQzj7T53DlKMD9r/e0=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
       --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
   '';
 
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+    CARGO_BUILD_RUSTFLAGS = "-C linker=${stdenv.cc.targetPrefix}cc";
+  };
+
   passthru = {
     tests = {
       inherit deltachat-desktop deltachat-repl deltachat-rpc-server;
@@ -81,8 +86,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Delta Chat Rust Core library";
-    homepage = "https://github.com/deltachat/deltachat-core-rust/";
-    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/chatmail/core";
+    changelog = "https://github.com/chatmail/core/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

@@ -1,17 +1,21 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "fscan";
-  version = "1.8.4";
+  version = "2.0.0-build4";
 
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
     rev = version;
-    hash = "sha256-5uFSvEkTBy0veMdeeg9BmSqu+qSqCwuozK0J3kerAdE=";
+    hash = "sha256-paW48xpxl/d3abDsBCPwbmSZ8yoFhlTU+VPg/Egq0eY=";
   };
 
-  vendorHash = "sha256-FFYqvGEFe7sUEb4G3ApQOuYoiDXeA54P7spmKfRiEF0=";
+  vendorHash = "sha256-OyYPN9pq3Hx8utKXj3Hx9kqE90M2XqHkgTT5P9D6BVc=";
 
   meta = with lib; {
     description = "Intranet comprehensive scanning tool";

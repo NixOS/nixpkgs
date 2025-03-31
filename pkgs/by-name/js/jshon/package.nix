@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  jansson,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jshon";
   version = "20170302";
 
@@ -23,15 +29,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace Makefile --replace "/usr/" "/"
-    '';
+  postPatch = ''
+    substituteInPlace Makefile --replace "/usr/" "/"
+  '';
 
-  preInstall =
-    ''
-      export DESTDIR=$out
-    '';
+  preInstall = ''
+    export DESTDIR=$out
+  '';
 
   meta = with lib; {
     homepage = "http://kmkeen.com/jshon";

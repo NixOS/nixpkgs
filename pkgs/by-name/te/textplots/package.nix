@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
@@ -9,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-83EAe6O8ETsuGJ5MK6kt68OnJL+r+BAYkFzvzlxHyp4=";
   };
 
-  cargoHash = "sha256-O47b00PGRXTWWxywitS2V15gXahzgjNvFKUvE+VMXaM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ep7gXTWHRhWpGo6n/EgjY0d/vqIqd3yEikzy9sLTtf8=";
 
   buildFeatures = [ "tool" ];
 

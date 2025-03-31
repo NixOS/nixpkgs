@@ -1,18 +1,32 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.25.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    hash = "sha256-0UmeSwIWEYWyGkoVqh6cKv6lx+7fjBpDanr6yo3DN0s=";
+    hash = "sha256-Zz171OlSa8bzxQUinyO/FF4QjBc4wKp0EUEXwzJewEU=";
   };
 
   # List of file formats to package.
-  _types = [ "html" "json" "jsonld" "rdfa" "rdfnt" "rdfturtle" "rdfxml" "template" "text" ];
+  _types = [
+    "html"
+    "json"
+    "jsonld"
+    "rdfa"
+    "rdfnt"
+    "rdfturtle"
+    "rdfxml"
+    "template"
+    "text"
+  ];
 
   outputs = [ "out" ] ++ _types;
 
@@ -40,7 +54,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Various data formats for the SPDX License List";
     homepage = "https://github.com/spdx/license-list-data";
     license = licenses.cc0;
-    maintainers = with maintainers; [ oxzi c0bw3b ];
+    maintainers = with maintainers; [
+      oxzi
+      c0bw3b
+    ];
     platforms = platforms.all;
   };
 }

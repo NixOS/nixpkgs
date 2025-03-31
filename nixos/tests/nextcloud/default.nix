@@ -80,7 +80,7 @@ let
               "${test-helpers.rclone} ${test-helpers.check-sample}"
           )
 
-      ${if builtins.isFunction test-helpers.extraTests then test-helpers.extraTests args else test-helpers.extraTests}
+      ${if pkgs.lib.isFunction test-helpers.extraTests then test-helpers.extraTests args else test-helpers.extraTests}
     '';
   };
 
@@ -110,4 +110,4 @@ let
       ./with-objectstore.nix
     ];
 in
-listToAttrs (concatMap genTests [ 28 29 30 ])
+listToAttrs (concatMap genTests [ 29 30 31 ])

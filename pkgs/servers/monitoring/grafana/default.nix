@@ -1,40 +1,82 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
-, tzdata, wire
-, yarn, nodejs, python3, cacert
-, jq, moreutils
-, nix-update-script, nixosTests, xcbuild
-, faketty
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  removeReferencesTo,
+  tzdata,
+  wire,
+  yarn,
+  nodejs,
+  python3,
+  cacert,
+  jq,
+  moreutils,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
+  faketty,
+  git,
 }:
 
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  # NOTE: sometimes, this is a no-op (i.e. `--replace-fail "X" "X"`).
+  # This is because Grafana raises the Go version above the patch-level we have
+  # on master if a security fix landed in Go (and our go may go through staging first).
+  #
+  # I(Ma27) decided to leave the code a no-op if this is not the case because
+  # pulling it out of the Git history every few months and checking which files
+  # we need to update now is slightly annoying.
+  patchGoVersion = ''
+    find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.23.7" "go 1.23.7"
+    done
+    find . -name go.work -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.23.7" "go 1.23.7"
+    done
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.23.7" "GO_VERSION = 1.23.7"
+  '';
+in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.3.1";
+  version = "11.6.0";
 
-  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
+  subPackages = [
+    "pkg/cmd/grafana"
+    "pkg/cmd/grafana-server"
+    "pkg/cmd/grafana-cli"
+  ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-r8+GdAI1W7Y4wLL8GTLzXUTaOzvLb/YQ4XWHmYs1biI=";
+    hash = "sha256-oXotHi79XBhxD/qYC7QDQwn7jiX0wKWe/RXZS5DwN9o=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    # Fix error: no member named 'aligned_alloc' in the global namespace.
-    # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-    NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
   };
 
   offlineCache = stdenv.mkDerivation {
     name = "${pname}-${version}-yarn-offline-cache";
     inherit src env;
     nativeBuildInputs = [
-      yarn nodejs cacert
-      jq moreutils python3
-    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
+      yarn
+      nodejs
+      cacert
+      jq
+      moreutils
+      # required to run old node-gyp
+      (python3.withPackages (ps: [ ps.distutils ]))
+      git
+      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
@@ -50,22 +92,34 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = rec {
-      x86_64-linux = "sha256-s9PGuuGwB4Ixw0cekrg0oldQxRU6xmb3KjFrNPRiGLs=";
-      aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-NVx+ipUPova7yN56Ag0b13Jb6CsD0fwHfPpwyDbQs+Y=";
-      x86_64-darwin = aarch64-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash =
+      rec {
+        x86_64-linux = "sha256-52Sq7YJHhs0UICMOtEDta+bY7b/1SdNfzUOigQhH3E4=";
+        aarch64-linux = x86_64-linux;
+        aarch64-darwin = "sha256-9AJbuA1WDGiln2ea0nqD9lDMhKWdYyVkgFyFLB6/Etc=";
+        x86_64-darwin = aarch64-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
+  postPatch = patchGoVersion;
+
+  vendorHash = "sha256-cYE43OAagPHFhWsUJLMcJVfsJj6d0vUqzjbAviYSuSc=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [
+    wire
+    yarn
+    jq
+    moreutils
+    removeReferencesTo
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
+    faketty
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -102,7 +156,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -135,8 +191,20 @@ buildGoModule rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "grafana-server";
   };
 }

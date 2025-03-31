@@ -59,22 +59,22 @@ builtins.listToAttrs (
 
       {
         pname = "G4EMLOW";
-        version = "8.5";
-        sha256 = "sha256-ZrrKSaxdReKsEMEltPsmYiXlEYA+ZpgZCc6c0+m873M=";
+        version = "8.6.1";
+        sha256 = "sha256-SpNYjSYIDOHTNrlPdvravkkF+48cuiQVeVAj1s2PSoo=";
         envvar = "LE";
       }
 
       {
         pname = "G4PhotonEvaporation";
-        version = "5.7";
-        sha256 = "sha256-dh5C5W/93j2YOfn52BAmB8a0wDKRUe5Rggb07p535+U=";
+        version = "6.1";
+        sha256 = "sha256-X/wfmagdUMkCAYbVmHSvc8U7okwYQrO4KzGIIjuyRvI=";
         envvar = "LEVELGAMMA";
       }
 
       {
         pname = "G4RadioactiveDecay";
-        version = "5.6";
-        sha256 = "sha256-OIYHfJyOWph4PmcY4cMlZ4me6y27M+QC1Edrwv5PDfE=";
+        version = "6.1.2";
+        sha256 = "sha256-pA1+Prxk01VVxKSdD/HglFzWBdhDVNBTEhKTkUyuoTo=";
         envvar = "RADIOACTIVE";
       }
 
@@ -87,8 +87,8 @@ builtins.listToAttrs (
 
       {
         pname = "G4PARTICLEXS";
-        version = "4.0";
-        sha256 = "sha256-k4EDlwPD8rD9NqtJmTYqLItP+QgMMi+QtOMZKBEzypU=";
+        version = "4.1";
+        sha256 = "sha256-B64eBI6ayOf5H2aWSX3VW9UMzIItl68aC56SMhKm19E=";
         envvar = "PARTICLEXS";
       }
 
@@ -115,8 +115,8 @@ builtins.listToAttrs (
 
       {
         pname = "G4ENSDFSTATE";
-        version = "2.3";
-        sha256 = "sha256-lETF4IIHkavTzKrOEFsOR3kPrc4obhEUmDTnnEqOkgM=";
+        version = "3.0";
+        sha256 = "sha256-S9w71Asx1DSFv0+H8FVwXlQKZVfWTthcaJxZyaTrp9Y=";
         envvar = "ENSDFSTATE";
       }
 
@@ -132,6 +132,27 @@ builtins.listToAttrs (
         version = "1.4";
         sha256 = "sha256-S3J0AgzItO1Wm4ku8YwuCI7c22tm850lWFzO4l2XIeA=";
         envvar = "PARTICLEHP";
+      }
+
+      {
+        pname = "G4CHANNELING";
+        version = "1.0";
+        sha256 = "sha256-ID48aZhMoJrNGBodMamw76+tS8EubGCPCwXmlRINZ/I=";
+        envvar = "CHANNELING";
+      }
+
+      {
+        pname = "G4NUDEXLIB";
+        version = "1.0";
+        sha256 = "sha256-ysfWXpxa+O26KyZn1YIuFqr5kGXJX4Bedt5MyGOV9BU=";
+        envvar = "NUDEXLIB";
+      }
+
+      {
+        pname = "G4URRPT";
+        version = "1.1";
+        sha256 = "sha256-ajQy24C8CIruGcUEucASSRMAXWNX6hSHBFFACrINnBE=";
+        envvar = "URRPT";
       }
     ]
 )

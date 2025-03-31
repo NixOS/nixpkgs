@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, groff
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  groff,
 }:
 
 stdenv.mkDerivation rec {

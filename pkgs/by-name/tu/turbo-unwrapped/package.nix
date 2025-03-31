@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   capnproto,
   extra-cmake-modules,
   fetchFromGitHub,
@@ -16,19 +15,19 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.3.3";
+  version = "2.4.5-canary.4";
 
   src = fetchFromGitHub {
     owner = "vercel";
-    repo = "turbo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-L51RgXUlA9hnVt232qdLo6t0kqXl7b01jotUk1r8wO0=";
+    repo = "turborepo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tQ/Xocpk48eRhCyfRZx2rkAVqNn115rO3MRYF5fC2nI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-qv5bK65vA94M/YSjSRaYilg44NqkzF2ybmUVapu8cpI=";
+  cargoHash = "sha256-pngzlmkntTCv5/aw1UNbDGNQOVtMgFZHc2woj6R0vys=";
 
   nativeBuildInputs =
     [
@@ -45,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     rust-jemalloc-sys
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  ];
 
   cargoBuildFlags = [
     "--package"
@@ -64,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'v(\d+\.\d+\.\d+)'"
+        "v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
   };
@@ -72,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
-    changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
+    changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
@@ -80,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "turbo";
   };
-}
+})

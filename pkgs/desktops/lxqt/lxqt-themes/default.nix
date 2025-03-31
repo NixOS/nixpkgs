@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

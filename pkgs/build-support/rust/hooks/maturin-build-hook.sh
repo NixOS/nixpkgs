@@ -12,14 +12,20 @@ maturinBuildHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
+    # This is a huge hack, but it's the least invasive way
+    # to get the required interpreter name for maturin.
+    local interpreter_path="$(command -v python3 || command -v pypy3)"
+    local interpreter_name="$($interpreter_path -c 'import os; import sysconfig; print(os.path.basename(sysconfig.get_config_var('\''INCLUDEPY'\'')))')"
+
     local flagsArray=(
         "--jobs=$NIX_BUILD_CORES"
         "--offline"
-        "--target" "@rustTargetPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--manylinux" "off"
         "--strip"
         "--release"
         "--out" "$dist"
+        "--interpreter" "$interpreter_name"
     )
 
     concatTo flagsArray maturinBuildFlags

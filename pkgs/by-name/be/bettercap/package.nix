@@ -1,11 +1,13 @@
-{ lib, stdenv
-, buildGo122Module
-, fetchFromGitHub
-, pkg-config
-, libpcap
-, libnfnetlink
-, libnetfilter_queue
-, libusb1
+{
+  lib,
+  stdenv,
+  buildGo122Module,
+  fetchFromGitHub,
+  pkg-config,
+  libpcap,
+  libnfnetlink,
+  libnetfilter_queue,
+  libusb1,
 }:
 
 buildGo122Module rec {
@@ -24,8 +26,15 @@ buildGo122Module rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpcap libusb1 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnfnetlink libnetfilter_queue ];
+  buildInputs =
+    [
+      libpcap
+      libusb1
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libnfnetlink
+      libnetfilter_queue
+    ];
 
   meta = with lib; {
     description = "Man in the middle tool";

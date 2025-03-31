@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libusb1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb1,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rkflashtool";

@@ -1,20 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, libXtst, xorgproto,
-libXi }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libX11,
+  libXtst,
+  xorgproto,
+  libXi,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xcape";
   version = "unstable-2018-03-01";
 
   src = fetchFromGitHub {
     owner = "alols";
-    repo = pname;
+    repo = "xcape";
     rev = "a34d6bae27bbd55506852f5ed3c27045a3c0bd9e";
     sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libX11 libXtst xorgproto libXi ];
+  buildInputs = [
+    libX11
+    libXtst
+    xorgproto
+    libXi
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -34,7 +47,7 @@ stdenv.mkDerivation rec {
       released on its own.
     '';
     homepage = "https://github.com/alols/xcape";
-    license = licenses.gpl3 ;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     mainProgram = "xcape";

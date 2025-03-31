@@ -1,17 +1,29 @@
-{ lib, stdenvNoCC, fetchFromGitHub, bash, scdoc }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  bash,
+  scdoc,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "fetchutils";
   version = "unstable-2021-03-16";
 
   src = fetchFromGitHub {
     owner = "kiedtl";
-    repo = pname;
+    repo = "fetchutils";
     rev = "882781a297e86f4ad4eaf143e0777fb3e7c69526";
     sha256 = "sha256-ONrVZC6GBV5v3TeBekW9ybZjDHF3FNyXw1rYknqKRbk=";
   };
 
-  buildInputs = [ bash scdoc ];
+  nativeBuildInputs = [
+    scdoc
+  ];
+
+  buildInputs = [
+    bash
+  ];
 
   installFlags = [ "PREFIX=$(out)/" ];
 

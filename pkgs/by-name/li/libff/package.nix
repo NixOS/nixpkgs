@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, gmp, openssl, pkg-config
-, enableStatic ? stdenv.hostPlatform.isStatic }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  gmp,
+  openssl,
+  pkg-config,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libff";
@@ -13,15 +22,26 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = [ "-DWITH_PROCPS=Off" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-DCURVE=ALT_BN128" "-DUSE_ASM=OFF" ];
+  cmakeFlags =
+    [ "-DWITH_PROCPS=Off" ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "-DCURVE=ALT_BN128"
+      "-DUSE_ASM=OFF"
+    ];
 
   postPatch = lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost gmp openssl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    boost
+    gmp
+    openssl
+  ];
 
   meta = with lib; {
     description = "C++ library for Finite Fields and Elliptic Curves";

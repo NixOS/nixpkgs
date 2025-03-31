@@ -1,22 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
-, jdk_headless, maven
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk_headless,
+  maven,
+  makeWrapper,
 }:
 
 let
   platform =
-    if stdenv.hostPlatform.isLinux then "linux"
-    else if stdenv.hostPlatform.isDarwin then "mac"
-    else if stdenv.hostPlatform.isWindows then "windows"
-    else throw "unsupported platform";
+    if stdenv.hostPlatform.isLinux then
+      "linux"
+    else if stdenv.hostPlatform.isDarwin then
+      "mac"
+    else if stdenv.hostPlatform.isWindows then
+      "windows"
+    else
+      throw "unsupported platform";
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage {
   pname = "java-language-server";
   version = "0.2.46";
 
   src = fetchFromGitHub {
     owner = "georgewfraser";
-    repo = pname;
+    repo = "java-language-server";
     # commit hash is used as owner sometimes forgets to set tags. See https://github.com/georgewfraser/java-language-server/issues/104
     rev = "d7f4303cd233cdad84daffbb871dd4512a2c8da2";
     sha256 = "sha256-BIcfwz+pLQarnK8XBPwDN2nrdvK8xqUo0XFXk8ZV/h0=";
@@ -26,12 +34,17 @@ maven.buildMavenPackage rec {
   mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk_headless makeWrapper ];
+  nativeBuildInputs = [
+    jdk_headless
+    makeWrapper
+  ];
 
   dontConfigure = true;
   preBuild = ''
     jlink \
-      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${
+        lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"
+      } \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, fetchFromGitHub
-, fetchYarnDeps
-, nixosTests
-, brotli
-, fixup-yarn-lock
-, jq
-, fd
-, nodejs
-, which
-, yarn
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nixosTests,
+  brotli,
+  fixup-yarn-lock,
+  jq,
+  fd,
+  nodejs,
+  which,
+  yarn,
 }:
 let
   bcryptHostPlatformAttrs = {
@@ -36,8 +37,9 @@ let
       hash = "sha256-JMnELVUxoU1C57Tzue3Sg6OfDFAjfCnzgDit0BWzmlo=";
     };
   };
-  bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
-    (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  bcryptAttrs =
+    bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}"
+      or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
   bcryptVersion = "5.1.1";
   bcryptLib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kPZcCJtnoqE1g0fAuM98IhuDy1E9QBDkFNWrWIpFIDA=";
   };
 
@@ -75,9 +77,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-x5qFCprn8q0xC88HudLV7W53X1Nkbz3F52RMp2PxIu8=";
   };
 
-  outputs = [ "out" "cli" "runner" ];
+  outputs = [
+    "out"
+    "cli"
+    "runner"
+  ];
 
-  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn fd ];
+  nativeBuildInputs = [
+    brotli
+    fixup-yarn-lock
+    jq
+    which
+    yarn
+    fd
+  ];
 
   buildInputs = [ nodejs ];
 
@@ -155,6 +168,14 @@ stdenv.mkDerivation rec {
     mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
     mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,yarn.lock} $out
 
+    # Remove broken symlinks in node_modules from workspace packages that aren't needed
+    # by the built artifact. If any new packages break the check for broken symlinks,
+    # they should be checked before adding them here to make sure they aren't likely to
+    # be needed, either now or in the future. If they might be, then we probably want
+    # to move the package to $out above instead of removing the broken symlink.
+    rm $out/node_modules/@peertube/{peertube-server,peertube-transcription-devtools,peertube-types-generator,tests}
+    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests}
+
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
     ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
@@ -191,10 +212,15 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [
-      "x86_64-linux" "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-linux"
       # feasible, looking for maintainer to help out
       # "x86_64-darwin" "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ immae izorkin stevenroose ];
+    maintainers = with maintainers; [
+      immae
+      izorkin
+      stevenroose
+    ];
   };
 }

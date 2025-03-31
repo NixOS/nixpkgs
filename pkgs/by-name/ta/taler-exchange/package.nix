@@ -10,7 +10,7 @@
   libsodium,
   libunistring,
   pkg-config,
-  postgresql,
+  libpq,
   autoreconfHook,
   python3,
   recutils,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "0.13.0";
+  version = "0.14.6-unstable-2025-03-02";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "v${finalAttrs.version}";
+    rev = "13e058a902a3dbee9d7fe327030b88c2d126675b";
     fetchSubmodules = true;
-    hash = "sha256-elVZUuiIMLOG058n+Egpy9oD9T2sLDC4TUCYZTCi0bw=";
+    hash = "sha256-fqlYpFggQkB/IqD6V01ec+G4EtoNaA/FXigM+jqIMe0=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmicrohttpd
     jansson
     libsodium
-    postgresql
+    libpq
     curl
     recutils
     gettext

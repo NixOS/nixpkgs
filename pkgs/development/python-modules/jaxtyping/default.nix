@@ -6,6 +6,9 @@
   # build-system
   hatchling,
 
+  # dependencies
+  wadler-lindig,
+
   # tests
   cloudpickle,
   equinox,
@@ -20,17 +23,21 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.36";
+    version = "0.3.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jaxtyping";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-TXhHh6Nka9TOnfFPaNyHmLdTkhzyFEY0mLSfoDf9KQc=";
+      tag = "v${version}";
+      hash = "sha256-sMJvkqlg7lNtyo7j+eD7aWrds71XwqO2VWDVsO4r4Mk=";
     };
 
     build-system = [ hatchling ];
+
+    dependencies = [
+      wadler-lindig
+    ];
 
     pythonImportsCheck = [ "jaxtyping" ];
 

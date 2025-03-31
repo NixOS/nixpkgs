@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchsvn
-, pkg-config
-, which
-, autoconf
-, automake
-, libtool
-, hexdump
-, libao
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  pkg-config,
+  which,
+  autoconf,
+  automake,
+  libtool,
+  hexdump,
+  libao,
+  zlib,
+  curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sc68";
   version = "unstable-2022-11-24";
 

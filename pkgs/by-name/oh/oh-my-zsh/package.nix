@@ -1,18 +1,32 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
-, git, nix, nixfmt-classic, jq, coreutils, gnused, curl, cacert, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  writeScript,
+  common-updater-scripts,
+  git,
+  nix,
+  jq,
+  coreutils,
+  gnused,
+  curl,
+  cacert,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
-  version = "2024-10-01";
+  version = "2025-03-11";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "f4423ebd09fbc7670815c3c20cc86c81b7319e5f";
-    sha256 = "sha256-JlYgWssS1DT1/Jlk6fOZqyEr6ta3ky6tlDqDZbJ1A9k=";
+    rev = "f97e871c33da57d20e1b0411da6b1674126192a9";
+    sha256 = "sha256-L2g9kw5mFfIz+IwTSfdHN4O48tew6D807gJvrgtkjJM=";
   };
 
   strictDeps = true;
@@ -34,7 +48,7 @@ stdenv.mkDerivation rec {
     chmod -R +w templates
 
     # Change the path to oh-my-zsh dir and disable auto-updating.
-    sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
+    sed -i -e "s#ZSH=\"\$HOME/.oh-my-zsh\"#ZSH=\"$outdir\"#" \
            -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
      $template
 
@@ -84,7 +98,6 @@ stdenv.mkDerivation rec {
           curl
           cacert
           git
-          nixfmt-classic
           nix
           jq
           coreutils
@@ -96,11 +109,8 @@ stdenv.mkDerivation rec {
       latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
 
       if [ ! "null" = "$latestSha" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
         update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi

@@ -1,28 +1,32 @@
-{ lib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, desktop-file-utils
-, glib
-, gtk3
-, python3
-, gsettings-desktop-schemas
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  cinnamon-gsettings-overrides,
+  desktop-file-utils,
+  glib,
+  gnome,
+  gtk3,
+  mate,
+  python3,
+  gsettings-desktop-schemas,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "themechanger";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
     rev = "v${version}";
-    hash = "sha256-/quCi2srn9XlhJQKYNkOaZDHTwdciB9SAlF/RML0q+M=";
+    hash = "sha256-+uTofigS1F/nBNs/OyJ+RSz10DNnqgvNjWpkTXAvARM=";
   };
 
   nativeBuildInputs = [
@@ -36,8 +40,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    cinnamon-gsettings-overrides
     glib
+    gnome.nixos-gsettings-overrides
     gtk3
+    mate.mate-desktop
+    mate.mate-settings-daemon
     python3
     gsettings-desktop-schemas
   ];

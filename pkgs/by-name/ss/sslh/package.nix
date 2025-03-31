@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, libcap, libev, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libcap,
+  libev,
+  libconfig,
+  perl,
+  tcp_wrappers,
+  pcre2,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
-    repo = pname;
+    repo = "sslh";
     rev = "v${version}";
-    hash = "sha256-+G6xYiytSWW2CljuaeJZfTuXCjkbDCzwU/FSLBmvnGw=";
+    hash = "sha256-46lnQ+u+TfHrI2Yz5jd/Tl82K8mmqFY2Cqu6ktLiveA=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap tcp_wrappers ];
+  buildInputs =
+    [
+      libev
+      libconfig
+      perl
+      pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+      tcp_wrappers
+    ];
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
+    "USELIBCAP=1"
+    "USELIBWRAP=1"
+  ];
 
   postInstall = ''
     # install all flavours
@@ -37,7 +61,10 @@ stdenv.mkDerivation rec {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
     license = licenses.gpl2Plus;
     homepage = "https://www.rutschle.net/tech/sslh/README.html";
-    maintainers = with maintainers; [ koral fpletz ];
+    maintainers = with maintainers; [
+      koral
+      fpletz
+    ];
     platforms = platforms.all;
   };
 }

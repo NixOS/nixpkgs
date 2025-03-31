@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "go-graft";
@@ -8,20 +13,37 @@ buildGoModule rec {
     owner = "mzz2017";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "sha256-DXW0NtFYvcCX4CgMs5/5HPaO9f9eFtw401wmJdCbHPU=";
+    hash = "sha256-DXW0NtFYvcCX4CgMs5/5HPaO9f9eFtw401wmJdCbHPU=";
   };
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
-  ldflags = [ "-X github.com/mzz2017/gg/cmd.Version=${version}" "-s" "-w" ];
+  ldflags = [
+    "-X github.com/mzz2017/gg/cmd.Version=${version}"
+    "-s"
+    "-w"
+  ];
+
   vendorHash = "sha256-fnM4ycqDyruCdCA1Cr4Ki48xeQiTG4l5dLVuAafEm14=";
-  subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd gg \
+    --bash completion/bash/gg \
+    --fish completion/fish/gg.fish \
+    --zsh completion/zsh/_gg
+  '';
 
   meta = with lib; {
     description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
+    changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
     homepage = "https://github.com/mzz2017/gg";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ xyenon ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      xyenon
+      oluceps
+    ];
     mainProgram = "gg";
     platforms = platforms.linux;
   };

@@ -1,23 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, scdoc }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  scdoc,
+}:
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    hash = "sha256-UI/f5EC5OOvwrxP1wfnNgEpY1DCwmekQohTILRvM2Gc=";
+    hash = "sha256-PFUjJOVW7bCFOxi5/6D4dOu96T8jj1L5clMVLC/W1Fk=";
   };
 
-  vendorHash = "sha256-p52IIzkAkcnqbxXBqQ92crYBrD84wQb/uVsTWX8EsPE=";
+  vendorHash = "sha256-2TSQYcKSzAHbqocQ5iboEUGM1DRis3J1TFlz0fOYQog=";
 
   subPackages = [ "cmd/shfmt" ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postBuild = ''
     scdoc < cmd/shfmt/shfmt.1.scd > shfmt.1
@@ -32,7 +45,10 @@ buildGoModule rec {
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [
+      zowoq
+      SuperSandro2000
+    ];
     mainProgram = "shfmt";
   };
 }

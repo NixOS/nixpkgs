@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmp
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmp,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "MrJoy";
-    repo = pname;
+    repo = "ssss";
     rev = "releases%2Fv${version}";
     sha256 = "18r1hwch6nq6gjijavr4pvrxz2plrlrvdx8ssqhdj2vmqvlqwbvd";
   };

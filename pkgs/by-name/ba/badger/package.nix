@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "badger";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "badger";
     rev = "v${version}";
-    hash = "sha256-2d+OnSEERWx2JNYawbnuorBl6uIIoi2oO5n7uCsUzFo=";
+    hash = "sha256-W3vPTLGI7YT7dFklJnOcpfYqQ9aBCsel9L6q4WNincY=";
   };
 
-  vendorHash = "sha256-iaTR7V8l66BEadAiCftUZy7Gr+fdLRNnvBbtwdU/m/k=";
+  vendorHash = "sha256-UVdOiaj1FN0etB9F0kt+THfO0Aa1kgdGYVeSVv4GpxY=";
 
   subPackages = [ "badger" ];
 

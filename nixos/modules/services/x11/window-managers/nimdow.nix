@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,7 +21,6 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton {
       name = "nimdow";
@@ -25,6 +29,9 @@ in
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ cfg.package pkgs.st ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.st
+    ];
   };
 }

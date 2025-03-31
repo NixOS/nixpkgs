@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ninvaders";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sf-refugees";
-    repo = pname;
+    repo = "ninvaders";
     rev = "v${version}";
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };

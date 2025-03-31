@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.screen;
@@ -29,7 +34,7 @@ in
         text = cfg.screenrc;
       };
       environment.systemPackages = [ cfg.package ];
-      security.pam.services.screen = {};
+      security.pam.services.screen = { };
     })
   ];
 }

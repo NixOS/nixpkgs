@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, glibc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glibc,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isStatic [ "-static-libgcc" "-static" ];
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isStatic [
+    "-static-libgcc"
+    "-static"
+  ];
 
   meta = with lib; {
     description = "AX.25 library for hamradio applications";

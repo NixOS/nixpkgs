@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, boost
-, cairo
-, cmake
-, fftwSinglePrec
-, fltk
-, libGLU
-, libjack2
-, libsndfile
-, libXdmcp
-, lv2
-, minixml
-, pcre
-, pkg-config
-, readline
-, xorg
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  boost,
+  cairo,
+  cmake,
+  fftwSinglePrec,
+  fltk,
+  libGLU,
+  libjack2,
+  libsndfile,
+  libXdmcp,
+  lv2,
+  minixml,
+  pcre,
+  pkg-config,
+  readline,
+  xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.3.3.1";
+  version = "2.3.3.3";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
-    repo = pname;
+    repo = "yoshimi";
     rev = version;
-    hash = "sha256-uBivCygpvJ6psgqW3FOHaW5IzUq8vrC2uk4KRv6L2oY=";
+    hash = "sha256-i6kzVtg2ukob0QBr/hbxblm+eTkPIKbnGLpFdUl/zGQ=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -38,7 +39,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Misc/Bank.cpp --replace /usr $out
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     alsa-lib

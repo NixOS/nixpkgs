@@ -1,8 +1,9 @@
-{ bctoolbox
-, cmake
-, fetchFromGitLab
-, lib
-, stdenv
+{
+  bctoolbox,
+  cmake,
+  fetchFromGitLab,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "belr";
     rev = version;
     hash = "sha256-4keVUAsTs1DAhOfV71VD28I0PEHnyvW95blplY690LY=";
   };

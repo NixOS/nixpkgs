@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, flex }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
-  version = "3.7";
+  version = "3.8.1";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";
-    sha256 = "sha256-zXQeJSROfvbNk01jNhQTGiZsPq6rM9i/pF6Kk7RcyQE=";
+    sha256 = "sha256-DnhwUwX5VavUwGVNN6VHfuJjSat0254rA6eGiJeuHd8=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''

@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libGLU, libGL, wxGTK32, libX11, xorgproto, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  glib,
+  pkg-config,
+  libGLU,
+  libGL,
+  wxGTK32,
+  libX11,
+  xorgproto,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fsg";
@@ -12,11 +25,24 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wxgtk-3.2.patch ];
 
+  # use correct wx-config for cross-compiling
+  postPatch = ''
+    substituteInPlace makefile \
+      --replace-fail 'wx-config' "${lib.getExe' wxGTK32 "wx-config"}"
+  '';
+
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib libGLU libGL wxGTK32 libX11 xorgproto ];
+  buildInputs = [
+    glib
+    libGLU
+    libGL
+    wxGTK32
+    libX11
+    xorgproto
+  ];
 
   preBuild = ''
     sed -e '
@@ -24,6 +50,10 @@ stdenv.mkDerivation rec {
     ' -i MainFrame.cpp
     sed -re '/ctrans_prob/s/energy\[center][+]energy\[other]/(int)(fmin(energy[center]+energy[other],99))/g' -i Canvas.cpp
   '';
+
+  makeFlags = [
+    "CPP=${stdenv.cc.targetPrefix}c++"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec

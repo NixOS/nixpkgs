@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, xercesc, getopt, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xercesc,
+  getopt,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xalan-c";
   version = "1.12.0";
 
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ xercesc getopt ];
+  buildInputs = [
+    xercesc
+    getopt
+  ];
 
   meta = {
     homepage = "https://xalan.apache.org/";

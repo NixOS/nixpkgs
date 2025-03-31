@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gdk-pixbuf
-, gtk-engine-murrine
-, gtk_engines
-, librsvg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gtk-engine-murrine,
+  gtk_engines,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
+    repo = "skeu";
     rev = version;
     sha256 = "0lbl09p0h493ya978fh7cib68qlmxfxahmbj0mpa3b65ynxda645";
   };

@@ -2,25 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "tlsinfo";
-  version = "0.1.41";
+  version = "0.1.45";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "tlsinfo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-II5/UDWVeEoupM1Ijty2A9M/qwWA2/b4Y68lTkxnJ9o=";
+    tag = "v${version}";
+    hash = "sha256-gVKB03Tv00c+vO9IgwESWCU1Vqh3iwkVuQLk3BEHlUk=";
   };
 
-  vendorHash = "sha256-IyinAjgK4vm+TkSGQq+XnY9BESsNvXgz84BRzNyZtJY=";
+  vendorHash = "sha256-FFefmnXPCyTEOUkM8A0UCz0nZ0Ors8scxZIwVPnSiac=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/tlsinfo/releases/tag/v${version}";

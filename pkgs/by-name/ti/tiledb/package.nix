@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, zlib
-, lz4
-, bzip2
-, zstd
-, spdlog
-, tbb
-, openssl
-, boost
-, libpqxx
-, clang-tools
-, catch2_3
-, python3
-, gtest
-, doxygen
-, fixDarwinDylibNames
-, useAVX2 ? stdenv.hostPlatform.avx2Support
+  cmake,
+  zlib,
+  lz4,
+  bzip2,
+  zstd,
+  spdlog,
+  tbb,
+  openssl,
+  boost,
+  libpqxx,
+  clang-tools,
+  catch2_3,
+  python3,
+  gtest,
+  doxygen,
+  fixDarwinDylibNames,
+  useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 let
   # pre-fetch ExternalProject from cmake/Modules/FindMagic_EP.cmake
   ep-file-windows = fetchFromGitHub {
     owner = "TileDB-Inc";
-    repo   = "file-windows";
-    rev    = "5.38.2.tiledb";
+    repo = "file-windows";
+    rev = "5.38.2.tiledb";
     hash = "sha256-TFn30VCuWZr252VN1T5NNCZe2VEN3xQSomS7XxxKGF8=";
     fetchSubmodules = true;
   };
@@ -47,16 +48,24 @@ stdenv.mkDerivation rec {
     ./FindMagic_EP.cmake.patch
   ];
 
-  postPatch = ''
-    # copy pre-fetched external project to directory where it is expected to be
-    mkdir -p build/externals/src
-    cp -a ${ep-file-windows} build/externals/src/ep_magic
-    chmod -R u+w build/externals/src/ep_magic
+  postPatch =
+    ''
+      # copy pre-fetched external project to directory where it is expected to be
+      mkdir -p build/externals/src
+      cp -a ${ep-file-windows} build/externals/src/ep_magic
+      chmod -R u+w build/externals/src/ep_magic
 
-    # add openssl on path
-    sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
-      cmake/Modules/FindOpenSSL_EP.cmake
-  '';
+      # add openssl on path
+      sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+        cmake/Modules/FindOpenSSL_EP.cmake
+    ''
+    # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
+    # without the -fexperimental-library flag. Tiledb adds its own
+    # implementations in the std namespace which conflict with libcxx. This
+    # test can be re-enabled once libcxx supports stop_token and jthread.
+    + lib.optionalString (stdenv.cc.libcxx != null) ''
+      truncate -s0 tiledb/stdx/test/CMakeLists.txt
+    '';
 
   # upstream will hopefully fix this in some newer release
   env.CXXFLAGS = "-include random";
@@ -106,7 +115,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  installTargets = [ "install-tiledb" "doc" ];
+  installTargets = [
+    "install-tiledb"
+    "doc"
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib

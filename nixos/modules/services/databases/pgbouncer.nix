@@ -1,123 +1,163 @@
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.pgbouncer;
 
   settingsFormat = pkgs.formats.ini { };
-  configFile = settingsFormat.generate "pgbouncer.ini"
-    (lib.filterAttrsRecursive (_: v: v != null) cfg.settings);
+  configFile = settingsFormat.generate "pgbouncer.ini" (
+    lib.filterAttrsRecursive (_: v: v != null) cfg.settings
+  );
   configPath = "pgbouncer/pgbouncer.ini";
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule
-      [ "services" "pgbouncer" "logFile" ]
-      ''
-        `services.pgbouncer.logFile` has been removed, use `services.pgbouncer.settings.pgbouncer.logfile`
-        instead.
-        Please note that the new option expects an absolute path
-        whereas the old option accepted paths relative to pgbouncer's home dir.
-      '')
+    (lib.mkRemovedOptionModule [ "services" "pgbouncer" "logFile" ] ''
+      `services.pgbouncer.logFile` has been removed, use `services.pgbouncer.settings.pgbouncer.logfile`
+      instead.
+      Please note that the new option expects an absolute path
+      whereas the old option accepted paths relative to pgbouncer's home dir.
+    '')
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "listenAddress" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "listen_addr" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "listen_addr" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "listenPort" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "listen_port" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "listen_port" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "poolMode" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "pool_mode" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "pool_mode" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "maxClientConn" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "max_client_conn" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "max_client_conn" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "defaultPoolSize" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "default_pool_size" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "default_pool_size" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "maxDbConnections" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "max_db_connections" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "max_db_connections" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "maxUserConnections" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "max_user_connections" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "max_user_connections" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "ignoreStartupParameters" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "ignore_startup_parameters" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "ignore_startup_parameters" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "databases" ]
-      [ "services" "pgbouncer" "settings" "databases" ])
+      [ "services" "pgbouncer" "settings" "databases" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "users" ]
-      [ "services" "pgbouncer" "settings" "users" ])
+      [ "services" "pgbouncer" "settings" "users" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "peers" ]
-      [ "services" "pgbouncer" "settings" "peers" ])
+      [ "services" "pgbouncer" "settings" "peers" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authType" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_type" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_type" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authHbaFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_hba_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_hba_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authUser" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_user" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_user" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authQuery" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_query" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_query" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "authDbname" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_dbname" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "auth_dbname" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "adminUsers" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "admin_users" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "admin_users" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "statsUsers" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "stats_users" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "stats_users" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "verbose" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "verbose" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "verbose" ]
+    )
     (lib.mkChangedOptionModule
       [ "services" "pgbouncer" "syslog" "enable" ]
       [ "services" "pgbouncer" "settings" "pgbouncer" "syslog" ]
-      (config:
+      (
+        config:
         let
-          enable = lib.getAttrFromPath
-            [ "services" "pgbouncer" "syslog" "enable" ]
-            config;
+          enable = lib.getAttrFromPath [ "services" "pgbouncer" "syslog" "enable" ] config;
         in
-        if enable then 1 else 0))
+        if enable then 1 else 0
+      )
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "syslog" "syslogIdent" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "syslog_ident" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "syslog_ident" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "syslog" "syslogFacility" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "syslog_facility" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "syslog_facility" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "client" "sslmode" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_sslmode" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_sslmode" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "client" "keyFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_key_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_key_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "client" "certFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_cert_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_cert_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "client" "caFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_ca_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "client_tls_ca_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "server" "sslmode" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_sslmode" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_sslmode" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "server" "keyFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_key_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_key_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "server" "certFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_cert_file" ])
+      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_cert_file" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "pgbouncer" "tls" "server" "caFile" ]
-      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_ca_file" ])
-    (lib.mkRemovedOptionModule [ "services" "pgbouncer" "extraConfig" ] "Use services.pgbouncer.settings instead.")
+      [ "services" "pgbouncer" "settings" "pgbouncer" "server_tls_ca_file" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "pgbouncer"
+      "extraConfig"
+    ] "Use services.pgbouncer.settings instead.")
   ];
 
   options.services.pgbouncer = {
@@ -160,7 +200,11 @@ in
             };
 
             pool_mode = lib.mkOption {
-              type = lib.types.enum [ "session" "transaction" "statement" ];
+              type = lib.types.enum [
+                "session"
+                "transaction"
+                "statement"
+              ];
               default = "session";
               description = ''
                 Specifies when a server connection can be reused by other clients.
@@ -268,11 +312,11 @@ in
           };
           databases = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = {};
+            default = { };
             example = {
               exampledb = "host=/run/postgresql/ port=5432 auth_user=exampleuser dbname=exampledb sslmode=require";
               bardb = "host=localhost dbname=bazdb";
-              foodb  = "host=host1.example.com port=5432";
+              foodb = "host=host1.example.com port=5432";
             };
             description = ''
               Detailed information about PostgreSQL database definitions:
@@ -281,7 +325,7 @@ in
           };
           users = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = {};
+            default = { };
             example = {
               user1 = "pool_mode=session";
             };
@@ -295,7 +339,7 @@ in
 
           peers = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = {};
+            default = { };
             example = {
               "1" = "host=host1.example.com";
               "2" = "host=/tmp/pgbouncer-2 port=5555";

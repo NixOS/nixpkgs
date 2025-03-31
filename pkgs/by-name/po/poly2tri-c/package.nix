@@ -1,20 +1,26 @@
-{ lib, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "poly2tri-c";
   version = "0.1.0";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jtojnar";
-    repo = pname;
+    repo = "poly2tri-c";
     rev = "p2tc-${version}";
     sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
   };

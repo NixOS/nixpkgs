@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, pkg-config
-, dbus
-, openssl
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  pkg-config,
+  dbus,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,11 +20,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4lk6AHquWKgDk0pBaswbVShZbUDA3wO6cPakhrvrwac=";
   };
 
-  cargoHash = "sha256-GS/RRPzULUla4XY4tO+eM2NAy2nG0qDxqcSq292ivgU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QYkEBqDwspdhSliwLwMWmybS9nd41DCjGNURnMzLzBM=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+    dbus
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Tool for working with a stack of patches";

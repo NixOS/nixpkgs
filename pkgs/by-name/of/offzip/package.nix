@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchzip,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "offzip";
   version = "0.4.1";
 

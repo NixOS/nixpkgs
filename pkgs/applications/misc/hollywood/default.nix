@@ -1,25 +1,26 @@
-{ stdenv
-, fetchFromGitHub
-, makeWrapper
-, lib
-, coreutils
-, apg
-, atop
-, bmon
-, cmatrix
-, pygments
-, moreutils
-, util-linux
-, jp2a
-, man
-, mplayer
-, openssh
-, tree
-, mlocate
-, findutils
-, ccze
-, ncurses
-, tmux
+{
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  lib,
+  coreutils,
+  apg,
+  atop,
+  bmon,
+  cmatrix,
+  pygments,
+  moreutils,
+  util-linux,
+  jp2a,
+  man,
+  mplayer,
+  openssh,
+  tree,
+  mlocate,
+  findutils,
+  ccze,
+  ncurses,
+  tmux,
 }:
 
 stdenv.mkDerivation {
@@ -45,28 +46,30 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase =
-    let pathDeps = [
-      tmux
-      coreutils
-      ncurses
-      jp2a
-      mlocate
-      apg
-      atop
-      bmon
-      cmatrix
-      pygments
-      moreutils
-      util-linux
-      jp2a
-      man
-      mplayer
-      openssh
-      tree
-      findutils
-      ccze
-    ];
-    in ''
+    let
+      pathDeps = [
+        tmux
+        coreutils
+        ncurses
+        jp2a
+        mlocate
+        apg
+        atop
+        bmon
+        cmatrix
+        pygments
+        moreutils
+        util-linux
+        jp2a
+        man
+        mplayer
+        openssh
+        tree
+        findutils
+        ccze
+      ];
+    in
+    ''
       runHook preInstall
 
       mkdir -p $out

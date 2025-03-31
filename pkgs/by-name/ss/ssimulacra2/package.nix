@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ninja
-, cmake
-, libpng
-, libhwy
-, lcms2
-, giflib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ninja,
+  cmake,
+  libpng,
+  libhwy,
+  lcms2,
+  giflib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "14.0.2";
+  version = "16.0.2";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nRNqubR44ydZwwuQG3q6TRm+MHTRgRbeLI9dsk83wq4=";
+    hash = "sha256-EOQVDzza1tqAzGtEV0npT2k1thTNJOhzMXXX1Tuti6Q=";
   };
 
   nativeBuildInputs = [
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 build/dayon.jar $out/share/dayon/dayon.jar
     # jre is in PATH because dayon needs keytool to generate certificates
-    makeWrapper ${jre}/bin/java $out/bin/dayon \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon \
       --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-jar $out/share/dayon/dayon.jar"
-    makeWrapper ${jre}/bin/java $out/bin/dayon_assisted \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon_assisted \
       --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assisted.AssistedRunner"
-    makeWrapper ${jre}/bin/java $out/bin/dayon_assistant \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon_assistant \
       --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assistant.AssistantRunner"
     install -Dm644 resources/dayon.png $out/share/icons/hicolor/128x128/apps/dayon.png
@@ -54,21 +54,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = [
-    "resources/deb/dayon_assisted.desktop"
-    "resources/deb/dayon_assistant.desktop"
+    "debian/dayon_assisted.desktop"
+    "debian/dayon_assistant.desktop"
   ];
 
-  postFixup = ''
-    substituteInPlace $out/share/applications/*.desktop \
-        --replace "/usr/bin/dayon/dayon.png" "dayon"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Easy to use, cross-platform remote desktop assistance solution";
     homepage = "https://retgal.github.io/Dayon/index.html";
-    license = licenses.gpl3Plus; # https://github.com/RetGal/Dayon/issues/59
+    license = lib.licenses.gpl3Plus; # https://github.com/RetGal/Dayon/issues/59
     mainProgram = "dayon";
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

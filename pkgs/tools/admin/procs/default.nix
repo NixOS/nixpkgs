@@ -1,24 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.14.7";
+  version = "0.14.10";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
     rev = "v${version}";
-    hash = "sha256-KYKHH41lGKm+En4vUDi6KG6J/zJtYxeJr8vY3WOgkl0=";
+    hash = "sha256-+qY0BG3XNCm5vm5W6VX4a0JWCb4JSat/oK9GLXRis/M=";
   };
 
-  cargoHash = "sha256-mGjxXetGgYBBXuaQ3ARS/6wWG5+YdBTmXcy22npPeBY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/y+9EA3PhyI5iqg2wM0ny41nBDJiKnsjvbmPfCe5RJk=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/procs --gen-completion $shell
+      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/procs --gen-completion $shell
     done
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';

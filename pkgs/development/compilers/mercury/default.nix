@@ -1,17 +1,36 @@
-{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk_headless, erlang, makeWrapper
-, readline }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc,
+  flex,
+  bison,
+  texinfo,
+  jdk_headless,
+  erlang,
+  makeWrapper,
+  readline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mercury";
   version = "22.01.8";
 
   src = fetchurl {
-    url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
+    url = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
     sha256 = "sha256-oJfozI7KAVLtlSfByvc+XJyD9q2h0xOiW4D+eQcvutg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gcc flex bison texinfo jdk_headless erlang readline ];
+  buildInputs = [
+    gcc
+    flex
+    bison
+    texinfo
+    jdk_headless
+    erlang
+    readline
+  ];
 
   patchPhase = ''
     # Fix calls to programs in /bin
@@ -54,10 +73,10 @@ stdenv.mkDerivation rec {
       allowing modularity, separate compilation, and numerous optimization/time
       trade-offs.
     '';
-    homepage    = "https://mercurylang.org/";
-    changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
-    license     = lib.licenses.gpl2Only;
-    platforms   = lib.platforms.all;
+    homepage = "https://mercurylang.org/";
+    changelog = "https://dl.mercurylang.org/release/release-notes-${version}.html";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vieta ];
   };
 }

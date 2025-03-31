@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, pcre2
-, glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, gettext
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  pcre2,
+  glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  gettext,
+  icu,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
-    repo = pname;
+    repo = "fsearch";
     rev = version;
     hash = "sha256-VBcoDxh4ip2zLBcXVHDe9s1lVRQF4bZJKsGUt6sPcos=";
   };

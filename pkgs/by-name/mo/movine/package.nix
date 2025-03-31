@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,17 +17,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wa2GfV2Y8oX8G+1LbWnb2KH/+QbUYL9GXgOOVHpzbN8=";
   };
 
-  cargoHash = "sha256-brM6QObhl9W5SZ+79Kv9oNxnglO24BUgjPSQy9jV1/Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sdyx2W9VUp1cBl19fFL2JDS+uS12zaC50yYzHaLOnHs=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = with lib; {
     description = "Migration manager written in Rust, that attempts to be smart yet minimal";

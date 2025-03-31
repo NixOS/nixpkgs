@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lazycli";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
-    repo = pname;
+    repo = "lazycli";
     rev = "v${version}";
     sha256 = "1qq167hc7pp9l0m40ysphfljakmm8hjjnhpldvb0kbc825h0z8z5";
   };
 
-  cargoHash = "sha256-1BIUXepR7ppEkTLDOCZz9RBv+RazNMXnCnH1rvzVFgs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L6qY1yu+8L7DajX//Yov0KgI2bR8yipSzbZC2c+LZZs=";
 
   checkFlags = [
     # currently broken: https://github.com/jesseduffield/lazycli/pull/20

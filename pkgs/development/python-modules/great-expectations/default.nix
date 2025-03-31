@@ -40,18 +40,20 @@
 
 buildPythonPackage rec {
   pname = "great-expectations";
-  version = "1.2.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "great-expectations";
     repo = "great_expectations";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TV07vmc0XdP6ICv7Kws79zACCsahZ6FlhplJHbpDFNk=";
+    tag = version;
+    hash = "sha256-MV6T8PyOyAQ2SfT8B38YdCtqj6oeZCW+z08koBR739A=";
   };
 
   postPatch = ''
     substituteInPlace tests/conftest.py --replace 'locale.setlocale(locale.LC_ALL, "en_US.UTF-8")' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"ignore::marshmallow.warnings.ChangedInMarshmallow4Warning",' ""
   '';
 
   build-system = [ setuptools ];
@@ -83,21 +85,24 @@ buildPythonPackage rec {
     "posthog"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    pytest-order
-    pytest-random-order
-    click
-    flaky
-    freezegun
-    invoke
-    moto
-    psycopg2
-    requirements-parser
-    responses
-    sqlalchemy
-  ] ++ moto.optional-dependencies.s3 ++ moto.optional-dependencies.sns;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-mock
+      pytest-order
+      pytest-random-order
+      click
+      flaky
+      freezegun
+      invoke
+      moto
+      psycopg2
+      requirements-parser
+      responses
+      sqlalchemy
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ moto.optional-dependencies.sns;
 
   disabledTestPaths = [
     # try to access external URLs:
@@ -126,9 +131,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not spark and not postgresql and not snowflake'" ];
 
   meta = {
+    broken = true; # 408 tests fail
     description = "Library for writing unit tests for data validation";
     homepage = "https://docs.greatexpectations.io";
-    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${version}";
+    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dukpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "dukpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8RDMz9SfBoUe7LQ9/atsZlJ/2uwLUb0hZxeYdsUOGpU=";
+    tag = version;
+    hash = "sha256-5+SdGHYBron6EwpCf5ByaK8KuqQXhvN73wQUptvgPzc=";
   };
 
   postPatch = ''
@@ -51,9 +52,12 @@ buildPythonPackage rec {
   meta = {
     description = "Simple JavaScript interpreter for Python";
     homepage = "https://github.com/amol-/dukpy";
-    changelog = "https://github.com/amol-/dukpy/releases/tag/${version}";
+    changelog = "https://github.com/amol-/dukpy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "dukpy";
+    # error: 'TARGET_OS_BRIDGE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
+    # https://github.com/amol-/dukpy/issues/82
+    broken = stdenv.cc.isClang;
   };
 }

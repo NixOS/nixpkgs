@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, curl, libmrss, podofo, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libmrss,
+  podofo,
+  libiconv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "offrss";
   version = "1.3";
 
@@ -9,35 +17,42 @@ stdenv.mkDerivation rec {
     cp offrss $out/bin
   '';
 
-  buildInputs = [ curl libmrss ]
+  buildInputs =
+    [
+      curl
+      libmrss
+    ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
   #     offrss.o:offrss.h:75: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-function-declaration";
 
-  configurePhase = ''
-    substituteInPlace Makefile \
-      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
-  '' + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
-    sed 's/#EXTRA/EXTRA/' -i Makefile
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed 's/^PDF/#PDF/' -i Makefile
-  '';
+  configurePhase =
+    ''
+      substituteInPlace Makefile \
+        --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
+      sed 's/#EXTRA/EXTRA/' -i Makefile
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed 's/^PDF/#PDF/' -i Makefile
+    '';
 
   src = fetchurl {
-    url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";
-    sha256 = "1akw1x84jj2m9z60cvlvmz21qwlaywmw18pl7lgp3bj5nw6250p6";
+    url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5oIiDLdFrnEfPfSiwCv3inIcxK+bbgbMT1VISVAPfKo=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
     description = "Offline RSS/Atom reader";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "offrss";
   };
-}
+})

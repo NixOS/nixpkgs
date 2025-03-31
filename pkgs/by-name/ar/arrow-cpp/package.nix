@@ -56,11 +56,6 @@
   enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
 
-assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.hostPlatform.isDarwin)
-  -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-) "S3 on Darwin requires Boost != 1.69";
-
 let
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
@@ -74,11 +69,11 @@ let
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "a7f1d288e693dbb08e3199851c4eb2140ff8dff2";
-    hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
+    rev = "c7cf1374cf284c0c73024cd1437becea75558bf8";
+    hash = "sha256-DThjyZ34LajHwXZy1IhYKUGUG/ejQ9WvBNuI8eUKmSs=";
   };
 
-  version = "18.0.0";
+  version = "19.0.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -88,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-V2lOYOUJwXSvPPk2G17uc1eZO88EATHKwwDnEroBrPw=";
+    hash = "sha256-toHwUIOZRpgR0K7pQtT5nqWpO9G7AuHYTcvA6UVg9lA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -262,11 +257,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

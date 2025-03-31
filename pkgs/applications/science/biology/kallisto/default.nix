@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, cmake, hdf5, zlib, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  cmake,
+  hdf5,
+  zlib,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kallisto";
@@ -11,9 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
 
-  nativeBuildInputs = [ autoconf cmake ];
+  nativeBuildInputs = [
+    autoconf
+    cmake
+  ];
 
-  buildInputs = [ hdf5 zlib ];
+  buildInputs = [
+    hdf5
+    zlib
+  ];
 
   cmakeFlags = [ "-DUSE_HDF5=ON" ];
 

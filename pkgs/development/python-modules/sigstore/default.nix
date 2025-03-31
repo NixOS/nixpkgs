@@ -19,6 +19,7 @@
   securesystemslib,
   sigstore-protobuf-specs,
   sigstore-rekor-types,
+  rfc3161-client,
   tuf,
   rfc8785,
   pyasn1,
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "3.5.1";
+  version = "3.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,9 +36,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AMKe+R1sTXdxFAelJmRiEyDNe+T55KaGK3HUARqz3Tw=";
+    tag = "v${version}";
+    hash = "sha256-BdVX2LWCsMx9r0bDTJjMdrvy4Hqn6hrw9wAcub0nRMk=";
   };
+
+  pythonRelaxDeps = [
+    "sigstore-rekor-types"
+    "rfc3161-client"
+  ];
 
   build-system = [ flit-core ];
 
@@ -51,6 +57,7 @@ buildPythonPackage rec {
     pyopenssl
     pyasn1
     rfc8785
+    rfc3161-client
     platformdirs
     requests
     rich
@@ -86,6 +93,7 @@ buildPythonPackage rec {
     "test_trust_root_bundled_get"
     "test_fix_bundle_upgrades_bundle"
     "test_trust_root_tuf_caches_and_requests"
+    "test_regression_verify_legacy_bundle"
   ];
 
   passthru.updateScript = nix-update-script { };

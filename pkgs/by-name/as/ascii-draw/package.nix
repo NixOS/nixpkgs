@@ -1,13 +1,14 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+K9th1LbESVzAiJqIplWpj2QHt7zDidENs7jHOuJ2S0=";
   };
 

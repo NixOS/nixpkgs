@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, requests
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  requests,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "hbrennhaeuser";
   domain = "ntfy";
-  version = "1.1.0-pre.2";
+  version = "1.2.0-pre.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant_integration_ntfy";
     rev = "v${version}";
-    hash = "sha256-OGCAJsAsnUjwaLR8lCBdU+ghVOGFF0mT73t5JtcngUA=";
+    hash = "sha256-cdqO8fwaEZzAEa7aVjV00OQYnmx0vJZqz7Nd9+MUHN8=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
   ];
 
@@ -27,4 +28,3 @@ buildHomeAssistantComponent rec {
     license = licenses.gpl3;
   };
 }
-

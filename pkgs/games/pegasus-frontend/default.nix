@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, qtbase
-, qtgraphicaleffects
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, SDL2
-, sqlite
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  SDL2,
+  sqlite,
+  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pegasus-frontend";
   version = "0-unstable-2024-11-11";
 

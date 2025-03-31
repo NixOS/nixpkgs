@@ -15,15 +15,15 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha512-JuCl3SyejzwUd2n8Fy7EdxUuO4bIcGb8yMWZQOhZzsY4fvg9prFOnVZEquxahD0a41MLKHRNA1R2N3NMapcc0A==";
   };
 
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0-bin;
 
   buildInputs = [(lib.getLib stdenv.cc.cc) zlib];
 

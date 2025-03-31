@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "6tunnel";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "wojtekka";
-    repo = pname;
+    repo = "6tunnel";
     rev = version;
     sha256 = "0zsx9d6xz5w8zvrqsm8r625gpbqqhjzvjdzc3z8yix668yg8ff8h";
   };

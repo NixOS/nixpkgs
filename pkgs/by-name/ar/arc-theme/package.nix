@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, sassc
-, meson
-, ninja
-, glib
-, gnome-shell
-, gnome-themes-extra
-, gtk-engine-murrine
-, inkscape
-, cinnamon-common
-, makeFontsConf
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sassc,
+  meson,
+  ninja,
+  glib,
+  gnome-shell,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  inkscape,
+  cinnamon-common,
+  makeFontsConf,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jnsh";
-    repo = pname;
+    repo = "arc-theme";
     rev = version;
     sha256 = "sha256-7VmqsUCeG5GwmrVdt9BJj0eZ/1v+no/05KwGFb7E9ns=";
   };
@@ -64,6 +66,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jnsh/arc-theme";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simonvandel romildo ];
+    maintainers = with maintainers; [
+      simonvandel
+      romildo
+    ];
   };
 }

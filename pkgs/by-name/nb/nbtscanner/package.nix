@@ -14,11 +14,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jonkgrimes";
     repo = "nbtscanner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lnTTutOc829COwfNhBkSK8UpiNnGsm7Da53b+eSBt1Q=";
   };
 
-  cargoHash = "sha256-NffNQXKJ+b1w7Ar2M6UDev/AxruDEf8IGQ+mNdvU6e4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/gVJJegPIUe0Mv7+0tCP/vWrMbImtY3tb+lELnn1ur0=";
 
   cargoPatches = [
     ./Cargo.lock.patch

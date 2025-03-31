@@ -14,19 +14,20 @@
   libXi,
   libXmu,
   opencascade-occt,
+  numpy,
   rapidjson,
   swig,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "7.6.2";
+  version = "7.8.1.1";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    tag = version;
+    hash = "sha256-0o2PQEN0/Z7FUPZEo2HxFFa+mN2bZnYI++HVu4ONpNA=";
   };
 
   postPatch = ''
@@ -50,12 +51,14 @@ stdenv.mkDerivation rec {
     libXmu
     libXi
     fontconfig
+    numpy
     rapidjson
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
+    "-DPYTHONOCC_MESHDS_NUMPY=on"
   ];
 
   passthru = {
@@ -70,6 +73,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

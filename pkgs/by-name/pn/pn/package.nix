@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libphonenumber, icu, protobuf }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libphonenumber,
+  icu,
+  protobuf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pn";
@@ -6,13 +14,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
-    repo = pname;
+    repo = "pn";
     rev = "v${version}";
     sha256 = "sha256-vRF9MPcw/hCreHVLD6QB7g1r0wQiZv1xrfzIHj1Yf9M=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libphonenumber icu protobuf ];
+  buildInputs = [
+    libphonenumber
+    icu
+    protobuf
+  ];
 
   meta = with lib; {
     description = "Libphonenumber command-line wrapper";

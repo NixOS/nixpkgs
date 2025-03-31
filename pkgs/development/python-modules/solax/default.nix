@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "3.2.1";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eeALI7GvhRl8OQaSqv1I26rMaBTxF24w4QQzUcnV2ys=";
+    hash = "sha256-ht+UP/is9+galMiVz/pkwtre1BXfCTT39SpSz4Vctvs=";
   };
 
   build-system = [ setuptools-scm ];

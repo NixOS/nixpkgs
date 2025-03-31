@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl
-, automake, autoconf, bzip2, libtar, libtool, pkg-config, autoconf-archive
-, libxml2
-, languageMachines
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+  bzip2,
+  libtar,
+  libtool,
+  pkg-config,
+  autoconf-archive,
+  libxml2,
+  languageMachines,
 }:
 
 let
@@ -11,14 +20,24 @@ in
 stdenv.mkDerivation {
   pname = "mbt";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "mbt-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config automake autoconf ];
-  buildInputs = [ bzip2 libtar libtool autoconf-archive
-                  libxml2
-                  languageMachines.ticcutils
-                  languageMachines.timbl
-                ];
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "mbt-${release.version}.tar.gz";
+  };
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+  ];
+  buildInputs = [
+    bzip2
+    libtar
+    libtool
+    autoconf-archive
+    libxml2
+    languageMachines.ticcutils
+    languageMachines.timbl
+  ];
   patches = [ ./mbt-add-libxml2-dep.patch ];
   preConfigure = ''
     sh bootstrap.sh
@@ -26,9 +45,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Memory Based Tagger";
-    homepage    = "https://languagemachines.github.io/mbt/";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    homepage = "https://languagemachines.github.io/mbt/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

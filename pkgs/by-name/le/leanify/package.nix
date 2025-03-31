@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "leanify";
   version = "unstable-2023-12-17";
 

@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config # needed to find minizip
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_net
-, SDL2_ttf
-, cmake
-, curl
-, doxygen
-, gettext
-, glew
-, graphviz
-, icu
-, installShellFiles
-, libpng
-, lua
-, python3
-, zlib
-, minizip
-, asio
-, libSM
-, libICE
-, libXext
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config, # needed to find minizip
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  cmake,
+  curl,
+  doxygen,
+  gettext,
+  glew,
+  graphviz,
+  icu,
+  installShellFiles,
+  libpng,
+  lua,
+  python3,
+  zlib,
+  minizip,
+  asio,
+  libSM,
+  libICE,
+  libXext,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,42 +51,55 @@ stdenv.mkDerivation rec {
     "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"
   ];
 
-  nativeBuildInputs = [ cmake doxygen gettext graphviz installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    gettext
+    graphviz
+    installShellFiles
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
-    curl
-    glew
-    icu
-    libpng
-    lua
-    python3
-    zlib
-    minizip
-    asio
-    libSM  # XXX: these should be propagated by SDL2?
-    libICE
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libXext
-  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-  ]);
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_net
+      SDL2_ttf
+      curl
+      glew
+      icu
+      libpng
+      lua
+      python3
+      zlib
+      minizip
+      asio
+      libSM # XXX: these should be propagated by SDL2?
+      libICE
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libXext
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Cocoa
+      ]
+    );
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm444 -t $out/share/applications ../xdg/org.widelands.Widelands.desktop
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm444 -t $out/share/applications ../xdg/org.widelands.Widelands.desktop
 
-    for s in 16 32 48 64 128; do
-      install -Dm444 ../data/images/logos/wl-ico-''${s}.png $out/share/icons/hicolor/''${s}x''${s}/org.widelands.Widelands.png
-    done
-  '' + ''
-    installManPage ../xdg/widelands.6
-  '';
+      for s in 16 32 48 64 128; do
+        install -Dm444 ../data/images/logos/wl-ico-''${s}.png $out/share/icons/hicolor/''${s}x''${s}/org.widelands.Widelands.png
+      done
+    ''
+    + ''
+      installManPage ../xdg/widelands.6
+    '';
 
   meta = with lib; {
     description = "RTS with multiple-goods economy";
@@ -98,7 +112,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/widelands/widelands/releases/tag/v${version}";
     mainProgram = "widelands";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin jcumming ];
+    maintainers = with maintainers; [
+      raskin
+      jcumming
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     hydraPlatforms = [ ];
   };

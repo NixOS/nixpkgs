@@ -1,4 +1,15 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, dune-configurator, AppKit, Foundation, pkg-config, glib, gst_all_1 }:
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  AppKit,
+  Foundation,
+  pkg-config,
+  glib,
+  gst_all_1,
+}:
 
 buildDunePackage rec {
   pname = "gstreamer";
@@ -12,8 +23,17 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Foundation ];
-  propagatedBuildInputs = [ glib.dev gst_all_1.gstreamer.dev gst_all_1.gst-plugins-base ];
+  buildInputs =
+    [ dune-configurator ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Foundation
+    ];
+  propagatedBuildInputs = [
+    glib.dev
+    gst_all_1.gstreamer.dev
+    gst_all_1.gst-plugins-base
+  ];
 
   CFLAGS_COMPILE = [
     "-I${glib.dev}/include/glib-2.0"

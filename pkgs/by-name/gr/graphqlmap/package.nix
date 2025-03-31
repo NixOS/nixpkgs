@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "graphqlmap";
   version = "unstable-2022-01-17";
   format = "setuptools";

@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchFromGitHub } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fasd";
   version = "unstable-2016-08-11";
 
   src = fetchFromGitHub {
     owner = "clvv";
-    repo = pname;
+    repo = "fasd";
     rev = "90b531a5daaa545c74c7d98974b54cbdb92659fc";
     sha256 = "0i22qmhq3indpvwbxz7c472rdyp8grag55x7iyjz8gmyn8gxjc11";
   };

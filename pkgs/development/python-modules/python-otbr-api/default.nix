@@ -9,12 +9,13 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  typing-extensions,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,16 +23,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-otbr-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RMj4NdEbMIxh2PDzbhUWgmcdzRXY8RxcQNN/bbGOW5Q=";
+    tag = version;
+    hash = "sha256-irQ4QvpGIAYYKq0UqLuo7Nrnde905+GJFd4HkxsCDmQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     bitstruct
     cryptography
+    typing-extensions
     voluptuous
   ];
 

@@ -17,7 +17,7 @@
 , libXext
 , libXfixes
 , libXrandr
-, mesa
+, libgbm
 , gtk3
 , pango
 , cairo
@@ -50,7 +50,7 @@ let
     libXext
     libXfixes
     libXrandr
-    mesa
+    libgbm
     gtk3
     pango
     cairo
@@ -93,15 +93,20 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase = ''
-    mkdir -p $out/lib/ $out/share/cef/
+    mkdir -p $out/lib/ $out/share/cef/ $out/libexec/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
     cp ../Release/libEGL.so $out/lib/
     cp ../Release/libGLESv2.so $out/lib/
+    cp ../Release/libvk_swiftshader.so $out/lib/
+    cp ../Release/libvulkan.so.1 $out/lib/
+    cp ../Release/chrome-sandbox $out/libexec/cef/
     patchelf --set-rpath "${rpath}" $out/lib/libcef.so
     patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
     patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
-    cp ../Release/*.bin $out/share/cef/
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libvk_swiftshader.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libvulkan.so.1
+    cp ../Release/*.bin ../Release/*.json $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
   '';

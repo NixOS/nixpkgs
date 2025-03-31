@@ -3,11 +3,9 @@
   buildPythonPackage,
   contextlib2,
   fetchFromGitHub,
-  fetchurl,
   lib,
   pyyaml,
   six,
-  setuptools,
   flit-core,
   pytestCheckHook,
   pytest-xdist,
@@ -22,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "ml_collections";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QUhwkfffjA6gKd6lTmEgnnoUeJOu82mfFPBta9/iebg=";
   };
 

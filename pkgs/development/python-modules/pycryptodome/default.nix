@@ -11,14 +11,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.20.0";
+  version = "3.21.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RPaBUj/BJCO+10maGDmugeEXxaIrlk2UHIvkbrQVM8c=";
+    tag = "v${version}";
+    hash = "sha256-4GnjHDYJY1W3n6lUtGfk5KDMQfe5NoKbYn94TTXYCDY=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
-    changelog = "https://github.com/Legrandin/pycryptodome/blob/v${version}/Changelog.rst";
+    changelog = "https://github.com/Legrandin/pycryptodome/blob/${src.tag}/Changelog.rst";
     license = with licenses; [
       bsd2 # and
       asl20

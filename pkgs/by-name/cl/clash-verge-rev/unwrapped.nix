@@ -3,38 +3,64 @@
   version,
   src,
   libayatana-appindicator,
-  sysproxy-hash,
+  vendor-hash,
+  fetchpatch,
+  glib,
   webui,
   pkg-config,
+  libsoup,
   rustPlatform,
   makeDesktopItem,
+  libsForQt5,
+  kdePackages,
   meta,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   openssl,
 }:
+
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo-tauri.lock;
-    outputHashes = {
-      "sysproxy-0.3.0" = sysproxy-hash;
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = vendor-hash;
 
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-service-mode-mihomo-check.patch";
+      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/16d4f9fe7ee95b7312a10bf216c818c3e144dea7.patch";
+      hash = "sha256-FQHm1jjo0W1IokMDJGWVMVV9DWItG1prX+TIysL12DA=";
+    })
+  ];
+
+  prePatch = ''
+    cd ..
+  '';
+
   postPatch = ''
+    cd src-tauri
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
+      --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
+      --replace-fail '"kreadconfig5"' '"${libsForQt5.kconfig}/bin/kreadconfig5"' \
+      --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
+      --replace-fail '"kwriteconfig5"' '"${libsForQt5.kconfig}/bin/kwriteconfig5"' \
+      --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
+
     substituteInPlace ./tauri.conf.json \
-      --replace-fail '"distDir": "../dist",' '"distDir": "${webui}",' \
+      --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${webui}",' \
       --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
     sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
+    sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
+    chmod 777 ../.cargo
+    rm ../.cargo/config.toml
   '';
 
   nativeBuildInputs = [
@@ -44,7 +70,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-    webkitgtk_4_0
+    libsoup
+    webkitgtk_4_1
   ];
 
   postInstall = ''

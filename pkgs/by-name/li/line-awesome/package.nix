@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "line-awesome";
   version = "1.3.0";
 
   src = fetchurl {
-    url =
-      "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${version}/line-awesome-${version}.zip";
+    url = "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${version}/line-awesome-${version}.zip";
     sha256 = "07qkz8s1wjh5xwqlq1b4lpihr1zah3kh6bnqvfwvncld8l9wjqfk";
   };
 

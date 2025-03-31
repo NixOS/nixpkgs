@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation {
   pname = "bolliedelayxt.lv2";
   version = "unstable-2017-11-02";
 
   src = fetchFromGitHub {
     owner = "MrBollie";
-    repo = pname;
+    repo = "bolliedelayxt.lv2";
     rev = "49c488523c8fb71cb2222d41f9f66ee0cb6b6d82";
     sha256 = "sha256-7GM3YccN22JQdQ5ng9HFs9R6Ex/d+XP/khTQsgbGcAw=";
   };

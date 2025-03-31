@@ -1,20 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, git
-, pkg-config
-, gperf
-, libmicrohttpd
-, libsodium
-, lz4
-, openssl
-, readline
-, secp256k1
-, zlib
-, nix-update-script
-, darwinMinVersionHook
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  pkg-config,
+  gperf,
+  libmicrohttpd,
+  libsodium,
+  lz4,
+  openssl,
+  readline,
+  secp256k1,
+  zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +28,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -46,10 +48,6 @@ stdenv.mkDerivation rec {
     readline
     secp256k1
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    (darwinMinVersionHook "10.13")
-    apple-sdk_11
   ];
 
   passthru.updateScript = nix-update-script { };

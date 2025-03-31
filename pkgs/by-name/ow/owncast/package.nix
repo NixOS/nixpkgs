@@ -1,25 +1,27 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, bash
-, which
-, ffmpeg
-, makeBinaryWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  bash,
+  which,
+  ffmpeg,
+  makeBinaryWrapper,
 }:
 
 let
-  version = "0.1.3";
-in buildGoModule {
+  version = "0.2.0";
+in
+buildGoModule {
   pname = "owncast";
   inherit version;
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    hash = "sha256-VoItAV/8hzrqj4bIgMum9Drr/kAafH63vXw3GO6nSOc=";
+    hash = "sha256-MdquhDdbOdP1shnKHBlzQrSDe41fp0qnMzgaqL89jTk=";
   };
-  vendorHash = "sha256-JitvKfCLSravW5WRE0QllJTrRPLaaBg1GxJi3kmtiIU=";
+  vendorHash = "sha256-ERilQZ8vnhGW1IEcLA4CcmozDooHKbnmASMw87tjYD4=";
 
   propagatedBuildInputs = [ ffmpeg ];
 
@@ -27,7 +29,13 @@ in buildGoModule {
 
   postInstall = ''
     wrapProgram $out/bin/owncast \
-      --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          which
+          ffmpeg
+        ]
+      }
   '';
 
   installCheckPhase = ''

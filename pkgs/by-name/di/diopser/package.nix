@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libjack2,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
 }:
 
 let
@@ -15,24 +28,24 @@ let
     };
   };
 
-  juce = rec {
+  juce = {
     version = "unstable-2021-04-07";
     src = fetchFromGitHub {
       owner = "juce-framework";
       repo = "JUCE";
       rev = "1a5fb5992a1a4e28e998708ed8dce2cc864a30d7";
-      sha256= "1ri7w4sz3sy5xilibg53ls9526fx7jwbv8rc54ccrqfhxqyin308";
+      sha256 = "1ri7w4sz3sy5xilibg53ls9526fx7jwbv8rc54ccrqfhxqyin308";
     };
   };
 
-
-in  stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "diopser";
   version = "unstable-2021-5-13";
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = pname;
+    repo = "diopser";
     fetchSubmodules = true;
     rev = "d5fdc92f1caf5a828e071dac99e106e58f06d84d";
     sha256 = "06y1h895yxh44gp4vxzrna59lf7nlfw7aacd3kk4l1g56jhy9pdx";
@@ -62,10 +75,19 @@ in  stdenv.mkDerivation rec {
     cp -r Diopser_artefacts/Release/VST3/Diopser.vst3 $out/lib/vst3
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
-    libjack2 alsa-lib freetype libX11 libXrandr libXinerama libXext
+    libjack2
+    alsa-lib
+    freetype
+    libX11
+    libXrandr
+    libXinerama
+    libXext
     libXcursor
   ];
 

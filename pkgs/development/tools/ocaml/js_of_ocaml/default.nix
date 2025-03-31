@@ -1,5 +1,7 @@
-{ buildDunePackage, js_of_ocaml-compiler
-, ppxlib
+{
+  buildDunePackage,
+  js_of_ocaml-compiler,
+  ppxlib,
 }:
 
 buildDunePackage {

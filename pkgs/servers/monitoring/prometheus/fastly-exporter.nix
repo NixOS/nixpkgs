@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "9.0.0";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "fastly-exporter";
     rev = "v${version}";
-    hash = "sha256-H7EaNQmgrRomIQo2xm2Qqkud0LMSYFshNv54lRdrEyw=";
+    hash = "sha256-1xgTAMsUw+eYeHD6NEo2Zw3fL1Hdm6fxQWfgp/VQaXc=";
   };
 
-  vendorHash = "sha256-k/n9muWFtTBv8PxMdevFBeTtAOIiCDrK3GoCGeMtBn4=";
+  vendorHash = "sha256-NbMvDaD4E6mYypPRSqNBjToCffldJzh33wuq83hWM9A=";
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) fastly;

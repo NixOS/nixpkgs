@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchurl, ocaml }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+}:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "omake";
-  version = "0.10.6";
+  version = "0.10.7";
 
-  src = fetchurl {
-    url = "http://download.camlcity.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-AuSZEnybyk8HaDZ7mbwDqjFXMXVQ7TDRuRU/aRY8/yE=";
+  src = fetchFromGitHub {
+    owner = "ocaml-omake";
+    repo = "omake";
+    tag = "omake-${finalAttrs.version}";
+    hash = "sha256-5ZOdY3uGcI0KGpnr7epUwe2ueKCoLeaHGzaiTiXLNoc=";
   };
 
   strictDeps = true;
@@ -18,9 +24,9 @@ stdenv.mkDerivation rec {
     description = "Build system designed for scalability and portability";
     homepage = "http://projects.camlcity.org/projects/omake.html";
     license = with lib.licenses; [
-      mit /* scripts */
-      gpl2 /* program */
+      mit # scripts
+      gpl2 # program
     ];
     inherit (ocaml.meta) platforms;
   };
-}
+})

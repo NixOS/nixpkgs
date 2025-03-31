@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.9.1";
+  version = "4.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pymongo";
-    hash = "sha256-t/LTQ5Cs9g4inDADfRRz/PafRTbNf0j294wMkxxhxQU=";
+    hash = "sha256-0O4+AnX2e93Ng7ImOBi3xK568eyv6+frf9FjiUV+whA=";
   };
 
   build-system = [

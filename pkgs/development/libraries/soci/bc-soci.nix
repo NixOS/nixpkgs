@@ -1,13 +1,14 @@
-{ cmake
-, fetchFromGitLab
-, fetchpatch
-, sqlite
-, boost
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  fetchpatch,
+  sqlite,
+  boost,
+  lib,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bc-soci";
   version = "linphone-4.4.1";
 

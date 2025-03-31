@@ -5,13 +5,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.7.1";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,14 +20,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BVuDnIp9K+f4jZPPfCABMD+fpPXDQE6/RWTZ8k7ftMI=";
+    tag = "v${version}";
+    hash = "sha256-3WafrcJH9pD1u0FEJzYaVWLWb2Ur1sCHYHFON4DXLpo=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -35,7 +31,10 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aiovodafone" ];
 

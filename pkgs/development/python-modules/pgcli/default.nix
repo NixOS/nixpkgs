@@ -24,15 +24,17 @@
 # integrating with ipython-sql
 buildPythonPackage rec {
   pname = "pgcli";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P9Fsi1G9AUX/YYwscyZLzYVLqGaqIG1PB2hR9kG5shU=";
+    hash = "sha256-DT7ZkW87viRcKDv0hEUwgP8AInqwhWYMbPuw7FPy6eY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cli-helpers
     click
     configobj
@@ -47,7 +49,6 @@ buildPythonPackage rec {
     sshtunnel
   ];
 
-  nativeBuildInputs = [ setuptools ];
   nativeCheckInputs = [
     pytestCheckHook
     mock

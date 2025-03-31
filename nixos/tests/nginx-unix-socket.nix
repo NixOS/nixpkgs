@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ ... }:
 let
   nginxSocketPath = "/var/run/nginx/test.sock";
 in
@@ -6,16 +6,18 @@ in
   name = "nginx-unix-socket";
 
   nodes = {
-    webserver = { pkgs, lib, ... }: {
-      services.nginx = {
-        enable = true;
-        virtualHosts.localhost = {
-          serverName = "localhost";
-          listen = [{ addr = "unix:${nginxSocketPath}"; }];
-          locations."/test".return = "200 'foo'";
+    webserver =
+      { pkgs, lib, ... }:
+      {
+        services.nginx = {
+          enable = true;
+          virtualHosts.localhost = {
+            serverName = "localhost";
+            listen = [ { addr = "unix:${nginxSocketPath}"; } ];
+            locations."/test".return = "200 'foo'";
+          };
         };
       };
-    };
   };
 
   testScript = ''
@@ -24,4 +26,4 @@ in
 
     webserver.succeed("curl --fail --silent --unix-socket '${nginxSocketPath}' http://localhost/test | grep '^foo$'")
   '';
-})
+}

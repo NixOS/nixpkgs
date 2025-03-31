@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, glib
-, autoreconfHook
-, pkg-config
-, systemd
-, fetchFromGitLab
-, nix-update-script
+{
+  stdenv,
+  lib,
+  glib,
+  autoreconfHook,
+  pkg-config,
+  systemd,
+  fetchFromGitLab,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {

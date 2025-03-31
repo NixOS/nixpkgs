@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, asciidoc, cmake, libxslt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asciidoc,
+  cmake,
+  libxslt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "genkfs";
@@ -13,16 +20,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ asciidoc libxslt.bin cmake ];
+  nativeBuildInputs = [
+    asciidoc
+    libxslt.bin
+    cmake
+  ];
 
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "Utility to write a KFS filesystem into a ROM file";
     mainProgram = "genkfs";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

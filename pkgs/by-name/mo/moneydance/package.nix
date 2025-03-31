@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchzip, makeWrapper, openjdk23, jvmFlags ? [ ] }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchzip,
+  makeWrapper,
+  openjdk23,
+  wrapGAppsHook3,
+  jvmFlags ? [ ],
+}:
 let
   jdk = openjdk23.override {
     enableJavaFX = true;
@@ -13,8 +22,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wwSb3CuhuXB4I9jq+TpLPbd1k9UzqQbAaZkGKgi+nns=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  # We must use wrapGAppsHook (since Java GUIs on Linux use GTK), but by
+  # default that uses makeBinaryWrapper which doesn't support flags that need
+  # quoting: <https://github.com/NixOS/nixpkgs/issues/330471>. Thanks to
+  # @Artturin for the tip to override the wrapper generator.
+  nativeBuildInputs = [
+    makeWrapper
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+  ];
   buildInputs = [ jdk ];
+  dontWrapGApps = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/libexec $out/bin
+    cp -p $src/lib/* $out/libexec/
+
+    runHook postInstall
+  '';
 
   # Note the double escaping in the call to makeWrapper. The escapeShellArgs
   # call quotes each element of the flags list as a word[1] and returns a
@@ -24,26 +50,26 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # 1. https://www.gnu.org/software/bash/manual/html_node/Word-Splitting.html
   # 2. https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
-  installPhase = let
-    finalJvmFlags = [
-      "-client"
-      "--add-modules"
-      "javafx.swing,javafx.controls,javafx.graphics"
-      "-classpath"
-      "${placeholder "out"}/libexec/*"
-    ] ++ jvmFlags ++ [ "Moneydance" ];
-  in ''
-    runHook preInstall
+  postFixup =
+    let
+      finalJvmFlags = [
+        "-client"
+        "--add-modules"
+        "javafx.swing,javafx.controls,javafx.graphics"
+        "-classpath"
+        "${placeholder "out"}/libexec/*"
+      ] ++ jvmFlags ++ [ "Moneydance" ];
+    in
+    ''
+      # This is in postFixup because gappsWrapperArgs is generated in preFixup
+      makeWrapper ${jdk}/bin/java $out/bin/moneydance \
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
+    '';
 
-    mkdir -p $out/libexec $out/bin
-    cp -p $src/lib/* $out/libexec/
-    makeWrapper ${jdk}/bin/java $out/bin/moneydance \
-      --add-flags ${lib.escapeShellArg (lib.escapeShellArgs finalJvmFlags)}
-
-    runHook postInstall
-  '';
-
-  passthru = { inherit jdk; };
+  passthru = {
+    inherit jdk;
+  };
 
   meta = {
     homepage = "https://infinitekind.com/moneydance";

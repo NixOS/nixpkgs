@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-mfa3";
-  version = "0.13.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
-    rev = "refs/tags/${version}";
-    hash = "sha256-O8po7VevqyHlP2isnNnLbpgfs1p4sFezxIZKMTgnwuY=";
+    tag = version;
+    hash = "sha256-HcurgGSzPnKVRpL9NVq0vkCmYDvj/HoWYVbnIrK5pSI=";
   };
 
   build-system = [ setuptools ];
@@ -36,9 +36,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "qrcode" ];
 
   checkPhase = ''
-    # Disable failing test test_origin_https
-    # https://github.com/xi/django-mfa3/issues/24
-    ${python.interpreter} -m django test --settings tests.settings -k "not test_origin_https"
+    ${python.interpreter} -m django test --settings tests.settings
   '';
 
   meta = {

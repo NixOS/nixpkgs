@@ -1,14 +1,15 @@
-{ lib
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, makeWrapper
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  makeWrapper,
 
-# Script dependencies.
-, fzf
-, wl-clipboard
-, xclip
+  # Script dependencies.
+  fzf,
+  wl-clipboard,
+  xclip,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
   };
 
-  cargoHash = "sha256-Zj9t/e6QhiOxU8mlVRBKEbviSTKXM4WQ3lqtoCcMbMI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Jvg3XndPyQ9TYejJaO7GAI9RwLAOWB0uapA+6WIKAkI=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   preInstall = ''
     ${scdoc}/bin/scdoc < doc/license.scd > license.1
@@ -43,7 +48,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm0755 ./scripts/copy-header -t $out/bin
     wrapProgram $out/bin/copy-header \
       --prefix PATH : "$out/bin" \
-      --prefix PATH : ${lib.makeBinPath [ wl-clipboard xclip ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          wl-clipboard
+          xclip
+        ]
+      }
   '';
 
   meta = with lib; {

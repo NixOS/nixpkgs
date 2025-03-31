@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, zed
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  zed,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-E9CXS3BQAglJV36BPgwhkb9SswxAj/yBcGqJ+XXwTmE=";
 
-  subPackages = [ "cmd/zed" "cmd/zq" ];
+  subPackages = [
+    "cmd/zed"
+    "cmd/zq"
+  ];
 
   ldflags = [
     "-s"
@@ -41,6 +45,9 @@ buildGoModule rec {
     homepage = "https://zed.brimdata.io";
     changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dit7ya knl ];
+    maintainers = with maintainers; [
+      dit7ya
+      knl
+    ];
   };
 }

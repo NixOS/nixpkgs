@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk-engine-murrine,
+}:
 
 stdenv.mkDerivation {
   version = "2017-04-24";

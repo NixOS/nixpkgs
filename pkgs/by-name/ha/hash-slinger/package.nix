@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, unbound
-, libreswan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  libreswan,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "letoams";
-    repo = pname;
+    repo = "hash-slinger";
     rev = version;
     sha256 = "sha256-c6IZHUFuhcccUWZYSOUGFbKpTtwMclIvEvDX8gE5d8o=";
   };

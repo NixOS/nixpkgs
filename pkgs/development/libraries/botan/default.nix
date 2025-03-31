@@ -64,7 +64,7 @@ let
 
       buildTargets =
         [ "cli" ]
-        ++ lib.optionals finalAttrs.doCheck [ "tests" ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
         ++ lib.optionals (!static) [ "shared" ];
 
@@ -124,8 +124,6 @@ in
   botan3 = common {
     version = "3.6.1";
     hash = "sha256-fLhXXYjSMsdxdHadf54ku0REQWBYWYbuvWbnScuakIk=";
-    # this patch fixes build errors on MacOS with SDK 10.12, recheck to remove this again
-    patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./botan3-macos.patch ];
   };
 
   botan2 = common {

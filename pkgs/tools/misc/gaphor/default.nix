@@ -1,42 +1,47 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, copyDesktopItems
-, gobject-introspection
-, poetry-core
-, wrapGAppsHook4
-, gtksourceview5
-, libadwaita
-, pango
-, gaphas
-, generic
-, jedi
-, pycairo
-, pillow
-, dulwich
-, pydot
-, defusedxml
-, better-exceptions
-, babel
-, pygobject3
-, tinycss2
-, gtk4
-, librsvg
-, makeDesktopItem
-, python
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  copyDesktopItems,
+  gobject-introspection,
+  poetry-core,
+  wrapGAppsHook4,
+  gtksourceview5,
+  libadwaita,
+  pango,
+  gaphas,
+  generic,
+  jedi,
+  pycairo,
+  pillow,
+  dulwich,
+  pydot,
+  defusedxml,
+  better-exceptions,
+  babel,
+  pygobject3,
+  tinycss2,
+  gtk4,
+  librsvg,
+  makeDesktopItem,
+  python,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.27.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MsbEeOop6Osq2Hn6CkorsXt8/bTY//QHW/uCl0FEUN4=";
+    hash = "sha256-I5n0XeZLQw4qje6gwh2aMu5Zo5tuXgESHhkR0xegaYM=";
   };
 
-  pythonRelaxDeps = [ "defusedxml" ];
+  pythonRelaxDeps = [
+    "defusedxml"
+    "gaphas"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -53,18 +58,18 @@ buildPythonApplication rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    pycairo
-    pygobject3
-    gaphas
-    generic
-    tinycss2
     babel
-    jedi
     better-exceptions
-    pydot
-    pillow
     defusedxml
     dulwich
+    gaphas
+    generic
+    jedi
+    pillow
+    pycairo
+    pydot
+    pygobject3
+    tinycss2
   ];
 
   desktopItems = [
@@ -92,11 +97,16 @@ buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Simple modeling tool written in Python";
-    maintainers = [ ];
     homepage = "https://github.com/gaphor/gaphor";
-    license = licenses.asl20;
+    changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 }

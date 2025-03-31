@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  curl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sblim-sfcc";
-  version = "2.2.9"; # this is technically 2.2.9-preview
+  version = "2.2.8-unstable-2023-06-26";
 
   src = fetchFromGitHub {
-    owner  = "kkaempf";
-    repo   = "sblim-sfcc";
-    rev    = "514a76af2020fd6dc6fc380df76cbe27786a76a2";
-    sha256 = "06c1mskl9ixbf26v88w0lvn6v2xd6n5f0jd5mckqrn9j4vmh70hs";
+    owner = "kkaempf";
+    repo = "sblim-sfcc";
+    rev = "881fccbaf19e26cbef3da1bebe2b42b3a9de1147";
+    hash = "sha256-zXQD+IYuMV5vw27FpTpeCfh/mf0wvKzOvc4bplEDJCw=";
   };
 
   buildInputs = [ curl ];
@@ -19,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small Footprint CIM Client Library";
-    homepage    = "https://sourceforge.net/projects/sblim/";
-    license     = licenses.cpl10;
+    homepage = "https://sourceforge.net/projects/sblim/";
+    license = licenses.cpl10;
     maintainers = with maintainers; [ deepfire ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

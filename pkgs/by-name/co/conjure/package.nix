@@ -1,15 +1,16 @@
-{ fetchFromGitHub
-, gobject-introspection
-, lib
-, libadwaita
-, python3Packages
-, wrapGAppsHook4
-, meson
-, ninja
-, desktop-file-utils
-, pkg-config
-, appstream-glib
-, gtk4
+{
+  fetchFromGitHub,
+  gobject-introspection,
+  lib,
+  libadwaita,
+  python3Packages,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  desktop-file-utils,
+  pkg-config,
+  appstream-glib,
+  gtk4,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "conjure";

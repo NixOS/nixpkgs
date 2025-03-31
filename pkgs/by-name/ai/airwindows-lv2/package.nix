@@ -1,16 +1,28 @@
-{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  lv2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "airwindows-lv2";
   version = "28.0";
   src = fetchFromSourcehut {
     owner = "~hannes";
-    repo = pname;
+    repo = "airwindows-lv2";
     rev = "v${version}";
     sha256 = "sha256-1GWkdNCn98ttsF2rPLZE0+GJdatgkLewFQyx9Frr2sM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [ lv2 ];
 
   meta = with lib; {

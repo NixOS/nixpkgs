@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, rr
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  rr,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
-    repo = pname;
+    repo = "cargo-rr";
     rev = "v${version}";
     sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
   };
 
-  cargoHash = "sha256-P4r4XRolORdSGAsNg5RutZ2VVRR8rAfiBZNm+vIH3aM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-s3KZFntAb/q4oreJLDQ2Pnz+Oj8Ik36vYR2InY0BIBw=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -34,6 +36,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-rr";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ otavio matthiasbeyer ];
+    maintainers = with maintainers; [
+      otavio
+      matthiasbeyer
+    ];
   };
 }

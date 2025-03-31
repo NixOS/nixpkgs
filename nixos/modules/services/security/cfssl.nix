@@ -1,16 +1,20 @@
-{ config, options, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cfssl;
-in {
+in
+{
   options.services.cfssl = {
-    enable = mkEnableOption "the CFSSL CA api-server";
+    enable = lib.mkEnableOption "the CFSSL CA api-server";
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       default = "/var/lib/cfssl";
-      type = types.path;
+      type = lib.types.path;
       description = ''
         The work directory for CFSSL.
 
@@ -23,51 +27,51 @@ in {
       '';
     };
 
-    address = mkOption {
+    address = lib.mkOption {
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
       description = "Address to bind.";
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 8888;
-      type = types.port;
+      type = lib.types.port;
       description = "Port to bind.";
     };
 
-    ca = mkOption {
-      defaultText = literalExpression ''"''${cfg.dataDir}/ca.pem"'';
-      type = types.str;
+    ca = lib.mkOption {
+      defaultText = lib.literalExpression ''"''${cfg.dataDir}/ca.pem"'';
+      type = lib.types.str;
       description = "CA used to sign the new certificate -- accepts '[file:]fname' or 'env:varname'.";
     };
 
-    caKey = mkOption {
-      defaultText = literalExpression ''"file:''${cfg.dataDir}/ca-key.pem"'';
-      type = types.str;
+    caKey = lib.mkOption {
+      defaultText = lib.literalExpression ''"file:''${cfg.dataDir}/ca-key.pem"'';
+      type = lib.types.str;
       description = "CA private key -- accepts '[file:]fname' or 'env:varname'.";
     };
 
-    caBundle = mkOption {
+    caBundle = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Path to root certificate store.";
     };
 
-    intBundle = mkOption {
+    intBundle = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Path to intermediate certificate store.";
     };
 
-    intDir = mkOption {
+    intDir = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Intermediates directory.";
     };
 
-    metadata = mkOption {
+    metadata = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Metadata file for root certificate presence.
         The content of the file is a json dictionary (k,v): each key k is
@@ -76,86 +80,93 @@ in {
       '';
     };
 
-    remote = mkOption {
+    remote = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = "Remote CFSSL server.";
     };
 
-    configFile = mkOption {
+    configFile = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = "Path to configuration file. Do not put this in nix-store as it might contain secrets.";
     };
 
-    responder = mkOption {
+    responder = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Certificate for OCSP responder.";
     };
 
-    responderKey = mkOption {
+    responderKey = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = "Private key for OCSP responder certificate. Do not put this in nix-store.";
     };
 
-    tlsKey = mkOption {
+    tlsKey = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = "Other endpoint's CA private key. Do not put this in nix-store.";
     };
 
-    tlsCert = mkOption {
+    tlsCert = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Other endpoint's CA to set up TLS protocol.";
     };
 
-    mutualTlsCa = mkOption {
+    mutualTlsCa = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Mutual TLS - require clients be signed by this CA.";
     };
 
-    mutualTlsCn = mkOption {
+    mutualTlsCn = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = "Mutual TLS - regex for whitelist of allowed client CNs.";
     };
 
-    tlsRemoteCa = mkOption {
+    tlsRemoteCa = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "CAs to trust for remote TLS requests.";
     };
 
-    mutualTlsClientCert = mkOption {
+    mutualTlsClientCert = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Mutual TLS - client certificate to call remote instance requiring client certs.";
     };
 
-    mutualTlsClientKey = mkOption {
+    mutualTlsClientKey = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Mutual TLS - client key to call remote instance requiring client certs. Do not put this in nix-store.";
     };
 
-    dbConfig = mkOption {
+    dbConfig = lib.mkOption {
       default = null;
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "Certificate db configuration file. Path must be writeable.";
     };
 
-    logLevel = mkOption {
+    logLevel = lib.mkOption {
       default = 1;
-      type = types.enum [ 0 1 2 3 4 5 ];
+      type = lib.types.enum [
+        0
+        1
+        2
+        3
+        4
+        5
+      ];
       description = "Log level (0 = DEBUG, 5 = FATAL).";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.cfssl = {
       gid = config.ids.gids.cfssl;
     };
@@ -179,9 +190,11 @@ in {
           User = "cfssl";
           Group = "cfssl";
 
-          ExecStart = with cfg; let
-            opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
-          in
+          ExecStart =
+            with cfg;
+            let
+              opt = n: v: lib.optionalString (v != null) ''-${n}="${v}"'';
+            in
             lib.concatStringsSep " \\\n" [
               "${pkgs.cfssl}/bin/cfssl serve"
               (opt "address" address)
@@ -207,7 +220,7 @@ in {
               (opt "loglevel" (toString logLevel))
             ];
         }
-        (mkIf (cfg.dataDir == options.services.cfssl.dataDir.default) {
+        (lib.mkIf (cfg.dataDir == options.services.cfssl.dataDir.default) {
           StateDirectory = baseNameOf cfg.dataDir;
           StateDirectoryMode = 700;
         })
@@ -215,8 +228,8 @@ in {
     };
 
     services.cfssl = {
-      ca = mkDefault "${cfg.dataDir}/ca.pem";
-      caKey = mkDefault "${cfg.dataDir}/ca-key.pem";
+      ca = lib.mkDefault "${cfg.dataDir}/ca.pem";
+      caKey = lib.mkDefault "${cfg.dataDir}/ca-key.pem";
     };
   };
 }

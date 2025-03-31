@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5u5jyoDEt7aMs8/8QrhrUrUzFJJCNayqbN2WrMhUCV4=";
   };
 
-  cargoHash = "sha256-repPyeIVM2ufG5NhJHGbZUaxOItiTZTxiCZ21Fpt0wM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9UlH2W8wNzdZJxIgOafGylliS2RjaBlpirxSWHJ/SIQ=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];

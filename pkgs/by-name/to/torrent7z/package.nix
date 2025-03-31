@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "torrent7z";
@@ -6,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BubblesInTheTub";
-    repo = pname;
+    repo = "torrent7z";
     rev = version;
     sha256 = "Y2tr0+z9uij4Ifi6FfWRN24BwcDXUZKVLkLtKUiVjU4=";
   };
@@ -14,8 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "fix-gcc10-compilation.patch"; # Fix compilation on GCC 10. This patch is included on the latest commit
-      url =
-        "https://github.com/paulyc/torrent7z/commit/5958f42a364c430b3ed4ac68911bbbea1f967fc4.patch";
+      url = "https://github.com/paulyc/torrent7z/commit/5958f42a364c430b3ed4ac68911bbbea1f967fc4.patch";
       sha256 = "vJOv1sG9XwTvvxQiWew0H5ALoUb9wIAouzTsTvKHuPI=";
     })
   ];

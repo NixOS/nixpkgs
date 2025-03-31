@@ -1,18 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo, yaml-cpp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  boost,
+  libnabo,
+  yaml-cpp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpointmatcher";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "norlab-ulaval";
     repo = "libpointmatcher";
     rev = version;
-    hash = "sha256-ewsU3aCFPeem1pJpqKaceMhL7SwTYOaYlcwOfMxwkSs=";
+    hash = "sha256-OkfWdim0JDKiBx5spYpkMyFrLQP3AMWBVDpzmFwqNFM=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen boost libnabo yaml-cpp ];
+  buildInputs = [
+    eigen
+    boost
+    libnabo
+    yaml-cpp
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "EIGEN_INCLUDE_DIR" "${eigen}/include/eigen3")

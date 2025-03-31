@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, usbmuxd
-, libimobiledevice
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  usbmuxd,
+  libimobiledevice,
+  libzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
+    repo = "ideviceinstaller";
     rev = "71ec5eaa30d2780c2614b6b227a2229ea3aeb1e9";
     hash = "sha256-YsQwAlt71vouYJzXl0P7b3fG/MfcwI947GtvN4g3/gM=";
   };

@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.10";
-  pname   = "libircclient";
+  pname = "libircclient";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
     sha256 = "0b9wa0h3xc31wpqlvgxgnvqp5wgx3kwsf5s9432m5cj8ycx6zcmv";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [ "--enable-shared" ];
 
@@ -22,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small but extremely powerful library which implements the client IRC protocol";
-    homepage    = "http://www.ulduzsoft.com/libircclient/";
-    license     = licenses.lgpl3;
+    homepage = "http://www.ulduzsoft.com/libircclient/";
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +12,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "deater";
-    repo = pname;
+    repo = "linux_logo";
     rev = "v${version}";
     hash = "sha256-yBAxPwgKyFFIX0wuG7oG+FbEDpA5cPwyyJgWrFErJ7I=";
   };
 
-  nativeBuildInputs = [ gettext which ];
+  nativeBuildInputs = [
+    gettext
+    which
+  ];
 
   meta = with lib; {
     description = "Prints an ASCII logo and some system info";

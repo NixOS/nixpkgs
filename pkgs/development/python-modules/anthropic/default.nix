@@ -10,9 +10,11 @@
   hatchling,
   httpx,
   jiter,
+  nest-asyncio,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   respx,
   sniffio,
@@ -22,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.39.0";
+  version = "0.49.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lpW+waHvwgbhK7EnPZy/XI8gK3a8JjFflPqUFbDN1z8=";
+    tag = "v${version}";
+    hash = "sha256-vbK8rqCekWbgLAU7YlHUhfV+wB7Q3Rpx0OUYvq3WYWw=";
   };
 
   build-system = [
@@ -57,16 +59,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     pytest-asyncio
+    nest-asyncio
     pytestCheckHook
     respx
   ];
 
   pythonImportsCheck = [ "anthropic" ];
 
-  disabledTests = [
-    # Test require network access
-    "test_copy_build_request"
-  ];
+  disabledTests =
+    [
+      # Test require network access
+      "test_copy_build_request"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # Fails on RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
+      "test_multi_byte_character_multiple_chunks[async]"
+    ];
 
   disabledTestPaths = [
     # Test require network access
@@ -82,7 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
-    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v${version}";
+    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

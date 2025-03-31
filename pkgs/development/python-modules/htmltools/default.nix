@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, packaging
-, typing-extensions
-, pytestCheckHook
-, syrupy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  packaging,
+  typing-extensions,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-htmltools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ugtDYs5YaVo7Yy9EodyRrypHQUjmOIPpsyhwNnZkiko=";
   };
 

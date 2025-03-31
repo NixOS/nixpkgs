@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, vips
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  vips,
 }:
 
 let
@@ -30,14 +31,15 @@ let
       cp -r ../public/app $out
     '';
   };
-in buildNpmPackage {
+in
+buildNpmPackage {
   inherit pname version src;
 
   npmDepsHash = "sha256-EW/Fej58LE/nbJomPtWvEjDveAUdo0jIWwC+ziN0gy0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    vips  # for 'sharp' dependency
+    vips # for 'sharp' dependency
   ];
 
   postPatch = ''

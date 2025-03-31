@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libESMTP";
   version = "1.1.0";
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [ openssl ];
+
+  mesonFlags = lib.optional (stdenv.hostPlatform.libc == "glibc") "-Dc_args=-D_DEFAULT_SOURCE";
 
   src = fetchFromGitHub {
     owner = "libesmtp";
-    repo = pname;
+    repo = "libESMTP";
     rev = "v${version}";
     sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
@@ -26,4 +40,3 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
   };
 }
-

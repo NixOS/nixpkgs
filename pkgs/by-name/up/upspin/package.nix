@@ -1,6 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "upspin";
   version = "unstable-2023-02-05";
 

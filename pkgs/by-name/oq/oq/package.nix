@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, crystal
-, jq
-, libxml2
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  crystal,
+  jq,
+  libxml2,
+  makeWrapper,
 }:
 
 crystal.buildCrystalPackage rec {
@@ -13,7 +14,7 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
-    repo = pname;
+    repo = "oq";
     rev = "v${version}";
     sha256 = "sha256-W0iGE1yVOphooiab689AFT3rhGGdXqEFyYIhrx11RTE=";
   };

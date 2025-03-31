@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, gtk3, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  gtk3,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spotify-tray";
@@ -6,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tsmetana";
-    repo = pname;
+    repo = "spotify-tray";
     rev = "v${version}";
     sha256 = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
   };
@@ -19,7 +28,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [ gtk3 ];
 

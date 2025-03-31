@@ -15,6 +15,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,15 +24,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "FineFindus";
-    repo = pname;
+    repo = "eyedropper";
     rev = "v${version}";
     hash = "sha256-FyGj0180Wn8iIDTdDqnNEvFYegwdWCsCq+hmyTTUIo4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jXo7Aq+pXWySe6MyH9GCTQVNwbboER7RwJe6Asqbxxc=";
+    hash = "sha256-nYmH7Nu43TDJKvwfSaBKSihD0acLPmIUQpQM6kV4CAk=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +54,16 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     mainProgram = "eyedropper";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

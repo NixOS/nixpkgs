@@ -1,34 +1,33 @@
-{ lib
-, fetchFromGitHub
-, linkFarm
-, makeWrapper
-, rustPlatform
-, tree-sitter
-, gitUpdater
-, versionCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  linkFarm,
+  makeWrapper,
+  rustPlatform,
+  tree-sitter,
+  gitUpdater,
+  versionCheckHook,
 }:
 
 let
   # based on https://github.com/NixOS/nixpkgs/blob/aa07b78b9606daf1145a37f6299c6066939df075/pkgs/development/tools/parsing/tree-sitter/default.nix#L85-L104
-  withPlugins = grammarFn:
+  withPlugins =
+    grammarFn:
     let
       grammars = grammarFn tree-sitter.builtGrammars;
     in
-    linkFarm "grammars"
-      (map
-        (drv:
-          let
-            name = lib.strings.getName drv;
-          in
-          {
-            name =
-              "lib" +
-              (lib.strings.removeSuffix "-grammar" name)
-              + ".so";
-            path = "${drv}/parser";
-          }
-        )
-        grammars);
+    linkFarm "grammars" (
+      map (
+        drv:
+        let
+          name = lib.strings.getName drv;
+        in
+        {
+          name = "lib" + (lib.strings.removeSuffix "-grammar" name) + ".so";
+          path = "${drv}/parser";
+        }
+      ) grammars
+    );
 
   libPath = withPlugins (_: tree-sitter.allGrammars);
 in
@@ -38,13 +37,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
-    repo = pname;
+    repo = "diffsitter";
     rev = "v${version}";
     hash = "sha256-ta7JcSPEgpJwieYvtZnNMFvsYvz4FuxthhmKMYe2XUE=";
     fetchSubmodules = false;
   };
 
-  cargoHash = "sha256-VbdV4dftCxxKLJr9TEuCe9tvSGbc62AUwlDZdaNRNhw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YgVsWiINzEsmUMAi6ttEtXutwNDJA2viXnV5rGdSSxU=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

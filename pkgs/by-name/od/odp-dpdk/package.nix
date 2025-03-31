@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, dpdk
-, libbpf
-, libconfig
-, libpcap
-, numactl
-, openssl
-, zlib
-, zstd
-, libbsd
-, elfutils
-, jansson
-, libnl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  dpdk,
+  libbpf,
+  libconfig,
+  libpcap,
+  numactl,
+  openssl,
+  zlib,
+  zstd,
+  libbsd,
+  elfutils,
+  jansson,
+  libnl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "odp-dpdk";
-  version = "1.44.0.0_DPDK_22.11";
+  version = "1.46.0.0_DPDK_22.11";
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
     rev = "v${version}";
-    hash = "sha256-hYtQ7kKB08BImkTYXqtnv1Ny1SUPCs6GX7WOYks8iKA=";
+    hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
   nativeBuildInputs = [

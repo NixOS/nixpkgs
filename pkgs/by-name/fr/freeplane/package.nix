@@ -2,25 +2,27 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_7,
+  gradle_8,
   which,
+  copyDesktopItems,
 }:
 
 let
   pname = "freeplane";
-  version = "1.11.14";
+  version = "1.12.8";
 
   jdk = jdk17;
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-zEQjB57iiKVQnH8VtynpEGKNAa2e+WpqnGt6fnv5Rjs=";
+    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
   };
 
 in
@@ -31,6 +33,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     jdk
     gradle
+    copyDesktopItems
+  ];
+
+  patches = [
+    # Plugin update to support Gradle 8.13; remove when included in a release.
+    (fetchpatch {
+      url = "https://github.com/freeplane/freeplane/commit/e58958783ef6f85ab00bf270c1f897093c4d7006.patch";
+      hash = "sha256-oQF/GbItl2ZEVlTKzojqk9xTWl8CVP7V3yig/py71hk=";
+    })
   ];
 
   mitmCache = gradle.fetchDeps {

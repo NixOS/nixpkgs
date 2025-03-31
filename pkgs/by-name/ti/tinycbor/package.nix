@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tinycbor";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tinycbor";
     rev = "v${version}";
-    sha256 = "1ph1cmsh4hm6ikd3bs45mnv9zmniyrvp2rrg8qln204kr6fngfcd";
+    sha256 = "sha256-JgkZAvZ63jjTdFRnyk+AeIWcGsg36UtPPFbhFjky9e8=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

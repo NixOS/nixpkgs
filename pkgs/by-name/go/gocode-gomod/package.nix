@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gocode-gomod";
@@ -41,6 +45,9 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/stamblerre/gocode";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit rvolosatovs ];
+    maintainers = with maintainers; [
+      kalbasit
+      rvolosatovs
+    ];
   };
 }

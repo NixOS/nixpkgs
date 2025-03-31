@@ -2,9 +2,7 @@
   lib,
   stdenv,
   cmake,
-  darwin,
-  fetchpatch,
-  llvmPackages_17,
+  llvm,
   fetchFromGitHub,
   mbedtls,
   gtk3,
@@ -26,31 +24,22 @@
   nix-update-script,
   autoPatchelfHook,
   makeWrapper,
-  overrideSDK,
 }:
 
 let
-  version = "1.35.4";
-  patterns_version = "1.35.4";
-
-  llvmPackages = llvmPackages_17;
-
-  stdenv' =
-    let
-      baseStdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    in
-    if stdenv.hostPlatform.isDarwin then overrideSDK baseStdenv "11.0" else baseStdenv;
+  version = "1.37.4";
+  patterns_version = "1.37.4";
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
-    rev = "ImHex-v${patterns_version}";
-    hash = "sha256-7ch2KXkbkdRAvo3HyErWcth3kG4bzYvp9I5GZSsb/BQ=";
+    tag = "ImHex-v${patterns_version}";
+    hash = "sha256-2NgMYaG6+XKp0fIHAn3vAcoXXa3EF4HV01nI+t1IL1U=";
   };
 
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imhex";
   inherit version;
 
@@ -59,57 +48,36 @@ stdenv'.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     owner = "WerWolv";
     repo = "ImHex";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6QpmFkSMQpGlEzo7BHZn20c+q8CTDUB4yO87wMU5JT4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uenwAaIjtBzrtiLdy6fh5TxtbWtUJbtybNOLP3+8blA=";
   };
 
-  patches = [
-    # https://github.com/WerWolv/ImHex/pull/1910
-    # during https://github.com/NixOS/nixpkgs/pull/330303 it was discovered that ImHex
-    # would not build on Darwin x86-64
-    # this temporary patch can be removed when the above PR is merged
-    (fetchpatch {
-      url = "https://github.com/WerWolv/ImHex/commit/69624a2661ea44db9fb8b81c3278ef69016ebfcf.patch";
-      hash = "sha256-LcUCl8Rfz6cbhop2StksuViim2bH4ma3/8tGVKFdAgg=";
-    })
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    llvm
+    python3
+    perl
+    pkg-config
+    rsync
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  buildInputs = [
+    capstone
+    curl
+    dbus
+    file
+    fmt
+    glfw3
+    gtk3
+    jansson
+    libGLU
+    mbedtls
+    nlohmann_json
+    yara
   ];
-
-  # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/modules/PostprocessBundle.cmake \
-      --replace-fail "fixup_bundle" "#fixup_bundle"
-  '';
-
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.llvm
-      python3
-      perl
-      pkg-config
-      rsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
-
-  buildInputs =
-    [
-      capstone
-      curl
-      dbus
-      file
-      fmt
-      glfw3
-      gtk3
-      jansson
-      libGLU
-      mbedtls
-      nlohmann_json
-      yara
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers
-    ];
 
   # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
   # however, we will append to RUNPATH ourselves
@@ -131,12 +99,20 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_YARA" true)
   ];
 
+  # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/modules/PostprocessBundle.cmake \
+      --replace-fail "fixup_bundle" "#fixup_bundle"
+  '';
+
   # rsync is used here so we can not copy the _schema.json files
   postInstall =
     if stdenv.hostPlatform.isLinux then
       ''
         mkdir -p $out/share/imhex
         rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
+        # without this imhex is not able to find pattern files
+        wrapProgram $out/bin/imhex --prefix XDG_DATA_DIRS : $out/share
       ''
     else if stdenv.hostPlatform.isDarwin then
       ''
@@ -154,14 +130,15 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [
       kashw2
       cafkafk
+      govanify
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TPXQaWnUy+blTS+Tz84K6cxJu4+dLbT2Dl9SKqlhDHY=";
   };
 
@@ -20,6 +21,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     pycryptodome
     javaobj-py3
+    vobject
   ];
 
   meta = with lib; {
@@ -33,6 +35,9 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.mit;
     mainProgram = "wtsexporter";
-    maintainers = with maintainers; [ bbenno ];
+    maintainers = with maintainers; [
+      bbenno
+      EstebanMacanek
+    ];
   };
 }

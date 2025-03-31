@@ -1,10 +1,21 @@
-{ lib, stdenv, buildPackages, kernel, pciutils, gettext, which }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  kernel,
+  pciutils,
+  gettext,
+  which,
+}:
 
 stdenv.mkDerivation {
   pname = "cpupower";
   inherit (kernel) version src patches;
 
-  nativeBuildInputs = [ gettext which ];
+  nativeBuildInputs = [
+    gettext
+    which
+  ];
   buildInputs = [ pciutils ];
 
   postPatch = ''
@@ -20,8 +31,7 @@ stdenv.mkDerivation {
     "LD=${stdenv.cc.targetPrefix}cc"
   ];
 
-  installFlags = lib.mapAttrsToList
-    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+  installFlags = lib.mapAttrsToList (n: v: "${n}dir=${placeholder "out"}/${v}") {
     bin = "bin";
     sbin = "sbin";
     man = "share/man";

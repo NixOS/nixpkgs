@@ -1,6 +1,13 @@
-{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, nixosTests }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  ruby,
+  makeWrapper,
+  nixosTests,
+}:
 
-bundlerApp rec {
+bundlerApp {
   pname = "gollum";
   exes = [ "gollum" ];
 
@@ -17,7 +24,12 @@ bundlerApp rec {
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/HEAD/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ erictapen jgillich nicknovitski bbenno ];
+    maintainers = with maintainers; [
+      erictapen
+      jgillich
+      nicknovitski
+      bbenno
+    ];
     platforms = platforms.unix;
     mainProgram = "gollum";
   };

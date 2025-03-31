@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages, libjpeg_original }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  perlPackages,
+  libjpeg_original,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jpegrescan";
   version = "unstable-2019-03-27";
 
@@ -9,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kud";
-    repo = pname;
+    repo = "jpegrescan";
     rev = "3a7de06feabeb3c3235c3decbe2557893c1abe51";
     sha256 = "0cnl46z28lkqc5x27b8rpghvagahivrqcfvhzcsv9w1qs8qbd6dm";
   };

@@ -5,6 +5,8 @@ lib.makeScope newScope (self: with self; {
 
   autopair = callPackage ./autopair.nix { };
 
+  bang-bang = callPackage ./bang-bang.nix { };
+
   bobthefish = callPackage ./bobthefish.nix { };
 
   bobthefisher = callPackage ./bobthefisher.nix { };
@@ -18,6 +20,8 @@ lib.makeScope newScope (self: with self; {
   bass = callPackage ./bass.nix { };
 
   done = callPackage ./done.nix { };
+
+  exercism-cli-fish-wrapper = callPackage ./exercism-cli-fish-wrapper.nix { };
 
   fifc = callPackage ./fifc.nix { };
 
@@ -49,6 +53,10 @@ lib.makeScope newScope (self: with self; {
   humantime-fish = callPackage ./humantime-fish.nix { };
 
   hydro = callPackage ./hydro.nix { };
+
+  macos = callPackage ./macos.nix { };
+
+  nvm = callPackage ./nvm.nix { };
 
   pisces = callPackage ./pisces.nix { };
 

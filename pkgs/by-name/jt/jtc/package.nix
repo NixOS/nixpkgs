@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jtc";
@@ -6,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ldn-softdev";
-    repo = pname;
+    repo = "jtc";
     rev = version;
     sha256 = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
   };

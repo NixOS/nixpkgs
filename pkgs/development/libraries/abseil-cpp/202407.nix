@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abseil-cpp";
-  version = "20240722.0";
+  version = "20240722.1";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
+    tag = finalAttrs.version;
+    hash = "sha256-ir4hG2VIPv3se7JfWqCM/siLqFEFkmhMW/IGCocy6Pc=";
   };
 
   patches = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
+    changelog = "https://github.com/abseil/abseil-cpp/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.GaetanLepage ];

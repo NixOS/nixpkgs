@@ -1,30 +1,33 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swc";
-  version = "0.91.369";
-
-  env = {
-    # swc depends on nightly features
-    RUSTC_BOOTSTRAP = 1;
-  };
+  version = "0.91.495";
 
   src = fetchCrate {
     pname = "swc_cli";
     inherit version;
-    hash = "sha256-6n6zHMV87h1kmjzEmdE86/toHI99q2HO1EEGHUE9sg8=";
+    hash = "sha256-th+VLeKdTqyAjyRer0GeGLprBX0XhYTd9F7kwBDrzLo=";
   };
 
-  cargoHash = "sha256-/Ku0W+L2mqVYDSkd2zRqM7UhHueXya4zjewp/xO/XlQ";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mIFZ9F0XS16OGSQlzu7H2wQZN4YUEKJlK+KHmkrc12w=";
 
-  meta = with lib; {
+  # swc depends on nightly features
+  env.RUSTC_BOOTSTRAP = 1;
+
+  meta = {
     description = "Rust-based platform for the Web";
     mainProgram = "swc";
     homepage = "https://github.com/swc-project/swc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      dit7ya
+      kashw2
+    ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, jq
-, oniguruma
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  jq,
+  oniguruma,
 }:
 
 buildGoModule rec {

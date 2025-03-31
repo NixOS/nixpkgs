@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fltk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdiskusage";

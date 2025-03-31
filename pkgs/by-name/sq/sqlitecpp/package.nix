@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, sqlite
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sqlite,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ SQLite3 wrapper";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jbedo maintainers.doronbehar ];
+    maintainers = [
+      maintainers.jbedo
+      maintainers.doronbehar
+    ];
   };
 })

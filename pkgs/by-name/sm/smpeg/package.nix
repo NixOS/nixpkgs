@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL,
+  autoconf,
+  automake,
+  libtool,
+  gtk2,
+  m4,
+  pkg-config,
+  libGLU,
+  libGL,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smpeg";
@@ -7,14 +22,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "smpeg";
-    rev = "release_${builtins.replaceStrings ["."] ["_"] version}";
+    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [ ./libx11.patch ] ++ [
     ./format.patch
     ./gcc6.patch
-    ./libx11.patch
     ./gtk.patch
     # These patches remove use of the `register` storage class specifier,
     # allowing smpeg to build with clang 16, which defaults to C++17.
@@ -36,11 +50,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    m4
+    pkg-config
+    makeWrapper
+  ];
 
-  buildInputs = [ SDL ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gtk2 libGLU libGL ];
+  buildInputs =
+    [ SDL ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gtk2
+      libGLU
+      libGL
+    ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
@@ -62,10 +92,10 @@ stdenv.mkDerivation rec {
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
-  NIX_LDFLAGS = "-lX11";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lX11";
 
   meta = {
-    homepage = "http://icculus.org/smpeg/";
+    homepage = "https://icculus.org/smpeg/";
     description = "MPEG decoding library";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

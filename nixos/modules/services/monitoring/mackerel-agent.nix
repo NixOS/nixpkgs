@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mackerel-agent;
-  settingsFmt = pkgs.formats.toml {};
-in {
+  settingsFmt = pkgs.formats.toml { };
+in
+{
   options.services.mackerel-agent = {
     enable = lib.mkEnableOption "mackerel.io agent";
 
@@ -33,7 +39,7 @@ in {
         <https://mackerel.io/docs/entry/spec/agent>
       '';
 
-      default = {};
+      default = { };
       example = {
         verbose = false;
         silent = false;
@@ -44,19 +50,28 @@ in {
 
         options.host_status = {
           on_start = lib.mkOption {
-            type = lib.types.enum [ "working" "standby" "maintenance" "poweroff" ];
+            type = lib.types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent startup.";
             default = "working";
           };
           on_stop = lib.mkOption {
-            type = lib.types.enum [ "working" "standby" "maintenance" "poweroff" ];
+            type = lib.types.enum [
+              "working"
+              "standby"
+              "maintenance"
+              "poweroff"
+            ];
             description = "Host status after agent shutdown.";
             default = "poweroff";
           };
         };
 
-        options.diagnostic =
-          lib.mkEnableOption "collecting memory usage for the agent itself";
+        options.diagnostic = lib.mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };
@@ -82,7 +97,10 @@ in {
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "nss-lookup.target" ];
+      after = [
+        "network-online.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       environment = {
         MACKEREL_PLUGIN_WORKDIR = lib.mkDefault "%C/mackerel-agent";

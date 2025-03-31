@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, rtaudio
-, rtmidi
-, glew
-, alsa-lib
-, cmake
-, pkg-config
-, zenity
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  rtaudio,
+  rtmidi,
+  glew,
+  alsa-lib,
+  angelscript,
+  cmake,
+  pkg-config,
+  zenity,
+  withEditor ? true,
 }:
 let
   # package depends on SDL2main static library
@@ -19,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.10.000";
+  version = "1.22.200";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-oEcjHb6HY5qxKuPoNBuobPbdi39hUUWtKSb7FbAfEpc=";
+    hash = "sha256-Mvp9VrPk36wNTUwNQT83JPOEO72Xhqmhkn3/KfZhQX4=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +43,13 @@ stdenv.mkDerivation rec {
     rtmidi
     glew
     alsa-lib
+    angelscript
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_EDITOR" withEditor)
   ];
 
   prePatch = ''
@@ -59,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://theforceengine.github.io";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ devusb ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, k0sctl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  k0sctl,
 }:
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.19.2";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = "k0sctl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TdnZZ27j++o9I4Zup4PmM2VAHwn8BPBG/CwxTUy0BWU=";
+    tag = "v${version}";
+    hash = "sha256-KhbS7nO/NW7tX6G/MfM92krOHq8cj08515E9h78MJrI=";
   };
 
-  vendorHash = "sha256-Hl/eSFbwFiuSaaPh5blWFfz6m4VNrS5mYL8ehQlb90I=";
+  vendorHash = "sha256-ehTwgvnnL0Hl/xu/o2rwILKDzD0i3rZ73ogjpLcyJ0I=";
 
   ldflags = [
     "-s"
@@ -49,6 +50,9 @@ buildGoModule rec {
     changelog = "https://github.com/k0sproject/k0sctl/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "k0sctl";
-    maintainers = with maintainers; [ nickcao qjoly ];
+    maintainers = with maintainers; [
+      nickcao
+      qjoly
+    ];
   };
 }

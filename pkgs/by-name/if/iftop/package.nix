@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libpcap,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iftop";
@@ -13,11 +20,10 @@ stdenv.mkDerivation rec {
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
 
-  preConfigure = ''
-    cp ${automake}/share/automake*/config.{sub,guess} config
-  '';
-
-  buildInputs = [ncurses libpcap];
+  buildInputs = [
+    ncurses
+    libpcap
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

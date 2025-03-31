@@ -11,22 +11,31 @@
 
   iptables,
   nftables,
-  gawk
+  gawk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "69.5";
+  version = "70.5";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-3wFNXtx9Yt40ahlikHbQWh2fUtJZrCNkqgJF1C+fsDo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-El/3qWZCyN5WixDWbtv+W69z0WITGMODX83dwDIT/94=";
   };
 
-  buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];
-  nativeBuildInputs = [ iptables nftables gawk ];
+  buildInputs = [
+    libcap
+    zlib
+    libnetfilter_queue
+    libnfnetlink
+  ];
+  nativeBuildInputs = [
+    iptables
+    nftables
+    gawk
+  ];
 
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 

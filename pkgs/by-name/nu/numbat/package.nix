@@ -1,30 +1,25 @@
 {
   lib,
-  stdenv,
-  testers,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
-  numbat,
   tzdata,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.14.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
-    rev = "v${version}";
-    hash = "sha256-TmzM541S2W5Cy8zHEWKRE2Zj2bSgrM4vbsWw3zbi3LQ=";
+    tag = "v${version}";
+    hash = "sha256-1CAUl9NB1QjduXgwOIcMclXA6SpaTP+kd3j25BK5Q/8=";
   };
 
-  cargoHash = "sha256-exvJJsGIj6KhmMcwhPjXMELvisuUtl17BAO6XEJSJmI=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EBfhi7puB2To/1GLbXW6Tz1zazDswvh+NqqBkeqRtAI=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
@@ -40,11 +35,13 @@ rustPlatform.buildRustPackage rec {
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = numbat;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High precision scientific calculator with full support for physical units";
     longDescription = ''
       A statically typed programming language for scientific computations
@@ -52,16 +49,14 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://numbat.dev";
     changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    mainProgram = "numbat";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       giomf
       atemu
     ];
-    # Failing tests on Darwin.
-    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "numbat";
   };
 }

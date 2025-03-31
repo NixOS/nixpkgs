@@ -22,6 +22,7 @@
   psutil,
   pycparser,
   pyformlang,
+  pydemumble,
   pythonOlder,
   pyvex,
   rich,
@@ -30,13 +31,14 @@
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn,
+  unicorn-angr,
   unique-log-filter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.130";
+  version = "9.2.148";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -44,20 +46,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XPiHRFt0peGyi5g5+fBVxg1jp/UXTetGIwAilgCM+Ow=";
+    tag = "v${version}";
+    hash = "sha256-WObd/zpoRn4OQO1PWcuv/6odJ0qZnKW7uFx8Z0dUmv8=";
   };
 
-  postPatch = ''
-    # unicorn is also part of build-system
-    substituteInPlace pyproject.toml \
-      --replace-fail "unicorn==2.0.1.post1" "unicorn"
-  '';
-
-  pythonRelaxDeps = [
-    "capstone"
-    "unicorn"
-  ];
+  pythonRelaxDeps = [ "capstone" ];
 
   build-system = [ setuptools ];
 
@@ -81,13 +74,14 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyformlang
+    pydemumble
     pyvex
     rich
     rpyc
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn
+    unicorn-angr
     unique-log-filter
   ];
 
@@ -112,12 +106,12 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
-    # angr is pining unicorn
-    broken = versionAtLeast unicorn.version "2.0.1.post1";
   };
 }

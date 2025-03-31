@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, asciidoc
-, docbook_xsl
-, fuse
-, libuuid
-, libxslt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  asciidoc,
+  docbook_xsl,
+  fuse,
+  libuuid,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,19 +16,27 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "glandium";
-    repo = pname;
+    repo = "vmfs-tools";
     rev = "4ab76ef5b074bdf06e4b518ff6d50439de05ae7f";
     sha256 = "14y412ww5hxk336ils62s3fwykfh6mx1j0iiaa5cwc615pi6qvi4";
   };
 
-  nativeBuildInputs = [ asciidoc docbook_xsl libxslt pkg-config ];
+  nativeBuildInputs = [
+    asciidoc
+    docbook_xsl
+    libxslt
+    pkg-config
+  ];
 
-  buildInputs = [ fuse libuuid ];
+  buildInputs = [
+    fuse
+    libuuid
+  ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} AUTHORS LICENSE README TODO
+    install -Dm444 -t $out/share/doc/vmfs-tools AUTHORS LICENSE README TODO
   '';
 
   meta = with lib; {

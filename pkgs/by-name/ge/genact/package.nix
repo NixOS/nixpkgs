@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
@@ -6,12 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "svenstaro";
-    repo = pname;
+    repo = "genact";
     rev = "v${version}";
     sha256 = "sha256-Rn9kJWutWKPj9cLu2ZJKITmC+I8/ikhCAoIp00Yg6ZA=";
   };
 
-  cargoHash = "sha256-kmXtwS5pCLEq5dbNHtWYGzDKjOUlVlr5xippVd2wl8k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ttg9stfiIYCXk35+GWdGOzQrM/aYZPZK+e9y+zw1ZXQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

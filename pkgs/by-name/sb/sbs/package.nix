@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libX11, imlib2, libXinerama, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  imlib2,
+  libXinerama,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sbs";
@@ -6,14 +14,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "onur-ozkan";
-    repo = "${pname}";
+    repo = "sbs";
     rev = "v${version}";
     sha256 = "sha256-Zgu9W/3LwHF/fyaPlxmV/2LdxilO1tU0JY/esLnJVGY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ imlib2 libX11 libXinerama ];
+  buildInputs = [
+    imlib2
+    libX11
+    libXinerama
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, substituteAll
-, ffmpeg
-, installShellFiles
+{
+  lib,
+  python3,
+  fetchPypi,
+  replaceVars,
+  ffmpeg,
+  installShellFiles,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,8 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg}/bin/ffmpeg";
       version = lib.getVersion ffmpeg;

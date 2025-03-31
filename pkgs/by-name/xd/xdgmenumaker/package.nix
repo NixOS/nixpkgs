@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, atk
-, gdk-pixbuf
-, gobject-introspection
-, pango
-, python3Packages
-, txt2tags
-, wrapGAppsHook3
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  atk,
+  gdk-pixbuf,
+  gobject-introspection,
+  pango,
+  python3Packages,
+  txt2tags,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = pname;
     rev = version;
-    sha256 = "uSSKiceHurk+qGVnaYa4uJEuq9FQROdhcotQxPBgPIs=";
+    sha256 = "rh1rRgbw8uqii4oN3XXNNKsWam1d8TY0qGceHERlG1k=";
   };
 
   format = "other";

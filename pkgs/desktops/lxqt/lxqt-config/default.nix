@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, kwindowsystem
-, libXScrnSaver
-, libXcursor
-, libXdmcp
-, libkscreen
-, liblxqt
-, libpthreadstubs
-, libqtxdg
-, libxcb
-, lxqt-build-tools
-, lxqt-menu-data
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, xf86inputlibinput
-, xkeyboard_config
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  kwindowsystem,
+  libXScrnSaver,
+  libXcursor,
+  libXdmcp,
+  libkscreen,
+  liblxqt,
+  libpthreadstubs,
+  libqtxdg,
+  libxcb,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  xf86inputlibinput,
+  xkeyboard_config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-config";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-zAJD1p0iJUEN+pOW1nyVKrCBfew/uqVNqw9aCFq+JY4=";
+    hash = "sha256-Vzf+Olaxl6tn3ETEQseFIPstjo+pfdzZUgyVFqk6p3c=";
   };
 
   nativeBuildInputs = [

@@ -4,12 +4,9 @@
   buildGoModule,
   fetchzip,
   pkg-config,
-  libicns,
   copyDesktopItems,
   makeDesktopItem,
   desktopToDarwinBundle,
-  apple-sdk_11,
-  darwinMinVersionHook,
   wayland,
   libxkbcommon,
   vulkan-headers,
@@ -44,23 +41,15 @@ buildGoModule rec {
       desktopToDarwinBundle
     ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        apple-sdk_11
-        # metal dependencies require 10.13 or newer
-        (darwinMinVersionHook "10.13")
-      ]
-    else
-      [
-        wayland
-        libxkbcommon
-        vulkan-headers
-        libGL
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXfixes
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    wayland
+    libxkbcommon
+    vulkan-headers
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXfixes
+  ];
 
   # Got different result in utf8 char length?
   checkFlags = [ "-skip=^TestClearAfter$" ];

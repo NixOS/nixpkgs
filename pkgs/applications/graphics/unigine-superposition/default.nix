@@ -1,37 +1,38 @@
-{ lib
-, glib
-, stdenv
-, dbus
-, freetype
-, fontconfig
-, zlib
-, qtquickcontrols2
-, libXinerama
-, libxcb
-, libSM
-, libXi
-, libglvnd
-, libXext
-, libXrandr
-, mailspring
-, libX11
-, libICE
-, libXrender
-, autoPatchelfHook
-, makeWrapper
-, mkDerivation
-, xkeyboard_config
-, fetchurl
-, buildFHSEnv
-, openal
-, makeDesktopItem
+{
+  lib,
+  glib,
+  stdenv,
+  dbus,
+  freetype,
+  fontconfig,
+  zlib,
+  qtquickcontrols2,
+  libXinerama,
+  libxcb,
+  libSM,
+  libXi,
+  libglvnd,
+  libXext,
+  libXrandr,
+  mailspring,
+  libX11,
+  libICE,
+  libXrender,
+  autoPatchelfHook,
+  makeWrapper,
+  mkDerivation,
+  xkeyboard_config,
+  fetchurl,
+  buildFHSEnv,
+  openal,
+  makeDesktopItem,
 }:
 
 let
   pname = "unigine-superposition";
   version = "1.1";
 
-  superposition = stdenv.mkDerivation rec{
+  superposition = stdenv.mkDerivation rec {
     inherit pname version;
 
     src = fetchurl {
@@ -86,7 +87,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "Superposition";
-    exec = "Superposition";
+    exec = "superposition";
     genericName = "A GPU Stress test tool from the UNIGINE";
     icon = "Superposition";
     desktopName = "Superposition Benchmark";

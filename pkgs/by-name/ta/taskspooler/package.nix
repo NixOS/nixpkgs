@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchurl, makeWrapper, coreutils }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "taskspooler";
   version = "1.0.1";
 

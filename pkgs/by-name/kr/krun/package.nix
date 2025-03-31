@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, libkrun
-, makeWrapper
-, passt
-, sommelier
-, mesa
-, opengl-driver ? mesa.drivers
-, withSommelier ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libkrun,
+  makeWrapper,
+  passt,
+  sommelier,
+  mesa,
+  withSommelier ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "krun";
   version = "0-unstable-2024-06-18";
 
   src = fetchFromGitHub {
     owner = "slp";
-    repo = pname;
+    repo = "krun";
     rev = "912afa5c6525b7c8f83dffd65ec4b1425b3f7521";
     hash = "sha256-rDuxv3UakAemDnj4Nsbpqsykts2IcseuQmDwO24L+u8=";
   };
@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-NahnigxJaY2QwWnySCRrnf3JyqZ+7jRA1CpE7ON0OOE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5zrwxyzt9ZEdUNUMnCaFUVpaO53RAabVdtib9LG6Q1s=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -55,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/krun $wrapArgs \
-      --set-default OPENGL_DRIVER ${opengl-driver}
+      --set-default OPENGL_DRIVER ${mesa.driverLink}
   '';
 
   meta = {

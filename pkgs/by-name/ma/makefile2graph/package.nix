@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bash, gnumake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  gnumake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "makefile2graph";
@@ -7,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lindenb";
     repo = "makefile2graph";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4jyftC0eCJ13X/L4uEWhT5FA5/UXUmSHSoba89GSySQ=";
   };
 

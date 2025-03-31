@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, autoconf
-, automake
-, bison
-, ruby
-, zlib
-, readline
-, libiconv
-, libobjc
-, libunwind
-, libxcrypt
-, libyaml
-, rust-jemalloc-sys-unprefixed
-, Foundation
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  bison,
+  ruby,
+  zlib,
+  readline,
+  libiconv,
+  libobjc,
+  libunwind,
+  libxcrypt,
+  libyaml,
+  rust-jemalloc-sys-unprefixed,
+  Foundation,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,19 +38,21 @@ rustPlatform.buildRustPackage rec {
     ruby
   ];
 
-  buildInputs = [
-    zlib
-    libxcrypt
-    libyaml
-    rust-jemalloc-sys-unprefixed
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    readline
-    libiconv
-    libobjc
-    libunwind
-    Foundation
-    Security
-  ];
+  buildInputs =
+    [
+      zlib
+      libxcrypt
+      libyaml
+      rust-jemalloc-sys-unprefixed
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      readline
+      libiconv
+      libobjc
+      libunwind
+      Foundation
+      Security
+    ];
 
   preConfigure = ''
     pushd librubyfmt/ruby_checkout
@@ -65,7 +68,8 @@ rustPlatform.buildRustPackage rec {
     ./0003-ignore-warnings.patch
   ];
 
-  cargoHash = "sha256-QZ26GmsKyENkzdCGg2peie/aJhEt7KQAF/lwsibonDk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8LgAHznxU30bbK8ivNamVD3Yi2pljgpqJg2WC0nxftk=";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
 

@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, python3
-, popt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  popt,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,14 +12,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
-    repo = pname;
+    repo = "isomd5sum";
     rev = version;
     sha256 = "sha256-c/4CQtAzatfG1Z3SfyB2OZmfJRMnyrZZTqSApsK7R+Q=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs = [ popt ] ;
+  buildInputs = [ popt ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "#/usr/" "#"
@@ -28,7 +31,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   # we don't install python stuff as it borks up directories
-  installTargets = [ "install-bin" "install-devel" ];
+  installTargets = [
+    "install-bin"
+    "install-devel"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rhinstaller/isomd5sum";

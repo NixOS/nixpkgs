@@ -27,7 +27,7 @@
 # Community
 
 * [Discourse Forum](https://discourse.nixos.org/)
-* [Matrix Chat](https://matrix.to/#/#community:nixos.org)
+* [Matrix Chat](https://matrix.to/#/#space:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
@@ -59,7 +59,7 @@ system, [Hydra](https://hydra.nixos.org/).
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
+channels](https://nix.dev/manual/nix/stable/command-ref/nix-channel.html).
 
 # Contributing
 

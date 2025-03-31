@@ -1,8 +1,23 @@
-{ stdenv, lib, substituteAll, fetchurl, cmake, libogg, libvorbis, libtheora, curl, freetype
-, libjpeg, libpng, SDL2, libGL, openal, zlib
+{
+  stdenv,
+  lib,
+  replaceVars,
+  fetchurl,
+  cmake,
+  libogg,
+  libvorbis,
+  libtheora,
+  curl,
+  freetype,
+  libjpeg,
+  libpng,
+  SDL2,
+  libGL,
+  openal,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "warsow-engine";
   version = "2.1.0";
 
@@ -12,16 +27,33 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
-      inherit zlib curl libpng libjpeg libogg libvorbis libtheora freetype;
+    (replaceVars ./libpath.patch {
+      inherit
+        zlib
+        curl
+        libpng
+        libjpeg
+        libogg
+        libvorbis
+        libtheora
+        freetype
+        ;
     })
   ];
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    libogg libvorbis libtheora curl freetype libjpeg SDL2 libGL openal zlib
+    libogg
+    libvorbis
+    libtheora
+    curl
+    freetype
+    libjpeg
+    SDL2
+    libGL
+    openal
+    zlib
     libpng
   ];
 
@@ -52,7 +84,10 @@ stdenv.mkDerivation rec {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl abbradar ];
+    maintainers = with maintainers; [
+      astsmtl
+      abbradar
+    ];
     platforms = platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
