@@ -14917,6 +14917,7 @@ with self;
       pkgs.gtk2
       Gtk2
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=implicit-function-declaration";
     meta = {
       description = "Perl interface to the GooCanvas";
       license = with lib.licenses; [
