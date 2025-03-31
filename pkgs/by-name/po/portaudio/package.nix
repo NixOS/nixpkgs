@@ -8,6 +8,7 @@
   alsa-lib,
   jackSupport ? true,
   libjack2,
+  ossSupport ? stdenv.hostPlatform.isBSD,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   pkg-config,
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     PA_USE_ALSA = alsaSupport;
     PA_USE_JACK = jackSupport;
+    PA_USE_OSS = ossSupport;
     PA_USE_PULSEAUDIO = pulseSupport;
   };
 
