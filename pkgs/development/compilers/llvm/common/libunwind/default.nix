@@ -71,6 +71,8 @@ stdenv.mkDerivation (rec {
     ninja python3
   ];
 
+  LDFLAGS = "-unwindlib=none";
+
   cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
     ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
     ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
