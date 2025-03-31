@@ -314,7 +314,7 @@ in {
   darling = handleTest ./darling.nix {};
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix {};
-  davis = handleTest ./davis.nix {};
+  davis = runTest ./davis.nix;
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
   ddns-updater = handleTest ./ddns-updater.nix {};
@@ -578,7 +578,7 @@ in {
   installer = handleTest ./installer.nix {};
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix {};
   intune = handleTest ./intune.nix {};
-  invoiceplane = handleTest ./invoiceplane.nix {};
+  invoiceplane = runTest ./invoiceplane.nix;
   iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   iscsi-multipath-root = handleTest ./iscsi-multipath-root.nix {};
@@ -678,7 +678,7 @@ in {
   maestral = handleTest ./maestral.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   magnetico = handleTest ./magnetico.nix {};
-  mailcatcher = handleTest ./mailcatcher.nix {};
+  mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix {};
   mailpit = handleTest ./mailpit.nix {};
   mailman = handleTest ./mailman.nix {};
@@ -802,20 +802,20 @@ in {
   nginx-etag = runTest ./nginx-etag.nix;
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
-  nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
   nginx-njs = handleTest ./nginx-njs.nix {};
-  nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
-  nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
-  nginx-redirectcode = handleTest ./nginx-redirectcode.nix {};
-  nginx-sso = handleTest ./nginx-sso.nix {};
-  nginx-status-page = handleTest ./nginx-status-page.nix {};
-  nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
-  nginx-unix-socket = handleTest ./nginx-unix-socket.nix {};
-  nginx-variants = handleTest ./nginx-variants.nix {};
-  nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
+  nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
+  nginx-pubhtml = runTest ./nginx-pubhtml.nix;
+  nginx-redirectcode = runTest ./nginx-redirectcode.nix;
+  nginx-sso = runTest ./nginx-sso.nix;
+  nginx-status-page = runTest ./nginx-status-page.nix;
+  nginx-tmpdir = runTest ./nginx-tmpdir.nix;
+  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
+  nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
+  nifi = runTestOn ["x86_64-linux"] ./web-apps/nifi.nix;
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
@@ -846,7 +846,7 @@ in {
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
-  node-red = handleTest ./node-red.nix {};
+  node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
   non-switchable-system = runTest ./non-switchable-system.nix;
@@ -1231,7 +1231,7 @@ in {
   tomcat = handleTest ./tomcat.nix {};
   tor = handleTest ./tor.nix {};
   tpm-ek = handleTest ./tpm-ek {};
-  traefik = handleTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix {};
+  traefik = runTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix;
   trafficserver = handleTest ./trafficserver.nix {};
   transfer-sh = handleTest ./transfer-sh.nix {};
   transmission_3 = handleTest ./transmission.nix { transmission = pkgs.transmission_3; };
@@ -1277,9 +1277,18 @@ in {
   ustreamer = handleTest ./ustreamer.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
-  varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
-  varnish76 = handleTest ./varnish.nix { package = pkgs.varnish76; };
+  varnish60 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish60;
+  };
+  varnish75 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish75;
+  };
+  varnish76 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish76;
+  };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};

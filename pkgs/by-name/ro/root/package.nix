@@ -18,7 +18,6 @@
   gnugrep,
   gnused,
   gsl,
-  lapack,
   libGLU,
   libGL,
   libxcrypt,
@@ -29,7 +28,6 @@
   xorg,
   xz,
   man,
-  openblas,
   openssl,
   pcre,
   nlohmann_json,
@@ -53,7 +51,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.04";
+  version = "6.34.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-4yDFNzqOh7sptygJVMqDVa2MQpXPSSNWBvDIsgCss3Q=";
+    hash = "sha256-p5nWMtrlux7Ifq5uvARqEiaMaEnyqIN5IcEY/FG2z/M=";
   };
 
   clad_src = fetchgit {
@@ -90,7 +88,6 @@ stdenv.mkDerivation rec {
       gl2ps
       glew
       gsl
-      lapack
       libjpeg
       libpng
       libtiff
@@ -98,7 +95,6 @@ stdenv.mkDerivation rec {
       libxml2
       llvm_18
       lz4
-      openblas
       openssl
       patchRcPathCsh
       patchRcPathFish
@@ -131,10 +127,6 @@ stdenv.mkDerivation rec {
       done
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
-
-      # Make sure that clad is finding the right llvm version
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
 
       substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
         --replace-fail 'add_clang_symlink(''${link} clang)' ""
