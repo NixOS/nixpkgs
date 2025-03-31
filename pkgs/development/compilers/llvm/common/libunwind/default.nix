@@ -15,17 +15,6 @@
   devExtraCmakeFlags ? [ ],
   getVersionFile,
 }:
-let
-  postInstall =
-    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
-      ''
-        # libcxxabi wants to link to libunwind_shared.so (?).
-        ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
-      ''
-    + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
-      ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
-    '';
-in
 stdenv.mkDerivation (
   finalAttrs:
   let
@@ -108,6 +97,16 @@ stdenv.mkDerivation (
           cd ../runtimes
         '';
 
+    postInstall =
+      lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
+        ''
+          # libcxxabi wants to link to libunwind_shared.so (?).
+          ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+        ''
+      + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
+        ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
+      '';
+
     meta = llvm_meta // {
       # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst
       homepage = "https://clang.llvm.org/docs/Toolchain.html#unwind-library";
@@ -120,5 +119,4 @@ stdenv.mkDerivation (
       '';
     };
   }
-  // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else { })
 )
