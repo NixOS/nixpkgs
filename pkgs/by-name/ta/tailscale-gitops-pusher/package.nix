@@ -1,10 +1,10 @@
 {
   lib,
   tailscale,
-  buildGo123Module,
+  buildGoModule,
 }:
 
-buildGo123Module {
+buildGoModule {
   inherit (tailscale)
     version
     src

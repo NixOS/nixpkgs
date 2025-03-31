@@ -1,13 +1,13 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "sops";
   version = "3.9.4";
 

@@ -1443,6 +1443,7 @@ with pkgs;
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../by-name/ki/kitty/package.nix {
+    buildGoModule = buildGo123Module;
     harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
     inherit (darwin) autoSignDarwinBinariesHook;
     inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -12470,6 +12471,10 @@ with pkgs;
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
+  ali = callPackage ../by-name/al/ali/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
@@ -12569,12 +12574,20 @@ with pkgs;
     enableVST2 = true;
   };
 
+  bettercap = callPackage ../by-name/be/bettercap/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
 
   bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
+
+  bitmagnet = callPackage ../by-name/bi/bitmagnet/package.nix {
+    buildGoModule = buildGo122Module; # builds, but does not start on 1.23
+  };
 
   bitscope = recurseIntoAttrs
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
@@ -12652,6 +12665,10 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
+  certinfo = callPackage ../by-name/ce/certinfo/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   brotab = callPackage ../tools/misc/brotab {
     python = python3;
   };
@@ -12676,6 +12693,10 @@ with pkgs;
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
+
+  cloudpan189-go = callPackage ../by-name/cl/cloudpan189-go/package.nix {
+    buildGoModule = buildGo122Module;
+  };
 
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio VideoToolbox;
@@ -12715,6 +12736,10 @@ with pkgs;
 
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
+  d2 = callPackage ../by-name/d2/d2/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   darcs = haskell.lib.compose.disableCabalFlag "library"
     (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
 
@@ -12747,7 +12772,15 @@ with pkgs;
     plugins = [];
   };
 
+  devdash = callPackage ../by-name/de/devdash/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
+
+  dex-oidc = callPackage ../by-name/de/dex-oidc/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
@@ -12874,6 +12907,10 @@ with pkgs;
 
   espflash = callPackage ../by-name/es/espflash/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
+  };
+
+  evcc = callPackage ../by-name/ev/evcc/package.nix {
+    buildGoModule = buildGo124Module;
   };
 
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
@@ -13021,12 +13058,20 @@ with pkgs;
     libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
 
+  fan2go = callPackage ../by-name/fa/fan2go/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   fclones = callPackage ../tools/misc/fclones { };
 
   fclones-gui = darwin.apple_sdk_11_0.callPackage ../tools/misc/fclones/gui.nix { };
 
   feh = callPackage ../applications/graphics/feh {
     imlib2 = imlib2Full;
+  };
+
+  filebrowser = callPackage ../by-name/fi/filebrowser/package.nix {
+    buildGoModule = buildGo123Module;
   };
 
   filezilla = darwin.apple_sdk_11_0.callPackage ../applications/networking/ftp/filezilla {
@@ -13223,8 +13268,32 @@ with pkgs;
     jdk = jdk.override { enableJavaFX = true; };
   };
 
+  git-spice = callPackage ../by-name/gi/git-spice/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
+  gitea-actions-runner = callPackage ../by-name/gi/gitea-actions-runner/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   gkrellm = callPackage ../applications/misc/gkrellm {
     inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
+  glasskube = callPackage ../by-name/gl/glasskube/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
+  go-came = callPackage ../by-name/go/go-camo/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
+  golangci-lint = callPackage ../by-name/go/golangci-lint/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
+  govulncheck = callPackage ../by-name/go/govulncheck/package.nix {
+    buildGoModule = buildGo124Module;
   };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
@@ -13234,6 +13303,10 @@ with pkgs;
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
+
+  grafana-agent = callPackage ../by-name/gr/grafana-agent/package.nix {
+    buildGoModule = buildGo122Module;
+  };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
@@ -13287,8 +13360,20 @@ with pkgs;
     haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
+  hof = callPackage ../by-name/ho/hof/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   hollywood = callPackage ../applications/misc/hollywood {
     inherit (python3Packages) pygments;
+  };
+
+  homebox = callPackage ../by-name/ho/homebox/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
+  honeytrap = callPackage ../by-name/ho/honeytrap/package.nix {
+    buildGoModule = buildGo122Module;
   };
 
   hors = callPackage ../development/tools/hors {
@@ -13300,6 +13385,10 @@ with pkgs;
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
+
+  hubble = callPackage ../by-name/hu/hubble/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
@@ -13615,6 +13704,10 @@ with pkgs;
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney { };
 
+  ko = callPackage ../by-name/ko/ko/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
@@ -13784,6 +13877,10 @@ with pkgs;
     portaudio = null;
   };
 
+  local-ai = callPackage ../by-name/lo/local-ai/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   luddite = with python3Packages; toPythonApplication luddite;
@@ -13825,6 +13922,10 @@ with pkgs;
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   mastodon-bot = nodePackages.mastodon-bot;
+
+  matrix-alertmanager-receiver = callPackage ../by-name/ma/matrix-alertmanager-receiver/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   matrix-commander = python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander { };
 
@@ -14157,9 +14258,25 @@ with pkgs;
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
+  nak = callPackage ../by-name/na/nak/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
+  navidrome = callPackage ../by-name/na/navidrome/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   ncdu = callPackage ../tools/misc/ncdu { };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
+
+  nexttrace = callPackage ../by-name/ne/nexttrace/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
+  nezha = callPackage ../by-name/ne/nezha/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
@@ -14257,6 +14374,10 @@ with pkgs;
     };
   };
 
+  otpauth = callPackage ../by-name/ot/otpauth/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
   palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
@@ -14294,6 +14415,18 @@ with pkgs;
     nodejs = nodejs_18;
   };
 
+  peroxide = callPackage ../by-name/pe/peroxide/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
+  phlare = callPackage ../by-name/ph/phlare/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
+  photofield = callPackage ../by-name/ph/photofield/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
@@ -14301,6 +14434,10 @@ with pkgs;
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
+
+  picocrypt = callPackage ../by-name/pi/picocrypt/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   pidginPackages = recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/pidgin/pidgin-plugins { });
 
@@ -14324,6 +14461,10 @@ with pkgs;
 
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
 
+  pomerium = callPackage ../by-name/po/pomerium/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   pomodoro = callPackage ../applications/misc/pomodoro {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
@@ -14342,6 +14483,10 @@ with pkgs;
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
   } // (config.profanity or {}));
+
+  prometheus-node-cert-exporter = callPackage ../by-name/pr/prometheus-node-cert-exporter/package.nix {
+    buildGoModule = buildGo122Module;
+  };
 
   protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
@@ -14529,7 +14674,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  redli = callPackage ../by-name/re/redli/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
+
+  resticprofile = callPackage ../by-name/re/resticprofile/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   restique = libsForQt5.callPackage ../applications/backup/restique { };
 
@@ -14598,6 +14751,10 @@ with pkgs;
 
   scantailor-universal = libsForQt5.callPackage ../applications/graphics/scantailor/universal.nix { };
 
+  screego = callPackage ../by-name/sc/screego/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
   scribus = scribus_1_5;
 
@@ -14607,12 +14764,20 @@ with pkgs;
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
+  siyuan = callPackage ../by-name/si/siyuan/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   sommelier = callPackage ../applications/window-managers/sommelier { };
 
   spotify-qt = qt6Packages.callPackage ../applications/audio/spotify-qt { };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
+  };
+
+  sops = callPackage ../by-name/so/sops/package.nix {
+    buildGoModule = buildGo122Module;
   };
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
@@ -14807,6 +14972,10 @@ with pkgs;
 
   tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho { };
 
+  tailscale-gitops-pusher = callPackage ../by-name/ta/tailscale-gitops-pusher/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
@@ -14889,6 +15058,14 @@ with pkgs;
   };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
+
+  traefik = callPackage ../by-name/tr/traefik/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
+  trivy = callPackage ../by-name/tr/trivy/package.nix {
+    buildGoModule = buildGo124Module;
+  };
 
   trustedqsl = tqsl; # Alias added 2019-02-10
 
@@ -15138,6 +15315,10 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
+  vuls = callPackage ../by-name/vu/vuls/package.nix {
+    buildGoModule = buildGo124Module;
+  };
+
   windsurf = callPackage ../by-name/wi/windsurf/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
@@ -15243,6 +15424,10 @@ with pkgs;
 
   wordnet = callPackage ../applications/misc/wordnet {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  workout-tracker = callPackage ../by-name/wo/workout-tracker/package.nix {
+    buildGoModule = buildGo124Module;
   };
 
   worldengine-cli = python3Packages.worldengine;
@@ -15401,6 +15586,10 @@ with pkgs;
     # that it requires sixel graphics compatible terminals like mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+  };
+
+  zincsearch = callPackage ../by-name/zi/zincsearch/package.nix {
+    buildGoModule = buildGo122Module;
   };
 
   zotero_7 = pkgs.zotero-beta;

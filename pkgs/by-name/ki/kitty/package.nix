@@ -45,7 +45,7 @@
   fish,
   nixosTests,
   go_1_23,
-  buildGo123Module,
+  buildGoModule,
   nix-update-script,
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
@@ -67,7 +67,7 @@ buildPythonApplication rec {
   };
 
   goModules =
-    (buildGo123Module {
+    (buildGoModule {
       pname = "kitty-go-modules";
       inherit src version;
       vendorHash = "sha256-wr5R2X+lV8vVVWsDYLLSaz7HRNOB7Zzk/a7knsdDlXs=";

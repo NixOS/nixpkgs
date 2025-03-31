@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
-buildGo123Module rec {
+buildGoModule rec {
   pname = "nak";
   version = "0.11.4";
 

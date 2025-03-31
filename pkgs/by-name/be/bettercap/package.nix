@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   pkg-config,
   libpcap,
@@ -10,7 +10,7 @@
   libusb1,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "bettercap";
   version = "2.32.0";
 

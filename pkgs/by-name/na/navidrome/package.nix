@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -16,7 +16,7 @@
   ffmpegSupport ? true,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "navidrome";
   version = "0.55.1";
 

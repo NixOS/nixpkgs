@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   pnpm_9,
   nodejs,
@@ -19,7 +19,7 @@ let
     hash = "sha256-XzO/aJcLGu+ZHt9fDUhUzBbUS9VpChFVOH0cgvYK6kc=";
   };
 in
-buildGo123Module {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = "sha256-Zo/yI1mNeN0O9gZsHux6aOzBlv72h17s7QNO+MaG2/g=";

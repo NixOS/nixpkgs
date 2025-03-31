@@ -1,5 +1,5 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup-yarn-lock
@@ -15,7 +15,7 @@
 
 # Breaks with Go 1.23: https://github.com/grafana/agent/issues/6972
 # FIXME: unpin when fixed upstream
-buildGo122Module rec {
+buildGoModule rec {
   pname = "grafana-agent";
   version = "0.44.2";
 

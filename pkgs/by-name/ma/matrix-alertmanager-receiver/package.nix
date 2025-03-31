@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "matrix-alertmanager-receiver";
   version = "2025.3.19";
 

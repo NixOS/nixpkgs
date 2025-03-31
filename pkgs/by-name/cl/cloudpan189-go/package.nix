@@ -1,10 +1,10 @@
 {
-  buildGo122Module,
+  buildGoModule,
   lib,
   fetchFromGitHub,
   versionCheckHook,
 }:
-buildGo122Module rec {
+buildGoModule rec {
   pname = "cloudpan189-go";
   version = "0.1.3";
   src = fetchFromGitHub {

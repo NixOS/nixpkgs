@@ -1,13 +1,13 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
   testers,
   dex-oidc,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "dex";
   version = "2.42.0";
 

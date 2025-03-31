@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGoModule,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "otpauth";
   version = "0.5.4";
 

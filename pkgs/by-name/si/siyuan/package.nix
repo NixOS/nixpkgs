@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hkvlodf2zBT/+ohmxLrinbBiluCmSsGRKnw4ZrdFcAg=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
