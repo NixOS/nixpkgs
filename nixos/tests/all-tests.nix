@@ -967,7 +967,7 @@ in {
   podgrab = handleTest ./podgrab.nix {};
   podman = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/default.nix {};
   podman-tls-ghostunnel = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/tls-ghostunnel.nix {};
-  polaris = handleTest ./polaris.nix {};
+  polaris = runTest ./polaris.nix;
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   portunus = handleTest ./portunus.nix { };
   postfix = handleTest ./postfix.nix {};

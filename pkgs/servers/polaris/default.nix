@@ -1,64 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, polaris-web
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  darwin,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polaris";
-  version = "0.14.3";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    rev = version;
-    hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
-
-    # The polaris version upstream in Cargo.lock is "0.0.0".
-    # We're unable to simply patch it in the patch phase due to
-    # rustPlatform.buildRustPackage fetching dependencies before applying patches.
-    # If we patch it after fetching dependencies we get an error when
-    # validating consistency between the final build and the prefetched deps.
-    postFetch = ''
-      # 'substituteInPlace' does not support multiline replacements?
-      sed -i $out/Cargo.lock -z \
-        -e 's/\[\[package\]\]\nname = "polaris"\nversion = "0.0.0"/[[package]]\nname = "polaris"\nversion = "'"${version}"'"/g'
-    '';
+    tag = finalAttrs.version;
+    hash = "sha256-7VgDySL3LWEuf9ee+w3Wpv3WCNA7DBYFaMMmP7BE/rc=";
   };
 
+  web-assets = callPackage ./web.nix { };
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
+  cargoHash = "sha256-/YvLcawEBpF76evByQ0WMZ9dic5vFcsydbO/6TfN+ts=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security
   ];
 
   # Compile-time environment variables for where to find assets needed at runtime
-  env = {
-    POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
-    POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
-  };
-
-  postInstall = ''
-    mkdir -p $out/share
-    cp -a docs/swagger $out/share/polaris-swagger
-  '';
+  env.POLARIS_WEB_DIR = "${finalAttrs.web-assets}/share/polaris-web";
 
   preCheck = ''
     # 'Err' value: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
     ulimit -n 4096
+    # to debug bumps
+    export RUST_BACKTRACE=1
   '';
+
+  checkFlags = [
+    # requires network
+    "--skip=server::test::settings::put_settings_golden_path"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = nixosTests.polaris;
-  passthru.updateScript = nix-update-script { };
+  passthru.tests.nixos = nixosTests.polaris;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "web-assets"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Self-host your music collection, and access it from any computer and mobile device";
     longDescription = ''
       Polaris is a FOSS music streaming application, designed to let you enjoy your music collection
@@ -67,9 +63,10 @@ rustPlatform.buildRustPackage rec {
       The only requirement is that your computer stays on while it streams your music!
     '';
     homepage = "https://github.com/agersant/polaris";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/agersant/polaris/blob/master/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "polaris";
   };
-}
+})
