@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   chardet,
   hatchling,
   html5lib,
@@ -11,6 +10,7 @@
   pythonOlder,
   soupsieve,
   sphinxHook,
+  typing-extensions,
 
   # for passthru.tests
   html-sanitizer,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.12.3";
+  version = "4.13.3";
   pyproject = true;
 
   outputs = [
@@ -35,25 +35,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
+    hash = "sha256-G9MkBdrMkgtCuDugFkR0ftd0VqZXYOKF+8R2M87dr4s=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests.patch";
-      url = "https://git.launchpad.net/beautifulsoup/patch/?id=9786a62726de5a8caba10021c4d4a58c8a3e9e3f";
-      hash = "sha256-FOMoJjT0RgqKjbTLN/qCuc0HjhKeenMcgwb9Fp8atAY=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     soupsieve
+    typing-extensions
   ];
 
   optional-dependencies = {
