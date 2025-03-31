@@ -399,6 +399,16 @@
       "agpl"
     ]
   },
+  "uppush": {
+    "hash": "sha256-3QD3gtCfhs9tWrbiiPPV7lYxpzGQhc31unSZukcrvN0=",
+    "url": "https://codeberg.org/NextPush/uppush/archive/2.3.0.tar.gz",
+    "version": "2.3.0",
+    "description": "Once the mobile phone is connected with NextPush, push notifications can be forwarded to applications implementing UnifiedPush.\n\nMore information about UnifiedPush at https://unifiedpush.org",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "user_oidc": {
     "hash": "sha256-qEsUJG63j+VRZc+tqeX4iTEs9/GIVsTsyeFEOwSBYCg=",
     "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.1.0/user_oidc-v7.1.0.tar.gz",
