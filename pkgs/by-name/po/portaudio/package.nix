@@ -34,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     which
   ];
-  buildInputs = [
-    libjack2
-  ]
-  # Enabling alsa causes linux-only sources to be built
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+
+  propagatedBuildInputs =
+    [
+      libjack2
+    ]
+    # Enabling alsa causes linux-only sources to be built
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -50,11 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/^(libdir=).*/\1@CMAKE_INSTALL_FULL_LIBDIR@/' \
       -e 's/^(includedir=).*/\1@CMAKE_INSTALL_FULL_INCLUDEDIR@/' \
       cmake/portaudio-2.0.pc.in
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${lib.getLib alsa-lib}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
   '';
 
   meta = {
