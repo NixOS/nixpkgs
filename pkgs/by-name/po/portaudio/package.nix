@@ -7,6 +7,7 @@
   libjack2,
   pkg-config,
   which,
+  testers,
   nix-update-script,
 }:
 
@@ -63,10 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
+
+    pkgConfigModules = [ "portaudio-2.0" ];
   };
 
   passthru = {
     api_version = 19;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = nix-update-script {
       extraArgs = [ "--version=branch" ];
     };
