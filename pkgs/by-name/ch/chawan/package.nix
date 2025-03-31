@@ -46,12 +46,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    curlMinimal
-    libseccomp
-    ncurses
-    zlib
-  ];
+  buildInputs =
+    [
+      curlMinimal
+      ncurses
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+    ];
 
   buildFlags = [
     "all"
@@ -83,6 +86,5 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }
