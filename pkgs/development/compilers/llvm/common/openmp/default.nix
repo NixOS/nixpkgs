@@ -24,9 +24,11 @@
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
 
-stdenv.mkDerivation (finalAttrs:
-let
-  src' =
+stdenv.mkDerivation (finalAttrs: {
+  pname = "openmp";
+  inherit version;
+
+  src =
     if monorepoSrc != null then
       runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
@@ -35,11 +37,6 @@ let
       '' + ''
         cp -r ${monorepoSrc}/openmp "$out"
       '') else src;
-in {
-  pname = "openmp";
-  inherit version;
-
-  src = src';
 
   sourceRoot = "${finalAttrs.src.name}/openmp";
 
