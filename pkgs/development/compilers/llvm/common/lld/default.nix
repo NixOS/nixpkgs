@@ -15,8 +15,8 @@
 , getVersionFile
 , fetchpatch
 }:
+stdenv.mkDerivation (finalAttrs:
 let
-  pname = "lld";
   src' =
     if monorepoSrc != null then
       runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
@@ -24,7 +24,7 @@ let
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
       '' + ''
-        cp -r ${monorepoSrc}/${pname} "$out"
+        cp -r ${monorepoSrc}/lld "$out"
         mkdir -p "$out/libunwind"
         cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
         mkdir -p "$out/llvm"
@@ -34,13 +34,13 @@ let
     substituteInPlace MachO/CMakeLists.txt --replace-fail \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+in {
+  pname = "lld";
+  inherit version;
 
   src = src';
 
-  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
+  sourceRoot = "${finalAttrs.src.name}/lld";
 
   patches =
     [ (getVersionFile "lld/gnu-install-dirs.patch") ]
