@@ -55,9 +55,7 @@ with python312Packages;
     format = "pyproject";
     dontCheckRuntimeDeps = true;
     buildInputs = [ tor ];
-    propagatedBuildInputs = [
-      (python312.withPackages (
-        ps: with ps; [
+    dependencies = with python312Packages; [
           cryptography
           pycryptodomex
           pyyaml
