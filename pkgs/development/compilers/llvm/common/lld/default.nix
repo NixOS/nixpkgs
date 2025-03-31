@@ -56,11 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = lib.optionals (lib.versionOlder release_version "14") [
-    "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+    (lib.cmakeFeature "LLVM_CONFIG_PATH" "${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}")
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
-    "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
+    (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
   ] ++ [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
   ] ++ devExtraCmakeFlags;
 
   postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
