@@ -170,6 +170,18 @@ with pkgs;
     } ../build-support/setup-hooks/add-bin-to-path.sh
   ) { };
 
+  aider-chat = with python3Packages; toPythonApplication aider-chat;
+
+  aider-chat-with-playwright = with python3Packages; toPythonApplication (aider-chat.withOptional { withPlaywright = true; });
+
+  aider-chat-with-browser = with python3Packages; toPythonApplication (aider-chat.withOptional { withBrowser = true; });
+
+  aider-chat-with-help = with python3Packages; toPythonApplication (aider-chat.withOptional { withHelp = true; });
+
+  aider-chat-with-bedrock = with python3Packages; toPythonApplication (aider-chat.withOptional { withBedrock = true; });
+
+  aider-chat-full = with python3Packages; toPythonApplication (aider-chat.withOptional { withAll = true; });
+
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {
