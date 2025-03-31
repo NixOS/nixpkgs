@@ -649,7 +649,9 @@ let
             (module:
               mapAttrs
                 (n: value:
-                  map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                  map (config: { inherit (module) file; inherit config; }) (
+                    builtins.addErrorContext "while processing definitions from `${module.file}`" (pushDownProperties value)
+                  )
                 )
               module.config
             )
@@ -999,15 +1001,15 @@ let
 
     : 1\. Function argument
   */
-  pushDownProperties = cfg:
-    if cfg._type or "" == "merge" then
-      concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
-    else # FIXME: handle mkOrder?
-      [ cfg ];
+  pushDownProperties =
+    let
+      matchProperties = {
+        "merge" = { _type, contents }: concatMap pushDownProperties contents;
+        "if" = { _type, condition, content }: map (mapAttrs (n: v: mkIf condition v)) (pushDownProperties content);
+        "override" = { _type, priority, content }: map (mapAttrs (n: v: mkOverride priority v)) (pushDownProperties content);
+      };
+    in
+      cfg: (matchProperties.${cfg._type or ""} or (cfg: [ cfg ])) cfg;
 
   /**
     Given a config value, expand mkMerge properties, and discharge
@@ -1027,19 +1029,25 @@ let
 
     : 1\. Function argument
   */
-  dischargeProperties = def:
-    if def._type or "" == "merge" then
-      concatMap dischargeProperties def.contents
-    else if def._type or "" == "if" then
-      if isBool def.condition then
-        if def.condition then
-          dischargeProperties def.content
-        else
-          [ ]
-      else
-        throw "‘mkIf’ called with a non-Boolean condition"
-    else
-      [ def ];
+  dischargeProperties =
+    let
+      matchProperties = {
+        "merge" =
+          # Handle mkMerge attributes (error if unknown attributes are present)
+          { _type, contents }: concatMap dischargeProperties contents;
+        "if" =
+          # Handle mkIf attributes (error if unknown attributes are present)
+          { _type, condition, content }:
+          if isBool condition then
+            if condition then
+              dischargeProperties content
+            else
+              [ ]
+          else
+            throw "‘mkIf’ called with a non-Boolean condition";
+      };
+    in
+      def: (matchProperties.${def._type or ""} or (def: [ def ])) def;
 
   /**
     Given a list of config values, process the mkOverride properties,
