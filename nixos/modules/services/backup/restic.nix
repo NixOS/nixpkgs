@@ -465,7 +465,7 @@ in
         # set same environment variables as the systemd service
         ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
           (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrsToList (n: v: "${n}=${v}"))
+          (lib.mapAttrsToList (n: v: lib.toShellVar n "${v}"))
           (lib.concatStringsSep "\n")
         ]}
         PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
