@@ -27,6 +27,7 @@
   libcdio,
   libcdio-paranoia,
   libdrm,
+  libdisplay-info,
   libdvdnav,
   libjack2,
   libplacebo,
@@ -187,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
+      libdisplay-info
       libgbm
     ]
     ++ lib.optionals dvdnavSupport [
