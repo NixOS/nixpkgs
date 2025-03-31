@@ -8940,6 +8940,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit;
   };
 
+  highctidh_511 = callPackage ../by-name/hi/highctidh/package.nix { fieldSize = 511; };
+  highctidh_512 = callPackage ../by-name/hi/highctidh/package.nix { fieldSize = 512; };
+  highctidh_1024 = callPackage ../by-name/hi/highctidh/package.nix { fieldSize = 1024; };
+  highctidh_2048 = callPackage ../by-name/hi/highctidh/package.nix { fieldSize = 2048; };
+
   highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hivex = callPackage ../development/libraries/hivex {
