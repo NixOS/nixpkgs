@@ -95,10 +95,12 @@ stdenv.mkDerivation (
       ];
 
     cmakeFlags =
-      lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
-      ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+      [ (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared) ]
+      ++ lib.optional (lib.versionAtLeast release_version "15") (
+        lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind"
+      )
       ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
-        "-DCMAKE_CXX_COMPILER_WORKS=ON"
+        (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
       ]
       ++ devExtraCmakeFlags;
 
