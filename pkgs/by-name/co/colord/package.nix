@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
   nixosTests,
   bash-completion,
   glib,
@@ -31,11 +32,12 @@
   gtk-doc,
   libxslt,
   enableDaemon ? true,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colord";
-  version = "1.4.6";
+  version = "1.4.7";
 
   outputs = [
     "out"
@@ -45,14 +47,26 @@ stdenv.mkDerivation rec {
     "installedTests"
   ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
-    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "colord";
+    tag = finalAttrs.version;
+    hash = "sha256-/lAj8T2V23V6F8IhNNeJAq5BDWCeaMaxVd2igZP6oMo=";
   };
 
   patches = [
     # Put installed tests into its own output
     ./installed-tests-path.patch
+    (fetchpatch {
+      # Fix writing to the database with ProtectSystem=strict, can be dropped on 1.4.8
+      url = "https://github.com/hughsie/colord/commit/08a32b2379fb5582f4312e59bf51a2823df56276.patch?full_index=1";
+      hash = "sha256-E8EXgvyd9jMXhQOO97ZOgv3oCTWcrbtS8IR0yQNyhyo=";
+    })
+    # Fix USB scanners not working with RestrictAddressFamilies, can be dropped on 1.4.8
+    (fetchpatch {
+      url = "https://github.com/hughsie/colord/commit/9283abd9c00468edb94d2a06d6fa3681cae2700d.patch?full_index=1";
+      hash = "sha256-hDA4bTuTJJxmSnmPUkVnYl2FYLoGFEBAeSDhVyr+Nhw=";
+    })
   ];
 
   postPatch = ''
@@ -130,6 +144,7 @@ stdenv.mkDerivation rec {
     tests = {
       installedTests = nixosTests.installed-tests.colord;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -139,4 +154,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
     platforms = platforms.linux;
   };
-}
+})
