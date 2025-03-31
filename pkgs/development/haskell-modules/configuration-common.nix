@@ -1924,6 +1924,12 @@ self: super: {
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
+  # Flaky test suites
+  ticker = dontCheck super.ticker;
+  powerqueue-distributed = dontCheck super.powerqueue-distributed;
+  job = dontCheck super.job;
+  scheduler = dontCheck super.scheduler;
+
   # 2024-09-18: Make compatible with haskell-gi 0.26.10
   # https://github.com/owickstrom/gi-gtk-declarative/pull/118
   gi-gtk-declarative = overrideCabal (drv: assert drv.version == "0.7.1"; {
