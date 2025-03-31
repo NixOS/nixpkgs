@@ -32,11 +32,11 @@ let
     };
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.1" = {
-      sha256 = "sha256-QTOzbNFtFNYzlpw3/VHCyJqOpdbhYRVSgZ2R9xshn4s=";
-    };
     "2.5.2" = {
       sha256 = "sha256-XcJ+un3aQz31P9dEHeixFHSoLNrBaJwfbOVfoGXWX6w=";
+    };
+    "2.5.3" = {
+      sha256 = "sha256-ih5251u3Pq7C3x7gVBqrZGyqEELHHiVqqmf3r/OrFtU=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
