@@ -3,7 +3,7 @@
 with pkgs;
 
 {
-  inherit (pkgs) openjfx17 openjfx21 openjfx23;
+  inherit (pkgs) openjfx17 openjfx21 openjfx24;
 
   compiler =
     let
@@ -38,7 +38,7 @@ with pkgs;
       openjdk11 = mkOpenjdk "11" ../development/compilers/zulu/11.nix;
       openjdk17 = mkOpenjdk "17" ../development/compilers/zulu/17.nix;
       openjdk21 = mkOpenjdk "21" ../development/compilers/zulu/21.nix;
-      openjdk23 = mkOpenjdk "23" ../development/compilers/zulu/23.nix;
+      openjdk24 = mkOpenjdk "24" ../development/compilers/zulu/24.nix;
 
       # Legacy aliases
       openjdk8-bootstrap = temurin-bin.jdk-8;
