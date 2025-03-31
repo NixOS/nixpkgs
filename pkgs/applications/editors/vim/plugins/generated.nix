@@ -20917,6 +20917,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  whichpy-nvim = buildVimPlugin {
+    pname = "whichpy.nvim";
+    version = "2025-03-14";
+    src = fetchFromGitHub {
+      owner = "neolooong";
+      repo = "whichpy.nvim";
+      rev = "1652a59dce97902c6c77960fba325163764af40f";
+      sha256 = "084b5y17069sz3hh312g4v6w4bqlaqmwdszk3yz3s34a386a0qgf";
+    };
+    meta.homepage = "https://github.com/neolooong/whichpy.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   whitespace-nvim = buildVimPlugin {
     pname = "whitespace.nvim";
     version = "2025-03-14";
