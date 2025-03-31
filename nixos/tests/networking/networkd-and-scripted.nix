@@ -983,6 +983,11 @@ let
               address = "192.168.1.2";
               prefixLength = 24;
             }
+            {
+              address = "192.168.2.2";
+              prefixLength = 32;
+              peer = "192.168.2.1";
+            }
           ];
           ipv6.addresses = [
             {
@@ -1065,6 +1070,10 @@ let
                 """.format(
                   ipv6Table, targetIPv6Table
               )
+
+              ipv4Addrs = machine.succeed("ip -4 address list dev eth0")
+              expected_substring = "inet 192.168.2.2 peer 192.168.2.1/32 scope global eth0"
+              assert expected_substring in ipv4Addrs, f"'{expected_substring}' is missing in output:\n{ipv4Addrs}"
 
         ''
         + lib.optionalString (!networkd) ''

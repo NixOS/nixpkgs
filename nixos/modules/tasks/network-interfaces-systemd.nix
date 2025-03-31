@@ -94,7 +94,10 @@ let
             if i.useDHCP != null then i.useDHCP else (config.networking.useDHCP && i.ipv4.addresses == [ ])
           )
         );
-        address = forEach (interfaceIps i) (ip: "${ip.address}/${toString ip.prefixLength}");
+        addresses = forEach (interfaceIps i) (ip: {
+          Address = "${ip.address}/${toString ip.prefixLength}";
+          Peer = mkIf (ip.peer != null) ip.peer;
+        });
         routes = forEach (interfaceRoutes i) (
           route:
           mkMerge [
