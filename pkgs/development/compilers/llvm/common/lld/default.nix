@@ -15,13 +15,7 @@
 , getVersionFile
 , fetchpatch
 }:
-stdenv.mkDerivation (finalAttrs:
-let
-  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
-    substituteInPlace MachO/CMakeLists.txt --replace-fail \
-      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
-  '';
-in {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lld";
   inherit version;
 
@@ -69,6 +63,11 @@ in {
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
   ] ++ devExtraCmakeFlags;
 
+  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
+    substituteInPlace MachO/CMakeLists.txt --replace-fail \
+      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
+  '';
+
   # Musl's default stack size is too small for lld to be able to link Firefox.
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";
 
@@ -86,4 +85,4 @@ in {
       of several different linkers.
     '';
   };
-} // (lib.optionalAttrs (postPatch != "") { inherit postPatch; }))
+})
