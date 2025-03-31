@@ -24,24 +24,24 @@
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
 
+stdenv.mkDerivation (finalAttrs:
 let
-  pname = "openmp";
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
       '' + ''
-        cp -r ${monorepoSrc}/${pname} "$out"
+        cp -r ${monorepoSrc}/openmp "$out"
       '') else src;
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+in {
+  pname = "openmp";
+  inherit version;
 
   src = src';
 
-  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
+  sourceRoot = "${finalAttrs.src.name}/openmp";
 
   outputs = [ "out" ]
     ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
