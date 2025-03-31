@@ -1,29 +1,24 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "sops";
-  version = "3.9.4";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-w2RMK1Fl/k8QXV68j0Kc6shtx4vQa07RCnpgHLM8c8Q=";
+    hash = "sha256-NOZvVL4b7+TVlB6iM4HJDa5PHOjvcN0BXDMOHmqg7lU=";
   };
 
-  vendorHash = "sha256-wxmSj3QaFChGE+/2my7Oe2mhprwi404izUxteecyggY=";
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.22" "go 1.22.7"
-  '';
+  vendorHash = "sha256-I+iwimrNdKABZFP2etZTQJAXKigh+0g/Jhip86Cl5Rg=";
 
   subPackages = [ "cmd/sops" ];
 
