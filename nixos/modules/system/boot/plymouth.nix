@@ -167,6 +167,16 @@ in
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
+    systemd.services.plymouth-switch-root-initramfs.wantedBy = [
+      "halt.target"
+      "kexec.target"
+      "poweroff.target"
+      "reboot.target"
+      "plymouth-switch-root-initramfs.service"
+    ];
+    systemd.services.plymouth-switch-root-initramfs.after = [
+      "generate-shutdown-ramfs.service"
+    ];
     systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
     systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
 
@@ -255,13 +265,6 @@ in
         plymouth-start.wantedBy = [
           "initrd-switch-root.target"
           "sysinit.target"
-        ];
-        plymouth-switch-root-initramfs.wantedBy = [
-          "halt.target"
-          "kexec.target"
-          "plymouth-switch-root-initramfs.service"
-          "poweroff.target"
-          "reboot.target"
         ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
