@@ -1952,13 +1952,13 @@ buildLuarocksPackage {
   version = "scm-1";
   knownRockspec = (fetchurl {
     url    = "mirror://luarocks/lualine.nvim-scm-1.rockspec";
-    sha256 = "0ry9k3rs9msi6zd7nmd0cij0ghrxikwn4508i11xg9azpzhjzvn7";
+    sha256 = "0ryds8vr73p6xkfwrrbxbd01hawxdc0g9zphi6vb79hbnrdnbbq0";
   }).outPath;
   src = fetchFromGitHub {
     owner = "nvim-lualine";
     repo = "lualine.nvim";
-    rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
-    hash = "sha256-uAxe3UdNUVfdpQcKvGvQ/E2blGksvMPlTBfEOtgeVYo=";
+    rev = "1517caa8fff05e4b4999857319d3b0609a7f57fa";
+    hash = "sha256-DAYRf8JIty6W78JXBSyfnyCryUUYX+QrsHSAlcOk7Fc=";
   };
 
   disabled = luaOlder "5.1";
