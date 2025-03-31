@@ -10955,6 +10955,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-tinygit = buildVimPlugin {
+    pname = "nvim-tinygit";
+    version = "2025-03-30";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-tinygit";
+      rev = "8332b4a1cd852416a632dda51848a5fae58df48e";
+      sha256 = "1sjnc2bgprhjyjcgg3ninskkmh0369jq80i6n3sxr2lxxp64yvjp";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-tinygit/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-tree-lua = buildVimPlugin {
     pname = "nvim-tree.lua";
     version = "2025-03-23";
