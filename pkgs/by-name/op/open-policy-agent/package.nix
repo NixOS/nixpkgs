@@ -43,9 +43,20 @@ buildGoModule rec {
     ) "opa_wasm"
   );
 
-  checkFlags = lib.optionals (!enableWasmEval) [
-    "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-  ];
+  checkFlags =
+    [
+      # Skip tests that require network, not available in the nix sandbox
+      "-skip=TestInterQueryCache_ClientError"
+      "-skip=TestIntraQueryCache_ClientError"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Skip tests that require network, not available in the darwin sandbox
+      "-skip=TestHTTPSClient"
+      "-skip=TestHTTPSNoClientCerts"
+    ]
+    ++ lib.optionals (!enableWasmEval) [
+      "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+    ];
 
   preCheck =
     ''
