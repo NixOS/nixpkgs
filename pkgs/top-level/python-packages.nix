@@ -14678,6 +14678,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { };
 
+  ray-cpp = callPackage ../development/python-modules/ray { cpp = true; };
+
   raylib-python-cffi = callPackage ../development/python-modules/raylib-python-cffi { };
 
   razdel = callPackage ../development/python-modules/razdel { };
