@@ -30,21 +30,6 @@ stdenv.mkDerivation (
   finalAttrs:
   let
     hasPatches = builtins.length finalAttrs.patches > 0;
-
-    prePatch =
-      lib.optionalString
-        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-        ''
-          cd ../libunwind
-          chmod -R u+w .
-        '';
-
-    postPatch =
-      lib.optionalString
-        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
-        ''
-          cd ../runtimes
-        '';
   in
   {
     pname = "libunwind";
@@ -108,6 +93,21 @@ stdenv.mkDerivation (
       ]
       ++ devExtraCmakeFlags;
 
+    prePatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../libunwind
+          chmod -R u+w .
+        '';
+
+    postPatch =
+      lib.optionalString
+        (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
+        ''
+          cd ../runtimes
+        '';
+
     meta = llvm_meta // {
       # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst
       homepage = "https://clang.llvm.org/docs/Toolchain.html#unwind-library";
@@ -121,6 +121,4 @@ stdenv.mkDerivation (
     };
   }
   // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else { })
-  // (if prePatch != "" then { inherit prePatch; } else { })
-  // (if postPatch != "" then { inherit postPatch; } else { })
 )
