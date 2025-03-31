@@ -1,17 +1,17 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  llvmPackages,
-  buildNpmPackage,
+  callPackage,
+  cargo,
   cmake,
+  fetchFromGitHub,
+  lib,
+  llvmPackages_19,
+  makeRustPlatform,
+  makeWrapper,
   nodejs,
-  unzip,
   python3,
-  pkg-config,
-  libsecret,
+  rustc,
+  stdenv,
+  unzip,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -30,17 +30,20 @@ let
     hash = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
   };
 
-  lldb = llvmPackages.lldb;
+  lldb = llvmPackages_19.lldb;
 
   adapter = (
-    import ./adapter.nix {
-      inherit
-        lib
-        lldb
-        makeWrapper
-        rustPlatform
-        stdenv
+    callPackage ./adapter.nix {
+      # The adapter is meant to be compiled with clang++,
+      # based on the provided CMake toolchain files.
+      # <https://github.com/vadimcn/codelldb/tree/master/cmake>
+      rustPlatform = makeRustPlatform {
+        stdenv = llvmPackages_19.libcxxStdenv;
+        inherit cargo rustc;
+      };
+      stdenv = llvmPackages_19.libcxxStdenv;
 
+      inherit
         pname
         src
         version
@@ -49,13 +52,8 @@ let
   );
 
   nodeDeps = (
-    import ./node_deps.nix {
+    callPackage ./node_deps.nix {
       inherit
-        buildNpmPackage
-        libsecret
-        pkg-config
-        python3
-
         pname
         src
         version
