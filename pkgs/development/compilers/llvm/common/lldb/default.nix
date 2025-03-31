@@ -130,7 +130,7 @@ stdenv.mkDerivation (
       ++ lib.optional (lib.versionOlder release_version "14") (
         getVersionFile "lldb/gnu-install-dirs.patch"
       )
-      ++ lib.optional (lib.versionAtLeast release_version "14") ./lldb/gnu-install-dirs.patch;
+      ++ lib.optional (lib.versionAtLeast release_version "14") ./gnu-install-dirs.patch;
 
     nativeBuildInputs =
       [
