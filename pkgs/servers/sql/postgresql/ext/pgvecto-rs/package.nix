@@ -30,7 +30,7 @@ in
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
   rustPlatform = rustPlatform';
 })
-  rec {
+  (finalAttrs: {
     inherit postgresql;
 
     pname = "pgvecto-rs";
@@ -49,7 +49,7 @@ in
     src = fetchFromGitHub {
       owner = "tensorchord";
       repo = "pgvecto.rs";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
     };
 
@@ -58,7 +58,7 @@ in
 
     # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
     postPatch = ''
-      substituteInPlace ./vectors.control --subst-var-by CARGO_VERSION ${version}
+      substituteInPlace ./vectors.control --subst-var-by CARGO_VERSION ${finalAttrs.version}
     '';
 
     # Include upgrade scripts in the final package
@@ -90,7 +90,7 @@ in
         ||
           # PostgreSQL 17 support issue upstream: https://github.com/tensorchord/pgvecto.rs/issues/607
           # Check after next package update.
-          lib.versionAtLeast postgresql.version "17" && version == "0.3.0";
+          lib.versionAtLeast postgresql.version "17" && finalAttrs.version == "0.3.0";
       description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
       homepage = "https://github.com/tensorchord/pgvecto.rs";
       license = lib.licenses.asl20;
@@ -99,4 +99,4 @@ in
         esclear
       ];
     };
-  }
+  })
