@@ -1368,6 +1368,24 @@ in
     src = "${hurl.src}/contrib/vim";
   };
 
+  hurl-nvim = super.hurl-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      nvim-treesitter
+      plenary-nvim
+    ];
+
+    runtimeDeps = [
+      hurl
+    ];
+
+    nvimSkipModules = [
+      # attempt to index global '_HURL_GLOBAL_CONFIG' (a nil value)
+      "hurl.popup"
+      "hurl.split"
+    ];
+  };
+
   idris2-nvim = super.idris2-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
