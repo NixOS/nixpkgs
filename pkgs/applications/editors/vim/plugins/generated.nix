@@ -10643,6 +10643,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-origami = buildVimPlugin {
+    pname = "nvim-origami";
+    version = "2025-03-31";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-origami";
+      rev = "61c0fdec70e82d9a85642234420399372acd636d";
+      sha256 = "1ld4bp18b4xi9ppjhj06ii339azrblnqpi3baz48pjjfdc4lxgld";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-origami/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-osc52 = buildVimPlugin {
     pname = "nvim-osc52";
     version = "2024-05-24";
