@@ -4,6 +4,7 @@
   withSwhPythonPackages ? [
     python3Packages.swh-auth
     python3Packages.swh-model
+    python3Packages.swh-objstorage
     python3Packages.swh-scanner
     python3Packages.swh-web-client
   ],

@@ -16661,6 +16661,8 @@ self: super: with self; {
 
   swh-model = callPackage ../development/python-modules/swh-model { };
 
+  swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
+
   swh-perfecthash = callPackage ../development/python-modules/swh-perfecthash { };
 
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
