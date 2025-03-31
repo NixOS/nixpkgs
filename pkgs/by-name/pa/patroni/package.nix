@@ -5,6 +5,7 @@
   versionCheckHook,
   nixosTests,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -46,11 +47,9 @@ python3Packages.buildPythonApplication rec {
     pytest-cov
     requests
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
-
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
 
   __darwinAllowLocalNetworking = true;
 
