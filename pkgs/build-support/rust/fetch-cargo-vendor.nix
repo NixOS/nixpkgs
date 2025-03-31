@@ -35,9 +35,6 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
-  # This is mostly for breaking infinite recursion where dependencies
-  # of nix-prefetch-git use fetchCargoVendor.
-  allowGitDependencies ? true,
   ...
 }@args:
 
