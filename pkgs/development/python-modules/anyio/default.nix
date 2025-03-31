@@ -18,6 +18,7 @@
   trio,
 
   # tests
+  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-CwoU52W5MspzGAekTkFyUY88pqbY+68qCbck3neI2jE=";
+    hash = "sha256-kISaBHDkMOYYU9sdiQAXiq3jp1ehWOYFpvFbuceBWB0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     exceptiongroup
     hypothesis
     psutil
