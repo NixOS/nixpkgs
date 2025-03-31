@@ -57,12 +57,12 @@ let
   # need to be used instead. Ideally, for the release branches of NixOS we
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
-  mirrors = lib.optionals version.final  [
+  mirrors = if version.final then [
     # tlnet-final snapshot; used when texlive.tlpdb is frozen
     # the TeX Live yearly freeze typically happens in mid-March
     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
     "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
-  ] ++ [
+  ] else [
     # CTAN mirrors
     "https://mirror.ctan.org/systems/texlive/tlnet"
     # daily snapshots hosted by one of the texlive release managers;

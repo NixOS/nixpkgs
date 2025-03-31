@@ -6862,7 +6862,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php83;
+  php = php84;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
@@ -8489,7 +8489,7 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  flint = callPackage ../development/libraries/flint { };
+  flint = flint3;
 
   flint3 = callPackage ../development/libraries/flint/3.nix { };
 
@@ -9762,10 +9762,6 @@ with pkgs;
   ogre = ogre_14;
 
   one_gadget = callPackage ../development/tools/misc/one_gadget { };
-
-  oneDNN = callPackage ../development/libraries/oneDNN { };
-
-  oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
 
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
