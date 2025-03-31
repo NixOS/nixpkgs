@@ -3746,6 +3746,12 @@ in
     nvimSkipModules = [ "which-key.docs" ];
   };
 
+  whichpy-nvim = super.whichpy-nvim.overrideAttrs {
+    checkInputs = with self; [
+      telescope-nvim
+    ];
+  };
+
   wiki-vim = super.wiki-vim.overrideAttrs {
     # Optional telescope integration
     nvimSkipModules = [ "wiki.telescope" ];
