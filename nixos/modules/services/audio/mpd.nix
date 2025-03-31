@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+
+  inherit (lib) isList isBool isAttrs concatStringsSep imap0 optionalString foldlAttrs boolToString literalExpression hasPrefix;
 
   name = "mpd";
 
@@ -12,11 +12,11 @@ let
 
   credentialsPlaceholder = (creds:
     let
-      placeholders = (lib.imap0
-        (i: c: ''password "{{password-${toString i}}}@${lib.concatStringsSep "," c.permissions}"'')
+      placeholders = (imap0
+        (i: c: ''password "{{password-${toString i}}}@${concatStringsSep "," c.permissions}"'')
         creds);
     in
-      lib.concatStringsSep "\n" placeholders);
+      concatStringsSep "\n" placeholders);
 
   mpdConf = let
       mkSetting = with builtins; k: v: if isAttrs v then
@@ -63,7 +63,7 @@ let
         ${cfg.extraConfig}
       '';
 
-  baseType = with types; oneOf [ str bool int float path ];
+  baseType = with lib.types; oneOf [ str bool int float path ];
 
 in {
 
@@ -221,8 +221,8 @@ in {
         '';
       };
 
-      settings = mkOption {
-        type = with types; nullOr (attrsOf (oneOf [ baseType (listOf baseType) (attrsOf baseType) (listOf (attrsOf baseType)) ]));
+      settings = lib.mkOption {
+        type = with lib.types; nullOr (attrsOf (oneOf [ baseType (listOf baseType) (attrsOf baseType) (listOf (attrsOf baseType)) ]));
         default = null;
         description = ''
           Manages the configuration file declaratively.
