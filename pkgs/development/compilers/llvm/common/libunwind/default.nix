@@ -16,10 +16,9 @@
   getVersionFile,
 }:
 let
-  pname = "libunwind";
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+      runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } (
         ''
           mkdir -p "$out"
         ''
@@ -27,7 +26,7 @@ let
           cp -r ${monorepoSrc}/cmake "$out"
         ''
         + ''
-          cp -r ${monorepoSrc}/${pname} "$out"
+          cp -r ${monorepoSrc}/libunwind "$out"
           mkdir -p "$out/libcxx"
           cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
           cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
@@ -52,7 +51,7 @@ let
     lib.optionalString
       (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18"))
       ''
-        cd ../${pname}
+        cd ../libunwind
         chmod -R u+w .
       '';
 
@@ -76,7 +75,9 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   {
-    inherit pname version patches;
+    pname = "libunwind";
+
+    inherit version patches;
 
     src = src';
 
@@ -84,7 +85,7 @@ stdenv.mkDerivation (
       if lib.versionAtLeast release_version "15" then
         "${finalAttrs.src.name}/runtimes"
       else
-        "${finalAttrs.src.name}/${finalAttrs.pname}";
+        "${finalAttrs.src.name}/libunwind";
 
     outputs = [
       "out"
