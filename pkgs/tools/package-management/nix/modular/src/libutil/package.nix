@@ -41,16 +41,18 @@ mkMesonLibrary (finalAttrs: {
     (fileset.fileFilter (file: file.hasExt "hh") ./.)
   ];
 
-  buildInputs = [
-    brotli
-  ]
-  ++ lib.optional (lib.versionAtLeast version "2.27") [
-    libblake3
-  ]
-  ++ [
-    libsodium
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
+  buildInputs =
+    [
+      brotli
+    ]
+    ++ lib.optional (lib.versionAtLeast version "2.27") [
+      libblake3
+    ]
+    ++ [
+      libsodium
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
 
   propagatedBuildInputs = [
     boost
