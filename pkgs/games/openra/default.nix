@@ -8,5 +8,6 @@ in
 {
   engines = {
     release = callPackage' ./engines/release;
+    bleed = callPackage' ./engines/bleed;
   };
 }
