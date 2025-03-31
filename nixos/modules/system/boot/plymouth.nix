@@ -183,6 +183,9 @@ in
     # Prevent Plymouth taking over the screen during system updates.
     systemd.services.plymouth-start.restartIfChanged = false;
 
+    # helper binary which is used to hold onto the pixel-displays fds until the end
+    systemd.shutdownRamfs.storePaths = [ "${plymouth}/libexec/plymouth/plymouthd-fd-escrow" ];
+
     boot.initrd.systemd = {
       extraBin.plymouth = "${plymouth}/bin/plymouth"; # for the recovery shell
       storePaths = [
