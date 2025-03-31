@@ -17,7 +17,15 @@
 }:
 stdenv.mkDerivation (finalAttrs:
 let
-  src' =
+  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
+    substituteInPlace MachO/CMakeLists.txt --replace-fail \
+      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
+  '';
+in {
+  pname = "lld";
+  inherit version;
+
+  src =
     if monorepoSrc != null then
       runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
@@ -29,16 +37,6 @@ let
         cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
         mkdir -p "$out/llvm"
       '') else src;
-
-  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
-    substituteInPlace MachO/CMakeLists.txt --replace-fail \
-      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
-  '';
-in {
-  pname = "lld";
-  inherit version;
-
-  src = src';
 
   sourceRoot = "${finalAttrs.src.name}/lld";
 
