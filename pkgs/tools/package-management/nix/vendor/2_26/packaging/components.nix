@@ -240,6 +240,8 @@ in
 
   /**
     Apply an extension function (i.e. overlay-shaped) to all component derivations.
+
+    Single argument: the extension function to apply (finalAttrs: prevAttrs: { ... })
   */
   overrideAllMesonComponents =
     f:
@@ -253,7 +255,11 @@ in
     Provide an alternate source. This allows the expressions to be vendored without copying the sources,
     but it does make the build non-granular; all components will use a complete source.
 
-    Packaging expressions will be ignored.
+    Filesets in the packaging expressions will be ignored.
+
+    Single argument: the source to use.
+
+    See also `appendPatches`
   */
   overrideSource =
     src:
@@ -294,6 +300,10 @@ in
     This affects all components.
 
     Changes to the packaging expressions will be ignored.
+
+    Single argument: list of patches to apply
+
+    See also `overrideSource`
   */
   appendPatches =
     patches:
@@ -367,7 +377,7 @@ in
   nix-perl-bindings = callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
-    # Note: no `passthru.overrideAllMesonComponents`
+    # Note: no `passthru.overrideAllMesonComponents` etc
     #       This would propagate into `nix.overrideAttrs f`, but then discard
     #       `f` when `.overrideAllMesonComponents` is used.
     #       Both "methods" should be views on the same fixpoint overriding mechanism
@@ -375,6 +385,8 @@ in
     #       two-fixpoint solution.
     /**
       Apply an extension function (i.e. overlay-shaped) to all component derivations, and return the nix package.
+
+      Single argument: the extension function to apply (finalAttrs: prevAttrs: { ... })
     */
     overrideAllMesonComponents = f: (scope.overrideAllMesonComponents f).nix-everything;
 
@@ -383,6 +395,10 @@ in
       This affects all components.
 
       Changes to the packaging expressions will be ignored.
+
+      Single argument: list of patches to apply
+
+      See also `overrideSource`
     */
     appendPatches = ps: (scope.appendPatches ps).nix-everything;
 
@@ -390,9 +406,25 @@ in
       Provide an alternate source. This allows the expressions to be vendored without copying the sources,
       but it does make the build non-granular; all components will use a complete source.
 
-      Packaging expressions will be ignored.
+      Filesets in the packaging expressions will be ignored.
+
+      Single argument: the source to use.
+
+      See also `appendPatches`
     */
     overrideSource = src: (scope.overrideSource src).nix-everything;
+
+    /**
+      Override any internals of the Nix package set.
+
+      Single argument: the extension function to apply to the package set (finalScope: prevScope: { ... })
+
+      Example:
+      ```
+      overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
+      ```
+    */
+    overrideScope = f: (scope.overrideScope f).nix-everything;
 
   };
 }
