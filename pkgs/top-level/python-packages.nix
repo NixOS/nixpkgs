@@ -16482,6 +16482,8 @@ self: super: with self; {
 
   retry2 = callPackage ../development/python-modules/retry2 { };
 
+  retryhttp = callPackage ../development/python-modules/retryhttp { };
+
   retrying = callPackage ../development/python-modules/retrying { };
 
   returns = callPackage ../development/python-modules/returns { };
