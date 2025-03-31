@@ -9541,6 +9541,8 @@ self: super: with self; {
 
   nanoemoji = callPackage ../development/python-modules/nanoemoji { };
 
+  nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
+
   nanoid = callPackage ../development/python-modules/nanoid { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
