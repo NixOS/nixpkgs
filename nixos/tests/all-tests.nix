@@ -407,7 +407,10 @@ in
   enlightenment = handleTest ./enlightenment.nix { };
   env = handleTest ./env.nix { };
   envfs = handleTest ./envfs.nix { };
-  envoy = handleTest ./envoy.nix { };
+  envoy = runTest {
+    imports = [ ./envoy.nix ];
+    _module.args.envoyPackage = pkgs.envoy;
+  };
   ergo = handleTest ./ergo.nix { };
   ergochat = handleTest ./ergochat.nix { };
   eris-server = handleTest ./eris-server.nix { };
