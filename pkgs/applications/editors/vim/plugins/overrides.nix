@@ -2688,6 +2688,21 @@ in
     ];
   };
 
+  parrot-nvim = super.parrot-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+    ];
+
+    dependencies = with self; [
+      plenary-nvim
+    ];
+
+    checkInputs = [
+      curl
+      ripgrep
+    ];
+  };
+
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)

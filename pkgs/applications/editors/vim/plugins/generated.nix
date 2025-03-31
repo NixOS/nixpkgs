@@ -11736,6 +11736,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  parrot-nvim = buildVimPlugin {
+    pname = "parrot.nvim";
+    version = "2025-03-30";
+    src = fetchFromGitHub {
+      owner = "frankroeder";
+      repo = "parrot.nvim";
+      rev = "3158788f52745310bee3ec5a53dd0012f17f34d0";
+      sha256 = "1pdxgjbfav223wablhy2gfq1fm3j523dln1rdnpycvbqcm60hm42";
+    };
+    meta.homepage = "https://github.com/frankroeder/parrot.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   pckr-nvim = buildVimPlugin {
     pname = "pckr.nvim";
     version = "2025-03-30";
