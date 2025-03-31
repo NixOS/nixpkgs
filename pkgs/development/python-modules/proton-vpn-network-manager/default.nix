@@ -12,6 +12,7 @@
   proton-vpn-local-agent,
   pycairo,
   pygobject3,
+  pyxdg,
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     proton-vpn-local-agent
     pycairo
     pygobject3
+    pyxdg
   ];
 
   postPatch = ''
@@ -67,9 +69,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   meta = {
