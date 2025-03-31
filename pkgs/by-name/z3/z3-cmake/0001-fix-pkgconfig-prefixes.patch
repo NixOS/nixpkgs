@@ -1,0 +1,29 @@
+From b978d9f7573c6e3ea7ab8bd5d73846eba159fbc5 Mon Sep 17 00:00:00 2001
+From: Lach <iam@lach.pw>
+Date: Sat, 15 Mar 2025 19:38:44 +0100
+Subject: [PATCH] fix: pkgconfig prefixes
+
+Signed-off-by: Lach <iam@lach.pw>
+---
+ z3.pc.cmake.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/z3.pc.cmake.in b/z3.pc.cmake.in
+index 436dd62..78fb937 100644
+--- a/z3.pc.cmake.in
++++ b/z3.pc.cmake.in
+@@ -1,8 +1,8 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-sharedlibdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
++sharedlibdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
+ 
+ Name: z3
+ Description: The Z3 Theorem Prover
+-- 
+2.48.1
+

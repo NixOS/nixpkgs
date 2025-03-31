@@ -6,7 +6,7 @@
 , cmake
 , pkg-config
 , wrapGAppsHook3
-, boost186
+, boost
 , cereal
 , cgal
 , curl
@@ -34,8 +34,9 @@
 , xorg
 , libbgcode
 , heatshrink
-, catch2
+, catch2_3
 , webkitgtk_4_0
+, z3-cmake
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
 , opencascade-override ? null
@@ -71,29 +72,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
+    hash = "sha256-i93P0W2/FQDpBSigKBFIi98fsx4ZAWh3g5fbqXzosss=";
     rev = "version_${finalAttrs.version}";
   };
 
-  # https://github.com/prusa3d/PrusaSlicer/pull/14010
-  patches = [(fetchpatch {
-    url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
-    hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
-  })];
-
-  # required for GCC 14
-  # (not applicable to super-slicer fork)
-  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
-    substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
-      --replace-fail \
-      "WritableDataStoreTraits<ArrItem>::template set" \
-      "WritableDataStoreTraits<ArrItem>::set"
-  '';
+  patches = [
+    (fetchpatch {
+      name = "build-with-boost-187";
+      url = "https://946495.bugs.gentoo.org/attachment.cgi?id=914594";
+      hash = "sha256-FVCpfkOe8a7zRG7QXoBu6i8I4sFu2i/j+E9uKPGmcec=";
+    })
+    # https://github.com/prusa3d/PrusaSlicer/pull/14010
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
+      hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -104,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     binutils
-    boost186  # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
+    boost
     cereal
     cgal
     curl
@@ -131,8 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     libbgcode
     heatshrink
-    catch2
+    catch2_3
     webkitgtk_4_0
+    z3-cmake
   ] ++ lib.optionals withSystemd [
     systemd
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
