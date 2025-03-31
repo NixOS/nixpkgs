@@ -62,6 +62,9 @@ let
         skopeo
         umoci
       ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
+        lego
+      ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils
 
