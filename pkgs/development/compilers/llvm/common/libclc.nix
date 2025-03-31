@@ -26,11 +26,11 @@ let
     ln -s "${lib.getExe' buildLlvmTools.clang.cc "clang"}" "$out"/bin
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir -p "$out"
     ''
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       cp -r ${monorepoSrc}/cmake "$out"
     ''
     + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/libclc "$out"
     ''
   );
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/libclc";
 
   outputs = [
     "out"
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
   };
-}
+})
