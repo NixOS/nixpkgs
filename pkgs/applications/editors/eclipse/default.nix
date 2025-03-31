@@ -150,29 +150,6 @@ rec {
     };
   };
 
-  ### Eclipse Scala SDK
-
-  eclipse-scala-sdk =
-    (buildEclipseUnversioned.override
-      {
-        jdk = jdk8;
-        gtk = gtk2;
-      }
-      {
-        name = "eclipse-scala-sdk-4.7.0";
-        description = "Eclipse IDE for Scala Developers";
-        productVersion = "4.7";
-        src = fetchurl {
-          url = "https://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-linux.gtk.x86_64.tar.gz";
-          sha256 = "1n5w2a7mh9ajv6fxcas1gpgwb04pdxbr9v5dzr67gsz5bhahq4ya";
-        };
-      }
-    ).overrideAttrs
-      (oa: {
-        # Only download for x86_64
-        meta.platforms = [ "x86_64-linux" ];
-      });
-
   ### Eclipse SDK
 
   eclipse-sdk = buildEclipse {
