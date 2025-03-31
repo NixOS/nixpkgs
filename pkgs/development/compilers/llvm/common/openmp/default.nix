@@ -36,12 +36,12 @@ let
         cp -r ${monorepoSrc}/${pname} "$out"
       '') else src;
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   outputs = [ "out" ]
     ++ lib.optionals (lib.versionAtLeast release_version "14") [ "dev" ];
