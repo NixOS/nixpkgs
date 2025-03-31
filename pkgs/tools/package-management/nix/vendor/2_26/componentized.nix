@@ -1,16 +1,15 @@
 {
   lib,
-  fetchFromGitHub,
   splicePackages,
   nixDependencies,
   pkgs,
   maintainers,
   otherSplices,
   version,
+  src,
 }:
 let
   officialRelease = true;
-  src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
 
   # A new scope, so that we can use `callPackage` to inject our own interdependencies
   # without "polluting" the top level "`pkgs`" attrset.

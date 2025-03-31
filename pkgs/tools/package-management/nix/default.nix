@@ -167,13 +167,17 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_25";
       };
 
-      nixComponents_2_26 = (
-        nixDependencies.callPackage ./vendor/2_26/componentized.nix {
-          version = "2.26.3";
-          inherit (self.nix_2_24.meta) maintainers;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
-        }
-      );
+      nixComponents_2_26 = nixDependencies.callPackage ./vendor/2_26/componentized.nix {
+        version = "2.26.3";
+        inherit (self.nix_2_24.meta) maintainers;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = "42fc03dd1f12df2d9152303f3fb8bf22b746462c";
+          hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+        };
+      };
 
       # Note, this might eventually become an alias, as packages should
       # depend on the components they need in `nixComponents_2_26`.
