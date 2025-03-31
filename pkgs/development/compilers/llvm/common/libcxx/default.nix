@@ -118,7 +118,7 @@ let
 
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version cmakeFlags;
 
   src = src';
@@ -226,5 +226,5 @@ stdenv.mkDerivation (rec {
     cd runtimes
   '';
 } else {
-  sourceRoot = "${src'.name}/runtimes";
+  sourceRoot = "${finalAttrs.src.name}/runtimes";
 }))
