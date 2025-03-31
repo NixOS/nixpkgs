@@ -35,12 +35,12 @@ let
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   patches =
     [ (getVersionFile "lld/gnu-install-dirs.patch") ]
