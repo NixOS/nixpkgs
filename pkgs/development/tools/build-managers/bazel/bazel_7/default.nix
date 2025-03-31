@@ -52,7 +52,22 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
+    hash =
+      {
+        # Hashes of all non-release candidate public releases of bazel 7
+        # as some projects like to pin/use a very particular version; this
+        # makes them easily accessible with an option override.
+        #
+        # With the availability of a range of versions, maybe we can even use
+        # that for a nix-backed `baselisk` functionality ?
+        "7.3.1" = "sha256-8FAfkMn8dM1pM9vcWeF7jWJy1sCfi448QomFxYlxR8c=";
+        "7.3.2" = "sha256-jCRJCmRFsA63agStuwFy9cUbHtuu7vkf9/PH6Gx5If8=";
+        "7.4.0" = "sha256-GY1wu3O5O7K2MMJv6wjE+DLnUgwjkHdmcqhT1o9G9Cg=";
+        "7.4.1" = "sha256-gzhmGLxIn02jYmbvJiDsZKUmxobPBwQTMsr/fJU6+vU=";
+        "7.5.0" = "sha256-nT2bdM88u6BAGHTDofcO/GUxh400FGsi1P0gknbvr90=";
+        "7.6.0" = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
+      }
+      .${version} or (throw "No hash for ${version} available yet; please add.");
   };
 
   defaultShellUtils =
