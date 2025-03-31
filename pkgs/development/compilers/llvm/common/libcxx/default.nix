@@ -32,25 +32,6 @@ let
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
-  src' = if monorepoSrc != null then
-    runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (''
-      mkdir -p "$out/llvm"
-    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '') + ''
-      cp -r ${monorepoSrc}/libcxx "$out"
-      cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-      cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/third-party "$out"
-    '') + (lib.optionalString (lib.versionAtLeast release_version "20") ''
-      cp -r ${monorepoSrc}/libc "$out"
-    '') + ''
-      cp -r ${monorepoSrc}/runtimes "$out"
-    '' + (lib.optionalString (cxxabi == null) ''
-      cp -r ${monorepoSrc}/libcxxabi "$out"
-    '')) else src;
-
   cxxabiCMakeFlags = lib.optionals (lib.versionAtLeast release_version "18") [
     (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
   ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
@@ -120,7 +101,24 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libcxx";
   inherit version cmakeFlags;
 
-  src = src';
+  src = if monorepoSrc != null then
+    runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (''
+      mkdir -p "$out/llvm"
+    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
+    '') + ''
+      cp -r ${monorepoSrc}/libcxx "$out"
+      cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+      cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/third-party "$out"
+    '') + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+      cp -r ${monorepoSrc}/libc "$out"
+    '') + ''
+      cp -r ${monorepoSrc}/runtimes "$out"
+    '' + (lib.optionalString (cxxabi == null) ''
+      cp -r ${monorepoSrc}/libcxxabi "$out"
+    '')) else src;
 
   outputs = [ "out" "dev" ];
 
