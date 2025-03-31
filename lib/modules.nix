@@ -649,7 +649,9 @@ let
             (module:
               mapAttrs
                 (n: value:
-                  map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                  map (config: { inherit (module) file; inherit config; }) (
+                    builtins.addErrorContext "while processing definitions from `${module.file}`" (pushDownProperties value)
+                  )
                 )
               module.config
             )
