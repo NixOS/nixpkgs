@@ -2054,8 +2054,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
 
-  colorls = callPackage ../tools/system/colorls { };
-
   coloursum = callPackage ../tools/text/coloursum {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3165,8 +3163,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  fastlane = callPackage ../tools/admin/fastlane { };
-
   fontmatrix = libsForQt5.callPackage ../applications/graphics/fontmatrix { };
 
   fox = callPackage ../development/libraries/fox {};
@@ -3501,8 +3497,6 @@ with pkgs;
   headscale = callPackage ../servers/headscale {
     buildGoModule = buildGo123Module;
   };
-
-  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
   hobbits = libsForQt5.callPackage ../tools/graphics/hobbits { };
 
@@ -4354,8 +4348,6 @@ with pkgs;
   ovito = qt6Packages.callPackage ../applications/graphics/ovito {
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
   };
-
-  oxidized = callPackage ../tools/admin/oxidized { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -7904,8 +7896,6 @@ with pkgs;
 
   premake = premake4;
 
-  procodile = callPackage ../tools/system/procodile { };
-
   pry = callPackage ../development/tools/pry { };
 
   pycritty = with python3Packages; toPythonApplication pycritty;
@@ -9762,8 +9752,6 @@ with pkgs;
     ogre_13 ogre_14;
 
   ogre = ogre_14;
-
-  one_gadget = callPackage ../development/tools/misc/one_gadget { };
 
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
@@ -16042,7 +16030,7 @@ with pkgs;
   };
 
   starsector = callPackage ../games/starsector {
-    openjdk = openjdk8;
+    openjdk = openjdk17;
   };
 
   scummvm = callPackage ../games/scummvm {
@@ -17069,8 +17057,6 @@ with pkgs;
   lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
-
-  itamae = callPackage ../tools/admin/itamae { };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
