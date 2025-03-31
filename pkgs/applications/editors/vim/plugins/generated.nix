@@ -5982,6 +5982,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  hurl-nvim = buildVimPlugin {
+    pname = "hurl.nvim";
+    version = "2025-03-04";
+    src = fetchFromGitHub {
+      owner = "jellydn";
+      repo = "hurl.nvim";
+      rev = "bf00b4ee56dc8026dd7cd068236fb2c01bb1e307";
+      sha256 = "1hw8sfx689j8fxwixfdia6rvfncb37j5y3g7f8kgqg1rd6vc3b0z";
+    };
+    meta.homepage = "https://github.com/jellydn/hurl.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   hydra-nvim = buildVimPlugin {
     pname = "hydra.nvim";
     version = "2025-03-28";
