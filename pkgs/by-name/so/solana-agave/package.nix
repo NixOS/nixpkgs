@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   # For the same reason as discussed in solana-cli derivation (crossbeam softlink), the no_atomic file is missing
   # and either must somehow be rendered unneeded (using an upstream package) or replaced. A cleaner, non-behavior-changing,
   # solution would be to commit the file to the repo fork (replacing the softlink).
-  cargoPatches = [ ./crossbeam-epoch.patch ];
+  cargoPatches = [ ./crossbeam-epoch.patch ./qualifier_attr-dep.patch ];
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
