@@ -1337,7 +1337,7 @@ in {
   xpadneo = runTest ./xpadneo.nix;
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
-  xscreensaver = handleTest ./xscreensaver.nix {};
+  xscreensaver = runTest ./xscreensaver.nix;
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
