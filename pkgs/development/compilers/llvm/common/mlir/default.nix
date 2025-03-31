@@ -19,12 +19,12 @@
   devExtraCmakeFlags ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlir";
   inherit version doCheck;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir -p "$out"
     ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ''
   );
 
-  sourceRoot = "${src.name}/mlir";
+  sourceRoot = "${finalAttrs.src.name}/mlir";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       "-DLLVM_ENABLE_IDE=OFF"
       "-DMLIR_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/mlir"
       "-DMLIR_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/mlir"
-      "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+      "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
       "-DLLVM_ENABLE_FFI=ON"
       "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
       "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
       existing compilers together.
     '';
   };
-}
+})
