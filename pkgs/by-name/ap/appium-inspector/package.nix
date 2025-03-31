@@ -82,6 +82,6 @@ buildNpmPackage {
     license = lib.licenses.asl20;
     mainProgram = "appium-inspector";
     maintainers = with lib.maintainers; [ marie ];
-    inherit (electron.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 }
