@@ -8,8 +8,20 @@ engine:
 let
   pname = "openra-${engine.build}";
   version = engine.version;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0-bin;
+
+  dotnetVersions = {
+    "6" = {
+      sdk = dotnetCorePackages.sdk_6_0-bin;
+      runtime = dotnetCorePackages.runtime_6_0-bin;
+    };
+    "8" = {
+      sdk = dotnetCorePackages.sdk_8_0;
+      runtime = dotnetCorePackages.runtime_8_0;
+    };
+  };
+
+  dotnet-sdk = lib.getAttrFromPath [ engine.dotnetVersion "sdk" ] dotnetVersions;
+  dotnet-runtime = lib.getAttrFromPath [ engine.dotnetVersion "runtime" ] dotnetVersions;
 in
 buildDotnetModule {
   inherit pname version dotnet-sdk dotnet-runtime;
@@ -17,7 +29,9 @@ buildDotnetModule {
   src = fetchFromGitHub {
     owner = "OpenRA";
     repo = "OpenRA";
-    rev = "${engine.build}-${engine.version}";
+    rev = if lib.hasAttr "rev" engine
+      then engine.rev
+      else "${engine.build}-${engine.version}";
     inherit (engine) hash;
   };
 
