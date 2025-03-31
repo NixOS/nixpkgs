@@ -70,7 +70,7 @@ let
     ];
 
     meta = {
-      description = "onionbalance config generator";
+      description = "Onionbalance config generator";
       homepage = "https://gitlab.torproject.org/tpo/onion-services/onionbalance";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ MulliganSecurity ];
