@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
-  version = "2.0.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     tag = version;
-    hash = "sha256-toY3eVJdB5rbRuwkXMizpQUxUTo4Y1tWKFCZZuiYaGI=";
+    hash = "sha256-Z5dWgeXwIRd2iPT2GsWyypHVbaMZ5NUXEBxa8+AZdNk=";
   };
 
   propagatedBuildInputs = [
