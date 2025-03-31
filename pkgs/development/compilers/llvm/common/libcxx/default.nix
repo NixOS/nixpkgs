@@ -54,66 +54,64 @@ let
     '')) else src;
 
   cxxabiCMakeFlags = lib.optionals (lib.versionAtLeast release_version "18") [
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
+    (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
   ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
-    "-DLIBCXXABI_ADDITIONAL_LIBRARIES=unwind"
-    "-DLIBCXXABI_USE_COMPILER_RT=ON"
+    (lib.cmakeFeature "LIBCXXABI_ADDITIONAL_LIBRARIES" "unwind")
+    (lib.cmakeBool "LIBCXXABI_USE_COMPILER_RT" true)
   ] else [
-    "-DLIBCXXABI_USE_COMPILER_RT=ON"
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+    (lib.cmakeBool "LIBCXXABI_USE_COMPILER_RT" true)
+    (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" true)
   ]) ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+    (lib.cmakeBool "LIBCXXABI_ENABLE_THREADS" false)
+    (lib.cmakeBool "LIBCXXABI_ENABLE_EXCEPTIONS" false)
   ] ++ lib.optionals (!enableShared || stdenv.hostPlatform.isWindows) [
     # Required on Windows due to https://github.com/llvm/llvm-project/issues/55245
-    "-DLIBCXXABI_ENABLE_SHARED=OFF"
+    (lib.cmakeBool "LIBCXXABI_ENABLE_SHARED" false)
   ];
 
   cxxCMakeFlags = [
-    "-DLIBCXX_CXX_ABI=${cxxabiName}"
+    (lib.cmakeFeature "LIBCXX_CXX_ABI" cxxabiName)
+    (lib.cmakeBool "LIBCXX_ENABLE_SHARED" enableShared)
+    # https://github.com/llvm/llvm-project/issues/55245
+    (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
   ] ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
     # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
     # Include libc++abi symbols within libc++.a for static linking libc++;
     # dynamic linking includes them through libc++.so being a linker script
     # which includes both shared objects.
-    "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON"
+    (lib.cmakeBool "LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY" true)
   ] ++ lib.optionals (cxxabi != null) [
-    "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
+    (lib.cmakeFeature "LIBCXX_CXX_ABI_INCLUDE_PATHS" "${lib.getDev cxxabi}/include")
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
-    "-DLIBCXX_HAS_MUSL_LIBC=1"
+    (lib.cmakeFeature "LIBCXX_HAS_MUSL_LIBC" "1")
   ] ++ lib.optionals (lib.versionAtLeast release_version "18" && !useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
-    "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
+    (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
   ] ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
     # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
     # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
+    (lib.cmakeBool "LIBCXXABI_USE_LLVM_UNWINDER" false)
   ] ++ lib.optionals useLLVM [
-    "-DLIBCXX_USE_COMPILER_RT=ON"
+    (lib.cmakeBool "LIBCXX_USE_COMPILER_RT" true)
   ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
-    "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
+    (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "unwind")
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXX_ENABLE_THREADS=OFF"
-    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    # https://github.com/llvm/llvm-project/issues/55245
-    "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON"
-  ] ++ lib.optionals (!enableShared) [
-    "-DLIBCXX_ENABLE_SHARED=OFF"
+    (lib.cmakeBool "LIBCXX_ENABLE_THREADS" false)
+    (lib.cmakeBool "LIBCXX_ENABLE_FILESYSTEM" false)
+    (lib.cmakeBool "LIBCXX_ENABLE_EXCEPTIONS" false)
   ] ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
-    "-DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON"
+    (lib.cmakeBool "LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS" true)
   ];
 
   cmakeFlags = [
-    "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" (lib.concatStringsSep ";" runtimes))
   ] ++ lib.optionals (
     stdenv.hostPlatform.isWasm
     || (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin)
   ) [
-    "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DCMAKE_C_COMPILER_WORKS=ON"
-    "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "UNIX" true) # Required otherwise libc++ fails to detect the correct linker
   ] ++ cxxCMakeFlags
     ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
     ++ devExtraCmakeFlags;
