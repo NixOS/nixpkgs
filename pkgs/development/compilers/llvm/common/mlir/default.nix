@@ -11,17 +11,18 @@
   libxml2,
   libllvm,
   version,
-  doCheck ?
-    (
-      !stdenv.hostPlatform.isx86_32 # TODO: why
-    )
-    && (!stdenv.hostPlatform.isMusl),
   devExtraCmakeFlags ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlir";
-  inherit version doCheck;
+  inherit version;
+
+  doCheck =
+    (
+      !stdenv.hostPlatform.isx86_32 # TODO: why
+    )
+    && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
   src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
