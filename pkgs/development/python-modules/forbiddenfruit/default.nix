@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pynose,
   setuptools,
 }:
 
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarete";
     repo = "forbiddenfruit";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yHIZsVn2UVmWeBNIzWDE6AOwAXZilPqXo+bVtXqGkJk=";
   };
 
@@ -24,17 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "forbiddenfruit" ];
 
-  nativeCheckInputs = [ pynose ];
-
-  # https://github.com/clarete/forbiddenfruit/pull/47 required to switch to pytest
-  checkPhase = ''
-    runHook preCheck
-
-    find ./build -name '*.so' -exec mv {} tests/unit \;
-    nosetests
-
-    runHook postCheck
-  '';
+  doCheck = false; # uses nose
 
   meta = with lib; {
     description = "Patch python built-in objects";
