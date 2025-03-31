@@ -7,23 +7,22 @@
   freetype,
   openal,
   lua51Packages,
-  openRaUpdater
+  openRaUpdater,
 }:
 engine:
 
 let
   pname = "openra-${engine.build}";
   version = engine.version;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0-bin;
+  dotnet-sdk = engine.dotnet-sdk;
 in
 buildDotnetModule {
-  inherit pname version dotnet-sdk dotnet-runtime;
+  inherit pname version dotnet-sdk;
 
   src = fetchFromGitHub {
     owner = "OpenRA";
     repo = "OpenRA";
-    rev = "${engine.build}-${engine.version}";
+    rev = if lib.hasAttr "rev" engine then engine.rev else "${engine.build}-${engine.version}";
     inherit (engine) hash;
   };
 
@@ -86,7 +85,7 @@ buildDotnetModule {
     # Create Nix wrappers to the application scripts which setup the needed environment
     for bin in $(find $out/.bin-unwrapped -type f); do
       makeWrapper "$bin" "$out/bin/$(basename "$bin")" \
-        --prefix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
+        --prefix "PATH" : "${lib.makeBinPath [ dotnet-sdk.runtime ]}"
     done
   '';
 
