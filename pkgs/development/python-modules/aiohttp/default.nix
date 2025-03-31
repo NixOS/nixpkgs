@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.13";
+  version = "3.11.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-VY7Q8m1mOppI/sUgL0Zy/jisR/Vy3zZQBMhgrBYophs=";
+    hash = "sha256-kolGM7jFd1U6Z5/PYL8FBs8yJI9o7gCkghtEiaYOtJI=";
   };
 
   patches = [
