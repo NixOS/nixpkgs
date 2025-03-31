@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   alsa-lib,
   libjack2,
   pkg-config,
@@ -10,11 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "portaudio";
-  version = "190700_20210406";
+  version = "19.7.0";
 
-  src = fetchurl {
-    url = "https://files.portaudio.com/archives/pa_stable_v${finalAttrs.version}.tgz";
-    sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
+  src = fetchFromGitHub {
+    owner = "PortAudio";
+    repo = "portaudio";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P2gIMSID2rclezJ/L7Uyu7uCmCpFGeoWyz7PRVDPIdc=";
   };
 
   strictDeps = true;
