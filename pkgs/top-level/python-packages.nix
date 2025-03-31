@@ -1608,6 +1608,8 @@ self: super: with self; {
 
   bangla = callPackage ../development/python-modules/bangla { };
 
+  banks = callPackage ../development/python-modules/banks { };
+
   bap = callPackage ../development/python-modules/bap {
     inherit (pkgs.ocaml-ng.ocamlPackages_4_14) bap;
   };
@@ -5599,8 +5601,6 @@ self: super: with self; {
 
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
 
-  goobook = callPackage ../development/python-modules/goobook { };
-
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   goodwe = callPackage ../development/python-modules/goodwe { };
@@ -7367,6 +7367,8 @@ self: super: with self; {
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
+
+  kopf = callPackage ../development/python-modules/kopf { };
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
@@ -12764,6 +12766,8 @@ self: super: with self; {
 
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
+  pyotb = callPackage ../development/python-modules/pyotb { };
+
   pyotgw = callPackage ../development/python-modules/pyotgw { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
@@ -15836,7 +15840,7 @@ self: super: with self; {
 
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
 
-  snack = toPythonModule (pkgs.newt.override { inherit (self) python; });
+  snack = toPythonModule (pkgs.newt.override { python3 = self.python; });
 
   snakebite = callPackage ../development/python-modules/snakebite { };
 

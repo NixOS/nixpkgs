@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hoarder";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "hoarder-app";
     repo = "hoarder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SYcJfobuDl2iPXy5qGGG8ukBX/CSboSo/hF2e/8ixVw=";
+    hash = "sha256-ro2+jXfp83JfQ9HQr0imy7aohSFbH5J6Wx5bxhMT5TM=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       installPhase = "cp -pr --reflink=auto -- . $out";
     };
 
-    hash = "sha256-4MSNh2lyl0PFUoG29Tmk3WOZSRnW8NBE3xoppJr8ZNY=";
+    hash = "sha256-FzQPBIwe7OQ1KHaMtWaFe+RI+pXko5Ly11/jOmYSuFA=";
   };
   buildPhase = ''
     runHook preBuild
@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Self-hostable bookmark-everything app with a touch of AI for the data hoarders out there";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
+    mainProgram = "hoarder-cli";
     platforms = lib.platforms.linux;
   };
 })
