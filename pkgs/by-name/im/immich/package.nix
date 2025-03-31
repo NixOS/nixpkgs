@@ -121,6 +121,16 @@ let
     sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
+    # prePatch is needed because npmConfigHook is a postPatch
+    prePatch = ''
+      # some part of the build wants to use un-prefixed binaries. let them.
+      mkdir -p $TMP/bin
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+      export PATH="$TMP/bin:$PATH"
+    '';
+
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
@@ -164,7 +174,8 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
-  postPatch = ''
+  # prePatch is needed because npmConfigHook is a postPatch
+  prePatch = ''
     # pg_dumpall fails without database root access
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
@@ -172,9 +183,9 @@ buildNpmPackage' {
 
     # some part of the build wants to use un-prefixed binaries. let them.
     mkdir -p $TMP/bin
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
     export PATH="$TMP/bin:$PATH"
   '';
 
