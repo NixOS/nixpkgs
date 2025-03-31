@@ -14,7 +14,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QTLaaztZghcQRQSE/GXQGpo7W7bHNNXGwYNIaV41PvY=";
   };
 
@@ -40,14 +40,14 @@ buildDotnetModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
-    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       gbtb
       mdarocha
     ];
