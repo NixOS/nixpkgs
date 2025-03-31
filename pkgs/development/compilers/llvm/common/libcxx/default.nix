@@ -26,7 +26,6 @@
 # https://github.com/NixOS/nixpkgs/issues/269548
 assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
-  pname = "libcxx";
   cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
@@ -34,7 +33,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+    runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
@@ -118,7 +117,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version cmakeFlags;
+  pname = "libcxx";
+  inherit version cmakeFlags;
 
   src = src';
 
