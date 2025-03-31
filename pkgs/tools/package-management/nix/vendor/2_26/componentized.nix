@@ -6,6 +6,7 @@
   pkgs,
   maintainers,
   otherSplices,
+  version,
 }:
 let
   officialRelease = true;
@@ -30,6 +31,7 @@ let
             officialRelease
             pkgs
             src
+            version
             ;
         };
       };
