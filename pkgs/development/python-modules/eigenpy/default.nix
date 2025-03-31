@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     "-DINSTALL_DOCUMENTATION=ON"
+    "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
   ];
 
@@ -49,6 +50,8 @@ buildPythonPackage rec {
     jrl-cmakemodules
     numpy
   ];
+
+  preInstallCheck = "make test";
 
   pythonImportsCheck = [ "eigenpy" ];
 
