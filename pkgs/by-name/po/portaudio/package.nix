@@ -34,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     which
   ];
-  buildInputs = [
-    libjack2
-  ]
-  # Enabling alsa causes linux-only sources to be built
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+
+  propagatedBuildInputs =
+    [
+      libjack2
+    ]
+    # Enabling alsa causes linux-only sources to be built
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -51,11 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
                      'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
                      'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${lib.getLib alsa-lib}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
   '';
 
   meta = {
