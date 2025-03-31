@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Portable cross-platform Audio API";
     homepage = "https://www.portaudio.com/";
+    changelog = "https://github.com/PortAudio/portaudio/releases";
     # Not exactly a bsd license, but alike
     license = lib.licenses.mit;
     maintainers = [ ];

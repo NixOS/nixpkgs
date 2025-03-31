@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PortAudio C++ bindings";
     inherit (portaudio.meta)
       homepage
+      changelog
       license
       maintainers
       platforms
