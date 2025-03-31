@@ -9763,8 +9763,6 @@ with pkgs;
 
   ogre = ogre_14;
 
-  one_gadget = callPackage ../development/tools/misc/one_gadget { };
-
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
