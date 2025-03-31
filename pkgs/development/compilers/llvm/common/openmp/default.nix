@@ -70,9 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python3.pythonOnBuildForHost
+    perl
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     ninja
-  ] ++ [ perl ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
+  ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     pkg-config lit
   ];
 
