@@ -78,6 +78,8 @@
   ncurses,
   # devdocs-nvim dependencies
   pandoc,
+  # nvim-tinygit
+  gitMinimal,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -1368,6 +1370,24 @@ in
     src = "${hurl.src}/contrib/vim";
   };
 
+  hurl-nvim = super.hurl-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      nvim-treesitter
+      plenary-nvim
+    ];
+
+    runtimeDeps = [
+      hurl
+    ];
+
+    nvimSkipModules = [
+      # attempt to index global '_HURL_GLOBAL_CONFIG' (a nil value)
+      "hurl.popup"
+      "hurl.split"
+    ];
+  };
+
   idris2-nvim = super.idris2-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
@@ -2457,6 +2477,18 @@ in
     ];
   };
 
+  nvim-tinygit = super.nvim-tinygit.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+
+    checkInputs = [
+      gitMinimal
+      # transitive dependency (telescope-nvim) not properly propagated to the test environment
+      self.plenary-nvim
+    ];
+  };
+
   nvim-tree-lua = super.nvim-tree-lua.overrideAttrs {
     nvimSkipModules = [
       # Meta can't be required
@@ -2653,6 +2685,21 @@ in
       nvim-parinfer
       nvim-paredit
       nvim-treesitter
+    ];
+  };
+
+  parrot-nvim = super.parrot-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+    ];
+
+    dependencies = with self; [
+      plenary-nvim
+    ];
+
+    checkInputs = [
+      curl
+      ripgrep
     ];
   };
 
@@ -3744,6 +3791,12 @@ in
 
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
+  };
+
+  whichpy-nvim = super.whichpy-nvim.overrideAttrs {
+    checkInputs = with self; [
+      telescope-nvim
+    ];
   };
 
   wiki-vim = super.wiki-vim.overrideAttrs {
