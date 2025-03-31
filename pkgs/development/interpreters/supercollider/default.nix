@@ -8,11 +8,11 @@
 
 mkDerivation rec {
   pname = "supercollider";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-D8Xbpbrq43+Qaa0oiFqkBcaiUwnjiGy+ERvTt8BVMc4=";
+    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
   };
 
   patches = [
