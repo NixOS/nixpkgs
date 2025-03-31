@@ -587,8 +587,15 @@ buildPythonPackage rec {
       find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
       mkdir $dev
+
+      # CppExtension requires that include files are packaged with the main
+      # python library output; which is why they are copied here.
       cp -r $out/${python.sitePackages}/torch/include $dev/include
-      cp -r $out/${python.sitePackages}/torch/share $dev/share
+
+      # Cmake files under /share are different and can be safely moved. This
+      # avoids unnecessary closure blow-up due to apple sdk references when
+      # USE_DISTRIBUTED is enabled.
+      mv $out/${python.sitePackages}/torch/share $dev/share
 
       # Fix up library paths for split outputs
       substituteInPlace \
