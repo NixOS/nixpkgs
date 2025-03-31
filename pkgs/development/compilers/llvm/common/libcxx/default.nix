@@ -26,8 +26,7 @@
 # https://github.com/NixOS/nixpkgs/issues/269548
 assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
-  basename = "libcxx";
-  pname = basename;
+  pname = "libcxx";
   cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
