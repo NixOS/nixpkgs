@@ -1,10 +1,13 @@
 {
+  config,
   lib,
   stdenv,
   cmake,
   fetchFromGitHub,
   alsa-lib,
   libjack2,
+  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
   pkg-config,
   which,
   testers,
@@ -39,12 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libjack2
     ]
+    ++ lib.optionals pulseSupport [ libpulseaudio ]
     # Enabling alsa causes linux-only sources to be built
     ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
+  cmakeFlags = lib.mapAttrsToList (flag: value: lib.cmakeBool flag value) {
+    BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
+    PA_USE_PULSEAUDIO = pulseSupport;
+  };
 
   postPatch = ''
     # remove prefix from library and include paths
