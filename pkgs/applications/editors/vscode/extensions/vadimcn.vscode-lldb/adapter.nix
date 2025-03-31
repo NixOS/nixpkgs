@@ -18,7 +18,7 @@ let
       "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
     else
       "${lib.getBin lldb}/bin/lldb-server";
-  LLVM_TRIPLE = stdenv.hostPlatform.config;
+  LLVM_TRIPLE = stdenv.buildPlatform.rust.rustcTarget;
 in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
