@@ -2,9 +2,7 @@
   lib,
   config,
   stdenv,
-  aws-sdk-cpp,
-  boehmgc,
-  callPackage,
+  nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
   fetchpatch2,
@@ -20,99 +18,22 @@
   confDir ? "/etc",
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    patches = (drv.patches or [ ]) ++ [
-      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-      ./patches/boehmgc-coroutine-sp-fallback.patch
-    ];
-  });
-
-  # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
-  aws-sdk-cpp-old-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
-      ];
-      customMemoryManagement = false;
-    }).overrideAttrs
-      (args: rec {
-        # intentionally overriding postPatch
-        version = "1.9.294";
-
-        src = fetchFromGitHub {
-          owner = "aws";
-          repo = "aws-sdk-cpp";
-          rev = version;
-          hash = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
-        };
-        postPatch =
-          ''
-            # Avoid blanket -Werror to evade build failures on less
-            # tested compilers.
-            substituteInPlace cmake/compiler_settings.cmake \
-              --replace '"-Werror"' ' '
-
-            # Missing includes for GCC11
-            sed '5i#include <thread>' -i \
-              aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
-              aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
-              aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
-              aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
-              aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
-              aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
-              aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
-              aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
-              aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
-              aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
-              aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
-              aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
-              aws-cpp-sdk-transfer-tests/TransferTests.cpp
-            # Flaky on Hydra
-            rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
-            # Includes aws-c-auth private headers, so only works with submodule build
-            rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
-            # TestRandomURLMultiThreaded fails
-            rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-          ''
-          + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
-            # EPSILON is exceeded
-            rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
-          '';
-
-        patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
-
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
-      });
-
-  aws-sdk-cpp-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
-      ];
-      customMemoryManagement = false;
-    }).overrideAttrs
-      {
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
-      };
-
+  # Called for Nix < 2.26
   common =
     args:
-    callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
+    nixDependencies.callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
       inherit
         Security
         storeDir
         stateDir
         confDir
         ;
-      boehmgc = boehmgc-nix;
       aws-sdk-cpp =
-        if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+        if lib.versionAtLeast args.version "2.12pre" then
+          nixDependencies.aws-sdk-cpp
+        else
+          nixDependencies.aws-sdk-cpp-old;
     };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -219,18 +140,15 @@ lib.makeExtensible (
   (
     {
       nix_2_3 =
-        (
-          (common {
-            version = "2.3.18";
-            hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
-            patches = [
-              patch-monitorfdhup
-            ];
-            self_attribute_name = "nix_2_3";
-            maintainers = with lib.maintainers; [ flokli ];
-          }).override
-          { boehmgc = boehmgc-nix_2_3; }
-        ).overrideAttrs
+        (common {
+          version = "2.3.18";
+          hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
+          patches = [
+            patch-monitorfdhup
+          ];
+          self_attribute_name = "nix_2_3";
+          maintainers = with lib.maintainers; [ flokli ];
+        }).overrideAttrs
           {
             # https://github.com/NixOS/nix/issues/10222
             # spurious test/add.sh failures
@@ -250,7 +168,7 @@ lib.makeExtensible (
       };
 
       nixComponents_2_26 = (
-        callPackage ./vendor/2_26/componentized.nix {
+        nixDependencies.callPackage ./vendor/2_26/componentized.nix {
           inherit (self.nix_2_24.meta) maintainers;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
         }
