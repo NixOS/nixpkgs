@@ -58,27 +58,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DLLVM_BUILD_TOOLS=ON"
+      (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
       # Install headers as well
-      "-DLLVM_INSTALL_TOOLCHAIN_ONLY=OFF"
-      "-DMLIR_TOOLS_INSTALL_DIR=${placeholder "out"}/bin/"
-      "-DLLVM_ENABLE_IDE=OFF"
-      "-DMLIR_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/mlir"
-      "-DMLIR_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/mlir"
-      "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-      "-DLLVM_ENABLE_FFI=ON"
-      "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-      "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-      "-DLLVM_ENABLE_DUMP=ON"
-      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
-      "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/mlir-tblgen"
+      (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
+      (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
+      (lib.cmakeBool "LLVM_ENABLE_IDE" false)
+      (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+      (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+      (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+      (lib.cmakeBool "LLVM_ENABLE_FFI" true)
+      (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
+      (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
+      (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+      (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
       (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
     ]
     ++ lib.optionals stdenv.hostPlatform.isStatic [
       # Disables building of shared libs, -fPIC is still injected by cc-wrapper
-      "-DLLVM_ENABLE_PIC=OFF"
-      "-DLLVM_BUILD_STATIC=ON"
-      "-DLLVM_LINK_LLVM_DYLIB=OFF"
+      (lib.cmakeBool "LLVM_ENABLE_PIC" false)
+      (lib.cmakeBool "LLVM_BUILD_STATIC" true)
+      (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
     ]
     ++ devExtraCmakeFlags;
 
