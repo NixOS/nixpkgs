@@ -570,10 +570,11 @@ mapAliases {
   erlangR24_odbc = throw "erlangR24_odbc has been removed in favor of erlang_24_odbc"; # added 2024-05-24
   erlangR24_javac = throw "erlangR24_javac has been removed in favor of erlang_24_javac"; # added 2024-05-24
   erlangR24_odbc_javac = throw "erlangR24_odbc_javac has been removed in favor of erlang_24_odbc_javac"; # added 2024-05-24
-  erlangR25 = throw "erlangR25 has been removed in favor of erlang_25"; # added 2024-05-24
-  erlangR25_odbc = throw "erlangR25_odbc has been removed in favor of erlang_25_odbc"; # added 2024-05-24
-  erlangR25_javac = throw "erlangR25_javac has been removed in favor of erlang_25_javac"; # added 2024-05-24
-  erlangR25_odbc_javac = throw "erlangR25_odbc_javac has been removed in favor of erlang_25_odbc_javac"; # added 2024-05-24
+  erlang_25 = throw "erlang_25 has been removed as it is unmaintained upstream"; # added 2025-03-31
+  erlangR25 = throw "erlangR25 has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_odbc = throw "erlangR25_odbc has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_javac = throw "erlangR25_javac has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_odbc_javac = throw "erlangR25_odbc_javac has been removed as it is unmaintained upstream"; # added 2024-05-24
   erlangR26 = throw "erlangR26 has been removed in favor of erlang_26"; # added 2024-05-24
   erlangR26_odbc = throw "erlangR26_odbc has been removed in favor of erlang_26_odbc"; # added 2024-05-24
   erlangR26_javac = throw "erlangR26_javac has been removed in favor of erlang_26_javac"; # added 2024-05-24
