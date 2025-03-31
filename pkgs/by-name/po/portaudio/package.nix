@@ -4,7 +4,9 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
+  jackSupport ? true,
   libjack2,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
@@ -39,15 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs =
-    [
-      libjack2
-    ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    # Enabling alsa causes linux-only sources to be built
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+    lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals jackSupport [ libjack2 ]
+    ++ lib.optionals pulseSupport [ libpulseaudio ];
 
   cmakeFlags = lib.mapAttrsToList (flag: value: lib.cmakeBool flag value) {
     BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
+
+    PA_USE_ALSA = alsaSupport;
+    PA_USE_JACK = jackSupport;
     PA_USE_PULSEAUDIO = pulseSupport;
   };
 
