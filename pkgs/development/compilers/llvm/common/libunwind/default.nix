@@ -74,13 +74,17 @@ let
     '';
 in
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     inherit pname version patches;
 
     src = src';
 
     sourceRoot =
-      if lib.versionAtLeast release_version "15" then "${src.name}/runtimes" else "${src.name}/${pname}";
+      if lib.versionAtLeast release_version "15" then
+        "${finalAttrs.src.name}/runtimes"
+      else
+        "${finalAttrs.src.name}/${finalAttrs.pname}";
 
     outputs = [
       "out"
