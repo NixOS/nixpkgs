@@ -6,9 +6,18 @@
   gitMinimal,
   portaudio,
   playwright-driver,
+  symlinkJoin,
+  nltk-data,
 }:
 
 let
+  aider-nltk-data = symlinkJoin {
+    name = "aider-nltk-data";
+    paths = [
+      nltk-data.punkt_tab
+      nltk-data.stopwords
+    ];
+  };
   python3 = python312.override {
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
@@ -161,8 +170,12 @@ let
       ];
 
     makeWrapperArgs = [
-      "--set AIDER_CHECK_UPDATE false"
-      "--set AIDER_ANALYTICS false"
+      "--set"
+      "AIDER_CHECK_UPDATE"
+      "false"
+      "--set"
+      "AIDER_ANALYTICS"
+      "false"
     ];
 
     preCheck = ''
@@ -184,6 +197,7 @@ let
         llama-index-core
         llama-index-embeddings-huggingface
         torch
+        nltk
       ];
       bedrock = [
         boto3
@@ -218,8 +232,21 @@ let
             playwrightArgs =
               if withPlaywright || withAll then
                 [
-                  "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
-                  "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
+                  "--set"
+                  "PLAYWRIGHT_BROWSERS_PATH"
+                  "${playwright-driver.browsers}"
+                  "--set"
+                  "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                  "true"
+                ]
+              else
+                [ ];
+            helpArgs =
+              if withHelp || withAll then
+                [
+                  "--set"
+                  "NLTK_DATA"
+                  "${aider-nltk-data}"
                 ]
               else
                 [ ];
@@ -227,7 +254,7 @@ let
           {
             dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps ++ bedrockDeps;
             propagatedBuildInputs = propagatedBuildInputs ++ playwrightInputs;
-            makeWrapperArgs = makeWrapperArgs ++ playwrightArgs;
+            makeWrapperArgs = makeWrapperArgs ++ playwrightArgs ++ helpArgs;
           }
         );
     };
