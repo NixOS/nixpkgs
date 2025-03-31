@@ -7,28 +7,34 @@
   freetype,
   openal,
   lua51Packages,
+  openRaUpdater
 }:
 engine:
 
-buildDotnetModule rec {
+let
   pname = "openra-${engine.build}";
-  inherit (engine) version;
-
-  src =
-    if engine ? src then
-      engine.src
-    else
-      fetchFromGitHub {
-        owner = "OpenRA";
-        repo = "OpenRA";
-        rev = "${engine.build}-${engine.version}";
-        sha256 = engine.sha256;
-      };
-
-  nugetDeps = engine.deps;
-
+  version = engine.version;
   dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_6_0-bin;
+in
+buildDotnetModule {
+  inherit pname version dotnet-sdk dotnet-runtime;
+
+  src = fetchFromGitHub {
+    owner = "OpenRA";
+    repo = "OpenRA";
+    rev = "${engine.build}-${engine.version}";
+    inherit (engine) hash;
+  };
+
+  passthru = {
+    updateScript = {
+      command = openRaUpdater engine;
+      supportedFeatures = [ "commit" ];
+    };
+  };
+
+  nugetDeps = engine.deps;
 
   useAppHost = false;
 
@@ -84,11 +90,11 @@ buildDotnetModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert. ${engine.build} version";
     homepage = "https://www.openra.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mdarocha ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.mdarocha ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "openra-ra";
   };
