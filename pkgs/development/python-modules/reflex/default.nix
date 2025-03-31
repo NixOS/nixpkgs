@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.4";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-Ra7XFa86sZ18xXjfJ4COiIl7MDqz87MPLRws+kGEfKk=";
+    hash = "sha256-uHlLItjONHGnuE4t2UOcVRYxcDDbRldUwHd8mPn7JfY=";
   };
 
   pythonRelaxDeps = [
