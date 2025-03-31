@@ -211,6 +211,9 @@ let
   };
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
+    # https://github.com/pytorch/pytorch/issues/150174
+    "aarch64-linux with GCC14 is currently broken" =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
     "Unsupported CUDA version" =
