@@ -6,9 +6,18 @@
   gitMinimal,
   portaudio,
   playwright-driver,
+  symlinkJoin,
+  nltk-data,
 }:
 
 let
+  aider-nltk-data = symlinkJoin {
+    name = "aider-nltk-data";
+    paths = [
+      nltk-data.punkt_tab
+      nltk-data.stopwords
+    ];
+  };
   python3 = python312.override {
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
@@ -161,8 +170,12 @@ let
       ];
 
     makeWrapperArgs = [
-      "--set AIDER_CHECK_UPDATE false"
-      "--set AIDER_ANALYTICS false"
+      "--set"
+      "AIDER_CHECK_UPDATE"
+      "false"
+      "--set"
+      "AIDER_ANALYTICS"
+      "false"
     ];
 
     preCheck = ''
@@ -177,25 +190,73 @@ let
         pyee
         typing-extensions
       ];
+      browser = [
+        streamlit
+      ];
+      help = [
+        llama-index-core
+        llama-index-embeddings-huggingface
+        torch
+        nltk
+      ];
+      bedrock = [
+        boto3
+      ];
     };
 
     passthru = {
-      withPlaywright = aider-chat.overridePythonAttrs (
+      withOptional =
         {
-          dependencies,
-          makeWrapperArgs,
-          propagatedBuildInputs ? [ ],
+          withPlaywright ? false,
+          withBrowser ? false,
+          withHelp ? false,
+          withBedrock ? false,
+          withAll ? false,
           ...
         }:
-        {
-          dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
-          propagatedBuildInputs = propagatedBuildInputs ++ [ playwright-driver.browsers ];
-          makeWrapperArgs = makeWrapperArgs ++ [
-            "--set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}"
-            "--set PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true"
-          ];
-        }
-      );
+        aider-chat.overridePythonAttrs (
+          {
+            dependencies,
+            makeWrapperArgs,
+            propagatedBuildInputs ? [ ],
+            ...
+          }:
+          let
+            playwrightDeps =
+              if withPlaywright || withAll then aider-chat.optional-dependencies.playwright else [ ];
+            browserDeps = if withBrowser || withAll then aider-chat.optional-dependencies.browser else [ ];
+            helpDeps = if withHelp || withAll then aider-chat.optional-dependencies.help else [ ];
+            bedrockDeps = if withBedrock || withAll then aider-chat.optional-dependencies.bedrock else [ ];
+
+            playwrightInputs = if withPlaywright || withAll then [ playwright-driver.browsers ] else [ ];
+            playwrightArgs =
+              if withPlaywright || withAll then
+                [
+                  "--set"
+                  "PLAYWRIGHT_BROWSERS_PATH"
+                  "${playwright-driver.browsers}"
+                  "--set"
+                  "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                  "true"
+                ]
+              else
+                [ ];
+            helpArgs =
+              if withHelp || withAll then
+                [
+                  "--set"
+                  "NLTK_DATA"
+                  "${aider-nltk-data}"
+                ]
+              else
+                [ ];
+          in
+          {
+            dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps ++ bedrockDeps;
+            propagatedBuildInputs = propagatedBuildInputs ++ playwrightInputs;
+            makeWrapperArgs = makeWrapperArgs ++ playwrightArgs ++ helpArgs;
+          }
+        );
     };
 
     meta = {
