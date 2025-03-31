@@ -52,7 +52,7 @@ with python312Packages;
     pname = "onionbalance-config";
     version = "0.2.3";
     doCheck = false;
-    format = "pyproject";
+    pyproject = true;
     dontCheckRuntimeDeps = true;
     buildInputs = [ tor ];
     dependencies = with python312Packages; [
