@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches =
-    [ ./libclc/libclc-gnu-install-dirs.patch ]
+    [ ./libclc-gnu-install-dirs.patch ]
     # LLVM 19 changes how host tools are looked up.
     # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
     # so CMake can actually find the tools in nativeBuildInputs.
