@@ -21,13 +21,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-g86RPfhF9XHpbXhHRbyhl920VazCrQyRQrYV6tVCHy4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "matrix-sdk-base-0.7.0" = "sha256-nCiG4T/MB7gvGrmadKOEbh8+54081PHee9Bm8oY/nl0=";
-      "ruma-0.10.1" = "sha256-Yc5RKk4aRjNIoQsMl30fFehTDCkRO9VvenAvLoVHzXo=";
-      "vodozemac-0.6.0" = "sha256-jJgrJJ0SFcy2oRRZ3ubuKnM2pLO8Tx6NyXordWJjz8o=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-5+nW5g9oxe4L39wJUkSuP3ul5yH8V+E7IdhQVfvzhNk=";
   };
 
   nativeBuildInputs = [

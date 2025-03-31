@@ -23204,6 +23204,17 @@
     github = "sweenu";
     githubId = 7051978;
   };
+  sweiglbosker = {
+    email = "stefan@s00.xyz";
+    github = "sweiglbosker";
+    githubId = 124390044;
+    name = "Stefan Weigl-Bosker";
+    keys = [
+      {
+        fingerprint = "B520 0ABF BD21 3FC9 C17C  6DB9 1291 CBBC F3B9 F225";
+      }
+    ];
+  };
   swendel = {
     name = "Sebastian Wendel";
     email = "nixpkgs.aiX5ph@srx.digital";
