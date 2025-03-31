@@ -1,8 +1,13 @@
 {
-  python3,
   fetchFromGitHub,
   buildPythonPackage,
   lib,
+  setuptools,
+  requests,
+  tqdm,
+  psutil,
+  toml,
+  pip,
 }:
 buildPythonPackage rec {
   pname = "language-tool-python";
@@ -17,8 +22,8 @@ buildPythonPackage rec {
     hash = "sha256-v82RCg2lE0/ETJTiMogrI09fZ28tq1jhzFhbC89kbTU=";
   };
 
-  build-system = [ python3.pkgs.setuptools ];
-  dependencies = with python3.pkgs; [
+  build-system = [ setuptools ];
+  dependencies = [
     requests
     tqdm
     psutil
