@@ -60,6 +60,8 @@ let
               cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
               caddy fmt --overwrite $out/Caddyfile
               ${lib.optionalString cfg.validateConfigFile ''
+                # 'validate' cannot be used for validation, due to log location access
+                # See https://github.com/caddyserver/caddy/issues/6788
                 caddy adapt --adapter caddyfile --config $out/Caddyfile
               ''}
             '';
