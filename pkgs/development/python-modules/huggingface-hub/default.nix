@@ -14,6 +14,27 @@
   requests,
   tqdm,
   typing-extensions,
+
+  # optional-dependencies
+  # cli
+  inquirerpy,
+  # inference
+  aiohttp,
+  # torch
+  torch,
+  safetensors,
+  # hf_transfer
+  hf-transfer,
+  # fastai
+  toml,
+  fastai,
+  fastcore,
+  # tensorflow
+  tensorflow,
+  pydot,
+  graphviz,
+  # tensorflow-testing
+  keras,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +60,42 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
   ];
+
+  optional-dependencies = {
+    all = [
+
+    ];
+    cli = [
+      inquirerpy
+    ];
+    inference = [
+      aiohttp
+    ];
+    torch = [
+      torch
+      safetensors
+    ] ++ safetensors.optional-dependencies.torch;
+    hf_transfer = [
+      hf-transfer
+    ];
+    fastai = [
+      toml
+      fastai
+      fastcore
+    ];
+    tensorflow = [
+      tensorflow
+      pydot
+      graphviz
+    ];
+    tensorflow-testing = [
+      tensorflow
+      keras
+    ];
+    hf_xet = [
+      # hf-xet
+    ];
+  };
 
   # Tests require network access.
   doCheck = false;
