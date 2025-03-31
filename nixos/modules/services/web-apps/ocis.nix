@@ -7,9 +7,72 @@
 
 let
   inherit (lib) types;
+  inherit (config.system) stateVersion;
+  inherit (lib.strings) toJSON;
   cfg = config.services.ocis;
   defaultUser = "ocis";
   defaultGroup = defaultUser;
+
+  serviceEnvironment = {
+    PROXY_HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
+    OCIS_URL = cfg.url;
+    OCIS_CONFIG_DIR = if (cfg.configDir == null) then "${cfg.stateDir}/config" else cfg.configDir;
+    OCIS_BASE_DATA_PATH = cfg.stateDir;
+  } // cfg.environment;
+
+  env = lib.concatMapStrings (
+    n:
+    lib.optionalString (
+      serviceEnvironment.${n} != null
+    ) "--property='Environment=${toJSON "${n}=${serviceEnvironment.${n}}"}' "
+  ) (lib.attrNames serviceEnvironment);
+
+  ocisShim = pkgs.writeShellScript "ocis-shim" ''
+    if [ -n "$OCIS_CONFIG_DIR" ]; then
+      cd "$OCIS_CONFIG_DIR"
+      if [ "$?" != "0" ]; then
+        >&2 echo "Warning: Failed to change directory to $OCIS_CONFIG_DIR"
+      fi
+    fi
+
+    exec ${cfg.package}/bin/ocis "$@"
+  '';
+
+  # Note: this tool is not quite as hardened as the
+  #       systemd service because it needs to be able to do things like
+  #       edit the config.
+  ocisadmWrapper = pkgs.writeShellScriptBin "ocisadm" ''
+    exec systemd-run \
+      --quiet \
+      --pipe \
+      --pty \
+      --wait \
+      --collect \
+      --service-type=exec \
+      ${env} \
+      ${
+        lib.optionalString (cfg.environmentFile != null) "--property=EnvironmentFile=${cfg.environmentFile}"
+      } \
+      --property=User="${cfg.user}" \
+      --property=Group="${cfg.group}" \
+      --property=MemoryDenyWriteExecute=yes \
+      --property=NoNewPrivileges=yes \
+      --property=PrivateTmp=yes \
+      --property=PrivateDevices=yes \
+      --property=ProtectHome=yes \
+      --property=ProtectControlGroups=yes \
+      --property=ProtectKernelModules=yes \
+      --property=ProtectKernelTunables=yes \
+      --property=ProtectKernelLogs=yes \
+      --property=RestrictNamespaces=yes \
+      --property=RestrictRealtime=yes \
+      --property=RestrictSUIDSGID=yes \
+      --property=LockPersonality=yes \
+      --property=SystemCallArchitectures=native \
+      --working-directory="${cfg.stateDir}" \
+      -- \
+      ${ocisShim} "$@"
+  '';
 in
 {
   options = {
@@ -19,7 +82,11 @@ in
       package = lib.mkOption {
         type = types.package;
         description = "Which package to use for the ownCloud Infinite Scale instance.";
-        relatedPackages = [ "ocis_5-bin" ];
+        relatedPackages = [
+          "ocis_5-bin"
+          "ocis_70-bin"
+          "ocis_71-bin"
+        ];
       };
 
       configDir = lib.mkOption {
@@ -141,7 +208,35 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.ocis.package = lib.mkDefault pkgs.ocis_5-bin;
+    warnings =
+      let
+        latest = "7.1";
+        versionToPkgSuffix =
+          version: builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version);
+        upgradeWarning = majorMinor: nextMajorMinor: nixos: ''
+          A legacy owncloud Infinite Scale install (from before NixOS ${nixos}) may be installed.
+
+          After ocis_${versionToPkgSuffix majorMinor}-bin is installed successfully, you can safely upgrade
+          to ocis_${versionToPkgSuffix nextMajorMinor}-bin. The latest version available is ocis_${versionToPkgSuffix latest}-bin.
+
+          Please note that oCIS doesn't support upgrades across multiple major nor minor production versions
+          (i.e. an upgrade from 5.0.x is possible to 7.0.y, but not 5.0.x to 7.1.y).
+
+          Please study the upstream documentation before attempting an upgrade:
+
+            https://doc.owncloud.com/ocis/next/migration/upgrading-ocis.html
+
+          The package can be upgraded by explicitly declaring the service-option
+          `services.ocis.package`.
+        '';
+      in
+      (lib.optional (lib.versionOlder (lib.versions.majorMinor cfg.package.version) "7.0") (
+        upgradeWarning "7.0" "7.1" "25.11"
+      ));
+
+    services.ocis.package = lib.mkDefault (
+      if lib.versionOlder stateVersion "25.11" then pkgs.ocis_5-bin else pkgs.ocis_71-bin
+    );
 
     users.users.${defaultUser} = lib.mkIf (cfg.user == defaultUser) {
       group = cfg.group;
@@ -153,16 +248,14 @@ in
 
     users.groups = lib.mkIf (cfg.group == defaultGroup) { ${defaultGroup} = { }; };
 
+    environment.systemPackages = [
+      ocisadmWrapper
+    ];
     systemd = {
       services.ocis = {
         description = "ownCloud Infinite Scale Stack";
         wantedBy = [ "multi-user.target" ];
-        environment = {
-          PROXY_HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
-          OCIS_URL = cfg.url;
-          OCIS_CONFIG_DIR = if (cfg.configDir == null) then "${cfg.stateDir}/config" else cfg.configDir;
-          OCIS_BASE_DATA_PATH = cfg.stateDir;
-        } // cfg.environment;
+        environment = serviceEnvironment;
         serviceConfig = {
           Type = "simple";
           ExecStart = "${lib.getExe cfg.package} server";
@@ -204,4 +297,5 @@ in
     danth
     ramblurr
   ];
+  meta.doc = ./ocis.md;
 }
