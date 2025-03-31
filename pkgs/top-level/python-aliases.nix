@@ -33,6 +33,31 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  # Prevent incorrect Python packaging attempts.
+  # Note: `{ python3, python3Packages, ... }: with python3Packages; [ ... python3 ]` still works, since `with` has lower priority.
+  pythonPackages = throw "do not use pythonPackages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python2Packages = throw "do not use python2Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python27Packages = throw "do not use python27Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python3Packages = throw "do not use python3Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python39Packages = throw "do not use python39Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python310Packages = throw "do not use python310Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python311Packages = throw "do not use python311Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python312Packages = throw "do not use python312Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python313Packages = throw "do not use python313Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python2 = throw "do not use python2 when building Python packages, use the generic python parameter instead"; # do not remove
+  python3 = throw "do not use python3 when building Python packages, use the generic python parameter instead"; # do not remove
+  python39 = throw "do not use python39 when building Python packages, use the generic python parameter instead"; # do not remove
+  python310 = throw "do not use python310 when building Python packages, use the generic python parameter instead"; # do not remove
+  python311 = throw "do not use python311 when building Python packages, use the generic python parameter instead"; # do not remove
+  python312 = throw "do not use python312 when building Python packages, use the generic python parameter instead"; # do not remove
+  python313 = throw "do not use python313 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy = throw "do not use pypy when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy2 = throw "do not use pypy2 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy27 = throw "do not use pypy27 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy3 = throw "do not use pypy3 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy310 = throw "do not use pypy310 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy311 = throw "do not use pypy311 when building Python packages, use the generic python parameter instead"; # do not remove
+
   aadict = throw "aadict was removed, it was introduced as a dependency for a package that never manifested and has been an unused leaf package ever since"; # added 2024-07-08
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
