@@ -5,14 +5,14 @@
 }:
 
 let
-  version = "6.16.6";
+  version = "6.16.7";
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-httpyac";
     publisher = "anweber";
     inherit version;
-    hash = "sha256-GR1DX6td/a75STpfIU0UtOxpNBWCkyzecEZdDMZTy1M=";
+    hash = "sha256-NAyVsEb3QBgq+cGWF03kjk2bQ8L5mulYYyIhIhjNVMQ=";
   };
 
   buildInputs = [ httpyac ];
