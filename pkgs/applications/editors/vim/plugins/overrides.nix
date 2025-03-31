@@ -78,6 +78,8 @@
   ncurses,
   # devdocs-nvim dependencies
   pandoc,
+  # nvim-tinygit
+  gitMinimal,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -2454,6 +2456,18 @@ in
       "nvim-test.runners.zig"
       "nvim-test.runners.hspec"
       "nvim-test.runners.stack"
+    ];
+  };
+
+  nvim-tinygit = super.nvim-tinygit.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+
+    checkInputs = [
+      gitMinimal
+      # transitive dependency (telescope-nvim) not properly propagated to the test environment
+      self.plenary-nvim
     ];
   };
 
