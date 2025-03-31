@@ -57,6 +57,21 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = false;
 
+  # Disabling tests because:
+  #
+  # ```
+  # running 3 tests
+  # test args::tests::test_max_genesis_archive_unpacked_size_constant ... ok
+  # test bigtable::tests::test_missing_blocks ... ok
+  # error: test failed, to rerun pass `-p agave-ledger-tool --bin agave-ledger-tool`
+  #
+  # Caused by:
+  #   process didn't exit successfully: `/build/source/target/x86_64-unknown-linux-gnu/release/deps/agave_ledger_tool-b8aca978c218ed51` (signal: 4, SIGILL: illegal instruction)
+  # ```
+  #
+  # Almost certainly caused by the ledger-tool test calling `Command::cargo_bin` which assumes a good bit about the current environment.
+  doCheck = false;
+
   meta = with lib; {
     description = "Solana Network Validator";
     homepage = "https://github.com/anza-xyz/agave";
