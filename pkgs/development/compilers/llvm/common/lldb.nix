@@ -32,25 +32,6 @@
 }:
 
 let
-  src' =
-    if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/lldb "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
-        ''
-      )
-    else
-      src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
@@ -64,7 +45,25 @@ stdenv.mkDerivation (
     pname = "lldb";
     inherit version;
 
-    src = src';
+    src =
+      if monorepoSrc != null then
+        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
+          ''
+            mkdir -p "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "14") ''
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/lldb "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+          ''
+        )
+      else
+        src;
 
     # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
     # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
