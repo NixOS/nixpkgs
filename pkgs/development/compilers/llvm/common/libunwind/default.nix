@@ -16,31 +16,6 @@
   getVersionFile,
 }:
 let
-  src' =
-    if monorepoSrc != null then
-      runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/libunwind "$out"
-          mkdir -p "$out/libcxx"
-          cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
-          cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "15") ''
-          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          cp -r ${monorepoSrc}/runtimes "$out"
-        ''
-      )
-    else
-      src;
-
   patches = lib.optional (lib.versionOlder release_version "17") (
     getVersionFile "libunwind/gnu-install-dirs.patch"
   );
@@ -79,7 +54,30 @@ stdenv.mkDerivation (
 
     inherit version patches;
 
-    src = src';
+    src =
+      if monorepoSrc != null then
+        runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } (
+          ''
+            mkdir -p "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "14") ''
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/libunwind "$out"
+            mkdir -p "$out/libcxx"
+            cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+            cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "15") ''
+            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+            cp -r ${monorepoSrc}/runtimes "$out"
+          ''
+        )
+      else
+        src;
 
     sourceRoot =
       if lib.versionAtLeast release_version "15" then
