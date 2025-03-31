@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lVXx0G+CmH+7RliGJwVRV0BBT9NLTbatLtdqLcCNO94=";
   };
 
-  buildInputs = [
-    curl
-  ];
+  buildInputs = [ curl ];
 
   configureFlags = [
     # Disable SSE2 extensions on platforms for which they are not enabled by default
