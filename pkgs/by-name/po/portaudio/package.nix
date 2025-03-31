@@ -14,6 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "portaudio";
   version = "19.7.0-unstable-2026-02-19";
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
   src = fetchFromGitHub {
     owner = "PortAudio";
     repo = "portaudio";
@@ -35,9 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  postPatch = ''
+    # remove prefix from library and include paths
+    substituteInPlace cmake/portaudio-2.0.pc.in \
+      --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' \
+                     'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
+                     'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # fixup .pc file to find alsa library
