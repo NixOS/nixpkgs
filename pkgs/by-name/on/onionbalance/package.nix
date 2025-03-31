@@ -43,7 +43,7 @@ with python312Packages;
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ MulliganSecurity ];
       mainProgram = "onionbalance";
-      changelog = "https://gitlab.torproject.org/tpo/onion-services/onionbalance/-/tags/0.2.3";
+      changelog = "https://gitlab.torproject.org/tpo/onion-services/onionbalance/-/tags/${version}";
     };
 
   };
