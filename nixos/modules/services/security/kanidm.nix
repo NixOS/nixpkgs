@@ -907,7 +907,6 @@ in
           TemporaryFileSystem = "/:ro";
         }
       ];
-      environment.RUST_LOG = "info";
     };
 
     systemd.services.kanidm-unixd = mkIf cfg.enablePam {
