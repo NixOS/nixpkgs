@@ -88,11 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
     (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
   ] ++ lib.optionals (lib.versions.major release_version == "13") [
-    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL fails
+    (lib.cmakeBool "LIBOMPTARGET_BUILD_AMDGCN_BCLIB" false) # Building the AMDGCN device RTL fails
   ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
-    "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
-    "-DOPT_TOOL=${llvm}/bin/opt"
-    "-DLINK_TOOL=${llvm}/bin/llvm-link"
+    (lib.cmakeFeature "CLANG_TOOL" "${clang-unwrapped}/bin/clang")
+    (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
+    (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
   ] ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
