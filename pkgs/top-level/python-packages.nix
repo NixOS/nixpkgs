@@ -16675,6 +16675,8 @@ self: super: with self; {
 
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
 
+  swh-scheduler = callPackage ../development/python-modules/swh-scheduler { };
+
   swh-storage = callPackage ../development/python-modules/swh-storage { };
 
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
