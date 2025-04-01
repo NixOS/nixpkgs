@@ -1073,6 +1073,7 @@ mapAliases {
     first on 24.05 because Nextcloud doesn't support upgrades across multiple major versions!
   ''; # Added 2024-06-25
   nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
+  nextcloud-news-updater = throw "nextcloud-news-updater has been removed because the project is unmaintained"; # Added 2025-03-28
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = makePlasma5Throw "neochat"; # added 2022-05-10
   nerdfonts = throw ''

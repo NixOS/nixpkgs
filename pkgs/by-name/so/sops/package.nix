@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "sops";
-  version = "3.10.0";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-NOZvVL4b7+TVlB6iM4HJDa5PHOjvcN0BXDMOHmqg7lU=";
+    hash = "sha256-LdsuN243oQ/L6LYgynb7Kw60alXn5IfUfhY0WaZFVCU=";
   };
 
   vendorHash = "sha256-I+iwimrNdKABZFP2etZTQJAXKigh+0g/Jhip86Cl5Rg=";

@@ -10291,6 +10291,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-grpc
       { };
 
+  opentelemetry-instrumentation-httpx =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-httpx
+      { };
+
   opentelemetry-instrumentation-logging =
     callPackage ../development/python-modules/opentelemetry-instrumentation-logging
       { };
