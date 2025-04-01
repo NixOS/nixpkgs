@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   python,
+  pythonAtLeast,
   nose,
   mock,
   requests,
@@ -61,6 +62,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # Unmaintained since 2020, archived in the beginning of May 2024 and broken
     # https://github.com/boto/boto/issues/3951
-    broken = true;
+    broken = pythonAtLeast "3.12";
   };
 }
