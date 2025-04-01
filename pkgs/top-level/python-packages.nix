@@ -18814,8 +18814,6 @@ self: super: with self; {
 
   wsme = callPackage ../development/python-modules/wsme { };
 
-  wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
-
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
