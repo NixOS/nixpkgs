@@ -267,7 +267,7 @@ in
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix { };
   btrbk-section-order = handleTest ./btrbk-section-order.nix { };
   budgie = handleTest ./budgie.nix { };
-  buildbot = handleTest ./buildbot.nix { };
+  buildbot = runTest ./buildbot.nix;
   buildkite-agents = handleTest ./buildkite-agents.nix { };
   c2fmzq = handleTest ./c2fmzq.nix { };
   caddy = handleTest ./caddy.nix { };
