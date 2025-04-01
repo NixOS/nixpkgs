@@ -231,9 +231,16 @@ buildPythonApplication rec {
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # can be re-enabled with the next kitty release, see https://github.com/kovidgoyal/kitty/pull/7939
+
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_transfer_send dont_test_transfer_send
+
+    substituteInPlace kitty_tests/ssh.py \
+      --replace test_ssh_connection_data no_test_ssh_connection_data \
+
+    substituteInPlace kitty_tests/shell_integration.py \
+      --replace test_fish_integration no_test_fish_integration
+
     # theme collection test starts an http server
     rm tools/themes/collection_test.go
     # passwd_test tries to exec /usr/bin/dscl
