@@ -5,14 +5,15 @@
   stdenv,
   darwin,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jnv";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HKZ+hF5Y7vTA4EODSAd9xYJHaipv5YukTl470ejPLtM=";
   };
 
@@ -37,4 +38,4 @@ rustPlatform.buildRustPackage rec {
       nshalman
     ];
   };
-}
+})
