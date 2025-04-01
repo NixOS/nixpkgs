@@ -16175,6 +16175,8 @@ self: super: with self; {
 
   sphinx-reredirects = callPackage ../development/python-modules/sphinx-reredirects { };
 
+  sphinx-remove-toctrees = callPackage ../development/python-modules/sphinx-remove-toctrees { };
+
   sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
