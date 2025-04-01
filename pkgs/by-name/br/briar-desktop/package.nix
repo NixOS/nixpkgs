@@ -63,7 +63,10 @@ stdenv.mkDerivation rec {
     mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      onny
+      supinie
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
