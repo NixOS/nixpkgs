@@ -19,6 +19,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-c6H/8/dmCWasFKVR15U/kty4AzQAqmiL/VLKrPtH+s4=";
 
+  tags = [
+    "api"
+    "client"
+    "server"
+    "forward"
+    "nat"
+    "other"
+  ];
+
   # tests fail due to requiring networking
   doCheck = false;
 
