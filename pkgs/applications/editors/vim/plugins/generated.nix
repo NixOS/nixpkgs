@@ -16822,6 +16822,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-fold-cycle = buildVimPlugin {
+    pname = "vim-fold-cycle";
+    version = "2020-05-11";
+    src = fetchFromGitHub {
+      owner = "arecarn";
+      repo = "vim-fold-cycle";
+      rev = "23a87f3eb12b1b9d8927207353b0f7a5454d1c0b";
+      sha256 = "11kx2grggkyfkspfhvg2wgvlzyhrirmrf1kw8r8h64sindypxfsg";
+    };
+    meta.homepage = "https://github.com/arecarn/vim-fold-cycle/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-foldsearch = buildVimPlugin {
     pname = "vim-foldsearch";
     version = "2024-05-15";
