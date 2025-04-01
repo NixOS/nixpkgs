@@ -11,6 +11,7 @@
   buildNpmPackage,
   installShellFiles,
   versionCheckHook,
+  nixosTests,
 }:
 
 buildGoModule (
@@ -122,6 +123,7 @@ buildGoModule (
 
     passthru = {
       inherit gen webui;
+      tests = { inherit (nixosTests) olivetin; };
       updateScript = ./update.sh;
     };
 
