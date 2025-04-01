@@ -53,14 +53,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.0.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
+    hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
   patches = [
     (fetchpatch {
