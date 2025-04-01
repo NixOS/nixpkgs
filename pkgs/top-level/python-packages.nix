@@ -1979,6 +1979,8 @@ self: super: with self; {
 
   bork = callPackage ../development/python-modules/bork { };
 
+  bosch-alarm-mode2 = callPackage ../development/python-modules/bosch-alarm-mode2 { };
+
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
