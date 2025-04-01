@@ -203,7 +203,7 @@ in {
   };
   ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = runTest ./babeld.nix;
-  bazarr = handleTest ./bazarr.nix {};
+  bazarr = runTest ./bazarr.nix;
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
@@ -330,7 +330,7 @@ in {
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
-  doas = handleTest ./doas.nix {};
+  doas = runTest ./doas.nix;
   docker = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker.nix {};
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
@@ -398,8 +398,8 @@ in {
   fider = runTest ./fider.nix;
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
-  firefly-iii = handleTest ./firefly-iii.nix {};
-  firefly-iii-data-importer = handleTest ./firefly-iii-data-importer.nix {};
+  firefly-iii = runTest ./firefly-iii.nix;
+  firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
   firefox = runTest {
     imports = [./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox;
@@ -756,7 +756,7 @@ in {
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix {};
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
-  n8n = handleTest ./n8n.nix {};
+  n8n = runTest ./n8n.nix;
   nagios = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
@@ -1338,7 +1338,7 @@ in {
   xpadneo = runTest ./xpadneo.nix;
   xrdp = runTest ./xrdp.nix;
   xrdp-with-audio-pulseaudio = runTest ./xrdp-with-audio-pulseaudio.nix;
-  xscreensaver = handleTest ./xscreensaver.nix {};
+  xscreensaver = runTest ./xscreensaver.nix;
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
