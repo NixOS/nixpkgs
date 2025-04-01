@@ -396,7 +396,7 @@ def execute(argv: list[str]) -> None:
                     raise NRError(
                         "please specify one of the following "
                         + "supported image variants via --image-variant:\n"
-                        + "\n".join(f"- {v}" for v in variants.keys())
+                        + "\n".join(f"- {v}" for v in variants)
                     )
 
             match action:
@@ -518,7 +518,19 @@ def execute(argv: list[str]) -> None:
                         "Done. The virtual machine can be started by running", vm_path
                     )
                 case Action.BUILD_IMAGE:
-                    disk_path = path_to_config / variants[args.image_variant]
+                    if flake:
+                        image_name = nix.get_build_image_name_flake(
+                            flake,
+                            args.image_variant,
+                            eval_flags=flake_common_flags,
+                        )
+                    else:
+                        image_name = nix.get_build_image_name(
+                            build_attr,
+                            args.image_variant,
+                            instantiate_flags=flake_common_flags,
+                        )
+                    disk_path = path_to_config / image_name
                     print_result("Done. The disk image can be found in", disk_path)
 
         case Action.EDIT:
