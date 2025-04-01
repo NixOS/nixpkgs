@@ -5982,6 +5982,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  hurl-nvim = buildVimPlugin {
+    pname = "hurl.nvim";
+    version = "2025-03-04";
+    src = fetchFromGitHub {
+      owner = "jellydn";
+      repo = "hurl.nvim";
+      rev = "bf00b4ee56dc8026dd7cd068236fb2c01bb1e307";
+      sha256 = "1hw8sfx689j8fxwixfdia6rvfncb37j5y3g7f8kgqg1rd6vc3b0z";
+    };
+    meta.homepage = "https://github.com/jellydn/hurl.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   hydra-nvim = buildVimPlugin {
     pname = "hydra.nvim";
     version = "2025-03-28";
@@ -10643,6 +10656,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-origami = buildVimPlugin {
+    pname = "nvim-origami";
+    version = "2025-03-31";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-origami";
+      rev = "61c0fdec70e82d9a85642234420399372acd636d";
+      sha256 = "1ld4bp18b4xi9ppjhj06ii339azrblnqpi3baz48pjjfdc4lxgld";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-origami/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-osc52 = buildVimPlugin {
     pname = "nvim-osc52";
     version = "2024-05-24";
@@ -10926,6 +10952,19 @@ final: prev:
       sha256 = "1cm4dggp1aidq72jdkk2zi2aw7dizrb5npriwjxn0nnc8vnv9j4q";
     };
     meta.homepage = "https://github.com/klen/nvim-test/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-tinygit = buildVimPlugin {
+    pname = "nvim-tinygit";
+    version = "2025-03-30";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-tinygit";
+      rev = "8332b4a1cd852416a632dda51848a5fae58df48e";
+      sha256 = "1sjnc2bgprhjyjcgg3ninskkmh0369jq80i6n3sxr2lxxp64yvjp";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-tinygit/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11694,6 +11733,19 @@ final: prev:
       sha256 = "09y0q4shgi8a88z42lrkh41ay64yhb7050rlc3b6r2lk6k72xdqz";
     };
     meta.homepage = "https://github.com/dundalek/parpar.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  parrot-nvim = buildVimPlugin {
+    pname = "parrot.nvim";
+    version = "2025-03-30";
+    src = fetchFromGitHub {
+      owner = "frankroeder";
+      repo = "parrot.nvim";
+      rev = "3158788f52745310bee3ec5a53dd0012f17f34d0";
+      sha256 = "1pdxgjbfav223wablhy2gfq1fm3j523dln1rdnpycvbqcm60hm42";
+    };
+    meta.homepage = "https://github.com/frankroeder/parrot.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20888,6 +20940,19 @@ final: prev:
       sha256 = "0am4yw7lnibgc949qvbsi4a7hqdx6gk209l5vafv5bwcvd4irwxs";
     };
     meta.homepage = "https://github.com/folke/which-key.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  whichpy-nvim = buildVimPlugin {
+    pname = "whichpy.nvim";
+    version = "2025-03-14";
+    src = fetchFromGitHub {
+      owner = "neolooong";
+      repo = "whichpy.nvim";
+      rev = "1652a59dce97902c6c77960fba325163764af40f";
+      sha256 = "084b5y17069sz3hh312g4v6w4bqlaqmwdszk3yz3s34a386a0qgf";
+    };
+    meta.homepage = "https://github.com/neolooong/whichpy.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

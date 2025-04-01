@@ -5,18 +5,20 @@ GEM
       base64
       nkf
       rexml
+    abbrev (0.1.2)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     artifactory (3.0.17)
     atomos (0.1.3)
     aws-eventstream (1.3.2)
-    aws-partitions (1.1068.0)
-    aws-sdk-core (3.220.1)
+    aws-partitions (1.1075.0)
+    aws-sdk-core (3.221.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
+      logger
     aws-sdk-kms (1.99.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
@@ -159,6 +161,7 @@ GEM
     json (2.10.2)
     jwt (2.10.1)
       base64
+    logger (1.7.0)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     multi_json (1.15.0)
@@ -209,7 +212,7 @@ GEM
       colored2 (~> 3.1)
       nanaimo (~> 0.4.0)
       rexml (>= 3.3.6, < 4.0)
-    xcpretty (0.4.0)
+    xcpretty (0.4.1)
       rouge (~> 3.28.0)
     xcpretty-travis-formatter (1.0.1)
       xcpretty (~> 0.2, >= 0.0.7)
@@ -218,6 +221,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  abbrev (~> 0.1.2)
   fastlane
 
 BUNDLED WITH
