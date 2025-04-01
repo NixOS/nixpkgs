@@ -389,6 +389,7 @@ self: super: builtins.intersectAttrs super {
     dontCheck
     enableSeparateBinOutput
     (self.generateOptparseApplicativeCompletions [ "postgrest" ])
+    (overrideCabal { passthru.tests = pkgs.nixosTests.postgrest; })
   ];
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.

@@ -199,15 +199,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "9.0.0-beta.25111.5",
-    "hash": "sha256-gwzSdsu6YfLYxjltDOUouvajClMQ/BW8aiJQlYyxtlk=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25111.5/microsoft.dotnet.arcade.sdk.9.0.0-beta.25111.5.nupkg"
+    "version": "9.0.0-beta.25161.4",
+    "hash": "sha256-NrQSPWnG7RlhNMyrqcz4sR0+WWpJpoTrrRtVLkIGFms=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25161.4/microsoft.dotnet.arcade.sdk.9.0.0-beta.25161.4.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "9.0.0-beta.25111.5",
-    "hash": "sha256-ZOwHiBzSiJ9PJwLP1iw18sZoxW+78ej+gGg4yt9dei4=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25111.5/microsoft.dotnet.xlifftasks.9.0.0-beta.25111.5.nupkg"
+    "version": "9.0.0-beta.25161.4",
+    "hash": "sha256-l4CTmNsxuFP3Bjs2mS1/zdmsb/ZvyHpddTX2HT+MVu4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/9.0.0-beta.25161.4/microsoft.dotnet.xlifftasks.9.0.0-beta.25161.4.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
