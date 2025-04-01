@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kgeotag";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "kgeotag";
     owner = "graphics";
     rev = "v${version}";
-    hash = "sha256-/NYAR/18Dh+fphCBz/zFWj/xqEl28e77ZtV8LlcGyMI=";
+    hash = "sha256-3PEtwTGvyH5RFBWQ9LI7FNlet46JYiVp9w5VtVvB454=";
   };
 
   nativeBuildInputs = [
