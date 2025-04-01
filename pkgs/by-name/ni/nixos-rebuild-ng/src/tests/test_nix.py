@@ -353,7 +353,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
               value = import <nixpkgs/nixos>;
               set = if builtins.isFunction value then value {} else value;
             in
-              builtins.mapAttrs (n: v: v.passthru.filePath) set.config.system.build.images
+              builtins.attrNames set.config.system.build.images
             """),
         ],
         stdout=PIPE,
@@ -376,7 +376,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
               value = import "{tmp_path}";
               set = if builtins.isFunction value then value {{}} else value;
             in
-              builtins.mapAttrs (n: v: v.passthru.filePath) set.preAttr.config.system.build.images
+              builtins.attrNames set.preAttr.config.system.build.images
             """),
             "--inst-flag",
         ],
@@ -411,7 +411,7 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
             "--json",
             "flake.nix#myAttr.config.system.build.images",
             "--apply",
-            "builtins.mapAttrs (n: v: v.passthru.filePath)",
+            "builtins.attrNames",
             "--eval-flag",
         ],
         stdout=PIPE,
