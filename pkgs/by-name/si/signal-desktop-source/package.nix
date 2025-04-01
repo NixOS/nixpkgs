@@ -74,17 +74,46 @@ let
     '';
   });
 
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "signal-desktop-source";
   version = "7.48.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-/jtuGsBOFsSgJZNpRilWZ0daI0iYVziZBaF/vLvQ7NU=";
   };
+
+  stickerCreator = stdenv.mkDerivation (finalAttrs: {
+    pname = "signal-desktop-sticker-creator";
+    inherit version;
+    src = src + "/sticker-creator";
+
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname src version;
+      hash = "sha256-TuPyRVNFIlR0A4YHMpQsQ6m+lm2fsp79FzQ1P5qqjIc=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      (pnpm.override { inherit nodejs; }).configHook
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+      pnpm run build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -r dist $out
+      runHook postInstall
+    '';
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "signal-desktop-source";
+  inherit src version;
 
   nativeBuildInputs = [
     nodejs
@@ -136,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${electron-headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
+    cp -r ${stickerCreator} sticker-creator/dist
 
     pnpm run generate
     pnpm exec electron-builder \
