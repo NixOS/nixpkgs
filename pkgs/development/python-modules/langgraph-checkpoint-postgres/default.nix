@@ -9,7 +9,7 @@
 
   # dependencies
   langgraph-checkpoint,
-  orjson,
+  ormsgpack,
   psycopg,
   psycopg-pool,
 
@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.15";
+  version = "2.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     langgraph-checkpoint
-    orjson
+    ormsgpack
     psycopg
     psycopg-pool
   ];
