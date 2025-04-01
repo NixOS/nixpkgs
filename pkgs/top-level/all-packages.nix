@@ -4906,7 +4906,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  }) teleport_15 teleport_16 teleport_17 teleport;
+  }) teleport_16 teleport_17 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
