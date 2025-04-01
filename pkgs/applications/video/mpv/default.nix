@@ -227,6 +227,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals zimgSupport [ zimg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
 
+  # https://github.com/mpv-player/mpv/issues/15591#issuecomment-2764797522
+  # In file included from ../player/clipboard/clipboard-mac.m:19:
+  # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
+  };
+
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
