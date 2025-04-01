@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk11
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-, unzip
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk11,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+  unzip,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,11 @@ stdenv.mkDerivation rec {
       comment = "Scientific Image Analysis";
       desktopName = "Fiji Is Just ImageJ";
       genericName = "Fiji Is Just ImageJ";
-      categories = [ "Education" "Science" "ImageProcessing" ];
+      categories = [
+        "Education"
+        "Science"
+        "ImageProcessing"
+      ];
       startupNotify = true;
       startupWMClass = "fiji-Main";
     })
@@ -85,7 +90,12 @@ stdenv.mkDerivation rec {
       binaryBytecode
       binaryNativeCode
     ];
-    license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      bsd2
+      publicDomain
+    ];
     maintainers = with maintainers; [ davisrichard437 ];
   };
 }

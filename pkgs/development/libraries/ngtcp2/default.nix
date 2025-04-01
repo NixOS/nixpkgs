@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, brotli, libev, nghttp3, quictls
-, withJemalloc ? false, jemalloc
-, curlHTTP3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  brotli,
+  libev,
+  nghttp3,
+  quictls,
+  withJemalloc ? false,
+  jemalloc,
+  curlHTTP3,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +24,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
