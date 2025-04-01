@@ -25,7 +25,7 @@ in other cases, you will need to add something like the following to your
 }
 ```
 
-## NixOS-integrated Flatpak Package Management {#nixos-integrated-flatpak-package-management}
+## Declarative Flatpak management {#module-services-flatpak-declarative-manage}
 NixOS now supports integrated management of Flatpak packages. You can specify
 Flatpak packages to be installed or removed through your {file}`configuration.nix`:
 ```nix
