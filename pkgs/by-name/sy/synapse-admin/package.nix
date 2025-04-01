@@ -5,6 +5,7 @@
   nodejs,
   yarn-berry,
   cacert,
+  nix-update-script,
   formats,
   baseUrl ? null,
 }:
@@ -122,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Admin UI for Synapse Homeservers";
