@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.ejabberd;
@@ -8,11 +13,23 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  ectl = ''${cfg.package}/bin/ejabberdctl ${
+    lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
+  } ${
+    lib.optionalString (cfg.configDir != null) "--config-dir ${lib.escapeShellArg cfg.configDir}"
+  } --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
 
-in {
+in
+{
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ejabberd"
+      "imagemagick"
+    ] "Instead use `services.ejabberd.package = pkgs.ejabberd.override { withImageMagick = true; };`")
+  ];
 
   ###### interface
 
@@ -26,7 +43,20 @@ in {
         description = "Whether to enable ejabberd server";
       };
 
-      package = lib.mkPackageOption pkgs "ejabberd" { };
+      package = lib.mkPackageOption pkgs "ejabberd" {
+        example = ''
+          pkgs.ejabberd.override {
+            withImageMagick = true;
+            withLua = true;
+            withMySQL = true;
+            withPostgreSQL = true;
+            withRedis = true;
+            withSIP = true;
+            withSQLite = true;
+            withZlib = false;
+          }
+        '';
+      };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -38,6 +68,13 @@ in {
         type = lib.types.str;
         default = "ejabberd";
         description = "Group under which ejabberd is ran";
+      };
+
+      configDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/etc/ejabberd";
+        description = "Location of the configuration directory of ejabberd";
       };
 
       spoolDir = lib.mkOption {
@@ -66,20 +103,13 @@ in {
 
       loadDumps = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         description = "Configuration dumps that should be loaded on the first startup";
         example = lib.literalExpression "[ ./myejabberd.dump ]";
-      };
-
-      imagemagick = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Add ImageMagick to server's path; allows for image thumbnailing";
       };
     };
 
   };
-
 
   ###### implementation
 
@@ -103,7 +133,10 @@ in {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      path = [
+        pkgs.findutils
+        pkgs.coreutils
+      ];
 
       serviceConfig = {
         User = cfg.user;
@@ -148,7 +181,7 @@ in {
       "d '${cfg.spoolDir}' 0700 ${cfg.user} ${cfg.group} -"
     ];
 
-    security.pam.services.ejabberd = {};
+    security.pam.services.ejabberd = { };
 
   };
 
