@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  setuptools,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
