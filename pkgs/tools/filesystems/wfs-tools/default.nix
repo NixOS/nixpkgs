@@ -1,17 +1,31 @@
-{ lib, stdenv, fetchurl, makeWrapper, fuse, unzip, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  fuse,
+  unzip,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "wfs-tools";
   version = "1.2.3";
 
   src = fetchurl {
-    url =
-      "https://github.com/koolkdev/wfs-tools/releases/download/v${version}/wfs-tools-v${version}-linux-x86-64.zip";
+    url = "https://github.com/koolkdev/wfs-tools/releases/download/v${version}/wfs-tools-v${version}-linux-x86-64.zip";
     hash = "sha256-lISRaVl39tr7ZD2yLyFaQ/2iyr1WJsWiXsqfOSe1lBU=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    autoPatchelfHook
+  ];
 
-  buildInputs = [ fuse stdenv.cc.cc.lib ]; # Add the C runtime library
+  buildInputs = [
+    fuse
+    stdenv.cc.cc.lib
+  ]; # Add the C runtime library
 
   unpackPhase = ''
     mkdir -p $out/bin
@@ -25,7 +39,10 @@ stdenv.mkDerivation rec {
       mv "$binary" "$binary.unwrapped"
       makeWrapper "$binary.unwrapped" "$binary" \
         --prefix LD_LIBRARY_PATH : "${
-          lib.makeLibraryPath [ fuse stdenv.cc.cc.lib ]
+          lib.makeLibraryPath [
+            fuse
+            stdenv.cc.cc.lib
+          ]
         }"
     done
   '';
