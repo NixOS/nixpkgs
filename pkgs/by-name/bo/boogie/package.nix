@@ -8,16 +8,16 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    hash = "sha256-IWtYbb1IFB6DLIYYTP+q7q+h/0aqonxr/mWwf+83aRo=";
+    hash = "sha256-0YZy4TYff6iupSAwDw8qvR6vdkUh8PDXKoKARfEyEPQ=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.json;
 
