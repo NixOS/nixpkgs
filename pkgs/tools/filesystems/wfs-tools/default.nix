@@ -5,6 +5,7 @@
   makeWrapper,
   fuse,
   unzip,
+  autoPatchelfHook,
 }:
 stdenv.mkDerivation rec {
   pname = "wfs-tools";
@@ -18,9 +19,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     unzip
+    autoPatchelfHook
   ];
 
-  buildInputs = [ fuse ];
+  buildInputs = [ 
+    fuse 
+    stdenv.cc.cc.lib  # Add the C runtime library
+  ];
 
   unpackPhase = ''
     mkdir -p $out/bin
@@ -33,8 +38,7 @@ stdenv.mkDerivation rec {
     for binary in $out/bin/wfs-*; do
       mv "$binary" "$binary.unwrapped"
       makeWrapper "$binary.unwrapped" "$binary" \
-        --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ fuse ]}" \
-        --suffix PATH : "${lib.makeBinPath [ fuse ]}"
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse stdenv.cc.cc.lib ]}"
     done
   '';
 
