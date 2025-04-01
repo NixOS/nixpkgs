@@ -13627,6 +13627,10 @@ self: super: with self; {
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
 
+  pytest-shared-session-scope =
+    callPackage ../development/python-modules/pytest-shared-session-scope
+      { };
+
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
   pytest-smtpd = callPackage ../development/python-modules/pytest-smtpd { };
