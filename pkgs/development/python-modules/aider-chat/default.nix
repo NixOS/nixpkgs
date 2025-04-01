@@ -18,11 +18,9 @@ let
       nltk-data.stopwords
     ];
   };
-  python3 = python312.override {
-    self = python3;
-    packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
-  };
-  version = "0.75.2";
+
+  python3 = python312;
+  version = "0.80.0";
   aider-chat = python3.pkgs.buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -32,7 +30,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-+XpvAnxsv6TbsJwTAgNdJtZxxoPXQ9cxRVUaFZCnS8w=";
+      hash = "sha256-W3GO5+0rprQHmn1upL3pcXuv2e9Wir6TW0tUnvZj48E=";
     };
 
     pythonRelaxDeps = true;
@@ -117,8 +115,9 @@ let
       tokenizers
       tqdm
       tree-sitter
-      tree-sitter-languages
+      tree-sitter-language-pack
       typing-extensions
+      typing-inspection
       urllib3
       watchfiles
       wcwidth
