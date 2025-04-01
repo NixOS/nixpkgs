@@ -1276,6 +1276,7 @@ in {
   user-home-mode = handleTest ./user-home-mode.nix {};
   ustreamer = handleTest ./ustreamer.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
+  vars = handleTest ./vars.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = runTest {
     imports = [ ./varnish.nix ];
