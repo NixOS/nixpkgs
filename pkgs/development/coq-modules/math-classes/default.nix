@@ -37,7 +37,7 @@ mkCoqDerivation {
   release."8.18.0".sha256 = "sha256-0WwPss8+Vr37zX616xeuS4TvtImtSbToFQkQostIjO8=";
   release."8.19.0".sha256 = "sha256-rsV96W9MPFi/DKsepNPm1QnC2DMemio+uALIgzVYw0w=";
 
-  mlPlugin = true;  /* uses coq-bignums.plugin */
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [ bignums ];
 

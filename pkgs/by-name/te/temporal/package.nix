@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  temporal,
+}:
 
 buildGoModule rec {
   pname = "temporal";
@@ -18,7 +24,10 @@ buildGoModule rec {
   env.CGO_ENABLED = 0;
 
   tags = [ "test_dep" ];
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There too many integration tests.
   doCheck = false;

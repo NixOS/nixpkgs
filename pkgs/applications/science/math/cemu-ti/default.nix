@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, libarchive
-, libpng
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  libarchive,
+  libpng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ clevor ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ];
     broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };
 })

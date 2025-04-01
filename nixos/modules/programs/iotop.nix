@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.iotop;
-in {
+in
+{
   options = {
     programs.iotop.enable = lib.mkEnableOption "iotop + setcap wrapper";
   };

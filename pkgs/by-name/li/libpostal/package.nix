@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, autoreconfHook, withData ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  autoreconfHook,
+  withData ? false,
+}:
 
 let
   releases = "https://github.com/openvenues/libpostal/releases";
@@ -17,7 +24,8 @@ let
     hash = "sha256-/Gn931Nx4UDBaiFUgGqC/NJUIKQ5aZT/+OYSlcfXva8=";
     stripRoot = false;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libpostal";
   version = "1.1";
 

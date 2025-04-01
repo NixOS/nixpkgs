@@ -1,10 +1,11 @@
-{ lib
-, buildGo123Module
-, buildNpmPackage
-, fetchFromGitHub
-, nix-update-script
-, installShellFiles
-, versionCheckHook
+{
+  lib,
+  buildGo123Module,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  versionCheckHook,
 }:
 
 let
@@ -35,7 +36,8 @@ let
     '';
   };
 
-in buildGo123Module rec {
+in
+buildGo123Module rec {
   inherit version;
   pname = "glasskube";
 
@@ -52,7 +54,10 @@ in buildGo123Module rec {
     "-X github.com/glasskube/glasskube/internal/config.Commit=${src.rev}"
   ];
 
-  subPackages = [ "cmd/glasskube" "cmd/package-operator" ];
+  subPackages = [
+    "cmd/glasskube"
+    "cmd/package-operator"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [ versionCheckHook ];
@@ -73,11 +78,9 @@ in buildGo123Module rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description =
-      "The missing Package Manager for Kubernetes featuring a GUI and a CLI";
+    description = "The missing Package Manager for Kubernetes featuring a GUI and a CLI";
     homepage = "https://github.com/glasskube/glasskube";
-    changelog =
-      "https://github.com/glasskube/glasskube/releases/tag/v${version}";
+    changelog = "https://github.com/glasskube/glasskube/releases/tag/v${version}";
     maintainers = with maintainers; [ jakuzure ];
     license = licenses.asl20;
     mainProgram = "glasskube";

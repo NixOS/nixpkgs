@@ -1,29 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.traefik;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
 
-  dynamicConfigFile = if cfg.dynamicConfigFile == null then
-    format.generate "config.toml" cfg.dynamicConfigOptions
-  else
-    cfg.dynamicConfigFile;
+  dynamicConfigFile =
+    if cfg.dynamicConfigFile == null then
+      format.generate "config.toml" cfg.dynamicConfigOptions
+    else
+      cfg.dynamicConfigFile;
 
-  staticConfigFile = if cfg.staticConfigFile == null then
-    format.generate "config.toml" (recursiveUpdate cfg.staticConfigOptions {
-      providers.file.filename = "${dynamicConfigFile}";
-    })
-  else
-    cfg.staticConfigFile;
+  staticConfigFile =
+    if cfg.staticConfigFile == null then
+      format.generate "config.toml" (
+        recursiveUpdate cfg.staticConfigOptions {
+          providers.file.filename = "${dynamicConfigFile}";
+        }
+      )
+    else
+      cfg.staticConfigFile;
 
   finalStaticConfigFile =
-    if cfg.environmentFiles == []
-    then staticConfigFile
-    else "/run/traefik/config.toml";
-in {
+    if cfg.environmentFiles == [ ] then staticConfigFile else "/run/traefik/config.toml";
+in
+{
   options.services.traefik = {
     enable = mkEnableOption "Traefik web server";
 
@@ -42,7 +50,9 @@ in {
         Static configuration for Traefik.
       '';
       type = format.type;
-      default = { entryPoints.http.address = ":80"; };
+      default = {
+        entryPoints.http.address = ":80";
+      };
       example = {
         entryPoints.web.address = ":8080";
         entryPoints.http.address = ":80";
@@ -73,8 +83,7 @@ in {
           service = "service1";
         };
 
-        http.services.service1.loadBalancer.servers =
-          [{ url = "http://localhost:8080"; }];
+        http.services.service1.loadBalancer.servers = [ { url = "http://localhost:8080"; } ];
       };
     };
 
@@ -99,7 +108,7 @@ in {
     package = mkPackageOption pkgs "traefik" { };
 
     environmentFiles = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.path;
       example = [ "/run/secrets/traefik.env" ];
       description = ''
@@ -121,11 +130,12 @@ in {
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [])
-          (pkgs.writeShellScript "pre-start" ''
+        ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
+          pkgs.writeShellScript "pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          '');
+          ''
+        );
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";

@@ -1,19 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, bash-completion
-, gst-plugins-base
-, gst-plugins-bad
-, gst-devtools
-, libxml2
-, flex
-, gettext
-, gobject-introspection
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  bash-completion,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-devtools,
+  libxml2,
+  flex,
+  gettext,
+  gobject-introspection,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,17 +33,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-bwCxG05eNMKjLWTfUh3Kd1GdYm/MXjhjwCGL0SNn4XQ=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    gobject-introspection
-    python3
-    flex
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      gobject-introspection
+      python3
+      flex
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
   buildInputs = [
     bash-completion
