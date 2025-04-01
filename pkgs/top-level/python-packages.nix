@@ -16663,6 +16663,8 @@ self: super: with self; {
 
   swh-core = callPackage ../development/python-modules/swh-core { };
 
+  swh-journal = callPackage ../development/python-modules/swh-journal { };
+
   swh-model = callPackage ../development/python-modules/swh-model { };
 
   swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
