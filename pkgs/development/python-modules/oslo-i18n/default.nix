@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.5.0";
+  version = "6.5.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.i18n";
+    pname = "oslo_i18n";
     inherit version;
-    hash = "sha256-k5O8rpLq3F93ETLRxqsjmxmJb/bYheOvwhqfqk3pJNM=";
+    hash = "sha256-6oVqcMWvfHbvtlkJlCMSid6r4jvoR3FZ03kBzvM7EJ0=";
   };
 
   postPatch = ''
