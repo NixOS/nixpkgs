@@ -197,7 +197,8 @@ in {
     homepage = "https://www.gnu.org/software/gnat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ethindp ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ]
+      ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
