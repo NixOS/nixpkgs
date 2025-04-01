@@ -66,6 +66,7 @@ dart.section.md
 dhall.section.md
 dlang.section.md
 dotnet.section.md
+elisp.section.md
 emscripten.section.md
 gnome.section.md
 go.section.md
