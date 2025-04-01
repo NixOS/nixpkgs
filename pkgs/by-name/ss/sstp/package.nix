@@ -7,6 +7,8 @@
   libevent,
   openssl,
   autoreconfHook,
+  makeWrapper,
+  cacert,
 }:
 
 stdenv.mkDerivation {
@@ -34,13 +36,19 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = [
     libevent
     openssl
     ppp
+    cacert
   ];
+
+  postInstall = ''
+    wrapProgram $out/sbin/sstpc --add-flags "--ca-cert ${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
 
   meta = with lib; {
     description = "SSTP client for Linux";
