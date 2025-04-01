@@ -652,6 +652,7 @@ in {
   localsend = handleTest ./localsend.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
+  logiops = handleTest ./logiops.nix {};
   logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
   luks = handleTest ./luks.nix {};
