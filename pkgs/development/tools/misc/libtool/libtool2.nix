@@ -2,6 +2,7 @@
 , runtimeShell
 , updateAutotoolsGnuConfigScriptsHook
 , file
+, pkgsHostTarget
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -9,7 +10,19 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+# Using pkgsHostTarget.targetPackages.stdenv.mkDerivation here, because
+# libtool does not support build/host/target as we know it. We have to
+# configure libtool with --host=$target and make sure only the target C
+# compiler is available during the configure, because otherwise libtool will
+# attempt to call the x86 compiler when it is used to cross-compile something.
+
+# `or` is because when cross-compiling `pkgsHostTarget.targetPackages.stdenv` will only have `cc`
+
+let
+  mkDerivation = if (stdenv.buildPlatform != stdenv.hostPlatform) then pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation else stdenv.mkDerivation;
+in
+
+mkDerivation rec {
   pname = "libtool";
   version = "2.5.4";
 
