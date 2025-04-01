@@ -1363,4 +1363,5 @@ in {
   ]);
 
   meta.doc = ./nextcloud.md;
+  meta.maintainers = teams.nextcloud;
 }

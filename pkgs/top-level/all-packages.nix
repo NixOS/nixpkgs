@@ -4139,8 +4139,6 @@ with pkgs;
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
   nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
 
-  nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
-
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
   inherit (callPackages ../applications/networking/cluster/nomad { })
