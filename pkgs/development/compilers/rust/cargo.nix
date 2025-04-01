@@ -75,6 +75,10 @@ rustPlatform.buildRustPackage.override {
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
     # https://github.com/alexcrichton/nghttp2-rs/issues/2
+    #
+    # If you fix this, please also re-enable Rust in the Linux kernel
+    # or ping @blitz. Look for cargo here:
+    # pkgs/os-specific/linux/kernel/generic.nix
     broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

@@ -109,7 +109,12 @@ let
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
-    rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc;
+    rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc
+      # Cargo is broken for cross-compilation. See here for context:
+      # pkgs/development/compilers/rust/cargo.nix
+      && !(stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform)
+      # Bindgen and clang don't get along right now.
+      && !stdenv.cc.isClang;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
@@ -168,23 +173,67 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
+      export HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc
+      export HOSTCXX=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++
+      export HOSTAR=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ar
+      export HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld
+
+      # Absolute paths for tools avoid any PATH-clobbering issues.
+      #
+      # We use the unwrapped clang, because the clang-wrapper doesn't like -target.
+      export CC=${if stdenv.cc.isClang
+                  then "${stdenv.cc.cc}/bin/clang"
+                  else "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"}
+      export LD=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ld
+      export AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar
+      export NM=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}nm
+      export STRIP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}strip
+      export OBJCOPY=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objcopy
+      export OBJDUMP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objdump
+      export READELF=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}readelf
 
       # Get a basic config file for later refinement with $generateConfig.
       make $makeFlags \
           -C . O="$buildRoot" $kernelBaseConfig \
-          ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+          ARCH=$kernelArch \
+          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
+          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          LD=$LD AR=$AR NM=$NM STRIP=$STRIP \
           $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-        KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
         PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
         perl -w $generateConfig
+
+
     '';
 
     installPhase = "mv $buildRoot/.config $out";
+
+    doCheck = true;
+
+    # Because gcc and binutils are still pulled in via buildPackages
+    # even in pkgsLLVM, we have to be extra careful that they doesn't
+    # leak into the build.
+    checkPhase = lib.optionalString stdenv.cc.isClang ''
+      if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+        echo "Kernel config didn't recognize the clang compiler?"
+        exit 1
+      fi
+    '' + lib.optionalString stdenv.cc.bintools.isLLVM ''
+      if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+        echo "Kernel config didn't recognize the LLVM linker?"
+        exit 1
+      fi
+    '' + lib.optionalString withRust ''
+      if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+        echo "Kernel config didn't find Rust toolchain?"
+        exit 1
+      fi
+    '';
 
     enableParallelBuilding = true;
 
@@ -210,7 +259,11 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
+  kernel = (callPackage ./manual-config.nix {
+    inherit lib stdenv buildPackages;
+
+    allowConfigChanges = false;
+  }) (basicArgs // {
     inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile modDirVersion;
     pos = builtins.unsafeGetAttrPos "version" args;
 
