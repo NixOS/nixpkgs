@@ -2192,6 +2192,10 @@ self: super: with self; {
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
 
+  canonical-sphinx-extensions =
+    callPackage ../development/python-modules/canonical-sphinx-extensions
+      { };
+
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   canopen = callPackage ../development/python-modules/canopen { };
