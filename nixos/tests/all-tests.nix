@@ -1246,6 +1246,7 @@ in {
   ttyd = handleTest ./web-servers/ttyd.nix {};
   tt-rss = handleTest ./web-apps/tt-rss.nix {};
   txredisapi = handleTest ./txredisapi.nix {};
+  tun2socks = handleTest ./tun2socks.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   turn-rs = handleTest ./turn-rs.nix {};

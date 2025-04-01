@@ -12274,6 +12274,12 @@
     githubId = 367259;
     name = "Konstantin Alekseev";
   };
+  kaleocheng = {
+    email = "kaleocheng@gmail.com";
+    github = "kaleocheng";
+    githubId = 7939352;
+    name = "Kaleo Cheng";
+  };
   kamadorueda = {
     name = "Kevin Amado";
     email = "kamadorueda@gmail.com";
