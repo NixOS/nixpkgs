@@ -9,6 +9,7 @@
   # dependencies
   langchain-core,
   msgpack,
+  ormsgpack,
 
   # testing
   dataclasses-json,
@@ -22,25 +23,26 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.16";
+  version = "2.0.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-HieCzNM+z7d0UGL8QOyjNP5P2IbLf0x0xhaUCWM/c0k=";
+    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
   build-system = [ poetry-core ];
 
-  dependencies = [ langchain-core ];
+  dependencies = [
+    langchain-core
+    ormsgpack
+  ];
 
   propagatedBuildInputs = [ msgpack ];
-
-  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
 
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
