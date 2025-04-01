@@ -110,6 +110,8 @@ stdenv.mkDerivation rec {
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://www.eclipse.org/";
     inherit description;
