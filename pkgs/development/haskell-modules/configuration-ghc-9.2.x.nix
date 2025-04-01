@@ -45,7 +45,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -59,6 +59,9 @@ self: super: {
   # These core package only exist for GHC >= 9.4. The best we can do is feign
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
@@ -93,6 +96,9 @@ self: super: {
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
@@ -110,8 +116,8 @@ self: super: {
   # 0.2.2.3 requires Cabal >= 3.8
   shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # https://github.com/NixOS/cabal2nix/issues/554
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility

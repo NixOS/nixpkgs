@@ -8,8 +8,12 @@ in
 
 self: super: {
 
-  # Should be llvmPackages_6 which has been removed from nixpkgs
-  llvmPackages = null;
+  # Should be llvmPackages_6 which has been removed from nixpkgs,
+  # create attribute set to prevent eval errors.
+  llvmPackages = {
+    llvm = null;
+    clang = null;
+  };
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -43,7 +47,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -57,6 +61,9 @@ self: super: {
   # These core package only exist for GHC >= 9.4. The best we can do is feign
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # Needs Cabal 3.0.x.
   jailbreak-cabal = super.jailbreak-cabal.overrideScope (cself: _: { Cabal = cself.Cabal_3_2_1_0; });
@@ -92,6 +99,9 @@ self: super: {
 
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = self.exceptions_0_10_9;

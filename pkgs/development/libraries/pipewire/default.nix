@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   buildPackages,
   fetchFromGitLab,
   python3,
@@ -253,7 +254,12 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pw-jack" "$jack"
   '';
 
-  passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.pipewire;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
@@ -264,6 +270,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       kranzes
       k900
+    ];
+    pkgConfigModules = [
+      "libpipewire-0.3"
+      "libspa-0.2"
     ];
   };
 })

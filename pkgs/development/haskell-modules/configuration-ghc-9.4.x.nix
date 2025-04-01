@@ -54,7 +54,7 @@ in
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -62,6 +62,9 @@ in
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # Jailbreaks & Version Updates
 
@@ -74,6 +77,9 @@ in
     self.base-orphans
   ] super.generically;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;
@@ -85,9 +91,6 @@ in
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
     ] ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
-
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
@@ -139,6 +142,9 @@ in
     self.foldable1-classes-compat
     self.OneTuple
   ] super.base-compat-batteries;
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
