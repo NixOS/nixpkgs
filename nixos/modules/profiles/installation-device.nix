@@ -75,6 +75,7 @@ with lib;
     # mounting the storage in a different system.
     services.openssh = {
       enable = mkDefault true;
+      authorizedKeysInHomedir = mkDefault true;
       settings.PermitRootLogin = mkDefault "yes";
     };
 
