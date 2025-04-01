@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.11.0";
+  version = "5.2.12.0";
 
   outputs = [
     "out"
@@ -45,17 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-89zJ2ORHPqy6qgmMdOSyPEcgxtEYE4CPnmRp7FfNj8Y=";
+    hash = "sha256-r5bZgcnY7O1U28tkSnSJur3/Z/llabGe7mlIMA8ZGls=";
   };
-
-  patches = [
-    # Only define systemd constants when WITH_SYSTEMD is enabled
-    (fetchpatch {
-      name = "0001-offline-only-define-systemd-constants.patch";
-      url = "https://github.com/rpm-software-management/dnf5/commit/f75894eea0892917d80e8f0bf3f9f6c8db0ac400.patch";
-      hash = "sha256-4eBeBTzhOTUDtiOlfiddh7gJ8AoiMty4FSTlLtdymos=";
-    })
-  ];
 
   nativeBuildInputs =
     [

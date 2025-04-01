@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  php,
+  php83,
   nixosTests,
 }:
 
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
     cp -ra application bin etc library modules public $out
     cp -ra doc $out/share
 
-    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php ]}"
+    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}"
   '';
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };

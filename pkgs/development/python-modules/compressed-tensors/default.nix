@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
   src = fetchFromGitHub {
     owner = "neuralmagic";
-    repo = pname;
+    repo = "compressed-tensors";
     tag = version;
     hash = "sha256-PxW8zseDUF0EOh7E/N8swwgFTfvkoTpp+d3ngAUpFNU=";
   };
@@ -42,25 +43,32 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # these try to download models from HF Hub
-    "test_get_observer_token_count"
-    "test_kv_cache_quantization"
-    "test_target_prioritization"
-    "test_load_compressed_sharded"
-    "test_save_compressed_model"
-    "test_apply_tinyllama_dynamic_activations"
-  ];
+  disabledTests =
+    [
+      # these try to download models from HF Hub
+      "test_get_observer_token_count"
+      "test_kv_cache_quantization"
+      "test_target_prioritization"
+      "test_load_compressed_sharded"
+      "test_save_compressed_model"
+      "test_apply_tinyllama_dynamic_activations"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      "test_composability"
+      "test_missing_and_unexpected_keys_on_compression"
+    ];
 
   disabledTestPaths = [
     # these try to download models from HF Hub
     "tests/test_quantization/lifecycle/test_apply.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A safetensors extension to efficiently store sparse quantized tensors on disk";
     homepage = "https://github.com/neuralmagic/compressed-tensors";
-    license = licenses.asl20;
+    changelog = "https://github.com/neuralmagic/compressed-tensors/releases/tag/${version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

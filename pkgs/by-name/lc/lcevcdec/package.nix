@@ -1,17 +1,12 @@
 {
   cmake,
-  copyPkgconfigItems,
   fetchFromGitHub,
-  fmt,
   git,
   gitUpdater,
-  gtest,
   lib,
-  makePkgconfigItem,
+  nlohmann_json,
   pkg-config,
   python3,
-  range-v3,
-  rapidjson,
   stdenv,
   testers,
 }:
@@ -39,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "args.git_version" '"${finalAttrs.version}"' \
         --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
         --replace-fail "args.git_date" '"1970-01-01"'
+      substituteInPlace cmake/templates/lcevc_dec.pc.in \
+        --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
 
     ''
     + lib.optionalString (!stdenv.hostPlatform.avxSupport) ''
@@ -55,47 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-variable";
   };
 
-  pkgconfigItems = [
-    (makePkgconfigItem rec {
-      name = "lcevc_dec";
-      inherit (finalAttrs) version;
-      libs = [
-        "-L${variables.libdir}"
-        "-llcevc_dec_api"
-      ];
-      libsPrivate = [
-        "-lpthread"
-        "-llcevc_dec_core"
-      ];
-      cflags = [
-        "-I${variables.includedir}"
-      ];
-      variables = {
-        prefix = "@dev@";
-        includedir = "@includedir@";
-        libdir = "@libdir@";
-      };
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
-    python3
     git
     pkg-config
-    copyPkgconfigItems
+    python3
   ];
 
   buildInputs = [
-    rapidjson
-    fmt
-    range-v3
+    nlohmann_json
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "VN_SDK_FFMPEG_LIBS_PACKAGE" "")
     (lib.cmakeBool "VN_SDK_UNIT_TESTS" false)
     (lib.cmakeBool "VN_SDK_SAMPLE_SOURCE" false)
+    (lib.cmakeBool "VN_SDK_JSON_CONFIG" true)
     (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
     # Requires avx for checking on runtime
     (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)

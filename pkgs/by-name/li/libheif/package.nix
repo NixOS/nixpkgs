@@ -1,31 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dav1d
-, rav1e
-, libde265
-, x265
-, libpng
-, libjpeg
-, libaom
-, gdk-pixbuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dav1d,
+  rav1e,
+  libde265,
+  x265,
+  libpng,
+  libjpeg,
+  libaom,
+  gdk-pixbuf,
 
-# for passthru.tests
-, gimp
-, imagemagick
-, imlib2Full
-, imv
-, python3Packages
-, vips
+  # for passthru.tests
+  gimp,
+  imagemagick,
+  imlib2Full,
+  imv,
+  python3Packages,
+  vips,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
   version = "1.18.2";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
@@ -60,7 +66,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit gimp imagemagick imlib2Full imv vips;
+    inherit
+      gimp
+      imagemagick
+      imlib2Full
+      imv
+      vips
+      ;
     inherit (python3Packages) pillow-heif;
   };
 

@@ -1,11 +1,12 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, libkrb5
-, zlib
-, openssl
-, callPackage
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  libkrb5,
+  zlib,
+  openssl,
+  callPackage,
 }:
 
 buildDotnetModule rec {
@@ -35,14 +36,17 @@ buildDotnetModule rec {
     # useAppHost doesn't explicitly disable this
     "-p:UseAppHost=false"
     "-p:RuntimeIdentifiers="
-  ]
-  ;
+  ];
   dotnetBuildFlags = [
     "--framework=net9.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
-  runtimeDeps = [ libkrb5 zlib openssl ];
+  runtimeDeps = [
+    libkrb5
+    zlib
+    openssl
+  ];
 
   doCheck = true;
 

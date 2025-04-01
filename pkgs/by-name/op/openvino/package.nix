@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, cudaSupport ? opencv.cudaSupport or false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cudaSupport ? opencv.cudaSupport or false,
 
-# build
-, scons
-, addDriverRunpath
-, autoPatchelfHook
-, cmake
-, git
-, libarchive
-, patchelf
-, pkg-config
-, python3Packages
-, shellcheck
+  # build
+  scons,
+  addDriverRunpath,
+  autoPatchelfHook,
+  cmake,
+  git,
+  libarchive,
+  patchelf,
+  pkg-config,
+  python3Packages,
+  shellcheck,
 
-# runtime
-, flatbuffers
-, gflags
-, level-zero
-, libusb1
-, libxml2
-, ocl-icd
-, opencv
-, protobuf
-, pugixml
-, snappy
-, tbb_2022_0
-, cudaPackages
+  # runtime
+  flatbuffers,
+  gflags,
+  level-zero,
+  libusb1,
+  libxml2,
+  ocl-icd,
+  opencv,
+  protobuf,
+  pugixml,
+  snappy,
+  tbb_2022_0,
+  cudaPackages,
 }:
 
 let
   inherit (lib)
     cmakeBool
-  ;
+    ;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
@@ -45,14 +46,16 @@ let
     hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
   };
 
-  python = python3Packages.python.withPackages (ps: with ps; [
-    cython
-    distutils
-    pybind11
-    setuptools
-    sphinx
-    wheel
-  ]);
+  python = python3Packages.python.withPackages (
+    ps: with ps; [
+      cython
+      distutils
+      pybind11
+      setuptools
+      sphinx
+      wheel
+    ]
+  );
 
 in
 
@@ -73,20 +76,22 @@ stdenv.mkDerivation rec {
     "python"
   ];
 
-  nativeBuildInputs = [
-    addDriverRunpath
-    autoPatchelfHook
-    cmake
-    git
-    libarchive
-    patchelf
-    pkg-config
-    python
-    scons'
-    shellcheck
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      addDriverRunpath
+      autoPatchelfHook
+      cmake
+      git
+      libarchive
+      patchelf
+      pkg-config
+      python
+      scons'
+      shellcheck
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}
@@ -142,20 +147,22 @@ stdenv.mkDerivation rec {
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
   env.NIX_CFLAGS_COMPILE = "-Wno-odr";
 
-  buildInputs = [
-    flatbuffers
-    gflags
-    level-zero
-    libusb1
-    libxml2
-    ocl-icd
-    opencv
-    pugixml
-    snappy
-    tbb_2022_0
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs =
+    [
+      flatbuffers
+      gflags
+      level-zero
+      libusb1
+      libxml2
+      ocl-icd
+      opencv
+      pugixml
+      snappy
+      tbb_2022_0
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+    ];
 
   enableParallelBuilding = true;
 

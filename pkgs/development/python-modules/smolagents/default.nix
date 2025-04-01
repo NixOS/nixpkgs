@@ -20,7 +20,6 @@
   pytest-datadir,
   pytestCheckHook,
   python-dotenv,
-  rank-bm25,
   requests,
   rich,
   setuptools,
@@ -127,7 +126,23 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.isDarwin [
       # Missing dependencies
       "test_get_mlx"
+
+      # Fatal Python error: Aborted
+      # thread '<unnamed>' panicked, Attempted to create a NULL object.
+      # duckduckgo_search/duckduckgo_search.py", line 83 in __init__
+      "TestDuckDuckGoSearchTool"
+      "test_init_agent_with_different_toolsets"
+      "test_multiagents_save"
+      "test_new_instance"
     ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+    "tests/test_final_answer.py"
+    "tests/test_types.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Barebones library for agents";

@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, protobuf
-, elfutils
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  protobuf,
+  elfutils,
 }:
 
 rustPlatform.buildRustPackage rec {

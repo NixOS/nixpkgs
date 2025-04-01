@@ -20,19 +20,18 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-dr8DUY6T6fvtMASdM9U+XQN0dVP8AKvwa1gwHfOz3Dw=";
+    hash = "sha256-37yUZSD9c92ydjjt5Z7KnUzfSMAQM37Ah4WGp9HWiDs=";
   };
 
   build-system = [

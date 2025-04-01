@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.17.1";
+  version = "0.19.0";
 in
 rustPlatform.buildRustPackage {
   pname = "gir";
@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage {
     owner = "gtk-rs";
     repo = "gir";
     rev = version;
-    sha256 = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
+    sha256 = "sha256-GAAK4ej16e5/sjnPOVWs4ul1H9sqa+tDE8ky9tbB9No=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bytICp0+1/suM+kf4VX9z/mpnsdXi3I3dPUlK3A9+V4=";
+  cargoHash = "sha256-ObEXOaEdwJpaLJDkcSmAK86P7E6y0eUQQHFpX4hsuog=";
 
   postPatch = ''
     rm build.rs

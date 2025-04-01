@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "31.0.0";
+  version = "32.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-Qjf5ovXOlzN1vMOZag+v8AtMfC/0+4JGz7LlBfBBI4Q=";
+    hash = "sha256-pQuo2oLWMmq4dHTqJYL+Z1xg3ZoYp9ZzLDT7jWIsglo=";
   };
 
   build-system = [

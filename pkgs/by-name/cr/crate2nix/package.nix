@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, nix
-, nix-prefetch-git
-, installShellFiles
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {

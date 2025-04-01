@@ -30,19 +30,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LPcVLpskpmHc8EzdNqMT6BnbY8Le/BVojpXPIqy6tGI=";
+    hash = "sha256-PCY6vAnDjyoIL66oREUGRypQFX90EKB1RlXTkQDyXMw=";
   };
 
   postPatch =
     ''
       substituteInPlace CMakeLists.txt \
-        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}'
+        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+        --replace-fail '-march=native' '# -march=native' \
+        --replace-fail '-flto' '# -flto'
     ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
       substituteInPlace CMakeLists.txt \

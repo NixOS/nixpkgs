@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
       (lib.cmakeBool "QUARTO_ENABLED" true)
       (lib.cmakeBool "RSTUDIO_CRASHPAD_ENABLED" false) # This is a NOOP except on x86_64-darwin
       (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (
-        (placeholder "out") + (if stdenv.isDarwin then "/Applications" else "/lib/rstudio")
+        (placeholder "out") + (if stdenv.hostPlatform.isDarwin then "/Applications" else "/lib/rstudio")
       ))
     ]
     ++ lib.optionals (!server) [

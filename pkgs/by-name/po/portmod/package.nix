@@ -1,14 +1,15 @@
-{ lib
-, bubblewrap
-, cacert
-, fetchFromGitLab
-, git
-, imagemagick
-, openmw
-, python3Packages
-, rustPlatform
-, tes3cmd
-, tr-patcher
+{
+  lib,
+  bubblewrap,
+  cacert,
+  fetchFromGitLab,
+  git,
+  imagemagick,
+  openmw,
+  python3Packages,
+  rustPlatform,
+  tes3cmd,
+  tr-patcher,
 }:
 
 let
@@ -85,9 +86,12 @@ python3Packages.buildPythonApplication {
     fasteners
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ] ++ bin-programs;
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+    ]
+    ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -114,7 +118,7 @@ python3Packages.buildPythonApplication {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
   meta = with lib; {

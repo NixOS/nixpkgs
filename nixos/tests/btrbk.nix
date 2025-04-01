@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
   let
     privateKey = ''
@@ -21,64 +22,73 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
 
     nodes = {
-      archive = { ... }: {
-        environment.systemPackages = with pkgs; [ btrfs-progs ];
-        # note: this makes the privateKey world readable.
-        # don't do it with real ssh keys.
-        environment.etc."btrbk_key".text = privateKey;
-        services.btrbk = {
-          instances = {
-            remote = {
-              onCalendar = "minutely";
-              settings = {
-                ssh_identity = "/etc/btrbk_key";
-                ssh_user = "btrbk";
-                stream_compress = "lz4";
-                volume = {
-                  "ssh://main/mnt" = {
-                    target = "/mnt";
-                    snapshot_dir = "btrbk/remote";
-                    subvolume = "to_backup";
+      archive =
+        { ... }:
+        {
+          environment.systemPackages = with pkgs; [ btrfs-progs ];
+          # note: this makes the privateKey world readable.
+          # don't do it with real ssh keys.
+          environment.etc."btrbk_key".text = privateKey;
+          services.btrbk = {
+            instances = {
+              remote = {
+                onCalendar = "minutely";
+                settings = {
+                  ssh_identity = "/etc/btrbk_key";
+                  ssh_user = "btrbk";
+                  stream_compress = "lz4";
+                  volume = {
+                    "ssh://main/mnt" = {
+                      target = "/mnt";
+                      snapshot_dir = "btrbk/remote";
+                      subvolume = "to_backup";
+                    };
                   };
                 };
               };
             };
           };
         };
-      };
 
-      main = { ... }: {
-        environment.systemPackages = with pkgs; [ btrfs-progs ];
-        services.openssh = {
-          enable = true;
-          settings = {
-            KbdInteractiveAuthentication = false;
-            PasswordAuthentication = false;
+      main =
+        { ... }:
+        {
+          environment.systemPackages = with pkgs; [ btrfs-progs ];
+          services.openssh = {
+            enable = true;
+            settings = {
+              KbdInteractiveAuthentication = false;
+              PasswordAuthentication = false;
+            };
           };
-        };
-        services.btrbk = {
-          extraPackages = [ pkgs.lz4 ];
-          sshAccess = [
-            {
-              key = publicKey;
-              roles = [ "source" "send" "info" "delete" ];
-            }
-          ];
-          instances = {
-            local = {
-              onCalendar = "minutely";
-              settings = {
-                volume = {
-                  "/mnt" = {
-                    snapshot_dir = "btrbk/local";
-                    subvolume = "to_backup";
+          services.btrbk = {
+            extraPackages = [ pkgs.lz4 ];
+            sshAccess = [
+              {
+                key = publicKey;
+                roles = [
+                  "source"
+                  "send"
+                  "info"
+                  "delete"
+                ];
+              }
+            ];
+            instances = {
+              local = {
+                onCalendar = "minutely";
+                settings = {
+                  volume = {
+                    "/mnt" = {
+                      snapshot_dir = "btrbk/local";
+                      subvolume = "to_backup";
+                    };
                   };
                 };
               };
             };
           };
         };
-      };
     };
 
     testScript = ''
@@ -108,4 +118,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
           main.succeed("echo baz > /mnt/to_backup/bar")
           archive.succeed("cat /mnt/*/bar | grep bar")
     '';
-  })
+  }
+)

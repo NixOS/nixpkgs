@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchurl, zlib, curl, xz, patchelf, runtimeShell }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  curl,
+  xz,
+  patchelf,
+  runtimeShell,
+}:
 
 let
   version = "2.7.3";
@@ -66,7 +75,14 @@ stdenv.mkDerivation {
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib curl xz ]}" \
+      --replace "@RPATH@" "${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          zlib
+          curl
+          xz
+        ]
+      }" \
       --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
     # Patch node.
@@ -79,7 +95,14 @@ stdenv.mkDerivation {
     for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib curl xz ]}" \
+        --set-rpath "$(patchelf --print-rpath $p):${
+          lib.makeLibraryPath [
+            stdenv.cc.cc
+            zlib
+            curl
+            xz
+          ]
+        }" \
         $p
     done
 

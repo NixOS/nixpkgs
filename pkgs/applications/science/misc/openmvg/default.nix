@@ -1,20 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, cereal
-, ceres-solver
-, clp
-, coin-utils
-, eigen
-, lemon-graph
-, libjpeg
-, libpng
-, libtiff
-, nix-update-script
-, openmp
-, osi
-, zlib
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableExamples ? false
-, enableDocs ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  cereal,
+  ceres-solver,
+  clp,
+  coin-utils,
+  eigen,
+  lemon-graph,
+  libjpeg,
+  libpng,
+  libtiff,
+  nix-update-script,
+  openmp,
+  osi,
+  zlib,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableExamples ? false,
+  enableDocs ? false,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.1";
@@ -47,7 +53,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   # flann is missing because the lz4 dependency isn't propagated: https://github.com/openMVG/openMVG/issues/1265
   cmakeFlags = [
@@ -78,6 +87,9 @@ stdenv.mkDerivation rec {
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ mdaiter bouk ];
+    maintainers = with lib.maintainers; [
+      mdaiter
+      bouk
+    ];
   };
 }

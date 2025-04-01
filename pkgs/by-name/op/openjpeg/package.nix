@@ -1,20 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, libpng, libtiff, zlib, lcms2
-, jpipLibSupport ? false # JPIP library & executables
-, jpipServerSupport ? false, curl, fcgi # JPIP Server
-, jdk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libpng,
+  libtiff,
+  zlib,
+  lcms2,
+  jpipLibSupport ? false, # JPIP library & executables
+  jpipServerSupport ? false,
+  curl,
+  fcgi, # JPIP Server
+  jdk,
 
-# for passthru.tests
-, ffmpeg
-, gdal
-, gdcm
-, ghostscript
-, imagemagick
-, leptonica
-, mupdf
-, poppler
-, python3
-, vips
+  # for passthru.tests
+  ffmpeg,
+  gdal,
+  gdcm,
+  ghostscript,
+  imagemagick,
+  leptonica,
+  mupdf,
+  poppler,
+  python3,
+  vips,
 }:
 
 let
@@ -53,7 +64,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -66,15 +80,26 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "BUILD_TESTING" doCheck)
   ] ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libpng libtiff zlib lcms2 ]
-    ++ lib.optionals jpipServerSupport [ curl fcgi ]
+  buildInputs =
+    [
+      libpng
+      libtiff
+      zlib
+      lcms2
+    ]
+    ++ lib.optionals jpipServerSupport [
+      curl
+      fcgi
+    ]
     ++ lib.optional (jpipLibSupport) jdk;
 
   # tests did fail on powerpc64
-  doCheck = !stdenv.hostPlatform.isPower64
-    && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = !stdenv.hostPlatform.isPower64 && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
     runHook preCheck
@@ -98,7 +123,7 @@ stdenv.mkDerivation rec {
         mupdf
         poppler
         vips
-      ;
+        ;
     };
   };
 

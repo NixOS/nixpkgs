@@ -37,11 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    jemalloc
-    curl
-    libuuid
-  ] ++ lib.optionals tlsSupport [ openssl ] ++ lib.optionals withSystemd [ systemd ];
+  buildInputs =
+    [
+      jemalloc
+      curl
+      libuuid
+    ]
+    ++ lib.optionals tlsSupport [ openssl ]
+    ++ lib.optionals withSystemd [ systemd ];
 
   makeFlags =
     [

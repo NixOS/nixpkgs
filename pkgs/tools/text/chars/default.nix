@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {

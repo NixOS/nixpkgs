@@ -3,30 +3,28 @@
   buildGoModule,
   lib,
   testers,
-  gitmux,
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitmux";
   version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "arl";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gitmux";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0Cw98hTg8qPu7BUTBDEgFBOpoCxstPW9HeNXQUUjgGA=";
   };
 
   vendorHash = "sha256-PHY020MIuLlC1LqNGyBJRNd7J+SzoHbNMPAil7CKP/M=";
 
   nativeCheckInputs = [ git ];
-  doCheck = true;
 
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${finalAttrs.version}" ];
 
   passthru.tests.version = testers.testVersion {
-    package = gitmux;
+    package = finalAttrs.finalPackage;
     command = "gitmux -V";
   };
 
@@ -39,4 +37,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ nialov ];
     mainProgram = "gitmux";
   };
-}
+})

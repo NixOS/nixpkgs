@@ -28,6 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-oYOWobwCGcl00adGErEfnc4NW9ix3FXGX2rH/WCejCg=";
   };
 
+  postPatch =
+    if (pythonOlder "3.11") then
+      ''
+        substituteInPlace pyproject.toml \
+          --replace-fail 'tomli<=2.0.2' 'tomli'
+      ''
+    else
+      null;
+
   build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   dependencies = [

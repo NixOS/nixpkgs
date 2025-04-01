@@ -32,6 +32,8 @@
   xorg,
   yosys,
   zlib,
+  llvmPackages,
+  stdenv,
 }:
 
 let
@@ -91,7 +93,7 @@ mkDerivation rec {
     yosys
     xorg.libX11
     zlib
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   postPatch = ''
     patchShebangs --build etc/find_messages.py
@@ -99,24 +101,28 @@ mkDerivation rec {
     sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CMakeLists.txt
   '';
 
-  cmakeFlags = [
-    "-DENABLE_TESTS=ON"
-    "-DUSE_SYSTEM_BOOST=ON"
-    "-DUSE_SYSTEM_ABC=OFF"
-    "-DABC_SKIP_TESTS=ON" # it attempts to download gtest
-    "-DUSE_SYSTEM_OPENSTA=OFF"
-    "-DOPENROAD_VERSION=${version}_${src.rev}"
-    "-DCMAKE_RULE_MESSAGES=OFF"
-    "-DTCL_LIBRARY=${tcl}/lib/libtcl.so"
-    "-DTCL_HEADER=${tcl}/include/tcl.h"
-  ];
+  cmakeFlags =
+    [
+      "-DENABLE_TESTS=ON"
+      "-DUSE_SYSTEM_BOOST=ON"
+      "-DUSE_SYSTEM_ABC=OFF"
+      "-DABC_SKIP_TESTS=ON" # it attempts to download gtest
+      "-DUSE_SYSTEM_OPENSTA=OFF"
+      "-DOPENROAD_VERSION=${version}_${src.rev}"
+      "-DCMAKE_RULE_MESSAGES=OFF"
+      "-DTCL_HEADER=${tcl}/include/tcl.h"
+      "-DTCL_LIBRARY=${tcl}/lib/libtcl${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_CXX_FLAGS=-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED"
+    ];
 
   # Resynthesis needs access to the Yosys binaries.
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
 
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin; # it seems to hang on darwin
   checkPhase = ''
     make test
     ../test/regression
@@ -136,6 +142,6 @@ mkDerivation rec {
       trepetti
       hzeller
     ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

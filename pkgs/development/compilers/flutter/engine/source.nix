@@ -48,7 +48,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
     gclient = writeText "flutter-engine-${version}.gclient" ''
       solutions = [{
         "managed": False,
-        "name": "src/flutter",
+        "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
         "url": "${url}",
         "custom_vars": {
           "download_fuchsia_deps": False,
@@ -86,23 +86,44 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
       (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
         or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
   }
-  ''
-    source ${../../../../build-support/fetchgit/deterministic-git}
-    export -f clean_git
-    export -f make_deterministic_repo
+  (
+    ''
+      source ${../../../../build-support/fetchgit/deterministic-git}
+      export -f clean_git
+      export -f make_deterministic_repo
 
-    mkdir -p $out
-    cp $gclient $out/.gclient
-    cd $out
+    ''
+    + (
+      if lib.versionAtLeast flutterVersion "3.29" then
+        ''
+          mkdir -p source
+          cp $gclient source/.gclient
+          cd source
+        ''
+      else
+        ''
+          mkdir -p $out
+          cp $gclient $out/.gclient
+          cd $out
+        ''
+    )
+    + ''
 
-    export PATH=$PATH:$depot_tools
-    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
-    find $out -name '.git' -exec rm -rf {} \; || true
+      export PATH=$PATH:$depot_tools
+      python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
+    ''
+    + lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      cp -r engine/src/flutter/third_party/* engine/src/flutter/engine/src/flutter/third_party/
+      mv engine/src/flutter/engine $out
+    ''
+    + ''
+      find $out -name '.git' -exec rm -rf {} \; || true
 
-    rm -rf $out/src/{buildtools,fuchsia}
-    rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
-    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
-    rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
+      rm -rf $out/src/{buildtools,fuchsia}
+      rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
+      rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
+      rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
 
-    rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
-  ''
+      rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
+    ''
+  )

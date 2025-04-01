@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-vqx/OgQ/hgH6ULBI1I9+fD4CswQZDzfdNlhImbnQiKg=";
   };
 
+  postPatch = ''
+    substituteInPlace awsiot/__init__.py \
+      --replace-fail  "__version__ = '1.0.0-dev'" "__version__ = '${version}'"
+  '';
+
   pythonRelaxDeps = [ "awscrt" ];
 
   build-system = [ setuptools ];

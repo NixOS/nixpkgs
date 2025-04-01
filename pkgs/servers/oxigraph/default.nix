@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, IOKit
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  IOKit,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,11 +27,17 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    IOKit
+    Security
+  ];
 
   buildAndTestSubdir = "cli";
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "rustls-webpki" "geosparql" ];
+  buildFeatures = [
+    "rustls-webpki"
+    "geosparql"
+  ];
 
   # Man pages and autocompletion
   postInstall = ''
@@ -48,9 +55,16 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/oxigraph/oxigraph";
     description = "SPARQL graph database";
-    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with maintainers; [ astro ];
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "oxigraph";
   };
 }

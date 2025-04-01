@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, mongoc
-, openssl
-, cyrus_sasl
-, cmake
-, validatePkgConfig
-, testers
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mongoc,
+  openssl,
+  cyrus_sasl,
+  cmake,
+  validatePkgConfig,
+  testers,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,8 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Official C++ client library for MongoDB";
     homepage = "http://mongocxx.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adriandole vcele ];
-    pkgConfigModules = [ "libmongocxx" "libbsoncxx" ];
+    maintainers = with maintainers; [
+      adriandole
+      vcele
+    ];
+    pkgConfigModules = [
+      "libmongocxx"
+      "libbsoncxx"
+    ];
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ]; # needs sdk >= 10.14
   };

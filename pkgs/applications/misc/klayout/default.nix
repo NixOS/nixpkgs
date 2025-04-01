@@ -1,17 +1,28 @@
-{ lib, mkDerivation, fetchFromGitHub
-, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, libgit2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  python3,
+  ruby,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  qtxmlpatterns,
+  which,
+  perl,
+  libgit2,
+  stdenv,
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.29.12";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-TLLAIlZYKGeQENtzfc9ilWwl4yu2ln7yBy+VW7Zwexc=";
+    hash = "sha256-i7MQqkVf+NZkmcf589BpLofwqc5KGxRNqdr1Go84M9A=";
   };
 
   postPatch = ''
@@ -41,12 +52,28 @@ mkDerivation rec {
     runHook postBuild
   '';
 
-  postBuild = ''
-    mkdir $out/bin
-    mv $out/lib/klayout $out/bin/
+  postBuild =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir $out/bin
 
-    install -Dm444 etc/klayout.desktop -t $out/share/applications
-    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
+      install -Dm444 etc/klayout.desktop -t $out/share/applications
+      install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
+      mv $out/lib/klayout $out/bin/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/lib/klayout.app $out/Applications/
+    '';
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    exec_name=$out/Applications/klayout.app/Contents/MacOS/klayout
+
+    for lib in $out/lib/libklayout_*.0.dylib; do
+      base_name=$(basename $lib)
+      install_name_tool -change "$base_name" "@rpath/$base_name" "$exec_name"
+    done
+
+    wrapQtApp "$out/Applications/klayout.app/Contents/MacOS/klayout"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
@@ -63,8 +90,7 @@ mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
   };
 }
-

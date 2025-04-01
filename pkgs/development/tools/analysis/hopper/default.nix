@@ -1,12 +1,13 @@
-{ stdenv
-, fetchurl
-, lib
-, autoPatchelfHook
-, wrapQtAppsHook
-, gnustep-libobjc
-, libbsd
-, libffi_3_3
-, ncurses6
+{
+  stdenv,
+  fetchurl,
+  lib,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  gnustep-libobjc,
+  libbsd,
+  libffi_3_3,
+  ncurses6,
 }:
 
 stdenv.mkDerivation rec {

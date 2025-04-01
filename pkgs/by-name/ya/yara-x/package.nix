@@ -10,19 +10,19 @@
   yara-x,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yara-x";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
-    tag = "v${version}";
-    hash = "sha256-ZSJHvpRZO6Tbw7Ct4oD6QmuV4mJ4RGW5gnT6PTX+nC8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C8wBGmilouNcNN3HkwvSTWcZY1fe0jVc2TeWDN4w5xA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pD4qyw+TTpmcoX1N3C65VelYszYifm9sFOsEkXEysvo=";
+  cargoHash = "sha256-afCBuWr12trjEIDvE0qnGFxTXU7LKZCzZB8RqgqperY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tool to do pattern matching for malware research";
     homepage = "https://virustotal.github.io/yara-x/";
-    changelog = "https://github.com/VirusTotal/yara-x/releases/tag/v${version}";
+    changelog = "https://github.com/VirusTotal/yara-x/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       fab
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "yr";
   };
-}
+})

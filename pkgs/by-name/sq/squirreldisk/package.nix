@@ -45,18 +45,12 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "window-shadows-0.2.1" = "sha256-3meM04TG63PvB0M5wUH1cDMBo7ObcB0zdgwGt2aKHMs=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dFTdbMX355klZ2wY160bYcgMiOiOGplEU7/e6Btv5JI=";
 
   # copy the frontend static resources to final build directory
   # Also modify tauri.conf.json so that it expects the resources at the new location
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-
     mkdir -p frontend-build
     cp -r ${frontend-build}/* frontend-build
 

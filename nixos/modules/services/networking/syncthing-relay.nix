@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,7 +23,8 @@ let
     ++ optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
     ++ optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
     ++ cfg.extraOptions;
-in {
+in
+{
   ###### interface
 
   options.services.syncthing.relay = {
@@ -94,7 +100,7 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra command line arguments to pass to strelaysrv.
       '';

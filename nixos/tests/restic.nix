@@ -45,7 +45,10 @@ import ./make-test-python.nix (
     name = "restic";
 
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ bbigras i077 ];
+      maintainers = [
+        bbigras
+        i077
+      ];
     };
 
     nodes = {
@@ -54,7 +57,14 @@ import ./make-test-python.nix (
         {
           services.restic.backups = {
             remotebackup = {
-              inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                backupPrepareCommand
+                backupCleanupCommand
+                ;
               repository = remoteRepository;
               initialize = true;
               timerConfig = null; # has no effect here, just checking that it doesn't break the service
@@ -72,18 +82,33 @@ import ./make-test-python.nix (
               '';
             };
             inhibit-test = {
-              inherit passwordFile paths exclude pruneOpts;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                ;
               repository = remoteInhibitTestRepository;
               initialize = true;
               inhibitsSleep = true;
             };
             remote-noinit-backup = {
-              inherit passwordFile exclude pruneOpts paths;
+              inherit
+                passwordFile
+                exclude
+                pruneOpts
+                paths
+                ;
               initialize = false;
               repository = remoteNoInitRepository;
             };
             rclonebackup = {
-              inherit passwordFile paths exclude pruneOpts;
+              inherit
+                passwordFile
+                paths
+                exclude
+                pruneOpts
+                ;
               initialize = true;
               repository = rcloneRepository;
               rcloneConfig = {

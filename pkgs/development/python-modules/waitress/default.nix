@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   disabledTests = [
     # access to socket
     "test_service_port"

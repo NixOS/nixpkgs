@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, mkXfceDerivation
-, cairo
-, exo
-, garcon
-, gtk-layer-shell
-, gtk3
-, libdbusmenu-gtk3
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxfce4windowing
-, tzdata
-, wayland
-, xfconf
-, withIntrospection ?
+{
+  stdenv,
+  lib,
+  mkXfceDerivation,
+  cairo,
+  exo,
+  garcon,
+  gtk-layer-shell,
+  gtk3,
+  libdbusmenu-gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  tzdata,
+  wayland,
+  xfconf,
+  withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
-, vala
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  vala,
 }:
 
 mkXfceDerivation {

@@ -74,6 +74,9 @@ let
       lvm2 # dmsetup
     ];
 
+    # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
+    GOEXPERIMENT = "boringcrypto";
+
     # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
     ldflags = [
       "-w"
@@ -119,6 +122,14 @@ let
     '';
 
     doCheck = false;
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      # Verify that the binary uses BoringCrypto
+      go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
+      runHook postInstallCheck
+    '';
 
     passthru = {
       inherit updateScript;

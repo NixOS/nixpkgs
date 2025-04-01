@@ -116,6 +116,7 @@ mapAliases (
     snipmate = vim-snipmate;
     sourcemap = sourcemap-vim;
     "sourcemap.vim" = sourcemap-vim;
+    Spacegray-vim = throw "Spacegray-vim has been removed: abandoned by upstream"; # Added 2025-03-24
     surround = vim-surround;
     sleuth = vim-sleuth;
     solidity = vim-solidity;

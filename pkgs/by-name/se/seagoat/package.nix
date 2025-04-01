@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "0.54.3";
+  version = "0.54.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-uSOFak5fQkj4noYRgzjOFV/wlRdsMLDbNpb4ud3+gE4=";
+    hash = "sha256-vix/tecZfKPF2pMuaYhBa3Y0qh3DelWYpta8Qy0saUE=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";

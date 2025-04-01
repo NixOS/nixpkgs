@@ -11,13 +11,12 @@
   postgresql,
   replaceVars,
   rustPlatform,
-  stdenv,
 }:
 
 let
   # Upstream only works with clang 16, so we're pinning it here to
   # avoid future incompatibility.
-  # See https://docs.pgvecto.rs/developers/development.html#environment, step 4
+  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 2
   clang = clang_16;
   rustPlatform' = rustPlatform // {
     bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
@@ -27,7 +26,7 @@ in
 (buildPgrxExtension.override {
   # Upstream only works with a fixed version of cargo-pgrx for each release,
   # so we're pinning it here to avoid future incompatibility.
-  # See https://docs.pgvecto.rs/developers/development.html#environment, step 6
+  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 5
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
   rustPlatform = rustPlatform';
 })
@@ -54,14 +53,8 @@ in
       hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
     };
 
-    # Package has git dependencies on Cargo.lock (instead of just crate.io dependencies),
-    # so cargoHash does not work, therefore we have to include Cargo.lock in nixpkgs.
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "pgrx-0.12.0-alpha.1" = "sha256-HSQrAR9DFJsi4ZF4hLiJ1sIy+M9Ygva2+WxeUzflOLk=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-8otJ1uqGrCmlxAqvfAL3OjhBI4I6dAu6EoajstO46Sw=";
 
     # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
     postPatch = ''

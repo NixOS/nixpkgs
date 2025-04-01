@@ -127,8 +127,7 @@
 
   mlPlugin = true;
 
-  useDuneifVersion =
-    v: v != null && (v == "dev" || lib.versionAtLeast v "1.3.1+9.0");
+  useDuneifVersion = v: v != null && (v == "dev" || lib.versionAtLeast v "1.3.1+9.0");
 
   propagatedBuildInputs = [ stdlib ];
 
@@ -138,12 +137,16 @@
     maintainers = with maintainers; [ jwiegley ];
   };
 }).overrideAttrs
-  (o: if o.version != null && o.version != "dev"
-         && !(lib.versionAtLeast o.version "1.3.1+9.0") then {
-    preBuild = "coq_makefile -f _CoqProject -o Makefile${
-      lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"
-    }";
-  } else {
-    propagatedBuildInputs = o.propagatedBuildInputs
-      ++ [ coq.ocamlPackages.ppx_optcomp ];
-  })
+  (
+    o:
+    if o.version != null && o.version != "dev" && !(lib.versionAtLeast o.version "1.3.1+9.0") then
+      {
+        preBuild = "coq_makefile -f _CoqProject -o Makefile${
+          lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"
+        }";
+      }
+    else
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
+      }
+  )

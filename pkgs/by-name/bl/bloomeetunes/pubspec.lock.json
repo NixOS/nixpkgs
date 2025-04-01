@@ -978,16 +978,6 @@
       "source": "hosted",
       "version": "2.1.1"
     },
-    "lists": {
-      "dependency": "transitive",
-      "description": {
-        "name": "lists",
-        "sha256": "4ca5c19ae4350de036a7e996cdd1ee39c93ac0a2b840f4915459b7d0a7d4ab27",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.1"
-    },
     "logging": {
       "dependency": "direct main",
       "description": {
@@ -1498,6 +1488,16 @@
       "source": "hosted",
       "version": "1.0.4"
     },
+    "simple_sparse_list": {
+      "dependency": "transitive",
+      "description": {
+        "name": "simple_sparse_list",
+        "sha256": "aa648fd240fa39b49dcd11c19c266990006006de6699a412de485695910fbc1f",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.4"
+    },
     "sky_engine": {
       "dependency": "transitive",
       "description": "flutter",
@@ -1678,11 +1678,11 @@
       "dependency": "transitive",
       "description": {
         "name": "unicode",
-        "sha256": "0f69e46593d65245774d4f17125c6084d2c20b4e473a983f6e21b7d7762218f1",
+        "sha256": "48f8b6c50ed70ba61647f4987d56ec505923041956bbdb651db2838ce7b47b58",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.3.1"
+      "version": "1.1.7"
     },
     "universal_platform": {
       "dependency": "transitive",
@@ -1937,12 +1937,13 @@
     "youtube_explode_dart": {
       "dependency": "direct main",
       "description": {
-        "name": "youtube_explode_dart",
-        "sha256": "9f044feb602659392a7c7a160e74d373671c959373a199658d687fe18ba1ab07",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "master",
+        "resolved-ref": "4230020b5ae6cbb19fb37666709f0e76e749c749",
+        "url": "https://github.com/HemantKArya/youtube_explode_dart.git"
       },
-      "source": "hosted",
-      "version": "2.3.9"
+      "source": "git",
+      "version": "2.4.0-dev.1"
     }
   },
   "sdks": {

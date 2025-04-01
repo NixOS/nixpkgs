@@ -1,7 +1,9 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-}: buildGoModule rec {
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+}:
+buildGoModule rec {
   pname = "betula";
   version = "1.3.1";
 

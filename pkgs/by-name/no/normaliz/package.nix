@@ -4,8 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   gmpxx,
-  flint,
-  arb,
+  flint3,
   nauty,
 }:
 
@@ -22,8 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmpxx
-    flint
-    arb
+    flint3
     nauty
   ];
 

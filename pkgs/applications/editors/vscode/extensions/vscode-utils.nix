@@ -36,7 +36,7 @@ let
         nativeBuildInputs ? [ ],
         passthru ? { },
         ...
-      }:
+      }@args:
       {
         pname = "vscode-extension-${pname}";
 
@@ -53,21 +53,22 @@ let
 
         # Some .vsix files contain other directories (e.g., `package`) that we don't use.
         # If other directories are present but `sourceRoot` is unset, the unpacker phase fails.
-        sourceRoot = "extension";
+        sourceRoot = args.sourceRoot or "extension";
 
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
         nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
-        installPhase = ''
-          runHook preInstall
+        installPhase =
+          args.installPhase or ''
+            runHook preInstall
 
-          mkdir -p "$out/$installPrefix"
-          find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
+            mkdir -p "$out/$installPrefix"
+            find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
 
-          runHook postInstall
-        '';
+            runHook postInstall
+          '';
       };
   };
 

@@ -1,10 +1,23 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption mkOption mkIf literalMD mkPackageOption;
-  settingsFormat = pkgs.formats.ini {};
-in {
+  inherit (lib)
+    types
+    mkEnableOption
+    mkOption
+    mkIf
+    literalMD
+    mkPackageOption
+    ;
+  settingsFormat = pkgs.formats.ini { };
+in
+{
   options = {
     services.cockpit = {
       enable = mkEnableOption "Cockpit";
@@ -16,7 +29,7 @@ in {
       settings = lib.mkOption {
         type = settingsFormat.type;
 
-        default = {};
+        default = { };
 
         description = ''
           Settings for cockpit that will be saved in /etc/cockpit/cockpit.conf.
@@ -49,15 +62,19 @@ in {
     # generate cockpit settings
     environment.etc."cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
 
-    security.pam.services.cockpit = {};
+    security.pam.services.cockpit = { };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.packages = [ cfg.package ];
     systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];
-    systemd.sockets.cockpit.listenStreams = [ "" (toString cfg.port) ];
+    systemd.sockets.cockpit.listenStreams = [
+      ""
+      (toString cfg.port)
+    ];
 
-    systemd.tmpfiles.rules = [ # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf
+    systemd.tmpfiles.rules = [
+      # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf
       "C /run/cockpit/inactive.motd 0640 root root - ${cfg.package}/share/cockpit/motd/inactive.motd"
       "f /run/cockpit/active.motd   0640 root root -"
       "L+ /run/cockpit/motd - - - - inactive.motd"
