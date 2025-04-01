@@ -1,15 +1,5 @@
-{
-  system ? builtins.currentSystem,
-  handleTestOn,
-}:
+{ recurseIntoAttrs, runTest }:
 
-let
-  supportedSystems = [
-    "x86_64-linux"
-    "i686-linux"
-    "aarch64-linux"
-  ];
-in
-{
-  prosody-nginx = handleTestOn supportedSystems ./prosody-nginx.nix { inherit system; };
+recurseIntoAttrs {
+  prosody-nginx = runTest ./prosody-nginx.nix;
 }
