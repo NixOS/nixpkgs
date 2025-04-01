@@ -1844,7 +1844,7 @@ with pkgs;
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
   buildbotPackages = recurseIntoAttrs (
-    python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { }
+    callPackage ../development/tools/continuous-integration/buildbot { }
   );
   inherit (buildbotPackages)
     buildbot
