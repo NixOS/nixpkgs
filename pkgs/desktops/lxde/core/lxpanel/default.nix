@@ -30,12 +30,12 @@
   withGtk3 ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxpanel";
   version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/lxde/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-HjGPV9fja2HCOlBNA9JDDHja0ULBgERRBh8bPqVEHug=";
   };
 
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight X11 desktop panel for LXDE";
     homepage = "https://lxde.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ryneeverett ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.ryneeverett ];
+    platforms = lib.platforms.linux;
   };
-}
+})
