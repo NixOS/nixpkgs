@@ -557,6 +557,8 @@ def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwa
     if changelog := _get_attr_value(f"{pkgs_prefix}{pname}.meta.changelog"):
         msg += f"\n\n{changelog}"
 
+    msg += "\n\nThis commit was automatically generated using update-python-libraries."
+
     try:
         subprocess.check_call([GIT, "add", path])
         subprocess.check_call([GIT, "commit", "-m", msg])
