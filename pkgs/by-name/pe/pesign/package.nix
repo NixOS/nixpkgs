@@ -12,14 +12,14 @@
   mandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pesign";
   version = "116";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "pesign";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-cuOSD/ZHkilgguDFJviIZCG8kceRWw2JgssQuWN02Do=";
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/run
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications";
     homepage = "https://github.com/rhboot/pesign";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
     # efivar is currently Linux-only.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
