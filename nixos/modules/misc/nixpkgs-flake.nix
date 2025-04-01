@@ -1,8 +1,6 @@
 {
   config,
-  options,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -16,10 +14,23 @@ in
       # to gracefully come through the interface in discussion with @roberth.
       #
       # See: https://github.com/NixOS/nixpkgs/pull/278522#discussion_r1460292639
-      type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
+      #
+      # In even newer Nix versions, (path) Flake inputs may be needlessly copied when
+      # not referenced with a NAR hash. We use this if available, and gracefully fallback
+      # to the previous behavior otherwise
+      #
+      # TODO: Enforce this in 25.11?
+      # See: https://discourse.nixos.org/t/nix-copying-a-store-path-into-the-store/60409
+      type = lib.types.nullOr (
+        lib.types.oneOf [
+          lib.types.str
+          lib.types.path
+          (lib.types.lazyAttrsOf lib.types.raw)
+        ]
+      );
 
       default = null;
-      defaultText = "if (using nixpkgsFlake.lib.nixosSystem) then self.outPath else null";
+      defaultText = "if (using nixpkgsFlake.lib.nixosSystem) then self else null";
 
       example = ''builtins.fetchTarball { name = "source"; sha256 = "${lib.fakeHash}"; url = "https://github.com/nixos/nixpkgs/archive/somecommit.tar.gz"; }'';
 
@@ -92,10 +103,15 @@ in
         ];
       }
       (lib.mkIf cfg.setFlakeRegistry {
-        nix.registry.nixpkgs.to = lib.mkDefault {
-          type = "path";
-          path = cfg.source;
-        };
+        nix.registry.nixpkgs = lib.mkDefault (
+          if (lib.hasAttr "narHash" cfg.source) then
+            { flake = cfg.source; }
+          else
+            {
+              type = "path";
+              path = cfg.source;
+            }
+        );
       })
       (lib.mkIf cfg.setNixPath {
         # N.B. This does not include nixos-config in NIX_PATH unlike modules/config/nix-channel.nix
