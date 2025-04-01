@@ -1,32 +1,31 @@
 {
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   lib,
   python,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
   version = "2.13.0";
-
-  disabled = pythonOlder "3.6";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pycodestyle";
-    rev = version;
+    tag = version;
     hash = "sha256-jpF0/sVzRjot8KRdXqvhWpdafzC/Fska6jmG3s2U6Wk=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pycodestyle" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
+  # https://github.com/PyCQA/pycodestyle/blob/2.13.0/tox.ini#L16
   postCheck = ''
     ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
   '';
