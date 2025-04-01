@@ -69,6 +69,7 @@ Important notes:
 - The `update.auto.enable` option defaults to `false`. When set to `true`, it allows automatic updates of installed Flatpak packages.
 - The `update.auto.onCalendar` option uses systemd calendar syntax. If not set, no timer will be created even if `update.auto.enable` is `true`.
 - The `update.duringBuild` option defaults to `false`. When set to `true`, it updates Flatpak packages during system rebuild.
+- The `remotes` option defaults to including Flathub, the main repository for Flatpak applications.
 
 Be aware that while Flatpak packages are managed through NixOS, they operate in a somewhat separate environment. If you encounter issues with a Flatpak package:
 - First, check if the issue is related to NixOS configuration, such as missing portals or system dependencies.

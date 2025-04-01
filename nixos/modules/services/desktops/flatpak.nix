@@ -118,7 +118,12 @@ in
             };
           }
         );
-        default = [ ];
+        default = [
+          {
+            name = "flathub";
+            url = "https://flathub.org/repo/flathub.flatpakrepo";
+          }
+        ];
         example = [
           {
             name = "flathub";
@@ -129,7 +134,7 @@ in
             url = "https://sdk.gnome.org/repo/flatpak/gnome-nightly.flatpakrepo";
           }
         ];
-        description = "List of Flatpak remotes to add.";
+        description = "List of Flatpak remotes to add. By default, includes Flathub.";
       };
     };
   };
