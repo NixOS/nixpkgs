@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }: {
+import ./make-test-python.nix ({ lib, ng ? false, ... }: {
   name = "grub";
 
   meta = with lib.maintainers; {
@@ -12,6 +12,8 @@ import ./make-test-python.nix ({ lib, ... }: {
     boot.loader.grub = {
       enable = true;
       users.alice.password = "supersecret";
+
+      useInstallNg = ng;
 
       # OCR is not accurate enough
       extraConfig = "serial; terminal_output serial";
