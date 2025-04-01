@@ -1,0 +1,14 @@
+diff --git a/lib/autoconf/programs.m4 b/lib/autoconf/programs.m4
+index 8226a7c..3b231b9 100644
+--- a/lib/autoconf/programs.m4
++++ b/lib/autoconf/programs.m4
+@@ -701,7 +701,8 @@ if test -z "$MKDIR_P"; then
+ 	   case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
+ 	     'mkdir ('*'coreutils) '* | \
+ 	     *'BusyBox '* | \
+-	     'mkdir (fileutils) '4.1*)
++	     'mkdir (fileutils) '4.1* | \
++       'mkdir 0.0.'*)
+ 	       ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
+ 	       break 3;;
+ 	   esac
