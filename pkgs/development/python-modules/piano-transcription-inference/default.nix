@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "piano-transcription-inference";
-  version = "0.0.5";
+  version = "0.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nbhuSkXuWrekFxwdNHaspuag+3K1cKwq90IpATBpWPY=";
+    hash = "sha256-tt0A+bS8rLYUByXwO0E5peD0rNNaaeSSpdH3NOz70jE=";
   };
 
   checkpoint = fetchurl {
