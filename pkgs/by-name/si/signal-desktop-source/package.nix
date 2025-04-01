@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1741810629;
+    SOURCE_DATE_EPOCH = 1743538878;
   };
 
   preBuild = ''
