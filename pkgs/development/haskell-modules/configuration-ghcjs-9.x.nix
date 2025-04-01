@@ -54,4 +54,11 @@ with haskellLib;
       ]
     ))
   ];
+
+  # https://github.com/haskellari/splitmix/pull/75
+  splitmix = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/haskellari/splitmix/commit/7ffb3158f577c48ab5de774abea47767921ef3e9.patch";
+    sha256 = "sha256-n2q4FGf/pPcI1bhb9srHjHLzaNVehkdN6kQgL0F4MMg=";
+  }) super.splitmix;
+
 })
