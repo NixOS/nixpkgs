@@ -7,7 +7,7 @@
   freetype,
   openal,
   lua51Packages,
-  openRaUpdater
+  openRaUpdater,
 }:
 engine:
 
@@ -30,14 +30,17 @@ let
   dotnet-runtime = lib.getAttrFromPath [ engine.dotnetVersion "runtime" ] dotnetVersions;
 in
 buildDotnetModule {
-  inherit pname version dotnet-sdk dotnet-runtime;
+  inherit
+    pname
+    version
+    dotnet-sdk
+    dotnet-runtime
+    ;
 
   src = fetchFromGitHub {
     owner = "OpenRA";
     repo = "OpenRA";
-    rev = if lib.hasAttr "rev" engine
-      then engine.rev
-      else "${engine.build}-${engine.version}";
+    rev = if lib.hasAttr "rev" engine then engine.rev else "${engine.build}-${engine.version}";
     inherit (engine) hash;
   };
 
