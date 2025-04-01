@@ -209,3 +209,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # treewide nixfmt reformat pass 1, master, staging and staging-next
 d9d87c51960050e89c79e4025082ed965e770d68
+
+# treewide format of all Nix files
+14182c19701221692b84e7428e5b7281b099967a # !autorebase nix-shell --run treefmt
