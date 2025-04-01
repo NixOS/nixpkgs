@@ -385,6 +385,7 @@
   ./security/sudo.nix
   ./security/sudo-rs.nix
   ./security/systemd-confinement.nix
+  ./security/systemd-hardening.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix
   ./services/accessibility/orca.nix
