@@ -1,4 +1,5 @@
-{ testers, fetchgit, ... }: {
+{ testers, fetchgit, ... }:
+{
   simple = testers.invalidateFetcherByDrvHash fetchgit {
     name = "simple-nix-source";
     url = "https://github.com/NixOS/nix";

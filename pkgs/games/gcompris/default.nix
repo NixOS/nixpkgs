@@ -1,23 +1,24 @@
-{ stdenv
-, cmake
-, fetchurl
-, gettext
-, gst_all_1
-, lib
-, ninja
-, wrapQtAppsHook
-, qmlbox2d
-, qtbase
-, qtcharts
-, qtdeclarative
-, qtgraphicaleffects
-, qtimageformats
-, qtmultimedia
-, qtquickcontrols2
-, qtsensors
-, qttools
-, qtxmlpatterns
-, extra-cmake-modules
+{
+  stdenv,
+  cmake,
+  fetchurl,
+  gettext,
+  gst_all_1,
+  lib,
+  ninja,
+  wrapQtAppsHook,
+  qmlbox2d,
+  qtbase,
+  qtcharts,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qtimageformats,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtsensors,
+  qttools,
+  qtxmlpatterns,
+  extra-cmake-modules,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,25 +35,34 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules gettext ninja qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    gettext
+    ninja
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [
-    qmlbox2d
-    qtbase
-    qtcharts
-    qtdeclarative
-    qtgraphicaleffects
-    qtimageformats
-    qtmultimedia
-    qtquickcontrols2
-    qtsensors
-    qtxmlpatterns
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      qmlbox2d
+      qtbase
+      qtcharts
+      qtdeclarative
+      qtgraphicaleffects
+      qtimageformats
+      qtmultimedia
+      qtquickcontrols2
+      qtsensors
+      qtxmlpatterns
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
   postInstall = ''
     install -Dm444 ../org.kde.gcompris.appdata.xml -t $out/share/metainfo

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook, pkg-config, txt2man, which
-, openssl, nss, p11-kit, libical, ldns, unbound, apr, aprutil
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  txt2man,
+  which,
+  openssl,
+  nss,
+  p11-kit,
+  libical,
+  ldns,
+  unbound,
+  apr,
+  aprutil,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +25,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-gA9YWR3v66lSn4KkwG49l7V4/HUTrBXXl1uDCLr1tu8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config txt2man which ];
-  buildInputs = [ openssl nss p11-kit libical ldns unbound apr aprutil ];
-  configureFlags = [ "--with-openssl" "--with-nss" "--with-p11-kit" "--with-libical" "--with-ldns" "--with-unbound" "--with-bash-completion-dir=yes" ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    txt2man
+    which
+  ];
+  buildInputs = [
+    openssl
+    nss
+    p11-kit
+    libical
+    ldns
+    unbound
+    apr
+    aprutil
+  ];
+  configureFlags = [
+    "--with-openssl"
+    "--with-nss"
+    "--with-p11-kit"
+    "--with-libical"
+    "--with-ldns"
+    "--with-unbound"
+    "--with-bash-completion-dir=yes"
+  ];
 
   meta = with lib; {
     homepage = "https://redwax.eu/rt/";

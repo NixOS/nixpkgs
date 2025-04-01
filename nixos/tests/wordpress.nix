@@ -75,7 +75,10 @@ rec {
               };
             };
 
-            networking.firewall.allowedTCPPorts = [ 80 443 ];
+            networking.firewall.allowedTCPPorts = [
+              80
+              443
+            ];
             networking.hosts."127.0.0.1" = [
               "site1.local"
               "site2.local"

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -45,10 +50,11 @@ in
         $cfg['style'] = 'courgette';
         $cfg['organisation'] = 'ACME';
       '';
-      description =  let
-        documentationLink =
-          "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
-      in ''
+      description =
+        let
+          documentationLink = "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
+        in
+        ''
           Jirefeau configuration. Refer to <${documentationLink}> for supported
           values.
         '';
@@ -69,9 +75,11 @@ in
     maxUploadTimeout = mkOption {
       type = types.str;
       default = "30m";
-      description = let
-        nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
-      in ''
+      description =
+        let
+          nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
+        in
+        ''
           Timeout for reading client request bodies and headers. Refer to
           <${nginxCoreDocumentation}#client_body_timeout> and
           <${nginxCoreDocumentation}#client_header_timeout> for accepted values.
@@ -79,9 +87,8 @@ in
     };
 
     nginxConfig = mkOption {
-      type = types.submodule
-        (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-      default = {};
+      type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+      default = { };
       example = literalExpression ''
         {
           serverAliases = [ "wiki.''${config.networking.domain}" ];
@@ -93,7 +100,13 @@ in
     package = mkPackageOption pkgs "jirafeau" { };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -109,7 +122,6 @@ in
     };
   };
 
-
   config = mkIf cfg.enable {
     services = {
       nginx = {
@@ -117,10 +129,11 @@ in
         virtualHosts."${cfg.hostName}" = mkMerge [
           cfg.nginxConfig
           {
-            extraConfig = let
-              clientMaxBodySize =
-                if cfg.maxUploadSizeMegabytes == 0 then "0" else "${cfg.maxUploadSizeMegabytes}m";
-            in
+            extraConfig =
+              let
+                clientMaxBodySize =
+                  if cfg.maxUploadSizeMegabytes == 0 then "0" else "${cfg.maxUploadSizeMegabytes}m";
+              in
               ''
                 index index.php;
                 client_max_body_size ${clientMaxBodySize};

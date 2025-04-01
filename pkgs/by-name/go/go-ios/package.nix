@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, libusb1
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  libusb1,
 }:
 
 buildGoModule rec {
@@ -39,13 +40,14 @@ buildGoModule rec {
 
   # skips all the integration tests (requires iOS device) (`-tags=fast`)
   # as well as tests that requires networking
-  checkFlags = let
-    skippedTests = [
-      "TestWorksWithoutProxy"
-      "TestUsesProxy"
-    ];
-  in [ "-tags=fast" ]
-  ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestWorksWithoutProxy"
+        "TestUsesProxy"
+      ];
+    in
+    [ "-tags=fast" ] ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script { };
 
