@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication {
       colorama
       junit-xml
       ptpython
+      ipython
     ]
     ++ extraPythonPackages python3Packages;
 
