@@ -129,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Admin UI for Synapse Homeservers";
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
+    changelog = "https://github.com/Awesome-Technologies/synapse-admin/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
