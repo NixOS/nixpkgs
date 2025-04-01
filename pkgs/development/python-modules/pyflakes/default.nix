@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "3.2.0";
+  version = "3.3.2";
 
   disabled = pythonOlder "3.8";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pyflakes";
     rev = version;
-    hash = "sha256-ouCkkm9OrYob00uLTilqgWsTWfHhzaiZp7sa2C5liqk=";
+    hash = "sha256-nNug9EZ0coI095/QJu/eK1Ozlt01INT+mLlYdqrJuzE=";
   };
 
   nativeBuildInputs = [ setuptools ];
