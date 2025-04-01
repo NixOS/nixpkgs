@@ -10,7 +10,7 @@ let
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage {
+python.pkgs.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;
