@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.12.1";
+  version = "2.13.0";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pycodestyle";
     rev = version;
-    hash = "sha256-rQkOjDikJPHCBqrqxFQ9PLikYSeQZwJnHAmPGRUZecA=";
+    hash = "sha256-jpF0/sVzRjot8KRdXqvhWpdafzC/Fska6jmG3s2U6Wk=";
   };
 
   pythonImportsCheck = [ "pycodestyle" ];
