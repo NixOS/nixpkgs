@@ -1,4 +1,10 @@
-{ stdenv, bc, version, src, eulaDate }:
+{
+  stdenv,
+  bc,
+  version,
+  src,
+  eulaDate,
+}:
 stdenv.mkDerivation {
   inherit version src;
   pname = "houdini-runtime";

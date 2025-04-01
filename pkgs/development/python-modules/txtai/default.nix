@@ -165,7 +165,6 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -202,9 +201,13 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "txtai" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.ann ++ optional-dependencies.api ++ optional-dependencies.similarity;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.ann
+    ++ optional-dependencies.api
+    ++ optional-dependencies.similarity;
 
   checkInputs = [
     httpx

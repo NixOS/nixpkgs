@@ -1,15 +1,21 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
-{ config, lib, options, pkgs, ... }:
 {
-  imports =
-    [ ./iso-image.nix
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./iso-image.nix
 
-      # Profiles of this basic installation CD.
-      ../../profiles/all-hardware.nix
-      ../../profiles/base.nix
-      ../../profiles/installation-device.nix
-    ];
+    # Profiles of this basic installation CD.
+    ../../profiles/all-hardware.nix
+    ../../profiles/base.nix
+    ../../profiles/installation-device.nix
+  ];
 
   # Adds terminus_font for people with HiDPI displays
   console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];

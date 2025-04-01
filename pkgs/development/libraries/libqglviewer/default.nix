@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, qmake, qtbase, libGLU, AGL }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake,
+  qtbase,
+  libGLU,
+  AGL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libqglviewer";
@@ -10,8 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase libGLU ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin AGL;
+  buildInputs = [
+    qtbase
+    libGLU
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   dontWrapQtApps = true;
 

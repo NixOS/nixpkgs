@@ -1,6 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub, callPackage, makeDesktopItem
-, clang, copyDesktopItems, patchelf, pkg-config, wrapQtAppsHook
-, alsa-lib, bash, ffmpeg, mdk-sdk, ocl-icd, opencv, qtbase, qtdeclarative, qtsvg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  callPackage,
+  makeDesktopItem,
+  clang,
+  copyDesktopItems,
+  patchelf,
+  pkg-config,
+  wrapQtAppsHook,
+  alsa-lib,
+  bash,
+  ffmpeg,
+  mdk-sdk,
+  ocl-icd,
+  opencv,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,16 +50,31 @@ rustPlatform.buildRustPackage rec {
       "spirv-std-0.9.0" = "sha256-uZn1p2pM5UYQKlY9u16aafPH7dfQcSG7PaFDd1sT4Qc=";
       "system_shutdown-4.0.1" = "sha256-YypNnZzTxkmUgIxaP4jOpFBje/fEzI5L1g+3pJgMd0w=";
       "telemetry-parser-0.3.0" = "sha256-U26cWC7pSw4NFiu43BZf+KlLy9NU61iRpFx3Btse1aY=";
-     };
+    };
   };
 
   lens-profiles = callPackage ./lens-profiles.nix { };
 
   nativeBuildInputs = [
-    clang copyDesktopItems patchelf pkg-config rustPlatform.bindgenHook wrapQtAppsHook
+    clang
+    copyDesktopItems
+    patchelf
+    pkg-config
+    rustPlatform.bindgenHook
+    wrapQtAppsHook
   ];
 
-  buildInputs = [ alsa-lib bash ffmpeg mdk-sdk ocl-icd opencv qtbase qtdeclarative qtsvg ];
+  buildInputs = [
+    alsa-lib
+    bash
+    ffmpeg
+    mdk-sdk
+    ocl-icd
+    opencv
+    qtbase
+    qtdeclarative
+    qtsvg
+  ];
 
   patches = [ ./no-static-zlib.patch ];
 
@@ -112,7 +144,12 @@ rustPlatform.buildRustPackage rec {
       exec = "gyroflow-open %u";
       terminal = false;
       mimeTypes = [ "application/x-gyroflow" ];
-      categories = [ "AudioVideo" "Video" "AudioVideoEditing" "Qt" ];
+      categories = [
+        "AudioVideo"
+        "Video"
+        "AudioVideoEditing"
+        "Qt"
+      ];
       startupNotify = true;
       startupWMClass = "gyroflow";
       prefersNonDefaultGPU = true;

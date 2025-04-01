@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gnatcoll-core
-, gprbuild
-, python3
-, ocamlPackages
-, makeWrapper
-, gpr2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  gnatcoll-core,
+  gprbuild,
+  python3,
+  ocamlPackages,
+  makeWrapper,
+  gpr2,
 }:
 let
   gnat_version = lib.versions.major gnat.version;
 
   # gnatprove fsf-14 requires gpr2 from a special branch
-  gpr2_24_2_next = gpr2.overrideAttrs(old: rec {
+  gpr2_24_2_next = gpr2.overrideAttrs (old: rec {
     version = "24.2.0-next";
     src = fetchFromGitHub {
       owner = "AdaCore";
@@ -23,12 +24,14 @@ let
     };
   });
 
-  fetchSpark2014 = { rev, hash } : fetchFromGitHub {
-    owner = "AdaCore";
-    repo = "spark2014";
-    fetchSubmodules = true;
-    inherit rev hash;
-  };
+  fetchSpark2014 =
+    { rev, hash }:
+    fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "spark2014";
+      fetchSubmodules = true;
+      inherit rev hash;
+    };
 
   spark2014 = {
     "12" = {
@@ -58,8 +61,9 @@ let
     };
   };
 
-  thisSpark = spark2014.${gnat_version} or
-    (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+  thisSpark =
+    spark2014.${gnat_version}
+      or (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
 stdenv.mkDerivation rec {
@@ -68,35 +72,40 @@ stdenv.mkDerivation rec {
 
   src = thisSpark.src;
 
-  patches = thisSpark.patches or [];
+  patches = thisSpark.patches or [ ];
 
-  nativeBuildInputs = [
-    gnat
-    gprbuild
-    python3
-    makeWrapper
-  ] ++ (with ocamlPackages; [
-    ocaml
-    findlib
-    menhir
-  ]);
+  nativeBuildInputs =
+    [
+      gnat
+      gprbuild
+      python3
+      makeWrapper
+    ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      menhir
+    ]);
 
-  buildInputs = [
-    gnatcoll-core
-  ] ++ (with ocamlPackages; [
-    ocamlgraph
-    zarith
-    ppx_deriving
-    ppx_sexp_conv
-    camlzip
-    menhirLib
-    num
-    re
-    sexplib
-    yojson
-  ]) ++ (lib.optionals (gnat_version == "14")[
-    gpr2_24_2_next
-  ]);
+  buildInputs =
+    [
+      gnatcoll-core
+    ]
+    ++ (with ocamlPackages; [
+      ocamlgraph
+      zarith
+      ppx_deriving
+      ppx_sexp_conv
+      camlzip
+      menhirLib
+      num
+      re
+      sexplib
+      yojson
+    ])
+    ++ (lib.optionals (gnat_version == "14") [
+      gpr2_24_2_next
+    ]);
 
   propagatedBuildInputs = [
     gprbuild
@@ -131,4 +140,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

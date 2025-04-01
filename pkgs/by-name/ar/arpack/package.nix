@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja
-, gfortran, blas, lapack, eigen
-, useMpi ? false
-, mpi
-, openssh
-, igraph
-, useAccel ? false #use Accelerate framework on darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  gfortran,
+  blas,
+  lapack,
+  eigen,
+  useMpi ? false,
+  mpi,
+  openssh,
+  igraph,
+  useAccel ? false, # use Accelerate framework on darwin
 }:
 
 # MPI version can only be built with LP64 interface.
@@ -23,12 +31,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ninja ];
-  buildInputs = [
-    eigen
-  ] ++ lib.optionals (!useAccel) (assert (blas.isILP64 == lapack.isILP64); [
-    blas lapack
-  ]) ++ lib.optional useMpi mpi;
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    ninja
+  ];
+  buildInputs =
+    [
+      eigen
+    ]
+    ++ lib.optionals (!useAccel) (
+      assert (blas.isILP64 == lapack.isILP64);
+      [
+        blas
+        lapack
+      ]
+    )
+    ++ lib.optional useMpi mpi;
 
   nativeCheckInputs = lib.optional useMpi openssh;
 
@@ -43,16 +62,18 @@ stdenv.mkDerivation rec {
     FFLAGS = "-ff2c -fno-second-underscore";
   };
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
-    (lib.cmakeBool "EIGEN" true)
-    (lib.cmakeBool "EXAMPLES" true)
-    (lib.cmakeBool "ICB" true)
-    (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
-    (lib.cmakeBool "MPI" useMpi)
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+      (lib.cmakeBool "EIGEN" true)
+      (lib.cmakeBool "EXAMPLES" true)
+      (lib.cmakeBool "ICB" true)
+      (lib.cmakeBool "INTERFACE64" (!useAccel && blas.isILP64))
+      (lib.cmakeBool "MPI" useMpi)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DBLA_VENDOR=${if useAccel then "Apple" else "Generic"}"
+    ];
 
   passthru = {
     isILP64 = !useAccel && blas.isILP64;
@@ -69,7 +90,10 @@ stdenv.mkDerivation rec {
       problems.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel dotlambda ];
+    maintainers = with lib.maintainers; [
+      ttuegel
+      dotlambda
+    ];
     platforms = lib.platforms.unix;
   };
 }

@@ -242,8 +242,11 @@ in
   warnOnInstantiate =
     msg: drv:
     let
-      drvToWrap = removeAttrs drv [ "meta" "name" "type" ];
+      drvToWrap = removeAttrs drv [
+        "meta"
+        "name"
+        "type"
+      ];
     in
-    drv
-    // mapAttrs (_: lib.warn msg) drvToWrap;
+    drv // mapAttrs (_: lib.warn msg) drvToWrap;
 }

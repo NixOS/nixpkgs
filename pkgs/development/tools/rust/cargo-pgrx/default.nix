@@ -1,17 +1,19 @@
-{ lib
-, darwin
-, fetchCrate
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  darwin,
+  fetchCrate,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 let
   generic =
-    { version
-    , hash
-    , cargoHash
+    {
+      version,
+      hash,
+      cargoHash,
     }:
     rustPlatform.buildRustPackage rec {
       pname = "cargo-pgrx";
@@ -28,11 +30,13 @@ let
         pkg-config
       ];
 
-      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-        openssl
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.Security
-      ];
+      buildInputs =
+        lib.optionals stdenv.hostPlatform.isLinux [
+          openssl
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
 
       preCheck = ''
         export PGRX_HOME=$(mktemp -d)

@@ -1,27 +1,35 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.environment;
 
   exportedEnvVars =
     let
-      absoluteVariables =
-        lib.mapAttrs (n: lib.toList) cfg.variables;
+      absoluteVariables = lib.mapAttrs (n: lib.toList) cfg.variables;
 
-      suffixedVariables =
-        lib.flip lib.mapAttrs cfg.profileRelativeEnvVars (envVar: listSuffixes:
-          lib.concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
-        );
+      suffixedVariables = lib.flip lib.mapAttrs cfg.profileRelativeEnvVars (
+        envVar: listSuffixes:
+        lib.concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
+      );
 
-      allVariables =
-        lib.zipAttrsWith (n: lib.concatLists) [ absoluteVariables suffixedVariables ];
+      allVariables = lib.zipAttrsWith (n: lib.concatLists) [
+        absoluteVariables
+        suffixedVariables
+      ];
 
-      exportVariables =
-        lib.mapAttrsToList (n: v: ''export ${n}="${lib.concatStringsSep ":" v}"'') allVariables;
+      exportVariables = lib.mapAttrsToList (
+        n: v: ''export ${n}="${lib.concatStringsSep ":" v}"''
+      ) allVariables;
     in
-      lib.concatStringsSep "\n" exportVariables;
+    lib.concatStringsSep "\n" exportVariables;
 in
 
 {
@@ -29,8 +37,11 @@ in
   options = {
 
     environment.variables = lib.mkOption {
-      default = {};
-      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
+      default = { };
+      example = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
@@ -38,14 +49,27 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with lib.types; attrsOf (oneOf [ (listOf (oneOf [ int str path ])) int str path ]);
-      apply = let
-        toStr = v: if lib.isPath v then "${v}" else toString v;
-      in lib.mapAttrs (n: v: if lib.isList v then lib.concatMapStringsSep ":" toStr v else toStr v);
+      type =
+        with lib.types;
+        attrsOf (oneOf [
+          (listOf (oneOf [
+            int
+            str
+            path
+          ]))
+          int
+          str
+          path
+        ]);
+      apply =
+        let
+          toStr = v: if lib.isPath v then "${v}" else toString v;
+        in
+        lib.mapAttrs (n: v: if lib.isList v then lib.concatMapStringsSep ":" toStr v else toStr v);
     };
 
     environment.profiles = lib.mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of profiles used to setup the global environment.
       '';
@@ -54,7 +78,13 @@ in
 
     environment.profileRelativeEnvVars = lib.mkOption {
       type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = {
+        PATH = [ "/bin" ];
+        MANPATH = [
+          "/man"
+          "/share/man"
+        ];
+      };
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
@@ -106,7 +136,10 @@ in
     };
 
     environment.shellAliases = lib.mkOption {
-      example = { l = null; ll = "ls -l"; };
+      example = {
+        l = null;
+        ll = "ls -l";
+      };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
@@ -147,7 +180,7 @@ in
     };
 
     environment.shells = lib.mkOption {
-      default = [];
+      default = [ ];
       example = lib.literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
@@ -174,49 +207,46 @@ in
     environment.shellAliases = lib.mapAttrs (name: lib.mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
-      l  = "ls -alh";
+      l = "ls -alh";
     };
 
-    environment.etc.shells.text =
-      ''
-        ${lib.concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
-        /bin/sh
-      '';
+    environment.etc.shells.text = ''
+      ${lib.concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
+      /bin/sh
+    '';
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
     environment.etc.set-environment.source = config.system.build.setEnvironment;
 
-    system.build.setEnvironment = pkgs.writeText "set-environment"
-      ''
-        # DO NOT EDIT -- this file has been generated automatically.
+    system.build.setEnvironment = pkgs.writeText "set-environment" ''
+      # DO NOT EDIT -- this file has been generated automatically.
 
-        # Prevent this file from being sourced by child shells.
-        export __NIXOS_SET_ENVIRONMENT_DONE=1
+      # Prevent this file from being sourced by child shells.
+      export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-        ${exportedEnvVars}
+      ${exportedEnvVars}
 
-        ${cfg.extraInit}
+      ${cfg.extraInit}
 
-        ${lib.optionalString cfg.homeBinInPath ''
-          # ~/bin if it exists overrides other bin directories.
-          export PATH="$HOME/bin:$PATH"
-        ''}
+      ${lib.optionalString cfg.homeBinInPath ''
+        # ~/bin if it exists overrides other bin directories.
+        export PATH="$HOME/bin:$PATH"
+      ''}
 
-        ${lib.optionalString cfg.localBinInPath ''
-          export PATH="$HOME/.local/bin:$PATH"
-        ''}
-      '';
+      ${lib.optionalString cfg.localBinInPath ''
+        export PATH="$HOME/.local/bin:$PATH"
+      ''}
+    '';
 
-    system.activationScripts.binsh = lib.stringAfter [ "stdio" ]
-      ''
-        # Create the required /bin/sh symlink; otherwise lots of things
-        # (notably the system() function) won't work.
-        mkdir -p /bin
-        chmod 0755 /bin
-        ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-        mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-      '';
+    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] ''
+      # Create the required /bin/sh symlink; otherwise lots of things
+      # (notably the system() function) won't work.
+      mkdir -p /bin
+      chmod 0755 /bin
+      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
+      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+    '';
 
   };
 

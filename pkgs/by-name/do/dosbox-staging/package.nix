@@ -87,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "10.15") # from https://www.dosbox-staging.org/releases/macos/
     ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postInstall = ''
     install -Dm644 $src/contrib/linux/dosbox-staging.desktop $out/share/applications/

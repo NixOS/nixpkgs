@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "go-graft";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-X github.com/mzz2017/gg/cmd.Version=${version}" "-s" "-w" ];
+  ldflags = [
+    "-X github.com/mzz2017/gg/cmd.Version=${version}"
+    "-s"
+    "-w"
+  ];
   vendorHash = "sha256-fnM4ycqDyruCdCA1Cr4Ki48xeQiTG4l5dLVuAafEm14=";
   subPackages = [ "." ];
 

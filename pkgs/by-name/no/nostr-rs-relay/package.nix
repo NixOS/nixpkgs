@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, libiconv
-, darwin
-, protobuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  libiconv,
+  darwin,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,12 +22,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+agmlg6tAnEJ5o586fUY7V4fdNScDPKCbaZqt7R3gqg=";
 
-  buildInputs = [ openssl.dev ]
+  buildInputs =
+    [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [
     pkg-config # for openssl

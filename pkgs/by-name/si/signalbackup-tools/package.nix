@@ -24,22 +24,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-klIkNt3AlT/msZl7pYPQaFMl/pdI7rcaeLDZekmTIzY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = [
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    dbus
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Needed for `utimensat` on `x86_64-darwin`
-    apple-sdk_11
-    (darwinMinVersionHook "11.3")
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Needed for `utimensat` on `x86_64-darwin`
+      apple-sdk_11
+      (darwinMinVersionHook "11.3")
+    ];
 
   installPhase = ''
     runHook preInstall

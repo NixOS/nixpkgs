@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   name = "virtio_vmmci";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-dMh6bqlhsp/cWKqiJ9xjVI9yJj2w1ap7agKSnRjadXA=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   extraConfig = ''

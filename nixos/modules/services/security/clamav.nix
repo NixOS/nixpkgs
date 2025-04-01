@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   clamavUser = "clamav";
@@ -14,14 +19,29 @@ let
   clamdConfigFile = pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
   freshclamConfigFile = pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
   fangfrischConfigFile = pkgs.writeText "fangfrisch.conf" ''
-    ${lib.generators.toINI {} cfg.fangfrisch.settings}
+    ${lib.generators.toINI { } cfg.fangfrisch.settings}
   '';
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "config" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "updater" "extraConfig" ] "Use services.clamav.updater.settings instead.")
-    (mkRemovedOptionModule [ "services" "clamav" "daemon" "extraConfig" ] "Use services.clamav.daemon.settings instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "updater"
+      "config"
+    ] "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "updater"
+      "extraConfig"
+    ] "Use services.clamav.updater.settings instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamav"
+      "daemon"
+      "extraConfig"
+    ] "Use services.clamav.daemon.settings instead.")
   ];
 
   options = {
@@ -31,7 +51,14 @@ in
         enable = mkEnableOption "ClamAV clamd daemon";
 
         settings = mkOption {
-          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+          type =
+            with types;
+            attrsOf (oneOf [
+              bool
+              int
+              str
+              (listOf str)
+            ]);
           default = { };
           description = ''
             ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
@@ -60,7 +87,14 @@ in
         };
 
         settings = mkOption {
-          type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+          type =
+            with types;
+            attrsOf (oneOf [
+              bool
+              int
+              str
+              (listOf str)
+            ]);
           default = { };
           description = ''
             freshclam configuration. Refer to <https://linux.die.net/man/5/freshclam.conf>,
@@ -82,7 +116,15 @@ in
 
         settings = mkOption {
           type = lib.types.submodule {
-            freeformType = with types; attrsOf (attrsOf (oneOf [ str int bool ]));
+            freeformType =
+              with types;
+              attrsOf (
+                attrsOf (oneOf [
+                  str
+                  int
+                  bool
+                ])
+              );
           };
           default = { };
           example = {
@@ -114,7 +156,13 @@ in
 
         scanDirectories = mkOption {
           type = with types; listOf str;
-          default = [ "/home" "/var/lib" "/tmp" "/etc" "/var/tmp" ];
+          default = [
+            "/home"
+            "/var/lib"
+            "/tmp"
+            "/etc"
+            "/var/tmp"
+          ];
           description = ''
             List of directories to scan.
             The default includes everything I could think of that is valid for nixos. Feel free to contribute a PR to add to the default if you see something missing.
@@ -134,8 +182,9 @@ in
       home = stateDir;
     };
 
-    users.groups.${clamavGroup} =
-      { gid = config.ids.gids.clamav; };
+    users.groups.${clamavGroup} = {
+      gid = config.ids.gids.clamav;
+    };
 
     services.clamav.daemon.settings = {
       DatabaseDirectory = stateDir;
@@ -252,7 +301,10 @@ in
       description = "ClamAV virus database updater (fangfrisch)";
       restartTriggers = [ fangfrischConfigFile ];
       requires = [ "network-online.target" ];
-      after = [ "network-online.target" "clamav-fangfrisch-init.service" ];
+      after = [
+        "network-online.target"
+        "clamav-fangfrisch-init.service"
+      ];
 
       serviceConfig = {
         Type = "oneshot";

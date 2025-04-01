@@ -1,4 +1,10 @@
-{ lib, buildEnv, writeShellScriptBin, fetchurl, jre }:
+{
+  lib,
+  buildEnv,
+  writeShellScriptBin,
+  fetchurl,
+  jre,
+}:
 
 let
   name = "legends-browser-${version}";

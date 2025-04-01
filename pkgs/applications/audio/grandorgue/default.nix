@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fftwFloat
-, alsa-lib
-, zlib
-, wavpack
-, wxGTK32
-, udev
-, jackaudioSupport ? false
-, libjack2
-, imagemagick
-, libicns
-, yaml-cpp
-, makeWrapper
-, Cocoa
-, includeDemo ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftwFloat,
+  alsa-lib,
+  zlib,
+  wavpack,
+  wxGTK32,
+  udev,
+  jackaudioSupport ? false,
+  libjack2,
+  imagemagick,
+  libicns,
+  yaml-cpp,
+  makeWrapper,
+  Cocoa,
+  includeDemo ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,19 +34,37 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-fixes.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    imagemagick
+    libicns
+    makeWrapper
+  ];
 
-  buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+  buildInputs =
+    [
+      fftwFloat
+      zlib
+      wavpack
+      wxGTK32
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      udev
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optionals (!jackaudioSupport) [
-    "-DRTAUDIO_USE_JACK=OFF"
-    "-DRTMIDI_USE_JACK=OFF"
-    "-DGO_USE_JACK=OFF"
-    "-DINSTALL_DEPEND=OFF"
-  ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
+  cmakeFlags =
+    lib.optionals (!jackaudioSupport) [
+      "-DRTAUDIO_USE_JACK=OFF"
+      "-DRTMIDI_USE_JACK=OFF"
+      "-DGO_USE_JACK=OFF"
+      "-DINSTALL_DEPEND=OFF"
+    ]
+    ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_IPHONE=0";
 

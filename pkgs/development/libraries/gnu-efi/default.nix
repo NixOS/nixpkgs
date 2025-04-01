@@ -1,5 +1,15 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, pciutils
-, gitUpdater, fwupd-efi, ipxe, refind, syslinux }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  pciutils,
+  gitUpdater,
+  fwupd-efi,
+  ipxe,
+  refind,
+  syslinux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
@@ -33,7 +43,12 @@ stdenv.mkDerivation rec {
       url = "https://git.code.sf.net/p/gnu-efi/code";
     };
     tests = {
-      inherit fwupd-efi ipxe refind syslinux;
+      inherit
+        fwupd-efi
+        ipxe
+        refind
+        syslinux
+        ;
     };
   };
 

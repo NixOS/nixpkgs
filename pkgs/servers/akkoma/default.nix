@@ -1,12 +1,13 @@
-{ lib
-, beamPackages
-, fetchFromGitea
-, fetchFromGitHub
-, fetchFromGitLab
-, cmake
-, file
-, nixosTests
-, ...
+{
+  lib,
+  beamPackages,
+  fetchFromGitea,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  cmake,
+  file,
+  nixosTests,
+  ...
 }:
 beamPackages.mixRelease rec {
   pname = "akkoma";
@@ -34,7 +35,8 @@ beamPackages.mixRelease rec {
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = final: prev:
+    overrides =
+      final: prev:
       let
         mimeTypePatchPhase = ''
           mkdir -p config
@@ -58,11 +60,14 @@ beamPackages.mixRelease rec {
         # However, we can't just recompile things like we would on other systems.
         # Therefore, we need to add it to mime's compile-time config too, and also in every package that depends on mime, directly or indirectly.
         # We take the lazy way out and just add it to every dependency - it won't make a difference in packages that don't depend on `mime`.
-        addMimeTypes = _: p: p.override {
-          patchPhase = mimeTypePatchPhase;
-        };
+        addMimeTypes =
+          _: p:
+          p.override {
+            patchPhase = mimeTypePatchPhase;
+          };
       in
-      (lib.attrsets.mapAttrs addMimeTypes prev) // {
+      (lib.attrsets.mapAttrs addMimeTypes prev)
+      // {
         # mix2nix does not support git dependencies yet,
         # so we need to add them manually
         captcha = beamPackages.buildMix rec {
@@ -129,7 +134,10 @@ beamPackages.mixRelease rec {
             hash = "sha256-couG5jrAo0Fbk/WABd4n3vhXpDUp+9drxExKc5NM9CI=";
           };
 
-          beamDeps = with final; [ phoenix_view temple ];
+          beamDeps = with final; [
+            phoenix_view
+            temple
+          ];
           patchPhase = mimeTypePatchPhase;
         };
         search_parser = beamPackages.buildMix rec {
@@ -158,7 +166,14 @@ beamPackages.mixRelease rec {
           };
 
           mixEnv = "dev";
-          beamDeps = with final; [ earmark_parser ex_doc makeup makeup_elixir makeup_erlang nimble_parsec ];
+          beamDeps = with final; [
+            earmark_parser
+            ex_doc
+            makeup
+            makeup_elixir
+            makeup_erlang
+            nimble_parsec
+          ];
           patchPhase = mimeTypePatchPhase;
         };
 
@@ -179,7 +194,12 @@ beamPackages.mixRelease rec {
             hash = "sha256-Q/IoVbM/TBgGCmx8AxiBHF2hARb0FbPml8N1HjN3CsE=";
           };
 
-          beamDeps = with final; [ credo ex_doc dialyxir temple ];
+          beamDeps = with final; [
+            credo
+            ex_doc
+            dialyxir
+            temple
+          ];
           patchPhase = ''
             substituteInPlace mix.exs --replace ":logger" ":logger, :public_key"
             ${mimeTypePatchPhase}
@@ -198,7 +218,15 @@ beamPackages.mixRelease rec {
           };
 
           buildInputs = [ file ];
-          beamDeps = with final; [ nimble_pool mime plug credo dialyxir ex_doc elixir_make ];
+          beamDeps = with final; [
+            nimble_pool
+            mime
+            plug
+            credo
+            dialyxir
+            ex_doc
+            elixir_make
+          ];
           patchPhase = mimeTypePatchPhase;
         };
 
@@ -209,7 +237,9 @@ beamPackages.mixRelease rec {
   };
 
   passthru = {
-    tests = with nixosTests; { inherit akkoma akkoma-confined; };
+    tests = with nixosTests; {
+      inherit akkoma akkoma-confined;
+    };
     inherit mixNixDeps;
 
     # Used to make sure the service uses the same version of elixir as

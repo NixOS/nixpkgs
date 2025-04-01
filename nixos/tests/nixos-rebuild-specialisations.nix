@@ -1,4 +1,5 @@
-{ hostPkgs, ... }: {
+{ hostPkgs, ... }:
+{
   name = "nixos-rebuild-specialisations";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
@@ -6,32 +7,34 @@
   node.pkgsReadOnly = false;
 
   nodes = {
-    machine = { lib, pkgs, ... }: {
-      imports = [
-        ../modules/profiles/installation-device.nix
-        ../modules/profiles/base.nix
-      ];
+    machine =
+      { lib, pkgs, ... }:
+      {
+        imports = [
+          ../modules/profiles/installation-device.nix
+          ../modules/profiles/base.nix
+        ];
 
-      nix.settings = {
-        substituters = lib.mkForce [ ];
-        hashed-mirrors = null;
-        connect-timeout = 1;
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+        };
+
+        system.includeBuildDependencies = true;
+
+        system.extraDependencies = [
+          # Not part of the initial build apparently?
+          pkgs.grub2
+        ];
+
+        system.switch.enable = true;
+
+        virtualisation = {
+          cores = 2;
+          memorySize = 4096;
+        };
       };
-
-      system.includeBuildDependencies = true;
-
-      system.extraDependencies = [
-        # Not part of the initial build apparently?
-        pkgs.grub2
-      ];
-
-      system.switch.enable = true;
-
-      virtualisation = {
-        cores = 2;
-        memorySize = 4096;
-      };
-    };
   };
 
   testScript =

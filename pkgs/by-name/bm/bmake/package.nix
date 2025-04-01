@@ -27,18 +27,23 @@ stdenv.mkDerivation (finalAttrs: {
     ./004-unconditional-ksh-test.diff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     getopt
   ];
 
-  nativeCheckInputs = [
-    bc
-    tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  nativeCheckInputs =
+    [
+      bc
+      tzdata
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+      ksh
+    ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
   # given op. On a case-insensitive filesystem this generated makefile clobbers
@@ -112,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable version of NetBSD 'make'";
     license = lib.licenses.bsd3;
     mainProgram = "bmake";
-    maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
     # requires strip
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

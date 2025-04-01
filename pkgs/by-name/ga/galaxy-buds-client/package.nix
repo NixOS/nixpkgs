@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, fontconfig
-, glib
-, libglvnd
-, xorg
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  fontconfig,
+  glib,
+  libglvnd,
+  xorg,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildDotnetModule rec {
@@ -29,9 +30,15 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   dotnetFlags = [ "-p:Runtimeidentifier=linux-x64" ];
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) fontconfig ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    fontconfig
+  ];
 
   runtimeDeps = [
     libglvnd

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "docker-buildx";
@@ -16,7 +20,8 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
     "-X github.com/docker/buildx/version.Version=v${version}"
   ];
@@ -35,6 +40,9 @@ buildGoModule rec {
     mainProgram = "docker-buildx";
     homepage = "https://github.com/docker/buildx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivan-babrou developer-guy ];
+    maintainers = with maintainers; [
+      ivan-babrou
+      developer-guy
+    ];
   };
 }

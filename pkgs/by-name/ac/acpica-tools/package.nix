@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-RlhKBvydesUdBaFUHk3sSM6SRIZ7q5IqnibX+hps+Tc=";
   };
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   buildFlags = [
     "acpibin"
@@ -49,8 +53,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
-    license = with licenses; [ iasl gpl2Only bsd3 ];
-    maintainers = with maintainers; [ tadfisher felixsinger ];
+    license = with licenses; [
+      iasl
+      gpl2Only
+      bsd3
+    ];
+    maintainers = with maintainers; [
+      tadfisher
+      felixsinger
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

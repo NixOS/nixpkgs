@@ -1,4 +1,15 @@
-{ mkDerivation, lib, fetchurl, pkg-config, libjack2, alsa-lib, libsndfile, liblo, lv2, qt5 }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  alsa-lib,
+  libsndfile,
+  liblo,
+  lv2,
+  qt5,
+}:
 
 mkDerivation rec {
   pname = "drumkv1";
@@ -9,7 +20,15 @@ mkDerivation rec {
     sha256 = "sha256-gNscsqGpEfU1CNJDlBAzum9M0vzJSm6Wx5b/zhOt+sk=";
   };
 
-  buildInputs = [ libjack2 alsa-lib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];
+  buildInputs = [
+    libjack2
+    alsa-lib
+    libsndfile
+    liblo
+    lv2
+    qt5.qtbase
+    qt5.qttools
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

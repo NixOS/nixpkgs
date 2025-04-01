@@ -1,34 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, boost
-, cmake
-, Cocoa
-, libtorrent-rasterbar
-, ninja
-, qtbase
-, qtsvg
-, qttools
-, wrapGAppsHook3
-, wrapQtAppsHook
+  boost,
+  cmake,
+  Cocoa,
+  libtorrent-rasterbar,
+  ninja,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
 
-, guiSupport ? true
-, dbus
-, qtwayland
+  guiSupport ? true,
+  dbus,
+  qtwayland,
 
-, trackerSearch ? true
-, python3
+  trackerSearch ? true,
+  python3,
 
-, webuiSupport ? true
+  webuiSupport ? true,
 }:
 
 let
   qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
-  pname = "qbittorrent"
-    + lib.optionalString (!guiSupport) "-nox";
+  pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
   version = "5.0.1";
 
   src = fetchFromGitHub {
@@ -45,29 +45,36 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    boost
-    libtorrent-rasterbar
-    qtbase
-    qtsvg
-    qttools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ] ++ lib.optionals guiSupport [
-    dbus
-  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [
-    qtwayland
-  ] ++ lib.optionals trackerSearch [
-    python3
-  ];
+  buildInputs =
+    [
+      boost
+      libtorrent-rasterbar
+      qtbase
+      qtsvg
+      qttools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ]
+    ++ lib.optionals guiSupport [
+      dbus
+    ]
+    ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [
+      qtwayland
+    ]
+    ++ lib.optionals trackerSearch [
+      python3
+    ];
 
-  cmakeFlags = lib.optionals (!guiSupport) [
-    "-DGUI=OFF"
-    "-DSYSTEMD=ON"
-    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
-  ] ++ lib.optionals (!webuiSupport) [
-    "-DWEBUI=OFF"
-  ];
+  cmakeFlags =
+    lib.optionals (!guiSupport) [
+      "-DGUI=OFF"
+      "-DSYSTEMD=ON"
+      "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+    ]
+    ++ lib.optionals (!webuiSupport) [
+      "-DWEBUI=OFF"
+    ];
 
   qtWrapperArgs = lib.optionals trackerSearch [
     "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
@@ -92,9 +99,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
-    mainProgram =
-      "qbittorrent"
-      + lib.optionalString (!guiSupport) "-nox";
+    maintainers = with maintainers; [
+      Anton-Latukha
+      kashw2
+    ];
+    mainProgram = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
   };
 }

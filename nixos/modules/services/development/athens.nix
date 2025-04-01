@@ -1,144 +1,147 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.athens;
 
-  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig (
-    {
-      GoBinary = "${cfg.goBinary}/bin/go";
-      GoEnv = cfg.goEnv;
-      GoBinaryEnvVars = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.goBinaryEnvVars;
-      GoGetWorkers = cfg.goGetWorkers;
-      GoGetDir = cfg.goGetDir;
-      ProtocolWorkers = cfg.protocolWorkers;
-      LogLevel = cfg.logLevel;
-      CloudRuntime = cfg.cloudRuntime;
-      EnablePprof = cfg.enablePprof;
-      PprofPort = ":${toString cfg.pprofPort}";
-      FilterFile = cfg.filterFile;
-      RobotsFile = cfg.robotsFile;
-      Timeout = cfg.timeout;
-      StorageType = cfg.storageType;
-      TLSCertFile = cfg.tlsCertFile;
-      TLSKeyFile = cfg.tlsKeyFile;
-      Port = ":${toString cfg.port}";
-      UnixSocket = cfg.unixSocket;
-      GlobalEndpoint = cfg.globalEndpoint;
-      BasicAuthUser = cfg.basicAuthUser;
-      BasicAuthPass = cfg.basicAuthPass;
-      ForceSSL = cfg.forceSSL;
-      ValidatorHook = cfg.validatorHook;
-      PathPrefix = cfg.pathPrefix;
-      NETRCPath = cfg.netrcPath;
-      GithubToken = cfg.githubToken;
-      HGRCPath = cfg.hgrcPath;
-      TraceExporter = cfg.traceExporter;
-      StatsExporter = cfg.statsExporter;
-      SumDBs = cfg.sumDBs;
-      NoSumPatterns = cfg.noSumPatterns;
-      DownloadMode = cfg.downloadMode;
-      NetworkMode = cfg.networkMode;
-      DownloadURL = cfg.downloadURL;
-      SingleFlightType = cfg.singleFlightType;
-      IndexType = cfg.indexType;
-      ShutdownTimeout = cfg.shutdownTimeout;
-      SingleFlight = {
-        Etcd = {
-          Endpoints = builtins.concatStringsSep "," cfg.singleFlight.etcd.endpoints;
-        };
-        Redis = {
-          Endpoint = cfg.singleFlight.redis.endpoint;
-          Password = cfg.singleFlight.redis.password;
-          LockConfig = {
-            TTL = cfg.singleFlight.redis.lockConfig.ttl;
-            Timeout = cfg.singleFlight.redis.lockConfig.timeout;
-            MaxRetries = cfg.singleFlight.redis.lockConfig.maxRetries;
-          };
-        };
-        RedisSentinel = {
-          Endpoints = cfg.singleFlight.redisSentinel.endpoints;
-          MasterName = cfg.singleFlight.redisSentinel.masterName;
-          SentinelPassword = cfg.singleFlight.redisSentinel.sentinelPassword;
-          LockConfig = {
-            TTL = cfg.singleFlight.redisSentinel.lockConfig.ttl;
-            Timeout = cfg.singleFlight.redisSentinel.lockConfig.timeout;
-            MaxRetries = cfg.singleFlight.redisSentinel.lockConfig.maxRetries;
-          };
+  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig ({
+    GoBinary = "${cfg.goBinary}/bin/go";
+    GoEnv = cfg.goEnv;
+    GoBinaryEnvVars = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.goBinaryEnvVars;
+    GoGetWorkers = cfg.goGetWorkers;
+    GoGetDir = cfg.goGetDir;
+    ProtocolWorkers = cfg.protocolWorkers;
+    LogLevel = cfg.logLevel;
+    CloudRuntime = cfg.cloudRuntime;
+    EnablePprof = cfg.enablePprof;
+    PprofPort = ":${toString cfg.pprofPort}";
+    FilterFile = cfg.filterFile;
+    RobotsFile = cfg.robotsFile;
+    Timeout = cfg.timeout;
+    StorageType = cfg.storageType;
+    TLSCertFile = cfg.tlsCertFile;
+    TLSKeyFile = cfg.tlsKeyFile;
+    Port = ":${toString cfg.port}";
+    UnixSocket = cfg.unixSocket;
+    GlobalEndpoint = cfg.globalEndpoint;
+    BasicAuthUser = cfg.basicAuthUser;
+    BasicAuthPass = cfg.basicAuthPass;
+    ForceSSL = cfg.forceSSL;
+    ValidatorHook = cfg.validatorHook;
+    PathPrefix = cfg.pathPrefix;
+    NETRCPath = cfg.netrcPath;
+    GithubToken = cfg.githubToken;
+    HGRCPath = cfg.hgrcPath;
+    TraceExporter = cfg.traceExporter;
+    StatsExporter = cfg.statsExporter;
+    SumDBs = cfg.sumDBs;
+    NoSumPatterns = cfg.noSumPatterns;
+    DownloadMode = cfg.downloadMode;
+    NetworkMode = cfg.networkMode;
+    DownloadURL = cfg.downloadURL;
+    SingleFlightType = cfg.singleFlightType;
+    IndexType = cfg.indexType;
+    ShutdownTimeout = cfg.shutdownTimeout;
+    SingleFlight = {
+      Etcd = {
+        Endpoints = builtins.concatStringsSep "," cfg.singleFlight.etcd.endpoints;
+      };
+      Redis = {
+        Endpoint = cfg.singleFlight.redis.endpoint;
+        Password = cfg.singleFlight.redis.password;
+        LockConfig = {
+          TTL = cfg.singleFlight.redis.lockConfig.ttl;
+          Timeout = cfg.singleFlight.redis.lockConfig.timeout;
+          MaxRetries = cfg.singleFlight.redis.lockConfig.maxRetries;
         };
       };
-      Storage = {
-        CDN = {
-          Endpoint = cfg.storage.cdn.endpoint;
-        };
-        Disk = {
-          RootPath = cfg.storage.disk.rootPath;
-        };
-        GCP = {
-          ProjectID = cfg.storage.gcp.projectID;
-          Bucket = cfg.storage.gcp.bucket;
-          JSONKey = cfg.storage.gcp.jsonKey;
-        };
-        Minio = {
-          Endpoint = cfg.storage.minio.endpoint;
-          Key = cfg.storage.minio.key;
-          Secret = cfg.storage.minio.secret;
-          EnableSSL = cfg.storage.minio.enableSSL;
-          Bucket = cfg.storage.minio.bucket;
-          region = cfg.storage.minio.region;
-        };
-        Mongo = {
-          URL = cfg.storage.mongo.url;
-          DefaultDBName = cfg.storage.mongo.defaultDBName;
-          CertPath = cfg.storage.mongo.certPath;
-          Insecure = cfg.storage.mongo.insecure;
-        };
-        S3 = {
-          Region = cfg.storage.s3.region;
-          Key = cfg.storage.s3.key;
-          Secret = cfg.storage.s3.secret;
-          Token = cfg.storage.s3.token;
-          Bucket = cfg.storage.s3.bucket;
-          ForcePathStyle = cfg.storage.s3.forcePathStyle;
-          UseDefaultConfiguration = cfg.storage.s3.useDefaultConfiguration;
-          CredentialsEndpoint = cfg.storage.s3.credentialsEndpoint;
-          AwsContainerCredentialsRelativeURI = cfg.storage.s3.awsContainerCredentialsRelativeURI;
-          Endpoint = cfg.storage.s3.endpoint;
-        };
-        AzureBlob = {
-          AccountName = cfg.storage.azureblob.accountName;
-          AccountKey = cfg.storage.azureblob.accountKey;
-          ContainerName = cfg.storage.azureblob.containerName;
-        };
-        External = {
-          URL = cfg.storage.external.url;
+      RedisSentinel = {
+        Endpoints = cfg.singleFlight.redisSentinel.endpoints;
+        MasterName = cfg.singleFlight.redisSentinel.masterName;
+        SentinelPassword = cfg.singleFlight.redisSentinel.sentinelPassword;
+        LockConfig = {
+          TTL = cfg.singleFlight.redisSentinel.lockConfig.ttl;
+          Timeout = cfg.singleFlight.redisSentinel.lockConfig.timeout;
+          MaxRetries = cfg.singleFlight.redisSentinel.lockConfig.maxRetries;
         };
       };
-      Index = {
-        MySQL = {
-          Protocol = cfg.index.mysql.protocol;
-          Host = cfg.index.mysql.host;
-          Port = cfg.index.mysql.port;
-          User = cfg.index.mysql.user;
-          Password = cfg.index.mysql.password;
-          Database = cfg.index.mysql.database;
-          Params = {
-            parseTime = cfg.index.mysql.params.parseTime;
-            timeout = cfg.index.mysql.params.timeout;
-          };
-        };
-        Postgres = {
-          Host = cfg.index.postgres.host;
-          Port = cfg.index.postgres.port;
-          User = cfg.index.postgres.user;
-          Password = cfg.index.postgres.password;
-          Database = cfg.index.postgres.database;
-          Params = {
-            connect_timeout = cfg.index.postgres.params.connect_timeout;
-            sslmode = cfg.index.postgres.params.sslmode;
-          };
+    };
+    Storage = {
+      CDN = {
+        Endpoint = cfg.storage.cdn.endpoint;
+      };
+      Disk = {
+        RootPath = cfg.storage.disk.rootPath;
+      };
+      GCP = {
+        ProjectID = cfg.storage.gcp.projectID;
+        Bucket = cfg.storage.gcp.bucket;
+        JSONKey = cfg.storage.gcp.jsonKey;
+      };
+      Minio = {
+        Endpoint = cfg.storage.minio.endpoint;
+        Key = cfg.storage.minio.key;
+        Secret = cfg.storage.minio.secret;
+        EnableSSL = cfg.storage.minio.enableSSL;
+        Bucket = cfg.storage.minio.bucket;
+        region = cfg.storage.minio.region;
+      };
+      Mongo = {
+        URL = cfg.storage.mongo.url;
+        DefaultDBName = cfg.storage.mongo.defaultDBName;
+        CertPath = cfg.storage.mongo.certPath;
+        Insecure = cfg.storage.mongo.insecure;
+      };
+      S3 = {
+        Region = cfg.storage.s3.region;
+        Key = cfg.storage.s3.key;
+        Secret = cfg.storage.s3.secret;
+        Token = cfg.storage.s3.token;
+        Bucket = cfg.storage.s3.bucket;
+        ForcePathStyle = cfg.storage.s3.forcePathStyle;
+        UseDefaultConfiguration = cfg.storage.s3.useDefaultConfiguration;
+        CredentialsEndpoint = cfg.storage.s3.credentialsEndpoint;
+        AwsContainerCredentialsRelativeURI = cfg.storage.s3.awsContainerCredentialsRelativeURI;
+        Endpoint = cfg.storage.s3.endpoint;
+      };
+      AzureBlob = {
+        AccountName = cfg.storage.azureblob.accountName;
+        AccountKey = cfg.storage.azureblob.accountKey;
+        ContainerName = cfg.storage.azureblob.containerName;
+      };
+      External = {
+        URL = cfg.storage.external.url;
+      };
+    };
+    Index = {
+      MySQL = {
+        Protocol = cfg.index.mysql.protocol;
+        Host = cfg.index.mysql.host;
+        Port = cfg.index.mysql.port;
+        User = cfg.index.mysql.user;
+        Password = cfg.index.mysql.password;
+        Database = cfg.index.mysql.database;
+        Params = {
+          parseTime = cfg.index.mysql.params.parseTime;
+          timeout = cfg.index.mysql.params.timeout;
         };
       };
-    }
-  );
+      Postgres = {
+        Host = cfg.index.postgres.host;
+        Port = cfg.index.postgres.port;
+        User = cfg.index.postgres.user;
+        Password = cfg.index.postgres.password;
+        Database = cfg.index.postgres.database;
+        Params = {
+          connect_timeout = cfg.index.postgres.params.connect_timeout;
+          sslmode = cfg.index.postgres.params.sslmode;
+        };
+      };
+    };
+  });
 
   configFile = pkgs.runCommandLocal "config.toml" { } ''
     ${pkgs.buildPackages.jq}/bin/jq 'del(..|nulls)' \
@@ -179,7 +182,10 @@ in
     };
 
     goEnv = lib.mkOption {
-      type = lib.types.enum [ "development" "production" ];
+      type = lib.types.enum [
+        "development"
+        "production"
+      ];
       description = "Specifies the type of environment to run. One of 'development' or 'production'.";
       default = "development";
       example = "production";
@@ -222,7 +228,17 @@ in
     };
 
     logLevel = lib.mkOption {
-      type = lib.types.nullOr (lib.types.enum [ "panic" "fatal" "error" "warning" "info" "debug" "trace" ]);
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "panic"
+          "fatal"
+          "error"
+          "warning"
+          "info"
+          "debug"
+          "trace"
+        ]
+      );
       description = ''
         Log level for Athens.
         Supports all logrus log levels (https://github.com/Sirupsen/logrus#level-logging)".
@@ -232,7 +248,10 @@ in
     };
 
     cloudRuntime = lib.mkOption {
-      type = lib.types.enum [ "GCP" "none" ];
+      type = lib.types.enum [
+        "GCP"
+        "none"
+      ];
       description = ''
         Specifies the Cloud Provider on which the Proxy/registry is running.
       '';
@@ -281,7 +300,16 @@ in
     };
 
     storageType = lib.mkOption {
-      type = lib.types.enum [ "memory" "disk" "mongo" "gcp" "minio" "s3" "azureblob" "external" ];
+      type = lib.types.enum [
+        "memory"
+        "disk"
+        "mongo"
+        "gcp"
+        "minio"
+        "s3"
+        "azureblob"
+        "external"
+      ];
       description = "Specifies the type of storage backend to use.";
       default = "disk";
     };
@@ -403,7 +431,12 @@ in
     };
 
     traceExporter = lib.mkOption {
-      type = lib.types.nullOr (lib.types.enum [ "jaeger" "datadog" ]);
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "jaeger"
+          "datadog"
+        ]
+      );
       description = ''
         Trace exporter to use.
       '';
@@ -444,7 +477,16 @@ in
     };
 
     downloadMode = lib.mkOption {
-      type = lib.types.oneOf [ (lib.types.enum [ "sync" "async" "redirect" "async_redirect" "none" ]) (lib.types.strMatching "^file:.*$|^custom:.*$") ];
+      type = lib.types.oneOf [
+        (lib.types.enum [
+          "sync"
+          "async"
+          "redirect"
+          "async_redirect"
+          "none"
+        ])
+        (lib.types.strMatching "^file:.*$|^custom:.*$")
+      ];
       description = ''
         Defines how Athens behaves when a module@version
         is not found in storage. There are 7 options:
@@ -468,7 +510,11 @@ in
     };
 
     networkMode = lib.mkOption {
-      type = lib.types.enum [ "strict" "offline" "fallback" ];
+      type = lib.types.enum [
+        "strict"
+        "offline"
+        "fallback"
+      ];
       description = ''
         Configures how Athens will return the results
         of the /list endpoint as it can be assembled from both its own
@@ -494,7 +540,14 @@ in
     };
 
     singleFlightType = lib.mkOption {
-      type = lib.types.enum [ "memory" "etcd" "redis" "redis-sentinel" "gcp" "azureblob" ];
+      type = lib.types.enum [
+        "memory"
+        "etcd"
+        "redis"
+        "redis-sentinel"
+        "gcp"
+        "azureblob"
+      ];
       description = ''
         Determines what mechanism Athens uses to manage concurrency flowing into the Athens backend.
       '';
@@ -502,7 +555,12 @@ in
     };
 
     indexType = lib.mkOption {
-      type = lib.types.enum [ "none" "memory" "mysql" "postgres" ];
+      type = lib.types.enum [
+        "none"
+        "memory"
+        "mysql"
+        "postgres"
+      ];
       description = ''
         Type of index backend Athens will use.
       '';
@@ -915,8 +973,12 @@ in
         ProtectHome = "read-only";
         ProtectSystem = "full";
 
-        ReadWritePaths = lib.mkIf (cfg.storage.disk.rootPath != null && (! lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath)) [ cfg.storage.disk.rootPath ];
-        StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath) [ (lib.removePrefix "/var/lib/" cfg.storage.disk.rootPath) ];
+        ReadWritePaths = lib.mkIf (
+          cfg.storage.disk.rootPath != null && (!lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath)
+        ) [ cfg.storage.disk.rootPath ];
+        StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath) [
+          (lib.removePrefix "/var/lib/" cfg.storage.disk.rootPath)
+        ];
 
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
@@ -925,7 +987,8 @@ in
     };
 
     networking.firewall = {
-      allowedTCPPorts = lib.optionals (cfg.unixSocket == null) [ cfg.port ]
+      allowedTCPPorts =
+        lib.optionals (cfg.unixSocket == null) [ cfg.port ]
         ++ lib.optionals cfg.enablePprof [ cfg.pprofPort ];
     };
   };

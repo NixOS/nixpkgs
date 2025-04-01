@@ -1,12 +1,13 @@
-{ lib
-, python3
-, fetchPypi
-, fetchFromGitHub
-, fetchpatch
-, git
-, postgresql
-, postgresqlTestHook
-, redis
+{
+  lib,
+  python3,
+  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
+  git,
+  postgresql,
+  postgresqlTestHook,
+  redis,
 }:
 
 let
@@ -26,12 +27,16 @@ let
         '';
         doCheck = false;
       });
-      alembic = prev.alembic.overridePythonAttrs (lib.const {
-        doCheck = false;
-      });
-      factory-boy = prev.factory-boy.overridePythonAttrs (lib.const {
-        doCheck = false;
-      });
+      alembic = prev.alembic.overridePythonAttrs (
+        lib.const {
+          doCheck = false;
+        }
+      );
+      factory-boy = prev.factory-boy.overridePythonAttrs (
+        lib.const {
+          doCheck = false;
+        }
+      );
       beautifultable = prev.beautifultable.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.0";
         src = fetchPypi {
@@ -68,7 +73,7 @@ py.pkgs.buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/irrdnet/irrd/commit/20b771e1ee564f38e739fdb0a2a79c10319f638f.patch";
       hash = "sha256-PtNdhSoFPT1kt71kFsySp/VnUpUdO23Gu9FKknHLph8=";
-      includes = ["irrd/webui/auth/endpoints_mfa.py"];
+      includes = [ "irrd/webui/auth/endpoints_mfa.py" ];
     })
   ];
 
@@ -82,63 +87,68 @@ py.pkgs.buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeCheckInputs = [
-    git
-    redis
-    postgresql
-    postgresqlTestHook
-  ] ++ (with py.pkgs; [
-    pytest-asyncio
-    pytest-freezegun
-    pytestCheckHook
-    smtpdfix
-    httpx
-  ]);
+  nativeCheckInputs =
+    [
+      git
+      redis
+      postgresql
+      postgresqlTestHook
+    ]
+    ++ (with py.pkgs; [
+      pytest-asyncio
+      pytest-freezegun
+      pytestCheckHook
+      smtpdfix
+      httpx
+    ]);
 
-  propagatedBuildInputs = with py.pkgs; [
-    python-gnupg
-    passlib
-    bcrypt
-    ipy
-    ordered-set
-    beautifultable
-    pyyaml
-    datrie
-    setproctitle
-    python-daemon
-    pid
-    py.pkgs.redis
-    hiredis
-    coredis
-    requests
-    pytz
-    ariadne
-    uvicorn
-    starlette
-    psutil
-    asgiref
-    pydantic
-    typing-extensions
-    py-radix-sr
-    psycopg2
-    sqlalchemy
-    alembic
-    ujson
-    wheel
-    websockets
-    limits
-    factory-boy
-    webauthn
-    wtforms
-    imia
-    starlette-wtf
-    zxcvbn
-    pyotp
-    asgi-logger
-    wtforms-bootstrap5
-    email-validator
-    jinja2
-  ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
+  propagatedBuildInputs =
+    with py.pkgs;
+    [
+      python-gnupg
+      passlib
+      bcrypt
+      ipy
+      ordered-set
+      beautifultable
+      pyyaml
+      datrie
+      setproctitle
+      python-daemon
+      pid
+      py.pkgs.redis
+      hiredis
+      coredis
+      requests
+      pytz
+      ariadne
+      uvicorn
+      starlette
+      psutil
+      asgiref
+      pydantic
+      typing-extensions
+      py-radix-sr
+      psycopg2
+      sqlalchemy
+      alembic
+      ujson
+      wheel
+      websockets
+      limits
+      factory-boy
+      webauthn
+      wtforms
+      imia
+      starlette-wtf
+      zxcvbn
+      pyotp
+      asgi-logger
+      wtforms-bootstrap5
+      email-validator
+      jinja2
+    ]
+    ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
     redis-server &

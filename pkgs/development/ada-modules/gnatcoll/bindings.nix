@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gprbuild
-, gnatcoll-core
-, component
-# component dependencies
-, gmp
-, libiconv
-, xz
-, readline
-, zlib
-, python3
-, ncurses
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  gprbuild,
+  gnatcoll-core,
+  component,
+  # component dependencies
+  gmp,
+  libiconv,
+  xz,
+  readline,
+  zlib,
+  python3,
+  ncurses,
+  darwin,
 }:
 
 let
@@ -24,12 +25,14 @@ let
     gmp = [ gmp ];
     lzma = [ xz ];
     readline = [ readline ];
-    python3 = [ python3 ncurses ];
+    python3 = [
+      python3
+      ncurses
+    ];
     syslog = [ ];
     zlib = [ zlib ];
   };
 in
-
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
   # downstream executable.
   propagatedBuildInputs = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [];
+  ] ++ libsFor."${component}" or [ ];
 
   # explicit flag for GPL acceptance because upstreams
   # allows a gcc runtime exception for all bindings

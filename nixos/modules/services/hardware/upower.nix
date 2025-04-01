@@ -1,5 +1,10 @@
 # Upower daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.upower;
@@ -180,7 +185,11 @@ in
       };
 
       criticalPowerAction = lib.mkOption {
-        type = lib.types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
+        type = lib.types.enum [
+          "PowerOff"
+          "Hibernate"
+          "HybridSleep"
+        ];
         default = "HybridSleep";
         description = ''
           The action to take when `timeAction` or
@@ -192,7 +201,6 @@ in
     };
 
   };
-
 
   ###### implementation
 
@@ -206,7 +214,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = lib.generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = lib.generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;

@@ -1,10 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
-, systemd, dbus, rdma-core, libstatgrab, net-snmp
-, enableDbus ? false
-, enableInfiniBandRdma ? false
-, enableMonitoring ? false
-, enableSnmp ? false
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  kronosnet,
+  nss,
+  nspr,
+  libqb,
+  systemd,
+  dbus,
+  rdma-core,
+  libstatgrab,
+  net-snmp,
+  enableDbus ? false,
+  enableInfiniBandRdma ? false,
+  enableMonitoring ? false,
+  enableSnmp ? false,
+  nixosTests,
 }:
 
 let
@@ -19,24 +32,35 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cCNUT6O7NsALvKvZk1tyabQdiWc4oQjtMuqbnJsn7D0=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [
-    kronosnet nss nspr libqb systemd.dev
-  ] ++ optional enableDbus dbus
+  buildInputs =
+    [
+      kronosnet
+      nss
+      nspr
+      libqb
+      systemd.dev
+    ]
+    ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
     ++ optional enableSnmp net-snmp;
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-logdir=/var/log/corosync"
-    "--enable-watchdog"
-    "--enable-qdevices"
-    # allows Type=notify in the systemd service
-    "--enable-systemd"
-  ] ++ optional enableDbus "--enable-dbus"
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "--with-logdir=/var/log/corosync"
+      "--enable-watchdog"
+      "--enable-qdevices"
+      # allows Type=notify in the systemd service
+      "--enable-systemd"
+    ]
+    ++ optional enableDbus "--enable-dbus"
     ++ optional enableInfiniBandRdma "--enable-rdma"
     ++ optional enableMonitoring "--enable-monitoring"
     ++ optional enableSnmp "--enable-snmp";
@@ -76,6 +100,9 @@ stdenv.mkDerivation rec {
     description = "Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ montag451 ryantm ];
+    maintainers = with maintainers; [
+      montag451
+      ryantm
+    ];
   };
 }

@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libGL
-, libGLU
-, libpng
-, libjpeg_turbo
-, libuv
-, libvorbis
-, mbedtls_2
-, openal
-, pcre
-, SDL2
-, sqlite
-, getconf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libGL,
+  libGLU,
+  libpng,
+  libjpeg_turbo,
+  libuv,
+  libvorbis,
+  mbedtls_2,
+  openal,
+  pcre,
+  SDL2,
+  sqlite,
+  getconf,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,13 +46,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ getconf ];
 
   # append default installPhase with library install for haxe
-  postInstall = let
-    haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
-  in ''
-    mkdir -p "${haxelibPath}"
-    echo -n "${version}" > "${haxelibPath}/../.current"
-    cp -r other/haxelib/* "${haxelibPath}"
-  '';
+  postInstall =
+    let
+      haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
+    in
+    ''
+      mkdir -p "${haxelibPath}"
+      echo -n "${version}" > "${haxelibPath}/../.current"
+      cp -r other/haxelib/* "${haxelibPath}"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
@@ -62,7 +65,14 @@ stdenv.mkDerivation rec {
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ iblech locallycompact logo ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
+    maintainers = with maintainers; [
+      iblech
+      locallycompact
+      logo
+    ];
   };
 }

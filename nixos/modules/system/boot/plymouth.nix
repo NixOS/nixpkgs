@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -131,7 +137,8 @@ in
     environment.systemPackages = [ plymouth ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
-    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
+    environment.etc."plymouth/plymouthd.defaults".source =
+      "${plymouth}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
     environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
     # XXX: Needed because we supply a different set of plugins in initrd.
@@ -173,7 +180,7 @@ in
         "/etc/plymouth/logo.png".source = cfg.logo;
         "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
         # Directories
-        "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" {} ''
+        "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" { } ''
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
@@ -189,7 +196,7 @@ in
           # useless in the initrd, and adds several megabytes to the closure
           rm $out/renderers/x11.so
         '';
-        "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
+        "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" { } ''
           # Check if the actual requested theme is here
           if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
               echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
@@ -217,7 +224,7 @@ in
         '';
 
         # Fonts
-        "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" {} ''
+        "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" { } ''
           mkdir -p $out
           cp ${escapeShellArg cfg.font} $out
         '';
@@ -238,8 +245,17 @@ in
         plymouth-quit.wantedBy = [ "multi-user.target" ];
         plymouth-read-write.wantedBy = [ "sysinit.target" ];
         plymouth-reboot.wantedBy = [ "reboot.target" ];
-        plymouth-start.wantedBy = [ "initrd-switch-root.target" "sysinit.target" ];
-        plymouth-switch-root-initramfs.wantedBy = [ "halt.target" "kexec.target" "plymouth-switch-root-initramfs.service" "poweroff.target" "reboot.target" ];
+        plymouth-start.wantedBy = [
+          "initrd-switch-root.target"
+          "sysinit.target"
+        ];
+        plymouth-switch-root-initramfs.wantedBy = [
+          "halt.target"
+          "kexec.target"
+          "plymouth-switch-root-initramfs.service"
+          "poweroff.target"
+          "reboot.target"
+        ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
       # Link in runtime files before starting
@@ -251,11 +267,13 @@ in
 
     # Insert required udev rules. We take stage 2 systemd because the udev
     # rules are only generated when building with logind.
-    boot.initrd.services.udev.packages = [ (pkgs.runCommand "initrd-plymouth-udev-rules" {} ''
-      mkdir -p $out/etc/udev/rules.d
-      cp ${config.systemd.package.out}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out/etc/udev/rules.d
-      sed -i '/loginctl/d' $out/etc/udev/rules.d/71-seat.rules
-    '') ];
+    boot.initrd.services.udev.packages = [
+      (pkgs.runCommand "initrd-plymouth-udev-rules" { } ''
+        mkdir -p $out/etc/udev/rules.d
+        cp ${config.systemd.package.out}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out/etc/udev/rules.d
+        sed -i '/loginctl/d' $out/etc/udev/rules.d/71-seat.rules
+      '')
+    ];
 
     boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${plymouth}/bin/plymouth

@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, ffmpegthumbnailer
-, gdk-pixbuf
-, glib
-, freetype
-, libgepub
-, libgsf
-, libjxl
-, librsvg
-, poppler
-, gst_all_1
-, webp-pixbuf-loader
-, libxfce4util
+{
+  lib,
+  mkXfceDerivation,
+  ffmpegthumbnailer,
+  gdk-pixbuf,
+  glib,
+  freetype,
+  libgepub,
+  libgsf,
+  libjxl,
+  librsvg,
+  poppler,
+  gst_all_1,
+  webp-pixbuf-loader,
+  libxfce4util,
 }:
 
 # TODO: add libopenraw
@@ -38,7 +39,13 @@ mkXfceDerivation {
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ libjxl librsvg webp-pixbuf-loader ]}"
+      --prefix XDG_DATA_DIRS : "${
+        lib.makeSearchPath "share" [
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ]
+      }"
     )
   '';
 

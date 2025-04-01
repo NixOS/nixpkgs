@@ -20,10 +20,12 @@ buildDotnetModule rec {
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [
-    sdk_7_0
-    sdk_6_0
-  ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_7_0
+      sdk_6_0
+    ];
 
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 

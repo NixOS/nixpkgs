@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchzip, kernel }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ch9344";

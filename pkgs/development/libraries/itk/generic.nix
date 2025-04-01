@@ -157,20 +157,23 @@ stdenv.mkDerivation {
   # These deps were propagated from VTK 9 in https://github.com/NixOS/nixpkgs/pull/206935,
   # so we simply propagate them again from ITK.
   # This admittedly is a hack and seems like an issue with VTK 9's CMake configuration.
-  propagatedBuildInputs = [
-    # The dependencies we've un-vendored from ITK, such as GDCM, must be propagated,
-    # otherwise other software built against ITK fails to configure since ITK headers
-    # refer to these previously vendored libraries:
-    expat
-    fftw
-    gdcm
-    hdf5-cpp
-    libjpeg
-    libminc
-    libpng
-    libtiff
-    zlib
-  ] ++ lib.optionals withVtk vtk.propagatedBuildInputs ++ lib.optionals enablePython [ numpy ];
+  propagatedBuildInputs =
+    [
+      # The dependencies we've un-vendored from ITK, such as GDCM, must be propagated,
+      # otherwise other software built against ITK fails to configure since ITK headers
+      # refer to these previously vendored libraries:
+      expat
+      fftw
+      gdcm
+      hdf5-cpp
+      libjpeg
+      libminc
+      libpng
+      libtiff
+      zlib
+    ]
+    ++ lib.optionals withVtk vtk.propagatedBuildInputs
+    ++ lib.optionals enablePython [ numpy ];
 
   postInstall = lib.optionalString enablePython ''
     substitute \

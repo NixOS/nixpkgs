@@ -1,5 +1,10 @@
 # rygel service.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   meta = {

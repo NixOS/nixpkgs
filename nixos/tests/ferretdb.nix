@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; }
-, ...
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../.. { inherit system; },
+  ...
 }:
 let
   lib = pkgs.lib;
@@ -14,51 +15,51 @@ in
 with import ../lib/testing-python.nix { inherit system; };
 {
 
-  postgresql = makeTest
-    {
-      inherit testScript;
-      name = "ferretdb-postgresql";
-      meta.maintainers = with lib.maintainers; [ julienmalka ];
+  postgresql = makeTest {
+    inherit testScript;
+    name = "ferretdb-postgresql";
+    meta.maintainers = with lib.maintainers; [ julienmalka ];
 
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          services.ferretdb = {
-            enable = true;
-            settings.FERRETDB_HANDLER = "pg";
-            settings.FERRETDB_POSTGRESQL_URL = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
-          };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.ferretdb = {
+          enable = true;
+          settings.FERRETDB_HANDLER = "pg";
+          settings.FERRETDB_POSTGRESQL_URL = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
+        };
 
-          systemd.services.ferretdb.serviceConfig = {
-            Requires = "postgresql.service";
-            After = "postgresql.service";
-          };
+        systemd.services.ferretdb.serviceConfig = {
+          Requires = "postgresql.service";
+          After = "postgresql.service";
+        };
 
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ "ferretdb" ];
-            ensureUsers = [{
+        services.postgresql = {
+          enable = true;
+          ensureDatabases = [ "ferretdb" ];
+          ensureUsers = [
+            {
               name = "ferretdb";
               ensureDBOwnership = true;
-            }];
-          };
-
-          environment.systemPackages = with pkgs; [ mongosh ];
+            }
+          ];
         };
-    };
 
-  sqlite = makeTest
-    {
-      inherit testScript;
-      name = "ferretdb-sqlite";
-      meta.maintainers = with lib.maintainers; [ julienmalka ];
+        environment.systemPackages = with pkgs; [ mongosh ];
+      };
+  };
 
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          services.ferretdb.enable = true;
+  sqlite = makeTest {
+    inherit testScript;
+    name = "ferretdb-sqlite";
+    meta.maintainers = with lib.maintainers; [ julienmalka ];
 
-          environment.systemPackages = with pkgs; [ mongosh ];
-        };
-    };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        services.ferretdb.enable = true;
+
+        environment.systemPackages = with pkgs; [ mongosh ];
+      };
+  };
 }

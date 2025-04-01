@@ -1,22 +1,24 @@
-{ asciidoctor
-, darwin
-, fetchgit
-, git
-, installShellFiles
-, jq
-, lib
-, makeWrapper
-, man-db
-, nixos
-, nixosTests
-, openssh
-, radicle-node
-, runCommand
-, rustPlatform
-, stdenv
-, testers
-, xdg-utils
-}: rustPlatform.buildRustPackage rec {
+{
+  asciidoctor,
+  darwin,
+  fetchgit,
+  git,
+  installShellFiles,
+  jq,
+  lib,
+  makeWrapper,
+  man-db,
+  nixos,
+  nixosTests,
+  openssh,
+  radicle-node,
+  runCommand,
+  rustPlatform,
+  stdenv,
+  testers,
+  xdg-utils,
+}:
+rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
   version = "1.1.0";
   env.RADICLE_VERSION = version;
@@ -32,7 +34,11 @@
     ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
   ];
 
-  nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+    makeWrapper
+  ];
   nativeCheckInputs = [ git ];
   buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -66,7 +72,14 @@
     for program in $out/bin/* ;
     do
       wrapProgram "$program" \
-        --prefix PATH : "${lib.makeBinPath [ git man-db openssh xdg-utils ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            git
+            man-db
+            openssh
+            xdg-utils
+          ]
+        }"
     done
   '';
 
@@ -76,36 +89,45 @@
     in
     {
       version = testers.testVersion { inherit package; };
-      basic = runCommand "${package.name}-basic-test"
-        {
-          nativeBuildInputs = [ jq openssh radicle-node ];
-        } ''
-        set -e
-        export RAD_HOME="$PWD/.radicle"
-        mkdir -p "$RAD_HOME/keys"
-        ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-        jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+      basic =
+        runCommand "${package.name}-basic-test"
+          {
+            nativeBuildInputs = [
+              jq
+              openssh
+              radicle-node
+            ];
+          }
+          ''
+            set -e
+            export RAD_HOME="$PWD/.radicle"
+            mkdir -p "$RAD_HOME/keys"
+            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-        rad config > /dev/null
-        rad debug | jq -e '
-            (.sshVersion | contains("${openssh.version}"))
-          and
-            (.gitVersion | contains("${git.version}"))
-        '
+            rad config > /dev/null
+            rad debug | jq -e '
+                (.sshVersion | contains("${openssh.version}"))
+              and
+                (.gitVersion | contains("${git.version}"))
+            '
 
-        touch $out
-      '';
+            touch $out
+          '';
       nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success = (nixos {
+        checkConfig-success =
+          (nixos {
             services.radicle.settings = {
               node.alias = "foo";
             };
           }).config.services.radicle.configFile;
-        checkConfig-failure = testers.testBuildFailure (nixos {
-            services.radicle.settings = {
-              node.alias = null;
-            };
-          }).config.services.radicle.configFile;
+        checkConfig-failure =
+          testers.testBuildFailure
+            (nixos {
+              services.radicle.settings = {
+                node.alias = null;
+              };
+            }).config.services.radicle.configFile;
       };
       nixos-run = nixosTests.radicle;
     };
@@ -118,9 +140,15 @@
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ amesgen lorenzleutgeb ];
+    maintainers = with lib.maintainers; [
+      amesgen
+      lorenzleutgeb
+    ];
     mainProgram = "rad";
   };
 }

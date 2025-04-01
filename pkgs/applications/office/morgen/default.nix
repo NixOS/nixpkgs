@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  asar,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  mesa,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
@@ -17,7 +30,13 @@ stdenv.mkDerivation rec {
     asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libxshmfence
+    mesa
+    nss
+  ];
 
   unpackCmd = ''
     dpkg-deb -x ${src} ./morgen-${pname}
