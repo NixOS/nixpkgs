@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchFromGitLab,
   python3Packages,
   gobject-introspection,
   gsettings-desktop-schemas,
@@ -16,10 +17,20 @@ buildPythonApplication rec {
   pname = "arandr";
   version = "0.1.11";
 
-  src = fetchurl {
-    url = "https://christian.amsuess.com/tools/arandr/files/${pname}-${version}.tar.gz";
-    hash = "sha256-5Mu+Npi7gSs5V3CHAXS+AJS7rrOREFqBH5X0LrGCrgI=";
+  #src = fetchurl {
+    #url = "https://christian.amsuess.com/tools/arandr/files/${pname}-${version}.tar.gz";
+    #hash = "sha256-5Mu+Npi7gSs5V3CHAXS+AJS7rrOREFqBH5X0LrGCrgI=";
+  #};
+
+  src = fetchFromGitLab {
+    owner = "arandr";
+    repo = "arandr";
+    rev = version;
+    hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
+
+  patches = [ ./gzip-timestamp-fix.patch ]; # patch that set mtime=0 in setup.py
+  patchFlags = [ "-p0" ];
 
   preBuild = ''
     rm -rf data/po/*
