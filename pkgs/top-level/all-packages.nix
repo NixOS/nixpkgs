@@ -12916,10 +12916,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  fluidsynth = callPackage ../applications/audio/fluidsynth {
-    inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreAudio CoreMIDI CoreServices;
-  };
-
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
   fnc = darwin.apple_sdk_11_0.callPackage ../applications/version-management/fnc { };
