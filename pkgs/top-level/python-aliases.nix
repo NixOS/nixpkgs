@@ -113,7 +113,6 @@ mapAliases ({
   blessings = throw "blessings has been removed in favor of blessed, as it was unmaintained"; # added 2024-08-20
   BlinkStick = blinkstick; # added 2023-02-19
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
-  boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
   boxx = throw "boxx was removed as it is no longer used by any packages in nixpkgs."; # added 2025-02-08
   bpycv = throw "bpycv was removed as it is incompatible with blender version 4 or later."; # added 2025-02-08
   bsblan = python-bsblan; # added 2022-11-04
