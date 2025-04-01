@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, pango
-, python3Packages
-, wrapGAppsHook3
-, youtube-dl
-, glib
-, ffmpeg
-, aria2
+{
+  lib,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  pango,
+  python3Packages,
+  wrapGAppsHook3,
+  youtube-dl,
+  glib,
+  ffmpeg,
+  aria2,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -72,7 +73,10 @@ python3Packages.buildPythonApplication rec {
     description = "GUI front-end for youtube-dl";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mkg20001 luc65r ];
+    maintainers = with maintainers; [
+      mkg20001
+      luc65r
+    ];
     homepage = "https://tartube.sourceforge.io/";
     mainProgram = "tartube";
   };

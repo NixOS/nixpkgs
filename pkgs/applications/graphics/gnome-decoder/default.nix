@@ -1,28 +1,29 @@
-{ lib
-, clangStdenv
-, fetchFromGitLab
-, rustPlatform
-, cargo
-, meson
-, ninja
-, pkg-config
-, rustc
-, glib
-, gtk4
-, libadwaita
-, zbar
-, sqlite
-, openssl
-, pipewire
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gst-plugins-rs
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, glycin-loaders
+{
+  lib,
+  clangStdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  glib,
+  gtk4,
+  libadwaita,
+  zbar,
+  sqlite,
+  openssl,
+  pipewire,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gst-plugins-rs,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  glycin-loaders,
 }:
 
 clangStdenv.mkDerivation rec {

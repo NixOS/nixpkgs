@@ -13,31 +13,38 @@
   addDriverRunpath,
   pythonOlder,
   symlinkJoin,
-  fetchpatch
+  fetchpatch,
 }:
 
 let
   inherit (cudaPackages) cudnn cutensor nccl;
   outpaths = with cudaPackages; [
-      cuda_cccl # <nv/target>
-      cuda_cudart
-      cuda_nvcc # <crt/host_defines.h>
-      cuda_nvprof
-      cuda_nvrtc
-      cuda_nvtx
-      cuda_profiler_api
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
+    cuda_cccl # <nv/target>
+    cuda_cudart
+    cuda_nvcc # <crt/host_defines.h>
+    cuda_nvprof
+    cuda_nvrtc
+    cuda_nvtx
+    cuda_profiler_api
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
 
-      # Missing:
-      # cusparselt
+    # Missing:
+    # cusparselt
   ];
   cudatoolkit-joined = symlinkJoin {
     name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
+    paths =
+      outpaths
+      ++ lib.concatMap (f: lib.map f outpaths) [
+        lib.getLib
+        lib.getDev
+        (lib.getOutput "static")
+        (lib.getOutput "stubs")
+      ];
   };
 in
 buildPythonPackage rec {
@@ -57,8 +64,7 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url =
-        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
+      url = "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
       hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
     })
   ];

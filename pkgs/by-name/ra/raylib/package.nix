@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fetchpatch
-, mesa
-, libGLU
-, glfw
-, libX11
-, libXi
-, libXcursor
-, libXrandr
-, libXinerama
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, pulseSupport ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, sharedLib ? true
-, includeEverything ? true
-, raylib-games
-, darwin
-, autoPatchelfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fetchpatch,
+  mesa,
+  libGLU,
+  glfw,
+  libX11,
+  libXi,
+  libXcursor,
+  libXrandr,
+  libXinerama,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  pulseSupport ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  sharedLib ? true,
+  includeEverything ? true,
+  raylib-games,
+  darwin,
+  autoPatchelfHook,
 }:
 let
   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL;
@@ -39,22 +40,38 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ]
+  buildInputs =
+    [ glfw ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      mesa
+      libXi
+      libXcursor
+      libXrandr
+      libXinerama
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ]
+  propagatedBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libX11
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
-  cmakeFlags = [
-    "-DUSE_EXTERNAL_GLFW=ON"
-    "-DBUILD_EXAMPLES=OFF"
-    "-DCUSTOMIZE_BUILD=1"
-  ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-  ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags =
+    [
+      "-DUSE_EXTERNAL_GLFW=ON"
+      "-DBUILD_EXAMPLES=OFF"
+      "-DCUSTOMIZE_BUILD=1"
+    ]
+    ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+    ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
   passthru.tests = { inherit raylib-games; };
 

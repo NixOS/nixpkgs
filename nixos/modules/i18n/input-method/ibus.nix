@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,9 +12,9 @@ let
   cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = lib.types.mkOptionType {
-    name  = "ibus-engine";
+    name = "ibus-engine";
     inherit (lib.types.package) descriptionClass merge;
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
+    check = x: (lib.types.package.check x) && (attrByPath [ "meta" "isIbusEngine" ] false x);
   };
 
   impanel = optionalString (cfg.panel != null) "--panel=${cfg.panel}";
@@ -35,15 +40,15 @@ in
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
-        type    = with types; listOf ibusEngine;
-        default = [];
+        type = with types; listOf ibusEngine;
+        default = [ ];
         example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
-            engines = concatStringsSep ", "
-              (map (name: "`${name}`") (attrNames enginesDrv));
-          in "Enabled IBus engines. Available engines are: ${engines}.";
+            engines = concatStringsSep ", " (map (name: "`${name}`") (attrNames enginesDrv));
+          in
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;

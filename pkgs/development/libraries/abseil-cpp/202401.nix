@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, static ? stdenv.hostPlatform.isStatic
-, cxxStandard ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  static ? stdenv.hostPlatform.isStatic,
+  cxxStandard ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,13 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eA2/dZpNOlex1O5PNa3XSZhpMB3AmaIoHzVDI9TD/cg=";
   };
 
-  cmakeFlags = [
-    "-DABSL_BUILD_TEST_HELPERS=ON"
-    "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"
-    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ] ++ lib.optionals (cxxStandard != null) [
-    "-DCMAKE_CXX_STANDARD=${cxxStandard}"
-  ];
+  cmakeFlags =
+    [
+      "-DABSL_BUILD_TEST_HELPERS=ON"
+      "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"
+      "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    ]
+    ++ lib.optionals (cxxStandard != null) [
+      "-DCMAKE_CXX_STANDARD=${cxxStandard}"
+    ];
 
   strictDeps = true;
 

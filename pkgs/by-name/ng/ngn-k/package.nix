@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, stdenvNoLibs
-, fetchFromGitea
-, runtimeShell
-, doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform
-, withLibc ? true
+{
+  lib,
+  stdenv,
+  stdenvNoLibs,
+  fetchFromGitea,
+  runtimeShell,
+  doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform,
+  withLibc ? true,
 }:
 
 let
@@ -46,7 +47,11 @@ useStdenv.mkDerivation {
   checkTarget = "t";
   inherit doCheck;
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   # TODO(@sternenseemann): package bulgarian translation
   installPhase = ''
@@ -65,6 +70,9 @@ useStdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [ "x86_64-linux" "x86_64-freebsd" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-freebsd"
+    ];
   };
 }

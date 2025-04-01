@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, wrapGAppsHook3
-, copyDesktopItems
-, imagemagick
-, jre
-, xorg
-, glib
-, libGL
-, glfw
-, openal
-, libglvnd
-, alsa-lib
-, wayland
-, libpulseaudio
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  copyDesktopItems,
+  imagemagick,
+  jre,
+  xorg,
+  glib,
+  libGL,
+  glfw,
+  openal,
+  libglvnd,
+  alsa-lib,
+  wayland,
+  libpulseaudio,
+  gobject-introspection,
 }:
 
 let
@@ -67,15 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-    fixupPhase =
-      let
-        libpath = lib.makeLibraryPath ([
+  fixupPhase =
+    let
+      libpath = lib.makeLibraryPath (
+        [
           libGL
           glfw
           glib
           openal
           libglvnd
-        ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           xorg.libX11
           xorg.libXxf86vm
           xorg.libXext
@@ -85,17 +88,19 @@ stdenv.mkDerivation (finalAttrs: {
           libpulseaudio
           wayland
           alsa-lib
-        ]);
-      in ''
-        runHook preFixup
+        ]
+      );
+    in
+    ''
+      runHook preFixup
 
-        makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
-          --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
-          --set LD_LIBRARY_PATH ${libpath} \
-          ''${gappsWrapperArgs[@]}
+      makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
+        --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
+        --set LD_LIBRARY_PATH ${libpath} \
+        ''${gappsWrapperArgs[@]}
 
-        runHook postFixup
-      '';
+      runHook postFixup
+    '';
 
   meta = with lib; {
     homepage = "https://hmcl.huangyuhui.net";

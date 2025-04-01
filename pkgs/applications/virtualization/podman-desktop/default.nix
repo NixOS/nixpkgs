@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, copyDesktopItems
-, electron
-, nodejs
-, pnpm_9
-, makeDesktopItem
-, autoSignDarwinBinariesHook
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  copyDesktopItems,
+  electron,
+  nodejs,
+  pnpm_9,
+  makeDesktopItem,
+  autoSignDarwinBinariesHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,13 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs = [
-    makeWrapper nodejs pnpm_9.configHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      nodejs
+      pnpm_9.configHook
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      autoSignDarwinBinariesHook
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -69,29 +75,33 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p "$out/share/lib/podman-desktop"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/{Applications,bin}
-    mv dist/mac*/Podman\ Desktop.app $out/Applications
-    ln -s $out/Applications/Podman\ Desktop.app/Contents/Resources "$out/share/lib/podman-desktop/resources"
+      mkdir -p "$out/share/lib/podman-desktop"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/{Applications,bin}
+      mv dist/mac*/Podman\ Desktop.app $out/Applications
+      ln -s $out/Applications/Podman\ Desktop.app/Contents/Resources "$out/share/lib/podman-desktop/resources"
 
-    makeWrapper "$out/Applications/Podman Desktop.app/Contents/MacOS/Podman Desktop" $out/bin/podman-desktop
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
+      makeWrapper "$out/Applications/Podman Desktop.app/Contents/MacOS/Podman Desktop" $out/bin/podman-desktop
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
-    install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
+      install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
-      --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --inherit-argv0
-  '' + ''
+      makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+        --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --inherit-argv0
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
@@ -112,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ booxter panda2134 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      panda2134
+    ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";
   };

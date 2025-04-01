@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, gnat
-, gprbuild
-, fetchFromGitHub
-, which
+{
+  stdenv,
+  lib,
+  gnat,
+  gprbuild,
+  fetchFromGitHub,
+  which,
 }:
 
 stdenv.mkDerivation rec {

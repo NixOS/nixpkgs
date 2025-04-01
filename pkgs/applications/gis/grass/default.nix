@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, makeWrapper
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  wrapGAppsHook3,
 
-, withOpenGL ? !stdenv.hostPlatform.isDarwin
+  withOpenGL ? !stdenv.hostPlatform.isDarwin,
 
-, bison
-, blas
-, cairo
-, ffmpeg
-, fftw
-, flex
-, freetype
-, gdal
-, geos
-, lapack
-, libGLU
-, libiconv
-, libpng
-, libsvm
-, libtiff
-, libxml2
-, llvmPackages
-, netcdf
-, pdal
-, pkg-config
-, postgresql
-, proj
-, python311Packages
-, readline
-, sqlite
-, wxGTK32
-, zlib
-, zstd
+  bison,
+  blas,
+  cairo,
+  ffmpeg,
+  fftw,
+  flex,
+  freetype,
+  gdal,
+  geos,
+  lapack,
+  libGLU,
+  libiconv,
+  libpng,
+  libsvm,
+  libtiff,
+  libxml2,
+  llvmPackages,
+  netcdf,
+  pdal,
+  pkg-config,
+  postgresql,
+  proj,
+  python311Packages,
+  readline,
+  sqlite,
+  wxGTK32,
+  zlib,
+  zstd,
 }:
 
 let
@@ -52,82 +53,95 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-q1jOimQi+24I1ZBf6Z0cvAyXcBFBpT5aWSNeG6n6y0k=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    wrapGAppsHook3
+  nativeBuildInputs =
+    [
+      makeWrapper
+      wrapGAppsHook3
 
-    bison
-    flex
-    gdal # for `gdal-config`
-    geos # for `geos-config`
-    netcdf # for `nc-config`
-    pkg-config
-  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
+      bison
+      flex
+      gdal # for `gdal-config`
+      geos # for `geos-config`
+      netcdf # for `nc-config`
+      pkg-config
+    ]
+    ++ (with pyPackages; [
+      python-dateutil
+      numpy
+      wxpython
+    ]);
 
-  buildInputs = [
-    blas
-    cairo
-    ffmpeg
-    fftw
-    freetype
-    gdal
-    geos
-    lapack
-    libpng
-    libsvm
-    libtiff
-    (libxml2.override { enableHttp = true; })
-    netcdf
-    pdal
-    postgresql
-    proj
-    readline
-    sqlite
-    wxGTK32
-    zlib
-    zstd
-  ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs =
+    [
+      blas
+      cairo
+      ffmpeg
+      fftw
+      freetype
+      gdal
+      geos
+      lapack
+      libpng
+      libsvm
+      libtiff
+      (libxml2.override { enableHttp = true; })
+      netcdf
+      pdal
+      postgresql
+      proj
+      readline
+      sqlite
+      wxGTK32
+      zlib
+      zstd
+    ]
+    ++ lib.optionals withOpenGL [ libGLU ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
-  configureFlags = [
-    "--with-blas"
-    "--with-cairo-ldflags=-lfontconfig"
-    "--with-cxx"
-    "--with-fftw"
-    "--with-freetype"
-    "--with-geos"
-    "--with-gdal"
-    "--with-lapack"
-    "--with-libsvm"
-    "--with-nls"
-    "--with-openmp"
-    "--with-pdal"
-    "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
-    "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-libs=${proj}/lib"
-    "--with-proj-share=${proj}/share/proj"
-    "--with-sqlite"
-    "--with-zstd"
-    "--without-bzlib"
-    "--without-mysql"
-    "--without-odbc"
-  ] ++ lib.optionals (! withOpenGL) [
-    "--without-opengl"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--without-cairo"
-    "--without-freetype"
-    "--without-x"
-  ];
+  configureFlags =
+    [
+      "--with-blas"
+      "--with-cairo-ldflags=-lfontconfig"
+      "--with-cxx"
+      "--with-fftw"
+      "--with-freetype"
+      "--with-geos"
+      "--with-gdal"
+      "--with-lapack"
+      "--with-libsvm"
+      "--with-nls"
+      "--with-openmp"
+      "--with-pdal"
+      "--with-postgres"
+      "--with-postgres-libs=${postgresql.lib}/lib/"
+      "--with-proj-includes=${proj.dev}/include"
+      "--with-proj-libs=${proj}/lib"
+      "--with-proj-share=${proj}/share/proj"
+      "--with-sqlite"
+      "--with-zstd"
+      "--without-bzlib"
+      "--without-mysql"
+      "--without-odbc"
+    ]
+    ++ lib.optionals (!withOpenGL) [
+      "--without-opengl"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--without-cairo"
+      "--without-freetype"
+      "--without-x"
+    ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
   makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
-  /* Ensures that the python script run at build time are actually executable;
-   * otherwise, patchShebangs ignores them.  */
+  /*
+    Ensures that the python script run at build time are actually executable;
+    otherwise, patchShebangs ignores them.
+  */
   postConfigure = ''
     for f in $(find . -name '*.py'); do
       chmod +x $f

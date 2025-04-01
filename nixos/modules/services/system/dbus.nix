@@ -1,6 +1,11 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -14,7 +19,13 @@ let
     serviceDirectories = cfg.packages;
   };
 
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    mkIf
+    mkMerge
+    types
+    ;
 
 in
 
@@ -38,7 +49,10 @@ in
       };
 
       implementation = mkOption {
-        type = types.enum [ "dbus" "broker" ];
+        type = types.enum [
+          "dbus"
+          "broker"
+        ];
         default = "dbus";
         description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
@@ -67,7 +81,11 @@ in
       };
 
       apparmor = mkOption {
-        type = types.enum [ "enabled" "disabled" "required" ];
+        type = types.enum [
+          "enabled"
+          "disabled"
+          "required"
+        ];
         description = ''
           AppArmor mode for dbus.
 
@@ -128,7 +146,10 @@ in
         contents."/etc/dbus-1".source = pkgs.makeDBusConf {
           inherit (cfg) apparmor;
           suidHelper = "/bin/false";
-          serviceDirectories = [ pkgs.dbus config.boot.initrd.systemd.package ];
+          serviceDirectories = [
+            pkgs.dbus
+            config.boot.initrd.systemd.package
+          ];
         };
         packages = [ pkgs.dbus ];
         storePaths = [

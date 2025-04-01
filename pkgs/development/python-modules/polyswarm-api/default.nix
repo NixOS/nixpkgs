@@ -29,7 +29,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "future" ];
 
-
   build-system = [ setuptools ];
 
   dependencies = [

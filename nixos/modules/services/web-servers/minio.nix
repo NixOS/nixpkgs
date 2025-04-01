@@ -1,14 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.minio;
 
-  legacyCredentials = cfg: pkgs.writeText "minio-legacy-credentials" ''
-    MINIO_ROOT_USER=${cfg.accessKey}
-    MINIO_ROOT_PASSWORD=${cfg.secretKey}
-  '';
+  legacyCredentials =
+    cfg:
+    pkgs.writeText "minio-legacy-credentials" ''
+      MINIO_ROOT_USER=${cfg.accessKey}
+      MINIO_ROOT_PASSWORD=${cfg.secretKey}
+    '';
 in
 {
   meta.maintainers = [ maintainers.bachp ];
@@ -89,35 +96,43 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
+    warnings =
+      optional ((cfg.accessKey != "") || (cfg.secretKey != ""))
+        "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
-    systemd = lib.mkMerge [{
-      tmpfiles.rules = [
-        "d '${cfg.configDir}' - minio minio - -"
-      ] ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
+    systemd = lib.mkMerge [
+      {
+        tmpfiles.rules =
+          [
+            "d '${cfg.configDir}' - minio minio - -"
+          ]
+          ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
 
-      services.minio = {
-        description = "Minio Object Storage";
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
-          Type = "simple";
-          User = "minio";
-          Group = "minio";
-          LimitNOFILE = 65536;
-          EnvironmentFile =
-            if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-            else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-            else null;
+        services.minio = {
+          description = "Minio Object Storage";
+          wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            LimitNOFILE = 65536;
+            EnvironmentFile =
+              if (cfg.rootCredentialsFile != null) then
+                cfg.rootCredentialsFile
+              else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then
+                (legacyCredentials cfg)
+              else
+                null;
+          };
+          environment = {
+            MINIO_REGION = "${cfg.region}";
+            MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+          };
         };
-        environment = {
-          MINIO_REGION = "${cfg.region}";
-          MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-        };
-      };
-    }
+      }
 
       (lib.mkIf (cfg.rootCredentialsFile != null) {
         # The service will fail if the credentials file is missing
@@ -147,7 +162,8 @@ in
             RestartSec = 5;
           };
         };
-      })];
+      })
+    ];
 
     users.users.minio = {
       group = "minio";

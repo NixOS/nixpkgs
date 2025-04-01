@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, xmrig
+{
+  lib,
+  fetchFromGitHub,
+  xmrig,
 }:
 
 xmrig.overrideAttrs (oldAttrs: rec {
@@ -20,6 +21,9 @@ xmrig.overrideAttrs (oldAttrs: rec {
     license = licenses.gpl3Plus;
     mainProgram = "xmrig";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ j0hax redhawk ];
+    maintainers = with maintainers; [
+      j0hax
+      redhawk
+    ];
   };
 })

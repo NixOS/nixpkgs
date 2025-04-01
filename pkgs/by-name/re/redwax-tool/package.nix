@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchsvn
-, autoreconfHook, pkg-config, txt2man, which
-, openssl, apr, aprutil
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+  pkg-config,
+  txt2man,
+  which,
+  openssl,
+  apr,
+  aprutil,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +20,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MWSB1AkkRS18UUHGq8EWv3OIXPSVHpmrdD5Eq1VdbkA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config txt2man which ];
-  buildInputs = [ openssl apr aprutil ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    txt2man
+    which
+  ];
+  buildInputs = [
+    openssl
+    apr
+    aprutil
+  ];
 
   meta = with lib; {
     homepage = "https://redwax.eu/rt/";

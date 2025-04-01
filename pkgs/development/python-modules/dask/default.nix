@@ -64,10 +64,15 @@ let
 
     optional-dependencies = lib.fix (self: {
       array = [ numpy ];
-      complete = [
-        pyarrow
-        lz4
-      ] ++ self.array ++ self.dataframe ++ self.distributed ++ self.diagnostics;
+      complete =
+        [
+          pyarrow
+          lz4
+        ]
+        ++ self.array
+        ++ self.dataframe
+        ++ self.distributed
+        ++ self.diagnostics;
       dataframe = [
         # dask-expr -> circular dependency with dask-expr
         numpy

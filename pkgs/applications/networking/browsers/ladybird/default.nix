@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, fetchurl
-, cacert
-, unicode-emoji
-, unicode-character-database
-, cmake
-, ninja
-, pkg-config
-, curl
-, libavif
-, libjxl
-, libpulseaudio
-, libwebp
-, libxcrypt
-, python3
-, qt6Packages
-, woff2
-, ffmpeg
-, simdutf
-, skia
-, nixosTests
-, AppKit
-, Cocoa
-, Foundation
-, OpenGL
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  fetchurl,
+  cacert,
+  unicode-emoji,
+  unicode-character-database,
+  cmake,
+  ninja,
+  pkg-config,
+  curl,
+  libavif,
+  libjxl,
+  libpulseaudio,
+  libwebp,
+  libxcrypt,
+  python3,
+  qt6Packages,
+  woff2,
+  ffmpeg,
+  simdutf,
+  skia,
+  nixosTests,
+  AppKit,
+  Cocoa,
+  Foundation,
+  OpenGL,
+  unstableGitUpdater,
 }:
 
 let
@@ -104,35 +105,41 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = with qt6Packages; [
-    curl
-    ffmpeg
-    libavif
-    libjxl
-    libwebp
-    libxcrypt
-    qtbase
-    qtmultimedia
-    simdutf
-    skia
-    woff2
-  ] ++ lib.optional stdenv.hostPlatform.isLinux [
-    libpulseaudio.dev
-    qtwayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
-  ];
+  buildInputs =
+    with qt6Packages;
+    [
+      curl
+      ffmpeg
+      libavif
+      libjxl
+      libwebp
+      libxcrypt
+      qtbase
+      qtmultimedia
+      simdutf
+      skia
+      woff2
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux [
+      libpulseaudio.dev
+      qtwayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+      OpenGL
+    ];
 
-  cmakeFlags = [
-    # Disable network operations
-    "-DSERENITY_CACHE_DIR=Caches"
-    "-DENABLE_NETWORK_DOWNLOADS=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-  ];
+  cmakeFlags =
+    [
+      # Disable network operations
+      "-DSERENITY_CACHE_DIR=Caches"
+      "-DENABLE_NETWORK_DOWNLOADS=OFF"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+    ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
@@ -156,7 +163,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ladybird.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "Ladybird";
     # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
     broken = stdenv.hostPlatform.isDarwin;

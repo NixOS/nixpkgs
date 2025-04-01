@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -33,166 +38,167 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = config.networking.networkmanager.enable == false;
-      message = "Windows Azure Linux Agent is not compatible with NetworkManager";
-    }];
+    assertions = [
+      {
+        assertion = config.networking.networkmanager.enable == false;
+        message = "Windows Azure Linux Agent is not compatible with NetworkManager";
+      }
+    ];
 
     boot.initrd.kernelModules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];
 
-
     environment.etc."waagent.conf".text = ''
-        #
-        # Microsoft Azure Linux Agent Configuration
-        #
+      #
+      # Microsoft Azure Linux Agent Configuration
+      #
 
-        # Enable extension handling. Do not disable this unless you do not need password reset,
-        # backup, monitoring, or any extension handling whatsoever.
-        Extensions.Enabled=y
+      # Enable extension handling. Do not disable this unless you do not need password reset,
+      # backup, monitoring, or any extension handling whatsoever.
+      Extensions.Enabled=y
 
-        # How often (in seconds) to poll for new goal states
-        Extensions.GoalStatePeriod=6
+      # How often (in seconds) to poll for new goal states
+      Extensions.GoalStatePeriod=6
 
-        # Which provisioning agent to use. Supported values are "auto" (default), "waagent",
-        # "cloud-init", or "disabled".
-        Provisioning.Agent=auto
+      # Which provisioning agent to use. Supported values are "auto" (default), "waagent",
+      # "cloud-init", or "disabled".
+      Provisioning.Agent=auto
 
-        # Password authentication for root account will be unavailable.
-        Provisioning.DeleteRootPassword=n
+      # Password authentication for root account will be unavailable.
+      Provisioning.DeleteRootPassword=n
 
-        # Generate fresh host key pair.
-        Provisioning.RegenerateSshHostKeyPair=n
+      # Generate fresh host key pair.
+      Provisioning.RegenerateSshHostKeyPair=n
 
-        # Supported values are "rsa", "dsa", "ecdsa", "ed25519", and "auto".
-        # The "auto" option is supported on OpenSSH 5.9 (2011) and later.
-        Provisioning.SshHostKeyPairType=ed25519
+      # Supported values are "rsa", "dsa", "ecdsa", "ed25519", and "auto".
+      # The "auto" option is supported on OpenSSH 5.9 (2011) and later.
+      Provisioning.SshHostKeyPairType=ed25519
 
-        # Monitor host name changes and publish changes via DHCP requests.
-        Provisioning.MonitorHostName=y
+      # Monitor host name changes and publish changes via DHCP requests.
+      Provisioning.MonitorHostName=y
 
-        # How often (in seconds) to monitor host name changes.
-        Provisioning.MonitorHostNamePeriod=30
+      # How often (in seconds) to monitor host name changes.
+      Provisioning.MonitorHostNamePeriod=30
 
-        # Decode CustomData from Base64.
-        Provisioning.DecodeCustomData=n
+      # Decode CustomData from Base64.
+      Provisioning.DecodeCustomData=n
 
-        # Execute CustomData after provisioning.
-        Provisioning.ExecuteCustomData=n
+      # Execute CustomData after provisioning.
+      Provisioning.ExecuteCustomData=n
 
-        # Algorithm used by crypt when generating password hash.
-        #Provisioning.PasswordCryptId=6
+      # Algorithm used by crypt when generating password hash.
+      #Provisioning.PasswordCryptId=6
 
-        # Length of random salt used when generating password hash.
-        #Provisioning.PasswordCryptSaltLength=10
+      # Length of random salt used when generating password hash.
+      #Provisioning.PasswordCryptSaltLength=10
 
-        # Allow reset password of sys user
-        Provisioning.AllowResetSysUser=n
+      # Allow reset password of sys user
+      Provisioning.AllowResetSysUser=n
 
-        # Format if unformatted. If 'n', resource disk will not be mounted.
-        ResourceDisk.Format=${if cfg.mountResourceDisk then "y" else "n"}
+      # Format if unformatted. If 'n', resource disk will not be mounted.
+      ResourceDisk.Format=${if cfg.mountResourceDisk then "y" else "n"}
 
-        # File system on the resource disk
-        # Typically ext3 or ext4. FreeBSD images should use 'ufs2' here.
-        ResourceDisk.Filesystem=ext4
+      # File system on the resource disk
+      # Typically ext3 or ext4. FreeBSD images should use 'ufs2' here.
+      ResourceDisk.Filesystem=ext4
 
-        # Mount point for the resource disk
-        ResourceDisk.MountPoint=/mnt/resource
+      # Mount point for the resource disk
+      ResourceDisk.MountPoint=/mnt/resource
 
-        # Create and use swapfile on resource disk.
-        ResourceDisk.EnableSwap=n
+      # Create and use swapfile on resource disk.
+      ResourceDisk.EnableSwap=n
 
-        # Size of the swapfile.
-        ResourceDisk.SwapSizeMB=0
+      # Size of the swapfile.
+      ResourceDisk.SwapSizeMB=0
 
-        # Comma-separated list of mount options. See mount(8) for valid options.
-        ResourceDisk.MountOptions=None
+      # Comma-separated list of mount options. See mount(8) for valid options.
+      ResourceDisk.MountOptions=None
 
-        # Enable verbose logging (y|n)
-        Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
+      # Enable verbose logging (y|n)
+      Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
 
-        # Enable Console logging, default is y
-        # Logs.Console=y
+      # Enable Console logging, default is y
+      # Logs.Console=y
 
-        # Enable periodic log collection, default is n
-        Logs.Collect=n
+      # Enable periodic log collection, default is n
+      Logs.Collect=n
 
-        # How frequently to collect logs, default is each hour
-        Logs.CollectPeriod=3600
+      # How frequently to collect logs, default is each hour
+      Logs.CollectPeriod=3600
 
-        # Is FIPS enabled
-        OS.EnableFIPS=n
+      # Is FIPS enabled
+      OS.EnableFIPS=n
 
-        # Root device timeout in seconds.
-        OS.RootDeviceScsiTimeout=300
+      # Root device timeout in seconds.
+      OS.RootDeviceScsiTimeout=300
 
-        # How often (in seconds) to set the root device timeout.
-        OS.RootDeviceScsiTimeoutPeriod=30
+      # How often (in seconds) to set the root device timeout.
+      OS.RootDeviceScsiTimeoutPeriod=30
 
-        # If "None", the system default version is used.
-        OS.OpensslPath=${pkgs.openssl_3.bin}/bin/openssl
+      # If "None", the system default version is used.
+      OS.OpensslPath=${pkgs.openssl_3.bin}/bin/openssl
 
-        # Set the SSH ClientAliveInterval
-        # OS.SshClientAliveInterval=180
+      # Set the SSH ClientAliveInterval
+      # OS.SshClientAliveInterval=180
 
-        # Set the path to SSH keys and configuration files
-        OS.SshDir=/etc/ssh
+      # Set the path to SSH keys and configuration files
+      OS.SshDir=/etc/ssh
 
-        # If set, agent will use proxy server to access internet
-        #HttpProxy.Host=None
-        #HttpProxy.Port=None
+      # If set, agent will use proxy server to access internet
+      #HttpProxy.Host=None
+      #HttpProxy.Port=None
 
-        # Detect Scvmm environment, default is n
-        # DetectScvmmEnv=n
+      # Detect Scvmm environment, default is n
+      # DetectScvmmEnv=n
 
-        #
-        # Lib.Dir=/var/lib/waagent
+      #
+      # Lib.Dir=/var/lib/waagent
 
-        #
-        # DVD.MountPoint=/mnt/cdrom/secure
+      #
+      # DVD.MountPoint=/mnt/cdrom/secure
 
-        #
-        # Pid.File=/var/run/waagent.pid
+      #
+      # Pid.File=/var/run/waagent.pid
 
-        #
-        # Extension.LogDir=/var/log/azure
+      #
+      # Extension.LogDir=/var/log/azure
 
-        #
-        # Home.Dir=/home
+      #
+      # Home.Dir=/home
 
-        # Enable RDMA management and set up, should only be used in HPC images
-        OS.EnableRDMA=n
+      # Enable RDMA management and set up, should only be used in HPC images
+      OS.EnableRDMA=n
 
-        # Enable checking RDMA driver version and update
-        # OS.CheckRdmaDriver=y
+      # Enable checking RDMA driver version and update
+      # OS.CheckRdmaDriver=y
 
-        # Enable or disable goal state processing auto-update, default is enabled
-        AutoUpdate.Enabled=n
+      # Enable or disable goal state processing auto-update, default is enabled
+      AutoUpdate.Enabled=n
 
-        # Determine the update family, this should not be changed
-        # AutoUpdate.GAFamily=Prod
+      # Determine the update family, this should not be changed
+      # AutoUpdate.GAFamily=Prod
 
-        # Determine if the overprovisioning feature is enabled. If yes, hold extension
-        # handling until inVMArtifactsProfile.OnHold is false.
-        # Default is enabled
-        EnableOverProvisioning=n
+      # Determine if the overprovisioning feature is enabled. If yes, hold extension
+      # handling until inVMArtifactsProfile.OnHold is false.
+      # Default is enabled
+      EnableOverProvisioning=n
 
-        # Allow fallback to HTTP if HTTPS is unavailable
-        # Note: Allowing HTTP (vs. HTTPS) may cause security risks
-        # OS.AllowHTTP=n
+      # Allow fallback to HTTP if HTTPS is unavailable
+      # Note: Allowing HTTP (vs. HTTPS) may cause security risks
+      # OS.AllowHTTP=n
 
-        # Add firewall rules to protect access to Azure host node services
-        OS.EnableFirewall=n
+      # Add firewall rules to protect access to Azure host node services
+      OS.EnableFirewall=n
 
-        # How often (in seconds) to check the firewall rules
-        OS.EnableFirewallPeriod=30
+      # How often (in seconds) to check the firewall rules
+      OS.EnableFirewallPeriod=30
 
-        # How often (in seconds) to remove the udev rules for persistent network interface
-        # names (75-persistent-net-generator.rules and /etc/udev/rules.d/70-persistent-net.rules)
-        OS.RemovePersistentNetRulesPeriod=30
+      # How often (in seconds) to remove the udev rules for persistent network interface
+      # names (75-persistent-net-generator.rules and /etc/udev/rules.d/70-persistent-net.rules)
+      OS.RemovePersistentNetRulesPeriod=30
 
-        # How often (in seconds) to monitor for DHCP client restarts
-        OS.MonitorDhcpClientRestartPeriod=30
+      # How often (in seconds) to monitor for DHCP client restarts
+      OS.MonitorDhcpClientRestartPeriod=30
     '';
 
     services.udev.packages = [ pkgs.waagent ];
@@ -219,28 +225,35 @@ in
       description = "Services Requiring Azure VM provisioning to have finished";
     };
 
-    systemd.services.consume-hypervisor-entropy =
-      {
-        description = "Consume entropy in ACPI table provided by Hyper-V";
+    systemd.services.consume-hypervisor-entropy = {
+      description = "Consume entropy in ACPI table provided by Hyper-V";
 
-        wantedBy = [ "sshd.service" "waagent.service" ];
-        before = [ "sshd.service" "waagent.service" ];
+      wantedBy = [
+        "sshd.service"
+        "waagent.service"
+      ];
+      before = [
+        "sshd.service"
+        "waagent.service"
+      ];
 
-        path = [ pkgs.coreutils ];
-        script =
-          ''
-            echo "Fetching entropy..."
-            cat /sys/firmware/acpi/tables/OEM0 > /dev/random
-          '';
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.StandardError = "journal+console";
-        serviceConfig.StandardOutput = "journal+console";
-      };
+      path = [ pkgs.coreutils ];
+      script = ''
+        echo "Fetching entropy..."
+        cat /sys/firmware/acpi/tables/OEM0 > /dev/random
+      '';
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.StandardError = "journal+console";
+      serviceConfig.StandardOutput = "journal+console";
+    };
 
     systemd.services.waagent = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "sshd.service" ];
+      after = [
+        "network-online.target"
+        "sshd.service"
+      ];
       wants = [ "network-online.target" ];
 
       path = [

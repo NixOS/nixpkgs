@@ -1,17 +1,56 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
-, libXext , freetype, libXrender, fontconfig, libXft, libXinerama
-, libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl, writeShellScript, common-updater-scripts, xmlstarlet }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  libX11,
+  zlib,
+  libSM,
+  libICE,
+  libXext,
+  freetype,
+  libXrender,
+  fontconfig,
+  libXft,
+  libXinerama,
+  libXfixes,
+  libXScrnSaver,
+  libnotify,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  curl,
+  writeShellScript,
+  common-updater-scripts,
+  xmlstarlet,
+}:
 
 let
   url = "https://app.hubstaff.com/download/8099-standard-linux-1-6-26-release";
   version = "1.6.26-95441346";
   sha256 = "sha256:0xxw2za1hmqff5y0vyrvccgldsgyb808dql548c2xqsc1qi9gbn9";
 
-  rpath = lib.makeLibraryPath
-    [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
-      curl libXfixes libXScrnSaver ];
+  rpath = lib.makeLibraryPath [
+    libX11
+    zlib
+    libSM
+    libICE
+    libXext
+    freetype
+    libXrender
+    fontconfig
+    libXft
+    libXinerama
+    stdenv.cc.cc
+    libnotify
+    glib
+    gtk3
+    libappindicator-gtk3
+    curl
+    libXfixes
+    libXScrnSaver
+  ];
 
 in
 
@@ -21,7 +60,10 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit sha256 url; };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   unpackCmd = ''
     # MojoSetups have a ZIP file at the end. ZIP’s magic string is
@@ -83,6 +125,9 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michalrus srghma ];
+    maintainers = with maintainers; [
+      michalrus
+      srghma
+    ];
   };
 }

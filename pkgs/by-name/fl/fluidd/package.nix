@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "fluidd";

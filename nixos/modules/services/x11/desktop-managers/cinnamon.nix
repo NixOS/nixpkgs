@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -25,7 +31,7 @@ in
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gpaste ]";
         description = ''
@@ -43,14 +49,14 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
@@ -130,61 +136,66 @@ in
 
       # Fix lockscreen
       security.pam.services = {
-        cinnamon-screensaver = {};
+        cinnamon-screensaver = { };
       };
 
-      environment.systemPackages = with pkgs; ([
-        desktop-file-utils
+      environment.systemPackages =
+        with pkgs;
+        (
+          [
+            desktop-file-utils
 
-        # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+            # common-files
+            cinnamon-common
+            cinnamon-session
+            cinnamon-desktop
+            cinnamon-menus
+            cinnamon-translations
 
-        # utils needed by some scripts
-        killall
+            # utils needed by some scripts
+            killall
 
-        # session requirements
-        cinnamon-screensaver
-        # cinnamon-killer-daemon: provided by cinnamon-common
-        networkmanagerapplet # session requirement - also nm-applet not needed
+            # session requirements
+            cinnamon-screensaver
+            # cinnamon-killer-daemon: provided by cinnamon-common
+            networkmanagerapplet # session requirement - also nm-applet not needed
 
-        # For a polkit authentication agent
-        polkit_gnome
+            # For a polkit authentication agent
+            polkit_gnome
 
-        # packages
-        nemo-with-extensions
-        gnome-online-accounts-gtk
-        cinnamon-control-center
-        cinnamon-settings-daemon
-        libgnomekbd
+            # packages
+            nemo-with-extensions
+            gnome-online-accounts-gtk
+            cinnamon-control-center
+            cinnamon-settings-daemon
+            libgnomekbd
 
-        # theme
-        adwaita-icon-theme
-        gnome-themes-extra
-        gtk3.out
+            # theme
+            adwaita-icon-theme
+            gnome-themes-extra
+            gtk3.out
 
-        # other
-        glib # for gsettings
-        xdg-user-dirs
-      ] ++ utils.removePackagesByName [
-        # accessibility
-        onboard
+            # other
+            glib # for gsettings
+            xdg-user-dirs
+          ]
+          ++ utils.removePackagesByName [
+            # accessibility
+            onboard
 
-        # theme
-        sound-theme-freedesktop
-        nixos-artwork.wallpapers.simple-dark-gray
-        mint-artwork
-        mint-cursor-themes
-        mint-l-icons
-        mint-l-theme
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        xapp # provides some xapp-* icons
-      ] config.environment.cinnamon.excludePackages);
+            # theme
+            sound-theme-freedesktop
+            nixos-artwork.wallpapers.simple-dark-gray
+            mint-artwork
+            mint-cursor-themes
+            mint-l-icons
+            mint-l-theme
+            mint-themes
+            mint-x-icons
+            mint-y-icons
+            xapp # provides some xapp-* icons
+          ] config.environment.cinnamon.excludePackages
+        );
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
@@ -230,23 +241,25 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs; utils.removePackagesByName [
-        # cinnamon team apps
-        bulky
-        warpinator
+      environment.systemPackages =
+        with pkgs;
+        utils.removePackagesByName [
+          # cinnamon team apps
+          bulky
+          warpinator
 
-        # cinnamon xapp
-        xviewer
-        xreader
-        xed-editor
-        xplayer
-        pix
+          # cinnamon xapp
+          xviewer
+          xreader
+          xed-editor
+          xplayer
+          pix
 
-        # external apps shipped with linux-mint
-        gnome-calculator
-        gnome-calendar
-        gnome-screenshot
-      ] config.environment.cinnamon.excludePackages;
+          # external apps shipped with linux-mint
+          gnome-calculator
+          gnome-calendar
+          gnome-screenshot
+        ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

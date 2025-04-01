@@ -511,14 +511,17 @@ let
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [
-      protobuf
-      protoc-gen-go
-      protoc-gen-go-grpc
-      makeWrapper
-      ncurses # tput
-      which
-    ] ++ lib.optional enable_upx upx ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs =
+      [
+        protobuf
+        protoc-gen-go
+        protoc-gen-go-grpc
+        makeWrapper
+        ncurses # tput
+        which
+      ]
+      ++ lib.optional enable_upx upx
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 

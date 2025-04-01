@@ -1,45 +1,46 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, boost
-, cmake
-, chromaprint
-, gettext
-, gst_all_1
-, liblastfm
-, qtbase
-, qtx11extras
-, qttools
-, taglib
-, fftw
-, glew
-, qjson
-, sqlite
-, libgpod
-, libplist
-, usbmuxd
-, libmtp
-, libpulseaudio
-, gvfs
-, libcdio
-, pcre
-, projectm
-, protobuf
-, qca-qt5
-, pkg-config
-, sparsehash
-, config
-, makeWrapper
-, gst_plugins
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  chromaprint,
+  gettext,
+  gst_all_1,
+  liblastfm,
+  qtbase,
+  qtx11extras,
+  qttools,
+  taglib,
+  fftw,
+  glew,
+  qjson,
+  sqlite,
+  libgpod,
+  libplist,
+  usbmuxd,
+  libmtp,
+  libpulseaudio,
+  gvfs,
+  libcdio,
+  pcre,
+  projectm,
+  protobuf,
+  qca-qt5,
+  pkg-config,
+  sparsehash,
+  config,
+  makeWrapper,
+  gst_plugins,
 
-, util-linux
-, libunwind
-, libselinux
-, elfutils
-, libsepol
-, orc
+  util-linux,
+  libunwind,
+  libselinux,
+  elfutils,
+  libsepol,
+  orc,
 
-, alsa-lib
+  alsa-lib,
 }:
 
 let
@@ -72,37 +73,42 @@ mkDerivation {
     orc
   ];
 
-  buildInputs = [
-    boost
-    chromaprint
-    fftw
-    gettext
-    glew
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gstreamer
-    gvfs
-    liblastfm
-    libpulseaudio
-    pcre
-    projectm
-    protobuf
-    qca-qt5
-    qjson
-    qtbase
-    qtx11extras
-    qttools
-    sqlite
-    taglib
+  buildInputs =
+    [
+      boost
+      chromaprint
+      fftw
+      gettext
+      glew
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gstreamer
+      gvfs
+      liblastfm
+      libpulseaudio
+      pcre
+      projectm
+      protobuf
+      qca-qt5
+      qjson
+      qtbase
+      qtx11extras
+      qttools
+      sqlite
+      taglib
 
-    alsa-lib
-  ]
-  # gst_plugins needed for setup-hooks
-  ++ gst_plugins
-  ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+      alsa-lib
+    ]
+    # gst_plugins needed for setup-hooks
+    ++ gst_plugins
+    ++ lib.optionals (withIpod) [
+      libgpod
+      libplist
+      usbmuxd
+    ]
+    ++ lib.optionals (withMTP) [ libmtp ]
+    ++ lib.optionals (withCD) [ libcdio ]
+    ++ lib.optionals (withCloud) [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \

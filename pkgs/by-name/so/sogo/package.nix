@@ -1,8 +1,25 @@
-{ gnustep, lib, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oath-toolkit
-, enableActiveSync ? false
-, libwbxml }:
+{
+  gnustep,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  lndir,
+  libxcrypt,
+  openssl,
+  openldap,
+  sope,
+  libmemcached,
+  curl,
+  libsodium,
+  libytnef,
+  libzip,
+  pkg-config,
+  nixosTests,
+  oath-toolkit,
+  enableActiveSync ? false,
+  libwbxml,
+}:
 gnustep.stdenv.mkDerivation rec {
   pname = "sogo";
   version = "5.11.0";
@@ -15,9 +32,25 @@ gnustep.stdenv.mkDerivation rec {
     hash = "sha256-2/0OaCAQkdnDPGOVERZs2Oz+bCpQN3MTLzp2pz0WB08=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
-    ++ lib.optional enableActiveSync libwbxml;
+  nativeBuildInputs = [
+    gnustep.make
+    makeWrapper
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    gnustep.base
+    sope
+    openssl
+    libmemcached
+    curl
+    libsodium
+    libytnef
+    libzip
+    openldap
+    oath-toolkit
+    libxcrypt
+  ] ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
@@ -74,10 +107,12 @@ gnustep.stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ jceb ];
   };
 }
-

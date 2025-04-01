@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, pkg-config
-, rustfmt
-, cacert
-, openssl
-, darwin
-, nix-update-script
-, testers
-, dioxus-cli
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  rustfmt,
+  cacert,
+  openssl,
+  darwin,
+  nix-update-script,
+  testers,
+  dioxus-cli,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,11 +24,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-D6y2NiFqSf0u6icSKCRZK7ycR+GswOX627M7PEy/D6U=";
 
-  nativeBuildInputs = [ pkg-config cacert ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    pkg-config
+    cacert
   ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -47,8 +53,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://dioxuslabs.com";
     description = "CLI tool for developing, testing, and publishing Dioxus apps";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ xanderio cathalmullan ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      xanderio
+      cathalmullan
+    ];
     mainProgram = "dx";
   };
 }

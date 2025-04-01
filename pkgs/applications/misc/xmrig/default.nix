@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libuv
-, libmicrohttpd
-, openssl
-, hwloc
-, donateLevel ? 0
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libuv,
+  libmicrohttpd,
+  openssl,
+  hwloc,
+  donateLevel ? 0,
+  darwin,
 }:
 
 let
@@ -38,16 +39,18 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = [
-    libuv
-    libmicrohttpd
-    openssl
-    hwloc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    CoreServices
-    OpenCL
-  ];
+  buildInputs =
+    [
+      libuv
+      libmicrohttpd
+      openssl
+      hwloc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreServices
+      OpenCL
+    ];
 
   inherit donateLevel;
 

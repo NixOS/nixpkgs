@@ -12,7 +12,7 @@
   gdk-pixbuf,
   wayland-scanner,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {

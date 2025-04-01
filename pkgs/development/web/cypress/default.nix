@@ -1,18 +1,19 @@
-{ alsa-lib
-, autoPatchelfHook
-, fetchzip
-, gtk2
-, gtk3
-, lib
-, buildPackages
-, makeShellWrapper
-, mesa
-, nss
-, stdenv
-, udev
-, unzip
-, xorg
-, darwin
+{
+  alsa-lib,
+  autoPatchelfHook,
+  fetchzip,
+  gtk2,
+  gtk3,
+  lib,
+  buildPackages,
+  makeShellWrapper,
+  mesa,
+  nss,
+  stdenv,
+  udev,
+  unzip,
+  xorg,
+  darwin,
 }:
 
 let
@@ -31,9 +32,11 @@ let
     };
   };
   inherit (stdenv.hostPlatform) system;
-  binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
+  binary =
+    availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
   inherit (binary) platform checksum;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cypress";
   version = "13.13.2";
 
@@ -58,27 +61,34 @@ in stdenv.mkDerivation rec {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
-
-  buildInputs = lib.optionals stdenv.isLinux (with xorg; [
-    libXScrnSaver
-    libXdamage
-    libXtst
-    libxshmfence
-    nss
-    gtk2
-    alsa-lib
-    gtk3
-    mesa # for libgbm
-  ]) ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-    CoreServices
-    CoreMedia
-    CoreAudio
-    AudioToolbox
-    AVFoundation
-    Foundation
-    ApplicationServices
-  ]);
+  buildInputs =
+    lib.optionals stdenv.isLinux (
+      with xorg;
+      [
+        libXScrnSaver
+        libXdamage
+        libXtst
+        libxshmfence
+        nss
+        gtk2
+        alsa-lib
+        gtk3
+        mesa # for libgbm
+      ]
+    )
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Cocoa
+        CoreServices
+        CoreMedia
+        CoreAudio
+        AudioToolbox
+        AVFoundation
+        Foundation
+        ApplicationServices
+      ]
+    );
 
   runtimeDependencies = lib.optional stdenv.isLinux (lib.getLib udev);
 
@@ -93,11 +103,16 @@ in stdenv.mkDerivation rec {
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
-    ${if stdenv.isDarwin then ''
-      ln -s $out/opt/cypress/Cypress.app/Contents/MacOS/Cypress $out/bin/cypress
-    '' else ''
-      ln -s $out/opt/cypress/Cypress $out/bin/cypress
-    ''}
+    ${
+      if stdenv.isDarwin then
+        ''
+          ln -s $out/opt/cypress/Cypress.app/Contents/MacOS/Cypress $out/bin/cypress
+        ''
+      else
+        ''
+          ln -s $out/opt/cypress/Cypress $out/bin/cypress
+        ''
+    }
     runHook postInstall
   '';
 
@@ -127,6 +142,10 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = lib.attrNames availableBinaries;
-    maintainers = with maintainers; [ tweber mmahut Crafter ];
+    maintainers = with maintainers; [
+      tweber
+      mmahut
+      Crafter
+    ];
   };
 }

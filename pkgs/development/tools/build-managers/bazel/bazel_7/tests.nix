@@ -1,18 +1,19 @@
-{ lib
+{
+  lib,
   # tooling
-, callPackage
-, fetchFromGitHub
-, newScope
-, recurseIntoAttrs
-, runCommandCC
-, stdenv
+  callPackage,
+  fetchFromGitHub,
+  newScope,
+  recurseIntoAttrs,
+  runCommandCC,
+  stdenv,
   # inputs
-, Foundation
-, bazel_self
-, lr
-, xe
-, lockfile
-, ...
+  Foundation,
+  bazel_self,
+  lr,
+  xe,
+  lockfile,
+  ...
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin;
@@ -28,28 +29,33 @@ let
 
     # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
     # but none of the platform-specific binaries, as they are large and useless.
-    requiredDepNamePredicate = name:
+    requiredDepNamePredicate =
+      name:
       name == "_main~bazel_build_deps~workspace_repo_cache"
-      || null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
-      && null != builtins.match "(platforms|com_google_|protobuf|rules_|.*bazel_|apple_support).*" name;
+      ||
+        null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
+        && null != builtins.match "(platforms|com_google_|protobuf|rules_|.*bazel_|apple_support).*" name;
   };
 
-  runLocal = name: attrs: script:
+  runLocal =
+    name: attrs: script:
     let
       attrs' = removeAttrs attrs [ "buildInputs" ];
       buildInputs = attrs.buildInputs or [ ];
     in
-    runCommandCC name
-      ({
+    runCommandCC name (
+      {
         inherit buildInputs;
         preferLocalBuild = true;
         meta.platforms = bazel_self.meta.platforms;
-      } // attrs')
-      script;
+      }
+      // attrs'
+    ) script;
 
   # bazel wants to extract itself into $install_dir/install every time it runs,
   # so let’s do that only once.
-  extracted = bazelPkg:
+  extracted =
+    bazelPkg:
     let
       install_dir =
         # `install_base` field printed by `bazel info`, minus the hash.
@@ -67,7 +73,14 @@ let
       cp -R ${install_dir} $out
     '';
 
-  bazelTest = { name, bazelScript, workspaceDir, bazelPkg, buildInputs ? [ ] }:
+  bazelTest =
+    {
+      name,
+      bazelScript,
+      workspaceDir,
+      bazelPkg,
+      buildInputs ? [ ],
+    }:
     runLocal name
       {
         inherit buildInputs;
@@ -79,7 +92,8 @@ let
         mkdir bazel_home
         export HOME=$PWD/bazel_home
 
-        ${# Concurrent bazel invocations have the same workspace path.
+        ${
+          # Concurrent bazel invocations have the same workspace path.
           # On darwin, for some reason, it means they access and corrupt the
           # same outputRoot, outputUserRoot and outputBase
           # Ensure they use build-local outputRoot by setting TEST_TMPDIR
@@ -87,10 +101,13 @@ let
             export TEST_TMPDIR=$HOME/.cache/bazel
           ''
         }
-        ${# Speed-up tests by caching bazel extraction.
+        ${
+          # Speed-up tests by caching bazel extraction.
           # Except on Darwin, because nobody knows how Darwin works.
-          let bazelExtracted = extracted bazelPkg;
-          in lib.optionalString (!isDarwin) ''
+          let
+            bazelExtracted = extracted bazelPkg;
+          in
+          lib.optionalString (!isDarwin) ''
             mkdir -p ${bazelExtracted.install_dir}
             cp -R ${bazelExtracted}/install ${bazelExtracted.install_dir}
 
@@ -102,14 +119,17 @@ let
             ${lr}/bin/lr -0 -U ${bazelExtracted.install_dir} | ${xe}/bin/xe -N0 -0 touch --date="9 years 6 months" {}
           ''
         }
-        ${# Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
+        ${
+          # Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
           # about why to create a subdir for the workspace.
           ''cp -r ${workspaceDir} wd && chmod ug+rw -R wd && cd wd''
         }
-        ${# run the actual test snippet
+        ${
+          # run the actual test snippet
           bazelScript
         }
-        ${# Try to keep darwin clean of our garbage
+        ${
+          # Try to keep darwin clean of our garbage
           lib.optionalString isDarwin ''
             rm -rf $HOME || true
           ''
@@ -125,7 +145,8 @@ let
     hash = "sha256-DaPKp7Sn5uvfZRjdDx6grot3g3B7trqCyL0TRIdwg98=";
   };
 
-  callBazelTests = bazel:
+  callBazelTests =
+    bazel:
     let
       callBazelTest = newScope {
         inherit runLocal bazelTest bazel-examples;
@@ -143,7 +164,8 @@ let
           inherit extracted;
           extraBazelArgs = "--noenable_bzlmod";
         };
-      }) // {
+      })
+      // {
         bashTools = callBazelTest ../bash-tools-test.nix { };
         cpp = callBazelTest ./cpp-test.nix {
           extraBazelArgs = "";
@@ -170,4 +192,3 @@ recurseIntoAttrs {
     #inherit bazel-watcher;
   });
 }
-

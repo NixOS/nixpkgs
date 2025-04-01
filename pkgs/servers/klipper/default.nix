@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python3
-, unstableGitUpdater
-, makeWrapper
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python3,
+  unstableGitUpdater,
+  makeWrapper,
+  writeShellScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +23,23 @@ stdenv.mkDerivation rec {
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages ( p: with p; [ cffi ] ))
+    (python3.withPackages (p: with p; [ cffi ]))
     makeWrapper
   ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ python-can cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
+  buildInputs = [
+    (python3.withPackages (
+      p: with p; [
+        python-can
+        cffi
+        pyserial
+        greenlet
+        jinja2
+        markupsafe
+        numpy
+      ]
+    ))
+  ];
 
   # we need to run this to prebuild the chelper.
   postBuild = ''
@@ -97,7 +110,11 @@ stdenv.mkDerivation rec {
     description = "Klipper 3D printer firmware";
     mainProgram = "klippy";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault zhaofengli cab404 ];
+    maintainers = with maintainers; [
+      lovesegfault
+      zhaofengli
+      cab404
+    ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

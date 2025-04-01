@@ -1,4 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitHub, testers, typescript }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  testers,
+  typescript,
+}:
 
 buildNpmPackage rec {
   pname = "typescript";

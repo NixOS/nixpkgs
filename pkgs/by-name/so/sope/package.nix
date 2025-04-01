@@ -1,5 +1,15 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, libxml2, openssl
-, openldap, mariadb, libmysqlclient, postgresql }:
+{
+  gnustep,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  libxml2,
+  openssl,
+  openldap,
+  mariadb,
+  libmysqlclient,
+  postgresql,
+}:
 
 gnustep.stdenv.mkDerivation rec {
   pname = "sope";
@@ -13,7 +23,8 @@ gnustep.stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {  # https://github.com/Alinto/sope/pull/66
+    (fetchpatch {
+      # https://github.com/Alinto/sope/pull/66
       name = "sope-fix-gnustep-1.29.0+.patch";
       url = "https://github.com/Alinto/sope/pull/66/commits/9ec2744cc851b11886c3ebb723138e4d672bd5c7.patch";
       hash = "sha256-JgYRwjmjlitgzYz9Jfei5XJRThP1TunPjI0g5M2wZPA=";
@@ -21,9 +32,17 @@ gnustep.stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ gnustep.make ];
-  buildInputs = [ gnustep.base libxml2 openssl ]
+  buildInputs =
+    [
+      gnustep.base
+      libxml2
+      openssl
+    ]
     ++ lib.optional (openldap != null) openldap
-    ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
+    ++ lib.optionals (mariadb != null) [
+      libmysqlclient
+      mariadb
+    ]
     ++ lib.optional (postgresql != null) postgresql;
 
   # Configure directories where files are installed to. Everything is automatically
@@ -38,7 +57,13 @@ gnustep.stdenv.mkDerivation rec {
     EOF
   '';
 
-  configureFlags = [ "--prefix=" "--disable-debug" "--enable-xml" "--with-ssl=ssl" ]
+  configureFlags =
+    [
+      "--prefix="
+      "--disable-debug"
+      "--enable-xml"
+      "--with-ssl=ssl"
+    ]
     ++ lib.optional (openldap != null) "--enable-openldap"
     ++ lib.optional (mariadb != null) "--enable-mysql"
     ++ lib.optional (postgresql != null) "--enable-postgresql";

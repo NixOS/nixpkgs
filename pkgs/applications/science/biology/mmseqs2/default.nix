@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, xxd
-, perl
-, installShellFiles
-, enableAvx2 ? stdenv.hostPlatform.avx2Support
-, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
-, enableMpi ? false
-, mpi
-, openmp
-, zlib
-, bzip2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  xxd,
+  perl,
+  installShellFiles,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
+  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
+  enableMpi ? false,
+  mpi,
+  openmp,
+  zlib,
+  bzip2,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,14 +26,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-L+zOWrGkCLz/wqpBuji8H4/93sDFpcfnDOE8FHq1j84=";
   };
 
-  nativeBuildInputs = [ cmake xxd perl installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    xxd
+    perl
+    installShellFiles
+  ];
   cmakeFlags =
     lib.optional enableAvx2 "-DHAVE_AVX2=1"
     ++ lib.optional enableSse4_1 "-DHAVE_SSE4_1=1"
     ++ lib.optional enableMpi "-DHAVE_MPI=1";
 
   buildInputs =
-    lib.optionals stdenv.cc.isClang [ openmp zlib bzip2 ]
+    lib.optionals stdenv.cc.isClang [
+      openmp
+      zlib
+      bzip2
+    ]
     ++ lib.optional enableMpi mpi;
 
   postInstall = ''

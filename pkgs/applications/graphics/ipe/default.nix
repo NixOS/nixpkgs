@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, makeDesktopItem
-, fetchFromGitHub
-, pkg-config
-, copyDesktopItems
-, cairo
-, freetype
-, ghostscript
-, gsl
-, libjpeg
-, libpng
-, libspiro
-, lua5
-, qtbase
-, qtsvg
-, texliveSmall
-, wrapQtAppsHook
-, zlib
-, withTeXLive ? true
-, buildPackages
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchFromGitHub,
+  pkg-config,
+  copyDesktopItems,
+  cairo,
+  freetype,
+  ghostscript,
+  gsl,
+  libjpeg,
+  libpng,
+  libspiro,
+  lua5,
+  qtbase,
+  qtsvg,
+  texliveSmall,
+  wrapQtAppsHook,
+  zlib,
+  withTeXLive ? true,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,23 +33,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
-  nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [
-    cairo
-    freetype
-    ghostscript
-    gsl
-    libjpeg
-    libpng
-    libspiro
-    lua5
-    qtbase
-    qtsvg
-    zlib
-  ] ++ (lib.optionals withTeXLive [
-    texliveSmall
-  ]);
+  buildInputs =
+    [
+      cairo
+      freetype
+      ghostscript
+      gsl
+      libjpeg
+      libpng
+      libspiro
+      lua5
+      qtbase
+      qtsvg
+      zlib
+    ]
+    ++ (lib.optionals withTeXLive [
+      texliveSmall
+    ]);
 
   makeFlags = [
     "-C src"
@@ -70,8 +77,14 @@ stdenv.mkDerivation rec {
       comment = "A drawing editor for creating figures in PDF format";
       exec = "ipe";
       icon = "ipe";
-      mimeTypes = [ "text/xml" "application/pdf" ];
-      categories = [ "Graphics" "Qt" ];
+      mimeTypes = [
+        "text/xml"
+        "application/pdf"
+      ];
+      categories = [
+        "Graphics"
+        "Qt"
+      ];
       startupNotify = true;
       startupWMClass = "ipe";
     })
