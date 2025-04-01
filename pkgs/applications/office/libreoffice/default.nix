@@ -201,12 +201,14 @@ let
     optionalString
     ;
 
-  notoSubset = suffixes: runCommand "noto-fonts-subset" {} ''
-    mkdir -p "$out/share/fonts/noto/"
-    ${concatMapStrings (x: ''
-      cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-    '') suffixes}
-  '';
+  notoSubset =
+    suffixes:
+    runCommand "noto-fonts-subset" { } ''
+      mkdir -p "$out/share/fonts/noto/"
+      ${concatMapStrings (x: ''
+        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
+      '') suffixes}
+    '';
 
   fontsConf = makeFontsConf {
     fontDirectories = [
@@ -222,7 +224,7 @@ let
       libertine-g
       # Font priority issues in some tests in Still
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset ["Arabic"]))
+      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
       noto-fonts-cjk-sans
     ];
   };

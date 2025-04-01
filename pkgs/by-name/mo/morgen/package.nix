@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, asar, alsa-lib, gtk3, libxshmfence, libgbm, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  asar,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  libgbm,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
@@ -18,7 +31,13 @@ stdenv.mkDerivation rec {
     asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence libgbm nss ];
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libxshmfence
+    libgbm
+    nss
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,16 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gstreamer
-, gst-plugins-base
-, gettext
-, ffmpeg-headless
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gettext,
+  ffmpeg-headless,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,17 +24,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-TPLi2CBOVLqK+VGai5t/+m6VGnCHr6Df6DwSXUm7tfs=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    python3
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
   buildInputs = [
     gstreamer

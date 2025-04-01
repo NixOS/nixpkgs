@@ -14,7 +14,7 @@ in
       };
 
       dates = lib.mkOption {
-        default = ["03:45"];
+        default = [ "03:45" ];
         type = with lib.types; listOf str;
         description = ''
           Specification (in the format described by
