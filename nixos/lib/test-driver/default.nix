@@ -13,6 +13,8 @@
   vde2,
   extraPythonPackages ? (_: [ ]),
   nixosTests,
+  breakpointHook,
+  openssh,
 }:
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
@@ -25,12 +27,19 @@ python3Packages.buildPythonApplication {
     setuptools
   ];
 
+  postPatch = ''
+    substituteInPlace test_driver/driver.py \
+      --replace-fail "@attach@" "${breakpointHook.attach}"
+  '';
+
   dependencies =
     with python3Packages;
     [
       colorama
       junit-xml
       ptpython
+      ipython
+      remote-pdb
     ]
     ++ extraPythonPackages python3Packages;
 
