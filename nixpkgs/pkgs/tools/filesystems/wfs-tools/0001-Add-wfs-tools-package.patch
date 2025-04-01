@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hyphastorm <hyphastormdev@gmail.com>
+Date: Mon, 1 Apr 2024 00:00:00 +0000
+Subject: [PATCH] Add wfs-tools package
+
+---
+ pkgs/top-level/all-packages.nix | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index 000000000000..000000000000 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -1000,6 +1000,7 @@ with pkgs;
+   wfuzz = callPackage ../tools/security/wfuzz { };
+   wget = callPackage ../tools/networking/wget { };
+   wgetpaste = callPackage ../tools/networking/wgetpaste { };
++  wfs-tools = callPackage ../tools/filesystems/wfs-tools { };
+   wg-quick = callPackage ../tools/networking/wireguard-tools { };
+   wg-dynamic = callPackage ../tools/networking/wg-dynamic { };
+   wg-manage = callPackage ../tools/networking/wg-manage { }; 
