@@ -17267,7 +17267,7 @@ with pkgs;
 
   nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc)
-    ({ inherit pkgs lib; } // attrs);
+    ({ inherit lib; pkgs = pkgs.__splicedPackages; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
     nix = nixVersions.nix_2_26;
