@@ -14383,10 +14383,6 @@ with pkgs;
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
-  googler = callPackage ../applications/misc/googler {
-    python = python3;
-  };
-
   gqrx = qt6Packages.callPackage ../applications/radio/gqrx { };
   gqrx-portaudio = qt6Packages.callPackage ../applications/radio/gqrx {
     portaudioSupport = true;
