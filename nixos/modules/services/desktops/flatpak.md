@@ -71,7 +71,7 @@ Be aware that while Flatpak packages are managed through NixOS, they operate in 
 
 Remember that the NixOS Flatpak integration might also have its own quirks, so consider if the problem could be related to how NixOS is managing Flatpak when troubleshooting.
 
-## Manual Package Management {#manual-package-management}
+## Manual Flatpak management {#module-services-flatpak-manual-manage}
 If you prefer to manage Flatpak packages manually, you can still do so.
 
 First, you will need to add a repository, for example,
