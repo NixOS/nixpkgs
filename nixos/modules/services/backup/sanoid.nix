@@ -164,6 +164,17 @@ in
         for allowed options.
       '';
     };
+
+    zfsPermissions = mkOption {
+      type = types.listOf types.str;
+      default = [ "snapshot" "mount" "destroy" ];
+      example = [ ];
+      description = lib.mdDoc ''
+        List of zfs permission to grant to sanoid and its post/pre/prune scripts.
+        See https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html for the list of available permissions
+      '';
+    };
+
   };
 
   # Implementation
@@ -177,8 +188,8 @@ in
     systemd.services.sanoid = {
       description = "Sanoid snapshot service";
       serviceConfig = {
-        ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
-        ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
+        ExecStartPre = (map (buildAllowCommand "allow" cfg.zfsPermissions) datasets);
+        ExecStopPost = (map (buildAllowCommand "unallow" cfg.zfsPermissions) datasets);
         ExecStart = lib.escapeShellArgs ([
           "${cfg.package}/bin/sanoid"
           "--cron"
