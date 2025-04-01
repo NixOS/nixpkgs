@@ -287,24 +287,12 @@ in {
     linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
 
   } // lib.optionalAttrs config.allowAliases {
-    linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
-    linux_6_4 = throw "linux 6.4 was removed because it has reached its end of life upstream";
-    linux_6_5 = throw "linux 6.5 was removed because it has reached its end of life upstream";
-    linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
-    linux_6_8 = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
     linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
     linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
 
-    linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
-
-    linux_4_14_hardened = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
     linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
-    linux_6_4_hardened = throw "linux 6.4 was removed because it has reached its end of life upstream";
-    linux_6_5_hardened = throw "linux 6.5 was removed because it has reached its end of life upstream";
-    linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
-    linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
     linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
     linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
@@ -655,12 +643,7 @@ in {
     linux_6_13 = recurseIntoAttrs (packagesFor kernels.linux_6_13);
     linux_6_14 = recurseIntoAttrs (packagesFor kernels.linux_6_14);
   } // lib.optionalAttrs config.allowAliases {
-    linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
-    linux_6_4 = throw "linux 6.4 was removed because it reached its end of life upstream"; # Added 2023-10-02
-    linux_6_5 = throw "linux 6.5 was removed because it reached its end of life upstream"; # Added 2024-02-28
-    linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
-    linux_6_8 = throw "linux 6.8 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
     linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
@@ -708,15 +691,10 @@ in {
     linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
     __recurseIntoDerivationForReleaseJobs = true;
   } // lib.optionalAttrs config.allowAliases {
-    linux_4_14_hardened = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
     linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
-    linux_6_4_hardened = throw "linux 6.4 was removed because it has reached its end of life upstream";
-    linux_6_5_hardened = throw "linux 6.5 was removed because it has reached its end of life upstream";
-    linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
-    linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
     linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
-    linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
   });
 
   packageAliases = {
