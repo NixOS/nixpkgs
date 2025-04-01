@@ -10151,6 +10151,8 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  openapi-pydantic = callPackage ../development/python-modules/openapi-pydantic { };
+
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
@@ -14648,6 +14650,8 @@ self: super: with self; {
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
+  rdbtools = callPackage ../development/python-modules/rdbtools { };
+
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdkit = callPackage ../development/python-modules/rdkit {
@@ -17198,6 +17202,8 @@ self: super: with self; {
   tlv8 = callPackage ../development/python-modules/tlv8 { };
 
   tmb = callPackage ../development/python-modules/tmb { };
+
+  tnefparse = callPackage ../development/python-modules/tnefparse { };
 
   todoist = callPackage ../development/python-modules/todoist { };
 

@@ -4637,8 +4637,6 @@ with pkgs;
 
   ratarmount = with python3Packages; toPythonApplication ratarmount;
 
-  rdbtools = callPackage ../development/tools/rdbtools { python = python3; };
-
   retext = qt6Packages.callPackage ../applications/editors/retext { };
 
   inherit (callPackage ../tools/security/rekor { })
@@ -4906,7 +4904,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  }) teleport_15 teleport_16 teleport_17 teleport;
+  }) teleport_16 teleport_17 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -12916,10 +12914,6 @@ with pkgs;
 
   fldigi = callPackage ../applications/radio/fldigi {
     hamlib = hamlib_4;
-  };
-
-  fluidsynth = callPackage ../applications/audio/fluidsynth {
-    inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreAudio CoreMIDI CoreServices;
   };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };

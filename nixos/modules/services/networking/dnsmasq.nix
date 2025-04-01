@@ -149,7 +149,7 @@ in
           mkdir -m 755 -p ${stateDir}
           touch ${stateDir}/dnsmasq.leases
           chown -R dnsmasq ${stateDir}
-          touch /etc/dnsmasq-{conf,resolv}.conf
+          ${lib.optionalString cfg.resolveLocalQueries "touch /etc/dnsmasq-{conf,resolv}.conf"}
           dnsmasq --test
         '';
         serviceConfig = {
