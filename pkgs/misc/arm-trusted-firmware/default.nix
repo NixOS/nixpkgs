@@ -18,7 +18,7 @@
 }:
 
 let
-  buildArmTrustedFirmware =
+  buildArmTrustedFirmware = lib.makeOverridable (
     {
       filesToInstall,
       installDir ? "$out",
@@ -59,8 +59,11 @@ let
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-        # For Cortex-M0 firmware in RK3399
-        nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+        nativeBuildInputs = [
+          pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
+          openssl # For fiptool
+        ];
+
         # Make the new toolchain guessing (from 2.11+) happy
         # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
         rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
@@ -109,7 +112,8 @@ let
           // extraMeta;
       }
       // builtins.removeAttrs args [ "extraMeta" ]
-    );
+    )
+  );
 
 in
 {
