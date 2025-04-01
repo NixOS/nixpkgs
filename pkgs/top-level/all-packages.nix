@@ -2934,6 +2934,8 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
+  dm-media-converter = libsForQt5.callPackage ../by-name/dm/dm-media-converter/package.nix { };
+
   dmd = callPackage ../by-name/dm/dmd/package.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation;
   } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
