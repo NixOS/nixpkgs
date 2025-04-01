@@ -39,6 +39,14 @@
 
   This partition layout is unsuitable for UEFI.
 
+  #### `legacy+boot`
+
+  The image is partitioned using MBR and:
+  - creates a FAT32 BOOT partition from 1MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
+  - creates a primary ext4 partition starting after the boot partition and extending to the full disk image
+
+  This partition layout is unsuitable for UEFI.
+
   #### `legacy+gpt`
 
   This partition table type uses GPT and:
@@ -106,7 +114,7 @@
   additionalSpace ? "512M",
 
   # size of the boot partition, is only used if partitionTableType is
-  # either "efi" or "hybrid"
+  # either "efi", "hybrid", or "legacy+boot"
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
   bootSize ? "256M",
@@ -197,6 +205,7 @@
 assert (
   lib.assertOneOf "partitionTableType" partitionTableType [
     "legacy"
+    "legacy+boot"
     "legacy+gpt"
     "efi"
     "efixbootldr"
@@ -260,6 +269,7 @@ let
     {
       # switch-case
       legacy = "1";
+      "legacy+boot" = "2";
       "legacy+gpt" = "2";
       efi = "2";
       efixbootldr = "3";
@@ -274,6 +284,14 @@ let
         parted --script $diskImage -- \
           mklabel msdos \
           mkpart primary ext4 1MiB 100% \
+          print
+      '';
+      "legacy+boot" = ''
+        parted --script $diskImage -- \
+          mklabel msdos \
+          mkpart primary fat32 1MiB $bootSizeMiB \
+          set 1 boot on \
+          mkpart primary ext4 $bootSizeMiB 100% \
           print
       '';
       "legacy+gpt" = ''
@@ -541,6 +559,12 @@ let
                 # Add the 1MiB aligned reserved space (includes MBR)
                 reservedSpace=$(( mebibyte ))
               ''
+            else if partitionTableType == "legacy+boot" then
+              ''
+                # The explanation from the above "efi" case applies here too,
+                # but gptSpace is not needed without a GPT.
+                reservedSpace=$(( bootSize ))
+              ''
             else
               ''
                 reservedSpace=0
@@ -695,6 +719,11 @@ let
 
           ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
         ''}
+        ${lib.optionalString (partitionTableType == "legacy+boot") ''
+          mkdir -p /mnt/boot
+          mkfs.vfat -n BOOT /dev/vda1
+          mount /dev/vda1 /mnt/boot
+        ''}
 
         # Install a configuration.nix
         mkdir -p /mnt/etc/nixos
@@ -703,28 +732,37 @@ let
         ''}
 
         ${lib.optionalString installBootLoader ''
-          # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
-          # Use this option to create a symlink from vda to any arbitrary device you want.
-          ${lib.optionalString (config.boot.loader.grub.enable) (
-            lib.concatMapStringsSep " " (
-              device:
-              lib.optionalString (device != "/dev/vda") ''
-                mkdir -p "$(dirname ${device})"
-                ln -s /dev/vda ${device}
+            # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
+            # Use this option to create a symlink from vda to any arbitrary device you want.
+            ${lib.optionalString (config.boot.loader.grub.enable) (
+              lib.concatMapStringsSep " " (
+                device:
+                lib.optionalString (device != "/dev/vda") ''
+                  mkdir -p "$(dirname ${device})"
+                  ln -s /dev/vda ${device}
+                ''
+              ) config.boot.loader.grub.devices
+            )}
+            ${
+              let
+                limine = config.boot.loader.limine;
+              in
+              lib.optionalString (limine.enable && limine.biosSupport && limine.biosDevice != "/dev/vda") ''
+                mkdir -p "$(dirname ${limine.biosDevice})"
+                ln -s /dev/vda ${limine.biosDevice}
               ''
-            ) config.boot.loader.grub.devices
-          )}
+            }
 
-          # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
+            # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
 
-        # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
-        # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
-        # /homeless-shelter to show up in the final image which  in turn breaks
-        # nix builds in the target image if sandboxing is turned off (through
-        # __noChroot for example).
-        export HOME=$TMPDIR
-        NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-      ''}
+          # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
+          # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
+          # /homeless-shelter to show up in the final image which  in turn breaks
+          # nix builds in the target image if sandboxing is turned off (through
+          # __noChroot for example).
+          export HOME=$TMPDIR
+          NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+        ''}
 
         # Set the ownerships of the contents. The modes are set in preVM.
         # No globbing on targets, so no need to set -f
