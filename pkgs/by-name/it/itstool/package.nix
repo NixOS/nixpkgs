@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   python3,
   autoreconfHook,
 }:
@@ -14,6 +15,15 @@ stdenv.mkDerivation rec {
     url = "http://files.itstool.org/${pname}/${pname}-${version}.tar.bz2";
     hash = "sha256-a5p80poSu5VZj1dQ6HY87niDahogf4W3TYsydbJ+h8o=";
   };
+
+  patches = [
+    # https://github.com/itstool/itstool/pull/51
+    (fetchpatch {
+      name = "fix-insufficiently-quoted-regular-expressions-pr51";
+      url = "https://github.com/itstool/itstool/commit/19f9580f27aa261ea383b395fdef7e153f3f9e6d.patch";
+      hash = "sha256-5J4mRXQu24o2rqVtaXN/ETgj6A8R0Ym+YkZhqhZTzIc=";
+    })
+  ];
 
   strictDeps = true;
 
