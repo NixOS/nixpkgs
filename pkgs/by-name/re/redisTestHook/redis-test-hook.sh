@@ -22,6 +22,9 @@ redisStart() {
   REDIS_PID=$!
 
   echo 'waiting for redis to be ready'
+  until [[ -S "$REDIS_SOCKET" ]] ; do
+    sleep 1
+  done
   while ! @cli@ --scan -s "$REDIS_SOCKET" ; do
     sleep 1
   done
