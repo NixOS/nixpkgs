@@ -3,10 +3,9 @@
   fetchFromGitHub,
   buildGoModule,
   go_1_24,
-  testers,
-  openbao,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule.override { go = go_1_24; } rec {
@@ -42,17 +41,6 @@ buildGoModule.override { go = go_1_24; } rec {
     mv $out/bin/openbao $out/bin/bao
   '';
 
-  # TODO: Enable the NixOS tests after adding OpenBao as a NixOS service in an upcoming PR and
-  # adding NixOS tests
-  #
-  # passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
-
-  passthru.tests.version = testers.testVersion {
-    package = openbao;
-    command = "HOME=$(mktemp -d) bao --version";
-    version = "v${version}";
-  };
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -61,6 +49,7 @@ buildGoModule.override { go = go_1_24; } rec {
   doInstallCheck = true;
 
   passthru = {
+    tests = { inherit (nixosTests) openbao; };
     updateScript = nix-update-script { };
   };
 

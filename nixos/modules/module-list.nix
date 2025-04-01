@@ -1415,6 +1415,7 @@
   ./services/security/nginx-sso.nix
   ./services/security/oauth2-proxy.nix
   ./services/security/oauth2-proxy-nginx.nix
+  ./services/security/openbao.nix
   ./services/security/opensnitch.nix
   ./services/security/paretosecurity.nix
   ./services/security/pass-secret-service.nix
