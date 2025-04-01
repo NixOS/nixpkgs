@@ -16822,6 +16822,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-foldsearch = buildVimPlugin {
+    pname = "vim-foldsearch";
+    version = "2024-05-15";
+    src = fetchFromGitHub {
+      owner = "embear";
+      repo = "vim-foldsearch";
+      rev = "c67bc8b40f8d38bf5eb6e51cc631be6b682ac1b6";
+      sha256 = "1cc2d4wpw16a9fcdaqjhxlz4v5qyh7945f596yxl6g81y031zmal";
+    };
+    meta.homepage = "https://github.com/embear/vim-foldsearch/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-ft-diff_fold = buildVimPlugin {
     pname = "vim-ft-diff_fold";
     version = "2013-02-10";
