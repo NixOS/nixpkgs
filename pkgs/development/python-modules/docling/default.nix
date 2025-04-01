@@ -23,7 +23,7 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
   pylatexenc,
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
     pylatexenc
