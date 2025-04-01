@@ -191,10 +191,14 @@ rec {
       # definition values and locations (e.g. [ { file = "/foo.nix";
       # value = 1; } { file = "/bar.nix"; value = 2 } ]).
       merge ? mergeDefaultOption
-
-    , #
-      # This field does not have a default implementation, so that users' changes
-      # to `check` and `merge` are propagated.
+    , # 'checkAndMerge' replaces 'merge' and 'check'. It is called with the same arguments as 'merge'.
+      # If specified, 'merge' and 'check' are ignored.
+      # Instead of returning the plain merged value it returns an envelope:
+      # `{ value = ...; valueMeta = ... }`
+      # Where 'value' contains the merged value and 'valueMeta' contains
+      # metadata about the merged value.
+      # This is useful for introspection to see where a value came from.
+      # For practical examples see i.e `types.attrsOf` and `types.submodule`.
       checkAndMerge ? null
     , # Whether this type has a value representing nothingness. If it does,
       # this should be a value of the form { value = <the nothing value>; }
