@@ -17199,6 +17199,8 @@ self: super: with self; {
 
   tmb = callPackage ../development/python-modules/tmb { };
 
+  tnefparse = callPackage ../development/python-modules/tnefparse { };
+
   todoist = callPackage ../development/python-modules/todoist { };
 
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
