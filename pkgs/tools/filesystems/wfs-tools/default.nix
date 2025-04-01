@@ -1,12 +1,4 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  fuse,
-  unzip,
-  autoPatchelfHook,
-}:
+{ lib, stdenv, fetchurl, makeWrapper, fuse, unzip, autoPatchelfHook }:
 stdenv.mkDerivation rec {
   pname = "wfs-tools";
   version = "1.2.3";
@@ -16,16 +8,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-lISRaVl39tr7ZD2yLyFaQ/2iyr1WJsWiXsqfOSe1lBU=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    unzip
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
 
-  buildInputs = [ 
-    fuse 
-    stdenv.cc.cc.lib  # Add the C runtime library
-  ];
+  buildInputs = [ fuse stdenv.cc.cc.lib ]; # Add the C runtime library
 
   unpackPhase = ''
     mkdir -p $out/bin
