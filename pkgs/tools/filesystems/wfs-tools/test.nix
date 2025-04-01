@@ -1,5 +1,8 @@
-{ lib, stdenv, wfs-tools }:
-
+{
+  lib,
+  stdenv,
+  wfs-tools,
+}:
 stdenv.mkDerivation {
   name = "wfs-tools-test";
 
