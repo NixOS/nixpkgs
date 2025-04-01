@@ -1,13 +1,117 @@
 {
   lib,
   stdenv,
-  python312,
+  buildPythonPackage,
   fetchFromGitHub,
   gitMinimal,
   portaudio,
   playwright-driver,
   symlinkJoin,
   nltk-data,
+  pythonOlder,
+  pythonAtLeast,
+  setuptools-scm,
+  aiohappyeyeballs,
+  aiohttp,
+  aiosignal,
+  annotated-types,
+  anyio,
+  attrs,
+  backoff,
+  beautifulsoup4,
+  certifi,
+  cffi,
+  charset-normalizer,
+  click,
+  configargparse,
+  diff-match-patch,
+  diskcache,
+  distro,
+  filelock,
+  flake8,
+  frozenlist,
+  fsspec,
+  gitdb,
+  gitpython,
+  grep-ast,
+  h11,
+  httpcore,
+  httpx,
+  huggingface-hub,
+  idna,
+  importlib-resources,
+  jinja2,
+  jiter,
+  json5,
+  jsonschema,
+  jsonschema-specifications,
+  litellm,
+  markdown-it-py,
+  markupsafe,
+  mccabe,
+  mdurl,
+  multidict,
+  networkx,
+  numpy,
+  openai,
+  packaging,
+  pathspec,
+  pexpect,
+  pillow,
+  prompt-toolkit,
+  psutil,
+  ptyprocess,
+  pycodestyle,
+  pycparser,
+  pydantic,
+  pydantic-core,
+  pydub,
+  pyflakes,
+  pygments,
+  pypandoc,
+  pyperclip,
+  python-dotenv,
+  pyyaml,
+  referencing,
+  regex,
+  requests,
+  rich,
+  rpds-py,
+  scipy,
+  smmap,
+  sniffio,
+  sounddevice,
+  socksio,
+  soundfile,
+  soupsieve,
+  tiktoken,
+  tokenizers,
+  tqdm,
+  tree-sitter,
+  tree-sitter-language-pack,
+  typing-extensions,
+  typing-inspection,
+  urllib3,
+  watchfiles,
+  wcwidth,
+  yarl,
+  zipp,
+  pip,
+  mixpanel,
+  monotonic,
+  posthog,
+  propcache,
+  python-dateutil,
+  pytestCheckHook,
+  greenlet,
+  playwright,
+  pyee,
+  streamlit,
+  llama-index-core,
+  llama-index-embeddings-huggingface,
+  torch,
+  nltk,
+  boto3,
 }:
 
 let
@@ -19,12 +123,14 @@ let
     ];
   };
 
-  python3 = python312;
   version = "0.80.0";
-  aider-chat = python3.pkgs.buildPythonPackage {
+  aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
     pyproject = true;
+
+    # needs exactly Python 3.12
+    disabled = pythonOlder "3.12" || pythonAtLeast "3.13";
 
     src = fetchFromGitHub {
       owner = "Aider-AI";
@@ -35,9 +141,9 @@ let
 
     pythonRelaxDeps = true;
 
-    build-system = with python3.pkgs; [ setuptools-scm ];
+    build-system = [ setuptools-scm ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = [
       aiohappyeyeballs
       aiohttp
       aiosignal
@@ -135,7 +241,10 @@ let
 
     buildInputs = [ portaudio ];
 
-    nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ]) ++ [ gitMinimal ];
+    nativeCheckInputs = [
+      pytestCheckHook
+      gitMinimal
+    ];
 
     disabledTestPaths = [
       # Tests require network access
@@ -182,7 +291,7 @@ let
       export AIDER_ANALYTICS="false"
     '';
 
-    optional-dependencies = with python3.pkgs; {
+    optional-dependencies = {
       playwright = [
         greenlet
         playwright

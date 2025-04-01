@@ -95,6 +95,9 @@
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
   ],
@@ -118,6 +121,9 @@
   ],
   "sec-nixpkgs-release-25.05-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"

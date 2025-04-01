@@ -68,6 +68,8 @@ let
 
       runHook postInstall
     '';
+
+    dontCheckForBrokenSymlinks = true;
   };
 
   linux = stdenv.mkDerivation {
@@ -116,6 +118,8 @@ let
 
       runHook postInstall
     '';
+
+    dontCheckForBrokenSymlinks = true;
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

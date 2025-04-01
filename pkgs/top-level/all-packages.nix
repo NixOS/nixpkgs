@@ -170,17 +170,17 @@ with pkgs;
     } ../build-support/setup-hooks/add-bin-to-path.sh
   ) { };
 
-  aider-chat = with python3Packages; toPythonApplication aider-chat;
+  aider-chat = with python312Packages; toPythonApplication aider-chat;
 
-  aider-chat-with-playwright = with python3Packages; toPythonApplication (aider-chat.withOptional { withPlaywright = true; });
+  aider-chat-with-playwright = with python312Packages; toPythonApplication (aider-chat.withOptional { withPlaywright = true; });
 
-  aider-chat-with-browser = with python3Packages; toPythonApplication (aider-chat.withOptional { withBrowser = true; });
+  aider-chat-with-browser = with python312Packages; toPythonApplication (aider-chat.withOptional { withBrowser = true; });
 
-  aider-chat-with-help = with python3Packages; toPythonApplication (aider-chat.withOptional { withHelp = true; });
+  aider-chat-with-help = with python312Packages; toPythonApplication (aider-chat.withOptional { withHelp = true; });
 
-  aider-chat-with-bedrock = with python3Packages; toPythonApplication (aider-chat.withOptional { withBedrock = true; });
+  aider-chat-with-bedrock = with python312Packages; toPythonApplication (aider-chat.withOptional { withBedrock = true; });
 
-  aider-chat-full = with python3Packages; toPythonApplication (aider-chat.withOptional { withAll = true; });
+  aider-chat-full = with python312Packages; toPythonApplication (aider-chat.withOptional { withAll = true; });
 
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
@@ -4138,8 +4138,6 @@ with pkgs;
   nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
   nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
-
-  nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
