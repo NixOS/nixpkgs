@@ -227,7 +227,7 @@ in
   ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = runTest ./babeld.nix;
   bazarr = runTest ./bazarr.nix;
-  bcachefs = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcachefs.nix { };
+  bcachefs = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcachefs.nix;
   beanstalkd = handleTest ./beanstalkd.nix { };
   bees = handleTest ./bees.nix { };
   benchexec = handleTest ./benchexec.nix { };
