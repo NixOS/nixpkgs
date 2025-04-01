@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "tika";
-  version = "2.6.0";
+  version = "3.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VmcOuBKUTrJe1z8bOwdapB56E1t0skCCLyi4GeWzc9o=";
+    hash = "sha256-TDpATD2EZDfJQtam/Xtx1QKFaQ+uVImqim8A/5zND8c=";
   };
 
   propagatedBuildInputs = [
