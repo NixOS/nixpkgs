@@ -1,0 +1,17 @@
+diff --git a/src/syscalls/realloc.c b/src/syscalls/realloc.c
+index 9bdb3fa..9370421 100644
+--- a/src/syscalls/realloc.c
++++ b/src/syscalls/realloc.c
+@@ -39,11 +39,11 @@ void __attribute__((alloc_size(2))) *FTLrealloc(void *ptr_in, const size_t size,
+ 
+ 	// Handle other errors than EINTR
+ 	if(ptr_out == NULL)
+-		logg("FATAL: Memory reallocation (%p -> %zu) failed in %s() (%s:%i)",
+-		     ptr_in, size, func, file, line);
++		logg("FATAL: Memory reallocation (%zu) failed in %s() (%s:%i)",
++		     size, func, file, line);
+ 
+ 	// Restore errno value
+ 	errno = _errno;
+ 
+ 	return ptr_out;
