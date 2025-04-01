@@ -24128,8 +24128,8 @@ with self; {
     pname = "TAP-Parser-SourceHandler-pgTAP";
     version = "3.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.36.tar.gz";
-      hash = "sha256-B75RUy4GPqxu2OWBUFRw7ryB1VBkQa8tzzK8Dr7pjGc=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.37.tar.gz";
+      hash = "sha256-bpKFgUQqHmhxMfe11vT/RLf43N95jS0Ha9zQfYt6WX0=";
     };
     doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
