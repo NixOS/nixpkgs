@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, fuse
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  fuse,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-lISRaVl39tr7ZD2yLyFaQ/2iyr1WJsWiXsqfOSe1lBU=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   buildInputs = [ fuse ];
 
@@ -42,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ Hyphastorm ];
     platforms = platforms.linux;
   };
-} 
+}

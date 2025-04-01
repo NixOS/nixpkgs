@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, wfs-tools
+{
+  lib,
+  stdenv,
+  wfs-tools,
 }:
 
 stdenv.mkDerivation {
@@ -16,4 +17,4 @@ stdenv.mkDerivation {
 
     touch $out
   '';
-} 
+}
