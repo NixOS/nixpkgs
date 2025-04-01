@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    maintainers = [ lib.maintainers.jerith666 ];
   };
 
 }
