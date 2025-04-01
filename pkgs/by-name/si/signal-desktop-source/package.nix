@@ -1,9 +1,9 @@
 {
   stdenv,
   lib,
-  nodejs_20,
+  nodejs_22,
   pnpm_10,
-  electron_34,
+  electron_35,
   python3,
   makeWrapper,
   callPackage,
@@ -20,9 +20,9 @@
   withAppleEmojis ? false,
 }:
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   pnpm = pnpm_10;
-  electron = electron_34;
+  electron = electron_35;
 
   electron-headers = runCommand "electron-headers" { } ''
     mkdir -p $out
@@ -34,10 +34,10 @@ let
 
   ringrtc = stdenv.mkDerivation (finalAttrs: {
     pname = "ringrtc-bin";
-    version = "2.50.1";
+    version = "2.50.2";
     src = fetchzip {
       url = "https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v${finalAttrs.version}.tar.gz";
-      hash = "sha256-KHNTw5ScBdYAAyKFdJ6PTmFr+7GYHqgnb4mmNUJZvzM=";
+      hash = "sha256-hNlz+gSulyJ//FdbPvY/5OHbtJ4rEUdi9/SHJDX6gZE=";
     };
 
     installPhase = ''
@@ -77,13 +77,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop-source";
-  version = "7.46.0";
+  version = "7.48.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pV28jcIQcPjyZL8q+gisnlfAGf0SOKDQ7OxacTM3B0M=";
+    hash = "sha256-/jtuGsBOFsSgJZNpRilWZ0daI0iYVziZBaF/vLvQ7NU=";
   };
 
   nativeBuildInputs = [
@@ -110,9 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-keG+ymMD4ma0dt6N4Fai9u0+rh9VzkQD6tClPKoQXkM="
+        "sha256-xba5MfIjwnLHDKVM9+2KSpC3gcw6cM4cX3dn3/jqT3o="
       else
-        "sha256-qImY0s8UQmuKGf8dvgO3YrJlrqqdoZtvbtLgvgMVnnE=";
+        "sha256-I5UGY9Fz4wCa23snq0pir2uq/P+w+fAGU4Bks+CqEgk=";
   };
 
   env = {
