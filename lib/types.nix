@@ -91,6 +91,9 @@ let
     The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${lib.optionalString (loc != null) "of the option `${showOption loc}` "}is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
   '' payload.elemType;
 
+  # Custom that doesn't abort if NIX_ABORT_ON_WARN is set.
+  # This is needed for deprecations that are to big to change at once
+  deprecated = msg: v: builtins.trace "[1;35mDeprecation warning:[0m ${msg}" v;
 
   outer_types =
 rec {
@@ -904,8 +907,13 @@ rec {
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
-    submodule = modules: submoduleWith {
+    submodule = deprecated "lib.types.submodule is deprecated, use lib.types.module instead" (modules: submoduleWith {
       shorthandOnlyDefinesConfig = true;
+      modules = toList modules;
+    });
+
+    # Shorthand of moduleWith { modules = ...; }
+    module = modules: moduleWith {
       modules = toList modules;
     };
 
@@ -968,7 +976,8 @@ rec {
         in mergedOption.type;
     };
 
-    submoduleWith =
+    submoduleWith = deprecated "lib.types.submoduleWith is deprecated, use types.moduleWith instead." moduleWith;
+    moduleWith =
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
