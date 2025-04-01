@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   python3,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +17,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    python3
-    python3.pkgs.wrapPython
-  ];
+  postPatch = ''
+    # Do not let autoconf find Python, but set it directly. This fixes cross-compilation.
+    substituteInPlace configure.ac \
+      --replace-fail 'AM_PATH_PYTHON([2.6])' "" \
+      --replace-fail 'AC_MSG_ERROR(Python module $py_module is needed to run this package)' ""
+    substituteInPlace itstool.in \
+      --replace-fail "@PYTHON@" "${python3.interpreter}"
+  '';
 
-  buildInputs = [
-    python3
-    python3.pkgs.libxml2
+  nativeBuildInputs = [
+    autoreconfHook
+    python3.pkgs.wrapPython
   ];
 
   pythonPath = [
