@@ -13326,6 +13326,8 @@ self: super: with self; {
 
   pyspellchecker = callPackage ../development/python-modules/pyspellchecker { };
 
+  pyspelling = callPackage ../development/python-modules/pyspelling { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pyspice = callPackage ../development/python-modules/pyspice { };
