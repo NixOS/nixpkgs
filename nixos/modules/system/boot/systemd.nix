@@ -121,6 +121,8 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
+      "systemd-soft-reboot.service"
+      "soft-reboot.target"
     ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
 
       # Password entry.
@@ -698,6 +700,20 @@ in
         create = "0664 root ${config.users.groups.utmp.name}";
         minsize = "1M";
       };
+    };
+
+    # make sure /run/next-system isn't garbage collected before the next boot
+    systemd.tmpfiles.rules = [ "L+ /nix/var/nix/gcroots/next-system - - - - /run/next-system" ];
+
+    # if /run/next-system exists, activate it before  rebooting
+    systemd.services.systemd-soft-reboot-activate-next-system = {
+      wantedBy = [ "soft-reboot.target" ];
+      before = [ "systemd-soft-reboot.service" ];
+      unitConfig = {
+        DefaultDependencies = false;
+        ConditionPathExists = "/run/next-system/activate";
+      };
+      serviceConfig.ExecStart = "/run/next-system/activate";
     };
   };
 
