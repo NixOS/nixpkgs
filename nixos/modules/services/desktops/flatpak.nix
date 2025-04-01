@@ -103,8 +103,8 @@ in
         };
       };
 
-      remote = lib.mkOption {
-        type = lib.types.nullOr (
+      remotes = lib.mkOption {
+        type = lib.types.listOf (
           lib.types.submodule {
             options = {
               name = lib.mkOption {
@@ -118,12 +118,18 @@ in
             };
           }
         );
-        default = null;
-        example = {
-          name = "flathub";
-          url = "https://flathub.org/repo/flathub.flatpakrepo";
-        };
-        description = "Flatpak remote to add. If null, no remote will be added automatically.";
+        default = [ ];
+        example = [
+          {
+            name = "flathub";
+            url = "https://flathub.org/repo/flathub.flatpakrepo";
+          }
+          {
+            name = "gnome";
+            url = "https://sdk.gnome.org/repo/flatpak/gnome-nightly.flatpakrepo";
+          }
+        ];
+        description = "List of Flatpak remotes to add.";
       };
     };
   };
@@ -157,7 +163,21 @@ in
 
     # Activation script for installation and optionally updating during build
     system.activationScripts.flatpak-setup = ''
-      echo "Managing Flatpak packages..."
+      set -eou pipefail
+
+      # Handle remotes
+      for remote in ${toString cfg.remotes}; do
+        remote_name=$(echo $remote | jq -r .name)
+        remote_url=$(echo $remote | jq -r .url)
+        if ! ${flatpakCommand} remotes | grep -q "^$remote_name"; then
+          echo "Adding Flatpak remote: $remote_name"
+          ${flatpakCommand} remote-add --if-not-exists "$remote_name" "$remote_url"
+        else
+          echo "Flatpak remote already exists: $remote_name"
+        fi
+      done
+
+      echo "Installing specified Flatpak packages..."
       ${manageFlatpaks}
     '';
 

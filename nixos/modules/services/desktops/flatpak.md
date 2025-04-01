@@ -32,6 +32,16 @@ Flatpak packages to be installed or removed through your {file}`configuration.ni
 {
   services.flatpak = {
     enable = true;
+    remotes = [
+      {
+        name = "flathub";
+        url = "https://flathub.org/repo/flathub.flatpakrepo";
+      }
+      {
+        name = "gnome";
+        url = "https://sdk.gnome.org/repo/flatpak/gnome-nightly.flatpakrepo";
+      }
+    ];
     packages = [ "org.blender.Blender" "net.ankiweb.Anki" ];
     removeUnmanagedPackages = true;
     update = {
@@ -41,21 +51,17 @@ Flatpak packages to be installed or removed through your {file}`configuration.ni
       };
       duringBuild = false;
     };
-    remote = {
-      name = "flathub";
-      url = "https://flathub.org/repo/flathub.flatpakrepo";
-    };
   };
 }
 ```
 
 This example configuration will:
 - Enable Flatpak
+- Add the specified Flatpak remotes (Flathub and GNOME nightly in this example)
 - Ensure the specified packages are installed (Blender and Anki in this example)
 - Remove any Flatpak packages not listed in the `packages` option (if `removeUnmanagedPackages` is true)
 - Enable automatic weekly updates of Flatpak packages
 - Disable package updates when building your system
-- Add the Flathub remote repository
 
 Important notes:
 - Package versions are managed by Flatpak's servers, not nixpkgs.
@@ -63,7 +69,6 @@ Important notes:
 - The `update.auto.enable` option defaults to `false`. When set to `true`, it allows automatic updates of installed Flatpak packages.
 - The `update.auto.onCalendar` option uses systemd calendar syntax. If not set, no timer will be created even if `update.auto.enable` is `true`.
 - The `update.duringBuild` option defaults to `false`. When set to `true`, it updates Flatpak packages during system rebuild.
-- The `remote` option is `null` by default. If set, it adds the specified Flatpak remote repository. If `null`, no remote will be added automatically.
 
 Be aware that while Flatpak packages are managed through NixOS, they operate in a somewhat separate environment. If you encounter issues with a Flatpak package:
 - First, check if the issue is related to NixOS configuration, such as missing portals or system dependencies.
