@@ -15,7 +15,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp-igd";
   version = "1.2.0";
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
+    url = "mirror://gnome/sources/gupnp-igd/${lib.versions.majorMinor finalAttrs.version}/gupnp-igd-${finalAttrs.version}.tar.xz";
+    hash = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
   depsBuildBuild = [
@@ -56,20 +56,20 @@ stdenv.mkDerivation rec {
 
   # Seems to get stuck sometimes.
   # https://github.com/NixOS/nixpkgs/issues/119288
-  #doCheck = true;
+  # doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gupnp-igd";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle UPnP IGD port mapping";
     homepage = "http://www.gupnp.org/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})
