@@ -33,17 +33,21 @@ runTest (
 
           services.nextcloud.config.dbtype = "sqlite";
 
-          services.nextcloud.config.objectstore.s3 = {
-            enable = true;
-            bucket = "nextcloud";
-            autocreate = true;
-            key = accessKey;
-            secretFile = "${pkgs.writeText "secretKey" secretKey}";
-            hostname = "nextcloud";
-            useSsl = false;
-            port = 9000;
-            usePathStyle = true;
-            region = "us-east-1";
+          services.nextcloud = {
+            settings.objectstore = {
+              class = "\\OC\\Files\\ObjectStore\\S3";
+              arguments = {
+                bucket = "nextcloud";
+                autocreate = true;
+                key = accessKey;
+                hostname = "nextcloud";
+                use_ssl = false;
+                port = 9000;
+                use_path_style = true;
+                region = "us-east-1";
+              };
+            };
+            secretFile = "/etc/nextcloud-secrets.json";
           };
 
           services.minio = {
@@ -52,6 +56,19 @@ runTest (
             consoleAddress = "0.0.0.0:9001";
             inherit rootCredentialsFile;
           };
+
+          # This file is meant to contain secret options which should
+          # not go into the nix store. Here it is just used to set the
+          # objectstore secret.
+          environment.etc."nextcloud-secrets.json".text = ''
+            {
+              "objectstore": {
+                "arguments": {
+                  "secret": "${secretKey}"
+                }
+              }
+            }
+          '';
         };
     };
 
