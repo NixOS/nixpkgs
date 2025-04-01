@@ -398,8 +398,8 @@ in {
   fider = runTest ./fider.nix;
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
-  firefly-iii = handleTest ./firefly-iii.nix {};
-  firefly-iii-data-importer = handleTest ./firefly-iii-data-importer.nix {};
+  firefly-iii = runTest ./firefly-iii.nix;
+  firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
   firefox = runTest {
     imports = [./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox;
