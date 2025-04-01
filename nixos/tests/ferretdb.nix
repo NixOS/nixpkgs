@@ -8,14 +8,11 @@ let
     machine.start()
     machine.wait_for_unit("ferretdb.service")
     machine.wait_for_open_port(27017)
-    machine.succeed("mongosh --eval 'use myNewDatabase;' --eval 'db.myCollection.insertOne( { x: 1 } );'")
+    machine.succeed("mongosh -u ferretdb -p ferretdb --eval 'use myNewDatabase;' --eval 'db.myCollection.insertOne( { x: 1 } );'")
   '';
 in
 with import ../lib/testing-python.nix { inherit system; };
-{
-
-  postgresql = makeTest
-    {
+    makeTest {
       inherit testScript;
       name = "ferretdb-postgresql";
       meta.maintainers = with lib.maintainers; [ julienmalka ];
@@ -40,24 +37,14 @@ with import ../lib/testing-python.nix { inherit system; };
               name = "ferretdb";
               ensureDBOwnership = true;
             }];
+            extensions =
+              ps: with ps; [
+                documentdb-ferretdb
+                pg_cron
+              ];
+            settings.shared_preload_libraries = "pg_cron,pg_documentdb_core,pg_documentdb";
           };
 
           environment.systemPackages = with pkgs; [ mongosh ];
         };
-    };
-
-  sqlite = makeTest
-    {
-      inherit testScript;
-      name = "ferretdb-sqlite";
-      meta.maintainers = with lib.maintainers; [ julienmalka ];
-
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          services.ferretdb.enable = true;
-
-          environment.systemPackages = with pkgs; [ mongosh ];
-        };
-    };
-}
+    }
