@@ -769,6 +769,7 @@ mapAliases ({
   webhelpers = throw "webhelpers has been removed because it is unmaintained and upstream is gone"; # added 2024-07-27
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
+  wsnsimpy = throw "wsnsimpy has been removed, it was unmaintained and no more compatible with Python 3.12"; # added 2025-04-01
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_2 = wxpython; # added 2024-01-07
