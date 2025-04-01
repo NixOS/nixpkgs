@@ -270,6 +270,13 @@ rec {
   # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
+    mkTypeError = {
+      msg,
+    }@error: setType "option-type-error" error;
+
+    isTypeError = isType "option-type-error";
+
+
     raw = mkOptionType {
       name = "raw";
       description = "raw value";
@@ -614,8 +621,32 @@ rec {
               else
                 isString x # Do not allow a true path, which could be copied to the store later on.
             );
+            checks = [
+              {
+                msg = "inStore";
+                value = inStore;
+                expected = isInStore;
+              }
+              {
+                msg = "absolute";
+                value = absolute;
+                expected = isAbsolute;
+              }
+              {
+                msg = "expected type: " + (if inStore == null || inStore then "stringLike" else "string") + " but got: " + builtins.typeOf x;
+                value = isExpectedType;
+                expected = true;
+              }
+            ];
+
+            result = isExpectedType && (inStore == null || inStore == isInStore) && (absolute == null || absolute == isAbsolute);
           in
-            isExpectedType && (inStore == null || inStore == isInStore) && (absolute == null || absolute == isAbsolute);
+            if result then result else
+            mkTypeError {
+              msg = builtins.foldl' (
+                res: check: if check.value != check.expected then res + "\n" + check.msg else res
+              ) " " checks;
+            };
           };
 
     listOf = elemType: mkOptionType rec {

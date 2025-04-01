@@ -53,6 +53,7 @@ let
     isOption
     mkOption
     showDefs
+    showDefsWith
     showFiles
     showOption
     unknownModule
@@ -959,9 +960,13 @@ let
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
-        else let allInvalid = filter (def: ! type.check def.value) defsFinal;
-        in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+        # check returns either true or isTypeError def.value = false
+        if all (def: let checkRes = type.check def.value; in types.isTypeError checkRes == false && checkRes) defsFinal then type.merge loc defsFinal
+        else let allInvalid = filter (def: let checkRes = type.check def.value; in types.isTypeError checkRes || ! checkRes ) defsFinal;
+        in throw ''A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefsWith {
+          defs = allInvalid;
+          getMsg = def: let check = (type.check def.value); in if types.isTypeError check then check.msg else "";
+        }}''
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
