@@ -4005,6 +4005,8 @@ self: super: with self; {
     loguru-cpp = pkgs.loguru;
   };
 
+  docling-serve = callPackage ../development/python-modules/docling-serve { };
+
   docloud = callPackage ../development/python-modules/docloud { };
 
   docopt = callPackage ../development/python-modules/docopt { };
