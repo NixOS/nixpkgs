@@ -7,15 +7,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zzuf";
   version = "0.15";
 
   src = fetchFromGitHub {
     owner = "samhocevar";
     repo = "zzuf";
-    rev = "v${version}";
-    sha256 = "0li1s11xf32dafxq1jbnc8c63313hy9ry09dja2rymk9mza4x2n9";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yYpO1K9pVp+Fki0Bn5OHI4xhGGJ2yYC7U00M10PQIVI=";
   };
 
   patches = [
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transparent application input fuzzer";
     homepage = "http://caca.zoy.org/wiki/zzuf";
-    license = licenses.wtfpl;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lihop ];
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lihop ];
   };
-}
+})
