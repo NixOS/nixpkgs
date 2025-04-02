@@ -99,6 +99,9 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+  # Required for tests that need networking
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org";
