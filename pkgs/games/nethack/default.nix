@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
+      -e 's,/usr/bin/true,${coreutils}/bin/true,g' \
       -i sys/unix/hints/macosx10.14
     sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
