@@ -32,13 +32,13 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    hash = "sha256-Jb+Y/Cbapw2ZCXMwXMw1hsy0vT/K8mM/A/Z1all7y+A=";
+    hash = "sha256-Qb9GMAFjQBsPItwkiWSMWv8WJyc5hOz9Yrq5PPOFVQo=";
   };
 
   buildTools = [ hpack ];
