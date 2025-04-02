@@ -212,8 +212,8 @@ in
     };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
-      "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
-      "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+      net.ipv4.conf.all.forwarding = mkOverride 97 true;
+      net.ipv6.conf.all.forwarding = mkOverride 97 true;
     };
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];

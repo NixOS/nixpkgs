@@ -30,7 +30,7 @@ import ./make-test-python.nix (
           device = "/root/swapfile";
         }
       ];
-      boot.kernel.sysctl."vm.swappiness" = 60;
+      boot.kernel.sysctl.vm.swappiness = 60;
     };
 
     testScript = ''

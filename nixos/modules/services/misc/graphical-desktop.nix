@@ -25,8 +25,8 @@ in
     # Nowadays most apps require a good number of inotify watches,
     # the value below is used by default on several other distros.
     boot.kernel.sysctl = {
-      "fs.inotify.max_user_instances" = lib.mkDefault 524288;
-      "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+      fs.inotify.max_user_instances = lib.mkDefault 524288;
+      fs.inotify.max_user_watches = lib.mkDefault 524288;
     };
 
     environment = {

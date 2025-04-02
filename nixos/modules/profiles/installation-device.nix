@@ -104,7 +104,7 @@ with lib;
     # fairly often, preventing processes such as nix-worker or
     # download-using-manifests.pl from forking even if there is
     # plenty of free memory.
-    boot.kernel.sysctl."vm.overcommit_memory" = "1";
+    boot.kernel.sysctl.vm.overcommit_memory = 1;
 
     # To speed up installation a little bit, include the complete
     # stdenv in the Nix store on the CD.

@@ -243,8 +243,8 @@ in
         "xt_nat"
       ];
       boot.kernel.sysctl = {
-        "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
-        "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
+        net.ipv4.conf.all.forwarding = mkOverride 98 true;
+        net.ipv4.conf.default.forwarding = mkOverride 98 true;
       };
       environment.systemPackages = [ cfg.package ] ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;

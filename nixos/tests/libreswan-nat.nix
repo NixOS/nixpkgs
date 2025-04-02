@@ -112,10 +112,10 @@ in
 
       boot.kernel.sysctl = {
         # enable forwarding packets
-        "net.ipv6.conf.all.forwarding" = 1;
-        "net.ipv4.conf.all.forwarding" = 1;
+        net.ipv6.conf.all.forwarding = true;
+        net.ipv4.conf.all.forwarding = true;
         # enable NDP proxy for VPN clients
-        "net.ipv6.conf.all.proxy_ndp" = 1;
+        net.ipv6.conf.all.proxy_ndp = true;
       };
 
       services.libreswan.configSetup = "listen-tcp=yes";
