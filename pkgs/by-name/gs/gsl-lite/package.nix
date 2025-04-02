@@ -7,15 +7,14 @@
   installCompatHeader ? false,
   installLegacyHeaders ? false,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsl-lite";
   version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "gsl-lite";
     repo = "gsl-lite";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4CQG+sX/UTQ4zICmDR6YBfapuh0hSqkWk5skZAVAy2o=";
   };
 
@@ -24,22 +23,17 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  cmakeFlags =
-    lib.mapAttrsToList (name: value: ''-DGSL_LITE_OPT_${name}:BOOL=${if value then "ON" else "OFF"}'')
-      {
-        INSTALL_COMPAT_HEADER = installCompatHeader;
-        INSTALL_LEGACY_HEADERS = installLegacyHeaders;
-        BUILD_TESTS = doCheck;
-      };
+  cmakeFlags = [
+    (lib.cmakeBool "GSL_LITE_OPT_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "GSL_LITE_OPT_INSTALL_COMPAT_HEADER" installCompatHeader)
+    (lib.cmakeBool "GSL_LITE_OPT_INSTALL_LEGACY_HEADERS" installLegacyHeaders)
+  ];
 
   # Building tests is broken on Darwin.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    description = ''
-      A single-file header-only version of ISO C++ Guidelines Support Library
-      (GSL) for C++98, C++11, and later
-    '';
+  meta = {
+    description = "Single-file header-only version of ISO C++ GSL";
     longDescription = ''
       gsl-lite is a single-file header-only implementation of the C++ Core
       Guidelines Support Library originally based on Microsoft GSL and adapted
@@ -47,9 +41,9 @@ stdenv.mkDerivation rec {
       C++20.
     '';
     homepage = "https://github.com/gsl-lite/gsl-lite";
-    changelog = "https://github.com/gsl-lite/gsl-lite/blob/${src.rev}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    changelog = "https://github.com/gsl-lite/gsl-lite/blob/${finalAttrs.src.rev}/CHANGES.txt";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.azahi ];
+    platforms = lib.platforms.all;
   };
-}
+})
