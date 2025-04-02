@@ -5,7 +5,6 @@
 }:
 
 {
-  lib,
   stdenv,
   fetchYarnDeps,
   yarnConfigHook,
@@ -29,7 +28,6 @@ let
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-3WvfbhLpp03yP7Nb8bmZXYSlGJuEnBkBuyEzNVkIYZg=";
   };
 in
 stdenv.mkDerivation {
@@ -42,7 +40,7 @@ stdenv.mkDerivation {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${zitadelRepo}/console/yarn.lock";
-    hash = "sha256-+7CFBEKfRsqXbJR+BkLdB+pZ/dEEk4POGwZOVQ1LAUo=";
+    hash = (builtins.fromJSON (builtins.readFile ./source.json)).yarnHash;
   };
 
   nativeBuildInputs = [
