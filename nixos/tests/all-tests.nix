@@ -546,7 +546,6 @@ in
   gotify-server = handleTest ./gotify-server.nix { };
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana { };
-  grafana-agent = handleTest ./grafana-agent.nix { };
   graphite = handleTest ./graphite.nix { };
   grav = runTest ./web-apps/grav.nix;
   graylog = handleTest ./graylog.nix { };
