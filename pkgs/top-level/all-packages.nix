@@ -16940,10 +16940,6 @@ with pkgs;
   };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
 
-  xsd = callPackage ../development/libraries/xsd {
-    stdenv = gcc9Stdenv;
-  };
-
   xmp = callPackage ../applications/audio/xmp {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
   };
