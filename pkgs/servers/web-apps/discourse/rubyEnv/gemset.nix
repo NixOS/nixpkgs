@@ -958,10 +958,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0vwnr6fmxig4pkag86yzbznpxk8ii7rhjz0rrprkqvnymhhfnscz";
+      sha256 = "sha256-54DJ6acP8T2RncEoTXTURhNBUCY6RMBRJuEizQc3wBc=";
       type = "gem";
     };
-    version = "4.27.2";
+    version = "4.27.3";
   };
   guess_html_encoding = {
     groups = [ "default" ];
