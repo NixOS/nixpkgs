@@ -270,7 +270,7 @@ in
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = handleTest ./buildkite-agents.nix { };
   c2fmzq = handleTest ./c2fmzq.nix { };
-  caddy = handleTest ./caddy.nix { };
+  caddy = runTest ./caddy.nix;
   cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
   cage = handleTest ./cage.nix { };
   cagebreak = handleTest ./cagebreak.nix { };
@@ -407,7 +407,14 @@ in
   enlightenment = handleTest ./enlightenment.nix { };
   env = handleTest ./env.nix { };
   envfs = handleTest ./envfs.nix { };
-  envoy = handleTest ./envoy.nix { };
+  envoy = runTest {
+    imports = [ ./envoy.nix ];
+    _module.args.envoyPackage = pkgs.envoy;
+  };
+  envoy-bin = runTest {
+    imports = [ ./envoy.nix ];
+    _module.args.envoyPackage = pkgs.envoy-bin;
+  };
   ergo = handleTest ./ergo.nix { };
   ergochat = handleTest ./ergochat.nix { };
   eris-server = handleTest ./eris-server.nix { };

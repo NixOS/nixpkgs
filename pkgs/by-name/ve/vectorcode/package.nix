@@ -3,6 +3,8 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
+
+  lspSupport ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,20 +23,23 @@ python3Packages.buildPythonApplication rec {
     pdm-backend
   ];
 
-  dependencies = with python3Packages; [
-    chromadb
-    httpx
-    numpy
-    pathspec
-    psutil
-    pygments
-    sentence-transformers
-    shtab
-    tabulate
-    transformers
-    tree-sitter
-    tree-sitter-language-pack
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      chromadb
+      httpx
+      numpy
+      pathspec
+      psutil
+      pygments
+      sentence-transformers
+      shtab
+      tabulate
+      transformers
+      tree-sitter
+      tree-sitter-language-pack
+    ]
+    ++ lib.optionals lspSupport optional-dependencies.lsp;
 
   optional-dependencies = with python3Packages; {
     intel = [
