@@ -197,13 +197,7 @@ stdenvNoCC.mkDerivation {
       sarahec
       aspauldingcode
     ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-    # Temporary: Cursor doesn't supply a 0.47.8 build for aarch64-linux
-    badPlatforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
 }
