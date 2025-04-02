@@ -18654,10 +18654,6 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
-  applgrid = callPackage ../development/libraries/physics/applgrid {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
     python = null;
   };
