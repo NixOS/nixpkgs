@@ -53,6 +53,11 @@ self: super: builtins.intersectAttrs super {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
+  cabal-add = overrideCabal (drv: {
+    # tests depend on executable
+    preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
+  }) super.cabal-add;
+
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
