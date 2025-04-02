@@ -220,9 +220,9 @@
     ]
   },
   "music": {
-    "hash": "sha256-9n934EcAUVaKLfT+QKu53/9PJvTd+SsFa2w1/idLFk0=",
-    "url": "https://github.com/owncloud/music/releases/download/v2.1.2/music_2.1.2_for_nextcloud.tar.gz",
-    "version": "2.1.2",
+    "hash": "sha256-lqWdzi41YZfd8eH8l8Dm46XzgoZJ2CPV3+hzlNyd+v8=",
+    "url": "https://github.com/owncloud/music/releases/download/v2.1.3/music_2.1.3_for_nextcloud.tar.gz",
+    "version": "2.1.3",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Advanced search to freely use and combine dozens of search criteria\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on dozens of external apps on Android, iOS, Windows, Linux, etc.\n- Widget for the Nextcloud Dashboard",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "news": {
-    "hash": "sha256-CAnDrbpXZVISJ4WjAAl7mhZY2t9ohBgPLdf7tGd3aIY=",
-    "url": "https://github.com/nextcloud/news/releases/download/25.3.0/news.tar.gz",
-    "version": "25.3.0",
+    "hash": "sha256-trXnDSSFyr5HKXaS1S3XrlSAUiiT+8B+kP0lg+exLcs=",
+    "url": "https://github.com/nextcloud/news/releases/download/25.3.1/news.tar.gz",
+    "version": "25.3.1",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -330,9 +330,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-Y97Z7ylwTGBFTUAVPhR6+aXIeasv+/U6JcnLYW41CN8=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.10/richdocuments-v8.4.10.tar.gz",
-    "version": "8.4.10",
+    "hash": "sha256-2sO5lj0v73Zo1NB4HLxt+txwlzfs7kbnLXWAsyDriI0=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.11/richdocuments-v8.4.11.tar.gz",
+    "version": "8.4.11",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -409,10 +409,20 @@
       "agpl"
     ]
   },
+  "uppush": {
+    "hash": "sha256-3QD3gtCfhs9tWrbiiPPV7lYxpzGQhc31unSZukcrvN0=",
+    "url": "https://codeberg.org/NextPush/uppush/archive/2.3.0.tar.gz",
+    "version": "2.3.0",
+    "description": "Once the mobile phone is connected with NextPush, push notifications can be forwarded to applications implementing UnifiedPush.\n\nMore information about UnifiedPush at https://unifiedpush.org",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "user_oidc": {
-    "hash": "sha256-jhqch6Gup7774P9seExlwhDGbDv0AK9LEzSEtmFW85A=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.0.0/user_oidc-v7.0.0.tar.gz",
-    "version": "7.0.0",
+    "hash": "sha256-qEsUJG63j+VRZc+tqeX4iTEs9/GIVsTsyeFEOwSBYCg=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v7.1.0/user_oidc-v7.1.0.tar.gz",
+    "version": "7.1.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
