@@ -167,6 +167,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # Versions older than 0.14 do not have a runtime page size feature.
+    broken =
+      lib.versionOlder finalAttrs.version "0.14"
+      && stdenv.hostPlatform.pageSize.min > 4096
+      && !stdenv.hostPlatform.isDarwin;
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";

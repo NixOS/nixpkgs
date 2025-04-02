@@ -56,7 +56,7 @@ let
       ++ map (x: "gccarch-${x}") (
         systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
       )
-    );
+    ) ++ map (v: "pages-${builtins.toString (v / 1024)}") pkgs.stdenv.hostPlatform.pageSize.range;
 
   legacyConfMappings = {
     useSandbox = "sandbox";

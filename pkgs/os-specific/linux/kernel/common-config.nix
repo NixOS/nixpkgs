@@ -1454,7 +1454,23 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
-      };
+      }
+      //
+        lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.isPower)
+          (
+            let
+              key =
+                if stdenv.hostPlatform.isPower then
+                  "PPC"
+                else if stdenv.hostPlatform.isAarch64 then
+                  "ARM64"
+                else
+                  throw "Not supported";
+            in
+            {
+              "${key}_${builtins.toString (stdenv.hostPlatform.pageSize.min / 1024)}K_PAGES" = yes;
+            }
+          );
 
     accel = {
       # Build DRM accelerator devices

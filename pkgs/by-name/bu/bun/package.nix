@@ -121,7 +121,9 @@ stdenvNoCC.mkDerivation rec {
     platforms = builtins.attrNames passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/280716
-    broken = stdenvNoCC.hostPlatform.isMusl;
+    # Broken on systems with page sizes > 16k
+    # https://github.com/oven-sh/bun/issues/6241
+    broken = stdenvNoCC.hostPlatform.isMusl || stdenvNoCC.hostPlatform.pageSize.min > 16384;
 
     # Hangs when run via Rosetta 2 on Apple Silicon
     hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;

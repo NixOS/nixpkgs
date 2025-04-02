@@ -424,6 +424,24 @@ rec {
 
   ################################################################################
 
+  types.openPageSize = mkOptionType {
+    name = "pageSize";
+    description = "4k aligned page size value";
+    merge = mergeOneOption;
+    check = x: (x / 4096) > 0;
+  };
+
+  types.pageSize = enum (attrValues pageSizes);
+
+  pageSizes = setType types.openPageSize {
+    "4k" = 4096;
+    "16k" = 16384;
+    "32k" = 32768;
+    "64k" = 65536;
+  };
+
+  ################################################################################
+
   types.parsedPlatform = mkOptionType {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
