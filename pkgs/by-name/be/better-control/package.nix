@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchzip
-, gtk3
-, networkmanager
-, bluez
-, pipewire
-, brightnessctl
-, python3
-, power-profiles-daemon
-, gammastep
-, libpulseaudio
-, pulseaudio
-, pkg-config
-, wrapGAppsHook
-, makeWrapper
-, desktop-file-utils
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchzip,
+  gtk3,
+  networkmanager,
+  bluez,
+  pipewire,
+  brightnessctl,
+  python3,
+  power-profiles-daemon,
+  gammastep,
+  libpulseaudio,
+  pulseaudio,
+  pkg-config,
+  wrapGAppsHook4,
+  makeWrapper,
+  desktop-file-utils,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +49,12 @@ stdenv.mkDerivation rec {
     pulseaudio
   ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook makeWrapper desktop-file-utils ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook4
+    makeWrapper
+    desktop-file-utils
+  ];
 
   dontBuild = true;
   sourceRoot = "source/";
@@ -78,13 +84,25 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/better-control \
-      --prefix PATH : ${lib.makeBinPath [
-        python3 brightnessctl networkmanager bluez pipewire power-profiles-daemon
-        gammastep libpulseaudio pulseaudio
-      ]} \
-      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [
-        gtk3 python3Packages.pygobject3
-      ]}" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          python3
+          brightnessctl
+          networkmanager
+          bluez
+          pipewire
+          power-profiles-daemon
+          gammastep
+          libpulseaudio
+          pulseaudio
+        ]
+      } \
+      --prefix GI_TYPELIB_PATH : "${
+        lib.makeSearchPath "lib/girepository-1.0" [
+          gtk3
+          python3Packages.pygobject3
+        ]
+      }" \
       --set PYTHONPATH "$PYTHONPATH:${python3Packages.pygobject3}/${python3.sitePackages}" \
       --set DBUS_SYSTEM_BUS_ADDRESS "unix:path=/run/dbus/system_bus_socket"
   '';
@@ -95,6 +113,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     mainProgram = "better-control";
-    maintainers = with maintainers; [ quantumvoid nekrooo ];
+    maintainers = with maintainers; [
+      quantumvoid
+      nekrooo
+    ];
   };
 }
