@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
     (cmakeBool "V3D_SUPPORT" v3d)
-    (cmakeBool "TPU_SUPPORT" tpu) #requires libtpuinfo which is not packaged yet
+    (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
   ];
   nativeBuildInputs = [
     cmake
