@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -30,20 +35,18 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "dwm";
-        start =
-          ''
-            export _JAVA_AWT_WM_NONREPARENTING=1
-            dwm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "dwm";
+      start = ''
+        export _JAVA_AWT_WM_NONREPARENTING=1
+        dwm &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ cfg.package ];
 

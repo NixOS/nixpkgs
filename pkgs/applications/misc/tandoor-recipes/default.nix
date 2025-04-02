@@ -1,6 +1,7 @@
-{ callPackage
-, nixosTests
-, python3
+{
+  callPackage,
+  nixosTests,
+  python3,
 }:
 let
   python = python3;

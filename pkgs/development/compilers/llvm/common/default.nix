@@ -534,12 +534,13 @@ let
             # https://reviews.llvm.org/D51899
             (metadata.getVersionFile "clang/gnu-install-dirs.patch")
           ]
-          ++ lib.optional (lib.versions.major metadata.release_version == "13")
-            # Revert of https://reviews.llvm.org/D100879
-            # The malloc alignment assumption is incorrect for jemalloc and causes
-            # mis-compilation in firefox.
-            # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
-            (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          ++
+            lib.optional (lib.versions.major metadata.release_version == "13")
+              # Revert of https://reviews.llvm.org/D100879
+              # The malloc alignment assumption is incorrect for jemalloc and causes
+              # mis-compilation in firefox.
+              # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+              (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
           # This patch prevents global system header directories from
           # leaking through on non‐NixOS Linux. However, on macOS, the
           # SDK path is used as the sysroot, and forcing `-nostdlibinc`

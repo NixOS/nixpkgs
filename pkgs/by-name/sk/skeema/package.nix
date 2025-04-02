@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, testers, skeema }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  coreutils,
+  testers,
+  skeema,
+}:
 
 buildGoModule rec {
   pname = "skeema";
@@ -15,7 +22,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preCheck = ''
     # Fix tests expecting /usr/bin/printf and /bin/echo

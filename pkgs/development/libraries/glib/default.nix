@@ -1,34 +1,47 @@
-{ config
-, lib
-, stdenv
-, fetchurl
-, gettext
-, meson
-, ninja
-, pkg-config
-, perl
-, python3
-, python3Packages
-, libiconv, zlib, libffi, pcre2, elfutils, gnome, libselinux, bash, gnum4, libxslt
-, docutils, gi-docgen
-# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-, util-linuxMinimal ? null
-, buildPackages
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  perl,
+  python3,
+  python3Packages,
+  libiconv,
+  zlib,
+  libffi,
+  pcre2,
+  elfutils,
+  gnome,
+  libselinux,
+  bash,
+  gnum4,
+  libxslt,
+  docutils,
+  gi-docgen,
+  # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+  util-linuxMinimal ? null,
+  buildPackages,
 
-# this is just for tests (not in the closure of any regular package)
-, dbus, tzdata
-, desktop-file-utils, shared-mime-info
-, darwin
-, makeHardcodeGsettingsPatch
-, testers
-, gobject-introspection
-, libsystemtap
-, libsysprof-capture
-, mesonEmulatorHook
-, withIntrospection ?
-  stdenv.hostPlatform.emulatorAvailable buildPackages &&
-  lib.meta.availableOn stdenv.hostPlatform gobject-introspection &&
-  stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
+  # this is just for tests (not in the closure of any regular package)
+  dbus,
+  tzdata,
+  desktop-file-utils,
+  shared-mime-info,
+  darwin,
+  makeHardcodeGsettingsPatch,
+  testers,
+  gobject-introspection,
+  libsystemtap,
+  libsysprof-capture,
+  mesonEmulatorHook,
+  withIntrospection ?
+    stdenv.hostPlatform.emulatorAvailable buildPackages
+    && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
 }:
 
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
@@ -40,17 +53,24 @@ let
     x11Support = false;
   };
 
-  librarySuffix = if (stdenv.hostPlatform.extensions.library == ".so") then "2.0.so.0"
-                  else if (stdenv.hostPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
-                  else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
-                  else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
-                  else "2.0-0.lib";
+  librarySuffix =
+    if (stdenv.hostPlatform.extensions.library == ".so") then
+      "2.0.so.0"
+    else if (stdenv.hostPlatform.extensions.library == ".dylib") then
+      "2.0.0.dylib"
+    else if (stdenv.hostPlatform.extensions.library == ".a") then
+      "2.0.a"
+    else if (stdenv.hostPlatform.extensions.library == ".dll") then
+      "2.0-0.dll"
+    else
+      "2.0-0.lib";
 
   systemtap' = buildPackages.systemtap-sdt;
   withDtrace =
-    lib.meta.availableOn stdenv.buildPlatform systemtap' &&
-    # dtrace support requires sys/sdt.h header
-    lib.meta.availableOn stdenv.hostPlatform libsystemtap;
+    lib.meta.availableOn stdenv.buildPlatform systemtap'
+    &&
+      # dtrace support requires sys/sdt.h header
+      lib.meta.availableOn stdenv.hostPlatform libsystemtap;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,84 +82,107 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-R4Y0RAv1LuTsRCjVWHhzmMC+awQ8UhvrMIM0s9tEiaY=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./darwin-compilation.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ./quark_init_on_demand.patch
-    ./gobject_init_on_demand.patch
-  ] ++ [
-    # This patch lets GLib's GDesktopAppInfo API watch and notice changes
-    # to the Nix user and system profiles.  That way, the list of available
-    # applications shown by the desktop environment is immediately updated
-    # when the user installs or removes any
-    # (see <https://issues.guix.gnu.org/35594>).
+  patches =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      ./darwin-compilation.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      ./quark_init_on_demand.patch
+      ./gobject_init_on_demand.patch
+    ]
+    ++ [
+      # This patch lets GLib's GDesktopAppInfo API watch and notice changes
+      # to the Nix user and system profiles.  That way, the list of available
+      # applications shown by the desktop environment is immediately updated
+      # when the user installs or removes any
+      # (see <https://issues.guix.gnu.org/35594>).
 
-    # It does so by monitoring /nix/var/nix/profiles (for changes to the system
-    # profile) and /nix/var/nix/profiles/per-user/USER (for changes to the user
-    # profile) as well as /etc/profiles/per-user (for chanes to the user
-    # environment profile) and crawling their share/applications sub-directory when
-    # changes happen.
-    ./glib-appinfo-watch.patch
+      # It does so by monitoring /nix/var/nix/profiles (for changes to the system
+      # profile) and /nix/var/nix/profiles/per-user/USER (for changes to the user
+      # profile) as well as /etc/profiles/per-user (for chanes to the user
+      # environment profile) and crawling their share/applications sub-directory when
+      # changes happen.
+      ./glib-appinfo-watch.patch
 
-    ./schema-override-variable.patch
+      ./schema-override-variable.patch
 
-    # Add support for Pantheon’s terminal emulator.
-    ./elementary-terminal-support.patch
+      # Add support for Pantheon’s terminal emulator.
+      ./elementary-terminal-support.patch
 
-    # GLib contains many binaries used for different purposes;
-    # we will install them to different outputs:
-    # 1. Tools for desktop environment and introspection ($bin)
-    #    * gapplication (non-darwin)
-    #    * gdbus
-    #    * gi-compile-repository
-    #    * gi-decompile-typelib
-    #    * gi-inspect-typelib
-    #    * gio
-    #    * gio-launch-desktop (symlink to $out)
-    #    * gsettings
-    # 2. Development/build tools ($dev)
-    #    * gdbus-codegen
-    #    * gio-querymodules
-    #    * glib-compile-resources
-    #    * glib-compile-schemas
-    #    * glib-genmarshal
-    #    * glib-gettextize
-    #    * glib-mkenums
-    #    * gobject-query
-    #    * gresource
-    #    * gtester
-    #    * gtester-report
-    # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
-    #    * gio-launch-desktop
-    ./split-dev-programs.patch
+      # GLib contains many binaries used for different purposes;
+      # we will install them to different outputs:
+      # 1. Tools for desktop environment and introspection ($bin)
+      #    * gapplication (non-darwin)
+      #    * gdbus
+      #    * gi-compile-repository
+      #    * gi-decompile-typelib
+      #    * gi-inspect-typelib
+      #    * gio
+      #    * gio-launch-desktop (symlink to $out)
+      #    * gsettings
+      # 2. Development/build tools ($dev)
+      #    * gdbus-codegen
+      #    * gio-querymodules
+      #    * glib-compile-resources
+      #    * glib-compile-schemas
+      #    * glib-genmarshal
+      #    * glib-gettextize
+      #    * glib-mkenums
+      #    * gobject-query
+      #    * gresource
+      #    * gtester
+      #    * gtester-report
+      # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
+      #    * gio-launch-desktop
+      ./split-dev-programs.patch
 
-    # Tell Meson to install gdb scripts next to the lib
-    # GDB only looks there and in ${gdb}/share/gdb/auto-load,
-    # and by default meson installs in to $out/share/gdb/auto-load
-    # which does not help
-    ./gdb_script.patch
+      # Tell Meson to install gdb scripts next to the lib
+      # GDB only looks there and in ${gdb}/share/gdb/auto-load,
+      # and by default meson installs in to $out/share/gdb/auto-load
+      # which does not help
+      ./gdb_script.patch
+    ];
+
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
   ];
-
-  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [
-    finalAttrs.setupHook
-    libsysprof-capture
-    pcre2
-  ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    elfutils
-  ] ++ lib.optionals withDtrace [
-    libsystemtap
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libselinux
-    util-linuxMinimal # for libmount
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]);
+  buildInputs =
+    [
+      finalAttrs.setupHook
+      libsysprof-capture
+      pcre2
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      bash
+      gnum4 # install glib-gettextize and m4 macros for other apps to use
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      elfutils
+    ]
+    ++ lib.optionals withDtrace [
+      libsystemtap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libselinux
+      util-linuxMinimal # for libmount
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        Carbon
+        Cocoa
+        CoreFoundation
+        CoreServices
+        Foundation
+      ]
+    );
 
   strictDeps = true;
 
@@ -147,45 +190,57 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config # required to find native gi-docgen
   ];
 
-  nativeBuildInputs = [
-    docutils # for rst2man, rst2html5
-    meson
-    ninja
-    pkg-config
-    perl
-    python3
-    python3Packages.packaging # mostly used to make meson happy
-    python3Packages.wrapPython # for patchPythonScript
+  nativeBuildInputs =
+    [
+      docutils # for rst2man, rst2html5
+      meson
+      ninja
+      pkg-config
+      perl
+      python3
+      python3Packages.packaging # mostly used to make meson happy
+      python3Packages.wrapPython # for patchPythonScript
+      gettext
+      libxslt
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection'
+    ]
+    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ]
+    ++ lib.optionals withDtrace [
+      systemtap' # for dtrace
+    ];
+
+  propagatedBuildInputs = [
+    zlib
+    libffi
     gettext
-    libxslt
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection'
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ] ++ lib.optionals withDtrace [
-    systemtap' # for dtrace
+    libiconv
   ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
-
-  mesonFlags = [
-    "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
-    "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
-    (lib.mesonEnable "dtrace" withDtrace)
-    (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
-    "-Dnls=enabled"
-    "-Ddevbindir=${placeholder "dev"}/bin"
-    (lib.mesonEnable "introspection" withIntrospection)
-    # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
-    # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
-    "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
-  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    "-Dlibelf=disabled"
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    "-Db_lundef=false"
-    "-Dxattr=false"
-  ];
+  mesonFlags =
+    [
+      "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
+      "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
+      (lib.mesonEnable "dtrace" withDtrace)
+      (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
+      "-Dnls=enabled"
+      "-Ddevbindir=${placeholder "dev"}/bin"
+      (lib.mesonEnable "introspection" withIntrospection)
+      # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
+      # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+      "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+    ]
+    ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      "-Dlibelf=disabled"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "-Db_lundef=false"
+      "-Dxattr=false"
+    ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
@@ -194,26 +249,28 @@ stdenv.mkDerivation (finalAttrs: {
     "-DG_DISABLE_CAST_CHECKS"
   ];
 
-  postPatch = ''
-    patchShebangs glib/gen-unicode-tables.pl
-    patchShebangs glib/tests/gen-casefold-txt.py
-    patchShebangs glib/tests/gen-casemap-txt.py
-    patchShebangs tools/gen-visibility-macros.py
-    patchShebangs tests
+  postPatch =
+    ''
+      patchShebangs glib/gen-unicode-tables.pl
+      patchShebangs glib/tests/gen-casefold-txt.py
+      patchShebangs glib/tests/gen-casemap-txt.py
+      patchShebangs tools/gen-visibility-macros.py
+      patchShebangs tests
 
-    # Needs machine-id, comment the test
-    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
-    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
-    # All gschemas fail to pass the test, upstream bug?
-    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
-    # Cannot reproduce the failing test_associations on hydra
-    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
-    # Needed because of libtool wrappers
-    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
-  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
-    substituteInPlace gio/win32/meson.build \
-      --replace "libintl, " ""
-  '';
+      # Needs machine-id, comment the test
+      sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+      sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
+      # All gschemas fail to pass the test, upstream bug?
+      sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+      # Cannot reproduce the failing test_associations on hydra
+      sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+      # Needed because of libtool wrappers
+      sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
+    ''
+    + lib.optionalString stdenv.hostPlatform.isWindows ''
+      substituteInPlace gio/win32/meson.build \
+        --replace "libintl, " ""
+    '';
 
   postConfigure = ''
     patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
@@ -255,7 +312,11 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [
+    tzdata
+    desktop-file-utils
+    shared-mime-info
+  ];
 
   # Conditional necessary to break infinite recursion with passthru.tests
   preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
@@ -299,7 +360,9 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
     tests = {
-      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: {
+        doCheck = true;
+      });
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
@@ -323,15 +386,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://gitlab.gnome.org/GNOME/glib";
-    license     = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    homepage = "https://gitlab.gnome.org/GNOME/glib";
+    license = licenses.lgpl21Plus;
+    maintainers =
+      teams.gnome.members
+      ++ (with maintainers; [
+        lovek323
+        raskin
+      ]);
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms   = platforms.unix ++ platforms.windows;
+    platforms = platforms.unix ++ platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

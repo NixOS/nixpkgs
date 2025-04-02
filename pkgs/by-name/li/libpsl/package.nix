@@ -43,15 +43,17 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  buildInputs = [
-    libidn2
-    libunistring
-    libxslt
-  ] ++ lib.optional (
-    !stdenv.hostPlatform.isStatic
-    && !stdenv.hostPlatform.isWindows
-    && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
-   ) python3;
+  buildInputs =
+    [
+      libidn2
+      libunistring
+      libxslt
+    ]
+    ++ lib.optional (
+      !stdenv.hostPlatform.isStatic
+      && !stdenv.hostPlatform.isWindows
+      && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
+    ) python3;
 
   propagatedBuildInputs = [
     publicsuffix-list

@@ -1,106 +1,112 @@
-{ lib
-, bash
-, bash-completion
-, bridge-utils
-, coreutils
-, curl
-, darwin
-, dbus
-, dnsmasq
-, docutils
-, fetchFromGitLab
-, gettext
-, glib
-, gnutls
-, iproute2
-, iptables
-, libgcrypt
-, libpcap
-, libtasn1
-, libxml2
-, libxslt
-, makeWrapper
-, meson
-, ninja
-, openssh
-, perl
-, perlPackages
-, polkit
-, pkg-config
-, pmutils
-, python3
-, readline
-, rpcsvc-proto
-, stdenv
-, substituteAll
-, xhtml1
-, json_c
-, writeScript
-, nixosTests
+{
+  lib,
+  bash,
+  bash-completion,
+  bridge-utils,
+  coreutils,
+  curl,
+  darwin,
+  dbus,
+  dnsmasq,
+  docutils,
+  fetchFromGitLab,
+  gettext,
+  glib,
+  gnutls,
+  iproute2,
+  iptables,
+  libgcrypt,
+  libpcap,
+  libtasn1,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  meson,
+  ninja,
+  openssh,
+  perl,
+  perlPackages,
+  polkit,
+  pkg-config,
+  pmutils,
+  python3,
+  readline,
+  rpcsvc-proto,
+  stdenv,
+  substituteAll,
+  xhtml1,
+  json_c,
+  writeScript,
+  nixosTests,
 
   # Linux
-, acl ? null
-, attr ? null
-, audit ? null
-, dmidecode ? null
-, fuse3 ? null
-, kmod ? null
-, libapparmor ? null
-, libcap_ng ? null
-, libnl ? null
-, libpciaccess ? null
-, libtirpc ? null
-, lvm2 ? null
-, numactl ? null
-, numad ? null
-, parted ? null
-, systemd ? null
-, util-linux ? null
+  acl ? null,
+  attr ? null,
+  audit ? null,
+  dmidecode ? null,
+  fuse3 ? null,
+  kmod ? null,
+  libapparmor ? null,
+  libcap_ng ? null,
+  libnl ? null,
+  libpciaccess ? null,
+  libtirpc ? null,
+  lvm2 ? null,
+  numactl ? null,
+  numad ? null,
+  parted ? null,
+  systemd ? null,
+  util-linux ? null,
 
   # Darwin
-, gmp
-, libiconv
-, qemu
-, Carbon
-, AppKit
+  gmp,
+  libiconv,
+  qemu,
+  Carbon,
+  AppKit,
 
   # Options
-, enableCeph ? false
-, ceph
-, enableGlusterfs ? false
-, glusterfs
-, enableIscsi ? false
-, openiscsi
-, libiscsi
-, enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
-, xen
-, enableZfs ? stdenv.hostPlatform.isLinux
-, zfs
+  enableCeph ? false,
+  ceph,
+  enableGlusterfs ? false,
+  glusterfs,
+  enableIscsi ? false,
+  openiscsi,
+  libiscsi,
+  enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
+  xen,
+  enableZfs ? stdenv.hostPlatform.isLinux,
+  zfs,
 }:
 
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux isx86_64;
-  binPath = lib.makeBinPath ([
-    dnsmasq
-  ] ++ lib.optionals isLinux [
-    bridge-utils
-    dmidecode
-    dnsmasq
-    iproute2
-    iptables
-    kmod
-    lvm2
-    numactl
-    numad
-    openssh
-    pmutils
-    systemd
-  ] ++ lib.optionals enableIscsi [
-    libiscsi
-    openiscsi
-  ] ++ lib.optionals enableZfs [
-    zfs
-  ]);
+  binPath = lib.makeBinPath (
+    [
+      dnsmasq
+    ]
+    ++ lib.optionals isLinux [
+      bridge-utils
+      dmidecode
+      dnsmasq
+      iproute2
+      iptables
+      kmod
+      lvm2
+      numactl
+      numad
+      openssh
+      pmutils
+      systemd
+    ]
+    ++ lib.optionals enableIscsi [
+      libiscsi
+      openiscsi
+    ]
+    ++ lib.optionals enableZfs [
+      zfs
+    ]
+  );
 in
 
 assert enableXen -> isLinux && isx86_64;
@@ -124,115 +130,130 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-  ] ++ lib.optionals enableZfs [
-    (substituteAll {
-      src = ./0002-substitute-zfs-and-zpool-commands.patch;
-      zfs = "${zfs}/bin/zfs";
-      zpool = "${zfs}/bin/zpool";
-    })
-  ];
+  patches =
+    [
+      ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    ]
+    ++ lib.optionals enableZfs [
+      (substituteAll {
+        src = ./0002-substitute-zfs-and-zpool-commands.patch;
+        zfs = "${zfs}/bin/zfs";
+        zpool = "${zfs}/bin/zpool";
+      })
+    ];
 
   # remove some broken tests
-  postPatch = ''
-    sed -i '/commandtest/d' tests/meson.build
-    sed -i '/virnetsockettest/d' tests/meson.build
-    # delete only the first occurrence of this
-    sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
+  postPatch =
+    ''
+      sed -i '/commandtest/d' tests/meson.build
+      sed -i '/virnetsockettest/d' tests/meson.build
+      # delete only the first occurrence of this
+      sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
 
-  '' + lib.optionalString isLinux ''
-    for binary in mount umount mkfs; do
+    ''
+    + lib.optionalString isLinux ''
+      for binary in mount umount mkfs; do
+        substituteInPlace meson.build \
+          --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
+      done
+
+    ''
+    + ''
       substituteInPlace meson.build \
-        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
-    done
-
-  '' + ''
-    substituteInPlace meson.build \
-      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
-  '' + lib.optionalString isLinux ''
-    sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
-      src/storage/storage_backend_disk.c \
-      src/storage/storage_util.c
-  '' + lib.optionalString isDarwin ''
-    # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
-    # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
-    sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
-    sed -i '/qemufirmwaretest/d' tests/meson.build
-    sed -i '/qemuhotplugtest/d' tests/meson.build
-    sed -i '/qemuvhostusertest/d' tests/meson.build
-    sed -i '/qemuxml2xmltest/d' tests/meson.build
-    sed -i '/domaincapstest/d' tests/meson.build
-    # virshtest frequently times out on Darwin
-    substituteInPlace tests/meson.build \
-      --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
-  '' + lib.optionalString enableXen ''
-    # Has various hardcoded paths that don't exist outside of a Xen dom0.
-    sed -i '/libxlxml2domconfigtest/d' tests/meson.build
-    substituteInPlace src/libxl/libxl_capabilities.h \
-     --replace-fail /usr/lib/xen ${xen}/libexec/xen
-  '';
+        --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
+    ''
+    + lib.optionalString isLinux ''
+      sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
+        src/storage/storage_backend_disk.c \
+        src/storage/storage_util.c
+    ''
+    + lib.optionalString isDarwin ''
+      # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
+      # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
+      sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
+      sed -i '/qemufirmwaretest/d' tests/meson.build
+      sed -i '/qemuhotplugtest/d' tests/meson.build
+      sed -i '/qemuvhostusertest/d' tests/meson.build
+      sed -i '/qemuxml2xmltest/d' tests/meson.build
+      sed -i '/domaincapstest/d' tests/meson.build
+      # virshtest frequently times out on Darwin
+      substituteInPlace tests/meson.build \
+        --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
+    ''
+    + lib.optionalString enableXen ''
+      # Has various hardcoded paths that don't exist outside of a Xen dom0.
+      sed -i '/libxlxml2domconfigtest/d' tests/meson.build
+      substituteInPlace src/libxl/libxl_capabilities.h \
+       --replace-fail /usr/lib/xen ${xen}/libexec/xen
+    '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    docutils
-    libxml2 # for xmllint
-    libxslt # for xsltproc
-    gettext
-    makeWrapper
-    ninja
-    pkg-config
-    perl
-    perlPackages.XMLXPath
-  ]
-  ++ lib.optional (!isDarwin) rpcsvc-proto
-  # NOTE: needed for rpcgen
-  ++ lib.optional isDarwin darwin.developer_cmds;
+  nativeBuildInputs =
+    [
+      meson
+      docutils
+      libxml2 # for xmllint
+      libxslt # for xsltproc
+      gettext
+      makeWrapper
+      ninja
+      pkg-config
+      perl
+      perlPackages.XMLXPath
+    ]
+    ++ lib.optional (!isDarwin) rpcsvc-proto
+    # NOTE: needed for rpcgen
+    ++ lib.optional isDarwin darwin.developer_cmds;
 
-  buildInputs = [
-    bash
-    bash-completion
-    curl
-    dbus
-    glib
-    gnutls
-    libgcrypt
-    libpcap
-    libtasn1
-    libxml2
-    python3
-    readline
-    xhtml1
-    json_c
-  ] ++ lib.optionals isLinux [
-    acl
-    attr
-    audit
-    fuse3
-    libapparmor
-    libcap_ng
-    libnl
-    libpciaccess
-    libtirpc
-    lvm2
-    numactl
-    numad
-    parted
-    systemd
-    util-linux
-  ] ++ lib.optionals isDarwin [
-    AppKit
-    Carbon
-    gmp
-    libiconv
-  ]
-  ++ lib.optionals enableCeph [ ceph ]
-  ++ lib.optionals enableGlusterfs [ glusterfs ]
-  ++ lib.optionals enableIscsi [ libiscsi openiscsi ]
-  ++ lib.optionals enableXen [ xen ]
-  ++ lib.optionals enableZfs [ zfs ];
+  buildInputs =
+    [
+      bash
+      bash-completion
+      curl
+      dbus
+      glib
+      gnutls
+      libgcrypt
+      libpcap
+      libtasn1
+      libxml2
+      python3
+      readline
+      xhtml1
+      json_c
+    ]
+    ++ lib.optionals isLinux [
+      acl
+      attr
+      audit
+      fuse3
+      libapparmor
+      libcap_ng
+      libnl
+      libpciaccess
+      libtirpc
+      lvm2
+      numactl
+      numad
+      parted
+      systemd
+      util-linux
+    ]
+    ++ lib.optionals isDarwin [
+      AppKit
+      Carbon
+      gmp
+      libiconv
+    ]
+    ++ lib.optionals enableCeph [ ceph ]
+    ++ lib.optionals enableGlusterfs [ glusterfs ]
+    ++ lib.optionals enableIscsi [
+      libiscsi
+      openiscsi
+    ]
+    ++ lib.optionals enableXen [ xen ]
+    ++ lib.optionals enableZfs [ zfs ];
 
   preConfigure =
     let
@@ -261,7 +282,9 @@ stdenv.mkDerivation rec {
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       substituteInPlace src/util/virpci.c \
-         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+         --replace '/lib/modules' '${
+           if isLinux then "/run/booted-system/kernel-modules" else ""
+         }/lib/modules'
 
       patchShebangs .
     ''
@@ -348,29 +371,31 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    substituteInPlace $out/bin/virt-xml-validate \
-      --replace xmllint ${libxml2}/bin/xmllint
+  postInstall =
+    ''
+      substituteInPlace $out/bin/virt-xml-validate \
+        --replace xmllint ${libxml2}/bin/xmllint
 
-    substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
-      --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
-      --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
-      --replace 'SHUTDOWN_TIMEOUT=300'  'SHUTDOWN_TIMEOUT=''${SHUTDOWN_TIMEOUT:-300}' \
-      --replace "$out/bin"              '${gettext}/bin' \
-      --replace 'lock/subsys'           'lock' \
-      --replace 'gettext.sh'            'gettext.sh
-    # Added in nixpkgs:
-    gettext() { "${gettext}/bin/gettext" "$@"; }
-    '
-  '' + lib.optionalString isLinux ''
-    for f in $out/lib/systemd/system/*.service ; do
-      substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
-    done
-    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
-    wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${binPath}
-  '';
+      substituteInPlace $out/libexec/libvirt-guests.sh \
+        --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
+        --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+        --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
+        --replace 'SHUTDOWN_TIMEOUT=300'  'SHUTDOWN_TIMEOUT=''${SHUTDOWN_TIMEOUT:-300}' \
+        --replace "$out/bin"              '${gettext}/bin' \
+        --replace 'lock/subsys'           'lock' \
+        --replace 'gettext.sh'            'gettext.sh
+      # Added in nixpkgs:
+      gettext() { "${gettext}/bin/gettext" "$@"; }
+      '
+    ''
+    + lib.optionalString isLinux ''
+      for f in $out/lib/systemd/system/*.service ; do
+        substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
+      done
+      rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
+      wrapProgram $out/sbin/libvirtd \
+        --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+    '';
 
   passthru.updateScript = writeScript "update-libvirt" ''
     #!/usr/bin/env nix-shell
@@ -393,6 +418,10 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin lovesegfault ];
+    maintainers = with maintainers; [
+      fpletz
+      globin
+      lovesegfault
+    ];
   };
 }

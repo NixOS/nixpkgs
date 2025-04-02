@@ -1,4 +1,6 @@
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 ## we default to importing <nixpkgs> here, so that you can use
 ## a simple shell command to insert new hashes into this file
 ## e.g. with emacs C-u M-x shell-command
@@ -6,22 +8,66 @@
 ##     nix-prefetch-url sources.nix -A {stable{,.mono,.gecko64,.gecko32}, unstable, staging, winetricks}
 
 # here we wrap fetchurl and fetchFromGitHub, in order to be able to pass additional args around it
-let fetchurl = args@{url, hash, ...}:
-  pkgs.fetchurl { inherit url hash; } // args;
-    fetchFromGitHub = args@{owner, repo, rev, hash, ...}:
-  pkgs.fetchFromGitHub { inherit owner repo rev hash; } // args;
-    fetchFromGitLab = args@{domain, owner, repo, rev, hash, ...}:
-  pkgs.fetchFromGitLab { inherit domain owner repo rev hash; } // args;
+let
+  fetchurl = args@{ url, hash, ... }: pkgs.fetchurl { inherit url hash; } // args;
+  fetchFromGitHub =
+    args@{
+      owner,
+      repo,
+      rev,
+      hash,
+      ...
+    }:
+    pkgs.fetchFromGitHub {
+      inherit
+        owner
+        repo
+        rev
+        hash
+        ;
+    }
+    // args;
+  fetchFromGitLab =
+    args@{
+      domain,
+      owner,
+      repo,
+      rev,
+      hash,
+      ...
+    }:
+    pkgs.fetchFromGitLab {
+      inherit
+        domain
+        owner
+        repo
+        rev
+        hash
+        ;
+    }
+    // args;
 
-    updateScriptPreamble = ''
-      set -eou pipefail
-      PATH=${with pkgs; lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused jq nix ]}
-      sources_file=${__curPos.file}
-      source ${./update-lib.sh}
-    '';
+  updateScriptPreamble = ''
+    set -eou pipefail
+    PATH=${
+      with pkgs;
+      lib.makeBinPath [
+        common-updater-scripts
+        coreutils
+        curl
+        gnugrep
+        gnused
+        jq
+        nix
+      ]
+    }
+    sources_file=${__curPos.file}
+    source ${./update-lib.sh}
+  '';
 
-    inherit (pkgs) writeShellScript;
-in rec {
+  inherit (pkgs) writeShellScript;
+in
+rec {
 
   stable = fetchurl rec {
     version = "9.0";

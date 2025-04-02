@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,6 @@ let
   fprintdPkg = if cfg.tod.enable then pkgs.fprintd-tod else pkgs.fprintd;
 
 in
-
 
 {
 
@@ -43,7 +47,6 @@ in
       };
     };
   };
-
 
   ###### implementation
 

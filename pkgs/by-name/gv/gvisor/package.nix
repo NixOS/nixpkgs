@@ -1,12 +1,13 @@
-{ lib
-, nixosTests
-, buildGoModule
-, fetchFromGitHub
-, iproute2
-, iptables
-, makeWrapper
-, procps
-, glibc
+{
+  lib,
+  nixosTests,
+  buildGoModule,
+  fetchFromGitHub,
+  iproute2,
+  iptables,
+  makeWrapper,
+  procps,
+  glibc,
 }:
 
 buildGoModule {
@@ -24,7 +25,7 @@ buildGoModule {
     hash = "sha256-idgUEbYAfnm/HphVs12Sj1FwG+jmL2BBr0PJnG9BC3A=";
   };
 
-    # Replace the placeholder with the actual path to ldconfig
+  # Replace the placeholder with the actual path to ldconfig
   postPatch = ''
     substituteInPlace runsc/container/container.go \
       --replace-fail '"/sbin/ldconfig"' '"${glibc}/bin/ldconfig"'
@@ -36,14 +37,26 @@ buildGoModule {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  subPackages = [ "runsc" "shim" ];
+  subPackages = [
+    "runsc"
+    "shim"
+  ];
 
   postInstall = ''
     # Needed for the 'runsc do' subcommand
     wrapProgram $out/bin/runsc \
-      --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          iproute2
+          iptables
+          procps
+        ]
+      }
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1
   '';
 
@@ -54,6 +67,9 @@ buildGoModule {
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
     maintainers = with maintainers; [ gpl ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

@@ -1,4 +1,5 @@
-{ hostPkgs, ... }: {
+{ hostPkgs, ... }:
+{
   name = "nixos-rebuild-target-host";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
@@ -6,104 +7,126 @@
   node.pkgsReadOnly = false;
 
   nodes = {
-    deployer = { lib, pkgs, ... }: let
-      inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-    in {
-      imports = [ ../modules/profiles/installation-device.nix ];
+    deployer =
+      { lib, pkgs, ... }:
+      let
+        inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+      in
+      {
+        imports = [ ../modules/profiles/installation-device.nix ];
 
-      nix.settings = {
-        substituters = lib.mkForce [ ];
-        hashed-mirrors = null;
-        connect-timeout = 1;
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+        };
+
+        environment.systemPackages = [ pkgs.passh ];
+
+        system.includeBuildDependencies = true;
+
+        virtualisation = {
+          cores = 2;
+          memorySize = 2048;
+        };
+
+        system.build.privateKey = snakeOilPrivateKey;
+        system.build.publicKey = snakeOilPublicKey;
+        # We don't switch on `deployer`, but we need it to have the dependencies
+        # available, to be picked up by system.includeBuildDependencies above.
+        system.switch.enable = true;
       };
 
-      environment.systemPackages = [ pkgs.passh ];
+    target =
+      { nodes, lib, ... }:
+      let
+        targetConfig = {
+          documentation.enable = false;
+          services.openssh.enable = true;
 
-      system.includeBuildDependencies = true;
+          users.users.root.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+          users.users.alice.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+          users.users.bob.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
 
-      virtualisation = {
-        cores = 2;
-        memorySize = 2048;
-      };
+          users.users.alice.extraGroups = [ "wheel" ];
+          users.users.bob.extraGroups = [ "wheel" ];
 
-      system.build.privateKey = snakeOilPrivateKey;
-      system.build.publicKey = snakeOilPublicKey;
-      # We don't switch on `deployer`, but we need it to have the dependencies
-      # available, to be picked up by system.includeBuildDependencies above.
-      system.switch.enable = true;
-    };
+          # Disable sudo for root to ensure sudo isn't called without `--use-remote-sudo`
+          security.sudo.extraRules = lib.mkForce [
+            {
+              groups = [ "wheel" ];
+              commands = [ { command = "ALL"; } ];
+            }
+            {
+              users = [ "alice" ];
+              commands = [
+                {
+                  command = "ALL";
+                  options = [ "NOPASSWD" ];
+                }
+              ];
+            }
+          ];
 
-    target = { nodes, lib, ... }: let
-      targetConfig = {
-        documentation.enable = false;
-        services.openssh.enable = true;
+          nix.settings.trusted-users = [ "@wheel" ];
+        };
+      in
+      {
+        imports = [ ./common/user-account.nix ];
 
-        users.users.root.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
-        users.users.alice.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
-        users.users.bob.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+        config = lib.mkMerge [
+          targetConfig
+          {
+            system.build = {
+              inherit targetConfig;
+            };
+            system.switch.enable = true;
 
-        users.users.alice.extraGroups = [ "wheel" ];
-        users.users.bob.extraGroups = [ "wheel" ];
-
-        # Disable sudo for root to ensure sudo isn't called without `--use-remote-sudo`
-        security.sudo.extraRules = lib.mkForce [
-          { groups = [ "wheel" ]; commands = [ { command = "ALL"; } ]; }
-          { users = [ "alice" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }
+            networking.hostName = "target";
+          }
         ];
-
-        nix.settings.trusted-users = [ "@wheel" ];
       };
-    in {
-      imports = [ ./common/user-account.nix ];
-
-      config = lib.mkMerge [
-        targetConfig
-        {
-          system.build = {
-            inherit targetConfig;
-          };
-          system.switch.enable = true;
-
-          networking.hostName = "target";
-        }
-      ];
-    };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       sshConfig = builtins.toFile "ssh.conf" ''
         UserKnownHostsFile=/dev/null
         StrictHostKeyChecking=no
       '';
 
-      targetConfigJSON = hostPkgs.writeText "target-configuration.json"
-        (builtins.toJSON nodes.target.system.build.targetConfig);
+      targetConfigJSON = hostPkgs.writeText "target-configuration.json" (
+        builtins.toJSON nodes.target.system.build.targetConfig
+      );
 
-      targetNetworkJSON = hostPkgs.writeText "target-network.json"
-        (builtins.toJSON nodes.target.system.build.networkConfig);
+      targetNetworkJSON = hostPkgs.writeText "target-network.json" (
+        builtins.toJSON nodes.target.system.build.networkConfig
+      );
 
-      configFile = hostname: hostPkgs.writeText "configuration.nix" ''
-        { lib, modulesPath, ... }: {
-          imports = [
-            (modulesPath + "/virtualisation/qemu-vm.nix")
-            (modulesPath + "/testing/test-instrumentation.nix")
-            (modulesPath + "/../tests/common/user-account.nix")
-            (lib.modules.importJSON ./target-configuration.json)
-            (lib.modules.importJSON ./target-network.json)
-            ./hardware-configuration.nix
-          ];
+      configFile =
+        hostname:
+        hostPkgs.writeText "configuration.nix" ''
+          { lib, modulesPath, ... }: {
+            imports = [
+              (modulesPath + "/virtualisation/qemu-vm.nix")
+              (modulesPath + "/testing/test-instrumentation.nix")
+              (modulesPath + "/../tests/common/user-account.nix")
+              (lib.modules.importJSON ./target-configuration.json)
+              (lib.modules.importJSON ./target-network.json)
+              ./hardware-configuration.nix
+            ];
 
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
+            boot.loader.grub = {
+              enable = true;
+              device = "/dev/vda";
+              forceInstall = true;
+            };
 
-          # this will be asserted
-          networking.hostName = "${hostname}";
-        }
-      '';
+            # this will be asserted
+            networking.hostName = "${hostname}";
+          }
+        '';
     in
     ''
       start_all()

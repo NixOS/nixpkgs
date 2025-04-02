@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, binutils
-, cmake
-, extra-cmake-modules
-, patchelfUnstable
-, wrapQtAppsHook
-, elfutils
-, fetchFromGitHub
-, kconfigwidgets
-, kddockwidgets
-, ki18n
-, kio
-, kitemmodels
-, kitemviews
-, kparts
-, kwindowsystem
-, libelf
-, linuxPackages
-, qtbase
-, qtsvg
-, rustc-demangle
-, syntax-highlighting
-, threadweaver
-, zstd
+{
+  lib,
+  stdenv,
+  binutils,
+  cmake,
+  extra-cmake-modules,
+  patchelfUnstable,
+  wrapQtAppsHook,
+  elfutils,
+  fetchFromGitHub,
+  kconfigwidgets,
+  kddockwidgets,
+  ki18n,
+  kio,
+  kitemmodels,
+  kitemviews,
+  kparts,
+  kwindowsystem,
+  libelf,
+  linuxPackages,
+  qtbase,
+  qtsvg,
+  rustc-demangle,
+  syntax-highlighting,
+  threadweaver,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -65,7 +66,12 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ linuxPackages.perf binutils ]}"
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        linuxPackages.perf
+        binutils
+      ]
+    }"
   ];
 
   preFixup = ''
@@ -85,7 +91,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/KDAB/hotspot";
     changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
-    license = with licenses; [ gpl2Only gpl3Only ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ nh2 ];
   };

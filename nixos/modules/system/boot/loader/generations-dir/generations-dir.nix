@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,11 @@ let
     src = ./generations-dir-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    path = [
+      pkgs.coreutils
+      pkgs.gnused
+      pkgs.gnugrep
+    ];
     inherit (config.boot.loader.generationsDir) copyKernels;
   };
 
@@ -50,7 +59,6 @@ in
     };
 
   };
-
 
   config = mkIf config.boot.loader.generationsDir.enable {
 

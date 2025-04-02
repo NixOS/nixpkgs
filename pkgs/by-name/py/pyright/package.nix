@@ -1,4 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitHub, runCommand, jq }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  runCommand,
+  jq,
+}:
 
 let
   version = "1.1.382";

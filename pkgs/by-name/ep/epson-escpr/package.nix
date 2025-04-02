@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, cups }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+}:
 
-let version = "1.7.20";
-in stdenv.mkDerivation {
+let
+  version = "1.7.20";
+in
+stdenv.mkDerivation {
   pname = "epson-escpr";
   inherit version;
 

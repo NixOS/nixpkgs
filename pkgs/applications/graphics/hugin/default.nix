@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, cmake
-, fetchurl
-, gnumake
-, makeWrapper
-, pkg-config
-, autopanosiftc
-, boost
-, cairo
-, enblend-enfuse
-, exiv2
-, fftw
-, flann
-, gettext
-, glew
-, ilmbase
-, lcms2
-, lensfun
-, libjpeg
-, libpng
-, libtiff
-, libX11
-, libXi
-, libXmu
-, libGLU
-, libGL
-, openexr_3
-, panotools
-, perlPackages
-, sqlite
-, vigra
-, wrapGAppsHook3
-, wxGTK
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  gnumake,
+  makeWrapper,
+  pkg-config,
+  autopanosiftc,
+  boost,
+  cairo,
+  enblend-enfuse,
+  exiv2,
+  fftw,
+  flann,
+  gettext,
+  glew,
+  ilmbase,
+  lcms2,
+  lensfun,
+  libjpeg,
+  libpng,
+  libtiff,
+  libX11,
+  libXi,
+  libXmu,
+  libGLU,
+  libGL,
+  openexr_3,
+  panotools,
+  perlPackages,
+  sqlite,
+  vigra,
+  wrapGAppsHook3,
+  wxGTK,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -71,7 +72,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];

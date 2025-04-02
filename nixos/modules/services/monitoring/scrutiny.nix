@@ -1,10 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
-  inherit (lib.types) bool enum nullOr port str submodule;
+  inherit (lib.options)
+    literalExpression
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    ;
+  inherit (lib.types)
+    bool
+    enum
+    nullOr
+    port
+    str
+    submodule
+    ;
 
   cfg = config.services.scrutiny;
   # Define the settings format used for this program
@@ -64,7 +81,10 @@ in
           };
 
           options.log.level = mkOption {
-            type = enum [ "INFO" "DEBUG" ];
+            type = enum [
+              "INFO"
+              "DEBUG"
+            ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
@@ -87,7 +107,8 @@ in
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
+          options.web.influxdb.tls.insecure_skip_verify =
+            mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
           options.web.influxdb.token = mkOption {
             type = nullOr str;
@@ -149,7 +170,10 @@ in
             };
 
             options.log.level = mkOption {
-              type = enum [ "INFO" "DEBUG" ];
+              type = enum [
+                "INFO"
+                "DEBUG"
+              ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
             };

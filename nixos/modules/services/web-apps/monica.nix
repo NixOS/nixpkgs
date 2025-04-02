@@ -4,7 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.services.monica;
   monica = pkgs.monica.override {
     dataDir = cfg.dataDir;
@@ -30,7 +31,8 @@ with lib; let
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
-in {
+in
+{
   options.services.monica = {
     enable = mkEnableOption "monica";
 
@@ -59,9 +61,7 @@ in {
     hostname = lib.mkOption {
       type = lib.types.str;
       default =
-        if config.networking.domain != null
-        then config.networking.fqdn
-        else config.networking.hostName;
+        if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "monica.example.com";
       description = ''
@@ -127,7 +127,10 @@ in {
 
     mail = {
       driver = mkOption {
-        type = types.enum ["smtp" "sendmail"];
+        type = types.enum [
+          "smtp"
+          "sendmail"
+        ];
         default = "smtp";
         description = "Mail driver to use.";
       };
@@ -167,7 +170,7 @@ in {
         '';
       };
       encryption = mkOption {
-        type = with types; nullOr (enum ["tls"]);
+        type = with types; nullOr (enum [ "tls" ]);
         default = null;
         description = "SMTP encryption mechanism to use.";
       };
@@ -181,7 +184,13 @@ in {
     };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [str int bool]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -198,10 +207,9 @@ in {
 
     nginx = mkOption {
       type = types.submodule (
-        recursiveUpdate
-        (import ../web-servers/nginx/vhost-options.nix {inherit config lib;}) {}
+        recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = {};
+      default = { };
       example = ''
         {
           serverAliases = [
@@ -218,30 +226,33 @@ in {
     };
 
     config = mkOption {
-      type = with types;
-        attrsOf
-        (nullOr
-          (either
-            (oneOf [
-              bool
-              int
-              port
-              path
-              str
-            ])
-            (submodule {
-              options = {
-                _secret = mkOption {
-                  type = nullOr str;
-                  description = ''
-                    The path to a file containing the value the
-                    option should be set to in the final
-                    configuration file.
-                  '';
+      type =
+        with types;
+        attrsOf (
+          nullOr (
+            either
+              (oneOf [
+                bool
+                int
+                port
+                path
+                str
+              ])
+              (submodule {
+                options = {
+                  _secret = mkOption {
+                    type = nullOr str;
+                    description = ''
+                      The path to a file containing the value the
+                      option should be set to in the final
+                      configuration file.
+                    '';
+                  };
                 };
-              };
-            })));
-      default = {};
+              })
+          )
+        );
+      default = { };
       example = ''
         {
           ALLOWED_IFRAME_HOSTS = "https://example.com";
@@ -311,16 +322,18 @@ in {
       SESSION_SECURE_COOKIE = tlsEnabled;
     };
 
-    environment.systemPackages = [artisan];
+    environment.systemPackages = [ artisan ];
 
     services.mysql = mkIf db.createLocally {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [db.name];
+      ensureDatabases = [ db.name ];
       ensureUsers = [
         {
           name = db.user;
-          ensurePermissions = {"${db.name}.*" = "ALL PRIVILEGES";};
+          ensurePermissions = {
+            "${db.name}.*" = "ALL PRIVILEGES";
+          };
         }
       ];
     };
@@ -368,66 +381,82 @@ in {
 
     systemd.services.monica-setup = {
       description = "Preparation tasks for monica";
-      before = ["phpfpm-monica.service"];
+      before = [ "phpfpm-monica.service" ];
       after = optional db.createLocally "mysql.service";
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         User = user;
-        UMask = 077;
+        UMask = 77;
         WorkingDirectory = "${monica}";
         RuntimeDirectory = "monica/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = 700;
       };
-      path = [pkgs.replace-secret];
-      script = let
-        isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-        monicaEnvVars = lib.generators.toKeyValue {
-          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
-            mkValueString = v:
-              with builtins;
-                if isInt v
-                then toString v
-                else if isString v
-                then v
-                else if true == v
-                then "true"
-                else if false == v
-                then "false"
-                else if isSecret v
-                then hashString "sha256" v._secret
-                else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+      path = [ pkgs.replace-secret ];
+      script =
+        let
+          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+          monicaEnvVars = lib.generators.toKeyValue {
+            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+              mkValueString =
+                v:
+                with builtins;
+                if isInt v then
+                  toString v
+                else if isString v then
+                  v
+                else if true == v then
+                  "true"
+                else if false == v then
+                  "false"
+                else if isSecret v then
+                  hashString "sha256" v._secret
+                else
+                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
+            };
           };
-        };
-        secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
-        mkSecretReplacement = file: ''
-          replace-secret ${escapeShellArgs [(builtins.hashString "sha256" file) file "${cfg.dataDir}/.env"]}
+          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
+          mkSecretReplacement = file: ''
+            replace-secret ${
+              escapeShellArgs [
+                (builtins.hashString "sha256" file)
+                file
+                "${cfg.dataDir}/.env"
+              ]
+            }
+          '';
+          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (
+            _: v:
+            !elem v [
+              { }
+              null
+            ]
+          )) cfg.config;
+          monicaEnv = pkgs.writeText "monica.env" (monicaEnvVars filteredConfig);
+        in
+        ''
+          # error handling
+          set -euo pipefail
+
+          # create .env file
+          install -T -m 0600 -o ${user} ${monicaEnv} "${cfg.dataDir}/.env"
+          ${secretReplacements}
+          if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
+            sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
+          fi
+
+          # migrate & seed db
+          ${pkgs.php}/bin/php artisan key:generate --force
+          ${pkgs.php}/bin/php artisan setup:production -v --force
         '';
-        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [{} null])) cfg.config;
-        monicaEnv = pkgs.writeText "monica.env" (monicaEnvVars filteredConfig);
-      in ''
-        # error handling
-        set -euo pipefail
-
-        # create .env file
-        install -T -m 0600 -o ${user} ${monicaEnv} "${cfg.dataDir}/.env"
-        ${secretReplacements}
-        if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
-          sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
-        fi
-
-        # migrate & seed db
-        ${pkgs.php}/bin/php artisan key:generate --force
-        ${pkgs.php}/bin/php artisan setup:production -v --force
-      '';
     };
 
     systemd.services.monica-scheduler = {
       description = "Background tasks for monica";
       startAt = "minutely";
-      after = ["monica-setup.service"];
+      after = [ "monica-setup.service" ];
       serviceConfig = {
         Type = "oneshot";
         User = user;
@@ -457,12 +486,11 @@ in {
           inherit group;
           isSystemUser = true;
         };
-        "${config.services.nginx.user}".extraGroups = [group];
+        "${config.services.nginx.user}".extraGroups = [ group ];
       };
       groups = mkIf (group == "monica") {
-        monica = {};
+        monica = { };
       };
     };
   };
 }
-

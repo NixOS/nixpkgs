@@ -1,35 +1,39 @@
-{ libX11
-, libxcb
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, stdenv
-, lib
-, alsa-lib
-, at-spi2-atk
-, atkmm
-, cairo
-, cups
-, dbus
-, expat
-, glib
-, gtk3
-, libdrm
-, libglvnd
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, fetchurl
-, autoPatchelfHook
-, dpkg
+{
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  stdenv,
+  lib,
+  alsa-lib,
+  at-spi2-atk,
+  atkmm,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  gtk3,
+  libdrm,
+  libglvnd,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
 }:
 let
-  glLibs = [ libglvnd mesa ];
+  glLibs = [
+    libglvnd
+    mesa
+  ];
   libs = [
     alsa-lib
     atkmm
@@ -54,7 +58,10 @@ let
     pango
   ];
   buildInputs = glLibs ++ libs;
-  runpathPackages = glLibs ++ [ stdenv.cc.cc stdenv.cc.libc ];
+  runpathPackages = glLibs ++ [
+    stdenv.cc.cc
+    stdenv.cc.libc
+  ];
   version = "1.0.16";
 in
 stdenv.mkDerivation {
@@ -71,7 +78,9 @@ stdenv.mkDerivation {
     dpkg
   ];
 
-  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [ "${placeholder "out"}/lib/tana" ];
+  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [
+    "${placeholder "out"}/lib/tana"
+  ];
 
   # Needed for Zygote
   runtimeDependencies = [

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper, unzip, jre, libXxf86vm
-, extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  makeWrapper,
+  unzip,
+  jre,
+  libXxf86vm,
+  extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true",
 }:
 let
   pname = "josm";
@@ -37,18 +45,21 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.hostPlatform.isDarwin then ''
-      mkdir -p $out/Applications
-      ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
-    '' else ''
-      install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-      cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
+      ''
+    else
+      ''
+        install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
+        cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
 
-      # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
-      makeWrapper ${jre}/bin/java $out/bin/josm \
-        --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
-    '';
+        # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+        makeWrapper ${jre}/bin/java $out/bin/josm \
+          --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
+          --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
+      '';
 
   meta = {
     description = "Extensible editor for OpenStreetMap";
@@ -56,7 +67,10 @@ stdenv.mkDerivation rec {
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ rycee sikmir ];
+    maintainers = with lib.maintainers; [
+      rycee
+      sikmir
+    ];
     platforms = lib.platforms.all;
     mainProgram = "josm";
   };

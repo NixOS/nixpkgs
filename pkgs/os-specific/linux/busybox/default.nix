@@ -1,11 +1,18 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchpatch, fetchFromGitLab
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableMinimal ? false
-, enableAppletSymlinks ? true
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
-, extraConfig ? ""
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitLab,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableMinimal ? false,
+  enableAppletSymlinks ? true,
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+  useMusl ? stdenv.hostPlatform.libc == "musl",
+  musl,
+  extraConfig ? "",
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -60,8 +67,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
-  hardeningDisable = [ "format" "pie" ]
-    ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [
+    "format"
+    "pie"
+  ] ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
     ./busybox-in-store.patch
@@ -178,7 +187,10 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   enableParallelBuilding = true;
 
@@ -190,7 +202,10 @@ stdenv.mkDerivation rec {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson qyliss ];
+    maintainers = with maintainers; [
+      TethysSvensson
+      qyliss
+    ];
     platforms = platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };

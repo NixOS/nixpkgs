@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,52 +10,53 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  imageCfg = (import ../lib/eval-config.nix {
-    inherit system;
-    modules = [
-      ../maintainers/scripts/ec2/amazon-image.nix
-      ../modules/testing/test-instrumentation.nix
-      ../modules/profiles/qemu-guest.nix
-      {
-        # Hack to make the partition resizing work in QEMU.
-        boot.initrd.postDeviceCommands = mkBefore ''
-          ln -s vda /dev/xvda
-          ln -s vda1 /dev/xvda1
-        '';
+  imageCfg =
+    (import ../lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ../maintainers/scripts/ec2/amazon-image.nix
+        ../modules/testing/test-instrumentation.nix
+        ../modules/profiles/qemu-guest.nix
+        {
+          # Hack to make the partition resizing work in QEMU.
+          boot.initrd.postDeviceCommands = mkBefore ''
+            ln -s vda /dev/xvda
+            ln -s vda1 /dev/xvda1
+          '';
 
-        amazonImage.format = "qcow2";
+          amazonImage.format = "qcow2";
 
-        # In a NixOS test the serial console is occupied by the "backdoor"
-        # (see testing/test-instrumentation.nix) and is incompatible with
-        # the configuration in virtualisation/amazon-image.nix.
-        systemd.services."serial-getty@ttyS0".enable = mkForce false;
+          # In a NixOS test the serial console is occupied by the "backdoor"
+          # (see testing/test-instrumentation.nix) and is incompatible with
+          # the configuration in virtualisation/amazon-image.nix.
+          systemd.services."serial-getty@ttyS0".enable = mkForce false;
 
-        # Needed by nixos-rebuild due to the lack of network
-        # access. Determined by trial and error.
-        system.extraDependencies = with pkgs; ( [
-          # Needed for a nixos-rebuild.
-          busybox
-          cloud-utils
-          desktop-file-utils
-          libxslt.bin
-          mkinitcpio-nfs-utils
-          stdenv
-          stdenvNoCC
-          texinfo
-          unionfs-fuse
-          xorg.lndir
+          # Needed by nixos-rebuild due to the lack of network
+          # access. Determined by trial and error.
+          system.extraDependencies = with pkgs; ([
+            # Needed for a nixos-rebuild.
+            busybox
+            cloud-utils
+            desktop-file-utils
+            libxslt.bin
+            mkinitcpio-nfs-utils
+            stdenv
+            stdenvNoCC
+            texinfo
+            unionfs-fuse
+            xorg.lndir
 
-          # These are used in the configure-from-userdata tests
-          # for EC2. Httpd and valgrind are requested by the
-          # configuration.
-          apacheHttpd
-          apacheHttpd.doc
-          apacheHttpd.man
-          valgrind.doc
-        ]);
-      }
-    ];
-  }).config;
+            # These are used in the configure-from-userdata tests
+            # for EC2. Httpd and valgrind are requested by the
+            # configuration.
+            apacheHttpd
+            apacheHttpd.doc
+            apacheHttpd.man
+            valgrind.doc
+          ]);
+        }
+      ];
+    }).config;
   image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.qcow2";
 
   sshKeys = import ./ssh-keys.nix pkgs;
@@ -62,16 +64,17 @@ let
   snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
-in {
+in
+{
   boot-ec2-nixops = makeEc2Test {
-    name         = "nixops-userdata";
+    name = "nixops-userdata";
     meta.timeout = 600;
     inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       machine.start()
@@ -113,7 +116,7 @@ in {
   };
 
   boot-ec2-config = makeEc2Test {
-    name         = "config-userdata";
+    name = "config-userdata";
     meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;

@@ -1,11 +1,12 @@
 # For building the multiple addons that are in the kikit repo.
-{ stdenv
-, bc
-, kikit
-, zip
-, python3
-, addonName
-, addonPath
+{
+  stdenv,
+  bc,
+  kikit,
+  zip,
+  python3,
+  addonName,
+  addonPath,
 }:
 let
   # This python is only used when building the package, it's not the python
@@ -33,7 +34,11 @@ stdenv.mkDerivation {
   name = "kicadaddon-${addonName}";
   inherit (kikit-module) src version;
 
-  nativeBuildInputs = [ python bc zip ];
+  nativeBuildInputs = [
+    python
+    bc
+    zip
+  ];
   propagatedBuildInputs = [ kikit-module ];
 
   buildPhase = ''

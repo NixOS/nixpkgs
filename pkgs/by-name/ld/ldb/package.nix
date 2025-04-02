@@ -1,20 +1,22 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, tdb
-, talloc
-, tevent
-, popt
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, cmocka
-, wafHook
-, buildPackages
-, libxcrypt
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  readline,
+  tdb,
+  talloc,
+  tevent,
+  popt,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  cmocka,
+  wafHook,
+  buildPackages,
+  libxcrypt,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yV5Nwy3qiGS3mJnuNAyf3yi0hvRku8OLqZFRoItJP5s=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -59,21 +64,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
-    "--bundled-libraries=NONE"
-    "--builtin-libraries=replace"
-    "--without-ldb-lmdb"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-  ];
+  wafConfigureFlags =
+    [
+      "--bundled-libraries=NONE"
+      "--builtin-libraries=replace"
+      "--without-ldb-lmdb"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-compile"
+      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+    ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  stripDebugList = [ "bin" "lib" "modules" ];
+  stripDebugList = [
+    "bin"
+    "lib"
+    "modules"
+  ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;

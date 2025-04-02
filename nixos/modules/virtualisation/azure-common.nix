@@ -1,9 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.azure;
-  mlxDrivers = [ "mlx4_en" "mlx4_core" "mlx5_core" ];
+  mlxDrivers = [
+    "mlx4_en"
+    "mlx4_core"
+    "mlx5_core"
+  ];
 in
 {
   options.virtualisation.azure = {
@@ -21,8 +30,19 @@ in
   config = {
     virtualisation.azure.agent.enable = true;
 
-    boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-    boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
+    boot.kernelParams = [
+      "console=ttyS0"
+      "earlyprintk=ttyS0"
+      "rootdelay=300"
+      "panic=1"
+      "boot.panic_on_fail"
+    ];
+    boot.initrd.kernelModules = [
+      "hv_vmbus"
+      "hv_netvsc"
+      "hv_utils"
+      "hv_storvsc"
+    ];
     boot.initrd.availableKernelModules = lib.optionals cfg.acceleratedNetworking mlxDrivers;
 
     # Accelerated networking
@@ -30,8 +50,9 @@ in
       matchConfig.Driver = mlxDrivers;
       linkConfig.Unmanaged = "yes";
     };
-    networking.networkmanager.unmanaged = lib.mkIf cfg.acceleratedNetworking
-      (builtins.map (drv: "driver:${drv}") mlxDrivers);
+    networking.networkmanager.unmanaged = lib.mkIf cfg.acceleratedNetworking (
+      builtins.map (drv: "driver:${drv}") mlxDrivers
+    );
 
     # Generate a GRUB menu.
     boot.loader.grub.device = "/dev/sda";
@@ -55,7 +76,10 @@ in
 
     # Always include cryptsetup so that NixOps can use it.
     # sg_scan is needed to finalize disk removal on older kernels
-    environment.systemPackages = [ pkgs.cryptsetup pkgs.sg3_utils ];
+    environment.systemPackages = [
+      pkgs.cryptsetup
+      pkgs.sg3_utils
+    ];
 
     networking.usePredictableInterfaceNames = false;
 

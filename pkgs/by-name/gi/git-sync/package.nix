@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  git,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  inotify-tools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-sync";
@@ -21,12 +31,15 @@ stdenv.mkDerivation rec {
     cp -a contrib/git-* $out/bin/
   '';
 
-  wrapperPath = lib.makeBinPath ([
-    coreutils
-    git
-    gnugrep
-    gnused
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]);
+  wrapperPath = lib.makeBinPath (
+    [
+      coreutils
+      git
+      gnugrep
+      gnused
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+  );
 
   postFixup = ''
     wrap_path="${wrapperPath}":$out/bin

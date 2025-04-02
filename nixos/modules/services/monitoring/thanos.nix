@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -27,22 +32,29 @@ let
 
   cfg = config.services.thanos;
 
-  nullOpt = type: description: mkOption {
-    type = types.nullOr type;
-    default = null;
-    description = description;
-  };
+  nullOpt =
+    type: description:
+    mkOption {
+      type = types.nullOr type;
+      default = null;
+      description = description;
+    };
 
-  optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
-  flagToArgs   = opt: v  : optional v            "--${opt}";
-  listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
-  attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
+  optionToArgs = opt: v: optional (v != null) ''--${opt}="${toString v}"'';
+  flagToArgs = opt: v: optional v "--${opt}";
+  listToArgs = opt: vs: map (v: ''--${opt}="${v}"'') vs;
+  attrsToArgs = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
-  mkParamDef = type: default: description: mkParam type (description + ''
+  mkParamDef =
+    type: default: description:
+    mkParam type (
+      description
+      + ''
 
-    Defaults to `${toString default}` in Thanos
-    when set to `null`.
-  '');
+        Defaults to `${toString default}` in Thanos
+        when set to `null`.
+      ''
+    );
 
   mkParam = type: description: {
     toArgs = optionToArgs;
@@ -62,7 +74,7 @@ let
     toArgs = _opt: listToArgs opt;
     option = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = description;
     };
   };
@@ -71,7 +83,7 @@ let
     toArgs = _opt: attrsToArgs opt;
     option = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       description = description;
     };
   };
@@ -85,43 +97,63 @@ let
     };
   };
 
-  toYAML = name: attrs: pkgs.runCommand name {
-    preferLocalBuild = true;
-    json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
-    nativeBuildInputs = [ pkgs.remarshal ];
-  } "json2yaml -i $json -o $out";
+  toYAML =
+    name: attrs:
+    pkgs.runCommand name {
+      preferLocalBuild = true;
+      json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
+      nativeBuildInputs = [ pkgs.remarshal ];
+    } "json2yaml -i $json -o $out";
 
-  thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = cfg.${cmd}.arguments;
-     in optionalString (length args != 0) (" \\\n  " +
-         concatStringsSep " \\\n  " args));
+  thanos =
+    cmd:
+    "${cfg.package}/bin/thanos ${cmd}"
+    + (
+      let
+        args = cfg.${cmd}.arguments;
+      in
+      optionalString (length args != 0) (" \\\n  " + concatStringsSep " \\\n  " args)
+    );
 
-  argumentsOf = cmd: concatLists (collect isList
-    (flip mapParamsRecursive params.${cmd} (path: param:
-      let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg.${cmd};
-      in param.toArgs opt v)));
+  argumentsOf =
+    cmd:
+    concatLists (
+      collect isList (
+        flip mapParamsRecursive params.${cmd} (
+          path: param:
+          let
+            opt = concatStringsSep "." path;
+            v = getAttrFromPath path cfg.${cmd};
+          in
+          param.toArgs opt v
+        )
+      )
+    );
 
-  mkArgumentsOption = cmd: mkOption {
-    type = types.listOf types.str;
-    default = argumentsOf cmd;
-    defaultText = literalMD ''
-      calculated from `config.services.thanos.${cmd}`
-    '';
-    description = ''
-      Arguments to the `thanos ${cmd}` command.
+  mkArgumentsOption =
+    cmd:
+    mkOption {
+      type = types.listOf types.str;
+      default = argumentsOf cmd;
+      defaultText = literalMD ''
+        calculated from `config.services.thanos.${cmd}`
+      '';
+      description = ''
+        Arguments to the `thanos ${cmd}` command.
 
-      Defaults to a list of arguments formed by converting the structured
-      options of {option}`services.thanos.${cmd}` to a list of arguments.
+        Defaults to a list of arguments formed by converting the structured
+        options of {option}`services.thanos.${cmd}` to a list of arguments.
 
-      Overriding this option will cause none of the structured options to have
-      any effect. So only set this if you know what you're doing!
-    '';
-  };
+        Overriding this option will cause none of the structured options to have
+        any effect. So only set this if you know what you're doing!
+      '';
+    };
 
   mapParamsRecursive =
-    let noParam = attr: !(attr ? toArgs && attr ? option);
-    in mapAttrsRecursiveCond noParam;
+    let
+      noParam = attr: !(attr ? toArgs && attr ? option);
+    in
+    mapAttrsRecursiveCond noParam;
 
   paramsToOptions = mapParamsRecursive (_path: param: param.option);
 
@@ -129,9 +161,19 @@ let
 
     log = {
 
-      log.level = mkParamDef (types.enum ["debug" "info" "warn" "error" "fatal"]) "info" ''
-        Log filtering level.
-      '';
+      log.level =
+        mkParamDef
+          (types.enum [
+            "debug"
+            "info"
+            "warn"
+            "error"
+            "fatal"
+          ])
+          "info"
+          ''
+            Log filtering level.
+          '';
 
       log.format = mkParam types.str ''
         Log format to use.
@@ -143,8 +185,8 @@ let
         toArgs = _opt: path: optionToArgs "tracing.config-file" path;
         option = mkOption {
           type = with types; nullOr str;
-          default = if cfg.tracing.config == null then null
-                    else toString (toYAML "tracing.yaml" cfg.tracing.config);
+          default =
+            if cfg.tracing.config == null then null else toString (toYAML "tracing.yaml" cfg.tracing.config);
           defaultText = literalExpression ''
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
@@ -157,50 +199,53 @@ let
         };
       };
 
-      tracing.config =
-        {
-          toArgs = _opt: _attrs: [];
-          option = nullOpt types.attrs ''
-            Tracing configuration.
+      tracing.config = {
+        toArgs = _opt: _attrs: [ ];
+        option = nullOpt types.attrs ''
+          Tracing configuration.
 
-            When not `null` the attribute set gets converted to
-            a YAML file and stored in the Nix store. The option
-            {option}`tracing.config-file` will default to its path.
+          When not `null` the attribute set gets converted to
+          a YAML file and stored in the Nix store. The option
+          {option}`tracing.config-file` will default to its path.
 
-            If {option}`tracing.config-file` is set this option has no effect.
+          If {option}`tracing.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
-          '';
-        };
+          See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
+        '';
+      };
     };
 
-    common = cfg: params.log // params.tracing cfg // {
+    common =
+      cfg:
+      params.log
+      // params.tracing cfg
+      // {
 
-      http-address = mkParamDef types.str "0.0.0.0:10902" ''
-        Listen `host:port` for HTTP endpoints.
-      '';
+        http-address = mkParamDef types.str "0.0.0.0:10902" ''
+          Listen `host:port` for HTTP endpoints.
+        '';
 
-      grpc-address = mkParamDef types.str "0.0.0.0:10901" ''
-        Listen `ip:port` address for gRPC endpoints (StoreAPI).
+        grpc-address = mkParamDef types.str "0.0.0.0:10901" ''
+          Listen `ip:port` address for gRPC endpoints (StoreAPI).
 
-        Make sure this address is routable from other components.
-      '';
+          Make sure this address is routable from other components.
+        '';
 
-      grpc-server-tls-cert = mkParam types.str ''
-        TLS Certificate for gRPC server, leave blank to disable TLS
-      '';
+        grpc-server-tls-cert = mkParam types.str ''
+          TLS Certificate for gRPC server, leave blank to disable TLS
+        '';
 
-      grpc-server-tls-key = mkParam types.str ''
-        TLS Key for the gRPC server, leave blank to disable TLS
-      '';
+        grpc-server-tls-key = mkParam types.str ''
+          TLS Key for the gRPC server, leave blank to disable TLS
+        '';
 
-      grpc-server-tls-client-ca = mkParam types.str ''
-        TLS CA to verify clients against.
+        grpc-server-tls-client-ca = mkParam types.str ''
+          TLS CA to verify clients against.
 
-        If no client CA is specified, there is no client verification on server side.
-        (tls.NoClientCert)
-      '';
-    };
+          If no client CA is specified, there is no client verification on server side.
+          (tls.NoClientCert)
+        '';
+      };
 
     objstore = cfg: {
 
@@ -208,8 +253,8 @@ let
         toArgs = _opt: path: optionToArgs "objstore.config-file" path;
         option = mkOption {
           type = with types; nullOr str;
-          default = if cfg.objstore.config == null then null
-                    else toString (toYAML "objstore.yaml" cfg.objstore.config);
+          default =
+            if cfg.objstore.config == null then null else toString (toYAML "objstore.yaml" cfg.objstore.config);
           defaultText = literalExpression ''
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
@@ -222,112 +267,117 @@ let
         };
       };
 
-      objstore.config =
-        {
-          toArgs = _opt: _attrs: [];
-          option = nullOpt types.attrs ''
-            Object store configuration.
+      objstore.config = {
+        toArgs = _opt: _attrs: [ ];
+        option = nullOpt types.attrs ''
+          Object store configuration.
 
-            When not `null` the attribute set gets converted to
-            a YAML file and stored in the Nix store. The option
-            {option}`objstore.config-file` will default to its path.
+          When not `null` the attribute set gets converted to
+          a YAML file and stored in the Nix store. The option
+          {option}`objstore.config-file` will default to its path.
 
-            If {option}`objstore.config-file` is set this option has no effect.
+          If {option}`objstore.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
-          '';
-        };
+          See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
+        '';
+      };
     };
 
-    sidecar = params.common cfg.sidecar // params.objstore cfg.sidecar // {
+    sidecar =
+      params.common cfg.sidecar
+      // params.objstore cfg.sidecar
+      // {
 
-      prometheus.url = mkParamDef types.str "http://localhost:9090" ''
-        URL at which to reach Prometheus's API.
+        prometheus.url = mkParamDef types.str "http://localhost:9090" ''
+          URL at which to reach Prometheus's API.
 
-        For better performance use local network.
-      '';
+          For better performance use local network.
+        '';
 
-      tsdb.path = {
-        toArgs = optionToArgs;
-        option = mkOption {
-          type = types.str;
-          default = "/var/lib/${config.services.prometheus.stateDir}/data";
-          defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
-          description = ''
-            Data directory of TSDB.
-          '';
+        tsdb.path = {
+          toArgs = optionToArgs;
+          option = mkOption {
+            type = types.str;
+            default = "/var/lib/${config.services.prometheus.stateDir}/data";
+            defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
+            description = ''
+              Data directory of TSDB.
+            '';
+          };
         };
+
+        reloader.config-file = mkParam types.str ''
+          Config file watched by the reloader.
+        '';
+
+        reloader.config-envsubst-file = mkParam types.str ''
+          Output file for environment variable substituted config file.
+        '';
+
+        reloader.rule-dirs = mkListParam "reloader.rule-dir" ''
+          Rule directories for the reloader to refresh.
+        '';
+
       };
 
-      reloader.config-file = mkParam types.str ''
-        Config file watched by the reloader.
-      '';
+    store =
+      params.common cfg.store
+      // params.objstore cfg.store
+      // {
 
-      reloader.config-envsubst-file = mkParam types.str ''
-        Output file for environment variable substituted config file.
-      '';
+        stateDir = mkStateDirParam "data-dir" "thanos-store" ''
+          Data directory relative to `/var/lib`
+          in which to cache remote blocks.
+        '';
 
-      reloader.rule-dirs = mkListParam "reloader.rule-dir" ''
-        Rule directories for the reloader to refresh.
-      '';
+        index-cache-size = mkParamDef types.str "250MB" ''
+          Maximum size of items held in the index cache.
+        '';
 
-    };
+        chunk-pool-size = mkParamDef types.str "2GB" ''
+          Maximum size of concurrently allocatable bytes for chunks.
+        '';
 
-    store = params.common cfg.store // params.objstore cfg.store // {
+        store.limits.request-samples = mkParamDef types.int 0 ''
+          The maximum samples allowed for a single Series request.
+          The Series call fails if this limit is exceeded.
 
-      stateDir = mkStateDirParam "data-dir" "thanos-store" ''
-        Data directory relative to `/var/lib`
-        in which to cache remote blocks.
-      '';
+          `0` means no limit.
 
-      index-cache-size = mkParamDef types.str "250MB" ''
-        Maximum size of items held in the index cache.
-      '';
+          NOTE: For efficiency the limit is internally implemented as 'chunks limit'
+          considering each chunk contains a maximum of 120 samples.
+        '';
 
-      chunk-pool-size = mkParamDef types.str "2GB" ''
-        Maximum size of concurrently allocatable bytes for chunks.
-      '';
+        store.grpc.series-max-concurrency = mkParamDef types.int 20 ''
+          Maximum number of concurrent Series calls.
+        '';
 
-      store.limits.request-samples = mkParamDef types.int 0 ''
-        The maximum samples allowed for a single Series request.
-        The Series call fails if this limit is exceeded.
+        sync-block-duration = mkParamDef types.str "3m" ''
+          Repeat interval for syncing the blocks between local and remote view.
+        '';
 
-        `0` means no limit.
+        block-sync-concurrency = mkParamDef types.int 20 ''
+          Number of goroutines to use when syncing blocks from object storage.
+        '';
 
-        NOTE: For efficiency the limit is internally implemented as 'chunks limit'
-        considering each chunk contains a maximum of 120 samples.
-      '';
+        min-time = mkParamDef types.str "0000-01-01T00:00:00Z" ''
+          Start of time range limit to serve.
 
-      store.grpc.series-max-concurrency = mkParamDef types.int 20 ''
-        Maximum number of concurrent Series calls.
-      '';
+          Thanos Store serves only metrics, which happened later than this
+          value. Option can be a constant time in RFC3339 format or time duration
+          relative to current time, such as -1d or 2h45m. Valid duration units are
+          ms, s, m, h, d, w, y.
+        '';
 
-      sync-block-duration = mkParamDef types.str "3m" ''
-        Repeat interval for syncing the blocks between local and remote view.
-      '';
+        max-time = mkParamDef types.str "9999-12-31T23:59:59Z" ''
+          End of time range limit to serve.
 
-      block-sync-concurrency = mkParamDef types.int 20 ''
-        Number of goroutines to use when syncing blocks from object storage.
-      '';
-
-      min-time = mkParamDef types.str "0000-01-01T00:00:00Z" ''
-        Start of time range limit to serve.
-
-        Thanos Store serves only metrics, which happened later than this
-        value. Option can be a constant time in RFC3339 format or time duration
-        relative to current time, such as -1d or 2h45m. Valid duration units are
-        ms, s, m, h, d, w, y.
-      '';
-
-      max-time = mkParamDef types.str "9999-12-31T23:59:59Z" ''
-        End of time range limit to serve.
-
-        Thanos Store serves only blocks, which happened earlier than this
-        value. Option can be a constant time in RFC3339 format or time duration
-        relative to current time, such as -1d or 2h45m. Valid duration units are
-        ms, s, m, h, d, w, y.
-      '';
-    };
+          Thanos Store serves only blocks, which happened earlier than this
+          value. Option can be a constant time in RFC3339 format or time duration
+          relative to current time, such as -1d or 2h45m. Valid duration units are
+          ms, s, m, h, d, w, y.
+        '';
+      };
 
     query = params.common cfg.query // {
 
@@ -462,214 +512,228 @@ let
       '';
     };
 
-    rule = params.common cfg.rule // params.objstore cfg.rule // {
+    rule =
+      params.common cfg.rule
+      // params.objstore cfg.rule
+      // {
 
-      labels = mkAttrsParam "label" ''
-        Labels to be applied to all generated metrics.
+        labels = mkAttrsParam "label" ''
+          Labels to be applied to all generated metrics.
 
-        Similar to external labels for Prometheus,
-        used to identify ruler and its blocks as unique source.
-      '';
+          Similar to external labels for Prometheus,
+          used to identify ruler and its blocks as unique source.
+        '';
 
-      stateDir = mkStateDirParam "data-dir" "thanos-rule" ''
-        Data directory relative to `/var/lib`.
-      '';
+        stateDir = mkStateDirParam "data-dir" "thanos-rule" ''
+          Data directory relative to `/var/lib`.
+        '';
 
-      rule-files = mkListParam "rule-file" ''
-        Rule files that should be used by rule manager. Can be in glob format.
-      '';
+        rule-files = mkListParam "rule-file" ''
+          Rule files that should be used by rule manager. Can be in glob format.
+        '';
 
-      eval-interval = mkParamDef types.str "1m" ''
-        The default evaluation interval to use.
-      '';
+        eval-interval = mkParamDef types.str "1m" ''
+          The default evaluation interval to use.
+        '';
 
-      tsdb.block-duration = mkParamDef types.str "2h" ''
-        Block duration for TSDB block.
-      '';
+        tsdb.block-duration = mkParamDef types.str "2h" ''
+          Block duration for TSDB block.
+        '';
 
-      tsdb.retention = mkParamDef types.str "48h" ''
-        Block retention time on local disk.
-      '';
+        tsdb.retention = mkParamDef types.str "48h" ''
+          Block retention time on local disk.
+        '';
 
-      alertmanagers.urls = mkListParam "alertmanagers.url" ''
-        Alertmanager replica URLs to push firing alerts.
+        alertmanagers.urls = mkListParam "alertmanagers.url" ''
+          Alertmanager replica URLs to push firing alerts.
 
-        Ruler claims success if push to at least one alertmanager from
-        discovered succeeds. The scheme may be prefixed with
-        `dns+` or `dnssrv+` to detect
-        Alertmanager IPs through respective DNS lookups. The port defaults to
-        `9093` or the SRV record's value. The URL path is
-        used as a prefix for the regular Alertmanager API path.
-      '';
+          Ruler claims success if push to at least one alertmanager from
+          discovered succeeds. The scheme may be prefixed with
+          `dns+` or `dnssrv+` to detect
+          Alertmanager IPs through respective DNS lookups. The port defaults to
+          `9093` or the SRV record's value. The URL path is
+          used as a prefix for the regular Alertmanager API path.
+        '';
 
-      alertmanagers.send-timeout = mkParamDef types.str "10s" ''
-        Timeout for sending alerts to alertmanager.
-      '';
+        alertmanagers.send-timeout = mkParamDef types.str "10s" ''
+          Timeout for sending alerts to alertmanager.
+        '';
 
-      alert.query-url = mkParam types.str ''
-        The external Thanos Query URL that would be set in all alerts 'Source' field.
-      '';
+        alert.query-url = mkParam types.str ''
+          The external Thanos Query URL that would be set in all alerts 'Source' field.
+        '';
 
-      alert.label-drop = mkListParam "alert.label-drop" ''
-        Labels by name to drop before sending to alertmanager.
+        alert.label-drop = mkListParam "alert.label-drop" ''
+          Labels by name to drop before sending to alertmanager.
 
-        This allows alert to be deduplicated on replica label.
+          This allows alert to be deduplicated on replica label.
 
-        Similar Prometheus alert relabelling
-      '';
+          Similar Prometheus alert relabelling
+        '';
 
-      web.route-prefix = mkParam types.str ''
-        Prefix for API and UI endpoints.
+        web.route-prefix = mkParam types.str ''
+          Prefix for API and UI endpoints.
 
-        This allows thanos UI to be served on a sub-path.
+          This allows thanos UI to be served on a sub-path.
 
-        This option is analogous to `--web.route-prefix` of Promethus.
-      '';
+          This option is analogous to `--web.route-prefix` of Promethus.
+        '';
 
-      web.external-prefix = mkParam types.str ''
-        Static prefix for all HTML links and redirect URLs in the UI query web
-        interface.
+        web.external-prefix = mkParam types.str ''
+          Static prefix for all HTML links and redirect URLs in the UI query web
+          interface.
 
-        Actual endpoints are still served on / or the
-        {option}`web.route-prefix`. This allows thanos UI to be served
-        behind a reverse proxy that strips a URL sub-path.
-      '';
+          Actual endpoints are still served on / or the
+          {option}`web.route-prefix`. This allows thanos UI to be served
+          behind a reverse proxy that strips a URL sub-path.
+        '';
 
-      web.prefix-header = mkParam types.str ''
-        Name of HTTP request header used for dynamic prefixing of UI links and
-        redirects.
+        web.prefix-header = mkParam types.str ''
+          Name of HTTP request header used for dynamic prefixing of UI links and
+          redirects.
 
-        This option is ignored if the option
-        {option}`web.external-prefix` is set.
+          This option is ignored if the option
+          {option}`web.external-prefix` is set.
 
-        Security risk: enable this option only if a reverse proxy in front of
-        thanos is resetting the header.
+          Security risk: enable this option only if a reverse proxy in front of
+          thanos is resetting the header.
 
-        The header `X-Forwarded-Prefix` can be useful, for
-        example, if Thanos UI is served via Traefik reverse proxy with
-        `PathPrefixStrip` option enabled, which sends the
-        stripped prefix value in `X-Forwarded-Prefix`
-        header. This allows thanos UI to be served on a sub-path.
-      '';
+          The header `X-Forwarded-Prefix` can be useful, for
+          example, if Thanos UI is served via Traefik reverse proxy with
+          `PathPrefixStrip` option enabled, which sends the
+          stripped prefix value in `X-Forwarded-Prefix`
+          header. This allows thanos UI to be served on a sub-path.
+        '';
 
-      query.addresses = mkListParam "query" ''
-        Addresses of statically configured query API servers.
+        query.addresses = mkListParam "query" ''
+          Addresses of statically configured query API servers.
 
-        The scheme may be prefixed with `dns+` or
-        `dnssrv+` to detect query API servers through
-        respective DNS lookups.
-      '';
+          The scheme may be prefixed with `dns+` or
+          `dnssrv+` to detect query API servers through
+          respective DNS lookups.
+        '';
 
-      query.sd-files = mkListParam "query.sd-files" ''
-        Path to file that contain addresses of query peers.
-        The path can be a glob pattern.
-      '';
+        query.sd-files = mkListParam "query.sd-files" ''
+          Path to file that contain addresses of query peers.
+          The path can be a glob pattern.
+        '';
 
-      query.sd-interval = mkParamDef types.str "5m" ''
-        Refresh interval to re-read file SD files. (used as a fallback)
-      '';
+        query.sd-interval = mkParamDef types.str "5m" ''
+          Refresh interval to re-read file SD files. (used as a fallback)
+        '';
 
-      query.sd-dns-interval = mkParamDef types.str "30s" ''
-        Interval between DNS resolutions.
-      '';
-    };
-
-    compact = params.log // params.tracing cfg.compact // params.objstore cfg.compact // {
-
-      http-address = mkParamDef types.str "0.0.0.0:10902" ''
-        Listen `host:port` for HTTP endpoints.
-      '';
-
-      stateDir = mkStateDirParam "data-dir" "thanos-compact" ''
-        Data directory relative to `/var/lib`
-        in which to cache blocks and process compactions.
-      '';
-
-      consistency-delay = mkParamDef types.str "30m" ''
-        Minimum age of fresh (non-compacted) blocks before they are being
-        processed. Malformed blocks older than the maximum of consistency-delay
-        and 30m0s will be removed.
-      '';
-
-      retention.resolution-raw = mkParamDef types.str "0d" ''
-        How long to retain raw samples in bucket.
-
-        `0d` - disables this retention
-      '';
-
-      retention.resolution-5m = mkParamDef types.str "0d" ''
-        How long to retain samples of resolution 1 (5 minutes) in bucket.
-
-        `0d` - disables this retention
-      '';
-
-      retention.resolution-1h = mkParamDef types.str "0d" ''
-        How long to retain samples of resolution 2 (1 hour) in bucket.
-
-        `0d` - disables this retention
-      '';
-
-      startAt = {
-        toArgs = _opt: startAt: flagToArgs "wait" (startAt == null);
-        option = nullOpt types.str ''
-          When this option is set to a `systemd.time`
-          specification the Thanos compactor will run at the specified period.
-
-          When this option is `null` the Thanos compactor service
-          will run continuously. So it will not exit after all compactions have
-          been processed but wait for new work.
+        query.sd-dns-interval = mkParamDef types.str "30s" ''
+          Interval between DNS resolutions.
         '';
       };
 
-      downsampling.disable = mkFlagParam ''
-        Disables downsampling.
+    compact =
+      params.log
+      // params.tracing cfg.compact
+      // params.objstore cfg.compact
+      // {
 
-        This is not recommended as querying long time ranges without
-        non-downsampled data is not efficient and useful e.g it is not possible
-        to render all samples for a human eye anyway
-      '';
+        http-address = mkParamDef types.str "0.0.0.0:10902" ''
+          Listen `host:port` for HTTP endpoints.
+        '';
 
-      compact.concurrency = mkParamDef types.int 1 ''
-        Number of goroutines to use when compacting groups.
-      '';
-    };
+        stateDir = mkStateDirParam "data-dir" "thanos-compact" ''
+          Data directory relative to `/var/lib`
+          in which to cache blocks and process compactions.
+        '';
 
-    downsample = params.log // params.tracing cfg.downsample // params.objstore cfg.downsample // {
+        consistency-delay = mkParamDef types.str "30m" ''
+          Minimum age of fresh (non-compacted) blocks before they are being
+          processed. Malformed blocks older than the maximum of consistency-delay
+          and 30m0s will be removed.
+        '';
 
-      stateDir = mkStateDirParam "data-dir" "thanos-downsample" ''
-        Data directory relative to `/var/lib`
-        in which to cache blocks and process downsamplings.
-      '';
+        retention.resolution-raw = mkParamDef types.str "0d" ''
+          How long to retain raw samples in bucket.
 
-    };
+          `0d` - disables this retention
+        '';
 
-    receive = params.common cfg.receive // params.objstore cfg.receive // {
+        retention.resolution-5m = mkParamDef types.str "0d" ''
+          How long to retain samples of resolution 1 (5 minutes) in bucket.
 
-      receive.grpc-compression = mkParam types.str ''
-        Compression algorithm to use for gRPC requests to other receivers.
-      '';
+          `0d` - disables this retention
+        '';
 
-      remote-write.address = mkParamDef types.str "0.0.0.0:19291" ''
-        Address to listen on for remote write requests.
-      '';
+        retention.resolution-1h = mkParamDef types.str "0d" ''
+          How long to retain samples of resolution 2 (1 hour) in bucket.
 
-      stateDir = mkStateDirParam "tsdb.path" "thanos-receive" ''
-        Data directory relative to `/var/lib` of TSDB.
-      '';
+          `0d` - disables this retention
+        '';
 
-      labels = mkAttrsParam "label" ''
-        External labels to announce.
+        startAt = {
+          toArgs = _opt: startAt: flagToArgs "wait" (startAt == null);
+          option = nullOpt types.str ''
+            When this option is set to a `systemd.time`
+            specification the Thanos compactor will run at the specified period.
 
-        This flag will be removed in the future when handling multiple tsdb
-        instances is added.
-      '';
+            When this option is `null` the Thanos compactor service
+            will run continuously. So it will not exit after all compactions have
+            been processed but wait for new work.
+          '';
+        };
 
-      tsdb.retention = mkParamDef types.str "15d" ''
-        How long to retain raw samples on local storage.
+        downsampling.disable = mkFlagParam ''
+          Disables downsampling.
 
-        `0d` - disables this retention
-      '';
-    };
+          This is not recommended as querying long time ranges without
+          non-downsampled data is not efficient and useful e.g it is not possible
+          to render all samples for a human eye anyway
+        '';
+
+        compact.concurrency = mkParamDef types.int 1 ''
+          Number of goroutines to use when compacting groups.
+        '';
+      };
+
+    downsample =
+      params.log
+      // params.tracing cfg.downsample
+      // params.objstore cfg.downsample
+      // {
+
+        stateDir = mkStateDirParam "data-dir" "thanos-downsample" ''
+          Data directory relative to `/var/lib`
+          in which to cache blocks and process downsamplings.
+        '';
+
+      };
+
+    receive =
+      params.common cfg.receive
+      // params.objstore cfg.receive
+      // {
+
+        receive.grpc-compression = mkParam types.str ''
+          Compression algorithm to use for gRPC requests to other receivers.
+        '';
+
+        remote-write.address = mkParamDef types.str "0.0.0.0:19291" ''
+          Address to listen on for remote write requests.
+        '';
+
+        stateDir = mkStateDirParam "tsdb.path" "thanos-receive" ''
+          Data directory relative to `/var/lib` of TSDB.
+        '';
+
+        labels = mkAttrsParam "label" ''
+          External labels to announce.
+
+          This flag will be removed in the future when handling multiple tsdb
+          instances is added.
+        '';
+
+        tsdb.retention = mkParamDef types.str "15d" ''
+          How long to retain raw samples on local storage.
+
+          `0d` - disables this retention
+        '';
+      };
 
   };
 
@@ -678,17 +742,18 @@ let
       {
         assertion = !hasPrefix "/" cfg.${cmd}.stateDir;
         message =
-          "The option services.thanos.${cmd}.stateDir should not be an absolute directory." +
-          " It should be a directory relative to /var/lib.";
+          "The option services.thanos.${cmd}.stateDir should not be an absolute directory."
+          + " It should be a directory relative to /var/lib.";
       }
     ];
   };
 
-in {
+in
+{
 
   options.services.thanos = {
 
-    package = mkPackageOption pkgs "thanos" {};
+    package = mkPackageOption pkgs "thanos" { };
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption "the Thanos sidecar for Prometheus server";
@@ -701,20 +766,26 @@ in {
     };
 
     query = paramsToOptions params.query // {
-      enable = mkEnableOption ("the Thanos query node exposing PromQL enabled Query API " +
-         "with data retrieved from multiple store nodes");
+      enable = mkEnableOption (
+        "the Thanos query node exposing PromQL enabled Query API "
+        + "with data retrieved from multiple store nodes"
+      );
       arguments = mkArgumentsOption "query";
     };
 
     query-frontend = paramsToOptions params.query-frontend // {
-      enable = mkEnableOption ("the Thanos query frontend implements a service deployed in front of queriers to
-          improve query parallelization and caching.");
+      enable = mkEnableOption (
+        "the Thanos query frontend implements a service deployed in front of queriers to
+          improve query parallelization and caching."
+      );
       arguments = mkArgumentsOption "query-frontend";
     };
 
     rule = paramsToOptions params.rule // {
-      enable = mkEnableOption ("the Thanos ruler service which evaluates Prometheus rules against" +
-        " given Query nodes, exposing Store API and storing old blocks in bucket");
+      enable = mkEnableOption (
+        "the Thanos ruler service which evaluates Prometheus rules against"
+        + " given Query nodes, exposing Store API and storing old blocks in bucket"
+      );
       arguments = mkArgumentsOption "rule";
     };
 
@@ -729,7 +800,9 @@ in {
     };
 
     receive = paramsToOptions params.receive // {
-      enable = mkEnableOption ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb");
+      enable = mkEnableOption (
+        "the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"
+      );
       arguments = mkArgumentsOption "receive";
     };
   };
@@ -740,21 +813,26 @@ in {
       assertions = [
         {
           assertion = config.services.prometheus.enable;
-          message =
-            "Please enable services.prometheus when enabling services.thanos.sidecar.";
+          message = "Please enable services.prometheus when enabling services.thanos.sidecar.";
         }
         {
-          assertion = !(config.services.prometheus.globalConfig.external_labels == null ||
-                        config.services.prometheus.globalConfig.external_labels == {});
+          assertion =
+            !(
+              config.services.prometheus.globalConfig.external_labels == null
+              || config.services.prometheus.globalConfig.external_labels == { }
+            );
           message =
-            "services.thanos.sidecar requires uniquely identifying external labels " +
-            "to be configured in the Prometheus server. " +
-            "Please set services.prometheus.globalConfig.external_labels.";
+            "services.thanos.sidecar requires uniquely identifying external labels "
+            + "to be configured in the Prometheus server. "
+            + "Please set services.prometheus.globalConfig.external_labels.";
         }
       ];
       systemd.services.thanos-sidecar = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" "prometheus.service" ];
+        after = [
+          "network.target"
+          "prometheus.service"
+        ];
         serviceConfig = {
           User = "prometheus";
           Restart = "always";
@@ -769,7 +847,7 @@ in {
       {
         systemd.services.thanos-store = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.store.stateDir;
@@ -784,7 +862,7 @@ in {
     (mkIf cfg.query.enable {
       systemd.services.thanos-query = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
           Restart = "always";
@@ -797,7 +875,7 @@ in {
     (mkIf cfg.query-frontend.enable {
       systemd.services.thanos-query-frontend = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
           Restart = "always";
@@ -812,7 +890,7 @@ in {
       {
         systemd.services.thanos-rule = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.rule.stateDir;
@@ -828,18 +906,22 @@ in {
       (assertRelativeStateDir "compact")
       {
         systemd.services.thanos-compact =
-          let wait = cfg.compact.startAt == null; in {
+          let
+            wait = cfg.compact.startAt == null;
+          in
+          {
             wantedBy = [ "multi-user.target" ];
-            after    = [ "network.target" ];
+            after = [ "network.target" ];
             serviceConfig = {
-              Type    = if wait then "simple" else "oneshot";
+              Type = if wait then "simple" else "oneshot";
               Restart = if wait then "always" else "no";
               DynamicUser = true;
               StateDirectory = cfg.compact.stateDir;
               ExecStart = thanos "compact";
               ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             };
-          } // optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
+          }
+          // optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
       }
     ]))
 
@@ -848,7 +930,7 @@ in {
       {
         systemd.services.thanos-downsample = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.downsample.stateDir;
@@ -865,7 +947,7 @@ in {
       {
         systemd.services.thanos-receive = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.receive.stateDir;

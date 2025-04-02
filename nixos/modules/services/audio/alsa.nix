@@ -1,9 +1,16 @@
 # ALSA sound support.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "sound" ] "The option was heavily overloaded and can be removed from most configurations.")
+    (lib.mkRemovedOptionModule [
+      "sound"
+    ] "The option was heavily overloaded and can be removed from most configurations.")
   ];
 
   options.hardware.alsa.enablePersistence = lib.mkOption {

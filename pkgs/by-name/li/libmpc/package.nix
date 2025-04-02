@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, gmp, mpfr
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  mpfr,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,7 +23,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  buildInputs = [ gmp mpfr ];
+  buildInputs = [
+    gmp
+    mpfr
+  ];
 
   doCheck = true; # not cross;
 

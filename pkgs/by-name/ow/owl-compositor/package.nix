@@ -1,12 +1,13 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, gnustep
-, libxkbcommon
-, makeWrapper
-, wayland
-, wayland-scanner
-, darwin
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  gnustep,
+  libxkbcommon,
+  makeWrapper,
+  wayland,
+  wayland-scanner,
+  darwin,
 }:
 
 let
@@ -34,27 +35,33 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-    wayland-scanner
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.DarwinTools
-    darwin.bootstrap_cmds
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.make
-    gnustep.wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      wayland-scanner
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+      darwin.bootstrap_cmds
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gnustep.make
+      gnustep.wrapGNUstepAppsHook
+    ];
 
-  buildInputs = [
-    libxkbcommon
-    wayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.back
-    gnustep.base
-    gnustep.gui
-  ];
+  buildInputs =
+    [
+      libxkbcommon
+      wayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gnustep.back
+      gnustep.base
+      gnustep.gui
+    ];
 
   preConfigure = ''
     mkdir -p build
@@ -64,7 +71,9 @@ stdenv.mkDerivation {
   configureScript = "../configure";
 
   # error: "Your gnustep-base was configured for the objc-nonfragile-abi but you are not using it now."
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-fobjc-runtime=gnustep-2.0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    !stdenv.hostPlatform.isDarwin
+  ) "-fobjc-runtime=gnustep-2.0";
 
   installPhase = ''
     runHook preInstall

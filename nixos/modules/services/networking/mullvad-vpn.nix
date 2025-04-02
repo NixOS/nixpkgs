@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mullvad-vpn;
 in
@@ -53,7 +58,10 @@ with lib;
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" "network-online.target" ];
+      wants = [
+        "network.target"
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
         "NetworkManager.service"
@@ -64,8 +72,7 @@ with lib;
         # Needed for ping
         "/run/wrappers"
         # See https://github.com/NixOS/nixpkgs/issues/262681
-      ] ++ (lib.optional config.networking.resolvconf.enable
-        config.networking.resolvconf.package);
+      ] ++ (lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package);
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {
@@ -76,5 +83,8 @@ with lib;
     };
   };
 
-  meta.maintainers = with maintainers; [ arcuru ymarkus ];
+  meta.maintainers = with maintainers; [
+    arcuru
+    ymarkus
+  ];
 }

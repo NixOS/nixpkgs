@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
   cfg = config.services.nginx.sso;
   pkg = getBin cfg.package;
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
-in {
+in
+{
   options.services.nginx.sso = {
     enable = mkEnableOption "nginx-sso service";
 
@@ -14,7 +20,7 @@ in {
 
     configuration = mkOption {
       type = types.attrsOf types.unspecified;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };

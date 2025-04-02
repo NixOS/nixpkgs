@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -27,19 +32,18 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.tftpd.enable {
 
     services.xinetd.enable = true;
 
-    services.xinetd.services = singleton
-      { name = "tftp";
-        protocol = "udp";
-        server = "${pkgs.netkittftp}/sbin/in.tftpd";
-        serverArgs = "${config.services.tftpd.path}";
-      };
+    services.xinetd.services = singleton {
+      name = "tftp";
+      protocol = "udp";
+      server = "${pkgs.netkittftp}/sbin/in.tftpd";
+      serverArgs = "${config.services.tftpd.path}";
+    };
 
   };
 

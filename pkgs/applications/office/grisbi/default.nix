@@ -1,13 +1,15 @@
-{ fetchurl
-, lib, stdenv
-, gtk
-, pkg-config
-, libgsf
-, libofx
-, intltool
-, wrapGAppsHook3
-, libsoup
-, adwaita-icon-theme
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gtk,
+  pkg-config,
+  libgsf,
+  libofx,
+  intltool,
+  wrapGAppsHook3,
+  libsoup,
+  adwaita-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vTrbq/xLTfwF7/YtKzZFiiSw8A0HzzWin2ry8gPHej8=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    intltool
+  ];
   buildInputs = [
     gtk
     libgsf

@@ -1,38 +1,44 @@
-{ lib
-, buildNpmPackage
-, copyDesktopItems
-, electron_30
-, buildGoModule
-, esbuild
-, fetchFromGitHub
-, jq
-, deltachat-rpc-server
-, makeDesktopItem
-, makeWrapper
-, noto-fonts-color-emoji
-, pkg-config
-, python3
-, roboto
-, sqlcipher
-, stdenv
-, darwin
-, testers
-, deltachat-desktop
+{
+  lib,
+  buildNpmPackage,
+  copyDesktopItems,
+  electron_30,
+  buildGoModule,
+  esbuild,
+  fetchFromGitHub,
+  jq,
+  deltachat-rpc-server,
+  makeDesktopItem,
+  makeWrapper,
+  noto-fonts-color-emoji,
+  pkg-config,
+  python3,
+  roboto,
+  sqlcipher,
+  stdenv,
+  darwin,
+  testers,
+  deltachat-desktop,
 }:
 
 let
   electron = electron_30;
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.19.12";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-NQ06esCSU6YPvQ4cMsi3DEFGIQGl8Ff6fhdTxUAyGvo=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.19.12";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-NQ06esCSU6YPvQ4cMsi3DEFGIQGl8Ff6fhdTxUAyGvo=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 in
 buildNpmPackage rec {
@@ -48,20 +54,24 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-+74koym1lL2rk5n06i7JgcXmX+yW4zgqRfdH6ryXe0s=";
 
-  nativeBuildInputs = [
-    jq
-    makeWrapper
-    pkg-config
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      jq
+      makeWrapper
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
-  buildInputs = [
-    deltachat-rpc-server
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      deltachat-rpc-server
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -125,7 +135,11 @@ buildNpmPackage rec {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"

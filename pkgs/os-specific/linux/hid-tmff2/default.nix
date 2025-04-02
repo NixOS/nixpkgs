@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation {
   pname = "hid-tmff2";

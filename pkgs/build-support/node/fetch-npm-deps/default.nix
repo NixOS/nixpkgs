@@ -1,4 +1,18 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  makeWrapper,
+  pkg-config,
+  curl,
+  gnutar,
+  gzip,
+  testers,
+  fetchurl,
+  cacert,
+  prefetch-npm-deps,
+  fetchNpmDeps,
+}:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -7,7 +21,8 @@
 
     src = lib.cleanSourceWith {
       src = ./.;
-      filter = name: type:
+      filter =
+        name: type:
         let
           name' = builtins.baseNameOf name;
         in
@@ -16,31 +31,54 @@
 
     cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ makeWrapper pkg-config ];
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
     buildInputs = [ curl ];
 
     postInstall = ''
-      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
+      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${
+        lib.makeBinPath [
+          gnutar
+          gzip
+        ]
+      }
     '';
 
     passthru.tests =
       let
-        makeTestSrc = { name, src }: stdenvNoCC.mkDerivation {
-          name = "${name}-src";
+        makeTestSrc =
+          { name, src }:
+          stdenvNoCC.mkDerivation {
+            name = "${name}-src";
 
-          inherit src;
+            inherit src;
 
-          buildCommand = ''
-            mkdir -p $out
-            cp $src $out/package-lock.json
-          '';
-        };
+            buildCommand = ''
+              mkdir -p $out
+              cp $src $out/package-lock.json
+            '';
+          };
 
-        makeTest = { name, src, hash, forceGitDeps ? false, forceEmptyCache ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash forceGitDeps forceEmptyCache;
+        makeTest =
+          {
+            name,
+            src,
+            hash,
+            forceGitDeps ? false,
+            forceEmptyCache ? false,
+          }:
+          testers.invalidateFetcherByDrvHash fetchNpmDeps {
+            inherit
+              name
+              hash
+              forceGitDeps
+              forceEmptyCache
+              ;
 
-          src = makeTestSrc { inherit name src; };
-        };
+            src = makeTestSrc { inherit name src; };
+          };
       in
       {
         lockfileV1 = makeTest {
@@ -148,60 +186,79 @@
   };
 
   fetchNpmDeps =
-    { name ? "npm-deps"
-    , hash ? ""
-    , forceGitDeps ? false
-    , forceEmptyCache ? false
-    , ...
-    } @ args:
+    {
+      name ? "npm-deps",
+      hash ? "",
+      forceGitDeps ? false,
+      forceEmptyCache ? false,
+      ...
+    }@args:
     let
       hash_ =
-        if hash != "" then {
-          outputHash = hash;
-        } else {
-          outputHash = "";
-          outputHashAlgo = "sha256";
-        };
+        if hash != "" then
+          {
+            outputHash = hash;
+          }
+        else
+          {
+            outputHash = "";
+            outputHashAlgo = "sha256";
+          };
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
     in
-    stdenvNoCC.mkDerivation (args // {
-      inherit name;
+    stdenvNoCC.mkDerivation (
+      args
+      // {
+        inherit name;
 
-      nativeBuildInputs = [ prefetch-npm-deps ];
+        nativeBuildInputs = [ prefetch-npm-deps ];
 
-      buildPhase = ''
-        runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-        if [[ ! -e package-lock.json ]]; then
-          echo
-          echo "ERROR: The package-lock.json file does not exist!"
-          echo
-          echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
-          echo "when packages are updated on npm."
-          echo
-          echo "Hint: You can copy a vendored package-lock.json file via postPatch."
-          echo
+          if [[ ! -e package-lock.json ]]; then
+            echo
+            echo "ERROR: The package-lock.json file does not exist!"
+            echo
+            echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
+            echo "when packages are updated on npm."
+            echo
+            echo "Hint: You can copy a vendored package-lock.json file via postPatch."
+            echo
 
-          exit 1
-        fi
+            exit 1
+          fi
 
-        prefetch-npm-deps package-lock.json $out
+          prefetch-npm-deps package-lock.json $out
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
 
-      dontInstall = true;
+        dontInstall = true;
 
-      # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
-      # `{ "registry.example.com": "example-registry-bearer-token", ... }`
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+        # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+        # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
-      SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
-        then "${cacert}/etc/ssl/certs/ca-bundle.crt"
-        else "/no-cert-file.crt";
+        SSL_CERT_FILE =
+          if
+            (
+              hash_.outputHash == ""
+              || hash_.outputHash == lib.fakeSha256
+              || hash_.outputHash == lib.fakeSha512
+              || hash_.outputHash == lib.fakeHash
+            )
+          then
+            "${cacert}/etc/ssl/certs/ca-bundle.crt"
+          else
+            "/no-cert-file.crt";
 
-      outputHashMode = "recursive";
-    } // hash_ // forceGitDeps_ // forceEmptyCache_);
+        outputHashMode = "recursive";
+      }
+      // hash_
+      // forceGitDeps_
+      // forceEmptyCache_
+    );
 }

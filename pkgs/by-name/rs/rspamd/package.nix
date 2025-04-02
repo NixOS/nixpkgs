@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   doctest,
   fmt_11,
@@ -15,7 +14,7 @@
   sqlite,
   ragel,
   icu,
-  hyperscan,
+  vectorscan,
   jemalloc,
   blas,
   lapack,
@@ -25,31 +24,20 @@
   zstd,
   libarchive,
   withBlas ? true,
-  withHyperscan ? stdenv.hostPlatform.isx86_64,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
-assert withHyperscan -> stdenv.hostPlatform.isx86_64;
-
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.10.2";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-x0Mw2ug5H6BZI6LKOjFufYzGVxZIkgxXHeIX7Emsj8A=";
+    hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
   };
-
-  patches = [
-    # remove https://www.nixspam.net/ because it has been shutdown
-    (fetchpatch {
-      url = "https://github.com/rspamd/rspamd/commit/dc6e7494c2440cd6c4e474b5ee3c4fabdad1f6bf.patch";
-      hash = "sha256-7zY+l5ADLWgPTTBNG/GxX23uX2OwQ33hyzSuokTLgqc=";
-    })
-  ];
 
   hardeningEnable = [ "pie" ];
 
@@ -57,7 +45,9 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     perl
+    ragel
   ];
+
   buildInputs =
     [
       doctest
@@ -73,8 +63,8 @@ stdenv.mkDerivation rec {
       xxHash
       zstd
       libarchive
+      vectorscan
     ]
-    ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [
       blas
       lapack
@@ -82,23 +72,21 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
-  cmakeFlags =
-    [
-      # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
-      "-DENABLE_PCRE2=OFF"
-      "-DDEBIAN_BUILD=ON"
-      "-DRUNDIR=/run/rspamd"
-      "-DDBDIR=/var/lib/rspamd"
-      "-DLOGDIR=/var/log/rspamd"
-      "-DLOCAL_CONFDIR=/etc/rspamd"
-      "-DENABLE_JEMALLOC=ON"
-      "-DSYSTEM_DOCTEST=ON"
-      "-DSYSTEM_FMT=ON"
-      "-DSYSTEM_XXHASH=ON"
-      "-DSYSTEM_ZSTD=ON"
-    ]
-    ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
-    ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+  cmakeFlags = [
+    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
+    "-DENABLE_PCRE2=OFF"
+    "-DDEBIAN_BUILD=ON"
+    "-DRUNDIR=/run/rspamd"
+    "-DDBDIR=/var/lib/rspamd"
+    "-DLOGDIR=/var/log/rspamd"
+    "-DLOCAL_CONFDIR=/etc/rspamd"
+    "-DENABLE_JEMALLOC=ON"
+    "-DSYSTEM_DOCTEST=ON"
+    "-DSYSTEM_FMT=ON"
+    "-DSYSTEM_XXHASH=ON"
+    "-DSYSTEM_ZSTD=ON"
+    "-DENABLE_HYPERSCAN=ON"
+  ] ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 

@@ -1,4 +1,8 @@
-{ lib, __splicedPackages, erlang }:
+{
+  lib,
+  __splicedPackages,
+  erlang,
+}:
 
 let
   pkgs = __splicedPackages;
@@ -7,10 +11,13 @@ let
   lib' = pkgs.callPackage ./lib.nix { };
 
   # FIXME: add support for overrideScope
-  callPackageWithScope = scope: drv: args: lib.callPackageWith scope drv args;
+  callPackageWithScope =
+    scope: drv: args:
+    lib.callPackageWith scope drv args;
   mkScope = scope: pkgs // scope;
 
-  packages = self:
+  packages =
+    self:
     let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;

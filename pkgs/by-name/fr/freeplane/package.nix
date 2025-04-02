@@ -38,7 +38,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" "-x" "test" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk}"
+    "-x"
+    "test"
+  ];
 
   # share/freeplane/core/org.freeplane.core/META-INF doesn't
   # always get generated with parallel building enabled
