@@ -829,7 +829,7 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
          // optionalAttrs (args ? badPlatforms)   { inherit badPlatforms; }
          // optionalAttrs (args ? changelog)      { inherit changelog; }
-         // optionalAttrs (args ? mainProgram)    { inherit mainProgram; }
+         // optionalAttrs (args ? mainProgram && isExecutable) { inherit mainProgram; }
          ;
 
 }
