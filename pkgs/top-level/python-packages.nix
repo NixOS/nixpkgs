@@ -16673,6 +16673,8 @@ self: super: with self; {
 
   swh-core = callPackage ../development/python-modules/swh-core { };
 
+  swh-export = callPackage ../development/python-modules/swh-export { };
+
   swh-journal = callPackage ../development/python-modules/swh-journal { };
 
   swh-model = callPackage ../development/python-modules/swh-model { };
