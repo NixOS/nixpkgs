@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2
       mpl11
     ];
+    mainProgram = "cmph";
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
