@@ -1,6 +1,6 @@
 {
   lib,
-  flutter327,
+  flutter,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -8,16 +8,16 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.14-beta";
+  version = "0.9.15-beta";
 in
-flutter327.buildFlutterApplication {
+flutter.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-SDzKB5KLHkJ3xcJY67TNBXDiDlBOApKrh4x0OZR/K/M=";
+    hash = "sha256-ekCdHU9z8nxcIFz3oN0txlIKWAwhMV8Q5/t5QYvbzCc=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
