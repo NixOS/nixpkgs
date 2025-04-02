@@ -1,15 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, rust
 , rustPlatform
-, cargo-c
 , python3
 
 # tests
-, testers
 , vips
-, libimagequant
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,28 +27,12 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  nativeBuildInputs = [ cargo-c ];
-
-  postBuild = ''
-    pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    popd
-  '';
-
-  postInstall = ''
-    pushd imagequant-sys
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    popd
-  '';
+  buildCAPIOnly = true;
+  cargoCFlags = [ "--package=imagequant-sys" ];
 
   passthru.tests = {
     inherit vips;
     inherit (python3.pkgs) pillow;
-
-    pkg-config = testers.hasPkgConfigModules {
-      package = libimagequant;
-      moduleNames = [ "imagequant" ];
-    };
   };
 
   meta = with lib; {
@@ -63,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ma9e ];
+    pkgConfigModules = [ "imagequant" ];
   };
 }

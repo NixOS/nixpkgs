@@ -1,11 +1,9 @@
 {
   lib,
-  rust,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  cargo-c,
   testers,
   yara-x,
 }:
@@ -13,6 +11,12 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yara-x";
   version = "0.14.0";
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
@@ -24,25 +28,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-afCBuWr12trjEIDvE0qnGFxTXU7LKZCzZB8RqgqperY=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    cargo-c
-  ];
+  buildCAPI = true;
 
-  postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd yr \
+      --bash <($bin/bin/yr completion bash) \
+      --fish <($bin/bin/yr completion fish) \
+      --zsh <($bin/bin/yr completion zsh)
   '';
-
-  postInstall =
-    ''
-      ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd yr \
-        --bash <($out/bin/yr completion bash) \
-        --fish <($out/bin/yr completion fish) \
-        --zsh <($out/bin/yr completion zsh)
-    '';
 
   passthru.tests.version = testers.testVersion {
     package = yara-x;
@@ -58,5 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lesuisse
     ];
     mainProgram = "yr";
+    pkgConfigModules = [ "yara_x_capi" ];
   };
 })

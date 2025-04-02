@@ -9,12 +9,18 @@
   cargoInstallHook,
   cargoNextestHook,
   cargoSetupHook,
+  cargoCSetupHook,
+  cargoCBuildHook,
+  cargoCCheckHook,
+  cargoCInstallHook,
+  cargoCFixupHook,
   cargo,
   cargo-auditable,
   buildPackages,
   rustc,
   libiconv,
   windows,
+  testers,
 }:
 
 lib.extendMkDerivation {
@@ -61,6 +67,8 @@ lib.extendMkDerivation {
       checkFeatures ? buildFeatures,
       useNextest ? false,
       auditable ? !cargo-auditable.meta.broken,
+      buildCAPI ? buildCAPIOnly,
+      buildCAPIOnly ? false,
 
       depsExtraArgs ? { },
 
@@ -71,6 +79,8 @@ lib.extendMkDerivation {
       buildAndTestSubdir ? null,
       ...
     }@args:
+
+    assert buildCAPIOnly -> buildCAPI;
 
     lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
@@ -150,6 +160,13 @@ lib.extendMkDerivation {
           cargoSetupHook
           rustc
           cargo
+        ]
+        ++ lib.optionals buildCAPI [
+          cargoCSetupHook
+          cargoCBuildHook
+          cargoCCheckHook
+          cargoCInstallHook
+          cargoCFixupHook
         ];
 
       buildInputs =
@@ -184,5 +201,45 @@ lib.extendMkDerivation {
         # default to Rust's platforms
         platforms = lib.intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
       };
-    };
+    }
+    // lib.optionalAttrs (buildCAPI) (
+      {
+        # separate outputs by default for C libraries
+        outputs =
+          args.outputs or [
+            "out"
+            "dev"
+          ];
+
+        # check pkg-config modules for C libraries
+        passthru = args.passthru or { } // {
+          tests = args.passthru.tests or { } // {
+            pkg-config =
+              args.passthru.tests.pkg-config or (lib.warnIfNot (finalAttrs ? meta.pkgConfigModules)
+                "buildRustPackage: No pkg-config modules defined in meta.pkgConfigModules for ${args.pname}"
+                (testers.testMetaPkgConfig finalAttrs.finalPackage)
+              );
+          };
+        };
+      }
+      // lib.optionalAttrs (buildCAPIOnly) {
+        buildPhase =
+          args.buildPhase or ''
+            runHook preBuild
+            runHook postBuild
+          '';
+
+        checkPhase =
+          args.checkPhase or ''
+            runHook preCheck
+            runHook postCheck
+          '';
+
+        installPhase =
+          args.installPhase or ''
+            runHook preInstall
+            runHook postInstall
+          '';
+      }
+    );
 }

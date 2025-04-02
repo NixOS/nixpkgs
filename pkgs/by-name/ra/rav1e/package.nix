@@ -1,10 +1,8 @@
 {
   lib,
-  rust,
   stdenv,
   rustPlatform,
   fetchCrate,
-  cargo-c,
   nasm,
   nix-update-script,
   testers,
@@ -15,6 +13,12 @@ rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.7.1";
 
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
+
   src = fetchCrate {
     inherit pname version;
     hash = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
@@ -23,10 +27,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-sJO40DN/Zfchg9J/7wTmO/RS88Zb6fIJ7nX4VNGe/eA=";
 
-  nativeBuildInputs = [
-    cargo-c
-    nasm
-  ];
+  buildCAPI = true;
+  dontCargoCCheck = true;
+
+  nativeBuildInputs = [ nasm ];
 
   postPatch =
     ''
@@ -43,14 +47,6 @@ rustPlatform.buildRustPackage rec {
     '';
 
   checkType = "debug";
-
-  postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
-
-  postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
-  '';
 
   passthru = {
     tests.version = testers.testVersion { package = rav1e; };
@@ -70,5 +66,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "rav1e";
+    pkgConfigModules = [ "rav1e" ];
   };
 }
