@@ -18,6 +18,8 @@
   enablePython ? false,
   python3,
   enableGSSAPI ? true,
+  enableGeoIPDB ? true,
+  libmaxminddb,
   libkrb5,
   buildPackages,
   nixosTests,
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
+    ++ lib.optional enableGeoIPDB libmaxminddb
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
