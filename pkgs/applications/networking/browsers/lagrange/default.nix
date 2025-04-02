@@ -9,6 +9,7 @@
   harfbuzz,
   libogg,
   libwebp,
+  libX11,
   mpg123,
   opusfile,
   SDL2,
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       harfbuzz
       libogg
       libwebp
+      libX11
       mpg123
       opusfile
       SDL2
