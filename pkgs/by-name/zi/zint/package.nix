@@ -4,11 +4,8 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  qtbase,
-  qtsvg,
-  qttools,
+  qt6,
   versionCheckHook,
-  wrapQtAppsHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zint";
@@ -24,13 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
   ];
 
   cmakeFlags = [ (lib.cmakeBool "ZINT_QT6" true) ];
