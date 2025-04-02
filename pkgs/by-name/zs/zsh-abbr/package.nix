@@ -37,8 +37,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/olets/zsh-abbr";
     description = "Zsh manager for auto-expanding abbreviations, inspired by fish shell";
-    license = with licenses; [cc-by-nc-sa-40 hl3];
-    maintainers = with maintainers; [icy-thought];
+    license = with licenses; [
+      cc-by-nc-sa-40
+      hl3
+    ];
+    maintainers = with maintainers; [ icy-thought ];
     platforms = platforms.all;
   };
 }

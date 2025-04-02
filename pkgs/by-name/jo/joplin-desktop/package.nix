@@ -1,4 +1,11 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
+{
+  lib,
+  stdenv,
+  appimageTools,
+  fetchurl,
+  makeWrapper,
+  _7zz,
+}:
 
 let
   pname = "joplin-desktop";
@@ -7,19 +14,23 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = ".AppImage";
-    x86_64-darwin = ".dmg";
-    aarch64-darwin = "-arm64.dmg";
-  }.${system} or throwSystem;
+  suffix =
+    {
+      x86_64-linux = ".AppImage";
+      x86_64-darwin = ".dmg";
+      aarch64-darwin = "-arm64.dmg";
+    }
+    .${system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
-    sha256 = {
-      x86_64-linux = "sha256-ImFB4KwJ/vAHtZUbLAdnIRpd+o2ZaXKy9luw/jnPLSE=";
-      x86_64-darwin = "sha256-Of6VXX40tCis+ou26LtJKOZm/87P3rsTHtnvSDwF8VY=";
-      aarch64-darwin = "sha256-HtHuZQhIkiI8GrhB9nCOTAN1hOs+9POJFRIsRUNikYs=";
-    }.${system} or throwSystem;
+    sha256 =
+      {
+        x86_64-linux = "sha256-ImFB4KwJ/vAHtZUbLAdnIRpd+o2ZaXKy9luw/jnPLSE=";
+        x86_64-darwin = "sha256-Of6VXX40tCis+ou26LtJKOZm/87P3rsTHtnvSDwF8VY=";
+        aarch64-darwin = "sha256-HtHuZQhIkiI8GrhB9nCOTAN1hOs+9POJFRIsRUNikYs=";
+      }
+      .${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -38,12 +49,25 @@ let
     '';
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ hugoreeves qjoly yajo ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      hugoreeves
+      qjoly
+      yajo
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
   linux = appimageTools.wrapType2 {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     nativeBuildInputs = [ makeWrapper ];
 
     profile = ''
@@ -61,7 +85,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [ _7zz ];
 
@@ -81,6 +110,4 @@ let
     '';
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

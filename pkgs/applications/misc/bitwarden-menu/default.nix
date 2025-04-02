@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, python3Packages
-, fetchPypi
-, pynput
-, xdg-base-dirs
+{
+  lib,
+  buildPythonApplication,
+  python3Packages,
+  fetchPypi,
+  pynput,
+  xdg-base-dirs,
 }:
 
 buildPythonApplication rec {
