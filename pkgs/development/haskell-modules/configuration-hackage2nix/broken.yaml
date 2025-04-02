@@ -587,7 +587,6 @@ broken-packages:
   - cabal2ebuild # failure in job https://hydra.nixos.org/build/233221248 at 2023-09-02
   - cabal2ghci # failure in job https://hydra.nixos.org/build/233233018 at 2023-09-02
   - cabal2json # failure in job https://hydra.nixos.org/build/233196099 at 2023-09-02
-  - cabal-add # failure in job https://hydra.nixos.org/build/273461296 at 2024-10-01
   - cabal-audit # failure in job https://hydra.nixos.org/build/233193414 at 2023-09-02
   - cabal-auto-expose # failure in job https://hydra.nixos.org/build/233195440 at 2023-09-02
   - cabal-build-programs # failure in job https://hydra.nixos.org/build/257091363 at 2024-04-27
