@@ -11,8 +11,8 @@ mattermost.override {
     # and make sure the version regex is up to date here.
     # Ensure you also check ../mattermost/package.nix for ESR releases.
     regex = "^v(10\\.[0-9]+\\.[0-9]+)$";
-    version = "10.6.0";
-    srcHash = "sha256-GnXxhhbOKJezUAyKRBbn5IE22gzsn80mwnPANOT9Qu4=";
+    version = "10.6.1";
+    srcHash = "sha256-xCrjJc6JCZXnCZ5lJ3o1bRbt7sxlEmcWeiw2cKmyWG0=";
     vendorHash = "sha256-wj+bAQNJSs9m2SSfl+Ipm965iAhKQ2v1iMjH7I79qf4=";
     npmDepsHash = "sha256-MdLfjLmizFbLfSqOdAZ+euXomB2ZPjZOqspQYnyHcuk=";
     lockfileOverlay = ''
