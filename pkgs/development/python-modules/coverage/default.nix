@@ -1,34 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   mock,
-  pythonOlder,
   setuptools,
+  tox
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.6.10";
+  version = "7.8.0";
   pyproject = true;
 
-  # uses f strings
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-f7EFMnyPjwaC4phD4v+Wr53L5bq47rSzmMajOhbYCiM=";
+  src = fetchFromGitHub {
+    owner = "nedbat";
+    repo = "coveragepy";
+    tag = version;
+    hash = "sha256-clnwx9Fa75aLfGe/MZVtIzE8Ah5EY7MQf8g11TSkl/c=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  # No tests in archive
-  doCheck = false;
-  nativeCheckInputs = [ mock ];
+  nativeCheckInputs = [
+    mock
+    tox
+  ];
+
+  pythonImportsCheck = [ "coverage" ];
 
   meta = {
     description = "Code coverage measurement for python";
     homepage = "https://coverage.readthedocs.io/";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ osbm ];
   };
 }
