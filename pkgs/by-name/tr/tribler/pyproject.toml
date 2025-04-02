@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tribler"
+version = "8.1.0"
+dependencies = [
+  'pyipv8',
+  'bitarray',
+  'configobj',
+  'ipv8-rust-tunnels',
+  #'libtorrent',
+  'lz4',
+  'pillow',
+  'pony',
+  'pystray',
+  'pywin32;sys_platform=="win32"',
+]
+
+[project.scripts]
+tribler = "__main__:main"
