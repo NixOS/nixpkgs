@@ -7409,17 +7409,17 @@ with pkgs;
   beamPackages = dontRecurseIntoAttrs beam27Packages;
   beamMinimalPackages = dontRecurseIntoAttrs beamMinimal27Packages;
 
-  beam25Packages = recurseIntoAttrs beam.packages.erlang_25;
-  beam26Packages = recurseIntoAttrs beam.packages.erlang_26;
-  beam27Packages = recurseIntoAttrs beam.packages.erlang_27;
+  beam25Packages = recurseIntoAttrs beam.packages.erlang_25.beamPackages;
+  beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
+  beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   # 28 is pre-release
-  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28;
+  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28.beamPackages;
 
-  beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25;
-  beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26;
-  beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27;
+  beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25.beamPackages;
+  beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
+  beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   # 28 is pre-release
-  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28;
+  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
 
   erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
