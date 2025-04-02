@@ -3,6 +3,7 @@
   buildNpmPackage,
   electron,
   fetchFromGitHub,
+  jq,
   writers,
   makeWrapper,
   withGui ? false,
@@ -47,6 +48,9 @@ buildNpmPackage rec {
     ''
       cp ${writers.writeJSON "zapversion.json" versionJson} .version.json
       cat .version.json
+      # this file is required to use zap-cli with scl
+      < apack.json jq '.path = [ "'"$out"'/bin" ]' > apack.json.new
+      mv -f apack.json.new apack.json
     '';
 
   postBuild = lib.optionalString withGui ''
@@ -56,26 +60,22 @@ buildNpmPackage rec {
       -c.electronVersion=${electron.version}
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    jq
+  ];
 
   postInstall =
     ''
       # this file is also used at runtime
       install -m644 .version.json $out/lib/node_modules/zap/
-    ''
-    + lib.optionalString (!withGui) ''
+
       # home-assistant chip-* python packages need the executable under the name zap-cli
       mv $out/bin/zap $out/bin/zap-cli
     ''
     + lib.optionalString withGui ''
-      pushd dist/linux-*unpacked
-      mkdir -p $out/opt/zap-chip
-      cp -r locales resources{,.pak} $out/opt/zap-chip
-      popd
-
-      rm $out/bin/zap
       makeWrapper '${lib.getExe electron}' "$out/bin/zap" \
-        --add-flags $out/opt/zap-chip/resources/app.asar \
+        --add-flags $out/lib/node_modules/zap/dist/linux-unpacked/resources/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
