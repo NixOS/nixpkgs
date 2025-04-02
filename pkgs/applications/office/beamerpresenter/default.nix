@@ -73,16 +73,16 @@ stdenv.mkDerivation rec {
     ];
 
   cmakeFlags = [
-    "-DGIT_VERSION=OFF"
-    "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
-    "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
-    "-DUSE_QTPDF=OFF"
-    "-DLINK_MUPDF_THIRD=OFF"
-    "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
-    "-DLINK_MUJS=OFF"
-    "-DLINK_GUMBO=ON"
-    "-DUSE_TRANSLATIONS=ON"
-    "-DQT_VERSION_MAJOR=${lib.versions.major qtbase.version}"
+    (lib.cmakeBool "GIT_VERSION" false)
+    (lib.cmakeBool "USE_POPPLER" usePoppler)
+    (lib.cmakeBool "USE_MUPDF" useMupdf)
+    (lib.cmakeBool "USE_QTPDF" false)
+    (lib.cmakeBool "LINK_MUPDF_THIRD" false)
+    (lib.cmakeBool "USE_EXTERNAL_RENDERER" useExternalRenderer)
+    (lib.cmakeBool "LINK_MUJS" false)
+    (lib.cmakeBool "LINK_GUMBO" true)
+    (lib.cmakeBool "USE_TRANSLATIONS" true)
+    (lib.cmakeFeature "QT_VERSION_MAJOR" (lib.versions.major qtbase.version))
   ];
 
   preFixup = ''

@@ -27,21 +27,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-3HOW3bip+0LKegwO773upeKKLiLv7JWUGEJcFiH0lcw=";
   };
 
-  cmakeFlags = [
-    "-DENABLE_COMPLEX_DEPS=true"
-    (lib.cmakeBool "ENABLE_CONDA" withConda)
-    "-DENABLE_LZMA_COMPRESSION=true"
-    "-DENABLE_BZIP2_COMPRESSION=true"
-    "-DENABLE_ZSTD_COMPRESSION=true"
-    "-DENABLE_ZCHUNK_COMPRESSION=true"
-    "-DWITH_SYSTEM_ZCHUNK=true"
-  ] ++ lib.optionals withRpm [
-    "-DENABLE_COMPS=true"
-    "-DENABLE_PUBKEY=true"
-    "-DENABLE_RPMDB=true"
-    "-DENABLE_RPMDB_BYRPMHEADER=true"
-    "-DENABLE_RPMMD=true"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "ENABLE_COMPLEX_DEPS" true)
+      (lib.cmakeBool "ENABLE_CONDA" withConda)
+      (lib.cmakeBool "ENABLE_LZMA_COMPRESSION" true)
+      (lib.cmakeBool "ENABLE_BZIP2_COMPRESSION" true)
+      (lib.cmakeBool "ENABLE_ZSTD_COMPRESSION" true)
+      (lib.cmakeBool "ENABLE_ZCHUNK_COMPRESSION" true)
+      (lib.cmakeBool "WITH_SYSTEM_ZCHUNK" true)
+    ]
+    ++ lib.optionals withRpm [
+      (lib.cmakeBool "ENABLE_COMPS" true)
+      (lib.cmakeBool "ENABLE_PUBKEY" true)
+      (lib.cmakeBool "ENABLE_RPMDB" true)
+      (lib.cmakeBool "ENABLE_RPMDB_BYRPMHEADER" true)
+      (lib.cmakeBool "ENABLE_RPMMD" true)
+    ];
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [ zlib xz bzip2 zchunk zstd expat db ]

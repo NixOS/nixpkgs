@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
-      "-DDISABLE_HTTP=${if httpSupport then "OFF" else "ON"}"
-      "-DDISABLE_LINENOISE=${if linenoiseSupport then "OFF" else "ON"}"
+      (lib.cmakeBool "BUILD_CLI" cliSupport)
+      (lib.cmakeBool "DISABLE_HTTP" (!httpSupport))
+      (lib.cmakeBool "DISABLE_LINENOISE" (!linenoiseSupport))
     ]
     ++ lib.optionals enableLTO [
       # TODO: LTO with LLVM
-      "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
-      "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
+      (lib.cmakeFeature "CMAKE_AR" "${stdenv.cc.cc}/bin/gcc-ar")
+      (lib.cmakeFeature "CMAKE_RANLIB" "${stdenv.cc.cc}/bin/gcc-ranlib")
     ];
 
   postBuild = ''
