@@ -339,101 +339,160 @@ rec {
   };
 
   # a superior CPU has all the features of an inferior and is able to build and test code for it
-  inferiors = {
-    # x86_64 Generic
-    default = [ ];
-    x86-64 = [ ];
-    x86-64-v2 = [ "x86-64" ];
-    x86-64-v3 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
-    x86-64-v4 = [ "x86-64-v3" ] ++ inferiors.x86-64-v3;
+  inferiors =
+    let
+      withInferiors = archs: lib.unique (archs ++ lib.flatten (lib.attrVals archs inferiors));
+    in
+    {
+      # x86_64 Generic
+      default = [ ];
+      x86-64 = [ ];
+      x86-64-v2 = [ "x86-64" ];
+      x86-64-v3 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      x86-64-v4 = [ "x86-64-v3" ] ++ inferiors.x86-64-v3;
 
-    # x86_64 Intel
-    # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-    nehalem = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
-    westmere = [ "nehalem" ] ++ inferiors.nehalem;
-    sandybridge = [ "westmere" ] ++ inferiors.westmere;
-    ivybridge = [ "sandybridge" ] ++ inferiors.sandybridge;
+      # x86_64 Intel
+      # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+      nehalem = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      westmere = [ "nehalem" ] ++ inferiors.nehalem;
+      sandybridge = [ "westmere" ] ++ inferiors.westmere;
+      ivybridge = [ "sandybridge" ] ++ inferiors.sandybridge;
 
-    haswell = lib.unique (
-      [
-        "ivybridge"
-        "x86-64-v3"
-      ]
-      ++ inferiors.ivybridge
-      ++ inferiors.x86-64-v3
-    );
-    broadwell = [ "haswell" ] ++ inferiors.haswell;
-    skylake = [ "broadwell" ] ++ inferiors.broadwell;
+      haswell = lib.unique (
+        [
+          "ivybridge"
+          "x86-64-v3"
+        ]
+        ++ inferiors.ivybridge
+        ++ inferiors.x86-64-v3
+      );
+      broadwell = [ "haswell" ] ++ inferiors.haswell;
+      skylake = [ "broadwell" ] ++ inferiors.broadwell;
 
-    skylake-avx512 = lib.unique (
-      [
-        "skylake"
-        "x86-64-v4"
-      ]
-      ++ inferiors.skylake
-      ++ inferiors.x86-64-v4
-    );
-    cannonlake = [ "skylake-avx512" ] ++ inferiors.skylake-avx512;
-    icelake-client = [ "cannonlake" ] ++ inferiors.cannonlake;
-    icelake-server = [ "icelake-client" ] ++ inferiors.icelake-client;
-    cascadelake = [ "cannonlake" ] ++ inferiors.cannonlake;
-    cooperlake = [ "cascadelake" ] ++ inferiors.cascadelake;
-    tigerlake = [ "icelake-server" ] ++ inferiors.icelake-server;
-    sapphirerapids = [ "tigerlake" ] ++ inferiors.tigerlake;
-    emeraldrapids = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
+      skylake-avx512 = lib.unique (
+        [
+          "skylake"
+          "x86-64-v4"
+        ]
+        ++ inferiors.skylake
+        ++ inferiors.x86-64-v4
+      );
+      cannonlake = [ "skylake-avx512" ] ++ inferiors.skylake-avx512;
+      icelake-client = [ "cannonlake" ] ++ inferiors.cannonlake;
+      icelake-server = [ "icelake-client" ] ++ inferiors.icelake-client;
+      cascadelake = [ "cannonlake" ] ++ inferiors.cannonlake;
+      cooperlake = [ "cascadelake" ] ++ inferiors.cascadelake;
+      tigerlake = [ "icelake-server" ] ++ inferiors.icelake-server;
+      sapphirerapids = [ "tigerlake" ] ++ inferiors.tigerlake;
+      emeraldrapids = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
-    # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
-    alderlake = [ ];
-    sierraforest = [ "alderlake" ] ++ inferiors.alderlake;
+      alderlake = [ "skylake" ] ++ inferiors.skylake;
+      sierraforest = [ "alderlake" ] ++ inferiors.alderlake;
 
-    # x86_64 AMD
-    # TODO: fill this (need testing)
-    btver1 = [ ];
-    btver2 = [ ];
-    bdver1 = [ ];
-    bdver2 = [ ];
-    bdver3 = [ ];
-    bdver4 = [ ];
-    # Regarding `skylake` as inferior of `znver1`, there are reports of
-    # successful usage by Gentoo users and Phoronix benchmarking of different
-    # `-march` targets.
-    #
-    # The GCC documentation on extensions used and wikichip documentation
-    # regarding supperted extensions on znver1 and skylake was used to create
-    # this partial order.
-    #
-    # Note:
-    #
-    # - The successors of `skylake` (`cannonlake`, `icelake`, etc) use `avx512`
-    #   which no current AMD Zen michroarch support.
-    # - `znver1` uses `ABM`, `CLZERO`, `CX16`, `MWAITX`, and `SSE4A` which no
-    #   current Intel microarch support.
-    #
-    # https://www.phoronix.com/scan.php?page=article&item=amd-znver3-gcc11&num=1
-    # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-    # https://en.wikichip.org/wiki/amd/microarchitectures/zen
-    # https://en.wikichip.org/wiki/intel/microarchitectures/skylake
-    znver1 = [ "skylake" ] ++ inferiors.skylake; # Includes haswell and x86-64-v3
-    znver2 = [ "znver1" ] ++ inferiors.znver1;
-    znver3 = [ "znver2" ] ++ inferiors.znver2;
-    znver4 = lib.unique (
-      [
-        "znver3"
-        "x86-64-v4"
-      ]
-      ++ inferiors.znver3
-      ++ inferiors.x86-64-v4
-    );
-    znver5 = [ "znver4" ] ++ inferiors.znver4;
+      # x86_64 AMD
+      # TODO: fill in specific CPU architecture inferiors
+      btver1 = [ "x86-64" ];
+      btver2 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      bdver1 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      bdver2 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      bdver3 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;
+      bdver4 = [ "x86-64-v3" ] ++ inferiors.x86-64-v3;
+      # Regarding `skylake` as inferior of `znver1`, there are reports of
+      # successful usage by Gentoo users and Phoronix benchmarking of different
+      # `-march` targets.
+      #
+      # The GCC documentation on extensions used and wikichip documentation
+      # regarding supperted extensions on znver1 and skylake was used to create
+      # this partial order.
+      #
+      # Note:
+      #
+      # - The successors of `skylake` (`cannonlake`, `icelake`, etc) use `avx512`
+      #   which no current AMD Zen michroarch support.
+      # - `znver1` uses `ABM`, `CLZERO`, `CX16`, `MWAITX`, and `SSE4A` which no
+      #   current Intel microarch support.
+      #
+      # https://www.phoronix.com/scan.php?page=article&item=amd-znver3-gcc11&num=1
+      # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+      # https://en.wikichip.org/wiki/amd/microarchitectures/zen
+      # https://en.wikichip.org/wiki/intel/microarchitectures/skylake
+      znver1 = [ "skylake" ] ++ inferiors.skylake; # Includes haswell and x86-64-v3
+      znver2 = [ "znver1" ] ++ inferiors.znver1;
+      znver3 = [ "znver2" ] ++ inferiors.znver2;
+      znver4 = lib.unique (
+        [
+          "znver3"
+          "x86-64-v4"
+        ]
+        ++ inferiors.znver3
+        ++ inferiors.x86-64-v4
+      );
+      znver5 = [ "znver4" ] ++ inferiors.znver4;
 
-    # other
-    armv5te = [ ];
-    armv6 = [ ];
-    armv7-a = [ ];
-    armv8-a = [ ];
-    mips32 = [ ];
-    loongson2f = [ ];
-  };
+      # ARM64 (AArch64)
+      armv8-a = [ ];
+      "armv8.1-a" = [ "armv8-a" ];
+      "armv8.2-a" = [ "armv8.1-a" ] ++ inferiors."armv8.1-a";
+      "armv8.3-a" = [ "armv8.2-a" ] ++ inferiors."armv8.2-a";
+      "armv8.4-a" = [ "armv8.3-a" ] ++ inferiors."armv8.3-a";
+      "armv8.5-a" = [ "armv8.4-a" ] ++ inferiors."armv8.4-a";
+      "armv8.6-a" = [ "armv8.5-a" ] ++ inferiors."armv8.5-a";
+      "armv8.7-a" = [ "armv8.6-a" ] ++ inferiors."armv8.6-a";
+      "armv8.8-a" = [ "armv8.7-a" ] ++ inferiors."armv8.7-a";
+      "armv8.9-a" = [ "armv8.8-a" ] ++ inferiors."armv8.8-a";
+      armv9-a = [ "armv8.5-a" ] ++ inferiors."armv8.5-a";
+      "armv9.1-a" = [
+        "armv9-a"
+        "armv8.6-a"
+      ] ++ inferiors."armv8.6-a";
+      "armv9.2-a" = lib.unique (
+        [
+          "armv9.1-a"
+          "armv8.7-a"
+        ]
+        ++ inferiors."armv9.1-a"
+        ++ inferiors."armv8.7-a"
+      );
+      "armv9.3-a" = lib.unique (
+        [
+          "armv9.2-a"
+          "armv8.8-a"
+        ]
+        ++ inferiors."armv9.2-a"
+        ++ inferiors."armv8.8-a"
+      );
+      "armv9.4-a" = [ "armv9.3-a" ] ++ inferiors."armv9.3-a";
+
+      # ARM
+      cortex-a53 = [ "armv8-a" ];
+      cortex-a72 = [ "armv8-a" ];
+      cortex-a55 = [
+        "armv8.2-a"
+        "cortex-a53"
+        "cortex-a72"
+      ] ++ inferiors."armv8.2-a";
+      cortex-a76 = [
+        "armv8.2-a"
+        "cortex-a53"
+        "cortex-a72"
+      ] ++ inferiors."armv8.2-a";
+
+      # Ampere
+      ampere1 = withInferiors [
+        "armv8.6-a"
+        "cortex-a55"
+        "cortex-a76"
+      ];
+      ampere1a = [ "ampere1" ] ++ inferiors.ampere1;
+      ampere1b = [ "ampere1a" ] ++ inferiors.ampere1a;
+
+      # other
+      armv5te = [ ];
+      armv6 = [ ];
+      armv7-a = [ ];
+      mips32 = [ ];
+      loongson2f = [ ];
+    };
 
   predicates =
     let
