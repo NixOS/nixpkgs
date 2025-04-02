@@ -16679,6 +16679,8 @@ self: super: with self; {
 
   swh-export = callPackage ../development/python-modules/swh-export { };
 
+  swh-graph = callPackage ../development/python-modules/swh-graph { };
+
   swh-journal = callPackage ../development/python-modules/swh-journal { };
 
   swh-model = callPackage ../development/python-modules/swh-model { };
