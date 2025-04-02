@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     "1.11" = fetchFromGitHub {
       owner = "ninja-build";
       repo = "ninja";
-      rev = "v1.11.1";
-      hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+      rev = "v1.12.1";
+      hash = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
     };
 
     latest = fetchFromGitHub {
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # for list of env vars
-    # see https://github.com/ninja-build/ninja/blob/v1.11.1/configure.py#L264
+    # see https://github.com/ninja-build/ninja/blob/v1.12.1/configure.py#L264
     CXX="$CXX_FOR_BUILD" \
     AR="$AR_FOR_BUILD" \
     CFLAGS="$CFLAGS_FOR_BUILD" \
