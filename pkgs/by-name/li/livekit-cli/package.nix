@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "livekit-cli";
-  version = "1.5.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
     rev = "v${version}";
-    hash = "sha256-J5tg3nm2pEemEZcIpObcxH+G4ByzvUtoSyy92CcWr6M=";
+    hash = "sha256-Ta6IAkx84BBF3xptFYju6XGyYb67mx9PTADnlOGa1D0=";
   };
 
-  vendorHash = "sha256-ywHTIuiZaoY3p7hTsnImcCpuwMXHQZcnRsWerIlOU4o=";
+  vendorHash = "sha256-hLaH9/ylA+MHaFaS64jOZOyg3AxDziL5y/tOjxQglKk=";
 
-  subPackages = [ "cmd/livekit-cli" ];
+  subPackages = [ "cmd/lk" ];
 
   meta = with lib; {
     description = "Command line interface to LiveKit";
     homepage = "https://livekit.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mgdelacroix ];
-    mainProgram = "livekit-cli";
+    mainProgram = "lk";
   };
 }
