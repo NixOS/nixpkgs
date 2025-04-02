@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.11.1";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
     rev = version;
-    sha256 = "sha256-MUmvzZMzzKKw5GjOUhpdrMIgKO9/i9RDqDtTsSghd18=";
+    sha256 = "sha256-6Gv4bVSPdMJxBW60WR0W167kzksNCUAgaTJrWlUzd/Q=";
   };
 
   nativeBuildInputs = [
