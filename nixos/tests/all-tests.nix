@@ -374,7 +374,7 @@ in
   docker-registry = runTest ./docker-registry.nix;
   docker-tools = handleTestOn [ "x86_64-linux" ] ./docker-tools.nix { };
   docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
-  docker-tools-cross = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./docker-tools-cross.nix { };
+  docker-tools-cross = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./docker-tools-cross.nix;
   docker-tools-overlay = runTestOn [ "x86_64-linux" ] ./docker-tools-overlay.nix;
   docling-serve = runTest ./docling-serve.nix;
   documize = handleTest ./documize.nix { };
