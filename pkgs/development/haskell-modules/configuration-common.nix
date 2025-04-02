@@ -1400,9 +1400,7 @@ self: super: {
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-  });
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
