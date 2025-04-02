@@ -1,35 +1,37 @@
-{ lib, stdenv
-, fetchurl
-, nixosTests
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook3
-, gobject-introspection
-, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
-, xorg
-, zlib
-, nss
-, nspr
-, fontconfig
-, pango
-, cairo
-, expat
-, alsa-lib
-, cups
-, dbus
-, atk
-, gtk3-x11
-, gtk2-x11
-, gdk-pixbuf
-, glib
-, curl
-, freetype
-, libpulseaudio
-, libuuid
-, systemd
-, flite ? null
-, libXxf86vm ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  wrapGAppsHook3,
+  gobject-introspection,
+  jre, # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
+  xorg,
+  zlib,
+  nss,
+  nspr,
+  fontconfig,
+  pango,
+  cairo,
+  expat,
+  alsa-lib,
+  cups,
+  dbus,
+  atk,
+  gtk3-x11,
+  gtk2-x11,
+  gdk-pixbuf,
+  glib,
+  curl,
+  freetype,
+  libpulseaudio,
+  libuuid,
+  systemd,
+  flite ? null,
+  libXxf86vm ? null,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -50,40 +52,42 @@ let
     libXxf86vm # needed only for versions <1.13
   ];
 
-  libPath = lib.makeLibraryPath ([
-    alsa-lib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    pango
-    gtk3-x11
-    gtk2-x11
-    nspr
-    nss
-    stdenv.cc.cc
-    zlib
-    libuuid
-  ] ++
-  (with xorg; [
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libXScrnSaver
-  ]));
+  libPath = lib.makeLibraryPath (
+    [
+      alsa-lib
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      pango
+      gtk3-x11
+      gtk2-x11
+      nspr
+      nss
+      stdenv.cc.cc
+      zlib
+      libuuid
+    ]
+    ++ (with xorg; [
+      libX11
+      libxcb
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libXScrnSaver
+    ])
+  );
 in
 stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
@@ -100,7 +104,12 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 copyDesktopItems gobject-introspection ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+    copyDesktopItems
+    gobject-introspection
+  ];
 
   sourceRoot = ".";
 

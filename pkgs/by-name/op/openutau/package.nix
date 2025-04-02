@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, dbus
-, fontconfig
-, portaudio
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  dbus,
+  fontconfig,
+  portaudio,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 buildDotnetModule rec {
@@ -70,18 +71,25 @@ buildDotnetModule rec {
   '';
 
   # need to make sure proprietary worldline resampler is copied
-  postInstall = let
-    runtime = if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) then "linux-x64"
-         else if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then "linux-arm64"
-         else if stdenv.hostPlatform.isDarwin then "osx"
-         else null;
-    shouldInstallResampler = lib.optionalString (runtime != null) ''
-      cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
-    '';
-    shouldInstallDesktopItem = lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg
-    '';
-    in ''
+  postInstall =
+    let
+      runtime =
+        if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) then
+          "linux-x64"
+        else if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
+          "linux-arm64"
+        else if stdenv.hostPlatform.isDarwin then
+          "osx"
+        else
+          null;
+      shouldInstallResampler = lib.optionalString (runtime != null) ''
+        cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/
+      '';
+      shouldInstallDesktopItem = lib.optionalString stdenv.hostPlatform.isLinux ''
+        install -Dm655 -t $out/share/icons/hicolor/scalable/apps Logo/openutau.svg
+      '';
+    in
+    ''
       ${shouldInstallResampler}
       ${shouldInstallDesktopItem}
     '';
@@ -100,7 +108,12 @@ buildDotnetModule rec {
     ];
     license = licenses.mit;
     maintainers = [ ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "OpenUtau";
   };
 }

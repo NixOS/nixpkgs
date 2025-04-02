@@ -23,7 +23,7 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
   pylatexenc,
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
     pylatexenc
@@ -177,6 +177,7 @@ buildPythonPackage rec {
     "tests/test_document_picture_classifier.py"
     "tests/test_e2e_conversion.py"
     "tests/test_e2e_ocr_conversion.py"
+    "tests/test_input_doc.py"
     "tests/test_interfaces.py"
     "tests/test_invalid_input.py"
     "tests/test_legacy_format_transform.py"

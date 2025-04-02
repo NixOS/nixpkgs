@@ -1,8 +1,10 @@
-{ buildDunePackage, ocsipersist-lib
-, lwt_log
-, ocaml_sqlite3
-, ocsigen_server
-, xml-light
+{
+  buildDunePackage,
+  ocsipersist-lib,
+  lwt_log,
+  ocaml_sqlite3,
+  ocsigen_server,
+  xml-light,
 }:
 
 buildDunePackage {

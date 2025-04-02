@@ -32,9 +32,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [ libredirect.hook postgresql ];
+  nativeCheckInputs = [
+    libredirect.hook
+    postgresql
+  ];
 
-  checkFlags = ["-short"];
+  checkFlags = [ "-short" ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
