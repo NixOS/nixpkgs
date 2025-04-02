@@ -399,17 +399,16 @@ builtins.intersectAttrs super {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "578ad85b3096d99b25cae0a73c03df4e82f587c7";
-        hash = "sha256-2LPx4iRJonX4gtd3r73DBM/ZhN/hKu1lb/MHOav8c5s=";
+        rev = "6e8d82a451fccbaa4714da8f7a3db5907bdfa96d";
+        hash = "sha256-Ht5wD/n2I/tQWNgYIdmi3UQbm1FNwp9m9JmDjZEd6ng=";
       };
-      version = "1.0.0-unstable-2024-10-01";
+      version = "1.0.0-unstable-2024-12-02";
       #editedCabalFile = null;
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
-      patches = (old.patches or [ ]) ++ [
-        # Part of https://github.com/aristanetworks/nix-serve-ng/pull/40
-        ./patches/nix-serve-ng-nix.2.24.patch
-      ];
+      # error: output '/nix/store/hv6lzj1nlshn8q5lirzgys8f4vgym4hg-nix-serve-ng-1.0.0-unstable-2024-12-02' is not allowed to refer to the following paths:
+      #    /nix/store/qza2y18fwkq1wzi02qywf691r42r5jfy-ghc-9.6.6
+      broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
     }) super.nix-serve-ng).override
       {
         nix = pkgs.nixVersions.nix_2_24;
