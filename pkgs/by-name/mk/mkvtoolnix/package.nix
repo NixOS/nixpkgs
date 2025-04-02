@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitea,
   pkg-config,
   autoreconfHook,
   rake,
@@ -9,7 +9,6 @@
   cmark,
   docbook_xsl,
   expat,
-  fetchpatch2,
   file,
   flac,
   fmt,
@@ -25,14 +24,12 @@
   libxslt,
   nlohmann_json,
   pugixml,
-  qtbase,
-  qtmultimedia,
-  qtwayland,
+  qt6,
   utf8cpp,
   xdg-utils,
   zlib,
+  nix-update-script,
   withGUI ? true,
-  wrapQtAppsHook,
 }:
 
 let
@@ -53,23 +50,23 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "87.0";
+  version = "91.0";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "mbunkus";
     repo = "mkvtoolnix";
-    rev = "release-${version}";
-    hash = "sha256-UU57ZgH1sxCXspwfKXScw08aJYiv+k526U8q8N1tA+4=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-cBzW8zj2JxzhdMkvs8nWiBID/8FSMT7FkrZ78c0f0ts=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/fc83003f541ac690fe308c3f4ac36e62814a40db.diff";
-      hash = "sha256-HOS79g5xm70upV5Okv1COEg0SanXs7brRRB59Ofx5HA=";
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=release-(.*)" ];
+    };
+  };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     rake
-  ] ++ optionals withGUI [ wrapQtAppsHook ];
+  ] ++ optionals withGUI [ qt6.wrapQtAppsHook ];
 
   # qtbase and qtmultimedia are needed without the GUI
   buildInputs =
@@ -97,14 +94,14 @@ stdenv.mkDerivation rec {
       libvorbis
       nlohmann_json
       pugixml
-      qtbase
-      qtmultimedia
+      qt6.qtbase
+      qt6.qtmultimedia
       utf8cpp
       xdg-utils
       zlib
     ]
     ++ optionals withGUI [ cmark ]
-    ++ optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+    ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
@@ -116,7 +113,6 @@ stdenv.mkDerivation rec {
     "--disable-debug"
     "--disable-precompiled-headers"
     "--disable-profiling"
-    "--disable-static-qt"
     "--disable-update-check"
     "--enable-optimization"
     "--with-boost-libdir=${getLib boost}/lib"
@@ -141,15 +137,15 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform tools for Matroska";
     homepage = "https://mkvtoolnix.download/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       codyopel
       rnhmjoj
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
