@@ -3006,6 +3006,9 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
+  "ssec-go-toolchain-versions" : [
+    "index.html#ssec-go-toolchain-versions"
+  ],
   "buildGoModule-goModules-override": [
     "index.html#buildGoModule-goModules-override"
   ],
