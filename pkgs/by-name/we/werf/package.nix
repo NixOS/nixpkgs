@@ -8,15 +8,14 @@
   installShellFiles,
   versionCheckHook,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "werf";
   version = "2.34.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hWkU3tyh0kQ9GNl5gQIs4wTRBQV0B3/0oOAhKLo1hOo=";
   };
 
@@ -40,9 +39,9 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
+      "-X github.com/werf/werf/v2/pkg/werf.Version=${finalAttrs.src.rev}"
     ]
-    ++ lib.optionals (env.CGO_ENABLED == 1) [
+    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "-extldflags=-static"
       "-linkmode external"
     ];
@@ -55,7 +54,7 @@ buildGoModule rec {
       "dfrunsecurity"
       "dfssh"
     ]
-    ++ lib.optionals (env.CGO_ENABLED == 1) [
+    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
       "cni"
       "exclude_graphdriver_devicemapper"
       "netgo"
@@ -78,7 +77,7 @@ buildGoModule rec {
         pkg/werf/exec/*_test.go \
         test/e2e
     ''
-    + lib.optionalString (env.CGO_ENABLED == 0) ''
+    + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
       # A workaround for osusergo.
       export USER=nixbld
     '';
@@ -104,9 +103,9 @@ buildGoModule rec {
       Buildah.
     '';
     homepage = "https://werf.io";
-    changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
+    changelog = "https://github.com/werf/werf/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "werf";
   };
-}
+})
