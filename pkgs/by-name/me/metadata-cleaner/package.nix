@@ -69,6 +69,6 @@ python3.pkgs.buildPythonApplication rec {
       gpl3Plus
       cc-by-sa-40
     ];
-    maintainers = with lib.maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
