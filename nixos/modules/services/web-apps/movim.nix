@@ -578,8 +578,8 @@ in
         };
       };
 
-      nginx =
-        mkIf (cfg.nginx != null) {
+      nginx = mkIf (cfg.nginx != null) (
+        {
           enable = true;
           recommendedOptimisation = mkDefault true;
           recommendedProxySettings = true;
@@ -677,7 +677,8 @@ in
         }
         // lib.optionalAttrs (cfg.precompressStaticFiles.brotli.enable) {
           recommendedBrotliSettings = mkDefault true;
-        };
+        }
+      );
 
       mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
         enable = mkDefault true;

@@ -1,54 +1,76 @@
-{ lib
-, fetchFromGitHub
-, pkgs
-, stdenv
-, config
+{
+  lib,
+  fetchFromGitHub,
+  pkgs,
+  stdenv,
+  config,
 }:
 
 let
   rtpPath = "share/tmux-plugins";
 
-  addRtp = path: rtpFilePath: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}/${rtpFilePath}"; } // {
+  addRtp =
+    path: rtpFilePath: attrs: derivation:
+    derivation
+    // {
+      rtp = "${derivation}/${path}/${rtpFilePath}";
+    }
+    // {
       overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
     };
 
-  mkTmuxPlugin = a@{
-    pluginName,
-    rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
-    namePrefix ? "tmuxplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? ":",
-    buildPhase ? ":",
-    addonInfo ? null,
-    preInstall ? "",
-    postInstall ? "",
-    path ? lib.getName pluginName,
-    ...
-  }:
+  mkTmuxPlugin =
+    a@{
+      pluginName,
+      rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux",
+      namePrefix ? "tmuxplugin-",
+      src,
+      unpackPhase ? "",
+      configurePhase ? ":",
+      buildPhase ? ":",
+      addonInfo ? null,
+      preInstall ? "",
+      postInstall ? "",
+      path ? lib.getName pluginName,
+      ...
+    }:
     if lib.hasAttr "dependencies" a then
       throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
-    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
-      pname = namePrefix + pluginName;
+    else
+      addRtp "${rtpPath}/${path}" rtpFilePath a (
+        stdenv.mkDerivation (
+          a
+          // {
+            pname = namePrefix + pluginName;
 
-      inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+            inherit
+              pluginName
+              unpackPhase
+              configurePhase
+              buildPhase
+              addonInfo
+              preInstall
+              postInstall
+              ;
 
-      installPhase = ''
-        runHook preInstall
+            installPhase = ''
+              runHook preInstall
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
-        if [ -n "$addonInfo" ]; then
-          echo "$addonInfo" > $target/addon-info.json
-        fi
+              target=$out/${rtpPath}/${path}
+              mkdir -p $out/${rtpPath}
+              cp -r . $target
+              if [ -n "$addonInfo" ]; then
+                echo "$addonInfo" > $target/addon-info.json
+              fi
 
-        runHook postInstall
-      '';
-    }));
+              runHook postInstall
+            '';
+          }
+        )
+      );
 
-in {
+in
+{
   inherit mkTmuxPlugin;
 
   battery = mkTmuxPlugin {
@@ -75,8 +97,7 @@ in {
     meta = {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
       description = "better mouse support for tmux";
-      longDescription =
-      ''
+      longDescription = ''
         Features:
 
           * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
@@ -122,8 +143,7 @@ in {
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continuous saving of tmux environment";
-      longDescription =
-      ''
+      longDescription = ''
         Features:
         * continuous saving of tmux environment
         * automatic tmux start when computer/server is turned on
@@ -158,7 +178,10 @@ in {
       description = "Various copy-mode tools";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ deejayem sedlund ];
+      maintainers = with lib.maintainers; [
+        deejayem
+        sedlund
+      ];
     };
   };
 
@@ -227,19 +250,27 @@ in {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ pkgs.python3 ];
     postInstall = ''
-     patchShebangs extrakto.py extrakto_plugin.py
+      patchShebangs extrakto.py extrakto_plugin.py
 
-      wrapProgram $target/scripts/open.sh \
-        --prefix PATH : ${ with pkgs; lib.makeBinPath
-          [ fzf xclip wl-clipboard ]
-        }
+       wrapProgram $target/scripts/open.sh \
+         --prefix PATH : ${
+           with pkgs;
+           lib.makeBinPath [
+             fzf
+             xclip
+             wl-clipboard
+           ]
+         }
     '';
     meta = {
       homepage = "https://github.com/laktak/extrakto";
       description = "Fuzzy find your text with fzf instead of selecting it by hand ";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kidd fnune ];
+      maintainers = with lib.maintainers; [
+        kidd
+        fnune
+      ];
     };
   };
 
@@ -275,7 +306,15 @@ in {
       for f in fuzzback.sh preview.sh supported.sh; do
         chmod +x $target/scripts/$f
         wrapProgram $target/scripts/$f \
-          --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils fzf gawk gnused ]}
+          --prefix PATH : ${
+            with pkgs;
+            lib.makeBinPath [
+              coreutils
+              fzf
+              gawk
+              gnused
+            ]
+          }
       done
     '';
     meta = {
@@ -410,13 +449,12 @@ in {
     meta = {
       homepage = "https://www.nordtheme.com/ports/tmux";
       description = "Nord Tmux theme with plugin support";
-      longDescription =
-        ''
-          > An arctic, north-bluish clean and elegant tmux theme.
-          > Designed for a fluent and clear workflow with support for third-party plugins.
+      longDescription = ''
+        > An arctic, north-bluish clean and elegant tmux theme.
+        > Designed for a fluent and clear workflow with support for third-party plugins.
 
-          This plugin requires that tmux be used with a Nord terminal emulator
-          theme in order to work properly.
+        This plugin requires that tmux be used with a Nord terminal emulator
+        theme in order to work properly.
       '';
       license = lib.licenses.mit;
       maintainers = [ lib.maintainers.sigmasquadron ];
@@ -496,9 +534,18 @@ in {
       rm -r $target/test
 
       wrapProgram $target/scripts/main.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
-          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
-        ] )}
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath ([
+            findutils
+            fzf
+            gnugrep
+            gnused
+            ncurses
+            pkgs.pass
+            tmux
+          ])
+        }
     '';
 
     meta = {
@@ -565,24 +612,23 @@ in {
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
       description = "Restore tmux environment after system restart";
-      longDescription =
-        ''
-          This plugin goes to great lengths to save and restore all the details
-          from your tmux environment. Here's what's been taken care of:
+      longDescription = ''
+        This plugin goes to great lengths to save and restore all the details
+        from your tmux environment. Here's what's been taken care of:
 
-          * all sessions, windows, panes and their order
-          * current working directory for each pane
-          * exact pane layouts within windows (even when zoomed)
-          * active and alternative session
-          * active and alternative window for each session
-          * windows with focus
-          * active pane for each window
-          * "grouped sessions" (useful feature when using tmux with multiple monitors)
-          * programs running within a pane! More details in the restoring programs doc.
+        * all sessions, windows, panes and their order
+        * current working directory for each pane
+        * exact pane layouts within windows (even when zoomed)
+        * active and alternative session
+        * active and alternative window for each session
+        * windows with focus
+        * active pane for each window
+        * "grouped sessions" (useful feature when using tmux with multiple monitors)
+        * programs running within a pane! More details in the restoring programs doc.
 
-          Optional:
-          * restoring vim and neovim sessions
-          * restoring pane contents
+        Optional:
+        * restoring vim and neovim sessions
+        * restoring pane contents
       '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
@@ -652,7 +698,16 @@ in {
       done
       substituteInPlace $target/session-wizard.tmux --replace  \$CURRENT_DIR $target
       wrapProgram $target/bin/t \
-        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath ([
+            fzf
+            zoxide
+            coreutils
+            gnugrep
+            gnused
+          ])
+        }
     '';
   };
 
@@ -776,8 +831,7 @@ in {
     meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
       description = "Use fzf to manage your tmux work environment! ";
-      longDescription =
-        ''
+      longDescription = ''
         Features:
         * Manage sessions (attach, detach*, rename, kill*).
         * Manage windows (switch, link, move, swap, rename, kill*).
@@ -835,13 +889,36 @@ in {
     postInstall = ''
       chmod +x $target/scripts/sessionx.sh
       wrapProgram $target/scripts/sessionx.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ zoxide fzf gnugrep gnused coreutils ]}
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            zoxide
+            fzf
+            gnugrep
+            gnused
+            coreutils
+          ]
+        }
       chmod +x $target/scripts/preview.sh
       wrapProgram $target/scripts/preview.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            coreutils
+            gnugrep
+            gnused
+          ]
+        }
       chmod +x $target/scripts/reload_sessions.sh
       wrapProgram $target/scripts/reload_sessions.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath [ coreutils gnugrep gnused ]}
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            coreutils
+            gnugrep
+            gnused
+          ]
+        }
     '';
     meta = {
       description = "Tmux session manager, with preview, fuzzy finding, and MORE";
@@ -869,9 +946,13 @@ in {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
-          --prefix PATH : ${with pkgs; lib.makeBinPath (
-            [ pkgs.fzf pkgs.zoxide ]
-          )}
+          --prefix PATH : ${
+            with pkgs;
+            lib.makeBinPath ([
+              pkgs.fzf
+              pkgs.zoxide
+            ])
+          }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
       find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
@@ -976,6 +1057,7 @@ in {
       maintainers = with maintainers; [ o0th ];
     };
   };
-} // lib.optionalAttrs config.allowAliases {
+}
+// lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 }

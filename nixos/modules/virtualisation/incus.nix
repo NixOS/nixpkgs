@@ -338,7 +338,40 @@ in
         "lxc-containers".profile = ''
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
+        "incusd".profile = ''
+          # This profile allows everything and only exists to give the
+          # application a name instead of having the label "unconfined"
+
+          abi <abi/4.0>,
+          include <tunables/global>
+
+          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
+            userns,
+            </var/lib/incus/security/apparmor/cache>
+            </var/lib/incus/security/apparmor/profiles>
+
+            # Site-specific additions and overrides. See local/README for details.
+            include if exists <local/incusd>
+          }
+        '';
       };
+      includes."abstractions/base" =
+        ''
+          # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+          # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+          mr /nix/store/*/lib/*.so*,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+
+          # Support use of VM instance
+          mrix ${pkgs.qemu_kvm}/bin/*,
+          k ${OVMF2MB.fd}/FV/*.fd,
+          k ${pkgs.OVMFFull.fd}/FV/*.fd,
+        ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+          k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
+        '';
     };
 
     systemd.services.incus = {

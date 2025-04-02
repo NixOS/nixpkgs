@@ -1,5 +1,5 @@
 diff --git a/DiscordChatExporter.Gui/Services/SettingsService.cs b/DiscordChatExporter.Gui/Services/SettingsService.cs
-index 4f69969..80a8d4b 100644
+index 4f69969..2716225 100644
 --- a/DiscordChatExporter.Gui/Services/SettingsService.cs
 +++ b/DiscordChatExporter.Gui/Services/SettingsService.cs
 @@ -14,7 +14,13 @@ namespace DiscordChatExporter.Gui.Services;
@@ -8,11 +8,11 @@ index 4f69969..80a8d4b 100644
      : SettingsBase(
 -        Path.Combine(AppContext.BaseDirectory, "Settings.dat"),
 +        Path.Combine(
-+          System.IO.Path.Combine(
-+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-+            "discordchatexporter"
-+          ),
-+          "Settings.dat"
++            System.IO.Path.Combine(
++                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
++                "discordchatexporter"
++            ),
++            "Settings.dat"
 +        ),
          SerializerContext.Default
      )
