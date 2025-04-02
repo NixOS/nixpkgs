@@ -5765,8 +5765,6 @@ with pkgs;
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
-  zint = qt6Packages.callPackage ../development/libraries/zint { };
-
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
   };

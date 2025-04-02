@@ -5,11 +5,8 @@
   cmake,
   ninja,
   libpng,
-  qtbase,
-  qtsvg,
-  qttools,
+  qt6,
   versionCheckHook,
-  wrapQtAppsHook,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -41,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
   ];
 
   propagatedBuildInputs = [
