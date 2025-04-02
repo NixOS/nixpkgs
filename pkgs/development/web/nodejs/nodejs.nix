@@ -143,6 +143,8 @@ let
       shift
     done
   '';
+  
+  downloadDir = if lib.strings.hasInfix "-rc." version then "download/rc" else "dist";
 
   package = stdenv.mkDerivation (finalAttrs:
   let
@@ -153,7 +155,7 @@ let
     inherit pname version;
 
     src = fetchurl {
-      url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
       inherit sha256;
     };
 
