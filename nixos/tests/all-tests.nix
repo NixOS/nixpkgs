@@ -375,7 +375,7 @@ in
   docker-tools = handleTestOn [ "x86_64-linux" ] ./docker-tools.nix { };
   docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-cross = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./docker-tools-cross.nix { };
-  docker-tools-overlay = handleTestOn [ "x86_64-linux" ] ./docker-tools-overlay.nix { };
+  docker-tools-overlay = runTestOn [ "x86_64-linux" ] ./docker-tools-overlay.nix;
   docling-serve = runTest ./docling-serve.nix;
   documize = handleTest ./documize.nix { };
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
