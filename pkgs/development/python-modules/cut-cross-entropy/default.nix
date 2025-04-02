@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonAtLeast,
   stdenv,
   setuptools,
   setuptools-scm,
@@ -22,6 +23,10 @@ buildPythonPackage rec {
   pname = "cut-cross-entropy";
   version = "0-unstable-2024-03-10";
   pyproject = true;
+
+  # Python 3.13 support requires PyTorch 2.6, which is not merged yet
+  # https://github.com/NixOS/nixpkgs/pull/377785
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "apple";
