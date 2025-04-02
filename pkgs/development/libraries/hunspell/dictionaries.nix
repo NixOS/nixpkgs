@@ -1219,4 +1219,30 @@ rec {
       maintainers = with lib.maintainers; [ honnip ];
     };
   };
+
+  ar = mkDict {
+    pname = "hunspell-dict-ar";
+    version = "3.7";
+
+    src = fetchFromGitHub {
+      owner = "linuxscout";
+      repo = "ayaspell";
+      rev = "36a90abb22c5033be58e709c8980160e0ce6c88c";
+      sha256 = "sha256-J4da/Gz9S61z/Q7Vads+pss65O0EoJ/4CaCDs+23UyA=";
+    };
+
+    buildFlags = [ "TEMPLATE=. build" ];
+
+    dictFileName = "ar";
+
+    readmeFile = "README.md";
+
+    meta = {
+      homepage = "https://github.com/linuxscout/ayaspell";
+      description = " AyaSpell Arabic Dictionary for Hunspell Spellchecker";
+      license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+      platforms = lib.platforms.all;
+      maintainers = [ lib.maintainers.MostafaKhaled ];
+    };
+  };
 }
