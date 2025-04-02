@@ -431,7 +431,7 @@ in
         "nomodeset"
       ];
 
-      boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
+      boot.kernel.sysctl.kernel.printk = mkDefault config.boot.consoleLogLevel;
 
       boot.kernelModules = [
         "loop"

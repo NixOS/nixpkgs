@@ -281,8 +281,8 @@ in
     ) activeInsts;
 
     boot.kernel.sysctl = mkIf cfg.allowSystemForward {
-      "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
-      "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+      net.ipv4.conf.all.forwarding = mkOverride 97 true;
+      net.ipv6.conf.all.forwarding = mkOverride 97 true;
     };
   };
 

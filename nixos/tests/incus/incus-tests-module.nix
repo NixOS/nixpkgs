@@ -111,7 +111,7 @@ in
                   # Arbitrary sysctl setting changed from nixos default
                   # used for verifying `distrobuilder.generator` properly allows
                   # for containers to modify sysctl
-                  boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+                  boot.kernel.sysctl.net.ipv4.ip_forward = true;
                 };
 
                 testScript = # python

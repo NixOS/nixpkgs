@@ -110,8 +110,8 @@ in
     users.groups.aerospike.gid = config.ids.gids.aerospike;
 
     boot.kernel.sysctl = {
-      "net.core.rmem_max" = lib.mkDefault 15728640;
-      "net.core.wmem_max" = lib.mkDefault 5242880;
+      net.core.rmem_max = lib.mkDefault 15728640;
+      net.core.wmem_max = lib.mkDefault 5242880;
     };
 
     systemd.services.aerospike = rec {

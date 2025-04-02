@@ -92,7 +92,7 @@ Kernel runtime parameters can be set through
 [](#opt-boot.kernel.sysctl), e.g.
 
 ```nix
-{ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120; }
+{ boot.kernel.sysctl.net.ipv4.tcp_keepalive_time = 120; }
 ```
 
 sets the kernel's TCP keepalive time to 120 seconds. To see the

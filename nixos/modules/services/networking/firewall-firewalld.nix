@@ -15,7 +15,7 @@ in
       }
     ];
 
-    boot.kernel.sysctl."net.ipv4.conf.all.rp_filter" =
+    boot.kernel.sysctl.net.ipv4.conf.all.rp_filter =
       if cfg.checkReversePath == false then
         0
       else if cfg.checkReversePath == "loose" then
