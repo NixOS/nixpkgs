@@ -1,0 +1,25 @@
+diff --git a/include/olm/list.hh b/include/olm/list.hh
+index 6906c87..952dee3 100644
+--- a/include/olm/list.hh
++++ b/include/olm/list.hh
+@@ -99,7 +99,7 @@ public:
+             return *this;
+         }
+         T * this_pos = _data;
+-        T * const other_pos = other._data;
++        T * other_pos = other._data;
+         while (other_pos != other._end) {
+             *this_pos = *other;
+             ++this_pos;
+diff --git a/include/olm/olm_export.h b/include/olm/olm_export.h
+index e8f3596..ca55fe9 100644
+--- a/include/olm/olm_export.h
++++ b/include/olm/olm_export.h
+@@ -33,6 +33,7 @@
+ #  define OLM_DEPRECATED_NO_EXPORT OLM_NO_EXPORT OLM_DEPRECATED
+ #endif
+ 
++/* NOLINTNEXTLINE(readability-avoid-unconditional-preprocessor-if) */
+ #if 0 /* DEFINE_NO_DEPRECATED */
+ #  ifndef OLM_NO_DEPRECATED
+ #    define OLM_NO_DEPRECATED
