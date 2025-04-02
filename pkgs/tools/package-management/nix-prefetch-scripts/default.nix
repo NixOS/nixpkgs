@@ -13,18 +13,6 @@
   git-lfs,
   gnused,
   mercurial,
-  # FIXME: These scripts should not depend on Nix, they should depend on a
-  # `.nar` hasher compatible with Nix.
-  #
-  # The fact that these scripts depend on Nix means that e.g. Chromium depends
-  # on Nix.
-  #
-  # Also should be fixed:
-  # - prefetch-yarn-deps
-  # - nurl, nix-init
-  #
-  # Gridlock is one such candidate: https://github.com/lf-/gridlock
-  nixForLinking,
   subversion,
 }:
 
@@ -49,7 +37,6 @@ let
               ++ [
                 coreutils
                 gnused
-                nixForLinking
               ]
             )
           } \
@@ -66,6 +53,9 @@ let
     };
 in
 rec {
+  # No explicit dependency on Nix, as these can be used inside builders,
+  # and thus will cause dependency loops. When used _outside_ builders,
+  # we expect people to have a Nix implementation available ambiently.
   nix-prefetch-bzr = mkPrefetchScript "bzr" ../../../build-support/fetchbzr/nix-prefetch-bzr [
     breezy
   ];
