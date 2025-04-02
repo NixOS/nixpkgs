@@ -221,10 +221,7 @@ let
                             headerSet ++ [ hsts ];
                       }
                     );
-              in
-              value.settings
-              // headerRecAttrs
-              // {
+
                 listen =
                   let
                     identity =
@@ -233,17 +230,27 @@ let
                         key-file = "${certs.${names.cert}.directory}/key.pem";
                         certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
                       };
+
+                    baseListen =
+                      {
+                        port = port.TLS;
+                        ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
+                          inherit identity;
+                        };
+                      }
+                      // lib.optionalAttrs (value.host != null) {
+                        host = value.host;
+                      };
+
+                    # QUIC, if used, will duplicate the TLS over TCP directive, but
+                    # append some extra QUIC-related settings
+                    quicListen = lib.optional (value.tls.quic != null) (baseListen // { inherit (value.tls) quic; });
                   in
                   {
-                    port = port.TLS;
-                    ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
-                      inherit identity;
-                    };
-                  }
-                  // lib.optionalAttrs (value.host != null) {
-                    host = value.host;
+                    listen = [ baseListen ] ++ quicListen;
                   };
-              };
+              in
+              value.settings // headerRecAttrs // listen;
           };
     in
     # With a high likelihood of HTTP & ACME challenges being on the same port,
@@ -351,7 +358,7 @@ in
                 "hydra.example.com" = {
                   tls = {
                     policy = "force";
-                    indentity = [
+                    identity = [
                       {
                         key-file = "/path/to/key";
                         certificate-file = "/path/to/cert";
