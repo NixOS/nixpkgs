@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     extension = "zip";
     name = "WhatsApp.app";
     url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=relbranch";
-    hash = "sha256-FnXW3l4JUdJkDQ7eASlDeUzRdZ2N5l3WvEKcuBuE0nY=";
+    hash = "sha256-yrQSGnAr5qDNZ7ouqxHlYed2SLBCOu66aKFOzyiegaU=";
   };
 
   dontConfigure = true;
