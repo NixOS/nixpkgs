@@ -52,6 +52,11 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
+      updater_xml="\$HOME/.stm32cubemx/thirdparties/db/updaterThirdParties.xml"
+      if [ -e "\$updater_xml" ] && [ ! -w "\$updater_xml" ]; then
+        echo "Warning: Unwritable \$updater_xml prevents CubeMX software packages from working correctly. Fixing that."
+        chmod u+w "\$updater_xml"
+      fi
       ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
@@ -126,6 +131,7 @@ buildFHSEnv {
       nspr
       nss
       pango
+      systemd
       xorg.libX11
       xorg.libxcb
       xorg.libXcomposite
