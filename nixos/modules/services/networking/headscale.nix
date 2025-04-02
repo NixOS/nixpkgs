@@ -18,8 +18,9 @@ let
     unix_socket = "${runDir}/headscale.sock";
   };
 
+  configOptions = lib.recursiveUpdate cfg.settings cfg.extraSettings;
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
+  configFile = settingsFormat.generate "headscale.yaml" configOptions;
   cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
 
   assertRemovedOption = option: message: {
@@ -487,74 +488,174 @@ in
           };
         };
       };
+
+      extraSettings = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf lib.types.anything;
+        description = ''
+          Extra configuration options which are serialized to yaml and added
+          to the headscale.yaml file.
+        '';
+      };
     };
   };
 
   imports = with lib; [
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "autoUpdate" ]
-      [ "services" "headscale" "settings" "derp" "auto_update_enable" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "derp"
+        "auto_update_enable"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "paths" ]
-      [ "services" "headscale" "settings" "derp" "paths" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "derp"
+        "paths"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "updateFrequency" ]
-      [ "services" "headscale" "settings" "derp" "update_frequency" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "derp"
+        "update_frequency"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "urls" ]
-      [ "services" "headscale" "settings" "derp" "urls" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "derp"
+        "urls"
+      ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
+      [
+        "services"
+        "headscale"
+        "ephemeralNodeInactivityTimeout"
+      ]
       [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]
-      [ "services" "headscale" "settings" "log" "level" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "log"
+        "level"
+      ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "openIdConnect" "clientId" ]
+      [
+        "services"
+        "headscale"
+        "openIdConnect"
+        "clientId"
+      ]
       [ "services" "headscale" "settings" "oidc" "client_id" ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "openIdConnect" "clientSecretFile" ]
+      [
+        "services"
+        "headscale"
+        "openIdConnect"
+        "clientSecretFile"
+      ]
       [ "services" "headscale" "settings" "oidc" "client_secret_path" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "openIdConnect" "issuer" ]
-      [ "services" "headscale" "settings" "oidc" "issuer" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "oidc"
+        "issuer"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "serverUrl" ]
-      [ "services" "headscale" "settings" "server_url" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "server_url"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "tls" "certFile" ]
-      [ "services" "headscale" "settings" "tls_cert_path" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "tls_cert_path"
+      ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "tls" "keyFile" ]
-      [ "services" "headscale" "settings" "tls_key_path" ]
+      [
+        "services"
+        "headscale"
+        "settings"
+        "tls_key_path"
+      ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "tls" "letsencrypt" "challengeType" ]
+      [
+        "services"
+        "headscale"
+        "tls"
+        "letsencrypt"
+        "challengeType"
+      ]
       [ "services" "headscale" "settings" "tls_letsencrypt_challenge_type" ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "tls" "letsencrypt" "hostname" ]
+      [
+        "services"
+        "headscale"
+        "tls"
+        "letsencrypt"
+        "hostname"
+      ]
       [ "services" "headscale" "settings" "tls_letsencrypt_hostname" ]
     )
     (mkRenamedOptionModule
-      [ "services" "headscale" "tls" "letsencrypt" "httpListen" ]
+      [
+        "services"
+        "headscale"
+        "tls"
+        "letsencrypt"
+        "httpListen"
+      ]
       [ "services" "headscale" "settings" "tls_letsencrypt_listen" ]
     )
 
-    (mkRemovedOptionModule [ "services" "headscale" "openIdConnect" "domainMap" ] ''
-      Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
-    '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "headscale"
+        "openIdConnect"
+        "domainMap"
+      ]
+      ''
+        Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
+      ''
+    )
   ];
 
   config = lib.mkIf cfg.enable {
