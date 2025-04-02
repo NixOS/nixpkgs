@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b36a8a94..61019e71 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,7 +32,13 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ # CMakeFind repository
+ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
+ 
+-find_package (OTF2 REQUIRED)
++PKG_CHECK_MODULES(OTF2 REQUIRED otf2)
++SET(OTF2_INCLUDE_PATH ${OTF2_INCLUDE_DIRS})
++SET(OTF2_LIBRARY ${OTF2_LIBRARIES})
++STRING(REPLACE "." ";" _VERSION ${OTF2_VERSION})
++LIST(GET _VERSION 0 OTF2_MAJOR_VERSION)
++LIST(GET _VERSION 1 OTF2_MINOR_VERSION)
++
+ if (NOT OTF2_FOUND)
+    message(FATAL_ERROR "libotf2 not found.")
+ endif()
