@@ -442,155 +442,151 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    systemd.services.libvirtd-config = {
-      description = "Libvirt Virtual Machine Management Daemon - configuration";
-      script = ''
-        # Copy default libvirt network config .xml files to /var/lib
-        # Files modified by the user will not be overwritten
-        for i in $(cd ${cfg.package}/var/lib && echo \
-            libvirt/qemu/networks/*.xml \
-            libvirt/nwfilter/*.xml );
-        do
-            # Intended behavior
-            # shellcheck disable=SC2174
-            mkdir -p "/var/lib/$(dirname "$i")" -m 755
-            if [ ! -e "/var/lib/$i" ]; then
-              cp -pd "${cfg.package}/var/lib/$i" "/var/lib/$i"
-            fi
-        done
-
-        # Copy generated qemu config to libvirt directory
-        cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
-
-        # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
-        for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
-          ln -s --force "$emulator" /run/${dirName}/nix-emulators/
-        done
-
-        ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
-
-        ${optionalString cfg.qemu.ovmf.enable (
-          let
-            ovmfpackage = pkgs.buildEnv {
-              name = "qemu-ovmf";
-              paths = cfg.qemu.ovmf.packages;
+    systemd.services = lib.mkMerge [
+      (
+        let
+          daemons = [
+            "virtqemud"
+            "virtinterfacesd"
+            "virtnetworkd"
+            "virtnodedevd"
+            "virtfilterd"
+            "virtsecretd"
+            "virtstoraged"
+          ];
+        in
+        builtins.listToAttrs (
+          map (daemon: {
+            name = daemon;
+            value = {
+              requires = [ "libvirtd-config.service" ];
+              after = [ "libvirtd-config.service" ];
+              path =
+                [
+                  cfg.qemu.package
+                  pkgs.netcat
+                ]
+                ++ optional vswitch.enable vswitch.package
+                ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
             };
-          in
-          ''
-            ln -s --force ${ovmfpackage}/FV/AAVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/OVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/AAVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/OVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
-          ''
-        )}
+          }) daemons
+        )
+      )
+      {
+        libvirtd-config = {
+          description = "Libvirt Virtual Machine Management Daemon - configuration";
+          script = ''
+            # Copy default libvirt network config .xml files to /var/lib
+            # Files modified by the user will not be overwritten
+            for i in $(cd ${cfg.package}/var/lib && echo \
+                libvirt/qemu/networks/*.xml \
+                libvirt/nwfilter/*.xml );
+            do
+                # Intended behavior
+                # shellcheck disable=SC2174
+                mkdir -p "/var/lib/$(dirname "$i")" -m 755
+                if [ ! -e "/var/lib/$i" ]; then
+                  cp -pd "${cfg.package}/var/lib/$i" "/var/lib/$i"
+                fi
+            done
 
-        # Symlink hooks to /var/lib/libvirt
-        ${concatStringsSep "\n" (
-          map (driver: ''
-            mkdir -p /var/lib/${dirName}/hooks/${driver}.d
-            rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
-            ${concatStringsSep "\n" (
-              mapAttrsToList (
-                name: value: "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}"
-              ) cfg.hooks.${driver}
+            # Copy generated qemu config to libvirt directory
+            cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
+
+            # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
+            for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
+              ln -s --force "$emulator" /run/${dirName}/nix-emulators/
+            done
+
+            ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
+
+            ${optionalString cfg.qemu.ovmf.enable (
+              let
+                ovmfpackage = pkgs.buildEnv {
+                  name = "qemu-ovmf";
+                  paths = cfg.qemu.ovmf.packages;
+                };
+              in
+              ''
+                ln -s --force ${ovmfpackage}/FV/AAVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+                ln -s --force ${ovmfpackage}/FV/OVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
+                ln -s --force ${ovmfpackage}/FV/AAVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
+                ln -s --force ${ovmfpackage}/FV/OVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
+              ''
             )}
-          '') (attrNames cfg.hooks)
-        )}
-      '';
 
-      serviceConfig = {
-        Type = "oneshot";
-        RuntimeDirectoryPreserve = "yes";
-        LogsDirectory = subDirs [ "qemu" ];
-        RuntimeDirectory = subDirs [
-          "nix-emulators"
-          "nix-helpers"
-          "nix-ovmf"
+            # Symlink hooks to /var/lib/libvirt
+            ${concatStringsSep "\n" (
+              map (driver: ''
+                mkdir -p /var/lib/${dirName}/hooks/${driver}.d
+                rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
+                ${concatStringsSep "\n" (
+                  mapAttrsToList (
+                    name: value: "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}"
+                  ) cfg.hooks.${driver}
+                )}
+              '') (attrNames cfg.hooks)
+            )}
+          '';
+
+          serviceConfig = {
+            Type = "oneshot";
+            RuntimeDirectoryPreserve = "yes";
+            LogsDirectory = subDirs [ "qemu" ];
+            RuntimeDirectory = subDirs [
+              "nix-emulators"
+              "nix-helpers"
+              "nix-ovmf"
+            ];
+            StateDirectory = subDirs [ "dnsmasq" ];
+          };
+        };
+      }
+    ];
+
+    systemd.sockets =
+      let
+        commonVariants = [
+          ""
+          "-ro"
+          "-admin"
         ];
-        StateDirectory = subDirs [ "dnsmasq" ];
-      };
-    };
 
-    systemd.services.libvirtd = {
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd-config.service" ];
-      after = [ "libvirtd-config.service" ] ++ optional vswitch.enable "ovs-vswitchd.service";
+        daemons = [
+          "virtqemud"
+          "virtinterfaced"
+          "virtnetworkd"
+          "virtnodedevd"
+          "virtnwfilterd"
+          "virtsecretd"
+          "virtstoraged"
+          "virtlogd"
+        ];
 
-      environment.LIBVIRTD_ARGS = escapeShellArgs (
-        [
-          "--config"
-          configFile
-          "--timeout"
-          "120" # from ${libvirt}/var/lib/sysconfig/libvirtd
-        ]
-        ++ cfg.extraOptions
-      );
+        proxyDaemon = {
+          name = "virtproxyd";
+          extraSockets = [ "-tls" ];
+        };
 
-      path =
-        [
-          cfg.qemu.package
-          pkgs.netcat
-        ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
+        mkDaemonSockets =
+          daemon:
+          let
+            variants =
+              if builtins.isAttrs daemon then commonVariants ++ daemon.extraSockets else commonVariants;
+            baseName = if builtins.isAttrs daemon then daemon.name else daemon;
+          in
+          builtins.listToAttrs (
+            map (variant: {
+              name = "${baseName}${variant}";
+              value = {
+                wantedBy = [ "sockets.target" ];
+              };
+            }) variants
+          );
 
-      serviceConfig = {
-        Type = "notify";
-        KillMode = "process"; # when stopping, leave the VMs alone
-        Restart = "no";
-        OOMScoreAdjust = "-999";
-      };
-      restartIfChanged = false;
-    };
-
-    systemd.services.virtchd = {
-      path = [ pkgs.cloud-hypervisor ];
-    };
-
-    systemd.services.libvirt-guests = {
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
-      after = [ "libvirtd.service" ];
-      path = with pkgs; [
-        coreutils
-        gawk
-        cfg.package
-      ];
-      restartIfChanged = false;
-
-      environment.ON_BOOT = "${cfg.onBoot}";
-      environment.ON_SHUTDOWN = "${cfg.onShutdown}";
-      environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
-      environment.SHUTDOWN_TIMEOUT = "${toString cfg.shutdownTimeout}";
-      environment.START_DELAY = "${toString cfg.startDelay}";
-    };
-
-    systemd.sockets.virtlogd = {
-      description = "Virtual machine log manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlogd-sock" ];
-    };
-
-    systemd.services.virtlogd = {
-      description = "Virtual machine log manager";
-      serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlogd virtlogd";
-      restartIfChanged = false;
-    };
-
-    systemd.sockets.virtlockd = {
-      description = "Virtual machine lock manager socket";
-      wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/${dirName}/virtlockd-sock" ];
-    };
-
-    systemd.services.virtlockd = {
-      description = "Virtual machine lock manager";
-      serviceConfig.ExecStart = "@${cfg.package}/sbin/virtlockd virtlockd";
-      restartIfChanged = false;
-    };
-
-    # https://libvirt.org/daemons.html#monolithic-systemd-integration
-    systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
+        allDaemons = daemons ++ [ proxyDaemon ];
+      in
+      lib.foldl' (acc: daemon: acc // (mkDaemonSockets daemon)) { } allDaemons;
 
     systemd.tmpfiles.rules =
       let

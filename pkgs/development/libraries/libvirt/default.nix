@@ -391,9 +391,10 @@ stdenv.mkDerivation rec {
       for f in $out/lib/systemd/system/*.service ; do
         substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
       done
-      rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
-      wrapProgram $out/sbin/libvirtd \
-        --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+      for f in $out/sbin/* ; do
+        wrapProgram $f \
+          --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+      done
     '';
 
   passthru.updateScript = writeScript "update-libvirt" ''
