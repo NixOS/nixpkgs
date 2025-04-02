@@ -2231,7 +2231,7 @@ with pkgs;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
-  cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { inherit systemd; };
+  cloud-init = callPackage ../tools/virtualization/cloud-init { inherit systemd; };
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
