@@ -4147,6 +4147,8 @@ self: super: with self; {
 
   dsnap = callPackage ../development/python-modules/dsnap { };
 
+  dtfabric = callPackage ../development/python-modules/dtfabric { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
