@@ -4872,6 +4872,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  plakar = callPackage ../by-name/pl/plakar/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   plan9port = darwin.apple_sdk_11_0.callPackage ../tools/system/plan9port {
     inherit (darwin.apple_sdk_11_0.frameworks)
       Carbon
