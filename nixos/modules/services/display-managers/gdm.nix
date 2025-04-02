@@ -7,7 +7,7 @@
 
 let
 
-  cfg = config.services.xserver.displayManager;
+  cfg = config.services.displayManager;
   gdm = pkgs.gdm;
   pamCfg = config.security.pam.services;
   settingsFormat = pkgs.formats.ini { };
@@ -41,13 +41,13 @@ let
 
   defaultSessionName = config.services.displayManager.defaultSession;
 
-  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
+  setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
 in
 
 {
   imports = [
     (lib.mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ]
+      [ "services" "displayManager" "gdm" "autoLogin" "enable" ]
       [
         "services"
         "displayManager"
@@ -56,7 +56,7 @@ in
       ]
     )
     (lib.mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ]
+      [ "services" "displayManager" "gdm" "autoLogin" "user" ]
       [
         "services"
         "displayManager"
@@ -67,11 +67,39 @@ in
 
     (lib.mkRemovedOptionModule [
       "services"
-      "xserver"
       "displayManager"
       "gdm"
       "nvidiaWayland"
     ] "We defer to GDM whether Wayland should be enabled.")
+
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "enable" ]
+      [ "services" "displayManager" "gdm" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "debug" ]
+      [ "services" "displayManager" "gdm" "debug" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "banner" ]
+      [ "services" "displayManager" "gdm" "banner" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "settings" ]
+      [ "services" "displayManager" "gdm" "settings" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "wayland" ]
+      [ "services" "displayManager" "gdm" "wayland" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "autoSuspend" ]
+      [ "services" "displayManager" "gdm" "autoSuspend" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "autoLogin" "delay" ]
+      [ "services" "displayManager" "gdm" "autoLogin" "delay" ]
+    )
   ];
 
   meta = {
@@ -82,7 +110,7 @@ in
 
   options = {
 
-    services.xserver.displayManager.gdm = {
+    services.displayManager.gdm = {
 
       enable = lib.mkEnableOption "GDM, the GNOME Display Manager";
 

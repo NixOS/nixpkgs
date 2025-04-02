@@ -31,7 +31,7 @@ in
     ./lumina.nix
     ./lxqt.nix
     ./enlightenment.nix
-    ./gnome.nix
+    ../../desktop-managers/gnome.nix
     ./retroarch.nix
     ./kodi.nix
     ./mate.nix
