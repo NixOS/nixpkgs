@@ -193,7 +193,12 @@ stdenv.mkDerivation rec {
     for i in $out/games/lib/nethackdir/*; do
       ln -s \$i \$(basename \$i)
     done
-    $out/games/nethack
+    set +e
+    $out/games/nethack "\$@"
+    if [[ \$? -gt 128 ]]; then
+      echo "nethack exited abnormally, attempting to recover save file..."
+      ./recover -d . ?lock.0
+    fi
     EOF
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
