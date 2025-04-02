@@ -84,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       mvs
       getchoo
+      ehmry
     ];
     mainProgram = "syd";
     platforms = lib.platforms.linux;
