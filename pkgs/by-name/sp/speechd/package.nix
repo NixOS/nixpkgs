@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
+      "--sysconfdir=/etc"
       # Audio method falls back from left to right.
       "--with-default-audio-method=\"libao,pulse,alsa,oss\""
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -124,6 +125,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
+
+  installFlags = [
+    "sysconfdir=$(out)/etc"
+  ];
 
   postInstall =
     if libsOnly then
