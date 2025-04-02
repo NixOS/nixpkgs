@@ -654,13 +654,13 @@ in
             if cfg.database.driver == "postgres" then
               {
                 sslmode = "disable";
-                connect_timeout = 30;
+                connect_timeout = 60;
               }
             else if cfg.database.driver == "mysql" then
               {
                 charset = "utf8mb4,utf8";
-                writeTimeout = "30s";
-                readTimeout = "30s";
+                writeTimeout = "60s";
+                readTimeout = "60s";
               }
             else
               throw "Invalid database driver ${cfg.database.driver}";
@@ -668,13 +668,13 @@ in
             if config.mattermost.database.driver == "postgres" then
               {
                 sslmode = "disable";
-                connect_timeout = 30;
+                connect_timeout = 60;
               }
             else if config.mattermost.database.driver == "mysql" then
               {
                 charset = "utf8mb4,utf8";
-                writeTimeout = "30s";
-                readTimeout = "30s";
+                writeTimeout = "60s";
+                readTimeout = "60s";
               }
             else
               throw "Invalid database driver";
