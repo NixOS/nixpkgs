@@ -11665,6 +11665,9 @@ with pkgs;
   go = go_1_24;
   buildGoModule = buildGo124Module;
 
+  go_latest = go_1_24;
+  buildGoLatestModule = buildGo124Module;
+
   go_1_23 = callPackage ../development/compilers/go/1.23.nix { };
   buildGo123Module = callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_23;
