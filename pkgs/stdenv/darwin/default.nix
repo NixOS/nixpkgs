@@ -479,6 +479,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                       isFromBootstrapFiles = true;
                       hardeningUnsupportedFlags = [
                         "fortify3"
+                        "pacret"
                         "shadowstack"
                         "stackclashprotection"
                         "zerocallusedregs"
