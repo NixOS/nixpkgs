@@ -113,9 +113,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     mainProgram = "better-control";
-    maintainers = with maintainers; [
-      quantumvoid
-      nekrooo
-    ];
   };
 }
