@@ -47,5 +47,8 @@ buildGoModule rec {
       zx2c4
     ];
     mainProgram = "wireguard-go";
+    # Doesn't build with Go toolchain >1.22, build error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'.
+    broken = true;
   };
 }

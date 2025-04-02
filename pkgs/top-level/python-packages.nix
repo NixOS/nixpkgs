@@ -11104,6 +11104,8 @@ self: super: with self; {
 
   ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
 
+  plotille = callPackage ../development/python-modules/plotille { };
+
   plotext = callPackage ../development/python-modules/plotext { };
 
   plotly = callPackage ../development/python-modules/plotly { };
@@ -13630,6 +13632,10 @@ self: super: with self; {
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
+
+  pytest-shared-session-scope =
+    callPackage ../development/python-modules/pytest-shared-session-scope
+      { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
@@ -16663,9 +16669,19 @@ self: super: with self; {
 
   swh-core = callPackage ../development/python-modules/swh-core { };
 
+  swh-journal = callPackage ../development/python-modules/swh-journal { };
+
   swh-model = callPackage ../development/python-modules/swh-model { };
 
+  swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
+
+  swh-perfecthash = callPackage ../development/python-modules/swh-perfecthash { };
+
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
+
+  swh-scheduler = callPackage ../development/python-modules/swh-scheduler { };
+
+  swh-storage = callPackage ../development/python-modules/swh-storage { };
 
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
 
@@ -18702,6 +18718,8 @@ self: super: with self; {
 
   wgnlpy = callPackage ../development/python-modules/wgnlpy { };
 
+  wgpu-py = callPackage ../development/python-modules/wgpu-py { };
+
   whatthepatch = callPackage ../development/python-modules/whatthepatch { };
 
   wheel = callPackage ../development/python-modules/wheel { };
@@ -18817,8 +18835,6 @@ self: super: with self; {
   wsgitools = callPackage ../development/python-modules/wsgitools { };
 
   wsme = callPackage ../development/python-modules/wsme { };
-
-  wsnsimpy = callPackage ../development/python-modules/wsnsimpy { };
 
   wsproto = callPackage ../development/python-modules/wsproto { };
 

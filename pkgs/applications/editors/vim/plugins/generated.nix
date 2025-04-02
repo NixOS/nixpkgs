@@ -20882,6 +20882,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  visual-whitespace-nvim = buildVimPlugin {
+    pname = "visual-whitespace.nvim";
+    version = "2025-03-31";
+    src = fetchFromGitHub {
+      owner = "mcauley-penney";
+      repo = "visual-whitespace.nvim";
+      rev = "2bdf159a49a8ed4e715b81d6e0f975dcc1751c53";
+      sha256 = "1s5iifvwznpf1dflp6y604khrmpkwx49nnv7xmm2c1jbwn0l5nyl";
+    };
+    meta.homepage = "https://github.com/mcauley-penney/visual-whitespace.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vs-tasks-nvim = buildVimPlugin {
     pname = "vs-tasks.nvim";
     version = "2025-03-17";
