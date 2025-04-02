@@ -62,6 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+    (fetchpatch {
+      name = "openbsd-defs.patch";
+      url = "https://lore.kernel.org/git/20250221180225.3176533-1-audrey@rhelmot.io/raw";
+      hash = "sha256-s9W+IurTbKzqeZl40VmU4UrmAhs58LTMaD+N/6yh5gw=";
+    })
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
   ];
