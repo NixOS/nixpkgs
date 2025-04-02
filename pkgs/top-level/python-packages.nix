@@ -1979,6 +1979,8 @@ self: super: with self; {
 
   bork = callPackage ../development/python-modules/bork { };
 
+  bosch-alarm-mode2 = callPackage ../development/python-modules/bosch-alarm-mode2 { };
+
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
@@ -4004,6 +4006,8 @@ self: super: with self; {
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
+
+  docling-serve = callPackage ../development/python-modules/docling-serve { };
 
   docloud = callPackage ../development/python-modules/docloud { };
 
@@ -17402,9 +17406,9 @@ self: super: with self; {
 
   tree-sitter-json = callPackage ../development/python-modules/tree-sitter-json { };
 
-  tree-sitter-languages = callPackage ../development/python-modules/tree-sitter-languages { };
-
   tree-sitter-language-pack = callPackage ../development/python-modules/tree-sitter-language-pack { };
+
+  tree-sitter-languages = callPackage ../development/python-modules/tree-sitter-languages { };
 
   tree-sitter-make = callPackage ../development/python-modules/tree-sitter-make { };
 

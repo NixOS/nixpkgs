@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
+
+  # build-system
   cython,
   setuptools,
   typing-extensions,
+
+  # dependencies
   tree-sitter,
   tree-sitter-c-sharp,
   tree-sitter-embedded-template,
   tree-sitter-yaml,
 }:
 
-let
-  version = "0.6.1";
-in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tree-sitter-language-pack";
-  inherit version;
+  version = "0.6.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
+  # Using the GitHub sources necessitates fetching the treesitter grammar parsers by using a vendored script:
+  # https://github.com/Goldziher/tree-sitter-language-pack/blob/main/scripts/clone_vendors.py
+  # The pypi archive has the benefit of already vendoring those dependencies which makes packaging easier on our side
   src = fetchPypi {
     pname = "tree_sitter_language_pack";
     inherit version;
@@ -45,9 +47,13 @@ buildPythonPackage {
     "tree_sitter_language_pack.bindings"
   ];
 
+  # No tests in the pypi archive
+  doCheck = false;
+
   meta = {
     description = "Comprehensive collection of tree-sitter languages";
-    homepage = "https://github.com/Goldziher/tree-sitter-language-pack/";
+    homepage = "https://github.com/Goldziher/tree-sitter-language-pack";
+    changelog = "https://github.com/Goldziher/tree-sitter-language-pack/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
