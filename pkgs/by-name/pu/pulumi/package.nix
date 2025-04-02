@@ -10,21 +10,26 @@
   callPackage,
   testers,
   pulumi,
+  pulumiPackages,
+  # updateScript
+  writers,
+  python3Packages,
+  nix,
 }:
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.156.0";
+  version = "3.159.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${version}";
-    hash = "sha256-1iML+WCEkLMdAJ7e+F5XwBzM+pn3eZQsCaSi3Ui/JdM=";
+    hash = "sha256-rzCu1WuX1NUvEA+yjHZZsjo/M5gsNzYH7kX0OLxOb/c=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-2hpn1IKJvWtXgNKgf56dZABA4VO1aT0cDsHOmCEPrGo=";
+  vendorHash = "sha256-jJudFPTRsH8pljqIED1elkAPkc0Cg7SuLekhq4TDWCQ=";
 
   sourceRoot = "${src.name}/pkg";
 
@@ -68,6 +73,10 @@ buildGoModule rec {
         "TestGenerateOnlyProjectCheck"
         "TestPulumiNewSetsTemplateTag"
         "TestPulumiPromptRuntimeOptions"
+        "TestPulumiNewOrgTemplate"
+        "TestPulumiNewWithOrgTemplates"
+        "TestPulumiNewWithoutPulumiAccessToken"
+        "TestPulumiNewWithoutTemplateSupport"
 
         # Connects to https://pulumi-testing.vault.azure.net/…
         "TestAzureCloudManager"
@@ -117,12 +126,39 @@ buildGoModule rec {
   passthru = {
     pkgs = callPackage ./plugins.nix { };
     withPackages = callPackage ./with-packages.nix { };
+    updateScript = {
+      supportedFeatures = [ "commit" ];
+      command = writers.writePython3 "pulumi-updater" {
+        libraries = with python3Packages; [ requests ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [
+            nix
+            git
+          ])
+        ];
+      } ./update.py;
+    };
     tests = {
       version = testers.testVersion {
         package = pulumi;
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+      # Test building packages that reuse our version and src.
+      inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
+      # Pulumi currently requires protobuf4, but Nixpkgs defaults to a newer
+      # version. Test that we can actually build the package with protobuf4.
+      # https://github.com/pulumi/pulumi/issues/16828
+      # https://github.com/NixOS/nixpkgs/issues/351751#issuecomment-2462163436
+      pythonPackage =
+        (python3Packages.overrideScope (
+          final: _: {
+            protobuf = final.protobuf4;
+          }
+        )).pulumi;
       pulumiTestHookShellcheck = testers.shellcheck {
         name = "pulumi-test-hook-shellcheck";
         src = ./extra/pulumi-test-hook.sh;
