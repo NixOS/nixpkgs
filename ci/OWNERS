@@ -116,6 +116,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # NixOS QEMU virtualisation
 /nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
+/nixos/modules/services/backup/libvirt-backup.nix   @6543
 
 # ACME
 /nixos/modules/security/acme                @NixOS/acme
