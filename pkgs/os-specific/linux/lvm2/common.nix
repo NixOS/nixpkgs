@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
       "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
     ]
-    ++ lib.optionals (!enableCmdlib) [
+    ++ lib.optionals (!enableCmdlib && !onlyLib) [
       "--bindir=${placeholder "bin"}/bin"
       "--sbindir=${placeholder "bin"}/bin"
       "--libdir=${placeholder "lib"}/lib"
@@ -155,9 +155,7 @@ stdenv.mkDerivation rec {
     ];
 
   installPhase = lib.optionalString onlyLib ''
-    install -D -t $out/lib libdm/ioctl/libdevmapper.${
-      if stdenv.hostPlatform.isStatic then "a" else "so"
-    }
+    make -C libdm install_${if stdenv.hostPlatform.isStatic then "static" else "dynamic"}
     make -C libdm install_include
     make -C libdm install_pkgconfig
   '';

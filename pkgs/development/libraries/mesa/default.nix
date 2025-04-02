@@ -161,6 +161,12 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+
+    # backport dril fix for #342763 and #282155
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/4ecd183c563670c5c3ab371d6b5596ecabbe6fad.diff";
+      hash = "sha256-AXXp1MHXEsvua1SyzQUbQLVqaA4Iw1yziqvAce+UkxQ=";
+    })
   ];
 
   postPatch = ''
