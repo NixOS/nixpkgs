@@ -19,7 +19,6 @@
   python-dateutil,
   pytz,
   xxhash,
-  python,
 
   # for passthru.tests
   falcon,
@@ -48,8 +47,6 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-MACmdptHmnifBTfB5s+CY6npAOFIrh0zvrIImYghGsw=";
   };
-
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs =
     [ cffi ]
