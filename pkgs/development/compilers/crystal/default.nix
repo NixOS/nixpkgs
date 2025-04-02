@@ -29,8 +29,6 @@
   zlib,
 }:
 
-# We need to keep around at least the latest version released with a stable
-# NixOS
 let
   archs = {
     x86_64-linux = "linux-x86_64";
@@ -299,14 +297,6 @@ rec {
     sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_15;
-  };
-
-  crystal_1_14 = generic {
-    version = "1.14.1";
-    sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
-    doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
   crystal_1_15 = generic {
