@@ -145,14 +145,6 @@ self: super: {
         dontCheck
       ];
 
-  ghcide = appendPatch (pkgs.fetchpatch {
-    name = "ghcide-ghc-9.8.3.patch";
-    url = "https://github.com/haskell/haskell-language-server/commit/6d0a6f220226fe6c1cb5b6533177deb55e755b0b.patch";
-    sha256 = "1jwxldar9qzkg2z6vsx8f2yih3vkf4yjk9p3mryv0azn929qn3h1";
-    stripLen = 1;
-    excludes = [ "cabal.project" ];
-  }) super.ghcide;
-
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
@@ -1408,9 +1400,7 @@ self: super: {
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-  });
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
