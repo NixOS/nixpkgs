@@ -1,30 +1,25 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
-  nixosTests,
   rclone,
+  nixosTests,
   python3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restic";
   version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-odyKcpNAhk1dlVBhjrtmgKjWTOCMtooYOJ5p0J9OUFY=";
   };
-
-  patches = [
-    # The TestRestoreWithPermissionFailure test fails in Nix’s build sandbox
-    ./0001-Skip-testing-restore-with-permission-failure.patch
-  ];
 
   vendorHash = "sha256-cxOwVf1qZXJbDZC/7cGnKPNpwJnAk3OunKVZpwtI8pI=";
 
@@ -41,15 +36,11 @@ buildGoModule rec {
     restic = nixosTests.restic;
   };
 
-  postPatch = ''
-    rm cmd/restic/cmd_mount_integration_test.go
-  '';
-
   postInstall =
     ''
       wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
     ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       $out/bin/restic generate \
         --bash-completion restic.bash \
         --fish-completion restic.fish \
@@ -59,16 +50,19 @@ buildGoModule rec {
       installManPage *.1
     '';
 
-  meta = with lib; {
+  # The TestRestoreWithPermissionFailure test fails in Nix’s build sandbox
+  checkFlags = [ "-skip=^TestRestoreWithPermissionFailure$|^TestMount$|^TestMountSameTimestamps$" ];
+
+  meta = {
     homepage = "https://restic.net";
-    changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/restic/restic/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Backup program that is fast, efficient and secure";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = [
-      maintainers.mbrgm
-      maintainers.dotlambda
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      mbrgm
+      dotlambda
     ];
     mainProgram = "restic";
   };
-}
+})
