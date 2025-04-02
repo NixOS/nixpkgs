@@ -190,6 +190,7 @@ in
       "tools/kwboot"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
