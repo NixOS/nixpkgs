@@ -15431,6 +15431,8 @@ self: super: with self; {
 
   segyio = callPackage ../development/python-modules/segyio { inherit (pkgs) cmake ninja; };
 
+  seisbench = callPackage ../development/python-modules/seisbench { };
+
   selenium = callPackage ../development/python-modules/selenium { };
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
@@ -18878,6 +18880,8 @@ self: super: with self; {
 
   xcffib = callPackage ../development/python-modules/xcffib { };
 
+  xdas = callPackage ../development/python-modules/xdas { };
+
   xdg = callPackage ../development/python-modules/xdg { };
 
   xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
@@ -18901,6 +18905,8 @@ self: super: with self; {
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
   xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
+
+  xinterp = callPackage ../development/python-modules/xinterp { };
 
   xkbcommon = callPackage ../development/python-modules/xkbcommon { };
 
