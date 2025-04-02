@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--disable-setcap"
     "--disable-werror"
