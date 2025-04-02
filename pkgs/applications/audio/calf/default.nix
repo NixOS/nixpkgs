@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "calf";
-  version = "0.90.4";
+  version = "0.90.5";
 
   src = fetchFromGitHub {
     owner = "calf-studio-gear";
     repo = "calf";
     tag = version;
-    hash = "sha256-E9H2YG1HAhIN+zJxDKIJTkJapbNz8h9dfd5YfZp9Zp0=";
+    hash = "sha256-2nsKFveeWMJ5bDyd23GXpz9AzPttFR067mHe8fKGdOI=";
   };
 
   outputs = [
