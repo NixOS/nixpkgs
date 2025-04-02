@@ -1,0 +1,222 @@
+From 6e3469dc52ecf82a74d80e24dfc905bdd101f40c Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 19 Feb 2025 17:50:37 +0100
+Subject: [PATCH] treewide: Switch to upstream glog CMake module
+
+---
+ CMakeLists.txt                                     |  4 +---
+ cmake/FindGLog.cmake                               | 14 --------------
+ examples/standalone/connectivity/CMakeLists.txt    |  5 ++---
+ examples/standalone/connectivity/FindGLog.cmake    | 14 --------------
+ .../com/lomiri/location/CMakeLists.txt             | 10 +++++-----
+ .../lomiri/location/providers/dummy/CMakeLists.txt |  4 ++++
+ .../lomiri/location/providers/gps/CMakeLists.txt   |  2 +-
+ .../location/providers/remote/CMakeLists.txt       |  5 +++++
+ .../location/providers/skyhook/CMakeLists.txt      |  1 +
+ 9 files changed, 19 insertions(+), 40 deletions(-)
+ delete mode 100644 cmake/FindGLog.cmake
+ delete mode 100644 examples/standalone/connectivity/FindGLog.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 45e6d70..09b487b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,14 +25,13 @@ option (ENABLE_TRUST_STORE "Enable support for trust-store" ON)
+ 
+ include(cmake/EnableCoverageReport.cmake)
+ include(cmake/FindGFlags.cmake)
+-include(cmake/FindGLog.cmake)
+ include(CTest)
+ 
+ include(GNUInstallDirs)
+ 
+ find_package(PkgConfig)
+ find_package(Boost COMPONENTS filesystem system program_options)
+-find_package(GLog)
++find_package(glog REQUIRED)
+ find_package(GFlags)
+ find_package(Threads)
+ pkg_check_modules(DBUS dbus-1 REQUIRED)
+@@ -93,7 +92,6 @@ include_directories(
+   ${PROPERTIES_CPP_INCLUDE_DIRS}
+   ${PROCESS_CPP_INCLUDE_DIRS}
+   ${TRUST_STORE_INCLUDE_DIRS}
+-  ${GLog_INCLUDE_DIR}
+   ${GFlags_INCLUDE_DIR}
+ 
+   ${CMAKE_SOURCE_DIR}/include/location_service
+diff --git a/cmake/FindGLog.cmake b/cmake/FindGLog.cmake
+deleted file mode 100644
+index 025daae..0000000
+--- a/cmake/FindGLog.cmake
++++ /dev/null
+@@ -1,14 +0,0 @@
+-if (GLog_INCLUDE_DIR)
+-  # Already in cache, be silent
+-  set(GLog_FIND_QUIETLY TRUE)
+-endif ()
+-
+-find_path(GLog_INCLUDE_DIR glog/logging.h)
+-
+-find_library(GLog_LIBRARY libglog.so
+-             HINTS /usr/lib/arm-linux-gnueabihf/)
+-
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(GLog DEFAULT_MSG GLog_LIBRARY GLog_INCLUDE_DIR)
+-
+-mark_as_advanced(GLog_LIBRARY GLog_INCLUDE_DIR)
+diff --git a/examples/standalone/connectivity/CMakeLists.txt b/examples/standalone/connectivity/CMakeLists.txt
+index a018447..859e2ed 100644
+--- a/examples/standalone/connectivity/CMakeLists.txt
++++ b/examples/standalone/connectivity/CMakeLists.txt
+@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
+ 
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ 
+-find_package(GLog)
++find_package(glog REQUIRED)
+ find_package(PkgConfig)
+ find_package(Threads)
+ 
+@@ -24,7 +24,6 @@ pkg_check_modules(
+ 
+ include_directories(
+   ${DBUS_CPP_INCLUDE_DIRS}
+-  ${GLog_INCLUDE_DIR}
+   ${PROCESS_CPP_INCLUDE_DIRS}
+   ${LOCATION_CONNECTIVITY_INCLUDE_DIRS})
+ 
+@@ -39,7 +38,7 @@ target_link_libraries(
+   ${CMAKE_THREAD_LIBS_INIT}
+ 
+   ${DBUS_CPP_LDFLAGS}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${PROCESS_CPP_LDFLAGS}
+   ${LOCATION_CONNECTIVITY_LDFLAGS})
+ 
+diff --git a/examples/standalone/connectivity/FindGLog.cmake b/examples/standalone/connectivity/FindGLog.cmake
+deleted file mode 100644
+index 025daae..0000000
+--- a/examples/standalone/connectivity/FindGLog.cmake
++++ /dev/null
+@@ -1,14 +0,0 @@
+-if (GLog_INCLUDE_DIR)
+-  # Already in cache, be silent
+-  set(GLog_FIND_QUIETLY TRUE)
+-endif ()
+-
+-find_path(GLog_INCLUDE_DIR glog/logging.h)
+-
+-find_library(GLog_LIBRARY libglog.so
+-             HINTS /usr/lib/arm-linux-gnueabihf/)
+-
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(GLog DEFAULT_MSG GLog_LIBRARY GLog_INCLUDE_DIR)
+-
+-mark_as_advanced(GLog_LIBRARY GLog_INCLUDE_DIR)
+diff --git a/src/location_service/com/lomiri/location/CMakeLists.txt b/src/location_service/com/lomiri/location/CMakeLists.txt
+index bd85444..93237ee 100644
+--- a/src/location_service/com/lomiri/location/CMakeLists.txt
++++ b/src/location_service/com/lomiri/location/CMakeLists.txt
+@@ -128,7 +128,7 @@ target_link_libraries(
+   ${DBUS_LIBRARIES}
+   ${DBUS_CPP_LDFLAGS}
+   ${PROCESS_CPP_LDFLAGS}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${GFlags_LIBRARY}
+ )
+ 
+@@ -148,7 +148,7 @@ target_link_libraries(
+   ${NET_CPP_LDFLAGS}
+   ${TRUST_STORE_LDFLAGS}
+   ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${GFlags_LIBRARY}
+ )
+ 
+@@ -214,7 +214,7 @@ target_link_libraries(
+   ${Boost_LIBRARIES}
+   ${DBUS_LIBRARIES}
+   ${DBUS_CPP_LIBRARIES}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${GFlags_LIBRARY}
+ )
+ 
+@@ -228,7 +228,7 @@ target_link_libraries(
+   ${Boost_LIBRARIES}
+   ${DBUS_LIBRARIES}
+   ${DBUS_CPP_LIBRARIES}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${GFlags_LIBRARY}
+ )
+ 
+@@ -242,7 +242,7 @@ target_link_libraries(
+   ${Boost_LIBRARIES}
+   ${DBUS_LIBRARIES}
+   ${DBUS_CPP_LIBRARIES}
+-  ${GLog_LIBRARY}
++  glog::glog
+   ${GFlags_LIBRARY}
+ )
+ 
+diff --git a/src/location_service/com/lomiri/location/providers/dummy/CMakeLists.txt b/src/location_service/com/lomiri/location/providers/dummy/CMakeLists.txt
+index 91187a9..b7583fa 100644
+--- a/src/location_service/com/lomiri/location/providers/dummy/CMakeLists.txt
++++ b/src/location_service/com/lomiri/location/providers/dummy/CMakeLists.txt
+@@ -6,6 +6,10 @@ add_library(
+   delayed_provider.h
+   delayed_provider.cpp)
+ 
++target_link_libraries(dummy
++  PUBLIC
++  glog::glog)
++
+ set(
+   ENABLED_PROVIDER_TARGETS
+   ${ENABLED_PROVIDER_TARGETS} dummy
+diff --git a/src/location_service/com/lomiri/location/providers/gps/CMakeLists.txt b/src/location_service/com/lomiri/location/providers/gps/CMakeLists.txt
+index e6a1402..6e16229 100644
+--- a/src/location_service/com/lomiri/location/providers/gps/CMakeLists.txt
++++ b/src/location_service/com/lomiri/location/providers/gps/CMakeLists.txt
+@@ -31,7 +31,7 @@ if ((LOCATION_SERVICE_ENABLE_GPS_PROVIDER) AND (UBUNTU_PLATFORM_HARDWARE_API_FOU
+         provider.h
+         provider.cpp)
+ 
+-    target_link_libraries(gps ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS})
++    target_link_libraries(gps ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS} glog::glog)
+   
+     set(
+       ENABLED_PROVIDER_TARGETS
+diff --git a/src/location_service/com/lomiri/location/providers/remote/CMakeLists.txt b/src/location_service/com/lomiri/location/providers/remote/CMakeLists.txt
+index e526f42..1c3a286 100644
+--- a/src/location_service/com/lomiri/location/providers/remote/CMakeLists.txt
++++ b/src/location_service/com/lomiri/location/providers/remote/CMakeLists.txt
+@@ -3,3 +3,8 @@ add_library(
+     provider.h provider.cpp
+     stub.cpp skeleton.cpp
+ )
++
++target_link_libraries(remote
++    PUBLIC
++    glog::glog
++)
+diff --git a/src/location_service/com/lomiri/location/providers/skyhook/CMakeLists.txt b/src/location_service/com/lomiri/location/providers/skyhook/CMakeLists.txt
+index 0d9013c..36ee45d 100644
+--- a/src/location_service/com/lomiri/location/providers/skyhook/CMakeLists.txt
++++ b/src/location_service/com/lomiri/location/providers/skyhook/CMakeLists.txt
+@@ -23,6 +23,7 @@ if (LOCATION_SERVICE_ENABLE_SKYHOOK_PROVIDER)
+ 
+       ${WPSAPI_LIBRARIES}
+       iw
++      glog::glog
+     )
+ 
+     set(
+-- 
+2.47.2
+
