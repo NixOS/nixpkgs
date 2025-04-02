@@ -1,36 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
+  setuptools,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.5.4";
-  format = "setuptools";
+  version = "1.5.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  # error: unknown type name ‘PyFutureFeatures’
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "typed_ast";
-    rev = version;
-    hash = "sha256-GRmKw7SRrrIIb61VeB8GLhSKCmLUd54AA+GAf43vor8=";
+    tag = version;
+    hash = "sha256-A/FA6ngu8/bbpKW9coJ7unm9GQezGuDhgBWjOhAxm2o=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [ pytest ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # We can't use pytestCheckHook because that invokes pytest with python -m pytest
-    # which adds the current directory to sys.path at the beginning.
-    # _That_ version of the typed_ast module doesn't have the C extensions we need.
-    pytest
-
-    runHook postCheck
+  preCheck = ''
+    rm -rf typed_ast
   '';
 
   pythonImportsCheck = [
@@ -40,10 +39,10 @@ buildPythonPackage rec {
     "typed_ast.conversions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }
