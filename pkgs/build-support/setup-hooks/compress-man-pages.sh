@@ -10,14 +10,15 @@ compressManPages() {
 
     # Compress all uncompressed manpages.  Don't follow symlinks, etc.
     find "$dir"/share/man/ -type f -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
-        | while IFS= read -r -d $'\0' f
+        | xargs -0 -n 128 -P "$NIX_BUILD_CORES" -- \
+            "$SHELL" -c 'for f in "$@"
     do
         if gzip -c -n "$f" > "$f".gz; then
             rm "$f"
         else
             rm "$f".gz
         fi
-    done
+    done' --
 
     # Point symlinks to compressed manpages.
     find "$dir"/share/man/ -type l -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
