@@ -406,6 +406,9 @@ builtins.intersectAttrs super {
       #editedCabalFile = null;
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
+      # error: output '/nix/store/hv6lzj1nlshn8q5lirzgys8f4vgym4hg-nix-serve-ng-1.0.0-unstable-2024-12-02' is not allowed to refer to the following paths:
+      #    /nix/store/qza2y18fwkq1wzi02qywf691r42r5jfy-ghc-9.6.6
+      broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
     }) super.nix-serve-ng).override
       {
         nix = pkgs.nixVersions.nix_2_24;
