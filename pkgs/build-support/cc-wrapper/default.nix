@@ -104,8 +104,6 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
-  cc_solib = getLib cc
-    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -127,6 +125,11 @@ let
     && gccForLibs != null;
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_solib =
+    if useGccForLibs then
+      gccForLibs_solib
+    else
+      getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # Analogously to cc_solib and gccForLibs_solib
   libcxx_solib = "${getLib libcxx}/lib";
