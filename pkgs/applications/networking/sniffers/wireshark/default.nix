@@ -157,6 +157,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
+      # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+      # (setting it to an absolute path causes include files to go to $out/$out/include,
+      #  because the absolute path is interpreted with root at $out).
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
       "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
       # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
       "-DCMAKE_INSTALL_LIBDIR=lib"
