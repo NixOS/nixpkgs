@@ -19,6 +19,8 @@
   panfrost ? false,
   panthor ? false,
   ascend ? false,
+  v3d ? false,
+  tpu ? false,
 }:
 
 let
@@ -34,17 +36,19 @@ let
       }" \
       $out/bin/nvtop
   '';
-  needDrm = (amd || msm || panfrost || panthor);
+  needDrm = (amd || msm || panfrost || panthor || intel);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.1.0";
+  version = "3.2.0";
 
+  # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = finalAttrs.version;
-    hash = "sha256-MkkBY2PR6FZnmRMqv9MWqwPWRgixfkUQW5TWJtHEzwA=";
+    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
   };
 
   cmakeFlags = with lib.strings; [
@@ -58,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANFROST_SUPPORT" panfrost)
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
+    (cmakeBool "V3D_SUPPORT" v3d)
+    (cmakeBool "TPU_SUPPORT" tpu) #requires libtpuinfo which is not packaged yet
   ];
   nativeBuildInputs = [
     cmake
