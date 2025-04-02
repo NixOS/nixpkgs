@@ -22752,6 +22752,13 @@
     github = "srounce";
     githubId = 60792;
   };
+  srp = {
+    name = "Seraphim Pardee";
+    matrix = "@xsrp:matrix.org";
+    email = "me@srp.life";
+    github = "SeraphimRP";
+    githubId = 8297347;
+  };
   srv6d = {
     name = "Marvin Vogt";
     github = "SRv6d";
