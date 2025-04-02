@@ -2,7 +2,7 @@
   lib,
   stdenv,
   cmake,
-  buildGo122Module,
+  buildGoModule,
   makeWrapper,
   fetchFromGitHub,
   pythonPackages,
@@ -43,7 +43,7 @@ let
   };
 
 in
-buildGo122Module rec {
+buildGoModule rec {
   pname = "datadog-agent";
   inherit src version;
 
