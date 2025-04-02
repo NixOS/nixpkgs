@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.4";
+  version = "1.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
+    hash = "sha256-CFYyG6LGcgFZyXHbv3lzcTiAIycSAurKXTzVqqs0fLM=";
   };
 
   build-system = [ hatchling ];
