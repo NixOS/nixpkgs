@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tcxparser";
-  version = "2.3.0";
+  version = "2.4.0-r1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vkurup";
     repo = "python-tcxparser";
-    rev = version;
-    hash = "sha256-HOACQpPVg/UKopz3Jdsyg0CIBnXYuVyhWUVPA+OXI0k=";
+    tag = version;
+    hash = "sha256-lQczTuxmxu4nCPJsgblrW2RXST7kvhtPnscemwXCx0Y=";
   };
 
   propagatedBuildInputs = [
