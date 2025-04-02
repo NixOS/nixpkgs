@@ -160,7 +160,7 @@ stdenvNoCC.mkDerivation {
       rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
 
       # Fix the desktop file to point to the correct location
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/share/cursor/cursor"
+      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
 
       wrapProgram $out/bin/cursor \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
