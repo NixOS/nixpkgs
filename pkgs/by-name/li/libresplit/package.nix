@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "libresplit";
-  version = "0-unstable-2024-09-24";
+  version = "0-unstable-2025-03-04";
 
   src = fetchFromGitHub {
     owner = "wins1ey";
     repo = "LibreSplit";
-    rev = "b56ce6743378fc09c9ab621713423754eac945a1";
-    hash = "sha256-mhX5xyBmElPV6NUQRTz8KKL+H1on3WJ4DYatv89MRPo=";
+    rev = "7077cad5affc335aabfd9497b5b361ade298b099";
+    hash = "sha256-DIgYNc/idFeFHbpW73S0+mdc+S3UZJmgyelzogDIjDE=";
   };
 
   nativeBuildInputs = [
