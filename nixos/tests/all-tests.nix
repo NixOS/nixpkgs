@@ -370,7 +370,7 @@ in
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
-  docker-rootless = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix { };
+  docker-rootless = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix;
   docker-registry = handleTest ./docker-registry.nix { };
   docker-tools = handleTestOn [ "x86_64-linux" ] ./docker-tools.nix { };
   docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
