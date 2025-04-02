@@ -235,6 +235,10 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
     except ELFError:
         return []
 
+    # these platforms are packaged in nixpkgs with ld.so in a separate derivation
+    # than libc.so and friends. keep_libc is mandatory.
+    keep_libc |= file_osabi in ('ELFOSABI_FREEBSD', 'ELFOSABI_OPENBSD')
+
     rpath = []
     if file_is_dynamic_executable:
         print("setting interpreter of", path)
