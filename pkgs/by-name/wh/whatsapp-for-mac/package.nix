@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-mac";
-  version = "2.24.23.82";
+  version = "2.25.8.76";
 
   src = fetchzip {
     extension = "zip";
