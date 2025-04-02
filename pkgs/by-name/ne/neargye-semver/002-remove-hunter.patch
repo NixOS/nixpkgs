@@ -1,0 +1,66 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3161667..24419d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,12 +4,12 @@
+ 
+ cmake_minimum_required(VERSION 3.2)
+ 
+-include("cmake/HunterGate.cmake")
+-HunterGate(
+-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.320.tar.gz"
+-    SHA1 "9b4e732afd22f40482c11ad6342f7d336634226f"
+-    LOCAL # Local config for dependencies
+-)
++# include("cmake/HunterGate.cmake")
++# HunterGate(
++#     URL "https://github.com/cpp-pm/hunter/archive/v0.23.320.tar.gz"
++#     SHA1 "9b4e732afd22f40482c11ad6342f7d336634226f"
++#     LOCAL # Local config for dependencies
++# )
+ 
+ ### Constants
+ set(TARGET_NAME "XLink")
+@@ -233,12 +233,12 @@ install(
+ )
+ #Install include folder
+ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+-# Install Hunter dependencies
+-if(XLINK_ENABLE_LIBUSB)
+-    if(NOT XLINK_LIBUSB_LOCAL AND NOT XLINK_LIBUSB_SYSTEM)
+-        install(DIRECTORY "${HUNTER_INSTALL_PREFIX}/" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/dependencies")
+-    endif()
+-endif()
++# # Install Hunter dependencies
++# if(XLINK_ENABLE_LIBUSB)
++#     if(NOT XLINK_LIBUSB_LOCAL AND NOT XLINK_LIBUSB_SYSTEM)
++#         install(DIRECTORY "${HUNTER_INSTALL_PREFIX}/" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/dependencies")
++#     endif()
++# endif()
+ # Install export group (information about targets)
+ install(EXPORT ${PROJECT_EXPORT_GROUP}
+     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+diff --git a/cmake/XLinkDependencies.cmake b/cmake/XLinkDependencies.cmake
+index 1072d1d..a213bee 100644
+--- a/cmake/XLinkDependencies.cmake
++++ b/cmake/XLinkDependencies.cmake
+@@ -9,7 +9,8 @@ else()
+     # set(XLINK_SHARED_LIBS ${BUILD_SHARED_LIBS})
+     if(XLINK_ENABLE_LIBUSB)
+         if(NOT XLINK_LIBUSB_LOCAL AND NOT XLINK_LIBUSB_SYSTEM)
+-            hunter_add_package(libusb-luxonis)
++            find_package(PkgConfig REQUIRED)
++            pkg_check_modules(libusb REQUIRED libusb-1.0)
+         endif()
+     endif()
+ endif()
+@@ -19,7 +20,8 @@ if(XLINK_ENABLE_LIBUSB)
+     if(XLINK_LIBUSB_LOCAL)
+         add_subdirectory("${XLINK_LIBUSB_LOCAL}" "${CMAKE_CURRENT_BINARY_DIR}/libusb" EXCLUDE_FROM_ALL)
+     elseif(NOT XLINK_LIBUSB_SYSTEM)
+-        find_package(usb-1.0 ${_QUIET} CONFIG REQUIRED HINTS "${CMAKE_CURRENT_LIST_DIR}/libusb")
++            find_package(PkgConfig REQUIRED)
++            pkg_check_modules(libusb REQUIRED libusb-1.0)
+     endif()
+ endif()
+ 
