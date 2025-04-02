@@ -41,7 +41,6 @@ let
     x86_64-linux = "linux";
     i686-linux = "linux32";
     x86_64-darwin = "osx";
-    i686-darwin = "osx32";
     x86_64-cygwin = "win";
     i686-cygwin = "win32";
   };
