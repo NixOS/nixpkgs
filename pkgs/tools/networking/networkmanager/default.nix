@@ -1,58 +1,58 @@
-{ lib
-, stdenv
-, fetchurl
-, replaceVars
-, gettext
-, pkg-config
-, dbus
-, gitUpdater
-, libuuid
-, polkit
-, gnutls
-, ppp
-, dhcpcd
-, iptables
-, nftables
-, python3
-, vala
-, libgcrypt
-, dnsmasq
-, bluez5
-, readline
-, libselinux
-, audit
-, gobject-introspection
-, perl
-, modemmanager
-, openresolv
-, libndp
-, newt
-, libsoup_2_4
-, ethtool
-, gnused
-, iputils
-, kmod
-, jansson
-, elfutils
-, gtk-doc
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, openconnect
-, curl
-, meson
-, mesonEmulatorHook
-, ninja
-, libpsl
-, mobile-broadband-provider-info
-, runtimeShell
-, buildPackages
-, nixosTests
-, systemd
-, udev
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  replaceVars,
+  gettext,
+  pkg-config,
+  dbus,
+  gitUpdater,
+  libuuid,
+  polkit,
+  gnutls,
+  ppp,
+  dhcpcd,
+  iptables,
+  nftables,
+  python3,
+  vala,
+  libgcrypt,
+  dnsmasq,
+  bluez5,
+  readline,
+  libselinux,
+  audit,
+  gobject-introspection,
+  perl,
+  modemmanager,
+  openresolv,
+  libndp,
+  newt,
+  ethtool,
+  gnused,
+  iputils,
+  kmod,
+  jansson,
+  elfutils,
+  gtk-doc,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  openconnect,
+  curl,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  libpsl,
+  mobile-broadband-provider-info,
+  runtimeShell,
+  buildPackages,
+  nixosTests,
+  systemd,
+  udev,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 let
@@ -67,7 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NW8hoV2lHkIY/U0P14zqYeBnsRFqJc3e5K+d8FBi6S0=";
   };
 
-  outputs = [ "out" "dev" "devdoc" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+    "doc"
+  ];
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
@@ -76,8 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     # System paths
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (lib.mesonOption "systemdsystemunitdir"
-      (if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"))
+    (lib.mesonOption "systemdsystemunitdir" (
+      if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
+    ))
     # to enable link-local connections
     "-Dudev_dir=${placeholder "out"}/lib/udev"
     "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
@@ -120,7 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      inherit iputils openconnect ethtool gnused;
+      inherit
+        iputils
+        openconnect
+        ethtool
+        gnused
+        ;
       inherit runtimeShell;
       # patch context
       OUTPUT = null;
@@ -147,47 +159,53 @@ stdenv.mkDerivation (finalAttrs: {
     modemmanager
     readline
     newt
-    libsoup_2_4
     jansson
     dbus # used to get directory paths with pkg-config during configuration
   ];
 
-  propagatedBuildInputs = [ gnutls libgcrypt ];
-
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    vala
-    gobject-introspection
-    perl
-    elfutils # used to find jansson soname
-    # Docs
-    gtk-doc
-    libxslt
-    docbook_xsl
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    pythonForDocs
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
+  propagatedBuildInputs = [
+    gnutls
+    libgcrypt
   ];
+
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      pkg-config
+      vala
+      gobject-introspection
+      perl
+      elfutils # used to find jansson soname
+      # Docs
+      gtk-doc
+      libxslt
+      docbook_xsl
+      docbook_xml_dtd_412
+      docbook_xml_dtd_42
+      docbook_xml_dtd_43
+      pythonForDocs
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   doCheck = false; # requires /sys, the net
 
-  postPatch = ''
-    patchShebangs ./tools
-    patchShebangs libnm/generate-setting-docs.py
+  postPatch =
+    ''
+      patchShebangs ./tools
+      patchShebangs libnm/generate-setting-docs.py
 
-    # TODO: submit upstream
-    substituteInPlace meson.build \
-      --replace "'vala', req" "'vala', native: false, req"
-  '' + lib.optionalString withSystemd ''
-    substituteInPlace data/NetworkManager.service.in \
-      --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
-  '';
+      # TODO: submit upstream
+      substituteInPlace meson.build \
+        --replace "'vala', req" "'vala', native: false, req"
+    ''
+    + lib.optionalString withSystemd ''
+      substituteInPlace data/NetworkManager.service.in \
+        --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
+    '';
 
   preBuild = ''
     # Our gobject-introspection patches make the shared library paths absolute
@@ -218,7 +236,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz ]);
+    maintainers =
+      teams.freedesktop.members
+      ++ (with maintainers; [
+        domenkozar
+        obadz
+      ]);
     platforms = platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "moar";
@@ -20,8 +25,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
-    "-X" "main.versionString=v${version}"
+    "-s"
+    "-w"
+    "-X"
+    "main.versionString=v${version}"
   ];
 
   meta = with lib; {

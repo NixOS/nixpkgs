@@ -224,7 +224,6 @@ let
               rustPlatform.fetchCargoVendor {
                 inherit (finalAttrs) src;
                 sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-                allowGitDependencies = false;
                 hash =
                   assert cargoHash != null;
                   cargoHash;

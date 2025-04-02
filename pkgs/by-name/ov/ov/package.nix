@@ -77,5 +77,6 @@ buildGoModule rec {
       farcaller
       figsoda
     ];
+    mainProgram = "ov";
   };
 }

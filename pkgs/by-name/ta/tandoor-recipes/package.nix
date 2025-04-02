@@ -1,6 +1,7 @@
-{ callPackage
-, nixosTests
-, python3
+{
+  callPackage,
+  nixosTests,
+  python3,
 }:
 let
   python = python3;
@@ -9,7 +10,7 @@ let
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage {
+python.pkgs.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;

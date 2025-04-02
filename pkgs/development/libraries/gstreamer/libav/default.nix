@@ -30,15 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cHqLaH/1/dzuWwJBXi7JtxtKxE0Leuw7R3Nkzuy/Hs8=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    python3
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      gettext
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
   buildInputs = [
     gstreamer

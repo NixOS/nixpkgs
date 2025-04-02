@@ -34,7 +34,10 @@ mkCoqDerivation {
       }
     ] null;
 
-  propagatedBuildInputs = [ mathcomp-ssreflect stdlib ];
+  propagatedBuildInputs = [
+    mathcomp-ssreflect
+    stdlib
+  ];
 
   meta = with lib; {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";
