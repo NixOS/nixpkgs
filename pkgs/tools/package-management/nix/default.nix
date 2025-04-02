@@ -115,6 +115,19 @@ let
         if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
     };
 
+  commonMeson =
+    args:
+    callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
+      inherit
+        Security
+        storeDir
+        stateDir
+        confDir
+        ;
+      boehmgc = boehmgc-nix;
+      aws-sdk-cpp = aws-sdk-cpp-nix;
+    };
+
   # https://github.com/NixOS/nix/pull/7585
   patch-monitorfdhup = fetchpatch2 {
     name = "nix-7585-monitor-fd-hup.patch";
@@ -255,10 +268,16 @@ lib.makeExtensible (
           otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
         }
       );
-
+      
       # Note, this might eventually become an alias, as packages should
       # depend on the components they need in `nixComponents_2_26`.
-      nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
+      # nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
+      
+      nix_2_26 = commonMeson {
+        version = "2.26.3";
+        hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+        self_attribute_name = "nix_2_26";
+      };
 
       latest = self.nix_2_26;
 
