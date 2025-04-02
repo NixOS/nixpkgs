@@ -20,11 +20,11 @@ let
     };
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.1" = {
-      sha256 = "sha256-QTOzbNFtFNYzlpw3/VHCyJqOpdbhYRVSgZ2R9xshn4s=";
-    };
     "2.5.2" = {
       sha256 = "sha256-XcJ+un3aQz31P9dEHeixFHSoLNrBaJwfbOVfoGXWX6w=";
+    };
+    "2.5.3" = {
+      sha256 = "sha256-ih5251u3Pq7C3x7gVBqrZGyqEELHHiVqqmf3r/OrFtU=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -134,8 +134,10 @@ stdenv.mkDerivation (self: {
     # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
-    ./dynamic-space-size-envvar-feature.patch
     ./dynamic-space-size-envvar-tests.patch
+    (if lib.versionOlder "2.5.2" self.version
+     then ./dynamic-space-size-envvar-feature-2.5.3.patch
+     else ./dynamic-space-size-envvar-feature-2.5.2.patch)
   ];
   postPatch = lib.optionalString (self.disabledTestFiles != [ ]) ''
     (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})

@@ -1,0 +1,50 @@
+diff --git a/src/runtime/runtime.c b/src/runtime/runtime.c
+index 656eca85b..45c7eba1d 100644
+--- a/src/runtime/runtime.c
++++ b/src/runtime/runtime.c
+@@ -416,6 +416,29 @@ static int is_memsize_arg(char *argv[], int argi, int argc, int *merge_core_page
+     return 0;
+ }
+ 
++/**
++ * Read memory options from the environment, if present.
++ *
++ * Memory settings are read in the following priority:
++ *
++ * 1. command line arguments
++ * 2. environment variable
++ * 3. embedded options in core
++ * 4. default
++ */
++static void
++read_memsize_from_env(void) {
++  const char *val = getenv("SBCL_DYNAMIC_SPACE_SIZE");
++  // The distinction is blurry between setting an envvar to the empty string and
++  // unsetting it entirely. Depending on the calling environment it can even be
++  // tricky to properly unset an envvar in the first place. An empty envvar is
++  // practically always intended to just mean “unset”, so let’s interpret it
++  // that way.
++  if (val != NULL && (strcmp(val, "") != 0)) {
++    dynamic_space_size = parse_size_arg(val, "SBCL_DYNAMIC_SPACE_SIZE");
++  }
++}
++
+ static struct cmdline_options
+ parse_argv(struct memsize_options memsize_options,
+            int argc, char *argv[], char *envp[], char *core)
+@@ -456,6 +479,7 @@ parse_argv(struct memsize_options memsize_options,
+         dynamic_space_size = memsize_options.dynamic_space_size;
+         thread_control_stack_size = memsize_options.thread_control_stack_size;
+         dynamic_values_bytes = memsize_options.thread_tls_bytes;
++        read_memsize_from_env();
+         if (memsize_options.present_in_core == 2) {
+             int stop_parsing = 0; // have we seen '--'
+             int output_index = 1;
+@@ -490,6 +514,7 @@ parse_argv(struct memsize_options memsize_options,
+ #endif
+         }
+     } else {
++        read_memsize_from_env();
+         bool end_runtime_options = 0;
+         /* Parse our any of the command-line options that we handle from C,
+          * stopping at the first one that we don't, and leave the rest */
