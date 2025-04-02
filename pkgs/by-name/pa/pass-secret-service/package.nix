@@ -6,6 +6,7 @@
   gnupg,
   coreutils,
   nixosTests,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -13,13 +14,13 @@ python3.pkgs.buildPythonApplication {
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "unstable-2022-07-18";
+  version = "0-unstable-2023-12-16";
 
   src = fetchFromGitHub {
     owner = "mdellweg";
     repo = "pass_secret_service";
-    rev = "fadc09be718ae1e507eeb8719f3a2ea23edb6d7a";
-    hash = "sha256-lrNU5bkG4/fMu5rDywfiI8vNHyBsMf/fiWIeEHug03c=";
+    rev = "6335c85d9a790a6472e3de6eff87a15208caa5dc";
+    hash = "sha256-SSmI3HJCUWuwFXCu3Zg66X18POlzp3ADRj7HeE8GRio=";
   };
 
   # Need to specify session.conf file for tests because it won't be found under
@@ -65,7 +66,12 @@ python3.pkgs.buildPythonApplication {
 
   checkTarget = "test";
 
-  passthru.tests.pass-secret-service = nixosTests.pass-secret-service;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+    tests.pass-secret-service = nixosTests.pass-secret-service;
+  };
 
   meta = {
     description = "Libsecret D-Bus API with pass as the backend";
