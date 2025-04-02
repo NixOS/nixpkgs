@@ -17864,6 +17864,12 @@
     githubId = 817073;
     name = "Yc. Shen";
   };
+  onnimonni = {
+    email = "onni@flaky.build";
+    github = "onnimonni";
+    githubId = 5691777;
+    name = "Onni Hakala";
+  };
   onny = {
     email = "onny@project-insanity.org";
     github = "onny";
@@ -20168,6 +20174,11 @@
     github = "remexre";
     githubId = 4196789;
     name = "Nathan Ringo";
+  };
+  remko = {
+    github = "remko";
+    githubId = 12300;
+    name = "Remko Tronçon";
   };
   remyvv = {
     name = "Remy van Velthuijsen";
