@@ -47,6 +47,9 @@ jobs:
         with:
           extra_nix_config: sandbox = true
 
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build
+
       - name: Evaluate the list of all attributes and get the systems matrix
         id: systems
         run: |
