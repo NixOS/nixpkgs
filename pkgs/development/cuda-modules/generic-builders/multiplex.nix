@@ -81,7 +81,7 @@ let
   redistArch = flags.getRedistArch hostPlatform.system;
 
   preferable =
-    p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
+    p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionOlder p2.version p1.version);
 
   # All the supported packages we can build for our platform.
   # perSystemReleases :: List Package
