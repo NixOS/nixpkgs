@@ -10,14 +10,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.5.1";
+  version = "1.6.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
+    hash = "sha256-WLwR6ASY2Z4k9hJnTBuMV8dBLPOAEVtqHJr3spxgHhI=";
   };
 
-  propagatedBuildInputs =
+  # license expression requires setuptools 77.0.0
+  # https://setuptools.pypa.io/en/latest/history.html#v77-0-0
+  patches = [ ./no-license.diff ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
     with python3.pkgs;
     [
       attrs
@@ -46,6 +53,9 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # assumes we have checked out the full repo (including remotes)
     "test_real_get_github_repos"
+    # requires a newer pandoc version (as it tests for a specific format of the
+    # error message)
+    "test_bad_convert_to_markdown"
   ];
 
   passthru.tests = {
