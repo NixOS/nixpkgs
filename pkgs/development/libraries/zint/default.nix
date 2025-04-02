@@ -2,33 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wrapQtAppsHook,
   cmake,
+  ninja,
   qtbase,
   qtsvg,
   qttools,
-  testers,
-  zint,
+  versionCheckHook,
+  wrapQtAppsHook,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zint";
-  version = "2.13.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "zint";
     repo = "zint";
-    rev = version;
-    hash = "sha256-/ILq/7A8Lffe2NuiABiV3KeYXapuL1SO55Qk3wXfC/8=";
+    tag = finalAttrs.version;
+    hash = "sha256-+dXIU66HIS2mE0pa99UemMMFBGCYjupUX8P7q3G7Nis=";
   };
-
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   nativeBuildInputs = [
     cmake
+    ninja
     wrapQtAppsHook
   ];
 
@@ -38,19 +33,16 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  cmakeFlags = [ "-DZINT_QT6:BOOL=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "ZINT_QT6" true) ];
+
+  doInstallCheck = true;
+  nativeCheckInputs = [ versionCheckHook ];
 
   postInstall = ''
     install -Dm644 -t $out/share/applications $src/zint-qt.desktop
     install -Dm644 -t $out/share/pixmaps $src/zint-qt.png
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
-
-  passthru.tests.version = testers.testVersion {
-    package = zint;
-    command = "zint --version";
-    inherit version;
-  };
 
   meta = with lib; {
     description = "Barcode generating tool and library";
@@ -61,9 +53,10 @@ stdenv.mkDerivation rec {
       developers access to the capabilities of Zint.
     '';
     homepage = "https://www.zint.org.uk";
-    changelog = "https://github.com/zint/zint/blob/${version}/ChangeLog";
+    changelog = "https://github.com/zint/zint/blob/${finalAttrs.src.rev}/ChangeLog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ lib.maintainers.azahi ];
     platforms = platforms.all;
+    mainProgram = "zint";
   };
-}
+})
