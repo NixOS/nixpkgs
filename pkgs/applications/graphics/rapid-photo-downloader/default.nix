@@ -21,13 +21,13 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.34";
+  version = "0.9.36";
 
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
     rev = "v${version}";
-    hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
+    hash = "sha256-fFmIbqymYkg2Z1/x0mNsCNlDCOyqVg65CM4a67t+kPQ=";
   };
 
   postPatch = ''
