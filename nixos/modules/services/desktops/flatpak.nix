@@ -136,6 +136,12 @@ in
         ];
         description = "List of Flatpak remotes to add. By default, includes Flathub.";
       };
+
+      removeUnmanagedRemotes = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to remove Flatpak remotes not listed in 'remotes'.";
+      };
     };
   };
 
@@ -170,7 +176,24 @@ in
     system.activationScripts.flatpak-setup = ''
       set -eou pipefail
 
-      # Handle remotes
+      # Get list of configured remote names
+      configured_remotes=""
+      for remote in ${toString cfg.remotes}; do
+        remote_name=$(echo $remote | jq -r .name)
+        configured_remotes="$configured_remotes $remote_name"
+      done
+
+      ${lib.optionalString cfg.removeUnmanagedRemotes ''
+        # Remove remotes that are not in the config
+        for existing_remote in $(${flatpakCommand} remotes | cut -f1); do
+          if ! echo "$configured_remotes" | grep -q " $existing_remote "; then
+            echo "Removing unconfigured Flatpak remote: $existing_remote"
+            ${flatpakCommand} remote-delete --force "$existing_remote"
+          fi
+        done
+      ''}
+
+      # Add or update configured remotes
       for remote in ${toString cfg.remotes}; do
         remote_name=$(echo $remote | jq -r .name)
         remote_url=$(echo $remote | jq -r .url)
@@ -179,6 +202,8 @@ in
           ${flatpakCommand} remote-add --if-not-exists "$remote_name" "$remote_url"
         else
           echo "Flatpak remote already exists: $remote_name"
+          # Update the remote URL in case it changed
+          ${flatpakCommand} remote-modify --url "$remote_url" "$remote_name"
         fi
       done
 

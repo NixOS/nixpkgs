@@ -44,6 +44,7 @@ Flatpak packages to be installed or removed through your {file}`configuration.ni
     ];
     packages = [ "org.blender.Blender" "net.ankiweb.Anki" ];
     removeUnmanagedPackages = true;
+    removeUnmanagedRemotes = true;
     update = {
       auto = {
         enable = true;
@@ -60,12 +61,14 @@ This example configuration will:
 - Add the specified Flatpak remotes (Flathub and GNOME nightly in this example)
 - Ensure the specified packages are installed (Blender and Anki in this example)
 - Remove any Flatpak packages not listed in the `packages` option (if `removeUnmanagedPackages` is true)
+- Remove any Flatpak remotes not listed in the `remotes` option (if `removeUnmanagedRemotes` is true)
 - Enable automatic weekly updates of Flatpak packages
 - Disable package updates when building your system
 
 Important notes:
 - Package versions are managed by Flatpak's servers, not nixpkgs.
 - The `removeUnmanagedPackages` option defaults to `false`.
+- The `removeUnmanagedRemotes` option defaults to `false`.
 - The `update.auto.enable` option defaults to `false`. When set to `true`, it allows automatic updates of installed Flatpak packages.
 - The `update.auto.onCalendar` option uses systemd calendar syntax. If not set, no timer will be created even if `update.auto.enable` is `true`.
 - The `update.duringBuild` option defaults to `false`. When set to `true`, it updates Flatpak packages during system rebuild.
@@ -101,4 +104,7 @@ $ flatpak run org.freedesktop.Bustle
 
 GNOME Software and KDE Discover offer a graphical interface for these tasks.
 
-Note: When using NixOS-integrated package management, manually installed packages may be removed if `removeUnmanagedPackages` is set to `true` and the package is not listed in the `packages` option. If automatic updates are disabled, you will need to manually update your Flatpak packages using the `flatpak update` command.
+Note: When using NixOS-integrated package management:
+- Manually installed packages may be removed if `removeUnmanagedPackages` is set to `true` and the package is not listed in the `packages` option.
+- Manually added remotes may be removed if `removeUnmanagedRemotes` is set to `true` and the remote is not listed in the `remotes` option.
+- If automatic updates are disabled, you will need to manually update your Flatpak packages using the `flatpak update` command.
