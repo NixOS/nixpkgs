@@ -105,6 +105,8 @@ in
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
       group = cfg.group;
+      home = cfg.spoolDir;
+      createHome = true;
     };
 
     users.groups.${cfg.group} = {
@@ -127,12 +129,6 @@ in
         ExecReload = "!${coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
       };
-      preStart = ''
-        if ! test -d ${cfg.spoolDir}; then
-          ${coreutils}/bin/mkdir -p ${cfg.spoolDir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.spoolDir}
-        fi
-      '';
     };
 
   };
