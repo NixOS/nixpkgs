@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Icon=sillytavern
+Name=SillyTavern
+Exec=sillytavern
+Terminal=true
+Hidden=false
+Categories=Network;Chat
+Comment="LLM Frontend for Power Users"
