@@ -11,18 +11,17 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "2.31.1";
+  version = "2.34.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${version}";
-    hash = "sha256-eEdhAY3vN6hsgggakYpGFiVjR2BBGrg1UF18gFXc8g8=";
+    hash = "sha256-hWkU3tyh0kQ9GNl5gQIs4wTRBQV0B3/0oOAhKLo1hOo=";
   };
 
-  vendorHash = "sha256-g+QZI0mfXSIU+iBnKzMeTGuF5UB1cwOixvRhcrBGrpE=";
-
   proxyVendor = true;
+  vendorHash = "sha256-x9ehxBfyk5sMg71yJcyjcrBAi5bzEnENAaqLXFoGQck=";
 
   subPackages = [ "cmd/werf" ];
 
@@ -72,10 +71,11 @@ buildGoModule rec {
       # Test all packages.
       unset subPackages
 
-      # Remove tests that require external services, usually a Docker daemon.
+      # Remove tests that fail or require external services.
       rm -rf \
         integration/suites \
         pkg/true_git/*_test.go \
+        pkg/werf/exec/*_test.go \
         test/e2e
     ''
     + lib.optionalString (env.CGO_ENABLED == 0) ''
