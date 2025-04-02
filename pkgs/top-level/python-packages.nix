@@ -12772,6 +12772,8 @@ self: super: with self; {
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
 
+  pyorc = callPackage ../development/python-modules/pyorc { };
+
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
