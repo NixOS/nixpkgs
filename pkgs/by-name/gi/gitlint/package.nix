@@ -1,15 +1,16 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   gitMinimal,
-  python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gitlint";
   version = "0.19.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
@@ -22,32 +23,36 @@ python3.pkgs.buildPythonApplication rec {
   # simplify the dependency handling
   sourceRoot = "${src.name}/gitlint-core";
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     arrow
     click
     sh
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     gitMinimal
-    pytestCheckHook
+    python3Packages.pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [
     "gitlint"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Linting for your git commit messages";
     homepage = "https://jorisroovers.com/gitlint/";
     changelog = "https://github.com/jorisroovers/gitlint/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ethancedwards8
       fab
       matthiasbeyer
