@@ -465,7 +465,7 @@ let
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
       mlir = callPackage ./mlir { };
-      libclc = callPackage ./libclc.nix { };
+      libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt {

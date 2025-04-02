@@ -26,11 +26,11 @@ let
     ln -s "${lib.getExe' buildLlvmTools.clang.cc "clang"}" "$out"/bin
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir -p "$out"
     ''
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       cp -r ${monorepoSrc}/cmake "$out"
     ''
     + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
+      cp -r ${monorepoSrc}/libclc "$out"
     ''
   );
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/libclc";
 
   outputs = [
     "out"
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches =
-    [ ./libclc/libclc-gnu-install-dirs.patch ]
+    [ ./libclc-gnu-install-dirs.patch ]
     # LLVM 19 changes how host tools are looked up.
     # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
     # so CMake can actually find the tools in nativeBuildInputs.
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
   };
-}
+})

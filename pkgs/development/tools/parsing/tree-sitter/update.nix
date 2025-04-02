@@ -155,6 +155,10 @@ let
       orga = "MunifTanjim";
       repo = "tree-sitter-lua";
     };
+    "tree-sitter-factor" = {
+      orga = "erochest";
+      repo = "tree-sitter-factor";
+    };
     "tree-sitter-fennel" = {
       orga = "travonted";
       repo = "tree-sitter-fennel";
