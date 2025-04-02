@@ -10418,6 +10418,8 @@ self: super: with self; {
 
   ormar = callPackage ../development/python-modules/ormar { };
 
+  ormsgpack = callPackage ../development/python-modules/ormsgpack { };
+
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
   orvibo = callPackage ../development/python-modules/orvibo { };
