@@ -75,8 +75,7 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
+    networking.nameservers = [ "127.0.0.1" ];
 
     systemd.services.dnscrypt-proxy2 = {
       description = "DNSCrypt-proxy client";
