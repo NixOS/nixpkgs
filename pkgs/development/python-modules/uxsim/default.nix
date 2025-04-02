@@ -8,6 +8,7 @@
   python,
   dill,
   matplotlib,
+  networkx,
   numpy,
   pandas,
   pillow,
@@ -17,14 +18,14 @@
 }:
 buildPythonPackage rec {
   pname = "uxsim";
-  version = "1.7.2";
+  version = "1.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "toruseo";
     repo = "UXsim";
     tag = "v${version}";
-    hash = "sha256-5up44edivGWj0nQOOL3+lqjdOBBfxk01nFokG5ht+5Y=";
+    hash = "sha256-HmP1A053v0lToGztEEIP2x6BAGLPKxRQmYQNY9V7Qqg=";
   };
 
   patches = [ ./add-qt-plugin-path-to-env.patch ];
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dill
     matplotlib
+    networkx
     numpy
     pandas
     pillow
