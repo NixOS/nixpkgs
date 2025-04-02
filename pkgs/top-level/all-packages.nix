@@ -10672,8 +10672,6 @@ with pkgs;
       ;
   };
 
-  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix { };
-
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
   };
