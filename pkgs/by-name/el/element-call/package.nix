@@ -5,36 +5,23 @@
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
-  yarnInstallHook,
   nodejs,
 }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-  offlineCacheHash =
-    {
-      x86_64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-      aarch64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-      x86_64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-      aarch64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-    }
-    .${system} or throwSystem;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HmkFr2DroN1uNNH2pnRwE7vsJsEPLYU6yhroiuR/E6Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BugR5aXDxIQ9WOhaqXEoo0FdZHnYSvoqDoRJLDd4PUk=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = offlineCacheHash;
+    hash = "sha256-7dUSt1k/5N6BaYrT272J6xxDGgloAsDw1dCFh327Itc=";
   };
 
   nativeBuildInputs = [
@@ -53,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/element-hq/element-call/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/element-hq/element-call";
     description = "Group calls powered by Matrix";
     license = licenses.asl20;
     maintainers = with maintainers; [ kilimnik ];
-    mainProgram = "element-call";
   };
 })
