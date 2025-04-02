@@ -270,7 +270,7 @@ in
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = handleTest ./buildkite-agents.nix { };
   c2fmzq = handleTest ./c2fmzq.nix { };
-  caddy = handleTest ./caddy.nix { };
+  caddy = runTest ./caddy.nix;
   cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
   cage = handleTest ./cage.nix { };
   cagebreak = handleTest ./cagebreak.nix { };
