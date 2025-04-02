@@ -19390,6 +19390,11 @@
     githubId = 15833376;
     name = "Pierre ROux";
   };
+  provokateurin = {
+    name = "Kate Döen";
+    github = "provokateurin";
+    githubId = 26026535;
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
@@ -22747,6 +22752,13 @@
     github = "srounce";
     githubId = 60792;
   };
+  srp = {
+    name = "Seraphim Pardee";
+    matrix = "@xsrp:matrix.org";
+    email = "me@srp.life";
+    github = "SeraphimRP";
+    githubId = 8297347;
+  };
   srv6d = {
     name = "Marvin Vogt";
     github = "SRv6d";
@@ -23204,6 +23216,17 @@
     github = "sweenu";
     githubId = 7051978;
   };
+  sweiglbosker = {
+    email = "stefan@s00.xyz";
+    github = "sweiglbosker";
+    githubId = 124390044;
+    name = "Stefan Weigl-Bosker";
+    keys = [
+      {
+        fingerprint = "B520 0ABF BD21 3FC9 C17C  6DB9 1291 CBBC F3B9 F225";
+      }
+    ];
+  };
   swendel = {
     name = "Sebastian Wendel";
     email = "nixpkgs.aiX5ph@srx.digital";
@@ -23448,6 +23471,11 @@
     github = "tari";
     githubId = 506181;
     name = "Peter Marheine";
+  };
+  tarinaky = {
+    github = "Tarinaky";
+    githubId = 186027;
+    name = "Tarinaky";
   };
   tasmo = {
     email = "tasmo@tasmo.de";

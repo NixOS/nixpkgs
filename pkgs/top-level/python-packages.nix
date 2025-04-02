@@ -1608,6 +1608,8 @@ self: super: with self; {
 
   bangla = callPackage ../development/python-modules/bangla { };
 
+  banks = callPackage ../development/python-modules/banks { };
+
   bap = callPackage ../development/python-modules/bap {
     inherit (pkgs.ocaml-ng.ocamlPackages_4_14) bap;
   };
@@ -1976,6 +1978,8 @@ self: super: with self; {
   borb = callPackage ../development/python-modules/borb { };
 
   bork = callPackage ../development/python-modules/bork { };
+
+  bosch-alarm-mode2 = callPackage ../development/python-modules/bosch-alarm-mode2 { };
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
@@ -4002,6 +4006,8 @@ self: super: with self; {
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
+
+  docling-serve = callPackage ../development/python-modules/docling-serve { };
 
   docloud = callPackage ../development/python-modules/docloud { };
 
@@ -7366,6 +7372,8 @@ self: super: with self; {
 
   konnected = callPackage ../development/python-modules/konnected { };
 
+  kopf = callPackage ../development/python-modules/kopf { };
+
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
   kornia = callPackage ../development/python-modules/kornia { };
@@ -10147,6 +10155,8 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  openapi-pydantic = callPackage ../development/python-modules/openapi-pydantic { };
+
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
@@ -10285,6 +10295,10 @@ self: super: with self; {
 
   opentelemetry-instrumentation-grpc =
     callPackage ../development/python-modules/opentelemetry-instrumentation-grpc
+      { };
+
+  opentelemetry-instrumentation-httpx =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-httpx
       { };
 
   opentelemetry-instrumentation-logging =
@@ -11551,6 +11565,8 @@ self: super: with self; {
   py-cid = callPackage ../development/python-modules/py-cid { };
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
+
+  py-dactyl = callPackage ../development/python-modules/py-dactyl { };
 
   py-datastruct = callPackage ../development/python-modules/py-datastruct { };
 
@@ -13837,6 +13853,8 @@ self: super: with self; {
 
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
+  python-iso639 = callPackage ../development/python-modules/python-iso639 { };
+
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
@@ -13984,6 +14002,8 @@ self: super: with self; {
   python-overseerr = callPackage ../development/python-modules/python-overseerr { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
+
+  python-oxmsg = callPackage ../development/python-modules/python-oxmsg { };
 
   python-packer = callPackage ../development/python-modules/python-packer { };
 
@@ -14633,6 +14653,8 @@ self: super: with self; {
   rclone-python = callPackage ../development/python-modules/rclone-python { };
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
+
+  rdbtools = callPackage ../development/python-modules/rdbtools { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
@@ -17185,6 +17207,8 @@ self: super: with self; {
 
   tmb = callPackage ../development/python-modules/tmb { };
 
+  tnefparse = callPackage ../development/python-modules/tnefparse { };
+
   todoist = callPackage ../development/python-modules/todoist { };
 
   todoist-api-python = callPackage ../development/python-modules/todoist-api-python { };
@@ -17370,11 +17394,19 @@ self: super: with self; {
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
 
+  tree-sitter-c-sharp = callPackage ../development/python-modules/tree-sitter-c-sharp { };
+
+  tree-sitter-embedded-template =
+    callPackage ../development/python-modules/tree-sitter-embedded-template
+      { };
+
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 
   tree-sitter-javascript = callPackage ../development/python-modules/tree-sitter-javascript { };
 
   tree-sitter-json = callPackage ../development/python-modules/tree-sitter-json { };
+
+  tree-sitter-language-pack = callPackage ../development/python-modules/tree-sitter-language-pack { };
 
   tree-sitter-languages = callPackage ../development/python-modules/tree-sitter-languages { };
 
@@ -17383,6 +17415,8 @@ self: super: with self; {
   tree-sitter-python = callPackage ../development/python-modules/tree-sitter-python { };
 
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
+
+  tree-sitter-yaml = callPackage ../development/python-modules/tree-sitter-yaml { };
 
   tree-sitter_0_21 = callPackage ../development/python-modules/tree-sitter/0_21.nix { };
 
@@ -18024,6 +18058,8 @@ self: super: with self; {
 
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
+  typing-inspection = callPackage ../development/python-modules/typing-inspection { };
+
   typing-validation = callPackage ../development/python-modules/typing-validation { };
 
   typish = callPackage ../development/python-modules/typish { };
@@ -18189,6 +18225,8 @@ self: super: with self; {
   unstructured = callPackage ../development/python-modules/unstructured { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
+
+  unstructured-client = callPackage ../development/python-modules/unstructured-client { };
 
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
@@ -18971,6 +19009,8 @@ self: super: with self; {
   yapsy = callPackage ../development/python-modules/yapsy { };
 
   yara-python = callPackage ../development/python-modules/yara-python { };
+
+  yara-x = callPackage ../development/python-modules/yara-x { };
 
   yaramod = callPackage ../development/python-modules/yaramod { };
 

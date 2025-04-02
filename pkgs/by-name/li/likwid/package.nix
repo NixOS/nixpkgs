@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, replaceVars
-, coreutils
-, gnugrep
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  replaceVars,
+  coreutils,
+  gnugrep,
 }:
 
 stdenv.mkDerivation rec {

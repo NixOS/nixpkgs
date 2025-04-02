@@ -41,12 +41,17 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     gcc
-    rust-bindgen  # for aws-lc-sys@0.22.0
+    rust-bindgen # for aws-lc-sys@0.22.0
     rustPlatform.bindgenHook
   ];
 
   cargoBuildFlags = [ "--workspace" ];
-  cargoTestFlags = [ "--package" "firecracker" "--package" "jailer" ];
+  cargoTestFlags = [
+    "--package"
+    "firecracker"
+    "--package"
+    "jailer"
+  ];
 
   checkFlags = [
     # basic tests to skip in sandbox

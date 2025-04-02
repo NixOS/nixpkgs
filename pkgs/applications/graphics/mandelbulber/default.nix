@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, libpng
-, gsl
-, libsndfile
-, lzo
-, qmake
-, qttools
-, qtbase
-, qtmultimedia
-, withOpenCL ? true
-, opencl-clhpp ? null
-, ocl-icd ? null
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  libpng,
+  gsl,
+  libsndfile,
+  lzo,
+  qmake,
+  qttools,
+  qtbase,
+  qtmultimedia,
+  withOpenCL ? true,
+  opencl-clhpp ? null,
+  ocl-icd ? null,
 }:
 
 assert withOpenCL -> opencl-clhpp != null;
@@ -32,25 +33,25 @@ mkDerivation rec {
     qmake
     qttools
   ];
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    libpng
-    gsl
-    libsndfile
-    lzo
-  ] ++ lib.optionals withOpenCL [
-    opencl-clhpp
-    ocl-icd
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtmultimedia
+      libpng
+      gsl
+      libsndfile
+      lzo
+    ]
+    ++ lib.optionals withOpenCL [
+      opencl-clhpp
+      ocl-icd
+    ];
 
   sourceRoot = "${src.name}/mandelbulber2";
 
   qmakeFlags = [
     "SHARED_PATH=${placeholder "out"}"
-    (if withOpenCL
-      then "qmake/mandelbulber-opencl.pro"
-      else "qmake/mandelbulber.pro")
+    (if withOpenCL then "qmake/mandelbulber-opencl.pro" else "qmake/mandelbulber.pro")
   ];
 
   meta = with lib; {

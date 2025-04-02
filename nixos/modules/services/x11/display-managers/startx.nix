@@ -102,14 +102,6 @@ in
 
     environment.systemPackages = with pkgs; [ xorg.xinit ];
 
-    # Make graphical-session fail if the user environment has not been imported
-    systemd.user.targets.graphical-session = {
-      unitConfig.AssertEnvironment = [
-        "DISPLAY"
-        "XDG_SESSION_ID"
-      ];
-    };
-
   };
 
 }

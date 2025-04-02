@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, catch2_3
-, cmake
-, ninja
-, fmt_11
-, mimalloc
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  catch2_3,
+  cmake,
+  ninja,
+  fmt_11,
+  mimalloc,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

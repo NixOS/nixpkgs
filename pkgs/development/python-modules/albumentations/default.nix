@@ -78,8 +78,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_pca_inverse_transform"
-    # test hangs
+    # these tests hang
     "test_keypoint_remap_methods"
+    "test_multiprocessing_support"
   ];
 
   pythonImportsCheck = [ "albumentations" ];

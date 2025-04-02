@@ -13,13 +13,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nwg-clipman";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-clipman";
     tag = "v${version}";
-    hash = "sha256-bAE9E6P+qfKrfRxb134k4r7DtIWGB+4JdiXKpI7gJ5M=";
+    hash = "sha256-RKbFAgx+Er1l0s7SC4MwOxO9TXKI/SBhB0pfyX+NVWo=";
   };
 
   build-system = [ python3Packages.setuptools ];

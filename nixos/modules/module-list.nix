@@ -353,6 +353,7 @@
   ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
+  ./programs/zoxide.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-autosuggestions.nix
@@ -513,6 +514,7 @@
   ./services/databases/pgbouncer.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
+  ./services/databases/postgrest.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
   ./services/databases/tigerbeetle.nix
@@ -578,6 +580,7 @@
   ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
   ./services/display-managers/default.nix
+  ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/sddm.nix
   ./services/display-managers/ly.nix
@@ -787,6 +790,7 @@
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
+  ./services/misc/docling-serve.nix
   ./services/misc/domoticz.nix
   ./services/misc/duckdns.nix
   ./services/misc/duckling.nix
@@ -1783,6 +1787,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/apfs.nix
   ./tasks/filesystems/bcachefs.nix
+  ./tasks/filesystems/bindfs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ecryptfs.nix

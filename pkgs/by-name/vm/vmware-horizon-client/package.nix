@@ -1,21 +1,24 @@
-{ stdenv
-, lib
-, buildFHSEnv
-, copyDesktopItems
-, fetchurl
-, gsettings-desktop-schemas
-, makeDesktopItem
-, makeWrapper
-, opensc
-, writeTextDir
-, configText ? ""
+{
+  stdenv,
+  lib,
+  buildFHSEnv,
+  copyDesktopItems,
+  fetchurl,
+  gsettings-desktop-schemas,
+  makeDesktopItem,
+  makeWrapper,
+  opensc,
+  writeTextDir,
+  configText ? "",
 }:
 let
   version = "2406";
 
   sysArch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "x64"
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
@@ -68,54 +71,57 @@ let
     '';
   };
 
-  vmwareFHSUserEnv = pname: buildFHSEnv {
-    inherit pname version;
+  vmwareFHSUserEnv =
+    pname:
+    buildFHSEnv {
+      inherit pname version;
 
-    runScript = "${vmwareHorizonClientFiles}/bin/${pname}_wrapper";
+      runScript = "${vmwareHorizonClientFiles}/bin/${pname}_wrapper";
 
-    targetPkgs = pkgs: with pkgs; [
-      at-spi2-atk
-      atk
-      cairo
-      dbus
-      file
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk2
-      gtk3-x11
-      harfbuzz
-      liberation_ttf
-      libjpeg
-      libpng
-      libpulseaudio
-      libtiff
-      libudev0-shim
-      libuuid
-      libv4l
-      libxml2
-      pango
-      pcsclite
-      pixman
-      udev
-      vmwareHorizonClientFiles
-      xorg.libX11
-      xorg.libXau
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libxkbfile
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
-      zlib
+      targetPkgs =
+        pkgs: with pkgs; [
+          at-spi2-atk
+          atk
+          cairo
+          dbus
+          file
+          fontconfig
+          freetype
+          gdk-pixbuf
+          glib
+          gtk2
+          gtk3-x11
+          harfbuzz
+          liberation_ttf
+          libjpeg
+          libpng
+          libpulseaudio
+          libtiff
+          libudev0-shim
+          libuuid
+          libv4l
+          libxml2
+          pango
+          pcsclite
+          pixman
+          udev
+          vmwareHorizonClientFiles
+          xorg.libX11
+          xorg.libXau
+          xorg.libXcursor
+          xorg.libXext
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libxkbfile
+          xorg.libXrandr
+          xorg.libXrender
+          xorg.libXScrnSaver
+          xorg.libXtst
+          zlib
 
-      (writeTextDir "etc/vmware/config" configText)
-    ];
-  };
+          (writeTextDir "etc/vmware/config" configText)
+        ];
+    };
 
   desktopItem = makeDesktopItem {
     name = "vmware-view";

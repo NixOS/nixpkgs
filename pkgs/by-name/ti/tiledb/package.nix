@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
   cmake,
   zlib,
   lz4,
@@ -15,62 +16,80 @@
   clang-tools,
   catch2_3,
   python3,
+  gtest,
   doxygen,
   fixDarwinDylibNames,
-  gtest,
-  rapidcheck,
-  libpng,
-  file,
-  runCommand,
-  catch2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 let
-  rapidcheck' = runCommand "rapidcheck" { } ''
-    cp -r ${rapidcheck.out} $out
-    chmod -R +w $out
-    cp -r ${rapidcheck.dev}/* $out
-  '';
+  # pre-fetch ExternalProject from cmake/Modules/FindMagic_EP.cmake
+  ep-file-windows = fetchFromGitHub {
+    owner = "TileDB-Inc";
+    repo = "file-windows";
+    rev = "5.38.2.tiledb";
+    hash = "sha256-TFn30VCuWZr252VN1T5NNCZe2VEN3xQSomS7XxxKGF8=";
+    fetchSubmodules = true;
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.27.2";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
-    tag = version;
-    hash = "sha256-zk4jkXJMh6wpuEKaCvuKUDod+F8B/6W5Lw8gwelcPEM=";
+    rev = version;
+    hash = "sha256-uLiXhigYz3v7NgY38twot3sBHxZS5QCrOiPfME4wWzE=";
   };
 
-  # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
-  # without the -fexperimental-library flag. Tiledb adds its own
-  # implementations in the std namespace which conflict with libcxx. This
-  # test can be re-enabled once libcxx supports stop_token and jthread.
-  postPatch = lib.optionalString (stdenv.cc.libcxx != null) ''
-    truncate -s0 tiledb/stdx/test/CMakeLists.txt
-  '';
+  patches = [
+    ./FindMagic_EP.cmake.patch
+  ];
 
-  env.TILEDB_DISABLE_AUTO_VCPKG = "1";
+  postPatch =
+    ''
+      # copy pre-fetched external project to directory where it is expected to be
+      mkdir -p build/externals/src
+      cp -a ${ep-file-windows} build/externals/src/ep_magic
+      chmod -R u+w build/externals/src/ep_magic
+
+      # add openssl on path
+      sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+        cmake/Modules/FindOpenSSL_EP.cmake
+    ''
+    # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
+    # without the -fexperimental-library flag. Tiledb adds its own
+    # implementations in the std namespace which conflict with libcxx. This
+    # test can be re-enabled once libcxx supports stop_token and jthread.
+    + lib.optionalString (stdenv.cc.libcxx != null) ''
+      truncate -s0 tiledb/stdx/test/CMakeLists.txt
+    '';
+
+  # upstream will hopefully fix this in some newer release
+  env.CXXFLAGS = "-include random";
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [
+    "-DTILEDB_VCPKG=OFF"
     "-DTILEDB_WEBP=OFF"
     "-DTILEDB_WERROR=OFF"
-    # https://github.com/NixOS/nixpkgs/issues/144170
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
+    ep-file-windows
     catch2_3
     clang-tools
     cmake
     python3
     doxygen
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  nativeCheckInputs = [
+    gtest
+  ];
 
   buildInputs = [
     zlib
@@ -82,33 +101,19 @@ stdenv.mkDerivation rec {
     openssl
     boost
     libpqxx
-    libpng
-    file
-    rapidcheck'
-    catch2
-  ];
-
-  # fatal error: catch.hpp: No such file or directory
-  doCheck = false;
-
-  nativeCheckInputs = [
-    gtest
-    catch2
   ];
 
   # test commands taken from
   # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml
   checkPhase = ''
     runHook preCheck
-
-    pushd ..
-    cmake --build build --target tests
-    ctest --test-dir build -R '(^unit_|test_assert)' --no-tests=error
-    ctest --test-dir build -R 'test_ci_asserts'
-    popd
-
+    make -C tiledb tests -j$NIX_BUILD_CORES
+    make -C tiledb test ARGS="-R '^unit_'" -R "test_assert"
+    make -C tiledb test ARGS="-R 'test_ci_asserts'"
     runHook postCheck
   '';
+
+  doCheck = true;
 
   installTargets = [
     "install-tiledb"
@@ -119,11 +124,11 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ rakesh4g ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ rakesh4g ];
   };
 }

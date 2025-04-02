@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Self-hostable bookmark-everything app with a touch of AI for the data hoarders out there";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
+    mainProgram = "hoarder-cli";
     platforms = lib.platforms.linux;
   };
 })
