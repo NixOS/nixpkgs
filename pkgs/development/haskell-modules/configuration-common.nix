@@ -2714,6 +2714,9 @@ self: super: {
     })
   ] (doJailbreak super.http2-client);
 
+  # https://github.com/snoyberg/http-client/pull/563
+  http-client-tls = doJailbreak super.http-client-tls;
+
   # 2025-01-23: jailbreak to allow base >= 4.17
   warp-systemd = doJailbreak super.warp-systemd;
 
