@@ -61,6 +61,7 @@ buildFHSEnv {
           gtest
           jq
           libepoxy
+          lz4
           lz4.dev
           tbb
           libxkbcommon
