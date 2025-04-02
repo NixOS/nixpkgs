@@ -369,7 +369,7 @@ in
   dnscrypt-proxy2 = handleTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix { };
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
-  docker = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix { };
+  docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
   docker-rootless = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix { };
   docker-registry = handleTest ./docker-registry.nix { };
   docker-tools = handleTestOn [ "x86_64-linux" ] ./docker-tools.nix { };
