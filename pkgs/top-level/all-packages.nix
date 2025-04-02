@@ -15266,12 +15266,6 @@ with pkgs;
 
   linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
 
-  lmms = libsForQt5.callPackage ../applications/audio/lmms {
-    lame = null;
-    libsoundio = null;
-    portaudio = null;
-  };
-
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   luddite = with python3Packages; toPythonApplication luddite;

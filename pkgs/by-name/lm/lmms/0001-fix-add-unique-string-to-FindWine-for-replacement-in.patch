@@ -1,0 +1,38 @@
+From 9d05021c4e9370f7e1b8c7595a18ae2b98895a60 Mon Sep 17 00:00:00 2001
+From: "Alexandre Cavalheiro S. Tiago da Silva" <contact@thewizard.link>
+Date: Tue, 28 Jan 2025 18:36:47 -0300
+Subject: [PATCH] fix!: add unique string to FindWine for replacement in nixos
+
+---
+ cmake/modules/FindWine.cmake | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/cmake/modules/FindWine.cmake b/cmake/modules/FindWine.cmake
+index eeef8d9c2..c04ee4a35 100644
+--- a/cmake/modules/FindWine.cmake
++++ b/cmake/modules/FindWine.cmake
+@@ -13,6 +13,13 @@
+ #  WINE_64_FLAGS - 64-bit linker flags
+ #
+ 
++set(WINE_INCLUDE_DIR @WINE_LOCATION@/include)
++set(WINE_BUILD @WINE_LOCATION@/bin/winebuild)
++set(WINE_CXX @WINE_LOCATION@/bin/wineg++)
++set(WINE_GCC @WINE_LOCATION@/bin/winegcc)
++set(WINE_32_LIBRARY_DIRS @WINE_LOCATION@/lib/wine/i386-unix)
++set(WINE_64_LIBRARY_DIRS @WINE_LOCATION@/lib/wine/x86_64-windows)
++
+ MACRO(_findwine_find_flags output expression result)
+ 	STRING(REPLACE " " ";" WINEBUILD_FLAGS "${output}")
+ 	FOREACH(FLAG ${WINEBUILD_FLAGS})
+@@ -32,6 +39,7 @@ ENDMACRO()
+ 
+ # Prefer newest wine first
+ list(APPEND WINE_LOCATIONS
++	@WINE_LOCATION@
+ 	/opt/wine-staging
+ 	/opt/wine-devel
+ 	/opt/wine-stable
+-- 
+2.47.1
+
