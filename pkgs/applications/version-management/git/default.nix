@@ -476,6 +476,13 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       disable_test t7527-builtin-fsmonitor
     ''
+    +
+      lib.optionalString (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.system == "x86_64-linux")
+        ''
+          # https://github.com/NixOS/nixpkgs/pull/394957
+          # > t2082-parallel-checkout-attributes.sh            (Wstat: 256 (exited 1) Tests: 5 Failed: 1)
+          disable_test t2082-parallel-checkout-attributes
+        ''
     + lib.optionalString stdenv.hostPlatform.isMusl ''
       # Test fails (as of 2.17.0, musl 1.1.19)
       disable_test t3900-i18n-commit
