@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   mercury,
   pandoc,
   ncurses,
@@ -21,10 +22,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CqA9JU/ujqIn/NvtbPtSWxKDYCv4oDdLCgbf2jj9Av4=";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   nativeBuildInputs = [
     mercury
     pandoc
   ];
+
   postPatch = ''
     substituteInPlace src/compose.m --replace 'shell_quoted("base64' 'shell_quoted("${coreutils}/bin/base64'
     substituteInPlace src/detect_mime_type.m --replace 'shell_quoted("file' 'shell_quoted("${file}/bin/file'
