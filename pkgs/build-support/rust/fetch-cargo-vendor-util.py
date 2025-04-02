@@ -198,7 +198,7 @@ def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_
     crate_tree = crate_manifest_path.parent
 
     eprint(f"Copying to {crate_out_dir}")
-    shutil.copytree(crate_tree, crate_out_dir, ignore_dangling_symlinks=True)
+    shutil.copytree(crate_tree, crate_out_dir, ignore_dangling_symlinks=True, dirs_exist_ok=True)
     crate_out_dir.chmod(0o755)
 
     with open(crate_manifest_path, "r") as f:
