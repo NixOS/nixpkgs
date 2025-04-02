@@ -2,34 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   markdown-it-py,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.19";
+  version = "0.7.22";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat";
     tag = version;
-    hash = "sha256-t2yx8cIq8es3XOc2nbHPKjUUium5+RPZuD8oNWZxVV0=";
+    hash = "sha256-WvbGCqfzh7KlNXIGJq09goiyLzVgU7c1+qmsLrIW38k=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [ markdown-it-py ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [ markdown-it-py ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
