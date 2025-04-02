@@ -18890,6 +18890,10 @@ with pkgs;
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
+  nixDependencies = recurseIntoAttrs (
+    callPackage ../tools/package-management/nix/dependencies-scope.nix { }
+  );
+
   nixVersions = recurseIntoAttrs (
     callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";

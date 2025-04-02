@@ -1,17 +1,15 @@
 {
   lib,
-  fetchFromGitHub,
   splicePackages,
-  generateSplicesForMkScope,
-  newScope,
+  nixDependencies,
   pkgs,
-  stdenv,
   maintainers,
   otherSplices,
+  version,
+  src,
 }:
 let
   officialRelease = true;
-  src = fetchFromGitHub (builtins.fromJSON (builtins.readFile ./source.json));
 
   # A new scope, so that we can use `callPackage` to inject our own interdependencies
   # without "polluting" the top level "`pkgs`" attrset.
@@ -32,26 +30,10 @@ let
             officialRelease
             pkgs
             src
+            version
             ;
         };
       };
 
-  # The dependencies are in their own scope, so that they don't have to be
-  # in Nixpkgs top level `pkgs` or `nixComponents`.
-  nixDependencies =
-    lib.makeScopeWithSplicing'
-      {
-        inherit splicePackages;
-        inherit newScope; # layered directly on pkgs, unlike nixComponents above
-      }
-      {
-        # Technically this should point to the nixDependencies set only, but
-        # this is ok as long as the scopes don't intersect.
-        inherit otherSplices;
-        f = import ./dependencies.nix {
-          inherit pkgs;
-          inherit stdenv;
-        };
-      };
 in
 nixComponents.overrideSource src
