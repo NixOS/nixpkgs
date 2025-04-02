@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   autoreconfHook,
   glib,
@@ -9,13 +9,18 @@
   libticonv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtifiles2";
-  version = "1.1.7";
-  src = fetchurl {
-    url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
-    sha256 = "10n9mhlabmaw3ha5ckllxfy6fygs2pmlmj5v6w5v62bvx54kpils";
+  version = "1.1.8";
+
+  src = fetchFromGitHub {
+    owner = "debrouxl";
+    repo = "tilibs";
+    rev = "aae5bcf4a6b7c653eaf1d80c752e74eff042b4b5";
+    hash = "sha256-W2SkOsqm3HJ3z6RHua5LQW6Mq1VQHGcouz0Cu/zENJE=";
   };
+
+  sourceRoot = finalAttrs.src.name + "/libtifiles/trunk";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -39,4 +44,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with platforms; linux ++ darwin;
   };
-}
+})
