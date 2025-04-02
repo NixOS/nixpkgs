@@ -6427,6 +6427,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  jule-nvim = buildVimPlugin {
+    pname = "jule.nvim";
+    version = "2025-02-22";
+    src = fetchFromGitHub {
+      owner = "julelang";
+      repo = "jule.nvim";
+      rev = "11c983f900dc84dca4ae6bcb54a937a1ceba4038";
+      sha256 = "0gajpcg7g3885696aljq7zky8cd0bfsjr7n2fad3d2yf0i999fif";
+    };
+    meta.homepage = "https://github.com/julelang/jule.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   julia-vim = buildVimPlugin {
     pname = "julia-vim";
     version = "2024-05-25";
