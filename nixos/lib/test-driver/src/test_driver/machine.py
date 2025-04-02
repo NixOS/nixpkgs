@@ -397,6 +397,30 @@ class Machine:
         self.monitor.send(message)
         return self.wait_for_monitor_prompt()
 
+    def wait_for_unit_active_state(
+        self, unit: str, desired_state: str, user: str | None = None, timeout: int = 900
+    ) -> None:
+        """
+        Wait for a systemd unit to get into the given state.
+        More generic version of `wait_for_unit` which only waits for the
+        `"active"` state and throws on the `"failed"` and `"inactive"` state.
+        This is useful to assert that a unit failed for example.
+        """
+
+        def check_state(last_try: bool) -> bool:
+            current_state = self.get_unit_property(unit, "ActiveState", user)
+            if last_try and current_state != desired_state:
+                raise Exception(
+                    f'unit "{unit}" reached state "{current_state}", expected "{desired_state}"'
+                )
+            return current_state == desired_state
+
+        with self.nested(
+            f"waiting for unit {unit} to reach state {desired_state}"
+            + (f" with user {user}" if user is not None else "")
+        ):
+            retry(check_state, timeout)
+
     def wait_for_unit(
         self, unit: str, user: str | None = None, timeout: int = 900
     ) -> None:
