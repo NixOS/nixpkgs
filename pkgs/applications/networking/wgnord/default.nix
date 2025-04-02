@@ -25,6 +25,7 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace wgnord \
+      --replace 'conf_dir=/var/lib/wgnord' "conf_dir=$out/share" \
       --replace '$conf_dir/countries.txt' "$out/share/countries.txt" \
       --replace '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
   '';
