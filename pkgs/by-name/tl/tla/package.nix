@@ -1,11 +1,15 @@
 {
-  stdenv,
+  gcc13Stdenv,
   fetchurl,
   which,
   diffutils,
   gnupatch,
   gnutar,
 }:
+
+let
+  stdenv = gcc13Stdenv;
+in
 
 stdenv.mkDerivation rec {
   pname = "tla";
