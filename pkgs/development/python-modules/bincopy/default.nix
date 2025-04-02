@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   argparse-addons,
   humanfriendly,
   pyelftools,
@@ -10,17 +11,21 @@
 
 buildPythonPackage rec {
   pname = "bincopy";
-  version = "20.0.0";
-  format = "setuptools";
+  version = "20.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FM+0z5cie/Kx9bhWI99MdnrSGa/cn+BzLdLP3/RGr98=";
+    hash = "sha256-2KToy4Ltr7vjZ0FTN9GSbH2MRVYX5DvUsUVlN3K5uWU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     argparse-addons
     humanfriendly
     pyelftools
