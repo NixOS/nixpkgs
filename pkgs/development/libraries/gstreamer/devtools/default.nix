@@ -59,17 +59,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gobject-introspection
-    rustPlatform.cargoSetupHook
-    rustc
-    cargo
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gobject-introspection
+      rustPlatform.cargoSetupHook
+      rustc
+      cargo
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
   buildInputs = [
     cairo

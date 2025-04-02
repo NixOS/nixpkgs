@@ -1,9 +1,10 @@
-{ buildNpmPackage
-, darwin
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
+{
+  buildNpmPackage,
+  darwin,
+  fetchFromGitHub,
+  lib,
+  python3,
+  stdenv,
 }:
 
 buildNpmPackage rec {

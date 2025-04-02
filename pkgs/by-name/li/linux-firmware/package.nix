@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, fetchzip
-, lib
-, python3
-, rdfind
-, which
-, writeShellScriptBin
+{
+  stdenvNoCC,
+  fetchzip,
+  lib,
+  python3,
+  rdfind,
+  which,
+  writeShellScriptBin,
 }:
 let
   # check-whence.py attempts to call `git ls-files`, but we don't have a .git,
@@ -18,7 +19,8 @@ let
       exit 1
     fi
   '';
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
   version = "20250311";
 
@@ -38,7 +40,10 @@ in stdenvNoCC.mkDerivation rec {
     which
   ];
 
-  installTargets = [ "install" "dedup" ];
+  installTargets = [
+    "install"
+    "dedup"
+  ];
   makeFlags = [ "DESTDIR=$(out)" ];
 
   # Firmware blobs do not need fixing and should not be modified

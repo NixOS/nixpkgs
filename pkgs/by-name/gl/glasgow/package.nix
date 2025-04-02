@@ -1,21 +1,24 @@
-{ lib
-, python3
-, fetchFromGitHub
-, sdcc
-, yosys
-, icestorm
-, nextpnr
-, unstableGitUpdater
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  sdcc,
+  yosys,
+  icestorm,
+  nextpnr,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
   version = "0-unstable-2025-01-26";
   # from `pdm show`
-  realVersion = let
+  realVersion =
+    let
       tag = builtins.elemAt (lib.splitString "-" version) 0;
       rev = lib.substring 0 7 src.rev;
-    in "${tag}.1.dev2085+g${rev}";
+    in
+    "${tag}.1.dev2085+g${rev}";
 
   pyproject = true;
 
@@ -78,9 +81,15 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    "--set" "YOSYS" "${yosys}/bin/yosys"
-    "--set" "ICEPACK" "${icestorm}/bin/icepack"
-    "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
+    "--set"
+    "YOSYS"
+    "${yosys}/bin/yosys"
+    "--set"
+    "ICEPACK"
+    "${icestorm}/bin/icepack"
+    "--set"
+    "NEXTPNR_ICE40"
+    "${nextpnr}/bin/nextpnr-ice40"
   ];
 
   passthru.updateScript = unstableGitUpdater {

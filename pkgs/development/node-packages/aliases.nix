@@ -9,37 +9,35 @@ pkgs: lib: self: super:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias:
-    if alias.recurseForDerivations or false
-    then lib.removeAttrs alias ["recurseForDerivations"]
-    else alias;
+  removeRecurseForDerivations =
+    alias:
+    if alias.recurseForDerivations or false then
+      lib.removeAttrs alias [ "recurseForDerivations" ]
+    else
+      alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias:
-    if lib.isDerivation alias then
-      lib.dontDistribute alias
-    else alias;
+  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
   # Make sure that we are not shadowing something from node-packages.nix.
-  checkInPkgs = n: alias:
-    if builtins.hasAttr n super
-    then throw "Alias ${n} is still in node-packages.nix"
-    else alias;
+  checkInPkgs =
+    n: alias:
+    if builtins.hasAttr n super then throw "Alias ${n} is still in node-packages.nix" else alias;
 
-  mapAliases = aliases:
-    lib.mapAttrs (n: alias:
-      removeDistribute
-        (removeRecurseForDerivations
-          (checkInPkgs n alias)))
-      aliases;
+  mapAliases =
+    aliases:
+    lib.mapAttrs (
+      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+    ) aliases;
 in
 
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
-  "@commitlint/config-conventional" = throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
+  "@commitlint/config-conventional" =
+    throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -161,7 +159,11 @@ mapAliases {
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
-  npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
+  npm = pkgs.nodejs.overrideAttrs (old: {
+    meta = old.meta // {
+      mainProgram = "npm";
+    };
+  }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23

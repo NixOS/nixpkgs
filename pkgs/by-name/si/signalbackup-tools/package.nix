@@ -22,18 +22,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-MrpHGSuV5HhZuwCC8E1konE3DhyK/hv6m6Mt+Wx3JT4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = [
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    dbus
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+    ];
 
   installPhase = ''
     runHook preInstall

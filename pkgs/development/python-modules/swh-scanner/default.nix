@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  fetchpatch,
   setuptools,
   setuptools-scm,
   requests,
@@ -35,6 +36,15 @@ buildPythonPackage rec {
     hash = "sha256-baUUuYFapBD7iuDaDP8CSR9f4glVZcS5qBpZddVf7z8=";
   };
 
+  patches = [
+    # To be removed at the next release
+    # See https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/merge_requests/160
+    (fetchpatch {
+      url = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/commit/0eb273475826b0074844c7619b767c052562cfe4.patch";
+      hash = "sha256-i3hpaQJmHpIYgix+/npICQGtJ/IKVRXcCTm2O1VsR9M=";
+    })
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -63,11 +73,6 @@ buildPythonPackage rec {
     types-beautifulsoup4
     types-pyyaml
     types-requests
-  ];
-
-  disabledTests = [
-    # AttributeError: 'called_once' is not a valid assertion. Use a spec for the mock if 'called_once' is meant to be an attribute.
-    "test_scan_api_url_option_success"
   ];
 
   disabledTestPaths = [
