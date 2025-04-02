@@ -19715,6 +19715,12 @@
     githubId = 2141853;
     name = "Bang Lee";
   };
+  qvalentin = {
+    email = "valentin.theodor@web.de";
+    github = "qvalentin";
+    githubId = 36446499;
+    name = "qvalentin";
+  };
   qwqawawow = {
     email = "eihqnh@outlook.com";
     github = "qwqawawow";
