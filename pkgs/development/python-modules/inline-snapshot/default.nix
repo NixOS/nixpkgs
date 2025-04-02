@@ -13,6 +13,7 @@
   pydantic,
   pyright,
   pytest-freezer,
+  pytest-mock,
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.20.5";
+  version = "0.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-hIOavNdD2SaYuvG1rdlIkVRALjaJDfXkanrlF9TcPo0=";
+    hash = "sha256-ll2wSSTr2QEUXE5liYw+JhcYsTEcJCWWTFXRagd6fCw=";
   };
 
   build-system = [ hatchling ];
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     pydantic
     pyright
     pytest-freezer
+    pytest-mock
     pytest-subtests
     pytest-xdist
     pytestCheckHook
@@ -72,7 +74,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
-    "tests/test_formating.py"
   ];
 
   meta = with lib; {
