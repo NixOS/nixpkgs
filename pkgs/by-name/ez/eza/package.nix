@@ -13,14 +13,14 @@
   exaAlias ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eza";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-edBFMqY+61kFumLTcVFgnmhE4d+bMVz+udR5h02kDk0=";
   };
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   postInstall =
     ''
       for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
-        sed "s/\$version/v${version}/g" "man/$page.md" |
+        sed "s/\$version/v${finalAttrs.version}/g" "man/$page.md" |
           pandoc --standalone -f markdown -t man >"man/$page"
       done
       installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
       written in Rust, so it’s small, fast, and portable.
     '';
     homepage = "https://github.com/eza-community/eza";
-    changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
+    changelog = "https://github.com/eza-community/eza/releases/tag/v${finalAttrs.version}";
     license = licenses.eupl12;
     mainProgram = "eza";
     maintainers = with maintainers; [
@@ -80,4 +80,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.unix ++ platforms.windows;
   };
-}
+})
