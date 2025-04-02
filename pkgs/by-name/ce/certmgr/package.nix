@@ -16,6 +16,10 @@ buildGoModule rec {
     hash = "sha256-MgNPU06bv31tdfUnigcmct8UTVztNLXcmTg3H/J7mic=";
   };
 
+  patches = [
+    ./uri-san.patch
+  ];
+
   vendorHash = null;
 
   ldflags = [
