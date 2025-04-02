@@ -21,14 +21,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.4.3";
+  version = "1.5.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
+    hash = "sha256-KgIJgeG+N5b5kGBmOG61etdquxwssaNfx7/OPAXX+jw=";
   };
 
   patches = [
