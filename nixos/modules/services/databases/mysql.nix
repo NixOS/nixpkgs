@@ -387,6 +387,7 @@ in
       path = [
         # Needed for the mysql_install_db command in the preStart script
         # which calls the hostname command.
+        # SOME DIFF
         pkgs.nettools
       ];
 
