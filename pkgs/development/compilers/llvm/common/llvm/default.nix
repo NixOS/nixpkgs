@@ -594,21 +594,14 @@ stdenv.mkDerivation (
             (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
             (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
           ];
-
-        triple =
-          if stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "20" then
-            # JIT tests expect the triple to use Darwin arch's naming for CPU architectures.
-            "${stdenv.hostPlatform.darwinArch}-apple-${stdenv.hostPlatform.darwinPlatform}"
-          else
-            stdenv.hostPlatform.config;
       in
       flagsForLlvmConfig
       ++ [
         (lib.cmakeBool "LLVM_INSTALL_UTILS" true) # Needed by rustc
         (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
         (lib.cmakeBool "LLVM_ENABLE_FFI" true)
-        (lib.cmakeFeature "LLVM_HOST_TRIPLE" triple)
-        (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" triple)
+        (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
+        (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
         (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
         (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
         (lib.cmakeBool "LLVM_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)

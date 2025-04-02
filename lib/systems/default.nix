@@ -209,6 +209,8 @@ let
                 "ppc${optionalString final.isLittleEndian "le"}"
               else if final.isMips64 then
                 "mips64" # endianness is *not* included on mips64
+              else if final.isDarwin then
+                final.darwinArch
               else
                 final.parsed.cpu.name;
 
@@ -329,12 +331,7 @@ let
             else
               final.parsed.cpu.name;
 
-          darwinArch =
-            {
-              armv7a = "armv7";
-              aarch64 = "arm64";
-            }
-            .${final.parsed.cpu.name} or final.parsed.cpu.name;
+          darwinArch = parse.darwinArch final.parsed.cpu;
 
           darwinPlatform =
             if final.isMacOS then
@@ -488,8 +485,8 @@ let
                   }
                   .${cpu.name} or cpu.name;
                 vendor_ = final.rust.platform.vendor;
-                # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               in
+              # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
               args.rust.rustcTarget or args.rustc.config or (
                 # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
                 # We cannot know which subversion does the user want, and
