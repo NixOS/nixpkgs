@@ -13,21 +13,40 @@
   libXcursor,
   libXxf86vm,
   ui ? false,
+  client ? true,
+  server ? false,
   netbird-ui,
   versionCheckHook,
 }:
 let
   modules =
-    if ui then
-      {
-        "client/ui" = "netbird-ui";
-      }
-    else
-      {
-        client = "netbird";
-        management = "netbird-mgmt";
-        signal = "netbird-signal";
-      };
+    { }
+    // (
+      if ui then
+        {
+          "client/ui" = "netbird-ui";
+        }
+      else
+        { }
+    )
+    // (
+      if client then
+        {
+          client = "netbird";
+        }
+      else
+        { }
+    )
+    // (
+      if server then
+        {
+          management = "netbird-mgmt";
+          signal = "netbird-signal";
+          relay = "netbird-relay";
+        }
+      else
+        { }
+    );
 in
 buildGoModule (finalAttrs: {
   pname = "netbird";
@@ -79,7 +98,8 @@ buildGoModule (finalAttrs: {
         ''
           mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
         ''
-        + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform && !ui) ''
+        # relay has no completions, in which case the completion subcommand will error
+        + lib.optionalString (module != "relay" && module != "client/ui") ''
           installShellCompletion --cmd ${binary} \
             --bash <($out/bin/${binary} completion bash) \
             --fish <($out/bin/${binary} completion fish) \
@@ -99,7 +119,7 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "version";
+  versionCheckProgramArg = if server then "--version" else "version";
   # Disabled for the `netbird-ui` version because it does a network request.
   doInstallCheck = !ui;
 
@@ -119,7 +139,14 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       vrifox
       saturn745
+      patrickdag
     ];
-    mainProgram = if ui then "netbird-ui" else "netbird";
+    mainProgram =
+      if ui then
+        "netbird-ui"
+      else if server then
+        "netbird-mgmt"
+      else
+        "netbird";
   };
 })
