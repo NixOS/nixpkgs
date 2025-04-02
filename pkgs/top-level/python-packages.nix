@@ -10900,6 +10900,8 @@ self: super: with self; {
 
   phply = callPackage ../development/python-modules/phply { };
 
+  pgraph-python = callPackage ../development/python-modules/pgraph-python { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   phunspell = callPackage ../development/python-modules/phunspell { };
