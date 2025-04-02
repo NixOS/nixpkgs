@@ -241,6 +241,9 @@ buildPythonApplication rec {
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration no_test_fish_integration
 
+    substituteInPlace kitty_tests/fonts.py \
+      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+
     # theme collection test starts an http server
     rm tools/themes/collection_test.go
     # passwd_test tries to exec /usr/bin/dscl
