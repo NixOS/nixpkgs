@@ -1045,7 +1045,7 @@ with pkgs;
   };
 
   akkoma = callPackage ../by-name/ak/akkoma/package.nix {
-    beamPackages = beam_nox.packages.erlang_26.extend (
+    beamPackages = beam_minimal.packages.erlang_26.extend (
       self: super: {
         elixir = self.elixir_1_16;
         rebar3 = self.rebar3WithPlugins {
@@ -7373,14 +7373,9 @@ with pkgs;
   };
 
   beam = callPackage ./beam-packages.nix { };
-  beam_nox = callPackage ./beam-packages.nix {
-    beam = beam_nox;
-    wxSupport = false;
-  };
   beam_minimal = callPackage ./beam-packages.nix {
     beam = beam_minimal;
     wxSupport = false;
-    systemdSupport = false;
   };
 
   inherit (beam.interpreters)
@@ -7397,8 +7392,6 @@ with pkgs;
     elixir_1_14
     elixir-ls
     ;
-
-  erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
     erlang-ls
