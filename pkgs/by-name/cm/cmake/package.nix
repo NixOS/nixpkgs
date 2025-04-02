@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.31.6";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZTQn8PUBR1Cq//InJ/sqpgxscyypGAjPt4ziLd2eVfA=";
+    hash = "sha256-3cVK1juH4VPPUL5FCmWA8bF7SIHeiUHalj/1aZGkCDs=";
   };
 
   patches = [
@@ -62,19 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
   ]
-  ++ lib.optional stdenv.hostPlatform.isCygwin ./004-cygwin.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
     replaceVars ./007-darwin-bsd-ps-abspath.diff {
       ps = lib.getExe ps;
-    })
-  ++ [
-    # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
-    # Needed to correctly link curl in pkgsStatic.
-    ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
-  ];
+    });
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   separateDebugInfo = true;
