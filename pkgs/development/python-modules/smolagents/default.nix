@@ -28,18 +28,19 @@
   torchvision,
   transformers,
   websocket-client,
+  wikipedia-api,
 }:
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-OgivL7L6IOqIEDHO3JUrxluMZoq768DD3hhUpIh1fac=";
+    hash = "sha256-LZW2MsBowr2ttl3V5J3AlIxZijo++DwT02gBVaXXBXs=";
   };
 
   build-system = [ setuptools ];
@@ -102,6 +103,7 @@ buildPythonPackage rec {
     ipython
     pytest-datadir
     pytestCheckHook
+    wikipedia-api
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "smolagents" ];
@@ -122,6 +124,7 @@ buildPythonPackage rec {
       "test_transformers_message_vl_no_tool"
       "test_transformers_toolcalling_agent"
       "test_visit_webpage"
+      "test_wikipedia_search"
     ]
     ++ lib.optionals stdenv.isDarwin [
       # Missing dependencies
