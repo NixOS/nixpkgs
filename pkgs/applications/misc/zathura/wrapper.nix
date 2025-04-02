@@ -10,10 +10,13 @@
   zathura_pdf_poppler,
   file,
   useMupdf,
+  withCb,
+  withDjvu,
+  withPs,
   plugins ? [
-    zathura_djvu
-    zathura_ps
-    zathura_cb
+    (if withCb then zathura_cb else "")
+    (if withDjvu then zathura_djvu else "")
+    (if withPs then zathura_ps else "")
     (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
   ],
   stdenv,
