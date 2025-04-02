@@ -52,6 +52,7 @@ buildFHSEnv {
           xorg.xorgproto
           SDL2
           wayland
+          mesa-gl-headers
           # Additional dependencies required for Monado WMR support
           bc
           fmt
