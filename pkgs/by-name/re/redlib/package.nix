@@ -9,20 +9,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
-  version = "0.35.1-unstable-2024-11-01";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "f03bdcf472d32d51a1093528071dc329b348379d";
-    hash = "sha256-fbk0m20NpaUCWvH/l9hfmx+VKw4U3pkTkXdAeHL7bHs=";
+    tag = "v${version}";
+    hash = "sha256-a+FFQqKXYws8b/iGr49eZMVmKBqacQGvW8P51ybtBSc=";
   };
 
-  cargoHash = "sha256-PNqecQSx0Q+K3bBfbOJYWPdl7JdUTDQ4f95RUuW0vPw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1zPLnkNZvuZS5z9AEJvhyIv+8/y+YhqFcj5Mu7RSqnE=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  postInstall = ''
+    install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
+    substituteInPlace $out/lib/systemd/system/redlib.service \
+      --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
+  '';
 
   checkFlags = [
     # All these test try to connect to Reddit.
@@ -38,6 +45,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_private_sub"
     "--skip=test_banned_sub"
     "--skip=test_gated_sub"
+    "--skip=test_default_subscriptions"
+    "--skip=test_rate_limit_check"
 
     # subreddit.rs
     "--skip=test_fetching_subreddit"
@@ -68,6 +77,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
-    maintainers = with lib.maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [
+      bpeetz
+      Guanran928
+    ];
   };
 }
