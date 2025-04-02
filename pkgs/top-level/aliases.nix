@@ -1241,11 +1241,6 @@ mapAliases {
   nux = throw "nux has been removed because it has been abandoned for 4 years"; # Added 2025-03-22
   nvidia-podman = throw "podman should use the Container Device Interface (CDI) instead. See https://web.archive.org/web/20240729183805/https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-podman"; # Added 2024-08-02
   nvidia-thrust = throw "nvidia-thrust has been removed because the project was deprecated; use cudaPackages.cuda_cccl";
-  nvtop = lib.warnOnInstantiate "nvtop has been renamed to nvtopPackages.full" nvtopPackages.full; # Added 2024-02-25
-  nvtop-amd = lib.warnOnInstantiate "nvtop-amd has been renamed to nvtopPackages.amd" nvtopPackages.amd; # Added 2024-02-25
-  nvtop-nvidia = lib.warnOnInstantiate "nvtop-nvidia has been renamed to nvtopPackages.nvidia" nvtopPackages.nvidia; # Added 2024-02-25
-  nvtop-intel = lib.warnOnInstantiate "nvtop-intel has been renamed to nvtopPackages.intel" nvtopPackages.intel; # Added 2024-02-25
-  nvtop-msm = lib.warnOnInstantiate "nvtop-msm has been renamed to nvtopPackages.msm" nvtopPackages.msm; # Added 2024-02-25
 
   ### O ###
 
