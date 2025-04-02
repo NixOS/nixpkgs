@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "textfsm";
-  version = "1.1.3";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
+    tag = "v${version}";
+    hash = "sha256-YMoo6vGZ0sFhtgKgmLW+j8bEt0I6WymXgvPSXiN9OKA=";
   };
 
   # upstream forgot to update the release version
