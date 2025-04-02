@@ -19,27 +19,10 @@ body:
         Welcome to Nixpkgs. Please replace the **`Module Request: nixos/MODULENAME`** template above with the correct module name (As seen in the [NixOS Option Search](https://search.nixos.org/options)).
 
         > [!TIP]
-        > For instance, if you were filing a request against the missing `hello` module, your title would be as follows:
-        > `Module Request: nixos/hello`
+        > For instance, if you were filing a request for a new `services.hello` / `programs.hello` / `hardware.hello` module, your title would be as follows:
+        > `Module Request: nixos/{services,programs,hardware}/hello`
 
         ---
-  - type: "dropdown"
-    id: "version"
-    attributes:
-      label: "Nixpkgs version"
-      description: |
-        What version of Nixpkgs are you using?
-
-        > [!IMPORTANT]
-        > If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
-      options:
-        - "Please select a version."
-        - "- Unstable (25.05)"
-        - "- Stable (24.11)"
-        - "- Previous Stable (24.05)"
-      default: 0
-    validations:
-      required: true
   - type: "textarea"
     id: "description"
     attributes:
@@ -59,7 +42,7 @@ body:
     attributes:
       label: "Notify maintainers"
       description: |
-        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+        Please mention the people who are in the **Maintainers** list of any related packages. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
       value: |
 
 
@@ -73,6 +56,8 @@ body:
     attributes:
       label: "I assert that this issue is relevant for Nixpkgs"
       options:
+        - label: "I assert that this module does not yet exist in [NixOS Unstable](https://search.nixos.org/options?channel=unstable)."
+          required: true
         - label: "I assert that this module does not yet exist in an [open pull request](https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%228.has%3A+module+%28new%29%22) or in [NixOS Unstable](https://search.nixos.org/options?channel=unstable)."
           required: true
         - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%229.needs%3A+module+%28new%29%22). "
