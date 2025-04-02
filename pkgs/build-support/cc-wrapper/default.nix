@@ -745,7 +745,7 @@ stdenvNoCC.mkDerivation {
     # no `/usr/include`, there’s essentially no risk to dropping
     # the flag there. See discussion in NixOS/nixpkgs#191152.
     #
-    + optionalString ((cc.isClang or false) && !(cc.isROCm or false) && !targetPlatform.isDarwin) ''
+    + optionalString ((cc.isClang or false) && !(cc.isROCm or false) && !targetPlatform.isDarwin && !targetPlatform.isAndroid) ''
       echo " -nostdlibinc" >> $out/nix-support/cc-cflags
     ''
 
