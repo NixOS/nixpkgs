@@ -551,7 +551,7 @@ in
   grav = runTest ./web-apps/grav.nix;
   graylog = handleTest ./graylog.nix { };
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix { };
-  grocy = handleTest ./grocy.nix { };
+  grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix { };
   guacamole-server = handleTest ./guacamole-server.nix { };
