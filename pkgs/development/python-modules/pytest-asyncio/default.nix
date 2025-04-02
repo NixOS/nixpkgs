@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   pytest,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-asyncio";
   version = "0.26.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
