@@ -111,12 +111,12 @@ buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ vncsb ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "nxc";
     # FIXME: failing fixupPhase:
     # $ Rewriting #!/nix/store/<hash>-python3-3.11.7/bin/python3.11 to #!/nix/store/<hash>-python3-3.11.7
