@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python,
   installShellFiles,
   buildPythonApplication,
   fetchFromGitHub,
@@ -25,7 +25,10 @@ buildPythonApplication rec {
 
   AWSUME_SKIP_ALIAS_SETUP = 1;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    python
+  ];
 
   propagatedBuildInputs = [
     colorama
@@ -44,9 +47,9 @@ buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --cmd awsume \
-      --bash <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
-      --zsh <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
-      --fish <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
+      --bash <(PYTHONPATH=./awsume/configure python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
+      --zsh <(PYTHONPATH=./awsume/configure python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
+      --fish <(PYTHONPATH=./awsume/configure python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
 
     rm -f $out/bin/awsume.bat
   '';
