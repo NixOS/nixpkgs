@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   rustPlatform,
   stdenv,
@@ -12,10 +11,8 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "unstable-2023-03-15";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "0.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polkascan";

@@ -9,12 +9,12 @@
 }:
 buildPythonPackage rec {
   pname = "dist-meta";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5zuHOwg2GDXiVZLU10Ep8DU7ykRR3RK/oQqvFK9GguQ=";
+    hash = "sha256-+hbr1VdHRKCVlqs0IIOhHXIJ2NBc8yiR0cmFvn7Ay9c=";
   };
 
   build-system = [ setuptools ];

@@ -11,12 +11,12 @@
 }:
 buildPythonPackage rec {
   pname = "shippinglabel";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XwE/b7TQ7i+2hMSdZJhyVjl2lieweZLbA6PXcSJTnFE=";
+    hash = "sha256-uvQ6MjHp1X63PlEDQKaiYMLoB7/gqs4KfFyZoCeNNXQ=";
   };
 
   build-system = [ setuptools ];

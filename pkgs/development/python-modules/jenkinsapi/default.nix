@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.13";
+  version = "0.3.14";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JGqYpj5h9UoV0WEFyxVIjFZwc030HobHrw1dnAryQLk=";
+    hash = "sha256-G+Wj1gu5e4/VqdnUR34iAeB+RyWn1CwOsWhGu4eeS5c=";
   };
 
   patches = [ ./pytest-warn-none.patch ];
