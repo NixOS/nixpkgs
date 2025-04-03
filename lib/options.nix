@@ -26,6 +26,7 @@ let
     optional
     optionals
     take
+    types
     ;
   inherit (lib.attrsets)
     attrByPath
@@ -344,6 +345,19 @@ rec {
     Previously used to create options with markdown documentation, which is no longer required.
   */
   mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
+
+  /**
+    Make an option with `attrsOf (submodule submodule)` as its type.
+
+    This can reduce levels of parenthesis nesting significantly when
+    writing a module that supports multiple instances of some
+    component.
+  */
+  mkSubmoduleAttrsOption =
+    submodule:
+    mkOption {
+      type = types.attrsOf (types.submodule submodule);
+    };
 
   /**
     This option accepts arbitrary definitions, but it does not produce an option value.

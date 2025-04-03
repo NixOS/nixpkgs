@@ -493,6 +493,7 @@ let
         mkOption
         mkPackageOption
         mkPackageOptionMD
+        mkSubmoduleAttrsOption
         literalMD
         ;
       inherit (self.types)
