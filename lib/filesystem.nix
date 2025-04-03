@@ -433,23 +433,24 @@ in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath { }
-    else recurseIntoAttrs (
-      if args ? newScope then
-        # Create a new scope, letting the packages refer to each other.
-        # See:
-        #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
-        #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-        makeScope newScope (
-          self:
-          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
-          processDir (
-            args
-            // {
-              inherit (self) callPackage newScope;
-            }
+    else
+      recurseIntoAttrs (
+        if args ? newScope then
+          # Create a new scope, letting the packages refer to each other.
+          # See:
+          #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+          #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+          makeScope newScope (
+            self:
+            # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+            processDir (
+              args
+              // {
+                inherit (self) callPackage newScope;
+              }
+            )
           )
-        )
-      else
-        processDir args
-    );
+        else
+          processDir args
+      );
 }
