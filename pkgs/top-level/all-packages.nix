@@ -1850,7 +1850,7 @@ with pkgs;
 
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
-  catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
+  catcli = callPackage ../tools/filesystems/catcli { };
 
   chipsec = callPackage ../tools/security/chipsec {
     kernel = null;
