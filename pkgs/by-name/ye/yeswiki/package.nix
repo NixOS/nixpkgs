@@ -39,14 +39,14 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Publish, edit and share your content with a user-friendly tool for building collaborative platforms";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://www.yeswiki.net";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ppom
       mrflos
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
