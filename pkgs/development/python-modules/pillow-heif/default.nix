@@ -84,6 +84,8 @@ buildPythonPackage rec {
     [
       # Time based
       "test_decode_threads"
+      # Missing EXIF info on WEBP-AVIF variant
+      "test_exif_from_pillow"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89
