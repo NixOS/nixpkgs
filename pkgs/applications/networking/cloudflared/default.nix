@@ -7,31 +7,15 @@
   gitUpdater,
 }:
 
-let
-  # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
-  # buildGoModule = buildGoModule.override {
-  #   go = buildPackages.go_1_22.overrideAttrs {
-  #     pname = "cloudflare-go";
-  #     version = "1.22.2-devel-cf";
-  #     src = fetchFromGitHub {
-  #       owner = "cloudflare";
-  #       repo = "go";
-  #       rev = "ec0a014545f180b0c74dfd687698657a9e86e310";
-  #       sha256 = "sha256-oQQ9Jyh8TphZSCaHqaugTL7v0aeZjyOdVACz86I2KvU=";
-  #     };
-  #   };
-  # };
-in
-
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2025.2.1";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = version;
-    hash = "sha256-RiHEUs1I9ErYBQF28la6kqU3BW968PVT+K7uGUVr6Ec=";
+    hash = "sha256-PKF7wP/ueLLhV8k3nMUm/c5fkg+7CwRf1oLnx0qbcA0=";
   };
 
   vendorHash = null;
@@ -105,10 +89,8 @@ buildGoModule rec {
       thoughtpolice
       piperswe
       qjoly
+      wrbbz
     ];
     mainProgram = "cloudflared";
-    # cloudflared requires a fork of go 1.22 to build (see override above),
-    # but go 1.22 is EOL and the toolchain has been removed from nixpkgs.
-    broken = true;
   };
 }
