@@ -46,11 +46,14 @@ buildPythonPackage rec {
     eapp = [
       absl-py # FIXME package simple-parsing
     ] ++ epy;
-    ecolab = [
-      jupyter
-      numpy
-      mediapy
-    ] ++ enp ++ epy;
+    ecolab =
+      [
+        jupyter
+        numpy
+        mediapy
+      ]
+      ++ enp
+      ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
     epath = [

@@ -1,26 +1,40 @@
-{ lib, stdenv, fetchFromGitHub
-, buildPackages
-, vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
-, gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
-, libadwaita
-, libnotify, libsoup_2_4, libgee
-, libsignal-protocol-c
-, libgcrypt
-, sqlite
-, gpgme
-, pcre2
-, qrencode
-, icu
-, gspell
-, srtp
-, libnice
-, gnutls
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-plugins-bad
-, gst-vaapi
-, webrtc-audio-processing
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  vala,
+  cmake,
+  ninja,
+  wrapGAppsHook4,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  glib,
+  gdk-pixbuf,
+  gtk4,
+  glib-networking,
+  libadwaita,
+  libnotify,
+  libsoup_2_4,
+  libgee,
+  libsignal-protocol-c,
+  libgcrypt,
+  sqlite,
+  gpgme,
+  pcre2,
+  qrencode,
+  icu,
+  gspell,
+  srtp,
+  libnice,
+  gnutls,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-vaapi,
+  webrtc-audio-processing,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

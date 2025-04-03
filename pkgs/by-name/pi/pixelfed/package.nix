@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, php
-, nixosTests
-, nix-update-script
-, dataDir ? "/var/lib/pixelfed"
-, runtimeDir ? "/run/pixelfed"
+{
+  lib,
+  fetchFromGitHub,
+  php,
+  nixosTests,
+  nix-update-script,
+  dataDir ? "/var/lib/pixelfed",
+  runtimeDir ? "/run/pixelfed",
 }:
 
 php.buildComposerProject2 (finalAttrs: {

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchsvn
-, autoreconfHook
-, gettext
-, gnutls
-, nettle
-, pkg-config
-, libiconv
-, libxcrypt
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+  gettext,
+  gnutls,
+  nettle,
+  pkg-config,
+  libiconv,
+  libxcrypt,
+  ApplicationServices,
 }:
 
 stdenv.mkDerivation {
@@ -20,10 +22,22 @@ stdenv.mkDerivation {
     hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ gettext gnutls nettle libxcrypt ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ApplicationServices ];
+  buildInputs =
+    [
+      gettext
+      gnutls
+      nettle
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      ApplicationServices
+    ];
 
   enableParallelBuilding = true;
 

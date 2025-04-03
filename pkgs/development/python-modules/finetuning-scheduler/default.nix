@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -28,6 +29,13 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-+jt+if9aAbEd2XDMC7RpZmJpm4VUEZMt5xoLOP/esMg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/speediedan/finetuning-scheduler/commit/78e6e225f353d1ba95db05d7fc6ff541859ed6a2.patch";
+      hash = "sha256-7mbtsaHrnHph8lvuwhBGqxPQimbZcbGeyBYXzApFPn4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -71,9 +79,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

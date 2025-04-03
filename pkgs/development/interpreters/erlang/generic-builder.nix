@@ -21,7 +21,8 @@
   parallelBuild ? false,
   systemd,
   wxSupport ? true,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, # systemd support in epmd
+  # systemd support for epmd
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   # updateScript deps
   writeScript,
   common-updater-scripts,
@@ -50,6 +51,7 @@
   odbcSupport ? false,
   odbcPackages ? [ unixODBC ],
   opensslPackage ? openssl,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wxPackages ? [
     libGL
     libGLU

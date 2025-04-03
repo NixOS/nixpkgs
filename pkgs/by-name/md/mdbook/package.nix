@@ -22,11 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XTvC2pGRVat0kOybNb9TziG32wDVexnFx2ahmpUFmaA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    allowGitDependencies = false;
-    hash = "sha256-ASPRBAB+elJuyXpPQBm3WI97wD3mjoO1hw0fNHc+KAw=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ASPRBAB+elJuyXpPQBm3WI97wD3mjoO1hw0fNHc+KAw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

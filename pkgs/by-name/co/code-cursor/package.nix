@@ -48,27 +48,26 @@
 }:
 let
   pname = "cursor";
-  version = "0.47.8";
+  version = "0.48.6";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/linux/x64/Cursor-0.47.8-82ef0f61c01d079d1b7e5ab04d88499d5af500e3.deb.glibc2.25-x86_64.AppImage";
-      hash = "sha256-3Ph5A+x1hW0SOaX8CF7b/8Fq7eMeBkG1ju9vud6Cbn0=";
+      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/linux/x64/Cursor-0.48.6-x86_64.AppImage";
+      hash = "sha256-ZiQpVRZRaFOJ8UbANRd1F+4uhv7W/t15d9wmGKshu80=";
     };
-    # Cursor's release for aarch64-linux is the wrong version (temporarily).
-    # aarch64-linux = fetchurl {
-    #   url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-arm64.AppImage";
-    #   hash = "sha256-8OUlPuPNgqbGe2x7gG+m3n3u6UDvgnVekkjJ08pVORs=";
-    # };
+    aarch64-linux = fetchurl {
+      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/linux/arm64/Cursor-0.48.6-aarch64.AppImage";
+      hash = "sha256-PUnrQz/H4hfbyX4mumG5v4DcKG6N6yh6taMpnnG35hQ=";
+    };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-T5N8b/6HexQ2ZchWUb9CL3t9ks93O9WJgrDtxfE1SgU=";
+      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-S2l2Kz3rG6z4iKLyGFeKVeyrWq7eb09v1+knBln+Mgk=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-ycroylfEZY/KfRiXvfOuTdyyglbg/J7DU12u6Xrsk0s=";
+      url = "https://downloads.cursor.com/production/1649e229afdef8fd1d18ea173f063563f1e722ef/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-6QEH/A6qxKLyrJQQkFj4FFXF/BoVupov92ve7fO0ads=";
     };
   };
 
@@ -160,7 +159,7 @@ stdenvNoCC.mkDerivation {
       rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
 
       # Fix the desktop file to point to the correct location
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/share/cursor/cursor"
+      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
 
       wrapProgram $out/bin/cursor \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
@@ -197,13 +196,7 @@ stdenvNoCC.mkDerivation {
       sarahec
       aspauldingcode
     ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-    # Temporary: Cursor doesn't supply a 0.47.8 build for aarch64-linux
-    badPlatforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
 }

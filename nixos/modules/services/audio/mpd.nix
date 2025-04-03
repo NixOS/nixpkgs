@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
-  inherit (lib) isList isBool isAttrs concatStringsSep imap0 optionalString foldlAttrs boolToString literalExpression hasPrefix;
+  inherit (lib) isList isBool isAttrs concatStringsSep optionalString foldlAttrs boolToString literalExpression;
 
   name = "mpd";
 
@@ -10,9 +14,10 @@ let
   gid = config.ids.gids.mpd;
   cfg = config.services.mpd;
 
-  credentialsPlaceholder = (creds:
+  credentialsPlaceholder = (
+    creds:
     let
-      placeholders = (imap0
+      placeholders = (lib.imap0
         (i: c: ''password "{{password-${toString i}}}@${concatStringsSep "," c.permissions}"'')
         creds);
     in
@@ -65,7 +70,8 @@ let
 
   baseType = with lib.types; oneOf [ str bool int float path ];
 
-in {
+in
+{
 
   ###### interface
 
@@ -183,33 +189,53 @@ in {
       };
 
       credentials = lib.mkOption {
-        type = lib.types.listOf (lib.types.submodule {
-          options = {
-            passwordFile = lib.mkOption {
-              type = lib.types.path;
-              description = ''
-                Path to file containing the password.
-              '';
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              passwordFile = lib.mkOption {
+                type = lib.types.path;
+                description = ''
+                  Path to file containing the password.
+                '';
+              };
+              permissions =
+                let
+                  perms = [
+                    "read"
+                    "add"
+                    "control"
+                    "admin"
+                  ];
+                in
+                lib.mkOption {
+                  type = lib.types.listOf (lib.types.enum perms);
+                  default = [ "read" ];
+                  description = ''
+                    List of permissions that are granted with this password.
+                    Permissions can be "${lib.concatStringsSep "\", \"" perms}".
+                  '';
+                };
             };
-            permissions = let
-              perms = ["read" "add" "control" "admin"];
-            in lib.mkOption {
-              type = lib.types.listOf (lib.types.enum perms);
-              default = [ "read" ];
-              description = ''
-                List of permissions that are granted with this password.
-                Permissions can be "${lib.concatStringsSep "\", \"" perms}".
-              '';
-            };
-          };
-        });
+          }
+        );
         description = ''
           Credentials and permissions for accessing the mpd server.
         '';
-        default = [];
+        default = [ ];
         example = [
-          {passwordFile = "/var/lib/secrets/mpd_readonly_password"; permissions = [ "read" ];}
-          {passwordFile = "/var/lib/secrets/mpd_admin_password"; permissions = ["read" "add" "control" "admin"];}
+          {
+            passwordFile = "/var/lib/secrets/mpd_readonly_password";
+            permissions = [ "read" ];
+          }
+          {
+            passwordFile = "/var/lib/secrets/mpd_admin_password";
+            permissions = [
+              "read"
+              "add"
+              "control"
+              "admin"
+            ];
+          }
         ];
       };
 
@@ -251,7 +277,6 @@ in {
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -262,10 +287,15 @@ in {
     systemd.sockets.mpd = lib.mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
       listenStreams = [
-        ""  # Note: this is needed to override the upstream unit
-        (if hasPrefix "/" cfg.network.listenAddress
-          then cfg.network.listenAddress
-          else "${lib.optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
+        "" # Note: this is needed to override the upstream unit
+        (
+          if lib.hasPrefix "/" cfg.network.listenAddress then
+            cfg.network.listenAddress
+          else
+            "${
+              lib.optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"
+            }${toString cfg.network.port}"
+        )
       ];
     };
 
@@ -276,23 +306,36 @@ in {
         ''
           set -euo pipefail
           install -m 600 ${mpdConf} /run/mpd/mpd.conf
-        '' + lib.optionalString (cfg.credentials != [])
-        (lib.concatStringsSep "\n"
-          (lib.imap0
-            (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
-            cfg.credentials));
+        ''
+        + lib.optionalString (cfg.credentials != [ ]) (
+          lib.concatStringsSep "\n" (
+            lib.imap0 (
+              i: c:
+              ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
+            ) cfg.credentials
+          )
+        );
 
-      serviceConfig =
-        {
-          User = "${cfg.user}";
-          # Note: the first "" overrides the ExecStart from the upstream unit
-          ExecStart = [ "" "${pkgs.mpd}/bin/mpd --systemd /run/mpd/mpd.conf" ];
-          RuntimeDirectory = "mpd";
-          StateDirectory = []
-            ++ lib.optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
-            ++ lib.optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [ name "${name}/playlists" ]
-            ++ lib.optionals (cfg.musicDirectory == "/var/lib/${name}/music")        [ name "${name}/music" ];
-        };
+      serviceConfig = {
+        User = "${cfg.user}";
+        # Note: the first "" overrides the ExecStart from the upstream unit
+        ExecStart = [
+          ""
+          "${pkgs.mpd}/bin/mpd --systemd /run/mpd/mpd.conf"
+        ];
+        RuntimeDirectory = "mpd";
+        StateDirectory =
+          [ ]
+          ++ lib.optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
+          ++ lib.optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [
+            name
+            "${name}/playlists"
+          ]
+          ++ lib.optionals (cfg.musicDirectory == "/var/lib/${name}/music") [
+            name
+            "${name}/music"
+          ];
+      };
     };
 
     users.users = lib.optionalAttrs (cfg.user == name) {
