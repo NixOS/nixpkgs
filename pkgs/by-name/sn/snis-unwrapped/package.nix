@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snis";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "smcameron";
     repo = "space-nerds-in-space";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QfRH/YWu2BS5Dn47DmaPqoXe0SVFaBxaBIuE6Pq2XwY=";
+    hash = "sha256-vJUfrCvurzwTYqeLJgeBE9tl9NDI/G+YC1V705aud88=";
   };
 
   enableParallelBuilding = true;
