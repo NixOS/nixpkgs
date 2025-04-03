@@ -79,6 +79,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  ];
+
   disabledTests = [
     # attempts to run the package manager uv
     "test_command_execution"
