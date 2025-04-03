@@ -80,7 +80,7 @@ buildPythonPackage rec {
     xmltodict
   ] ++ lib.optionals windowsSupport [ pywinrm ];
 
-  __structuredAttrs = true;  # required for pyRelaxBuildDeps
+  __structuredAttrs = true; # required for pyRelaxBuildDeps
   pythonRelaxBuildDeps = [ "setuptools" ];
   pythonRelaxDeps = [ "resolvelib" ];
 
