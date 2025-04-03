@@ -15,6 +15,13 @@ in
       enable = lib.mkEnableOption "Docling Serve server";
       package = lib.mkPackageOption pkgs "docling-serve" { };
 
+      stateDir = lib.mkOption {
+        type = types.path;
+        default = "/var/lib/docling-serve";
+        example = "/home/foo";
+        description = "State directory of Docling Serve.";
+      };
+
       host = lib.mkOption {
         type = types.str;
         default = "127.0.0.1";
@@ -36,11 +43,11 @@ in
       environment = lib.mkOption {
         type = types.attrsOf types.str;
         default = {
-          DOCLING_SERVE_ENABLE_UI = "True";
+          DOCLING_SERVE_ENABLE_UI = "False";
         };
         example = ''
           {
-            DOCLING_SERVE_ENABLE_UI = "False";
+            DOCLING_SERVE_ENABLE_UI = "True";
           }
         '';
         description = ''
@@ -77,11 +84,19 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment = cfg.environment;
+      environment = {
+        HF_HOME = ".";
+        EASYOCR_MODULE_PATH = ".";
+        MPLCONFIGDIR = ".";
+      } // cfg.environment;
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} run --host \"${cfg.host}\" --port ${toString cfg.port}";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        WorkingDirectory = cfg.stateDir;
+        StateDirectory = "docling-serve";
+        RuntimeDirectory = "docling-serve";
+        RuntimeDirectoryMode = "0755";
         PrivateTmp = true;
         DynamicUser = true;
         DevicePolicy = "closed";
