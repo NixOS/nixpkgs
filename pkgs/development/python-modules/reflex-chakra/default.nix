@@ -4,6 +4,8 @@
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
+  reflex,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +22,25 @@ buildPythonPackage rec {
     hash = "sha256-foIXPLWcxNf33y39BgiRpvwRnZOTcfAjhCvC4TD8ZMs=";
   };
 
-  pythonRemoveDeps = [
-    # Circular dependency
-    "reflex"
-  ];
-
   build-system = [ poetry-core ];
 
-  # pythonImportsCheck = [ "reflex_chakra" ];
+  dependencies = [
+    reflex
+  ];
 
+  pythonImportsCheck = [ "reflex_chakra" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # there are no "test_*.py" files, and the
+  # other files with `test_*` functions are not maintained it seems
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Chakra Implementation in Reflex";
     homepage = "https://github.com/reflex-dev/reflex-chakra";
     changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
