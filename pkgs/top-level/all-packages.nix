@@ -19227,7 +19227,7 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  tftui = python3Packages.callPackage ../applications/networking/cluster/tftui { };
+  tftui = callPackage ../applications/networking/cluster/tftui { };
 
   trufflehog = callPackage ../tools/security/trufflehog {
     buildGoModule = buildGo123Module;
