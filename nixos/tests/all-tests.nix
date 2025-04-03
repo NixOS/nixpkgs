@@ -229,7 +229,7 @@ in
   bazarr = runTest ./bazarr.nix;
   bcachefs = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcachefs.nix;
   beanstalkd = runTest ./beanstalkd.nix;
-  bees = handleTest ./bees.nix { };
+  bees = runTest ./bees.nix;
   benchexec = handleTest ./benchexec.nix { };
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
