@@ -38,7 +38,7 @@ let
       in
       ''
 
-        # Upgrade ${file}
+        echo "Trying to upgrade ${file}"
         # There is no overlay nor configuration in the imports below.
         # This is expected, as it evaluates the nixos configuration in exactly
         # the same way as `nixos-rebuild` would have.
@@ -479,13 +479,18 @@ in
                       exit 1
                     ''}
 
-                    # Write the result in `$out` if this passed
-                    cat - > "$out" <<EOF
+                    if readlink -f ${lib.strings.escapeShellArg config.path} | grep -E '^/nix/store/'; then
+                      # Write the result in `$out` if this passed
+                      cat - > "$out" <<EOF
                     {
                       desyncAge = ${toString (config.desyncAge + 1)};
-                      path = builtins.toPath ${lib.strings.escapeNixString (config.path)};
+                      path = builtins.toPath ${lib.strings.escapeNixString config.path};
                     }
                     EOF
+                    else
+                      echo "No known-good desync version, please rollback to a channel that builds fine and retry" >&2
+                      exit 1
+                    fi
                   '';
                 };
             }
