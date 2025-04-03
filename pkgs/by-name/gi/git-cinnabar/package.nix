@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-RUrklp2hobHKnBZKVvxMGquNSZBG/rVWaD/m+7AWqHo=";
     fetchSubmodules = true;
   };
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Disable automated version-check
   buildNoDefaultFeatures = true;
-  checkNoDefaultFeatures = true;
 
   installPhase = ''
     runHook preInstall
