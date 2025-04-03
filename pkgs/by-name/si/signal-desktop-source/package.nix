@@ -27,7 +27,6 @@ let
     tar -C $out --strip-components=1 -xvf ${electron.headers}
   '';
 
-  sqlcipher-signal-extension = callPackage ./sqlcipher-signal-extension.nix { };
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
 
   ringrtc-bin = callPackage ./ringrtc-bin.nix { };
@@ -53,13 +52,13 @@ let
     '';
   });
 
-  version = "7.48.0";
+  version = "7.49.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-/jtuGsBOFsSgJZNpRilWZ0daI0iYVziZBaF/vLvQ7NU=";
+    hash = "sha256-URWDSHiPK+DCh8giT8YFW2HNY0tYNokqbAKBpBWZKD0=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -119,15 +118,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-xba5MfIjwnLHDKVM9+2KSpC3gcw6cM4cX3dn3/jqT3o="
+        "sha256-QBlouzA3PhRGiL94sCQS/zRSdsFbKf4VI20x3seMpE4="
       else
-        "sha256-I5UGY9Fz4wCa23snq0pir2uq/P+w+fAGU4Bks+CqEgk=";
+        "sha256-LKSFptmJyfI0ACo1egZ2LAY5pAXexu9UNjIhD79rJ9E=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1743538878;
+    SOURCE_DATE_EPOCH = 1743627521;
   };
 
   preBuild = ''
@@ -150,22 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
     then
       die "ringrtc version mismatch"
     fi
-
-    sqlcipherVersion=${sqlcipher-signal-extension.passthru.sqlcipher-amalgamation.version}
-    if ! grep "const SQLCIPHER_VERSION = '$sqlcipherVersion';" \
-      node_modules/@signalapp/better-sqlite3/deps/download.js
-    then
-      die "sqlcipher version mismatch"
-    fi
-
-    extensionVersion=${sqlcipher-signal-extension.passthru.signal-sqlcipher-extension.version}
-    if ! grep "const EXTENSION_VERSION = '$extensionVersion-asm2';" \
-      node_modules/@signalapp/better-sqlite3/deps/download.js
-    then
-      die "signal-sqlcipher-extension version mismatch"
-    fi
-
-    cp ${sqlcipher-signal-extension}/share/sqlite3.gyp node_modules/@signalapp/better-sqlite3/deps/sqlite3.gyp
 
     cp -r ${ringrtc-bin} node_modules/@signalapp/ringrtc/build
 
@@ -234,7 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit
-      sqlcipher-signal-extension
       libsignal-node
       ringrtc-bin
       sticker-creator
@@ -271,6 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [
       fromSource
 
+      # @signalapp/sqlcipher
       # ringrtc
       binaryNativeCode
     ];
