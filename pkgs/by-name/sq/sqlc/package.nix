@@ -4,21 +4,17 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  sqlc,
+  versionCheckHook,
 }:
 
-let
-  version = "1.28.0";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "sqlc";
-  inherit version;
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "sqlc-dev";
     repo = "sqlc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kACZusfwEIO78OooNGMXCXQO5iPYddmsHCsbJ3wkRQs=";
   };
 
@@ -41,11 +37,9 @@ buildGoModule {
       --zsh <($out/bin/sqlc completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = sqlc;
-    command = "sqlc version";
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Generate type-safe code from SQL";
@@ -54,4 +48,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "sqlc";
   };
-}
+})
