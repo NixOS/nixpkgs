@@ -3,7 +3,6 @@
   lib,
   options,
   pkgs,
-  buildEnv,
   ...
 }:
 
@@ -44,6 +43,12 @@ in
     };
 
     package = mkPackageOption pkgs "healthchecks" { };
+
+    configurePostgres = mkOption {
+      default = false;
+      example = true;
+      description = "Whether to configure and create a local PostgreSQL database.";
+    };
 
     user = mkOption {
       default = defaultUser;
@@ -171,17 +176,29 @@ in
               "postgres"
               "mysql"
             ];
-            default = "sqlite";
+            default = if config.services.healthchecks.configurePostgres then "postgres" else "sqlite";
+            defaultText = ''
+              if config.services.healthchecks.configurePostgres then "postgres" else "sqlite"
+            '';
             description = "Database engine to use.";
           };
 
           DB_NAME = mkOption {
             type = types.str;
-            default = if settings.config.DB == "sqlite" then "${cfg.dataDir}/healthchecks.sqlite" else "hc";
+            default =
+              if settings.config.DB == "sqlite" then
+                "${cfg.dataDir}/healthchecks.sqlite"
+              else if config.services.healthchecks.configurePostgres then
+                "healthchecks"
+              else
+                "hc";
             defaultText = lib.literalExpression ''
-              if config.${settings.options.DB} == "sqlite"
-              then "''${config.${opt.dataDir}}/healthchecks.sqlite"
-              else "hc"
+              if config.${settings.options.DB} == "sqlite" then
+                "''${config.${opt.dataDir}}/healthchecks.sqlite"
+              else if config.services.healthchecks.configurePostgres then
+                "healthchecks"
+              else
+                "hc"
             '';
             description = "Database name.";
           };
@@ -191,7 +208,33 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.configurePostgres -> cfg.user == defaultUser;
+        message = "services.healthchecks.configurePostgres requires using the default user in services.healthchecks.user";
+      }
+    ];
+
     environment.systemPackages = [ healthchecksManageScript ];
+
+    services = {
+      healthchecks.settings = lib.mkif cfg.configurePostgres {
+        DB = "postgres";
+        DB_CONN_MAX_AGE = "None";
+        DB_HOST = "/run/postgresql";
+        DB_NAME = "healthchecks";
+        DB_USER = "healthchecks";
+      };
+      postgresql = lib.mkIf cfg.configurePostgres {
+        ensureDatabases = [ "healthchecks" ];
+        ensureUsers = [
+          {
+            name = "healthchecks";
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+    };
 
     systemd.targets.healthchecks = {
       description = "Target for all Healthchecks services";
