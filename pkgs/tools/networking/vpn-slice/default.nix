@@ -3,10 +3,12 @@
   stdenv,
   buildPythonApplication,
   nix-update-script,
-  python3Packages,
   fetchFromGitHub,
+  dnspython,
   iproute2,
   iptables,
+  setproctitle,
+  setuptools,
   unixtools,
 }:
 
@@ -33,11 +35,11 @@ buildPythonApplication rec {
         --replace-fail "'/sbin/iptables'" "'${iptables}/bin/iptables'"
     '';
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     setuptools # can be removed with next package update, upstream no longer has a dependency on distutils
     setproctitle
     dnspython
