@@ -9,7 +9,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   namePrefix = [
     "coq"
     "mathcomp"

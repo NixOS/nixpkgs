@@ -4,7 +4,7 @@
   fetchurl,
   ncurses,
   pkg-config,
-  zig_0_13,
+  zig_0_14,
   zstd,
   installShellFiles,
   testers,
@@ -13,15 +13,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-shjMFKK7mFLPlR204hrsiYDnqMOsoJfjqjQX8g65MAA=";
+    hash = "sha256-qmFXb37J/fUyyxeBQu9bMqrUJWdwWZLPPg0cb+fjjkA=";
   };
 
   nativeBuildInputs = [
-    zig_0_13.hook
+    zig_0_14.hook
     installShellFiles
     pkg-config
   ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       pSub
       rodrgz
     ];
-    inherit (zig_0_13.meta) platforms;
+    inherit (zig_0_14.meta) platforms;
     mainProgram = "ncdu";
   };
 })

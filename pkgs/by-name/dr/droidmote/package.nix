@@ -37,7 +37,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "droidmote";
   version = "3.0.6";
 

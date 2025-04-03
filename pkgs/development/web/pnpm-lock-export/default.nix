@@ -3,7 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
 }:
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "pnpm-lock-export";
   version = "unstable-2023-07-31";
 

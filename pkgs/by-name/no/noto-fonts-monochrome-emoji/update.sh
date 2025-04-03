@@ -12,7 +12,7 @@ git -C "$tmpdir" checkout main
 
 newrev=$(git -C "$tmpdir" rev-list -1 HEAD "ofl/notoemoji/*.ttf")
 newver=$(grep 'archive:' "$tmpdir/ofl/notoemoji/upstream.yaml" | grep -oP '(?<=v)[0-9]+\.[0-9]+')
-newhash=$(nix-prefetch "{ stdenv, fetchurl }: stdenv.mkDerivation rec {
+newhash=$(nix-prefetch "{ stdenv, fetchurl }: stdenv.mkDerivation {
   name = \"noto-fonts-cjk-serif\";
   src = fetchFromGitHub {
     owner = \"google\";

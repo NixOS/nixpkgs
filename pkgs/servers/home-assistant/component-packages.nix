@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.3.1";
+  version = "2025.3.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1035,7 +1035,8 @@
       ]; # missing inputs: decora
     "decora_wifi" =
       ps: with ps; [
-      ]; # missing inputs: decora-wifi
+        decora-wifi
+      ];
     "decorquip" =
       ps: with ps; [
       ];
@@ -5427,7 +5428,7 @@
       ];
     "suez_water" =
       ps: with ps; [
-        pysuez
+        pysuezv2
       ];
     "sun" =
       ps: with ps; [

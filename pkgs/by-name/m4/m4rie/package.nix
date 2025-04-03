@@ -1,20 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
   m4ri,
 }:
 
 stdenv.mkDerivation rec {
-  version = "20250103";
+  version = "20250128";
   pname = "m4rie";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "malb";
     repo = "m4rie";
-    rev = "release-${version}";
-    hash = "sha256-CbzDLSqdtQ+CLKoKycznKzD3VCa+gfuh8TLvRC1fVz0=";
+    rev = version;
+    hash = "sha256-tw6ZX8hKfr9wQLF2nuO1dSkkTYZX6pzNWMlWfzLqQNE=";
   };
 
   doCheck = true;
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-O0" ];
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
   ];
 
   meta = with lib; {

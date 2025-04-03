@@ -3,48 +3,50 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  libcosmicAppHook,
   just,
   pkg-config,
-  udev,
   util-linuxMinimal,
   dbus,
   glib,
   libinput,
-  libxkbcommon,
   pulseaudio,
-  wayland,
+  udev,
+  xkeyboard_config,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applets";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applets";
-    rev = "epoch-${version}";
-    hash = "sha256-4KaMG7sKaiJDIlP101/6YDHDwKRqJXHdqotNZlPhv8Q=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-kRj2hEtE8FYky9Fn8hgHBo+UwWjOoS7/ROh9qz/0Vzs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-f5OV//qzWQqIvq8BNtd2H1dWl7aqR0WJwmdimL4wcKQ=";
+  cargoHash = "sha256-jADtvhMzWdJydT1T14PSk4ggZpWIcXiOK0TW2llKeos=";
 
   nativeBuildInputs = [
     just
     pkg-config
     util-linuxMinimal
+    libcosmicAppHook
   ];
+
   buildInputs = [
     dbus
     glib
     libinput
-    libxkbcommon
     pulseaudio
-    wayland
     udev
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -55,23 +57,31 @@ rustPlatform.buildRustPackage rec {
     "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
   ];
 
-  # Force linking to libwayland-client, which is always dlopen()ed.
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
-    map (a: "-C link-arg=${a}")
-      [
-        "-Wl,--push-state,--no-as-needed"
-        "-lwayland-client"
-        "-Wl,--pop-state"
-      ];
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(
+      --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
+      --set-default X11_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.extras.xml
+    )
+  '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-applets";
     description = "Applets for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       qyliss
       nyabinary
+      HeitorAugustoLN
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

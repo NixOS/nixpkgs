@@ -27,7 +27,7 @@
   fltk ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "csound";
   version = "6.18.1-unstable-2024-07-02";
 

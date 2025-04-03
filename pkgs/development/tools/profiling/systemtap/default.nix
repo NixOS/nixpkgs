@@ -11,7 +11,7 @@
   gnumake,
   python3,
   nixosTests,
-  withStap ? true, # avoid cyclic dependency with glib
+  withStap ? true, # avoid cyclic dependency with glib, reduce closure size substantially
 }:
 
 let

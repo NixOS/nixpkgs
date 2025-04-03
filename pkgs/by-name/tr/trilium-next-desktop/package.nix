@@ -3,7 +3,6 @@
   lib,
   unzip,
   fetchurl,
-  fetchzip,
   makeBinaryWrapper,
   # use specific electron since it has to load a compiled module
   electron_34,
@@ -16,13 +15,30 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.91.6";
+  version = "0.92.4";
 
-  linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-x64.zip";
-  linuxSource.sha256 = "13r9akfakmrpvnyab182irhraf9hpqb24205r8rxjfgj8dpmfa4p";
+  triliumSource = os: arch: sha256: {
+    url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${os}-${arch}.zip";
+    inherit sha256;
+  };
 
-  darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip";
-  darwinSource.sha256 = "0iaz4wim11x110phg4xgzdw3sjcbmxwbksk5gpygjbhlzhjprnnp";
+  linuxSource = triliumSource "linux";
+  darwinSource = triliumSource "macos";
+
+  # exposed like this for update.sh
+  x86_64-linux.sha256 = "12z6r38ab8jrjgic370q5v1y17m9brj38gfqdg05drf7a25xam8r";
+  aarch64-linux.sha256 = "0zsc7c7q07zml91sqvwgz8x3vql1mlhvb7msf7vx22w94dypzivf";
+  x86_64-darwin.sha256 = "09ipqfr77xqlgbzh2dvlidm532isg8jj8iwawjldq74ncbv8m5h0";
+  aarch64-darwin.sha256 = "031nz4f3rdjg3cyvadax4shchr7liyrzsn3ab6whsp3mhnb9wr9l";
+
+  sources = {
+    x86_64-linux = linuxSource "x64" x86_64-linux.sha256;
+    aarch64-linux = linuxSource "arm64" aarch64-linux.sha256;
+    x86_64-darwin = darwinSource "x64" x86_64-darwin.sha256;
+    aarch64-darwin = darwinSource "arm64" aarch64-darwin.sha256;
+  };
+
+  src = fetchurl sources.${stdenv.hostPlatform.system};
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
@@ -34,16 +50,16 @@ let
       fliegendewurst
     ];
     mainProgram = "trilium";
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
+    platforms = lib.attrNames sources;
   };
 
-  linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
-
-    src = fetchurl linuxSource;
+  linux = stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      meta
+      src
+      ;
 
     # Remove trilium-portable.sh, so trilium knows it is packaged making it stop auto generating a desktop item on launch
     postPatch = ''
@@ -89,7 +105,7 @@ let
       asar extract $out/share/trilium/resources/app.asar $tmp
       rm $out/share/trilium/resources/app.asar
 
-      for f in "src/services/utils.ts" "dist/src/services/utils.js"; do
+      for f in "src/services/utils.js"; do
         substituteInPlace $tmp/$f \
           --replace-fail "process.resourcesPath" "'$out/share/trilium/resources'"
       done
@@ -113,9 +129,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta;
-
-    src = fetchurl darwinSource;
+    inherit
+      pname
+      version
+      meta
+      src
+      ;
 
     nativeBuildInputs = [
       unzip

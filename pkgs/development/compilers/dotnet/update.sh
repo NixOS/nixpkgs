@@ -10,14 +10,14 @@ release () {
     local content="$1"
     local version="$2"
 
-    jq -r '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
+    jq -er '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
 }
 
 release_files () {
     local release="$1"
     local expr="$2"
 
-    jq -r '[('"$expr"').files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+    jq -er '[('"$expr"').files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
 }
 
 release_platform_attr () {
@@ -25,7 +25,7 @@ release_platform_attr () {
     local platform="$2"
     local attr="$3"
 
-    jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
+    jq -er '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
@@ -53,7 +53,7 @@ platform_sources () {
 nuget_index="$(curl -fsSL "https://api.nuget.org/v3/index.json")"
 
 get_nuget_resource() {
-    jq -r '.resources[] | select(."@type" == "'"$1"'")."@id"' <<<"$nuget_index"
+    jq -er '.resources[] | select(."@type" == "'"$1"'")."@id"' <<<"$nuget_index"
 }
 
 nuget_package_base_url="$(get_nuget_resource "PackageBaseAddress/3.0.0")"
@@ -256,12 +256,12 @@ update() {
     content=$(curl -fsSL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
     if [[ -n $sdk ]]; then
         major_minor_patch=$(
-            jq -r --arg version "$sem_version" '
+            jq -er --arg version "$sem_version" '
                 .releases[] |
                 select(.sdks[].version == $version) |
                 ."release-version"' <<< "$content")
     else
-        major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-release"' <<< "$content")
+        major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -er '."latest-release"' <<< "$content")
     fi
     local major_minor_underscore=${major_minor/./_}
 
@@ -269,13 +269,13 @@ update() {
     local -a sdk_versions
 
     release_content=$(release "$content" "$major_minor_patch")
-    aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
-    runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+    aspnetcore_version=$(jq -er '."aspnetcore-runtime".version' <<< "$release_content")
+    runtime_version=$(jq -er '.runtime.version' <<< "$release_content")
 
     if [[ -n $sdk ]]; then
         sdk_versions=("$sem_version")
     else
-        mapfile -t sdk_versions < <(jq -r '.sdks[] | .version' <<< "$release_content" | sort -rn)
+        mapfile -t sdk_versions < <(jq -er '.sdks[] | .version' <<< "$release_content" | sort -rn)
     fi
 
     # If patch was not specified, check if the package is already the latest version
@@ -291,7 +291,7 @@ update() {
             }); (x: builtins.deepSeq x x) [
                 runtime_${major_minor_underscore}.version
                 sdk_${major_minor_underscore}.version
-            ]" --argstr output "$output" | jq --raw-output0 .[])
+            ]" --argstr output "$output" | jq -e --raw-output0 .[])
         if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "${sdk_versions[0]}" ]]; then
             echo "Nothing to update."
             return
@@ -303,8 +303,8 @@ update() {
     runtime_files="$(release_files "$release_content" .runtime)"
 
     local channel_version support_phase
-    channel_version=$(jq -r '."channel-version"' <<< "$content")
-    support_phase=$(jq -r '."support-phase"' <<< "$content")
+    channel_version=$(jq -er '."channel-version"' <<< "$content")
+    support_phase=$(jq -er '."support-phase"' <<< "$content")
 
     local aspnetcore_sources runtime_sources
     aspnetcore_sources="$(platform_sources "$aspnetcore_files")"

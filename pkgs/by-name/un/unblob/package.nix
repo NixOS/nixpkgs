@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   python3,
   fetchFromGitHub,
   gitUpdater,

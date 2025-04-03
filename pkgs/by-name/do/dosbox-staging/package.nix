@@ -58,30 +58,31 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      SDL2_image
-      SDL2_net
-      fluidsynth
-      glib
-      iir1
-      libGL
-      libGLU
-      libjack2
-      libmt32emu
-      libogg
-      libpng
-      libpulseaudio
-      libslirp
-      libsndfile
-      opusfile
-      speexdsp
-      zlib-ng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_net
+    fluidsynth
+    glib
+    iir1
+    libGL
+    libGLU
+    libjack2
+    libmt32emu
+    libogg
+    libpng
+    libpulseaudio
+    libslirp
+    libsndfile
+    opusfile
+    speexdsp
+    zlib-ng
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postInstall = ''
     install -Dm644 $src/contrib/linux/dosbox-staging.desktop $out/share/applications/

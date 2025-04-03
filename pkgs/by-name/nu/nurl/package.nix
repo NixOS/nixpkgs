@@ -8,7 +8,7 @@
   darwin,
   gitMinimal,
   mercurial,
-  nix,
+  nixForLinking,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
         lib.makeBinPath [
           gitMinimal
           mercurial
-          nix
+          nixForLinking
         ]
       }
     installManPage artifacts/nurl.1

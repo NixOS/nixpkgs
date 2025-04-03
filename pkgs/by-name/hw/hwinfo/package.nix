@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
-  version = "23.3";
+  version = "23.4";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = finalAttrs.version;
-    hash = "sha256-TOW6jD7ZTA32H4oByaVkDAjUSwo9JSID7WSBYj7ZzBs=";
+    hash = "sha256-mTkDyfdAwjJwBEp/bOYRz0zfzPSzOUEI5hp+mridZsA=";
   };
 
   nativeBuildInputs = [

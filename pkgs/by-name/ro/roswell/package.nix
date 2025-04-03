@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "roswell";
-    repo = pname;
+    repo = "roswell";
     rev = "v${version}";
     hash = "sha256-2aYA1AzRPXaM82Sh+dMiQJcOAD0rzwV09VyLy0oS6as=";
   };

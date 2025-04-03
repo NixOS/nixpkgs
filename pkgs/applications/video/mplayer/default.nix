@@ -118,7 +118,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mplayer";
   version = "1.5-unstable-2024-12-21";
 

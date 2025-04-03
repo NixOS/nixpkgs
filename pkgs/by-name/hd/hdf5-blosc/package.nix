@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Blosc";
-    repo = pname;
+    repo = "hdf5-blosc";
     rev = "v${version}";
     sha256 = "1nj2bm1v6ymm3fmyvhbn6ih5fgdiapavlfghh1pvbmhw71cysyqs";
   };

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = pname;
+    repo = "taxi";
     rev = version;
     sha256 = "1a4a14b2d5vqbk56drzbbldp0nngfqhwycpyv8d3svi2nchkvpqa";
   };

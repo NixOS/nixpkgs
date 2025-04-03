@@ -236,6 +236,10 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
+      # Fatal Python error: Aborted
+      # onnxruntime/capi/_pybind_state.py", line 32 in <module>
+      "aarch64-linux"
+
       # Tests segfault on darwin
       lib.systems.inspect.patterns.isDarwin
     ];

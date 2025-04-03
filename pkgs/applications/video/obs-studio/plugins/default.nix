@@ -1,4 +1,8 @@
-{ callPackage, qt6Packages, pkgsi686Linux }:
+{
+  callPackage,
+  qt6Packages,
+  pkgsi686Linux,
+}:
 
 # When adding new plugins:
 # - Respect alphabetical order. On diversion, file a PR.
@@ -15,6 +19,8 @@
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
 
   obs-3d-effect = callPackage ./obs-3d-effect.nix { };
+
+  obs-advanced-masks = callPackage ./obs-advanced-masks.nix { };
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 

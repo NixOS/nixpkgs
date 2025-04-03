@@ -17,7 +17,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libyafaray";
   version = "unstable-2022-09-17";
 

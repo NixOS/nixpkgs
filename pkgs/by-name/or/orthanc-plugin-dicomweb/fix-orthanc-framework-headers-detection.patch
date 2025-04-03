@@ -1,0 +1,16 @@
+diff -r ad41d16f36b1 Resources/Orthanc/CMake/DownloadOrthancFramework.cmake
+--- a/Resources/Orthanc/CMake/DownloadOrthancFramework.cmake	Fri Jan 17 12:24:54 2025 +0100
++++ b/Resources/Orthanc/CMake/DownloadOrthancFramework.cmake	Thu Mar 20 17:45:59 2025 +0100
+@@ -552,9 +552,10 @@
+     set(ORTHANC_FRAMEWORK_INCLUDE_DIR ${ORTHANC_FRAMEWORK_ROOT})
+   else()
+     find_path(ORTHANC_FRAMEWORK_INCLUDE_DIR OrthancFramework.h
+-      /usr/include/orthanc-framework
+-      /usr/local/include/orthanc-framework
++      /usr/
++      /usr/local/
+       ${ORTHANC_FRAMEWORK_ROOT}
++      PATH_SUFFIXES include include/orthanc-framework
+       )
+   endif()
+ 

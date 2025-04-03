@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, apacheHttpd, apr, avahi }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  avahi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_dnssd";
@@ -15,12 +24,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ apacheHttpd avahi apr ];
+  buildInputs = [
+    apacheHttpd
+    avahi
+    apr
+  ];
 
-  patches = [ (fetchpatch {
-    url = "https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/10/debian/patches/port-for-apache2.4.patch";
-    sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/10/debian/patches/port-for-apache2.4.patch";
+      sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

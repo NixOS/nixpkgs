@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "6.9.0";
+  version = "6.9.1";
   pname = "timeular";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    hash = "sha256-qesdlKl07EUjdzjQVa1ajaY229jGtXvu86LgcBvmIi0=";
+    hash = "sha256-oXdalYfysZ4Jb46eHABSkiWThMuc2JGCmP/mk0vCjkE=";
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p common-updater-scripts prefetch-npm-deps jq sd
+#! nix-shell -i bash -p common-updater-scripts prefetch-npm-deps jq sd nodejs
 #shellcheck shell=bash
 
 set -xeu -o pipefail

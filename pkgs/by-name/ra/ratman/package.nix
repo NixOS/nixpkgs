@@ -1,85 +1,73 @@
 {
   lib,
-  fetchFromGitLab,
+  fetchFromGitea,
+  fetchNpmDeps,
   installShellFiles,
-  libsodium,
   pkg-config,
-  protobuf,
   rustPlatform,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  npmHooks,
   stdenv,
-  nodejs_20,
+  nodejs,
+  udev,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ratman";
-  version = "0.4.0";
+  version = "0.7.0";
 
-  src = fetchFromGitLab {
-    domain = "git.irde.st";
-    owner = "we";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "irdest";
     repo = "irdest";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-ZZ7idZ67xvQFmQJqIFU/l77YU+yDQOqNthX5NR/l4k8=";
+    rev = "${version}";
+    sha256 = "sha256-OuKUZSvIUekhbe1LoEFBL8+sU2KLXBsp1JCEEuxkUlk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YfELSorpW5qWKrkW+oHwMarTo5oZcBRp13wzmFnacg4=";
+  cargoHash = "sha256-H1XE+khN6sU9WTM87foEQRTK0u5fgDZvoG3//hvd464=";
 
   nativeBuildInputs = [
-    protobuf
     pkg-config
     installShellFiles
   ];
 
+  buildInputs = [ udev ];
+
   cargoBuildFlags = [
-    "--all-features"
     "-p"
-    "ratman"
+    "ratmand"
+    "-p"
+    "ratman-tools"
   ];
   cargoTestFlags = cargoBuildFlags;
-
-  buildInputs = [ libsodium ];
-
-  postInstall = ''
-    installManPage docs/man/ratmand.1
-  '';
-
-  SODIUM_USE_PKG_CONFIG = 1;
 
   dashboard = stdenv.mkDerivation rec {
     pname = "ratman-dashboard";
     inherit version src;
     sourceRoot = "${src.name}/ratman/dashboard";
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/ratman/dashboard/yarn.lock";
-      sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
+    npmDeps = fetchNpmDeps {
+      name = "${pname}-${version}-npm-deps";
+      src = "${src}/ratman/dashboard";
+      hash = "sha256-47L4V/Vf8DK3q63MYw3x22+rzIN3UPD0N/REmXh5h3w=";
     };
 
     nativeBuildInputs = [
-      nodejs_20
-      yarnConfigHook
-      yarnBuildHook
+      nodejs
+      npmHooks.npmConfigHook
+      npmHooks.npmBuildHook
     ];
 
-    outputs = [
-      "out"
-      "dist"
-    ];
+    npmBuildScript = "build";
 
     installPhase = ''
-      cp -R . $out
-
-      mv $out/dist $dist
-      ln -s $dist $out/dist
+      mkdir $out
+      cp -r dist/* $out/
     '';
   };
 
   prePatch = ''
-    cp -r ${dashboard.dist} ratman/dashboard/dist
+    cp -r ${dashboard} ratman/dashboard/dist
   '';
 
   meta = with lib; {

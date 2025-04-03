@@ -7,6 +7,7 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
   headers = [
+    "include/GL/internal/dri_interface.h"
     "include/EGL/eglext_angle.h"
     "include/EGL/eglmesaext.h"
   ];

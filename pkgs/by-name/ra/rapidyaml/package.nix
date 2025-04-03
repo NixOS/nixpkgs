@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "biojppm";
-    repo = pname;
+    repo = "rapidyaml";
     fetchSubmodules = true;
     rev = "v${version}";
     hash = "sha256-5Z1UV8JSgaO4X8+fTEgxD7bzD1igOgiLQMn10c3rCLs=";

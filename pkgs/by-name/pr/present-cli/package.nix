@@ -4,13 +4,13 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "present";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "terror";
-    repo = pname;
+    repo = "present";
     rev = "43c10253dc31038614eba5824588dbf2716212d6A";
     sha256 = "aMy8Qn1kUM7jmvD9nGjBk1XXQF1rTLfnPDJOh9d4uIg=";
   };

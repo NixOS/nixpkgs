@@ -30,7 +30,6 @@ buildPythonPackage rec {
     python = "py3";
   };
 
-
   pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [

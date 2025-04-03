@@ -14,7 +14,7 @@
   screen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apt-dater";
   version = "1.0.4-unstable-2024-10-04";
 

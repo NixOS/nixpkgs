@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "graphpython";
   version = "1.0-unstable-2024-07-28";
   pyproject = true;

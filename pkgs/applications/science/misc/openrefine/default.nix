@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildNpmPackage
-, curl
-, jdk
-, jq
-, makeWrapper
-, maven
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildNpmPackage,
+  curl,
+  jdk,
+  jq,
+  makeWrapper,
+  maven,
 }:
 
 let
-  version = "3.9.0";
+  version = "3.9.2";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-793qKSo9/FVzchlHqQKSBF4MT3rJUv9xvf7YJBiQnZo=";
+    hash = "sha256-Z52YfS+caNe7N3xMv85eoBes6TwkSsGk5/rGaQd/6ds=";
   };
 
   npmPkg = buildNpmPackage {
@@ -42,7 +43,8 @@ let
     '';
   };
 
-in maven.buildMavenPackage {
+in
+maven.buildMavenPackage {
   inherit src version;
 
   pname = "openrefine";
@@ -102,7 +104,12 @@ in maven.buildMavenPackage {
     EOF
 
     wrapProgram $out/bin/refine \
-      --prefix PATH : '${lib.makeBinPath [ jdk curl ]}' \
+      --prefix PATH : '${
+        lib.makeBinPath [
+          jdk
+          curl
+        ]
+      }' \
       --set-default REFINE_INI_PATH "$out/etc/refine.ini"
   '';
 
@@ -118,9 +125,9 @@ in maven.buildMavenPackage {
     maintainers = with maintainers; [ ris ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # maven dependencies
+      binaryBytecode # maven dependencies
     ];
-    broken = stdenv.hostPlatform.isDarwin;  # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin; # builds, doesn't run
     mainProgram = "refine";
   };
 }

@@ -14,17 +14,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = pname;
+    repo = "rust-synapse-compress-state";
     rev = "v${version}";
     hash = "sha256-nNQ/d4FFAvI+UY+XeqExyhngq+k+j5Pkz94ch27aoVM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "state-map-0.1.0" = "sha256-zToFCioijyT0vZ6c1uO+1ho+RODTe4OwbK2GhoKk+X4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-l8N6+xh0CbFKt4eEbSAvUJ5oHxhp5jf2YHLheYAegnU=";
 
   cargoBuildFlags = [
     "--all"

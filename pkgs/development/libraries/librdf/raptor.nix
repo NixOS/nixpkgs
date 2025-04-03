@@ -33,5 +33,7 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
+    # error: passing argument 2 of 'xmlSetStructuredErrorFunc' from incompatible pointer type [-Wincompatible-pointer-types]
+    broken = true;
   };
 }

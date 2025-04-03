@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "with";
   version = "unstable-2018-03-20";
 

@@ -12,7 +12,7 @@
   xdg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rmrl";
   version = "0.2.1-unstable-2023-06-1";
 

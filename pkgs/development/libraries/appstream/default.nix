@@ -1,50 +1,55 @@
-{ lib
-, stdenv
-, buildPackages
-, replaceVars
-, fetchFromGitHub
-, fetchpatch
-, meson
-, mesonEmulatorHook
-, appstream
-, ninja
-, pkg-config
-, cmake
-, gettext
-, xmlto
-, docbook-xsl-nons
-, docbook_xml_dtd_45
-, libxslt
-, libstemmer
-, glib
-, xapian
-, libxml2
-, libxmlb
-, libyaml
-, gobject-introspection
-, pcre
-, itstool
-, gperf
-, vala
-, curl
-, cairo
-, gdk-pixbuf
-, pango
-, librsvg
-, systemd
-, nixosTests
-, testers
-, withIntrospection ?
+{
+  lib,
+  stdenv,
+  buildPackages,
+  replaceVars,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  mesonEmulatorHook,
+  appstream,
+  ninja,
+  pkg-config,
+  cmake,
+  gettext,
+  xmlto,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
+  libxslt,
+  libstemmer,
+  glib,
+  xapian,
+  libxml2,
+  libxmlb,
+  libyaml,
+  gobject-introspection,
+  pcre,
+  itstool,
+  gperf,
+  vala,
+  curl,
+  cairo,
+  gdk-pixbuf,
+  pango,
+  librsvg,
+  systemd,
+  nixosTests,
+  testers,
+  withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
   version = "1.0.4";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "ximion";
@@ -75,56 +80,64 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    cmake
-    gettext
-    libxslt
-    xmlto
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    glib
-    itstool
-    gperf
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-    appstream
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      cmake
+      gettext
+      libxslt
+      xmlto
+      docbook-xsl-nons
+      docbook_xml_dtd_45
+      glib
+      itstool
+      gperf
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ]
+    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+      appstream
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ];
 
-  buildInputs = [
-    libstemmer
-    pcre
-    glib
-    xapian
-    libxml2
-    libxmlb
-    libyaml
-    curl
-    cairo
-    gdk-pixbuf
-    pango
-    librsvg
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ];
+  buildInputs =
+    [
+      libstemmer
+      pcre
+      glib
+      xapian
+      libxml2
+      libxmlb
+      libyaml
+      curl
+      cairo
+      gdk-pixbuf
+      pango
+      librsvg
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ];
 
-  mesonFlags = [
-    "-Dapidocs=false"
-    "-Dc_args=-Wno-error=missing-include-dirs"
-    "-Ddocs=false"
-    "-Dvapi=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "-Dcompose=true"
-    (lib.mesonBool "gir" withIntrospection)
-  ] ++ lib.optionals (!withSystemd) [
-    "-Dsystemd=false"
-  ];
+  mesonFlags =
+    [
+      "-Dapidocs=false"
+      "-Dc_args=-Wno-error=missing-include-dirs"
+      "-Ddocs=false"
+      "-Dvapi=true"
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      "-Dcompose=true"
+      (lib.mesonBool "gir" withIntrospection)
+    ]
+    ++ lib.optionals (!withSystemd) [
+      "-Dsystemd=false"
+    ];
 
   passthru.tests = {
     installed-tests = nixosTests.installed-tests.appstream;

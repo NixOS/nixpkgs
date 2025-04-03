@@ -77,6 +77,12 @@ in
         default = false;
         description = "Whether to open the TCP port in the firewall";
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Environment file, used to set any secret ND_* environment variables.";
+      };
     };
   };
 
@@ -105,6 +111,7 @@ in
             ExecStart = ''
               ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
             Group = cfg.group;
             StateDirectory = "navidrome";

@@ -80,7 +80,7 @@ vimUtils.buildVimPlugin {
     inherit avante-nvim-lib;
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Requires setup with corresponding provider
     "avante.providers.azure"
     "avante.providers.copilot"

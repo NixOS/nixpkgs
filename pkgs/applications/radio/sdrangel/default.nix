@@ -112,7 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       uhd
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ] ++ lib.optionals withSDRplay [ sdrplay ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"

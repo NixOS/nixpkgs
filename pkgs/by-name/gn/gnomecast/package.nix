@@ -10,7 +10,7 @@
 }:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "gnomecast";
   version = "unstable-2022-04-23";
 

@@ -37,7 +37,7 @@ makeSetupHook {
     installScript =
       {
         darwin = ''
-          mkdir $out
+          mkdir -p $out
           mv "$targetDir"/bundle/macos $out/Applications
         '';
 

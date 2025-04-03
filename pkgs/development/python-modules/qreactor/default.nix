@@ -7,7 +7,7 @@
   pyqt5,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qreactor-unstable";
   version = "2018-09-29";
 

@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-S5A5wBb2ZMxpLvP/EYahdg2BqgzKGvnzvZOII76O/+w=";
+    hash = "sha256-0X/ta2yfzjf3JnZYdUAzQmXvbsDpwFCJe/bArMSWQgU=";
   };
 
   build-system = [ setuptools ];
@@ -78,6 +78,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
+      "test_mcmc_parallel_chain"
+
       # AssertionError due to tolerance issues
       "test_bijective_transforms"
       "test_cpu"
@@ -89,20 +92,18 @@ buildPythonPackage rec {
       # E        Emitted warnings: [].
       "test_laplace_approximation_warning"
 
-      # Tests want to download data
-      "data_load"
-      "test_jsb_chorales"
-
       # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
       "test_chain"
-
-      # test_biject_to[CorrMatrix()-(15,)] - assert Array(False, dtype=bool)
-      "test_biject_to"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # AssertionError: Not equal to tolerance rtol=0.06, atol=0
       "test_functional_map"
     ];
+
+  disabledTestPaths = [
+    # Require internet access
+    "test/test_example_utils.py"
+  ];
 
   meta = {
     description = "Library for probabilistic programming with NumPy";

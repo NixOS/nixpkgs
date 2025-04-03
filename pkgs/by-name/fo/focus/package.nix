@@ -6,7 +6,7 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "focus";
   version = "unstable-2021-02-23";
 

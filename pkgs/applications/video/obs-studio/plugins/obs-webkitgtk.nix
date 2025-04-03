@@ -12,7 +12,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-webkitgtk";
   version = "unstable-2023-11-10";
 

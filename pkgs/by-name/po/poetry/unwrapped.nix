@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   findpython,
   installShellFiles,
   build,
@@ -38,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,16 +46,8 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-2u0idmnXY0FNvc8peDMWIFAeGH/xdIfMrMErUdxc0UA=";
+    hash = "sha256-51pO/PP5OwTmi+1uy26CK/1oQ/P21wPBoRVE9Jv0TjA=";
   };
-
-  patches = [
-    # https://github.com/python-poetry/poetry/pull/9939
-    (fetchpatch2 {
-      url = "https://github.com/python-poetry/poetry/commit/c2387ff3c878ab608d7616e4984fc01c4226416c.patch?full_index=1";
-      hash = "sha256-cxTDbFykRr+kGk4jYzKwhU8QEZvK5A/P8zxliXpE+Sg=";
-    })
-  ];
 
   build-system = [
     poetry-core
@@ -142,6 +133,12 @@ buildPythonPackage rec {
     "test_env_system_packages_are_relative_to_lib"
     "test_install_warning_corrupt_root"
     "test_project_plugins_are_installed_in_project_folder"
+    "test_application_command_not_found_messages"
+    # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
+    "test_list_poetry_managed"
+    "test_list_poetry_managed"
+    "test_find_all_with_poetry_managed"
+    "test_find_poetry_managed_pythons"
   ];
 
   pytestFlagsArray = [

@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "argos";
   version = "unstable-2024-10-28";
 

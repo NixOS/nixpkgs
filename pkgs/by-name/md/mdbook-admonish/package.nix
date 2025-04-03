@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "tommilligan";
-    repo = pname;
+    repo = "mdbook-admonish";
     tag = "v${version}";
     hash = "sha256-rlJowyyB83bNqzOavggbwVJg9/GYZLYjGr8Pv/O6UBE=";
   };

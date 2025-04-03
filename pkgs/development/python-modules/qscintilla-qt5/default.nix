@@ -19,7 +19,7 @@ let
     pyqt-builder
     ;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qscintilla-qt5";
   version = qscintilla.version;
   src = qscintilla.src;

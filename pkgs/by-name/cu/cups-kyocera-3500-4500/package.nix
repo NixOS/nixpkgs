@@ -17,7 +17,7 @@ let
   kyodialog_version_long = "9.0";
   date = "20221003";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyocera-3500-4500";
   version = "${kyodialog_version_long}-${date}";
 

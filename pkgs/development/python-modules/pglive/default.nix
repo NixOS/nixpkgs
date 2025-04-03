@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pglive";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domarm-comat";
     repo = "pglive";
-    rev = "76185c40850b607d9a83843292748463fcaa8089";
-    hash = "sha256-/z4hpWqxW4WkHa9SXfu7UXHoNrVpbqR7+YbsRQUuEA8=";
+    tag = "v${version}";
+    hash = "sha256-JZ/XfNtGGrlNY/NN+OrN9RlI3ZK/TFNP7SZxNaEm38A=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pglive" ];
 
   meta = {
-    changelog = "https://github.com/domarm-comat/pglive/releases/tag/v${version}";
+    changelog = "https://github.com/domarm-comat/pglive/releases/tag/${src.tag}";
     description = "Live plot for PyqtGraph";
     homepage = "https://github.com/domarm-comat/pglive";
     license = lib.licenses.mit;

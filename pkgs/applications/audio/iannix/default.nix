@@ -9,7 +9,7 @@
   qmake,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "iannix";
   version = "unstable-2020-12-09";
 

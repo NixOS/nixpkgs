@@ -8,7 +8,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soqt";
   version = "2020-12-05-unstable";
 

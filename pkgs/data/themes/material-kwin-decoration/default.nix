@@ -16,7 +16,7 @@
   unstableGitUpdater,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "material-kwin-decoration";
   version = "7-unstable-2023-01-15";
 

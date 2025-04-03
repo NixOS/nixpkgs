@@ -6,13 +6,13 @@
   disablePosixThreads ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmcrypt";
   version = "2.5.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcrypt/Libmcrypt/${version}/libmcrypt-${version}.tar.gz";
-    sha256 = "0gipgb939vy9m66d3k8il98rvvwczyaw2ixr8yn6icds9c3nrsz4";
+    url = "mirror://sourceforge/mcrypt/Libmcrypt/${finalAttrs.version}/libmcrypt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5OtsB0u6sWisR7lHwZX/jO+dUaIRzdGMqcnvNNJ6Nz4=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin cctools;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
     mainProgram = "libmcrypt-config";
     homepage = "https://mcrypt.sourceforge.net";
-    license = "GPL";
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
   };
-}
+})

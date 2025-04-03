@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-python312Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication {
   pname = "vanguards";
   version = "0.3.1-unstable-2023-10-31";
 

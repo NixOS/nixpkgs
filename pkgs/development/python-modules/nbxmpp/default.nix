@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "6.0.0";
+  version = "6.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = "refs/tags/${version}";
-    hash = "sha256-qy1+N5h2T4mkxuX3aaywuq8WDLuNFH5fDyJf9z57BOg=";
+    hash = "sha256-k7cC1H+o+17sTahsjhkAzq5f8/61DRtK9gi+sbPCM6w=";
   };
 
   nativeBuildInputs = [

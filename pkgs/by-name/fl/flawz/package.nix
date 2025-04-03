@@ -75,6 +75,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flawz";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.hostPlatform.isDarwin; # needing some apple_sdk packages
   };
 }

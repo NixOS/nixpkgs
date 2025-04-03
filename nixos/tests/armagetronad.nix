@@ -1,11 +1,8 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  lib,
+  pkgs,
+  ...
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
 let
   user = "alice";
 
@@ -27,9 +24,9 @@ let
     };
 
 in
-makeTest {
+{
   name = "armagetronad";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ numinit ];
   };
 

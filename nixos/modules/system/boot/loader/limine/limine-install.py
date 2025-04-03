@@ -29,10 +29,12 @@ def config(*path: List[str]) -> Optional[Any]:
 
 
 def get_system_path(profile: str = 'system', gen: Optional[str] = None, spec: Optional[str] = None) -> str:
+    basename = f'{profile}-{gen}-link' if gen is not None else profile
+    profiles_dir = '/nix/var/nix/profiles'
     if profile == 'system':
-        result = os.path.join('/nix', 'var', 'nix', 'profiles', 'system')
+        result = os.path.join(profiles_dir, basename)
     else:
-        result = os.path.join('/nix', 'var', 'nix', 'profiles', 'system-profiles', profile + f'-{gen}-link' if gen is not None else '')
+        result = os.path.join(profiles_dir, 'system-profiles', basename)
 
     if spec is not None:
         result = os.path.join(result, 'specialisation', spec)
@@ -169,8 +171,8 @@ def generate_config_entry(profile: str, gen: str) -> str:
     boot_spec = bootjson_to_bootspec(boot_json)
 
     entry = config_entry(2, boot_spec, f'Generation {gen}', time)
-    for spec in boot_spec.specialisations:
-        entry += config_entry(2, boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
+    for spec, spec_boot_spec in boot_spec.specialisations.items():
+        entry += config_entry(2, spec_boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
     return entry
 
 
@@ -189,7 +191,7 @@ def find_mounted_device(path: str) -> str:
     while not os.path.ismount(path):
         path = os.path.dirname(path)
 
-    devices = [x for x in psutil.disk_partitions(all=True) if x.mountpoint == path]
+    devices = [x for x in psutil.disk_partitions() if x.mountpoint == path]
 
     assert len(devices) == 1
     return devices[0].device
@@ -395,15 +397,16 @@ def main():
             limine_deploy_args = [limine_binary, 'bios-install', device]
 
         if config('partitionIndex'):
-            limine_deploy_args.append(config('partitionIndex'))
+            limine_deploy_args.append(str(config('partitionIndex')))
 
         if config('forceMbr'):
             limine_deploy_args += '--force-mbr'
-            try:
-                subprocess.run(limine_deploy_args)
-            except:
-                raise Exception(
-                    'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
-                    'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
+
+        try:
+            subprocess.run(limine_deploy_args)
+        except:
+            raise Exception(
+                'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
+                'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
 
 main()

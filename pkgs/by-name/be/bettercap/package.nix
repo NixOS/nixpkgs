@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   pkg-config,
   libpcap,
@@ -10,7 +10,7 @@
   libusb1,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "bettercap";
   version = "2.32.0";
 
@@ -47,5 +47,8 @@ buildGo122Module rec {
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ y0no ];
     mainProgram = "bettercap";
+    # Broken on darwin for Go toolchain > 1.22, with error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,16 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchurl, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchurl,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "8.10.0";
+  version = "8.12.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-ZSYqTERS724L7Twv2rzpjl/ss719eEyP6KJlAjU4Lm4=";
+    sha256 = "sha256-W9hshsq02AiDVNFYMoIWCei04b7pPTmIP2+fMyLgcDY=";
   };
-  vendorHash = "sha256-IyPTsVQSHXiMsF3N0b6udnV4EY5nTIyBx4zGM/2SL/c=";
+  vendorHash = "sha256-6pAcDdCCp64o6VuSSLyLtnLPD5OxSt4o3eUpRhJzXTI=";
 
   subPackages = [ "." ];
 

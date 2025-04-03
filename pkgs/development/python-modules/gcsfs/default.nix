@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "gcsfs";
     tag = version;
-    hash = "sha256-1nPhttEmGI8jreMe5hwOZRALJa5QTNOw2McisV+cR54=";
+    hash = "sha256-CXv0SbwOaEjD5HkJgPRfGk+VfciDjpvwomM5oCi6VIw=";
   };
 
   build-system = [

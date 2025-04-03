@@ -89,7 +89,7 @@ proc configurePhase*() =
       else: fmWrite
   var cfg = newFileStream(configFilePath, mode)
   proc switch(key, val: string) =
-    cfg.writeLine("switch(", key.escape, ",", val.escape, ")")
+    cfg.writeLine("\nswitch(", key.escape, ",", val.escape, ")")
   switch("backend", nf.getNimbleValue("backend", "c"))
   switch("nimcache", getEnv("NIX_BUILD_TOP", ".") / "nimcache")
   if getEnvBool("nimRelease", true):

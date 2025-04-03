@@ -1,8 +1,9 @@
-{ stdenv
-, fetchFromGitHub
-, glib
-, lib
-, writeScriptBin
+{
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  lib,
+  writeScriptBin,
 }:
 let
   # make install will use dconf to find desktop background file uri.
@@ -16,12 +17,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "daniruiz";
-    repo = pname;
+    repo = "flat-remix-gnome";
     rev = version;
     hash = "sha256-pMxdx/D3M2DwEjrOZx/zY4zZjBUamo7+8/yvVOffxx0=";
   };
 
-  nativeBuildInputs = [ glib fake-dconf ];
+  nativeBuildInputs = [
+    glib
+    fake-dconf
+  ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   # make install will back up this file, it will fail if the file doesn't exist.

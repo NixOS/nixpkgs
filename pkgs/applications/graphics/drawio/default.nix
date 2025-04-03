@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Desktop application for creating diagrams";
+    description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
     license = with lib.licenses; [
       # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996

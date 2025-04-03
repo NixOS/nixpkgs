@@ -9,7 +9,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qscreenshot";
   version = "unstable-2021-10-18";
 

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.43.1";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = "jedi-language-server";
     tag = "v${version}";
-    hash = "sha256-w0qasGuBvY6KVhLB17wux7Sm94Xuk1z2La/DPSLEp/4=";
+    hash = "sha256-b3wty4ir/JHh3018Kk0zyX7mM2yrE5n0f2YoidnSIw8=";
   };
 
   build-system = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     description = "Language Server for the latest version(s) of Jedi";
     mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
-    changelog = "https://github.com/pappasam/jedi-language-server/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pappasam/jedi-language-server/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "volkovlabs-variable-panel";
   version = "3.5.0";
   zipHash = "sha256-SqMTCdB+8OUo94zJ3eS5NoCeyjc7sdMCR0CTvVe/L1g=";

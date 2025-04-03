@@ -5,7 +5,7 @@
   buildLua,
 }:
 
-buildLua rec {
+buildLua {
   pname = "manga-reader";
 
   version = "0-unstable-2025-02-16";

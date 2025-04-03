@@ -26,11 +26,6 @@
       inherit (self) callPackage;
     in
     {
-      fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {
-        git = buildPackages.gitMinimal;
-        inherit cargo;
-      };
-
       fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
         inherit cargo;
       };
@@ -81,4 +76,7 @@
     rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
     cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;
   };
+
+  # Added in 25.05.
+  fetchCargoTarball = throw "`rustPlatform.fetchCargoTarball` has been removed in 25.05, use `rustPlatform.fetchCargoVendor` instead";
 }

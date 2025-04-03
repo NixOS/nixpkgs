@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "virtnbdbackup";
-  version = "2.21";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "virtnbdbackup";
     tag = "v${version}";
-    hash = "sha256-gWxanvpfRf+2nZyBa0FAPImTIl7tomUzIbsdTR6kR5E=";
+    hash = "sha256-lek2UND7Qmg2ar8YvCDSOVO/TqmiMff/mRLgfyVkAvg=";
   };
 
   build-system = with python3Packages; [

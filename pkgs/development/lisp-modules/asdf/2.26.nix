@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Standard software-system definition library for Common Lisp";
+    homepage = "https://asdf.common-lisp.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

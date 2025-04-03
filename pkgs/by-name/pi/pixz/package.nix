@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = pname;
+    repo = "pixz";
     rev = "v${version}";
     sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };

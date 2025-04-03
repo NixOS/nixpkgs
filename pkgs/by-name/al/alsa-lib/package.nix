@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,

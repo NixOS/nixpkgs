@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   replaceVars,
   buildEnv,
   fetchFromGitHub,

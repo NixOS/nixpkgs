@@ -14,14 +14,14 @@
   intltool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-notifications";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-d6bAiRSO2opKSZfadyQYrU9oIrXwPNzO/g2E2RY6q04=";
   };
 
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
-}
+})

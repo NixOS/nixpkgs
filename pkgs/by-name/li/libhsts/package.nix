@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "rockdaboot";
-    repo = pname;
+    repo = "libhsts";
     rev = "libhsts-${version}";
     sha256 = "0gbchzf0f4xzb6zjc56dk74hqrmdgyirmgxvvsqp9vqn9wb5kkx4";
   };

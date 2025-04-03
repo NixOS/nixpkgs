@@ -14,7 +14,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "prometrix";
   version = "0.1.18-unstable-2024-04-30";
   pyproject = true;

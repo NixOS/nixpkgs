@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   coreutils,
   darwin,
   glibcLocales,
@@ -153,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
+    hash = "sha256-Mj4v2ubYr4ufs7aU/1AdY239byiCJHKXam64af/VO3U=";
   };
 
   env = {
@@ -170,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-4ol4LvabhtjiMMWwV1wrcywFePOmU0Jub1sy+Ay7mLA=";
+    hash = "sha256-4kqBrpeneCpF0WohP1ZArKrV3duHAE01XA5+GT9f56w=";
   };
 
   patches = [
@@ -190,17 +189,9 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
 
-    (fetchpatch2 {
-      name = "cargo_version.diff";
-      url = "https://github.com/fish-shell/fish-shell/commit/1e069b0fff20b153bc7f824f9f9b820ca4117e1e.diff?full_index=1";
-      hash = "sha256-XFJ0fT2Zanvdqt/iwgyH2IA/kIOcOHMNdsmuzjTX5qs=";
-    })
-
-    # Fixes a build issue in kitty, see https://github.com/fish-shell/fish-shell/commit/97f0809b62a1fa77df1b9fcbbfe623b6187b5013
-    # The first patch is needed since it introduces the BufferedOutputter type that's
-    # used by the second one.
-    ./reduce_writes.patch
-    ./osc_133.patch
+    # remove 4.0.2
+    # https://github.com/fish-shell/fish-shell/issues/11254
+    ./1d78c8bd4295262a3118f478e6b3a7c7536fa282.patch
   ];
 
   # Fix FHS paths in tests
@@ -280,10 +271,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
+      (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "${placeholder "doc"}/share/doc/fish")
+      (lib.cmakeFeature "Rust_CARGO_TARGET" stdenv.hostPlatform.rust.rustcTarget)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DMAC_CODESIGN_ID=OFF"
+      (lib.cmakeBool "MAC_CODESIGN_ID" false)
     ];
 
   # Fish’s test suite needs to be able to look up process information and send signals.
@@ -329,6 +321,8 @@ stdenv.mkDerivation (finalAttrs: {
       darwin.system_cmds
     ];
 
+  # we target the top-level make target which runs all the cmake/ctest
+  # tests, including test_cargo-test
   checkTarget = "fish_run_tests";
   preCheck = ''
     export TERMINFO="${ncurses}/share/terminfo"
@@ -387,17 +381,18 @@ stdenv.mkDerivation (finalAttrs: {
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Smart and user-friendly command line shell";
     homepage = "https://fishshell.com/";
-    changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       adamcstephens
       cole-h
       winter
       sigmasquadron
+      rvdp
     ];
     mainProgram = "fish";
   };

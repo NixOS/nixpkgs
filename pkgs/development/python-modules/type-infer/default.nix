@@ -31,7 +31,7 @@ let
   version = "0.0.21";
   tag = "v${version}";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "type-infer";
   inherit version;
   pyproject = true;

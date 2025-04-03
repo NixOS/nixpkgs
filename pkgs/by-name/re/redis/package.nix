@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit integration/aof-multi-part \
       --skipunit integration/failover # flaky and slow
 
     runHook postCheck

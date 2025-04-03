@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.0.5";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XV8EJqCOTYqljZe2PQvnhIaPUOJ+bBjRIoshdeqZycA=";
+    hash = "sha256-jUL/kyXKODpcCURG7e7/qNarvwm4+EnzZRL2Wix5Jbs=";
   };
 
   # eigenpy is not used without python support

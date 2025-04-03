@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, libpcap }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libpcap,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dnspeep";
@@ -6,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jvns";
-    repo = pname;
+    repo = "dnspeep";
     rev = "v${version}";
     sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };

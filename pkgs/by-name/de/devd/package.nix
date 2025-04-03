@@ -5,7 +5,7 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "devd";
   version = "unstable-2020-04-27";
 

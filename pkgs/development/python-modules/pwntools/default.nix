@@ -79,7 +79,9 @@ buildPythonPackage rec {
   doCheck = false; # no setuptools tests for the package
 
   postInstall = ''
-    installShellCompletion --bash extra/bash_completion.d/shellcraft
+    installShellCompletion --cmd pwn \
+      --bash extra/bash_completion.d/pwn \
+      --zsh extra/zsh_completion/_pwn
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

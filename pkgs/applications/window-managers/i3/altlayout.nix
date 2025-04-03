@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
@@ -11,7 +15,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonRemoveDeps = [ "enum-compat" ];
 
-  pythonPath = with python3Packages; [ i3ipc docopt ];
+  pythonPath = with python3Packages; [
+    i3ipc
+    docopt
+  ];
 
   doCheck = false;
 

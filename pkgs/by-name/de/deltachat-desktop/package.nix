@@ -1,35 +1,36 @@
-{ lib
-, copyDesktopItems
-, electron_34
-, fetchFromGitHub
-, deltachat-rpc-server
-, makeDesktopItem
-, makeWrapper
-, nodejs
-, pkg-config
-, pnpm_9
-, python3
-, rustPlatform
-, stdenv
-, darwin
-, testers
-, deltachat-desktop
-, yq
+{
+  lib,
+  copyDesktopItems,
+  electron_34,
+  fetchFromGitHub,
+  deltachat-rpc-server,
+  makeDesktopItem,
+  makeWrapper,
+  nodejs,
+  pkg-config,
+  pnpm_9,
+  python3,
+  rustPlatform,
+  stdenv,
+  darwin,
+  testers,
+  deltachat-desktop,
+  yq,
 }:
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.156.2";
+    version = "1.157.3";
     src = fetchFromGitHub {
-      owner = "deltachat";
-      repo = "deltachat-core-rust";
+      owner = "chatmail";
+      repo = "core";
       tag = "v${version}";
-      hash = "sha256-CpFnO8stLLTH/XOZZS3j9nVrf2FRekjkQ/R1pmw5o9A=";
+      hash = "sha256-J9Tm35xuyIbHH2HGcctENYbArIlRWe7xzKyF3hGbwNA=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "deltachat-core-rust";
       inherit version src;
-      hash = "sha256-jrsGMNgKglk+Rq/ZGiZgSZrT4uSA5RjbTYaDtW0Ijyg=";
+      hash = "sha256-BX0TpyG2OJkD5BUIPCij5/g3aRf6FuF9E8y9GM12o7U=";
     };
   };
   electron = electron_34;
@@ -37,30 +38,32 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.54.2";
+  version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KN8VO03/f143qMBv9Z6K75Mb3S1QQjgzt0psTnBFLyw=";
+    hash = "sha256-XkA1WOMLe0+Fz0wE54KSZWeN+rRqT0TE1PXDppPm6SI=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-dRnmu5tEqrWn2AizLvd/ZMsiQJP4qtq/+SOSidpzLbY=";
+    hash = "sha256-4VvJNpuO7P6m6BBxBWFebtRsXvqkjdAjmnBwxG+qNns=";
   };
 
-  nativeBuildInputs = [
-    yq
-    makeWrapper
-    nodejs
-    pkg-config
-    pnpm.configHook
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      yq
+      makeWrapper
+      nodejs
+      pkg-config
+      pnpm.configHook
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -123,7 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = finalAttrs.meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"

@@ -6,20 +6,21 @@
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  git,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.24.0";
+  version = "8.24.2";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
     tag = "v${version}";
-    hash = "sha256-4LkM65njb2L8aCLBmKo18gNXX93zXCGh/e/+xdS+wek=";
+    hash = "sha256-5Bx+suC24r2v9WaBzhkGJTAnh1TeQyjkVj+YVCviYOc=";
   };
 
-  vendorHash = "sha256-J9cQUXVDqSTykoUOCaKGgyYzkcv7Uss6tNra42Sofw8=";
+  vendorHash = "sha256-MSF9N9kXsIM2WKsjKAVztYypwGPng2EElHx7p6vADqc=";
 
   ldflags = [
     "-s"
@@ -32,8 +33,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  # With v8 the config tests are blocking
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \

@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   gmp,
   bison,
   perl,
@@ -31,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.4.0p6";
+  version = "4.4.1";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -41,22 +40,13 @@ stdenv.mkDerivation rec {
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
     rev = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-QxMMMnXaWe+0ogA6+3eOtdROb0RolSveya6DIx97/YY=";
+    hash = "sha256-vrRIirWQLbbe1l07AqqHK/StWo0egKuivdKT5R8Rx58=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
     # not included in the tarball downloaded by fetchzip.
     forceFetchGit = true;
   };
-
-  patches = [
-    (fetchpatch {
-      # removes dead code with invalid member reference in gfanlib
-      name = "clang-19.patch";
-      url = "https://github.com/Singular/Singular/commit/d3f73432d73ac0dd041af83cb35301498e9b57d9.patch";
-      hash = "sha256-1KOk+yrTvHWY4aSK9QcByHIwKwe71QIYTMx8zo7XNos=";
-    })
-  ];
 
   configureFlags =
     [
@@ -70,7 +60,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # don't let the tests depend on `hostname`
-    substituteInPlace Tst/regress.cmd --replace 'mysystem_catch("hostname")' 'nix_test_runner'
+    substituteInPlace Tst/regress.cmd \
+      --replace-fail 'mysystem_catch("hostname")' 'nix_test_runner'
+
+    # ld: file not found: @rpath/libquadmath.0.dylib
+    substituteInPlace m4/p-procs.m4 \
+      --replace-fail "-flat_namespace" ""
 
     patchShebangs .
   '';

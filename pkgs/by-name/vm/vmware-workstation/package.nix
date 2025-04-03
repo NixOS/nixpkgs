@@ -1,32 +1,36 @@
-{ stdenv
-, buildFHSEnv
-, fetchurl
-, fetchzip
-, lib
-, zlib
-, gdbm
-, libxslt
-, libxml2
-, libuuid
-, readline
-, readline70
-, xz
-, cups
-, libaio
-, vulkan-loader
-, alsa-lib
-, libpulseaudio
-, libxcrypt-legacy
-, libGL
-, numactl
-, xorg
-, kmod
-, python3
-, autoPatchelfHook
-, makeWrapper
-, symlinkJoin
-, enableInstaller ? false, bzip2, sqlite
-, enableMacOSGuests ? false, fetchFromGitHub, unzip
+{
+  stdenv,
+  buildFHSEnv,
+  fetchzip,
+  lib,
+  zlib,
+  gdbm,
+  libxslt,
+  libxml2,
+  libuuid,
+  readline,
+  readline70,
+  xz,
+  cups,
+  libaio,
+  vulkan-loader,
+  alsa-lib,
+  libpulseaudio,
+  libxcrypt-legacy,
+  libGL,
+  numactl,
+  xorg,
+  kmod,
+  python3,
+  autoPatchelfHook,
+  makeWrapper,
+  symlinkJoin,
+  enableInstaller ? false,
+  bzip2,
+  sqlite,
+  enableMacOSGuests ? false,
+  fetchFromGitHub,
+  unzip,
 }:
 
 let
@@ -46,7 +50,7 @@ let
     sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
-  vmware-unpack-env = buildFHSEnv rec {
+  vmware-unpack-env = buildFHSEnv {
     pname = "vmware-unpack-env";
     inherit version;
     targetPkgs = pkgs: [ zlib ];
@@ -96,18 +100,29 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
+  nativeBuildInputs =
+    [
+      python3
+      vmware-unpack-env
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals enableInstaller [
+      bzip2
+      sqlite
+      readline70_compat63
+    ]
     ++ lib.optionals enableMacOSGuests [ unzip ];
 
-  src = fetchzip {
-    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
-    stripRoot = false;
-  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
+  src =
+    fetchzip {
+      url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
+      sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
+      stripRoot = false;
+    }
+    + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase =
-  ''
+  unpackPhase = ''
     ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
   '';
 
@@ -372,6 +387,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cawilliamson deinferno vifino ];
+    maintainers = with maintainers; [
+      cawilliamson
+      deinferno
+      vifino
+    ];
   };
 }

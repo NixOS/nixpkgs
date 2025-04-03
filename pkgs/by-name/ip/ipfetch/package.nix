@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ipfetch";
   version = "unstable-2024-02-02";
 

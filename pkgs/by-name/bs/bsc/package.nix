@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bsc";
-  version = "3.3.5";
+  version = "3.3.6";
 
   src = fetchFromGitHub {
     owner = "IlyaGrebnov";
     repo = "libbsc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k+uGPcr5LNxKAtIICLJU1uIWDP/tvT05v/Oc0NHUQ+E=";
+    hash = "sha256-iUFKTDSAg2/57TPvR0nlmfVN2Z6O9kZKIg+BQQKvr/o=";
   };
 
   enableParallelBuilding = true;

@@ -52,7 +52,7 @@ buildPythonPackage rec {
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings.sqlite
 
-    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 

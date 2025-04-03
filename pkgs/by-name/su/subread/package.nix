@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "subread";
-  version = "2.0.8";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/subread/subread-${version}/subread-${version}-source.tar.gz";
-    sha256 = "sha256-y12t9xyFDxKKg0ciP+DOGeHBfjlZ6fPrqQ6AkGcfhXA=";
+    sha256 = "sha256-/fioTPFF7atJhAcOcVlWEsl603Qa/bjSX5Pa58hwNDM=";
   };
 
   buildInputs = [

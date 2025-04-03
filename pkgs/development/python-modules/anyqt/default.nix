@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "anyqt";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ales-erjavec";
     repo = "anyqt";
     rev = version;
-    hash = "sha256-dL2EUAMzWKq/oN3rXiEC6emDJddmg4KclT5ONKA0jfk=";
+    hash = "sha256-iDUgu+x9rnpxpHzO7Rf2rJFXsheivrK7HI3FUbomkTU=";
   };
 
   nativeCheckInputs = [

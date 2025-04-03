@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "lxmf";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "lxmf";
     tag = version;
-    hash = "sha256-QUWQlU2S1tBKXYOODXP7x8p8lIlWJVIvF0bRrEFYJMY=";
+    hash = "sha256-HkWl0fHb+nmcH4uczUAbNyizm1nP8a7Mo3zUoN1FxTo=";
   };
 
   build-system = [ setuptools ];

@@ -61,7 +61,6 @@ buildPythonPackage rec {
   # these tests require a running clickhouse instance
   disabledTestPaths = [
     "tests/integration_tests"
-    "tests/tls"
   ];
 
   pythonImportsCheck = [

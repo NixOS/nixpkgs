@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "2025.2.1";
+  version = "2025.2.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-KZalpsM9rvki9GD+urf8idHOEnvBJtkSvE1b2b4KL/4=";
+    hash = "sha256-aaSAlFIc5Gn5PJPVuObi24Y86/3N3yFJVQTx1tV2i2A=";
   };
 
   meta = with lib; {
@@ -30,6 +30,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
+    broken = stdenvNoCC.hostPlatform.isAarch64;
     maintainers = with maintainers; [
       jvanbruegge
       risson

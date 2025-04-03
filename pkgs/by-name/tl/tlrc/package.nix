@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-th7igqDnLB+Lib2NxYNIGtUTK6IfSQo+72ohO5Ki7Ok=";
+    hash = "sha256-LXuURq+MSSkd8+VzhltX2VqKsU3PWcQLMQTqqS5oLMg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+EWF21hag2kQ+YT8e+2NtdtOgyGrJL0BR2YMOxQfoDE=";
+  cargoHash = "sha256-nA24qjxo1C0t4twTv2/Uu05ELiSzYLrnsRgAIFKsIxg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

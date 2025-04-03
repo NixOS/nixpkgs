@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.15";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
     tag = "v${version}";
-    hash = "sha256-FLcvPa3vBldNINFM5hOraczrZCjSmlrEqkBj+f/sU1k=";
+    hash = "sha256-gPae04hgzUJrY0wshp25ojWrbi+7EYaWoR8wxoEJB30=";
   };
 
   build-system = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";
-    changelog = "https://github.com/pydantic/pytest-examples/releases/tag/v${version}";
+    changelog = "https://github.com/pydantic/pytest-examples/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

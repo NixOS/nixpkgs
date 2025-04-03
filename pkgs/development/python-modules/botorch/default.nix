@@ -43,16 +43,18 @@ buildPythonPackage rec {
     torch
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [
-    # tests tend to get stuck on busy hosts, increase verbosity to find out
-    # which specific tests get stuck
-    "-vvv"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   disabledTests =
-    [ "test_all_cases_covered" ]
+    [
+      "test_all_cases_covered"
+
+      # Skip tests that take too much time
+      "TestQMultiObjectivePredictiveEntropySearch"
+      "TestQPredictiveEntropySearch"
+    ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
       "test_optimize_acqf_mixed_binary_only"

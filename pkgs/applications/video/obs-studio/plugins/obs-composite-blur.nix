@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-composite-blur";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "FiniteSingularity";
     repo = "obs-composite-blur";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/fGLsbChaxhnBBwVJXEGRcjni80p9lI5no45nrp2csM=";
+    hash = "sha256-12wgzZxEoEUKqGGmccZKfcdE0libBJDZ1EzwxRPLURc=";
   };
 
   buildInputs = [

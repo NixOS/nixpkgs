@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytaglib";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "supermihi";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-TP3XScPDXlEnSR/BKcbF+DLt3rv8eyHrGwaBPAjIfA8=";
+    hash = "sha256-K9K30NFBcmxlYDQQ4YUhGzaPNVmLt0/L0JDrCtyKwLA=";
   };
 
   buildInputs = [

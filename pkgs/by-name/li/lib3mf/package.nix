@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
-    repo = pname;
+    repo = "lib3mf";
     tag = "v${version}";
     hash = "sha256-XEwrJINiNpI2+1wXxczirci8VJsUVs5iDUAMS6jWuNk=";
   };

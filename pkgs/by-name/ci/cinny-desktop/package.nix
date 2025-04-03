@@ -14,6 +14,8 @@
   glib,
   glib-networking,
   webkitgtk_4_0,
+  jq,
+  moreutils,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,10 +48,9 @@ rustPlatform.buildRustPackage rec {
         };
     in
     ''
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"cd cinny && npm run build"' '""'
+      ${lib.getExe jq} \
+        'del(.tauri.updater) | .build.distDir = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
+        | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
   postInstall =

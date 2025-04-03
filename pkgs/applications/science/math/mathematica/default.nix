@@ -78,7 +78,6 @@ callPackage ./generic.nix {
     maintainers = with maintainers; [
       herberteuler
       rafaelrc
-      chewblacka
     ];
     platforms = [ "x86_64-linux" ];
   };

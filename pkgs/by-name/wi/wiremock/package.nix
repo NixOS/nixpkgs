@@ -44,7 +44,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
     changelog = "https://github.com/wiremock/wiremock/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      bobvanderlinden
+      anthonyroussel
+    ];
     mainProgram = "wiremock";
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

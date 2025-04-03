@@ -7,7 +7,7 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "swiftshader";
   version = "2023-09-11";
 

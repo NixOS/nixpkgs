@@ -1,7 +1,12 @@
 # Module for rdnssd, a daemon that configures DNS servers in
 # /etc/resolv/conf from IPv6 RDNSS advertisements.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -21,24 +26,25 @@ in
       default = false;
       #default = config.networking.enableIPv6;
       description = ''
-          Whether to enable the RDNSS daemon
-          ({command}`rdnssd`), which configures DNS servers in
-          {file}`/etc/resolv.conf` from RDNSS
-          advertisements sent by IPv6 routers.
-        '';
+        Whether to enable the RDNSS daemon
+        ({command}`rdnssd`), which configures DNS servers in
+        {file}`/etc/resolv.conf` from RDNSS
+        advertisements sent by IPv6 routers.
+      '';
     };
 
   };
-
 
   ###### implementation
 
   config = mkIf config.services.rdnssd.enable {
 
-    assertions = [{
-      assertion = config.networking.resolvconf.enable;
-      message = "rdnssd needs resolvconf to work (probably something sets up a static resolv.conf)";
-    }];
+    assertions = [
+      {
+        assertion = config.networking.resolvconf.enable;
+        message = "rdnssd needs resolvconf to work (probably something sets up a static resolv.conf)";
+      }
+    ];
 
     systemd.services.rdnssd = {
       description = "RDNSS daemon";
@@ -74,7 +80,7 @@ in
       isSystemUser = true;
       group = "rdnssd";
     };
-    users.groups.rdnssd = {};
+    users.groups.rdnssd = { };
 
   };
 

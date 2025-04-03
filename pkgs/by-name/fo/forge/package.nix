@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "arrayfire";
-    repo = pname;
+    repo = "forge";
     rev = "v1.0.8";
     sha256 = "sha256-lSZAwcqAHiuZkpYcVfwvZCfNmEF3xGN9S/HuZQrGeKU=";
   };

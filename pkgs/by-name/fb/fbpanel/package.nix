@@ -16,7 +16,7 @@
   pypy2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fbpanel";
   version = "7.0";
   src = fetchFromGitHub {

@@ -33,14 +33,14 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2024.4.0";
+  version = "2024.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-SyRkOKZ1q1j37hqdkNkEZI5e/WbBgLL5iglrvT2V5Fs=";
+    hash = "sha256-w6EG3lh9U/qwwuVXBRT5SWdzdQzf2ggFnP+ADTA1IyM=";
   };
 
   env.LC_ALL = "en_US.UTF-8";

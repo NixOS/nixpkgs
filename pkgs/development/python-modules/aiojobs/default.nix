@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,

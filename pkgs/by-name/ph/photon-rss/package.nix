@@ -5,7 +5,7 @@
   xorg,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "photon";
   version = "unstable-2022-01-11";
 

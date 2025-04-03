@@ -5,7 +5,6 @@
   poetry-core,
   defusedxml,
   requests,
-  mock,
   httpretty,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "0.6.3";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "jdepoix";
     repo = "youtube-transcript-api";
     tag = "v${version}";
-    hash = "sha256-ZoF9BOQLrq2GVCZ98I8C9qouUhwZKEPp0zlTAqyEoYk=";
+    hash = "sha256-MDa19rI5DaIzrrEt7uNQ5+xSFkRXI5iwt/u5UNvT1f4=";
   };
 
   build-system = [ poetry-core ];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     httpretty
     pytestCheckHook
   ];

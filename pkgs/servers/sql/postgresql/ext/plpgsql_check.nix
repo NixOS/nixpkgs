@@ -1,20 +1,20 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
+  stdenv,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "plpgsql-check";
   version = "2.7.15";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "plpgsql_check";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JF0aTYakoHMRdiWcA70mYFvzTiwMhOJZfqRj+6JC6n0=";
   };
 
@@ -23,12 +23,12 @@ buildPostgresqlExtension (finalAttrs: {
     sql = "CREATE EXTENSION plpgsql_check;";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linter tool for language PL/pgSQL";
     homepage = "https://github.com/okbob/plpgsql_check";
     changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${finalAttrs.version}";
     platforms = postgresql.meta.platforms;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

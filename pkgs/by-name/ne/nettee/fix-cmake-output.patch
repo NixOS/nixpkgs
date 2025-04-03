@@ -1,0 +1,25 @@
+Index: a/CMakeLists.txt
+===================================================================
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,17 +6,18 @@
+ SET(FS11 -D_POSIX_SOURCE)
+ endif (UNIX)
+ 
+ #modify next line if a different installation target is required
+-SET(CMAKE_INSTALL_PREFIX "/usr/local")
+-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin)
++#SET(CMAKE_INSTALL_PREFIX "/usr/local")
++#SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin)
+ add_executable(nettee               nettee.c rb.c nio.c)
+ ###add_executable(stub_child_process   stub_child_process.c rb.c nio.c)
+ ###add_executable(stub_parent_process  stub_parent_process.c rb.c nio.c)
+ #
+ target_compile_options(nettee                PRIVATE ${FS9} ${FS10} ${FS11})
+ ###target_compile_options(stub_child_process    PRIVATE ${FS9}  ${FS11})
+ ###target_compile_options(stub_parent_process   PRIVATE ${FS9}  ${FS11})
++install(TARGETS nettee DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+ #
+ #####################################################
+ #
+ #install man pages

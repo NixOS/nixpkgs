@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -40,25 +41,37 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.18";
+  version = "0.3.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-oJ4lUbQqHNEqd9UdgLH0ZmTkdZpUbJ7UNsQyIrs8JvI=";
+    hash = "sha256-Up/pH2TxLPiPO49oIa2ZlNeH3TyN9sZSlNsqOIRmlxc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
+
+  patches = [
+    # blockbuster isn't supported in nixpkgs
+    ./rm-blockbuster.patch
+  ];
 
   build-system = [ pdm-backend ];
 
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
     "numpy"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "blockbuster"
   ];
 
   dependencies = [
@@ -135,10 +148,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain==([0-9.]+)$"
+    ];
   };
 
   meta = {

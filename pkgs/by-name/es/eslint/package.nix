@@ -31,14 +31,10 @@ buildNpmPackage' rec {
   '';
 
   npmDepsHash = "sha256-F3EUANBvniczR7QxNfo1LlksYPxXt16uqJDFzN6u64Y=";
+  npmInstallFlags = [ "--omit=dev" ];
 
   dontNpmBuild = true;
   dontNpmPrune = true;
-
-  postFixup = ''
-    # Remove broken symlink
-    rm $out/lib/node_modules/eslint/node_modules/eslint-config-eslint
-  '';
 
   meta = {
     description = "Find and fix problems in your JavaScript code";

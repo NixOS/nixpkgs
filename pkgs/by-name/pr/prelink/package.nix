@@ -7,7 +7,7 @@
   libiberty,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "prelink";
   version = "unstable-2019-06-24";
 

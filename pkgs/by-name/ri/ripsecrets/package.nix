@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripsecrets";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "sirwart";
     repo = "ripsecrets";
     rev = "v${version}";
-    hash = "sha256-MyFeSEZAG99g1Uh8KVA7CSZZVXUOF2qYJ0o1YviiPp4=";
+    hash = "sha256-lmahS/0W5075vdPfj4QnX7ZvrxHi986/92PRrplFblg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-e11kd+W8M8y5rC328Ycf2NB4wPdAQ++RcprrYaoM3t0=";
+  cargoHash = "sha256-AO0EL2JNwrqwUa7QLNB8/fjLP3HzBqidHR21YSmrMqg=";
 
   meta = with lib; {
     description = "Command-line tool to prevent committing secret keys into your source code";

@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -17,21 +18,25 @@
 
 buildPythonPackage rec {
   pname = "langchain-groq";
-  version = "0.2.4";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-groq==${version}";
-    hash = "sha256-hXY0xmt0rvV/AhMZTR+UxMz0ba7pJjRzBRVn6XvX6cA=";
+    hash = "sha256-KsKT7+jpTTiSVMZWcIwW7+1BCL7rpZHg/OX3PNLI6As=";
   };
 
   sourceRoot = "${src.name}/libs/partners/groq";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "langchain-core" ];
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     langchain-core
@@ -47,9 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-groq==([0-9.]+)$"
+    ];
   };
 
   meta = {

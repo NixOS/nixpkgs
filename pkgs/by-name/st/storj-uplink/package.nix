@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "storj-uplink";
-  version = "1.123.4";
+  version = "1.125.2";
 
   src = fetchFromGitHub {
     owner = "storj";
     repo = "storj";
     rev = "v${version}";
-    hash = "sha256-H62QB/lS3rDUPDJMckRVhChgevyXfQzPBT+XI4/uDNE=";
+    hash = "sha256-O4lp6NsUpxaikjpcDfpS+FZZHKOxjOn1Lr052PlD0W4=";
   };
 
   subPackages = [ "cmd/uplink" ];
 
-  vendorHash = "sha256-s6UrM7Kj/w09EXLHeyzcE6YLzucUz/qEpXsghFETRig=";
+  vendorHash = "sha256-OhYxrRTVbAbpPz25g27wgM30AQmQf3Uxh03ax8znFYY=";
 
   ldflags = [
     "-s"

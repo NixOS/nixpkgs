@@ -91,6 +91,10 @@ import ./versions.nix (
       ++ optional postgresqlSupport "--with-postgresql"
       ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
 
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (
+      lib.versions.major version <= "5"
+    ) "-Wno-error=incompatible-pointer-types";
+
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
     '';
@@ -122,6 +126,7 @@ import ./versions.nix (
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
+        bstanderline
         mmahut
         psyanticy
       ];

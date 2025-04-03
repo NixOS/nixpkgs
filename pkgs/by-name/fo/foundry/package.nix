@@ -25,9 +25,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-vVRFS7o0zV+ek9ho+URks6peOryMpFCE1sDzN9g7uH0=";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = [ solc ] ++ lib.optionals stdenv.isDarwin [ libusb1 ];
+  buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.
@@ -44,7 +46,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     SVM_RELEASES_LIST_JSON =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         # Confusingly, these are universal binaries, not amd64.
         # See: https://github.com/ethereum/solidity/issues/12291#issuecomment-1974771433
         "${./svm-lists/macosx-amd64.json}"

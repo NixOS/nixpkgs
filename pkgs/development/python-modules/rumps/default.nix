@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rumps";
   version = "unstable-2025-02-02";
   pyproject = true;

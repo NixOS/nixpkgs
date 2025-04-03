@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, gitUpdater
-, gmp
-, gtk3
-, pkg-config
-, qtbase
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  gitUpdater,
+  gmp,
+  gtk3,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -11,8 +11,12 @@
   libX11,
   libdrm,
   libgbm,
+  nativeContextSupport ? stdenv.hostPlatform.isLinux,
   vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkan-headers,
+  vulkan-loader,
   gitUpdater,
 }:
 
@@ -32,6 +36,10 @@ stdenv.mkDerivation rec {
       libepoxy
     ]
     ++ lib.optionals vaapiSupport [ libva ]
+    ++ lib.optionals vulkanSupport [
+      vulkan-headers
+      vulkan-loader
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       libX11
@@ -46,9 +54,14 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "video" vaapiSupport)
-  ];
+  mesonFlags =
+    [
+      (lib.mesonBool "video" vaapiSupport)
+      (lib.mesonBool "venus" vulkanSupport)
+    ]
+    ++ lib.optionals nativeContextSupport [
+      (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
+    ];
 
   passthru = {
     updateScript = gitUpdater {

@@ -4,7 +4,7 @@
   defaultGemConfig,
   fetchFromGitLab,
   fetchYarnDeps,
-  fixup-yarn-lock,
+  yarnConfigHook,
   git,
   gitlabEnterprise ? false,
   lib,
@@ -16,7 +16,6 @@
   ruby_3_3,
   stdenv,
   tzdata,
-  yarn,
 
   # gem dependencies:
   # gitlab-glfm-markdown
@@ -83,7 +82,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-LpuQMV112Z5lspSK4M0IYdkxO8oVmucnJtqF2Y3+aNU=";
+          hash = "sha256-VJR3F+6l8nYj1ZCHOWxnX82C68giXX45RkhIVpZvRLo=";
         };
 
         dontBuild = false;
@@ -151,10 +150,9 @@ let
       rubyEnv.wrappedRuby
       rubyEnv.bundler
       nodejs_20
-      yarn
       git
       cacert
-      fixup-yarn-lock
+      yarnConfigHook
     ];
 
     patches = [
@@ -176,9 +174,7 @@ let
     SKIP_YARN_INSTALL = 1;
     NODE_OPTIONS = "--max-old-space-size=8192";
 
-    configurePhase = ''
-      runHook preConfigure
-
+    postConfigure = ''
       # Some rake tasks try to run yarn automatically, which won't work
       rm lib/tasks/yarn.rake
 
@@ -186,31 +182,17 @@ let
       mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
-      # Yarn and bundler wants a real home directory to write cache, config, etc to
-      export HOME=$NIX_BUILD_TOP/fake_home
-
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock yarn.lock
-
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-
-      patchShebangs node_modules/
       patchShebangs scripts/frontend/
-
-      # TODO: Try to remove --ignore-scripts
-      # Needed for the js dependency pinia to work
-      pushd node_modules/vue-demi
-      yarn run postinstall
-      popd
-
-      runHook postConfigure
     '';
 
     buildPhase = ''
       runHook preBuild
+
+      # TODO: Try to yarn install without --ignore-scripts
+      # Needed for the js dependency pinia to work
+      pushd node_modules/vue-demi
+      yarn run postinstall
+      popd
 
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 

@@ -1,0 +1,129 @@
+diff --git a/ACKNOWLEDGMENTS.md b/ACKNOWLEDGMENTS.md
+index aed1048..e4c1f50 100644
+--- a/ACKNOWLEDGMENTS.md
++++ b/ACKNOWLEDGMENTS.md
+@@ -745,30 +745,6 @@ Signal Desktop makes use of the following open source projects.
+     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     SOFTWARE.
+ 
+-## emoji-datasource-apple
+-
+-    The MIT License (MIT)
+-
+-    Copyright (c) 2013 Cal Henderson
+-
+-    Permission is hereby granted, free of charge, to any person obtaining a copy
+-    of this software and associated documentation files (the "Software"), to deal
+-    in the Software without restriction, including without limitation the rights
+-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-    copies of the Software, and to permit persons to whom the Software is
+-    furnished to do so, subject to the following conditions:
+-
+-    The above copyright notice and this permission notice shall be included in all
+-    copies or substantial portions of the Software.
+-
+-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-    SOFTWARE.
+-
+ ## emoji-regex
+ 
+     Copyright Mathias Bynens <https://mathiasbynens.be/>
+diff --git a/app/protocol_filter.ts b/app/protocol_filter.ts
+index 68dceea..4b35bb1 100644
+--- a/app/protocol_filter.ts
++++ b/app/protocol_filter.ts
+@@ -59,6 +59,7 @@ function _createFileHandler({
+   const allowedRoots = [
+     userDataPath,
+     installPath,
++    "@noto-emoji-pngs@",
+     getAvatarsPath(userDataPath),
+     getBadgesPath(userDataPath),
+     getDraftPath(userDataPath),
+diff --git a/package.json b/package.json
+index 3a6ac26..40cdb25 100644
+--- a/package.json
++++ b/package.json
+@@ -130,7 +130,6 @@
+     "dashdash": "2.0.0",
+     "direction": "1.0.4",
+     "emoji-datasource": "15.1.2",
+-    "emoji-datasource-apple": "15.1.2",
+     "emoji-regex": "10.4.0",
+     "encoding": "0.1.13",
+     "fabric": "4.6.0",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index ba2f205..705e454 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -169,9 +169,6 @@ importers:
+       emoji-datasource:
+         specifier: 15.1.2
+         version: 15.1.2
+-      emoji-datasource-apple:
+-        specifier: 15.1.2
+-        version: 15.1.2
+       emoji-regex:
+         specifier: 10.4.0
+         version: 10.4.0
+@@ -4790,9 +4787,6 @@ packages:
+     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
+     engines: {node: '>=12'}
+ 
+-  emoji-datasource-apple@15.1.2:
+-    resolution: {integrity: sha512-32UZTK36x4DlvgD1smkmBlKmmJH7qUr5Qut4U/on2uQLGqNXGbZiheq6/LEA8xRQEUrmNrGEy25wpEI6wvYmTg==}
+-
+   emoji-datasource@15.1.2:
+     resolution: {integrity: sha512-tXAqGsrDVhgCRpFePtaD9P4Z8Ro2SUQSL/4MIJBG0SxqQJaMslEbin8J53OaFwEBu6e7JxFaIF6s4mw9+8acAQ==}
+ 
+@@ -14929,8 +14923,6 @@ snapshots:
+ 
+   emittery@0.13.1: {}
+ 
+-  emoji-datasource-apple@15.1.2: {}
+-
+   emoji-datasource@15.1.2: {}
+ 
+   emoji-regex@10.4.0: {}
+diff --git a/ts/components/conversation/Emojify.tsx b/ts/components/conversation/Emojify.tsx
+index f0b1115..7613230 100644
+--- a/ts/components/conversation/Emojify.tsx
++++ b/ts/components/conversation/Emojify.tsx
+@@ -35,8 +35,15 @@ function getImageTag({
+   }
+ 
+   let srcSet: string | undefined;
++  const emojiToNotoName = (emoji: string): string =>
++    `emoji_u${
++      [...emoji]
++        .filter(c => c != "\ufe0f")
++        .map(c => c.codePointAt(0)?.toString(16).padStart(4, "0"))
++        .join("_")
++    }.png`;
+   if (sizeClass != null && JUMBO_SIZES.has(sizeClass)) {
+-    srcSet = `emoji://jumbo?emoji=${encodeURIComponent(match)} 2x, ${img}`;
++    srcSet = `file://@noto-emoji-pngs@/${emojiToNotoName(match)} 2x, ${img}`;
+   }
+ 
+   return (
+diff --git a/ts/components/emoji/lib.ts b/ts/components/emoji/lib.ts
+index 9753017..cf51d3d 100644
+--- a/ts/components/emoji/lib.ts
++++ b/ts/components/emoji/lib.ts
+@@ -102,7 +102,10 @@ const ROOT_PATH = get(
+ );
+ 
+ const makeImagePath = (src: string) => {
+-  return `${ROOT_PATH}node_modules/emoji-datasource-apple/img/apple/64/${src}`;
++  const datasourceToNoto = (name: string): string =>
++    `emoji_u${name.slice(0,-4).split("-").filter(c => c != "fe0f").join("_")}.png`;
++
++  return `@noto-emoji-pngs@/${datasourceToNoto(src)}`;
+ };
+ 
+ const imageQueue = new PQueue({

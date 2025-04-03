@@ -22,7 +22,7 @@ let
       fetchSubmodules = true;
     };
 
-    patches = (oldAttrs.patches or [ ]) ++ [
+    patches = [
       (fetchpatch {
         url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
         decode = "base64 -d";

@@ -6,7 +6,7 @@
   mkdocs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-gitlab-plugin";
   version = "0.1.4";
   format = "setuptools";

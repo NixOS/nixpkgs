@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       unicode-30
     ];
     description = "Parallel I/O Library for NetCDF File Access";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
 })

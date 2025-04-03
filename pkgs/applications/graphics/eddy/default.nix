@@ -1,20 +1,21 @@
-{ python3Packages
-, fetchFromGitHub
-, lib
-, jre
-, qt5
-, wrapQtAppsHook
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+  jre,
+  qt5,
+  wrapQtAppsHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eddy";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "obdasystems";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-vRmLUIqU0qfcnKzymBGb9gfM/uQiAcUHUnyz8iH/GrM=";
+    sha256 = "sha256-ywAxlXuKoTXfJSzSsvVXxhycVEklIPQfUogs8QJ8DGQ=";
   };
 
   propagatedBuildInputs = [

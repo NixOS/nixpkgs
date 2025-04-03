@@ -9,7 +9,7 @@
   wayland-protocols,
   wayland-scanner,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlinhibit";
   version = "0.1.1";
 

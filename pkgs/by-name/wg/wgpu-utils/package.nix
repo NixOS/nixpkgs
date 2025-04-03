@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "24.0.1";
+  version = "24.0.3";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     tag = "wgpu-v${version}";
-    hash = "sha256-fhys0PYMFI23rvKcq9aJrXJrl7q9UQln9rmUybMJY1o=";
+    hash = "sha256-MoHpMdOKwCdQ2iO4O8WDskOQXgeFwpsD/UhQOhSbF70=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-cufabcRNrLxMjejDydqR4zf4SajeWkX/fcXj96RakDQ=";
+  cargoHash = "sha256-l7V8awY17YxVyBzWV+BHRva7FczZQxJy8c6xve27gjs=";
 
   nativeBuildInputs = [
     pkg-config

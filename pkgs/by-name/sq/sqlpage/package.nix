@@ -37,13 +37,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlpage";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     tag = "v${version}";
-    hash = "sha256-Yme+Nh6x5cJzDm3o4s+QVrOmv6afnmoD7ZjhTkWDAgo=";
+    hash = "sha256-cqMXdAXc46DbbONz1A6uf2Oo2Cu4sig6ntuLqYlihR4=";
   };
 
   postPatch = ''
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-/LTDlZseS4V2nqBKyi3HaxjNyqKHVYYNFmEJOTp0pqs=";
+  cargoHash = "sha256-NUbCSYUTXN8glw94Lr/+Jj54PukRXFlzTxq0d7znjwA=";
 
   nativeBuildInputs = [ pkg-config ];
 

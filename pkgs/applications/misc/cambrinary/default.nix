@@ -7,7 +7,7 @@
   beautifulsoup4,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
   format = "pyproject";

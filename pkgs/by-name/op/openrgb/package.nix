@@ -9,38 +9,45 @@
   coreutils,
   mbedtls_2,
   symlinkJoin,
-  openrgb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
-    rev = "release_${version}";
+    rev = "release_${finalAttrs.version}";
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
-  nativeBuildInputs = with libsForQt5; [
-    qmake
-    pkg-config
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with libsForQt5; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
-  buildInputs = with libsForQt5; [
-    libusb1
-    hidapi
-    mbedtls_2
-    qtbase
-    qttools
-  ];
+  buildInputs =
+    [
+
+      libusb1
+      hidapi
+      mbedtls_2
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qttools
+      qtwayland
+    ]);
 
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
-      --replace /bin/chmod "${coreutils}/bin/chmod"
+      --replace-fail /bin/chmod "${coreutils}/bin/chmod"
   '';
 
   doInstallCheck = true;
@@ -67,7 +74,7 @@ stdenv.mkDerivation rec {
         '';
       };
     in
-    openrgb.overrideAttrs (old: {
+    finalAttrs.finalPackage.overrideAttrs (old: {
       qmakeFlags = old.qmakeFlags or [ ] ++ [
         # Welcome to Escape Hell, we have backslashes
         ''DEFINES+=OPENRGB_EXTRA_PLUGIN_DIRECTORY=\\\""${
@@ -76,12 +83,12 @@ stdenv.mkDerivation rec {
       ];
     });
 
-  meta = with lib; {
+  meta = {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ johnrtitor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "openrgb";
   };
-}
+})

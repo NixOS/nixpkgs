@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.13.5";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-rZ2Psbs3s5NfY1Mktr3RLGwQYciMh5FCs4d0I1zBaA8=";
+    hash = "sha256-PeRz44agIKDPsgUhjPgm1Pn1oJb7Epyw0oj3xPCkj4k=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-syvW5Lm2ed/AXksDmIAEAbrw+mW1aA0FugJirBZLtLw=";
+  cargoHash = "sha256-PD1S9h4cGGgfRBB0iZzY7GRTeclRhwWLrxvNVEs8OJY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Modern Hardware Description Language";
     homepage = "https://veryl-lang.org/";
-    changelog = "https://github.com/veryl-lang/veryl/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/veryl-lang/veryl/releases/tag/v${version}";
     license = with lib.licenses; [
       mit
       asl20

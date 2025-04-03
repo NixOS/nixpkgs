@@ -21,7 +21,7 @@
 let
   rdbtools-patched = rdbtools.overridePythonAttrs (oldAttrs: {
     # Add required additional flag for resp-app
-    patches = [
+    patches = oldAttrs.patches or [ ] ++ [
       (fetchpatch {
         name = "Add-flag-to-parse-only-key-names.patch";
         url = "https://github.com/uglide/redis-rdb-tools/commit/b74946e6fbca589947ef0186429d5ce45a074b87.patch";

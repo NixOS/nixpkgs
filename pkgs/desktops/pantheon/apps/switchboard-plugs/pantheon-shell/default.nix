@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, libadwaita
-, libgee
-, granite7
-, gexiv2
-, gnome-settings-daemon
-, elementary-settings-daemon
-, gtk4
-, gala
-, wingpanel
-, wingpanel-indicator-keyboard
-, wingpanel-quick-settings
-, switchboard
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libadwaita,
+  libgee,
+  granite7,
+  gexiv2,
+  gnome-settings-daemon,
+  elementary-settings-daemon,
+  gtk4,
+  gala,
+  wingpanel,
+  wingpanel-indicator-keyboard,
+  wingpanel-quick-settings,
+  switchboard,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {

@@ -18,6 +18,7 @@ let
     "hibernate"
     "hybrid-sleep"
     "suspend-then-hibernate"
+    "sleep"
     "lock"
   ];
 in

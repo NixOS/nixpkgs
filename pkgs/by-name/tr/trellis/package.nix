@@ -29,7 +29,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "trellis";
   version = "unstable-2022-09-14";
 

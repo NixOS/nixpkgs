@@ -13,7 +13,7 @@
   fluxbox,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "fluxboxlauncher";
   version = "0.2.1";
 

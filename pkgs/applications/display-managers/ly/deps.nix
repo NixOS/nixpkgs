@@ -10,6 +10,9 @@
   name ? "zig-packages",
 }:
 
+with builtins;
+with lib;
+
 let
   unpackZigArtifact =
     { name, artifact }:
@@ -35,15 +38,16 @@ let
       name,
       url,
       hash,
+      rev ? throw "rev is required, remove and regenerate the zon2json-lock file",
     }:
     let
-      parts = lib.splitString "#" url;
-      base = lib.elemAt parts 0;
-      rev = lib.elemAt parts 1;
+      parts = splitString "#" url;
+      url_base = elemAt parts 0;
+      url_without_query = elemAt (splitString "?" url_base) 0;
     in
     fetchgit {
       inherit name rev hash;
-      url = base;
+      url = url_without_query;
       deepClone = false;
     };
 
@@ -52,20 +56,25 @@ let
       name,
       url,
       hash,
-    }:
+      ...
+    }@args:
     let
-      parts = lib.splitString "://" url;
-      proto = lib.elemAt parts 0;
-      path = lib.elemAt parts 1;
+      parts = splitString "://" url;
+      proto = elemAt parts 0;
+      path = elemAt parts 1;
       fetcher = {
-        "git+http" = fetchGitZig {
-          inherit name hash;
-          url = "http://${path}";
-        };
-        "git+https" = fetchGitZig {
-          inherit name hash;
-          url = "https://${path}";
-        };
+        "git+http" = fetchGitZig (
+          args
+          // {
+            url = "http://${path}";
+          }
+        );
+        "git+https" = fetchGitZig (
+          args
+          // {
+            url = "https://${path}";
+          }
+        );
         http = fetchZig {
           inherit name hash;
           url = "http://${path}";
@@ -74,21 +83,17 @@ let
           inherit name hash;
           url = "https://${path}";
         };
-        file = unpackZigArtifact {
-          inherit name;
-          artifact = /. + path;
-        };
       };
     in
     fetcher.${proto};
 in
 linkFarm name [
   {
-    name = "122014e73fd712190e109950837b97f6143f02d7e2b6986e1db70b6f4aadb5ba6a0d";
+    name = "122062d301a203d003547b414237229b09a7980095061697349f8bef41be9c30266b";
     path = fetchZigArtifact {
       name = "clap";
-      url = "https://github.com/Hejsil/zig-clap/archive/8c98e6404b22aafc0184e999d8f068b81cc22fa1.tar.gz";
-      hash = "sha256-3P9LyIlq4eNMOe+/jdVJgECfzveSUuRzTf9yhT4t8Zo=";
+      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.9.1.tar.gz";
+      hash = "sha256-7qxm/4xb+58MGG+iUzssUtR97OG2dRjAqyS0BAet4HY=";
     };
   }
   {

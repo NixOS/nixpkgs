@@ -33,7 +33,7 @@ let
     libglvnd.dev
     xorgproto
   ];
-  hover = buildGoModule rec {
+  hover = buildGoModule {
     inherit pname version;
 
     meta = with lib; {
@@ -87,7 +87,7 @@ let
   };
 
 in
-buildFHSEnv rec {
+buildFHSEnv {
   inherit pname version;
   targetPkgs =
     pkgs:

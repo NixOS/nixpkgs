@@ -143,6 +143,13 @@ in
     ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "grafana-agent"
+      ]
+      "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
+    )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )
@@ -291,6 +298,9 @@ in
       The dhcpd6 module has been removed because ISC DHCP reached its end of life.
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
+    '')
+    (mkRemovedOptionModule [ "services" "haka" ] ''
+      The corresponding package was broken and removed from nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "tedicross" ] ''
       The corresponding package was broken and removed from nixpkgs.

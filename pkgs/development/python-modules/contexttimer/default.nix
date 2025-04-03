@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "contexttimer";
   version = "unstable-2019-03-30";
   format = "setuptools";

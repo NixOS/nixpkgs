@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, python3
-, zlib
-, libssh2
-, openssl
-, pcre2
-, libiconv
-, Security
-, staticBuild ? stdenv.hostPlatform.isStatic
-# for passthru.tests
-, libgit2-glib
-, python3Packages
-, gitstatus
-, llhttp
-, withGssapi ? false
-, krb5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  python3,
+  zlib,
+  libssh2,
+  openssl,
+  pcre2,
+  libiconv,
+  Security,
+  staticBuild ? stdenv.hostPlatform.isStatic,
+  # for passthru.tests
+  libgit2-glib,
+  python3Packages,
+  gitstatus,
+  llhttp,
+  withGssapi ? false,
+  krb5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.9.0";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
-  outputs = ["lib" "dev" "out"];
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "libgit2";
@@ -43,24 +48,38 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags = [
-    "-DREGEX_BACKEND=pcre2"
-    "-DUSE_HTTP_PARSER=llhttp"
-    "-DUSE_SSH=ON"
-    (lib.cmakeBool "USE_GSSAPI" withGssapi)
-    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
-    # For ws2_32, referred to by a `*.pc` file
-    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
-  ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
-    # openbsd headers fail with default c90
-    "-DCMAKE_C_STANDARD=99"
+  cmakeFlags =
+    [
+      "-DREGEX_BACKEND=pcre2"
+      "-DUSE_HTTP_PARSER=llhttp"
+      "-DUSE_SSH=ON"
+      (lib.cmakeBool "USE_GSSAPI" withGssapi)
+      "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+      # For ws2_32, referred to by a `*.pc` file
+      "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+      # openbsd headers fail with default c90
+      "-DCMAKE_C_STANDARD=99"
+    ];
+
+  nativeBuildInputs = [
+    cmake
+    python3
+    pkg-config
   ];
 
-  nativeBuildInputs = [ cmake python3 pkg-config ];
-
-  buildInputs = [ zlib libssh2 openssl pcre2 llhttp ]
+  buildInputs =
+    [
+      zlib
+      libssh2
+      openssl
+      pcre2
+      llhttp
+    ]
     ++ lib.optional withGssapi krb5
     ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 

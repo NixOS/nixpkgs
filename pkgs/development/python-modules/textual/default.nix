@@ -23,19 +23,18 @@
   pytestCheckHook,
   syrupy,
   time-machine,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "1.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-3pNUDkkq9X3W9DdWp4M4h4ddHN+GzUxLCFNJJdAtRJM=";
+    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
   };
 
   build-system = [ poetry-core ];
@@ -75,24 +74,18 @@ buildPythonPackage rec {
     "tests/test_focus.py"
   ];
 
-  disabledTests =
-    [
-      # Assertion issues
-      "test_textual_env_var"
+  disabledTests = [
+    # Assertion issues
+    "test_textual_env_var"
 
-      # Requirements for tests are not quite ready
-      "test_register_language"
+    # Requirements for tests are not quite ready
+    "test_register_language"
 
-      # Requires python bindings for tree-sitter languages
-      # https://github.com/Textualize/textual/issues/5449
-      "test_setting_unknown_language"
-      "test_update_highlight_query"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/Textualize/textual/issues/5327
-      "test_cursor_page_up"
-      "test_cursor_page_down"
-    ];
+    # Requires python bindings for tree-sitter languages
+    # https://github.com/Textualize/textual/issues/5449
+    "test_setting_unknown_language"
+    "test_update_highlight_query"
+  ];
 
   # Some tests in groups require state from previous tests
   # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
@@ -105,7 +98,7 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };

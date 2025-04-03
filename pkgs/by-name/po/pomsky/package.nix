@@ -12,17 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
-    repo = pname;
+    repo = "pomsky";
     rev = "v${version}";
     hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "onig_sys-69.8.1" = "sha256-NJv/Dooh93yQ9KYyuNBhO1c4U7Gd7X007ECXyRsztrY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/tJwJ/xF5a2NEP5A/3swq75wCk9qxgbp7ilH1PqcWJY=";
 
   nativeBuildInputs = [
     pkg-config

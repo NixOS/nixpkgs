@@ -5,7 +5,7 @@
   ocaml_lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "graphql-lwt";
 
   inherit (graphql) version src;

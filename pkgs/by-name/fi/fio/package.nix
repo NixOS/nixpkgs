@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   # We use $CC instead.
   configurePlatforms = [ ];
 
+  dontAddStaticConfigureFlags = true;
+
   nativeBuildInputs = [
     makeWrapper
     python3.pkgs.wrapPython

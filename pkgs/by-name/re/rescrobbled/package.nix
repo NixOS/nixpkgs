@@ -1,10 +1,11 @@
-{ lib
-, bash
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  dbus,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl dbus ];
+  buildInputs = [
+    openssl
+    dbus
+  ];
 
   postPatch = ''
     # Required for tests

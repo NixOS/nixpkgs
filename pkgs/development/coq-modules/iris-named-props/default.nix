@@ -6,7 +6,7 @@
   iris,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "iris-named-props";
   owner = "tchajed";
   inherit version;

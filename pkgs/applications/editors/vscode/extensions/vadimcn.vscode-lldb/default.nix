@@ -64,14 +64,6 @@ let
     }
   );
 
-  # debugservers on macOS require the 'com.apple.security.cs.debugger'
-  # entitlement which nixpkgs' lldb-server does not yet provide; see
-  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
-  lldbServer =
-    if stdenv.hostPlatform.isDarwin then
-      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
-    else
-      "${lldb.out}/bin/lldb-server";
 in
 stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -130,7 +122,7 @@ stdenv.mkDerivation {
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
+      --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -153,7 +145,7 @@ stdenv.mkDerivation {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = [ lib.licenses.mit ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.r4v3n6101 ];
     platforms = lib.platforms.all;
   };
 }

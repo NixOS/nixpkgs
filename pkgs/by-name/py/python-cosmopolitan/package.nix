@@ -6,7 +6,7 @@
   bintools-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "python-cosmopolitan";
   version = "3.6.14";
 
