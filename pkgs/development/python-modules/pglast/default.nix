@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "7.5";
+  version = "7.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pYXMhxW4kpM4yhzQzbdAmKxL5txbpbv8xyXkL6v9KmQ=";
+    hash = "sha256-o4rsYxe8ynI93f7WBF3inPHf9K8wgR1YYMVdgsrJFDs=";
   };
 
   build-system = [ setuptools ];
