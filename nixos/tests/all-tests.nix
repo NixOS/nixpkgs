@@ -800,11 +800,11 @@ in
   mopidy = handleTest ./mopidy.nix { };
   morph-browser = runTest ./morph-browser.nix;
   morty = handleTest ./morty.nix { };
-  mosquitto = handleTest ./mosquitto.nix { };
+  mosquitto = runTest ./mosquitto.nix;
   moosefs = handleTest ./moosefs.nix { };
   movim = discoverTests (import ./web-apps/movim { inherit handleTestOn; });
   mpd = handleTest ./mpd.nix { };
-  mpv = handleTest ./mpv.nix { };
+  mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
   mumble = handleTest ./mumble.nix { };
