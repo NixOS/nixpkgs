@@ -4496,6 +4496,7 @@ with pkgs;
 
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
+      description = "Utility which reads and writes data across network connections — LibreSSL implementation";
       mainProgram = "nc";
     };
   });
