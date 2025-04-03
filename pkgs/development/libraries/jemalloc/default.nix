@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
+      "--with-version=${version}-0-g0000000000000000000000000000000000000000"
       "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
     ]
     # see the comment on stripPrefix
@@ -84,6 +85,11 @@ stdenv.mkDerivation rec {
 
   # Tries to link test binaries binaries dynamically and fails
   doCheck = !stdenv.hostPlatform.isStatic;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    ! grep missing_version_try_git_fetch_tags $out/include/jemalloc/jemalloc.h
+  '';
 
   # Parallel builds break reproducibility.
   enableParallelBuilding = false;
