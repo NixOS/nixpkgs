@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "annotatedyaml";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "annotatedyaml";
     tag = "v${version}";
-    hash = "sha256-SKimMMqmA8twoojDncIAuUdB6DyoJsciuEneiVfTUg4=";
+    hash = "sha256-AmgM5KF8O8/rkR/9PmTzcyQaSlEDcYBDDRq5ujwANR0=";
   };
 
   build-system = [

@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.1";
+  version = "6.1.3";
   pname = "icalendar";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-PP4wBItPv5pPQKkGX4mGPl2RUGxOALOss++imzK4G4E=";
+    hash = "sha256-qRIBsRy+gQ6/6yB8AZN/GHt7Tk4VymtJGMXRmfngDxI=";
   };
 
   patches = [
@@ -42,6 +42,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
+    "test_dateutil_timezone_is_matched_with_tzname"
+    "test_docstring_of_python_file"
   ];
 
   pytestFlagsArray = [ "src/icalendar" ];

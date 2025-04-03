@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "potentials";
-  version = "0.3.8";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZXsqsqsgWntZUOuW1/2KAhsbnienHu6VFctxYkw+GCU=";
+    hash = "sha256-7ujcfFa/cweUtCY2MrEh3bTkwAVzvbF+5AJ4fs5o6bE=";
   };
 
   build-system = [ setuptools ];

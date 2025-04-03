@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.8.0";
+  version = "18.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZtDYHe5pvcaTfMo7h4Jh8YNJWcYHiRUnp4knoBzqiAA=";
+    hash = "sha256-z2pLjwHsVD1adcAcIYR0upsGO9n9N0OCH+3GioRcq04=";
   };
 
   nativeBuildInputs = [

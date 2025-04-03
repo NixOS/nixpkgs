@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "ogmios";
-  version = "1.3.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ogmios";
     inherit version;
-    hash = "sha256-b5L1J9lqHEQmlw7alv5HnpXM0gpE26cGkddEKH5cSU0=";
+    hash = "sha256-L+BBuWhcQhnE9f+b860401WKTUcFxf7Ehji1MHCNqjo=";
   };
 
   build-system = [

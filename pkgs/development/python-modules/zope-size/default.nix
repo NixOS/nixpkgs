@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "zope-size";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "zope.size";
     inherit version;
-    hash = "sha256-sVRT40+Bb/VFmtg82TUCmqWBxqRTRj4DxeLZe9IKQyo=";
+    hash = "sha256-88OaPLxG6AnxlkGxLaFn6nzbPgWu8z9WmXOireHvgAk=";
   };
 
   build-system = [ setuptools ];
