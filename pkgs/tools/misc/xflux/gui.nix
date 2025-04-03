@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonApplication,
-  python3Packages,
+  python,
   wrapGAppsHook3,
   xflux,
   gtk3,
@@ -54,7 +54,7 @@ buildPythonApplication rec {
   postFixup = ''
     wrapGAppsHook
     wrapPythonPrograms
-    patchPythonScript $out/${python3Packages.python.sitePackages}/fluxgui/fluxapp.py
+    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

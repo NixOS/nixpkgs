@@ -284,7 +284,7 @@ with pkgs;
     extraPackages = [ jdk17 ];
   };
 
-  asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
+  asitop = callPackage ../os-specific/darwin/asitop { };
 
   cve = with python3Packages; toPythonApplication cvelib;
 
@@ -363,7 +363,7 @@ with pkgs;
     openexr = openexr_3;
   };
 
-  databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
+  databricks-sql-cli = callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
     buildGoModule = buildGo123Module;
@@ -403,7 +403,7 @@ with pkgs;
 
   inherit (gridlock) nyarr;
 
-  html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
+  html5validator = callPackage ../applications/misc/html5validator { };
 
   inspec = callPackage ../tools/misc/inspec { };
 
@@ -1175,7 +1175,7 @@ with pkgs;
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
-  mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
+  mymcplus = callPackage ../tools/games/mymcplus { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
@@ -1206,7 +1206,7 @@ with pkgs;
 
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
-  snagboot = python3.pkgs.callPackage ../applications/misc/snagboot { };
+  snagboot = callPackage ../applications/misc/snagboot { };
 
   slipstream = callPackage ../tools/games/slipstream {
     jdk = jdk8;
@@ -1850,7 +1850,7 @@ with pkgs;
 
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
-  catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
+  catcli = callPackage ../tools/filesystems/catcli { };
 
   chipsec = callPackage ../tools/security/chipsec {
     kernel = null;
@@ -4192,7 +4192,7 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  netexec = python3Packages.callPackage ../tools/security/netexec { };
+  netexec = callPackage ../tools/security/netexec { };
 
   netdata = callPackage ../tools/system/netdata {
     protobuf = protobuf_21;
@@ -5460,11 +5460,11 @@ with pkgs;
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
 
-  twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
+  twtxt = callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
 
-  ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
+  ubidump = callPackage ../tools/filesystems/ubidump { };
 
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
@@ -5959,7 +5959,7 @@ with pkgs;
     llvmPackages = crystal.llvmPackages;
   };
 
-  devpi-client = python3Packages.callPackage ../development/tools/devpi-client { };
+  devpi-client = callPackage ../development/tools/devpi-client { };
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
@@ -8593,7 +8593,7 @@ with pkgs;
     )
       haskellPackages.haskell-ci;
 
-  nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
+  nimbo = callPackage ../applications/misc/nimbo { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
@@ -17448,7 +17448,7 @@ with pkgs;
 
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
-  gshogi = python3Packages.callPackage ../games/gshogi { };
+  gshogi = callPackage ../games/gshogi { };
 
   qtads = qt5.callPackage ../games/qtads { };
 
@@ -17627,7 +17627,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  pysolfc = python3Packages.callPackage ../games/pysolfc { };
+  pysolfc = callPackage ../games/pysolfc { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
 
@@ -18626,7 +18626,7 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace { };
+  nextinspace = callPackage ../applications/science/misc/nextinspace { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 
@@ -18679,7 +18679,7 @@ with pkgs;
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
   avell-unofficial-control-center =
-    python3Packages.callPackage ../applications/misc/avell-unofficial-control-center
+    callPackage ../applications/misc/avell-unofficial-control-center
       { };
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
@@ -19227,7 +19227,7 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  tftui = python3Packages.callPackage ../applications/networking/cluster/tftui { };
+  tftui = callPackage ../applications/networking/cluster/tftui { };
 
   trufflehog = callPackage ../tools/security/trufflehog {
     buildGoModule = buildGo123Module;
