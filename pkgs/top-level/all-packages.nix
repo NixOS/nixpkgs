@@ -5460,7 +5460,7 @@ with pkgs;
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
 
-  twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
+  twtxt = callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
 
