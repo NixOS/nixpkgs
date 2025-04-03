@@ -12435,6 +12435,7 @@ with pkgs;
     withMysql = false;
     withNotification = false;
     withIcingadb = false;
+    withPerfdata = false;
   };
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
