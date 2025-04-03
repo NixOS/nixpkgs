@@ -17627,7 +17627,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  pysolfc = python3Packages.callPackage ../games/pysolfc { };
+  pysolfc = callPackage ../games/pysolfc { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
 
