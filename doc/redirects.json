@@ -3580,6 +3580,9 @@
   "using-pythonimportscheck": [
     "index.html#using-pythonimportscheck"
   ],
+  "using-pythonrelaxbuilddepshook": [
+    "index.html#using-pythonrelaxbuilddepshook"
+  ],
   "using-pythonrelaxdepshook": [
     "index.html#using-pythonrelaxdepshook"
   ],
