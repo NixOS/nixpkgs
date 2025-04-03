@@ -34,7 +34,10 @@ buildPythonPackage rec {
   optional-dependencies = {
     dotenv = [ python-dotenv ];
     timedelta = [ pytimeparse ];
-    toml = [ tomli tomli-w ];
+    toml = [
+      tomli
+      tomli-w
+    ];
     yaml = [ pyyaml ];
   };
 
@@ -45,7 +48,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # TypeError: dumps() got an unexpected keyword argument 'indent'
-    "test_catch_all"  # overly broad, but we're limited by pytest's selector syntax
+    "test_catch_all" # overly broad, but we're limited by pytest's selector syntax
     "test_toml_wizard_methods"
   ];
 
