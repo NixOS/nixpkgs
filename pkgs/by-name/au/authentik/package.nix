@@ -30,6 +30,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
+    broken = stdenvNoCC.hostPlatform.isAarch64;
     maintainers = with maintainers; [
       jvanbruegge
       risson
