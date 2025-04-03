@@ -8593,7 +8593,7 @@ with pkgs;
     )
       haskellPackages.haskell-ci;
 
-  nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
+  nimbo = callPackage ../applications/misc/nimbo { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
