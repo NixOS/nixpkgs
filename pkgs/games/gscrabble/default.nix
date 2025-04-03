@@ -6,7 +6,8 @@
   wrapGAppsHook3,
   gst_all_1,
   gobject-introspection,
-  python3Packages,
+  gst-python,
+  pygobject3,
   adwaita-icon-theme,
 }:
 
@@ -37,7 +38,7 @@ buildPythonApplication {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     gst-python
     pygobject3
   ];
