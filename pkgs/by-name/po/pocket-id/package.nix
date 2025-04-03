@@ -7,6 +7,7 @@
   makeWrapper,
   nodejs,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -91,6 +92,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) pocket-id;
+    };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
