@@ -453,6 +453,7 @@ python.pkgs.buildPythonApplication rec {
     "uv"
     "voluptuous-openapi"
     "yarl"
+    "zeroconf"
   ];
 
   # extract translations from pypi sdist
