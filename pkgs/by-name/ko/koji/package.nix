@@ -34,12 +34,15 @@ rustPlatform.buildRustPackage rec {
     openssl.dev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive CLI for creating conventional commits";
     homepage = "https://github.com/its-danny/koji";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ByteSudoer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ByteSudoer
+      WeetHet
+    ];
     mainProgram = "koji";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
