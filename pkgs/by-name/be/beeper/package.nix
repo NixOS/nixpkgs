@@ -69,6 +69,7 @@ appimageTools.wrapType2 {
       jshcmpbll
       mjm
       edmundmiller
+      zh4ngx
     ];
     platforms = [ "x86_64-linux" ];
   };
