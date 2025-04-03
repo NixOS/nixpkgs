@@ -284,7 +284,7 @@ with pkgs;
     extraPackages = [ jdk17 ];
   };
 
-  asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
+  asitop = callPackage ../os-specific/darwin/asitop { };
 
   cve = with python3Packages; toPythonApplication cvelib;
 
