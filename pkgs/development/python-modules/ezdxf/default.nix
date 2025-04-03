@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pyparsing,
   typing-extensions,
@@ -15,29 +14,31 @@
   matplotlib,
   pymupdf,
   pyqt5,
+  withGui ? false,
+  qt6,
 }:
 
 buildPythonPackage rec {
-  version = "1.3.2";
+  version = "1.4.0";
   pname = "ezdxf";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "ezdxf";
     tag = "v${version}";
-    hash = "sha256-BzdLl2GjLh2ABJzJ6bhdbic9jlSABIVR3XGrYiLJHa0=";
+    hash = "sha256-p8wvnBIOOcZ8XKPN1b9wsWF9eutSNeeoGSkgLfA/kjQ=";
   };
+
+  nativeBuildInputs = lib.optionals withGui [ qt6.wrapQtAppsHook ];
 
   dependencies = [
     pyparsing
     typing-extensions
     numpy
     fonttools
-  ];
+  ] ++ lib.optionals withGui ([ qt6.qtbase ] ++ optional-dependencies.draw);
 
   optional-dependencies = {
     draw = [
@@ -59,6 +60,12 @@ buildPythonPackage rec {
     cython
   ];
 
+  dontWrapQtApps = true;
+
+  preFixup = lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
   checkInputs = [ pillow ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -68,12 +75,13 @@ buildPythonPackage rec {
     "ezdxf.addons"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
     mainProgram = "ezdxf";
-    homepage = "https://github.com/mozman/ezdxf/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hodapp ];
-    platforms = platforms.unix;
+    homepage = "https://ezdxf.mozman.at/";
+    changelog = "https://github.com/mozman/ezdxf/blob/${src.rev}/notes/pages/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hodapp ];
+    platforms = lib.platforms.unix;
   };
 }
