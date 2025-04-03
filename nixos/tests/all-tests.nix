@@ -804,7 +804,7 @@ in
   moosefs = handleTest ./moosefs.nix { };
   movim = discoverTests (import ./web-apps/movim { inherit handleTestOn; });
   mpd = handleTest ./mpd.nix { };
-  mpv = handleTest ./mpv.nix { };
+  mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
   mumble = handleTest ./mumble.nix { };
