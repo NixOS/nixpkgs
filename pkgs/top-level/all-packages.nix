@@ -5464,7 +5464,7 @@ with pkgs;
 
   twurl = callPackage ../tools/misc/twurl { };
 
-  ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
+  ubidump = callPackage ../tools/filesystems/ubidump { };
 
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
