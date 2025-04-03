@@ -7,10 +7,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ringrtc-bin";
-  version = "2.50.2";
+  version = "2.50.3";
   src = fetchzip {
     url = "https://build-artifacts.signal.org/libraries/ringrtc-desktop-build-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-hNlz+gSulyJ//FdbPvY/5OHbtJ4rEUdi9/SHJDX6gZE=";
+    hash = "sha256-UJqH/UiT9j36r6fr673CP/Z4lGaSPXIzAkf72YZfExo=";
   };
 
   installPhase = ''
