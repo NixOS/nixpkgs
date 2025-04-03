@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "cockatrice";
-  version = "2025-02-10-Release-2.10.0";
+  version = "2025-03-27-Release-2.10.1";
 
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
     rev = version;
-    sha256 = "sha256-+/XmbBky0zdifofCineSIAwu16/g/UBsTJTB959twDM=";
+    sha256 = "sha256-vM12ufqoItlDeYXHhyN3Jkqm+chGgm9gB4xtIdDbI94=";
   };
 
   buildInputs = [
