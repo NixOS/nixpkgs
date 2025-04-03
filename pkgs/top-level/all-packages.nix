@@ -18679,7 +18679,7 @@ with pkgs;
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
   avell-unofficial-control-center =
-    python3Packages.callPackage ../applications/misc/avell-unofficial-control-center
+    callPackage ../applications/misc/avell-unofficial-control-center
       { };
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
