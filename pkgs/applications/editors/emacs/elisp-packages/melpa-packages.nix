@@ -1045,6 +1045,8 @@ let
           # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
           company-distel = ignoreCompilationError super.company-distel;
 
+          company-forge = buildWithGit super.company-forge;
+
           # qmltypes-table.el causing native-compiler-error-empty-byte
           company-qml = ignoreCompilationError super.company-qml;
 
