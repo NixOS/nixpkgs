@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.12.1";
+  version = "4.13.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pysal";
     repo = "libpysal";
     tag = "v${version}";
-    hash = "sha256-snhCEKeGKKj/bTDYi6ZVv5F4b/2rz/JHIFG2IoINQ+Q=";
+    hash = "sha256-lUaSUNNT2alfbBOjo59Dbjc3Yrkim3ZQHdLbxdrhDFw=";
   };
 
   build-system = [ setuptools-scm ];
