@@ -5,12 +5,12 @@
   gperf,
   perl,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
   libparserutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libhubbub";
+  pname = "libhubbub";
   version = "0.3.8";
 
   src = fetchurl {
@@ -23,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gperf
     perl
-    buildsystem
+    netsurf-buildsystem
     libparserutils
   ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
@@ -46,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       content well.
     '';
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })

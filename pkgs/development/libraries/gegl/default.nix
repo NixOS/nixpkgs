@@ -16,7 +16,7 @@
   lensfun,
   libspiro,
   maxflow,
-  netsurf,
+  libnsgif,
   pango,
   poly2tri-c,
   poppler,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       lensfun
       libspiro
       maxflow
-      netsurf.libnsgif
+      libnsgif
       pango
       poly2tri-c
       poppler

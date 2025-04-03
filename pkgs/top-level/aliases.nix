@@ -1166,6 +1166,24 @@ mapAliases {
   neocities-cli = neocities; # Added 2024-07-31
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
+  netsurf = recurseIntoAttrs {
+    browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
+    buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26
+    libcss = lib.warnOnInstantiate "'netsurf.libcss' has been renamed to 'libcss'" libcss; # Added 2025-03-26
+    libdom = lib.warnOnInstantiate "'netsurf.libdom' has been renamed to 'libdom'" libdom; # Added 2025-03-26
+    libhubbub = lib.warnOnInstantiate "'netsurf.libhubbub' has been renamed to 'libhubbub'" libhubbub; # Added 2025-03-26
+    libnsbmp = lib.warnOnInstantiate "'netsurf.libnsbmp' has been renamed to 'libnsbmp'" libnsbmp; # Added 2025-03-26
+    libnsfb = lib.warnOnInstantiate "'netsurf.libnsfb' has been renamed to 'libnsfb'" libnsfb; # Added 2025-03-26
+    libnsgif = lib.warnOnInstantiate "'netsurf.libnsgif' has been renamed to 'libnsgif'" libnsgif; # Added 2025-03-26
+    libnslog = lib.warnOnInstantiate "'netsurf.libnslog' has been renamed to 'libnslog'" libnslog; # Added 2025-03-26
+    libnspsl = lib.warnOnInstantiate "'netsurf.libnspsl' has been renamed to 'libnspsl'" libnspsl; # Added 2025-03-26
+    libnsutils = lib.warnOnInstantiate "'netsurf.libnsutils' has been renamed to 'libnsutils'" libnsutils; # Added 2025-03-26
+    libparserutils = lib.warnOnInstantiate "'netsurf.libparserutils' has been renamed to 'libparserutils'" libparserutils; # Added 2025-03-26
+    libsvgtiny = lib.warnOnInstantiate "'netsurf.libsvgtiny' has been renamed to 'libsvgtiny'" libsvgtiny; # Added 2025-03-26
+    libutf8proc = lib.warnOnInstantiate "'netsurf.libutf8proc' has been renamed to 'libutf8proc'" libutf8proc; # Added 2025-03-26
+    libwapcaplet = lib.warnOnInstantiate "'netsurf.libwapcaplet' has been renamed to 'libwapcaplet'" libwapcaplet; # Added 2025-03-26
+    nsgenbind = lib.warnOnInstantiate "'netsurf.nsgenbind' has been renamed to 'nsgenbind'" nsgenbind; # Added 2025-03-26
+  };
   nextcloud28 = throw ''
     Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring

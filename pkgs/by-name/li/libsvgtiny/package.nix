@@ -4,7 +4,7 @@
   fetchurl,
   gperf,
   pkg-config,
-  buildsystem,
+  netsurf-buildsystem,
   libdom,
   libhubbub,
   libparserutils,
@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "netsurf-libsvgtiny";
+  pname = "libsvgtiny";
   version = "0.1.8";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    buildsystem
+    netsurf-buildsystem
     libdom
     libhubbub
     libparserutils
@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "NSSHARED=${netsurf-buildsystem}/share/netsurf-buildsystem"
   ];
 
   meta = {
     homepage = "https://www.netsurf-browser.org/projects/libsvgtiny/";
     description = "NetSurf SVG decoder";
     license = lib.licenses.mit;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })

@@ -25,7 +25,7 @@
   xxd,
 
   # Netsurf-specific dependencies
-  buildsystem,
+  netsurf-buildsystem,
   libcss,
   libdom,
   libhubbub,
@@ -42,8 +42,14 @@
   nsgenbind,
 
   # Configuration
-  uilib,
+  uilib ? "gtk3",
 }:
+
+assert lib.assertOneOf "uilib" uilib [
+  "framebuffer"
+  "gtk2"
+  "gtk3"
+];
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf";
@@ -81,7 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
       libdom
       libhubbub
       libnsbmp
-      libnsfb
+      (libnsfb.override {
+        inherit
+          SDL
+          uilib
+          ;
+      })
       libnsgif
       libnslog
       libnspsl
@@ -147,6 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
       capable of handling many of the web standards in use today.
     '';
     license = lib.licenses.gpl2Only;
-    inherit (buildsystem.meta) maintainers platforms;
+    inherit (netsurf-buildsystem.meta) maintainers platforms;
   };
 })
