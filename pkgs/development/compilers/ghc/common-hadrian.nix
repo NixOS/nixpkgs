@@ -238,7 +238,15 @@
           ])
           [
             ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
-          ];
+          ]
+      ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
+        (fetchpatch {
+          name = "enable-ignore-build-platform-mismatch.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4ee094d46effd06093090fcba70f0a80d2a57e6c.patch";
+          includes = [ "configure.ac" ];
+          hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
+        })
+      ];
 
     stdenv = stdenvNoCC;
   },
@@ -602,7 +610,15 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals enableUnregisterised [
         "--enable-unregisterised"
-      ];
+      ]
+      ++
+        lib.optionals
+          (stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl && lib.versionOlder version "9.12")
+          [
+            # The bootstrap binaries for aarch64 musl were built for the wrong triple.
+            # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13182
+            "--enable-ignore-build-platform-mismatch"
+          ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.
     strictDeps = true;
