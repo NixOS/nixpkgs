@@ -10,7 +10,7 @@ let
   cfg = config.systemd.repart;
   initrdCfg = config.boot.initrd.systemd.repart;
 
-  format = pkgs.formats.ini { };
+  format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
   definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
     lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
@@ -93,6 +93,7 @@ in
               str
               int
               bool
+              (listOf str)
             ])
           );
         default = { };
@@ -109,8 +110,7 @@ in
         description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
-          configuration can use all upstream options. See <link
-          xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
+          configuration can use all upstream options. See {manpage}`repart.d(5)`
           for all available options.
         '';
       };

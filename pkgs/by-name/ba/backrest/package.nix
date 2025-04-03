@@ -11,13 +11,13 @@
 }:
 let
   pname = "backrest";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-I6UGxqZRtCai86Yq5VIg1ROYSQx4voQccPGRf7XdxYo=";
+    hash = "sha256-X3FiNor2q/JgyV05CIAls7MjMvongH5dGeutPz+CW9I=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {

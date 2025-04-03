@@ -19,7 +19,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@0d564482f06ca65fa9e77e2510873638c82206f2 # v1.11.5
+      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}

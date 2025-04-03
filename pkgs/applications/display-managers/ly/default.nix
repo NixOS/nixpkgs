@@ -31,7 +31,11 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    ln -s ${
+      callPackage ./deps.nix {
+        zig = zig_0_12;
+      }
+    } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   passthru.tests = { inherit (nixosTests) ly; };

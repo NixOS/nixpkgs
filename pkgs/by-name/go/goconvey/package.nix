@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "goconvey";
   version = "1.8.1-unstable-2024-03-06";
 

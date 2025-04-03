@@ -27,7 +27,16 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost186,
+  # Note when trying to upgrade boost:
+  # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
+  #   and default to that.
+  # * The version that Ceph downloads if `-DWITH_SYSTEM_BOOST:BOOL=ON` is not given
+  #   is declared in `cmake/modules/BuildBoost.cmake` line `set(boost_version ...)`.
+  #
+  # If you want to upgrade to boost >= 1.86, you need a Ceph version that
+  # has this PR in:
+  #     https://github.com/ceph/ceph/pull/61312
+  boost183,
   bzip2,
   cryptsetup,
   cunit,
@@ -174,6 +183,7 @@ let
       johanot
       krav
       nh2
+      benaryorg
     ];
     platforms = [
       "x86_64-linux"
@@ -296,7 +306,7 @@ let
       };
   };
 
-  boost' = boost186.override {
+  boost' = boost183.override {
     enablePython = true;
     inherit python;
   };
@@ -346,10 +356,10 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.0";
+  version = "19.2.1";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-30vkW1j49hFIxyxzkssSKVSq0VqiwLfDtOb62xfxadM=";
+    hash = "sha256-QEX3LHxySVgLBg21iQga1DnyQsXFi6593e+WSjgT/h8=";
   };
 in
 rec {
@@ -364,12 +374,6 @@ rec {
         hash = "sha256-21fi5tMIs/JmuhwPYMWtampv/aqAe+EoPAXZLJlOvgo=";
         stripLen = 1;
         extraPrefix = "src/s3select/";
-      })
-
-      (fetchpatch2 {
-        name = "ceph-gcc-14.patch";
-        url = "https://github.com/ceph/ceph/commit/0eace4ea9ea42412d4d6a16d24a8660642e41173.patch?full_index=1";
-        hash = "sha256-v+AExf/npe4NgmVl2j6o8860nwF9YuzC/vR0TWxTrIE=";
       })
 
       ./boost-1.85.patch
@@ -476,9 +480,20 @@ rec {
       "${placeholder "out"}/${ceph-python-env.sitePackages}"
     ];
 
-    # replace /sbin and /bin based paths with direct nix store paths
-    # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
+    # * `unset AS` because otherwise the Ceph CMake build errors with
+    #       configure: error: No modern nasm or yasm found as required. Nasm should be v2.11.01 or later (v2.13 for AVX512) and yasm should be 1.2.0 or later.
+    #   because the code at
+    #       https://github.com/intel/isa-l/blob/633add1b569fe927bace3960d7c84ed9c1b38bb9/configure.ac#L99-L191
+    #   doesn't even consider using `nasm` or `yasm` but instead uses `$AS`
+    #   from `gcc-wrapper`.
+    #   (Ceph's error message is extra confusing, because it says
+    #   `No modern nasm or yasm found` when in fact it found e.g. `nasm`
+    #   but then uses `$AS` instead.
+    # * replace /sbin and /bin based paths with direct nix store paths
+    # * increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
     preConfigure = ''
+      unset AS
+
       substituteInPlace src/common/module.c \
         --replace "char command[128];" "char command[256];" \
         --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \

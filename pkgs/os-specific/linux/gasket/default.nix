@@ -7,7 +7,7 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gasket";
   version = "1.0-18-unstable-2024-04-25";
 

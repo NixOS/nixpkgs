@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "jsonlines";
-  version = "3.1.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "wbolster";
     repo = pname;
     rev = version;
-    hash = "sha256-eMpUk5s49OyD+cNGdAeKA2LvpXdKta2QjZIFDnIBKC8=";
+    hash = "sha256-KNEJdAxEgd0NGPnk9J51C3yUN2e6Cvvevth0iKOMlhE=";
   };
 
   propagatedBuildInputs = [ attrs ];

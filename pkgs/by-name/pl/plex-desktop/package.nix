@@ -2,40 +2,29 @@
   alsa-lib,
   autoPatchelfHook,
   buildFHSEnv,
-  dbus,
   elfutils,
-  expat,
   extraEnv ? { },
-  fetchFromGitLab,
   fetchurl,
-  glib,
-  glibc,
+  ffmpeg_6-headless,
   lib,
-  libGL,
-  libapparmor,
-  libbsd,
   libdrm,
   libedit,
-  libffi_3_3,
-  libgcrypt,
-  libglvnd,
+  libpulseaudio,
+  libva,
+  libxkbcommon,
   makeShellWrapper,
-  sqlite,
+  minizip,
+  nss,
   squashfsTools,
   stdenv,
-  tcp_wrappers,
-  udev,
-  waylandpp,
   writeShellScript,
   xkeyboard_config,
   xorg,
-  xz,
-  zstd,
 }:
 let
   pname = "plex-desktop";
-  version = "1.101.0";
-  rev = "75";
+  version = "1.108.1";
+  rev = "84";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -50,23 +39,12 @@ let
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
   };
-
-  # The latest unstable version isn't compatible with libraries that ship in the snap.
-  libglvnd-1_4_0 = libglvnd.overrideAttrs {
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "glvnd";
-      repo = "libglvnd";
-      rev = "v1.4.0";
-      sha256 = "sha256-Y6JHRygXcZtnrdnqi1Lzyvh/635gwZWnMeW9aRCpxxs";
-    };
-  };
   plex-desktop = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-3ofO4a8HDWeUfjsv+4A5bC0jlQwxIew1CnL39Oa0bjnqShwRQjMW1vSHOjsJ1AHMkbp3h5W/2tFRxPL2C/Heqg==";
+      hash = "sha512-ZcP84maap5Dskf9yECd76gn5x+tWxyVcIo+c0P2VJiQ4VwN2KCgWmwH2JkHzafFCcCFm9EqFBrFlNXWEvnUieQ==";
     };
 
     nativeBuildInputs = [
@@ -76,25 +54,26 @@ let
     ];
 
     buildInputs = [
-      alsa-lib
-      dbus
       elfutils
-      expat
-      glib
-      libGL
-      libapparmor
-      libbsd
-      libedit
-      libffi_3_3
-      libgcrypt
-      sqlite
+      ffmpeg_6-headless
+      libpulseaudio
+      libva
+      libxkbcommon
+      minizip
+      nss
       stdenv.cc.cc
-      tcp_wrappers
-      udev
-      waylandpp
+      xorg.libXcomposite
+      xorg.libXdamage
       xorg.libXinerama
-      xz
-      zstd
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libxshmfence
+      xorg.xcbutilimage
+      xorg.xcbutilkeysyms
+      xorg.xcbutilrenderutil
+      xorg.xcbutilwm
+      xorg.xrandr
     ];
 
     strictDeps = true;
@@ -112,17 +91,32 @@ let
       runHook preInstall
 
       cp -r . $out
+      rm -r $out/etc
+      rm -r $out/usr
+
+      # flatpak removes these during installation.
+      rm -r $out/lib/dri
+      rm $out/lib/libpciaccess.so*
+      rm $out/lib/libswresample.so*
+      rm $out/lib/libva-*.so*
+      rm $out/lib/libva.so*
+      rm $out/lib/libEGL.so*
+      rm $out/lib/libdrm.so*
+      rm $out/lib/libdrm*
 
       ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
-      rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-      ln -s ${alsa-lib}/lib/libasound.so.2 $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-      rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
-      ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
 
-      ln -snf ${glib.dev}/bin/gio-querymodules $out/usr/bin/gio-querymodules
-      ln -snf ${glib.dev}/bin/glib-compile-schemas $out/usr/bin/glib-compile-schemas
-      rm $out/usr/share/doc/libglib2.0-bin/changelog.Debian.gz
-      rm $out/usr/share/doc/libxml2/NEWS.gz
+      # Keep dependencies where the version from nixpkgs is higher.
+      cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2
+      cp usr/lib/x86_64-linux-gnu/libjbig.so.0 $out/lib/libjbig.so.0
+      cp usr/lib/x86_64-linux-gnu/libjpeg.so.8 $out/lib/libjpeg.so.8
+      cp usr/lib/x86_64-linux-gnu/liblcms2.so.2 $out/lib/liblcms2.so.2
+      cp usr/lib/x86_64-linux-gnu/libpci.so.3.6.4 $out/lib/libpci.so.3
+      cp usr/lib/x86_64-linux-gnu/libsnappy.so.1.1.8 $out/lib/libsnappy.so.1
+      cp usr/lib/x86_64-linux-gnu/libtiff.so.5 $out/lib/libtiff.so.5
+      cp usr/lib/x86_64-linux-gnu/libwebp.so.6 $out/lib/libwebp.so.6
+      cp usr/lib/x86_64-linux-gnu/libxkbfile.so.1.0.2 $out/lib/libxkbfile.so.1
+      cp usr/lib/x86_64-linux-gnu/libxslt.so.1.1.34 $out/lib/libxslt.so.1
 
       runHook postInstall
     '';
@@ -131,6 +125,7 @@ in
 buildFHSEnv {
   inherit pname version meta;
   targetPkgs = pkgs: [
+    alsa-lib
     libdrm
     xkeyboard_config
   ];
@@ -158,16 +153,7 @@ buildFHSEnv {
     # db files should have write access.
     chmod --recursive 750 "$PLEX_DB"
 
-    PLEX_USR_PATH=${lib.makeSearchPath "usr/lib/x86_64-linux-gnu" [ plex-desktop ]}
-
     set -o allexport
-    LD_LIBRARY_PATH=${
-      lib.makeLibraryPath [
-        plex-desktop
-        libglvnd-1_4_0
-      ]
-    }:$PLEX_USR_PATH
-    LIBGL_DRIVERS_PATH=$PLEX_USR_PATH/dri
     ${lib.toShellVars extraEnv}
     exec ${plex-desktop}/Plex.sh
   '';

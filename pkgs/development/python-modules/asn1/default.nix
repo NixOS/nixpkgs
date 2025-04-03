@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "2.8.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "andrivet";
     repo = "python-asn1";
     tag = "v${version}";
-    hash = "sha256-DLKfdQzYLhfaIEPPymTzRqj3+L/fsm5Jh8kqud/ezfw=";
+    hash = "sha256-OVDhA5ClnwJJwZw0oinAUUDBN/s2ECgHXEww+8hB/fQ=";
   };
 
   build-system = [ setuptools ];

@@ -8,7 +8,7 @@ nvidia_x11: sha256:
   libtirpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvidia-persistenced";
   version = nvidia_x11.persistencedVersion;
 

@@ -1,9 +1,5 @@
-# Compatibility shim
-let
-  lib = import ../../../lib;
-  inherit (lib) mapAttrs;
-  everything = import ./amazon-ec2-amis.nix;
-  doAllVersions = mapAttrs (versionName: doRegion);
-  doRegion = mapAttrs (regionName: systems: systems.x86_64-linux);
-in
-doAllVersions everything
+throw ''
+  This file is not the source for amazon AMIs anymore since 24.05.
+  The canonical source for NixOS AMIs is the AWS API. Please see
+  https://nixos.org/download/#nixos-amazon or https://nixos.github.io/amis/ for instructions
+''

@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
-, libglvnd, libgbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  attr,
+  judy,
+  keyutils,
+  libaio,
+  libapparmor,
+  libbsd,
+  libcap,
+  libgcrypt,
+  lksctp-tools,
+  zlib,
+  libglvnd,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.18.10";
+  version = "0.18.11";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "stress-ng";
     rev = "V${version}";
-    hash = "sha256-RZc3OJkonXOW8iqSsHd/EA4XVTSiRO0ZRdAam3JC0MA=";
+    hash = "sha256-2C/hOjlv9pMLOa0hPSgN+az45qOXekaCAfl++J/cV3M=";
   };
 
   postPatch = ''
@@ -19,9 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs = [ judy libbsd libgcrypt zlib ]
+  buildInputs =
+    [
+      judy
+      libbsd
+      libgcrypt
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd libgbm
+      attr
+      keyutils
+      libaio
+      libapparmor
+      libcap
+      lksctp-tools
+      libglvnd
+      libgbm
     ];
 
   makeFlags = [

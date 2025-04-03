@@ -69,7 +69,7 @@ buildPythonPackage rec {
     uvicorn
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  optional-dependencies = rec {
+  optional-dependencies = {
     login = [
       attrs
       httpx

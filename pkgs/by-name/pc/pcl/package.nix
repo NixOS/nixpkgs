@@ -14,6 +14,7 @@
   libXt,
   libpcap,
   libusb1,
+  llvmPackages,
 
   # nativeBuildInputs
   boost,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsForQt5.qtbase
     libusb1
+    llvmPackages.openmp
   ];
 
   propagatedBuildInputs = [
@@ -73,8 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CUDA" true)
   ];
 
-  passthru = {
-    updateScript = gitUpdater { rev-prefix = "pcl-"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "pcl-";
+    ignoredVersions = "rc";
   };
 
   meta = {
@@ -82,11 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open project for 2D/3D image and point cloud processing";
     changelog = "https://github.com/PointCloudLibrary/pcl/blob/pcl-${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
-    platforms = with lib.platforms; linux ++ darwin;
-    badPlatforms = [
-      # fatal error: 'omp.h' file not found
-      lib.systems.inspect.patterns.isDarwin
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      usertam
     ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, gtest
-, jre
-, pkg-config
-, boost
-, icu
-, protobuf
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  cmake,
+  gtest,
+  jre,
+  pkg-config,
+  boost,
+  icu,
+  protobuf,
+  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "8.13.53";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JYz/R8vS9sJ8cv/GRPwrA31Hb1ofZvW3OQBNp5lDlg8=";
+    hash = "sha256-FEe04DNJKNB74P0s03DMgNtqtrLDN7uScIIltctKYic=";
   };
 
   patches = [
@@ -36,13 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    boost
-    icu
-    protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-  ];
+  buildInputs =
+    [
+      boost
+      icu
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
 
   cmakeDir = "../cpp";
 

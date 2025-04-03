@@ -6,6 +6,7 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
+  fetchpatch,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -38,7 +39,7 @@
   alsa-lib,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  browserSupport ? false, # FIXME: broken
+  browserSupport ? true,
   libcef,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
@@ -68,13 +69,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.1";
+  version = "31.0.3";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-dwS/90j4WfcneAsGFwuABM7xqvq1+VSD2uDVdU/GgQo=";
+    hash = "sha256-i1wkGlafPvfMTsQr5Ww5iwmUu+23cr0YmN10llJfohA=";
     fetchSubmodules = true;
   };
 
@@ -84,6 +85,33 @@ stdenv.mkDerivation (finalAttrs: {
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
+    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
+    (fetchpatch {
+      name = "Check-source-validity-before-attempting-to-log-rende.patch";
+      url = "https://github.com/obsproject/obs-browser/pull/478.patch";
+      revert = true;
+      stripLen = 1;
+      extraPrefix = "plugins/obs-browser/";
+      hash = "sha256-mQVhK4r8LlK2F9/jlDHA1V6M29mAfxWAU/VsMXYNrhU=";
+    })
+    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
+    (fetchpatch {
+      name = "Print-browser-source-renderer-crashes-to-OBS-log.patch";
+      url = "https://github.com/obsproject/obs-browser/pull/475.patch";
+      revert = true;
+      stripLen = 1;
+      extraPrefix = "plugins/obs-browser/";
+      hash = "sha256-ha77OYpWn57JovPNE+izyDOB/2KlF3qWVv/PGEgyu84=";
+    })
+    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
+    (fetchpatch {
+      name = "Log-error-if-CefInitialize-fails.patch.patch";
+      url = "https://github.com/obsproject/obs-browser/pull/477.patch";
+      revert = true;
+      stripLen = 1;
+      extraPrefix = "plugins/obs-browser/";
+      hash = "sha256-MMLFQtpWjfpti/38qEcOuXr1L3s1MPRHjuaZCjNmvt0=";
+    })
   ];
 
   nativeBuildInputs =

@@ -1,8 +1,6 @@
 {
   fetchFromGitHub,
   fetchFromGitiles,
-  fetchgit,
-  fetchurl,
   runCommand,
   lib,
 }:

@@ -21,18 +21,21 @@
   pandas,
   pylint,
   pytest,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker-core";
-  version = "1.0.22";
+  version = "1.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
     tag = "v${version}";
-    hash = "sha256-RoLLgOhG4M71Nx1aryDt1mt0sZ2zEqYRJTjQRSVuf8M=";
+    hash = "sha256-VfqQJf0r11z+GT/jpcVBdP2nLWf1lsjvijb1IsbOILQ=";
   };
 
   build-system = [
@@ -69,12 +72,20 @@ buildPythonPackage rec {
     "sagemaker_core"
   ];
 
-  # Only a single test which fails with:
-  # ValueError: Must setup local AWS configuration with a region supported by SageMaker.
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTestPaths = [
+    # Tries to import deprecated `sklearn`
+    "integ/test_codegen.py"
+
+    # botocore.exceptions.NoRegionError: You must specify a region
+    "tst/generated/test_logs.py"
+  ];
 
   meta = {
-    description = "Python SDK designed to provide an object-oriented interface for interacting with Amazon SageMaker resources";
+    description = "Python object-oriented interface for interacting with Amazon SageMaker resources";
     homepage = "https://github.com/aws/sagemaker-core";
     changelog = "https://github.com/aws/sagemaker-core/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;

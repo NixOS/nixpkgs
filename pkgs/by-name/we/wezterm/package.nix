@@ -39,19 +39,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KKfGB1vM8ytpNieWD6CHD5zVyUe17tFAegZFzLx7QfE=";
   };
 
-  postPatch = ''
-    echo ${version} > .tag
+  postPatch =
+    ''
+      echo ${version} > .tag
 
-    # tests are failing with: Unable to exchange encryption keys
-    rm -r wezterm-ssh/tests
-
-    # hash does not work well with NixOS
-    substituteInPlace assets/shell-integration/wezterm.sh \
-      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-  '';
+      # hash does not work well with NixOS
+      substituteInPlace assets/shell-integration/wezterm.sh \
+        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # many tests fail with: No such file or directory
+      rm -r wezterm-ssh/tests
+    '';
 
   cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
   useFetchCargoVendor = true;

@@ -2,27 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  mock,
   pytest,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-unordered";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utapyngo";
     repo = "pytest-unordered";
     tag = "v${version}";
-    hash = "sha256-51UJjnGBO7qBvQlY8F0B29n8+EO2aa3DF3WOwcjZzSo=";
+    hash = "sha256-nANsX28+G8jcSe8X0dB6Tu3HYHd9ebGkh1AUx8Xq8HM=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
   nativeCheckInputs = [
-    # https://github.com/utapyngo/pytest-unordered/issues/15
-    pytest7CheckHook
+    mock
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pytest_unordered" ];

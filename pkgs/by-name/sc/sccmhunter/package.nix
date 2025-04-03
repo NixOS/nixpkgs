@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "sccmhunter";
-  version = "1.0.6-unstable-2024-11-07";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
-    rev = "33c23f0d71e48127a0b03b06a019148df71049ef";
-    hash = "sha256-mU3GKgX8gcuJ+YT3xL0/dDds34uhFD+Rc3m15W7zoKc=";
+    rev = "v.1.0.8";
+    hash = "sha256-WCrC9YdiTx1qwsnylFK/6pjdwErimjcsJ0gSHegvkzo=";
   };
 
   build-system = with python3Packages; [

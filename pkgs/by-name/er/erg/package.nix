@@ -1,25 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, python3
-, which
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  which,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "erg";
-  version = "0.6.51";
+  version = "0.6.52";
 
   src = fetchFromGitHub {
     owner = "erg-lang";
     repo = "erg";
     rev = "v${version}";
-    hash = "sha256-pradjKj5luXcMZa9/p06l9H+3QTM1BrFtm23gKJv/I8=";
+    hash = "sha256-P59PUdwSGZHiQltyMhL683pt8mM96cDko9zfaep9lYU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WBEXnqi7Emv01usgeN4ktvp2Z4kqYutlYrPkR8M7U5A=";
+  cargoHash = "sha256-krO4jqkLFFeiqC2Y+RKZs0poQpsHcpMsNlYG6q8IXxo=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -61,7 +62,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "erg";
     homepage = "https://github.com/erg-lang/erg";
     changelog = "https://github.com/erg-lang/erg/releases/tag/${src.rev}";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

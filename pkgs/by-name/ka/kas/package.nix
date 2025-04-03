@@ -17,6 +17,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-P2I3lLa8kuCORdlrwcswrWFwOA8lW2WL4Apv/2T7+f8=";
   };
 
+  patches = [ ./pass-terminfo-env.patch ];
+
   propagatedBuildInputs = with python3.pkgs; [
     setuptools
     kconfiglib

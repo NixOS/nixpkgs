@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.32.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    hash = "sha256-UnldXIQD05yPFPuES5PvWFu0xQf72iht10GYJFZdZlQ=";
+    hash = "sha256-yqoP24SNjq7YZ9QfkZQte6tsSeR16ScknXgZ5nQJerI=";
   };
 
   nativeBuildInputs = [

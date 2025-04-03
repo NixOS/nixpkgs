@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, unzip
-, zlib
-, python3
-, parallel
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  unzip,
+  zlib,
+  python3,
+  parallel,
 }:
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1609";
+  version = "1615";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
     rev = "refs/tags/${version}";
-    hash = "sha256-QSl2RvHilsD5Z65QC9Q6Flqx3gIXeoKyFOO5LWoV6MQ=";
+    hash = "sha256-1opYdV4nszLSuHNCo0HuURuPYby8oVGXwQvDd68mDOM=";
   };
 
   nativeBuildInputs = [

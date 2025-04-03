@@ -1,19 +1,19 @@
 {
-  lib,
   fetchFromGitHub,
-  sqlite,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  sqlite,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "sqlite_fdw";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pgspider";
     repo = "sqlite_fdw";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zPVIFzUv6UFFHq0Zi5MeQOcvgsfZAKGkkNIGxkTJ+oo=";
   };
 

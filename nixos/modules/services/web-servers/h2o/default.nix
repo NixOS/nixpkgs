@@ -6,7 +6,6 @@
 }:
 
 # TODO: Gems includes for Mruby
-# TODO: Recommended options
 let
   cfg = config.services.h2o;
   inherit (config.security.acme) certs;
@@ -21,6 +20,8 @@ let
     ;
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
+  inherit (import ./common.nix { inherit lib; }) tlsRecommendationsOption;
 
   settingsFormat = pkgs.formats.yaml { };
 
@@ -51,7 +52,7 @@ let
 
   # Attrset with the ACME certificate names split by whether or not they depend
   # on H2O serving challenges.
-  certNames =
+  acmeCertNames =
     let
       partition =
         acc: vhostSettings:
@@ -66,15 +67,43 @@ let
         else
           acc;
 
-      certNames' = lib.lists.foldl partition {
+      certNames = lib.lists.foldl partition {
         dependent = [ ];
         independent = [ ];
       } acmeEnabledHostsConfigs;
     in
-    certNames'
+    certNames
     // {
-      all = certNames'.dependent ++ certNames'.independent;
+      all = certNames.dependent ++ certNames.independent;
     };
+
+  mozTLSRecs =
+    if cfg.defaultTLSRecommendations != null then
+      let
+        # NOTE: if updating, *do* verify the changes then adjust ciphers &
+        # other settings with the tests @
+        # `nixos/tests/web-servers/h2o/tls-recommendations.nix`
+        # & run with `nix-build -A nixosTests.h2o.tls-recommendations`
+        version = "5.7";
+        git_tag = "v5.7.1";
+        guidelinesJSON =
+          lib.pipe
+            {
+              urls = [
+                "https://ssl-config.mozilla.org/guidelines/${version}.json"
+                "https://raw.githubusercontent.com/mozilla/ssl-config-generator/refs/tags/${git_tag}/src/static/guidelines/${version}.json"
+              ];
+              sha256 = "sha256:1mj2pcb1hg7q2wpgdq3ac8pc2q64wvwvwlkb9xjmdd9jm4hiyny7";
+            }
+            [
+              pkgs.fetchurl
+              builtins.readFile
+              builtins.fromJSON
+            ];
+      in
+      guidelinesJSON.configurations
+    else
+      null;
 
   hostsConfig = lib.concatMapAttrs (
     name: value:
@@ -86,7 +115,7 @@ let
 
       names = getNames name value;
 
-      acmeSettings = lib.optionalAttrs (builtins.elem names.cert certNames.dependent) (
+      acmeSettings = lib.optionalAttrs (builtins.elem names.cert acmeCertNames.dependent) (
         let
           acmePort = 80;
           acmeChallengePath = "/.well-known/acme-challenge";
@@ -130,23 +159,98 @@ let
             ]
           )
           {
-            "${names.server}:${builtins.toString port.TLS}" = value.settings // {
-              listen =
-                let
-                  identity =
-                    value.tls.identity
-                    ++ lib.optional (builtins.elem names.cert certNames.all) {
-                      key-file = "${certs.${names.cert}.directory}/key.pem";
-                      certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
-                    };
-                in
-                {
-                  port = port.TLS;
-                  ssl = value.tls.extraSettings // {
-                    inherit identity;
+            "${names.server}:${builtins.toString port.TLS}" =
+              let
+                tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
+
+                hasTLSRecommendations = tlsRecommendations != null && mozTLSRecs != null;
+
+                # ATTENTION: Let’s Encrypt has sunset OCSP stapling.
+                tlsRecAttrs =
+                  # If using ACME, this module will disable H2O’s default OCSP
+                  # stapling.
+                  #
+                  # See: https://letsencrypt.org/2024/12/05/ending-ocsp/
+                  lib.optionalAttrs (builtins.elem names.cert acmeCertNames.all) {
+                    ocsp-update-interval = 0;
+                  }
+                  # Mozilla’s ssl-config-generator is at present still
+                  # recommending this setting as well, but this module will
+                  # skip setting a stapling value as Let’s Encrypt + ACME is
+                  # the most likely use case.
+                  #
+                  # See: https://github.com/mozilla/ssl-config-generator/issues/323
+                  // lib.optionalAttrs hasTLSRecommendations (
+                    let
+                      recs = mozTLSRecs.${tlsRecommendations};
+                    in
+                    {
+                      min-version = builtins.head recs.tls_versions;
+                      cipher-preference = "server";
+                      "cipher-suite-tls1.3" = recs.ciphersuites;
+                    }
+                    // lib.optionalAttrs (recs.ciphers.openssl != [ ]) {
+                      cipher-suite = lib.concatStringsSep ":" recs.ciphers.openssl;
+                    }
+                  );
+
+                headerRecAttrs =
+                  lib.optionalAttrs
+                    (
+                      hasTLSRecommendations
+                      && value.tls != null
+                      && builtins.elem value.tls.policy [
+                        "force"
+                        "only"
+                      ]
+                    )
+                    (
+                      let
+                        headerSet = value.settings."header.set" or [ ];
+                        recs = mozTLSRecs.${tlsRecommendations};
+                        hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                      in
+                      {
+                        "header.set" =
+                          if builtins.isString headerSet then
+                            [
+                              headerSet
+                              hsts
+                            ]
+                          else
+                            headerSet ++ [ hsts ];
+                      }
+                    );
+
+                listen =
+                  let
+                    identity =
+                      value.tls.identity
+                      ++ lib.optional (builtins.elem names.cert acmeCertNames.all) {
+                        key-file = "${certs.${names.cert}.directory}/key.pem";
+                        certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
+                      };
+
+                    baseListen =
+                      {
+                        port = port.TLS;
+                        ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
+                          inherit identity;
+                        };
+                      }
+                      // lib.optionalAttrs (value.host != null) {
+                        host = value.host;
+                      };
+
+                    # QUIC, if used, will duplicate the TLS over TCP directive, but
+                    # append some extra QUIC-related settings
+                    quicListen = lib.optional (value.tls.quic != null) (baseListen // { inherit (value.tls) quic; });
+                  in
+                  {
+                    listen = [ baseListen ] ++ quicListen;
                   };
-                };
-            };
+              in
+              value.settings // headerRecAttrs // listen;
           };
     in
     # With a high likelihood of HTTP & ACME challenges being on the same port,
@@ -184,11 +288,13 @@ in
       };
 
       package = lib.mkPackageOption pkgs "h2o" {
-        example = ''
-          pkgs.h2o.override {
-            withMruby = false;
-          };
-        '';
+        example = # nix
+          ''
+            pkgs.h2o.override {
+              withMruby = false;
+              openssl = pkgs.openssl_legacy;
+            }
+          '';
       };
 
       defaultHTTPListenPort = mkOption {
@@ -209,20 +315,32 @@ in
         example = 8443;
       };
 
+      defaultTLSRecommendations = tlsRecommendationsOption;
+
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
         description = "Configuration for H2O (see <https://h2o.examp1e.net/configure.html>)";
+        example =
+          literalExpression
+            # nix
+            ''
+              {
+                compress = "ON";
+                ssl-offload = "kernel";
+                http2-reprioritize-blocking-assets = "ON";
+                "file.mime.addtypes" = {
+                  "text/x-rst" = {
+                    extensions = [ ".rst" ];
+                    is_compressible = "YES";
+                  };
+                };
+              }
+            '';
       };
 
       hosts = mkOption {
-        type = types.attrsOf (
-          types.submodule (
-            import ./vhost-options.nix {
-              inherit config lib;
-            }
-          )
-        );
+        type = types.attrsOf (types.submodule (import ./vhost-options.nix { inherit config lib; }));
         default = { };
         description = ''
           The `hosts` config to be merged with the settings.
@@ -240,7 +358,7 @@ in
                 "hydra.example.com" = {
                   tls = {
                     policy = "force";
-                    indentity = [
+                    identity = [
                       {
                         key-file = "/path/to/key";
                         certificate-file = "/path/to/cert";
@@ -300,9 +418,9 @@ in
           groups = config.users.groups;
           services = [
             config.systemd.services.h2o
-          ] ++ lib.optional (certNames.all != [ ]) config.systemd.services.h2o-config-reload;
+          ] ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
         }
-      ) certNames.all;
+      ) acmeCertNames.all;
 
     users = {
       users.${cfg.user} =
@@ -318,13 +436,13 @@ in
     systemd.services.h2o = {
       description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) certNames.all);
+      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) acmeCertNames.all);
       # Since H2O will be hosting the challenges, H2O must be started
-      before = builtins.map (certName: "acme-${certName}.service") certNames.dependent;
+      before = builtins.map (certName: "acme-${certName}.service") acmeCertNames.dependent;
       after =
         [ "network.target" ]
-        ++ builtins.map (certName: "acme-selfsigned-${certName}.service") certNames.all
-        ++ builtins.map (certName: "acme-${certName}.service") certNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
+        ++ builtins.map (certName: "acme-selfsigned-${certName}.service") acmeCertNames.all
+        ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
 
       serviceConfig = {
         ExecStart = "${h2oExe} --mode 'master'";
@@ -377,15 +495,17 @@ in
     # of certs end-to-end.
     systemd.services.h2o-config-reload =
       let
-        tlsTargets = map (certName: "acme-${certName}.target") certNames.all;
-        tlsServices = map (certName: "acme-${certName}.service") certNames.all;
+        tlsTargets = map (certName: "acme-${certName}.target") acmeCertNames.all;
+        tlsServices = map (certName: "acme-${certName}.service") acmeCertNames.all;
       in
-      mkIf (certNames.all != [ ]) {
+      mkIf (acmeCertNames.all != [ ]) {
         wantedBy = tlsServices ++ [ "multi-user.target" ];
         before = tlsTargets;
         after = tlsServices;
         unitConfig = {
-          ConditionPathExists = map (certName: "${certs.${certName}.directory}/fullchain.pem") certNames.all;
+          ConditionPathExists = map (
+            certName: "${certs.${certName}.directory}/fullchain.pem"
+          ) acmeCertNames.all;
           # Disable rate limiting for this since it may be triggered quickly
           # a bunch of times if a lot of certificates are renewed in quick
           # succession. The reload itself is cheap, so even doing a lot of them

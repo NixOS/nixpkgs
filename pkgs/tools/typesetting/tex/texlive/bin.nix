@@ -251,6 +251,16 @@ rec {
 
     inherit (common) binToOutput src prePatch;
 
+    patches = [
+      (fetchpatch {
+        # do not create extractbb -> xdvipdfmx link
+        name = "extractbb-separate-package.patch";
+        url = "https://github.com/TeX-Live/texlive-source/commit/e48aafd2889281e5e9082cf2e4815a906b9a68ec.patch";
+        hash = "sha256-Rh0PJeUgKUfmgZ+WXnTteM5A0vXPEajKzZBU7AoE7Vs";
+        excludes = [ "texk/dvipdfm-x/ChangeLog" ];
+      })
+    ];
+
     outputs = [
       "out"
       "dev"
@@ -694,11 +704,14 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
+        hash = "sha256-egUACsP2vwYx2uvSCZ8H/jLU9f17Siz8gFWwCNSXsIQ=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
       texdocContainer = texlive.pkgs.asymptote.texdoc;
+
+      # build issue with asymptote 2.95 has been fixed
+      postConfigure = "";
     }
   );
 

@@ -702,7 +702,6 @@ TgpAlop/PjMQZ0tdVIyYM2EkFWdvWIgxg2TMsif9wTg=  share/snis/sounds/slider-noise.ogg
 D7nFmIgGwYBCdTFVxoUUnO26gyZVxO58GLxSpsOlgeA=  share/snis/sounds/atlas_rocket_sample.ogg
 wrQ8oxfGgi2CU94MxsvjH4XUvnHA2F+FqI7S4ikTTH0=  share/snis/sounds/robot-remove-component.ogg
 ErOZM6hPxAiQ0quCZ/qsdMx47hI9iaqrMTHWpeuM4Kk=  share/snis/sounds/ui18.ogg
-AbpHGcgLb+kRsJGnwFEktk7uzpZOCcBY74+YBdrKVGs=  share/snis/sounds/.gitignore
 HFw3Y9tECsE4EIgO3EpxW0LAQb6IqKmEZmwWsJQqzHw=  share/snis/sounds/crewmember-has-joined.ogg
 stbsVMZbvmUXpN/UaaGiSv40poGPmIenbP9kW/jHUqk=  share/snis/sounds/spacemonster_slap.ogg
 AcO73sTqhfaKsDrq4sW+n3j/jaUzmPWyoNtjeAoNmC0=  share/snis/sounds/ui5.ogg

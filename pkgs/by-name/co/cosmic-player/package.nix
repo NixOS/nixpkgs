@@ -1,32 +1,28 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  libcosmicAppHook,
+  just,
+  pkg-config,
   alsa-lib,
   ffmpeg,
   glib,
   gst_all_1,
-  just,
-  pkg-config,
-  libxkbcommon,
-  stdenv,
-  cosmic-icons,
   libglvnd,
   libgbm,
-  wayland,
-  xorg,
-  vulkan-loader,
-  makeBinaryWrapper,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
+    repo = "cosmic-player";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-Ebjj+C+yLCRomZy2W8mYDig1pv7aQcD3A9V2M53RM5U=";
   };
 
@@ -40,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     just
     pkg-config
-    makeBinaryWrapper
+    libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
 
   # Largely based on lilyinstarlight's work linked below
@@ -54,15 +51,12 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    libxkbcommon
     libgbm
-    wayland
-    vulkan-loader
-    xorg.libX11
     libglvnd
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -73,38 +67,28 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-player"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
-
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/cosmic-player" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-          vulkan-loader
-          libxkbcommon
-          wayland
-        ]
-      }
+    libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-player";
     description = "Media player for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ahoneybun ];
+    maintainers = with lib.maintainers; [
+      ahoneybun
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-player";
   };
-}
+})

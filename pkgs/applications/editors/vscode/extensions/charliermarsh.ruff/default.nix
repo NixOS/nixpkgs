@@ -3,6 +3,7 @@
   lib,
   vscode-utils,
   ruff,
+  vscode-extensions-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -11,28 +12,29 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-KiCTJbLDut0Az7BmcYPQbFweT94RWnsE+JYvqVZ2P7s=";
+          hash = "sha256-lGV/Zc4pibm7sTVtN4UYzuroxNgUltaUT9oJPaa5S8Q=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-Szy+bE/42cNzcEa2yKCyvxr5OBqH2dPVgJnCS57z3nY=";
+          hash = "sha256-h1cvTJ9VUHOL27F9twdbLTSzLb+NUhqrbaScoKF5jZ4=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-Bw1gdrb40baSXdrIgM0tlCLa18aGpRv1q7YN5wJRjNs=";
+          hash = "sha256-Ca9DGjQDT5BbJUL7FtU3dS6Zb7C2Blxr69l5HpZR4ZQ=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-xcHL/2dliPD69mNEsbEpbtn5QLV1P3gqu9ftDOn58qM=";
+          hash = "sha256-8Qay/ynixASQ8FFyAYjBeGcjBKQGXucGlOndOYa1Fn8=";
         };
       };
     in
     {
       name = "ruff";
       publisher = "charliermarsh";
-      version = "2024.34.0";
+      version = "2025.22.0";
     }
-    // sources.${stdenvNoCC.system} or (throw "Unsupported system ${stdenvNoCC.system}");
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
   postInstall = ''
     test -x "$out/$installPrefix/bundled/libs/bin/ruff" || {
@@ -43,12 +45,20 @@ vscode-utils.buildVscodeMarketplaceExtension {
     ln -sf ${lib.getExe ruff} "$out/$installPrefix/bundled/libs/bin/ruff"
   '';
 
+  passthru.updateScript = vscode-extensions-update-script { extraArgs = [ "--platforms" ]; };
+
   meta = {
     license = lib.licenses.mit;
     changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
     description = "Visual Studio Code extension with support for the Ruff linter";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
     homepage = "https://github.com/astral-sh/ruff-vscode";
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ lib.maintainers.azd325 ];
   };
 }

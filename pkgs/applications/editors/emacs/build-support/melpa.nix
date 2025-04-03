@@ -24,11 +24,14 @@ let
     src = fetchFromGitHub {
       owner = "melpa";
       repo = "package-build";
-      rev = "d5661f1f1996a893fbcbacb4d290c57acab4fb0e";
-      hash = "sha256-zVhFR2kLLkCKC+esPBbIk3qOa033YND1HF9GiNI4JM8=";
+      rev = "d1722503145facf96631ac118ec0213a73082b76";
+      hash = "sha256-utsZLm9IF9UkTwxFWvJmwA3Ox4tlMeNNTo+f/CqYJGA=";
     };
 
-    patches = [ ./package-build-dont-use-mtime.patch ];
+    prePatch = ''
+      substituteInPlace package-build.el \
+        --replace-fail '(format "--mtime=@%d" time)' '"--mtime=@0"'
+    '';
 
     dontConfigure = true;
     dontBuild = true;
@@ -185,7 +188,9 @@ lib.extendMkDerivation {
           emacs --batch -Q \
               -l "$elpa2nix" \
               -f elpa2nix-install-package \
-              "$archive" "$out/share/emacs/site-lisp/elpa"
+              "$archive" "$out/share/emacs/site-lisp/elpa" \
+              ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"} \
+              ${if finalAttrs.ignoreCompilationError then "t" else "nil"}
 
           runHook postInstall
         '';

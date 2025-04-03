@@ -37,7 +37,7 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sox";
   version = "unstable-2021-05-09";
 

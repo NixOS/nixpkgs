@@ -5,8 +5,7 @@
   dbus,
   fetchFromGitHub,
   gamescope,
-  godot_4,
-  godot_4-export-templates,
+  godot_4_4,
   hwdata,
   lib,
   libGL,
@@ -25,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengamepadui";
-  version = "0.35.8";
+  version = "0.39.0";
 
   buildType = if withDebug then "debug" else "release";
 
@@ -33,21 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ShadowBlip";
     repo = "OpenGamepadUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vMb08Wqjt5j6IgMnXuZr6MGNk1CprVn2GTNDdOxnFG0=";
+    hash = "sha256-eBHDJVbPL4Lw1TDOOJT4rzvSb+F7J6EdsLbL4co69nk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "source/${finalAttrs.cargoRoot}";
-    hash = "sha256-sTzMewIfKHbmVhSPZgUIzFFz1ahK+PMoQ5oB4GEt8nY=";
+    hash = "sha256-T79G2bShJuFRfaCqG3IDHqW0s68yAdGyv58kdDYg6kg=";
   };
   cargoRoot = "extensions";
 
   nativeBuildInputs = [
     autoPatchelfHook
     cargo
-    godot_4
-    godot_4-export-templates
+    godot_4_4
+    godot_4_4.export-templates-bin
     pkg-config
     rustPlatform.cargoSetupHook
   ];
@@ -76,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     let
-      versionAndRelease = lib.splitString "-" godot_4.version;
+      versionAndRelease = lib.splitString "-" godot_4_4.version;
     in
     {
-      GODOT = lib.getExe godot_4;
+      GODOT = lib.getExe godot_4_4;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
-      EXPORT_TEMPLATE = "${godot_4-export-templates}";
+      EXPORT_TEMPLATE = "${godot_4_4.export-templates-bin}";
       BUILD_TYPE = "${finalAttrs.buildType}";
     };
 
@@ -94,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Godot looks for export templates in HOME
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.$GODOT_RELEASE"
+    ln -s "${godot_4_4.export-templates-bin}" "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.$GODOT_RELEASE"
   '';
 
   postInstall = ''

@@ -77,7 +77,7 @@ in
         description = ''
           Automatically restart the server after
           {option}`services.mchprs.maxRuntime`.
-          The time span format is described here:
+          The {manpage}`systemd.time(7)` time span format is described here:
           <https://www.freedesktop.org/software/systemd/man/systemd.time.html#Parsing%20Time%20Spans>.
           If `null`, then the server is not restarted automatically.
         '';

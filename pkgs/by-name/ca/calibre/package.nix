@@ -21,7 +21,7 @@
   piper-tts,
   pkg-config,
   podofo,
-  poppler_utils,
+  poppler-utils,
   python3Packages,
   qt6,
   speechd-minimal,
@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.26.0";
+  version = "8.1.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cps2x3ZV68jaZ+cIJgQEeh++GG81Y9yX7mC7WKvFcCc=";
+    hash = "sha256-lz+QlrajIjA2uvo6Iomejk9Y+djDjUNPAd5BZT3Dz5Y=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     piper-tts
     podofo
-    poppler_utils
+    poppler-utils
     qt6.qtbase
     qt6.qtwayland
     sqlite
@@ -149,8 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+      popplerArgs = "--prefix PATH : ${poppler-utils.out}/bin";
     in
     ''
       for program in $out/bin/*; do

@@ -12,7 +12,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ams";
   version = "unstable-2019-04-27";
 

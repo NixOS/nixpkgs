@@ -1,0 +1,29 @@
+From cae2ad70d6202bc97623be8c7c123ee2736a4644 Mon Sep 17 00:00:00 2001
+From: aleksana <me@aleksana.moe>
+Date: Sun, 9 Mar 2025 21:19:27 +0800
+Subject: [PATCH] replace_regex: remove bash word boundary when detecting
+ gnused
+
+Bash linked against C libraries other than GLibc may not support GNU
+extensions of POSIX Extended Regular Regex. For example,
+
+> re='\bx'; [[ 'x' =~ $re ]] && echo "1"
+
+does not output the same result on Linux/GLibc and macOS.
+---
+ src/std/text.ab | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/std/text.ab b/src/std/text.ab
+index fe071e33..82449a02 100644
+--- a/src/std/text.ab
++++ b/src/std/text.ab
+@@ -19,7 +19,7 @@ pub fun replace_regex(source: Text, search: Text, replace: Text, extended: Bool
+             // GNU sed versions 4.0 through 4.2 support extended regex syntax,
+             // but only via the "-r" option; use that if the version information
+             // contains "GNU sed".
+-            $ re='\bCopyright\b.+\bFree Software Foundation\b'; [[ \$(sed --version 2>/dev/null) =~ \$re ]] $
++            $ re='Copyright.+Free Software Foundation'; [[ \$(sed --version 2>/dev/null) =~ \$re ]] $
+             let flag = status == 0 then "-r" else "-E"
+             return $ echo "{source}" | sed "{flag}" -e "s/{search}/{replace}/g" $
+         } else {

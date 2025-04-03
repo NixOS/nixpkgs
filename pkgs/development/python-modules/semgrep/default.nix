@@ -1,12 +1,38 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, semgrep-core
-, buildPythonPackage
-, pythonPackages
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  semgrep-core,
+  buildPythonPackage,
+  pythonPackages,
 
-, pytestCheckHook
-, git
+  pytestCheckHook,
+  git,
+
+  # python packages
+  attrs,
+  boltons,
+  colorama,
+  click,
+  click-option-group,
+  glom,
+  requests,
+  rich,
+  ruamel-yaml,
+  tqdm,
+  packaging,
+  jsonschema,
+  wcmatch,
+  peewee,
+  defusedxml,
+  urllib3,
+  typing-extensions,
+  python-lsp-jsonrpc,
+  tomli,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-instrumentation-requests,
 }:
 
 # testing locally post build:
@@ -28,19 +54,19 @@ buildPythonPackage rec {
 
   # prepare a subset of the submodules as we only need a handful
   # and there are many many submodules total
-  postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
-    (
-      path: submodule: ''
+  postPatch =
+    (lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (path: submodule: ''
         # substitute ${path}
         # remove git submodule placeholder
         rm -r ${path}
         # link submodule
         ln -s ${submodule}/ ${path}
-      ''
-    )
-    passthru.submodulesSubset)) + ''
-    cd cli
-  '';
+      '') passthru.submodulesSubset
+    ))
+    + ''
+      cd cli
+    '';
 
   # tell cli/setup.py to not copy semgrep-core into the result
   # this means we can share a copy of semgrep-core and avoid an issue where it
@@ -52,7 +78,7 @@ buildPythonPackage rec {
     "glom"
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  dependencies = [
     attrs
     boltons
     colorama
@@ -72,22 +98,31 @@ buildPythonPackage rec {
     typing-extensions
     python-lsp-jsonrpc
     tomli
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-instrumentation-requests
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = [ git pytestCheckHook ] ++ (with pythonPackages; [
-    flaky
-    pytest-snapshot
-    pytest-mock
-    pytest-freezegun
-    types-freezegun
-  ]);
+  nativeCheckInputs =
+    [
+      git
+      pytestCheckHook
+    ]
+    ++ (with pythonPackages; [
+      flaky
+      pytest-snapshot
+      pytest-mock
+      pytest-freezegun
+      types-freezegun
+    ]);
 
   disabledTestPaths = [
     "tests/default/e2e"
-    "tests/default/e2e-pro"
     "tests/default/e2e-pysemgrep"
+    "tests/default/e2e-other"
   ];
 
   disabledTests = [
@@ -99,6 +134,8 @@ buildPythonPackage rec {
     "TestConfigLoaderForProducts"
     # doesn't start flaky plugin correctly
     "test_debug_performance"
+    # requires .git directory
+    "clean_project_url"
   ];
 
   preCheck = ''
@@ -108,11 +145,6 @@ buildPythonPackage rec {
     # tests need access to `semgrep-core`
     export OLD_PATH="$PATH"
     export PATH="$PATH:${semgrepBinPath}"
-
-    # we're in cli
-    # replace old semgrep with wrapped one
-    rm ./bin/semgrep
-    ln -s $out/bin/semgrep ./bin/semgrep
   '';
 
   postCheck = ''

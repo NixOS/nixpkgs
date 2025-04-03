@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-ouS/aGfjTLd88nWc5lJwYJ20ukzuXE+b7uZ4eMEsdSk=";
+    hash = "sha256-SQrk6zsn3zZQTIruqVfjzs5cNyT2pAvM8XNI8SmyFM0=";
   };
 
   nativeBuildInputs = [

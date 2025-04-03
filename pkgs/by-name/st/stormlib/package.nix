@@ -1,27 +1,29 @@
 {
   lib,
+  stdenv,
   bzip2,
   cmake,
   darwin,
   fetchFromGitHub,
   libtomcrypt,
-  stdenv,
   zlib,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stormlib";
-  version = "9.23";
+  version = "9.30";
 
   src = fetchFromGitHub {
     owner = "ladislav-zezula";
     repo = "StormLib";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8JDMqZ5BWslH4+Mfo5lnWTmD2QDaColwBOLzcuGZciY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gW3jR9XnBo5uEORu12TpGsUMFAS4w5snWPA/bIUt9UY=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs =
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
+      --replace-fail "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
   '';
 
   meta = {

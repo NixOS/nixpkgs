@@ -1,9 +1,10 @@
-{ buildNpmPackage
-, darwin
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
+{
+  buildNpmPackage,
+  darwin,
+  fetchFromGitHub,
+  lib,
+  python3,
+  stdenv,
 }:
 
 buildNpmPackage rec {
@@ -12,7 +13,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "nestjs";
-    repo = pname;
+    repo = "nest-cli";
     rev = version;
     hash = "sha256-dko+hOC3oZToNS+EOqmm+z7DLHfqqKDeQsH2sYxburU=";
   };

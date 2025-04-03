@@ -21,7 +21,7 @@ let
   inherit (lib) optionals optionalString;
   onOff = a: if a then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libftdi";
   version = "1.5-unstable-2023-12-21";
 

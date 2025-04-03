@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
 
   # build-system
   cython,
@@ -36,15 +37,28 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--flakes" ""
+      --replace-fail "--flakes" ""
   '';
 
   optional-dependencies.arrays = [ numpy ];
 
   pythonImportsCheck = [ "ndindex" ];
 
+  # fix Hypothesis timeouts
   preCheck = ''
     cd $out
+
+    echo > ${python.sitePackages}/ndindex/tests/conftest.py <<EOF
+
+    import hypothesis
+
+    hypothesis.settings.register_profile(
+      "ci",
+      deadline=None,
+      print_blob=True,
+      derandomize=True,
+    )
+    EOF
   '';
 
   nativeCheckInputs = [
@@ -54,8 +68,13 @@ buildPythonPackage rec {
     sympy
   ] ++ optional-dependencies.arrays;
 
+  pytestFlagsArray = [
+    "--hypothesis-profile"
+    "ci"
+  ];
+
   meta = with lib; {
-    description = "";
+    description = "Python library for manipulating indices of ndarrays";
     homepage = "https://github.com/Quansight-Labs/ndindex";
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${version}";
     license = licenses.mit;

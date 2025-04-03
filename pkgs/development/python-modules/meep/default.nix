@@ -95,7 +95,6 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
 
   enableParallelBuilding = true;
 

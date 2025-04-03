@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "PhrozenByte";
-    repo = pname;
+    repo = "rmtrash";
     rev = "v${version}";
     sha256 = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
   };

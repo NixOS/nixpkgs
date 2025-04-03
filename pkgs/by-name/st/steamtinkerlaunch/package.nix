@@ -8,6 +8,7 @@
   stdenvNoCC,
   unixtools,
   unzip,
+  usbutils,
   wget,
   xdotool,
   xorg,
@@ -59,6 +60,7 @@ stdenvNoCC.mkDerivation {
           procps
           unixtools.xxd
           unzip
+          usbutils
           wget
           xdotool
           xorg.xprop

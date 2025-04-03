@@ -5,7 +5,7 @@
   stdune,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-private-libs";
 
   duneVersion = "3";

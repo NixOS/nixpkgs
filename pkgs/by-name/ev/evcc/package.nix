@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "0.200.3";
+  version = "0.202.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-mp2Kfgo1RCmKkNpPRwmS5nWG1YmJVQ6nWjWKfBk6500=";
+    hash = "sha256-GMKhlNZLk6R0XZn5I3YP5Eav8wD6WbEr1DM+VVtQtjo=";
   };
 
-  vendorHash = "sha256-sx04fyRXX9H2182yz8qvdLv/sSLXTrzhlwpf8lMSVew=";
+  vendorHash = "sha256-K9X63dTWE+dC5yo8LX86pUezm8OHwEHNXwxXHn/4AwU=";
 
   commonMeta = with lib; {
     license = licenses.mit;
@@ -52,7 +52,7 @@ buildGo124Module rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-VYAJO2HeswhBlCVKi08frkvhKc/AFepmrSGY4JccBZE=";
+    hash = "sha256-iTrmgNmUoHQWL5tsqhUnd0t1t9qengb6ba9pxYrL9Ks=";
   };
 
   nativeBuildInputs = [
@@ -117,5 +117,6 @@ buildGo124Module rec {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
     changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
+    mainProgram = "evcc";
   };
 }

@@ -12,21 +12,15 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
   pname = "fex";
-  version = "2502";
+  version = "2503";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${version}";
-    hash = "sha256-w+Kqk+IQsVNbOqYDTpxDeoPyeIgqX2IfZv9zqAJEMVc=";
+    hash = "sha256-NnYod6DeRv3/6h8SGkGYtgC+RRuIafxoQm3j1Sqk0mU=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # This is a workaround to get FEX working with NixOS's slightly weird binfmt
-    # infrastructure.
-    ./realpath.patch
-  ];
 
   nativeBuildInputs = [
     cmake

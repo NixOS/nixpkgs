@@ -2,7 +2,6 @@
   lib,
   installShellFiles,
   python3,
-  fetchPypi,
   fetchFromGitHub,
   nix-update-script,
   testers,

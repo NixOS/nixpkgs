@@ -5,25 +5,24 @@
   stdenv,
   vimUtils,
   nix-update-script,
-  git,
-  replaceVars,
+  gitMinimal,
 }:
 let
-  version = "0.12.4";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-ybzEQHvZIiF+B2SIdFX8HJGai50PUw5QRgrL7qJ0sUk=";
+    hash = "sha256-0e1XZTbdHUCwhzw9gDFDsN67jX/jqcHTIyPYyJx/shI=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-W7CdF70BMXKMCcooR6adw2wwHJ3WznZ+o8KRyHWMeeI=";
+    cargoHash = "sha256-F1wh/TjYoiIbDY3J/prVF367MKk3vwM7LqOpRobOs7I=";
 
-    nativeBuildInputs = [ git ];
+    nativeBuildInputs = [ gitMinimal ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
@@ -42,10 +41,6 @@ vimUtils.buildVimPlugin {
       mkdir -p target/release
       ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
     '';
-
-  patches = [
-    (replaceVars ./force-version.patch { inherit (src) tag; })
-  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -66,7 +61,7 @@ vimUtils.buildVimPlugin {
     ];
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Module for reproducing issues
     "repro"
   ];

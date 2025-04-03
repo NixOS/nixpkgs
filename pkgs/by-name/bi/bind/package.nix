@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  removeReferencesTo,
   darwin,
   perl,
   pkg-config,
@@ -10,6 +11,7 @@
   libtool,
   libxml2,
   openssl,
+  liburcu,
   libuv,
   nghttp2,
   jemalloc,
@@ -26,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.33";
+  version = "9.20.6";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+zc/rF67xBxkUWCv1an7RRkY9sDmmrHZR0FU4rUV3kA=";
+    hash = "sha256-7X9UtE+EpyAaL6epSfMCHqVoUpv62Q/KZk/VXAUQQTQ=";
   };
 
   outputs = [
@@ -49,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    removeReferencesTo
   ];
   buildInputs =
     [
@@ -56,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
       libxml2
       openssl
+      liburcu
       libuv
       nghttp2
       jemalloc
@@ -90,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
 
+    mkdir -p $out/etc
     cat <<EOF >$out/etc/rndc.conf
     include "/etc/bind/rndc.key";
     options {
@@ -127,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Test timeouts on Darwin
       sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
     '';
+
+  postFixup = ''
+    remove-references-to -t "$out" "$dnsutils/bin/delv"
+  '';
 
   passthru = {
     tests = {

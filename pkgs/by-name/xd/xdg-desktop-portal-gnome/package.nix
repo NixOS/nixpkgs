@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, fontconfig
-, glib
-, gnome
-, gnome-desktop
-, gsettings-desktop-schemas
-, gtk4
-, libadwaita
-, libjxl
-, librsvg
-, meson
-, ninja
-, pkg-config
-, wayland
-, wayland-scanner
-, webp-pixbuf-loader
-, wrapGAppsHook4
-, xdg-desktop-portal
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fontconfig,
+  glib,
+  gnome,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gtk4,
+  libadwaita,
+  libjxl,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  wayland-scanner,
+  webp-pixbuf-loader,
+  wrapGAppsHook4,
+  xdg-desktop-portal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-gnome";
-  version = "47.2";
+  version = "47.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/xdg-desktop-portal-gnome/${lib.versions.major finalAttrs.version}/xdg-desktop-portal-gnome-${finalAttrs.version}.tar.xz";
-    hash = "sha256-S1NoqhncCqYsioTkgciiZJC013x5ALjlydQyzpHxJ0w=";
+    hash = "sha256-n25LFLWDNnyRXpSUdk8ny4SSf6o/nm4Bi5O7vPM2HkQ=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        libjxl
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   passthru = {

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = postgresql.doInstallCheck;
 
   # required for compatibility with Python versions older than 3.11
   # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
@@ -41,6 +41,9 @@ buildPythonPackage rec {
   preCheck = ''
     rm -rf asyncpg/
   '';
+
+  # https://github.com/MagicStack/asyncpg/issues/1236
+  disabledTests = [ "test_connect_params" ];
 
   pythonImportsCheck = [ "asyncpg" ];
 

@@ -14,19 +14,19 @@
   intltool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-notifications";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
-    rev = "epoch-${version}";
-    hash = "sha256-xUyBXHhpYgwr3A34oLF5l1xB8f++wtx0mTr2p8WX89o=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-d6bAiRSO2opKSZfadyQYrU9oIrXwPNzO/g2E2RY6q04=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-froRGGsK5qoia5wHtxLhljKueMCYafhika9Drsp906E=";
+  cargoHash = "sha256-utip7E8NST88mPaKppkuOcdW+QkFoRqWy3a2McvMHo8=";
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
-}
+})

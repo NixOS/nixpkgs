@@ -64,6 +64,23 @@ in
     hash = info.chromium_npm_hash;
   };
 
+  env =
+    base.env
+    // {
+      # Hydra can fail to build electron due to clang spamming deprecation
+      # warnings mid-build, causing the build log to grow beyond the limit
+      # of 64mb and then getting killed by Hydra.
+      # For some reason, the log size limit appears to only be enforced on
+      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
+      # unbreak the build on h.n.o, we simply disable those warnings for now.
+      # https://hydra.nixos.org/build/283952243
+      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
+    }
+    // lib.optionalAttrs (lib.versionAtLeast info.version "35") {
+      # Needed for header generation in electron 35 and above
+      ELECTRON_OUT_DIR = "Release";
+    };
+
   src = null;
 
   patches = base.patches;
@@ -159,21 +176,6 @@ in
     ''
     + base.postPatch;
 
-  env =
-    base.env
-    // lib.optionalAttrs (lib.versionOlder info.version "33") {
-      # Hydra fails to build electron_32.aarch64-linux as of 2025-01-05 due to
-      # clang spamming deprecation warnings mid-build, causing the build log to
-      # grow beyond the limit of 64mb and then getting killed by Hydra. This
-      # renders our clang both too old for the latest chromium without the use
-      # of -Wno-unknown-warning-option and also too new for electron_32 (M128).
-      # For some reason, the log size limit appears to only be enforced on
-      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
-      # unbreak the build on h.n.o, we simply disable those warnings for now.
-      # https://hydra.nixos.org/build/283952243
-      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
-    };
-
   preConfigure =
     ''
       (
@@ -183,51 +185,45 @@ in
     ''
     + (base.preConfigure or "");
 
-  gnFlags =
-    rec {
-      # build/args/release.gn
-      is_component_build = false;
-      is_official_build = true;
-      rtc_use_h264 = proprietary_codecs;
-      is_component_ffmpeg = true;
+  gnFlags = rec {
+    # build/args/release.gn
+    is_component_build = false;
+    is_official_build = true;
+    rtc_use_h264 = proprietary_codecs;
+    is_component_ffmpeg = true;
 
-      # build/args/all.gn
-      is_electron_build = true;
-      root_extra_deps = [ "//electron" ];
-      node_module_version = info.modules;
-      v8_promise_internal_field_count = 1;
-      v8_embedder_string = "-electron.0";
-      v8_enable_snapshot_native_code_counters = false;
-      v8_enable_javascript_promise_hooks = true;
-      enable_cdm_host_verification = false;
-      proprietary_codecs = true;
-      ffmpeg_branding = "Chrome";
-      enable_printing = true;
-      angle_enable_vulkan_validation_layers = false;
-      dawn_enable_vulkan_validation_layers = false;
-      enable_pseudolocales = false;
-      allow_runtime_configurable_key_storage = true;
-      enable_cet_shadow_stack = false;
-      is_cfi = false;
-      use_qt = false;
-      v8_builtins_profiling_log_file = "";
-      enable_dangling_raw_ptr_checks = false;
-      dawn_use_built_dxc = false;
-      v8_enable_private_mapping_fork_optimization = true;
-      v8_expose_public_symbols = true;
-      enable_dangling_raw_ptr_feature_flag = false;
-      clang_unsafe_buffers_paths = "";
-      enterprise_cloud_content_analysis = false;
-    }
-    // lib.optionalAttrs (lib.versionAtLeast info.version "33") {
-      content_enable_legacy_ipc = true;
-    }
-    // {
+    # build/args/all.gn
+    is_electron_build = true;
+    root_extra_deps = [ "//electron" ];
+    node_module_version = lib.toInt info.modules;
+    v8_promise_internal_field_count = 1;
+    v8_embedder_string = "-electron.0";
+    v8_enable_snapshot_native_code_counters = false;
+    v8_enable_javascript_promise_hooks = true;
+    enable_cdm_host_verification = false;
+    proprietary_codecs = true;
+    ffmpeg_branding = "Chrome";
+    enable_printing = true;
+    angle_enable_vulkan_validation_layers = false;
+    dawn_enable_vulkan_validation_layers = false;
+    enable_pseudolocales = false;
+    allow_runtime_configurable_key_storage = true;
+    enable_cet_shadow_stack = false;
+    is_cfi = false;
+    v8_builtins_profiling_log_file = "";
+    enable_dangling_raw_ptr_checks = false;
+    dawn_use_built_dxc = false;
+    v8_enable_private_mapping_fork_optimization = true;
+    v8_expose_public_symbols = true;
+    enable_dangling_raw_ptr_feature_flag = false;
+    clang_unsafe_buffers_paths = "";
+    enterprise_cloud_content_analysis = false;
+    content_enable_legacy_ipc = true;
 
-      # other
-      enable_widevine = false;
-      override_electron_version = info.version;
-    };
+    # other
+    enable_widevine = false;
+    override_electron_version = info.version;
+  };
 
   installPhase = ''
     runHook preInstall
@@ -276,6 +272,7 @@ in
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     mainProgram = "electron";
     hydraPlatforms =

@@ -7,7 +7,7 @@
 
 let
   pname = "certificate-ripper";
-  version = "2.4.0";
+  version = "2.4.1";
 
   jar = maven.buildMavenPackage {
     pname = "${pname}-jar";
@@ -17,7 +17,7 @@ let
       owner = "Hakky54";
       repo = "certificate-ripper";
       tag = version;
-      hash = "sha256-2EXALTGeGkHne335B1R42VrA5vMCMkFF5FBatAfO9Tc=";
+      hash = "sha256-qQ5BHH+DT1sGNDGzSbclqc6+byBxyP16qvm3k9E/Yks=";
     };
 
     patches = [
@@ -25,7 +25,7 @@ let
       ./fix-test-temp-dir-path.patch
     ];
 
-    mvnHash = "sha256-Nv/V2+QPSPMxkDcUh6gJrI6aSi+9O+brxpOZg/JPGxI=";
+    mvnHash = "sha256-G2+Z1JyxTzCZzWjB8MQH1T9kwHjtRPag+bmzGXpQXw4=";
 
     mvnParameters =
       let

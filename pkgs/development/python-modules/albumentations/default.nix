@@ -9,29 +9,29 @@
 
   # dependencies
   albucore,
-  eval-type-backport,
   numpy,
   opencv-python,
   pydantic,
   pyyaml,
-  scikit-image,
   scipy,
 
   # optional dependencies
   huggingface-hub,
   pillow,
+  torch,
 
   # tests
   deepdiff,
   pytestCheckHook,
   pytest-mock,
-  torch,
+  scikit-image,
+  scikit-learn,
   torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "2.0.0";
+  version = "2.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     tag = version;
-    hash = "sha256-8WEOI2J2H4PNhyb9LoIUMofGKx9AHPiPddkQCSdh8/A=";
+    hash = "sha256-WqU25I1DxBqZAXd2+sNMUv/HOL4towlGTnFnpCGmMgY=";
   };
 
   patches = [
@@ -53,17 +53,16 @@ buildPythonPackage rec {
 
   dependencies = [
     albucore
-    eval-type-backport
     numpy
     opencv-python
     pydantic
     pyyaml
-    scikit-image
     scipy
   ];
 
   optional-dependencies = {
     hub = [ huggingface-hub ];
+    pytorch = [ torch ];
     text = [ pillow ];
   };
 
@@ -71,14 +70,17 @@ buildPythonPackage rec {
     deepdiff
     pytestCheckHook
     pytest-mock
+    scikit-image
+    scikit-learn
     torch
     torchvision
   ];
 
   disabledTests = [
     "test_pca_inverse_transform"
-    # this test hangs up
-    "test_transforms"
+    # these tests hang
+    "test_keypoint_remap_methods"
+    "test_multiprocessing_support"
   ];
 
   pythonImportsCheck = [ "albumentations" ];

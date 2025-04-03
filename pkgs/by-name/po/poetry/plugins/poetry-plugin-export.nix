@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry,
   poetry-core,
   pytest-mock,
@@ -20,6 +21,18 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-AP3/njzbLEi2s4pOUSLLLzqNprvxwLe9LSY7qh08EWc=";
   };
+
+  patches = [
+    # Remove after next release of poetry-plugin-export
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry-plugin-export/commit/16637f194e86708913ec6e09064c713eb0715bb6.patch";
+      includes = [
+        "tests/test_exporter.py"
+        "tests/markers.py"
+      ];
+      hash = "sha256-ncz9kqp18+yeRXlhmLEcWfO1bDavjohhmVw6DwTy1hA=";
+    })
+  ];
 
   build-system = [
     poetry-core

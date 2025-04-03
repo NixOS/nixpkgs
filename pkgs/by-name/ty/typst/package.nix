@@ -10,19 +10,19 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    tag = "v${version}";
-    hash = "sha256-3YLdHwDgQDQyW4R3BpZAEL49BBpgigev/5lbnhDIFgI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ey5pFGLgj17+RZGjpLOeN7Weh29jJyvuRrJ8wsIlC58=";
+  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
-    # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
     substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
     substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
   '';
@@ -54,16 +54,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--workspace" ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/v${version}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
@@ -74,4 +72,4 @@ rustPlatform.buildRustPackage rec {
       kanashimia
     ];
   };
-}
+})

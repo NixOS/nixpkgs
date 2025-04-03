@@ -1,28 +1,34 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, mandown
-, protobuf
-, nixosTests
-, go-md2man
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  mandown,
+  protobuf,
+  nixosTests,
+  go-md2man,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "netavark";
     rev = "v${version}";
-    hash = "sha256-/95tYUqjIPoyO2+YGza9RJ88YAbsIOzEB//d2FXfNZY=";
+    hash = "sha256-kAJOfZ4Q1EQ+JV1izXoLe/Z/qgxbzz3WbczM4fVhxfU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-6XSKuohY7gpnGmRK/Y+c3+0es/KRbkXjt5XQU/HksQ0=";
+  cargoHash = "sha256-MdKTGLNf+7SzdkQNLOWgfmSE9TNLYzPFU0oXh6MnW5w=";
 
-  nativeBuildInputs = [ installShellFiles mandown protobuf go-md2man ];
+  nativeBuildInputs = [
+    installShellFiles
+    mandown
+    protobuf
+    go-md2man
+  ];
 
   postBuild = ''
     make -C docs netavark.1

@@ -16,14 +16,14 @@
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "05.03.01";
+  version = "05.03.05";
 
   src = fetchFromGitea {
     domain = "git.skoll.ca";
     owner = "Skollsoft-Public";
     repo = "Remind";
     rev = version;
-    hash = "sha256-hthr6BELNGnFd1JB+fA10FYIsy8Cs9pPs6J4yOfy+d0=";
+    hash = "sha256-dMnsMV4DRxXWgev9LCb4wwdnx7A++giCsW7c2cMde9Q=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [

@@ -1,37 +1,40 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, nixosTests
-, alsa-lib
-, SDL2
-, libiconv
-, CoreAudio
-, CoreMIDI
-, CoreServices
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nixosTests,
+  alsa-lib,
+  SDL2,
+  libiconv,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.94";
+  version = "1.95";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-WRHZVn83s4mGoyhd9wvP2hp2DDufXk5mrXrPuN6cdf0=";
+    hash = "sha256-Xb4LHoon56P6OmHvd7RkODrOc4MDa0+U8npypGhcyw4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 ]
+  buildInputs =
+    [ SDL2 ]
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-         libiconv
-         CoreAudio
-         CoreMIDI
-         CoreServices
-         Cocoa
-       ];
+      libiconv
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Cocoa
+    ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;

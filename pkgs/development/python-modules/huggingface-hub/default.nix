@@ -14,18 +14,39 @@
   requests,
   tqdm,
   typing-extensions,
+
+  # optional-dependencies
+  # cli
+  inquirerpy,
+  # inference
+  aiohttp,
+  # torch
+  torch,
+  safetensors,
+  # hf_transfer
+  hf-transfer,
+  # fastai
+  toml,
+  fastai,
+  fastcore,
+  # tensorflow
+  tensorflow,
+  pydot,
+  graphviz,
+  # tensorflow-testing
+  keras,
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.29.1";
+  version = "0.29.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-9G5oq8X5/MtHZAOM7QHoMyRePPFwMe4Wa66y+japxwA=";
+    hash = "sha256-zUI5awSEKJ4PuSdtRRe0XJCpr3KLLfI7R+dafUuzfRU=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +60,42 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
   ];
+
+  optional-dependencies = {
+    all = [
+
+    ];
+    cli = [
+      inquirerpy
+    ];
+    inference = [
+      aiohttp
+    ];
+    torch = [
+      torch
+      safetensors
+    ] ++ safetensors.optional-dependencies.torch;
+    hf_transfer = [
+      hf-transfer
+    ];
+    fastai = [
+      toml
+      fastai
+      fastcore
+    ];
+    tensorflow = [
+      tensorflow
+      pydot
+      graphviz
+    ];
+    tensorflow-testing = [
+      tensorflow
+      keras
+    ];
+    hf_xet = [
+      # hf-xet
+    ];
+  };
 
   # Tests require network access.
   doCheck = false;

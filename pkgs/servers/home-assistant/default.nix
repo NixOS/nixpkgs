@@ -45,17 +45,6 @@ let
         ];
       });
 
-      aiomqtt = super.aiomqtt.overridePythonAttrs (rec {
-        version = "2.0.1";
-        src = fetchFromGitHub {
-          owner = "sbtinstruments";
-          repo = "aiomqtt";
-          tag = "v${version}";
-          hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
-        };
-        meta.broken = false;
-      });
-
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
@@ -118,6 +107,16 @@ let
         };
       });
 
+      brother = super.brother.overridePythonAttrs (rec {
+        version = "4.3.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "brother";
+          tag = version;
+          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
@@ -129,13 +128,13 @@ let
         build-system = with self; [ poetry-core ];
       });
 
-      govee-local-api = super.govee-local-api.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.3";
+      google-genai = super.google-genai.overridePythonAttrs (old: rec {
+        version = "1.1.0";
         src = fetchFromGitHub {
-          owner = "Galorhallen";
-          repo = "govee-local-api";
+          owner = "googleapis";
+          repo = "python-genai";
           tag = "v${version}";
-          hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+          hash = "sha256-CszKr2dvo0dLMAD/FZHSosCczeAFDD0xxKysGNv4RxM=";
         };
       });
 
@@ -168,16 +167,6 @@ let
         ];
       });
 
-      letpot = super.letpot.overridePythonAttrs (rec {
-        version = "0.3.0";
-        src = fetchFromGitHub {
-          owner = "jpelgrom";
-          repo = "python-letpot";
-          tag = "v${version}";
-          hash = "sha256-OFLQ0DV7roqUlm6zJWAzMRpcmAi/oco8lEHbmfqNaVs=";
-        };
-      });
-
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -186,8 +175,6 @@ let
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
-
-      paho-mqtt = super.paho-mqtt_1;
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
@@ -284,6 +271,16 @@ let
         };
       });
 
+      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (old: rec {
+        version = "0.2.1";
+        src = fetchFromGitHub {
+          owner = "freekode";
+          repo = "pyopenweathermap";
+          tag = "v${version}";
+          hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
+        };
+      });
+
       pyrail = super.pyrail.overridePythonAttrs (rec {
         version = "0.0.3";
         src = fetchPypi {
@@ -367,6 +364,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
       homeassistant = self.toPythonModule home-assistant;
@@ -395,7 +393,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.5";
+  hassVersion = "2025.3.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -415,14 +413,14 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8adHpOiuWddgqQjInc92FjEwVyg2Rvgx7wNOj3+Kxsk=";
+    tag = version;
+    hash = "sha256-g1t9xAjrSSePyAloTQ2qwxAGEXJUTWX2zIZmAvlGGa8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-JD2xus356qNzT5jqZOHr5gn4WGeC189rM83D81xVtWo=";
+    hash = "sha256-MIh8FMTKZVEZ/zC+Av8fykTpz9kkXgZZfnsuOZbgP0M=";
   };
 
   build-system = with python.pkgs; [
@@ -442,6 +440,7 @@ python.pkgs.buildPythonApplication rec {
     "jinja2"
     "orjson"
     "pillow"
+    "propcache"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
@@ -565,6 +564,7 @@ python.pkgs.buildPythonApplication rec {
       # some components are needed even if tests in tests/components are disabled
       "default_config"
       "hue"
+      "qwikswitch"
     ];
 
   pytestFlagsArray = [
@@ -577,17 +577,6 @@ python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 6 == 5
-    "--deselect=tests/helpers/test_translation.py::test_caching"
-    # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
-    "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
-    # Services were renamed to Actions in language strings, but the tests are lagging behind
-    "--deselect=tests/test_core.py::test_serviceregistry_service_that_not_exists"
-    "--deselect=tests/test_core.py::test_services_call_return_response_requires_blocking"
-    "--deselect=tests/test_core.py::test_serviceregistry_return_response_arguments"
-    "--deselect=tests/helpers/test_script.py::test_parallel_error"
-    "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
-    "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
     # checks whether pip is installed
     "--deselect=tests/util/test_package.py::test_check_package_fragment"
     # tests are located in tests/
@@ -642,6 +631,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
+    changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

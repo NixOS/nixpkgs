@@ -7,6 +7,8 @@
   mp3gain,
   mp3val,
   python3Packages,
+  version,
+  lib,
   ...
 }:
 {
@@ -169,4 +171,10 @@
     flask-cors
   ];
   zero = { };
+}
+# NOTE: There will be no need for this conditional once beets is updated.
+// lib.optionalAttrs (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") {
+  _typing = {
+    testPaths = [ ];
+  };
 }

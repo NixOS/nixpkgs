@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.3";
+  version = "4.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-QKV0qb36BfJWbmbqTXzPFY2X6SD+B3FxWSoDltDP8fM=";
+    hash = "sha256-A/obsrJIItNszMleMP1kkysSVdiFV2WxKTmYG+g1nks=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "trimesh";
     maintainers = with lib.maintainers; [
-      gebner
       pbsds
     ];
   };

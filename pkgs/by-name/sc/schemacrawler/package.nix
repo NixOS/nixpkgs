@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchzip
-, jre
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemacrawler";
-  version = "16.25.1";
+  version = "16.25.3";
 
   src = fetchzip {
     url = "https://github.com/schemacrawler/SchemaCrawler/releases/download/v${finalAttrs.version}/schemacrawler-${finalAttrs.version}-bin.zip";
-    hash = "sha256-IWVkLSYErfyw4D4GYf+36QTpUQLhWm1DNrhwlPbIuR8=";
+    hash = "sha256-GAPGu3t4k2hMeBpu/bOiCgRCQVlrEHIGhcp31B/p1vM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "schemacrawler";
     homepage = "https://www.schemacrawler.com/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [ epl10 gpl3Only lgpl3Only ];
+    license = with licenses; [
+      epl10
+      gpl3Only
+      lgpl3Only
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ elohmeier ];
   };

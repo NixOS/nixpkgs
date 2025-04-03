@@ -12,8 +12,9 @@
   jax-cuda12-pjrt,
 }:
 let
-  inherit (cudaPackages) cudaVersion;
   inherit (jaxlib) version;
+  inherit (cudaPackages) cudaVersion;
+  inherit (jax-cuda12-pjrt) cudaLibPath;
 
   getSrcFromPypi =
     {
@@ -39,42 +40,42 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-D0Q6azcpjt+weW/NvR+GzoWksIS2vT8fUKT7/Wfe2Gs=";
+      hash = "sha256-uiVVln+bbDgci075+wPQW8Vewl7P7lz+RcWs4099QVI=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp310";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-YXGu0vSzvdX8E3gt4QcsamNPzhNzG3XQywpquPTm5lA=";
     };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-qYE1oCIwZLj1xoU+It3BpOOGIVLTf7aF8Nve/+DIASI=";
+      hash = "sha256-qqcEpe9UdZXQItscHkh4oGdxFkEqk2DBFdZ/9LZOFZY=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-KY0tdo8QKbdKCx0BJw5Uk0nSw33Adlh5ZULNqWfre9M=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-QwWN/FZdjJ2mn0fNTkuVxJXxaG8onvRYTCtygD5vFgc=";
+      hash = "sha256-IDDPEgjOTqcO5WysYd3SOfl5hpX8Obt3OcUKJdbp2kQ=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-wlF6fCGG+HCIlGluJs+W69YLeHnOyjmLLEarso0slsg=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-3zbEsXbi01qCqfOM13zDadJx5gBR43GgqO9FFD+PWLY=";
+      hash = "sha256-GGJZWyttgVZ50R4OiJ5SMYXuVKRtRuAiaJ9w/EVU3ZE=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-If7BtWyYeD6gVpt0elZ1Hx+f8hh7SKzBHHANO/xeGjE=";
     };
   };
 in
@@ -94,12 +95,34 @@ buildPythonPackage {
     wheelUnpackHook
   ];
 
+  # jax-cuda12-plugin looks for ptxas at runtime, e.g. with a triton kernel.
+  # Linking into $out is the least bad solution. See
+  # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
+  # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
+  # * https://github.com/NixOS/nixpkgs/pull/375186
+  # for more info.
+  postInstall = ''
+    mkdir -p $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+  '';
+
+  # jax-cuda12-plugin contains shared libraries that open other shared libraries via dlopen
+  # and these implicit dependencies are not recognized by ldd or
+  # autoPatchelfHook. That means we need to sneak them into rpath. This step
+  # must be done after autoPatchelfHook and the automatic stripping of
+  # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
+  # patchPhase.
+  preInstallCheck = ''
+    patchelf --add-rpath "${cudaLibPath}" $out/${python.sitePackages}/jax_cuda12_plugin/*.so
+  '';
+
   dependencies = [ jax-cuda12-pjrt ];
 
   pythonImportsCheck = [ "jax_cuda12_plugin" ];
 
-  # no tests
-  doCheck = false;
+  # FIXME: there are no tests, but we need to run preInstallCheck above
+  doCheck = true;
 
   meta = {
     description = "JAX Plugin for CUDA12";

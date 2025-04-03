@@ -18,13 +18,13 @@ let
     else
       throw "unsupported platform";
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage {
   pname = "java-language-server";
   version = "0.2.46";
 
   src = fetchFromGitHub {
     owner = "georgewfraser";
-    repo = pname;
+    repo = "java-language-server";
     # commit hash is used as owner sometimes forgets to set tags. See https://github.com/georgewfraser/java-language-server/issues/104
     rev = "d7f4303cd233cdad84daffbb871dd4512a2c8da2";
     sha256 = "sha256-BIcfwz+pLQarnK8XBPwDN2nrdvK8xqUo0XFXk8ZV/h0=";

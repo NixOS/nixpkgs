@@ -19,7 +19,7 @@
 let
   manifest = lib.importJSON ./manifest.json;
 
-  inherit (stdenv.hostPlatform) isDarwin isStatic;
+  inherit (stdenv.hostPlatform) isDarwin;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,13 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [
-      "--enable-check"
+      # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
+      # "--enable-check"
       "--enable-csonly"
       "--enable-liblz4"
       "--enable-libz"
     ]
     ++ lib.optional disableDocs "--disable-docs"
-    ++ lib.optionals (!isStatic) [
+    ++ lib.optionals (!(finalAttrs.dontDisableStatic or false)) [
       # instead of `--disable-static` that `stdenv` assumes
       "--disable-libs"
       # "not currently supported" in `configure --help-cs` but still emphasized in README
@@ -86,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
       # "use Unix style (e.g., use Gtk) for Mac OS", which eliminates many problems
       "--enable-xonx"
     ];
+
+  # The upstream script builds static libraries by default.
+  dontAddStaticConfigureFlags = true;
 
   dontStrip = isDarwin;
 

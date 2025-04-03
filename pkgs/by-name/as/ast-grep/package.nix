@@ -10,19 +10,24 @@
   enableLegacySg ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.35.0";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
-    tag = version;
-    hash = "sha256-uiQYqVcSSQT32Vu8iE5ATIHFGDiyuxaQvg8hkBtB4DU=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ma4HwjbKujPEqJVXwNVV8HgszLlqDw3ogVoHwdKfwpU=";
   };
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-B/egtLMBrlLobB1m04L1NlNmZ6+DdQIV9Ae0LVPmO2Y=";
+  cargoHash = "sha256-+qOrRGao2szGHvLE5DGccKMwKApYoAyK+moPtMMKhdE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ast-grep";
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     homepage = "https://ast-grep.github.io/";
-    changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ast-grep/ast-grep/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
@@ -69,4 +74,4 @@ rustPlatform.buildRustPackage rec {
       cafkafk
     ];
   };
-}
+})

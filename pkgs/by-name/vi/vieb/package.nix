@@ -71,7 +71,6 @@ buildNpmPackage rec {
     description = "Vim Inspired Electron Browser";
     mainProgram = "vieb";
     maintainers = with maintainers; [
-      gebner
       tejing
     ];
     platforms = platforms.unix;

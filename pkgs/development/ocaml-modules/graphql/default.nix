@@ -6,7 +6,7 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "graphql";
 
   inherit (graphql_parser) version src;

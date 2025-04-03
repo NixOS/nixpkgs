@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nct6687d";
   version = "0-unstable-2024-11-05";
 

@@ -14,22 +14,6 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5;
 
-      django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = oldAttrs.src.override {
-          tag = "v${version}";
-          hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
-        };
-
-        propagatedBuildInputs = with final; [
-          beautifulsoup4
-          django
-        ];
-
-        # fails with some assertions
-        doCheck = false;
-      });
-
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1
         # https://github.com/django-extensions/django-extensions/issues/1885
@@ -127,7 +111,6 @@ python.pkgs.buildPythonApplication rec {
       defusedcsv
       defusedxml
       django
-      django-bootstrap4
       django-compressor
       django-context-decorator
       django-countries

@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = llvm_meta // {
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://libc.llvm.org/";
     description = "Standard C library for LLVM";
   };

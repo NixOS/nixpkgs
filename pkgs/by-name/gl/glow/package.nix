@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "glow";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
     rev = "v${version}";
-    hash = "sha256-gPy3MnQHmBJl06oVOpwQB4qIpJ10kUNMNMPkpsIujeI=";
+    hash = "sha256-pYXzm6HEqxJRPDdiUb+yij3iA2FhFYZOdRvQ69grcuU=";
   };
 
-  vendorHash = "sha256-vxw8yqY6MxIIWeSX1D+unb0VbBmIpz1431N7UNORJP0=";
+  vendorHash = "sha256-lnD3SdPqZO+xfsR5YhvIAr9Gy1sA1LXi4SP/d/Rv/6g=";
 
   nativeBuildInputs = [ installShellFiles ];
 

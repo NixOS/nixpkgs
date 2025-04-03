@@ -3,8 +3,8 @@ self:
   lib,
   stdenv,
   makeSetupHook,
-  fetchurl,
   cmake,
+  ninja,
   qt6,
 }:
 let
@@ -121,6 +121,7 @@ let
 
     nativeBuildInputs = [
       cmake
+      ninja
       qt6.wrapQtAppsHook
       moveDevHook
     ] ++ extraNativeBuildInputs;

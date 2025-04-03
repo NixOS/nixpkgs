@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   pythonPackages,
   buildPythonPackage,
   cmake,
@@ -22,7 +21,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "libmambapy";
   pyproject = true;
 

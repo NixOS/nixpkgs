@@ -4,8 +4,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_33,
-  nodejs_20,
+  electron_34,
+  nodejs_22,
   yarn-berry,
   cacert,
   writableTmpDirAsHomeHook,
@@ -32,8 +32,8 @@ let
     }
     .${hostPlatform.parsed.cpu.name}
       or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
-  electron = electron_33;
-  nodejs = nodejs_20;
+  electron = electron_34;
+  nodejs = nodejs_22;
   yarn = yarn-berry.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
   binName = lib.toLower productName;
@@ -41,17 +41,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.19.6";
+  version = "0.20.5";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BydTNE36oRIxr2lTnc2+EY0lvMXn4NTLB4EjqzhdjGk=";
+    hash = "sha256-eMVHwjJe6u3A3Dxo6SurusRuMksp/moPmXAUv0FXBwc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-racjpf0VgNod6OxWKSaCbKS9fEkInpDyhVbAHfYWIDo=";
+    hash = "sha256-Ob+A7NMTFuJ2wmRkHmemHnqkEAiY7G8NyxXXrT7NTR8=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-OuBxx0nrZ/KVFD1JinjBBXiQUcePWx5zRACld1CoHX0=";
+    outputHash = "sha256-e5GNWgeYw4CcpOGDd/LNk+syBupqAuws0hz+wUbaFL4=";
   };
   nativeBuildInputs =
     [

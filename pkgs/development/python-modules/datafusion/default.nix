@@ -69,7 +69,8 @@ buildPythonPackage rec {
 
   dependencies = [
     pyarrow
-  ] ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "1.4.6";
+  version = "1.4.9";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-Ntss7erVbpeW6EEeKrkR/anzvTUQhzggNhHi6rOIsFQ=";
+    hash = "sha256-rEN1z+gkQjWjDkISdnn0KsxVzzPSKGPI/+VeYclIvkI=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";
     homepage = "https://github.com/zweckj/pylamarzocco";
-    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/v${version}";
+    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

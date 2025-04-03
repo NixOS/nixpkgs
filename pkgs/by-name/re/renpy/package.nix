@@ -12,7 +12,7 @@
   makeWrapper,
   nix-update-script,
   pkg-config,
-  python311,
+  python3,
   SDL2,
   stdenv,
   versionCheckHook,
@@ -21,25 +21,23 @@
 }:
 
 let
-  python = python311;
+  python = python3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  version = "8.3.4.24120703";
+  version = "8.3.7.25031702";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     tag = finalAttrs.version;
-    hash = "sha256-9f1ptw+6OQ2rMytwPZPtUd+K/ihnVKHUiELs22iTTqE=";
+    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-    # Ren'Py currently does not compile on Cython 3.x.
-    # See https://github.com/renpy/renpy/issues/5359
-    python.pkgs.cython_0
+    python.pkgs.cython
     python.pkgs.setuptools
   ];
 
@@ -77,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libpng
     SDL2
-    SDL2.dev
+    (lib.getDev SDL2)
     zlib
   ];
 
@@ -120,7 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include/${python.libPrefix}";
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include";
+  };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

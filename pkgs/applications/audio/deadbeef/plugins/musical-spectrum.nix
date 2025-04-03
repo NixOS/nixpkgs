@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "deadbeef-musical-spectrum-plugin";
   version = "unstable-2020-07-01";
 

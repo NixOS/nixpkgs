@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "26.0.4";
+  version = "26.0.16";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-3tEWLRen8lRQEDFlfTWT9+L15k+7z/7To6p7SkmdJhU=";
+    hash = "sha256-se3yxIzxeinOnfltv+fSflypwxRHvW/wxKJ43LPsiho=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-DElSCZwVGZF/sjec0SFi7iIe/2Ern85oT5rp6bQl5wg=";
+    hash = "sha256-AtrBaN6Pvi5rvncHN64RCHS/fLA0u9WTC+hXsMQe7tU=";
   };
 
   nativeBuildInputs =
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Desktop application for creating diagrams";
+    description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
     license = with lib.licenses; [
       # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996

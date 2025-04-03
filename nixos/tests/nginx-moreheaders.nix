@@ -1,4 +1,5 @@
-import ./make-test-python.nix {
+{ ... }:
+{
   name = "nginx-more-headers";
 
   nodes = {

@@ -34,14 +34,14 @@ let
 
   edk2 = stdenv.mkDerivation {
     pname = "edk2";
-    version = "202502";
+    version = "202411";
 
     srcWithVendoring = fetchFromGitHub {
       owner = "tianocore";
       repo = "edk2";
       rev = "edk2-stable${edk2.version}";
       fetchSubmodules = true;
-      hash = "sha256-iobC0CeWSylS9sLuXOqAmL36hl/tY+IedT/I3xQ80Ag=";
+      hash = "sha256-KYaTGJ3DHtWbPEbP+n8MTk/WwzLv5Vugty/tvzuEUf0=";
     };
 
     src = applyPatches {
@@ -62,16 +62,18 @@ let
         })
       ];
 
+      # EDK2 is currently working on OpenSSL 3.3.x support. Use buildpackages.openssl again,
+      # when "https://github.com/tianocore/edk2/pull/6167" is merged.
       postPatch = ''
-        # de-vendor OpenSSL
+        # We don't want EDK2 to keep track of OpenSSL, they're frankly bad at it.
         rm -r CryptoPkg/Library/OpensslLib/openssl
         mkdir -p CryptoPkg/Library/OpensslLib/openssl
         (
         cd CryptoPkg/Library/OpensslLib/openssl
-        tar --strip-components=1 -xf ${buildPackages.openssl.src}
+        tar --strip-components=1 -xf ${buildPackages.openssl_3.src}
 
         # Apply OpenSSL patches.
-        ${lib.pipe buildPackages.openssl.patches [
+        ${lib.pipe buildPackages.openssl_3.patches [
           (builtins.filter (
             patch:
             !builtins.elem (baseNameOf patch) [

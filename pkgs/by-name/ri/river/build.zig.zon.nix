@@ -16,15 +16,11 @@ with lib;
 let
   unpackZigArtifact =
     { name, artifact }:
-    runCommandLocal name
-      {
-        nativeBuildInputs = [ zig ];
-      }
-      ''
-        hash="$(zig fetch --global-cache-dir "$TMPDIR" ${artifact})"
-        mv "$TMPDIR/p/$hash" "$out"
-        chmod 755 "$out"
-      '';
+    runCommandLocal name { nativeBuildInputs = [ zig ]; } ''
+      hash="$(zig fetch --global-cache-dir "$TMPDIR" ${artifact})"
+      mv "$TMPDIR/p/$hash" "$out"
+      chmod 755 "$out"
+    '';
 
   fetchZig =
     {
@@ -42,13 +38,12 @@ let
       name,
       url,
       hash,
+      rev ? throw "rev is required, remove and regenerate the zon2json-lock file",
     }:
     let
       parts = splitString "#" url;
       url_base = elemAt parts 0;
       url_without_query = elemAt (splitString "?" url_base) 0;
-      rev_base = elemAt parts 1;
-      rev = if match "^[a-fA-F0-9]{40}$" rev_base != null then rev_base else "refs/heads/${rev_base}";
     in
     fetchgit {
       inherit name rev hash;
@@ -61,20 +56,25 @@ let
       name,
       url,
       hash,
-    }:
+      ...
+    }@args:
     let
       parts = splitString "://" url;
       proto = elemAt parts 0;
       path = elemAt parts 1;
       fetcher = {
-        "git+http" = fetchGitZig {
-          inherit name hash;
-          url = "http://${path}";
-        };
-        "git+https" = fetchGitZig {
-          inherit name hash;
-          url = "https://${path}";
-        };
+        "git+http" = fetchGitZig (
+          args
+          // {
+            url = "http://${path}";
+          }
+        );
+        "git+https" = fetchGitZig (
+          args
+          // {
+            url = "https://${path}";
+          }
+        );
         http = fetchZig {
           inherit name hash;
           url = "http://${path}";
@@ -89,35 +89,35 @@ let
 in
 linkFarm name [
   {
-    name = "12209db20ce873af176138b76632931def33a10539387cba745db72933c43d274d56";
+    name = "pixman-0.3.0-LClMnz2VAAAs7QSCGwLimV5VUYx0JFnX5xWU6HwtMuDX";
     path = fetchZigArtifact {
-      name = "zig-pixman";
-      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.2.0.tar.gz";
-      hash = "sha256-CYgFIOR9H5q8UUpFglaixOocCMT6FGpcKQQBUVWpDKQ=";
+      name = "pixman";
+      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.3.0.tar.gz";
+      hash = "sha256-zX/jQV1NWGhalP3t0wjpmUo38BKCiUDPtgNGHefyxq0=";
     };
   }
   {
-    name = "1220687c8c47a48ba285d26a05600f8700d37fc637e223ced3aa8324f3650bf52242";
+    name = "wayland-0.3.0-lQa1kjPIAQDmhGYpY-zxiRzQJFHQ2VqhJkQLbKKdt5wl";
     path = fetchZigArtifact {
-      name = "zig-wayland";
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.2.0.tar.gz";
-      hash = "sha256-gxzkHLCq2NqX3l4nEly92ARU5dqP1SqnjpGMDgx4TXA=";
+      name = "wayland";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.3.0.tar.gz";
+      hash = "sha256-xU8IrETSFOKKQQMgwVyRKLwGaek4USaKXg49S9oHSTQ=";
     };
   }
   {
-    name = "122083317b028705b5d27be12976feebf17066a4e51802b3b5e9f970bec580e433e1";
+    name = "wlroots-0.18.2-jmOlchnIAwBq45_cxU1V3OWErxxJjQZlc9PyJfR-l3uk";
     path = fetchZigArtifact {
-      name = "zig-wlroots";
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.18.1.tar.gz";
-      hash = "sha256-S77/Own9/GjhLCCE/eI56pdpmhlvMVP41WZ27b+Sook=";
+      name = "wlroots";
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.18.2.tar.gz";
+      hash = "sha256-4/MGFCCgMeN6+oCaj0Z5dsbVo3s88oYk1+q0mMXrj8I=";
     };
   }
   {
-    name = "1220c90b2228d65fd8427a837d31b0add83e9fade1dcfa539bb56fd06f1f8461605f";
+    name = "xkbcommon-0.3.0-VDqIe3K9AQB2fG5ZeRcMC9i7kfrp5m2rWgLrmdNn9azr";
     path = fetchZigArtifact {
-      name = "zig-xkbcommon";
-      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.2.0.tar.gz";
-      hash = "sha256-f5oEJU5i2qeVN3GBrnQcqzEJCiOT7l4ak7GQ6gw5cH0=";
+      name = "xkbcommon";
+      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.3.0.tar.gz";
+      hash = "sha256-HhhUI+ayPtlylhTmZ1GrdSLbRIffTg3MeisGN1qs2iM=";
     };
   }
 ]

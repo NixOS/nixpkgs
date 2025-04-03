@@ -15,20 +15,20 @@
   mupdf,
   pkg-config,
   poppler,
-  poppler_utils,
+  poppler-utils,
   qpdf,
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libcupsfilters";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "libcupsfilters";
-    rev = "2.1.0";
-    hash = "sha256-tnQqM4stUJseDO9BG+PRUSFafjgpQQklTDsDsB9zQ4Y=";
+    rev = "2.1.1";
+    hash = "sha256-WEcg+NSsny/N1VAR1ejytM+3nOF3JlNuIUPf4w6N2ew=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libtiff
     mupdf
     poppler
-    poppler_utils
+    poppler-utils
     qpdf
   ];
   configureFlags = [

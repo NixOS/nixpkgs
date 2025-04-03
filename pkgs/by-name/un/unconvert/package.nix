@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "unconvert";
   version = "0-unstable-2023-09-07";
 

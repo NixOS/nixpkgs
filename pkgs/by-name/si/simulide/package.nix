@@ -53,33 +53,11 @@ in
 let
   inherit (versionInfo.${versionNum} or (throw "Unsupported versionNum")) release rev src;
 
-  extraPostPatch = lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
-    # GCC 13 needs the <cstdint> header explicitly included
-    sed -i src/gpsim/value.h -e '1i #include <cstdint>'
-    sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
-  '';
-
-  extraBuildInputs = lib.optionals (lib.versionOlder versionNum "1.1.0") [
-    libsForQt5.qtscript
-  ];
-
   iconPath =
     if lib.versionOlder versionNum "1.0.0" then
       "resources/icons/hicolor/256x256/simulide.png" # upstream had a messed up icon path in this release
     else
       "resources/icons/simulide.png";
-
-  installFiles =
-    if lib.versionOlder versionNum "1.0.0" then
-      ''
-        cp -r share/simulide/* $out/share/simulide
-        cp bin/simulide $out/bin/simulide
-      ''
-    else
-      ''
-        cp -r data examples $out/share/simulide
-        cp simulide $out/bin/simulide
-      '';
 
   release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
 in
@@ -89,50 +67,97 @@ stdenv.mkDerivation {
   version = "${versionNum}-${release}";
   inherit src;
 
+  patches = lib.optionals (versionNum == "1.0.0") [
+    # a static field was declared as protected but was accessed
+    # from a place where it would have had to be public
+    # this is only an error when using clang, gcc is more lenient
+    ./clang-fix-protected-field.patch
+  ];
+
   postPatch = ''
     sed -i resources/simulide.desktop \
       -e "s|^Exec=.*$|Exec=simulide|" \
       -e "s|^Icon=.*$|Icon=simulide|"
 
     # Note: older versions don't have REV_NO
+    # Note: the project file hardcodes a homebrew gcc compiler when using darwin
+    #       which we don't want, so we just delete the relevant lines
     sed -i SimulIDE.pr* \
       -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
       -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
-      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
+      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??????|" \
+      -e "/QMAKE_CC/d" \
+      -e "/QMAKE_CXX/d" \
+      -e "/QMAKE_LINK/d"
 
-    ${extraPostPatch}
+    ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
+      # GCC 13 needs the <cstdint> header explicitly included
+      sed -i src/gpsim/value.h -e '1i #include <cstdint>'
+      sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
+    ''}
   '';
 
   preConfigure = ''
     cd build_XX
   '';
 
-  nativeBuildInputs = with libsForQt5; [
-    qmake
-    wrapQtAppsHook
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
-    (with libsForQt5; [
-      qtserialport
-      qtmultimedia
-      qttools
-    ])
-    ++ extraBuildInputs;
+    [
+      libsForQt5.qtserialport
+      libsForQt5.qtmultimedia
+      libsForQt5.qttools
+    ]
+    ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
+      libsForQt5.qtscript
+    ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
-    install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
+      install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+    ''}
 
-    mkdir -p $out/share/simulide $out/bin
     pushd executables/SimulIDE_*
-    ${installFiles}
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          cp -r simulide.app $out/Applications
+        ''
+      else if lib.versionOlder versionNum "1.0.0" then
+        ''
+          mkdir -p $out/share/simulide $out/bin
+          cp -r share/simulide/* $out/share/simulide
+          cp bin/simulide $out/bin/simulide
+        ''
+      else
+        ''
+          mkdir -p $out/share/simulide $out/bin
+          cp -r data examples $out/share/simulide
+          cp simulide $out/bin/simulide
+        ''
+    }
     popd
 
     runHook postInstall
+  '';
+
+  # on darwin there are some binaries in the examples directory which
+  # accidentally get wrapped by wrapQtAppsHook so we do the wrapping manually instead
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/bin
+    wrapQtApp $out/Applications/simulide.app/Contents/MacOs/simulide
+    ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
   '';
 
   meta = {
@@ -149,6 +174,9 @@ stdenv.mkDerivation {
       carloscraveiro
       tomasajt
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

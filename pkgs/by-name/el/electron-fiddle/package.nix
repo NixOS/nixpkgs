@@ -1,31 +1,31 @@
 {
   buildFHSEnv,
-  electron_24,
+  electron_33,
   fetchFromGitHub,
   fetchYarnDeps,
   fetchurl,
-  fixup-yarn-lock,
   git,
   lib,
   makeDesktopItem,
-  nodejs_18,
+  nodejs_20,
   stdenvNoCC,
   util-linux,
-  yarn,
+  yarnBuildHook,
+  yarnConfigHook,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.32.6";
-  electron = electron_24;
-  nodejs = nodejs_18;
+  version = "0.36.5";
+  electron = electron_33;
+  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
-    rev = "v${version}";
-    hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
+    tag = "v${version}";
+    hash = "sha256-Fo7rXnufJ26WijnplWswdeCGJitkvTDboOggUfrz1Hw=";
   };
 
   # As of https://github.com/electron/fiddle/pull/1316 this is fetched
@@ -36,57 +36,53 @@ let
     hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
-  };
-
-  electronDummyMirror = "https://electron.invalid/";
-  electronDummyDir = "nix";
-  electronDummyFilename = builtins.baseNameOf (builtins.head (electron.src.urls));
-  electronDummyHash = builtins.hashString "sha256" "${electronDummyMirror}${electronDummyDir}";
-
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version src;
 
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-eZ/g2cP6M0zWhF14go0sIC+UuzTo9Gl4KsPBGzJU3FQ=";
+    };
+
     nativeBuildInputs = [
-      fixup-yarn-lock
       git
       nodejs
       util-linux
-      yarn
+      yarnBuildHook
+      yarnConfigHook
       zip
     ];
 
-    configurePhase = ''
-      export HOME=$TMPDIR
-      fixup-yarn-lock yarn.lock
-      yarn config --offline set yarn-offline-mirror ${offlineCache}
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules
+    preBuild = ''
+      # electron files need to be writable on Darwin
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
 
-      mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron.dist}' "$TMPDIR/electron"
-      chmod -R u+w "$TMPDIR/electron"
-      (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
+      pushd electron-dist
+      zip -0Xqr ../electron.zip .
+      popd
+
+      rm -r electron-dist
+
+      # force @electron/packager to use our electron instead of downloading it, even if it is a different version
+      substituteInPlace node_modules/@electron/packager/dist/packager.js \
+          --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
 
       ln -s ${releasesJson} static/releases.json
     '';
 
-    buildPhase = ''
-      ELECTRON_CUSTOM_VERSION='${electron.version}' \
-        ELECTRON_MIRROR='${electronDummyMirror}' \
-        ELECTRON_CUSTOM_DIR='${electronDummyDir}' \
-        ELECTRON_CUSTOM_FILENAME='${electronDummyFilename}' \
-        yarn --offline run package
-    '';
+    yarnBuildScript = "package";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/lib/electron-fiddle/resources"
       cp "out/Electron Fiddle-"*/resources/app.asar "$out/lib/electron-fiddle/resources/"
       mkdir -p "$out/share/icons/hicolor/scalable/apps"
       cp assets/icons/fiddle.svg "$out/share/icons/hicolor/scalable/apps/electron-fiddle.svg"
+
+      runHook postInstall
     '';
   };
 
@@ -135,6 +131,7 @@ buildFHSEnv {
       glib
       gtk3
       libdrm
+      libglvnd
       libnotify
       libxkbcommon
       libgbm
@@ -181,7 +178,11 @@ buildFHSEnv {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
     license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    mainProgram = "electron-fiddle";
+    maintainers = with maintainers; [
+      andersk
+      tomasajt
+    ];
     platforms = electron.meta.platforms;
   };
 }

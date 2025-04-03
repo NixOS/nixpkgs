@@ -62,6 +62,7 @@ let
             paramiko
             pkginfo
             psutil
+            py-deviceid
             pyjwt
             pyopenssl
             requests
@@ -152,21 +153,6 @@ let
           hash = "sha256-v0u3e9ZoEnDdCnM6o6fD7N+suo5hbTqMO5jM6cSMx8A=";
         };
       });
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.containerservice.v2024_09_01'
-      azure-mgmt-containerservice = super.azure-mgmt-containerservice.overridePythonAttrs (attrs: rec {
-        version = "33.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_containerservice"; # Different from src.pname in the original package.
-          inherit version;
-          hash = "sha256-hoWD3NuKSQXeA6hKm3kD12octZrNnDc28CvHQ7UEfJ4=";
-        };
-      });
-
-      # ValueError: The operation 'azure.mgmt.devtestlabs.operations#VirtualMachinesOperations.delete' is invalid.
-      azure-mgmt-devtestlabs =
-        overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
-          "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
 
       # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =

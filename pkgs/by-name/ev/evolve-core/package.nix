@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   fetchFromGitHub,
   flutter327,
   makeDesktopItem,

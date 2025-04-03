@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  installShellFiles,
   stdenv,
   darwin,
   versionCheckHook,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs =
     [
       pkg-config
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.DarwinTools
@@ -38,6 +40,14 @@ rustPlatform.buildRustPackage rec {
     # - workaround for "Io Error: No such file or directory"
     "--skip=test_run"
   ];
+
+  postInstall = ''
+    installManPage doc/cyme.1
+    installShellCompletion --cmd cyme \
+      --bash doc/cyme.bash \
+      --fish doc/cyme.fish \
+      --zsh doc/_cyme
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -1,42 +1,42 @@
-{ config
-, stdenv
-, lib
-, fetchFromGitHub
-, Foundation
-, abseil-cpp_202407
-, cmake
-, cpuinfo
-, eigen
-, flatbuffers_23
-, gbenchmark
-, glibcLocales
-, gtest
-, howard-hinnant-date
-, libpng
-, nlohmann_json
-, nsync
-, pkg-config
-, python3Packages
-, re2
-, zlib
-, microsoft-gsl
-, libiconv
-, protobuf_21
-, pythonSupport ? true
-, cudaSupport ? config.cudaSupport
-, ncclSupport ? config.cudaSupport
-, cudaPackages ? {}
+{
+  config,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  Foundation,
+  abseil-cpp_202407,
+  cmake,
+  cpuinfo,
+  eigen,
+  flatbuffers_23,
+  gbenchmark,
+  glibcLocales,
+  gtest,
+  howard-hinnant-date,
+  libpng,
+  nlohmann_json,
+  pkg-config,
+  python3Packages,
+  re2,
+  zlib,
+  microsoft-gsl,
+  libiconv,
+  protobuf_21,
+  pythonSupport ? true,
+  cudaSupport ? config.cudaSupport,
+  ncclSupport ? config.cudaSupport,
+  cudaPackages ? { },
 }@inputs:
 
-
 let
-  version = "1.20.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
-    hash = "sha256-GTrRRNdqLUKCcWC9VdV/Oslszykn73dMXf66FLcHRVc=";
+    hash = "sha256-BaHXpK6Ek+gsld7v+OBM+C3FjrPiyMQYP1liv7mEjho=";
     fetchSubmodules = true;
   };
 
@@ -64,144 +64,185 @@ let
     version = "3c8b153";
     src = "${cpuinfo.src}/deps/clog";
 
-    nativeBuildInputs = [ cmake gbenchmark gtest ];
+    nativeBuildInputs = [
+      cmake
+      gbenchmark
+      gtest
+    ];
     cmakeFlags = [
-      "-DUSE_SYSTEM_GOOGLEBENCHMARK=ON"
-      "-DUSE_SYSTEM_GOOGLETEST=ON"
-      "-DUSE_SYSTEM_LIBS=ON"
+      (lib.cmakeBool "USE_SYSTEM_GOOGLEBENCHMARK" true)
+      (lib.cmakeBool "USE_SYSTEM_GOOGLETEST" true)
+      (lib.cmakeBool "USE_SYSTEM_LIBS" true)
       # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
-      "-DCLOG_BUILD_TESTS=OFF"
+      (lib.cmakeBool "CLOG_BUILD_TESTS" false)
     ];
   };
 
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.16.1";
-    hash = "sha256-+NmWoZDXNJ8YQIWlUXV+czHyI8UtJedu2VG+1aR5L7s=";
-    # Apply backport of https://github.com/onnx/onnx/pull/6195 from 1.17.0
-    postFetch = ''
-      pushd $out
-      patch -p1 < ${src}/cmake/patches/onnx/onnx.patch
-      popd
-    '';
+    tag = "v1.17.0";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
-   cutlass = fetchFromGitHub {
+  cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v3.5.1";
     hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
- };
+  };
+
+  dlpack = fetchFromGitHub {
+    owner = "dmlc";
+    repo = "dlpack";
+    tag = "v0.6";
+    hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
+  };
+
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches = [
-    # If you stumble on these patches trying to update onnxruntime, check
-    # `git blame` and ping the introducers.
+  patches =
+    [
+      # drop with the next update
+      # https://github.com/microsoft/onnxruntime/pull/23939
+      (fetchpatch {
+        url = "https://github.com/microsoft/onnxruntime/commit/55553703eaa8cd01d2b01cc21171a0ea515c888a.patch";
+        hash = "sha256-gL1rMNUcteKcjLmdJ+0r67rvNrC31bAyKYx4aeseWkM=";
+      })
+    ]
+    ++ lib.optionals cudaSupport [
+      # We apply the referenced 1064.patch ourselves to our nix dependency.
+      #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
+      ./nvcc-gsl.patch
+    ];
 
-    # Context: we want the upstream to
-    # - always try find_package first (FIND_PACKAGE_ARGS),
-    # - use MakeAvailable instead of the low-level Populate,
-    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./eigen.patch
-  ] ++ lib.optionals cudaSupport [
-    # We apply the referenced 1064.patch ourselves to our nix dependency.
-    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
-    ./nvcc-gsl.patch
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      python3Packages.python
+      protobuf_21
+    ]
+    ++ lib.optionals pythonSupport (
+      with python3Packages;
+      [
+        pip
+        python
+        pythonOutputDistHook
+        setuptools
+        wheel
+      ]
+    )
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      cudaPackages.cudnn-frontend
+    ]
+    ++ lib.optionals isCudaJetson [
+      cudaPackages.autoAddCudaCompatRunpath
+    ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    python3Packages.python
-    protobuf_21
-  ] ++ lib.optionals pythonSupport (with python3Packages; [
-    pip
-    python
-    pythonOutputDistHook
-    setuptools
-    wheel
-  ]) ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    cudaPackages.cudnn-frontend
-  ];
+  buildInputs =
+    [
+      cpuinfo
+      eigen
+      glibcLocales
+      howard-hinnant-date
+      libpng
+      nlohmann_json
+      microsoft-gsl
+      pytorch_clog
+      zlib
+    ]
+    ++ lib.optionals pythonSupport (
+      with python3Packages;
+      [
+        numpy
+        pybind11
+        packaging
+      ]
+    )
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+      Foundation
+      libiconv
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl # cub/cub.cuh
+        libcublas # cublas_v2.h
+        libcurand # curand.h
+        libcusparse # cusparse.h
+        libcufft # cufft.h
+        cudnn # cudnn.h
+        cuda_cudart
+      ]
+      ++ lib.optionals (cudaSupport && ncclSupport) (
+        with cudaPackages;
+        [
+          nccl
+        ]
+      )
+    );
 
-  buildInputs = [
-    cpuinfo
-    eigen
-    glibcLocales
-    howard-hinnant-date
-    libpng
-    nlohmann_json
-    microsoft-gsl
-    pytorch_clog
-    zlib
-  ] ++ lib.optionals pythonSupport (with python3Packages; [
-    numpy
-    pybind11
-    packaging
-  ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    Foundation
-    libiconv
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cccl # cub/cub.cuh
-    libcublas # cublas_v2.h
-    libcurand # curand.h
-    libcusparse # cusparse.h
-    libcufft # cufft.h
-    cudnn # cudnn.h
-    cuda_cudart
-  ] ++ lib.optionals (cudaSupport && ncclSupport) (with cudaPackages; [
-    nccl
-  ]));
-
-  nativeCheckInputs = [
-    gtest
-  ] ++ lib.optionals pythonSupport (with python3Packages; [
-    pytest
-    sympy
-    onnx
-  ]);
+  nativeCheckInputs =
+    [
+      gtest
+    ]
+    ++ lib.optionals pythonSupport (
+      with python3Packages;
+      [
+        pytest
+        sympy
+        onnx
+      ]
+    );
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
-  outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "dist" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals pythonSupport [ "dist" ];
 
   enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
 
-  cmakeFlags = [
-    "-DABSL_ENABLE_INSTALL=ON"
-    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
-    "-DFETCHCONTENT_QUIET=OFF"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202407.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
-    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
-    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
-    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
-    # fails to find protoc on darwin, so specify it
-    "-DONNX_CUSTOM_PROTOC_EXECUTABLE=${protobuf_21}/bin/protoc"
-    "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
-    "-Donnxruntime_ENABLE_LTO=ON"
-    "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
-    (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
-    (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
-  ] ++ lib.optionals pythonSupport [
-    "-Donnxruntime_ENABLE_PYTHON=ON"
-  ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
-    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-    (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+      (lib.cmakeBool "FETCHCONTENT_QUIET" false)
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202407.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint}")
+      (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
+      # fails to find protoc on darwin, so specify it
+      (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" "${protobuf_21}/bin/protoc")
+      (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
+      (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
+      (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" false)
+      (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
+      (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+      (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+    ]
+    ++ lib.optionals pythonSupport [
+      (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+      (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+      (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
+    ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -212,19 +253,21 @@ effectiveStdenv.mkDerivation rec {
 
   requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
 
-  postPatch = ''
-    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
-    echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
+  postPatch =
+    ''
+      substituteInPlace cmake/libonnxruntime.pc.cmake.in \
+        --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+      echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
 
-    # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
-    substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
-      "GetRuntimePath() const { return PathString(); }" \
-      "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
-  '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
-    # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
-    rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
-  '';
+      # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
+      substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
+        "GetRuntimePath() const { return PathString(); }" \
+        "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
+    ''
+    + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
+      # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
+      rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
+    '';
 
   postBuild = lib.optionalString pythonSupport ''
     ${python3Packages.python.interpreter} ../setup.py bdist_wheel
@@ -262,6 +305,10 @@ effectiveStdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
+    maintainers = with maintainers; [
+      puffnfresh
+      ck3d
+      cbourjau
+    ];
   };
 }

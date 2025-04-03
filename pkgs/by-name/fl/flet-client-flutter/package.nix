@@ -1,31 +1,32 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, flutter327
-, gst_all_1
-, libunwind
-, makeWrapper
-, mimalloc
-, orc
-, python3
-, nix
-, gitUpdater
-, nix-prefetch-git
-, mpv-unwrapped
-, libplacebo
-, _experimental-update-script-combinators
-, fletTarget ? "linux"
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  flutter327,
+  gst_all_1,
+  libunwind,
+  makeWrapper,
+  mimalloc,
+  orc,
+  python3,
+  nix,
+  gitUpdater,
+  nix-prefetch-git,
+  mpv-unwrapped,
+  libplacebo,
+  _experimental-update-script-combinators,
+  fletTarget ? "linux",
 }:
 
 flutter327.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.26.0";
+  version = "0.27.6";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-KmZ13QiZeZ6jljs2wibetbACfNODGJ47II8XcRAxoX4=";
+    hash = "sha256-ZtIAfLdj9209ZzgmNzTHMyzCTohxYK0Va4M8NYyie64=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -46,26 +47,37 @@ flutter327.buildFlutterApplication rec {
     pkg-config
   ];
 
-  buildInputs = [
-    mpv-unwrapped
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-vaapi
-    gst_all_1.gstreamer
-    libunwind
-    orc
-    mimalloc
-  ]
+  buildInputs =
+    [
+      mpv-unwrapped
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-vaapi
+      gst_all_1.gstreamer
+      libunwind
+      orc
+      mimalloc
+    ]
     ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs
-  ;
+    ++ libplacebo.buildInputs;
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
       {
-        command = ["env" "PATH=${lib.makeBinPath [(python3.withPackages (p: [p.pyyaml])) nix-prefetch-git nix]}" "python3" ./update-lockfiles.py ];
-        supportedFeatures = ["silent"];
+        command = [
+          "env"
+          "PATH=${
+            lib.makeBinPath [
+              (python3.withPackages (p: [ p.pyyaml ]))
+              nix-prefetch-git
+              nix
+            ]
+          }"
+          "python3"
+          ./update-lockfiles.py
+        ];
+        supportedFeatures = [ "silent" ];
       }
     ];
   };
@@ -75,7 +87,10 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

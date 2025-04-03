@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   # build-system
@@ -44,6 +45,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "llm_cmd"
   ];
+
+  passthru.tests = {
+    llm-plugin = callPackage ./tests/llm-plugin.nix { };
+  };
 
   meta = {
     description = "Use LLM to generate and execute commands in your shell";

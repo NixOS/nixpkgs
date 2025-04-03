@@ -137,7 +137,7 @@ mkWrapper type (
               -i \$prev -t attr -n Project -v "${extraTargets}" \
               sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
           ''
-          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+          + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "10") ''
             codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
           ''
         )

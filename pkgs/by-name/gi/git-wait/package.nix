@@ -7,7 +7,7 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-wait";
   version = "0.4.0-unstable-2024-12-01";
 

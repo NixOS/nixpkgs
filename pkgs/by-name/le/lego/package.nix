@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "lego";
@@ -18,7 +23,9 @@ buildGoModule rec {
   subPackages = [ "cmd/lego" ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   meta = with lib; {
@@ -29,5 +36,8 @@ buildGoModule rec {
     mainProgram = "lego";
   };
 
-  passthru.tests.lego = nixosTests.acme;
+  passthru.tests = {
+    lego-http = nixosTests.acme.http01-builtin;
+    lego-dns = nixosTests.acme.dns01;
+  };
 }

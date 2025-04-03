@@ -5,7 +5,7 @@
   dune-private-libs,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-site";
   inherit (dune_3) src version;
 

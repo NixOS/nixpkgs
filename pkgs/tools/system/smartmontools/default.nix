@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ]
+    lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
       ApplicationServices

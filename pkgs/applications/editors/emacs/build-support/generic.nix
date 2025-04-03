@@ -61,6 +61,8 @@ lib.extendMkDerivation {
       propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
       strictDeps = args.strictDeps or true;
+      # TODO re-enable after #392928 reaches master
+      # __structuredAttrs = args.__structuredAttrs or true;
 
       inherit turnCompilationWarningToError ignoreCompilationError;
 

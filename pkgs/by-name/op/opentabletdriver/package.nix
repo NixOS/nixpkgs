@@ -17,6 +17,7 @@
   udev,
   wrapGAppsHook3,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -122,7 +123,7 @@ buildDotnetModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/otd-daemon";
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests = {
       otd-runs = nixosTests.opentabletdriver;
     };

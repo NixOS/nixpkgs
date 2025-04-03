@@ -16,7 +16,7 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "implot-demos";
   version = "unstable-2023-08-20";
 

@@ -7,7 +7,7 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.7.7";
   pname = "taktuk";
 

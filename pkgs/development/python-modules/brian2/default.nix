@@ -14,7 +14,6 @@
   setuptools-scm,
   python,
   scipy,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {

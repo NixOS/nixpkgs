@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pkgsBuildBuild
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pkgsBuildBuild,
 }:
 
 let
@@ -11,7 +12,7 @@ let
   # We build the CLI without the static server for simplicity, but the tool is still required for
   # compilation to succeed.
   # See: https://github.com/argoproj/argo/blob/d7690e32faf2ac5842468831daf1443283703c25/Makefile#L117
-  staticfiles = pkgsBuildBuild.buildGoModule rec {
+  staticfiles = pkgsBuildBuild.buildGoModule {
     name = "staticfiles";
 
     src = fetchFromGitHub {
@@ -29,21 +30,24 @@ let
       cp ${./staticfiles.go.mod} go.mod
     '';
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
   };
 in
 buildGoModule rec {
   pname = "argo-workflows";
-  version = "3.6.3";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     tag = "v${version}";
-    hash = "sha256-FbhF/oPWtcDqukeQf+NjfSCieQmrSTKBn3vbRr9IQIE=";
+    hash = "sha256-LvFpYVylVwWhoVtMDldalSHa5KGdbKVB6yFnP5ha4gg=";
   };
 
-  vendorHash = "sha256-uCIdZkoPgppJtrFf7nOVIyEXo1bVILYXNs5LtLLLmsY=";
+  vendorHash = "sha256-hMegxeUFSBf32dnXmD7QagkvWgWDeB4Fu4nlKNoePWY=";
 
   doCheck = false;
 
@@ -74,9 +78,11 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash zsh; do
-      ${if (stdenv.buildPlatform == stdenv.hostPlatform)
-        then "$out/bin/argo"
-        else "${pkgsBuildBuild.argo}/bin/argo"
+      ${
+        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+          "$out/bin/argo"
+        else
+          "${pkgsBuildBuild.argo}/bin/argo"
       } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done

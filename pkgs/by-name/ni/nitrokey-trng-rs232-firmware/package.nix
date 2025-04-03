@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkgsCross.avr.stdenv.cc ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   makeFlags = [ "all" ];
 

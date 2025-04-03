@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2025.1.4";
+  version = "2025.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = "securetar";
     tag = version;
-    hash = "sha256-vI9u8CUf9rdJwx+Q3ypO9XS/jfRxZV5EOjvKSmQSNa0=";
+    hash = "sha256-uVzyVgS8bWxS7jhwVyv7wTNF8REW+dJIhkRaS/8/FmY=";
   };
 
   build-system = [ setuptools ];

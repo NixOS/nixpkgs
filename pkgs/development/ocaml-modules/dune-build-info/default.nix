@@ -4,7 +4,7 @@
   dune-action-plugin,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-build-info";
   inherit (dune-action-plugin) src version preBuild;
 

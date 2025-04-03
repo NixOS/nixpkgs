@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.20.0";
+  version = "1.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_os_config";
     inherit version;
-    hash = "sha256-GczIpzo161rJ+TxU9LB9wcvtLXfopSRofeO9UyS4tMQ=";
+    hash = "sha256-15sKmKW9y3/JU7rTLRZJXYqxWdWvqIFmIqpXKo2tE8Q=";
   };
 
   build-system = [ setuptools ];

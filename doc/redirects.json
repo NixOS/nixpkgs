@@ -8,6 +8,18 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -53,6 +65,12 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
+  ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -77,6 +95,9 @@
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
   ],
@@ -97,6 +118,12 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -308,6 +335,30 @@
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
   ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
+  ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
   ],
@@ -331,6 +382,33 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -1521,9 +1599,6 @@
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
   ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
-  ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
   ],
@@ -1970,6 +2045,9 @@
   ],
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
+  ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
   ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
@@ -2675,6 +2753,24 @@
   ],
   "declarative-debugging": [
     "index.html#declarative-debugging"
+  ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
   ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"

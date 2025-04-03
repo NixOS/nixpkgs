@@ -25,7 +25,7 @@
   camelot,
   pytesseract,
   pytest-factoryboy,
-  poppler_utils,
+  poppler-utils,
   pytest-playwright,
   playwright-driver,
   pnpm_9,
@@ -99,7 +99,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    poppler_utils
+    poppler-utils
     pytest-django
     pytest-factoryboy
     pytest-playwright

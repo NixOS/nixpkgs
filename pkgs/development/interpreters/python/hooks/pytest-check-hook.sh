@@ -18,7 +18,7 @@ function pytestCheckPhase() {
     concatTo _pathsArray disabledTestPaths
     for path in "${_pathsArray[@]}"; do
         # Check if every path glob matches at least one path
-        @pythonCheckInterpreter@ <(cat <<EOF
+        @pythonCheckInterpreter@ - "$path" <<EOF
 import glob
 import sys
 path_glob=sys.argv[1]
@@ -27,7 +27,6 @@ if not len(path_glob):
 if next(glob.iglob(path_glob), None) is None:
     sys.exit('Disabled tests path glob "{}" does not match any paths. Aborting'.format(path_glob))
 EOF
-        ) "$path"
         flagsArray+=("--ignore-glob=$path")
     done
 

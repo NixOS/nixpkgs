@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wat";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "wat";
     rev = version;
-    hash = "sha256-oAvweCZxUd3Sd2swjYFL3hZ3szlpVjefYb5apkR9P5U=";
+    hash = "sha256-vTq+R/EBkBm27qWR4S9Za6/ppfWD9CLE21SXhTabkhc=";
   };
 
   build-system = [ setuptools ];

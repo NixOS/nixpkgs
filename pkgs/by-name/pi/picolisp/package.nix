@@ -29,10 +29,16 @@ stdenv.mkDerivation {
     readline
   ];
   sourceRoot = ''pil21'';
-  buildPhase = ''
-    cd src
-    make
-  '';
+  preBuild =
+    ''
+      cd src
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Flags taken from instructions at: https://picolisp.com/wiki/?alternativeMacOSRepository
+      makeFlagsArray+=(
+        SHARED='-dynamiclib -undefined dynamic_lookup'
+      )
+    '';
 
   installPhase = ''
     cd ..
@@ -42,7 +48,7 @@ stdenv.mkDerivation {
     ln -s "$out/lib/picolisp/bin/pil" "$out/bin/pil"
     ln -s "$out/lib/picolisp/man/man1/pil.1" "$out/man/pil.1"
     ln -s "$out/lib/picolisp/man/man1/picolisp.1" "$out/man/picolisp.1"
-    substituteInPlace $out/bin/pil --replace /usr $out
+    substituteInPlace $out/bin/pil --replace-fail /usr $out
   '';
 
   meta = with lib; {

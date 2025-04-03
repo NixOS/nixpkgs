@@ -86,14 +86,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.47.2";
+  version = "0.48.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dSKR1VpjpdJVZ5dmLgIvAu3K+DYrSbohZkqxSQhjw8U=";
+    hash = "sha256-skuJFly6LSFfyAVy2ByNolkEwIijsTu2TxzQ9ugWarI=";
   };
 
   postPatch = ''
@@ -176,7 +176,7 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  mesonBuildType = if debug then "debugoptimized" else "release";
+  mesonBuildType = if debug then "debug" else "release";
 
   dontStrip = debug;
   strictDeps = true;
@@ -186,6 +186,8 @@ customStdenv.mkDerivation (finalAttrs: {
       "xwayland" = enableXWayland;
       "legacy_renderer" = legacyRenderer;
       "systemd" = withSystemd;
+      "uwsm" = false;
+      "hyprpm" = false;
     })
     (mapAttrsToList mesonBool {
       # PCH provides no benefits when building with Nix

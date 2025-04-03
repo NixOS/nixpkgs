@@ -25,6 +25,8 @@ buildPythonPackage rec {
     hash = "sha256-jUH1XhkytRwR76wUTsGQGu6m8s+SZ/GO114Lz9atwE8=";
   };
 
+  pythonRelaxDeps = [ "async-timeout" ];
+
   postPatch = ''
     sed -i "/addopts/d" pyproject.toml
   '';

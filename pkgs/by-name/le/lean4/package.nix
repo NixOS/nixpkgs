@@ -6,6 +6,7 @@
   git,
   gmp,
   cadical,
+  pkg-config,
   libuv,
   perl,
   testers,
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.16.0";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdFTxLk0Yahwhu/oQeTappvWnUtnim63dxN7gmU8Jt8=";
+    hash = "sha256-1hVcRO9RbVUgoKTUTFXBqJZwt50/aw/P9dxUdI7RpCc=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [

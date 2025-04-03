@@ -531,13 +531,30 @@ If you removed packages or made some major NixOS changes, write about it in the 
 
 Names of files and directories should be in lowercase, with dashes between words — not in camel case. For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPackages.nix`.
 
+### Formatting
+
+CI [enforces](./.github/workflows/check-nix-format.yml) all Nix files to be
+formatted using the [official Nix formatter](https://github.com/NixOS/nixfmt).
+
+You can ensure this locally using either of these commands:
+```
+nix-shell --run treefmt
+nix develop --command treefmt
+nix fmt
+```
+
+If you're starting your editor in `nix-shell` or `nix develop`,
+you can also set it up to automatically format the file with `treefmt` on save.
+
+If you have any problems with formatting, please ping the
+[formatting team](https://nixos.org/community/teams/formatting/) via
+[@NixOS/nix-formatting](https://github.com/orgs/NixOS/teams/nix-formatting).
+
 ### Syntax
 
 - Set up [editorconfig](https://editorconfig.org/) for your editor, such that [the settings](./.editorconfig) are automatically applied.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
-
-- New files must be formatted by entering the `nix-shell` from the repository root and running `nixfmt`.
 
 - Functions should list their expected arguments as precisely as possible. That is, write
 
@@ -650,7 +667,7 @@ If you want your PR to get merged quickly and smoothly, it is in your best inter
 
 For the committer to judge your intention, it's best to explain why you've made your change.
 This does not apply to trivial changes like version updates because the intention is obvious (though linking the changelog is appreciated).
-For any more nuanced changed or even major version upgrades, it helps if you explain the background behind your change a bit.
+For any more nuanced changes or even major version upgrades, it helps if you explain the background behind your change a bit.
 E.g. if you're adding a package, explain what it is and why it should be in Nixpkgs.
 This goes hand in hand with [Writing good commit messages](#writing-good-commit-messages).
 

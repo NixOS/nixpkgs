@@ -71,11 +71,11 @@ rec {
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems [ "x86_64-linux" "aarch64-linux" ] "nixos.amazonImage")
-        (onFullSupported "nixos.iso_plasma6")
-        (onFullSupported "nixos.iso_gnome")
+        (onFullSupported "nixos.iso_graphical")
         (onFullSupported "nixos.manual")
         (onSystems [ "aarch64-linux" ] "nixos.sd_image")
-        (onFullSupported "nixos.tests.acme")
+        (onFullSupported "nixos.tests.acme.http01-builtin")
+        (onFullSupported "nixos.tests.acme.dns01")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosCdrom")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")
@@ -85,7 +85,6 @@ rec {
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
-        (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
 
         # Way too many manual retries required on Hydra.

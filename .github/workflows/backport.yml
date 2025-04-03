@@ -19,7 +19,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@0d564482f06ca65fa9e77e2510873638c82206f2 # v1.11.5
+      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -31,7 +31,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Create backport PRs
-        uses: korthout/backport-action@be567af183754f6a5d831ae90f648954763f17f5 # v3.1.0
+        uses: korthout/backport-action@436145e922f9561fc5ea157ff406f21af2d6b363 # v3.2.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'

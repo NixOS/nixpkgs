@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -10,7 +11,7 @@ buildDotnetModule rec {
 
   src = fetchFromGitHub {
     owner = "github";
-    repo = pname;
+    repo = "gh-gei";
     rev = "v${version}";
     hash = "sha256-orDjHgyqwBo/LOuujCp/6p4G0SWDA/ZDWvtTfH1ofrU=";
   };

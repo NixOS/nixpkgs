@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   src = fetchFromSourcehut {
-    repo = pname;
+    repo = "wofi";
     owner = "~scoopta";
     rev = "v${version}";
     sha256 = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";

@@ -24,19 +24,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-WYy6cyPmyWL/11yHf+dRbcZGBfvVfELeTwKvpJMu5ns=";
+    hash = "sha256-aJp9UrfRXAsnHFGgMTHGRgCvlPEa62r9/0hEp5YKRzE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-bqZZIA7sE0viAhI5GUFIVCXTkK+U9aWPvCPCug5SR94=";
+    hash = "sha256-ZoflXdou6S7CYFF5x1pB71Ur08X1W6wPaJIm1sYsI2w=";
   };
 
   nativeBuildInputs = [

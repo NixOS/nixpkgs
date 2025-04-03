@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-jLKawxnwP5dJglUhgHfWgmKh27i32Rr4LcJQdpXasco=";
+    hash = "sha256-6HOTLwGi2oSQChwHE/oNHfZpcMh8xTuwNQSpKS01bwI=";
   };
 
   nativeBuildInputs = [

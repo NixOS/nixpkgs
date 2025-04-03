@@ -90,7 +90,8 @@ buildPythonPackage rec {
     ''
       substituteInPlace pyproject.toml \
         --replace-fail "setuptools~=69.2.0" "setuptools" \
-        --replace-fail "wheel~=0.44.0" "wheel"
+        --replace-fail "wheel~=0.44.0" "wheel" \
+        --replace-fail "cython>=0.29.1,<=3.0.11" "cython"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace kivy/lib/mtdev.py \

@@ -12,19 +12,17 @@
   openssl,
   perl,
   runtimeShell,
-  autoconf,
   openjdk11 ? null, # javacSupport
   unixODBC ? null, # odbcSupport
   libGL ? null,
   libGLU ? null,
   wxGTK ? null,
   xorg ? null,
-  ex_doc ? null,
   parallelBuild ? false,
   systemd,
   wxSupport ? true,
-  ex_docSupport ? false,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, # systemd support in epmd
+  # systemd support for epmd
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   # updateScript deps
   writeScript,
   common-updater-scripts,
@@ -53,6 +51,7 @@
   odbcSupport ? false,
   odbcPackages ? [ unixODBC ],
   opensslPackage ? openssl,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wxPackages ? [
     libGL
     libGLU
@@ -76,14 +75,6 @@
   installPhase ? "",
   preInstall ? "",
   postInstall ? "",
-  installTargets ?
-    if ((lib.versionOlder version "27.0") || ex_docSupport) then
-      [
-        "install"
-        "install-docs"
-      ]
-    else
-      [ "install" ],
   checkPhase ? "",
   preCheck ? "",
   postCheck ? "",
@@ -104,7 +95,6 @@ assert
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
-assert ex_docSupport -> ex_doc != null;
 
 let
   inherit (lib)
@@ -132,7 +122,6 @@ stdenv.mkDerivation (
     LANG = "C.UTF-8";
 
     nativeBuildInputs = [
-      autoconf
       makeWrapper
       perl
       gnum4
@@ -140,11 +129,9 @@ stdenv.mkDerivation (
       libxml2
     ];
 
-    env = lib.optionalAttrs ((lib.versionAtLeast "28.0-rc1" version) && ex_docSupport) {
-      # erlang-28.0-rc> warning: jinterface.html redirects to ../lib/jinterface/doc/html/index.html, which does not exist
-      # erlang-28.0-rc>
-      # erlang-28.0-rc> warning: odbc.html redirects to ../lib/odbc/doc/html/index.html, which does not exist
-      EX_DOC_WARNINGS_AS_ERRORS = "false";
+    env = {
+      # only build shell/IDE docs and man pages
+      DOC_TARGETS = "chunks man";
     };
 
     buildInputs =
@@ -174,25 +161,6 @@ stdenv.mkDerivation (
           --replace-fail '"sh ' '"${runtimeShell} '
       '';
 
-    # For OTP 27+ we need ex_doc to build the documentation
-    # When ex_docSupport is enabled, grab the raw ex_doc executable from the ex_doc
-    # derivation. Next, patch the first line to use the escript that will be
-    # built during the build phase of this derivation. Finally, building the
-    # documentation requires the erlang-logo.png asset.
-    preConfigure =
-      ''
-        ./otp_build autoconf
-      ''
-      + optionalString ex_docSupport ''
-        mkdir -p $out/bin
-        cp ${ex_doc}/bin/.ex_doc-wrapped $out/bin/ex_doc
-        sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
-        export EX_DOC=$out/bin/ex_doc
-
-        mkdir -p $out/lib/erlang/system/doc/assets
-        cp $src/system/doc/assets/erlang-logo.png $out/lib/erlang/system/doc/assets
-      '';
-
     configureFlags =
       [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
       ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
@@ -211,6 +179,10 @@ stdenv.mkDerivation (
 
     # install-docs will generate and install manpages and html docs
     # (PDFs are generated only when fop is available).
+    installTargets = [
+      "install"
+      "install-docs"
+    ];
 
     postInstall = ''
       ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
@@ -295,7 +267,6 @@ stdenv.mkDerivation (
   // optionalAttrs (preCheck != "") { inherit preCheck; }
   // optionalAttrs (postCheck != "") { inherit postCheck; }
   // optionalAttrs (installPhase != "") { inherit installPhase; }
-  // optionalAttrs (installTargets != [ ]) { inherit installTargets; }
   // optionalAttrs (preInstall != "") { inherit preInstall; }
   // optionalAttrs (fixupPhase != "") { inherit fixupPhase; }
   // optionalAttrs (preFixup != "") { inherit preFixup; }

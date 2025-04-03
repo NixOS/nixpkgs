@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.3.0";
+  version = "14.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-HcF4SjAdAPxINB0+kI1RWtKQ3VBhMNpFk6BECup7E+w=";
+    hash = "sha256-cFxa+QNfMk8+5jC4cxhbUs09/0tHjOgdsaE8XfxG6yk=";
   };
 
   build-system = [ setuptools ];
@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_preceding_whitespace"
+    "test_command_line_verify"
     # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"

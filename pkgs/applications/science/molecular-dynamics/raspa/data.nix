@@ -4,7 +4,7 @@
   raspa,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "raspa-data";
   inherit (raspa) version src;
 

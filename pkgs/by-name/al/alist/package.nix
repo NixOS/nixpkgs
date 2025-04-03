@@ -11,14 +11,14 @@
 }:
 buildGoModule rec {
   pname = "alist";
-  version = "3.42.0";
-  webVersion = "3.42.0";
+  version = "3.43.0";
+  webVersion = "3.43.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${version}";
-    hash = "sha256-qUW9bA2TeAVve77i43+ITxClLaO3aqm5959itf+iFqs=";
+    hash = "sha256-0+gt5S/eklSp8K4z1bXUVHaG7L3zKhi6TdVaxX/Y83w=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -32,11 +32,11 @@ buildGoModule rec {
   };
   web = fetchzip {
     url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
-    hash = "sha256-g2+qdLrxuyuqxlyVk32BKJCbMfXNs29KLEPxAkTQHjU=";
+    hash = "sha256-uFa9V8DSHk0ET0BCdfT37qUNP2kLNjmt2S6fEk1muME=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-uid+uT4eOtDsCNsKqGqPc4vMDnKUatG4V2n0Z7r6ccY=";
+  vendorHash = "sha256-40YuarjrOvwHyXmHZoiqGMueN7dzu8zQ6hgInmsWVJg=";
 
   buildInputs = [ fuse ];
 

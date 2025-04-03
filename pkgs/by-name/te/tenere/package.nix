@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tenere";
   version = "0.11.2-unstable-2024-12-05";
   src = fetchFromGitHub {

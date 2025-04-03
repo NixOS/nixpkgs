@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gcsfuse";
-  version = "2.10.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    hash = "sha256-gKKsUihV/YiIYbdTPjOXl/SEmi7dTAncNEAnAS/42VY=";
+    hash = "sha256-SWbIfAE/pmokhJO0rimfHqxqOH23HrJRTJHDikNC7TI=";
   };
 
-  vendorHash = "sha256-/9LhIZ/KThuTI1OYfdZHfV9Ad70gw4Yii3MsE5ZVLSI=";
+  vendorHash = "sha256-Xw2XsDhQpJJq7peh015ckIvV7yG87dE+HZ2b+XwuXMY=";
 
   subPackages = [
     "."

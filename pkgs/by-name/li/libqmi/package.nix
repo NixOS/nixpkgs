@@ -88,6 +88,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  patches = [
+    # https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/issues/124
+    ./build_doc_deps_by_default.patch
+  ];
 
   postPatch = ''
     patchShebangs \

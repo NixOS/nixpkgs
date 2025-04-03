@@ -20,6 +20,7 @@
   networkmanager,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
+  procps,
 }:
 
 let
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
       librsvg
       adwaita-icon-theme
       networkmanager
+      procps
     ]
     ++ pythonPath
     ++ lib.optional withPulseAudio libpulseaudio;

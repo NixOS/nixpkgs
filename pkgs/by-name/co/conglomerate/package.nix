@@ -12,13 +12,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "conglomerate";
   version = "unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = pname;
+    repo = "conglomerate";
     rev = "6fb26084f2871a85044e2e4afc868982702b40ed";
     hash = "sha256-Inr4b2bxguzkcRQBURObsQQ0Rb3H/Zz6hEzNRd+IX3w=";
   };

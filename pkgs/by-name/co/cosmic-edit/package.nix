@@ -18,24 +18,24 @@
   vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.5.1";
+  version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
-    rev = "epoch-${version}";
-    hash = "sha256-pxGV7X6FkYAtj4oj+XBWbi9evZ8J7Ng4sX7xbHDIJUg=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-mKVZI/x8+LrwFHGnJOzOq/vFkGev7sM9xJQOTA7uZGA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-6Ik3GhWsMwGADlbP09gf4RD0mT1zi9F+PNR89Co/LkU=";
+  cargoHash = "sha256-+b8pSSBUMs1EJDlldgR1UqLLH0sLU/djMOtE3JsDpkQ=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-01-14";
-  env.VERGEN_GIT_SHA = src.rev;
+  env.VERGEN_GIT_COMMIT_DATE = "2025-02-20";
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
@@ -95,4 +95,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.linux;
   };
-}
+})

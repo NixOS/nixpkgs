@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
-  version = "0.20.1";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
-    hash = "sha256-4Q3e6w0XqtsXZVnlHNf84CFO6ITwqlgB69D7iqJ2YO8=";
+    hash = "sha256-ncPL76HCC9n4wTciGeqb+YAUcCE9EeOpWGM5DRYUCYg=";
   };
 
   nativeBuildInputs = [

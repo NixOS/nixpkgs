@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "ssl-proxy";
   version = "0.2.7-unstable-2024-02-05";
 

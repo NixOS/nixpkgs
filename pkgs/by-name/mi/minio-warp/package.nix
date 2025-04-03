@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "minio-warp";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-8GQ0rSy+bzji1IZu6vHEXjYVVuQSLlSCwWmzjLE9a+A=";
+    hash = "sha256-zRRvY/PpLSY8cx3vqcAGfVK7FJKzFnxtghhIwrlUh+Y=";
   };
 
   vendorHash = "sha256-Qyb8ivuZplbOIxoS2cC+2FSZbW7CnChv1jaIKkCzgN4=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "yrutschle";
-    repo = pname;
+    repo = "sslh";
     rev = "v${version}";
     hash = "sha256-46lnQ+u+TfHrI2Yz5jd/Tl82K8mmqFY2Cqu6ktLiveA=";
   };

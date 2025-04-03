@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "colobot";
-    repo = pname;
+    repo = "colobot";
     rev = "colobot-gold-${version}";
     hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };

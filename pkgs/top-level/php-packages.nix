@@ -280,7 +280,7 @@ lib.makeScope pkgs.newScope (
 
         ast = callPackage ../development/php-packages/ast { };
 
-        blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { };
+        blackfire = callPackage ../by-name/bl/blackfire/php-probe.nix { };
 
         couchbase = callPackage ../development/php-packages/couchbase { };
 
@@ -640,7 +640,6 @@ lib.makeScope pkgs.newScope (
               {
                 name = "pdo_pgsql";
                 internalDeps = [ php.extensions.pdo ];
-                buildInputs = [ libpq ];
                 configureFlags = [ "--with-pdo-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;
               }
@@ -655,7 +654,6 @@ lib.makeScope pkgs.newScope (
                 name = "pgsql";
                 buildInputs = [
                   pcre2
-                  libpq
                 ];
                 configureFlags = [ "--with-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;

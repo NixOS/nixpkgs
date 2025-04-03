@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.4";
   pname = "libgeotiff";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "libgeotiff";
     rev = version;
-    hash = "sha256-FUvWZR5BrGEMnApxCBQBwmmi9NU7Tx6Ziq3mbIxjqfc=";
+    hash = "sha256-oiuooLejCRI1DFTjhgYoePtKS+OAGnW6OBzgITcY500=";
   };
 
   outputs = [

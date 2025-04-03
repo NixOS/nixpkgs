@@ -63,6 +63,8 @@ mapAliases ({
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
+  cf-private = throw "'cf-private' has been renamed to 'apple_sdk.frameworks.CoreFoundation'.";
+
   ### D ###
 
   discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
@@ -85,4 +87,7 @@ mapAliases ({
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02
+
+  ### P ###
+  postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
 })

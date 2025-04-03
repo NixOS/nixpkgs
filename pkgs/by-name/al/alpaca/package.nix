@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "4.0.1";
+  version = "5.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-BTTqSYoyhtFh+sk95hTNpg9AK/mdnXKz3hy/nqSbSTQ=";
+    hash = "sha256-uUGsdHrqzA5fZ4LNtX04H4ue9n4JQrkTYW2PCCFYFHc=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
     odfpy
     pyicu
     matplotlib
+    openai
   ];
 
   dontWrapGApps = true;
@@ -95,6 +96,6 @@ python3Packages.buildPythonApplication rec {
       aleksana
       Gliczy
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

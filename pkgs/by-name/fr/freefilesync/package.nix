@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  replaceVars,
   fetchDebianPatch,
   fetchFromGitHub,
   copyDesktopItems,
@@ -12,6 +12,7 @@
   curl,
   glib,
   gtk3,
+  libidn2,
   libssh2,
   openssl,
   wxGTK32,
@@ -41,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.0";
+  version = "14.3";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -50,36 +51,33 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-qxt6fpJT0jKcSYJ+WVneks6PI18/wwSc5H84qICegag=";
+    hash = "sha256-F8oIoG+SaHwhT7aA+iYp9/eWyGf6CiDIGm6Y2px0wlI=";
   };
 
   sourceRoot = ".";
 
-  # Patches from Debian
   patches = [
     # Disable loading of the missing Animal.dat
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/f/freefilesync/13.3-1/debian/patches/ffs_devuan.patch";
-      excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
-      hash = "sha256-cW0Y9+ByQWGzMU4NFRSkW46KkxQB4jRZotHlCFniv5o=";
-    })
+    ./skip-missing-Animal.dat.patch
     # Fix build with GTK 3
-    (fetchDebianPatch {
-      pname = "freefilesync";
-      version = "13.3";
-      debianRevision = "1";
-      patch = "ffs_devuan_gtk3.patch";
-      hash = "sha256-0n58Np4JI3hYK/CRBytkPHl9Jp4xK+IRjgUvoYti/f4=";
+    (replaceVars ./Makefile.patch {
+      gtk3-dev = lib.getDev gtk3;
     })
     # Fix build with vanilla wxWidgets
     (fetchDebianPatch {
       pname = "freefilesync";
-      version = "13.3";
+      version = "13.7";
       debianRevision = "1";
       patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
     })
   ];
+
+  # https://freefilesync.org/forum/viewtopic.php?t=12163
+  postPatch = ''
+    substituteInPlace zen/socket.h zen/sys_error.h \
+      --replace-fail "#undef G_GNUC_UNUSED" ""
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -92,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     glib
     gtk3
+    libidn2
     libssh2
     openssl
     wxwidgets_3_3

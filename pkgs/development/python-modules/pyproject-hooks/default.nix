@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi rec {
+  src = fetchPypi {
     pname = "pyproject_hooks";
     inherit version;
     hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";

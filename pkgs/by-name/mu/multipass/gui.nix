@@ -27,7 +27,6 @@ flutter327.buildFlutterApplication {
   gitHashes = {
     dartssh2 = "sha256-2pypKwurziwGLZYuGaxlS2lzN3UvJp3bRTvvYYxEqRI=";
     hotkey_manager_linux = "sha256-aO0h94YZvgV/ggVupNw8GjyZsnXrq3qTHRDtuhNv3oI=";
-    system_info2 = "sha256-fly7E2vG+bQ/+QGzXk+DYba73RZccltdW2LpZGDKX60=";
     tray_menu = "sha256-riiAiBEms+9ARog8i+MR1fto1Yqx+gwbBWyNbNq6VTM=";
     window_size = "sha256-71PqQzf+qY23hTJvcm0Oye8tng3Asr42E2vfF1nBmVA=";
     xterm = "sha256-h8vIonTPUVnNqZPk/A4ZV7EYCMyM0rrErL9ZOMe4ZBE=";

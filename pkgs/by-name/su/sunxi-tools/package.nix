@@ -6,17 +6,18 @@
   dtc,
   libusb1,
   zlib,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sunxi-tools";
-  version = "unstable-2021-08-29";
+  version = "0-unstable-2025-03-29";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";
     repo = "sunxi-tools";
-    rev = "74273b671a3fc34048383c40c85c684423009fb9";
-    sha256 = "1gwamb64vr45iy2ry7jp1k3zc03q5sydmdflrbwr892f0ijh2wjl";
+    rev = "7540cb235691be94ac5ef0181a73dd929949fc4e";
+    sha256 = "sha256-bPH63+I+YN6Gvm3Q/zd4RGHEbR4cF1QXJ6v1zwzl89w=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -38,11 +39,13 @@ stdenv.mkDerivation rec {
     "install-misc"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ elitak ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.elitak ];
   };
 }

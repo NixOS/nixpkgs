@@ -8,7 +8,7 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "owl";
   version = "unstable-2022-01-30";
 

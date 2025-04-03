@@ -28,7 +28,7 @@
   perl,
   perlPackages,
   pkg-config,
-  poppler_utils,
+  poppler-utils,
   python3Packages,
   qtbase,
   qttools,
@@ -57,7 +57,7 @@ let
     groff = groff;
     gunzip = gzip;
     iconv = libiconv;
-    pdftotext = poppler_utils;
+    pdftotext = poppler-utils;
     ps2ascii = ghostscript;
     sed = gnused;
     tar = gnutar;

@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight device mounter, with libudev as only dependency";
+    homepage = "https://github.com/LemonBoy/ldm";
     mainProgram = "ldm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

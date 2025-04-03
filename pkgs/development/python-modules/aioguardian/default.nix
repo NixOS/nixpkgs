@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-RoVD2O/OAk4l96kYEq7ZM/2QuckcPxDluf1MT4HdKc4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail poetry-core==2.0.1 poetry-core
+  '';
+
   pythonRelaxDeps = [
     "asyncio_dgram"
     "typing-extensions"

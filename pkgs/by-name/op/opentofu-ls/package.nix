@@ -8,13 +8,13 @@
 
 buildGoModule {
   pname = "opentofu-ls";
-  version = "0-unstable-2025-01-01";
+  version = "0-unstable-2025-02-26";
 
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "opentofu-ls";
-    rev = "e6fe83c83107728dd39bb9324b8e1ecc31ad44d3";
-    hash = "sha256-3d/vlW+U1YrGR34edyaMZmV6HaMra0yDCgnQwkQGzuY=";
+    rev = "978a5fb56519a9f17833709119d2eb5fe604784e";
+    hash = "sha256-xBJkIuYqqUan2fo+s426vEIr5Qri8dM5arJACvKFjws=";
   };
 
   vendorHash = "sha256-CrbLqcwPXHB80m4VhqrC8j5VhU2BUeuNy87+bc+Bq6I=";

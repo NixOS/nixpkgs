@@ -10,24 +10,24 @@
 
 let
   apexcharts = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/apexcharts@4.3.0/dist/apexcharts.min.js";
-    hash = "sha256-zceUTsCKa8Y2SqjqZjLjifXQDnqsvKRTmT8fTIUix/4=";
+    url = "https://cdn.jsdelivr.net/npm/apexcharts@4.5.0/dist/apexcharts.min.js";
+    hash = "sha256-D19uY7rZtzJPVsZWYpvTOoY2hXmgfg+Mlaf+ALYHTgg=";
   };
   tablerCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css";
-    hash = "sha256-lS3nKxMMZiKIRJG7UgUonOHYuvHgW5eckEjvHMYxb9Q=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css";
+    hash = "sha256-aO+4ZoyNPZHCexbbprDYU9LCxshqszQA0SINFYfos3M=";
   };
   tablerVendorsCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css";
-    hash = "sha256-Aa7AUOaz6hJLiUzQStZTy2VPOZyg0ViSo2MCzpDU1tY=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler-vendors.min.css";
+    hash = "sha256-MyRhKcnB54KIswGkkyYXzEjx3YPVTKG7zVBf4wE20QY=";
   };
   tablerJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/js/tabler.min.js";
-    hash = "sha256-c01wM5Q9GIKYbvvjIaxt67o1CpIBkFMMmz1Dgsi0K7A=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js";
+    hash = "sha256-QoGNzPGpYrbyDynQUZxmnFFT8MEk/nkUCLyp71avhqw=";
   };
   tablerIcons = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.21.0/dist/tabler-sprite.svg";
-    hash = "sha256-TUlx6LLnZ7sDN7Xzt+/zAuxLYgUkQSqRgdQm8H4cohY=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.30.0/dist/tabler-sprite.svg";
+    hash = "sha256-CD5BvpwW4Db6C7bxjaWUrA3kz17BDJKVU4bTwOPP1kE=";
   };
   tomselect = fetchurl {
     url = "https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js";
@@ -37,30 +37,30 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlpage";
-  version = "0.32.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     tag = "v${version}";
-    hash = "sha256-PfBZCfwXL5/ItBFrEod27BIuWbWR9gVGTfbdxQ/IIuQ=";
+    hash = "sha256-cqMXdAXc46DbbONz1A6uf2Oo2Cu4sig6ntuLqYlihR4=";
   };
 
   postPatch = ''
     substituteInPlace sqlpage/apexcharts.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@4.3.0/dist/apexcharts.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@4.5.0/dist/apexcharts.min.js */' \
       "$(cat ${apexcharts})"
     substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css */' \
       "$(cat ${tablerCss})"
     substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler-vendors.min.css */' \
       "$(cat ${tablerVendorsCss})"
     substituteInPlace sqlpage/sqlpage.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/js/tabler.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js */' \
       "$(cat ${tablerJs})"
     substituteInPlace sqlpage/tabler-icons.svg \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.21.0/dist/tabler-sprite.svg */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.30.0/dist/tabler-sprite.svg */' \
       "$(cat ${tablerIcons})"
     substituteInPlace sqlpage/tomselect.js \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js */' \
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-HbNVBMysowIV62l7eSHu4YaBMIku+IT11jlEgWrjaWE=";
+  cargoHash = "sha256-NUbCSYUTXN8glw94Lr/+Jj54PukRXFlzTxq0d7znjwA=";
 
   nativeBuildInputs = [ pkg-config ];
 

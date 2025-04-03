@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

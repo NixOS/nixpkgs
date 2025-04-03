@@ -8,6 +8,7 @@
   cargo,
   rustc,
   clippy,
+  gcc,
   makeWrapper,
 }:
 let
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage {
         cargo
         rustc
         clippy
+        gcc
       ]
     }
   '';

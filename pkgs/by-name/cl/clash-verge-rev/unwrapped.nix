@@ -4,6 +4,7 @@
   src,
   libayatana-appindicator,
   vendor-hash,
+  fetchpatch,
   glib,
   webui,
   pkg-config,
@@ -16,6 +17,7 @@
   webkitgtk_4_1,
   openssl,
 }:
+
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -29,11 +31,19 @@ rustPlatform.buildRustPackage {
   };
 
   patches = [
-    # https://github.com/clash-verge-rev/clash-verge-rev/pull/2582
-    ./0001-enable-format_bytes_speed-for-every-platform.patch
+    (fetchpatch {
+      name = "fix-service-mode-mihomo-check.patch";
+      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/16d4f9fe7ee95b7312a10bf216c818c3e144dea7.patch";
+      hash = "sha256-FQHm1jjo0W1IokMDJGWVMVV9DWItG1prX+TIysL12DA=";
+    })
   ];
 
+  prePatch = ''
+    cd ..
+  '';
+
   postPatch = ''
+    cd src-tauri
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
@@ -49,6 +59,8 @@ rustPlatform.buildRustPackage {
       --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
     sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
     sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
+    chmod 777 ../.cargo
+    rm ../.cargo/config.toml
   '';
 
   nativeBuildInputs = [

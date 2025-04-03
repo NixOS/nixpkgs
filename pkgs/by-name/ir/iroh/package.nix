@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "iroh";
-  version = "0.32.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
-    repo = pname;
+    repo = "iroh";
     rev = "v${version}";
-    hash = "sha256-2XhTe10YuQjLME2s/njeoU2lPGPsKM87Q7ABLrBaDAM=";
+    hash = "sha256-uavWluu7rVY2lZXDRsKApcZMB7TJsGuhJzieZPMXdvE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-n1SfPb0n15O73yfJvRHB5buPQYk7ne6wJdXAfY7ExPU=";
+  cargoHash = "sha256-7tQbfXVdgoxACF6qtesbUQ3AtVFAI2IbGO720PjwZCc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [
+    with darwin.apple_sdk.frameworks;
+    [
       Security
       SystemConfiguration
     ]
@@ -32,7 +34,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Efficient IPFS for the whole world right now";
     homepage = "https://iroh.computer";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ cameronfyfe ];
     mainProgram = "iroh";
   };

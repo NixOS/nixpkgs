@@ -12,16 +12,16 @@
 
 buildGoModule {
   pname = "spread";
-  version = "0-unstable-2023-03-01";
+  version = "0-unstable-2025-02-06";
 
   src = fetchFromGitHub {
     owner = "snapcore";
     repo = "spread";
-    rev = "ded9133cdbceaf01f8a1c9decf6ff9ea56e194d6";
-    hash = "sha256-uHBzVABfRCyBAGP9f+2GS49Qc8R9d1HaRr6bYPeVSU4=";
+    rev = "d6447c43754c8ca0741901e9db73d5fdb4d21c93";
+    hash = "sha256-6d7FuEzO5Ond3xjKpf5iRIp9LEV/4O5g3j/tZQEDCZg=";
   };
 
-  vendorHash = "sha256-SULAfCLtNSnuUXvA33I48hnhU0Ixq79HhADPIKYkWNU=";
+  vendorHash = "sha256-yKDz8Hz8T6D7MZAV8ePa3mVwo4jycX3uVgzxjRp2O5o=";
 
   subPackages = [ "cmd/spread" ];
 

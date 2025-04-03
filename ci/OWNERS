@@ -27,20 +27,20 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil
+/lib                        @infinisil @hsjobeki
 /lib/systems                @alyssais @ericson2314 @NixOS/stdenv
-/lib/generators.nix         @infinisil @Profpatsch
-/lib/cli.nix                @infinisil @Profpatsch
-/lib/debug.nix              @infinisil @Profpatsch
-/lib/asserts.nix            @infinisil @Profpatsch
-/lib/path/*                 @infinisil
-/lib/fileset                @infinisil
+/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
+/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
+/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
+/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
+/lib/path/*                 @infinisil @hsjobeki
+/lib/fileset                @infinisil @hsjobeki
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth
-/lib/types.nix              @infinisil @roberth
-/lib/options.nix            @infinisil @roberth
-/lib/tests/modules.sh       @infinisil @roberth
-/lib/tests/modules          @infinisil @roberth
+/lib/modules.nix            @infinisil @roberth @hsjobeki
+/lib/types.nix              @infinisil @roberth @hsjobeki
+/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/tests/modules.sh       @infinisil @roberth @hsjobeki
+/lib/tests/modules          @infinisil @roberth @hsjobeki
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -129,6 +129,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
+# Limine
+/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi
+
 # Images and installer media
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco
@@ -146,9 +149,12 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
 /nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
 
+# Monitoring
+/nixos/modules/services/monitoring/fluent-bit.nix @arianvp
+/nixos/tests/fluent-bit.nix                       @arianvp
+
 # nixos-rebuild-ng
 /pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
-
 
 # Updaters
 ## update.nix
@@ -214,7 +220,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
-pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
+pkgs/by-name/ca/cacert @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
 pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
@@ -269,7 +275,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/home-assistant.nix @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
-/pkgs/tools/misc/esphome @mweinelt
+/pkgs/by-name/es/esphome @mweinelt
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -395,6 +401,11 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid
 /pkgs/development/ocaml-modules     @ulrikstrid
+
+# ZFS
+/nixos/modules/tasks/filesystems/zfs.nix @adamcstephens @amarshall
+/nixos/tests/zfs.nix                     @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
 
 # Zig
 /pkgs/development/compilers/zig @figsoda @RossComputerGuy

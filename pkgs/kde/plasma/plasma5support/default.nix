@@ -1,9 +1,6 @@
 {
   mkKdeDerivation,
   pkg-config,
-  kidletime,
-  networkmanager-qt,
-  plasma-activities,
   gpsd,
 }:
 mkKdeDerivation {
@@ -11,11 +8,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
 
-  extraBuildInputs = [
-    kidletime
-    networkmanager-qt
-    plasma-activities
-
-    gpsd
-  ];
+  extraBuildInputs = [ gpsd ];
 }

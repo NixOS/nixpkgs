@@ -12,12 +12,12 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "cwtch-ui";
-  version = "1.15.4";
+  version = "1.15.5";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
     rev = "v${version}";
-    hash = "sha256-Ee6LKqh4Xe+93noJktCGQyW1YLxSXgVKh6YoG0xebBc=";
+    hash = "sha256-u0IFLZp53Fg8soKjSXr6IjNxFI9aTU5xUYgf1SN6rTQ=";
   };
 
   # NOTE: The included pubspec.json does not exactly match the upstream

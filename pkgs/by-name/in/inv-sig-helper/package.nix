@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "inv-sig-helper";
-  version = "0-unstable-2025-02-15";
+  version = "0-unstable-2025-03-27";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = "inv_sig_helper";
-    rev = "35bc77247b8718ff2705a5f4cbbb3845d02eb65f";
-    hash = "sha256-WMIKJb85yauEmyfgSl0zNFBfeXya8Ms2MWGNKo6+T1s=";
+    rev = "1c70bf6375d9f31a459d8d1e409dd3fb5d5f175c";
+    hash = "sha256-MGU7MXFZkJjM0OGiqxs2RQGbPaiRB23w78iZKSo/4hk=";
   };
 
   useFetchCargoVendor = true;
