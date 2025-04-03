@@ -1,38 +1,50 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   perl,
   udev,
   openssl,
+  gitMinimal,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koji";
-  version = "2.2.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    owner = "its-danny";
+    owner = "cococonscious";
     repo = "koji";
-    rev = version;
-    hash = "sha256-2kBjHX7izo4loJ8oyPjE9FtCvUODC3Sm4T8ETIdeGZM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+xtq4btFbOfiyFMDHXo6riSBMhAwTLQFuE91MUHtg5Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ZHti7nMfHiYur1kjxj+ySIF4/l0UU9q2urabUWZyk6E=";
+  cargoHash = "sha256-WiFXDXLJc2ictv29UoRFRpIpAqeJlEBEOvThXhLXLJA=";
 
   OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
     perl
-    udev
   ];
 
   buildInputs = [
-    openssl.dev
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
   ];
+
+  preCheck = ''
+    git config --global user.name 'nix-user'
+    git config --global user.email 'nix-user@example.com'
+  '';
 
   meta = {
     description = "Interactive CLI for creating conventional commits";
@@ -45,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "koji";
     platforms = lib.platforms.unix;
   };
-}
+})
