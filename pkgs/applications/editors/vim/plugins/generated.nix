@@ -6129,6 +6129,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  incline-nvim = buildVimPlugin {
+    pname = "incline.nvim";
+    version = "2025-03-24";
+    src = fetchFromGitHub {
+      owner = "b0o";
+      repo = "incline.nvim";
+      rev = "27040695b3bbfcd3257669037bd008d1a892831d";
+      sha256 = "1frm25a0fa13x6ihimi94p21pipxs93s3bbapjjhzmg4z08npj75";
+    };
+    meta.homepage = "https://github.com/b0o/incline.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   increment-activator = buildVimPlugin {
     pname = "increment-activator";
     version = "2024-03-20";
