@@ -125,9 +125,7 @@ with pkgs;
 
   defaultPkgConfigPackages =
     # We don't want nix-env -q to enter this, because all of these are aliases.
-    dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs) // {
-      __attrsFailEvaluation = true;
-    };
+    dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs);
 
   ### Nixpkgs maintainer tools
 
