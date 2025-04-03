@@ -13573,7 +13573,7 @@
   };
   lgcl = {
     email = "dev@lgcl.de";
-    name = "Leon Vack";
+    name = "Leonie Marcy Vack";
     github = "LogicalOverflow";
     githubId = 5919957;
   };
