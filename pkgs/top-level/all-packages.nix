@@ -5959,7 +5959,7 @@ with pkgs;
     llvmPackages = crystal.llvmPackages;
   };
 
-  devpi-client = python3Packages.callPackage ../development/tools/devpi-client { };
+  devpi-client = callPackage ../development/tools/devpi-client { };
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
