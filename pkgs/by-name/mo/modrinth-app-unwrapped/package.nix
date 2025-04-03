@@ -17,7 +17,6 @@
 
 let
   pnpm = pnpm_9;
-
 in
 rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
