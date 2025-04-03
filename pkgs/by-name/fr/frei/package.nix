@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "frei";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "alexcoder04";
     repo = "frei";
     rev = "v${version}";
-    sha256 = "sha256-289idsn/PhLK2FOUTQj6eS4O73LgX5v5qn3ZRvn/XRo=";
+    sha256 = "sha256-jCUr3fREawA0J8Q0U07wCpBQrjPyH0l/6tih6C9kJWc=";
   };
 
-  vendorHash = "sha256-N5k/2wB46oRfM4ShjVQ23tAgCMmyBaGfIslUqYUJYrc=";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Modern replacement for free";
