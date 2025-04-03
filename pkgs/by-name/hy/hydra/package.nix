@@ -265,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra;
+    tests = { inherit (nixosTests) hydra; };
     updateScript = unstableGitUpdater { };
   };
 

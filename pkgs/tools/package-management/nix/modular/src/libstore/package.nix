@@ -78,7 +78,7 @@ mkMesonLibrary (finalAttrs: {
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
     ];
 
-  env = {
+  env = lib.optionalAttrs (!lib.versionAtLeast version "2.27") {
     # Needed for Meson to find Boost.
     # https://github.com/NixOS/nixpkgs/issues/86131.
     BOOST_INCLUDEDIR = "${lib.getDev boost}/include";

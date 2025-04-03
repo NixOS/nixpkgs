@@ -10418,6 +10418,8 @@ self: super: with self; {
 
   ormar = callPackage ../development/python-modules/ormar { };
 
+  ormsgpack = callPackage ../development/python-modules/ormsgpack { };
+
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
   orvibo = callPackage ../development/python-modules/orvibo { };
@@ -12772,6 +12774,8 @@ self: super: with self; {
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
 
+  pyorc = callPackage ../development/python-modules/pyorc { };
+
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
@@ -13540,6 +13544,8 @@ self: super: with self; {
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
 
   pytest-jupyter = callPackage ../development/python-modules/pytest-jupyter { };
+
+  pytest-kafka = callPackage ../development/python-modules/pytest-kafka { };
 
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
@@ -16668,6 +16674,8 @@ self: super: with self; {
   swh-auth = callPackage ../development/python-modules/swh-auth { };
 
   swh-core = callPackage ../development/python-modules/swh-core { };
+
+  swh-export = callPackage ../development/python-modules/swh-export { };
 
   swh-journal = callPackage ../development/python-modules/swh-journal { };
 
