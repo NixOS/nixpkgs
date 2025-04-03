@@ -197,8 +197,6 @@
       inherit passthruFun;
     };
 
-    pypy39_prebuilt = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
-
     pypy310_prebuilt = callPackage ./pypy/prebuilt.nix {
       # Not included at top-level
       self = __splicedPackages.pythonInterpreters.pypy310_prebuilt;
@@ -218,5 +216,8 @@
       pythonVersion = "3.10";
       inherit passthruFun;
     };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    pypy39_prebuilt = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
   }
 )
