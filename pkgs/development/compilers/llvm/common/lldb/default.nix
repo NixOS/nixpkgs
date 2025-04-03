@@ -32,25 +32,6 @@
 }:
 
 let
-  src' =
-    if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/lldb "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
-        ''
-      )
-    else
-      src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
@@ -58,12 +39,31 @@ let
 in
 
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     passthru.monorepoSrc = monorepoSrc;
     pname = "lldb";
     inherit version;
 
-    src = src';
+    src =
+      if monorepoSrc != null then
+        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
+          ''
+            mkdir -p "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "14") ''
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/lldb "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+          ''
+        )
+      else
+        src;
 
     # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
     # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
@@ -73,7 +73,7 @@ stdenv.mkDerivation (
       "dev"
     ];
 
-    sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
+    sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${finalAttrs.src.name}/${finalAttrs.pname}";
 
     patches =
       let
@@ -130,7 +130,7 @@ stdenv.mkDerivation (
       ++ lib.optional (lib.versionOlder release_version "14") (
         getVersionFile "lldb/gnu-install-dirs.patch"
       )
-      ++ lib.optional (lib.versionAtLeast release_version "14") ./lldb/gnu-install-dirs.patch;
+      ++ lib.optional (lib.versionAtLeast release_version "14") ./gnu-install-dirs.patch;
 
     nativeBuildInputs =
       [
@@ -177,25 +177,25 @@ stdenv.mkDerivation (
 
     cmakeFlags =
       [
-        "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"
-        "-DLLVM_ENABLE_RTTI=OFF"
-        "-DClang_DIR=${lib.getDev libclang}/lib/cmake"
-        "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
+        (lib.cmakeBool "LLDB_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
+        (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
+        (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
+        (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
+        (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
       ]
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+        (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "17") [
-        "-DCLANG_RESOURCE_DIR=../../../../${lib.getLib libclang}"
+        (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
       ]
       ++ lib.optionals enableManpages (
         [
-          "-DLLVM_ENABLE_SPHINX=ON"
-          "-DSPHINX_OUTPUT_MAN=ON"
-          "-DSPHINX_OUTPUT_HTML=OFF"
+          (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+          (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+          (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
         ]
         ++ lib.optionals (lib.versionAtLeast release_version "15") [
           # docs reference `automodapi` but it's not added to the extensions list when
@@ -203,12 +203,12 @@ stdenv.mkDerivation (
           # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
           #
           # so, we just ignore the resulting errors
-          "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+          (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
         ]
       )
-      ++ lib.optionals doCheck [
-        "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-        "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
+        (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
       ]
       ++ devExtraCmakeFlags;
 
