@@ -9,6 +9,8 @@
   openssl,
   gitMinimal,
   writableTmpDirAsHomeHook,
+  installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     perl
+    installShellFiles
   ];
 
   buildInputs = [
@@ -45,6 +48,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git config --global user.name 'nix-user'
     git config --global user.email 'nix-user@example.com'
   '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd koji \
+      --bash <($out/bin/koji completions bash) \
+      --fish <($out/bin/koji completions fish) \
+      --zsh <($out/bin/koji completions zsh)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
     description = "Interactive CLI for creating conventional commits";
