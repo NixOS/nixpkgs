@@ -62,7 +62,7 @@
   libusb1,
   neon,
   openal,
-  openexr_3,
+  openexr,
   openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264,
   openh264,
   libopenmpt,
@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
       libusb1
       neon
       openal
-      openexr_3
+      openexr
       rtmpdump
       pango
       soundtouch

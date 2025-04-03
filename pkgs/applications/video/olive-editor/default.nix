@@ -12,7 +12,7 @@
   cmake,
   wrapQtAppsHook,
   openimageio,
-  openexr_3,
+  openexr,
   portaudio,
   imath,
   qtwayland,
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     opencolorio
     openimageio'
     imath
-    openexr_3
+    openexr
     portaudio
     qtwayland
     qtmultimedia
