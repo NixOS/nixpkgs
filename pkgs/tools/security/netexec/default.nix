@@ -2,30 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  buildPythonApplication,
+  pytestCheckHook,
+  # Deps
+  poetry-core,
+  poetry-dynamic-versioning,
+  aardwolf,
+  aioconsole,
+  aiosqlite,
+  argcomplete,
+  asyauth,
+  beautifulsoup4,
+  bloodhound-py,
+  dploot,
+  dsinternals,
+  lsassy,
+  masky,
+  minikerberos,
+  msgpack,
+  msldap,
+  neo4j,
+  paramiko,
+  pyasn1-modules,
+  pylnk3,
+  pynfsclient,
+  pypsrp,
+  pypykatz,
+  python-dateutil,
+  python-libnmap,
+  pywerview,
+  requests,
+  rich,
+  sqlalchemy,
+  termcolor,
+  terminaltables,
+  xmltodict,
+  impacket,
 }:
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0.dev1-unstable-2023-11-30";
-        src = fetchFromGitHub {
-          owner = "Pennyw0rth";
-          repo = "impacket";
-          rev = "d370e6359a410063b2c9c68f6572c3b5fb178a38";
-          hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
-        };
-        # Fix version to be compliant with Python packaging rules
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
-        '';
-      };
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "netexec";
   version = "1.3.0";
   pyproject = true;
@@ -50,12 +64,12 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail '{ git = "https://github.com/Pennyw0rth/NfsClient" }' '"*"'
   '';
 
-  build-system = with python.pkgs; [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = [
     aardwolf
     aioconsole
     aiosqlite
@@ -65,7 +79,6 @@ python.pkgs.buildPythonApplication rec {
     bloodhound-py
     dploot
     dsinternals
-    impacket
     lsassy
     masky
     minikerberos
@@ -89,7 +102,7 @@ python.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests no longer works out-of-box with 1.3.0
   doCheck = false;
