@@ -1045,7 +1045,7 @@ with pkgs;
   };
 
   akkoma = callPackage ../by-name/ak/akkoma/package.nix {
-    beamPackages = beam_nox.packages.erlang_26.extend (
+    beamPackages = beam_minimal.packages.erlang_26.extend (
       self: super: {
         elixir = self.elixir_1_16;
         rebar3 = self.rebar3WithPlugins {
@@ -7373,14 +7373,9 @@ with pkgs;
   };
 
   beam = callPackage ./beam-packages.nix { };
-  beam_nox = callPackage ./beam-packages.nix {
-    beam = beam_nox;
-    wxSupport = false;
-  };
   beam_minimal = callPackage ./beam-packages.nix {
     beam = beam_minimal;
     wxSupport = false;
-    systemdSupport = false;
   };
 
   inherit (beam.interpreters)
@@ -7398,8 +7393,6 @@ with pkgs;
     elixir-ls
     ;
 
-  erlang_nox = beam_nox.interpreters.erlang;
-
   inherit (beam.packages.erlang)
     erlang-ls
     ex_doc
@@ -7416,17 +7409,17 @@ with pkgs;
   beamPackages = dontRecurseIntoAttrs beam27Packages;
   beamMinimalPackages = dontRecurseIntoAttrs beamMinimal27Packages;
 
-  beam25Packages = recurseIntoAttrs beam.packages.erlang_25;
-  beam26Packages = recurseIntoAttrs beam.packages.erlang_26;
-  beam27Packages = recurseIntoAttrs beam.packages.erlang_27;
+  beam25Packages = recurseIntoAttrs beam.packages.erlang_25.beamPackages;
+  beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
+  beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   # 28 is pre-release
-  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28;
+  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28.beamPackages;
 
-  beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25;
-  beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26;
-  beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27;
+  beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25.beamPackages;
+  beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
+  beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   # 28 is pre-release
-  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28;
+  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
 
   erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
@@ -16940,10 +16933,6 @@ with pkgs;
   };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
 
-  xsd = callPackage ../development/libraries/xsd {
-    stdenv = gcc9Stdenv;
-  };
-
   xmp = callPackage ../applications/audio/xmp {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
   };
@@ -18893,6 +18882,10 @@ with pkgs;
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
+
+  nixDependencies = recurseIntoAttrs (
+    callPackage ../tools/package-management/nix/dependencies-scope.nix { }
+  );
 
   nixVersions = recurseIntoAttrs (
     callPackage ../tools/package-management/nix {

@@ -59,7 +59,7 @@ in
       createHome = true;
       group = "cosmic-greeter";
     };
-    # Setup PAM authentication for the `cosmic-greeter` user
+    # Required for authentication
     security.pam.services.cosmic-greeter = { };
 
     hardware.graphics.enable = true;
