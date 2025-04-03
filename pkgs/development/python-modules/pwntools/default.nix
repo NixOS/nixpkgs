@@ -51,7 +51,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [ "pip" ];
+  pythonRemoveDeps = [
+    "pip"
+    "unicorn"
+  ];
 
   propagatedBuildInputs = [
     capstone
