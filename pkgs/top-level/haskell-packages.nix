@@ -293,8 +293,10 @@ in
       ghc96 = compiler.ghc967;
       ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -311,8 +313,10 @@ in
       };
       ghc982 = callPackage ../development/compilers/ghc/9.8.2.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -329,8 +333,10 @@ in
       };
       ghc983 = callPackage ../development/compilers/ghc/9.8.3.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -347,8 +353,10 @@ in
       };
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
