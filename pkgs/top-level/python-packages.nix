@@ -3275,6 +3275,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  decora-wifi = callPackage ../development/python-modules/decora-wifi { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deebot-client = callPackage ../development/python-modules/deebot-client { };

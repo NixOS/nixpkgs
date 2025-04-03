@@ -4892,6 +4892,12 @@
     githubId = 217918;
     name = "Viktor Kronvall";
   };
+  Continous = {
+    email = "continous159@gmail.com";
+    github = "Continous";
+    githubId = 4413336;
+    name = "Dusty Carrier";
+  };
   contrun = {
     email = "uuuuuu@protonmail.com";
     github = "contrun";
