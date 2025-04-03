@@ -1101,6 +1101,15 @@ in
                 exit 1
               fi
 
+              # Check if systemd-tmpfiles setup worked correctly
+              if [[ ! -O "${datadir}/config" ]]; then
+                echo "${datadir}/config is not owned by user 'nextcloud'!"
+                echo "Please check the logs via 'journalctl -u systemd-tmpfiles-setup'"
+                echo "and make sure there are no unsafe path transitions."
+                echo "(https://nixos.org/manual/nixos/stable/#module-services-nextcloud-pitfalls-during-upgrade)"
+                exit 1
+              fi
+
               ${concatMapStrings
                 (name: ''
                   if [ -d "${cfg.home}"/${name} ]; then

@@ -1449,13 +1449,27 @@ self: super:
       rev = "ce811e78882d9f31636351dfe65351f4ded52c74";
       sha256 = "sha256-PKCxFHMwxgbew0gkxNBKiezWuqlFG6bWLkmtUNyoF8Q=";
     };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook xorg.utilmacros xorg.xorgserver ];
-    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
+    buildInputs = attrs.buildInputs ++ [
+      xorg.libXScrnSaver
+      xorg.libXv
+      xorg.pixman
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      xorg.utilmacros
+      xorg.xorgserver
+    ];
+    configureFlags = [
+      "--with-default-dri=3"
+      "--enable-tools"
+    ];
     patches = [ ./use_crocus_and_iris.patch ];
 
     meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+      ];
     };
   });
 
