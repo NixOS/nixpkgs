@@ -20,6 +20,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
     install -Dm444 ${appimageContents}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
