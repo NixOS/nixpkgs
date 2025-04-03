@@ -301,21 +301,16 @@ buildPythonPackage rec {
       "test_updates_stored_up_to_capacity"
       "test_varying_output_forms_with_generators"
     ];
-  disabledTestPaths =
-    [
-      # 100% touches network
-      "test/test_networking.py"
-      "client/python/test/test_client.py"
-      # makes pytest freeze 50% of the time
-      "test/test_interfaces.py"
+  disabledTestPaths = [
+    # 100% touches network
+    "test/test_networking.py"
+    "client/python/test/test_client.py"
+    # makes pytest freeze 50% of the time
+    "test/test_interfaces.py"
 
-      # Local network tests dependant on port availability (port 7860-7959)
-      "test/test_routes.py"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      "test/test_pipelines.py"
-    ];
+    # Local network tests dependant on port availability (port 7860-7959)
+    "test/test_routes.py"
+  ];
   pytestFlagsArray = [
     "-x" # abort on first failure
     "-m 'not flaky'"

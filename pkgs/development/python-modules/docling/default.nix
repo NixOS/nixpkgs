@@ -164,26 +164,6 @@ buildPythonPackage rec {
     "test_e2e_valid_csv_conversions"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    "tests/test_backend_csv.py"
-    "tests/test_backend_html.py"
-    "tests/test_backend_jats.py"
-    "tests/test_backend_msexcel.py"
-    "tests/test_backend_msword.py"
-    "tests/test_backend_pptx.py"
-    "tests/test_cli.py"
-    "tests/test_code_formula.py"
-    "tests/test_document_picture_classifier.py"
-    "tests/test_e2e_conversion.py"
-    "tests/test_e2e_ocr_conversion.py"
-    "tests/test_input_doc.py"
-    "tests/test_interfaces.py"
-    "tests/test_invalid_input.py"
-    "tests/test_legacy_format_transform.py"
-    "tests/test_options.py"
-  ];
-
   meta = {
     description = "Get your documents ready for gen AI";
     homepage = "https://github.com/DS4SD/docling";

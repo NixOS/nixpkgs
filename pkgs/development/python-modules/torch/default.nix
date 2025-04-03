@@ -271,7 +271,8 @@ buildPythonPackage rec {
   };
 
   patches =
-    lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+    [ ./clang19-template-warning.patch ]
+    ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
@@ -394,6 +395,10 @@ buildPythonPackage rec {
 
   # Explicitly enable MPS for Darwin
   USE_MPS = setBool stdenv.hostPlatform.isDarwin;
+
+  # building torch.distributed on Darwin is disabled by default
+  # https://pytorch.org/docs/stable/distributed.html#torch.distributed.is_available
+  USE_DISTRIBUTED = setBool true;
 
   cmakeFlags =
     [
@@ -604,8 +609,15 @@ buildPythonPackage rec {
       find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
       mkdir $dev
+
+      # CppExtension requires that include files are packaged with the main
+      # python library output; which is why they are copied here.
       cp -r $out/${python.sitePackages}/torch/include $dev/include
-      cp -r $out/${python.sitePackages}/torch/share $dev/share
+
+      # Cmake files under /share are different and can be safely moved. This
+      # avoids unnecessary closure blow-up due to apple sdk references when
+      # USE_DISTRIBUTED is enabled.
+      mv $out/${python.sitePackages}/torch/share $dev/share
 
       # Fix up library paths for split outputs
       substituteInPlace \
