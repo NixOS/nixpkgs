@@ -538,6 +538,8 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to fail if the package depends on two different versions of the same dependency.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxBuildDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxbuilddepshook).
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
@@ -1431,6 +1433,27 @@ For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
 automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 `pythonRemoveDeps` is specified.
 
+#### Using pythonRelaxBuildDepsHook {#using-pythonrelaxbuilddepshook}
+
+`pythonRelaxBuildDepsHook` is analogous to `pythonRelaxDepsHook` but removes
+or relaxes build dependencies from `pyproject.toml`, as specified in its
+`build-system.requires` entry.
+
+It requires `__structuredAttrs` to be true, and expects either of two attributes:
+- `pythonRelaxBuildDeps`, a list of [PEP 508 dependency specifier][pep508-dep-spec] strings ;
+- `pythonRemoveBuildDeps`, a list of distribution names.
+
+Each `build-system.requires` entry will be:
+- removed if its distribution name is in `pythonRemoveBuildDeps` ;
+- replaced by the `pythonRelaxBuildDeps` entry with the same distribution name, if any ;
+- otherwise kept as-is.
+
+Whenever either of those entries is set, `mkPythonDerivation` adds `pythonRelaxBuildDepsHook`
+to the default `nativeBuildInputs`.
+
+[pep508-dep-spec]: https://packaging.python.org/en/latest/specifications/dependency-specifiers/#dependency-specifiers
+
+
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
 `unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
@@ -2062,6 +2085,8 @@ The following rules are desired to be respected:
 * Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
+* The version restrictions of `build-dependencies` can be relaxed by [`pythonRelaxBuildDepsHook`](#using-pythonrelaxbuilddepshook),
+  if specified in `pyproject.toml`.
 * The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
