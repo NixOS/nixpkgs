@@ -42,7 +42,7 @@ let
         # There is no overlay nor configuration in the imports below.
         # This is expected, as it evaluates the nixos configuration in exactly
         # the same way as `nixos-rebuild` would have.
-        cp -f ${file} ${file}.old || true
+        cp -df ${file} ${file}.old || true
         ${lib.getExe' config.nix.package "nix-build"} \
           -E '(import <nixpkgs/nixos> {})
           .config.system.autoUpgrade.desync
@@ -407,6 +407,8 @@ in
 
               # Internal options and configuration, to make this work
               options.desyncUpgradeScript = lib.mkOption {
+                # Derivation called to upgrade the desync files.
+                # `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
                 readOnly = true;
                 internal = true;
                 visible = false;
@@ -418,6 +420,8 @@ in
               };
 
               options.upgradeFailedScript = lib.mkOption {
+                # Derivation called when the latest upgrade failed.
+                # `$out` will be symlinked from `/var/lib/nixos/desyncs/${name}.nix by the `upgradeScript`
                 readOnly = true;
                 internal = true;
                 visible = false;
