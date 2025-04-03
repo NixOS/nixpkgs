@@ -45,8 +45,8 @@ let
 in
 import ./default.nix
   {
-    rustcVersion = "1.85.0";
-    rustcSha256 = "L08xQv+3yEAhOc+geW4kuqrIuf0/lrLe7DuUtARcaoo=";
+    rustcVersion = "1.86.0";
+    rustcSha256 = "AionKG32eQCgRNIn2dtp1HMuw9gz5P/CWcRCXtce7YA=";
 
     rustcPatches = [
       # Fix for including no_std targets by default, shipping in Rust 1.87
@@ -133,7 +133,7 @@ import ./default.nix
       x86_64-unknown-freebsd = "6ad090d188079450b1d65e4d539833affac54cfeb504e022b1b56d6d98bb4cbe";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_85;
+    selectRustPackage = pkgs: pkgs.rust_1_86;
   }
 
   (
