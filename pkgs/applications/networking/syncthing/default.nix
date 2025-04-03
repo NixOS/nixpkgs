@@ -1,16 +1,22 @@
-{ pkgsBuildBuild
-, go
-, buildGoModule
-, stdenv
-, lib
-, fetchFromGitHub
-, nixosTests
-, autoSignDarwinBinariesHook
-, nix-update-script
+{
+  pkgsBuildBuild,
+  go,
+  buildGoModule,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  autoSignDarwinBinariesHook,
+  nix-update-script,
 }:
 
 let
-  common = { stname, target, postInstall ? "" }:
+  common =
+    {
+      stname,
+      target,
+      postInstall ? "",
+    }:
     buildGoModule rec {
       pname = stname;
       version = "1.28.0";
@@ -69,7 +75,10 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ joko peterhoeg ];
+        maintainers = with lib.maintainers; [
+          joko
+          peterhoeg
+        ];
         mainProgram = target;
         platforms = lib.platforms.unix;
       };
@@ -81,26 +90,28 @@ in
     stname = "syncthing";
     target = "syncthing";
 
-    postInstall = ''
-      # This installs man pages in the correct directory according to the suffix
-      # on the filename
-      for mf in man/*.[1-9]; do
-        mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
-        mandir="$out/share/man/man$mantype"
-        install -Dm644 "$mf" "$mandir/$(basename "$mf")"
-      done
+    postInstall =
+      ''
+        # This installs man pages in the correct directory according to the suffix
+        # on the filename
+        for mf in man/*.[1-9]; do
+          mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+          mandir="$out/share/man/man$mantype"
+          install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+        done
 
-    '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      mkdir -p $out/lib/systemd/{system,user}
+      ''
+      + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+        mkdir -p $out/lib/systemd/{system,user}
 
-      substitute etc/linux-systemd/system/syncthing@.service \
-                 $out/lib/systemd/system/syncthing@.service \
-                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
+        substitute etc/linux-systemd/system/syncthing@.service \
+                   $out/lib/systemd/system/syncthing@.service \
+                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
 
-      substitute etc/linux-systemd/user/syncthing.service \
-                 $out/lib/systemd/user/syncthing.service \
-                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
-    '';
+        substitute etc/linux-systemd/user/syncthing.service \
+                   $out/lib/systemd/user/syncthing.service \
+                   --replace-fail /usr/bin/syncthing $out/bin/syncthing
+      '';
   };
 
   syncthing-discovery = common {

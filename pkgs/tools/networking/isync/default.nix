@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
-, openssl, db, cyrus_sasl, zlib
-, Security
-# Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
-# on a package that isn't really maintained anymore:
-, withCyrusSaslXoauth2 ? false, cyrus-sasl-xoauth2, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  openssl,
+  db,
+  cyrus_sasl,
+  zlib,
+  Security,
+  # Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
+  # on a package that isn't really maintained anymore:
+  withCyrusSaslXoauth2 ? false,
+  cyrus-sasl-xoauth2,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,14 +29,25 @@ stdenv.mkDerivation (finalAttrs: {
   # see https://sourceforge.net/p/isync/mailman/isync-devel/thread/87fsevvebj.fsf%40steelpick.2x.cz/
   env.NIX_CFLAGS_COMPILE = "-DQPRINTF_BUFF=4000";
 
-  nativeBuildInputs = [ pkg-config perl ]
-    ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
-  buildInputs = [ openssl db cyrus_sasl zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ] ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
+  buildInputs = [
+    openssl
+    db
+    cyrus_sasl
+    zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \
-        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 cyrus_sasl.out ]}"
+        --prefix SASL_PATH : "${
+          lib.makeSearchPath "lib/sasl2" [
+            cyrus-sasl-xoauth2
+            cyrus_sasl.out
+          ]
+        }"
   '';
 
   meta = with lib; {

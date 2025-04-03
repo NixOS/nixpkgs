@@ -1,25 +1,26 @@
-{ bazel
-, Foundation
-, bazelTest
-, callPackage
-, cctools
-, darwin
-, distDir
-, extraBazelArgs ? ""
-, fetchurl
-, jdk11_headless
-, lib
-, libtool
-, lndir
-, openjdk8
-, repoCache
-, runLocal
-, runtimeShell
-, stdenv
-, symlinkJoin
-, tree
-, writeScript
-, writeText
+{
+  bazel,
+  Foundation,
+  bazelTest,
+  callPackage,
+  cctools,
+  darwin,
+  distDir,
+  extraBazelArgs ? "",
+  fetchurl,
+  jdk11_headless,
+  lib,
+  libtool,
+  lndir,
+  openjdk8,
+  repoCache,
+  runLocal,
+  runtimeShell,
+  stdenv,
+  symlinkJoin,
+  tree,
+  writeScript,
+  writeText,
 }:
 
 # This test uses bzlmod because I could not make it work without it.
@@ -43,13 +44,16 @@ let
     inherit lockfile;
 
     # Remove platform-specific binaries, as they are large and useless.
-    requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name;
+    requiredDepNamePredicate =
+      name: null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name;
   };
 
   mergedRepoCache = symlinkJoin {
     name = "mergedDistDir";
-    paths = [ protobufRepoCache distDir ];
+    paths = [
+      protobufRepoCache
+      distDir
+    ];
   };
 
   MODULE = writeText "MODULE.bazel" ''
@@ -111,55 +115,62 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" { } (''
-    mkdir $out
-    cp ${MODULE} $out/MODULE.bazel
-    cp ${./protobuf-test.MODULE.bazel.lock} $out/MODULE.bazel.lock
-    #cp ${WORKSPACE} $out/WORKSPACE
-    touch $out/WORKSPACE
-    touch $out/BUILD.bazel
-    mkdir $out/person
-    cp ${personProto} $out/person/person.proto
-    cp ${personBUILD} $out/person/BUILD.bazel
-  ''
-  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-    echo 'tools bazel created'
-    mkdir $out/tools
-    install ${toolsBazel} $out/tools/bazel
-  ''));
+  workspaceDir = runLocal "our_workspace" { } (
+    ''
+      mkdir $out
+      cp ${MODULE} $out/MODULE.bazel
+      cp ${./protobuf-test.MODULE.bazel.lock} $out/MODULE.bazel.lock
+      #cp ${WORKSPACE} $out/WORKSPACE
+      touch $out/WORKSPACE
+      touch $out/BUILD.bazel
+      mkdir $out/person
+      cp ${personProto} $out/person/person.proto
+      cp ${personBUILD} $out/person/BUILD.bazel
+    ''
+    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      echo 'tools bazel created'
+      mkdir $out/tools
+      install ${toolsBazel} $out/tools/bazel
+    '')
+  );
 
   testBazel = bazelTest {
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [
-      (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
-      tree
-      bazel
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      darwin.objc4
-    ];
+    buildInputs =
+      [
+        (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
+        tree
+        bazel
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        Foundation
+        darwin.objc4
+      ];
 
-    bazelScript = ''
-      ${bazel}/bin/bazel \
-        build \
-        --repository_cache=${mergedRepoCache} \
-        ${extraBazelArgs} \
-        --enable_bzlmod \
-        --lockfile_mode=error \
-        --verbose_failures \
-        //... \
-    '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+    bazelScript =
+      ''
+        ${bazel}/bin/bazel \
+          build \
+          --repository_cache=${mergedRepoCache} \
+          ${extraBazelArgs} \
+          --enable_bzlmod \
+          --lockfile_mode=error \
+          --verbose_failures \
+          //... \
+      ''
+      + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
         --host_javabase='@local_jdk//:jdk' \
         --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
         --javabase='@local_jdk//:jdk' \
-    '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      ''
+      + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-    '' + ''
+      ''
+      + ''
 
-    '';
+      '';
   };
 
 in

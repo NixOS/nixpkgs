@@ -67,7 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # `w3m' is needed for HTML to text conversions.
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${lib.makeBinPath [ libxslt libxml2 getopt w3m ]}"
+       --prefix PATH : "${
+         lib.makeBinPath [
+           libxslt
+           libxml2
+           getopt
+           w3m
+         ]
+       }"
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -1,57 +1,59 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, docbook_xsl
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, autoreconfHook
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, fetchFromGitHub
-, nixosTests
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  docbook_xsl,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  autoreconfHook,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  fetchFromGitHub,
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -173,7 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -233,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
-    updateScript = unstableGitUpdater {};
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

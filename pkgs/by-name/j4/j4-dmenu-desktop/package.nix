@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, dmenu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  dmenu,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "j4-dmenu-desktop";

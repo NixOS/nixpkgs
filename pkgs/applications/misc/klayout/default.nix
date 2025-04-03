@@ -1,6 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub
-, python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, libgit2
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  python3,
+  ruby,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  qtxmlpatterns,
+  which,
+  perl,
+  libgit2,
 }:
 
 mkDerivation rec {
@@ -67,4 +77,3 @@ mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp ];
   };
 }
-

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mailhog;
 
@@ -8,8 +13,8 @@ let
       "-smtp-bind-addr :${toString cfg.smtpPort}"
       "-ui-bind-addr :${toString cfg.uiPort}"
       "-storage ${cfg.storage}"
-    ] ++ lib.optional (cfg.storage == "maildir")
-      "-maildir-path $STATE_DIRECTORY"
+    ]
+    ++ lib.optional (cfg.storage == "maildir") "-maildir-path $STATE_DIRECTORY"
     ++ cfg.extraArgs
   );
 
@@ -27,7 +32,10 @@ in
       enable = lib.mkEnableOption "MailHog, web and API based SMTP testing";
 
       storage = lib.mkOption {
-        type = lib.types.enum [ "maildir" "memory" ];
+        type = lib.types.enum [
+          "maildir"
+          "memory"
+        ];
         default = "memory";
         description = "Store mails on disk or in memory.";
       };
@@ -52,12 +60,11 @@ in
 
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "List of additional arguments to pass to the MailHog process.";
       };
     };
   };
-
 
   ###### implementation
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.earlyoom;
@@ -15,7 +20,8 @@ let
     mkRemovedOptionModule
     optionalString
     optionals
-    types;
+    types
+    ;
 in
 {
   meta = {
@@ -127,8 +133,11 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
+      default = [ ];
+      example = [
+        "-g"
+        "--prefer '(^|/)(java|chromium)$'"
+      ];
       description = "Extra command-line arguments to be passed to earlyoom.";
     };
   };
@@ -155,18 +164,24 @@ in
       path = optionals cfg.enableNotifications [ pkgs.dbus ];
       serviceConfig = {
         StandardError = "journal";
-        ExecStart = concatStringsSep " " ([
-          "${lib.getExe cfg.package}"
-          ("-m ${toString cfg.freeMemThreshold}"
-           + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
-          ("-s ${toString cfg.freeSwapThreshold}"
-           + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
-          "-r ${toString cfg.reportInterval}"
-        ]
-        ++ optionals cfg.enableDebugInfo [ "-d" ]
-        ++ optionals cfg.enableNotifications [ "-n" ]
-        ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
-        ++ cfg.extraArgs);
+        ExecStart = concatStringsSep " " (
+          [
+            "${lib.getExe cfg.package}"
+            (
+              "-m ${toString cfg.freeMemThreshold}"
+              + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}"
+            )
+            (
+              "-s ${toString cfg.freeSwapThreshold}"
+              + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}"
+            )
+            "-r ${toString cfg.reportInterval}"
+          ]
+          ++ optionals cfg.enableDebugInfo [ "-d" ]
+          ++ optionals cfg.enableNotifications [ "-n" ]
+          ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
+          ++ cfg.extraArgs
+        );
       };
     };
   };

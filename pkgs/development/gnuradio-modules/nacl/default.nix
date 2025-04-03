@@ -1,15 +1,16 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cppunit
-, swig3
-, boost
-, logLib
-, python
-, libsodium
-, gnuradioAtLeast
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cppunit,
+  swig3,
+  boost,
+  logLib,
+  python,
+  libsodium,
+  gnuradioAtLeast,
 }:
 
 mkDerivation {

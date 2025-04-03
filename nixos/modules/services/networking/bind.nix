@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.bind;
@@ -7,100 +12,117 @@ let
 
   bindUser = "named";
 
-  bindZoneCoerce = list: builtins.listToAttrs (lib.forEach list (zone: { name = zone.name; value = zone; }));
+  bindZoneCoerce =
+    list:
+    builtins.listToAttrs (
+      lib.forEach list (zone: {
+        name = zone.name;
+        value = zone;
+      })
+    );
 
-  bindZoneOptions = { name, config, ... }: {
-    options = {
-      name = lib.mkOption {
-        type = lib.types.str;
-        default = name;
-        description = "Name of the zone.";
-      };
-      master = lib.mkOption {
-        description = "Master=false means slave server";
-        type = lib.types.bool;
-      };
-      file = lib.mkOption {
-        type = lib.types.either lib.types.str lib.types.path;
-        description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
-      };
-      masters = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = "List of servers for inclusion in stub and secondary zones.";
-      };
-      slaves = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = "Addresses who may request zone transfers.";
-        default = [ ];
-      };
-      allowQuery = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = ''
-          List of address ranges allowed to query this zone. Instead of the address(es), this may instead
-          contain the single string "any".
+  bindZoneOptions =
+    { name, config, ... }:
+    {
+      options = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = name;
+          description = "Name of the zone.";
+        };
+        master = lib.mkOption {
+          description = "Master=false means slave server";
+          type = lib.types.bool;
+        };
+        file = lib.mkOption {
+          type = lib.types.either lib.types.str lib.types.path;
+          description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+        };
+        masters = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "List of servers for inclusion in stub and secondary zones.";
+        };
+        slaves = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "Addresses who may request zone transfers.";
+          default = [ ];
+        };
+        allowQuery = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = ''
+            List of address ranges allowed to query this zone. Instead of the address(es), this may instead
+            contain the single string "any".
 
-          NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
-          of `cachenetworks`.
-        '';
-        default = [ "any" ];
-      };
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        description = "Extra zone config to be appended at the end of the zone section.";
-        default = "";
+            NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
+            of `cachenetworks`.
+          '';
+          default = [ "any" ];
+        };
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
+          description = "Extra zone config to be appended at the end of the zone section.";
+          default = "";
+        };
       };
     };
-  };
 
-  confFile = pkgs.writeText "named.conf"
-    ''
-      include "/etc/bind/rndc.key";
-      controls {
-        inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
-      };
+  confFile = pkgs.writeText "named.conf" ''
+    include "/etc/bind/rndc.key";
+    controls {
+      inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+    };
 
-      acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
-      acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+    acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
+    acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
-      options {
-        listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query { cachenetworks; };
-        blackhole { badnetworks; };
-        forward ${cfg.forward};
-        forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "${cfg.directory}";
-        pid-file "/run/named/named.pid";
-        ${cfg.extraOptions}
-      };
+    options {
+      listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
+      listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+      allow-query { cachenetworks; };
+      blackhole { badnetworks; };
+      forward ${cfg.forward};
+      forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
+      directory "${cfg.directory}";
+      pid-file "/run/named/named.pid";
+      ${cfg.extraOptions}
+    };
 
-      ${cfg.extraConfig}
+    ${cfg.extraConfig}
 
-      ${ lib.concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
-            ''
-              zone "${name}" {
-                type ${if master then "master" else "slave"};
-                file "${file}";
-                ${ if master then
-                   ''
-                     allow-transfer {
-                       ${lib.concatMapStrings (ip: "${ip};\n") slaves}
-                     };
-                   ''
-                   else
-                   ''
-                     masters {
-                       ${lib.concatMapStrings (ip: "${ip};\n") masters}
-                     };
-                   ''
-                }
-                allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
-                ${extraConfig}
-              };
-            '')
-          (lib.attrValues cfg.zones) }
-    '';
+    ${lib.concatMapStrings (
+      {
+        name,
+        file,
+        master ? true,
+        slaves ? [ ],
+        masters ? [ ],
+        allowQuery ? [ ],
+        extraConfig ? "",
+      }:
+      ''
+        zone "${name}" {
+          type ${if master then "master" else "slave"};
+          file "${file}";
+          ${
+            if master then
+              ''
+                allow-transfer {
+                  ${lib.concatMapStrings (ip: "${ip};\n") slaves}
+                };
+              ''
+            else
+              ''
+                masters {
+                  ${lib.concatMapStrings (ip: "${ip};\n") masters}
+                };
+              ''
+          }
+          allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
+          ${extraConfig}
+        };
+      ''
+    ) (lib.attrValues cfg.zones)}
+  '';
 
 in
 
@@ -114,11 +136,13 @@ in
 
       enable = lib.mkEnableOption "BIND domain name server";
 
-
       package = lib.mkPackageOption pkgs "bind" { };
 
       cacheNetworks = lib.mkOption {
-        default = [ "127.0.0.0/24" "::1/128" ];
+        default = [
+          "127.0.0.0/24"
+          "::1/128"
+        ];
         type = lib.types.listOf lib.types.str;
         description = ''
           What networks are allowed to use us as a resolver.  Note
@@ -158,7 +182,10 @@ in
 
       forward = lib.mkOption {
         default = "first";
-        type = lib.types.enum ["first" "only"];
+        type = lib.types.enum [
+          "first"
+          "only"
+        ];
         description = ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         '';
@@ -188,7 +215,9 @@ in
 
       zones = lib.mkOption {
         default = [ ];
-        type = with lib.types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (lib.types.submodule bindZoneOptions));
+        type =
+          with lib.types;
+          coercedTo (listOf attrs) bindZoneCoerce (attrsOf (lib.types.submodule bindZoneOptions));
         description = ''
           List of zones we claim authority over.
         '';
@@ -234,20 +263,18 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-    users.users.${bindUser} =
-      {
-        group = bindUser;
-        description = "BIND daemon user";
-        isSystemUser = true;
-      };
-    users.groups.${bindUser} = {};
+    users.users.${bindUser} = {
+      group = bindUser;
+      description = "BIND daemon user";
+      isSystemUser = true;
+    };
+    users.groups.${bindUser} = { };
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";

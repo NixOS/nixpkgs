@@ -43,7 +43,7 @@ let
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
     hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
   };
 
@@ -80,8 +80,19 @@ assert
     || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
 python311Packages.buildPythonApplication {
-  inherit pname version src;
+  inherit pname version;
   format = "other";
+
+  srcs = [ src ] ++ lib.optional withPlugin plugin;
+
+  unpackCmd = lib.optionalString withPlugin ''
+    if ! [[ "$curSrc" =~ -plugin\.run$ ]]; then return 1; fi # fallback to regular unpackCmdHooks
+
+    # Unpack plugin shar
+    sh "$curSrc" --noexec --keep
+  '';
+
+  sourceRoot = "${pname}-${version}";
 
   buildInputs =
     [
@@ -238,8 +249,7 @@ python311Packages.buildPythonApplication {
       done
     ''
     + lib.optionalString withPlugin ''
-      sh ${plugin} --noexec --keep
-      cd plugin_tmp
+      pushd $NIX_BUILD_TOP/plugin_tmp
 
       cp plugin.spec $out/share/hplip/
 
@@ -275,6 +285,8 @@ python311Packages.buildPythonApplication {
 
       mkdir -p $out/var/lib/hp
       cp ${hplipState} $out/var/lib/hp/hplip.state
+
+      popd
     '';
 
   # The installed executables are just symlinks into $out/share/hplip,

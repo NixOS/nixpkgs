@@ -1,54 +1,55 @@
-{ stdenv
-, lib
-, boehmgc
-, boost
-, cairo
-, callPackage
-, cmake
-, desktopToDarwinBundle
-, fetchurl
-, fd
-, gettext
-, ghostscript
-, glib
-, glibmm
-, gobject-introspection
-, gsl
-, gspell
-, gtk-mac-integration
-, gtkmm3
-, gdk-pixbuf
-, imagemagick
-, lcms
-, lib2geom
-, libcdr
-, libexif
-, libpng
-, librevenge
-, librsvg
-, libsigcxx
-, libvisio
-, libwpg
-, libXft
-, libxml2
-, libxslt
-, ninja
-, perlPackages
-, pkg-config
-, poppler
-, popt
-, potrace
-, python3
-, runCommand
-, substituteAll
-, wrapGAppsHook3
-, libepoxy
-, zlib
-, yq
+{
+  stdenv,
+  lib,
+  boehmgc,
+  boost,
+  cairo,
+  callPackage,
+  cmake,
+  desktopToDarwinBundle,
+  fetchurl,
+  fd,
+  gettext,
+  ghostscript,
+  glib,
+  glibmm,
+  gobject-introspection,
+  gsl,
+  gspell,
+  gtk-mac-integration,
+  gtkmm3,
+  gdk-pixbuf,
+  imagemagick,
+  lcms,
+  lib2geom,
+  libcdr,
+  libexif,
+  libpng,
+  librevenge,
+  librsvg,
+  libsigcxx,
+  libvisio,
+  libwpg,
+  libXft,
+  libxml2,
+  libxslt,
+  ninja,
+  perlPackages,
+  pkg-config,
+  poppler,
+  popt,
+  potrace,
+  python3,
+  runCommand,
+  substituteAll,
+  wrapGAppsHook3,
+  libepoxy,
+  zlib,
+  yq,
 }:
 let
-  python3Env = python3.withPackages
-    (ps: with ps; [
+  python3Env = python3.withPackages (
+    ps: with ps; [
       # List taken almost verbatim from the output of nix-build -A inkscape.passthru.pythonDependencies
       appdirs
       beautifulsoup4
@@ -67,7 +68,8 @@ let
       scour
       tinycss2
       zstandard
-    ]);
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
@@ -108,57 +110,63 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    python3Env
-    glib # for setup hook
-    gdk-pixbuf # for setup hook
-    wrapGAppsHook3
-    gobject-introspection
-  ] ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      ninja
+      python3Env
+      glib # for setup hook
+      gdk-pixbuf # for setup hook
+      wrapGAppsHook3
+      gobject-introspection
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
-  buildInputs = [
-    boehmgc
-    boost
-    gettext
-    glib
-    glibmm
-    gsl
-    gtkmm3
-    imagemagick
-    lcms
-    lib2geom
-    libcdr
-    libexif
-    libpng
-    librevenge
-    librsvg # for loading icons
-    libsigcxx
-    libvisio
-    libwpg
-    libXft
-    libxml2
-    libxslt
-    perlPackages.perl
-    poppler
-    popt
-    potrace
-    python3Env
-    zlib
-    libepoxy
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gspell
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cairo
-    gtk-mac-integration
-  ];
+  buildInputs =
+    [
+      boehmgc
+      boost
+      gettext
+      glib
+      glibmm
+      gsl
+      gtkmm3
+      imagemagick
+      lcms
+      lib2geom
+      libcdr
+      libexif
+      libpng
+      librevenge
+      librsvg # for loading icons
+      libsigcxx
+      libvisio
+      libwpg
+      libXft
+      libxml2
+      libxslt
+      perlPackages.perl
+      poppler
+      popt
+      potrace
+      python3Env
+      zlib
+      libepoxy
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gspell
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cairo
+      gtk-mac-integration
+    ];
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -173,16 +181,19 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (python3.pkgs) inkex;
     };
 
-    pythonDependencies = runCommand "python-dependency-list" {
-      nativeBuildInputs = [
-        fd
-        yq
-      ];
-      inherit (finalAttrs) src;
-    } ''
-      unpackPhase
-      tomlq --slurp 'map(.tool.poetry.dependencies | to_entries | map(.key)) | flatten | map(ascii_downcase) | unique' $(fd pyproject.toml) > "$out"
-    '';
+    pythonDependencies =
+      runCommand "python-dependency-list"
+        {
+          nativeBuildInputs = [
+            fd
+            yq
+          ];
+          inherit (finalAttrs) src;
+        }
+        ''
+          unpackPhase
+          tomlq --slurp 'map(.tool.poetry.dependencies | to_entries | map(.key)) | flatten | map(ascii_downcase) | unique' $(fd pyproject.toml) > "$out"
+        '';
   };
 
   meta = {

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, which, squawk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  squawk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
@@ -13,7 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  makeFlags = [ "build" "build_shared" ];
+  makeFlags = [
+    "build"
+    "build_shared"
+  ];
 
   installPhase = ''
     install -Dm644 -t $out/lib libpg_query.a

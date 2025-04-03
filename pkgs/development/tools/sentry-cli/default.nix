@@ -1,13 +1,14 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
-, installShellFiles
-, openssl
-, pkg-config
-, stdenv
-, CoreServices
-, Security
-, SystemConfiguration
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+  openssl,
+  pkg-config,
+  stdenv,
+  CoreServices,
+  Security,
+  SystemConfiguration,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
@@ -24,8 +25,17 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security SystemConfiguration ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   cargoHash = "sha256-gyNP6qYg/uKOmhq3elYw8jPknjfAzoGyhGegSq1wDoo=";
 

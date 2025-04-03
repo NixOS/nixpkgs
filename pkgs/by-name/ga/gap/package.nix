@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, readline
-, gmp
-, pari
-, zlib
-# one of
-# - "minimal" (~400M):
-#     Install the bare minimum of packages required by gap to start.
-#     This is likely to break a lot of stuff. Do not expect upstream support with
-#     this configuration.
-# - "standard" (~700M):
-#     Install the "standard packages" which gap autoloads by default. These
-#     packages are effectively considered a part of gap.
-# - "full" (~1.7G):
-#     Install all available packages. This takes a lot of space.
-, packageSet ? "standard"
-# Kept for backwards compatibility. Overrides packageSet to "full".
-, keepAllPackages ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  readline,
+  gmp,
+  pari,
+  zlib,
+  # one of
+  # - "minimal" (~400M):
+  #     Install the bare minimum of packages required by gap to start.
+  #     This is likely to break a lot of stuff. Do not expect upstream support with
+  #     this configuration.
+  # - "standard" (~700M):
+  #     Install the "standard packages" which gap autoloads by default. These
+  #     packages are effectively considered a part of gap.
+  # - "full" (~1.7G):
+  #     Install all available packages. This takes a lot of space.
+  packageSet ? "standard",
+  # Kept for backwards compatibility. Overrides packageSet to "full".
+  keepAllPackages ? false,
 }:
 let
   # packages absolutely required for gap to start
@@ -45,10 +46,10 @@ let
     "resclasses"
     "sophus"
     "tomlib"
-    "autodoc"  # dependency of atlasrep
-    "io"       # used by atlasrep to fetch data from online sources
+    "autodoc" # dependency of atlasrep
+    "io" # used by atlasrep to fetch data from online sources
     "radiroot" # dependency of polenta
-    "utils"    # dependency of atlasrep
+    "utils" # dependency of atlasrep
   ];
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
@@ -56,12 +57,16 @@ let
   # Generate bash script that removes all packages from the `pkg` subdirectory
   # that are not on the whitelist. The whitelist consists of strings expected by
   # `find`'s `-name`.
-  removeNonWhitelistedPkgs = whitelist: ''
-    find pkg -type d -maxdepth 1 -mindepth 1 \
-  '' + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist)) + ''
-    -exec echo "Removing package {}" \; \
-    -exec rm -r '{}' \;
-  '';
+  removeNonWhitelistedPkgs =
+    whitelist:
+    ''
+      find pkg -type d -maxdepth 1 -mindepth 1 \
+    ''
+    + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist))
+    + ''
+      -exec echo "Removing package {}" \; \
+      -exec rm -r '{}' \;
+    '';
 in
 stdenv.mkDerivation rec {
   pname = "gap";
@@ -74,9 +79,11 @@ stdenv.mkDerivation rec {
   };
 
   # remove all non-essential packages (which take up a lot of space)
-  preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
-    patchShebangs .
-  '';
+  preConfigure =
+    lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep)
+    + ''
+      patchShebangs .
+    '';
 
   buildInputs = [
     readline

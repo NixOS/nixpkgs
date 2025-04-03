@@ -1,37 +1,41 @@
-{ stdenv
-, lib
-, meson
-, mesonEmulatorHook
-, fetchurl
-, python3
-, pkg-config
-, gtk3
-, gtk-mac-integration
-, glib
-, libgedit-amtk
-, libgedit-gtksourceview
-, libgedit-tepl
-, libpeas
-, libxml2
-, gsettings-desktop-schemas
-, wrapGAppsHook3
-, gtk-doc
-, gobject-introspection
-, docbook-xsl-nons
-, ninja
-, gnome
-, gspell
-, perl
-, itstool
-, desktop-file-utils
-, vala
+{
+  stdenv,
+  lib,
+  meson,
+  mesonEmulatorHook,
+  fetchurl,
+  python3,
+  pkg-config,
+  gtk3,
+  gtk-mac-integration,
+  glib,
+  libgedit-amtk,
+  libgedit-gtksourceview,
+  libgedit-tepl,
+  libpeas,
+  libxml2,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
+  gtk-doc,
+  gobject-introspection,
+  docbook-xsl-nons,
+  ninja,
+  gnome,
+  gspell,
+  perl,
+  itstool,
+  desktop-file-utils,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
   version = "48.0";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
@@ -44,36 +48,40 @@ stdenv.mkDerivation rec {
     ./correct-gir-lib-path.patch
   ];
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    itstool
-    libxml2
-    meson
-    ninja
-    perl
-    pkg-config
-    python3
-    vala
-    wrapGAppsHook3
-    gtk-doc
-    gobject-introspection
-    docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      desktop-file-utils
+      itstool
+      libxml2
+      meson
+      ninja
+      perl
+      pkg-config
+      python3
+      vala
+      wrapGAppsHook3
+      gtk-doc
+      gobject-introspection
+      docbook-xsl-nons
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    glib
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    libgedit-amtk
-    libgedit-gtksourceview
-    libgedit-tepl
-    libpeas
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration
-  ];
+  buildInputs =
+    [
+      glib
+      gsettings-desktop-schemas
+      gspell
+      gtk3
+      libgedit-amtk
+      libgedit-gtksourceview
+      libgedit-tepl
+      libpeas
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gtk-mac-integration
+    ];
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py

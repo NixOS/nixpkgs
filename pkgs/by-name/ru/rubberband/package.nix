@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
-, lv2, jdk_headless
-, vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsamplerate,
+  libsndfile,
+  fftw,
+  lv2,
+  jdk_headless,
+  vamp-plugin-sdk,
+  ladspaH,
+  meson,
+  ninja,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
@@ -11,9 +24,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-2e+J4rjvn4WxOsPC+uww4grPLJ86nIxFzmN/K8leV2w=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin
-    (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    jdk_headless
+  ];
+  buildInputs =
+    [
+      libsamplerate
+      libsndfile
+      fftw
+      vamp-plugin-sdk
+      ladspaH
+      lv2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Accelerate
+        CoreGraphics
+        CoreVideo
+      ]
+    );
   makeFlags = [ "AR:=$(AR)" ];
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/danieleades/mdbook-d2";
     changelog = "https://github.com/danieleades/mdbook-d2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
+    maintainers = with maintainers; [
+      blaggacao
+      matthiasbeyer
+    ];
   };
 }

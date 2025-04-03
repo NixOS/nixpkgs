@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, gmp
-, pkg-config
-, qtbase
-, wrapQtAppsHook
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
+  gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

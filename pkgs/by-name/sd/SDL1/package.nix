@@ -1,39 +1,61 @@
-{ lib
-, alsa-lib
-, audiofile
-, config
-, darwin
-, fetchpatch
-, fetchurl
-, libGL
-, libGLU
-, libICE
-, libXext
-, libXrandr
-, libcap
-, libiconv
-, libpulseaudio
-, pkg-config
-, stdenv
-# Boolean flags
-, alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
-, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
-, openglSupport ? libGLSupported
-, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
-, x11Support ? !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isAndroid
+{
+  lib,
+  alsa-lib,
+  audiofile,
+  config,
+  darwin,
+  fetchpatch,
+  fetchurl,
+  libGL,
+  libGLU,
+  libICE,
+  libXext,
+  libXrandr,
+  libcap,
+  libiconv,
+  libpulseaudio,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL,
+  openglSupport ? libGLSupported,
+  pulseaudioSupport ?
+    config.pulseaudio or stdenv.hostPlatform.isLinux
+    && !stdenv.hostPlatform.isAndroid
+    && lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
+  x11Support ? !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isAndroid,
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
 let
-  inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
-  extraPropagatedBuildInputs = [ ]
-    ++ lib.optionals x11Support [ libXext libICE libXrandr ]
+  inherit (darwin.apple_sdk.frameworks)
+    OpenGL
+    CoreAudio
+    CoreServices
+    AudioUnit
+    Kernel
+    Cocoa
+    GLUT
+    ;
+  extraPropagatedBuildInputs =
+    [ ]
+    ++ lib.optionals x11Support [
+      libXext
+      libICE
+      libXrandr
+    ]
     ++ lib.optionals (openglSupport && stdenv.hostPlatform.isLinux) [ libGL ]
     # libGLU doesn’t work with Android's SDL
-    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAndroid)) [ libGLU ]
-    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isDarwin) [ OpenGL GLUT ]
+    ++ lib.optionals (
+      openglSupport && stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAndroid)
+    ) [ libGLU ]
+    ++ lib.optionals (openglSupport && stdenv.hostPlatform.isDarwin) [
+      OpenGL
+      GLUT
+    ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
@@ -47,30 +69,40 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1tMWp5Pl40gVXw3ZO5eXmJM/uYqh7evMEIgp1kdKrQA=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
   buildInputs =
     [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW && alsaSupport) [ audiofile ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AudioUnit
+      CoreAudio
+      CoreServices
+      Kernel
+      OpenGL
+    ];
 
-  configureFlags = [
-    "--disable-oss"
-    "--disable-video-x11-xme"
-    "--enable-rpath"
-  # Building without this fails on Darwin with
-  #
-  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
-  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
-  #
-  # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-x11-shared"
+  configureFlags =
+    [
+      "--disable-oss"
+      "--disable-video-x11-xme"
+      "--enable-rpath"
+      # Building without this fails on Darwin with
+      #
+      #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
+      #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
+      #
+      # Please try revert the change that introduced this comment when updating SDL.
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ lib.optional stdenv.hostPlatform.isMusl "CFLAGS=-DICONV_INBUF_NONCONST";
@@ -131,15 +163,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # See the same place in the expression for SDL2
-  postFixup = let
-    rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
-  in ''
-    for lib in $out/lib/*.so* ; do
-      if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
-      fi
-    done
-  '';
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
+    in
+    ''
+      for lib in $out/lib/*.so* ; do
+        if [[ -L "$lib" ]]; then
+          patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
+        fi
+      done
+    '';
 
   setupHook = ./setup-hook.sh;
 

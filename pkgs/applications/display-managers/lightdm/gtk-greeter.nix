@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, lightdm-gtk-greeter
-, fetchurl
-, lightdm
-, pkg-config
-, intltool
-, linkFarm
-, wrapGAppsHook3
-, gtk3
-, xfce4-dev-tools
-, at-spi2-core
-, librsvg
-, hicolor-icon-theme
+{
+  stdenv,
+  lib,
+  lightdm-gtk-greeter,
+  fetchurl,
+  lightdm,
+  pkg-config,
+  intltool,
+  linkFarm,
+  wrapGAppsHook3,
+  gtk3,
+  xfce4-dev-tools,
+  at-spi2-core,
+  librsvg,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,10 +60,12 @@ stdenv.mkDerivation rec {
       --replace-fail "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
-    path = "${lightdm-gtk-greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
-    name = "lightdm-gtk-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [
+    {
+      path = "${lightdm-gtk-greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
+      name = "lightdm-gtk-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Xubuntu/lightdm-gtk-greeter";

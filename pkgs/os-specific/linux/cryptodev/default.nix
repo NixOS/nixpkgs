@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   kernel ? false,
-  kernelModuleMakeFlags ? [],
+  kernelModuleMakeFlags ? [ ],
 }:
 
 stdenv.mkDerivation rec {

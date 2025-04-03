@@ -1,16 +1,17 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, grafana-agent
-, nix-update-script
-, nixosTests
-, nodejs
-, stdenv
-, systemd
-, testers
-, yarn
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  grafana-agent,
+  nix-update-script,
+  nixosTests,
+  nodejs,
+  stdenv,
+  systemd,
+  testers,
+  yarn,
 }:
 
 # Breaks with Go 1.23: https://github.com/grafana/agent/issues/6972
@@ -34,19 +35,26 @@ buildGo122Module rec {
     hash = "sha256-kThqcjQ7qdSSs6bItSfLSW1WXpEYEA9BSLmyRfeCLyw=";
   };
 
-  ldflags = let
-    prefix = "github.com/grafana/agent/internal/build";
-  in [
-    "-s" "-w"
-    # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
-    "-X ${prefix}.Version=${version}"
-    "-X ${prefix}.Branch=v${version}"
-    "-X ${prefix}.Revision=v${version}"
-    "-X ${prefix}.BuildUser=nix"
-    "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
-  ];
+  ldflags =
+    let
+      prefix = "github.com/grafana/agent/internal/build";
+    in
+    [
+      "-s"
+      "-w"
+      # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
+      "-X ${prefix}.Version=${version}"
+      "-X ${prefix}.Branch=v${version}"
+      "-X ${prefix}.Revision=v${version}"
+      "-X ${prefix}.BuildUser=nix"
+      "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
+    ];
 
-  nativeBuildInputs = [ fixup-yarn-lock nodejs yarn ];
+  nativeBuildInputs = [
+    fixup-yarn-lock
+    nodejs
+    yarn
+  ];
 
   tags = [
     "builtinassets"
@@ -75,20 +83,26 @@ buildGo122Module rec {
 
   # do not pass preBuild to go-modules.drv, as it would otherwise fail to build.
   # but even if it would work, it simply isn't needed in that scope.
-  overrideModAttrs = (_: {
-    preBuild = null;
-  });
+  overrideModAttrs = (
+    _: {
+      preBuild = null;
+    }
+  );
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ]
+  );
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
+      --set-rpath "${
+        lib.makeLibraryPath [ (lib.getLib systemd) ]
+      }:$(patchelf --print-rpath $out/bin/grafana-agent)" \
       $out/bin/grafana-agent
   '';
 
@@ -111,7 +125,10 @@ buildGo122Module rec {
     license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
     changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ flokli emilylange ];
+    maintainers = with lib.maintainers; [
+      flokli
+      emilylange
+    ];
     mainProgram = "grafana-agent";
   };
 }

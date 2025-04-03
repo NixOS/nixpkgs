@@ -1,13 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.jupyterhub;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
-      then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
-  });
+  kernels = (
+    pkgs.jupyter-kernel.create {
+      definitions = if cfg.kernels != null then cfg.kernels else pkgs.jupyter-kernel.default;
+    }
+  );
 
   jupyterhubConfig = pkgs.writeText "jupyterhub_config.py" ''
     c.JupyterHub.bind_url = "http://${cfg.host}:${toString cfg.port}"
@@ -23,7 +28,8 @@ let
 
     ${cfg.extraConfig}
   '';
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
@@ -71,10 +77,12 @@ in {
 
     jupyterhubEnv = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.python3.withPackages (p: with p; [
-        jupyterhub
-        jupyterhub-systemdspawner
-      ]);
+      default = pkgs.python3.withPackages (
+        p: with p; [
+          jupyterhub
+          jupyterhub-systemdspawner
+        ]
+      );
       defaultText = lib.literalExpression ''
         pkgs.python3.withPackages (p: with p; [
           jupyterhub
@@ -93,10 +101,12 @@ in {
 
     jupyterlabEnv = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.python3.withPackages (p: with p; [
-        jupyterhub
-        jupyterlab
-      ]);
+      default = pkgs.python3.withPackages (
+        p: with p; [
+          jupyterhub
+          jupyterlab
+        ]
+      );
       defaultText = lib.literalExpression ''
         pkgs.python3.withPackages (p: with p; [
           jupyterhub
@@ -115,9 +125,15 @@ in {
     };
 
     kernels = lib.mkOption {
-      type = lib.types.nullOr (lib.types.attrsOf(lib.types.submodule (import ../jupyter/kernel-options.nix {
-        inherit lib pkgs;
-      })));
+      type = lib.types.nullOr (
+        lib.types.attrsOf (
+          lib.types.submodule (
+            import ../jupyter/kernel-options.nix {
+              inherit lib pkgs;
+            }
+          )
+        )
+      );
 
       default = null;
       example = lib.literalExpression ''
@@ -179,7 +195,7 @@ in {
   };
 
   config = lib.mkMerge [
-    (lib.mkIf cfg.enable  {
+    (lib.mkIf cfg.enable {
       systemd.services.jupyterhub = {
         description = "Jupyterhub development server";
 

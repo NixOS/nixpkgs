@@ -1,15 +1,16 @@
-{ lib
-, qt5
-, python3
-, fetchFromGitHub
-, aria2
-, ffmpeg
-, libnotify
-, pulseaudio
-, sound-theme-freedesktop
-, pkg-config
-, meson
-, ninja
+{
+  lib,
+  qt5,
+  python3,
+  fetchFromGitHub,
+  aria2,
+  ffmpeg,
+  libnotify,
+  pulseaudio,
+  sound-theme-freedesktop,
+  pkg-config,
+  meson,
+  ninja,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,11 +44,22 @@ python3.pkgs.buildPythonApplication rec {
 
   # prevent double wrapping
   dontWrapQtApps = true;
-  nativeBuildInputs = [ meson ninja pkg-config qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ aria2 ffmpeg libnotify ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        aria2
+        ffmpeg
+        libnotify
+      ]
+    }"
     "\${qtWrapperArgs[@]}"
   ];
 
@@ -61,17 +73,19 @@ python3.pkgs.buildPythonApplication rec {
     ffmpeg
   ];
 
-  propagatedBuildInputs = [
-    pulseaudio
-    sound-theme-freedesktop
-  ] ++ (with python3.pkgs; [
-    psutil
-    pyqt5
-    requests
-    setproctitle
-    setuptools
-    yt-dlp
-  ]);
+  propagatedBuildInputs =
+    [
+      pulseaudio
+      sound-theme-freedesktop
+    ]
+    ++ (with python3.pkgs; [
+      psutil
+      pyqt5
+      requests
+      setproctitle
+      setuptools
+      yt-dlp
+    ]);
 
   meta = with lib; {
     description = "GUI for aria2";

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, libxcrypt
-, pkg-config
-, autoreconfHook
-, openssl
-, bash
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  libxcrypt,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  bash,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

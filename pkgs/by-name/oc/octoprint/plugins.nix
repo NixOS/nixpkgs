@@ -1,20 +1,26 @@
-{ lib
-, config
-, fetchFromGitHub
-, fetchFromGitLab
-, fetchpatch
-, marlin-calc
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  fetchpatch,
+  marlin-calc,
 }:
 
 self: super:
 let
-  buildPlugin = args: self.buildPythonPackage (args // {
-    pname = "octoprint-plugin-${args.pname}";
-    inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
-    # none of the following have tests
-    doCheck = false;
-  });
+  buildPlugin =
+    args:
+    self.buildPythonPackage (
+      args
+      // {
+        pname = "octoprint-plugin-${args.pname}";
+        inherit (args) version;
+        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
+        # none of the following have tests
+        doCheck = false;
+      }
+    );
 in
 {
   inherit buildPlugin;
@@ -183,7 +189,7 @@ in
       sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
     };
 
-    propagatedBuildInputs = with super; [ pyserial  ];
+    propagatedBuildInputs = with super; [ pyserial ];
 
     meta = with lib; {
       description = "Printer Firmware Updater";
@@ -271,7 +277,7 @@ in
     };
   };
 
-    mqttchambertemperature = buildPlugin rec {
+  mqttchambertemperature = buildPlugin rec {
     pname = "mqttchambertemperature";
     version = "0.0.3";
 
@@ -399,7 +405,7 @@ in
       sha256 = "sha256-waNCTjAZwdBfhHyJCG2La7KTnJ8MDVuX1JLetFB5bS4=";
     };
 
-    propagatedBuildInputs = with super; [ psutil  ];
+    propagatedBuildInputs = with super; [ psutil ];
 
     meta = with lib; {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
@@ -448,7 +454,7 @@ in
       sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
     };
 
-    propagatedBuildInputs = with super; [ psutil  ];
+    propagatedBuildInputs = with super; [ psutil ];
 
     meta = with lib; {
       description = "Plugin to view the current CPU and RAM usage on your system";
@@ -635,13 +641,25 @@ in
     # Test fails due to code executed on import, see #136513
     #pythonImportsCheck = [ "octoprint_octolapse" ];
 
-    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six pillow psutil file-read-backwards ];
+    propagatedBuildInputs = with super; [
+      awesome-slugify
+      setuptools
+      pillow
+      sarge
+      six
+      pillow
+      psutil
+      file-read-backwards
+    ];
 
     meta = with lib; {
       description = "Stabilized timelapses for Octoprint";
       homepage = "https://github.com/FormerLurker/OctoLapse";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ illustris j0hax ];
+      maintainers = with maintainers; [
+        illustris
+        j0hax
+      ];
       # requires pillow >=6.2.0,<7.0.0
       broken = true;
     };
@@ -665,6 +683,7 @@ in
       maintainers = with maintainers; [ j0hax ];
     };
   };
-} // lib.optionalAttrs config.allowAliases {
+}
+// lib.optionalAttrs config.allowAliases {
   octoprint-dashboard = super.dashboard;
 }

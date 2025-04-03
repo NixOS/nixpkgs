@@ -1,17 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libdrm
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libdrm,
+  libva,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vpl-gpu-rt";
   version = "24.3.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "intel";
@@ -20,9 +24,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-aTVSkkSQmcnRcx1J0zqdT6Z6f2GQVRTR8b2JFov6DFE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libdrm libva ];
+  buildInputs = [
+    libdrm
+    libva
+  ];
 
   meta = {
     description = "oneAPI Video Processing Library Intel GPU implementation";
@@ -33,6 +43,9 @@ stdenv.mkDerivation rec {
     # CMake adds x86 specific compiler flags in <source>/builder/FindGlobals.cmake
     # NOTE: https://github.com/oneapi-src/oneVPL-intel-gpu/issues/303
     broken = !stdenv.hostPlatform.isx86;
-    maintainers = with lib.maintainers; [ evanrichter pjungkamp ];
+    maintainers = with lib.maintainers; [
+      evanrichter
+      pjungkamp
+    ];
   };
 }

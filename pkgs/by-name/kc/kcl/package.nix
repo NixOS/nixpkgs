@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildGo123Module
-, fetchFromGitHub
-, kclvm_cli
-, kclvm
-, makeWrapper
-, installShellFiles
-, darwin
-,
+{
+  lib,
+  stdenv,
+  buildGo123Module,
+  fetchFromGitHub,
+  kclvm_cli,
+  kclvm,
+  makeWrapper,
+  installShellFiles,
+  darwin,
 }:
 buildGo123Module rec {
   pname = "kcl";
@@ -30,23 +30,34 @@ buildGo123Module rec {
     "-X=kcl-lang.io/cli/pkg/version.version=v${version}"
   ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
-  buildInputs = [ kclvm kclvm_cli ] ++ (
-    lib.optional stdenv.hostPlatform.isDarwin [
+  buildInputs =
+    [
+      kclvm
+      kclvm_cli
+    ]
+    ++ (lib.optional stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration
-    ]
-  );
+    ]);
 
   subPackages = [ "cmd/kcl" ];
 
   # env vars https://github.com/kcl-lang/kcl-go/blob/main/pkg/env/env.go#L29
   postFixup = ''
      wrapProgram $out/bin/kcl \
-    --prefix PATH : "${lib.makeBinPath [kclvm kclvm_cli]}" \
-    --prefix KCL_LIB_HOME : "${lib.makeLibraryPath [kclvm]}" \
+    --prefix PATH : "${
+      lib.makeBinPath [
+        kclvm
+        kclvm_cli
+      ]
+    }" \
+    --prefix KCL_LIB_HOME : "${lib.makeLibraryPath [ kclvm ]}" \
     --prefix KCL_GO_DISABLE_INSTALL_ARTIFACT : false
   '';
 
@@ -63,7 +74,10 @@ buildGo123Module rec {
     homepage = "https://github.com/kcl-lang/cli";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ selfuryon peefy ];
+    maintainers = with maintainers; [
+      selfuryon
+      peefy
+    ];
     mainProgram = "kcl";
   };
 }

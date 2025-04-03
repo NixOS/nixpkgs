@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 let
-  isKernelRT = (kernel.structuredExtraConfig ? PREEMPT_RT) && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
+  isKernelRT =
+    (kernel.structuredExtraConfig ? PREEMPT_RT)
+    && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";

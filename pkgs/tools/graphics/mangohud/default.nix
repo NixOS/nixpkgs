@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, fetchurl
-, substituteAll
-, coreutils
-, curl
-, gnugrep
-, gnused
-, xdg-utils
-, dbus
-, hwdata
-, mangohud32
-, addDriverRunpath
-, appstream
-, git
-, glslang
-, mako
-, mesa-demos
-, meson
-, ninja
-, pkg-config
-, unzip
-, libXNVCtrl
-, wayland
-, libX11
-, nlohmann_json
-, spdlog
-, glew
-, glfw
-, xorg
-, gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
-, nix-update-script
-, libxkbcommon
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  fetchurl,
+  substituteAll,
+  coreutils,
+  curl,
+  gnugrep,
+  gnused,
+  xdg-utils,
+  dbus,
+  hwdata,
+  mangohud32,
+  addDriverRunpath,
+  appstream,
+  git,
+  glslang,
+  mako,
+  mesa-demos,
+  meson,
+  ninja,
+  pkg-config,
+  unzip,
+  libXNVCtrl,
+  wayland,
+  libX11,
+  nlohmann_json,
+  spdlog,
+  glew,
+  glfw,
+  xorg,
+  gamescopeSupport ? true, # build mangoapp and mangohudctl
+  lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
+  nix-update-script,
+  libxkbcommon,
 }:
 
 let
@@ -104,7 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cj/F/DWUDm2AHTJvHgkKa+KdIrfxPWLzI570Dp4VFhs=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   # Unpack subproject sources
   postUnpack = ''
@@ -146,11 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bin/mangohud.in \
-      --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
-        (placeholder "out")
-      ] ++ lib.optionals lowerBitnessSupport [
-        mangohud32
-      ])} \
+      --subst-var-by libraryPath ${
+        lib.makeSearchPath "lib/mangohud" (
+          [
+            (placeholder "out")
+          ]
+          ++ lib.optionals lowerBitnessSupport [
+            mangohud32
+          ]
+        )
+      } \
       --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
@@ -162,15 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  mesonFlags = [
-    "-Dwith_wayland=enabled"
-    "-Duse_system_spdlog=enabled"
-    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
-  ] ++ lib.optionals gamescopeSupport [
-    "-Dmangoapp=true"
-    "-Dmangoapp_layer=true"
-    "-Dmangohudctl=true"
-  ];
+  mesonFlags =
+    [
+      "-Dwith_wayland=enabled"
+      "-Duse_system_spdlog=enabled"
+      "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
+    ]
+    ++ lib.optionals gamescopeSupport [
+      "-Dmangoapp=true"
+      "-Dmangoapp_layer=true"
+      "-Dmangohudctl=true"
+    ];
 
   nativeBuildInputs = [
     addDriverRunpath
@@ -189,16 +201,18 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ];
 
-  buildInputs = [
-    dbus
-    nlohmann_json
-    spdlog
-  ] ++ lib.optionals gamescopeSupport [
-    glew
-    glfw
-    xorg.libXrandr
-    libxkbcommon
-  ];
+  buildInputs =
+    [
+      dbus
+      nlohmann_json
+      spdlog
+    ]
+    ++ lib.optionals gamescopeSupport [
+      glew
+      glfw
+      xorg.libXrandr
+      libxkbcommon
+    ];
 
   doCheck = true;
 
@@ -232,13 +246,16 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
         --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    '' + ''
+    ''
+    + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
       addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
-    '' + lib.optionalString gamescopeSupport ''
+    ''
+    + lib.optionalString gamescopeSupport ''
       addDriverRunpath "$out/bin/mangoapp"
-    '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # libcmocka.so is only used for tests
       rm "$out/lib/libcmocka.so"
     '';
@@ -251,6 +268,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau zeratax ];
+    maintainers = with maintainers; [
+      kira-bruneau
+      zeratax
+    ];
   };
 })

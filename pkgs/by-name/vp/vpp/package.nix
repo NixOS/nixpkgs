@@ -81,10 +81,13 @@ stdenv.mkDerivation rec {
     "-DVPP_LIBRARY_DIR=lib"
   ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optional enableDpdk dpdk' ++ lib.optional enableRdma rdma-core'.dev;
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optional enableDpdk dpdk'
+    ++ lib.optional enableRdma rdma-core'.dev;
 
   buildInputs =
     [

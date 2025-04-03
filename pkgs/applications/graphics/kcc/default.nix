@@ -1,9 +1,10 @@
-{ lib
-, mkDerivationWith
-, python3Packages
-, fetchPypi
-, p7zip
-, archiveSupport ? true
+{
+  lib,
+  mkDerivationWith,
+  python3Packages,
+  fetchPypi,
+  p7zip,
+  archiveSupport ? true,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -16,7 +17,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
   };
 
-  propagatedBuildInputs = with python3Packages ; [
+  propagatedBuildInputs = with python3Packages; [
     pillow
     pyqt5
     psutil
@@ -24,7 +25,12 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     raven
   ];
 
-  qtWrapperArgs = lib.optionals archiveSupport [ "--prefix" "PATH" ":" "${ lib.makeBinPath [ p7zip ] }" ];
+  qtWrapperArgs = lib.optionals archiveSupport [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ p7zip ]}"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/kcc "''${qtWrapperArgs[@]}"

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "cadvisor";
@@ -15,7 +20,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-9h+W+zuwxlpkBaCpk1otrBrwfyitfGLViOcZRpKB3uU=";
 
-  ldflags = [ "-s" "-w" "-X github.com/google/cadvisor/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/google/cadvisor/version.Version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/{cmd,cadvisor}

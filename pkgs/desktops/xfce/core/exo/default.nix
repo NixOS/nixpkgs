@@ -1,5 +1,14 @@
-{ lib, mkXfceDerivation, docbook_xsl, glib, libxslt, gtk3
-, libxfce4ui, libxfce4util, perl }:
+{
+  lib,
+  mkXfceDerivation,
+  docbook_xsl,
+  glib,
+  libxslt,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  perl,
+}:
 
 mkXfceDerivation {
   category = "xfce";
@@ -19,7 +28,7 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
 
-    (perl.withPackages(ps: with ps; [ URI ])) # for $out/lib/xfce4/exo/exo-compose-mail
+    (perl.withPackages (ps: with ps; [ URI ])) # for $out/lib/xfce4/exo/exo-compose-mail
   ];
 
   # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825

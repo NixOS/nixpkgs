@@ -1,40 +1,41 @@
-{ config
-, stdenv
-, lib
-, fetchurl
-, pkg-config
-, zlib
-, expat
-, openssl
-, autoconf
-, libjpeg
-, libpng
-, libtiff
-, freetype
-, fontconfig
-, libpaper
-, jbig2dec
-, libiconv
-, ijs
-, lcms2
-, callPackage
-, bash
-, buildPackages
-, openjpeg
-, fixDarwinDylibNames
-, cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
-, cups
-, x11Support ? cupsSupport
-, xorg # with CUPS, X11 only adds very little
-, dynamicDrivers ? true
+{
+  config,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  zlib,
+  expat,
+  openssl,
+  autoconf,
+  libjpeg,
+  libpng,
+  libtiff,
+  freetype,
+  fontconfig,
+  libpaper,
+  jbig2dec,
+  libiconv,
+  ijs,
+  lcms2,
+  callPackage,
+  bash,
+  buildPackages,
+  openjpeg,
+  fixDarwinDylibNames,
+  cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin),
+  cups,
+  x11Support ? cupsSupport,
+  xorg, # with CUPS, X11 only adds very little
+  dynamicDrivers ? true,
 
-# for passthru.tests
-, graphicsmagick
-, imagemagick
-, libspectre
-, lilypond
-, pstoedit
-, python3
+  # for passthru.tests
+  graphicsmagick,
+  imagemagick,
+  libspectre,
+  lilypond,
+  pstoedit,
+  python3,
 }:
 
 let
@@ -65,7 +66,9 @@ stdenv.mkDerivation rec {
   version = "10.05.0";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }/ghostscript-${version}.tar.xz";
     hash = "sha256-qsnE/fYYBadvYiABJzXBroMoE3iDFL/AQFXMDIlZuaM=";
   };
 
@@ -74,7 +77,12 @@ stdenv.mkDerivation rec {
     ./doc-no-ref.diff
   ];
 
-  outputs = [ "out" "man" "doc" "fonts" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "fonts"
+  ];
 
   enableParallelBuilding = true;
 
@@ -82,18 +90,40 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [ pkg-config autoconf zlib ]
+  nativeBuildInputs =
+    [
+      pkg-config
+      autoconf
+      zlib
+    ]
     ++ lib.optional cupsSupport cups
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [
-    zlib expat openssl
-    libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-    libiconv ijs lcms2 bash openjpeg
-  ]
-  ++ lib.optionals x11Support [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
-  ++ lib.optional cupsSupport cups
-  ;
+  buildInputs =
+    [
+      zlib
+      expat
+      openssl
+      libjpeg
+      libpng
+      libtiff
+      freetype
+      fontconfig
+      libpaper
+      jbig2dec
+      libiconv
+      ijs
+      lcms2
+      bash
+      openjpeg
+    ]
+    ++ lib.optionals x11Support [
+      xorg.libICE
+      xorg.libX11
+      xorg.libXext
+      xorg.libXt
+    ]
+    ++ lib.optional cupsSupport cups;
 
   preConfigure = ''
     # https://ghostscript.com/doc/current/Make.htm
@@ -108,23 +138,28 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  configureFlags = [
-    "--with-system-libtiff"
-    "--without-tesseract"
-  ] ++ lib.optionals dynamicDrivers [
-    "--enable-dynamic"
-    "--disable-hidden-visibility"
-  ] ++ lib.optionals x11Support [
-    "--with-x"
-  ] ++ lib.optionals cupsSupport [
-    "--enable-cups"
-  ];
+  configureFlags =
+    [
+      "--with-system-libtiff"
+      "--without-tesseract"
+    ]
+    ++ lib.optionals dynamicDrivers [
+      "--enable-dynamic"
+      "--disable-hidden-visibility"
+    ]
+    ++ lib.optionals x11Support [
+      "--with-x"
+    ]
+    ++ lib.optionals cupsSupport [
+      "--enable-cups"
+    ];
 
   # make check does nothing useful
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ]
+  buildFlags =
+    [ "so" ]
     # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
     # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
     ++ lib.optional (x11Support && stdenv.hostPlatform.isDarwin) "LDFLAGS=-headerpad_max_install_names";
@@ -173,8 +208,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    test-corpus-render = callPackage ./test-corpus-render.nix {};
-    inherit graphicsmagick imagemagick libspectre lilypond pstoedit;
+    test-corpus-render = callPackage ./test-corpus-render.nix { };
+    inherit
+      graphicsmagick
+      imagemagick
+      libspectre
+      lilypond
+      pstoedit
+      ;
     inherit (python3.pkgs) matplotlib;
   };
 

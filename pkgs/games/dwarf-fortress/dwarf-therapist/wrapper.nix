@@ -1,11 +1,19 @@
-{ stdenv, dwarf-therapist, dwarf-fortress, substituteAll, coreutils, wrapQtAppsHook
+{
+  stdenv,
+  dwarf-therapist,
+  dwarf-fortress,
+  substituteAll,
+  coreutils,
+  wrapQtAppsHook,
 }:
 
 let
-  platformSlug = let
-    prefix = if dwarf-fortress.baseVersion >= 50 then "-classic_" else "_";
-    base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
-  in prefix + base;
+  platformSlug =
+    let
+      prefix = if dwarf-fortress.baseVersion >= 50 then "-classic_" else "_";
+      base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
+    in
+    prefix + base;
   inifile = "linux/v0.${builtins.toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
 
 in

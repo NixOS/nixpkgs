@@ -1,8 +1,31 @@
-{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
-, qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
-, ckbcomp, xkeyboard_config, mkDerivation
-, nixos-extensions ? false
+{
+  lib,
+  fetchurl,
+  boost,
+  cmake,
+  extra-cmake-modules,
+  kparts,
+  kpmcore,
+  kirigami2,
+  kservice,
+  libatasmart,
+  libxcb,
+  yaml-cpp,
+  libpwquality,
+  parted,
+  polkit-qt,
+  python,
+  qtbase,
+  qtquickcontrols,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  util-linux,
+  tzdata,
+  ckbcomp,
+  xkeyboard_config,
+  mkDerivation,
+  nixos-extensions ? false,
 }:
 
 mkDerivation rec {
@@ -32,11 +55,29 @@ mkDerivation rec {
     ./0008-Change-default-location-where-calamares-searches-for.patch
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
-    boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
-    qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
+    boost
+    kparts.dev
+    kpmcore.out
+    kservice.dev
+    kirigami2
+    libatasmart
+    libxcb
+    yaml-cpp
+    libpwquality
+    parted
+    polkit-qt
+    python
+    qtbase
+    qtquickcontrols
+    qtsvg
+    qttools
+    qtwebengine.dev
+    util-linux
   ];
 
   cmakeFlags = [
@@ -82,8 +123,15 @@ mkDerivation rec {
   meta = with lib; {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [ gpl3Plus bsd2 cc0 ];
-    maintainers = with maintainers; [ manveru vlinkz ];
+    license = with licenses; [
+      gpl3Plus
+      bsd2
+      cc0
+    ];
+    maintainers = with maintainers; [
+      manveru
+      vlinkz
+    ];
     platforms = platforms.linux;
     mainProgram = "calamares";
   };

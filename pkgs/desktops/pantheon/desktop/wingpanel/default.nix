@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, wrapGAppsHook3
-, pkg-config
-, meson
-, ninja
-, vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, mesa
-, json-glib
-, elementary-gtk-theme
-, elementary-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  wrapGAppsHook3,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gala,
+  gtk3,
+  libgee,
+  granite,
+  gettext,
+  mutter,
+  mesa,
+  json-glib,
+  elementary-gtk-theme,
+  elementary-icon-theme,
 }:
 
 stdenv.mkDerivation rec {

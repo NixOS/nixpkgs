@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, ragel
-, util-linux
-, python3
-, boost184
-, sqlite
-, pcre
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ragel,
+  util-linux,
+  python3,
+  boost,
+  sqlite,
+  pcre,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
   };
 
+  postPatch = ''
+    sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+    substituteInPlace cmake/build_wrapper.sh \
+      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
+      --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -31,7 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
-    boost184
+    boost
     sqlite
     pcre
   ];
@@ -45,18 +56,35 @@ stdenv.mkDerivation rec {
   #
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
-  cmakeFlags = [ (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON") ]
-    ++
-    (if lib.elem stdenv.hostPlatform.system [ "x86_64-linux" "i686-linux" ] then
-      [ "-DBUILD_AVX2=ON" "-DBUILD_AVX512=ON" "-DBUILD_AVX512VBMI=ON" "-DFAT_RUNTIME=ON" ]
-    else
-      (if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-        [ "-DBUILD_SVE=ON" "-DBUILD_SVE2=ON" "-DBUILD_SVE2_BITPERM=ON" "-DFAT_RUNTIME=ON" ]
+  cmakeFlags =
+    [ (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON") ]
+    ++ (
+      if
+        lib.elem stdenv.hostPlatform.system [
+          "x86_64-linux"
+          "i686-linux"
+        ]
+      then
+        [
+          "-DBUILD_AVX2=ON"
+          "-DBUILD_AVX512=ON"
+          "-DBUILD_AVX512VBMI=ON"
+          "-DFAT_RUNTIME=ON"
+        ]
       else
-        [ "-DFAT_RUNTIME=OFF" ]
-          ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
-          ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
-      )
+        (
+          if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
+            [
+              "-DBUILD_SVE=ON"
+              "-DBUILD_SVE2=ON"
+              "-DBUILD_SVE2_BITPERM=ON"
+              "-DFAT_RUNTIME=ON"
+            ]
+          else
+            [ "-DFAT_RUNTIME=OFF" ]
+            ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
+            ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
+        )
     );
 
   doCheck = true;
@@ -85,7 +113,14 @@ stdenv.mkDerivation rec {
     homepage = "https://www.vectorcamp.gr/vectorscan/";
     changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
     platforms = platforms.unix;
-    license = with licenses; [ bsd3 /* and */ bsd2 /* and */ licenses.boost ];
-    maintainers = with maintainers; [ tnias vlaci ];
+    license = with licenses; [
+      bsd3 # and
+      bsd2 # and
+      licenses.boost
+    ];
+    maintainers = with maintainers; [
+      tnias
+      vlaci
+    ];
   };
 }

@@ -1,28 +1,65 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3, gpgme
-, installShellFiles, texinfo, gnused, usePython ? false, gpgmeSupport ? false }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  gmp,
+  mpfr,
+  libedit,
+  python3,
+  gpgme,
+  installShellFiles,
+  texinfo,
+  gnused,
+  usePython ? false,
+  gpgmeSupport ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
   version = "3.3.2";
 
   src = fetchFromGitHub {
-    owner  = "ledger";
-    repo   = "ledger";
-    rev    = "v${version}";
-    hash   = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
+    owner = "ledger";
+    repo = "ledger";
+    rev = "v${version}";
+    hash = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
   };
 
-  outputs = [ "out" "dev" ] ++ lib.optionals usePython [ "py" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals usePython [ "py" ];
 
-  buildInputs = [
-    gmp mpfr libedit gnused
-  ] ++ lib.optionals gpgmeSupport [
-    gpgme
-  ] ++ (if usePython
-        then [ python3 (boost.override { enablePython = true; python = python3; }) ]
-        else [ boost ]);
+  buildInputs =
+    [
+      gmp
+      mpfr
+      libedit
+      gnused
+    ]
+    ++ lib.optionals gpgmeSupport [
+      gpgme
+    ]
+    ++ (
+      if usePython then
+        [
+          python3
+          (boost.override {
+            enablePython = true;
+            python = python3;
+          })
+        ]
+      else
+        [ boost ]
+    );
 
-  nativeBuildInputs = [ cmake texinfo installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    texinfo
+    installShellFiles
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -38,7 +75,10 @@ stdenv.mkDerivation rec {
       --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
 
-  installTargets = [ "doc" "install" ];
+  installTargets = [
+    "doc"
+    "install"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash

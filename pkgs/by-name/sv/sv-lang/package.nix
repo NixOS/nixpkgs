@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost182
-, catch2_3
-, cmake
-, ninja
-, fmt_9
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost182,
+  catch2_3,
+  cmake,
+  ninja,
+  fmt_9,
+  python3,
 }:
 
 let

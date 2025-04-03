@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -33,8 +34,7 @@ stdenvNoCC.mkDerivation rec {
       NetNewsWire shows you articles from your favorite blogs and news sites and keeps track of what you've read.
     '';
     homepage = "https://github.com/Ranchero-Software/NetNewsWire";
-    changelog =
-      "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
+    changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
     license = licenses.mit;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ jakuzure ];
