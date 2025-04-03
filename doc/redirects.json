@@ -2757,6 +2757,24 @@
   "declarative-debugging": [
     "index.html#declarative-debugging"
   ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
+  ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"
   ],
