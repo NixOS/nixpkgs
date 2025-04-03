@@ -18,6 +18,7 @@
   ronn,
   pam,
   libxcrypt,
+  oath-toolkit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     pam
     libxcrypt
+    oath-toolkit
   ];
 
   meta = {
