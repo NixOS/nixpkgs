@@ -66,15 +66,10 @@ buildPythonPackage rec {
     "test_map_iter_interrupt_early"
   ];
 
-  disabledTestPaths =
-    [
-      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-      "test/test_compile.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      "test/test_distributed.py"
-    ];
+  disabledTestPaths = [
+    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+    "test/test_compile.py"
+  ];
 
   meta = {
     description = "Pytorch dedicated tensor container";

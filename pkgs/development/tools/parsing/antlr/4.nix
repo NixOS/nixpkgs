@@ -33,7 +33,7 @@ let
       source = fetchFromGitHub {
         owner = "antlr";
         repo = "antlr4";
-        rev = version;
+        tag = version;
         sha256 = sourceSha256;
       };
 
@@ -73,7 +73,7 @@ let
           jarLocation = antlr.src;
         };
 
-        meta = with lib; {
+        meta = {
           description = "Powerful parser generator";
           longDescription = ''
             ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -83,9 +83,9 @@ let
             walk parse trees.
           '';
           homepage = "https://www.antlr.org/";
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
-          license = licenses.bsd3;
-          platforms = platforms.unix;
+          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+          license = lib.licenses.bsd3;
+          platforms = lib.platforms.unix;
         };
       };
 
@@ -114,11 +114,11 @@ let
 
           cmakeFlags = extraCppCmakeFlags;
 
-          meta = with lib; {
+          meta = {
             description = "C++ target for ANTLR 4";
             homepage = "https://www.antlr.org/";
-            license = licenses.bsd3;
-            platforms = platforms.unix;
+            license = lib.licenses.bsd3;
+            platforms = lib.platforms.unix;
           };
         };
       };
@@ -133,11 +133,11 @@ in
       jarSha256 = "sha256-6uLfoRmmQydERnKv9j6ew1ogGA3FuAkLemq4USXfTXY=";
       extraCppCmakeFlags = [
         # Generate CMake config files, which are not installed by default.
-        "-DANTLR4_INSTALL=ON"
+        (lib.cmakeBool "ANTLR4_INSTALL" true)
 
         # Disable tests, since they require downloading googletest, which is
         # not available in a sandboxed build.
-        "-DANTLR_BUILD_CPP_TESTS=OFF"
+        (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
       extraPatches = [
         ./include-dir-issue-379757.patch
@@ -151,11 +151,11 @@ in
       jarSha256 = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
       extraCppCmakeFlags = [
         # Generate CMake config files, which are not installed by default.
-        "-DANTLR4_INSTALL=ON"
+        (lib.cmakeBool "ANTLR4_INSTALL" true)
 
         # Disable tests, since they require downloading googletest, which is
         # not available in a sandboxed build.
-        "-DANTLR_BUILD_CPP_TESTS=OFF"
+        (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
     }).antlr;
 
@@ -166,11 +166,11 @@ in
       jarSha256 = "sha256-YpdeGStK8mIrcrXwExVT7jy86X923CpBYy3MVeJUc+E=";
       extraCppCmakeFlags = [
         # Generate CMake config files, which are not installed by default.
-        "-DANTLR4_INSTALL=ON"
+        (lib.cmakeBool "ANTLR4_INSTALL" true)
 
         # Disable tests, since they require downloading googletest, which is
         # not available in a sandboxed build.
-        "-DANTLR_BUILD_CPP_TESTS=OFF"
+        (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
     }).antlr;
 
@@ -181,8 +181,8 @@ in
       jarSha256 = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
       extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
       extraCppCmakeFlags = [
-        "-DANTLR4_INSTALL=ON"
-        "-DANTLR_BUILD_CPP_TESTS=OFF"
+        (lib.cmakeBool "ANTLR4_INSTALL" true)
+        (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
     }).antlr;
 
@@ -193,7 +193,7 @@ in
       jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
       extraCppBuildInputs = [ utf8cpp ] ++ lib.optional stdenv.hostPlatform.isLinux libuuid;
       extraCppCmakeFlags = [
-        "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
+        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev utf8cpp}/include/utf8cpp")
       ];
       extraPatches = [
         ./utf8cpp.patch
@@ -206,6 +206,8 @@ in
       sourceSha256 = "1qal3add26qxskm85nk7r758arladn5rcyjinmhlhznmpbbv9j8m";
       jarSha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
       extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
-      extraCppCmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
+      extraCppCmakeFlags = [
+        (lib.cmakeBool "ANTLR4_INSTALL" true)
+      ];
     }).antlr;
 }
