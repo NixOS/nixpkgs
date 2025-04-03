@@ -6,6 +6,7 @@
   desktop-file-utils,
   fetchFromGitHub,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
   openssl,
   pkg-config,
@@ -72,6 +73,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --set-key="StartupWMClass" --set-value="ModrinthApp" \
         $out/share/applications/Modrinth\ App.desktop
     '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Modrinth's game launcher";
