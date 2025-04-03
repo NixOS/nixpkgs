@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       rtmidi
       SDL2
+      libX11
       zlib
       portaudio
     ]
