@@ -3736,6 +3736,12 @@
     githubId = 510553;
     name = "Jos van Bakel";
   };
+  c31io = {
+    email = "celiogrand@outlook.com";
+    github = "c31io";
+    githubId = 83821760;
+    name = "Celio Grand";
+  };
   c4605 = {
     email = "bolasblack@gmail.com";
     github = "bolasblack";
