@@ -128,10 +128,8 @@ let
               ''
                 echo -n "Precompressing static files with Brotli …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
-                    file="$1"
-                    ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output=$file.br $file
-                  ''}
+                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                      ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
                 echo " done."
               ''
             )
@@ -139,10 +137,8 @@ let
               ''
                 echo -n "Precompressing static files with Gzip …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_gzip" ''
-                    file="$1"
-                    ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} $file > $file.gz
-                  ''}
+                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                      ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
                 echo " done."
               ''
             )
