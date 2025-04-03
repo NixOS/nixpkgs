@@ -1175,7 +1175,7 @@ with pkgs;
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
-  mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
+  mymcplus = callPackage ../tools/games/mymcplus { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
