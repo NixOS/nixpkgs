@@ -1,20 +1,20 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  fetchurl,
   pkg-config,
   libevent,
   libressl,
-  libbsd,
-  fetchurl,
   readline,
+  libbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kamid";
   version = "0.2";
 
   src = fetchurl {
-    url = "https://github.com/omar-polo/kamid/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/omar-polo/kamid/releases/download/${finalAttrs.version}/kamid-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-23LgcZ+R6wcUz1fZA+IbhyshfQOTyiFPZ+uKVwOh680=";
   };
 
@@ -29,13 +29,17 @@ stdenv.mkDerivation rec {
     libbsd
   ];
 
+  # client.c:381:13: error: implicit declaration of function 'setgroups'; did you mean 'getgroups'?
+  # ftp.c:1585:22: error: passing argument 1 of 'log_procinit' makes pointer from integer without a cast
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=int-conversion";
+
   makeFlags = [ "AR:=$(AR)" ];
 
-  meta = with lib; {
+  meta = {
     description = "FREE, easy-to-use and portable implementation of a 9p file server daemon for UNIX-like systems";
     homepage = "https://kamid.omarpolo.com";
-    license = licenses.isc;
-    maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ heph2 ];
+    platforms = lib.platforms.linux;
   };
-}
+})
