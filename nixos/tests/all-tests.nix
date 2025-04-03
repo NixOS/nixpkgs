@@ -802,7 +802,7 @@ in
   morty = handleTest ./morty.nix { };
   mosquitto = runTest ./mosquitto.nix;
   moosefs = handleTest ./moosefs.nix { };
-  movim = discoverTests (import ./web-apps/movim { inherit handleTestOn; });
+  movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
   mpd = handleTest ./mpd.nix { };
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
