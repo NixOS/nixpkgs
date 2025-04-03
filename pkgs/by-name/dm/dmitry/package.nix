@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
 }:
 
@@ -16,16 +17,24 @@ stdenv.mkDerivation {
     hash = "sha256-cYFeBM8xFMaLXYk6Rg+5JvfbbIJI9F3mefzCX3+XbB0=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "implicit-function-declaration.patch";
+      url = "https://github.com/jaygreig86/dmitry/pull/14/commits/8385e1f915ba38938bca0453ed3302fa660aec07.patch";
+      hash = "sha256-jkb6tFATGClFIShfEdQG95hn5+xlrhJ6JiGDwooEB4I=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deepmagic Information Gathering Tool";
     mainProgram = "dmitry";
     homepage = "https://github.com/jaygreig86/dmitry";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }
