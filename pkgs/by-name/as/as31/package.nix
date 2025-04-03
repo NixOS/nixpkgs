@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "http://wiki.erazor-zone.de/_media/wiki:projects:linux:as31:${pname}-${version}.tar.gz";
+    url = "mirror://debian/pool/main/a/as31/${pname}_${version}.orig.tar.gz";
     name = "${pname}-${version}.tar.gz";
     hash = "sha256-zSEyWHFon5nyq717Mpmdv1XZ5Hz0e8ZABqsP8M83c1U=";
   };
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
+    homepage = "https://www.pjrc.com/tech/8051/tools/as31-doc.html";
     description = "8031/8051 assembler";
     mainProgram = "as31";
     license = licenses.gpl2Plus;
