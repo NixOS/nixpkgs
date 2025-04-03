@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -ra application bin etc library modules public $out
+    cp -ra application bin etc library modules public schema $out
     cp -ra doc $out/share
 
     wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php83 ]}"
