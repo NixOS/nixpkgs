@@ -1,15 +1,38 @@
 {
-  lib,
-  python3Packages,
+  buildPythonApplication,
   fetchFromGitHub,
   fetchpatch,
-  installShellFiles,
   git,
-  spdx-license-list-data,
+  installShellFiles,
+  lib,
+  python,
   replaceVars,
+  setuptools,
+  stdenv,
+  spdx-license-list-data,
+
+  aiofiles,
+  ajsonrpc,
+  bottle,
+  chardet,
+  click,
+  click-completion,
+  colorama,
+  jsondiff,
+  lockfile,
+  marshmallow,
+  pyelftools,
+  pyserial,
+  pytestCheckHook,
+  requests,
+  semantic-version,
+  starlette,
+  tabulate,
+  uvicorn,
+  wsproto,
+  zeroconf,
 }:
 
-with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
   version = "6.1.18";
@@ -30,7 +53,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+      interpreter = (python.withPackages (_: propagatedBuildInputs)).interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -202,9 +225,7 @@ buildPythonApplication rec {
       "test_pkgmanifest.py::test_packages"
     ]);
 
-  passthru = {
-    python = python3Packages.python;
-  };
+  passthru.python = python;
 
   meta = with lib; {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
