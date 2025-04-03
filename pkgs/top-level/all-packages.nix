@@ -363,7 +363,7 @@ with pkgs;
     openexr = openexr_3;
   };
 
-  databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
+  databricks-sql-cli = callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
     buildGoModule = buildGo123Module;
