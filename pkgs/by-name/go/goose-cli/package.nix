@@ -16,12 +16,12 @@ let
   gpt-4o-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
     hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
   claude-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/claude-tokenizer/resolve/cae688821ea05490de49a6d3faa36468a4672fad/tokenizer.json";
     hash = "sha256-wkFzffJLTn98mvT9zuKaDKkD3LKIqLdTvDRqMJKRF2c=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
 in
 rustPlatform.buildRustPackage rec {
