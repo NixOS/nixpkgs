@@ -19,14 +19,12 @@
 
 # build-tools
 , bootPkgs
-, autoconf
-, automake
+, autoreconfHook
 , coreutils
 , fetchurl
 , fetchgit
 , perl
 , python3
-, m4
 , sphinx
 , xattr
 , autoSignDarwinBinariesHook
@@ -573,9 +571,7 @@ stdenv.mkDerivation ({
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-    # autoconf and friends are necessary for hadrian to create the bindist
-    autoconf automake m4
+    autoreconfHook perl hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
     # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
     # Tool used to update GHC's settings file in postInstall
