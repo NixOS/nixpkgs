@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "embree";
-  version = "4.3.3";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     rev = "v${version}";
-    sha256 = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
+    sha256 = "sha256-vgtN7bdFQShRcvuGyuf+gIu/vIEvayQCeXMqlejxi7M=";
   };
 
   postPatch = ''
