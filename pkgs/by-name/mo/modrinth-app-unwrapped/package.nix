@@ -18,20 +18,19 @@
 let
   pnpm = pnpm_9;
 in
-
 rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${version}";
-    hash = "sha256-uDG+WHeMY/quzF8mHBn5o8xod4/G5+S4/zD2lbqdN0M=";
+    hash = "sha256-h+zj4Hm7v8SU6Zy0rIWbOknXVdSDf8b1d4q6M12J5Lc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-D9hkdliyKc8m9i2D9pG3keGmZsx+rzrgVXZws9Ot24I=";
+  cargoHash = "sha256-RrXSBgVh4UZFHcgUWhUjE7rEm/RZFDSDCpXS22gVjZ0=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
