@@ -26,6 +26,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRemoveDeps = [
+    # distinfo renamed to libpass
+    "passlib"
+  ];
+
   dependencies = with python3.pkgs; [
     aiosmtpd
     alembic
