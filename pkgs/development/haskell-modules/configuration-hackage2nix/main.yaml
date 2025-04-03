@@ -677,6 +677,7 @@ package-maintainers:
     - warp-systemd
     - amazonka
   wolfgangwalther:
+    - postgres-websockets
     - postgrest
 
 unsupported-platforms:
