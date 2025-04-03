@@ -8,16 +8,16 @@
   ncurses,
   tzdata,
   unzip,
+
+  # Version-specific attributes
+  version,
+  src,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "factor-lang";
-  version = "0.99";
 
-  src = fetchurl {
-    url = "https://downloads.factorcode.org/releases/${finalAttrs.version}/factor-src-${finalAttrs.version}.zip";
-    sha256 = "f5626bb3119bd77de9ac3392fdbe188bffc26557fab3ea34f7ca21e372a8443e";
-  };
+  inherit src version;
 
   patches = [
     # Use full path to image while bootstrapping

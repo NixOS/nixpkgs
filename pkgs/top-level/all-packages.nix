@@ -9272,8 +9272,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
 
-  factorPackages = callPackage ./factor-packages.nix { };
-  factor-lang = factorPackages.factor-lang;
+  factorPackages-0_99 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.99.nix { };
+  };
+  factorPackages-0_100 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.100.nix { };
+  };
+  factorPackages = factorPackages-0_100;
+
+  factor-lang-0_99 = factorPackages-0_99.factor-lang;
+  factor-lang-0_100 = factorPackages-0_100.factor-lang;
+  factor-lang = factor-lang-0_100;
 
   far2l = callPackage ../applications/misc/far2l {
     inherit (darwin.apple_sdk.frameworks)
