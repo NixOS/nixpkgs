@@ -2479,6 +2479,17 @@ self: super: {
   # unbreak with tasty-quickcheck 0.11, can be dropped for Stackage LTS >= 23.9
   text-builder = doDistribute self.text-builder_0_6_7_3;
 
+  postgres-websockets = lib.pipe super.postgres-websockets [
+    (addTestToolDepends [ pkgs.postgresql pkgs.postgresqlTestHook ])
+    (dontCheckIf pkgs.postgresqlTestHook.meta.broken)
+    (overrideCabal {
+      preCheck = ''
+        export postgresqlEnableTCP=1
+        export PGDATABASE=postgres_ws_test
+      '';
+    })
+  ];
+
   postgrest = lib.pipe
     (super.postgrest.overrideScope (self: super: {
       # 2025-01-19: Upstream is stuck at hasql < 1.7
