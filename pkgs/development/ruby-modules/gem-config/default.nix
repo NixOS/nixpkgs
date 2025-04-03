@@ -79,7 +79,7 @@
   libvirt,
   glib,
   vips,
-  taglib_1,
+  taglib,
   libopus,
   linux-pam,
   libidn,
@@ -1104,7 +1104,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib_1 ];
+    buildInputs = [ taglib ];
   };
 
   timfel-krb5-auth = attrs: {
