@@ -34,7 +34,6 @@
   # passthru
   wgpu-py,
   testers,
-  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
@@ -107,7 +106,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script { rev-prefix = "v"; };
     tests =
       {
         version = testers.testVersion {
