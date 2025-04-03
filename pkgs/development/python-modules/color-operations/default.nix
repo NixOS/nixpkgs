@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "color-operations";
-  version = "0.1.6";
+  version = "0.2.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "vincentsarago";
     repo = "color-operations";
     tag = version;
-    hash = "sha256-hHfcScKYemvPg2V5wn1Wsctjg6vgzljk5sAw+I+kS6w=";
+    hash = "sha256-LUO9PxrXCkFqyguvX4GT6vmlALMyfkDqXeGZAQG76vw=";
   };
 
   build-system = [
