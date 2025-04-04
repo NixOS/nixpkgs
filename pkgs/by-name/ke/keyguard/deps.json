@@ -1114,13 +1114,13 @@
   "nl/littlerobots/version-catalog-update#nl.littlerobots.version-catalog-update.gradle.plugin/0.8.5": {
    "pom": "sha256-a+z8hpHftExSYVqCqWeS8TQBpXXleMkBkR1/qjMPgoo="
   },
-  "org/gradle/kotlin#gradle-kotlin-dsl-plugins/5.1.2": {
-   "jar": "sha256-tYw+XDWgAln9QC3r89pHqjrQhcP0vnL5AuoSYbNQGa4=",
-   "module": "sha256-CPnVxzwOvolk4aq3z59G93inhCcxnZJ52ZKoRBPIXPM=",
-   "pom": "sha256-Y4Th1GwfBKl4Go/Pl6nFQ5YPNNoKZ/XQI2x8EubcvqU="
+  "org/gradle/kotlin#gradle-kotlin-dsl-plugins/5.2.0": {
+   "jar": "sha256-SKlcMPRlehDfloYC01LJ2GTZemYholfoFQjINWDE/q4=",
+   "module": "sha256-fxo3x8yLU7tmBAqrbAacidiqWOJ/+nH3s2HGROtaD7A=",
+   "pom": "sha256-uB9ZcQ4lOEW0+Pbe27BWPWfD5/UPg7AiQZXjo2GAtH8="
   },
-  "org/gradle/kotlin/kotlin-dsl#org.gradle.kotlin.kotlin-dsl.gradle.plugin/5.1.2": {
-   "pom": "sha256-1JPwqwDRfMB4Zduo3oQAo5CJ1SpxzkFtyQOlEsXe1V0="
+  "org/gradle/kotlin/kotlin-dsl#org.gradle.kotlin.kotlin-dsl.gradle.plugin/5.2.0": {
+   "pom": "sha256-pXu0ObpCYKJW8tYIRx1wgRiQd6Ck3fsCjdGBe+W8Ejc="
   },
   "org/gradle/toolchains#foojay-resolver/0.9.0": {
    "jar": "sha256-woQImj+HVX92Ai2Z8t8oNlaKpIs/5OKSI5LVZrqBQXY=",

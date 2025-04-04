@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, exo
-, gtk3
-, libcanberra
-, libpulseaudio
-, libnotify
-, libxfce4ui
-, libxfce4util
-, libxfce4windowing
-, xfce4-panel
-, xfconf
-, keybinder3
-, glib
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  gtk3,
+  libcanberra,
+  libpulseaudio,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  xfce4-panel,
+  xfconf,
+  keybinder3,
+  glib,
 }:
 
 mkXfceDerivation {

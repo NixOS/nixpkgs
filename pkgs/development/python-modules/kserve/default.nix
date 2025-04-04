@@ -11,6 +11,7 @@
   # dependencies
   cloudevents,
   fastapi,
+  grpc-interceptor,
   grpcio,
   httpx,
   kubernetes,
@@ -28,6 +29,7 @@
   huggingface-hub,
   asgi-logger,
   ray,
+  vllm,
 
   prometheus-client,
   protobuf,
@@ -51,14 +53,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-VwuUXANjshV4fN0i54Fs0zubHY81UtQcCV14JwMpXwA=";
+    hash = "sha256-J2VFMHwhHpvtsywv3ixuVzpuDwq8y9w4heedYYWVBmM=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -81,6 +83,7 @@ buildPythonPackage rec {
   dependencies = [
     cloudevents
     fastapi
+    grpc-interceptor
     grpcio
     httpx
     kubernetes
@@ -108,9 +111,12 @@ buildPythonPackage rec {
       huggingface-hub
       google-cloud-storage
       requests
-    ];
+    ] ++ huggingface-hub.optional-dependencies.hf_transfer;
     logging = [ asgi-logger ];
     ray = [ ray ];
+    llm = [
+      # vllm (broken)
+    ];
   };
 
   nativeCheckInputs = [
@@ -146,6 +152,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
+
+    # Require broken vllm
+    "test/test_dataplane.py"
+    "test/test_model_repository.py"
+    "test/test_openai_completion.py"
+    "test/test_openai_embedding.py"
   ];
 
   disabledTests =

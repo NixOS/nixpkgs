@@ -50,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.16.0";
+  version = "2.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${version}";
-    hash = "sha256-At7jYWrMcMVb2rWoQbtSAAqw1WRKLndPtn9qgmg03oI=";
+    hash = "sha256-bvqeH2JCUCrObQBgoD6ie2IEfH0nQAuiZoFX81+T7Gs=";
   };
 
   pythonRelaxDeps = [ "bokeh" ];

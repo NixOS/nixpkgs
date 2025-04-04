@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  python3,
   systemd,
   pandoc,
   kmod,
@@ -16,6 +15,7 @@
   replaceVars,
 
   # Python packages
+  python,
   setuptools,
   setuptools-scm,
   wheel,
@@ -46,7 +46,7 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (_: [ pefile ]);
+  python3pefile = python.withPackages (_: [ pefile ]);
 
   deps =
     [
@@ -66,7 +66,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "25.3";
+  version = "25.3-unstable-2025-04-01";
   format = "pyproject";
 
   outputs = [
@@ -77,8 +77,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    tag = "v${version}";
-    hash = "sha256-CTOVFZORLrVqehhPCgOoEaU3fhwu8fO8jGDNLxoELgE=";
+    rev = "21850673a7f75125d516268ce379dae776dd816a";
+    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
   };
 
   patches =

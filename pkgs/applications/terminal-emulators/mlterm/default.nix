@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -102,33 +101,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
-  version = "3.9.3";
+  version = "3.9.4";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = "mlterm";
-    rev = finalAttrs.version;
-    sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "mlterm-configure-implicit-function-declaration.patch";
-      url = "https://github.com/arakiken/mlterm/commit/1a9ee97e4574c5892bf12090b812b0538dcdf8f2.patch";
-      hash = "sha256-Kk+x5LAq+beZWE8yj5WfdS82ConLSgxNquzQd5mvOA4=";
-    })
-
-    (fetchpatch {
-      name = "mlterm-wayland-implicit-function-declaration.patch";
-      url = "https://github.com/arakiken/mlterm/commit/20ab931d5055dc5835154a75ca672fade478549f.patch";
-      hash = "sha256-rDmQ0e3dQD7UAGTX4ljOrDqTTddBqvnnRFnqDjRLAss=";
-    })
-
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/mlterm/-/raw/d9b1555e9220985e0c89a6ff5a0d58f7b18cc123/debian/patches/fix-incompat-pointer-types.patch";
-      hash = "sha256-EcI15FjQfcN8pcE1MqsBfaHQ4j+gyoeesN/WoHb7WnU=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -260,16 +240,16 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi Lingual TERMinal emulator";
     homepage = "https://mlterm.sourceforge.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       ramkromberg
       atemu
       doronbehar
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = desktopBinary;
   };
 })

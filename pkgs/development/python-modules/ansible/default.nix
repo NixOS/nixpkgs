@@ -15,6 +15,7 @@
   textfsm,
   ttp,
   xmltodict,
+  passlib,
 
   # optionals
   withJunos ? false,
@@ -47,6 +48,7 @@ buildPythonPackage {
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
+      passlib
       jxmlease
       ncclient
       netaddr

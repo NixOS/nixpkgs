@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -83,13 +88,19 @@ in
     systemd.services.teleport = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [ getent shadow sudo ];
+      path = with pkgs; [
+        getent
+        shadow
+        sudo
+      ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/teleport start \
             ${optionalString cfg.insecure.enable "--insecure"} \
             ${optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
-            ${optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}
+            ${optionalString (
+              cfg.settings != { }
+            ) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitNOFILE = 65536;
@@ -101,4 +112,3 @@ in
     };
   };
 }
-

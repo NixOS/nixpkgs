@@ -17,17 +17,18 @@
   libICE,
   stb,
   openssl,
+  xxHash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.64.0";
+  version = "3.65.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-+DSMqe1TNFCjZrfuhLggymno9OjYONc5ZweREgMsh60=";
+    hash = "sha256-H+ibj7eroIWti2Mxa+V5pzE1NE7b3H3/ThVIDqweWf8=";
   };
 
   strictDeps = true;
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     libICE
     stb
     openssl
+    xxHash
   ];
 
   postPatch = ''

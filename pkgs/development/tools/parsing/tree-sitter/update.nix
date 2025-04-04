@@ -1,12 +1,13 @@
-{ writeShellScript
-, writeText
-, writers
-, nix-prefetch-git
-, formats
-, lib
-, coreutils
-, curl
-, xe
+{
+  writeShellScript,
+  writeText,
+  writers,
+  nix-prefetch-git,
+  formats,
+  lib,
+  coreutils,
+  curl,
+  xe,
 }:
 
 # Grammar list:
@@ -94,7 +95,6 @@ let
     # not ready to be used
     "zig-tree-sitter"
 
-
     # Non-grammar repositories
     ".github"
     "fuzz-action"
@@ -154,6 +154,10 @@ let
     "tree-sitter-lua" = {
       orga = "MunifTanjim";
       repo = "tree-sitter-lua";
+    };
+    "tree-sitter-factor" = {
+      orga = "erochest";
+      repo = "tree-sitter-factor";
     };
     "tree-sitter-fennel" = {
       orga = "travonted";
@@ -480,62 +484,63 @@ let
 
   allGrammars =
     let
-      treeSitterOrgaGrammars =
-        lib.listToAttrs (map
-          (repo:
-            {
-              name = repo;
-              value = {
-                orga = "tree-sitter";
-                inherit repo;
-              };
-            })
-          knownTreeSitterOrgGrammarRepos);
+      treeSitterOrgaGrammars = lib.listToAttrs (
+        map (repo: {
+          name = repo;
+          value = {
+            orga = "tree-sitter";
+            inherit repo;
+          };
+        }) knownTreeSitterOrgGrammarRepos
+      );
 
     in
     lib.attrsets.unionOfDisjoint otherGrammars treeSitterOrgaGrammars;
 
-
-
   jsonFile = name: val: (formats.json { }).generate name val;
 
   # implementation of the updater
-  updateImpl = passArgs "updateImpl-with-args"
-    {
-      binaries = {
-        curl = "${curl}/bin/curl";
-        nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
-        printf = "${coreutils}/bin/printf";
-      };
-      inherit
-        knownTreeSitterOrgGrammarRepos
-        ignoredTreeSitterOrgRepos
-        ;
-    }
-    (writers.writePython3 "updateImpl"
+  updateImpl =
+    passArgs "updateImpl-with-args"
       {
-        flakeIgnore = [ "E501" ];
-      } ./update_impl.py);
+        binaries = {
+          curl = "${curl}/bin/curl";
+          nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+          printf = "${coreutils}/bin/printf";
+        };
+        inherit
+          knownTreeSitterOrgGrammarRepos
+          ignoredTreeSitterOrgRepos
+          ;
+      }
+      (
+        writers.writePython3 "updateImpl" {
+          flakeIgnore = [ "E501" ];
+        } ./update_impl.py
+      );
 
   # Pass the given arguments to the command, in the ARGS environment variable.
   # The arguments are just a json object that should be available in the script.
-  passArgs = name: argAttrs: script: writeShellScript name ''
-    env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
-      ${script} "$@"
-  '';
+  passArgs =
+    name: argAttrs: script:
+    writeShellScript name ''
+      env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
+        ${script} "$@"
+    '';
 
-  foreachSh = attrs: f:
-    lib.concatMapStringsSep "\n" f
-      (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
+  foreachSh =
+    attrs: f: lib.concatMapStringsSep "\n" f (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
   jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON { });
 
   # Run the given script for each of the attr list.
   # The attrs are passed to the script as a json value.
-  forEachParallel = name: script: listOfAttrs: writeShellScript "for-each-parallel.sh" ''
-    < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
-      ${xe}/bin/xe -F -j5 ${script} {}
-  '';
+  forEachParallel =
+    name: script: listOfAttrs:
+    writeShellScript "for-each-parallel.sh" ''
+      < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
+        ${xe}/bin/xe -F -j5 ${script} {}
+    '';
 
   # The output directory in the current source tree.
   # This will depend on your local environment, but that is intentional.
@@ -546,32 +551,38 @@ let
     ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
      echo "writing files to ${outputDir}" 1>&2
      mkdir -p "${outputDir}"
-     ${forEachParallel
-         "repos-to-fetch"
-         (writeShellScript "fetch-repo" ''
-             ${updateImpl} fetch-repo "$1"
-         '')
-         (lib.mapAttrsToList
-           (nixRepoAttrName: attrs: attrs // {
+     ${forEachParallel "repos-to-fetch"
+       (writeShellScript "fetch-repo" ''
+         ${updateImpl} fetch-repo "$1"
+       '')
+       (
+         lib.mapAttrsToList (
+           nixRepoAttrName: attrs:
+           attrs
+           // {
              inherit
                nixRepoAttrName
-               outputDir;
-           })
-           allGrammars)
+               outputDir
+               ;
+           }
+         ) allGrammars
+       )
      }
      ${updateImpl} print-all-grammars-nix-file "$(< ${
-         jsonFile "all-grammars.json" {
-           allGrammars =
-             (lib.mapAttrsToList
-               (nixRepoAttrName: attrs: attrs // {
-                 inherit nixRepoAttrName;
-               })
-               allGrammars);
-           inherit outputDir;
-         }
+       jsonFile "all-grammars.json" {
+         allGrammars = (
+           lib.mapAttrsToList (
+             nixRepoAttrName: attrs:
+             attrs
+             // {
+               inherit nixRepoAttrName;
+             }
+           ) allGrammars
+         );
+         inherit outputDir;
+       }
      })"
   '';
-
 
 in
 update-all-grammars

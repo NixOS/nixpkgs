@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf_26
-, git
-, testers
-, buf
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf_26,
+  git,
+  testers,
+  buf,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.50.1";
+  version = "1.51.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     rev = "v${version}";
-    hash = "sha256-n4X8Wgi/5z6fteR+uxr68R3kD7eorMzlAW8jacTZGHg=";
+    hash = "sha256-/6SDsIVyorDWjOkdUB1t0vAA2VLy6MiGyiFo+2rUfEU=";
   };
 
-  vendorHash = "sha256-HU4Di8ri2d93EUscCx8/gRiEJdLTcnKUaQ4kesKfZ+w=";
+  vendorHash = "sha256-4GD2yNfYTQobPeJ+zPQ+ECDTeNUi4PK8oXSxpBF/4Wk=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -28,7 +29,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
@@ -84,7 +88,11 @@ buildGoModule rec {
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jk lrewega aaronjheng ];
+    maintainers = with lib.maintainers; [
+      jk
+      lrewega
+      aaronjheng
+    ];
     mainProgram = "buf";
   };
 }

@@ -3,7 +3,6 @@
   buildGoModule,
   rustPlatform,
   fetchFromGitHub,
-  fetchYarnDeps,
   fetchpatch,
   makeWrapper,
   CoreFoundation,
@@ -14,16 +13,13 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
   pnpm_10,
   rustc,
   Security,
   stdenv,
   xdg-utils,
-  yarn,
   wasm-bindgen-cli,
   wasm-pack,
-  fixup-yarn-lock,
   nixosTests,
 
   withRdpClient ? true,
@@ -32,11 +28,9 @@
   hash,
   vendorHash,
   extPatches ? [ ],
-  cargoHash ? null,
-  yarnHash ? null,
-  pnpmHash ? null,
+  cargoHash,
+  pnpmHash,
 }:
-assert yarnHash != null || pnpmHash != null;
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
@@ -76,11 +70,6 @@ let
     '';
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = yarnHash;
-  };
-
   webassets = stdenv.mkDerivation {
     pname = "teleport-webassets";
     inherit src version;
@@ -90,46 +79,24 @@ let
       hash = cargoHash;
     };
 
-    pnpmDeps =
-      if pnpmHash != null then
-        if lib.versionAtLeast version "17" then
-          pnpm_10.fetchDeps {
-            inherit src pname version;
-            hash = pnpmHash;
-          }
-        else
-          pnpm_9.fetchDeps {
-            inherit src pname version;
-            hash = pnpmHash;
-          }
-      else
-        null;
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit src pname version;
+      hash = pnpmHash;
+    };
 
-    nativeBuildInputs =
-      [ nodejs ]
-      ++ lib.optional (lib.versionAtLeast version "15") [
-        binaryen
-        cargo
-        nodejs
-        rustc
-        rustc.llvmPackages.lld
-        rustPlatform.cargoSetupHook
-        wasm-bindgen-cli
-        wasm-pack
-      ]
-      ++ (
-        if lib.versionAtLeast version "17" then
-          [ pnpm_10.configHook ]
-        else if lib.versionAtLeast version "16" then
-          [ pnpm_9.configHook ]
-        else
-          [
-            yarn
-            fixup-yarn-lock
-          ]
-      );
+    nativeBuildInputs = [
+      binaryen
+      cargo
+      nodejs
+      pnpm_10.configHook
+      rustc
+      rustc.llvmPackages.lld
+      rustPlatform.cargoSetupHook
+      wasm-bindgen-cli
+      wasm-pack
+    ];
 
-    patches = lib.optional (lib.versionAtLeast version "16") [
+    patches = [
       (fetchpatch {
         name = "disable-wasm-opt-for-ironrdp.patch";
         url = "https://github.com/gravitational/teleport/commit/994890fb05360b166afd981312345a4cf01bc422.patch?full_index=1";
@@ -146,30 +113,13 @@ let
     '';
 
     buildPhase = ''
-      ${lib.optionalString (lib.versionOlder version "16") ''
-        yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-        fixup-yarn-lock yarn.lock
-
-        yarn install --offline \
-          --frozen-lockfile \
-          --ignore-engines --ignore-scripts
-        patchShebangs .
-      ''}
-
       PATH=$PATH:$PWD/node_modules/.bin
 
-      ${
-        if lib.versionAtLeast version "15" then
-          ''
-            pushd web/packages/teleport
-            # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
-            RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
-            vite build
-            popd
-          ''
-        else
-          "yarn build-ui-oss"
-      }
+      pushd web/packages/teleport
+      # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
+      RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
+      vite build
+      popd
     '';
 
     installPhase = ''
@@ -257,7 +207,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
-    license = if lib.versionAtLeast version "15" then licenses.agpl3Plus else licenses.asl20;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [
       arianvp
       justinas

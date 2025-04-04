@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
@@ -58,22 +58,22 @@ let
     };
   };
 in
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "oneanime";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-YPz0sctDzzBM1B/Ugspwj2Jg8LMSuB84ngZ8+PnlrDM=";
+    hash = "sha256-7W+/Au3NJLO6lv8AZ0T+vs9bb+qgUV0Sz4qZSl7gR6c=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes =
     let
-      media_kit-hash = "sha256-6V4ZTRsExm8TidznnvAZRXGbkxTLDs7YFNutNh7tLK8=";
+      media_kit-hash = "sha256-NTnEmU873mzB9YuD6hhRXKfF1WWGPjqvmvAH5ULayxI=";
     in
     {
       flutter_open_chinese_convert = "sha256-uRPBBB5RUd8fiFaM8dg9Th2tvQYwnbsQrsiDSPMm5kk=";

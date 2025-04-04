@@ -5,34 +5,58 @@ with self;
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias:
-      if alias.recurseForDerivations or false then
-            lib.removeAttrs alias ["recurseForDerivations"]
-                else alias;
+  removeRecurseForDerivations =
+    alias:
+    if alias.recurseForDerivations or false then
+      lib.removeAttrs alias [ "recurseForDerivations" ]
+    else
+      alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias:
-    if lib.isDerivation alias then
-      lib.dontDistribute alias
-    else alias;
+  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
   # Make sure that we are not shadowing something from
   # python-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n super
-                          then throw "Alias ${n} is still in python-packages.nix"
-                          else alias;
+  checkInPkgs =
+    n: alias:
+    if builtins.hasAttr n super then throw "Alias ${n} is still in python-packages.nix" else alias;
 
-  mapAliases = aliases:
-    lib.mapAttrs (n: alias: removeDistribute
-                             (removeRecurseForDerivations
-                              (checkInPkgs n alias)))
-                     aliases;
+  mapAliases =
+    aliases:
+    lib.mapAttrs (
+      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+    ) aliases;
 in
 
-  ### Deprecated aliases - for backward compatibility
+### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  # Prevent incorrect Python packaging attempts.
+  # Note: `{ python3, python3Packages, ... }: with python3Packages; [ ... python3 ]` still works, since `with` has lower priority.
+  pythonPackages = throw "do not use pythonPackages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python2Packages = throw "do not use python2Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python27Packages = throw "do not use python27Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python3Packages = throw "do not use python3Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python39Packages = throw "do not use python39Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python310Packages = throw "do not use python310Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python311Packages = throw "do not use python311Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python312Packages = throw "do not use python312Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python313Packages = throw "do not use python313Packages when building Python packages, specify each used package as a separate argument"; # do not remove
+  python2 = throw "do not use python2 when building Python packages, use the generic python parameter instead"; # do not remove
+  python3 = throw "do not use python3 when building Python packages, use the generic python parameter instead"; # do not remove
+  python39 = throw "do not use python39 when building Python packages, use the generic python parameter instead"; # do not remove
+  python310 = throw "do not use python310 when building Python packages, use the generic python parameter instead"; # do not remove
+  python311 = throw "do not use python311 when building Python packages, use the generic python parameter instead"; # do not remove
+  python312 = throw "do not use python312 when building Python packages, use the generic python parameter instead"; # do not remove
+  python313 = throw "do not use python313 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy = throw "do not use pypy when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy2 = throw "do not use pypy2 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy27 = throw "do not use pypy27 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy3 = throw "do not use pypy3 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy310 = throw "do not use pypy310 when building Python packages, use the generic python parameter instead"; # do not remove
+  pypy311 = throw "do not use pypy311 when building Python packages, use the generic python parameter instead"; # do not remove
+
   aadict = throw "aadict was removed, it was introduced as a dependency for a package that never manifested and has been an unused leaf package ever since"; # added 2024-07-08
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
@@ -154,7 +178,7 @@ mapAliases ({
   debian = python-debian; # added 2024-12-10
   deep_merge = throw "deep_merge has been removed, since it is no longer maintained and may be broken."; # added 2023-10-09
   demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
-  deprecat  = throw "deprecat has been removed, it unmaintained and archived by upstream"; # added 2025-03-08
+  deprecat = throw "deprecat has been removed, it unmaintained and archived by upstream"; # added 2025-03-08
   descartes = throw "descartes has been removed, since it is abandoned and broken"; # added 2023-06-21
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
   dftfit = throw "dftfit dependency lammps-cython no longer builds"; # added 2021-07-04
@@ -274,6 +298,7 @@ mapAliases ({
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   glasgow = throw "glasgow has been promoted to a top-level attribute name: `pkgs.glasgow`"; # added 2023-02-05
   globre = throw "globre was removed, because it was disabled on all python version since 3.7 and last updated in 2020."; # added 2024-05-13
+  goobook = throw "goobook has been promoted to a top-level attribute name: `pkgs.goobook`"; # Added 2025-03-25
   google-reauth = throw "google-reauth has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
@@ -308,9 +333,9 @@ mapAliases ({
   image-match = throw "image-match has been removed because it is no longer maintained"; # added 2023-06-10
   imgaug = throw "imgaug has been removed as it is no longer maintained"; # added 2023-07-10
   imgtool = throw "imgtool has been promoted to a top-level attribute name: `mcuboot-imgtool`"; # added 2024-10-09
-  intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
+  intreehook = throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
-  ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years";  # added 2024-05-21
+  ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years"; # added 2024-05-21
   ipython_genutils = ipython-genutils; # added 2023-10-12
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-10-17
@@ -421,7 +446,7 @@ mapAliases ({
   nose-exclude = throw "nose-exclude has been removed since it has not been maintained since 2016"; # added 2024-05-21
   nose-randomly = throw "nose-randomly has been removed, it was archived and unmaintained since 2019"; # added 2024-05-22
   nose-pattern-exclude = throw "nose-pattern-exclude has been removed as it has been unmaintained since 2014"; # added 2024-07-27
-  nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
+  nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-21
   nose-timer = throw "nose-timer has been removed as it depends on the abandoned nose test framework"; # added 2024-07-27
   nose-warnings-filters = throw "nose-warnings-filters has been removed as it has been unmaintained since 2016"; # added 2024-07-27
   nose_warnings_filters = nose-warnings-filters; # added 2024-01-07
@@ -483,7 +508,7 @@ mapAliases ({
   proton-vpn-session = throw "proton-vpn-session functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
-  pushbullet = pushbullet-py;  # Added 2022-10-15
+  pushbullet = pushbullet-py; # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
@@ -616,7 +641,7 @@ mapAliases ({
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
-  pyzufall =  throw "pyzufall was removed, because it is no longer maintained"; # added 2024-05-14
+  pyzufall = throw "pyzufall was removed, because it is no longer maintained"; # added 2024-05-14
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qds-sdk = throw "qds-sdk was removed as it is unmaintained upstream and depends on the removed boto package"; # Added 2024-09-22
   qds_sdk = qds-sdk; # added 2023-10-21
@@ -768,6 +793,7 @@ mapAliases ({
   webhelpers = throw "webhelpers has been removed because it is unmaintained and upstream is gone"; # added 2024-07-27
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
+  wsnsimpy = throw "wsnsimpy has been removed, it was unmaintained and no more compatible with Python 3.12"; # added 2025-04-01
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_2 = wxpython; # added 2024-01-07
@@ -780,7 +806,7 @@ mapAliases ({
   yahooweather = throw "yahooweather has been removed because it is no longer maintained"; # added 2025-01-13
   xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27
   Yapsy = yapsy; # added 2023-02-19
-  yanc  = throw "yanc has been removed because it relies on nose"; # added 2024-07-27
+  yanc = throw "yanc has been removed because it relies on nose"; # added 2024-07-27
   z3 = z3-solver; # added 2023-12-03
   zake = throw "zake has been removed because it is abandoned"; # added 2023-06-20
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";

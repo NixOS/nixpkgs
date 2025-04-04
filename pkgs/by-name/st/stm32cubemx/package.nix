@@ -133,5 +133,8 @@ buildFHSEnv {
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
+      libgcrypt
+      openssl
+      udev
     ];
 }
