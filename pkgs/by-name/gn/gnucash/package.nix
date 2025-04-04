@@ -26,6 +26,7 @@
   swig,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  cmakeFlags = [
+    "-DWITH_PYTHON=\"ON\""
+    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
+  ];
+
   buildInputs =
     [
       aqbanking
@@ -64,6 +70,7 @@ stdenv.mkDerivation rec {
       libxslt
       swig
       webkitgtk_4_0
+      python3
     ]
     ++ (with perlPackages; [
       JSONParse
@@ -80,6 +87,8 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # SWIG adds a new function arg that is not present in the source. Idk, might be due to SWIG 3 vs 4 differences
+    ./0005-fix-swig-invocation.patch
     # this patch fixes the build against icu 76
     (fetchpatch {
       name = "icu-76.patch";
@@ -94,6 +103,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patch -p0 <<END_PATCH
+      +++ bindings/python/__init__.py
+      @@ -1,3 +1,7 @@
+      +import os
+      +os.environ['GNC_DBD_DIR'] = '${libdbiDrivers}/lib/dbd'
+      +os.environ['GSETTINGS_SCHEMA_DIR'] = '${glib.makeSchemaPath "$out" "gnucash-${version}"}'
+      +
+       # import all the symbols from gnucash_core, so basic gnucash stuff can be
+       # loaded with:
+       # >>> from gnucash import thingy
+        END_PATCH
+  '';
+
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
   env.GUILE_AUTO_COMPILE = "0";
@@ -107,6 +130,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = true;
+  enableParallelBuilding = true;
   checkTarget = "check";
 
   passthru.docs = stdenv.mkDerivation {
