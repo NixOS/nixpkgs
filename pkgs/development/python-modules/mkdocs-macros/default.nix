@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-macros-plugin";
-  version = "1.0.5";
+  version = "1.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/jSNdfAckR82K22ZjFez2FtQWHbd5p25JPLFEsOVwyg=";
+    hash = "sha256-X9aWnixD4jAx/7cZvr50IRY+om9Nw2CvI0MUTKl5sEs=";
   };
 
   propagatedBuildInputs = [
