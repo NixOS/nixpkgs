@@ -29,6 +29,8 @@
         package = patchedPareto;
       };
 
+      networking.firewall.enable = true;
+
     };
 
   nodes.dashboard =
@@ -64,6 +66,12 @@
       services.displayManager.autoLogin = {
         enable = true;
         user = "alice";
+
+      };
+
+      virtualisation.resolution = {
+        x = 640;
+        y = 480;
       };
 
       environment.systemPackages = [ pkgs.xdotool ];
@@ -94,7 +102,6 @@
       + " --skip 21830a4e-84f1-48fe-9c5b-beab436b2cdb"  # Disk encryption
       + " --skip 44e4754a-0b42-4964-9cc2-b88b2023cb1e"  # Pareto Security is up to date
       + " --skip f962c423-fdf5-428a-a57a-827abc9b253e"  # Password manager installed
-      + " --skip 2e46c89a-5461-4865-a92e-3b799c12034a"  # Firewall is enabled
       + "'"
     )
 
@@ -117,7 +124,7 @@
     ]:
         status, out = xfce.systemctl("is-enabled " + unit, "alice")
         assert status == 0, f"Unit {unit} is not enabled (status: {status}): {out}"
-    xfce.succeed("xdotool mousemove 850 10")
+    xfce.succeed("xdotool mousemove 460 10")
     xfce.wait_for_text("Pareto Security")
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")

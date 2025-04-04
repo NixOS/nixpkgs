@@ -691,7 +691,7 @@ in
   leaps = handleTest ./leaps.nix { };
   lemmy = handleTest ./lemmy.nix { };
   libinput = handleTest ./libinput.nix { };
-  librenms = handleTest ./librenms.nix { };
+  librenms = runTest ./librenms.nix;
   libresprite = handleTest ./libresprite.nix { };
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
@@ -703,7 +703,7 @@ in
   libvirtd = handleTest ./libvirtd.nix { };
   lidarr = handleTest ./lidarr.nix { };
   lightdm = handleTest ./lightdm.nix { };
-  lighttpd = handleTest ./lighttpd.nix { };
+  lighttpd = runTest ./lighttpd.nix;
   limesurvey = handleTest ./limesurvey.nix { };
   limine = import ./limine { inherit runTest; };
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
@@ -1039,6 +1039,7 @@ in
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix { };
   plikd = handleTest ./plikd.nix { };
   plotinus = handleTest ./plotinus.nix { };
+  pocket-id = handleTest ./pocket-id.nix { };
   podgrab = handleTest ./podgrab.nix { };
   podman = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./podman/default.nix { };
   podman-tls-ghostunnel = handleTestOn [
@@ -1202,7 +1203,7 @@ in
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   stalwart-mail = handleTest ./stalwart-mail.nix { };
   stargazer = runTest ./web-servers/stargazer.nix;
-  starship = handleTest ./starship.nix { };
+  starship = runTest ./starship.nix;
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
   static-web-server = handleTest ./web-servers/static-web-server.nix { };
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
@@ -1351,7 +1352,7 @@ in
   tuptime = handleTest ./tuptime.nix { };
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix { };
   turn-rs = handleTest ./turn-rs.nix { };
-  tuxguitar = handleTest ./tuxguitar.nix { };
+  tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   typesense = handleTest ./typesense.nix { };
   ucarp = handleTest ./ucarp.nix { };
