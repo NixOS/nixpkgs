@@ -8,9 +8,7 @@
   spdx-license-list-data,
   replaceVars,
 }:
-
-with python3Packages;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "platformio";
   version = "6.1.18";
   pyproject = true;
@@ -30,7 +28,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+      inherit (python3Packages.python.withPackages (_: propagatedBuildInputs)) interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -55,36 +53,39 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools
+    python3Packages.setuptools
   ];
 
   pythonRelaxDeps = true;
 
   propagatedBuildInputs =
     [
-      aiofiles
-      ajsonrpc
-      bottle
-      click
-      click-completion
-      colorama
       git
-      lockfile
-      marshmallow
-      pyelftools
-      pyserial
-      requests
-      semantic-version
-      setuptools
       spdx-license-list-data.json
-      starlette
-      tabulate
-      uvicorn
-      wsproto
-      zeroconf
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      chardet
+    ++ (map (p: python3Packages.${p})
+      [
+        "aiofiles"
+        "ajsonrpc"
+        "bottle"
+        "click"
+        "click-completion"
+        "colorama"
+        "lockfile"
+        "marshmallow"
+        "pyelftools"
+        "pyserial"
+        "requests"
+        "semantic-version"
+        "setuptools"
+        "starlette"
+        "tabulate"
+        "uvicorn"
+        "wsproto"
+        "zeroconf"
+      ])
+    ++ lib.optionals (python3Packages.stdenv.hostPlatform.isDarwin && python3Packages.hostPlatform.isAarch64) [
+      python3Packages.chardet
     ];
 
   preCheck = ''
@@ -93,8 +94,8 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
-    jsondiff
-    pytestCheckHook
+    python3Packages.jsondiff
+    python3Packages.pytestCheckHook
   ];
 
   # Install udev rules into a separate output so all of platformio-core is not a dependency if
@@ -203,7 +204,7 @@ buildPythonApplication rec {
     ]);
 
   passthru = {
-    python = python3Packages.python;
+    inherit (python3Packages) python;
   };
 
   meta = with lib; {
