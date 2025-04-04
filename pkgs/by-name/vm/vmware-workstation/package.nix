@@ -33,7 +33,8 @@
   unzip,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vmware-workstation";
   # base - versions
   version = "17.6.3";
   build = "24583834";
@@ -45,13 +46,13 @@ let
   unlockerSrc = fetchFromGitHub {
     owner = "paolo-projects";
     repo = "unlocker";
-    rev = "${unlockerVersion}";
+    rev = "${finalAttrs.unlockerVersion}";
     sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
   vmware-unpack-env = buildFHSEnv {
     pname = "vmware-unpack-env";
-    inherit version;
+    inherit (finalAttrs) version;
     targetPkgs = pkgs: [ zlib ];
   };
 
@@ -62,10 +63,6 @@ let
       ln -s $out/lib/libreadline.so $out/lib/libreadline.so.6
     '';
   };
-in
-stdenv.mkDerivation rec {
-  pname = "vmware-workstation";
-  inherit version build;
 
   buildInputs = [
     libxslt
@@ -102,29 +99,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       python3
-      vmware-unpack-env
+      finalAttrs.vmware-unpack-env
       autoPatchelfHook
       makeWrapper
     ]
     ++ lib.optionals enableInstaller [
       bzip2
       sqlite
-      readline70_compat63
+      finalAttrs.readline70_compat63
     ]
     ++ lib.optionals enableMacOSGuests [ unzip ];
 
   src = requireFile {
-    name = "VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
     url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
     hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
   };
 
   unpackPhase = ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
+    ${finalAttrs.vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${finalAttrs.src} --extract unpacked"
   '';
 
   postPatch = lib.optionalString enableMacOSGuests ''
-    cp -R "${unlockerSrc}" unlocker/
+    cp -R "${finalAttrs.unlockerSrc}" unlocker/
 
     substituteInPlace unlocker/unlocker.py --replace \
       "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
@@ -167,7 +164,7 @@ stdenv.mkDerivation rec {
       cp ${./vmware-installer-bootstrap} $out/etc/vmware-installer/bootstrap
       sed -i -e "s,@@INSTALLERDIR@@,$dest," $out/etc/vmware-installer/bootstrap
       sed -i -e "s,@@IVERSION@@,$vmware_installer_version," $out/etc/vmware-installer/bootstrap
-      sed -i -e "s,@@BUILD@@,${build}," $out/etc/vmware-installer/bootstrap
+      sed -i -e "s,@@BUILD@@,${finalAttrs.build}," $out/etc/vmware-installer/bootstrap
 
       # create database of vmware guest tools (avoids vmware fetching them later)
       mkdir -p $out/etc/vmware-installer/components
@@ -181,7 +178,7 @@ stdenv.mkDerivation rec {
         component_version=$(cat unpacked/$component/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
         component_core_id=$([ "$component" == "vmware-installer" ] && echo "-1" || echo "1")
         type=$([ "$component" == "vmware-workstation" ] && echo "0" || echo "1")
-        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${build},$component_core_id,'$component','$component',$type);"
+        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${finalAttrs.build},$component_core_id,'$component','$component',$type);"
         mkdir -p $out/etc/vmware-installer/components/$component
         cp -r $folder/* $out/etc/vmware-installer/components/$component
       done
@@ -195,8 +192,8 @@ stdenv.mkDerivation rec {
     ## VMware Config
     echo "Installing VMware Config"
     cp ${./vmware-config} $out/etc/vmware/config
-    sed -i -e "s,@@VERSION@@,${version}," $out/etc/vmware/config
-    sed -i -e "s,@@BUILD@@,${build}," $out/etc/vmware/config
+    sed -i -e "s,@@VERSION@@,${finalAttrs.version}," $out/etc/vmware/config
+    sed -i -e "s,@@BUILD@@,${finalAttrs.build}," $out/etc/vmware/config
     sed -i -e "s,@@PREFIXDIR@@,$out," $out/etc/vmware/config
 
     ## VMware VMX
@@ -390,4 +387,4 @@ stdenv.mkDerivation rec {
       vifino
     ];
   };
-}
+})
