@@ -22,10 +22,10 @@ buildOctavePackage rec {
     msh
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/bim/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/bim/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Package for solving Diffusion Advection Reaction (DAR) Partial Differential Equations";
   };
 }

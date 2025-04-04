@@ -24,13 +24,13 @@ buildOctavePackage rec {
     unzip
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/io/index.html";
-    license = with licenses; [
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/io/";
+    license = with lib.licenses; [
       gpl3Plus
       bsd2
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Input/Output in external formats";
   };
 }

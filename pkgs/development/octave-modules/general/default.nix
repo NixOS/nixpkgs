@@ -23,10 +23,10 @@ buildOctavePackage rec {
     nettle
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/general/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/general/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "General tools for Octave";
   };
 }
