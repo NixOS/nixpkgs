@@ -38,11 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "17.6.3";
   build = "24583834";
 
-  macOSUnlockerSrc = fetchFromGitHub {
-    owner = "paolo-projects";
-    repo = "unlocker";
-    tag = "3.0.5";
-    hash = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+  src = requireFile {
+    name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
+    url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
+    hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -51,6 +50,27 @@ stdenv.mkDerivation (finalAttrs: {
     targetPkgs = pkgs: [ zlib ];
   };
 
+  unpackPhase = ''
+    ${finalAttrs.vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${finalAttrs.src} --extract unpacked"
+  '';
+
+  macOSUnlockerSrc = fetchFromGitHub {
+    owner = "paolo-projects";
+    repo = "unlocker";
+    tag = "3.0.5";
+    hash = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+  };
+
+  postPatch = lib.optionalString enableMacOSGuests ''
+    cp -R "${finalAttrs.macOSUnlockerSrc}" unlocker/
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
+  '';
+
   readline70_compat63 = symlinkJoin {
     name = "readline70_compat63";
     paths = [ readline70 ];
@@ -58,6 +78,20 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/lib/libreadline.so $out/lib/libreadline.so.6
     '';
   };
+
+  nativeBuildInputs =
+    [
+      python3
+      finalAttrs.vmware-unpack-env
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals enableInstaller [
+      bzip2
+      sqlite
+      finalAttrs.readline70_compat63
+    ]
+    ++ lib.optionals enableMacOSGuests [ unzip ];
 
   buildInputs = [
     libxslt
@@ -90,40 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libXtst
   ];
-
-  nativeBuildInputs =
-    [
-      python3
-      finalAttrs.vmware-unpack-env
-      autoPatchelfHook
-      makeWrapper
-    ]
-    ++ lib.optionals enableInstaller [
-      bzip2
-      sqlite
-      finalAttrs.readline70_compat63
-    ]
-    ++ lib.optionals enableMacOSGuests [ unzip ];
-
-  src = requireFile {
-    name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
-    hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
-  };
-
-  unpackPhase = ''
-    ${finalAttrs.vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${finalAttrs.src} --extract unpacked"
-  '';
-
-  postPatch = lib.optionalString enableMacOSGuests ''
-    cp -R "${finalAttrs.macOSUnlockerSrc}" unlocker/
-
-    substituteInPlace unlocker/unlocker.py --replace \
-      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
-
-    substituteInPlace unlocker/unlocker.py --replace \
-      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
-  '';
 
   installPhase = ''
     runHook preInstall
