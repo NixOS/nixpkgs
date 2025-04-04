@@ -68,7 +68,7 @@ in
             else
               cfg.configFile;
         in
-          "${getExe opentelemetry-collector} --config=file:${conf} $1";
+        "${getExe opentelemetry-collector} --config=file:${conf} $1";
 
       serviceConfig = {
         DynamicUser = true;
