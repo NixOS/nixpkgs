@@ -34,7 +34,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_octaviaclient";
+    inherit version;
     hash = "sha256-2yZnuPdhGyfEjS5bLXbRjhl/v+mQyyzYlv3gbztNYig=";
   };
 
