@@ -31,7 +31,7 @@ maturinBuildHook() {
     concatTo flagsArray maturinBuildFlags
 
     echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
-    @setEnv@ maturin build "${flagsArray[@]}"
+    maturin build "${flagsArray[@]}"
 
     if [ -n "${buildAndTestSubdir-}" ]; then
         popd
