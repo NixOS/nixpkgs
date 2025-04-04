@@ -118,8 +118,10 @@ stdenv.mkDerivation rec {
 
         LINKFLAGS +=
           ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
-          -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
-          -ljpeg -ltiff -lpng -lssl -lz ;
+          ${lib.optionalString stdenv.hostPlatform.isLinux "-lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss"}
+          ${lib.optionalString stdenv.hostPlatform.isDarwin "-framework IOKit"}
+          -ljpeg -ltiff -lpng -lssl -lz
+          ;
       '';
     in
     ''
@@ -135,6 +137,10 @@ stdenv.mkDerivation rec {
     libtiff
     libjpeg
     libpng
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXxf86vm
     libXrandr
@@ -144,8 +150,6 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libXdmcp
     libXau
-    openssl
-    zlib
   ];
 
   buildFlags = [ "all" ];
@@ -185,6 +189,6 @@ stdenv.mkDerivation rec {
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
