@@ -2,43 +2,41 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  gfortran,
-  libelf,
-  libiberty,
-  zlib,
-  # Once https://gitlab.com/eztrace/eztrace/-/issues/41
-  # is released we can switch to latest binutils.
-  libbfd_2_38,
-  libopcodes_2_38,
-  autoreconfHook,
+  cmake,
+  otf2,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "EZTrace";
-  version = "1.1-11";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "eztrace";
     repo = "eztrace";
-    rev = "eztrace-${version}";
-    hash = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
+    tag = finalAttrs.version;
+    hash = "sha256-ccW4YjEf++tkdIJLze2x8B/SWbBBXnYt8UV9OH8+KGU=";
   };
 
   nativeBuildInputs = [
-    gfortran
-    autoreconfHook
-  ];
-  buildInputs = [
-    libelf
-    libiberty
-    zlib
-    libbfd_2_38
-    libopcodes_2_38
+    cmake
+    otf2
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
-    license = licenses.cecill-b;
+    homepage = "https://eztrace.gitlab.io/eztrace/";
+    changelog = "https://gitlab.com/eztrace/eztrace/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.cecill-b;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ ];
   };
-}
+})
