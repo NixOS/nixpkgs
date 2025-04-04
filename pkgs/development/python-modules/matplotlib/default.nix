@@ -192,8 +192,8 @@ buildPythonPackage rec {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {
         src = fetchurl {
-          url = "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          sha256 = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
+          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
         };
         patches = [ ];
       });
