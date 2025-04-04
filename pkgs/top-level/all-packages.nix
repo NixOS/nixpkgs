@@ -17740,7 +17740,7 @@ with pkgs;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
-  stuntrally = callPackage ../games/stuntrally { };
+  stuntrally = callPackage ../games/stuntrally { boost = boost183; };
 
   superTuxKart = darwin.apple_sdk_11_0.callPackage ../games/super-tux-kart {
     inherit (darwin.apple_sdk_11_0.frameworks)
