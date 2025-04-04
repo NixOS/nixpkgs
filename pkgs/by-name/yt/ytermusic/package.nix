@@ -19,14 +19,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-nu/vedQNs5TgCG1v5qwwDTnFTyXCS2KnLVrnEhCtzCs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rusty_ytdl-0.6.6" = "sha256-htXD8v9Yd7S0iLjP6iZu94tP5KO5vbmkdUybqA7OtlU=";
-      "symphonia-0.5.4" = "sha256-uf0BbpqtlpZhsnV7Cm8egxjb/fXSINsOANTjDUQ4U9M=";
-    };
-  };
-  postPatch = "cp ${./Cargo.lock} Cargo.lock";
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-B4qey0ibBCc0BDObxgE8wR9fIERKF38EMxYPrS73b/I=";
 
   doCheck = true;
 
