@@ -29,7 +29,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_cinderclient";
+    inherit version;
     hash = "sha256-GMRQHlSWd5hNhbCxD9B0770mXjCt0qeW0oF2BVqNfc8=";
   };
 
