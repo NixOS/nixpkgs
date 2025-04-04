@@ -116,7 +116,7 @@ buildPythonPackage rec {
       # upgrade dependencies, so don't bother testing them.
       "tests/integrations/"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
+    ++ lib.optionals stdenv.buildPlatform.isAarch64 [
       # test crashes on aarch64
       "tests/test_transport.py"
     ];
