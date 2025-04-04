@@ -1,4 +1,5 @@
 {
+  apple-sdk_13,
   stdenv,
   cmake,
   lsb-release,
@@ -6,7 +7,6 @@
   lib,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   copyDesktopItems,
   makeDesktopItem,
   python3,
@@ -27,6 +27,8 @@
   tinyxml-2,
   spdlog,
   writeTextFile,
+  fixDarwinDylibNames,
+  applyPatches,
   shipwright,
 }:
 
@@ -41,11 +43,16 @@ let
     hash = "sha256-rXC4akz9BaKzr/C2CryZC6RGk6+fGVG7RsQryUFUUk0=";
   };
 
-  imgui' = fetchFromGitHub {
-    owner = "ocornut";
-    repo = "imgui";
-    tag = "v1.91.6-docking";
-    hash = "sha256-28wyzzwXE02W5vbEdRCw2iOF8ONkb3M3Al8XlYBvz1A=";
+  imgui' = applyPatches {
+    src = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v1.91.6-docking";
+      hash = "sha256-28wyzzwXE02W5vbEdRCw2iOF8ONkb3M3Al8XlYBvz1A=";
+    };
+    patches = [
+      "${shipwright.src}/libultraship/cmake/dependencies/patches/imgui-fixes-and-config.patch"
+    ];
   };
 
   libgfxd = fetchFromGitHub {
@@ -76,18 +83,30 @@ let
     hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
   };
 
-  stormlib' = fetchFromGitHub {
-    owner = "ladislav-zezula";
-    repo = "StormLib";
-    tag = "v9.25";
-    hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
+  stormlib' = applyPatches {
+    src = fetchFromGitHub {
+      owner = "ladislav-zezula";
+      repo = "StormLib";
+      tag = "v9.25";
+      hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
+    };
+    patches = [
+      "${shipwright.src}/libultraship/cmake/dependencies/patches/stormlib-optimizations.patch"
+    ];
   };
 
   thread_pool = fetchFromGitHub {
     owner = "bshoshany";
     repo = "thread-pool";
-    rev = "v4.1.0";
+    tag = "v4.1.0";
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
+  };
+
+  metalcpp = fetchFromGitHub {
+    owner = "briaguya-ai";
+    repo = "single-header-metal-cpp";
+    tag = "macOS13_iOS16";
+    hash = "sha256-CSYIpmq478bla2xoPL/cGYKIWAeiORxyFFZr0+ixd7I";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -123,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libicns
       darwin.sigtool
+      fixDarwinDylibNames
     ];
 
   buildInputs =
@@ -132,28 +152,37 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2
       SDL2_net
       libpng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      zenity
       libzip
       nlohmann_json
       tinyxml-2
       spdlog
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libpulseaudio
+      zenity
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Metal.hpp requires macOS 13.x min.
+      apple-sdk_13
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
-    (lib.cmakeBool "NON_PORTABLE" true)
-    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "/build/source/build/_deps/imgui-src")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "/build/source/build/_deps/stormlib-src")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
+      (lib.cmakeBool "NON_PORTABLE" true)
+      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPDLOG" "${spdlog}")
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int -Wno-elaborated-enum-base";
 
   dontAddPrefix = true;
 
@@ -165,24 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${stb'} ./stb/${stb'.name}
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
-      --replace-fail "\''${STB_DIR}" "/build/source/stb"
-  '';
-
-  postPatch = ''
-    # use the soh patched deps when building
-
-    mkdir -p ./build/_deps/imgui-src
-    cp -R --no-preserve=mode,ownership ${imgui'}/* ./build/_deps/imgui-src
-    pushd ./build/_deps/imgui-src
-    patch -p1 < ${shipwright.src}/libultraship/cmake/dependencies/patches/imgui-fixes-and-config.patch
-    popd
-
-    mkdir -p ./build/_deps/stormlib-src
-    cp -R --no-preserve=mode,ownership ${stormlib'}/* ./build/_deps/stormlib-src
-    pushd ./build/_deps/stormlib-src
-    patch -p1 < ${shipwright.src}/libultraship/cmake/dependencies/patches/stormlib-optimizations.patch
-    popd
-
+      --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
   '';
 
   postBuild = ''
@@ -215,11 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       mv $out/MacOS $out/Applications/soh.app/Contents/MacOS
 
-      # Wrapper
-      cp $src/soh/macosx/soh-macos.sh.in $out/Applications/soh.app/Contents/MacOS/soh
-      chmod +x $out/Applications/soh.app/Contents/MacOS/soh
-      patchShebangs $out/Applications/soh.app/Contents/MacOS/soh
-
       # "lib" contains all resources that are in "Resources" in the official bundle.
       # We move them to the right place and symlink them back to $out/lib,
       # as that's where the game expects them.
@@ -231,19 +238,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Copy icons
       cp -r ../build/macosx/soh.icns $out/Applications/soh.app/Contents/Resources/soh.icns
 
-      # Fix executable
-      install_name_tool -change @executable_path/../Frameworks/libSDL2-2.0.0.dylib \
-                        ${SDL2}/lib/libSDL2-2.0.0.dylib \
-                        $out/Applications/soh.app/Contents/Resources/soh-macos
-      install_name_tool -change @executable_path/../Frameworks/libGLEW.2.2.0.dylib \
-                        ${glew}/lib/libGLEW.2.2.0.dylib \
-                        $out/Applications/soh.app/Contents/Resources/soh-macos
-      install_name_tool -change @executable_path/../Frameworks/libpng16.16.dylib \
-                        ${libpng}/lib/libpng16.16.dylib \
-                        $out/Applications/soh.app/Contents/Resources/soh-macos
-
       # Codesign (ad-hoc)
-      codesign -f -s - $out/Applications/soh.app/Contents/Resources/soh-macos
+      codesign -f -s - $out/Applications/soh.app/Contents/MacOS/soh
     '';
 
   fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
