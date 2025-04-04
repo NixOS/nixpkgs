@@ -122,6 +122,7 @@ let
         "statsd"
         "surfboard"
         "systemd"
+        "tibber"
         "unbound"
         "unpoller"
         "v2ray"
