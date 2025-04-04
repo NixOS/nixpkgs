@@ -1039,6 +1039,7 @@ in
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix { };
   plikd = handleTest ./plikd.nix { };
   plotinus = handleTest ./plotinus.nix { };
+  pocket-id = handleTest ./pocket-id.nix { };
   podgrab = handleTest ./podgrab.nix { };
   podman = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./podman/default.nix { };
   podman-tls-ghostunnel = handleTestOn [
