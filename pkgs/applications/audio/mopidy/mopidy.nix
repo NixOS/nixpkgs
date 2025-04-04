@@ -36,7 +36,7 @@ pythonPackages.buildPythonApplication rec {
         cargoDeps = oldAttrs.cargoDeps.overrideAttrs (oldAttrs': {
           vendorStaging = oldAttrs'.vendorStaging.overrideAttrs {
             inherit (newAttrs) patches;
-            outputHash = "sha256-CegT8h+CJ6axipAD6E9drtrPJ9izRy/UCW14rbva5XA=";
+            outputHash = "sha256-urRYH5N1laBq1/SUEmwFKAtsHAC+KWYfYp+fmb7Ey7s=";
           };
         });
 
