@@ -7,14 +7,14 @@
   libconfuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dispad";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "BlueDragonX";
     repo = "dispad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PtwvaNtnCm3Y+6vlxPDc21RyIA2v3vkMOHpoGFxNFng=";
   };
 
@@ -24,12 +24,14 @@ stdenv.mkDerivation rec {
     libconfuse
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  meta = {
     description = "Small daemon for disabling trackpads while typing";
     homepage = "https://github.com/BlueDragonX/dispad";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zimbatm ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.zimbatm ];
+    platforms = lib.platforms.linux;
     mainProgram = "dispad";
   };
-}
+})
