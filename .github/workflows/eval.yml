@@ -75,6 +75,9 @@ jobs:
         with:
           extra_nix_config: sandbox = true
 
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
+
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
           time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
