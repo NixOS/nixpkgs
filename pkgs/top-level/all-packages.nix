@@ -359,6 +359,8 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
+  copilot-language-server-fhs = copilot-language-server.fhs;
+
   curv = callPackage ../by-name/cu/curv/package.nix {
     openexr = openexr_3;
   };
