@@ -14122,6 +14122,7 @@ with pkgs;
     docker_25
     docker_26
     docker_27
+    docker_28
     ;
 
   docker = docker_27;
