@@ -1237,6 +1237,7 @@ in
   syncthing-many-devices = handleTest ./syncthing-many-devices.nix { };
   syncthing-relay = handleTest ./syncthing-relay.nix { };
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  sysfs = runTest ./sysfs.nix;
   systemd = handleTest ./systemd.nix { };
   systemd-analyze = handleTest ./systemd-analyze.nix { };
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
