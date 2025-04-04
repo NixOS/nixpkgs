@@ -795,7 +795,7 @@ in
       defaults.services.mongodb.package = config.node.pkgs.mongodb-ce;
     }
   );
-  moodle = handleTest ./moodle.nix { };
+  moodle = runTest ./moodle.nix;
   moonraker = handleTest ./moonraker.nix { };
   mopidy = handleTest ./mopidy.nix { };
   morph-browser = runTest ./morph-browser.nix;
