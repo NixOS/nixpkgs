@@ -3,24 +3,31 @@
   lib,
   stdenv,
   libxcrypt,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pies";
-  version = "1.3";
+  version = "1.8";
 
   src = fetchurl {
-    url = "mirror://gnu/pies/${pname}-${version}.tar.bz2";
-    sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
+    url = "mirror://gnu/pies/pies-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-ZSi00WmC6il4+aSohqFKrKjtp6xFXYE7IIRGVwFmHWw=";
   };
 
   buildInputs = [ libxcrypt ];
+
+  patches = [ ./stdlib.patch ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
   hardeningDisable = [ "format" ];
 
   doCheck = true;
+
+  doInstallCheck = true;
+  nativeInstallCheck = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Program invocation and execution supervisor";
@@ -53,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
