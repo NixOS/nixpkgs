@@ -28,7 +28,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_novaclient";
+    inherit version;
     hash = "sha256-z2pLjwHsVD1adcAcIYR0upsGO9n9N0OCH+3GioRcq04=";
   };
 
