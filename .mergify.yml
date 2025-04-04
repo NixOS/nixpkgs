@@ -1,0 +1,21 @@
+queue_rules:
+  # This rule is for https://docs.mergify.com/commands/queue/
+  # and can be triggered with: @mergifyio queue
+  - name: default
+    merge_conditions:
+      # all github action checks in this list are required to merge a pull request
+      - check-success=Attributes
+      - check-success=Check
+      - check-success=Outpaths (aarch64-darwin)
+      - check-success=Outpaths (aarch64-linux)
+      - check-success=Outpaths (x86_64-darwin)
+      - check-success=Outpaths (x86_64-linux)
+      - check-success=Process
+      - check-success=Request
+      - check-success=editorconfig-check
+      - check-success=label-pr
+      - check-success=nix-files-parseable-check
+      - check-success=nixfmt-check
+      - check-success=nixpkgs-vet
+    # queue up to 5 pull requests at a time
+    batch_size: 5

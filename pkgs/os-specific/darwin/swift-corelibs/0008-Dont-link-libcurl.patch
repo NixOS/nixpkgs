@@ -1,0 +1,46 @@
+diff -u a/CoreFoundation/CMakeLists.txt b/CoreFoundation/CMakeLists.txt
+--- a/CoreFoundation/CMakeLists.txt	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/CMakeLists.txt	2023-06-29 19:39:30.074449222 -0400
+@@ -104,7 +104,6 @@
+                 # URL
+                 URL.subproj/CFURL.inc.h
+                 URL.subproj/CFURLPriv.h
+-                URL.subproj/CFURLSessionInterface.h
+               PUBLIC_HEADERS
+                 # FIXME: PrivateHeaders referenced by public headers
+                 Base.subproj/CFKnownLocations.h
+@@ -120,7 +119,6 @@
+                 String.subproj/CFRegularExpression.h
+                 String.subproj/CFRunArray.h
+                 URL.subproj/CFURLPriv.h
+-                URL.subproj/CFURLSessionInterface.h
+ 
+                 # AppServices
+                 AppServices.subproj/CFNotificationCenter.h
+@@ -280,8 +278,7 @@
+                 URL.subproj/CFURL.c
+                 URL.subproj/CFURLAccess.c
+                 URL.subproj/CFURLComponents.c
+-                URL.subproj/CFURLComponents_URIParser.c
+-                URL.subproj/CFURLSessionInterface.c)
++                URL.subproj/CFURLComponents_URIParser.c)
+ if(CMAKE_SYSTEM_NAME STREQUAL Linux OR CMAKE_SYSTEM_NAME STREQUAL Android)
+   target_compile_definitions(CoreFoundation
+                              PRIVATE
+@@ -341,8 +338,6 @@
+                              PRIVATE
+                                ${CURL_INCLUDE_DIRS})
+ elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+-  find_package(CURL REQUIRED)
+-  target_include_directories(CoreFoundation PRIVATE ${CURL_INCLUDE_DIRS})
+   find_package(ICU COMPONENTS uc i18n data REQUIRED)
+   find_package(LibXml2 REQUIRED)
+   target_include_directories(CoreFoundation PRIVATE ${LIBXML2_INCLUDE_DIR})
+@@ -377,7 +372,6 @@
+                           ${LIBXML2_LIBRARIES})
+ elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+   target_link_libraries(CoreFoundation PRIVATE
+-    ${CURL_LIBRARIES}
+     ICU::uc
+     ICU::i18n
+     ICU::data

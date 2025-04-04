@@ -1,0 +1,16 @@
+diff --git a/tail-tray.desktop.in b/tail-tray.desktop.in
+index 2d1c7be..5e859ae 100644
+--- a/tail-tray.desktop.in
++++ b/tail-tray.desktop.in
+@@ -2,8 +2,8 @@
+ Name=Tail Tray
+ GenericName=Tail Tray
+ Comment=Tailscale Tray Application
+-Exec=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@/tail-tray
+-Icon=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/icons/hicolor/128x128/apps/tailscale.png
++Exec=@CMAKE_INSTALL_PREFIX@/bin/tail-tray
++Icon=@CMAKE_INSTALL_PREFIX@/share/icons/hicolor/128x128/apps/tailscale.png
+ Type=Application
+ Categories=Qt;KDE;Utility;X-Networking;X-Internet;X-VPN;
+ StartupNotify=true
+

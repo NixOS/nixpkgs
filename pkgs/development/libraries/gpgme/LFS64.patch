@@ -1,0 +1,34 @@
+From 1726e0a0a3b9765a4ddf99c506178d3939a46ccd Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Fri, 3 May 2024 13:39:26 +0200
+Subject: [PATCH] posix: don't use LFS64 types in struct linux_dirent64
+
+The *64_t types are transitional APIs for applications that do not yet
+fully support large files on 32-bit platforms.  They have been removed
+in musl 1.2.5, which caused gpgme to fail to build.  Since this is for
+a raw syscall anyway, it doesn't make sense to use libc-specific types
+here anyway, so I've changed this to match the definition of the
+struct used in the kernel (except there the kernel-specific u64 and
+s64 typedefs are used instead).
+---
+ src/posix-io.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/posix-io.c b/src/posix-io.c
+index a422d8f6..c943f75c 100644
+--- a/src/posix-io.c
++++ b/src/posix-io.c
+@@ -74,8 +74,8 @@
+  * define it ourselves.  */
+ struct linux_dirent64
+ {
+-  ino64_t d_ino;
+-  off64_t d_off;
++  uint64_t d_ino;
++  int64_t d_off;
+   unsigned short d_reclen;
+   unsigned char d_type;
+   char d_name[];
+-- 
+2.44.0
+

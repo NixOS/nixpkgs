@@ -1,0 +1,38 @@
+From 46a92740dde0372fbe3e75a9a334ea79b6f53da1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ball=C3=B3=20Gy=C3=B6rgy?= <ballogyor@gmail.com>
+Date: Fri, 8 Nov 2024 00:04:01 +0100
+Subject: [PATCH] Don't check if running under Flatpak
+
+---
+ src/bin.js | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/src/bin.js b/src/bin.js
+index 5dcc3eb..362ce67 100755
+--- a/src/bin.js
++++ b/src/bin.js
+@@ -3,7 +3,6 @@
+ import { exit, programArgs } from "system";
+ import GLib from "gi://GLib";
+ import { setConsoleLogDomain } from "console";
+-import Xdp from "gi://Xdp";
+ 
+ // eslint-disable-next-line no-restricted-globals
+ imports.package.init({
+@@ -16,13 +15,6 @@ imports.package.init({
+ setConsoleLogDomain(pkg.name);
+ GLib.set_application_name("Biblioteca");
+ 
+-if (!Xdp.Portal.running_under_flatpak()) {
+-  console.error(
+-    "Flatpak required\nBiblioteca is only meant to be run sandboxed in a specific target environment.\nBypassing this will exposes users to arbitrary code breakage.",
+-  );
+-  exit(1);
+-}
+-
+ globalThis.__DEV__ = pkg.name.endsWith(".Devel");
+ if (__DEV__) {
+   pkg.sourcedir = "@sourcedir@";
+-- 
+2.47.0
+

@@ -1,0 +1,26 @@
+From 922d3dd36ac72b29ea21c4c728a922b43b19400e Mon Sep 17 00:00:00 2001
+From: Francesco Gazzetta <fgaz@fgaz.me>
+Date: Tue, 14 Jun 2022 17:55:43 +0200
+Subject: [PATCH] Another Qt5 fix
+
+---
+ qtsingleapplication/qtlocalpeer.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/qtsingleapplication/qtlocalpeer.cpp b/qtsingleapplication/qtlocalpeer.cpp
+index 4a84036..e6ccc72 100644
+--- a/qtsingleapplication/qtlocalpeer.cpp
++++ b/qtsingleapplication/qtlocalpeer.cpp
+@@ -41,6 +41,9 @@
+ 
+ #include "qtlocalpeer.h"
+ #include <QCoreApplication>
++#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
++#include <QDataStream>
++#endif
+ #include <QTime>
+ 
+ #if defined(Q_OS_WIN)
+-- 
+2.36.0
+

@@ -1,0 +1,46 @@
+diff --git a/kclvm/api/build.rs b/kclvm/api/build.rs
+index 7d1c39b7..0104bb6f 100644
+--- a/api/build.rs
++++ b/api/build.rs
+@@ -5,12 +5,12 @@ use prost_wkt_build::{FileDescriptorSet, Message};
+ /// According to the file kclvm/spec/gpyrpc/gpyrpc.proto, automatically generate
+ /// the corresponding rust source file to the directory src/model
+ fn main() {
+-    if env::var("PROTOC").is_err() {
+-        env::set_var(
+-            "PROTOC",
+-            protoc_bin_vendored::protoc_bin_path().unwrap().as_os_str(),
+-        );
+-    }
++    //if env::var("PROTOC").is_err() {
++    //    env::set_var(
++    //        "PROTOC",
++    //        protoc_bin_vendored::protoc_bin_path().unwrap().as_os_str(),
++    //    );
++    //}
+ 
+     let out = PathBuf::from(env::var("OUT_DIR").unwrap());
+     let descriptor_file = out.join("kclvm_service_descriptor.bin");
+diff --git a/kclvm/third-party/prost-wkt/wkt-types/build.rs b/kclvm/third-party/prost-wkt/wkt-types/build.rs
+index 620c759a..7f77e1b1 100644
+--- a/third-party/prost-wkt/wkt-types/build.rs
++++ b/third-party/prost-wkt/wkt-types/build.rs
+@@ -13,12 +13,12 @@ use regex::Regex;
+ 
+ fn main() {
+     //hack: set protoc_bin_vendored::protoc_bin_path() to PROTOC
+-    if env::var("PROTOC").is_err() {
+-        env::set_var(
+-            "PROTOC",
+-            protoc_bin_vendored::protoc_bin_path().unwrap().as_os_str(),
+-        );
+-    }
++    //if env::var("PROTOC").is_err() {
++    //    env::set_var(
++    //         "PROTOC",
++    //        protoc_bin_vendored::protoc_bin_path().unwrap().as_os_str(),
++    //    );
++    //}
+     let dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+     process_prost_pbtime(&dir);
+ 

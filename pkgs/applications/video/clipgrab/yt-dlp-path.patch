@@ -1,0 +1,86 @@
+--- a/main.cpp
++++ b/main.cpp
+@@ -91,14 +91,5 @@ int main(int argc, char *argv[])
+         w.show();
+     }
+ 
+-    QTimer::singleShot(0, [=] {
+-       cg->getUpdateInfo();
+-       QObject::connect(cg, &ClipGrab::updateInfoProcessed, [cg] {
+-           bool force = QSettings().value("forceYoutubeDlDownload", false).toBool();
+-           if (force) QSettings().setValue("forceYoutubeDlDownload", false);
+-           cg->downloadYoutubeDl(force);
+-       });
+-    });
+-
+     return app.exec();
+ }
+--- a/youtube_dl.cpp
++++ b/youtube_dl.cpp
+@@ -8,52 +8,16 @@ YoutubeDl::YoutubeDl()
+ QString YoutubeDl::path = QString();
+ 
+ QString YoutubeDl::find(bool force) {
+-    if (!force && !path.isEmpty()) return path;
+-
+-    // Prefer downloaded youtube-dl
+-    QString localPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "yt-dlp");
+-    QProcess* process = instance(localPath, QStringList() << "--version");
+-    process->start();
+-    process->waitForFinished();
+-    process->deleteLater();
+-    if (process->state() != QProcess::NotRunning) process->kill();
+-    if (process->exitCode() == QProcess::ExitStatus::NormalExit) {
+-        path = localPath;
+-        return path;
+-    }
+-
+-    // Try system-wide youtube-dlp installation
+-    QString globalPath = QStandardPaths::findExecutable("yt-dlp");
+-    process = instance(globalPath, QStringList() << "--version");
+-    process->start();
+-    process->waitForFinished();
+-    process->deleteLater();
+-    if (process->state() != QProcess::NotRunning) process->kill();
+-    if (process->exitCode() == QProcess::ExitStatus::NormalExit) {
+-        path = globalPath;
+-        return path;
+-    }
+-
+-    return "";
++    // We supply yt-dlp from nixpkgs, so the downloading
++    // machinery is not needed anymore.
++    (void)force;
++    return path;
+ }
+ 
+ QProcess* YoutubeDl::instance(QStringList arguments) {
+-    return instance(find(), arguments);
+-}
+-
+-QProcess* YoutubeDl::instance(QString path, QStringList arguments) {
+     QProcess *process = new QProcess();
+ 
+-    QString execPath = QCoreApplication::applicationDirPath();
+-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+-    env.insert("PATH", execPath + ":" + env.value("PATH"));
+-    process->setEnvironment(env.toStringList());
+-
+-    #if defined Q_OS_WIN
+-        process->setProgram(execPath + "/python/python.exe");
+-    #else
+-        process->setProgram(QStandardPaths::findExecutable("python3"));
+-    #endif
++    process->setProgram(path);
+ 
+     QSettings settings;
+     QStringList proxyArguments;
+@@ -81,7 +45,7 @@ QProcess* YoutubeDl::instance(QString path, QStringList arguments) {
+         networkArguments << "--force-ipv4";
+     }
+ 
+-    process->setArguments(QStringList() << path << arguments << proxyArguments << networkArguments);
++    process->setArguments(QStringList() << arguments << proxyArguments << networkArguments);
+     return process;
+ }
+ 

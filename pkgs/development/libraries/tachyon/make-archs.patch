@@ -1,0 +1,37 @@
+diff --git a/unix/Make-arch b/unix/Make-arch
+index 08afb85..dbeb691 100644
+--- a/unix/Make-arch
++++ b/unix/Make-arch
+@@ -920,6 +920,15 @@ macosx:
+ 	"RANLIB = ranlib" \
+ 	"LIBS = -L. -ltachyon $(MISCLIB)"
+ 
++macosx-64:
++	$(MAKE) all \
++	"ARCH = macosx" \
++	"CFLAGS = -Os -m64 -ffast-math -DBsd $(MISCFLAGS)" \
++	"ARFLAGS = r" \
++	"STRIP = strip" \
++	"RANLIB = ranlib" \
++	"LIBS = -L. -ltachyon $(MISCLIB)"
++
+ macosx-thr:
+ 	$(MAKE) all \
+ 	"ARCH = macosx-thr" \
+@@ -1209,6 +1218,16 @@ linux-thr:
+ 	"RANLIB = ranlib" \
+ 	"LIBS = -L. -ltachyon $(MISCLIB) -lm -lpthread"
+ 
++# Linux Arm using gcc
++linux-arm:
++	$(MAKE) all \
++	"ARCH = linux-arm" \
++	"CFLAGS = -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux $(MISCFLAGS)" \
++	"ARFLAGS = r" \
++	"STRIP = strip" \
++	"RANLIB = ranlib" \
++	"LIBS = -L. -ltachyon $(MISCLIB) -lm -lpthread"
++
+ # Linux x86 using gcc, threads, and OpenGL
+ linux-thr-ogl:
+ 	$(MAKE) all \
