@@ -16,17 +16,17 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "8.1.3";
+    version = "8.3.2";
 
     src = fetchurl (
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
+          sha256 = "sha256-fyxk7FiBhTRTy8f5Wx6Rp0MPX45O5Q05ZS17Krp05P0=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
+          sha256 = "sha256-dBA/TlTwG+9eRY5QdqVw0cghnXPRNCUfs9QoaNFFLB0=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
@@ -42,7 +42,7 @@ let
 
     installPhase = ''
       # replace dangling symlinks which are not copied into fhs with actually files
-      rm lib/*.so*
+      mkdir lib
       for file in var/www/onlyoffice/documentserver/server/FileConverter/bin/*.so* ; do
         ln -rs "$file" lib/$(basename "$file")
       done
@@ -59,6 +59,11 @@ let
 
       # required for bwrap --bind
       mkdir -p var/lib/onlyoffice/ var/www/onlyoffice/documentserver/fonts/
+
+      # see usr/bin/documentserver-flush-cache.sh
+      cp var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js.tpl var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
+      HASH=$(basename $out | cut -d '-' -f 1)
+      sed -i "s/{{HASH_POSTFIX}}/$HASH/g" var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
 
       mv * $out/
     '';
