@@ -34,6 +34,7 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
+  mopidy,
 }:
 
 let
@@ -282,13 +283,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    # use numbered releases rather than gstreamer-* releases
-    # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
-    extraArgs = [
-      "--version-regex"
-      "([0-9.]+)"
-    ];
+  passthru = {
+    tests = {
+      # Applies patches.
+      # TODO: remove with 0.14
+      inherit mopidy;
+    };
+
+    updateScript = nix-update-script {
+      # use numbered releases rather than gstreamer-* releases
+      # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
   };
 
   meta = with lib; {
