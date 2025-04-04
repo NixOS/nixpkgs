@@ -102,7 +102,7 @@ in
     }) cfg.servedNetworks;
 
     systemd.tmpfiles.rules = [
-      "a+ /var/lib/zerotier-one - - - - u:zeronsd:x"
+      "a+ /var/lib/zerotier-one - - - - mask::x,u:zeronsd:x"
       "a+ /var/lib/zerotier-one/authtoken.secret - - - - mask::r,u:zeronsd:r"
     ];
 
