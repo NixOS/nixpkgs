@@ -112,6 +112,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   guiSupport ? true,
+  gst-plugins-bad,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -410,6 +411,18 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # fails 20 out of 58 tests, expensive
 
   passthru = {
+    tests = {
+      full = gst-plugins-bad.override {
+        enableZbar = true;
+        faacSupport = true;
+        opencvSupport = true;
+      };
+
+      lgplOnly = gst-plugins-bad.override {
+        enableGplPlugins = false;
+      };
+    };
+
     updateScript = directoryListingUpdater { };
   };
 
