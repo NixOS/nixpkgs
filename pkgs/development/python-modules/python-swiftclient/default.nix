@@ -19,7 +19,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_swiftclient";
+    inherit version;
     hash = "sha256-r9dXV1PY5JYXrcsRVQGH/QsSD82Bnx54LAtTjy0JN3M=";
   };
 
