@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "tool-mklittlefs",
+  "version": "3.2.0",
+  "spec": {
+    "owner": "tasmota",
+    "id": 16072,
+    "name": "tool-mklittlefs",
+    "requirements": null,
+    "uri": null
+  }
+}
