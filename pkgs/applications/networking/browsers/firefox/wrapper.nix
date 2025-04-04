@@ -49,7 +49,7 @@ let
       wmClass ? applicationName,
       nativeMessagingHosts ? [ ],
       pkcs11Modules ? [ ],
-      useGlvnd ? true,
+      useGlvnd ? (!isDarwin),
       cfg ? config.${applicationName} or { },
 
       ## Following options are needed for extra prefs & policies
@@ -109,13 +109,13 @@ let
             zlib
           ]
         )
-        ++ lib.optional (config.pulseaudio or true) libpulseaudio
+        ++ lib.optional (config.pulseaudio or (!isDarwin)) libpulseaudio
         ++ lib.optional alsaSupport alsa-lib
         ++ lib.optional sndioSupport sndio
         ++ lib.optional jackSupport libjack2
         ++ lib.optional smartcardSupport opensc
         ++ pkcs11Modules
-        ++ gtk_modules;
+        ++ lib.optionals (!isDarwin) gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
@@ -289,7 +289,7 @@ let
         lndir
         jq
       ];
-      buildInputs = [ browser.gtk3 ];
+      buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
 
       makeWrapperArgs =
         [
@@ -297,11 +297,6 @@ let
           "LD_LIBRARY_PATH"
           ":"
           "${finalAttrs.libs}"
-
-          "--suffix"
-          "GTK_PATH"
-          ":"
-          "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
 
           "--suffix"
           "PATH"
@@ -319,6 +314,12 @@ let
           "--set"
           "MOZ_ALLOW_DOWNGRADE"
           "1"
+        ]
+        ++ lib.optionals (!isDarwin) [
+          "--suffix"
+          "GTK_PATH"
+          ":"
+          "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
 
           "--suffix"
           "XDG_DATA_DIRS"
@@ -457,8 +458,11 @@ let
             oldExe="$executablePrefix/.${applicationName}"-old
             mv "$executablePath" "$oldExe"
           fi
-
+        ''
+        + lib.optionalString (!isDarwin) ''
           appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+        ''
+        + ''
           concatTo makeWrapperArgs oldWrapperArgs
 
           makeWrapper "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
