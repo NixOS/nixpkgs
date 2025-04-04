@@ -24,32 +24,24 @@
   glycin-loaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "authenticator";
-  version = "4.5.0";
+  version = "4.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
-    rev = version;
-    hash = "sha256-g4+ntBuAEH9sj61CiS5t95nMfCgaWJTgiwRXtwrUTs0=";
+    tag = finalAttrs.version;
+    hash = "sha256-UvHIVUed4rxmjliaZ7jnwCjiHyvUDihoJyG3G+fYtow=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-XNAC1eA+11gAvMRu95huRM+YHdsrg5Sqpzb6F3Rgu5U=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-iOIGm3egVtVM6Eb3W5/ys9nQV5so0dnv2ZODjQwrVyw=";
   };
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
+  strictDeps = true;
 
   nativeBuildInputs = [
     appstream-glib
@@ -81,6 +73,15 @@ stdenv.mkDerivation rec {
     zbar
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
+
   meta = {
     description = "Two-factor authentication code generator for GNOME";
     mainProgram = "authenticator";
@@ -89,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ austinbutler ];
     platforms = lib.platforms.linux;
   };
-}
+})
