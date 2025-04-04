@@ -4,7 +4,6 @@
   fetchFromGitHub,
   semgrep-core,
   buildPythonPackage,
-  pythonPackages,
 
   pytestCheckHook,
   git,
@@ -12,27 +11,32 @@
   # python packages
   attrs,
   boltons,
-  colorama,
   click,
   click-option-group,
+  colorama,
+  defusedxml,
+  flaky,
   glom,
+  jsonschema,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-instrumentation-requests,
+  opentelemetry-sdk,
+  packaging,
+  peewee,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-snapshot,
+  python-lsp-jsonrpc,
   requests,
   rich,
   ruamel-yaml,
-  tqdm,
-  packaging,
-  jsonschema,
-  wcmatch,
-  peewee,
-  defusedxml,
-  urllib3,
-  typing-extensions,
-  python-lsp-jsonrpc,
   tomli,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-instrumentation-requests,
+  tqdm,
+  types-freezegun,
+  typing-extensions,
+  urllib3,
+  wcmatch,
 }:
 
 # testing locally post build:
@@ -106,18 +110,15 @@ buildPythonPackage rec {
 
   doCheck = true;
 
-  nativeCheckInputs =
-    [
-      git
-      pytestCheckHook
-    ]
-    ++ (with pythonPackages; [
-      flaky
-      pytest-snapshot
-      pytest-mock
-      pytest-freezegun
-      types-freezegun
-    ]);
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+    flaky
+    pytest-snapshot
+    pytest-mock
+    pytest-freezegun
+    types-freezegun
+  ];
 
   disabledTestPaths = [
     "tests/default/e2e"
