@@ -16,13 +16,13 @@
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = pname;
+    repo = "squashfuse";
     rev = version;
-    sha256 = "sha256-76PQB+6ls/RCjEP8Z4DEtX0xemN3srCsLM7DsDqiTVA=";
+    sha256 = "sha256-d2mc6bIlprnVV5yCN7WxrE91ZMTSaJtpR0UVEROoYJQ=";
   };
 
   nativeBuildInputs = [

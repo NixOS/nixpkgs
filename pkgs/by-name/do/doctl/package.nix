@@ -1,8 +1,15 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
+}:
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.122.0";
+  version = "1.124.0";
 
   vendorHash = null;
 
@@ -10,12 +17,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/doctl" ];
 
-  ldflags = let t = "github.com/digitalocean/doctl"; in [
-    "-X ${t}.Major=${lib.versions.major version}"
-    "-X ${t}.Minor=${lib.versions.minor version}"
-    "-X ${t}.Patch=${lib.versions.patch version}"
-    "-X ${t}.Label=release"
-  ];
+  ldflags =
+    let
+      t = "github.com/digitalocean/doctl";
+    in
+    [
+      "-X ${t}.Major=${lib.versions.major version}"
+      "-X ${t}.Minor=${lib.versions.minor version}"
+      "-X ${t}.Patch=${lib.versions.patch version}"
+      "-X ${t}.Label=release"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +42,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
-    sha256 = "sha256-l5UfvMTexoGhX2CWBZlO1ibM+cULdhRdZ7UeH0jgC7E=";
+    sha256 = "sha256-B3qozldNmCYLCuBoWMHycf9gNKbvUvPHK2CDOvMYEt8=";
   };
 
   meta = with lib; {

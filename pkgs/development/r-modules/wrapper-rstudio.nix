@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   runCommand,
   R,
   rstudio,
@@ -54,7 +56,13 @@ runCommand (rstudio.name + "-wrapper")
         ''
       else
         ''
-          ln -s ${rstudio}/share $out
+          ${lib.optionalString stdenv.hostPlatform.isLinux ''
+            # symlink files from unwrapped rstudio so that the desktop file and the icons
+            # are also installed when using the wrapped version
+            # TODO: figure out how to handle darwin .app structures
+            ln -s ${rstudio}/share $out
+          ''}
+
           makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
             --set R_PROFILE_USER $out/$fixLibsR
         ''

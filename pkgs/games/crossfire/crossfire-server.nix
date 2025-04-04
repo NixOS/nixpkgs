@@ -17,7 +17,7 @@
   arch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-server";
   version = rev;
 

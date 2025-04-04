@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       desktopName = "ÁNYK";
       name = "anyk";
       exec = "anyk";

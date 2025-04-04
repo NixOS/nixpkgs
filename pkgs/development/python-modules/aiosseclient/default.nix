@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiosseclient";
-  version = "0.1.3";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ebraminio";
     repo = "aiosseclient";
-    rev = version;
-    hash = "sha256-T97HmO53w1zNpASPU+LRcnqtnQVqPWtlOXycpBw4WmY=";
+    tag = version;
+    hash = "sha256-ynWqRQsCuog8myNleJDdp+omyujmNB1Ys7O6gU2AaUc=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Server Side Events (SSE) client";
     homepage = "https://github.com/ebraminio/aiosseclient";
-    changelog = "https://github.com/ebraminio/aiosseclient/releases/tag/${version}";
+    changelog = "https://github.com/ebraminio/aiosseclient/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -22,7 +22,7 @@ let
                 buildPlatform = lib.systems.elaborate buildPlatform;
                 flutterVersion = version;
                 version = engineVersion;
-                url = "https://github.com/flutter/engine.git@${engineVersion}";
+                url = "https://github.com/flutter/flutter.git@${engineVersion}";
                 hashes."${buildPlatform}"."${targetPlatform}" = lib.fakeSha256;
               })
             systemPlatforms)

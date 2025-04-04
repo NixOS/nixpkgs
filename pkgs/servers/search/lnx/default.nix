@@ -21,12 +21,10 @@ rustPlatform.buildRustPackage {
     rev = "2cb80f344c558bfe37f21ccfb83265bf351419d9";
     sha256 = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
   };
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "compose-0.1.0" = "sha256-zcniGI3wa+gI3jFTDqHcesX+6hAtNEbW81ABPUcFTXk=";
-    };
-  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9fro1Dx7P+P9NTsg0gtMfr0s4TEpkZA31EFAnObiNFo=";
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     DiskArbitration
     Foundation

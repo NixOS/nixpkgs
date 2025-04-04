@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "pytz" ];
+
   dependencies = [
     iso8601
     pytz

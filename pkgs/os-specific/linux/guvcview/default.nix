@@ -14,7 +14,7 @@
   alsa-lib,
   gsl,
   libpng,
-  sfml,
+  sfml_2,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio ? null,
   useQt ? false,
@@ -28,12 +28,12 @@
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.1.0";
   pname = "guvcview";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${finalAttrs.version}.tar.bz2";
     hash = "sha256-PZPkyfq40aepveGm278E1s+dNHwTS1EotFhqHZC2PPs=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       udev
       gsl
       libpng
-      sfml
+      sfml_2
     ]
     ++ lib.optionals (pulseaudioSupport) [ libpulseaudio ]
     ++ lib.optionals (useGtk) [ gtk3 ]
@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (useGtk) [ "--enable-gtk3" ]
     ++ lib.optionals (useQt) [ "--enable-qt5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface for devices supported by the linux UVC driver";
     mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
-    maintainers = [ maintainers.coconnor ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.coconnor ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

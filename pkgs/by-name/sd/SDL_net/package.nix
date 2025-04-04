@@ -1,20 +1,23 @@
 {
   lib,
   SDL,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   stdenv,
+  unstableGitUpdater,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_net";
-  version = "1.2.8";
+  version = "1.2.8-unstable-2024-04-23";
 
-  src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_net/release/SDL_net-${finalAttrs.version}.tar.gz";
-    hash = "sha256-X0p6i7iE95PCeKw/NxO+QZgMXu3M7P8CYEETR3FPrLQ=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL_net";
+    rev = "0043be2e559f8d562d04bf62d6e3f4162ed8edad";
+    hash = "sha256-/W1Mq6hzJNNwpcx+VUT4DRGP3bE06GGMbYDGHBc4XlQ=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "release-1.*";
+    tagPrefix = "release-";
+    branch = "SDL-1.2";
+  };
 
   meta = {
     homepage = "https://github.com/libsdl-org/SDL_net";

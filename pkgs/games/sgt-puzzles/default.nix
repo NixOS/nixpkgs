@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20250216.b99f107";
+  version = "20250303.7da4641";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-TErU482qrpPFWq//5RuCIpl6RpHU+MdckRolSDAS+xk=";
+    hash = "sha256-fwphR47zUV+H+Avjco0Dlb94TeH+s6v81MU/H+mbEAk=";
   };
 
   sgt-puzzles-menu = fetchurl {

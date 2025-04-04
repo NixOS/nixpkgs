@@ -166,7 +166,7 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
     [ nasm ]

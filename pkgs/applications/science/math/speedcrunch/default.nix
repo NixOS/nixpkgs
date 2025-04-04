@@ -42,7 +42,6 @@ mkDerivation rec {
       full keyboard-friendly and more than 15 built-in math function.
     '';
     maintainers = with maintainers; [
-      gebner
       j0hax
     ];
     inherit (qtbase.meta) platforms;

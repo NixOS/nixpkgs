@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 

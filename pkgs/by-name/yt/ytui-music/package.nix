@@ -8,7 +8,7 @@
   stdenv,
   darwin,
   mpv,
-  youtube-dl,
+  yt-dlp,
   makeBinaryWrapper,
 }:
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/ytui_music \
-      --prefix PATH : ${lib.makeBinPath [ youtube-dl ]}
+      --prefix PATH : ${lib.makeBinPath [ yt-dlp ]}
   '';
 
   doInstallCheck = true;

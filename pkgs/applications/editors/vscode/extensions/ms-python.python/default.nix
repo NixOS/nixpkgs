@@ -8,21 +8,15 @@
   # Defaults to `false` as we expect it to be project specific most of the time.
   pythonUseFixed ? false,
   # For updateScript
-  writeScript,
-  bash,
-  curl,
-  coreutils,
-  gnused,
-  jq,
-  nix,
+  vscode-extensions-update-script,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2025.1.2025021102";
-    hash = "sha256-qXQrBEKzZthZu1fdnRJXjryyHjpcxJA4c5LrhOI3deM=";
+    version = "2025.3.2025031001";
+    hash = "sha256-uYz0WgFqbLohCEmT8ewYgvlFrVLuZr9OAiKnrbNup7U=";
   };
 
   buildInputs = [ icu ];
@@ -51,35 +45,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
         --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
     '';
 
-  passthru.updateScript = writeScript "update" ''
-    #! ${bash}/bin/bash
-
-    set -eu -o pipefail
-
-    export PATH=${
-      lib.makeBinPath [
-        curl
-        coreutils
-        gnused
-        jq
-        nix
-      ]
-    }
-
-    api=$(curl -s 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
-      -H 'accept: application/json;api-version=3.0-preview.1' \
-      -H 'content-type: application/json' \
-      --data-raw '{"filters":[{"criteria":[{"filterType":7,"value":"${mktplcRef.publisher}.${mktplcRef.name}"}]}],"flags":16}')
-    # Find the latest version compatible with stable vscode version
-    version=$(echo $api | jq -r '.results[0].extensions[0].versions | map(select(has("properties"))) | map(select(.properties | map(select(.key == "Microsoft.VisualStudio.Code.Engine")) | .[0].value | test("\\^[0-9.]+$"))) | .[0].version')
-
-    if [[ $version != ${mktplcRef.version} ]]; then
-      tmp=$(mktemp)
-      curl -sLo $tmp $(echo ${(import ../mktplcExtRefToFetchArgs.nix mktplcRef).url} | sed "s|${mktplcRef.version}|$version|")
-      hash=$(nix hash file --type sha256 --base32 --sri $tmp)
-      sed -i -e "s|${mktplcRef.hash}|$hash|" -e "s|${mktplcRef.version}|$version|" pkgs/applications/editors/vscode/extensions/ms-python.python/default.nix
-    fi
-  '';
+  passthru.updateScript = vscode-extensions-update-script { };
 
   meta = {
     description = "Visual Studio Code extension with rich support for the Python language";

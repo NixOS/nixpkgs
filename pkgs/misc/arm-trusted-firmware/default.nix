@@ -65,10 +65,6 @@ let
         # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
         rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
 
-        # Some platforms like sun50i_a64 have ENABLE_LTO := 1, which requires $(ARCH)-ld/cc-id == "gnu-gcc"
-        aarch64-cc-id = "gnu-gcc";
-        aarch64-ld-id = "gnu-gcc";
-
         buildInputs = [ openssl ];
 
         makeFlags =
@@ -77,6 +73,8 @@ let
             "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
             "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
             # Make the new toolchain guessing (from 2.11+) happy
+            "CC=${stdenv.cc.targetPrefix}cc"
+            "LD=${stdenv.cc.targetPrefix}cc"
             "AS=${stdenv.cc.targetPrefix}cc"
             "OC=${stdenv.cc.targetPrefix}objcopy"
             "OD=${stdenv.cc.targetPrefix}objdump"
@@ -98,9 +96,6 @@ let
         hardeningDisable = [ "all" ];
         dontStrip = true;
 
-        # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
-        enableParallelBuilding = false;
-
         meta =
           with lib;
           {
@@ -120,7 +115,7 @@ in
 {
   inherit buildArmTrustedFirmware;
 
-  armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+  armTrustedFirmwareTools = buildArmTrustedFirmware {
     # Normally, arm-trusted-firmware builds the build tools for buildPlatform
     # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
     # for the hostPlatform here, we trick it by overriding the HOSTCC setting

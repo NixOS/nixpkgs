@@ -14,18 +14,20 @@
   sdl3,
   stdenv,
   testers,
+  libX11,
+  libGL,
   testSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.30.52";
+  version = "2.32.52";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-pdY+yrLWIjMTjmKdYvX4DjzXy2cKaw6P90BPu8K163k";
+    hash = "sha256-adtFcBFclfub//KGpxqObuTIZbh9r4k/jdJEnP1Hzpw=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3
+    libX11
   ];
+
+  checkInputs = [ libGL ];
 
   outputs = [
     "out"
@@ -44,21 +49,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputBin = "dev";
 
+  # SDL3 is dlopened at runtime, leave it in runpath
+  dontPatchELF = true;
+
   cmakeFlags = [
     (lib.cmakeBool "SDL2COMPAT_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3 ]))
   ];
+
+  # skip timing-based tests as those are flaky
+  env.SDL_TESTS_QUICK = 1;
 
   doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  postFixup =
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        install_name_tool -add_rpath ${lib.makeLibraryPath [ sdl3 ]} $out/lib/libSDL2.dylib
-      ''
-    else
-      ''
-        patchelf --add-rpath ${lib.makeLibraryPath [ sdl3 ]} $out/lib/libSDL2.so
-      '';
+  patches = [ ./find-headers.patch ];
+  setupHook = ./setup-hook.sh;
+
+  postFixup = ''
+    # allow as a drop in replacement for SDL2
+    # Can be removed after treewide switch from pkg-config to pkgconf
+    ln -s $dev/lib/pkgconfig/sdl2_compat.pc $dev/lib/pkgconfig/sdl2.pc
+  '';
 
   passthru = {
     tests =
@@ -92,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/sdl2-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ nadiaholmquist ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "sdl2_compat" ];
   };
 })

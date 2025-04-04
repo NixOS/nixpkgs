@@ -525,7 +525,7 @@
     },
     "libpq": {
       "attrPath": [
-        "postgresql"
+        "libpq"
       ]
     },
     "libpulse": {

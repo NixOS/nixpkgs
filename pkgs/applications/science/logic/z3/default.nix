@@ -153,6 +153,10 @@ let
   fixupPatches = dir: map (patch: replaceVars patch { inherit dir; });
 in
 {
+  z3_4_14 = common {
+    version = "4.14.1";
+    sha256 = "sha256-pTsDzf6Frk4mYAgF81wlR5Kb1x56joFggO5Fa3G2s70=";
+  };
   z3_4_13 = common {
     version = "4.13.4";
     sha256 = "sha256-8hWXCr6IuNVKkOegEmWooo5jkdmln9nU7wI8T882BSE=";

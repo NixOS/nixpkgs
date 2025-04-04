@@ -8,14 +8,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libvdwxc";
   # Stable version has non-working MPI detection.
   version = "unstable-24.02.2020";
 
   src = fetchFromGitLab {
     owner = "libvdwxc";
-    repo = pname;
+    repo = "libvdwxc";
     rev = "92f4910c6ac88e111db2fb3a518089d0510c53b0";
     sha256 = "1c7pjrvifncbdyngs2bv185imxbcbq64nka8gshhp8n2ns6fids6";
   };

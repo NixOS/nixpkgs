@@ -22,7 +22,7 @@ mkCoqDerivation rec {
     lib.switch coq.coq-version [
       {
         case = range "8.13" "8.20";
-        out = "4.11.0";
+        out = "4.11.1";
       }
       {
         case = range "8.12" "8.19";
@@ -57,6 +57,7 @@ mkCoqDerivation rec {
         out = "3.3.0";
       }
     ] null;
+  release."4.11.1".sha256 = "sha256-QWZvU468rOhK796xCCEawW6rhCRTPnE0iLll9ynKflo=";
   release."4.11.0".sha256 = "sha256-vPwa4zSjyvxHLGDoNaBnHV2pb77dnQFbC50BL80fcvE=";
   release."4.10.0".sha256 = "sha256-MZJVoKGLXjDabdv9BuUSK1L9z1cubzC9cqVuWevKIXQ=";
   release."4.9.0".sha256 = "sha256-+5NppyQahcc1idGu/U3B+EIWuZz2L3/oY7dIJR6pitE=";

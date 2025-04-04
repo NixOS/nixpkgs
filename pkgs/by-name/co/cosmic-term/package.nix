@@ -1,30 +1,25 @@
 {
   lib,
-  cosmic-icons,
+  stdenv,
+  rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  just,
+  libcosmicAppHook,
   fontconfig,
   freetype,
-  just,
-  libglvnd,
   libinput,
-  libxkbcommon,
-  makeBinaryWrapper,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  vulkan-loader,
-  wayland,
-  xorg,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-sdeRkT6UcyBKIFnJZn3aGf8LZQimqVPqtXo7RtwUs5M=";
   };
 
@@ -33,31 +28,25 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-02-21";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   nativeBuildInputs = [
     just
     pkg-config
-    makeBinaryWrapper
+    libcosmicAppHook
   ];
 
   buildInputs = [
     fontconfig
     freetype
-    libglvnd
     libinput
-    libxkbcommon
-    vulkan-loader
-    wayland
-    xorg.libX11
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -68,30 +57,25 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       ahoneybun
       nyabinary
+      HeitorAugustoLN
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "cosmic-term";
   };
-}
+})

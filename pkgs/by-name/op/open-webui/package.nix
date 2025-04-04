@@ -4,22 +4,33 @@
   fetchFromGitHub,
   python312,
   nixosTests,
+  fetchurl,
 }:
 let
   pname = "open-webui";
-  version = "0.5.18";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-SFw5bCzMSBuzIzZmhA+ylXXkouZ+OSsMBfc7QG7OSLU=";
+    hash = "sha256-YCob6Tgnpdbt9QqnwakorXGlyaxy4wo2QCp4EMGHTrU=";
   };
 
-  frontend = buildNpmPackage {
+  frontend = buildNpmPackage rec {
     inherit pname version src;
 
-    npmDepsHash = "sha256-rEV68SizR7NyYsRzlndg/ulvr8BeiDq3MpiBmaCUn2M=";
+    # the backend for run-on-client-browser python execution
+    # must match lock file in open-webui
+    # TODO: should we automate this?
+    # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
+    pyodideVersion = "0.27.2";
+    pyodide = fetchurl {
+      hash = "sha256-sZ47IxPiL1e12rmpH3Zv2v6L2+1tz/kIrT4uYbng+Ec=";
+      url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
+    };
+
+    npmDepsHash = "sha256-lWVkZDlPDCmiNMj+7K47wSFwTKRJkS762uGtcBfx59s=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -31,6 +42,10 @@ let
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
     env.NODE_OPTIONS = "--max-old-space-size=8192";
+
+    preBuild = ''
+      tar xf ${pyodide} -C static/
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -89,6 +104,7 @@ python312.pkgs.buildPythonApplication rec {
       docx2txt
       duckduckgo-search
       einops
+      elasticsearch
       extract-msg
       fake-useragent
       fastapi
@@ -117,11 +133,23 @@ python312.pkgs.buildPythonApplication rec {
       opencv-python-headless
       openpyxl
       opensearch-py
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp
+      opentelemetry-instrumentation
+      opentelemetry-instrumentation-fastapi
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-redis
+      opentelemetry-instrumentation-requests
+      opentelemetry-instrumentation-logging
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-aiohttp-client
       pandas
       passlib
       peewee
       peewee-migrate
       pgvector
+      pillow
       playwright
       psutil
       psycopg2-binary
@@ -147,6 +175,7 @@ python312.pkgs.buildPythonApplication rec {
       requests
       restrictedpython
       sentence-transformers
+      sentencepiece
       soundfile
       tiktoken
       transformers
@@ -167,6 +196,7 @@ python312.pkgs.buildPythonApplication rec {
       inherit (nixosTests) open-webui;
     };
     updateScript = ./update.sh;
+    inherit frontend;
   };
 
   meta = {

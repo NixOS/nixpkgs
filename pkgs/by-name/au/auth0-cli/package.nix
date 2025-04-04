@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "auth0-cli";
-  version = "1.9.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
     tag = "v${version}";
-    hash = "sha256-ynB4N9XbApvs7XdHeY23eZrrwNZc9hENbE/60ZVuWt8=";
+    hash = "sha256-6JWruZahA3Stu89FGOH2vF6L4wi5CJmqPjJ6fcRkaMY=";
   };
 
-  vendorHash = "sha256-S/K65q6glfHZslns1A2zplefC1kGzd9OCNMdvH8CZGM=";
+  vendorHash = "sha256-mW7eu8Va8XyV4hD4qkM86LvQhLGWirU+L5UKNvgQIFo=";
 
   ldflags = [
     "-s"

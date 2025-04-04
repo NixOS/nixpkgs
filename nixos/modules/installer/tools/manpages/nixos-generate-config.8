@@ -13,6 +13,7 @@
 .Op Fl -root Ar root
 .Op Fl -dir Ar dir
 .Op Fl -flake
+.Op Fl -kernel Ar <lts|latest>
 .
 .
 .
@@ -65,6 +66,9 @@ If this option is given, write the configuration files to the directory
 instead of
 .Pa /etc/nixos Ns
 \&.
+.
+.It Fl -kernel Ar <lts|latest>
+Set the kernel in the generated configuration file.
 .
 .It Fl -force
 Overwrite

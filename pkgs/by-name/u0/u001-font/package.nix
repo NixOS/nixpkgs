@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "u001";
   version = "unstable-2016-08-01"; # date in the zip file, actual creation date unknown
 

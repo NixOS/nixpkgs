@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.6.1";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "codrsquad";
     repo = "setupmeta";
     tag = "v${version}";
-    hash = "sha256-L8RDfcAa2Zhr6huFt0AmNt0Qzea2xNtCX1BIULsiQgA=";
+    hash = "sha256-2SKiIkwfmXVOQBKBNUmw4SjiVpyLjIMpSHNA9IQxqwY=";
   };
 
   preBuild = ''

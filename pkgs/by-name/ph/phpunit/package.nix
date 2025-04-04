@@ -5,25 +5,30 @@
   php,
   phpunit,
   testers,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "12.0.5";
+  version = "12.0.10";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     tag = finalAttrs.version;
-    hash = "sha256-AlyDyYeLD7uA7FWEa8liic4xfb+7Entym2ziZoJmu+U=";
+    hash = "sha256-JFJauSTUOZzUbpvKx6IrD3QDum/rNa+5JZZsoThA4TM=";
   };
 
-  vendorHash = "sha256-BZzbPBevhL58cvxdYHbErQvOTe5DpGHteLn2nP8Jh10=";
+  vendorHash = "sha256-fjed7Zm/Iq1VS7eakvrvZs1Yy1t3it3p5U61FKUB2zI=";
 
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = phpunit; };
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";

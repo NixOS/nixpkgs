@@ -1,0 +1,12 @@
+diff --git a/docs/reference/libqmi-glib/meson.build b/docs/reference/libqmi-glib/meson.build
+index 2f5cfc3..14e1aea 100644
+--- a/docs/reference/libqmi-glib/meson.build
++++ b/docs/reference/libqmi-glib/meson.build
+@@ -57,6 +57,7 @@ sections_txt = custom_target(
+   capture: true,
+   command: [find_program('cat'), '@INPUT@'] + gen_sections,
+   depends: gen_sections_deps,
++  build_by_default: true,
+ )
+ 
+ version_xml = configure_file(

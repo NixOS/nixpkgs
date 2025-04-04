@@ -46,6 +46,7 @@ let
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     platforms = [
       "x86_64-darwin"
@@ -56,7 +57,7 @@ let
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "32.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "33.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -127,13 +128,6 @@ let
     vulkan-loader
   ];
 
-  # Fix read out of range on aarch64 16k pages builds
-  # https://github.com/NixOS/nixpkgs/pull/365364
-  # https://github.com/NixOS/nixpkgs/pull/380991
-  # Can likely be removed when v34.2.1 (or v32.3.0?) releases:
-  # https://github.com/electron/electron/pull/45571
-  needsAarch64PageSizeFix = lib.versionAtLeast version "34" && stdenv.hostPlatform.isAarch64;
-
   linux = finalAttrs: {
     buildInputs = [
       glib
@@ -151,31 +145,25 @@ let
     dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out/libexec/electron $out/bin
+      mkdir -p $out/libexec/electron
       unzip -d $out/libexec/electron $src
-      ln -s $out/libexec/electron/electron $out/bin
       chmod u-x $out/libexec/electron/*.so*
     '';
 
-    # We use null here to not cause unnecessary rebuilds.
-    dontWrapGApps = if needsAarch64PageSizeFix then true else null;
-    preFixup =
-      if needsAarch64PageSizeFix then
-        ''
-          wrapProgram "$out/libexec/electron/chrome_crashpad_handler" "''${gappsWrapperArgs[@]}"
-          wrapProgram "$out/libexec/electron/chrome-sandbox" "''${gappsWrapperArgs[@]}"
-          wrapProgram "$out/libexec/electron/electron" "''${gappsWrapperArgs[@]}" \
-            --add-flags "--js-flags=--no-decommit-pooled-pages"
-        ''
-      else
-        null;
+    # We don't want to wrap the contents of $out/libexec automatically
+    dontWrapGApps = true;
+
+    preFixup = ''
+      makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
+        "''${gappsWrapperArgs[@]}"
+    '';
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
-        $out/libexec/electron/.electron-wrapped \
-        $out/libexec/electron/.chrome_crashpad_handler-wrapped
+        $out/libexec/electron/electron \
+        $out/libexec/electron/chrome_crashpad_handler
 
       # patch libANGLE
       patchelf \

@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "borb.pdf" ];
 
   disabledTests = [
-    "test_code_files_are_small "
+    "test_code_files_are_small"
     "test_image_has_pdfobject_methods"
   ];
 

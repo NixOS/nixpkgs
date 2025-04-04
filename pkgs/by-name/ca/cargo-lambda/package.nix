@@ -8,23 +8,23 @@
   pkg-config,
   openssl,
   stdenv,
-  zig,
+  zig_0_13,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.6.3";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
     tag = "v${version}";
-    hash = "sha256-GiV5yjlzU4iU4BJ8Fq8I9uOchVCF2UGb+WLMMr7n8pc=";
+    hash = "sha256-1i/nBuO7B6GHWmaibO8+w9LNCWGV5HdCP2B3WQPT/7c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-JMYGcIli72pH5O8DXQb7++bvnIgBpyYykqRbddObaAI=";
+  cargoHash = "sha256-i11bDmzCvsv4jTBsjCdryM8rx6FBefUXh4mbiGhyLt4=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -48,10 +48,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig ]}
+    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+
+  cargoBuildFlags = [ "--features=skip-build-banner" ];
+  cargoCheckFlags = [ "--features=skip-build-banner" ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in darwin sandbox, first because of trying to listen to a port on

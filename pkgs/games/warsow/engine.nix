@@ -17,7 +17,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "warsow-engine";
   version = "2.1.0";
 

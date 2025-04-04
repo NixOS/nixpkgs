@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtorganizer-mkcal";
-  version = "0-unstable-2025-02-14";
+  version = "0-unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "dcaliste";
     repo = "qtorganizer-mkcal";
-    rev = "3090565d70ecdfaad2cba57d5a895fa69afd024a";
-    hash = "sha256-ZNAcqjkVf9efP+WWTDr2YFZT+eZdIJAfX45Gm0+Y81A=";
+    rev = "312412de3f810fbedc7c4f27bd33adb2c3fbe967";
+    hash = "sha256-uv2cEs84bM614vg5K+t4vyXas+1b5Jm39tfGSwWj6n0=";
   };
 
   postPatch = ''
@@ -51,11 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    (lib.cmakeBool "INSTALL_TESTS" false)
-  ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Flaky: https://github.com/dcaliste/qtorganizer-mkcal/issues/9
+  doCheck = false;
 
   preCheck =
     let

@@ -9,7 +9,6 @@
   manim,
   ffmpeg,
 
-  av,
   beautifulsoup4,
   click,
   click-default-group,
@@ -35,7 +34,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.4.2";
+  version = "5.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,7 +43,7 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     tag = "v${version}";
-    hash = "sha256-LUnHv6Yr4le7B0OjA9m8s7tCd2OvUsjX0YR+5dv+Bjg=";
+    hash = "sha256-TP+F4q/rnibU6kvAdfwDD++ITVTYAFgGoDng0p0SUIs=";
   };
 
   build-system = [
@@ -59,7 +58,6 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      av
       beautifulsoup4
       click
       click-default-group
@@ -90,7 +88,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim_slides" ];
 
   meta = {
-    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.tag}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
     license = lib.licenses.mit;

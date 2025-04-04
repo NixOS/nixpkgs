@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "senf";
   version = "1.5.0-unstable-2024-11-26";
 

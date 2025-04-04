@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.11.1";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-U7S4JQ92H0SYEpMsMw5inioO6ayQ1/NDA7vnvR4i7Mk=";
+    hash = "sha256-CawBLQstWLZ7AOmoOxsU7W7bZnnqvMmZacBC9CI/h+M=";
   };
 
   build-system = [
@@ -118,7 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/v${version}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

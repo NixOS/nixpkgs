@@ -62,13 +62,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-03-01";
+  version = "0-unstable-2025-03-29";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "ce977636f63c2cded3c2d26cce548efbb91312b2";
-    hash = "sha256-m+VWSuxXRdY2Pqs7akmtpzrGmFLCY/5WSD/5cQU8RU4=";
+    rev = "5d1c64dba9cf3e65f770370eb17f00ad4114edce";
+    hash = "sha256-0DuS2WfgWgnxh5qDc/XNL28XxXKnYPQW7F2m4OlANck=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -79,14 +79,7 @@ rustPlatform.buildRustPackage {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-O7M1NJRaUPyh1+i8Ab2vvCwHMLBSMfwgEkfFCuIA9TA=";
-
-  postPatch = ''
-    # Remap absolute path between modules to include SEMVER
-    substituteInPlace ../servo-0-unstable-*-vendor/servo_atoms-0.0.1/build.rs --replace-fail \
-      "../style/counter_style/predefined.rs" \
-      "../style-0.0.1/counter_style/predefined.rs"
-  '';
+  cargoHash = "sha256-m6lsXHf7SIgbIt8RyhUkJpd1/nJQMSNRS9uTJ6th9ng=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)

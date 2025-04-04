@@ -11,6 +11,7 @@
   git,
   cairo,
   libxcb,
+  xcb-imdkit,
   xcb-util-cursor,
   xcbutilkeysyms,
   xcbutil,
@@ -23,6 +24,7 @@
   check,
   glib,
   buildPackages,
+  pandoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
     bison
+    pandoc
   ];
   buildInputs = [
     libxkbcommon
@@ -64,6 +67,7 @@ stdenv.mkDerivation rec {
     check
     libstartup_notification
     libxcb
+    xcb-imdkit
     xcb-util-cursor
     xcbutilkeysyms
     xcbutil
@@ -71,6 +75,8 @@ stdenv.mkDerivation rec {
     xcbutilxrm
     which
   ];
+
+  mesonFlags = [ "-Dimdkit=true" ];
 
   doCheck = false;
 

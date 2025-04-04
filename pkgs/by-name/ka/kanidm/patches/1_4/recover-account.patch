@@ -19,7 +19,8 @@ index 420e72c6c..5c4353116 100644
  
      #[instrument(
          level = "info",
-         skip(self, eventid),
+-        skip(self, eventid),
++        skip(self, password, eventid),
          fields(uuid = ?eventid)
      )]
      pub(crate) async fn handle_admin_recover_account(

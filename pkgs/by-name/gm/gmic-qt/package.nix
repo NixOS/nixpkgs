@@ -50,13 +50,13 @@ assert lib.assertMsg (builtins.all (d: d != null)
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
-    owner = "c-koi";
+    owner = "GreycLab";
     repo = "gmic-qt";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-fM6dBxBC2b1/v+rfiP//QaAcTJmMtYPn4OUNwVqKhYk=";
+    hash = "sha256-1fav1O75HBC7ySBgybn4goLFkX6HFbwRHARncfbkaoM=";
   };
 
   nativeBuildInputs = [

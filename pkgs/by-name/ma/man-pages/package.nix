@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.12";
+  version = "6.13";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tstdZ+C7AKOz89G8s/4GwmsEW6Y5I+1655QSNQxeHLU=";
+    hash = "sha256-osigwu/oqXjOUc6ABGHrnokx8SzHukt/qjCCtpun8Sw=";
   };
 
   nativeInstallCheckInputs = [ man ];

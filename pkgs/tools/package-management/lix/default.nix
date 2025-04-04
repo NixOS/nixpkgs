@@ -3,59 +3,96 @@
   aws-sdk-cpp,
   boehmgc,
   callPackage,
+  fetchgit,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   Security,
+  newScope,
+  editline,
+  ncurses,
+  stdenv,
+  clangStdenv,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
   confDir ? "/etc",
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
+  makeLixScope =
+    {
+      lix-args,
+      nix-eval-jobs-args,
+    }:
+    let
+      # GCC 13.2 is known to miscompile Lix coroutines (introduced in 2.92).
+      lixStdenv = if lib.versionAtLeast lix-args.version "2.92" then clangStdenv else stdenv;
+    in
+    lib.makeScope newScope (
+      self:
+      lib.recurseIntoAttrs {
+        inherit
+          Security
+          storeDir
+          stateDir
+          confDir
+          ;
 
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    patches = (drv.patches or [ ]) ++ [
-      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-      ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-    ];
-  });
+        boehmgc =
+          # TODO: Why is this called `boehmgc-nix_2_3`?
+          let
+            boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
+          in
+          # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
+          if lib.versionOlder lix-args.version "2.91" then
+            boehmgc-nix_2_3.overrideAttrs (drv: {
+              patches = (drv.patches or [ ]) ++ [
+                # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+                ../nix/patches/boehmgc-coroutine-sp-fallback.patch
+              ];
+            })
+          else
+            boehmgc-nix_2_3;
 
-  aws-sdk-cpp-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
-      ];
-      customMemoryManagement = false;
-    }).overrideAttrs
-      {
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
-      };
+        aws-sdk-cpp =
+          (aws-sdk-cpp.override {
+            apis = [
+              "s3"
+              "transfer"
+            ];
+            customMemoryManagement = false;
+          }).overrideAttrs
+            {
+              # only a stripped down version is build which takes a lot less resources to build
+              requiredSystemFeatures = [ ];
+            };
 
-  # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-  needsBoehmgcPatches = version: lib.versionOlder version "2.91";
+        editline = editline.override {
+          inherit ncurses;
+          enableTermcap = true;
+        };
 
-  common =
-    args:
-    callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
-      inherit
-        Security
-        storeDir
-        stateDir
-        confDir
-        ;
-      boehmgc = if needsBoehmgcPatches args.version then boehmgc-nix else boehmgc-nix_2_3;
-      aws-sdk-cpp = aws-sdk-cpp-nix;
-    };
+        # NOTE: The `common-*.nix` helpers contain a top-level function which
+        # takes the Lix source to build and version information. We use the
+        # outer `callPackage` for that.
+        #
+        # That *returns* another function which takes the actual build
+        # dependencies, and that uses the new scope's `self.callPackage` so
+        # that `nix-eval-jobs` can be built against the correct `lix` version.
+        lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
+          stdenv = lixStdenv;
+        };
+
+        nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
+          stdenv = lixStdenv;
+        };
+      }
+    );
 in
 lib.makeExtensible (self: {
-  buildLix = common;
+  inherit makeLixScope;
 
-  lix_2_90 = (
-    common rec {
+  lix_2_90 = self.makeLixScope {
+    lix-args = rec {
       version = "2.90.0";
 
       src = fetchFromGitHub {
@@ -68,15 +105,24 @@ lib.makeExtensible (self: {
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
         inherit src;
-        allowGitDependencies = false;
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
       };
-    }
-  );
+    };
 
-  lix_2_91 = (
-    common rec {
+    nix-eval-jobs-args = {
+      version = "2.90.0";
+      src = fetchgit {
+        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
+        # https://git.lix.systems/lix-project/nix-eval-jobs/commits/branch/release-2.90
+        rev = "9c23772cf25e0d891bef70b7bcb7df36239672a5";
+        hash = "sha256-oT273pDmYzzI7ACAFUOcsxtT6y34V5KF7VBSqTza7j8=";
+      };
+    };
+  };
+
+  lix_2_91 = self.makeLixScope {
+    lix-args = rec {
       version = "2.91.1";
 
       src = fetchFromGitHub {
@@ -89,13 +135,72 @@ lib.makeExtensible (self: {
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
         inherit src;
-        allowGitDependencies = false;
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-U820gvcbQIBaFr2OWPidfFIDXycDFGgXX1NpWDDqENs=";
       };
-    }
-  );
+    };
 
-  latest = self.lix_2_91;
+    nix-eval-jobs-args = {
+      version = "2.91.0";
+      src = fetchgit {
+        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
+        # https://git.lix.systems/lix-project/nix-eval-jobs/commits/branch/release-2.91
+        rev = "1f98b0c016a6285f29ad278fa5cd82b8f470d66a";
+        hash = "sha256-ZJKOC/iLuO8qjPi9/ql69Vgh3NIu0tU6CSI0vbiCrKA=";
+      };
+    };
+  };
+
+  lix_2_92 = self.makeLixScope {
+    lix-args = rec {
+      version = "2.92.0";
+
+      src = fetchFromGitHub {
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-CCKIAE84dzkrnlxJCKFyffAxP3yfsOAbdvydUGqq24g=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        allowGitDependencies = false;
+        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+      };
+    };
+
+    nix-eval-jobs-args = rec {
+      version = "2.92.0";
+      src = fetchgit {
+        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
+        rev = version;
+        hash = "sha256-tPr61X9v/OMVt7VXOs1RRStciwN8gDGxEKx+h0/Fg48=";
+      };
+    };
+  };
+
+  latest = self.lix_2_92;
+
+  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
+  # See: https://git.lix.systems/lix-project/lix/issues/662
   stable = self.lix_2_91;
+
+  # Previously, `nix-eval-jobs` was not packaged here, so we export an
+  # attribute with the previously-expected structure for compatibility. This
+  # is also available (for now) as `pkgs.lixVersions`.
+  renamedDeprecatedLixVersions =
+    let
+      mkAlias =
+        version:
+        lib.warnOnInstantiate "'lixVersions.${version}' has been renamed to 'lixPackageSets.${version}.lix'"
+          self.${version}.lix;
+    in
+    lib.dontRecurseIntoAttrs {
+      lix_2_90 = mkAlias "lix_2_90";
+      lix_2_91 = mkAlias "lix_2_91";
+      # NOTE: Do not add new versions of Lix here.
+      stable = mkAlias "stable";
+      latest = mkAlias "latest";
+    };
 })

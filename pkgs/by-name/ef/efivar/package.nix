@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   popt,
   mandoc,

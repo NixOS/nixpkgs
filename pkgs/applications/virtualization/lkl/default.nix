@@ -13,7 +13,7 @@
   firewallSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lkl";
 
   # NOTE: pinned to the last known version that doesn't have a hang in cptofs.

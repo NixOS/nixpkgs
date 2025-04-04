@@ -11,13 +11,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "pilipalax";
-  version = "1.1.0-beta.5";
+  version = "1.1.2-beta";
 
   src = fetchFromGitHub {
     owner = "orz12";
     repo = "PiliPalaX";
-    tag = "${version}+180";
-    hash = "sha256-bKs0EZjJCJvtVOZYl3GqXPE2MxX7DRjMwtmFUcNgrOQ=";
+    tag = "${version}+187";
+    hash = "sha256-8GQtPYgeYM7yTw3i5H9REWfM5j3G0aQz3oHxz8i9p2Y=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

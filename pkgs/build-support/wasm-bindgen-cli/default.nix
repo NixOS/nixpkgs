@@ -17,7 +17,7 @@
   cargoDeps,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wasm-bindgen-cli";
 
   inherit version src cargoDeps;

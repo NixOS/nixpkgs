@@ -31,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     xxd
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
+  '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
+  };
+
   mesonFlags = [ "-Denable_avx512=true" ];
 
   outputs = [

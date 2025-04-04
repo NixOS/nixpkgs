@@ -1,29 +1,26 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
   fetchFromGitHub,
   cacert,
   yarn-berry,
-  nodejs,
   electron,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
   copyDesktopItems,
-  nix-update-script,
   commandLineArgs ? "",
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.0.1";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C8D0XCwIFWG+5WakAK+TmI4VVuIYJBSgkv5ynM2Ewkc=";
+    hash = "sha256-rTIUBlQemYOAT0NRS80FcZfEc1Q9jUmlMU5YW99z0QE=";
   };
 
   yarnOfflineCache = stdenvNoCC.mkDerivation {
@@ -36,30 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-    postConfigure =
-      let
-        supportedArchitectures = builtins.toJSON {
-          os = [
-            "darwin"
-            "linux"
-          ];
-          cpu = [
-            "x64"
-            "ia32"
-            "arm64"
-          ];
-          libc = [
-            "glibc"
-            "musl"
-          ];
-        };
-      in
-      ''
-        yarn config set enableTelemetry false
-        yarn config set enableGlobalCache false
-        yarn config set supportedArchitectures --json '${supportedArchitectures}'
-        yarn config set cacheFolder $out
-      '';
+    postConfigure = ''
+      yarn config set enableTelemetry false
+      yarn config set enableGlobalCache false
+      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
+      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
+      yarn config set cacheFolder $out
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -70,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-DrEkaXkbaY40uYH7niT10OFJH+PD7ip3A4OCwbKmtz8=";
+    outputHash = "sha256-GVIa8/rNdYTcPYqaRZp8VGKeh0IiNttXzJEVvCpCAQo=";
   };
 
   nativeBuildInputs = [
@@ -80,11 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    npm_config_build_from_source = "true";
-    npm_config_nodedir = nodejs;
-  };
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postConfigure = ''
     yarn config set enableTelemetry false
@@ -126,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/cherry-studio
     cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
-    makeWrapper "${lib.getExe electron}" $out/bin/cherry-studio \
+    makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
       --add-flags $out/lib/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
@@ -135,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Desktop client that supports for multiple LLM providers";
@@ -143,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nayeko ];
+    maintainers = with lib.maintainers; [ ];
     license = with lib.licenses; [
       asl20
       unfree

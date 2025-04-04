@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "slowsage";
-    repo = pname;
+    repo = "mdbook-pagetoc";
     rev = "v${version}";
     hash = "sha256-A8J3cKSA//NGIVK3uE43YH3ph9DHGFlg7uOo10j2Kh8=";
   };

@@ -22,6 +22,9 @@ buildGoModule rec {
     "-w"
   ];
 
+  # Tests are comparing output
+  doCheck = false;
+
   meta = with lib; {
     description = "Scrape domain names from SSL certificates of arbitrary hosts";
     homepage = "https://github.com/glebarez/cero";

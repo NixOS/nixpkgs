@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "1.1.0";
+  version = "1.1.1";
 
   pyproject = true;
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     tag = "v${version}";
-    hash = "sha256-o+rxEMxiw4BP1lTk0xTXjqXS2C9vuHBzE8F7ZEVHmIc=";
+    hash = "sha256-5uE6ANOxVCeV5GMDGG+0j5JY2t++jw+mZFFHGl+sTfw=";
   };
 
   build-system = [ setuptools ];

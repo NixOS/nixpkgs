@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "fiat";
   owner = "mit-plv";
   repo = "fiat";

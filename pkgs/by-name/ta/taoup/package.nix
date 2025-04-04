@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ruby, bash, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  bash,
+  ncurses,
+}:
 let
   rubyEnv = ruby.withPackages (ps: with ps; [ ansi ]);
 in
@@ -13,7 +20,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-9J46fKyeSZW71r67R8y9KVPeCH8fn27hOk/XpusqGmk=";
   };
 
-  buildInputs = [ rubyEnv bash ncurses ];
+  buildInputs = [
+    rubyEnv
+    bash
+    ncurses
+  ];
 
   patches = [
     # Pre-create a cache within this derivation

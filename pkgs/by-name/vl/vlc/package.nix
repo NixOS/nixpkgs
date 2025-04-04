@@ -1,7 +1,5 @@
 {
   lib,
-  SDL,
-  SDL_image,
   a52dec,
   alsa-lib,
   autoreconfHook,
@@ -12,11 +10,7 @@
   fetchpatch,
   fetchurl,
   # Please unpin FFmpeg on the next upstream release.
-  # Currently FFmpeg is pinned to 4.x because VAAPI acceleration is broken when
-  # building with newer versions:
-  # https://code.videolan.org/videolan/vlc/-/issues/26772
-  # This is intentional by upstream but VLC 4.0 will support newer FFmpeg.
-  ffmpeg_4,
+  ffmpeg_6,
   flac,
   fluidsynth,
   freefont_ttf,
@@ -81,7 +75,7 @@
   srt,
   stdenv,
   systemd,
-  taglib,
+  taglib_1,
   unzip,
   wayland,
   wayland-protocols,
@@ -136,14 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
   # needing them
   buildInputs =
     [
-      SDL
-      SDL_image
       a52dec
       alsa-lib
       avahi
       dbus
       faad2
-      ffmpeg_4
+      ffmpeg_6
       flac
       fluidsynth
       fribidi
@@ -194,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
       speex
       srt
       systemd
-      taglib
+      taglib_1
       xcbutilkeysyms
       wayland-scanner # only required for configure script
       zlib
@@ -246,6 +238,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       hash = "sha256-qs3gY1ksCZlf931TSZyMuT2JD0sqrmcRCZwL+wVG0U8=";
+    })
+    # support VAAPI hardware video decoding with newer ffmpeg
+    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/6606 (will be included in the next release)
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/-/commit/ba5dc03aecc1d96f81b76838f845ebde7348cf62.diff";
+      hash = "sha256-s6AI9O0V3AKOyw9LbQ9CgjaCi5m5+nLacKNLl5ZLC6Q=";
     })
   ];
 

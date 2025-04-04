@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracelinks";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "flox";
     repo = "tracelinks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GftF2s2eRrkfzw2NpzTZ6Uhehcg2tMSOcsjHJssQJzU=";
+    hash = "sha256-sGC1TdcugitMgafnCZGpwYPqWioX+fRl2ZqDZE9levY=";
   };
 
   makeFlags = [

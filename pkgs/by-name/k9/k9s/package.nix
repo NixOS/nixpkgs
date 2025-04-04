@@ -1,14 +1,23 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, nix-update-script, k9s }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  k9s,
+}:
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.40.5";
+  version = "0.40.10";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     rev = "v${version}";
-    hash = "sha256-HntKFQnuPJ0i3yd7ItJNROs9decU6lMIxR2ptrc9yRc=";
+    hash = "sha256-QGymGiTHT3Qnf9l/hhE3lgJ7TBBjKMe2k1aJ32khU0E=";
   };
 
   ldflags = [
@@ -23,7 +32,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-O62yKTOW0ZyHyP/PA6cMWHdKjnvaPqm/bXAPtJbhxeY=";
+  vendorHash = "sha256-jAxrOdQcMIH7uECKGuuiTZlyV4aJ/a76IuKGouWg/r4=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -59,6 +68,11 @@ buildGoModule rec {
     changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "k9s";
-    maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
+    maintainers = with maintainers; [
+      Gonzih
+      markus1189
+      bryanasdev000
+      qjoly
+    ];
   };
 }

@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.7.2";
+  version = "1.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
-    hash = "sha256-65qNalbcg9MR5QhUJeutp3Y2Uox7cKX+ffo21LACeXE=";
+    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
   };
 
   build-system = [ hatchling ];
@@ -93,7 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${version}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

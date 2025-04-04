@@ -11,7 +11,6 @@
   installShellFiles,
   pango,
   freetype,
-  harfbuzz,
   cairo,
   libxml2,
   bzip2,
@@ -25,7 +24,6 @@
   python3Packages,
   gnome,
   vala,
-  writeShellScript,
   shared-mime-info,
   # Requires building a cdylib.
   withPixbufLoader ? !stdenv.hostPlatform.isStatic,
@@ -71,9 +69,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
+      # merged in 2.60.0-beta.0
       name = "cross-introspection.patch";
       url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/84f24b1f5767f807f8d0442bbf3f149a0defcf78.patch";
       hash = "sha256-FRyAYCCP3eu7YDUS6g7sKCdbq2nU8yQdbdVaQwLrlhE=";
+    })
+    (fetchpatch {
+      # merged in 2.60.0-beta.0; required for cross-gdk-pixbuf-loader.patch to apply
+      name = "Replace-CRLF-with-just-LF-in-a-few-remaining-files-that-had-them";
+      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/8c93369806283feafd060f4507111344e1110f79.patch";
+      hash = "sha256-FU6ZiWhXm8jPhGGuNKqlxDIEXu2bSfq1MWyQoADqLZA=";
+    })
+    (fetchpatch {
+      # merged in 2.60.0-beta.0; required for cross-gdk-pixbuf-loader.patch to apply
+      name = "do-not-look-for-gdk-pixbuf-query-loaders-in-cross-builds.patch";
+      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/ce2957acb7b0b5d7f75f47a3c503f5532aa698a6.patch";
+      hash = "sha256-f0Mdt4GjycIkM/k68KRsR0Hv2C+gaieQ4WnhjPbA5vs=";
+    })
+    (fetchpatch {
+      name = "cross-gdk-pixbuf-loader.patch";
+      url = "https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1095.patch";
+      hash = "sha256-4R/DfDkNn7WhgBy526v309FzK6znCt2dV/ooz4LYrVU=";
     })
   ];
 
@@ -92,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      gdk-pixbuf
       installShellFiles
       pkg-config
       meson
@@ -143,10 +158,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Probably broken MIME type detection on Darwin.
   # Tests fail with imprecise rendering on i686.
-  doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isi686;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isi686;
 
   env = {
-    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
+    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = buildPackages.writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
       ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
     '';
   };
@@ -178,8 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
-    # Not generated when cross compiling.
-    lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    lib.optionalString withPixbufLoader ''
       # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp

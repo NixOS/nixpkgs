@@ -1,58 +1,61 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, meson
-, ninja
-, nix-eval-jobs
-, fetchFromGitHub
-, nixosTests
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  meson,
+  ninja,
+  nix-eval-jobs,
+  fetchFromGitHub,
+  nixosTests,
+  unstableGitUpdater,
+  nixVersions,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -124,15 +127,19 @@ let
       ];
   };
 
-  nix-eval-jobs' = nix-eval-jobs.overrideAttrs (_: {
-    version = "2.25.0-unstable-2025-02-13";
-    src = fetchFromGitHub {
-      owner = "nix-community";
-      repo = "nix-eval-jobs";
-      rev = "6d4fd5a93d7bc953ffa4dcd6d53ad7056a71eff7";
-      hash = "sha256-1dZLPw+nlFQzzswfyTxW+8VF1AJ4ZvoYvLTjlHiz1SA=";
-    };
-  });
+  nix-eval-jobs' =
+    (nix-eval-jobs.override {
+      nix = nixVersions.nix_2_25;
+    }).overrideAttrs
+      (_: {
+        version = "2.25.0-unstable-2025-02-13";
+        src = fetchFromGitHub {
+          owner = "nix-community";
+          repo = "nix-eval-jobs";
+          rev = "6d4fd5a93d7bc953ffa4dcd6d53ad7056a71eff7";
+          hash = "sha256-1dZLPw+nlFQzzswfyTxW+8VF1AJ4ZvoYvLTjlHiz1SA=";
+        };
+      });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
@@ -145,7 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CEDUtkA005PiLt1wSo3sgmxfxUBikQSE74ZudyWNxfE=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     unzip
@@ -187,7 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -250,8 +265,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra;
-    updateScript = unstableGitUpdater {};
+    tests = { inherit (nixosTests) hydra; };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  cctools,
   gfortran,
   replaceVars,
   python3,
@@ -12,21 +11,24 @@
   zlib, # propagated by p4est but required by petsc
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
+  bash,
 
   # Build options
   petsc-optimized ? true,
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
   mpiSupport ? true,
-  withPetsc4py ? false, # petsc python binding
+  pythonSupport ? false, # petsc python binding
+  withExamples ? false,
   withFullDeps ? false, # full External libraries support
+  withCommonDeps ? true, # common External libraries support
 
   # External libraries options
-  withHdf5 ? true,
-  withMetis ? withFullDeps,
-  withParmetis ? false, # parmetis is unfree and should be enabled manualy
-  withPtscotch ? withFullDeps,
+  withHdf5 ? withCommonDeps,
+  withMetis ? withCommonDeps,
   withScalapack ? withFullDeps,
+  withParmetis ? withFullDeps, # parmetis is unfree
+  withPtscotch ? withFullDeps,
   withMumps ? withFullDeps,
   withP4est ? withFullDeps,
 
@@ -40,6 +42,7 @@
   pkg-config,
   p4est,
 }:
+assert withFullDeps -> withCommonDeps;
 
 # This version of PETSc does not support a non-MPI p4est build
 assert withP4est -> (p4est.mpiSupport && mpiSupport);
@@ -53,11 +56,11 @@ assert withMumps -> withScalapack;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.21.4";
+  version = "3.22.4";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
+    hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
   };
 
   strictDeps = true;
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     ++ lib.optional mpiSupport mpi
-    ++ lib.optionals withPetsc4py [
+    ++ lib.optionals pythonSupport [
       python3Packages.setuptools
       python3Packages.cython
     ];
@@ -87,7 +90,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withScalapack scalapack
     ++ lib.optional withMumps mumps_par;
 
-  propagatedBuildInputs = lib.optional withPetsc4py python3Packages.numpy;
+  propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
   patches = [
     (replaceVars ./fix-petsc4py-install-prefix.patch {
@@ -95,14 +98,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      patchShebangs ./lib/petsc/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace config/install.py \
-        --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
-    '';
+  postPatch = ''
+    patchShebangs ./lib/petsc/bin
+
+    substituteInPlace config/example_template.py \
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
 
   configureFlags =
     [
@@ -112,7 +113,7 @@ stdenv.mkDerivation rec {
       "--with-precision=${petsc-precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
-    ++ lib.optional withPetsc4py "--with-petsc4py=1"
+    ++ lib.optional pythonSupport "--with-petsc4py=1"
     ++ lib.optionals mpiSupport [
       "--CC=mpicc"
       "--with-cxx=mpicxx"
@@ -163,7 +164,7 @@ stdenv.mkDerivation rec {
     "fortify3"
   ];
 
-  configureScript = "python ./configure";
+  installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
 
@@ -173,16 +174,43 @@ stdenv.mkDerivation rec {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
-  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
+
+  # The PETSC4PY=no flag disables the ex100 test,
+  # which compiles C code to load Python modules for solving a math problem.
+  # This test fails on the Darwin platform but is rarely a common use case for petsc4py.
+  installCheckFlags = lib.optional stdenv.hostPlatform.isDarwin "PETSC4PY=no";
+
+  nativeInstallCheckInputs =
+    [
+      mpiCheckPhaseHook
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.pythonImportsCheckHook
+      python3Packages.unittestCheckHook
+    ];
+
+  unittestFlagsArray = [
+    "-s"
+    "src/binding/petsc4py/test"
+    "-v"
+  ];
+
+  pythonImportsCheck = [ "petsc4py" ];
 
   passthru = {
-    inherit mpiSupport;
+    inherit mpiSupport pythonSupport;
   };
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://petsc.org/release/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ cburstedde ];
+    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [
+      cburstedde
+      qbisi
+    ];
   };
 }

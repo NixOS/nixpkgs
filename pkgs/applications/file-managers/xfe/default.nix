@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfe";
-  version = "1.46.2";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
-    sha256 = "sha256-6hNNda4BKCY9E02uFYJnt0JySNp/is1ZqjFlOwQcRWs=";
+    sha256 = "sha256-vlu0yshT72rWQB0aqCleIsdJSZ4kEL8MUsYET1VqJbM=";
   };
 
   nativeBuildInputs = [

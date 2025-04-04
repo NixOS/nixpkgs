@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "propcache";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,8 +23,13 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "propcache";
     tag = "v${version}";
-    hash = "sha256-j2PjSaOx0IKijoMjhtYVNrpqEwRjVFsON5OU/Fv5idc=";
+    hash = "sha256-3jsQnRkXBB7/6xY44kv7JuAXz/P8oxUg8Hyg1O5w2Cg=";
   };
+
+  postPatch = ''
+    substituteInPlace packaging/pep517_backend/_backend.py \
+      --replace "Cython ~= 3.0.12" Cython
+  '';
 
   build-system = [
     cython
@@ -44,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast property caching";
     homepage = "https://github.com/aio-libs/propcache";
-    changelog = "https://github.com/aio-libs/propcache/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/propcache/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

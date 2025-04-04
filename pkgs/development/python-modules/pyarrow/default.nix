@@ -142,8 +142,6 @@ buildPythonPackage rec {
 
   disabledTests = [ "GcsFileSystem" ];
 
-  dontUseSetuptoolsCheck = true;
-
   preCheck =
     ''
       shopt -s extglob

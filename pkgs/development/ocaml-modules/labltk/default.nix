@@ -88,7 +88,7 @@ let
     or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
-param.stdenv.mkDerivation rec {
+param.stdenv.mkDerivation {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 

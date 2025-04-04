@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  brotli,
   buildPythonPackage,
   fetchPypi,
   google-auth,
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    brotli
     google-cloud-testutils
     mock
     pytest-asyncio

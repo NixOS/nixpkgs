@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
-    repo = pname;
+    repo = "nix-bundle";
     rev = "v${version}";
     sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
   };

@@ -1,47 +1,49 @@
-{ stdenv
-, lib
-, binutils
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, boost186
-, cereal
-, cgal
-, curl
-, darwin
-, dbus
-, eigen
-, expat
-, glew
-, glib
-, glib-networking
-, gmp
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mpfr
-, nanosvg
-, nlopt
-, opencascade-occt_7_6_1
-, openvdb
-, pcre
-, qhull
-, tbb_2021_11
-, wxGTK32
-, xorg
-, libbgcode
-, heatshrink
-, catch2
-, webkitgtk_4_0
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, wxGTK-override ? null
-, opencascade-override ? null
+{
+  stdenv,
+  lib,
+  binutils,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  boost186,
+  cereal,
+  cgal,
+  curl,
+  darwin,
+  dbus,
+  eigen,
+  expat,
+  glew,
+  glib,
+  glib-networking,
+  gmp,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mpfr,
+  nanosvg,
+  nlopt,
+  opencascade-occt_7_6_1,
+  openvdb,
+  pcre,
+  qhull,
+  tbb_2021_11,
+  wxGTK32,
+  xorg,
+  libbgcode,
+  heatshrink,
+  catch2,
+  webkitgtk_4_0,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  wxGTK-override ? null,
+  opencascade-override ? null,
 }:
 let
-  wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
+  wxGTK-prusa = wxGTK32.overrideAttrs (old: {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
     configureFlags = old.configureFlags ++ [ "--disable-glcanvasegl" ];
@@ -67,15 +69,12 @@ let
   });
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
-  opencascade-override' = if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
-
-  patches = [
-  ];
+  opencascade-override' =
+    if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
   version = "2.9.0";
-  inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
@@ -83,6 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
     rev = "version_${finalAttrs.version}";
   };
+
+  # https://github.com/prusa3d/PrusaSlicer/pull/14010
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
+      hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
+    })
+  ];
 
   # required for GCC 14
   # (not applicable to super-slicer fork)
@@ -100,42 +107,45 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK-override'
   ];
 
-  buildInputs = [
-    binutils
-    boost186  # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
-    cereal
-    cgal
-    curl
-    dbus
-    eigen
-    expat
-    glew
-    glib
-    glib-networking
-    gmp
-    gtk3
-    hicolor-icon-theme
-    ilmbase
-    libpng
-    mpfr
-    nanosvg-fltk
-    nlopt
-    opencascade-override'
-    openvdb_tbb_2021_8
-    pcre
-    qhull
-    tbb_2021_11
-    wxGTK-override'
-    xorg.libX11
-    libbgcode
-    heatshrink
-    catch2
-    webkitgtk_4_0
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreWLAN
-  ];
+  buildInputs =
+    [
+      binutils
+      boost186 # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
+      cereal
+      cgal
+      curl
+      dbus
+      eigen
+      expat
+      glew
+      glib
+      glib-networking
+      gmp
+      gtk3
+      hicolor-icon-theme
+      ilmbase
+      libpng
+      mpfr
+      nanosvg-fltk
+      nlopt
+      opencascade-override'
+      openvdb_tbb_2021_8
+      pcre
+      qhull
+      tbb_2021_11
+      wxGTK-override'
+      xorg.libX11
+      libbgcode
+      heatshrink
+      catch2
+      webkitgtk_4_0
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreWLAN
+    ];
 
   strictDeps = true;
 
@@ -212,13 +222,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "G-code generator for 3D printer";
-    homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ tweber tmarkus ];
-    platforms = platforms.unix;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-    mainProgram = "PrusaSlicer";
-  };
+  meta =
+    with lib;
+    {
+      description = "G-code generator for 3D printer";
+      homepage = "https://github.com/prusa3d/PrusaSlicer";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [
+        tweber
+        tmarkus
+      ];
+      platforms = platforms.unix;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+      mainProgram = "PrusaSlicer";
+    };
 })

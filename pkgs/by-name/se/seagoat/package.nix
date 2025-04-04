@@ -2,50 +2,65 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  ripgrep,
+
+  # tests
   gitMinimal,
+  ripgrep,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "seagoat";
-  version = "0.50.1";
+  version = "0.54.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${version}";
-    hash = "sha256-tf3elcKXUwBqtSStDksOaSN3Q66d72urrG/Vab2M4f0=";
+    hash = "sha256-vix/tecZfKPF2pMuaYhBa3Y0qh3DelWYpta8Qy0saUE=";
   };
 
   build-system = [ python3Packages.poetry-core ];
+
+  pythonRelaxDeps = [
+    "chromadb"
+    "psutil"
+  ];
 
   dependencies = with python3Packages; [
     appdirs
     blessed
     chardet
-    flask
-    deepmerge
     chromadb
+    deepmerge
+    flask
     gitpython
+    halo
     jsonschema
+    nest-asyncio
+    ollama
+    psutil
     pygments
     requests
-    nest-asyncio
-    waitress
-    psutil
     stop-words
+    waitress
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    freezegun
-    pytest-asyncio
-    pytest-mock
-    pytest-snapshot
-    gitMinimal
-    ripgrep
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      freezegun
+      pytest-asyncio
+      pytest-mock
+      pytest-snapshot
+    ]
+    ++ [
+      gitMinimal
+      ripgrep
+      writableTmpDirAsHomeHook
+    ];
 
   disabledTests = import ./failing_tests.nix;
 
@@ -55,9 +70,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     git init
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     wrapProgram $out/bin/seagoat-server \
@@ -67,6 +83,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";

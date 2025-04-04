@@ -166,6 +166,17 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
+  # This can be removed with version 469e as that contains this file already
+  # Workaround for bug https://github.com/OldUnreal/UnrealTournamentPatches/issues/1578
+  # that prevented starting or joining a multi player game
+  missing-file = fetchurl {
+    url = "https://gist.github.com/dwt/733d620fbbfd5c49da88683aef60d889/raw/73b271ef019412cf1be5ce1966842ef63a18ba39/de.u";
+    hash = "sha256-M14imMl35KUT0tG8dgB+DBoXve/1saVL7hPNgUFo1hY=";
+  };
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    cp ${finalAttrs.missing-file} $out/Applications/UnrealTournament.app/Contents/MacOS/System/de.u
+  '';
+
   # Bring in game's .so files into lookup. Otherwise game fails to start
   # as: `Object not found: Class Render.Render`
   appendRunpaths = [

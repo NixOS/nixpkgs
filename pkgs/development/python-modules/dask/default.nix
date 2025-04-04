@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.1.0";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-KBqOyf471mNg3L9dYmR7IRSltEtC+VgC+6ptsoKgVmM=";
+    hash = "sha256-j25+DfWReonXKqxkX9OVHjKo+Indh13rlBE5PyGe69c=";
   };
 
   postPatch = ''
@@ -57,8 +57,8 @@ buildPythonPackage rec {
       --replace-fail "version=versioneer.get_version()," "version='${version}'," \
       --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
 
-      substituteInPlace pyproject.toml \
-        --replace-fail ', "versioneer[toml]==0.29"' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "versioneer[toml]==0.29"' ""
   '';
 
   build-system = [ setuptools ];
@@ -67,10 +67,10 @@ buildPythonPackage rec {
     click
     cloudpickle
     fsspec
+    importlib-metadata
     packaging
     partd
     pyyaml
-    importlib-metadata
     toolz
   ];
 

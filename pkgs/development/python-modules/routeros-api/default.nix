@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "routeros-api";
-  version = "0.18.1";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "socialwifi";
     repo = "routeros-api";
     tag = version;
-    hash = "sha256-6IpoByG3YhHh2dPS18ufaoI1vzTZBsZa9WNHS/fImrg=";
+    hash = "sha256-1g37fDB+/6bVwgtgE1YzGnUpDaLEfwDpQWoqjHgeeqk=";
   };
 
   build-system = [ setuptools ];

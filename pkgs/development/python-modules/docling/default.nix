@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,9 +23,10 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
+  pylatexenc,
   pypdfium2,
   python-docx,
   python-pptx,
@@ -48,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.25.1";
+  version = "2.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-uJZIwXVwGd9xDBQkZ/uz2XLJ+lL1ZAZHJv/jHtW/LCk=";
+    hash = "sha256-YCZhLrukuQ0Y/4h7v6CfD0oMAfcbioqfs5mU9ImtnNM=";
   };
 
   build-system = [
@@ -78,9 +80,10 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
+    pylatexenc
     pypdfium2
     python-docx
     python-pptx
@@ -155,6 +158,7 @@ buildPythonPackage rec {
 
     # requires network access
     "test_page_range"
+    "test_parser_backends"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"
@@ -163,7 +167,7 @@ buildPythonPackage rec {
   meta = {
     description = "Get your documents ready for gen AI";
     homepage = "https://github.com/DS4SD/docling";
-    changelog = "https://github.com/DS4SD/docling/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "docling";

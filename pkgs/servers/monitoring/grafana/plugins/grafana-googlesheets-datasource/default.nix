@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "grafana-googlesheets-datasource";
   version = "1.2.14";
   zipHash = {

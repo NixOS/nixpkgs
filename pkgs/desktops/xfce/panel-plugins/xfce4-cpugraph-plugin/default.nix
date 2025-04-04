@@ -12,7 +12,7 @@
   xorgproto,
 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-cpugraph-plugin";
   version = "1.2.11";

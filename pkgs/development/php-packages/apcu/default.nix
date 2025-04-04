@@ -1,7 +1,6 @@
 {
   buildPecl,
   lib,
-  fetchpatch,
   pcre2,
   fetchFromGitHub,
 }:

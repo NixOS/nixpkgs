@@ -82,22 +82,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.2.1";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = finalAttrs.pname;
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-TWqW6kI5dDl6IW2Ql6eeySDSyxp0fPgcJOOX1JxjAxs=";
+    repo = "frr";
+    rev = "frr-${finalAttrs.version}";
+    hash = "sha256-o/BG12FVypIaInXDeOj2Ymdgv1mxof9Sl0ZQA8o3YLs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-44070.patch";
-      url = "https://github.com/FRRouting/frr/commit/fea4ed5043b4a523921f970a39a565d2c1ca381f.patch";
-      hash = "sha256-X9FjQeOvo92+mL1z3u5W0LBhhePDAyhFAqh8sAtNNm8=";
-    })
-  ];
 
   # Without the std explicitly set, we may run into abseil-cpp
   # compilation errors.

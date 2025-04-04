@@ -140,6 +140,10 @@ python3Packages.buildPythonApplication rec {
       # '...2-macosx_14_0_arm64.whl'
       "test_macos_archflags"
       "test_macos_max_compat"
+
+      # https://github.com/pypa/hatch/issues/1942
+      "test_features"
+      "test_sync_dynamic_dependencies"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 

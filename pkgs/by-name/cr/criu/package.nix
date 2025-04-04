@@ -11,6 +11,7 @@
   libpaper,
   libnl,
   libcap,
+  libuuid,
   libnet,
   pkg-config,
   iproute2,
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
-    repo = pname;
+    repo = "criu";
     rev = "v${version}";
-    hash = "sha256-D16s6pGWHWRLvub7foG3Vbzw2hoU4p1VeHt7ymL5hlw=";
+    hash = "sha256-Z4prbaPYRdN/fPdBwDz7D3/gKybh2ulA3UM1LZGeAK0=";
   };
 
   enableParallelBuilding = true;
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     asciidoc
     xmlto
     libpaper
+    libuuid
     docbook_xsl
     which
     makeWrapper

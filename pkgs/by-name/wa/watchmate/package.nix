@@ -14,7 +14,7 @@
 let
   releaseVersion = "0.5.2";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "watchmate";
   version = "${releaseVersion}-unstable-2024-08-13";
 
@@ -25,12 +25,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fHWxn7hFx/9cnLlCHIC6hIJaLd1U3Ii9mJgTJ+Hw63M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mpris2-zbus-0.1.0" = "sha256-a/cvbB0M9cUd8RP5XxgHRbJ/i/UKAEK4DTwwUU69IuY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9OR0+OIUpDu37BDC1QJ0r4P/T+DtuHIStFfYT/kPXBE=";
 
   nativeBuildInputs = [
     pkg-config

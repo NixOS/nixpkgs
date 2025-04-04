@@ -1,32 +1,35 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, dbus
-, gettext
-, gnutls
-, libfilezilla
-, libidn
-, nettle
-, pkg-config
-, pugixml
-, sqlite
-, tinyxml
-, boost
-, wrapGAppsHook3
-, wxGTK32
-, gtk3
-, xdg-utils
-, CoreServices
-, Security
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+  dbus,
+  gettext,
+  gnutls,
+  libfilezilla,
+  libidn,
+  nettle,
+  pkg-config,
+  pugixml,
+  sqlite,
+  tinyxml,
+  boost,
+  wrapGAppsHook3,
+  wxGTK32,
+  gtk3,
+  xdg-utils,
+  CoreServices,
+  Security,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.67.0";
+  version = "3.68.1";
 
-  src = fetchurl {
-    url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.xz";
-    hash = "sha256-5drcgH25mc60ZJhPl00+9ZtWLFlUZlgFfpsgEYOtr5o=";
+  src = fetchsvn {
+    url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
+    rev = "11205";
+    hash = "sha256-izaNfagJYUcPRPihZ1yXwLUTHunzVXuiMITW69KPSFE=";
   };
 
   configureFlags = [
@@ -34,23 +37,32 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [
-    boost
-    dbus
-    gettext
-    gnutls
-    libfilezilla
-    libidn
-    nettle
-    pugixml
-    sqlite
-    tinyxml
-    wxGTK32
-    gtk3
-    xdg-utils
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
+  buildInputs =
+    [
+      boost
+      dbus
+      gettext
+      gnutls
+      libfilezilla
+      libidn
+      nettle
+      pugixml
+      sqlite
+      tinyxml
+      wxGTK32
+      gtk3
+      xdg-utils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+    ];
 
   enableParallelBuilding = true;
 

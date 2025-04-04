@@ -46,6 +46,7 @@
   libxml2,
   llvmPackages_14,
   m17n_lib,
+  mailcap,
   mailutils,
   makeWrapper,
   motif,
@@ -127,6 +128,9 @@
   QuartzCore,
   UniformTypeIdentifiers,
   WebKit,
+
+  # test
+  callPackage,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -242,6 +246,14 @@ mkDerivation (finalAttrs: {
       for makefile_in in $(find . -name Makefile.in -print); do
         substituteInPlace $makefile_in --replace-warn /bin/pwd pwd
       done
+    ''
+
+    ''
+      substituteInPlace lisp/net/mailcap.el \
+        --replace-fail '"/etc/mime.types"' \
+                       '"/etc/mime.types" "${mailcap}/etc/mime.types"' \
+        --replace-fail '("/etc/mailcap" system)' \
+                       '("/etc/mailcap" system) ("${mailcap}/etc/mailcap" system)'
     ''
 
     ""
@@ -515,7 +527,12 @@ mkDerivation (finalAttrs: {
     inherit withTreeSitter;
     inherit withXwidgets;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
-    tests = { inherit (nixosTests) emacs-daemon; };
+    tests = {
+      inherit (nixosTests) emacs-daemon;
+      withPackages = callPackage ./build-support/wrapper-test.nix {
+        emacs = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = meta // {

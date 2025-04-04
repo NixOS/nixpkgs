@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     {
       stable = localRepoCheck nixVersions.stable;
       latest = localRepoCheck nixVersions.latest;
-      git = localRepoCheck nixVersions.git;
       nix_2_24 = localRepoCheck nixVersions.nix_2_24;
     };
 

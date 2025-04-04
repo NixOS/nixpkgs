@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, pkg-config
-, gnutls
-, libgcrypt
-, libpar2
-, libcap
-, libsigcxx
-, libxml2
-, ncurses
-, openssl
-, zlib
-, deterministic-uname
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libpar2,
+  libcap,
+  libsigcxx,
+  libxml2,
+  ncurses,
+  openssl,
+  zlib,
+  deterministic-uname,
+  nixosTests,
 }:
 
 let
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.6";
+  version = "24.8";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N2cYnZUk5//hjNRen1FaIlvG+nC2tXtvffr368AIOkA=";
+    hash = "sha256-jsCjiZQ5Li+PKAfeMliAe341f8kn7QgUjUKciP5CdKE=";
   };
 
   patches = [
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-git-usage.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -80,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     description = "Command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub devusb ];
+    maintainers = with maintainers; [
+      pSub
+      devusb
+    ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";
   };

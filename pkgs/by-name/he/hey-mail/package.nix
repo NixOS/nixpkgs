@@ -21,7 +21,7 @@
   wrapGAppsHook3,
   writeScript,
   atk,
-  mesa,
+  libgbm,
   cups,
   systemd,
   alsa-lib,
@@ -53,7 +53,7 @@ let
     libxkbcommon
     libGL
     atk
-    mesa
+    libgbm
     cups
     systemd
     alsa-lib

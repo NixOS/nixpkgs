@@ -83,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBLOADORDER_LIBRARIES" "loadorder_ffi")
     (lib.cmakeFeature "LCI_LIBRARIES" "loot_condition_interpreter_ffi")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS" "../testing-plugins")
-    (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "LIBLOOT_INSTALL_DOCS" withDocs)
   ];
 
-  postConfigure = lib.optionalString finalAttrs.doCheck ''
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
     cp -r --no-preserve=all ${finalAttrs.passthru.testing-plugins} ../testing-plugins
   '';
 

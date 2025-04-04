@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cdepillabout";
-    repo = pname;
+    repo = "nix-query-tree-viewer";
     rev = "v${version}";
     sha256 = "sha256-Lc9hfjybnRrkd7PZMa2ojxOM04bP4GJyagkZUX2nVwY=";
   };

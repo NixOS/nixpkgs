@@ -16,7 +16,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "convos-chat";
-    repo = pname;
+    repo = "convos";
     rev = "v${version}";
     sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };

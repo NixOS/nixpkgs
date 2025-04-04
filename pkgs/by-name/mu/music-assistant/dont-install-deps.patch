@@ -1,8 +1,8 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index b6e5f2b4..0edead16 100644
+index 8daf159d..af5a6f38 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -424,29 +424,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
+@@ -429,30 +429,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
      def _get_provider_module(domain: str) -> ProviderModuleType:
          return importlib.import_module(f".{domain}", "music_assistant.providers")
  
@@ -29,7 +29,8 @@ index b6e5f2b4..0edead16 100644
 -    # try loading the provider again to be safe
 -    # this will fail if something else is wrong (as it should)
 -    return await asyncio.to_thread(_get_provider_module, domain)
-+        raise RuntimeError(f"Missing dependencies for provider {domain}")
- 
+-
++        raise RuntimeError(f"Missing dependencies for provider {domain}.")
  
  def create_tempfile():
+     """Return a (named) temporary file."""

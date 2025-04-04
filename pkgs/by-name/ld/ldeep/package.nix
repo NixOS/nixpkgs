@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "cryptography"
+    "ldap3-bleeding-edge"
   ];
 
   build-system = with python3.pkgs; [ pdm-backend ];

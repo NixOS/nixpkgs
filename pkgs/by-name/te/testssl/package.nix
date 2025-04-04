@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "drwetter";
-    repo = pname;
+    repo = "testssl.sh";
     rev = "v${version}";
     sha256 = "sha256-MZNQ7oOJD/vjOwDiPOZr3k+Mn0XXVdkP7cC/0mnWLic=";
   };

@@ -12,7 +12,7 @@
   testing-common-database,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "testing-postgresql";
   # Version 1.3.0 isn't working so let's use the latest commit from GitHub
   version = "unstable-2017-10-31";

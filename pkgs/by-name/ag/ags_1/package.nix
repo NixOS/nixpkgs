@@ -20,14 +20,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ags";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ebnkUaee/pnfmw1KmOZj+MP1g5wA+8BT/TPKmn4Dkwc=";
     fetchSubmodules = true;
   };
@@ -68,7 +68,7 @@ buildNpmPackage rec {
   meta = {
     homepage = "https://github.com/Aylur/ags";
     description = "EWW-inspired widget system as a GJS library";
-    changelog = "https://github.com/Aylur/ags/releases/tag/v${version}";
+    changelog = "https://github.com/Aylur/ags/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       foo-dogsquared
@@ -77,4 +77,4 @@ buildNpmPackage rec {
     mainProgram = "ags";
     platforms = lib.platforms.linux;
   };
-}
+})

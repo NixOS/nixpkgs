@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensc";
-  version = "0.26.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    rev = version;
-    sha256 = "sha256-EIQ9YpIGwckg/JjpK0S2ZYdFf/0YC4KaWcLXRNRMuzA=";
+    tag = version;
+    hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
   };
 
   nativeBuildInputs = [

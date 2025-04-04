@@ -36,13 +36,8 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "gio-0.19.0" = "sha256-+PAQNJ9sTk8aKAhA/PLQWDCKDT/cQ+ukdbem7g1J+pU=";
-      "nm-0.4.0" = "sha256-53ipJU10ZhIKIF7PCw5Eo/e/reUK0qpyTyE7uIrCD88=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9sKcvVN14gfR30FvF8/esdJoIbSgHUl/aHRBWA8DRWg=";
 
   postInstall = ''
     # copy themes and plugins

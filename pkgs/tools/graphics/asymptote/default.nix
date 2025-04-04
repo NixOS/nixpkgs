@@ -36,7 +36,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.95";
+  version = "3.01";
   pname = "asymptote";
 
   outputs = [
@@ -49,14 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-FWBP0Cy23bxbgHUp0ub8YXyCWhhN0Ne3E5DFZ66seOc=";
+    hash = "sha256-egUACsP2vwYx2uvSCZ8H/jLU9f17Siz8gFWwCNSXsIQ=";
   };
-
-  # https://github.com/vectorgraphics/asymptote/issues/513
-  postConfigure = lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    substituteInPlace Makefile \
-      --replace-fail 'glew.o -lGLX' 'glew.o'
-  '';
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;

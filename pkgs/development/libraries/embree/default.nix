@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://embree.github.io/";
     maintainers = with maintainers; [
       hodapp
-      gebner
     ];
     license = licenses.asl20;
     platforms = platforms.unix;

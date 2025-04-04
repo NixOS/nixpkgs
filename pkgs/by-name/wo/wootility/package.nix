@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "4.7.3";
+  version = "5.0.3";
   src = fetchurl {
-    url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-5S4Yz2VymKfT1uBXYufb6MWx1aMbGn4ufT8RITJtuPc=";
+    url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
+    sha256 = "sha256-uDjxA8o/ZvWJzpwJFs2b6jXcaRBeNy04hkeZ3DGoXVs=";
   };
 in
 
@@ -27,11 +27,10 @@ appimageTools.wrapType2 {
       wrapProgram $out/bin/wootility \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-      install -Dm444 ${contents}/wootility-lekker.desktop -t $out/share/applications
-      install -Dm444 ${contents}/wootility-lekker.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/wootility-lekker.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=wootility' \
-        --replace-warn 'Name=wootility-lekker' 'Name=Wootility'
+      install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
+      install -Dm444 ${contents}/wootility.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/wootility.desktop \
+        --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';
 
   profile = ''
@@ -49,7 +48,6 @@ appimageTools.wrapType2 {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      davidtwco
       sodiboo
       returntoreality
     ];

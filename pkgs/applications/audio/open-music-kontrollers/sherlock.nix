@@ -7,7 +7,7 @@
 
 callPackage ./generic.nix (
   args
-  // rec {
+  // {
     pname = "sherlock";
     version = "0.28.0";
 

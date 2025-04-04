@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "2024.12.2";
+  version = "2025.2.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-Z3rFFrXrOKaF9NpY/fInsEbzdOWnWqLfEYl7YX9hFEU=";
+    hash = "sha256-aaSAlFIc5Gn5PJPVuObi24Y86/3N3yFJVQTx1tV2i2A=";
   };
 
   meta = with lib; {
@@ -30,6 +30,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
+    broken = stdenvNoCC.hostPlatform.isAarch64;
     maintainers = with maintainers; [
       jvanbruegge
       risson
@@ -43,7 +44,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-SONw9v67uuVk8meRIuS1KaBGbej6Gbz6nZxPDnHfCwQ=";
+    outputHash = "sha256-GIFz1ku0bS/GaWehOp2z9Te9qpWt61DQrw0LA+z/XCk=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -129,7 +130,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-aRfpJWTp2WQB3E9aqzJn3BiPLwpCkdvMoyHexaKvz0U=";
+    npmDepsHash = "sha256-uVur1DyXaIGPny7u/JQyx9HQ7VJqeSi2pPSORZgLjEw=";
 
     postPatch = ''
       cd web
@@ -254,6 +255,7 @@ let
             fido2
             flower
             geoip2
+            geopy
             google-api-python-client
             gunicorn
             gssapi
@@ -283,6 +285,7 @@ let
             tenant-schemas-celery
             twilio
             ua-parser
+            unidecode
             urllib3
             uvicorn
             watchdog
@@ -326,7 +329,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-FyRTPs2xfostV2x03IjrxEYBSrsZwnuPn+oHyQq1Kq0=";
+    vendorHash = "sha256-aG/VqpmHJeGyF98aS0jgwEAq1R5c8VggeJxLWS9W8HY=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

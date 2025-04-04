@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchFromGitHub {
-    owner = "chxrlt";
+    owner = "lyrebird-voice-changer";
     repo = "lyrebird";
     tag = "v${version}";
     sha256 = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple and powerful voice changer for Linux, written in GTK 3";
     mainProgram = "lyrebird";
-    homepage = "https://github.com/chxrlt/lyrebird";
+    homepage = "https://github.com/lyrebird-voice-changer/lyrebird";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;

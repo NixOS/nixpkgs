@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitea,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -34,14 +33,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.1.10";
+  version = "3.3.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    hash = "sha256:0hydhpw31c28lq7v5yvknm3dzvkkls98hcmpp0z2h9m9f32nq4s9";
+    hash = "sha256:08fr6zcqk4qp1k3r0di6v60qfyd3q5k9jnxzlsx2p1lh0nils0xa";
   };
 
   depsBuildBuild = [ pkg-config ];

@@ -69,6 +69,7 @@ let
       defaultNativeBuildInputs =
         extraNativeBuildInputs
         ++ [
+          ../../build-support/setup-hooks/no-broken-symlinks.sh
           ../../build-support/setup-hooks/audit-tmpdir.sh
           ../../build-support/setup-hooks/compress-man-pages.sh
           ../../build-support/setup-hooks/make-symlinks-relative.sh
@@ -77,7 +78,6 @@ let
           ../../build-support/setup-hooks/move-sbin.sh
           ../../build-support/setup-hooks/move-systemd-user-units.sh
           ../../build-support/setup-hooks/multiple-outputs.sh
-          ../../build-support/setup-hooks/no-broken-symlinks.sh
           ../../build-support/setup-hooks/patch-shebangs.sh
           ../../build-support/setup-hooks/prune-libtool-files.sh
           ../../build-support/setup-hooks/reproducible-builds.sh

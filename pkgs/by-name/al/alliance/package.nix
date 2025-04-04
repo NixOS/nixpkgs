@@ -14,7 +14,7 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "alliance";
   version = "unstable-2022-01-13";
 

@@ -235,3 +235,19 @@ ef85e0daa092c9eae0d32c7ce16b889728a5fbc0
 d89ad6c70e0e89aaae75e9f886878ea4e103965a
 e0fe216f4912dd88a021d12a44155fd2cfeb31c8
 80d5b411f6397d5c3e755a0635d95742f76f3c75
+
+# nixos/movim: format with nixfmt-rfc-style
+43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# nixos/iso-image.nix: nixfmt
+da9a092c34cef6947d7aee2b134f61df45171631
+
+# python-packages: format with nixfmt-rfc-style
+5f6f5e13ae0b6960cbf1be8aeb3d0048285a08d1
+
+# python-packages: sort with keep-sorted
+fd14c067813572afc03ddbf7cdedc3eab5a59954
+783add849cbca228a36ffdf407e5d380dc2fe6c4
+
+# treewide format of all Nix files
+374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt

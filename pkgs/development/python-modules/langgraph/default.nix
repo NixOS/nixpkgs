@@ -90,6 +90,11 @@ let
       "ignore::DeprecationWarning"
     ];
 
+    disabledTestPaths = [
+      # psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 5442 failed: Connection refused
+      # Is the server running on that host and accepting TCP/IP connections?
+      "tests/test_react_agent.py"
+    ];
   };
 in
 buildPythonPackage rec {

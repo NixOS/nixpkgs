@@ -7,7 +7,7 @@
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "e2tools";
   version = "0.1.0";
 

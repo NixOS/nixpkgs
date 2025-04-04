@@ -38,6 +38,12 @@ stdenv.mkDerivation (self: {
     sha256 = "sha256-4WQYO1BBDK9+eyblpI8qRgbBG4+qPRVZMjeAFAtot+0=";
   };
 
+  # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
+  postPatch = ''
+    substituteInPlace platform/x11/detect.py \
+      --replace-fail 'env.Append(LINKFLAGS=["-no-pie"])' ""
+  '';
+
   nativeBuildInputs = [
     autoPatchelfHook
     installShellFiles

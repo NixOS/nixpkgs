@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Un1q32";
     repo = "pfetch";
     tag = version;
-    hash = "sha256-n+FqttmvqbRBXb3urM8yGTxDCwVKdHo+aHeFBWTnN2M=";
+    hash = "sha256-DWntcAowiia4gEiYcZCJ6+uDGQ5h2eh/XwSSW+ThPKY=";
   };
 
   dontBuild = true;

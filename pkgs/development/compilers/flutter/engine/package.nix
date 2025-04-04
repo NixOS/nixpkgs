@@ -174,7 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      python3
+      (python3.withPackages (
+        ps: with ps; [
+          pyyaml
+        ]
+      ))
       (tools.vpython python3)
       gitMinimal
       pkg-config
@@ -265,8 +269,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (!isOptimized) "--unoptimized"
     ++ lib.optional (runtimeMode == "debug") "--no-stripped"
-    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
-    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
+    ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-unittests"
+    ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -295,6 +299,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     export TERM=dumb
 
+    ${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
+      # ValueError: ZIP does not support timestamps before 1980
+      substituteInPlace src/flutter/build/zip.py \
+        --replace-fail "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED)" "zipfile.ZipFile(args.output, 'w', zipfile.ZIP_DEFLATED, strict_timestamps=False)"
+    ''}
+
     ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 
     runHook postBuild
@@ -318,7 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
       find $out/out/$outName -name '*_unittests' -delete
       find $out/out/$outName -name '*_benchmarks' -delete
     ''
-    + lib.optionalString (finalAttrs.doCheck) ''
+    + lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       rm $out/out/$outName/{display_list_rendertests,flutter_tester}
     ''
     + ''

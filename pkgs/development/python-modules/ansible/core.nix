@@ -8,7 +8,6 @@
   setuptools,
   ansible,
   cryptography,
-  importlib-resources,
   jinja2,
   junit-xml,
   lxml,
@@ -16,7 +15,6 @@
   packaging,
   paramiko,
   ansible-pylibssh,
-  passlib,
   pexpect,
   psutil,
   pycrypto,
@@ -31,13 +29,15 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.2";
+  version = "2.18.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-clsEfTWUIwTrMi65NLmMxUQqw/SdM4J9lxccI4xLabk=";
+    hash = "sha256-4fj1wzVGNisO6TPglpo7o2S0hlFab6G8Jeu12V+OxfQ=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -66,34 +66,30 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      # depend on ansible instead of the other way around
-      ansible
-      # from requirements.txt
-      cryptography
-      jinja2
-      packaging
-      passlib
-      pyyaml
-      resolvelib
-      # optional dependencies
-      junit-xml
-      lxml
-      ncclient
-      paramiko
-      ansible-pylibssh
-      pexpect
-      psutil
-      pycrypto
-      requests
-      scp
-      xmltodict
-    ]
-    ++ lib.optionals windowsSupport [ pywinrm ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ];
+  dependencies = [
+    # depend on ansible instead of the other way around
+    ansible
+    # from requirements.txt
+    cryptography
+    jinja2
+    packaging
+    pyyaml
+    resolvelib
+    # optional dependencies
+    junit-xml
+    lxml
+    ncclient
+    paramiko
+    ansible-pylibssh
+    pexpect
+    psutil
+    pycrypto
+    requests
+    scp
+    xmltodict
+  ] ++ lib.optionals windowsSupport [ pywinrm ];
 
-  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
+  pythonRelaxDeps = [ "resolvelib" ];
 
   postInstall = ''
     export HOME="$(mktemp -d)"

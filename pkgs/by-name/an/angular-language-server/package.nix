@@ -11,15 +11,16 @@
   common-updater-scripts,
   jq,
   unzip,
+  typescript,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "19.1.0";
+  version = "19.2.2";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
-    hash = "sha256-ipF8UOUUuUr6LWetJ9V7Mm1EcxL4fQCZvl1ti5VBo5U=";
+    hash = "sha256-WoNrKcK9Gr9gVWH/pwKyEUHuzcVNKh6zQwwpG4BuVCg=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 server/bin/ngserver $out/lib/bin/ngserver
-    install -Dm755 server/index.js $out/lib/index.js
-    cp -r node_modules $out/lib/node_modules
+    install -Dm555 server/bin/ngserver $out/lib/bin/ngserver
+    install -Dm444 server/index.js $out/lib/index.js
+    mkdir -p $out/lib/node_modules
+    cp -r node_modules/* $out/lib/node_modules
+    # do not use vendored typescript
+    rm -rf $out/lib/node_modules/typescript
     runHook postInstall
   '';
 
@@ -41,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
     makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations $out/lib/node_modules --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
   '';
 
   passthru = {

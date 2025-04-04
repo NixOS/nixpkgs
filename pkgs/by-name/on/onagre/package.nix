@@ -15,7 +15,7 @@
   libGL,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "onagre";
   version = "1.1.1";
 

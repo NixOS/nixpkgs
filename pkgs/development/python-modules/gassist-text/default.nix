@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gassist-text";
-  version = "0.0.11";
+  version = "0.0.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "gassist_text";
     tag = version;
-    hash = "sha256-XFHyI48TuPBJjHA4dLSpYv62Y5zK0knrIqNKBoWnEeU=";
+    hash = "sha256-ToHkep+jcPcl5t05jmzRTX2QAhJRW2R+Qyhwt/zpIfc=";
   };
 
   nativeBuildInputs = [ setuptools ];

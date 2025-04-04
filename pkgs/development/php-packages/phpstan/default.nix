@@ -2,21 +2,26 @@
   fetchFromGitHub,
   lib,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpstan";
-  version = "2.1.6";
+  version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan-src";
     tag = finalAttrs.version;
-    hash = "sha256-kcZeiC92jw9mwmxrni32aPrSDH67UVm6QnT7n5GvG7w=";
+    hash = "sha256-K9XhLR5b3bPIt/6lyBxM6y7SgPZmvy9TvRpyohOwtDM=";
   };
 
-  vendorHash = "sha256-HmD/A4NRkkRj66Q1XAAoKRKnWQFc+iWlvCH9+3CVyFs=";
+  vendorHash = "sha256-I3v585gdcBzA24PavB9zBt2JfW1w7WdY94cxLnOjQxg=";
   composerStrictValidation = false;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";

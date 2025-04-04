@@ -1,26 +1,26 @@
-{ cmake
-, CoreFoundation
-, fetchFromGitHub
-, fetchurl
-, lib
-, lighthouse
-, nix-update-script
-, openssl
-, pkg-config
-, libpq
-, protobuf
-, rustPlatform
-, rust-jemalloc-sys
-, Security
-, sqlite
-, stdenv
-, SystemConfiguration
-, testers
+{
+  cmake,
+  CoreFoundation,
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  lighthouse,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  rust-jemalloc-sys,
+  Security,
+  sqlite,
+  stdenv,
+  SystemConfiguration,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "5.3.0";
+  version = "6.0.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -30,28 +30,20 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-wIj+YabyUrgLjWCfjCAH/Xb8jUG6ss+5SwnE2M82a+4=";
+    hash = "sha256-8jHNm/MGpHGOt52rLMXLMWIVn8AXqnpAr+Wvk7DH6gc=";
   };
 
   patches = [
     ./use-system-sqlite.patch
-    ./fix-dep-lazy_static.patch
   ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-Opkz3EVKw0M4LeWMsn1NlSw/Fg7cWVqnDJRRTPYYlLo=";
+  useFetchCargoVendor = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmdbx-0.1.4" = "sha256-ONp4uPkVCN84MObjXorCZuSjnM6uFSMXK1vdJiX074o=";
-      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "quick-protobuf-0.8.1" = "sha256-dgePLYCeoEZz5DGaLifhf3gEIPaL7XB0QT9wRKY8LJg=";
-    };
-  };
-
-  buildFeatures = [ "modern" "gnosis" ];
+  buildFeatures = [
+    "modern"
+    "gnosis"
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -60,16 +52,19 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = [
-    rust-jemalloc-sys
-    sqlite
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      rust-jemalloc-sys
+      sqlite
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+      SystemConfiguration
+    ];
 
   depositContractSpec = fetchurl {
     url = "https://raw.githubusercontent.com/ethereum/eth2.0-specs/v${depositContractSpecVersion}/deposit_contract/contracts/validator_registration.json";
@@ -109,29 +104,27 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # All of these tests require network access
-  checkFlags = [
-    "--skip basic"
-    "--skip deposit_tree::cache_consistency"
-    "--skip deposit_tree::double_update"
-    "--skip deposit_tree::updating"
-    "--skip eth1_cache::big_skip"
-    "--skip eth1_cache::double_update"
-    "--skip eth1_cache::pruning"
-    "--skip eth1_cache::simple_scenario"
-    "--skip fast::deposit_cache_query"
-    "--skip http::incrementing_deposits"
-    "--skip persist::test_persist_caches"
-    "--skip service::tests::tests::test_dht_persistence"
-    "--skip time::test::test_reinsertion_updates_timeout"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
-    "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
-    "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
-    "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
-  ];
-
-  nativeCheckInputs = [
-    libpq
-  ];
+  checkFlags =
+    [
+      "--skip basic"
+      "--skip deposit_tree::cache_consistency"
+      "--skip deposit_tree::double_update"
+      "--skip deposit_tree::updating"
+      "--skip eth1_cache::big_skip"
+      "--skip eth1_cache::double_update"
+      "--skip eth1_cache::pruning"
+      "--skip eth1_cache::simple_scenario"
+      "--skip fast::deposit_cache_query"
+      "--skip http::incrementing_deposits"
+      "--skip persist::test_persist_caches"
+      "--skip service::tests::tests::test_dht_persistence"
+      "--skip time::test::test_reinsertion_updates_timeout"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+      "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
+      "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
+      "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
+    ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -151,7 +144,10 @@ rustPlatform.buildRustPackage rec {
     description = "Ethereum consensus client in Rust";
     homepage = "https://lighthouse.sigmaprime.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ centromere pmw ];
+    maintainers = with maintainers; [
+      centromere
+      pmw
+    ];
     mainProgram = "lighthouse";
     broken = stdenv.hostPlatform.isDarwin;
   };

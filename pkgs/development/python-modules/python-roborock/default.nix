@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.12.0";
+  version = "2.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-hJzmAvIKb1rLwGo5uYiRWYspH4d3uTdoF7k+emlCAec=";
+    hash = "sha256-QAv4R4Nnn+BcPp0ktf7riKt+ZvaZTF5KI9sjjtDH3SY=";
   };
 
   postPatch = ''

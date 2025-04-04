@@ -1,15 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  unstableGitUpdater,
+}:
 stdenv.mkDerivation {
   pname = "hid-tmff2";
   # https://github.com/Kimplul/hid-tmff2/blob/ca168637fbfb085ebc9ade0c47fa0653dac5d25b/dkms/dkms-install.sh#L12
-  version = "0.82";
+  version = "0.82-unstable-2025-02-03";
 
   src = fetchFromGitHub {
     owner = "Kimplul";
     repo = "hid-tmff2";
-    rev = "343c01bcddf5368ef5465c9848c37bbe6ffc950d";
-    hash = "sha256-ojul5Er6z+cd5dj6J/yAUaGtX6g2Z2eBNCsnOKmqHck=";
+    rev = "a9312ead5720922e1c06b541ea48b6db3f289d36";
+    hash = "sha256-38G0PrYmHg4OLpZvEes5Y2/sQSfUJBCIvqSQderjwAM=";
     # For hid-tminit. Source: https://github.com/scarburato/hid-tminit
     fetchSubmodules = true;
   };
@@ -23,6 +29,8 @@ stdenv.mkDerivation {
   installFlags = [
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   postPatch = "sed -i '/depmod -A/d' Makefile";
 

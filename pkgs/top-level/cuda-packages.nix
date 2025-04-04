@@ -148,6 +148,9 @@ let
       (callPackage ../development/cuda-modules/cutensor/extension.nix {
         inherit cudaVersion flags mkVersionedPackageName;
       })
+      (callPackage ../development/cuda-modules/cusparselt/extension.nix {
+        inherit cudaVersion flags mkVersionedPackageName;
+      })
       (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit cudaVersion flags mkVersionedPackageName;
         pname = "tensorrt";

@@ -30,6 +30,6 @@ flutter324.buildFlutterApplication rec {
     mainProgram = "flut-renamer";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ nayeko ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

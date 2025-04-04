@@ -12,7 +12,7 @@
   python,
   pydantic,
   pytest7CheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0_21,
   pytest-mock,
   typing-extensions,
   tomlkit,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytest-mock
     pytest7CheckHook
     tomlkit

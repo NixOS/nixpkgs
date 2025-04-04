@@ -11,7 +11,7 @@
   Security,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dogdns";
   version = "unstable-2021-10-07";
 

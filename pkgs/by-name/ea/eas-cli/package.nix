@@ -5,7 +5,6 @@
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
-  yarnInstallHook,
   nodejs,
   jq,
 }:
@@ -20,8 +19,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-h7LohShs4j9Z7Mbe6MSMqfszrEPBcGeTpB+ma3iBXyM=";
   };
 
-  packageJson = finalAttrs.src + "/packages/eas-cli/package.json";
-
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
     hash = "sha256-pnp9MI2S5v4a7KftxYC3Sgc487vooX8+7lmYkmRTWWs=";
@@ -30,23 +27,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
-    yarnInstallHook
     nodejs
     jq
   ];
 
-  # Add version field to package.json to prevent yarn pack from failing
-  preInstall = ''
-    echo "Adding version field to package.json"
-    jq '. + {version: "${finalAttrs.version}"}' package.json > package.json.tmp
-    mv package.json.tmp package.json
+  # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/eas-cli-root
+    cp -r . $out/lib/node_modules/eas-cli-root
+
+    runHook postInstall
   '';
 
-  postInstall = ''
-    echo "Creating symlink for eas-cli binary"
+  # postFixup is used to override the symlink created in the fixupPhase
+  postFixup = ''
     mkdir -p $out/bin
     ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
-    chmod +x $out/bin/eas
   '';
 
   meta = {

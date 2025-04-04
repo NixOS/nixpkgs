@@ -21,25 +21,31 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lcov";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
     rev = "v${version}";
-    hash = "sha256-cZdDlOf3IgPQrUNl+wu6Gwecaj+r2xu0eqmlz67TeAI=";
+    hash = "sha256-Qz5Q1JRJeB0aCaYmCR8jeG7TQPkvJHtJTkBhXGM05ak=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
 
   buildInputs = [
     perl
     python3
   ];
 
+  strictDeps = true;
+
   preBuild = ''
-    patchShebangs bin/
-    makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=$(command -v perl))
+    patchShebangs --build bin/{fix.pl,get_version.sh} tests/*/*
+    patchShebangs --host bin/{gen*,lcov,perl2lcov}
+    makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=${lib.getExe perl})
   '';
 
   postInstall = ''

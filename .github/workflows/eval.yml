@@ -43,7 +43,7 @@ jobs:
           echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -54,7 +54,7 @@ jobs:
           echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
 
       - name: Upload the list of all attributes
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: paths
           path: result/*
@@ -71,9 +71,12 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
+
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
@@ -108,7 +111,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -123,7 +126,7 @@ jobs:
           # If it uses too much memory, slightly decrease chunkSize
 
       - name: Upload the output paths and eval stats
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: intermediate-${{ matrix.system }}
           path: result/*
@@ -149,7 +152,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -160,7 +163,7 @@ jobs:
             -o prResult
 
       - name: Upload the combined results
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: result
           path: prResult/*
@@ -224,7 +227,7 @@ jobs:
 
       - name: Upload the combined results
         if: steps.targetRunId.outputs.targetRunId
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: comparison
           path: comparison/*
@@ -241,7 +244,7 @@ jobs:
     steps:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1.11.6
+      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
@@ -254,7 +257,7 @@ jobs:
           path: comparison
 
       - name: Install Nix
-        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
 
       # Important: This workflow job runs with extra permissions,
       # so we need to make sure to not run untrusted code from PRs

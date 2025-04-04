@@ -1,17 +1,22 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.31.2";
+  version = "0.31.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bgVFUBSb/vs+oEVUeF/PniqEkUAl3qRiuFWR4U+iHXo=";
+    sha256 = "sha256-MaWO9I2+xHA+55tUSQ91yJ7suubnWP4V7JxZTruN1A0=";
   };
 
-  vendorHash = "sha256-C1GpLDb4YWL0dXG/mUR+UVy17rnh0zgaICAU0C1bfq0=";
+  vendorHash = "sha256-jTvKNl0L+Dl3u5qHQg0R/rtNtLljLoIvciXYKRe/zNg=";
 
   doCheck = false;
   # Required for versions >= 0.28 as they introduce a gowork.sum file. This is only used for tests so we can safely disable GOWORK
@@ -19,7 +24,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tk" ];
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags '-static'"
+    "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

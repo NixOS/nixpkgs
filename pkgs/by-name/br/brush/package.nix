@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "brush";
-  version = "0.2.15";
+  version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "reubeno";
     repo = "brush";
     tag = "brush-shell-v${version}";
-    hash = "sha256-hPF2nXYXAM+5Lz2VJw9vZ6RFZ40y+YkO94Jc/sLUYsg=";
+    hash = "sha256-ZQ1IiWkM888CWEtwWJ+dMjJO1sGvBTA8E6f9v9JLh/w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-A4v4i6U6BwUMNTI/TO7wTQvNVtQYKGiQfDXOCy8hFTE=";
+  cargoHash = "sha256-Vg5efRierCc7sT+7b94/4i4+3L5CoOrDoeMx/Rzg5mE=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru = {
+    shellPath = "/bin/brush";
+
     tests = {
       complete = testers.testEqualContents {
         assertion = "brushinfo performs to inspect completions";

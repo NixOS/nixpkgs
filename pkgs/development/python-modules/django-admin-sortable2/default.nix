@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-admin-sortable2";
-  version = "2.2.4";
+  version = "2.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jrief";
     repo = "django-admin-sortable2";
     tag = version;
-    hash = "sha256-WaDcDQF3Iq/UBE/tIlQFQiav6l5k6n+hKEsrcHwn+eY=";
+    hash = "sha256-MIxZ33Q8dHo102zvQqMiOlxtPjkenQQYTRyXJOHdCqE=";
   };
 
   build-system = [ setuptools ];
