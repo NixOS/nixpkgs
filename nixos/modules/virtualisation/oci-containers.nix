@@ -434,6 +434,7 @@ let
       };
 
       effectiveUser = container.podman.user or "root";
+      inherit (config.users.users.${effectiveUser}) uid;
       dependOnLingerService =
         cfg.backend == "podman" && effectiveUser != "root" && config.users.users.${effectiveUser}.linger;
     in
@@ -452,8 +453,15 @@ let
           "network-online.target"
         ]
         ++ dependsOn
-        ++ lib.optional dependOnLingerService "linger-users.service";
-      requires = dependsOn;
+        ++ lib.optional dependOnLingerService "linger-users.service"
+        ++ lib.optional (
+          effectiveUser != "root" && container.podman.sdnotify == "healthy"
+        ) "user@${toString uid}.service";
+      requires =
+        dependsOn
+        ++ lib.optional (
+          effectiveUser != "root" && container.podman.sdnotify == "healthy"
+        ) "user@${toString uid}.service";
       environment = lib.mkMerge [
         proxy_env
         (mkIf (cfg.backend == "podman" && container.podman.user != "root") {
@@ -522,6 +530,10 @@ let
           "podman rm -f --ignore --cidfile=/run/${escapedName}/ctr-id"
         else
           "${cfg.backend} rm -f ${name} || true";
+
+      unitConfig = mkIf (effectiveUser != "root") {
+        RequiresMountsFor = "/run/user/${toString uid}/containers";
+      };
 
       serviceConfig =
         {
@@ -615,6 +627,15 @@ in
                 {
                   assertion = cfg.backend == "docker" -> podman == null;
                   message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
+                }
+                {
+                  assertion =
+                    cfg.backend == "podman" && podman.sdnotify == "healthy" && podman.user != "root"
+                    -> config.users.users.${podman.user}.uid != null;
+                  message = ''
+                    Rootless container ${name} (with podman and sdnotify=healthy)
+                    requires that its running user ${podman.user} has a statically specified uid.
+                  '';
                 }
               ];
           in
