@@ -435,6 +435,7 @@ with pkgs;
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
     cloudflare = python3Packages.callPackage ../tools/networking/octodns/providers/cloudflare { };
+    ddns = python3Packages.callPackage ../tools/networking/octodns/providers/ddns { };
   };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
