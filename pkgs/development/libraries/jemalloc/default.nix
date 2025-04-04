@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     automake
   ];
 
-  preConfigure =
-    ''
-      ./autogen.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export LDFLAGS="$LDFLAGS -Wl,-no_uuid -Wl,-install_name,@rpath/libjemalloc.2.dylib";
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="$LDFLAGS -Wl,-no_uuid -Wl,-install_name,@rpath/libjemalloc.2.dylib";
+  '';
+
+  # TODO: switch to autoreconfHook when updating beyond 5.3.0
+  # https://github.com/jemalloc/jemalloc/issues/2346
+  configureScript = "./autogen.sh";
 
   configureFlags =
     [
