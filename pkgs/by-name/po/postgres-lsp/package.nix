@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  protobuf,
-  postgresql,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
@@ -21,9 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-wV1zqaNlihrjS/R9q8b50g5gY6FxddGi62R91adivQE=";
 
   nativeBuildInputs = [
-    protobuf
     rustPlatform.bindgenHook
-    postgresql
   ];
 
   env = {
