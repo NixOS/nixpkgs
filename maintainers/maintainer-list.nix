@@ -1689,6 +1689,11 @@
     githubId = 81317317;
     name = "Anna Aurora";
   };
+  anninzy = {
+    github = "anninzy";
+    githubId = 143312793;
+    name = "Annin";
+  };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
     email = "andrew@amorgan.xyz";
