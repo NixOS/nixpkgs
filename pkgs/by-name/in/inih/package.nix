@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inih";
-  version = "58";
+  version = "59";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "inih";
     rev = "r${version}";
-    hash = "sha256-b2f6hQvkmWgni/zdfv3I1b9ypd7zSyEBv/JVBA6K7/w=";
+    hash = "sha256-0fP5/2+nRJxSpabrH5fItl90gV5keUdLlkPLCdAUpGU=";
   };
 
   nativeBuildInputs = [
