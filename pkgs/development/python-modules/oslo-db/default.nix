@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.db";
+    pname = "oslo_db";
     inherit version;
     hash = "sha256-FHPfDAlc0HOVKG7WBSIgJcI3R3qhLGwpndQUqxT3t8Q=";
   };
