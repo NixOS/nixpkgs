@@ -56,6 +56,7 @@ let
         "blackbox"
         "borgmatic"
         "buildkite-agent"
+        "ecoflow"
         "chrony"
         "collectd"
         "deluge"
