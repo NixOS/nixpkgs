@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.config";
+    pname = "oslo_config";
     inherit version;
     hash = "sha256-VVizS8wrUvIgjoD8rZVaT3ssQbskW2RR1DpiGtEmO70=";
   };
