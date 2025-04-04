@@ -66,6 +66,11 @@ python3Packages.buildPythonApplication rec {
     "SYSCONFDIR=$(out)/etc"
   ];
 
+  postInstall = ''
+    # points to an invalid path and causes duplication with the d-bus service on NixOS
+    rm $out/share/dbus-1/system-services/id.waydro.Container.service
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
