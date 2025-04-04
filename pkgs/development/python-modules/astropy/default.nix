@@ -62,12 +62,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/astropy/astropy/commit/13b89edc9acd6d5f12eea75983084c57cb458130.patch";
-      hash = "sha256-2MgmW4kKBrZnTE1cjYYLOH5hStv5Q6tv4gN4sPSLBpM=";
-    })
-  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
