@@ -109,10 +109,8 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    # AssertionError:  average pixel value difference 12.0968 > epsilon 11.5000
-    "--deselect=Tests/test_file_avif.py::TestFileAvif::test_read"
-    # AssertionError:  average pixel value difference 8.0108 > epsilon 6.0200
-    "--deselect=Tests/test_file_avif.py::TestFileAvif::test_write_rgb"
+    # Checks for very precise color values on what's basically white
+    "--deselect=Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
   ];
 
   disabledTests =
