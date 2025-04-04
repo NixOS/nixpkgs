@@ -10067,10 +10067,6 @@ with pkgs;
 
   libcef = callPackage ../development/libraries/libcef { };
 
-  libcdio = callPackage ../development/libraries/libcdio {
-    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
-  };
-
   libcdio-paranoia = callPackage ../development/libraries/libcdio-paranoia {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration IOKit;
   };
