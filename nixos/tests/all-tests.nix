@@ -339,6 +339,7 @@ in
   convos = handleTest ./convos.nix { };
   corerad = handleTest ./corerad.nix { };
   cosmic = runTest ./cosmic/cosmic.nix;
+  cosmic-autologin = runTest ./cosmic/autologin.nix;
   coturn = handleTest ./coturn.nix { };
   couchdb = handleTest ./couchdb.nix { };
   crabfit = handleTest ./crabfit.nix { };
