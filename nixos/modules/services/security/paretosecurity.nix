@@ -24,6 +24,17 @@
     # dependencies here. This creates the necessary symlinks in the proper locations.
     systemd.sockets.paretosecurity.wantedBy = [ "sockets.target" ];
 
+    # In NixOS, systemd services are configured with minimal PATH. However,
+    # paretosecurity helper looks for installed software to do its job, so
+    # it needs the full system PATH. For example, it runs `iptables` to see if
+    # firewall is configured. And it looks for various password managers to see
+    # if one is installed.
+    # The `paretosecurity-user` timer service that is configured lower has
+    # the same need.
+    systemd.services.paretosecurity.serviceConfig.Environment = [
+      "PATH=${config.system.path}/bin:${config.system.path}/sbin"
+    ];
+
     # Enable the tray icon and timer services if the trayIcon option is enabled
     systemd.user = lib.mkIf config.services.paretosecurity.trayIcon {
       services.paretosecurity-trayicon = {
@@ -31,6 +42,9 @@
       };
       services.paretosecurity-user = {
         wantedBy = [ "graphical-session.target" ];
+        serviceConfig.Environment = [
+          "PATH=${config.system.path}/bin:${config.system.path}/sbin"
+        ];
       };
       timers.paretosecurity-user = {
         wantedBy = [ "timers.target" ];

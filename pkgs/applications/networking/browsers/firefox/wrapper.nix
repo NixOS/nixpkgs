@@ -405,10 +405,12 @@ let
         + lib.optionalString isDarwin ''
           cd "${appPath}"
 
-          # These files have to be copied and not symlinked, otherwise tabs crash.
+          # The omni.ja files have to be copied and not symlinked, otherwise tabs crash.
           # Maybe related to how omni.ja file is mmapped into memory. See:
           # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
-          for file in $(find . -type l -name "omni.ja"); do
+          #
+          # The *.dylib files are copied, otherwise some basic functionality, e.g. Crypto API, is broken.
+          for file in $(find . -name "omni.ja" -o -name "*.dylib"); do
             rm "$file"
             cp "${browser}/${appPath}/$file" "$file"
           done
