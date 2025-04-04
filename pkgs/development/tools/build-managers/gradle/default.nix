@@ -294,21 +294,17 @@ rec {
                     nativeBuildInputs = [
                       (gradle.override {
                         javaToolchains = [
-                          jdk11
+                          # this version has to match what is configured in tests/toolchains/build.gradle
                           jdk23
                         ];
                       })
                     ];
-                    src = ./tests/java-application;
+                    src = ./tests/toolchains;
                   }
                   ''
                     cp -a $src/* .
                     env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
-                      gradle javaToolchains --no-daemon --quiet --console plain > $out
-                    cat $out | grep "Language Version:   11"
-                    cat $out | grep "Detected by:        environment variable 'JAVA_TOOLCHAIN_NIX_0'"
-                    cat $out | grep "Language Version:   23"
-                    cat $out | grep "Detected by:        environment variable 'JAVA_TOOLCHAIN_NIX_1'"
+                     gradle assemble --no-daemon --quiet --console plain > $out
                   '';
             } // gradle.tests;
           }
