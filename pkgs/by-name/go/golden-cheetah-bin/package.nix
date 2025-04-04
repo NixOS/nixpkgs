@@ -6,7 +6,7 @@
 
 let
   pname = "golden-cheetah";
-  version = "3.7-DEV2410";
+  version = "3.7";
 
   commonMeta = {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";

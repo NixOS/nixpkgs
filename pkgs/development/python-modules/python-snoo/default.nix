@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-snoo";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "python-snoo";
     tag = "v${version}";
-    hash = "sha256-Lzyh9DbU9opKxx/2eb2yDEmwHCHsDkbcU6Xhqj0qOaU=";
+    hash = "sha256-vge7tCtKigBIOyInJVVztLdbr1trXTRu3Xbcst2VZN0=";
   };
 
   postPatch = ''

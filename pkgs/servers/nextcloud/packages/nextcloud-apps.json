@@ -43,6 +43,7 @@
 , "twofactor_webauthn": "agpl3Plus"
 , "unroundedcorners": "agpl3Only"
 , "unsplash": "agpl3Only"
+, "uppush": "agpl3Plus"
 , "user_oidc": "agpl3Plus"
 , "user_saml": "agpl3Plus"
 , "whiteboard": "agpl3Plus"

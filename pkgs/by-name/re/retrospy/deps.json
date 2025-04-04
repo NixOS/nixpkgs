@@ -210,6 +210,11 @@
     "hash": "sha256-3UehX9T+I81nfgv2dTHlpoPgYzXFk7kHr1mmlQOCBfw="
   },
   {
+    "pname": "SixLabors.ImageSharp",
+    "version": "3.1.7",
+    "hash": "sha256-jMD/FiIwW1kNhTI6hKig8/QFOO3eTQX/C22cSAcKBH4="
+  },
+  {
     "pname": "SkiaSharp",
     "version": "2.88.8",
     "hash": "sha256-rD5gc4SnlRTXwz367uHm8XG5eAIQpZloGqLRGnvNu0A="

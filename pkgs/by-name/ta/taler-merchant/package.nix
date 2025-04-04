@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.14.1";
+  version = "0.14.6-unstable-2025-03-02";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "v${finalAttrs.version}";
+    rev = "c84ed905e2d4af60162a7def5c0fc430394930e6";
     fetchSubmodules = true;
-    hash = "sha256-ac7ajHBLW6BJrL0iaa+b7XNZHMEEmbAo17URIdPSXd8=";
+    hash = "sha256-LXmrY8foiYOxCik23d3f4t9+tldbm7bVGG8eQOLsm+A=";
   };
 
   postUnpack = ''

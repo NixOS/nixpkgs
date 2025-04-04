@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk11, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk11,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "metabase";
@@ -21,11 +28,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Easy, open source way for everyone in your company to ask questions and learn from data";
-    homepage    = "https://metabase.com";
+    homepage = "https://metabase.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license     = licenses.agpl3Only;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      schneefux
+      thoughtpolice
+      mmahut
+    ];
     mainProgram = "metabase";
   };
   passthru.tests = {

@@ -65,6 +65,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Flaky: Can fail if it takes too long, which happens when the system is under heavy load
+    "test_fps_logger"
+
     # Tests that attempt to access the filesystem
     "test_make_atari_env"
     "test_vec_env_monitor_kwargs"

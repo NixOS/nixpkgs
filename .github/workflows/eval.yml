@@ -43,7 +43,7 @@ jobs:
           echo "targetSha=$targetSha" >> "$GITHUB_OUTPUT"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -71,9 +71,12 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
+
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
@@ -108,7 +111,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -149,7 +152,7 @@ jobs:
           path: nixpkgs
 
       - name: Install Nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -254,7 +257,7 @@ jobs:
           path: comparison
 
       - name: Install Nix
-        uses: cachix/install-nix-action@02a151ada4993995686f9ed4f1be7cfbb229e56f # v31
+        uses: cachix/install-nix-action@d1ca217b388ee87b2507a9a93bf01368bde7cec2 # v31
 
       # Important: This workflow job runs with extra permissions,
       # so we need to make sure to not run untrusted code from PRs

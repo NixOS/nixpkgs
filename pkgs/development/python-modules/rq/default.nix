@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.1";
+  version = "2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-J3ftABqm+5lH37LiBskEXOb6MszvDKO2271s+CEk0ls=";
+    hash = "sha256-RuqLfPEwdwfJo+mdY4vB3lpyGkbP/GQDfRU+TmUur3s=";
   };
 
   build-system = [ hatchling ];

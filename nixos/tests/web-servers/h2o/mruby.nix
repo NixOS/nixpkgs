@@ -58,10 +58,8 @@ in
       server.wait_for_unit("h2o.service")
       server.wait_for_open_port(${portStr})
 
-      hello_world = server.succeed("curl --fail-with-body http://${domain}:${portStr}/hello_world")
-      assert "${sawatdi_chao_lok}" in hello_world
+      assert "${sawatdi_chao_lok}" in server.succeed("curl --fail-with-body http://${domain}:${portStr}/hello_world")
 
-      file_handler = server.succeed("curl --fail-with-body http://${domain}:${portStr}/file_handler")
-      assert "FILE_HANDLER" in file_handler
+      assert "FILE_HANDLER" in server.succeed("curl --fail-with-body http://${domain}:${portStr}/file_handler")
     '';
 }

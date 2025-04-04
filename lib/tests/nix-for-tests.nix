@@ -1,4 +1,5 @@
 {
+  lib ? pkgs.lib,
   pkgs,
 }:
 
@@ -13,20 +14,8 @@
 
 builtins.mapAttrs (
   attr: pkg:
-  if
-    # TODO descend in `nixComponents_*` and override `nix-store`. Also
-    # need to introduce the flag needed to do that with.
-    #
-    # This must be done before Nix 2.26 and beyond becomes the default.
-    !(builtins.elem attr [
-      "nixComponents_2_26"
-      "nix_2_26"
-      "latest"
-    ])
-    # There may-be non-package things, like functions, in there too
-    && builtins.isAttrs pkg
-  then
-    pkg.override { withAWS = false; }
+  if lib.versionAtLeast pkg.version "2.26" then
+    pkg.overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
   else
-    pkg
+    pkg.override { withAWS = false; }
 ) pkgs.nixVersions

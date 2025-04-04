@@ -78,6 +78,8 @@
   ncurses,
   # devdocs-nvim dependencies
   pandoc,
+  # nvim-tinygit
+  gitMinimal,
   # Preview-nvim dependencies
   md-tui,
   # sved dependencies
@@ -1368,6 +1370,24 @@ in
     src = "${hurl.src}/contrib/vim";
   };
 
+  hurl-nvim = super.hurl-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      nvim-treesitter
+      plenary-nvim
+    ];
+
+    runtimeDeps = [
+      hurl
+    ];
+
+    nvimSkipModules = [
+      # attempt to index global '_HURL_GLOBAL_CONFIG' (a nil value)
+      "hurl.popup"
+      "hurl.split"
+    ];
+  };
+
   idris2-nvim = super.idris2-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
@@ -1558,6 +1578,10 @@ in
     patches = [
       ./patches/lens-vim/remove_duplicate_g_lens_animate.patch
     ];
+  };
+
+  lf-nvim = super.lf-nvim.overrideAttrs {
+    dependencies = [ self.toggleterm-nvim ];
   };
 
   lf-vim = super.lf-vim.overrideAttrs {
@@ -2287,6 +2311,7 @@ in
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
+      "nvim-highlight-colors.utils_spec"
       "nvim-highlight-colors.buffer_utils_spec"
       "nvim-highlight-colors.color.converters_spec"
       "nvim-highlight-colors.color.patterns_spec"
@@ -2449,6 +2474,18 @@ in
       "nvim-test.runners.zig"
       "nvim-test.runners.hspec"
       "nvim-test.runners.stack"
+    ];
+  };
+
+  nvim-tinygit = super.nvim-tinygit.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+
+    checkInputs = [
+      gitMinimal
+      # transitive dependency (telescope-nvim) not properly propagated to the test environment
+      self.plenary-nvim
     ];
   };
 
@@ -2648,6 +2685,21 @@ in
       nvim-parinfer
       nvim-paredit
       nvim-treesitter
+    ];
+  };
+
+  parrot-nvim = super.parrot-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+    ];
+
+    dependencies = with self; [
+      plenary-nvim
+    ];
+
+    checkInputs = [
+      curl
+      ripgrep
     ];
   };
 
@@ -3614,6 +3666,9 @@ in
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
+    # Code updated to find relative path at runtime
+    # https://github.com/fisadev/vim-isort/pull/41
+    dontCheckForBrokenSymlinks = true;
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
@@ -3736,6 +3791,12 @@ in
 
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
+  };
+
+  whichpy-nvim = super.whichpy-nvim.overrideAttrs {
+    checkInputs = with self; [
+      telescope-nvim
+    ];
   };
 
   wiki-vim = super.wiki-vim.overrideAttrs {
