@@ -17,7 +17,7 @@ let
 in
 {
   options.services.archtika = {
-    enable = mkEnableOption "Whether to enable the archtika service";
+    enable = mkEnableOption "the archtika CMS";
 
     package = mkPackageOption pkgs "archtika" { };
 
