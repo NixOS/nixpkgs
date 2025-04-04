@@ -68,22 +68,21 @@ in
             else
               cfg.configFile;
         in
-          "${getExe opentelemetry-collector} --config=file:${conf}";
+          "${getExe opentelemetry-collector} --config=file:${conf} $1";
 
-      serviceConfig =
-        {
-          DynamicUser = true;
-          Restart = "always";
-          ProtectSystem = "full";
-          DevicePolicy = "closed";
-          NoNewPrivileges = true;
-          WorkingDirectory = "%S/opentelemetry-collector";
-          StateDirectory = "opentelemetry-collector";
-          SupplementaryGroups = [
-            # allow to read the systemd journal for opentelemetry-collector
-            "systemd-journal"
-          ];
-        };
+      serviceConfig = {
+        DynamicUser = true;
+        Restart = "always";
+        ProtectSystem = "full";
+        DevicePolicy = "closed";
+        NoNewPrivileges = true;
+        WorkingDirectory = "%S/opentelemetry-collector";
+        StateDirectory = "opentelemetry-collector";
+        SupplementaryGroups = [
+          # allow to read the systemd journal for opentelemetry-collector
+          "systemd-journal"
+        ];
+      };
     };
   };
 }
