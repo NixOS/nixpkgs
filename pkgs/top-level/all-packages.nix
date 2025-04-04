@@ -7424,8 +7424,6 @@ with pkgs;
   # 28 is pre-release
   beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
 
-  erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
-
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
