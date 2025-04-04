@@ -60,8 +60,7 @@ in
     systemd.services.opentelemetry-collector = {
       description = "Opentelemetry Collector Service Daemon";
       wantedBy = [ "multi-user.target" ];
-
-      serviceConfig =
+      script =
         let
           conf =
             if cfg.configFile == null then
@@ -69,8 +68,10 @@ in
             else
               cfg.configFile;
         in
+          "${getExe opentelemetry-collector} --config=file:${conf}";
+
+      serviceConfig =
         {
-          ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
           DynamicUser = true;
           Restart = "always";
           ProtectSystem = "full";
