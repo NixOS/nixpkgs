@@ -15592,8 +15592,6 @@ with pkgs;
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
 
-  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
-
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
