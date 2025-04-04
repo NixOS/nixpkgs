@@ -1,0 +1,14 @@
+diff --git a/executors/kubernetes/kubernetes_test.go b/executors/kubernetes/kubernetes_test.go
+index ba50f31e0..c500e3a26 100644
+--- a/executors/kubernetes/kubernetes_test.go
++++ b/executors/kubernetes/kubernetes_test.go
+@@ -2815,6 +2815,9 @@ func TestPrepare(t *testing.T) {
+ 				if runtime.GOOS == "windows" {
+ 					return false, "skipping test, because we are running on windows"
+ 				}
++				if runtime.GOARCH == "arm64" {
++					return false, "skipping test, because of fix assertion we should be on x86"
++				}
+ 				return true, ""
+ 			},
+ 			WindowsKernelVersionGetter: func() string {
