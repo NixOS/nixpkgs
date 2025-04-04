@@ -741,7 +741,7 @@ in
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix { };
-  mailpit = handleTest ./mailpit.nix { };
+  mailpit = runTest ./mailpit.nix;
   mailman = handleTest ./mailman.nix { };
   man = handleTest ./man.nix { };
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
