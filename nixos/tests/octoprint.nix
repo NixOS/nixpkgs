@@ -14,6 +14,7 @@ import ./make-test-python.nix (
         environment.systemPackages = with pkgs; [ jq ];
         services.octoprint = {
           enable = true;
+          package = pkgs.octoprint;
           extraConfig = {
             server = {
               firstRun = false;
