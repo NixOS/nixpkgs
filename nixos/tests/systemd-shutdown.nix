@@ -17,7 +17,7 @@ import ./make-test-python.nix (
       imports = [ ../modules/profiles/minimal.nix ];
       systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source =
         pkgs.writeShellScript "shutdown-message" ''
-          echo "${msg}"
+          echo "${msg}" > /dev/kmsg
         '';
       boot.initrd.systemd.enable = systemdStage1;
     };
