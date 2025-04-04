@@ -1244,6 +1244,13 @@ with pkgs;
     wine = wineWowPackages.stable;
   };
 
+  x2t = callPackage ../by-name/x2/x2t/package.nix {
+    openssl = openssl.override {
+      enableMD2 = true;
+      static = true;
+    };
+  };
+
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
