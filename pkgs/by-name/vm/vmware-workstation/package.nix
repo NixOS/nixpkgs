@@ -372,10 +372,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Industry standard desktop hypervisor for x86-64 architecture";
-    homepage = "https://www.vmware.com/products/workstation-pro.html";
+    homepage = "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "vmware";
     maintainers = with lib.maintainers; [
       cawilliamson
       deinferno
