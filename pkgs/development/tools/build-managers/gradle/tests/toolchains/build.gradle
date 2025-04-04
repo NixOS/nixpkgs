@@ -1,0 +1,11 @@
+plugins {
+    id('application')
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(23))
+}
+
+application {
+    mainClass = 'Main'
+}
