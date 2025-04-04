@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.utils";
+    pname = "oslo_utils";
     inherit version;
     hash = "sha256-3PeNFLlo+3sUJjx3J4srkwp4YdPKqIfTpYsokPZlmDU=";
   };
