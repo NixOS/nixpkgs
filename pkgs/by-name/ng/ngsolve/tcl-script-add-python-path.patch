@@ -1,0 +1,14 @@
+diff --git a/ngsolve.tcl b/ngsolve.tcl
+index 4b0e10795..4837911b5 100644
+--- a/ngsolve.tcl
++++ b/ngsolve.tcl
+@@ -1,4 +1,9 @@
+ puts "loading ngsolve library"
++if {[info exists env(PYTHONPATH)]} {
++    set env(PYTHONPATH) $env(PYTHONPATH):@WRAP_PYTHONPATH@
++} else {
++	set env(PYTHONPATH) @WRAP_PYTHONPATH@
++}
+ 
+ # netgen_library_dir is set from python in pip packages
+ if { [ info exists netgen_library_dir ] } {

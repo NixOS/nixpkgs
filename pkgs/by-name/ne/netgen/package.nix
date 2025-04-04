@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
-  makeWrapper,
   cmake,
   python3Packages,
   mpi,
@@ -80,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
                      ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
 
     substituteInPlace ng/ng.tcl ng/onetcl.cpp \
-      --replace-fail "libnggui" "$out/lib/libnggui"
+      --replace-fail "libnggui" "$out/lib/libnggui" \
+      --replace-fail "{dir}/ngsolve.tcl" "{dir}/../libexec/ngsolve.tcl"
   '';
 
   nativeBuildInputs = [
     cmake
-    makeWrapper
     python3Packages.pybind11-stubgen
   ];
 
@@ -139,8 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     python3Packages.pytest-check
     python3Packages.pytest-mpi
+    python3Packages.pythonImportsCheckHook
     mpiCheckPhaseHook
   ];
+
+  pythonImportsCheck = [ "netgen" ];
 
   passthru = {
     inherit avxSupport avx2Support avx512Support;
