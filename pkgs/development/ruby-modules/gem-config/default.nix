@@ -79,7 +79,7 @@
   libvirt,
   glib,
   vips,
-  taglib_1,
+  taglib,
   libopus,
   linux-pam,
   libidn,
@@ -642,14 +642,9 @@ in
   };
 
   iconv = attrs: {
-    dontBuild = false;
     buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
-    ];
-    patches = [
-      # Fix incompatible function pointer conversion errors with clang 16
-      ./iconv-fix-incompatible-function-pointer-conversions.patch
     ];
   };
 
@@ -1109,7 +1104,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib_1 ];
+    buildInputs = [ taglib ];
   };
 
   timfel-krb5-auth = attrs: {
