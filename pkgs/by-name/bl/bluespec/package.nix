@@ -160,15 +160,17 @@ stdenv.mkDerivation rec {
     [
       automake
       autoconf
-      asciidoctor
       bison
       flex
       ghcWithPackages
       perl
       pkg-config
-      texliveFull
       tcl
       makeBinaryWrapper
+    ]
+    ++ lib.optionals withDocs [
+      texliveFull
+      asciidoctor
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/B-Lang-org/bsc/blob/main/src/comp/bsc.hs#L1838
