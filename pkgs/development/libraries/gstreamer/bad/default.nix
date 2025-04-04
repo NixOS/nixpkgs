@@ -340,7 +340,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
-      "-Dnvcodec=disabled" # Linux-only
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86) [
+      "-Dnvcodec=disabled" # Linux-only, broken on non-x86
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
       "-Dva=disabled" # see comment on `libva` in `buildInputs`
