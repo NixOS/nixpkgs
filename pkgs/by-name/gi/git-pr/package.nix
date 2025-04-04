@@ -19,13 +19,17 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/ssh $out/bin/git-ssh
+    mv $out/bin/web $out/bin/git-web
   '';
 
   meta = {
     homepage = "https://pr.pico.sh";
     description = "Simple git collaboration tool";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    mainProgram = "git-pr";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      jolheiser
+    ];
+    mainProgram = "git-ssh";
   };
 }
