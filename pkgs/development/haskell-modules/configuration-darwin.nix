@@ -290,35 +290,11 @@ self: super: ({
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-  http-client-tls = overrideCabal (drv: {
-    postPatch = ''
-      # This comment has been inserted, so the derivation hash changes, forcing
-      # a rebuild of this derivation which has succeeded to build on Hydra before,
-      # but apparently been corrupted, causing reverse dependencies to fail.
-      #
-      # This workaround can be removed upon the next darwin stdenv rebuild,
-      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-      # full haskellPackages rebuild.
-    '' + drv.postPatch or "";
-  }) super.http-client-tls;
-
   http2 = super.http2.overrideAttrs (drv: {
     # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
     # that access localhost.
     __darwinAllowLocalNetworking = true;
   });
-
-  foldl = overrideCabal (drv: {
-    postPatch = ''
-      # This comment has been inserted, so the derivation hash changes, forcing
-      # a rebuild of this derivation which has succeeded to build on Hydra before,
-      # but apparently been corrupted, causing reverse dependencies to fail.
-      #
-      # This workaround can be removed upon the next darwin stdenv rebuild,
-      # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-      # full haskellPackages rebuild.
-    '' + drv.postPatch or "";
-  }) super.foldl;
 
   # https://hydra.nixos.org/build/230964714/nixlog/1
   inline-c-cpp = appendPatch (pkgs.fetchpatch {
