@@ -251,3 +251,6 @@ fd14c067813572afc03ddbf7cdedc3eab5a59954
 
 # treewide format of all Nix files
 374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt
+
+# treewide format of inactive Nix files (https://github.com/NixOS/nixpkgs/pull/364000)
+9798dad2afacacb4cfdce8dfed1493e3d4c08457
