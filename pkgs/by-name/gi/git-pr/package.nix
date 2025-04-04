@@ -6,16 +6,28 @@
 
 buildGoModule rec {
   pname = "git-pr";
-  version = "0.0.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "picosh";
     repo = "git-pr";
     rev = "v${version}";
-    hash = "sha256-7Ka8p5X8nQBXKiT6QsWOWMQJL8rePKrHz/LZU1W+oQ8=";
+    hash = "sha256-2A2rP7yr8faVoIYAWprr+t7MwDPerhsuOjWWEl1mhXw=";
   };
 
-  vendorHash = "sha256-tu5C7hz6UTgn/jCCotXzZHlUmGVNERhA7Osxi31Domk=";
+  vendorHash = "sha256-7aHr5CWZVmhBiuCXaK49zYJXMufCxZBnS917mF0QJlg=";
+
+  subPackages = [
+    "cmd/ssh"
+    "cmd/web"
+  ];
+
+  env.CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/ssh $out/bin/git-ssh
