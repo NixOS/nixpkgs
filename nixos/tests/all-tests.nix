@@ -338,6 +338,7 @@ in
   containers-unified-hierarchy = handleTest ./containers-unified-hierarchy.nix { };
   convos = handleTest ./convos.nix { };
   corerad = handleTest ./corerad.nix { };
+  cosmic = runTest ./cosmic/cosmic.nix;
   coturn = handleTest ./coturn.nix { };
   couchdb = handleTest ./couchdb.nix { };
   crabfit = handleTest ./crabfit.nix { };
