@@ -9,13 +9,13 @@
 }:
 buildPythonPackage rec {
   pname = "textual-autocomplete";
-  version = "4.0.0a0";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "textual_autocomplete";
     inherit version;
-    hash = "sha256-wsjmgODvFgfbyqxW3jsH88JC8z0TZQOChLgics7wAHY=";
+    hash = "sha256-P8s1P+u/xRBj+ExnOyaw9Cf/e9RX6y+wBuNYRiE/3So=";
   };
 
   build-system = [
