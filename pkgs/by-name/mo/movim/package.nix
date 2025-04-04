@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.29.2";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/u8/9tn0X+IwXKyK3S5uA9X8IRsg5xDdUPpnvxOIaYc=";
+    hash = "sha256-rW751UhDBhakOrAT4BOiRDPpGldf1EwNZY8iavXlpLk=";
   };
 
   php = php.buildEnv (
@@ -94,11 +94,7 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  # no listed license
-  # pinned commonmark
-  composerStrictValidation = false;
-
-  vendorHash = "sha256-ikIAIPq8Yj27vGmJxeViYJ5SWiZtE68CIE526glZPlo=";
+  vendorHash = "sha256-NuX6CX2QXea8BcL0nzFOdxIBs36igD8lvixna+vsviM=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
