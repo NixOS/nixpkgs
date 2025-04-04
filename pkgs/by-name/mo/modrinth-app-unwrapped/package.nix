@@ -6,6 +6,7 @@
   desktop-file-utils,
   fetchFromGitHub,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
   openssl,
   pkg-config,
@@ -18,14 +19,15 @@
 let
   pnpm = pnpm_9;
 in
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h+zj4Hm7v8SU6Zy0rIWbOknXVdSDf8b1d4q6M12J5Lc=";
   };
 
@@ -33,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-RrXSBgVh4UZFHcgUWhUjE7rEm/RZFDSDCpXS22gVjZ0=";
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-nFuPFgwJw38XVxhW0QXmU31o+hqJKGJysnPg2YSg2D0=";
   };
 
@@ -72,6 +74,10 @@ rustPlatform.buildRustPackage rec {
         $out/share/applications/Modrinth\ App.desktop
     '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Modrinth's game launcher";
     longDescription = ''
@@ -91,4 +97,4 @@ rustPlatform.buildRustPackage rec {
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
     broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
   };
-}
+})
