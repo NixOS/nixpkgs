@@ -18,6 +18,7 @@
   libXmu,
   medfile,
   mpi,
+  netgen,
   ninja,
   ode,
   opencascade-occt_7_6,
@@ -78,6 +79,7 @@ freecad-utils.makeCustomizable (
       [
         cmake
         ninja
+        netgen
         pkg-config
         gfortran
         wrapGAppsHook3
@@ -104,6 +106,7 @@ freecad-utils.makeCustomizable (
         matplotlib
         medfile
         mpi
+        netgen
         ode
         opencamlib
         pivy
@@ -163,6 +166,9 @@ freecad-utils.makeCustomizable (
         "-DBUILD_FLAT_MESH:BOOL=ON"
         "-DINSTALL_TO_SITEPACKAGES=OFF"
         "-DFREECAD_USE_PYBIND11=ON"
+        "-DBUILD_NETGEN=ON"
+        "-DBUILD_FEM_NETGEN=ON"
+
       ]
       ++ lib.optionals (qtVersion == 5) [
         "-DBUILD_QT5=ON"
