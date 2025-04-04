@@ -331,11 +331,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
       "trivialautovarinit"
-      # breaks clang -target bpf; should be fixed to filter target?
     ]
     ++ (lib.optionals withLibBPF [
+      # breaks clang -target bpf; should be fixed to not use
+      # a wrapped clang?
       "zerocallusedregs"
       "shadowstack"
+      "pacret"
     ]);
 
   nativeBuildInputs =
