@@ -6557,6 +6557,12 @@
     github = "dsymbol";
     githubId = 88138099;
   };
+  dtsykunov = {
+    name = "Dmitrii Tsykunov";
+    email = "tsykunov.dmitry@gmail.com";
+    github = "dtsykunov";
+    githubId = 73191463;
+  };
   dtzWill = {
     email = "w@wdtz.org";
     github = "dtzWill";
