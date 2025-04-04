@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayclip";
-  version = "0.4.2";
+  version = "a62ac18e5e56085bd416fbe5fbe22b3560291e7b";
 
   outputs = [
     "out"
