@@ -339,7 +339,7 @@ let
             map (
               listen:
               {
-                port = cfg.defaultSSLListenPort;
+                port = if (hasPrefix "unix:" listen.addr) then null else cfg.defaultSSLListenPort;
                 ssl = true;
               }
               // listen
@@ -351,7 +351,7 @@ let
             map (
               listen:
               {
-                port = cfg.defaultHTTPListenPort;
+                port = if (hasPrefix "unix:" listen.addr) then null else cfg.defaultHTTPListenPort;
                 ssl = false;
               }
               // listen
