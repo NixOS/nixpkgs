@@ -1896,6 +1896,23 @@ let
         };
       };
 
+      ginfuru.better-solarized = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ginfuru.ginfuru-better-solarized-dark-theme/changelog";
+          description = "A Better Solarized theme for Visual Studio Code include light and dark versions";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ginfuru.ginfuru-better-solarized-dark-theme";
+          homepage = "https://github.com/ginfuru/vscode-better-solarized";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+        mktplcRef = {
+          name = "ginfuru-better-solarized-dark-theme";
+          publisher = "ginfuru";
+          version = "0.10.9";
+          hash = "sha256-Zh3u1iq/kSzwtOY1RmG4cwvN6nJO6ys88BXn/EH/wTs=";
+        };
+      };
+
       github.codespaces = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "github";
