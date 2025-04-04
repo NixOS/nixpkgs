@@ -3277,6 +3277,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  decora-wifi = callPackage ../development/python-modules/decora-wifi { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deebot-client = callPackage ../development/python-modules/deebot-client { };
@@ -7804,7 +7806,7 @@ self: super: with self; {
       p.override {
         enablePython = true;
         python3 = python;
-        python3Packages = pythonPackages;
+        python3Packages = self;
       }
     )
     (p: p.py)
