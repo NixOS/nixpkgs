@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b67e9d2..72c292b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -110,7 +110,7 @@ if (MSVC)
+     list(APPEND LUAU_LSP_OPTIONS /W3 /WX /D_CRT_SECURE_NO_WARNINGS)
+     list(APPEND LUAU_LSP_OPTIONS /MP) # Distribute compilation across multiple cores
+ else ()
+-    list(APPEND LUAU_LSP_OPTIONS -Wall -Werror)
++    list(APPEND LUAU_LSP_OPTIONS -Wall)
+ endif ()
+ 
+ if (LSP_BUILD_ASAN)
