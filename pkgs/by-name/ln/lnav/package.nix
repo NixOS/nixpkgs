@@ -20,6 +20,7 @@
   rustPlatform,
   rustc,
   libunistring,
+  prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,16 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    zlib
-    curl.dev
-    re2c
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
-  ];
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+      zlib
+      curl.dev
+      re2c
+    ]
+    ++ lib.optionals prqlSupport [
+      cargo
+      rustPlatform.cargoSetupHook
+      rustc
+    ];
 
   buildInputs =
     [
