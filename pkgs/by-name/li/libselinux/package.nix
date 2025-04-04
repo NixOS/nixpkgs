@@ -18,7 +18,7 @@ assert enablePython -> swig != null && python3 != null;
 stdenv.mkDerivation (
   rec {
     pname = "libselinux";
-    version = "3.8";
+    version = "3.8.1";
     inherit (libsepol) se_url;
 
     outputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (
 
     src = fetchurl {
       url = "${se_url}/${version}/libselinux-${version}.tar.gz";
-      hash = "sha256-DDdWvKBHyScCgdfE3N7NAAty44oYPJMGYeupaQg5tUE=";
+      hash = "sha256-7C0nifkxFS0hwdsetLwgLOTszt402b6eNg47RSQ87iw=";
     };
 
     patches = [
