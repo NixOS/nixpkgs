@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.22.200";
+  version = "1.22.300";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-Mvp9VrPk36wNTUwNQT83JPOEO72Xhqmhkn3/KfZhQX4=";
+    hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
 
   nativeBuildInputs = [
