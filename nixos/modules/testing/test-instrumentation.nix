@@ -179,11 +179,11 @@ in
     };
 
     boot.kernel.sysctl = {
-      "kernel.hung_task_timeout_secs" = 600;
+      kernel.hung_task_timeout_secs = 600;
       # Panic on out-of-memory conditions rather than letting the
       # OOM killer randomly get rid of processes, since this leads
       # to failures that are hard to diagnose.
-      "vm.panic_on_oom" = lib.mkDefault 2;
+      vm.panic_on_oom = lib.mkDefault 2;
     };
 
     boot.kernelParams = [

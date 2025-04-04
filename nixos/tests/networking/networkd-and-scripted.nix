@@ -892,7 +892,7 @@ let
       name = "Privacy";
       nodes.router = {
         virtualisation.interfaces.enp1s0.vlan = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+        boot.kernel.sysctl.net.ipv6.conf.all.forwarding = true;
         networking = {
           useNetworkd = networkd;
           useDHCP = false;

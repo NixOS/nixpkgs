@@ -166,7 +166,7 @@ import ./make-test-python.nix (
         { pkgs, ... }:
         {
           boot.kernel.sysctl = {
-            "net.ipv4.conf.all.forwarding" = 1;
+            net.ipv4.conf.all.forwarding = true;
           };
 
           networking = {

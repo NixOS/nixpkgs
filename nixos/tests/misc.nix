@@ -65,7 +65,7 @@ import ./make-test-python.nix (
           enable = true;
           wheelNeedsPassword = false;
         };
-        boot.kernel.sysctl."vm.swappiness" = 1;
+        boot.kernel.sysctl.vm.swappiness = 1;
         boot.kernelParams = [ "vsyscall=emulate" ];
         system.extraDependencies = [ foo ];
       };

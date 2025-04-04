@@ -7,7 +7,7 @@ import ./make-test-python.nix ({
         config = {
           # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
           boot.kernel.sysctl = {
-            "net.ipv6.conf.all.forwarding" = true;
+            net.ipv6.conf.all.forwarding = true;
           };
           networking.interfaces.eth1 = {
             ipv6.addresses = [
@@ -50,7 +50,7 @@ import ./make-test-python.nix ({
         # trigger one immediately.
         config = {
           boot.kernel.sysctl = {
-            "net.ipv6.conf.all.autoconf" = true;
+            net.ipv6.conf.all.autoconf = true;
           };
           environment.systemPackages = with pkgs; [
             ndisc6

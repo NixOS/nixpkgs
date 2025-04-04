@@ -252,10 +252,10 @@ in
     };
     # See: https://docs.rke2.io/security/hardening_guide#set-kernel-parameters
     boot.kernel.sysctl = lib.mkIf cfg.cisHardening {
-      "vm.panic_on_oom" = 0;
-      "vm.overcommit_memory" = 1;
-      "kernel.panic" = 10;
-      "kernel.panic_on_oops" = 1;
+      vm.panic_on_oom = 0;
+      vm.overcommit_memory = 1;
+      kernel.panic = 10;
+      kernel.panic_on_oops = 1;
     };
 
     systemd.services."rke2-${cfg.role}" = {

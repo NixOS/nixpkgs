@@ -568,7 +568,7 @@ in
         Additionally it is recommended to only use lower-case characters.
         If (e.g. for legacy reasons) a FQDN is required as the Linux kernel
         network node hostname (uname --nodename) the option
-        boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
+        boot.kernel.sysctl.kernel.hostname can be used as a workaround (but
         the 64 character limit still applies).
 
         WARNING: Do not use underscores (_) or you may run into unexpected issues.
@@ -1586,31 +1586,47 @@ in
       # from being created.
       optionalString hasBonds "options bonding max_bonds=0";
 
-    boot.kernel.sysctl =
-      {
-        "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
-        "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-        "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
-        # allow all users to do ICMP echo requests (ping)
-        "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
-        # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
-        "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
-      }
-      // listToAttrs (
-        forEach interfaces (
-          i: nameValuePair "net.ipv4.conf.${replaceStrings [ "." ] [ "/" ] i.name}.proxy_arp" i.proxyARP
-        )
-      )
-      // listToAttrs (
-        forEach interfaces (
-          i:
-          let
-            opt = i.tempAddress;
-            val = tempaddrValues.${opt}.sysctl;
-          in
-          nameValuePair "net.ipv6.conf.${replaceStrings [ "." ] [ "/" ] i.name}.use_tempaddr" val
-        )
-      );
+    boot.kernel.sysctl = {
+      net.ipv4.conf =
+        {
+          all.forwarding = mkDefault (any (i: i.proxyARP) interfaces);
+        }
+        // listToAttrs (
+          forEach interfaces (
+            i:
+            nameValuePair i.name {
+              proxy_arp = i.proxyARP;
+            }
+          )
+        );
+
+      # allow all users to do ICMP echo requests (ping)
+      net.ipv4.ping_group_range = mkDefault [
+        0
+        2147483647
+      ];
+
+      net.ipv6.conf =
+        {
+          all.disable_ipv6 = mkDefault (!cfg.enableIPv6);
+          default.disable_ipv6 = mkDefault (!cfg.enableIPv6);
+
+          # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
+          default.use_tempaddr = tempaddrValues.${cfg.tempAddresses}.sysctl;
+        }
+        // (listToAttrs (
+          forEach interfaces (
+            i:
+            let
+              opt = i.tempAddress;
+              val = tempaddrValues.${opt}.sysctl;
+            in
+            nameValuePair i.name {
+              use_tempaddr = val;
+            }
+          )
+        ));
+    };
 
     systemd.services.domainname = lib.mkIf (cfg.domain != null) {
       wantedBy = [ "sysinit.target" ];

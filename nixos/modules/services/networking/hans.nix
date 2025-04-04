@@ -105,7 +105,7 @@ in
 
   config = lib.mkIf (cfg.server.enable || cfg.clients != { }) {
     boot.kernel.sysctl = lib.optionalAttrs cfg.server.respondToSystemPings {
-      "net.ipv4.icmp_echo_ignore_all" = 1;
+      net.ipv4.icmp_echo_ignore_all = 1;
     };
 
     boot.kernelModules = [ "tun" ];

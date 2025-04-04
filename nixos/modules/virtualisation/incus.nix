@@ -295,16 +295,16 @@ in
 
     # https://github.com/lxc/incus/blob/f145309929f849b9951658ad2ba3b8f10cbe69d1/doc/reference/server_settings.md
     boot.kernel.sysctl = {
-      "fs.aio-max-nr" = lib.mkDefault 524288;
-      "fs.inotify.max_queued_events" = lib.mkDefault 1048576;
-      "fs.inotify.max_user_instances" = lib.mkOverride 1050 1048576; # override in case conflict nixos/modules/services/x11/xserver.nix
-      "fs.inotify.max_user_watches" = lib.mkOverride 1050 1048576; # override in case conflict nixos/modules/services/x11/xserver.nix
-      "kernel.dmesg_restrict" = lib.mkDefault 1;
-      "kernel.keys.maxbytes" = lib.mkDefault 2000000;
-      "kernel.keys.maxkeys" = lib.mkDefault 2000;
-      "net.core.bpf_jit_limit" = lib.mkDefault 1000000000;
-      "net.ipv4.neigh.default.gc_thresh3" = lib.mkDefault 8192;
-      "net.ipv6.neigh.default.gc_thresh3" = lib.mkDefault 8192;
+      fs.aio-max-nr = lib.mkDefault 524288;
+      fs.inotify.max_queued_events = lib.mkDefault 1048576;
+      fs.inotify.max_user_instances = lib.mkOverride 1050 1048576; # override in case conflict nixos/modules/services/x11/xserver.nix
+      fs.inotify.max_user_watches = lib.mkOverride 1050 1048576; # override in case conflict nixos/modules/services/x11/xserver.nix
+      kernel.dmesg_restrict = lib.mkDefault 1;
+      kernel.keys.maxbytes = lib.mkDefault 2000000;
+      kernel.keys.maxkeys = lib.mkDefault 2000;
+      net.core.bpf_jit_limit = lib.mkDefault 1000000000;
+      net.ipv4.neigh.default.gc_thresh3 = lib.mkDefault 8192;
+      net.ipv6.neigh.default.gc_thresh3 = lib.mkDefault 8192;
       # vm.max_map_count is set higher in nixos/modules/config/sysctl.nix
     };
 

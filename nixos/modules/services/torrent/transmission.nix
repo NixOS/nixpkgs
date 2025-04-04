@@ -540,28 +540,28 @@ in
       # https://trac.transmissionbt.com/browser/trunk/libtransmission/tr-udp.c?rev=11956.
       # at least up to the values hardcoded here:
       (mkIf cfg.settings.utp-enabled {
-        "net.core.rmem_max" = mkDefault 4194304; # 4MB
-        "net.core.wmem_max" = mkDefault 1048576; # 1MB
+        net.core.rmem_max = mkDefault 4194304; # 4MB
+        net.core.wmem_max = mkDefault 1048576; # 1MB
       })
       (mkIf cfg.performanceNetParameters {
         # Increase the number of available source (local) TCP and UDP ports to 49151.
         # Usual default is 32768 60999, ie. 28231 ports.
         # Find out your current usage with: ss -s
-        "net.ipv4.ip_local_port_range" = mkDefault "16384 65535";
+        net.ipv4.ip_local_port_range = mkDefault "16384 65535";
         # Timeout faster generic TCP states.
         # Usual default is 600.
         # Find out your current usage with: watch -n 1 netstat -nptuo
-        "net.netfilter.nf_conntrack_generic_timeout" = mkDefault 60;
+        net.netfilter.nf_conntrack_generic_timeout = mkDefault 60;
         # Timeout faster established but inactive connections.
         # Usual default is 432000.
-        "net.netfilter.nf_conntrack_tcp_timeout_established" = mkDefault 600;
+        net.netfilter.nf_conntrack_tcp_timeout_established = mkDefault 600;
         # Clear immediately TCP states after timeout.
         # Usual default is 120.
-        "net.netfilter.nf_conntrack_tcp_timeout_time_wait" = mkDefault 1;
+        net.netfilter.nf_conntrack_tcp_timeout_time_wait = mkDefault 1;
         # Increase the number of trackable connections.
         # Usual default is 262144.
         # Find out your current usage with: conntrack -C
-        "net.netfilter.nf_conntrack_max" = mkDefault 1048576;
+        net.netfilter.nf_conntrack_max = mkDefault 1048576;
       })
     ];
 

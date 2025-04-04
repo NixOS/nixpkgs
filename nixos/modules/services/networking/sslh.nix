@@ -224,8 +224,8 @@ in
     # the only difference is using iptables mark 0x2 instead of 0x1 to avoid conflicts with nixos/nat module
     (mkIf (cfg.enable && cfg.settings.transparent) {
       # Set route_localnet = 1 on all interfaces so that ssl can use "localhost" as destination
-      boot.kernel.sysctl."net.ipv4.conf.default.route_localnet" = 1;
-      boot.kernel.sysctl."net.ipv4.conf.all.route_localnet" = 1;
+      boot.kernel.sysctl.net.ipv4.conf.default.route_localnet = 1;
+      boot.kernel.sysctl.net.ipv4.conf.all.route_localnet = 1;
 
       systemd.services.sslh =
         let
