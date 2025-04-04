@@ -26,7 +26,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_manilaclient";
+    inherit version;
     hash = "sha256-58AYZzpFwG4Vd2AXW1WYxzbKRtMri7cyY7kboqv9EN8=";
   };
 

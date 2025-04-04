@@ -23,7 +23,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_keystoneclient";
+    inherit version;
     hash = "sha256-ch3irsdxAHY4nGdO4ntnEul9hsfg/0h7C0QJyPzuEOc=";
   };
 

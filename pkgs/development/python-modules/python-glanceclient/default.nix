@@ -49,7 +49,8 @@ buildPythonPackage {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "python_glanceclient";
+    inherit version;
     hash = "sha256-+FtvyB8ns02hyHSEswl2WdsFKavRxnWV0vD+fLFZA2w=";
   };
 
