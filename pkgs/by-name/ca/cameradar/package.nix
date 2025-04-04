@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "cameradar";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
+    sha256 = "sha256-c0yCYL4I99iIQLrUDS5W3b0Qf25nAu/f1cRptth/Ymo=";
   };
 
   vendorHash = "sha256-AIi57DWMvAKl0PhuwHO/0cHoDKk5e0bJsqHYBka4NiU=";
