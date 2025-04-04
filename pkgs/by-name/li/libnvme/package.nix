@@ -12,6 +12,7 @@
   python3,
   stdenv,
   swig,
+  liburing,
   systemd,
   # ImportError: cannot import name 'mlog' from 'mesonbuild'
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.11.1";
+  version = "1.12";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CEGr7PDOVRi210XvICH8iLYDKn8S9bGruBO4tycvsT8=";
+    hash = "sha256-S+bzdJmtNw9Zn9JtdA0CZNI1k2SSK47C6CH4Wu5UGrE=";
   };
 
   postPatch = ''
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3.pythonOnBuildForHost
     swig
+    liburing
   ];
 
   buildInputs = [
