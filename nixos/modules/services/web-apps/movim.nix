@@ -128,10 +128,8 @@ let
               ''
                 echo -n "Precompressing static files with Brotli …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
-                    file="$1"
-                    ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output=$file.br $file
-                  ''}
+                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                      ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
                 echo " done."
               ''
             )
@@ -139,10 +137,8 @@ let
               ''
                 echo -n "Precompressing static files with Gzip …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                  | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_gzip" ''
-                    file="$1"
-                    ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} $file > $file.gz
-                  ''}
+                  | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
+                      ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
                 echo " done."
               ''
             )
@@ -175,6 +171,37 @@ let
       "mysql" = "mysql.service";
     }
     .${cfg.database.type};
+
+  # exclusivity asserted in `assertions`
+  webServerService =
+    if cfg.h2o != null then
+      "h2o.service"
+    else if cfg.nginx != null then
+      "nginx.service"
+    else
+      null;
+
+  socketOwner =
+    if cfg.h2o != null then
+      config.services.h2o.user
+    else if cfg.nginx != null then
+      config.services.nginx.user
+    else
+      cfg.user;
+
+  # Movim needs a lot of unsafe values to function at this time. Perhaps if
+  # this is ever addressed in the future, the PHP application will send up the
+  # proper directive. For now this fairly conservative CSP will restrict a lot
+  # of potentially bad stuff as well as take in inventory of the features used.
+  #
+  # See: https://github.com/movim/movim/issues/314
+  movimCSP = lib.concatStringsSep "; " [
+    "default-src 'self'"
+    "img-src 'self' aesgcm: data: https:"
+    "media-src 'self' aesgcm: https:"
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+    "style-src 'self' 'unsafe-inline'"
+  ];
 in
 {
   options.services = {
@@ -209,19 +236,19 @@ in
       };
 
       dataDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/var/lib/movim";
         description = "State directory of the `movim` user which holds the application’s state & data.";
       };
 
       logDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/var/log/movim";
         description = "Log directory of the `movim` user which holds the application’s logs.";
       };
 
       runtimeDir = mkOption {
-        type = types.nonEmptyStr;
+        type = types.path;
         default = "/run/movim";
         description = "Runtime directory of the `movim` user which holds the application’s caches & temporary files.";
       };
@@ -319,30 +346,28 @@ in
       };
 
       precompressStaticFiles = mkOption {
-        type =
-          with types;
-          submodule {
-            options = {
-              brotli = {
-                enable = mkEnableOption "Brotli precompression";
-                package = mkPackageOption pkgs "brotli" { };
-                compressionLevel = mkOption {
-                  type = types.ints.between 0 11;
-                  default = 11;
-                  description = "Brotli compression level";
-                };
+        type = types.submodule {
+          options = {
+            brotli = {
+              enable = mkEnableOption "Brotli precompression";
+              package = mkPackageOption pkgs "brotli" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 0 11;
+                default = 11;
+                description = "Brotli compression level";
               };
-              gzip = {
-                enable = mkEnableOption "Gzip precompression";
-                package = mkPackageOption pkgs "gzip" { };
-                compressionLevel = mkOption {
-                  type = types.ints.between 1 9;
-                  default = 9;
-                  description = "Gzip compression level";
-                };
+            };
+            gzip = {
+              enable = mkEnableOption "Gzip precompression";
+              package = mkPackageOption pkgs "gzip" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 1 9;
+                default = 9;
+                description = "Gzip compression level";
               };
             };
           };
+        };
         default = {
           brotli.enable = true;
           gzip.enable = false;
@@ -354,67 +379,67 @@ in
         type = types.submodule {
           options = {
             info = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "Content of the info box on the login page";
             };
 
             description = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "General description of the instance";
             };
 
             timezone = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The server timezone";
             };
 
             restrictsuggestions = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Only suggest chatrooms, Communities and other contents that are available on the user XMPP server and related services";
             };
 
             chatonly = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Disable all the social feature (Communities, Blog…) and keep only the chat ones";
             };
 
             disableregistration = mkOption {
-              type = with types; nullOr bool;
+              type = types.nullOr types.bool;
               default = null;
               description = "Remove the XMPP registration flow and buttons from the interface";
             };
 
             loglevel = mkOption {
-              type = with types; nullOr (ints.between 0 3);
+              type = types.nullOr (types.ints.between 0 3);
               default = null;
               description = "The server loglevel";
             };
 
             locale = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The server main locale";
             };
 
             xmppdomain = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The default XMPP server domain";
             };
 
             xmppdescription = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The default XMPP server description";
             };
 
             xmppwhitelist = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.nonEmptyStr;
               default = null;
               description = "The allowlisted XMPP servers";
             };
@@ -442,7 +467,7 @@ in
       };
 
       secretFile = mkOption {
-        type = with types; nullOr path;
+        type = types.nullOr types.path;
         default = null;
         description = "The secret file to be sourced for the .env settings.";
       };
@@ -459,13 +484,13 @@ in
         };
 
         name = mkOption {
-          type = types.str;
+          type = types.nonEmptyStr;
           default = "movim";
           description = "Database name.";
         };
 
         user = mkOption {
-          type = types.str;
+          type = types.nonEmptyStr;
           default = "movim";
           description = "Database username.";
         };
@@ -477,33 +502,53 @@ in
         };
       };
 
-      nginx = mkOption {
-        type =
-          with types;
-          nullOr (
-            submodule (
-              import ../web-servers/nginx/vhost-options.nix {
-                inherit config lib;
-              }
-            )
-          );
+      h2o = mkOption {
+        type = types.nullOr (
+          types.submodule (import ../web-servers/h2o/vhost-options.nix { inherit config lib; })
+        );
         default = null;
         example =
-          lib.literalExpression # nginx
+          lib.literalExpression # nix
             ''
               {
                 serverAliases = [
-                  "pics.''${config.networking.domain}"
+                  "pics.''${config.movim.domain}"
+                ];
+                acme.enable = true;
+                tls.policy = "force";
+              }
+            '';
+        description = ''
+          With this option, you can customize an H2O virtual host which already
+          has sensible defaults for Movim. Set to `{ }` if you do not need any
+          customization to the virtual host. If enabled, then by default, the
+          {option}`serverName` is `''${domain}`, If this is set to `null` (the
+          default), no H2O `hosts` will be configured.
+        '';
+      };
+
+      nginx = mkOption {
+        type = types.nullOr (
+          types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+        );
+        default = null;
+        example =
+          lib.literalExpression # nix
+            ''
+              {
+                serverAliases = [
+                  "pics.''${config.movim.domain}"
                 ];
                 enableACME = true;
                 forceHttps = true;
               }
             '';
         description = ''
-          With this option, you can customize an nginx virtual host which already has sensible defaults for Movim.
-          Set to `{ }` if you do not need any customization to the virtual host.
-          If enabled, then by default, the {option}`serverName` is `''${domain}`,
-          If this is set to null (the default), no nginx virtualHost will be configured.
+          With this option, you can customize an Nginx virtual host which
+          already has sensible defaults for Movim. Set to `{ }` if you do not
+          need any customization to the virtual host. If enabled, then by
+          default, the {option}`serverName` is `''${domain}`, If this is set to
+          `null` (the default), no Nginx `virtualHost` will be configured.
         '';
       };
 
@@ -522,6 +567,25 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      (
+        let
+          webServers = [
+            "h2o"
+            "nginx"
+          ];
+          checkConfigs = lib.concatMapStringsSep ", " (ws: "services.movim.${ws}") webServers;
+        in
+        {
+          assertion = builtins.length (lib.lists.filter (ws: cfg.${ws} != null) webServers) <= 1;
+          message = ''
+            At most 1 web server virtual host configuration should be enabled
+            for Movim at a time. Check ${checkConfigs}.
+          '';
+        }
+      )
+    ];
+
     environment.systemPackages = [ package ];
 
     users = {
@@ -531,6 +595,9 @@ in
             isSystemUser = true;
             group = cfg.group;
           };
+        }
+        // lib.optionalAttrs (cfg.h2o != null) {
+          "${config.services.h2o.user}".extraGroups = [ cfg.group ];
         }
         // lib.optionalAttrs (cfg.nginx != null) {
           "${config.services.nginx.user}".extraGroups = [ cfg.group ];
@@ -576,6 +643,51 @@ in
           "pm.max_spare_servers" = 8;
           "pm.max_requests" = 500;
         };
+      };
+
+      h2o = mkIf (cfg.h2o != null) {
+        enable = true;
+        hosts."${cfg.domain}" = mkMerge [
+          {
+            settings = {
+              paths = {
+                "/ws/" = {
+                  "proxy.preserve-host" = "ON";
+                  "proxy.tunnel" = "ON";
+                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                };
+                "/" =
+                  {
+                    "file.dir" = "${package}/share/php/movim/public";
+                    "file.index" = [
+                      "index.php"
+                      "index.html"
+                    ];
+                    redirect = {
+                      url = "/index.php/";
+                      internal = "YES";
+                      status = 307;
+                    };
+                    "header.set" = [
+                      "Content-Security-Policy: ${movimCSP}"
+                    ];
+                  }
+                  // lib.optionalAttrs (with cfg.precompressStaticFiles; brotli.enable || gzip.enable) {
+                    "file.send-compressed" = "ON";
+                  };
+              };
+              "file.custom-handler" = {
+                extension = [ ".php" ];
+                "fastcgi.document_root" = package;
+                "fastcgi.connect" = {
+                  port = fpm.socket;
+                  type = "unix";
+                };
+              };
+            };
+          }
+          cfg.h2o
+        ];
       };
 
       nginx = mkIf (cfg.nginx != null) (
@@ -631,8 +743,7 @@ in
                   tryFiles = "$uri $uri/ /index.php$is_args$args";
                   extraConfig = # nginx
                     ''
-                      # https://github.com/movim/movim/issues/314
-                      add_header Content-Security-Policy "default-src 'self'; img-src 'self' aesgcm: https:; media-src 'self' aesgcm: https:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+                      add_header Content-Security-Policy "${movimCSP}";
                       set $no_cache 1;
                     '';
                 };
@@ -665,7 +776,7 @@ in
                     '';
                 };
               };
-              extraConfig = # ngnix
+              extraConfig = # nginx
                 ''
                   index index.php;
                 '';
@@ -706,27 +817,23 @@ in
         '';
       };
 
-      phpfpm.pools.${pool} =
-        let
-          socketOwner = if (cfg.nginx != null) then config.services.nginx.user else cfg.user;
-        in
-        {
-          phpPackage = package.php;
-          user = cfg.user;
-          group = cfg.group;
+      phpfpm.pools.${pool} = {
+        phpPackage = package.php;
+        user = cfg.user;
+        group = cfg.group;
 
-          phpOptions = ''
-            error_log = 'stderr'
-            log_errors = on
-          '';
+        phpOptions = ''
+          error_log = 'stderr'
+          log_errors = on
+        '';
 
-          settings = {
-            "listen.owner" = socketOwner;
-            "listen.group" = cfg.group;
-            "listen.mode" = "0660";
-            "catch_workers_output" = true;
-          } // cfg.poolConfig;
-        };
+        settings = {
+          "listen.owner" = socketOwner;
+          "listen.group" = cfg.group;
+          "listen.mode" = "0660";
+          "catch_workers_output" = true;
+        } // cfg.poolConfig;
+      };
     };
 
     systemd = {
@@ -788,9 +895,9 @@ in
       };
 
       services.${phpExecutionUnit} = {
-        wantedBy = lib.optional (cfg.nginx != null) "nginx.service";
+        wantedBy = lib.optional (webServerService != null) webServerService;
         requiredBy = [ "movim.service" ];
-        before = [ "movim.service" ] ++ lib.optional (cfg.nginx != null) "nginx.service";
+        before = [ "movim.service" ] ++ lib.optional (webServerService != null) webServerService;
         wants = [ "network.target" ];
         requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
         after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
@@ -809,14 +916,14 @@ in
             "${phpExecutionUnit}.service"
           ]
           ++ lib.optional cfg.database.createLocally dbService
-          ++ lib.optional (cfg.nginx != null) "nginx.service";
+          ++ lib.optional (webServerService != null) webServerService;
         after =
           [
             "movim-data-setup.service"
             "${phpExecutionUnit}.service"
           ]
           ++ lib.optional cfg.database.createLocally dbService
-          ++ lib.optional (cfg.nginx != null) "nginx.service";
+          ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
           WS_PORT = builtins.toString cfg.port;

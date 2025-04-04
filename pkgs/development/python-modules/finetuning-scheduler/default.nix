@@ -73,6 +73,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";

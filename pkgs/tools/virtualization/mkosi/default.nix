@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  python3,
   systemd,
   pandoc,
   kmod,
@@ -16,6 +15,7 @@
   replaceVars,
 
   # Python packages
+  python,
   setuptools,
   setuptools-scm,
   wheel,
@@ -46,7 +46,7 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (_: [ pefile ]);
+  python3pefile = python.withPackages (_: [ pefile ]);
 
   deps =
     [
