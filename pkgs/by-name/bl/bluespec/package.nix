@@ -223,6 +223,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  doInstallCheck = true;
 
   # TODO To fix check-suite:
   # On darwin
@@ -279,6 +280,13 @@ stdenv.mkDerivation rec {
         exit 1
       fi
     )
+  '';
+
+  installCheckPhase = ''
+    output="$($out/bin/bsc 2>&1 || true)"
+    echo "bsc output:"
+    echo "$output"
+    echo "$output" | grep -q "to get help"
   '';
 
   meta = {
