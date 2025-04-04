@@ -63,7 +63,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
   inherit version build;
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
+    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${finalAttrs.src} --extract unpacked"
   '';
 
   postPatch = lib.optionalString enableMacOSGuests ''
@@ -390,4 +390,4 @@ stdenv.mkDerivation rec {
       vifino
     ];
   };
-}
+})
