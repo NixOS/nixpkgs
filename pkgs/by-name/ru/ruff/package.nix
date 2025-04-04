@@ -55,14 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # This causes errors like "error: linker `cc` not found" on static builds
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason, but probably due to sandbox.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--workspace"
-    "--exclude=red_knot"
-  ];
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
