@@ -17221,12 +17221,6 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
-
-  zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
-
-  zdoom = callPackage ../games/doom-ports/zdoom { };
-
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
