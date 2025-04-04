@@ -22,7 +22,7 @@
   asciidoctor,
   texliveFull,
   which,
-  makeWrapper,
+  makeBinaryWrapper,
   cctools,
   targetPackages,
   # install -m 644 lib/libstp.dylib /private/tmp/nix-build-bluespec-2024.07.drv-5/source/inst/lib/SAT
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
       pkg-config
       texliveFull
       tcl
-      makeWrapper
+      makeBinaryWrapper
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/B-Lang-org/bsc/blob/main/src/comp/bsc.hs#L1838
@@ -212,9 +212,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # https://github.com/B-Lang-org/bsc/blob/65e3a87a17f6b9cf38cbb7b6ad7a4473f025c098/src/comp/bsc.hs#L1839
-    wrapProgram $out/bin/bsc --prefix PATH : ${
-      lib.makeBinPath (if stdenv.hostPlatform.isDarwin then [ cctools ] else [ targetPackages.stdenv.cc ])
-    }
+    # `/bin/bsc` is a bash script which the script name to call the binary in the `/bin/core` directory
+    # thus wrapping `/bin/bsc` messes up the scriptname detection in it.
+    wrapProgram $out/bin/core/bsc \
+      --prefix PATH : ${
+        lib.makeBinPath (if stdenv.hostPlatform.isDarwin then [ cctools ] else [ targetPackages.stdenv.cc ])
+      }
   '';
 
   doCheck = true;
