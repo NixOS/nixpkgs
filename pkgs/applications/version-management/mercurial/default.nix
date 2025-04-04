@@ -39,11 +39,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.9.1";
+    version = "6.9.4";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-5XdXfumpep+E08NNU8y4uTVCY9arlkR1JQlPPgpWcnA=";
+      hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
     };
 
     format = "other";
