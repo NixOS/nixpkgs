@@ -243,7 +243,7 @@ in
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "xz";
   };
-  bind = handleTest ./bind.nix { };
+  bind = runTest ./bind.nix;
   bird = handleTest ./bird.nix { };
   birdwatcher = handleTest ./birdwatcher.nix { };
   bitbox-bridge = runTest ./bitbox-bridge.nix;
