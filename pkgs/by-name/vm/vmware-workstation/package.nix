@@ -35,19 +35,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  # base - versions
   version = "17.6.3";
   build = "24583834";
 
-  # macOS - versions
-  unlockerVersion = "3.0.5";
-
-  # macOS - Unlocker
-  unlockerSrc = fetchFromGitHub {
+  macOSUnlockerSrc = fetchFromGitHub {
     owner = "paolo-projects";
     repo = "unlocker";
-    rev = "${finalAttrs.unlockerVersion}";
-    sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+    tag = "3.0.5";
+    hash = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -121,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = lib.optionalString enableMacOSGuests ''
-    cp -R "${finalAttrs.unlockerSrc}" unlocker/
+    cp -R "${finalAttrs.macOSUnlockerSrc}" unlocker/
 
     substituteInPlace unlocker/unlocker.py --replace \
       "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
@@ -375,13 +370,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Industry standard desktop hypervisor for x86-64 architecture";
     homepage = "https://www.vmware.com/products/workstation-pro.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cawilliamson
       deinferno
       vifino
