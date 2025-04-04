@@ -15,13 +15,15 @@ import ./make-test-python.nix (
               enable = true;
               inherit socketActivated;
               settings = {
-                global = {
+                globalSection = {
                   "reverse lookup" = false;
                   "forward lookup" = false;
                 };
-                tmp = {
-                  path = "/nix/store";
-                  comment = "test module";
+                sections = {
+                  tmp = {
+                    path = "/nix/store";
+                    comment = "test module";
+                  };
                 };
               };
             };
