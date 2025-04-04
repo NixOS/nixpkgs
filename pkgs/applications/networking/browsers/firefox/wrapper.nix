@@ -330,7 +330,7 @@ let
           "1"
 
         ]
-        ++ lib.optionals (!xdg-utils.meta.broken) [
+        ++ lib.optionals (!xdg-utils.meta.broken && !isDarwin) [
           # make xdg-open overridable at runtime
           "--suffix"
           "PATH"
