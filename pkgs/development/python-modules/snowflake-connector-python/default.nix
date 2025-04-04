@@ -66,6 +66,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [
+    "pyopenssl"
+  ];
+
   optional-dependencies = {
     pandas = [
       pandas
