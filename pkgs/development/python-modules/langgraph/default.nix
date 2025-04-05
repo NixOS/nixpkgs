@@ -10,7 +10,9 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-prebuilt,
   langgraph-sdk,
+  xxhash,
 
   # tests
   aiosqlite,
@@ -32,80 +34,16 @@
   postgresql,
   postgresqlTestHook,
 }:
-let
-  # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
-  # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
-  langgraph-prebuilt = buildPythonPackage rec {
-    pname = "langgraph-prebuilt";
-    version = "0.1.1";
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "langchain-ai";
-      repo = "langgraph";
-      tag = "prebuilt==${version}";
-      hash = "sha256-Kyyr4BSrUReC6jBp4LItuS/JNSzGK5IUaPl7UaLse78=";
-    };
-
-    sourceRoot = "${src.name}/libs/prebuilt";
-
-    build-system = [ poetry-core ];
-
-    dependencies = [
-      langchain-core
-      langgraph-checkpoint
-    ];
-
-    skipPythonImportsCheck = true; # This will be packaged with langgraph
-
-    # postgresql doesn't play nicely with the darwin sandbox:
-    # FATAL:  could not create shared memory segment: Operation not permitted
-    doCheck = !stdenv.hostPlatform.isDarwin;
-
-    nativeCheckInputs = [
-      pytestCheckHook
-      postgresql
-      postgresqlTestHook
-    ];
-
-    checkInputs = [
-      langgraph-checkpoint
-      langgraph-checkpoint-postgres
-      langgraph-checkpoint-sqlite
-      psycopg
-      psycopg-pool
-      pytest-asyncio
-      pytest-mock
-    ];
-
-    preCheck = ''
-      export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
-    '';
-
-    pytestFlagsArray = [
-      "-W"
-      "ignore::pytest.PytestDeprecationWarning"
-      "-W"
-      "ignore::DeprecationWarning"
-    ];
-
-    disabledTestPaths = [
-      # psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 5442 failed: Connection refused
-      # Is the server running on that host and accepting TCP/IP connections?
-      "tests/test_react_agent.py"
-    ];
-  };
-in
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.3.2";
+  version = "0.3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "${version}";
-    hash = "sha256-EawVIzG+db2k6/tQyUHCF6SzlO77QTXsYRUm3XpLu/c=";
+    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
   };
 
   postgresqlTestSetupPost = ''
@@ -122,6 +60,7 @@ buildPythonPackage rec {
     langgraph-checkpoint
     langgraph-prebuilt
     langgraph-sdk
+    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];

@@ -7470,6 +7470,8 @@ self: super: with self; {
 
   langgraph-cli = callPackage ../development/python-modules/langgraph-cli { };
 
+  langgraph-prebuilt = callPackage ../development/python-modules/langgraph-prebuilt { };
+
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
 
   langid = callPackage ../development/python-modules/langid { };
