@@ -7,16 +7,18 @@
   libnsl,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttr: {
   pname = "re-Isearch";
-  version = "unstable-2022-03-24";
+  version = "2.20220925.4.0a-unstable-2025-03-16";
 
   src = fetchFromGitHub {
     owner = "re-Isearch";
     repo = "re-Isearch";
-    rev = "e5953ea6c84285283be3689df7065908369cdbaf";
-    sha256 = "sha256-D0PDqlWzIOHqdS2MlNzR2T5cyhiLcFlf30v6eFokoRQ=";
+    rev = "56e0dfbe7468881b3958ca8e630f41a5354e9873";
+    sha256 = "sha256-tI75D02/sFEkHDQX/BpDlu24WNP6Qh9G0MIfEvs8npM=";
   };
+
+  patches = [ ./0001-fix-JsonHitTable-undefined-reference.patch ];
 
   postPatch = ''
     # Fix gcc-13 build due to missing <cstdint> include.
@@ -33,11 +35,12 @@ stdenv.mkDerivation {
     "CC=g++"
     "cc=gcc"
     "LD=g++"
-    "INSTALL=${placeholder "out"}/bin"
   ];
 
   preBuild = ''
     cd build
+    export HOME="$TMPDIR" # wants to write to HOME
+    make clean # clean up pre-built objects in the source
     makeFlagsArray+=(
       EXTRA_INC="-I${db.dev}/include -I${lib.getDev file}/include"
       LD_PATH="-L../lib -L${db.out}/lib -L${file}/lib -L${libnsl}/lib"
@@ -47,14 +50,22 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $out/{bin,lib}
   '';
-  postInstall = ''
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib}
+
+    cp ../bin/{Iindex,Isearch,Iutil,Idelete,zpresent,Iwatch,zipper} $out/bin
     cp ../lib/*.so $out/lib/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Novel multimodal search and retrieval engine";
     homepage = "https://github.com/re-Isearch/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ] ++ lib.teams.ngi.members;
   };
-}
+})
