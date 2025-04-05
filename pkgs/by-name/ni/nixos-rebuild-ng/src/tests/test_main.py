@@ -347,12 +347,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess(
                 [],
                 0,
-                """
-                {
-                  "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
-                  "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk"
-                }
-                """,
+                '"nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd"',
             )
         elif args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
@@ -372,7 +367,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
             call(
@@ -382,7 +377,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "--json",
                     "/path/to/config#nixosConfigurations.hostname.config.system.build.images",
                     "--apply",
-                    "builtins.mapAttrs (n: v: v.passthru.filePath)",
+                    "builtins.attrNames",
                 ],
                 check=True,
                 stdout=PIPE,
@@ -396,6 +391,17 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "build",
                     "--print-out-paths",
                     "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix",
+                    "eval",
+                    "--json",
+                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure.passthru.filePath",
                 ],
                 check=True,
                 stdout=PIPE,
