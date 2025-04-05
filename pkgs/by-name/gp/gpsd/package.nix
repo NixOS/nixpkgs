@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
       hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
     })
-  ];
+  ] ++ (if stdenv.hostPlatform.isLinux then [ ./sconstrict-rundir-fixes.patch ] else [ ]);
 
   preBuild = ''
     patchShebangs .
