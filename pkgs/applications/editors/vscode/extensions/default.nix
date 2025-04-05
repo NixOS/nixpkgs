@@ -9,7 +9,6 @@
   jq,
   lib,
   llvmPackages,
-  llvmPackages_14,
   moreutils,
   protobuf,
   python3Packages,
@@ -5105,7 +5104,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { llvmPackages = llvmPackages_14; };
+      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { };
 
       valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
         mktplcRef = {
