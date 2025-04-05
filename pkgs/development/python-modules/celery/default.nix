@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  azure-identity,
+  azure-storage-blob,
   billiard,
   buildPythonPackage,
   click-didyoumean,
@@ -8,6 +10,8 @@
   click-repl,
   click,
   fetchPypi,
+  gevent,
+  google-cloud-firestore,
   google-cloud-storage,
   kombu,
   moto,
@@ -15,6 +19,7 @@
   nixosTests,
   pymongo,
   redis,
+  pydantic,
   pytest-celery,
   pytest-click,
   pytest-subtests,
@@ -56,11 +61,20 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    gcs = [ google-cloud-storage ];
+    azureblockblob = [
+      azure-identity
+      azure-storage-blob
+    ];
+    gevent = [ gevent ];
+    gcs = [
+      google-cloud-firestore
+      google-cloud-storage
+    ];
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
     redis = [ redis ];
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
