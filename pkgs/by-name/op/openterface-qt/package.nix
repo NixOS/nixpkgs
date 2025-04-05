@@ -22,17 +22,18 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "openterface-qt";
-  version = "0.2.0";
+  version = "0.3.1";
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
-    rev = "v${final.version}";
-    hash = "sha256-2Z4sMoNfbGuZKyS4YVrId8AIKr5XhNBNcdYfywc2MXM=";
+    rev = "${final.version}";
+    hash = "sha256-HSUKewI6VPEAVkp/O2vnzXR9Eicecutntsd/WvuHU8w=";
   };
   nativeBuildInputs = [
     copyDesktopItems
     qt6.wrapQtAppsHook
     qt6.qmake
+    qt6.qttools
   ];
   buildInputs = [
     libusb1
@@ -41,6 +42,9 @@ stdenv.mkDerivation (final: {
     qt6.qtserialport
     qt6.qtsvg
   ];
+  preBuild = ''
+    lrelease openterfaceQT.pro
+  '';
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
