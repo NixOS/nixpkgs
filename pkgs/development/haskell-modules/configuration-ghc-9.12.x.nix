@@ -151,7 +151,7 @@ with haskellLib;
     ];
   }) super.generic-arbitrary;
 
-  # Unreported: GHC crashes
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
 
   # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
