@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildDotnetModule,
   dotnetCorePackages,
@@ -15,7 +16,7 @@
   xorg,
   libxkbcommon,
   libdrm,
-  withSELinux ? false,
+  withSELinux ? config.selinuxSupport,
 }:
 
 buildDotnetModule rec {
