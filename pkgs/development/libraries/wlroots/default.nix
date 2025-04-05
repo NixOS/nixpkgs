@@ -15,8 +15,6 @@
   libcap,
   libgbm,
   xorg,
-  libpng,
-  ffmpeg,
   hwdata,
   seatd,
   vulkan-loader,
@@ -77,13 +75,11 @@ let
 
       buildInputs =
         [
-          ffmpeg
           libliftoff
           libdisplay-info
           libGL
           libcap
           libinput
-          libpng
           libxkbcommon
           libgbm
           pixman
