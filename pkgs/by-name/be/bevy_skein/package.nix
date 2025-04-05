@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Convert glTF extras to Bevy Components using reflection";
     homepage = "https://github.com/rust-adventure/skein";
-    license = licenses.mit;
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ guelakais ];
     platforms = platforms.all;
   };
