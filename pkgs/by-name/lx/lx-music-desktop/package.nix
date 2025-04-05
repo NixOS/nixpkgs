@@ -1,81 +1,101 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  buildNpmPackage,
+
+  fetchFromGitHub,
+  runCommand,
+  replaceVars,
+
   makeWrapper,
 
-  dpkg,
-  libGL,
-  systemd,
-  electron_32,
-
+  electron,
   commandLineArgs ? "",
 }:
 
 let
+  # unpack tarball containing electron's headers
+  electron-headers = runCommand "electron-headers" { } ''
+    mkdir -p $out
+    tar -C $out --strip-components=1 -xvf ${electron.headers}
+  '';
+in
+buildNpmPackage rec {
   pname = "lx-music-desktop";
   version = "2.10.0";
 
-  buildUrl =
-    version: arch:
-    "https://github.com/lyswhut/lx-music-desktop/releases/download/v${version}/lx-music-desktop_${version}_${arch}.deb";
-
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = buildUrl version "amd64";
-      hash = "sha256-btNB8XFCJij1wUVZoWaa55vZn5n1gsKSMnEbQPTd9lg=";
-    };
-
-    aarch64-linux = fetchurl {
-      url = buildUrl version "arm64";
-      hash = "sha256-GVTzxTV7bM4AWZ+Xfb70fyedDMIa9eX/YwnGkm3WOsk=";
-    };
-
-    armv7l-linux = fetchurl {
-      url = buildUrl version "armv7l";
-      hash = "sha256-3zttIk+A4BpG0W196LzgTJ5WeqWvLjqPFz6e9RCGlJo=";
-    };
+  src = fetchFromGitHub {
+    owner = "lyswhut";
+    repo = "lx-music-desktop";
+    tag = "v${version}";
+    hash = "sha256-8IzQEGdaeoBbCsZSPhVowipeBr4YHGm/G28qGHtCY/s=";
   };
 
-  host = stdenv.hostPlatform.system;
-  src = srcs.${host} or (throw "Unsupported system: ${host}");
-
-  runtimeLibs = lib.makeLibraryPath [
-    libGL
-    stdenv.cc.cc
+  patches = [
+    # set electron version and dist dir
+    # disable before-pack: it would copy prebuilt libraries
+    (replaceVars ./electron-builder.patch {
+      electron_version = electron.version;
+    })
   ];
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
-  runtimeDependencies = map lib.getLib [
-    systemd
-  ];
+  npmDepsHash = "sha256-awD8gu1AnhUn5uT/dITXjMVWNAwABAmcEVZOKukbWrI=";
 
-  installPhase = ''
-    runHook preInstall
+  makeCacheWritable = true;
 
-    mkdir -p $out/bin $out/opt/lx-music-desktop
-    cp -r opt/lx-music-desktop/{resources,locales} $out/opt/lx-music-desktop
-    cp -r usr/share $out/share
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-    substituteInPlace $out/share/applications/lx-music-desktop.desktop \
-        --replace-fail "/opt/lx-music-desktop/lx-music-desktop" "$out/bin/lx-music-desktop" \
+  # we haven't set up npm_config_nodedir at this point
+  # and electron-rebuild will rebuild the native libs later anyway
+  npmFlags = [ "--ignore-scripts" ];
 
-    runHook postInstall
+  preBuild = ''
+    # delete prebuilt libs
+    rm -r build-config/lib
+
+    # don't spam the build logs
+    substituteInPlace build-config/pack.js \
+      --replace-fail 'new Spinnies({' 'new Spinnies({disableSpins:true,'
+
+    # this directory is configured to be used in the patch
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    export npm_config_nodedir=${electron-headers}
+
+    # TODO: remove
+    npm rebuild --verbose
   '';
 
-  postFixup = ''
-    makeWrapper ${electron_32}/bin/electron $out/bin/lx-music-desktop \
+  npmBuildScript = "pack:dir";
+
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p "$out/opt/lx-music-desktop"
+      cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
+      rm "$out/opt/lx-music-desktop/resources/app-update.yml"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r build/mac*/lx-music-desktop.app $out/Applications
+      makeWrapper $out/Applications/lx-music-desktop.app/Contents/MacOS/lx-music-desktop $out/bin/lx-music-desktop
+    ''
+    + ''
+      runHook postInstall
+    '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    makeWrapper ${electron}/bin/electron $out/bin/lx-music-desktop \
         --add-flags $out/opt/lx-music-desktop/resources/app.asar \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs} \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
   meta = with lib; {
@@ -83,11 +103,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "armv7l-linux"
-    ];
+    platforms = electron.meta.platforms;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
     maintainers = with maintainers; [ oosquare ];
