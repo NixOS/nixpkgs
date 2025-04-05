@@ -85,10 +85,6 @@ buildPythonPackage rec {
       "test_list_of_text"
       "test_untrained_indexer"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
-      "test_single_proc"
-    ]
     ++ lib.optionals cudaSupport [
       # crashes with SIGBART
       "test_accuracy_calculator_and_faiss_with_torch_and_numpy"

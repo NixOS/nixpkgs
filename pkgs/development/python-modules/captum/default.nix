@@ -64,11 +64,6 @@ buildPythonPackage rec {
       "tests/module/test_binary_concrete_stochastic_gates.py"
       "tests/module/test_gaussian_stochastic_gates.py"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # These tests are failing on macOS:
-      # > E   AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
-      "tests/attr/test_data_parallel.py"
-    ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Issue reported upstream at https://github.com/pytorch/captum/issues/1447
       "tests/concept/test_tcav.py"

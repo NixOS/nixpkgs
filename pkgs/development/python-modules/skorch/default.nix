@@ -72,9 +72,7 @@ buildPythonPackage rec {
       # tries to import `transformers` and download HuggingFace data
       "skorch/tests/test_hf.py"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
-      # torch.distributed is disabled by default in darwin
-      # aarch64-linux also failed these tests
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       "skorch/tests/test_history.py"
     ];
 
