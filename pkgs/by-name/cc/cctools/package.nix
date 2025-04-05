@@ -18,6 +18,8 @@ let
     stdenv.targetPlatform != stdenv.hostPlatform
   ) "${stdenv.targetPlatform.config}-";
 
+  openssl' = openssl.override { patchPcFiles = false; };
+
   # First version with all the required files
   xnu = fetchFromGitHub {
     name = "xnu-src";
@@ -117,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    openssl
+    openssl'
   ];
 
   buildInputs = [
