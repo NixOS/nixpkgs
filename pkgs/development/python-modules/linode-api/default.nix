@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.28.0";
+  version = "5.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-NTI/T78/D95sgVugjrsRKEPxU2jArvRcKiuD+09tKCo=";
+    hash = "sha256-9dDEEjY9ajh/eMuXTLkLVSGb38TOi3RDmRIf2vKknkI=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
+    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ glenns ];
   };
