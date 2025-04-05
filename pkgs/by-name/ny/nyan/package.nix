@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
+  preConfigure = lib.optional stdenv.hostPlatform.isDarwin ''
+    # fixes non-determinism between builds on macos
+    export LDFLAGS="$LDFLAGS -Wl,-no_adhoc_codesign"
+  '';
+
   nativeInstallCheckHooks = [
     versionCheckHook
   ];
