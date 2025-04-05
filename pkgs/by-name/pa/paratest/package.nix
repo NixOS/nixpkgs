@@ -23,7 +23,7 @@
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {

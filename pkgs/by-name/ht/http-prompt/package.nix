@@ -70,7 +70,7 @@ python.pkgs.buildPythonApplication rec {
     "test_vi_mode"
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Interactive command-line HTTP client featuring autocomplete and syntax highlighting";
