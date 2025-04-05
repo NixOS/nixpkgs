@@ -6,8 +6,10 @@
   qtdeclarative,
   cmake,
   ninja,
-  version ? "42.1.6",
-  hash ? "sha256-VjCXT4sl3HsFILrqTc3JJSeRedZaOXUbf4KvSzTo0uc=",
+  # see: https://github.com/Dwarf-Therapist/Dwarf-Therapist/releases
+  version ? "42.1.11",
+  maxDfVersion ? "51.08",
+  hash ? "sha256-uOQ6YdKjluQQyjtB0xsX7p7gCGuamkClKRR9h6FbQw8=",
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +47,10 @@ stdenv.mkDerivation rec {
       null;
 
   dontWrapQtApps = true;
+
+  passthru = {
+    inherit maxDfVersion;
+  };
 
   meta = with lib; {
     mainProgram = "dwarftherapist";

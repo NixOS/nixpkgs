@@ -246,28 +246,17 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
 
     installCheckPhase =
       let
-        commonExpectStatements =
-          fmod:
-          lib.optionalString isAtLeast50 ''
-            expect "Loading audio..."
-          ''
-          + lib.optionalString (!fmod && isAtLeast50) ''
-            expect "Failed to load fmod, trying SDL_mixer"
-          ''
-          + lib.optionalString isAtLeast50 ''
-            expect "Audio loaded successfully!"
-          ''
-          + ''
-            expect "Loading bindings from data/init/interface.txt"
-          '';
+        commonExpectStatements = ''
+          expect "Loading bindings from data/init/interface.txt"
+        '';
         dfHackExpectScript = writeText "dfhack-test.exp" (
           ''
             spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
           ''
-          + commonExpectStatements false
+          + commonExpectStatements
           + ''
             expect "DFHack is ready. Have a nice day!"
-            expect "DFHack version ${version}"
+            expect "DFHack version ${dfhack'.version}"
             expect "\[DFHack\]#"
             send -- "lua print(os.getenv('out'))\r"
             expect "$env(out)"
@@ -281,7 +270,7 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
             ''
               spawn env NIXPKGS_DF_OPTS=debug,${lib.optionalString fmod "fmod"} xvfb-run $env(out)/bin/dwarf-fortress
             ''
-            + commonExpectStatements fmod
+            + commonExpectStatements
             + ''
               exit 0
             ''

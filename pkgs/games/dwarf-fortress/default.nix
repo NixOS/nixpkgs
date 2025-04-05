@@ -62,7 +62,7 @@ let
   # this. Note that unfuck and twbt are not required for 50.
   latestVersion =
     if stdenv.hostPlatform.isLinux then
-      "50.13"
+      "51.08"
     else if stdenv.hostPlatform.isDarwin then
       "0.47.05"
     else
@@ -96,28 +96,41 @@ let
             stdenv = gccStdenv;
           };
 
+          mkDfWrapper =
+            {
+              dwarf-fortress,
+              dfhack,
+              dwarf-therapist ? null,
+              ...
+            }@args:
+            callPackage ./wrapper (
+              {
+                inherit (self) themes;
+                inherit
+                  dwarf-fortress
+                  twbt
+                  dfhack
+                  dwarf-therapist
+                  ;
+
+                jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+              }
+              // args
+            );
+
           dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist/wrapper.nix {
-            inherit dwarf-fortress;
+            inherit dwarf-fortress dfhack mkDfWrapper;
             dwarf-therapist = (libsForQt5.callPackage ./dwarf-therapist { }).override (
               optionalAttrs (!isAtLeast50) {
                 # 41.2.5 is the last version to support Dwarf Fortress 0.47.
                 version = "41.2.5";
+                maxDfVersion = "0.47.05";
                 hash = "sha256-xfYBtnO1n6OcliVt07GsQ9alDJIfWdVhtuyWwuvXSZs=";
               }
             );
           };
         in
-        callPackage ./wrapper {
-          inherit (self) themes;
-          inherit
-            dwarf-fortress
-            twbt
-            dfhack
-            dwarf-therapist
-            ;
-
-          jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-        };
+        mkDfWrapper { inherit dwarf-fortress dfhack dwarf-therapist; };
     }) (attrNames self.df-hashes)
   );
 
@@ -135,9 +148,7 @@ let
 
     soundSense = callPackage ./soundsense.nix { };
 
-    legends-browser = callPackage ./legends-browser {
-      jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    };
+    legends-browser = callPackage ./legends-browser { };
 
     themes = recurseIntoAttrs (
       callPackage ./themes {

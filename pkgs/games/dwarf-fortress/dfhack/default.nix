@@ -91,9 +91,45 @@ let
       xmlRev = "980b1af13acc31660dce632f913c968f52e2b275";
     };
     "50.13" = {
-      dfHackRelease = "50.13-r3";
-      hash = "sha256-WbkJ8HmLT5GdZgDmcuFh+1uzhloKM9um0b9YO//uR7Y=";
-      xmlRev = "f0530a22149606596e97e3e17d941df3aafe29b9";
+      dfHackRelease = "50.13-r5";
+      hash = "sha256-6j2hqdazFJBRVQmH71n2OwMtxsZXw2ev14zl4d6cyK0=";
+      xmlRev = "53b334a03e06693ea78164cee8e1a410ee68fef3";
+    };
+    "50.14" = {
+      dfHackRelease = "50.14-r2.1";
+      hash = "sha256-dmWKe3O/vxrzkoB/9dWs6kYqHx5vAayFyDfQiE36Bws=";
+      xmlRev = "be343a666869be92c28036ca0e1cebcb9328b636";
+    };
+    "50.15" = {
+      dfHackRelease = "50.15-r2";
+      hash = "sha256-6T1RXdBJdo/tvHXwYATS8emLIfDg7/0cGL4i982iHdY=";
+      xmlRev = "c6c8f15afec05d457813c003a869509901993af4";
+    };
+    "51.02" = {
+      # See release note about compatibility for this version.
+      dfHackRelease = "51.04-r1.1";
+      hash = "sha256-rXyg++G6ZNRjR54uwEIRrijLJfNw4dmAg4Vtp2yVG1k=";
+      xmlRev = "ee9a53f73b4d2bf918dca0fc9dcb450f53d6e7c3";
+    };
+    "51.05" = {
+      dfHackRelease = "51.05-r1";
+      hash = "sha256-emTuKWisYGzfmg8hKb1wLVn/5BcKsYA5xQeLhW56YQw=";
+      xmlRev = "5513dc1ffa70d567d87ce946a0c57ce4760fae7c";
+    };
+    "51.06" = {
+      dfHackRelease = "51.06-r1";
+      hash = "sha256-p7viIr9qnQh5Jqgwn+IT9YxcTzODoGqbeMmUiqbpolE=";
+      xmlRev = "9d207f7b70c7ecf3835b6ca7506e598622d29d04";
+    };
+    "51.07" = {
+      dfHackRelease = "51.07-r1";
+      hash = "sha256-fu6DK47E1mIiYlWYThhXlzbi+Ci5XhLA4qfTygxkyN4=";
+      xmlRev = "a5286b3d70249abe4d45d9f707b826ec306a1c33";
+    };
+    "51.08" = {
+      dfHackRelease = "51.08-r1";
+      hash = "sha256-FOZyjtAfwNHknwCrnPXVu39hzUCHAHmMnenbTEDj+HE=";
+      xmlRev = "860017b193c5cce1ee6c16321301b0a1d4788569";
     };
   };
 
