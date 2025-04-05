@@ -193,8 +193,9 @@ let
             "${placeholder "out"}/rplugin.vim"
           ]
           ++ lib.optionals finalAttrs.wrapRc [
-            "--add-flags"
-            "-u ${writeText "init.lua" rcContent}"
+            "--set-default"
+            "VIMINIT"
+            "lua dofile([[${writeText "init.lua" rcContent}]])"
           ]
           ++ finalAttrs.generatedWrapperArgs;
 
