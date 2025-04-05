@@ -11706,6 +11706,12 @@
     name = "Johan Larsson";
     keys = [ { fingerprint = "F0D6 BDE7 C7D1 6B3F 7883  73E7 2A41 C0FE DD6F F540"; } ];
   };
+  jolheiser = {
+    email = "nixpkgs@jolheiser.com";
+    github = "jolheiser";
+    githubId = 42128690;
+    name = "John Olheiser";
+  };
   jonaenz = {
     name = "Jona Enzinger";
     email = "5xt3zyy5l@mozmail.com";
