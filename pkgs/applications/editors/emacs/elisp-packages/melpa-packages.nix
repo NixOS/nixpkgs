@@ -1250,6 +1250,8 @@ let
 
           fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
 
+          forge-llm = buildWithGit super.forge-llm;
+
           frontside-javascript = super.frontside-javascript.overrideAttrs (
             finalAttrs: previousAttrs: {
               # https://github.com/melpa/melpa/pull/9182
