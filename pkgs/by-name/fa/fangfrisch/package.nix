@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  nix-update-script,
 }:
 let
   version = "1.9.2";
@@ -29,6 +30,8 @@ python3.pkgs.buildPythonApplication {
   ];
 
   pythonImportsCheck = [ "fangfrisch" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Update and verify unofficial Clam Anti-Virus signatures";
