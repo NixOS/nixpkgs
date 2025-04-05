@@ -1,4 +1,4 @@
-{fetchFromGitHub, pkgs, python3Packages, licenses}: let
+{fetchFromGitHub, pkgs, python3Packages, lib}: let
   version = "3.5.5";
   pname = "pros-cli";
 in python3Packages.buildPythonPackage {
@@ -33,11 +33,12 @@ in python3Packages.buildPythonPackage {
     };
     meta = let
       downloadPage = "https://github.com/purduesigbots/pros-cli/releases/tag/3.5.5";
-    in {
+    in with lib; {
       homepage = "https://pros.cs.purdue.edu/v5/index.html";
       inherit downloadPage;
       changelog = downloadPage;
-      license = licenses.mpl2;
+      license = licenses.mpl20;
+      maintainer = maintainers.maningreen;
       description = "Purdue University's Command Line Interface for managing PROS projects.";
       longDescription = ''
         Purdue University's Command Line Interface for managing PROS projects.
