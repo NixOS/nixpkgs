@@ -41,9 +41,9 @@ python3Packages.buildPythonApplication {
       homepage = "https://pros.cs.purdue.edu/v5/index.html";
       downloadPage = "https://github.com/purduesigbots/pros-cli/releases/";
       changelog = "https://github.com/purduesigbots/pros-cli/releases/tag/${version}";
-      license = licenses.mpl20;
-      maintainer = maintainers.maningreen;
-      description = "Purdue University's Command Line Interface for managing PROS projects.";
+      license = lib.licenses.mpl20;
+      maintainer = lib.maintainers.maningreen;
+      description = "Purdue University's Command Line Interface for managing PROS projects";
       longDescription = ''
         Purdue University's Command Line Interface for managing PROS projects.
         Works with V5 and the Cortex.
