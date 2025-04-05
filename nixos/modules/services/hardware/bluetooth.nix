@@ -151,6 +151,7 @@ in
               CapabilityBoundingSet = [
                 "CAP_NET_BIND_SERVICE" # sockets and tethering
               ];
+              ConfigurationDirectoryMode = "0755";
               NoNewPrivileges = true;
               RestrictNamespaces = true;
               ProtectControlGroups = true;
