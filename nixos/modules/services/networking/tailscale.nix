@@ -78,6 +78,9 @@ in
       description = ''
         A file containing the auth key.
         Tailscale will be automatically started if provided.
+
+        Services that bind to Tailscale IPs should order using
+        {option}`systemd.services.<name>.after` `tailscaled-autoconnect.service`.
       '';
     };
 
@@ -110,7 +113,7 @@ in
 
     extraUpFlags = mkOption {
       description = ''
-        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+        Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
       default = [ ];
@@ -171,15 +174,21 @@ in
 
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
       after = [ "tailscaled.service" ];
-      wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "tailscaled.service" ];
+
+      enableStrictShellChecks = true;
       serviceConfig = {
         Type = "oneshot";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      path = [
+        cfg.package
+        pkgs.coreutils # date
+        pkgs.iproute2 # ip
+        pkgs.jq
+      ];
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -188,14 +197,55 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # bash
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
+          timeout=$((1000 * 30)) # 30s in ms
+          start=$(date +%s%3N)   # start time in ms
+          end=$((start + timeout))
+
+          # exit 1 to let systemd continue (and activation rollback)
+          timeCheck() {
+            current=$(date +%s%3N)
+            if [[ $current -ge $end ]]; then
+              echo "Timed out $1"
+              exit 1
+            fi
+          }
+
+          statusCommand() {
+            tailscale status --json --peers=false | jq -r '.BackendState'
+          }
+
+          echo "Waiting for Tailscale daemon"
+          while [[ "$(statusCommand)" == "NoState" ]]; do
             sleep 0.5
+            timeCheck "waiting for Tailscale login"
           done
-          status=$(${statusCommand})
+          echo "Tailscale connected to control server"
+
+          echo "Checking if authentication needed"
+          status="$(statusCommand)"
+          # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
           if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+            echo "Sending authentication"
+            tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+          elif [[ "$status" == "Running" ]]; then
+            echo "Tailscale is running"
           fi
+
+          addrsUp() {
+            out="$(ip -oneline -json address show ${cfg.interfaceName})"
+            echo "$out" | jq --exit-status '.[].addr_info
+              | any(.family == "inet" and .scope == "global")
+                and any(.family == "inet6" and .scope == "global")' >/dev/null
+          }
+
+          echo "Waiting for Tailscale interface IPs to be configured"
+          until addrsUp; do
+            sleep 0.5
+            timeCheck "waiting for IPs to configure"
+          done
+          echo "Tailscale IPs configured"
         '';
     };
 
@@ -228,10 +278,7 @@ in
       matchConfig = {
         Name = cfg.interfaceName;
       };
-      linkConfig = {
-        Unmanaged = true;
-        ActivationPolicy = "manual";
-      };
+      linkConfig.Unmanaged = true;
     };
   };
 }
