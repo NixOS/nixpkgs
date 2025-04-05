@@ -39,8 +39,8 @@ python3Packages.buildPythonApplication {
   meta =
     {
       homepage = "https://pros.cs.purdue.edu/v5/index.html";
-      inherit downloadPage;
-      changelog = downloadPage;
+      downloadPage = "https://github.com/purduesigbots/pros-cli/releases/";
+      changelog = "https://github.com/purduesigbots/pros-cli/releases/tag/${version}";
       license = licenses.mpl20;
       maintainer = maintainers.maningreen;
       description = "Purdue University's Command Line Interface for managing PROS projects.";
