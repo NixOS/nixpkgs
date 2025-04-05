@@ -1,11 +1,13 @@
 {
   lib,
+  pkgsBuildBuild,
   stdenv,
   fetchFromSourcehut,
   fetchurl,
   curl,
   libarchive,
   libpkgconf,
+  ninja, # FIXME: remove ninja once builds work without it
   pkgconf,
   python3,
   samurai,
@@ -17,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     name = "muon-src";
     owner = "~lattis";
     repo = "muon";
     rev = finalAttrs.version;
-    hash = "sha256-ZHWyUV/BqM3ihauXDqDVkZURDDbBiRcEzptyGQmw94I=";
+    hash = "sha256-xTdyqK8t741raMhjjJBMbWnAorLMMdZ02TeMXK7O+Yw=";
   };
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
@@ -32,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       pkgconf
+    ]
+    ++ lib.optionals (!embedSamurai) [
+      ninja
       samurai
     ]
     ++ lib.optionals buildDocs [
@@ -43,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libarchive
     libpkgconf
-    samurai
     zlib
   ];
 
@@ -54,20 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
       # URLs manually extracted from subprojects directory
       meson-docs-wrap = fetchurl {
         name = "meson-docs-wrap";
-        url = "https://mochiro.moe/wrap/meson-docs-1.0.1-19-gdd8d4ee22.tar.gz";
-        hash = "sha256-jHSPdLFR5jUeds4e+hLZ6JOblor5iuCV5cIwoc4K9gI=";
-      };
-
-      samurai-wrap = fetchurl {
-        name = "samurai-wrap";
-        url = "https://mochiro.moe/wrap/samurai-1.2-32-g81cef5d.tar.gz";
-        hash = "sha256-aPMAtScqweGljvOLaTuR6B0A0GQQQrVbRviXY4dpCoc=";
+        url = "https://github.com/muon-build/meson-docs/archive/5bc0b250984722389419dccb529124aed7615583.tar.gz";
+        hash = "sha256-5MmmiZfadCuUJ2jy5Rxubwf4twX0jcpr+TPj5ssdSbM=";
       };
     in
     ''
       pushd $sourceRoot/subprojects
       ${lib.optionalString buildDocs "tar xvf ${meson-docs-wrap}"}
-      ${lib.optionalString embedSamurai "tar xvf ${samurai-wrap}"}
       popd
     '';
 
@@ -99,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preBuild
 
-      ./bootstrap.sh stage-1
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./bootstrap.sh stage-1
 
-      ./stage-1/muon setup ${cmdlineForMuon} stage-2
-      samu ${cmdlineForSamu} -C stage-2
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./stage-1/muon-bootstrap setup ${cmdlineForMuon} stage-2
+      CC=${lib.getExe pkgsBuildBuild.stdenv.cc} ./stage-1/muon-bootstrap samu ${cmdlineForSamu} -C stage-2
 
-      stage-2/muon setup -Dprefix=$out ${cmdlineForMuon} stage-3
-      samu ${cmdlineForSamu} -C stage-3
+      ./stage-2/muon setup -Dprefix=$out ${cmdlineForMuon} stage-3
+      ${lib.optionalString embedSamurai "./stage-2/muon"} samu ${cmdlineForSamu} -C stage-3
 
       runHook postBuild
     '';
