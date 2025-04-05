@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.39.0";
 
   src = fetchFromGitHub {
-    owner = "Byron";
+    owner = "GitoxideLabs";
     repo = "gitoxide";
     rev = "v${version}";
     hash = "sha256-xv4xGkrArJ/LTVLs2SYhvxhfNG6sjVm5nZWsi4s34iM=";
@@ -55,8 +55,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Command-line application for interacting with git repositories";
-    homepage = "https://github.com/Byron/gitoxide";
-    changelog = "https://github.com/Byron/gitoxide/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/GitoxideLabs/gitoxide";
+    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       mit # or
       asl20
