@@ -64,6 +64,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Sude-/lgogdownloader";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ _0x4A6F ];
-    platforms = lib.platforms.linux;
   };
 })
