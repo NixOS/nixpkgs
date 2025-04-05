@@ -59,7 +59,10 @@ stdenv.mkDerivation {
     changelog = "https://github.com/moverest/wl-kbptr/releases/tag/v${version}";
     license = lib.licenses.gpl3;
     mainProgram = "wl-kbptr";
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    maintainers = [
+      lib.maintainers.luftmensch-luftmensch
+      lib.maintainers.clementpoiret
+    ];
     inherit (wayland.meta) platforms;
   };
 }
