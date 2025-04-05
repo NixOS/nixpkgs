@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "1.9.1";
+  version = "1.10.0-rc1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-6vYVUdQST49TNctO9Y/XrRFyJ6hXng85SsO+4JBn1GA=";
+    hash = "sha256-R3oos+23XAbrcPtZS6of+YBSb5Pr8z6R+vEhfA2Kel4=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-arVtNxcYDVKRTGe9won6zb30wCxMD6MtsGs25UmOPjM=";
+  cargoHash = "sha256-uZIfyO06zJbQ8sLaq3S/TANt4VR0UjJCfmGkBYUwEho=";
 
   checkFlags = [
     # Makes a network request
