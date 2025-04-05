@@ -1,0 +1,34 @@
+{fetchFromGitHub, pkgs, python3Packages}: let
+  version = "3.5.5";
+  pname = "pros-cli";
+in python3Packages.buildPythonPackage {
+    inherit pname version;
+    doCheck = false;
+    propagatedBuildInputs = with python3Packages; [
+      setuptools
+      wheel
+      jsonpickle
+      pyserial
+      tabulate
+      cobs
+      click
+      rich-click
+      cachetools
+      requests-futures
+      semantic-version
+      colorama
+      pyzmq
+      sentry-sdk
+      pypng
+      pyinstaller
+    ];
+    nativeBuildInputs = with pkgs; [
+      gcc-arm-embedded
+    ];
+    src = fetchFromGitHub {
+      owner = "purduesigbots";
+      repo = "pros-cli";
+      tag = version;
+      hash = "sha256-Lw3NJaFmJFt0g3N+jgmGLG5AMeMB4Tqk3d4mPPWvC/c=";
+    };
+  }
