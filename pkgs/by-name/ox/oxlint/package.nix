@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.15.14";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-PCaS60UjD502YI9lZsvbSa3utwrYl8YazZj/CF91euQ=";
+    hash = "sha256-KSrmYZOm1z25+fI7rY1hm1rEuDw7YnO8WvEyNXY/HaI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/OLcyHTTevqpkrHY3Ueo38xtIjhjE4quqPTEZfPEcaY=";
+  cargoHash = "sha256-4KQZjSmZGCPHn+0kfDuv8zqXVM4Oziq3vQXHmwqNVKA=";
 
   buildInputs =
     [
