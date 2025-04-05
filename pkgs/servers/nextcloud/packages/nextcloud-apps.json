@@ -38,6 +38,7 @@
 , "sociallogin": "agpl3Only"
 , "spreed": "agpl3Plus"
 , "tasks": "agpl3Plus"
+, "twofactor_admin": "agpl3Plus"
 , "twofactor_nextcloud_notification": "agpl3Only"
 , "twofactor_totp": "agpl3Plus"
 , "twofactor_webauthn": "agpl3Plus"
