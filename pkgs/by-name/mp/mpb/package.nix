@@ -19,13 +19,13 @@ assert !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "mpb";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "mpb";
     tag = "v${version}";
-    hash = "sha256-+2cMjZSGdfngtGoAeZRPRPBDvflTEIOWO8Se0W6jv9k=";
+    hash = "sha256-naxVKD7pxefb/ht5Pa4e/T9eDzlZ0raNYPSvKNaZUn8=";
   };
 
   nativeBuildInputs = [
