@@ -4203,7 +4203,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
   netdataCloud = netdata.override {
-    withCloud = true;
     withCloudUi = true;
   };
 
