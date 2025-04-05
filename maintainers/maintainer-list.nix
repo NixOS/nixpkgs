@@ -17077,6 +17077,12 @@
     githubId = 368712;
     name = "Niels Egberts";
   };
+  nifoc = {
+    email = "nixpkgs@kempkens.io";
+    github = "nifoc";
+    githubId = 222412;
+    name = "Daniel Kempkens";
+  };
   nigelgbanks = {
     name = "Nigel Banks";
     email = "nigel.g.banks@gmail.com";
