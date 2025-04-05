@@ -149,6 +149,7 @@ in
     systemd.services.ntpd = {
       description = "NTP Daemon";
 
+      requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       wants = [ "time-sync.target" ];
       before = [ "time-sync.target" ];
