@@ -5,6 +5,14 @@
   pam,
   scdoc,
   installShellFiles,
+  nixosTests,
+
+  config,
+  greetd,
+  gtkgreet,
+  regreet,
+  tuigreet,
+  wlgreet,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,7 +46,11 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.no-shadow = nixosTests.greetd-no-shadow;
+  };
+
+  meta = {
     description = "Minimal and flexible login manager daemon";
     longDescription = ''
       greetd is a minimal and flexible login manager daemon
@@ -46,8 +58,21 @@ rustPlatform.buildRustPackage rec {
       Comes with agreety, a simple, text-based greeter.
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    mainProgram = "greetd";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux;
   };
 }
+// lib.optionalAttrs config.allowAliases (
+  lib.mapAttrs (name: pkg: lib.warn "pkgs.greetd.${name} moved to pkgs.${name}" pkg) {
+    inherit
+      greetd
+      gtkgreet
+      regreet
+      tuigreet
+      wlgreet
+      ;
+    dlm = throw "greetd.dlm has been removed as it is broken and abandoned upstream"; # Added 2024-07-15
+  }
+)
