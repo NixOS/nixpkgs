@@ -89,7 +89,8 @@ EOF
         # https://xenbits.xenproject.org/docs/unstable/misc/efi.html.
         [ "$1" = "debug" ] && echo -e "\e[1;34mxenBootBuilder:\e[0m making Xen UKI..."
         xenEfi=$(jq -re '."org.xenproject.bootspec.v1".xen' "$bootspecFile")
-        padding=$(objdump --header --section=".pad" "$xenEfi" | awk '/\.pad/ { printf("0x%016x\n", strtonum("0x"$3) + strtonum("0x"$4))};')
+        finalSection=$(objdump --header "$xenEfi" | tail -n 2 | head -n 1 | grep -Eo '\.[a-z]*')
+        padding=$(objdump --header --section="$finalSection" "$xenEfi" | awk -v section="$finalSection" '$0 ~ section { printf("0x%016x\n", strtonum("0x"$3) + strtonum("0x"$4))};')
         [ "$1" = "debug" ] && echo "               - padding: $padding"
         objcopy \
             --add-section .config="$tmpCfg" \
