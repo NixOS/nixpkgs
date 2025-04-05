@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Small binary that runs a list of commands in parallel and awaits termination";

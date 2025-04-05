@@ -103,7 +103,7 @@ let
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/gpu_stats";
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {
@@ -134,7 +134,7 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     __darwinAllowLocalNetworking = true;

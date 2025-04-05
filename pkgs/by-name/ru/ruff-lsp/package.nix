@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     ruff
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   makeWrapperArgs = [
     # prefer ruff from user's PATH, that's usually desired behavior

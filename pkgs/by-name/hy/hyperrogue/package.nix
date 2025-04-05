@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

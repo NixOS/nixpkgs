@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     requests
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = "export HOME=$(mktemp -d)";
