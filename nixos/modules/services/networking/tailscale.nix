@@ -173,13 +173,12 @@ in
       after = [ "tailscaled.service" ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
+      enableStrictShellChecks = true;
       serviceConfig = {
         Type = "oneshot";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -188,14 +187,63 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # sh
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
+          date=${pkgs.coreutils}/bin/date
+          ip=${pkgs.iproute2}/bin/ip
+          jq=${lib.getExe pkgs.jq}
+          tailscale=${lib.getExe cfg.package}
+
+          timeout=$((1000 * 30)) # 30s in ms
+          start=$($date +%s%3N) # start time in ms
+          end=$((start + timeout))
+
+          # exit 1 to let systemd continue (and activation rollback) in case of
+          # failure
+          timeCheck() {
+            current=$($date +%s%3N)
+            if [ "$current" -ge "$end" ]; then
+              echo "Timed out $1"
+              exit 1
+            fi
+          }
+
+          statusCommand() {
+            $tailscale status --json --peers=false | $jq -r '.BackendState'
+          }
+
+          echo Waiting for Tailscale daemon
+          while [[ "$(statusCommand)" == "NoState" ]]; do
             sleep 0.5
+            timeCheck "waiting for Tailscale"
           done
-          status=$(${statusCommand})
+          echo Tailscale connected to control server
+
+          echo Checking if authentication needed
+          status="$(statusCommand)"
+          # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
           if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+            echo Sending authentication
+            $tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+          elif [[ "$status" == "Running" ]]; then
+            echo Tailscale is running
           fi
+
+          # Verify ipv4 and ipv6 are configured to allow services to bind to
+          # them and can be ordered After= this unit
+          addrsUp() {
+            out="$($ip -oneline -json address show ${cfg.interfaceName})"
+            echo "$out" | $jq --exit-status '.[].addr_info
+              | any(.family == "inet" and .scope == "global")
+                and any(.family == "inet6" and .scope == "global")' > /dev/null
+          }
+
+          echo Waiting for Tailscale interface IPs to be configured
+          until addrsUp; do
+            sleep 0.5
+            timeCheck "waiting for IPs to configure"
+          done
+          echo Tailscale IPs configured
         '';
     };
 
