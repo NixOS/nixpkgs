@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  makeWrapper,
   boost,
   xercesc,
   qtbase,
@@ -12,6 +11,7 @@
   qtwebengine,
   qtsvg,
   python3Packages,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
-    wrapProgram "$out/bin/sigil" \
-       --prefix PYTHONPATH : $PYTHONPATH \
-       ''${qtWrapperArgs[@]}
+    wrapQtApp "$out/bin/sigil" --prefix PYTHONPATH : $PYTHONPATH
   '';
 
   meta = {
