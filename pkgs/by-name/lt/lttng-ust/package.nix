@@ -1,5 +1,3 @@
-{ version, sha256 }:
-
 {
   lib,
   stdenv,
@@ -23,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-ust";
-  inherit version;
+  version = "2.13.8";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
-    inherit sha256;
+    sha256 = "sha256-1O+Y2rmjetT1JMyv39UK9PJmA5tSjdWvq8545JAk2Tc=";
   };
 
   outputs = [

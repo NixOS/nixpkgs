@@ -8536,10 +8536,6 @@ with pkgs;
 
   lit = with python3Packages; toPythonApplication lit;
 
-  lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
-
-  lttng-ust_2_12 = callPackage ../development/tools/misc/lttng-ust/2.12.nix { };
-
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   maven3 = maven;
