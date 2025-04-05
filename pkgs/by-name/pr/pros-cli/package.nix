@@ -8,7 +8,7 @@ let
   version = "3.5.5";
   pname = "pros-cli";
 in
-python3Packages.buildPythonPackage {
+python3Packages.buildPythonApplication {
   inherit pname version;
   doCheck = false;
   propagatedBuildInputs = with python3Packages; [
