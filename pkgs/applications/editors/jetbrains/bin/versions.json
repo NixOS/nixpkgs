@@ -11,10 +11,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "c23b9aeb1fdd9f88ab977186e9e4558cdb9bdb5e498b7716f4255a845f8880fd",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.4.tar.gz",
-      "build_number": "243.25659.42"
+      "version": "2024.3.5",
+      "sha256": "502145600b1955156841fa5db37e70f97f960aecbfb7503578c728416f83eaaa",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.5.tar.gz",
+      "build_number": "243.26053.34"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -100,10 +100,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.tar.gz",
-      "version": "2024.3.6",
-      "sha256": "1f9db9f3f90c71fe476e3e17ac78be9fcc982e3f017c598f631b5cd600e6da43",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.6.tar.gz",
-      "build_number": "243.25659.34"
+      "version": "2024.3.7",
+      "sha256": "cffcb61698f0e381dc4190cfd32ef1dd93c702771650626d23281dc151e59672",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.7.tar.gz",
+      "build_number": "243.26053.56"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -150,10 +150,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz",
-      "version": "2024.3.4",
-      "sha256": "336d19b695392e9a7bf426ae2d93b864ade48216e8df8f96ecfc9b2e9b9afa4f",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.4-aarch64.tar.gz",
-      "build_number": "243.25659.42"
+      "version": "2024.3.5",
+      "sha256": "af9e6fe31455db2a296cfd744e4e483543375f53d21a3ef297c71b8219a56de9",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.5-aarch64.tar.gz",
+      "build_number": "243.26053.34"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -239,10 +239,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
-      "version": "2024.3.6",
-      "sha256": "f8c459c77327e97812507ba4724e6e9911e918425f5a187707cb66efafa47c45",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.6-aarch64.tar.gz",
-      "build_number": "243.25659.34"
+      "version": "2024.3.7",
+      "sha256": "f17bfddf466a1555e4ee0a5e31d4974feaea73bdb4fb7833c87d27c3e99838b9",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.7-aarch64.tar.gz",
+      "build_number": "243.26053.56"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -289,10 +289,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.dmg",
-      "version": "2024.3.4",
-      "sha256": "e92dc5ba5a2c59d09e3751de60ed31b0af012210f8381ffd1c5c3e254cc11718",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.4.dmg",
-      "build_number": "243.25659.42"
+      "version": "2024.3.5",
+      "sha256": "fd190a71f83d0b18322f6b3495c5c18ae72e8e81fbc8e2fd0ab811c6af575106",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.5.dmg",
+      "build_number": "243.26053.34"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -378,10 +378,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.dmg",
-      "version": "2024.3.6",
-      "sha256": "1677f8b1274149407799ba025f6a9316749a7b8d86ba142f77c807b52874f9fa",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.6.dmg",
-      "build_number": "243.25659.34"
+      "version": "2024.3.7",
+      "sha256": "24e5f2565e26133757a875bcf39ca1036fd47fff0589f147aec716529611088f",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.7.dmg",
+      "build_number": "243.26053.56"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -428,10 +428,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.dmg",
-      "version": "2024.3.4",
-      "sha256": "e9d601aaed26d8efa82137649acb24c24fdc8d555c42afa9226ed08d3a19fe4d",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.4-aarch64.dmg",
-      "build_number": "243.25659.42"
+      "version": "2024.3.5",
+      "sha256": "c7f4973ab9392daf3bb5708298002d23cf3f769565d2a7c3a9baa8547b06c042",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.3.5-aarch64.dmg",
+      "build_number": "243.26053.34"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -517,10 +517,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.dmg",
-      "version": "2024.3.6",
-      "sha256": "bf3f08040194b1280a857886ac40c6518f83b40f60a6ee990d348a7e14b2c023",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.6-aarch64.dmg",
-      "build_number": "243.25659.34"
+      "version": "2024.3.7",
+      "sha256": "9d71b7ee07c52fdbb96e49f83072065a3a99cb2ea97da089a0a23c03f4cd004a",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.3.7-aarch64.dmg",
+      "build_number": "243.26053.56"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
