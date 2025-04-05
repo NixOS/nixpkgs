@@ -5,10 +5,10 @@
 }:
 let
   pname = "protonup-qt";
-  version = "2.11.1";
+  version = "2.12.0";
   src = fetchurl {
     url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-    hash = "sha256-xHkeAqveXF8YLFvKHTZtSvINIIoiqhNbwVuKfnaHcQI=";
+    hash = "sha256-8MeHSy3XW1oXAD2xrDSIB0ZLJxtk5UBIMpDRTPF9ksU=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
