@@ -4697,6 +4697,8 @@ self: super: with self; {
 
   falconpy = callPackage ../development/python-modules/falconpy { };
 
+  falcon-cors = callPackage ../development/python-modules/falcon-cors { };
+
   faraday-agent-parameters-types =
     callPackage ../development/python-modules/faraday-agent-parameters-types
       { };
@@ -6793,6 +6795,8 @@ self: super: with self; {
   ircstates = callPackage ../development/python-modules/ircstates { };
 
   irctokens = callPackage ../development/python-modules/irctokens { };
+
+  irisclient = callPackage ../development/python-modules/irisclient { };
 
   isal = callPackage ../development/python-modules/isal { };
 
