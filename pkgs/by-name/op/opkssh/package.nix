@@ -8,23 +8,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "opkssh";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "openpubkey";
     repo = "opkssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RtTo/wj4v+jtJ4xZJD0YunKtxT7zZ1esgJOSEtxnLOg=";
+    hash = "sha256-bOE6HdS0J2LTa/gup04ioIfhEQfW2FJlkW2MU81io08=";
   };
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 
-  vendorHash = "sha256-MK7lEBKMVZv4jbYY2Vf0zYjw7YV+13tB0HkO3tCqzEI=";
+  vendorHash = "sha256-0drdEGX9ImoA0yKCNyEYD/HewTc9Q+uClEKGFTkK4Ek=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+
+  # remove integration tests, because they want to spin up container
+  preCheck = ''
+    rm -rf test/integration
+  '';
+
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
