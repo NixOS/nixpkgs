@@ -7718,6 +7718,8 @@ self: super: with self; {
     }
   );
 
+  libpass = callPackage ../development/python-modules/libpass { };
+
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
