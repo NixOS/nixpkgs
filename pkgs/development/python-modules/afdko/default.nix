@@ -64,7 +64,10 @@ buildPythonPackage rec {
     # FIXME: remove in 5.0
     (fetchpatch {
       url = "https://github.com/adobe-type-tools/afdko/commit/3b78bea15245e2bd2417c25ba5c2b8b15b07793c.patch";
-      excludes = [ "CMakeLists.txt" "requirements.txt" ];
+      excludes = [
+        "CMakeLists.txt"
+        "requirements.txt"
+      ];
       hash = "sha256-Ao5AUVm1h4a3qidqlBFWdC7jiXyBfXQEnsT7XsXXXRU=";
     })
   ];
