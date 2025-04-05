@@ -9112,6 +9112,8 @@ self: super: with self; {
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
+  mkdocs-simple-blog = callPackage ../development/python-modules/mkdocs-simple-blog { };
+
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
