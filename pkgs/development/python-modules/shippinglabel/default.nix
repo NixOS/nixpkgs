@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
   dist-meta,
   dom-toml,
   domdf-python-tools,
@@ -21,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-uvQ6MjHp1X63PlEDQKaiYMLoB7/gqs4KfFyZoCeNNXQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     dist-meta
@@ -29,8 +31,6 @@ buildPythonPackage rec {
     domdf-python-tools
     packaging
     typing-extensions
-    hatchling
-    hatch-requirements-txt
   ];
 
   meta = {
