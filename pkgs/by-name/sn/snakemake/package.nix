@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     ])
     ++ [ writableTmpDirAsHomeHook ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray = [
     "tests/tests.py"

@@ -37,7 +37,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Go manage your Ollama models";
