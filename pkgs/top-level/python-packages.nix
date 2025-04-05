@@ -13999,6 +13999,8 @@ self: super: with self; {
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
+  python-obfuscator = callPackage ../development/python-modules/python-obfuscator { };
+
   python-octaviaclient = callPackage ../development/python-modules/python-octaviaclient { };
 
   python-olm = callPackage ../development/python-modules/python-olm { };
