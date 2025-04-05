@@ -320,6 +320,83 @@ in
           description = "Port number on which the MySQL master server runs.";
         };
       };
+
+      galeraCluster = {
+        enable = lib.mkEnableOption "MariaDB Galera Cluster";
+
+        package = lib.mkOption {
+          type = lib.types.package;
+          description = "The MariaDB Galera package that provides the shared library 'libgalera_smm.so' required for cluster functionality.";
+          default = lib.literalExpression "pkgs.mariadb-galera";
+        };
+
+        name = lib.mkOption {
+          type = lib.types.str;
+          description = "The logical name of the Galera cluster. All nodes in the same cluster must use the same name.";
+          default = "galera";
+        };
+
+        sstMethod = lib.mkOption {
+          type = lib.types.enum [
+            "rsync"
+            "mariabackup"
+          ];
+          description = "Method for the initial state transfer (wsrep_sst_method) when a node joins the cluster. Be aware that rsync needs SSH keys to be generated and authorized on all nodes!";
+          default = "rsync";
+          example = "mariabackup";
+        };
+
+        localName = lib.mkOption {
+          type = lib.types.str;
+          description = "The unique name that identifies this particular node within the cluster. Each node must have a different name.";
+          example = "node1";
+        };
+
+        localAddress = lib.mkOption {
+          type = lib.types.str;
+          description = "IP address or hostname of this node that will be used for cluster communication. Must be reachable by all other nodes.";
+          example = "1.2.3.4";
+          default = cfg.galeraCluster.localName;
+          defaultText = lib.literalExpression "config.services.mysql.galeraCluster.localName";
+        };
+
+        nodeAddresses = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          description = "IP addresses or hostnames of all nodes in the cluster, including this node. This is used to construct the default clusterAddress connection string.";
+          example = lib.literalExpression ''["10.0.0.10" "10.0.0.20" "10.0.0.30"]'';
+          default = [ ];
+        };
+
+        clusterPassword = lib.mkOption {
+          type = lib.types.str;
+          description = "Optional password for securing cluster communications. If provided, it will be used in the clusterAddress for authentication between nodes.";
+          example = "SomePassword";
+          default = "";
+        };
+
+        clusterAddress = lib.mkOption {
+          type = lib.types.str;
+          description = "Full Galera cluster connection string. If nodeAddresses is set, this will be auto-generated, but you can override it with a custom value. Format is typically 'gcomm://node1,node2,node3' with optional parameters.";
+          example = "gcomm://10.0.0.10,10.0.0.20,10.0.0.30?gmcast.seg=1:SomePassword";
+          default =
+            if (cfg.galeraCluster.nodeAddresses == [ ]) then
+              ""
+            else
+              "gcomm://${builtins.concatStringsSep "," cfg.galeraCluster.nodeAddresses}"
+              + lib.optionalString (
+                cfg.galeraCluster.clusterPassword != ""
+              ) "?gmcast.seg=1:${cfg.galeraCluster.clusterPassword}";
+          defaultText = lib.literalExpression ''
+            if (config.services.mysql.galeraCluster.nodeAddresses == [ ]) then
+              ""
+            else
+              "gcomm://''${builtins.concatStringsSep \",\" config.services.mysql.galeraCluster.nodeAddresses}"
+              + lib.optionalString (config.services.mysql.galeraCluster.clusterPassword != "")
+                "?gmcast.seg=1:''${config.services.mysql.galeraCluster.clusterPassword}"
+          '';
+        };
+
+      };
     };
 
   };
@@ -327,6 +404,34 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !cfg.galeraCluster.enable || isMariaDB;
+        message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
+      }
+      {
+        assertion =
+          !cfg.galeraCluster.enable
+          || (
+            cfg.galeraCluster.localAddress != ""
+            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "")
+          );
+        message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
+      }
+      {
+        assertion = !(cfg.galeraCluster.clusterAddress != "" && cfg.galeraCluster.clusterPassword != "");
+        message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
+      }
+      {
+        assertion =
+          !(
+            cfg.galeraCluster.enable
+            && cfg.galeraCluster.nodeAddresses != [ ]
+            && cfg.galeraCluster.clusterAddress != ""
+          );
+        message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
+      }
+    ];
 
     services.mysql.dataDir = lib.mkDefault (
       if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
@@ -351,7 +456,37 @@ in
       (lib.mkIf (!isMariaDB) {
         plugin-load-add = [ "auth_socket.so" ];
       })
+      (lib.mkIf cfg.galeraCluster.enable {
+        # Ensure Only InnoDB is used as galera clusters can only work with them
+        enforce_storage_engine = "InnoDB";
+        default_storage_engine = "InnoDB";
+
+        # galera only support this binlog format
+        binlog-format = "ROW";
+
+        bind_address = lib.mkDefault "0.0.0.0";
+      })
     ];
+
+    services.mysql.settings.galera = lib.optionalAttrs cfg.galeraCluster.enable {
+      wsrep_on = "ON";
+      wsrep_debug = lib.mkDefault "NONE";
+      wsrep_retry_autocommit = lib.mkDefault "3";
+      wsrep_provider = "${cfg.galeraCluster.package}/lib/galera/libgalera_smm.so";
+
+      wsrep_cluster_name = cfg.galeraCluster.name;
+      wsrep_cluster_address = cfg.galeraCluster.clusterAddress;
+
+      wsrep_node_address = cfg.galeraCluster.localAddress;
+      wsrep_node_name = "${cfg.galeraCluster.localName}";
+
+      # SST method using rsync
+      wsrep_sst_method = lib.mkDefault cfg.galeraCluster.sstMethod;
+      wsrep_sst_auth = lib.mkDefault "check_repl:check_pass";
+
+      binlog_format = "ROW";
+      innodb_autoinc_lock_mode = 2;
+    };
 
     users.users = lib.optionalAttrs (cfg.user == "mysql") {
       mysql = {
@@ -384,11 +519,29 @@ in
 
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
-      path = [
-        # Needed for the mysql_install_db command in the preStart script
-        # which calls the hostname command.
-        pkgs.nettools
-      ];
+      path =
+        [
+          # Needed for the mysql_install_db command in the preStart script
+          # which calls the hostname command.
+          pkgs.nettools
+        ]
+        # tools 'wsrep_sst_rsync' needs
+        ++ lib.optionals cfg.galeraCluster.enable [
+          cfg.package
+          pkgs.bash
+          pkgs.gawk
+          pkgs.gnutar
+          pkgs.gzip
+          pkgs.inetutils
+          pkgs.iproute2
+          pkgs.netcat
+          pkgs.procps
+          pkgs.pv
+          pkgs.rsync
+          pkgs.socat
+          pkgs.stunnel
+          pkgs.which
+        ];
 
       preStart =
         if isMariaDB then
@@ -581,6 +734,17 @@ in
         })
       ];
     };
+
+    # Open firewall ports for MySQL (and Galera)
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.galeraCluster.enable [
+      3306 # MySQL
+      4567 # Galera Cluster
+      4568 # Galera IST
+      4444 # SST
+    ];
+    networking.firewall.allowedUDPPorts = lib.optionals cfg.galeraCluster.enable [
+      4567 # Galera Cluster
+    ];
   };
 
   meta.maintainers = [ lib.maintainers._6543 ];
