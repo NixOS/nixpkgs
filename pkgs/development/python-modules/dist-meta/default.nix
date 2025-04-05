@@ -2,9 +2,10 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
   domdf-python-tools,
   handy-archives,
+  hatchling,
+  hatch-requirements-txt,
   packaging,
 }:
 buildPythonPackage rec {
@@ -13,22 +14,21 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "dist_meta";
+    inherit version;
     hash = "sha256-+hbr1VdHRKCVlqs0IIOhHXIJ2NBc8yiR0cmFvn7Ay9c=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     domdf-python-tools
     handy-archives
     packaging
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
-  '';
 
   meta = {
     description = "Parse and create Python distribution metadata.";
