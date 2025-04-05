@@ -28,11 +28,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-+3PkG33qKckagSVvVdqkypulO7uu5AMOv8fQiP8IUbs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-    poetry-core
-  ] ++ [ tzdata ];
+  nativeBuildInputs =
+    with python3.pkgs;
+    [
+      setuptools
+      wheel
+      poetry-core
+    ]
+    ++ [ tzdata ];
 
   propagatedBuildInputs = with python3.pkgs; [
     rich

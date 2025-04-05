@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "archtika";
     repo = "archtika";
     tag = "v${version}";
-    hash = "sha256-ba9da7LqCE/e2lhRVHD7GOhwOj1fNTBbN/pARPMzIg4=";
+    hash = "sha256-GffYAtLs12v2Lt1WoKJOG5dZsmzDcySZKFBQwCT9nnY=";
   };
 
   web = buildNpmPackage {
     name = "web-app";
     src = "${src}/web-app";
-    npmDepsHash = "sha256-RTyo7K/Hr1hBGtcBKynrziUInl91JqZl84NkJg16ufA=";
+    npmDepsHash = "sha256-2udi8vLLvdoZxIyRKLOCfEpEMsooxsIrM1wiua1QPAI=";
     npmFlags = [ "--legacy-peer-deps" ];
     installPhase = ''
       mkdir -p $out/web-app
@@ -50,7 +50,10 @@ symlinkJoin {
     api
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit src web;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Modern, performant and lightweight CMS";

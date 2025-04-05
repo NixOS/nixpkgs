@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "14.0.6";
+  version = "14.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "pychromecast";
     tag = version;
-    hash = "sha256-fyF/3F/K4bSOEepCArhK+v+W6tet82r1EW22g74mQlw=";
+    hash = "sha256-NB/KXKgmyLAhsL/CD463eNMO8brye5LKVCkkD3EloPU=";
   };
 
   build-system = [ setuptools ];

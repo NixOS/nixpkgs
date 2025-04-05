@@ -7,6 +7,7 @@ import ../make-test-python.nix (
 
     allTests ? false,
 
+    appArmor ? false,
     featureUser ? allTests,
     initLegacy ? true,
     initSystemd ? true,
@@ -138,6 +139,9 @@ import ../make-test-python.nix (
 
       networking.hostId = "01234567";
       networking.firewall.trustedInterfaces = [ "incusbr0" ];
+
+      security.apparmor.enable = appArmor;
+      services.dbus.apparmor = (if appArmor then "enabled" else "disabled");
 
       services.lvm = {
         boot.thin.enable = storageLvm;

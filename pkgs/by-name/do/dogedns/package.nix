@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, openssl
-, pandoc
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  openssl,
+  pandoc,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,12 +41,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=options::test::two_classes"
   ];
 
-  nativeBuildInputs = [ installShellFiles pandoc ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
- postInstall = ''
+  postInstall = ''
     installShellCompletion completions/doge.{bash,fish,zsh}
     installManPage ./target/man/*.1
   '';

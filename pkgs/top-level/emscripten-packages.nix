@@ -6,91 +6,108 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
-  json_c = (pkgs.json_c.override {
-    stdenv = pkgs.emscriptenStdenv;
-  }).overrideAttrs
-    (old: {
-      nativeBuildInputs = [ pkg-config cmake ];
-      propagatedBuildInputs = [ zlib ];
-      configurePhase = ''
-        HOME=$TMPDIR
-        mkdir -p .emscriptencache
-        export EM_CACHE=$(pwd)/.emscriptencache
-        emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
-      '';
-      checkPhase = ''
-        echo "================= testing json_c using node ================="
+  json_c =
+    (pkgs.json_c.override {
+      stdenv = pkgs.emscriptenStdenv;
+    }).overrideAttrs
+      (old: {
+        nativeBuildInputs = [
+          pkg-config
+          cmake
+        ];
+        propagatedBuildInputs = [ zlib ];
+        configurePhase = ''
+          HOME=$TMPDIR
+          mkdir -p .emscriptencache
+          export EM_CACHE=$(pwd)/.emscriptencache
+          emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
+        '';
+        checkPhase = ''
+          echo "================= testing json_c using node ================="
 
-        echo "Compiling a custom test"
-        set -x
-        emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 tests/test1.c \
-          `pkg-config zlib --cflags` \
-          `pkg-config zlib --libs` \
-          -I . \
-          libjson-c.a \
-          -o ./test1.js
+          echo "Compiling a custom test"
+          set -x
+          emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 tests/test1.c \
+            `pkg-config zlib --cflags` \
+            `pkg-config zlib --libs` \
+            -I . \
+            libjson-c.a \
+            -o ./test1.js
 
-        echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-        ${pkgs.nodejs}/bin/node ./test1.js
+          echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
+          ${pkgs.nodejs}/bin/node ./test1.js
 
-        set +x
-        if [ $? -ne 0 ]; then
-          echo "test1.js execution failed -> unit test failed, please fix"
-          exit 1;
-        else
-          echo "test1.js execution seems to work! very good."
-        fi
-        echo "================= /testing json_c using node ================="
-      '';
-    });
+          set +x
+          if [ $? -ne 0 ]; then
+            echo "test1.js execution failed -> unit test failed, please fix"
+            exit 1;
+          else
+            echo "test1.js execution seems to work! very good."
+          fi
+          echo "================= /testing json_c using node ================="
+        '';
+      });
 
-  libxml2 = (pkgs.libxml2.override {
-    stdenv = emscriptenStdenv;
-    pythonSupport = false;
-  }).overrideAttrs
-    (old: {
-      propagatedBuildInputs = [ zlib ];
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
+  libxml2 =
+    (pkgs.libxml2.override {
+      stdenv = emscriptenStdenv;
+      pythonSupport = false;
+    }).overrideAttrs
+      (old: {
+        propagatedBuildInputs = [ zlib ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
 
-      # just override it with nothing so it does not fail
-      autoreconfPhase = "echo autoreconfPhase not used...";
-      configurePhase = ''
-        HOME=$TMPDIR
-        mkdir -p .emscriptencache
-        export EM_CACHE=$(pwd)/.emscriptencache
-        emconfigure ./configure --prefix=$out --without-python
-      '';
-      checkPhase = ''
-        echo "================= testing libxml2 using node ================="
+        # just override it with nothing so it does not fail
+        autoreconfPhase = "echo autoreconfPhase not used...";
+        configurePhase = ''
+          HOME=$TMPDIR
+          mkdir -p .emscriptencache
+          export EM_CACHE=$(pwd)/.emscriptencache
+          emconfigure ./configure --prefix=$out --without-python
+        '';
+        checkPhase = ''
+          echo "================= testing libxml2 using node ================="
 
-        echo "Compiling a custom test"
-        set -x
-        emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
-        ./.libs/${
-          if pkgs.stdenv.hostPlatform.isDarwin then "libxml2.dylib" else "libxml2.a"
-        } `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
-        --embed-file ./test/xmlid/id_err1.xml
+          echo "Compiling a custom test"
+          set -x
+          emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
+          ./.libs/${
+            if pkgs.stdenv.hostPlatform.isDarwin then "libxml2.dylib" else "libxml2.a"
+          } `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
+          --embed-file ./test/xmlid/id_err1.xml
 
-        echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-        ${pkgs.nodejs}/bin/node ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
+          echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
+          ${pkgs.nodejs}/bin/node ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
 
-        set +x
-        if [ $? -ne 0 ]; then
-          echo "xmllint unit test failed, please fix this package"
-          exit 1;
-        else
-          echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
-        fi
-        echo "================= /testing libxml2 using node ================="
-      '';
-    });
+          set +x
+          if [ $? -ne 0 ]; then
+            echo "xmllint unit test failed, please fix this package"
+            exit 1;
+          else
+            echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
+          fi
+          echo "================= /testing libxml2 using node ================="
+        '';
+      });
 
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
 
-    buildInputs = [ libtool gnumake libxml2 nodejs openjdk json_c ];
-    nativeBuildInputs = [ pkg-config zlib autoconf automake ];
+    buildInputs = [
+      libtool
+      gnumake
+      libxml2
+      nodejs
+      openjdk
+      json_c
+    ];
+    nativeBuildInputs = [
+      pkg-config
+      zlib
+      autoconf
+      automake
+    ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -117,7 +134,10 @@ rec {
       make -f Makefile.emEnv
     '';
 
-    outputs = [ "out" "doc" ];
+    outputs = [
+      "out"
+      "doc"
+    ];
 
     installPhase = ''
       mkdir -p $out/share
@@ -134,52 +154,54 @@ rec {
       cp *.rng $out/share
       cp README.md $doc/share/${pname}
     '';
-    checkPhase = ''
-    '';
+    checkPhase = '''';
   };
 
-  zlib = (pkgs.zlib.override {
-    stdenv = pkgs.emscriptenStdenv;
-  }).overrideAttrs
-    (old: {
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
-      # we need to reset this setting!
-      env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
-      dontStrip = true;
-      outputs = [ "out" ];
-      buildPhase = ''
-        emmake make
-      '';
-      installPhase = ''
-        emmake make install
-      '';
-      checkPhase = ''
-        echo "================= testing zlib using node ================="
+  zlib =
+    (pkgs.zlib.override {
+      stdenv = pkgs.emscriptenStdenv;
+    }).overrideAttrs
+      (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
+        # we need to reset this setting!
+        env = (old.env or { }) // {
+          NIX_CFLAGS_COMPILE = "";
+        };
+        dontStrip = true;
+        outputs = [ "out" ];
+        buildPhase = ''
+          emmake make
+        '';
+        installPhase = ''
+          emmake make install
+        '';
+        checkPhase = ''
+          echo "================= testing zlib using node ================="
 
-        echo "Compiling a custom test"
-        set -x
-        emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-        -L. libz.a -I . -o example.js
+          echo "Compiling a custom test"
+          set -x
+          emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
+          -L. libz.a -I . -o example.js
 
-        echo "Using node to execute the test"
-        ${pkgs.nodejs}/bin/node ./example.js
+          echo "Using node to execute the test"
+          ${pkgs.nodejs}/bin/node ./example.js
 
-        set +x
-        if [ $? -ne 0 ]; then
-          echo "test failed for some reason"
-          exit 1;
-        else
-          echo "it seems to work! very good."
-        fi
-        echo "================= /testing zlib using node ================="
-      '';
+          set +x
+          if [ $? -ne 0 ]; then
+            echo "test failed for some reason"
+            exit 1;
+          else
+            echo "it seems to work! very good."
+          fi
+          echo "================= /testing zlib using node ================="
+        '';
 
-      postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-        substituteInPlace configure \
-          --replace '/usr/bin/libtool' 'ar' \
-          --replace 'AR="libtool"' 'AR="ar"' \
-          --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
-      '';
-    });
+        postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+          substituteInPlace configure \
+            --replace '/usr/bin/libtool' 'ar' \
+            --replace 'AR="libtool"' 'AR="ar"' \
+            --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+        '';
+      });
 
 }

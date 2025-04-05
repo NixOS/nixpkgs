@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiorussound";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   # requires newer f-strings introduced in 3.12
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "noahhusby";
     repo = "aiorussound";
     tag = version;
-    hash = "sha256-y1ArQ4o9RRngJFT3uk3wO/EVZu3kWYXUx2pnTSFUruc=";
+    hash = "sha256-G4bJ2K9SBMoCwTCfn1oZSDoU/FHgZXQf13YEZJBKcNo=";
   };
 
   build-system = [ poetry-core ];

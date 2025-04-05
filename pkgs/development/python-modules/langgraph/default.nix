@@ -17,7 +17,6 @@
   dataclasses-json,
   grandalf,
   httpx,
-  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
@@ -142,7 +141,6 @@ buildPythonPackage rec {
     dataclasses-json
     grandalf
     httpx
-    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith

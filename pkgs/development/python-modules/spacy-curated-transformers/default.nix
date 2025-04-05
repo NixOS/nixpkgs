@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   # Unit tests are hard to use, since most tests rely on downloading
   # models from Hugging Face Hub.
-  pythonImportCheck = [ "spacy_curated_transformers" ];
+  pythonImportsCheck = [ "spacy_curated_transformers" ];
 
   meta = with lib; {
     description = "spaCy entry points for Curated Transformers";

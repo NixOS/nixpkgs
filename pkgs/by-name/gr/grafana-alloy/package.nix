@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${version}";
-    hash = "sha256-vMNh7tvRYGJRRWcLePBbNlUU2qVNtKhOSwsfB1dWWRA=";
+    hash = "sha256-4JfzjeF654+Q4Hc/0P08minpSJX3mO/p8EOeHUCKu6A=";
   };
 
   proxyVendor = true;

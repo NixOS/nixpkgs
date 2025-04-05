@@ -17,7 +17,7 @@
   pkg-config,
   ninja,
   cmake,
-  clang-tools,
+  buildPackages,
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ninja
     # nlohmann_json can be only discovered via cmake files
     cmake
-  ] ++ (lib.optional stdenv.cc.isClang [ clang-tools ]);
+  ] ++ (lib.optional stdenv.cc.isClang [ buildPackages.clang-tools ]);
 
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     inherit maintainers;
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isStatic;
   };
 }

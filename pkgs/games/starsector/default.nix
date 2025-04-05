@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.97a-RC11";
+  version = "0.98a-RC5";
 
   src = fetchzip {
     url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
-    sha256 = "sha256-KT4n0kBocaljD6dTbpr6xcwy6rBBZTFjov9m+jizDW4=";
+    sha256 = "sha256-otssjDpc4FjhTjS2A/JttlglJtMNVyDfhyTv9X+NiX0=";
   };
 
   nativeBuildInputs = [
@@ -82,9 +82,8 @@ stdenv.mkDerivation rec {
     substituteInPlace starsector.sh \
       --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
+      --replace-fail "./compiler_directives.txt" "$out/share/starsector/compiler_directives.txt" \
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace-fail "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
-      --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" "" \
       --replace-fail "com.fs.starfarer.StarfarerLauncher" "\"\$@\" com.fs.starfarer.StarfarerLauncher"
   '';
 

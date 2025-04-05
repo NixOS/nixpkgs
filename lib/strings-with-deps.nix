@@ -125,30 +125,58 @@ rec {
     - Ordering the dependent phases of `system.userActivationScripts`
 
     For further examples see: [NixOS activation script](https://nixos.org/manual/nixos/stable/#sec-activation-script)
-
   */
-  textClosureList = predefined: arg:
+  textClosureList =
+    predefined: arg:
     let
-      f = done: todo:
-        if todo == [] then {result = []; inherit done;}
+      f =
+        done: todo:
+        if todo == [ ] then
+          {
+            result = [ ];
+            inherit done;
+          }
         else
-          let entry = head todo; in
+          let
+            entry = head todo;
+          in
           if isAttrs entry then
-            let x = f done entry.deps;
-                y = f x.done (tail todo);
-            in { result = x.result ++ [entry.text] ++ y.result;
-                 done = y.done;
-               }
-          else if done ? ${entry} then f done (tail todo)
-          else f (done // listToAttrs [{name = entry; value = 1;}]) ([predefined.${entry}] ++ tail todo);
-    in (f {} arg).result;
+            let
+              x = f done entry.deps;
+              y = f x.done (tail todo);
+            in
+            {
+              result = x.result ++ [ entry.text ] ++ y.result;
+              done = y.done;
+            }
+          else if done ? ${entry} then
+            f done (tail todo)
+          else
+            f (
+              done
+              // listToAttrs [
+                {
+                  name = entry;
+                  value = 1;
+                }
+              ]
+            ) ([ predefined.${entry} ] ++ tail todo);
+    in
+    (f { } arg).result;
 
-  textClosureMap = f: predefined: names:
+  textClosureMap =
+    f: predefined: names:
     concatStringsSep "\n" (map f (textClosureList predefined names));
 
-  noDepEntry = text: {inherit text; deps = [];};
-  fullDepEntry = text: deps: {inherit text deps;};
-  packEntry = deps: {inherit deps; text="";};
+  noDepEntry = text: {
+    inherit text;
+    deps = [ ];
+  };
+  fullDepEntry = text: deps: { inherit text deps; };
+  packEntry = deps: {
+    inherit deps;
+    text = "";
+  };
 
   stringAfter = deps: text: { inherit text deps; };
 

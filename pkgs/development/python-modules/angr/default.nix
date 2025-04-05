@@ -79,14 +79,13 @@ buildPythonPackage rec {
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
-    unicorn-angr
     unique-log-filter
   ];
 
   optional-dependencies = {
-    AngrDB = [ sqlalchemy ];
+    angrdb = [ sqlalchemy ];
+    unicorn = [ unicorn-angr ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [

@@ -41,7 +41,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     boto3
     gremlinpython

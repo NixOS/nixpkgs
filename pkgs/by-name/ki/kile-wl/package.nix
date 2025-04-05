@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, unstableGitUpdater, rustPlatform }:
+{
+  lib,
+  fetchFromGitLab,
+  unstableGitUpdater,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "kile-wl";

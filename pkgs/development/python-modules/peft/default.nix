@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
@@ -69,6 +70,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests" ];
 
+  # These tests fail when MPS devices are detected
+  disabledTests = lib.optional stdenv.isDarwin [
+    "gpu"
+  ];
+
   disabledTestPaths = [
     # ValueError: Can't find 'adapter_config.json'
     "tests/test_config.py"
@@ -104,9 +110,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

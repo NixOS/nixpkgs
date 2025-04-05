@@ -17,15 +17,6 @@ let
       inherit (versionInfo.scx) hash;
     };
 
-    patches = [
-      # Remove after new release
-      (fetchpatch2 {
-        name = "fix-builds-on-debug-fs-kernels";
-        url = "https://github.com/sched-ext/scx/commit/3c09e8c8c62efd701107f4c2071211db02341d62.patch?full_index=1";
-        hash = "sha256-jLMlCKBYQKS6sf5pZy5z19iSmX9bu9rlXHmGVaxTOho=";
-      })
-    ];
-
     meta = {
       homepage = "https://github.com/sched-ext/scx";
       changelog = "https://github.com/sched-ext/scx/releases/tag/v${versionInfo.scx.version}";

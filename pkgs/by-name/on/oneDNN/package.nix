@@ -1,8 +1,9 @@
-{ cmake
-, fetchFromGitHub
-, lib
-, stdenv
-, llvmPackages
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  llvmPackages,
 }:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
@@ -19,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-buOrJOPI2Fe5fqyaFjC+Wai4BX2RhQ+41+VR2Kyi8+A=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
 

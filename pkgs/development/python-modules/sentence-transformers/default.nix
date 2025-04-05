@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-Hjf82IIkFO8e+xDK1lMp1DrkuUb6TSVQtVpmT/He/VI=";
+    hash = "sha256-sBTepBXSFyDX1zUu/iAj6PamCWhV8fjRbaFN7fBmOao=";
   };
 
   build-system = [ setuptools ];
@@ -110,12 +110,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
-    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
-    badPlatforms = [
-      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

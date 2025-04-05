@@ -8,6 +8,7 @@
   curl,
   cmake,
   ninja,
+  deterministic-host-uname,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    # cross: build system uses uname to determine host system
+    deterministic-host-uname
   ];
 
   buildInputs = [

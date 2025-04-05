@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.20";
+  version = "0.3.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-N209wUGdlHkOZynhSSE+ZHylL7cK+8H3PfZIG/wvMd0=";
+    hash = "sha256-Up/pH2TxLPiPO49oIa2ZlNeH3TyN9sZSlNsqOIRmlxc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";

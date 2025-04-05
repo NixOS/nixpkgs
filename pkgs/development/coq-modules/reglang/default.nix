@@ -47,7 +47,10 @@ mkCoqDerivation {
       ]
       null;
 
-  propagatedBuildInputs = [ mathcomp.ssreflect stdlib ];
+  propagatedBuildInputs = [
+    mathcomp.ssreflect
+    stdlib
+  ];
 
   meta = with lib; {
     description = "Regular Language Representations in Coq";

@@ -22,17 +22,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags =
-    kernelModuleMakeFlags
-    ++ [
-      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   installFlags = [
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   postPatch = "sed -i '/depmod -A/d' Makefile";
 
@@ -40,7 +38,7 @@ stdenv.mkDerivation {
     description = "Linux kernel module for Thrustmaster T300RS, T248 and TX(experimental)";
     homepage = "https://github.com/Kimplul/hid-tmff2";
     license = licenses.gpl2Plus;
-    maintainers = [maintainers.rayslash];
+    maintainers = [ maintainers.rayslash ];
     platforms = platforms.linux;
   };
 }

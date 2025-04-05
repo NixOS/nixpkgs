@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, python3
-, electron_35
-, makeDesktopItem
-, makeShellWrapper
-, copyDesktopItems
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  python3,
+  electron_35,
+  makeDesktopItem,
+  makeShellWrapper,
+  copyDesktopItems,
 }:
 
 buildNpmPackage rec {
@@ -65,7 +66,11 @@ buildNpmPackage rec {
       icon = "zulip";
       desktopName = "Zulip";
       comment = "Zulip Desktop Client for Linux";
-      categories = [ "Chat" "Network" "InstantMessaging" ];
+      categories = [
+        "Chat"
+        "Network"
+        "InstantMessaging"
+      ];
       startupWMClass = "Zulip";
       terminal = false;
     })

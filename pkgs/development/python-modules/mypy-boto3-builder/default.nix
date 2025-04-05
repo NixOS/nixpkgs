@@ -1,32 +1,28 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # dependencies
   boto3,
   botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
   jinja2,
   loguru,
   mdformat,
   packaging,
   prompt-toolkit,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
   questionary,
+  requests-mock,
   requests,
   ruff,
   setuptools,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
-  requests-mock,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "8.9.2";
+  version = "8.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,13 +31,15 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     tag = version;
-    hash = "sha256-5BWwCEf1kz3l04b+nkPlX6fMUxTdBVyj7pYlAHqD02o=";
+    hash = "sha256-2XWFmmTkT5LpGqzHK3h8KeqQXP1+nwNEPeGHt/gowRo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "8.9.1"' 'version = "${version}"'
+      --replace-fail 'version = "8.10.0"' 'version = "${version}"'
   '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     boto3
@@ -63,6 +61,7 @@ buildPythonPackage rec {
     requests-mock
     versionCheckHook
   ];
+
   versionCheckProgramArg = [ "--version" ];
 
   pythonImportsCheck = [ "mypy_boto3_builder" ];
@@ -76,7 +75,7 @@ buildPythonPackage rec {
     description = "Type annotations builder for boto3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
     changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mypy_boto3_builder";
   };

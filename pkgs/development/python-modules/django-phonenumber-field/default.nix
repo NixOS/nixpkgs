@@ -5,6 +5,7 @@
   django,
   djangorestframework,
   fetchFromGitHub,
+  gettext,
   phonenumbers,
   phonenumberslite,
   python,
@@ -39,10 +40,16 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
+  nativeBuildInputs = [ gettext ];
+
   pythonImportsCheck = [ "phonenumber_field" ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings tests.settings
+  '';
+
+  preBuild = ''
+    ${python.interpreter} -m django compilemessages
   '';
 
   optional-dependencies = {

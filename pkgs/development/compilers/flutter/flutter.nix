@@ -103,6 +103,12 @@ let
       echo "$(git rev-parse HEAD)" > bin/cache/flutter_tools.stamp
       ln -s '${flutterTools}/share/flutter_tools.snapshot' bin/cache/flutter_tools.snapshot
 
+      # Some of flutter_tools's dependencies contain static assets. The
+      # application attempts to read its own package_config.json to find these
+      # assets at runtime.
+      mkdir -p packages/flutter_tools/.dart_tool
+      ln -s '${flutterTools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
+
       echo -n "${version}" > version
       cat <<EOF > bin/cache/flutter.version.json
       {

@@ -51,6 +51,7 @@
   lxml,
   pip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
@@ -60,14 +61,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.51.0";
+  version = "0.52.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     tag = "v${version}";
-    hash = "sha256-QgCMoZrC3ZCo8yayRXw9fvBj5xi+XH2x/E1MuQFULPo=";
+    hash = "sha256-AQBzYKD4RsPQBtq/FxFwYnSUf8wW87JOb2cOnk9MHDY=";
   };
 
   postPatch = ''
@@ -142,6 +143,7 @@ buildPythonPackage rec {
     lxml
     pip
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
     pytest-xdist

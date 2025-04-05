@@ -41,6 +41,15 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-strfry": [
+    "index.html#module-services-strfry"
+  ],
+  "module-services-strfry-basic-usage": [
+    "index.html#module-services-strfry-basic-usage"
+  ],
+  "module-services-strfry-reverse-proxy": [
+    "index.html#module-services-strfry-reverse-proxy"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -1948,6 +1957,12 @@
   ],
   "sec-nixpkgs-release-25.05-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"
