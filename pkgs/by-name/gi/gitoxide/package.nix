@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-q35MQGN/tvsK7gg0a/ljoVY6wedy7rwKlSakONgBIgk=";
 
+  patches = [
+    ./fix-cargo-dependencies.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
