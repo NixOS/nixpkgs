@@ -1,0 +1,224 @@
+diff --git a/app.ts b/app.ts
+index 4457e61..7e75a75 100644
+--- a/app.ts
++++ b/app.ts
+@@ -2,7 +2,6 @@ import './src/lib/session';
+ import './src/scss/style';
+ import './src/globals/useTheme';
+ import './src/globals/wallpaper';
+-import './src/globals/systray';
+ import './src/globals/dropdown';
+ import './src/globals/utilities';
+ import './src/components/bar/utils/sideEffects';
+diff --git a/src/components/bar/exports.ts b/src/components/bar/exports.ts
+index fc4f9b5..f9254b2 100644
+--- a/src/components/bar/exports.ts
++++ b/src/components/bar/exports.ts
+@@ -8,7 +8,6 @@ import { Network } from '../../components/bar/modules/network/index';
+ import { Bluetooth } from '../../components/bar/modules/bluetooth/index';
+ import { BatteryLabel } from '../../components/bar/modules/battery/index';
+ import { Clock } from '../../components/bar/modules/clock/index';
+-import { SysTray } from '../../components/bar/modules/systray/index';
+ 
+ // Custom Modules
+ import { Ram } from '../../components/bar/modules/ram/index';
+@@ -36,7 +35,6 @@ export {
+     Bluetooth,
+     BatteryLabel,
+     Clock,
+-    SysTray,
+ 
+     // Custom Modules
+     Ram,
+diff --git a/src/components/bar/index.tsx b/src/components/bar/index.tsx
+index e770c04..bd4283b 100644
+--- a/src/components/bar/index.tsx
++++ b/src/components/bar/index.tsx
+@@ -9,7 +9,6 @@ import {
+     Bluetooth,
+     BatteryLabel,
+     Clock,
+-    SysTray,
+ 
+     // Custom Modules
+     Ram,
+@@ -50,7 +49,6 @@ const widget = {
+     network: (): JSX.Element => WidgetContainer(Network()),
+     bluetooth: (): JSX.Element => WidgetContainer(Bluetooth()),
+     clock: (): JSX.Element => WidgetContainer(Clock()),
+-    systray: (): JSX.Element => WidgetContainer(SysTray()),
+     ram: (): JSX.Element => WidgetContainer(Ram()),
+     cpu: (): JSX.Element => WidgetContainer(Cpu()),
+     cputemp: (): JSX.Element => WidgetContainer(CpuTemp()),
+diff --git a/src/components/bar/modules/systray/index.tsx b/src/components/bar/modules/systray/index.tsx
+deleted file mode 100644
+index f25e141..0000000
+--- a/src/components/bar/modules/systray/index.tsx
++++ /dev/null
+@@ -1,142 +0,0 @@
+-import { isMiddleClick, isPrimaryClick, isSecondaryClick, Notify } from '../../../../lib/utils';
+-import options from '../../../../options';
+-import AstalTray from 'gi://AstalTray?version=0.1';
+-import { bind, Gio, Variable } from 'astal';
+-import { BarBoxChild } from 'src/lib/types/bar';
+-import { Gdk, Gtk } from 'astal/gtk3';
+-
+-const systemtray = AstalTray.get_default();
+-const { ignore, customIcons } = options.bar.systray;
+-
+-//TODO: Connect to `notify::menu-model` and `notify::action-group` to have up to date menu and action group
+-const createMenu = (menuModel: Gio.MenuModel, actionGroup: Gio.ActionGroup | null): Gtk.Menu => {
+-    const menu = Gtk.Menu.new_from_model(menuModel);
+-    menu.insert_action_group('dbusmenu', actionGroup);
+-
+-    return menu;
+-};
+-
+-const MenuCustomIcon = ({ iconLabel, iconColor, item }: MenuCustomIconProps): JSX.Element => {
+-    return (
+-        <label
+-            className={'systray-icon txt-icon'}
+-            label={iconLabel}
+-            css={iconColor ? `color: ${iconColor}` : ''}
+-            tooltipMarkup={bind(item, 'tooltipMarkup')}
+-        />
+-    );
+-};
+-
+-const MenuDefaultIcon = ({ item }: MenuEntryProps): JSX.Element => {
+-    return <icon className={'systray-icon'} gIcon={bind(item, 'gicon')} tooltipMarkup={bind(item, 'tooltipMarkup')} />;
+-};
+-
+-const MenuEntry = ({ item, child }: MenuEntryProps): JSX.Element => {
+-    let menu: Gtk.Menu;
+-
+-    const entryBinding = Variable.derive(
+-        [bind(item, 'menuModel'), bind(item, 'actionGroup')],
+-        (menuModel, actionGroup) => {
+-            if (!menuModel) {
+-                return console.error(`Menu Model not found for ${item.id}`);
+-            }
+-            if (!actionGroup) {
+-                return console.error(`Action Group not found for ${item.id}`);
+-            }
+-
+-            menu = createMenu(menuModel, actionGroup);
+-        },
+-    );
+-
+-    return (
+-        <button
+-            cursor={'pointer'}
+-            onClick={(self, event) => {
+-                if (isPrimaryClick(event)) {
+-                    item.activate(0, 0);
+-                }
+-
+-                if (isSecondaryClick(event)) {
+-                    menu?.popup_at_widget(self, Gdk.Gravity.NORTH, Gdk.Gravity.SOUTH, null);
+-                }
+-
+-                if (isMiddleClick(event)) {
+-                    Notify({ summary: 'App Name', body: item.id });
+-                }
+-            }}
+-            onDestroy={() => {
+-                menu?.destroy();
+-                entryBinding.drop();
+-            }}
+-        >
+-            {child}
+-        </button>
+-    );
+-};
+-
+-const SysTray = (): BarBoxChild => {
+-    const isVis = Variable(false);
+-
+-    const componentChildren = Variable.derive(
+-        [bind(systemtray, 'items'), bind(ignore), bind(customIcons)],
+-        (items, ignored, custIcons) => {
+-            const filteredTray = items.filter(({ id }) => !ignored.includes(id) && id !== null);
+-
+-            isVis.set(filteredTray.length > 0);
+-
+-            return filteredTray.map((item) => {
+-                const matchedCustomIcon = Object.keys(custIcons).find((iconRegex) => item.id.match(iconRegex));
+-
+-                if (matchedCustomIcon !== undefined) {
+-                    const iconLabel = custIcons[matchedCustomIcon].icon || '󰠫';
+-                    const iconColor = custIcons[matchedCustomIcon].color;
+-
+-                    return (
+-                        <MenuEntry item={item}>
+-                            <MenuCustomIcon iconLabel={iconLabel} iconColor={iconColor} item={item} />
+-                        </MenuEntry>
+-                    );
+-                }
+-                return (
+-                    <MenuEntry item={item}>
+-                        <MenuDefaultIcon item={item} />
+-                    </MenuEntry>
+-                );
+-            });
+-        },
+-    );
+-
+-    const component = (
+-        <box
+-            className={'systray-container'}
+-            onDestroy={() => {
+-                isVis.drop();
+-                componentChildren.drop();
+-            }}
+-        >
+-            {componentChildren()}
+-        </box>
+-    );
+-
+-    return {
+-        component,
+-        isVisible: true,
+-        boxClass: 'systray',
+-        isVis,
+-        isBox: true,
+-        props: {},
+-    };
+-};
+-
+-interface MenuCustomIconProps {
+-    iconLabel: string;
+-    iconColor: string;
+-    item: AstalTray.TrayItem;
+-}
+-
+-interface MenuEntryProps {
+-    item: AstalTray.TrayItem;
+-    child?: JSX.Element;
+-}
+-
+-export { SysTray };
+diff --git a/src/globals/systray.ts b/src/globals/systray.ts
+deleted file mode 100644
+index c9dbe43..0000000
+--- a/src/globals/systray.ts
++++ /dev/null
+@@ -1,18 +0,0 @@
+-import AstalTray from 'gi://AstalTray';
+-import { errorHandler } from 'src/lib/utils';
+-const systemtray = AstalTray.get_default();
+-
+-globalThis.getSystrayItems = (): string => {
+-    try {
+-        const items = systemtray
+-            .get_items()
+-            .map((systrayItem) => systrayItem.id)
+-            .join('\n');
+-
+-        return items;
+-    } catch (error) {
+-        errorHandler(error);
+-    }
+-};
+-
+-export { getSystrayItems };
