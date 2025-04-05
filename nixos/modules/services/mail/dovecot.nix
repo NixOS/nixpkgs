@@ -7,19 +7,35 @@
 
 let
   inherit (lib)
+    isInt
+    isBool
+    isString
+    isAttrs
+    isList
+    all
+    splitString
+    hasAttr
+    elemAt
+    length
+    traceSeq
     attrValues
+    attrsToList
     concatMapStringsSep
-    concatStrings
     concatStringsSep
     flatten
     imap1
     literalExpression
     mapAttrsToList
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     mkRemovedOptionModule
+    showAttrPath
     optional
+    optionals
+    versionAtLeast
+    mkDefault
     optionalAttrs
     optionalString
     singleton
@@ -28,12 +44,10 @@ let
     nameValuePair
     mapAttrs'
     listToAttrs
-    filter
+    versionOlder
     ;
-  inherit (lib.strings) match;
 
   cfg = config.services.dovecot2;
-  dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
@@ -41,6 +55,7 @@ let
   sieveScriptSettings = mapAttrs' (
     to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
   ) cfg.sieve.scripts;
+
   imapSieveMailboxSettings = listToAttrs (
     flatten (
       imap1 (
@@ -69,36 +84,6 @@ let
     )
   );
 
-  mkExtraConfigCollisionWarning = term: ''
-    You referred to ${term} in `services.dovecot2.extraConfig`.
-
-    Due to gradual transition to structured configuration for plugin configuration, it is possible
-    this will cause your plugin configuration to be ignored.
-
-    Consider setting `services.dovecot2.pluginSettings.${term}` instead.
-  '';
-
-  # Those settings are automatically set based on other parts
-  # of this module.
-  automaticallySetPluginSettings =
-    [
-      "sieve_plugins"
-      "sieve_extensions"
-      "sieve_global_extensions"
-      "sieve_pipe_bin_dir"
-    ]
-    ++ (builtins.attrNames sieveScriptSettings)
-    ++ (builtins.attrNames imapSieveMailboxSettings);
-
-  # The idea is to match everything that looks like `$term =`
-  # but not `# $term something something`
-  # or `# $term = some value` because those are comments.
-  configContainsSetting = lines: term: (match "[[:blank:]]*${term}[[:blank:]]*=.*" lines) != null;
-
-  warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (
-    filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings
-  );
-
   sievePipeBinScriptDirectory = pkgs.linkFarm "sieve-pipe-bins" (
     map (el: {
       name = builtins.unsafeDiscardStringContext (baseNameOf el);
@@ -106,121 +91,67 @@ let
     }) cfg.sieve.pipeBins
   );
 
-  dovecotConf = concatStrings [
-    ''
-      base_dir = ${baseDir}
-      protocols = ${concatStringsSep " " cfg.protocols}
-      sendmail_path = /run/wrappers/bin/sendmail
-      mail_plugin_dir = /run/current-system/sw/lib/dovecot/modules
-      # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
-      mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
-    ''
+  yesOrNo = v: if v then "yes" else "no";
 
-    (concatStringsSep "\n" (
-      mapAttrsToList (protocol: plugins: ''
-        protocol ${protocol} {
-          mail_plugins = $mail_plugins ${concatStringsSep " " plugins.enable}
-        }
-      '') cfg.mailPlugins.perProtocol
-    ))
+  toOption =
+    i: n: v:
+    "${i}${toString n} = ${v}";
 
-    (
-      if cfg.sslServerCert == null then
-        ''
-          ssl = no
-          disable_plaintext_auth = no
-        ''
+  formatKeyValue =
+    indent: n: v:
+    if (v == null) then
+      ""
+    else if isInt v then
+      (toOption indent n (toString v))
+    else if isBool v then
+      (toOption indent n (yesOrNo v))
+    else if isString v then
+      (toOption indent n v)
+    else if isList v then
+      if (all (b: b) (map isString v)) then
+        (toOption indent n (concatStringsSep " " v))
       else
-        ''
-          ssl_cert = <${cfg.sslServerCert}
-          ssl_key = <${cfg.sslServerKey}
-          ${optionalString (cfg.sslCACert != null) ("ssl_ca = <" + cfg.sslCACert)}
-          ${optionalString cfg.enableDHE ''ssl_dh = <${config.security.dhparams.params.dovecot2.path}''}
-          disable_plaintext_auth = yes
-        ''
-    )
+        (map (formatKeyValue indent n) v)
+    else
+      let
+        nSplit = splitString " " n;
+        sectionType =
+          # section.type or part before space in $n
+          if (hasAttr "section" v) then
+            if (hasAttr "type" v.section) then v.section.type else (elemAt nSplit 0)
+          else
+            (elemAt nSplit 0);
+        sectionName =
+          # section.name, part after space in $n, or unnamed
+          if (hasAttr "section" v) && (hasAttr "name" v.section) then
+            v.section.name
+          else
+            (if (length nSplit == 2) then (elemAt nSplit 1) else "");
+      in
+      if isAttrs v then
+        concatStringsSep "\n" (
+          [ "${indent}${sectionType} ${sectionName}${if sectionName != "" then " " else ""}{" ]
+          ++ (mapAttrsToList (formatKeyValue "${indent}  ") (removeAttrs v [ "section" ]))
+          ++ [ "${indent}}" ]
+        )
+      else
+        throw (traceSeq v "services.dovecot2.settings: unexpected type");
 
-    ''
-      default_internal_user = ${cfg.user}
-      default_internal_group = ${cfg.group}
-      ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
-      ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
-
-      mail_location = ${cfg.mailLocation}
-
-      maildir_copy_with_hardlinks = yes
-      pop3_uidl_format = %08Xv%08Xu
-
-      auth_mechanisms = plain login
-
-      service auth {
-        user = root
-      }
-    ''
-
-    (optionalString cfg.enablePAM ''
-      userdb {
-        driver = passwd
-      }
-
-      passdb {
-        driver = pam
-        args = ${optionalString cfg.showPAMFailure "failure_show_msg=yes"} dovecot2
-      }
-    '')
-
-    (optionalString (cfg.mailboxes != { }) ''
-      namespace inbox {
-        inbox=yes
-        ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
-      }
-    '')
-
-    (optionalString cfg.enableQuota ''
-      service quota-status {
-        executable = ${dovecotPkg}/libexec/dovecot/quota-status -p postfix
-        inet_listener {
-          port = ${cfg.quotaPort}
-        }
-        client_limit = 1
-      }
-
-      plugin {
-        quota_rule = *:storage=${cfg.quotaGlobalPerUser}
-        quota = count:User quota # per virtual mail user quota
-        quota_status_success = DUNNO
-        quota_status_nouser = DUNNO
-        quota_status_overquota = "552 5.2.2 Mailbox is full"
-        quota_grace = 10%%
-        quota_vsizes = yes
-      }
-    '')
-
-    # General plugin settings:
-    # - sieve is mostly generated here, refer to `pluginSettings` to follow
-    # the control flow.
-    ''
-      plugin {
-        ${concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
-      }
-    ''
-
-    cfg.extraConfig
-  ];
-
-  mailboxConfig =
-    mailbox:
-    ''
-      mailbox "${mailbox.name}" {
-        auto = ${toString mailbox.auto}
-    ''
-    + optionalString (mailbox.autoexpunge != null) ''
-      autoexpunge = ${mailbox.autoexpunge}
-    ''
-    + optionalString (mailbox.specialUse != null) ''
-      special_use = \${toString mailbox.specialUse}
-    ''
-    + "}";
+  doveConf =
+    let
+      configVersion = cfg.settings.dovecot_config_version or null;
+      storageVersion = cfg.settings.dovecot_storage_version or null;
+      remainingSettings = builtins.removeAttrs cfg.settings [
+        "dovecot_config_version"
+        "dovecot_storage_version"
+      ];
+    in
+    concatStringsSep "\n" (
+      (optional (configVersion != null) (formatKeyValue "" "dovecot_config_version" configVersion))
+      ++ (optional (storageVersion != null) (formatKeyValue "" "dovecot_storage_version" storageVersion))
+      ++ (optionals (cfg.includeFiles != [ ]) (map (f: "!include ${f}") cfg.includeFiles))
+      ++ flatten (mapAttrsToList (formatKeyValue "") remainingSettings)
+    );
 
   mailboxes =
     { name, ... }:
@@ -272,21 +203,156 @@ let
     };
 in
 {
-  imports = [
-    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "modules"
-    ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
-    (mkRenamedOptionModule
-      [ "services" "dovecot2" "sieveScripts" ]
-      [ "services" "dovecot2" "sieve" "scripts" ]
-    )
-  ];
+  imports =
+    [
+      (mkRemovedOptionModule [
+        "services"
+        "dovecot2"
+        "modules"
+      ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
+      (mkRenamedOptionModule
+        [ "services" "dovecot2" "sieveScripts" ]
+        [ "services" "dovecot2" "sieve" "scripts" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "dovecot2" "mailUser" ]
+        [ "services" "dovecot2" "settings" "mail_uid" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "dovecot2" "mailGroup" ]
+        [ "services" "dovecot2" "settings" "mail_gid" ]
+      )
+      (mkRenamedOptionModule
+        [ "services" "dovecot2" "protocols" ]
+        [ "services" "dovecot2" "settings" "protocols" ]
+      )
+    ]
+    ++ (
+      let
+        basePath = [
+          "services"
+          "dovecot2"
+        ];
+        mkRemovedOptions =
+          list:
+          map (
+            name:
+            mkRemovedOptionModule (basePath ++ name)
+              "Please use services.dovecot2.settings instead of ${showAttrPath (basePath ++ name)}"
+          ) list;
+      in
+      mkRemovedOptions [
+        [ "mailLocation" ]
+        [ "extraConfig" ]
+        [ "pluginSettings" ]
+        [ "enableQuota" ]
+        [ "quotaPort" ]
+        [ "quotaGlobalPerUser" ]
+        [
+          "sieve"
+          "plugins"
+        ]
+        [
+          "sieve"
+          "extensions"
+        ]
+        [
+          "sieve"
+          "globalExtensions"
+        ]
+      ]
+    );
 
   options.services.dovecot2 = {
     enable = mkEnableOption "the dovecot 2.x POP3/IMAP server";
+
+    package = mkPackageOption pkgs "dovecot" {
+      default = [
+        (if versionAtLeast config.system.stateVersion "25.05" then pkgs.dovecot else pkgs.dovecot_2_3)
+      ];
+    };
+
+    configVersion = mkOption {
+      default =
+        if versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4" then
+          cfg.package.version
+        else
+          null;
+      type = with lib.types; nullOr str;
+      description = "Dovecot configuration version, uses the same versioning as Dovecot.";
+    };
+
+    storageVersion = mkOption {
+      default =
+        if versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4" then
+          cfg.package.version
+        else
+          null;
+      type = with lib.types; nullOr str;
+      description = "Dovecot storage file format version, uses the same versioning as Dovecot.";
+    };
+
+    settings =
+      let
+        atom =
+          with lib.types;
+          nullOr (oneOf [
+            int
+            str
+            bool
+            (attrsOf atom)
+          ]);
+        settingsType = with lib.types; either atom (listOf atom);
+      in
+      mkOption {
+        default = { };
+        type = lib.types.attrsOf settingsType;
+        description = ''
+          Dovecot configuration, see <https://doc.dovecot.org/2.4.0/core/summaries/settings.html#all-dovecot-settings>
+          for all available options.
+
+          Note that you risk overriding values set by the other services.dovecot2.* options if you use them in combination with services.dovecot2.settings.
+        '';
+        example = {
+          protocols = [
+            "imap"
+            "submission"
+            "lmtp"
+          ];
+          mail_driver = "maildir";
+          mail_path = "~/mail";
+          mail_log_events = "delete undelete expunge save copy mailbox_create mailbox_delete mailbox_rename flag_change";
+          "namespace inbox" = {
+            inbox = true;
+            separator = "/";
+          };
+          service = [
+            {
+              section.name = "imap";
+              process_min_avail = 1;
+              client_limit = 100;
+              "inet_listener imap".port = 31143;
+              "inet_listener imaps".port = 31993;
+            }
+            {
+              section.name = "lmtp";
+              user = "dovemail";
+              "unix_listener lmtp" = {
+                mode = "0660";
+                user = "postfix";
+              };
+            }
+          ];
+          "protocol imap".mail_plugins = {
+            imap_sieve = true;
+            imap_filter_sieve = true;
+          };
+          mail_attribute."dict file" = {
+            path = "%{home}/dovecot-attributes";
+          };
+
+        };
+      };
 
     enablePop3 = mkEnableOption "starting the POP3 listener (when Dovecot is enabled)";
 
@@ -295,12 +361,6 @@ in
     };
 
     enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
-
-    protocols = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = "Additional listeners to start when Dovecot is enabled.";
-    };
 
     user = mkOption {
       type = types.str;
@@ -312,13 +372,6 @@ in
       type = types.str;
       default = "dovecot2";
       description = "Dovecot group name.";
-    };
-
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = "mail_debug = yes";
-      description = "Additional entries to put verbatim into Dovecot's config file.";
     };
 
     mailPlugins =
@@ -375,35 +428,21 @@ in
       type = types.nullOr types.path;
       default = null;
       description = "Config file used for the whole dovecot configuration.";
-      apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;
+      apply = v: if v != null then v else pkgs.writeText "dovecot.conf" doveConf;
     };
 
-    mailLocation = mkOption {
-      type = types.str;
-      default = "maildir:/var/spool/mail/%u"; # Same as inbox, as postfix
-      example = "maildir:~/mail:INBOX=/var/spool/mail/%u";
-      description = ''
-        Location that dovecot will use for mail folders. Dovecot mail_location option.
-      '';
-    };
-
-    mailUser = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Default user to store mail for virtual users.";
-    };
-
-    mailGroup = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Default group to store mail for virtual users.";
+    includeFiles = mkOption {
+      type = types.listOf types.path;
+      default = [ ];
+      description = "Files to include in the Dovecot config file using !include directives.";
+      example = [ "/foo/bar/extraDovecotConfig.conf" ];
     };
 
     createMailUser =
       mkEnableOption ''
         automatically creating the user
-              given in {option}`services.dovecot.user` and the group
-              given in {option}`services.dovecot.group`''
+              given in {option}`services.dovecot2.settings.mail_uid` and the group
+              given in {option}`services.dovecot2.settings.mail_gid`''
       // {
         default = true;
       };
@@ -455,47 +494,6 @@ in
         }
       '';
       description = "Configure mailboxes and auto create or subscribe them.";
-    };
-
-    enableQuota = mkEnableOption "the dovecot quota service";
-
-    quotaPort = mkOption {
-      type = types.str;
-      default = "12340";
-      description = ''
-        The Port the dovecot quota service binds to.
-        If using postfix, add check_policy_service inet:localhost:12340 to your smtpd_recipient_restrictions in your postfix config.
-      '';
-    };
-    quotaGlobalPerUser = mkOption {
-      type = types.str;
-      default = "100G";
-      example = "10G";
-      description = "Quota limit for the user in bytes. Supports suffixes b, k, M, G, T and %.";
-    };
-
-    pluginSettings = mkOption {
-      # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
-      type = types.attrsOf (
-        types.oneOf [
-          types.str
-          types.package
-        ]
-      );
-      default = { };
-      example = literalExpression ''
-        {
-          sieve = "file:~/sieve;active=~/.dovecot.sieve";
-        }
-      '';
-      description = ''
-        Plugin settings for dovecot in general, e.g. `sieve`, `sieve_default`, etc.
-
-        Some of the other knobs of this module will influence by default the plugin settings, but you
-        can still override any plugin settings.
-
-        If you override a plugin setting, its value is cleared and you have to copy over the defaults.
-      '';
     };
 
     imapsieve.mailbox = mkOption {
@@ -577,31 +575,6 @@ in
     };
 
     sieve = {
-      plugins = mkOption {
-        default = [ ];
-        example = [ "sieve_extprograms" ];
-        description = "Sieve plugins to load";
-        type = types.listOf types.str;
-      };
-
-      extensions = mkOption {
-        default = [ ];
-        description = "Sieve extensions for use in user scripts";
-        example = [
-          "notify"
-          "imapflags"
-          "vnd.dovecot.filter"
-        ];
-        type = types.listOf types.str;
-      };
-
-      globalExtensions = mkOption {
-        default = [ ];
-        example = [ "vnd.dovecot.environment" ];
-        description = "Sieve extensions for use in global scripts";
-        type = types.listOf types.str;
-      };
-
       scripts = mkOption {
         type = types.attrsOf types.path;
         default = { };
@@ -630,32 +603,116 @@ in
       params.dovecot2 = { };
     };
 
-    services.dovecot2 = {
-      protocols =
-        optional cfg.enableImap "imap" ++ optional cfg.enablePop3 "pop3" ++ optional cfg.enableLmtp "lmtp";
+    services.dovecot2.settings =
+      {
+        dovecot_config_version = mkIf (versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4") cfg.package.version;
+        dovecot_storage_version = mkIf (versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4") cfg.package.version;
+        base_dir = mkDefault baseDir;
+        sendmail_path = mkDefault "/run/wrappers/bin/sendmail";
+        mail_plugin_dir = mkDefault "/run/current-system/sw/lib/dovecot/modules";
+        mail_path = mkDefault "maildir:/var/spool/mail/%u";
 
-      mailPlugins = mkIf cfg.enableQuota {
-        globally.enable = [ "quota" ];
-        perProtocol.imap.enable = [ "imap_quota" ];
-      };
+        default_internal_user = mkDefault cfg.user;
+        default_internal_group = mkDefault cfg.group;
 
-      sieve.plugins =
-        optional (cfg.imapsieve.mailbox != [ ]) "sieve_imapsieve"
-        ++ optional (cfg.sieve.pipeBins != [ ]) "sieve_extprograms";
+        maildir_copy_with_hardlinks = mkDefault true;
+        pop3_uidl_format =
+          if (versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4") then
+            mkDefault "%{uidvalidity}%{uid}"
+          else
+            mkDefault "%08Xv%08Xu";
 
-      sieve.globalExtensions = optional (cfg.sieve.pipeBins != [ ]) "vnd.dovecot.pipe";
+        auth_mechanisms = mkDefault "plain login";
+        "service auth" = {
+          user = "root";
+        };
 
-      pluginSettings = lib.mapAttrs (n: lib.mkDefault) (
-        {
-          sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-          sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
-          sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
-          sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
-        }
-        // sieveScriptSettings
-        // imapSieveMailboxSettings
+        protocols = mkDefault (
+          optional cfg.enableImap "imap" ++ optional cfg.enablePop3 "pop3" ++ optional cfg.enableLmtp "lmtp"
+        );
+
+        "namespace inbox" = mkIf (cfg.mailboxes != { }) (
+          {
+            inbox = mkDefault true;
+          }
+          // builtins.listToAttrs (
+            map (m: {
+              name = "mailbox ${m.name}";
+              value = {
+                inherit (m) auto autoexpunge;
+                special_use = m.specialUse;
+              };
+            }) (attrValues cfg.mailboxes)
+          )
+        );
+
+        mail_plugins = mkDefault "$mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}";
+
+        protocol = mkIf (cfg.mailPlugins.perProtocol != { }) (
+          listToAttrs (
+            map (m: {
+              name = elemAt (splitString "." m.name) 0;
+              value.mail_plugins = "$mail_plugins ${concatStringsSep " " m.value.enable}";
+            }) (attrsToList cfg.mailPlugins.perProtocol)
+          )
+        );
+
+        sieve_pipe_bin_dir = mkIf (cfg.sieve.pipeBins != [ ]) (mkDefault sievePipeBinScriptDirectory);
+      }
+      // (
+        if (versionAtLeast (lib.versions.majorMinor cfg.package.version) "2.4") then
+          {
+            ssl = if (cfg.sslServerCert == null) then mkDefault false else (mkDefault true);
+            auth_allow_cleartext = if (cfg.sslServerCert == null) then mkDefault true else (mkDefault false);
+
+            ssl_server_dh_file = mkIf (cfg.sslServerCert != null && cfg.enableDHE != null) (
+              mkDefault "${config.security.dhparams.params.dovecot2.path}"
+            );
+            ssl_server_cert_file = mkIf (cfg.sslServerCert != null) (mkDefault "${cfg.sslServerCert}");
+            ssl_server_key_file = mkIf (cfg.sslServerKey != null) (mkDefault "${cfg.sslServerKey}");
+            ssl_server_ca_file = mkIf (cfg.sslCACert != null) (mkDefault "${cfg.sslCACert}");
+
+            "passdb pam" = mkIf cfg.enablePAM (mkDefault {
+              driver = "pam";
+              args = "${optionalString cfg.showPAMFailure "failure_show_msg=yes"} dovecot2";
+            });
+
+            "userdb pam" = mkIf cfg.enablePAM (mkDefault {
+              driver = "passwd";
+            });
+          }
+          // lib.mapAttrs (_: lib.mkDefault) (
+            (if cfg.sieve.scripts != { } then sieveScriptSettings else { })
+            // (if (cfg.imapsieve.mailbox != [ ]) then imapSieveMailboxSettings else { })
+          )
+        else
+          {
+            ssl = if (cfg.sslServerCert == null) then mkDefault false else (mkDefault true);
+            disable_plaintext_auth = if (cfg.sslServerCert == null) then mkDefault false else (mkDefault true);
+
+            ssl_dh = mkIf (cfg.sslServerCert != null && cfg.enableDHE != null) (
+              mkDefault "<${config.security.dhparams.params.dovecot2.path}"
+            );
+            ssl_cert = mkIf (cfg.sslServerCert != null) (mkDefault "<${cfg.sslServerCert}");
+            ssl_key = mkIf (cfg.sslServerKey != null) (mkDefault "<${cfg.sslServerKey}");
+            ssl_ca = mkIf (cfg.sslCACert != null) (mkDefault "<${cfg.sslCACert}");
+
+            passdb = mkIf cfg.enablePAM (mkDefault {
+              driver = "pam";
+              args = "${optionalString cfg.showPAMFailure "failure_show_msg=yes"} dovecot2";
+            });
+
+            userdb = mkIf cfg.enablePAM (mkDefault {
+              driver = "passwd";
+            });
+          }
+          // {
+            plugin = lib.mapAttrs (_: lib.mkDefault) (
+              (if cfg.sieve.scripts != { } then sieveScriptSettings else { })
+              // (if (cfg.imapsieve.mailbox != [ ]) then imapSieveMailboxSettings else { })
+            );
+          }
       );
-    };
 
     users.users =
       {
@@ -672,12 +729,16 @@ in
           group = cfg.group;
         };
       }
-      // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
-        ${cfg.mailUser} = {
-          description = "Virtual Mail User";
-          isSystemUser = true;
-        } // optionalAttrs (cfg.mailGroup != null) { group = cfg.mailGroup; };
-      };
+      // (optionalAttrs (cfg.settings ? mail_uid && cfg.settings.mail_uid != null && cfg.createMailUser) {
+        ${cfg.settings.mail_uid} =
+          {
+            description = "Virtual Mail User";
+            isSystemUser = true;
+          }
+          // optionalAttrs (cfg.settings ? mail_gid && cfg.settings.mail_gid != null) {
+            group = cfg.settings.gid;
+          };
+      });
 
     users.groups =
       {
@@ -686,9 +747,9 @@ in
       // optionalAttrs (cfg.group == "dovecot2") {
         dovecot2.gid = config.ids.gids.dovecot2;
       }
-      // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
-        ${cfg.mailGroup} = { };
-      };
+      // (optionalAttrs (cfg.settings ? mail_gid && cfg.settings.mail_gid != null && cfg.createMailUser) {
+        ${cfg.settings.mail_gid} = { };
+      });
 
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
@@ -704,8 +765,8 @@ in
       startLimitIntervalSec = 60; # 1 min
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${dovecotPkg}/sbin/dovecot -F";
-        ExecReload = "${dovecotPkg}/sbin/doveadm reload";
+        ExecStart = "${cfg.package}/sbin/dovecot -F";
+        ExecReload = "${cfg.package}/sbin/doveadm reload";
         Restart = "on-failure";
         RestartSec = "1s";
         RuntimeDirectory = [ "dovecot2" ];
@@ -731,7 +792,9 @@ in
               ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
             '') cfg.sieve.scripts
           )}
-          chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
+          ${optionalString (
+            cfg.settings ? mail_uid && cfg.settings.mail_uid != null && cfg.settings.mail_gid != null
+          ) "chown -R '${cfg.settings.mail_uid}:${cfg.settings.mail_gid}' '${stateDir}/sieve'"}
         ''
         + optionalString (cfg.imapsieve.mailbox != [ ]) ''
           mkdir -p ${stateDir}/imapsieve/{before,after}
@@ -749,14 +812,18 @@ in
           ) cfg.imapsieve.mailbox}
 
           ${optionalString (
-            cfg.mailUser != null && cfg.mailGroup != null
-          ) "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"}
+            cfg.settings ? mail_uid && cfg.settings.mail_uid != null && cfg.settings.mail_gid != null
+          ) "chown -R '${cfg.settings.mail_uid}:${cfg.settings.mail_gid}' '${stateDir}/imapsieve'"}
         '';
     };
 
-    environment.systemPackages = [ dovecotPkg ];
+    environment.systemPackages = [ cfg.package ];
 
-    warnings = warnAboutExtraConfigCollisions;
+    warnings = optional (versionOlder config.system.stateVersion "25.05") ''
+      While Dovecot 2.3 is not yet deprecated or EOL,
+      there is a newer version available in Nixpkgs (Dovecot 2.4).
+      Check https://doc.dovecot.org/2.4.0/installation/upgrade/2.3-to-2.4.html
+      before upgrading.'';
 
     assertions = [
       {
@@ -770,8 +837,9 @@ in
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
       }
       {
-        assertion = cfg.sieve.scripts != { } -> (cfg.mailUser != null && cfg.mailGroup != null);
-        message = "dovecot requires mailUser and mailGroup to be set when `sieve.scripts` is set";
+        assertion =
+          cfg.sieve.scripts != { } -> (cfg.settings.mail_uid != null && cfg.settings.mail_gid != null);
+        message = "dovecot requires settings.mail_uid and settings.mail_gid to be set when `sieve.scripts` is set";
       }
     ];
 
