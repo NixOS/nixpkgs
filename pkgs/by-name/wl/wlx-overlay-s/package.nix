@@ -26,17 +26,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "25.3.0";
+  version = "25.4.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-m2YVXF9bEjovZOWa+X1CYHAUaAsUI4dBMG2ni3jP9L4=";
+    hash = "sha256-sddB0DhtCRbCaj+yksm3UOdy0NJ5FVZeQx4eNkqLBqI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-y4pWUQFPR0jOTdukQZe4d1v0DFDfQtAg0Bi4V4ue5+Y=";
+  cargoHash = "sha256-OwRUjjUMkQIIh9LGWioqDb7dgYForPrJnf/lmDKDmwk=";
 
   nativeBuildInputs = [
     makeWrapper
