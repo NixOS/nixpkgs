@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "kubernetes_validate" ];
 

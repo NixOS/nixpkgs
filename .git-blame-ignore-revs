@@ -251,3 +251,15 @@ fd14c067813572afc03ddbf7cdedc3eab5a59954
 
 # treewide format of all Nix files
 374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt
+
+# nix: nixfmt-rfc-style
+a4f7e161b380b35b2f7bc432659a95fd71254ad8
+0812c9a321003c924868051d2b2e1934e8880f3f
+34f269c14ac18d89ddee9a8f54b1ca92a85bbcc6
+062c34cdace499aa44f0fa6ca6f2ca71769f6c43
+
+# haskellPackages.hercules-ci-agent (cabal2nix -> nixfmt-rfc-style)
+9314da7ee8d2aedfb15193b8c489da51efe52bb5
+
+# nix-builder-vm: nixfmt-rfc-style
+a034fb50f79816c6738fb48b48503b09ea3b0132
