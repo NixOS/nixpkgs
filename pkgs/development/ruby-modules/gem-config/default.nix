@@ -837,6 +837,12 @@ in
       curl
       libxml2
     ];
+    # https://github.com/oVirt/ovirt-engine-sdk-ruby/issues/13
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-int-conversion"
+    ];
     dontBuild = false;
     meta.broken = stdenv.hostPlatform.isDarwin; # At least until releasing https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/17
   };
