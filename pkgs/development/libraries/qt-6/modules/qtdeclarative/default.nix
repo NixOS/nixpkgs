@@ -4,6 +4,7 @@
   qtlanguageserver,
   qtshadertools,
   openssl,
+  darwin,
   stdenv,
   lib,
   pkgsBuildBuild,
@@ -20,6 +21,10 @@ qtModule {
     openssl
   ];
   strictDeps = true;
+
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    darwin.sigtool
+  ];
 
   patches =
     [
