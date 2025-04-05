@@ -8,6 +8,7 @@ import ./make-test-python.nix (
         # OVERRIDDEN
         { config, pkgs, ... }: {
           imports = [ ./hardware-configuration.nix ];
+        $nixConfig
         $bootLoaderConfig
         $desktopConfiguration
         }
@@ -44,9 +45,19 @@ import ./make-test-python.nix (
           "grep 'services\\.xserver\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
       )
 
+      # Ensure flakes are not enabled by default.
+      machine.fail(
+          "grep -F 'nix.settings.experimental-features = [ \"flakes\" \"nix-command\" ];' /etc/nixos/configuration.nix"
+      )
+
       machine.succeed("rm -rf /etc/nixos")
       machine.succeed("nixos-generate-config --flake")
       machine.succeed("nix-instantiate --parse /etc/nixos/flake.nix /etc/nixos/configuration.nix /etc/nixos/hardware-configuration.nix")
+
+      # Ensure flakes are enabled when `--flake` was passed.
+      machine.succeed(
+          "grep -F 'nix.settings.experimental-features = [ \"flakes\" \"nix-command\" ];' /etc/nixos/configuration.nix"
+      )
     '';
   }
 )
