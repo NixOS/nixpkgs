@@ -10036,6 +10036,8 @@ self: super: with self; {
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
 
+  odc-loader = callPackage ../development/python-modules/odc-loader { };
+
   odc-stac = callPackage ../development/python-modules/odc-stac { };
 
   oddsprout = callPackage ../development/python-modules/oddsprout { };
