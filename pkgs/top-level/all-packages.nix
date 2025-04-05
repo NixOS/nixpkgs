@@ -9144,13 +9144,14 @@ with pkgs;
   certbot-full = certbot.withPlugins (
     cp: with cp; [
       # FIXME unbreak certbot-dns-cloudflare
+      certbot-dns-linode
       certbot-dns-google
       certbot-dns-ovh
       certbot-dns-rfc2136
       certbot-dns-route53
     ]
   );
-
+  
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
