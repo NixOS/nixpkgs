@@ -265,10 +265,10 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     config_lines = [
-        '[source.vendored-sources]',
-        'directory = "@vendor@"',
+        '[source.vendored-sources-registry]',
+        'directory = "@vendor@/registry"',
         '[source.crates-io]',
-        'replace-with = "vendored-sources"',
+        'replace-with = "vendored-sources-registry"',
     ]
 
     seen_source_keys = set()
@@ -280,8 +280,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
         source: str = pkg["source"]
 
-        dir_name = f"{pkg["name"]}-{pkg["version"]}"
-        crate_out_dir = out_dir / dir_name
+        crate_dir_name = f"{pkg["name"]}-{pkg["version"]}"
 
         if source.startswith("git+"):
 
@@ -289,6 +288,9 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
             git_sha_rev = source_info["git_sha_rev"]
             git_tree = vendor_staging_dir / "git" / git_sha_rev
+
+            crate_out_dir = out_dir / f"git-{git_sha_rev}" / crate_dir_name
+            crate_out_dir.parent.mkdir(exist_ok=True)
 
             copy_and_patch_git_crate_subtree(git_tree, pkg["name"], crate_out_dir)
 
@@ -303,16 +305,23 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
             seen_source_keys.add(source_key)
 
+            config_lines.append(f'[source.vendored-sources-git-{git_sha_rev}]')
+            config_lines.append(f'directory = "@vendor@/git-{git_sha_rev}"')
+
             config_lines.append(f'[source."{source_key}"]')
             config_lines.append(f'git = "{source_info["url"]}"')
             if source_info["type"] is not None:
                 config_lines.append(f'{source_info["type"]} = "{source_info["value"]}"')
-            config_lines.append('replace-with = "vendored-sources"')
+
+            config_lines.append(f'replace-with = "vendored-sources-git-{git_sha_rev}"')
 
         elif source.startswith("registry+"):
 
             filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
             tarball_path = vendor_staging_dir / "tarballs" / filename
+
+            crate_out_dir = out_dir / "registry" / crate_dir_name
+            crate_out_dir.parent.mkdir(exist_ok=True)
 
             extract_crate_tarball_contents(tarball_path, crate_out_dir)
 
