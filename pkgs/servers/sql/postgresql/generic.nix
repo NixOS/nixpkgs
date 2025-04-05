@@ -457,7 +457,10 @@ let
           # the tests works fine most of the time. But once the tests (or any package using
           # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
           # will be stuck around, and any future builds with the tests enabled *will* fail.
-          !(stdenv'.hostPlatform.isDarwin);
+          !(stdenv'.hostPlatform.isDarwin)
+        &&
+          # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
+          !(stdenv'.hostPlatform.isMusl);
       installCheckTarget = "check-world";
 
       passthru =
