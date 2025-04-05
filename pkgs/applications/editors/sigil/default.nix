@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  makeWrapper,
   boost,
   xercesc,
   qtbase,
@@ -12,6 +11,7 @@
   qtwebengine,
   qtsvg,
   python3Packages,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -47,12 +47,8 @@ stdenv.mkDerivation rec {
     sed -i '/^QTLIB_DIR=/ d' src/Resource_Files/bash/sigil-sh_install
   '';
 
-  dontWrapQtApps = true;
-
   preFixup = ''
-    wrapProgram "$out/bin/sigil" \
-       --prefix PYTHONPATH : $PYTHONPATH \
-       ''${qtWrapperArgs[@]}
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
   meta = {
