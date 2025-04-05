@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pcre,
   pcre2,
   jemalloc,
@@ -23,6 +24,7 @@ let
     {
       version,
       hash,
+      patches ? [ ],
       extraNativeBuildInputs ? [ ],
     }:
     stdenv.mkDerivation rec {
@@ -33,6 +35,8 @@ let
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
+
+      inherit patches;
 
       nativeBuildInputs = with python3.pkgs; [
         pkg-config
@@ -98,5 +102,12 @@ in
   varnish75 = common {
     version = "7.5.0";
     hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
+    patches = [
+      (fetchpatch {
+        name = "CVE-2025-30346.patch";
+        url = "https://github.com/varnishcache/varnish-cache/commit/a9640a13276048815cc51a12cda2603f4d4444e4.patch";
+        hash = "sha256-hzm09GMB7WLGp6zyqgMkxm9tJwUT9bRnEAPrX47v3e8=";
+      })
+    ];
   };
 }
