@@ -11847,6 +11847,11 @@
     github = "jpaju";
     githubId = 36770267;
   };
+  j-pap = {
+    name = "Jason";
+    github = "j-pap";
+    githubId = 205946337;
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";
