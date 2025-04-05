@@ -13356,6 +13356,7 @@ with pkgs;
     ubootQemuArm
     ubootQemuRiscv64Smode
     ubootQemuX86
+    ubootQemuX86_64
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
