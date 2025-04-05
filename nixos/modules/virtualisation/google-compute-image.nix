@@ -56,6 +56,21 @@ in
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
+
+    virtualisation.googleComputeImage.contents = mkOption {
+      default = [ ];
+      description = ''
+        The files and directories to be placed in the target file system.
+        This is a list of attribute sets {source, target, mode, user, group} where
+        `source' is the file system object (regular file or directory) to be
+        grafted in the file system at path `target', `mode' is a string containing
+        the permissions that will be set (ex. "755"), `user' and `group' are the
+        user and group name that will be set as owner of the files.
+        `mode', `user', and `group' are optional.
+        When setting one of `user' or `group', the other needs to be set too.
+      '';
+    };
+
     virtualisation.googleComputeImage.efi = mkEnableOption "EFI booting";
   };
 
@@ -99,6 +114,7 @@ in
       '';
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      inherit (cfg) contents;
       partitionTableType = if cfg.efi then "efi" else "legacy";
       inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
