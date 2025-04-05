@@ -4,14 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  makeWrapper,
   boost,
   xercesc,
-  qtbase,
-  qttools,
-  qtwebengine,
-  qtsvg,
   python3Packages,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,16 +26,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
     xercesc
-    qtbase
-    qttools
-    qtwebengine
-    qtsvg
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwebengine
+    qt6.qtsvg
     python3Packages.lxml
   ];
 
@@ -50,16 +46,14 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
-    wrapProgram "$out/bin/sigil" \
-       --prefix PYTHONPATH : $PYTHONPATH \
-       ''${qtWrapperArgs[@]}
+    wrapQtApp "$out/bin/sigil" --prefix PYTHONPATH : $PYTHONPATH
   '';
 
   meta = {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = "https://github.com/Sigil-Ebook/Sigil/";
     license = lib.licenses.gpl3;
-    # currently unmaintained
+    maintainers = with lib.maintainers; [ prince213 ];
     platforms = lib.platforms.linux;
     mainProgram = "sigil";
   };
