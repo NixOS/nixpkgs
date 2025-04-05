@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.3.21";
+  version = "3.3.21-unstable-2025-03-04";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-M/snpYKZK3pgzlhYjRYEiAPlK9DUKYRiiu43KcrAy9g=";
+    rev = "ce5369dd413cd71a81ce38a5ccd379f6c9352e23";
+    hash = "sha256-cZ/YT4H2OU5l3AosROnkoyT5qrva5lxKshQMS626f2E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -79,7 +79,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flaresolverr";
     maintainers = with maintainers; [ paveloom ];
     inherit (undetected-chromedriver.meta) platforms;
-    # See https://github.com/NixOS/nixpkgs/issues/332776
-    broken = true;
   };
 })
