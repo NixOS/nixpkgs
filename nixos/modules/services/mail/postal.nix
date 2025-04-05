@@ -517,6 +517,7 @@ in
           serviceConfig = serviceConfigDefaults // {
             Type = "notify";
             ExecStart = "${lib.getExe pkgs.postal} web-server";
+            TimeoutStartSec = 180;
           };
         };
 
