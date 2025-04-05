@@ -12455,6 +12455,7 @@ with pkgs;
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresqlVersions
+    postgresqlJitVersions
     libpq
     ;
 
@@ -12464,7 +12465,9 @@ with pkgs;
     postgresql_15
     postgresql_16
     postgresql_17
+    ;
 
+  inherit (postgresqlJitVersions)
     postgresql_13_jit
     postgresql_14_jit
     postgresql_15_jit
