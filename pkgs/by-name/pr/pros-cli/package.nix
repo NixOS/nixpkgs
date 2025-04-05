@@ -52,6 +52,6 @@ python3Packages.buildPythonPackage {
         Purdue University's Command Line Interface for managing PROS projects.
         Works with V5 and the Cortex.
       '';
-      mainProgram = "pros-cli";
+      mainProgram = "pros";
     };
 }
