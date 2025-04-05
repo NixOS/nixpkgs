@@ -60,12 +60,17 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
+  gst-plugins-good,
   directoryListingUpdater,
 }:
 
-# MMAL is not supported on aarch64, see:
-# https://github.com/raspberrypi/userland/issues/688
-assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
+let
+  # MMAL is not supported on aarch64, see:
+  # https://github.com/raspberrypi/userland/issues/688
+  hostSupportsRaspiCamera = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32;
+in
+
+assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
@@ -250,7 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      ext/qt6/qsb-wrapper.py
   '';
 
   env = {
@@ -267,6 +273,24 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   passthru = {
+    tests =
+      {
+        gtk = gst-plugins-good.override {
+          gtkSupport = true;
+        };
+        qt5 = gst-plugins-good.override {
+          qt5Support = true;
+        };
+        qt6 = gst-plugins-good.override {
+          qt6Support = true;
+        };
+      }
+      // lib.optionalAttrs hostSupportsRaspiCamera {
+        raspiCamera = gst-plugins-good.override {
+          raspiCameraSupport = true;
+        };
+      };
+
     updateScript = directoryListingUpdater { };
   };
 
