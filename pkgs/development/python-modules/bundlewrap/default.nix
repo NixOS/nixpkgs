@@ -31,12 +31,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  pythonRemoveDeps = [
-    # distinfo renamed to libpass, but still imports as passlib
-    "passlib"
-  ];
-
   dependencies = [
     setuptools
     cryptography

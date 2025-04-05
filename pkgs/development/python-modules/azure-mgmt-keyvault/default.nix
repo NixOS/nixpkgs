@@ -17,7 +17,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "azure_mgmt_keyvault";
+    inherit version;
     hash = "sha256-/PsTZoUpJvKjEeG8bmp4brioof1G5gJdTBFO3iy0ZC4=";
   };
 
