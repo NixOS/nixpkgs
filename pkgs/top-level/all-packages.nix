@@ -6638,11 +6638,15 @@ with pkgs;
 
   jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk17;
+    jlink = "${buildPackages.jdk17}/lib/*/bin/jlink";
   };
   jre21_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk21;
+    jlink = "${buildPackages.jdk21}/lib/*/bin/jlink";
   };
-  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
+  jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jlink = "${buildPackages.jdk}/lib/*/bin/jlink";
+  };
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
