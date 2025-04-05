@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krep";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "davidesantangelo";
     repo = "krep";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kAsOAcEFjfxlJs6fJvB0viCMxGFCG1BUs9qPgGMvBpM=";
+    hash = "sha256-wfMNyqZgqoEkp51gompWUn65kaeVZIMfvo0VStW4EPA=";
   };
 
   makeFlags = [
