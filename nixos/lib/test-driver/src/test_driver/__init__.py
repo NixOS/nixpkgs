@@ -3,7 +3,7 @@ import os
 import time
 from pathlib import Path
 
-import ptpython.repl
+import ptpython.ipython
 
 from test_driver.driver import Driver
 from test_driver.logger import (
@@ -136,11 +136,10 @@ def main() -> None:
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
-            ptpython.repl.embed(
-                driver.test_symbols(),
-                {},
+            ptpython.ipython.embed(
+                user_ns=driver.test_symbols(),
                 history_filename=history_path,
-            )
+            )  # type:ignore
         else:
             tic = time.time()
             driver.run_tests()
