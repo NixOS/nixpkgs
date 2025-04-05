@@ -18,18 +18,14 @@
   jujutsu,
 }:
 
-let
-  version = "0.28.1";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  inherit version;
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LDMHMFg9fjEMi8I2Fc3TEyWMctqJurAbckubCgkkZiM=";
   };
 
@@ -104,7 +100,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/jj-vcs/jj";
-    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -114,4 +110,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "jj";
   };
-}
+})
