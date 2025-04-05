@@ -29,7 +29,7 @@
 # Libraries
 /lib                        @infinisil @hsjobeki
 /lib/systems                @alyssais @ericson2314 @NixOS/stdenv
-/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
+/lib/generators             @infinisil @hsjobeki @Profpatsch
 /lib/cli.nix                @infinisil @hsjobeki @Profpatsch
 /lib/debug.nix              @infinisil @hsjobeki @Profpatsch
 /lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
