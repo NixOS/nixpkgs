@@ -1,8 +1,4 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
+{ pkgs, ... }:
 
 with pkgs.lib;
 
@@ -13,7 +9,7 @@ let
       kafkaPackage,
       mode ? "kraft",
     }:
-    (import ./make-test-python.nix ({
+    (import ../make-test-python.nix ({
       inherit name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [ nequissimus ];
@@ -116,7 +112,7 @@ let
             + "--from-beginning --max-messages 1"
         )
       '';
-    }) { inherit system; });
+    }));
 
 in
 with pkgs;
