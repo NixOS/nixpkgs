@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   fetchurl,
   autoreconfHook,
   buildPackages,
@@ -16,7 +17,7 @@
   acl,
   attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr,
   attr,
-  selinuxSupport ? false,
+  selinuxSupport ? config.selinuxSupport,
   libselinux,
   libsepol,
   # No openssl in default version, so openssl-induced rebuilds aren't too big.

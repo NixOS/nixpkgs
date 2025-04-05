@@ -177,6 +177,12 @@ let
       feature = "build packages with ROCm support by default";
     };
 
+    selinuxSupport = mkMassRebuild {
+      type = types.bool;
+      default = false;
+      feature = "build packages with SELinux support by default";
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [ ];

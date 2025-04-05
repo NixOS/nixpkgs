@@ -9,6 +9,7 @@
 
 {
   lib,
+  config,
   stdenv,
   Xaw3d,
   acl,
@@ -85,7 +86,7 @@
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
   withPgtk ? false,
-  withSelinux ? stdenv.hostPlatform.isLinux,
+  withSelinux ? config.selinuxSupport,
   withSQLite3 ? lib.versionAtLeast version "29",
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,

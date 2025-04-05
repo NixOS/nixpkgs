@@ -3,6 +3,7 @@ let
   generic =
     # utils
     {
+      config,
       stdenv,
       fetchFromGitHub,
       fetchpatch,
@@ -98,7 +99,7 @@ let
       tcl,
 
       # SELinux
-      selinuxSupport ? false,
+      selinuxSupport ? config.selinuxSupport,
       libselinux,
 
       # Systemd
