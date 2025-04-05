@@ -8302,8 +8302,6 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
-  manifestoo = callPackage ../development/python-modules/manifestoo { };
-
   manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
 
   manifestparser =
@@ -8315,6 +8313,8 @@ self: super: with self; {
   manim = callPackage ../development/python-modules/manim { };
 
   manim-slides = callPackage ../development/python-modules/manim-slides { };
+
+  manimgl = callPackage ../development/python-modules/manimgl { };
 
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
