@@ -16,21 +16,22 @@
   pytest-mock,
   pandas,
   azure-storage-blob,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.20.1";
+  version = "0.25.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-serMb6Rirmw+QLpET3NT2djBoFBW/TGu1/5qYjiYpKE=";
+    hash = "sha256-Z2cCNeGNYeKHjiKSXN2/qcgDR/8pVaz6EtARTbW3fX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-WGnjVYws8ZZMv0MvBrohozxQuyOImktaLxuvAIiH+U0=";
+    hash = "sha256-XqtL3sZqhvDy0wA1QH801vxOmevMzVFJAwwolikmfvc=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -53,11 +54,14 @@ buildPythonPackage rec {
   nativeBuildInputs =
     [
       pkg-config # openssl-sys needs this
+      pythonRelaxDepsHook
     ]
     ++ (with rustPlatform; [
       cargoSetupHook
       maturinBuildHook
     ]);
+
+  relaxDeps = [ "pyarrow" ];
 
   pythonImportsCheck = [ "deltalake" ];
 
