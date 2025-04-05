@@ -298,6 +298,16 @@ rec {
     license = lib.licenses.cc-by-sa-40;
   };
 
+  nineish-catppuccin-macchiato = mkNixBackground {
+    name = "nineish-catppuccin-macchiato-2025-01-27";
+    description = "Catppuccin Macchiato wallpaper for Nix inspired by simpler times";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/wallpapers/nix-wallpaper-nineish-catppuccin-macchiato.png";
+      hash = "sha256-1JWgytxOvI0hwkCk+1hdZqhLB0u5aHEyEcsmlo4kMuw=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
   recursive = mkNixBackground {
     name = "recursive-2022-04-19";
     description = "3D wallpaper for Nix";
