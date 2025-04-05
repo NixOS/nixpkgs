@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool for stripping tags from HTML";

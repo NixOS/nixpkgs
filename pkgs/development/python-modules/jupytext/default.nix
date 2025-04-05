@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable

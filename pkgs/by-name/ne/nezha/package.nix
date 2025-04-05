@@ -111,7 +111,7 @@ buildGo124Module {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
   passthru = {

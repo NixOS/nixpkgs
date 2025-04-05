@@ -34,7 +34,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-version" ];
+  versionCheckProgramArg = "-version";
 
   meta = with lib; {
     description = "Tool for configurable targeted scanning";

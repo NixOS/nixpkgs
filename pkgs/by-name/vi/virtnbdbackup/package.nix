@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "-V" ];
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Backup utility for Libvirt/qemu/kvm";
