@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   zlib,
-  lzo,
   libtasn1,
   nettle,
   pkg-config,
@@ -141,7 +140,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      lzo
       libtasn1
       libidn2
       zlib
