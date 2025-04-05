@@ -1,8 +1,6 @@
-diff --git a/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts b/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
-index ddee0e9..fc9ffca 100644
 --- a/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
 +++ b/src/r2mm/launching/runners/linux/SteamGameRunner_Linux.ts
-@@ -61,15 +61,9 @@ export default class SteamGameRunner_Linux extends GameRunnerProvider {
+@@ -64,15 +64,8 @@
      async start(game: Game, args: string): Promise<void | R2Error> {
  
          const settings = await ManagerSettings.getSingleton(game);
@@ -11,8 +9,8 @@ index ddee0e9..fc9ffca 100644
 -            return steamDir;
 -        }
 -
--        LoggerProvider.instance.Log(LogSeverity.INFO, `Steam directory is: ${steamDir}`);
- 
+-        LoggerProvider.instance.Log(LogSeverity.INFO, `Steam folder is: ${steamDir}`);
+-
          try {
 -            const cmd = `"${steamDir}/steam.sh" -applaunch ${game.activePlatform.storeIdentifier} ${args} ${settings.getContext().gameSpecific.launchParameters}`;
 +            const cmd = `steam -applaunch ${game.activePlatform.storeIdentifier} ${args} ${settings.getContext().gameSpecific.launchParameters}`;
