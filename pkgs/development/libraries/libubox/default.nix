@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2024-12-19";
+  version = "0-unstable-2024-12-19";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
