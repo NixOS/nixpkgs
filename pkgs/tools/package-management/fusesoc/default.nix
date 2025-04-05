@@ -15,11 +15,11 @@
 }:
 buildPythonPackage rec {
   pname = "fusesoc";
-  version = "2.2.1";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M36bXBgY8hR33AVDlHoH8PZJG2Bi0KOEI07IMns7R4w=";
+    hash = "sha256-ruYx9dDAm23jV4tw1Op+6Pe1ea1c7VWH5RzqasFsZ6E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
