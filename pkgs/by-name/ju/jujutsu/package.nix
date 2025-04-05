@@ -14,22 +14,17 @@
   openssh,
   buildPackages,
   nix-update-script,
-  testers,
-  jujutsu,
+  versionCheckHook,
 }:
 
-let
-  version = "0.28.1";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  inherit version;
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LDMHMFg9fjEMi8I2Fc3TEyWMctqJurAbckubCgkkZiM=";
   };
 
@@ -91,20 +86,19 @@ rustPlatform.buildRustPackage {
         --zsh <(COMPLETE=zsh ${jj})
     '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/jj";
+  versionCheckProgramArg = "--version";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = jujutsu;
-        command = "jj --version";
-      };
-    };
   };
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/jj-vcs/jj";
-    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -114,4 +108,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "jj";
   };
-}
+})
