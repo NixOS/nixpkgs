@@ -32,17 +32,13 @@ in python3Packages.buildPythonPackage {
       hash = "sha256-Lw3NJaFmJFt0g3N+jgmGLG5AMeMB4Tqk3d4mPPWvC/c=";
     };
     meta = let
-      downloadPage = "https://github.com/purduesigbots/pros-cli/releases/tag/3.5.5";
     in {
       homepage = "https://pros.cs.purdue.edu/v5/index.html";
-      inherit downloadPage;
-      changelog = downloadPage;
       license = licenses.mpl2;
       description = "Purdue University's Command Line Interface for managing PROS projects.";
       longDescription = ''
         Purdue University's Command Line Interface for managing PROS projects.
         Works with V5 and the Cortex.
       '';
-      mainProgram = "pros-cli";
     };
   }
