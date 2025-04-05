@@ -676,6 +676,7 @@ in
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
   kimai = handleTest ./kimai.nix { };
+  kismet = handleTest ./kismet.nix { };
   kmonad = runTest ./kmonad.nix;
   knot = runTest ./knot.nix;
   komga = handleTest ./komga.nix { };
