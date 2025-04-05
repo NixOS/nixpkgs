@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  pkgs,
+  gcc-arm-embedded,
   python3Packages,
   lib,
 }:
