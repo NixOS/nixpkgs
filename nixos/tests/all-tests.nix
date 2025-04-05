@@ -163,6 +163,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    unit-active-state = runTest ./nixos-test-driver/unit-active-state.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
