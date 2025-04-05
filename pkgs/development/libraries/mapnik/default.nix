@@ -25,18 +25,17 @@
   libpq,
   protozero,
   sparsehash,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
-  version = "4.0.5";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     rev = "v${version}";
-    hash = "sha256-pReoyMdu8RYrberKcwGw0DKmkxVRJezZYcPAM/UAn6o=";
+    hash = "sha256-gJktRWcJiSGxxjvWFt+Kl9d7g+TOSPk2PfGP0LIVxt4=";
     fetchSubmodules = true;
   };
 
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
+      --replace-fail '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash
@@ -64,12 +63,6 @@ stdenv.mkDerivation rec {
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
     ./use-sparsehash-package.patch
-
-    (fetchpatch {
-      name = "boost-u32regex-str";
-      url = "https://github.com/mapnik/mapnik/commit/102cf2b2c4b58d3540b3ff15c65ad90335f3a80d.patch";
-      hash = "sha256-+s5MaFHV2ulgEX61bVRkCVclipbUg8VhzSCb2sIA0mU=";
-    })
   ];
 
   nativeBuildInputs = [
