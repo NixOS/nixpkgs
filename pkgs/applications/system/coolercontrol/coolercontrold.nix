@@ -18,15 +18,14 @@ rustPlatform.buildRustPackage {
   sourceRoot = "${src.name}/coolercontrold";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5gqtSZs/unFobEl1MHec2uhGDrWnO6ITlYbB78VasZg=";
+  cargoHash = "sha256-eybPYL9yFmjbsPI5NuRPu3rvMH70eKTaw9ZFpTtIwgA=";
 
   buildInputs = [ libdrm ];
 
   postPatch = ''
     # copy the frontend static resources to a directory for embedding
     mkdir -p ui-build
-    cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace build.rs --replace-fail '"./resources/app"' '"./ui-build"'
+    cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
     substituteInPlace src/repositories/utils.rs \
