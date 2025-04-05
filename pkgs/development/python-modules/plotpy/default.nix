@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "plotpy";
-  version = "2.7.2";
+  version = "2.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
     tag = "v${version}";
-    hash = "sha256-X7HLsT+EKSrCE50u4wbfYr1jwJoSMS0YbvbKofznBL4=";
+    hash = "sha256-Z8aCDTBRdksbjjH5P+OXln3CHciw1MuYQN3K6KOcouk=";
   };
 
   build-system = [
@@ -112,7 +112,7 @@ buildPythonPackage rec {
   meta = {
     description = "Curve and image plotting tools for Python/Qt applications";
     homepage = "https://github.com/PlotPyStack/PlotPy";
-    changelog = "https://github.com/PlotPyStack/PlotPy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/PlotPy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
