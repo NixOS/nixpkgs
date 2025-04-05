@@ -7,7 +7,6 @@
   libtasn1,
   nettle,
   pkg-config,
-  lzip,
   perl,
   gmp,
   autoconf,
@@ -143,7 +142,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       lzo
-      lzip
       libtasn1
       libidn2
       zlib
@@ -153,7 +151,7 @@ stdenv.mkDerivation rec {
       gettext
       libiconv
     ]
-    ++ lib.optional (withP11-kit) p11-kit
+    ++ lib.optional withP11-kit p11-kit
     ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
 
   nativeBuildInputs =
