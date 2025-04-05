@@ -197,6 +197,20 @@ lib.makeExtensible (
 
       nix_2_27 = addTests "nix_2_27" self.nixComponents_2_27.nix-everything;
 
+      nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix {
+        version = "2.28.1pre";
+        inherit (self.nix_2_24.meta) maintainers;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_28";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = "9cdf72beaa77f1e6c0faed44872b83783051f20d";
+          hash = "sha256-0sk7cGOdfUA6/AamSsuURHdILxSyw+s2zl7CDaSsawo=";
+        };
+      };
+
+      nix_2_28 = addTests "nix_2_28" self.nixComponents_2_28.nix-everything;
+
       latest = self.nix_2_26;
 
       # The minimum Nix version supported by Nixpkgs
