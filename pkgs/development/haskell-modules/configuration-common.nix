@@ -2675,6 +2675,14 @@ self: super: {
     '';
   }) super.feedback;
 
+  # https://github.com/maralorn/haskell-taskwarrior/pull/12
+  taskwarrior = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/maralorn/haskell-taskwarrior/commit/b846c6ae64e716dca2d44488f60fee3697b5322d.patch";
+      sha256 = "sha256-fwBYBmw9Jva2UEPQ6E/5/HBA8ZDiM7/QQQDBp3diveU=";
+    })
+  ] super.taskwarrior;
+
   testcontainers = lib.pipe super.testcontainers [
     dontCheck   # Tests require docker
     doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
