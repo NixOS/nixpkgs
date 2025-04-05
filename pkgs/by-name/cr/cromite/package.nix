@@ -1,9 +1,9 @@
 {
-  fetchurl,
   lib,
+  stdenv,
+  fetchurl,
   makeBinaryWrapper,
   patchelf,
-  stdenv,
   copyDesktopItems,
   makeDesktopItem,
 
@@ -51,9 +51,6 @@
   # Command line programs
   coreutils,
 
-  # command line arguments which are always set e.g "--disable-gpu"
-  commandLineArgs ? "",
-
   # Will crash without.
   systemd,
 
@@ -96,6 +93,9 @@
 
   # For QT support
   qt6,
+
+  # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? "",
 }:
 
 let
@@ -166,15 +166,15 @@ let
       qt6.qtbase
       qt6.qtwayland
     ];
-  commit = "ee9852e97e8e1d0ec5edf1c1b35fd1f8b57f2929";
+  commit = "9609b54606287728228780ccd390a28c1f3a8bf0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cromite";
-  version = "134.0.6998.108";
+  version = "135.0.7049.52";
 
   src = fetchurl {
     url = "https://github.com/uazo/cromite/releases/download/v${finalAttrs.version}-${commit}/chrome-lin64.tar.gz";
-    hash = "sha256-P1dLdpFYQlnJYT2o02PietgL2VW0cTGqYLtbkBJyPl0=";
+    hash = "sha256-LXZ9X8fOlatLTEeoUCvmP0zWGzdWrZ1U+iIFuronn5Y=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -223,19 +223,17 @@ stdenv.mkDerivation (finalAttrs: {
     cp -v -a . $out/share/cromite
     # replace bundled vulkan-loader
     rm -v $out/share/cromite/libvulkan.so.1
-    ln -v -s -t "$out/share/cromite" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+    ln -v -s -t $out/share/cromite ${lib.getLib vulkan-loader}/lib/libvulkan.so.1
     # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
     mkdir $out/bin
     makeWrapper $out/share/cromite/chrome $out/bin/cromite \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins:${qt6.qtwayland}/lib/qt-6/plugins" \
       --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
-      --prefix PATH            : "$binpath" \
-      --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
+      --prefix PATH            : "$binpath:${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "cromite" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
