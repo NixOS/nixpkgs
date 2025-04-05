@@ -534,6 +534,9 @@ let
               "-uefi"
             ];
           };
+        }
+        // {
+          override = allArgs.override or (newArgs: elaborate (allArgs // newArgs));
         };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;

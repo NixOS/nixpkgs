@@ -212,219 +212,201 @@ let
     lib.optionalAttrs allowCustomOverrides ((config.packageOverrides or (super: { })) super);
 
   # Convenience attributes for instantitating package sets. Each of
-  # these will instantiate a new version of allPackages. Currently the
-  # following package sets are provided:
-  #
-  # - pkgsCross.<system> where system is a member of lib.systems.examples
-  # - pkgsMusl
-  # - pkgsi686Linux
-  otherPackageSets = self: super: {
-    # This maps each entry in lib.systems.examples to its own package
-    # set. Each of these will contain all packages cross compiled for
-    # that target system. For instance, pkgsCross.raspberryPi.hello,
-    # will refer to the "hello" package built for the ARM6-based
-    # Raspberry Pi.
-    pkgsCross = lib.mapAttrs (n: crossSystem: nixpkgsFun { inherit crossSystem; }) lib.systems.examples;
+  # these will instantiate a new version of allPackages.
+  otherPackageSets =
+    let
+      isNative = lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform;
+      mkPkgs =
+        name: nixpkgsArgs:
+        nixpkgsFun (
+          nixpkgsArgs
+          // {
+            overlays =
+              [
+                (self': super': {
+                  "${name}" = super';
+                })
+              ]
+              ++ nixpkgsArgs.overlays or [ ]
+              ++ overlays;
+          }
+        );
+      # This is only cross when we are already cross, otherwise local.
+      # For the case of "native cross", i.e. pkgsCross.gnu64 on a x86_64-linux system, we need to adjust **both**
+      # localSystem **and** crossSystem, otherwise they're out of sync.
+      mkHybridPkgs =
+        name: hybridAttrs:
+        mkPkgs name (
+          let
+            newSystem = stdenv.hostPlatform.override hybridAttrs;
+          in
+          { crossSystem = newSystem; } // lib.optionalAttrs isNative { localSystem = newSystem; }
+        );
+    in
+    self: super: {
+      # This maps each entry in lib.systems.examples to its own package
+      # set. Each of these will contain all packages cross compiled for
+      # that target system. For instance, pkgsCross.raspberryPi.hello,
+      # will refer to the "hello" package built for the ARM6-based
+      # Raspberry Pi.
+      pkgsCross = lib.mapAttrs (
+        n: crossSystem: nixpkgsFun { crossSystem = stdenv.hostPlatform.override crossSystem; }
+      ) lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVM = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the LLVM toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useLLVM = true;
-        linker = "lld";
+      pkgsLLVM = mkPkgs "pkgsLLVM" {
+        # Bootstrap a cross stdenv using the LLVM toolchain.
+        # This is currently not possible when compiling natively,
+        # so we don't need to check hostPlatform != buildPlatform.
+        crossSystem = stdenv.hostPlatform.override {
+          useLLVM = true;
+          linker = "lld";
+        };
       };
-    };
 
-    pkgsLLVMLibc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVMLibc = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using LLVM libc.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
-        libc = "llvm";
+      pkgsLLVMLibc = mkPkgs "pkgsLLVMLibc" {
+        # Bootstrap a cross stdenv using LLVM libc.
+        # This is currently not possible when compiling natively,
+        # so we don't need to check hostPlatform != buildPlatform.
+        crossSystem = stdenv.hostPlatform.override {
+          config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
+          libc = "llvm";
+        };
       };
-    };
 
-    pkgsArocc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsArocc = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the Aro C compiler.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useArocc = true;
-        linker = "lld";
+      pkgsArocc = mkPkgs "pkgsArocc" {
+        # Bootstrap a cross stdenv using the Aro C compiler.
+        # This is currently not possible when compiling natively,
+        # so we don't need to check hostPlatform != buildPlatform.
+        crossSystem = stdenv.hostPlatform.override {
+          useArocc = true;
+          linker = "lld";
+        };
       };
-    };
 
-    pkgsZig = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsZig = super';
-        })
-      ] ++ overlays;
-      # Bootstrap a cross stdenv using the Zig toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
-        useZig = true;
-        linker = "lld";
+      pkgsZig = mkPkgs "pkgsZig" {
+        # Bootstrap a cross stdenv using the Zig toolchain.
+        # This is currently not possible when compiling natively,
+        # so we don't need to check hostPlatform != buildPlatform.
+        crossSystem = stdenv.hostPlatform.override {
+          useZig = true;
+          linker = "lld";
+        };
       };
-    };
 
-    # All packages built with the Musl libc. This will override the
-    # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported. 32-bit is also not supported.
-    pkgsMusl =
-      if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsMusl = super';
-            })
-          ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+      # All packages built with the Musl libc. This will override the
+      # default GNU libc on Linux systems. Non-Linux systems are not
+      # supported. 32-bit is also not supported.
+      pkgsMusl =
+        if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
+          mkHybridPkgs "pkgsMusl" {
             config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
-          };
-        }
-      else
-        throw "Musl libc only supports 64-bit Linux systems.";
+          }
+        else
+          throw "Musl libc only supports 64-bit Linux systems.";
 
-    # All packages built for i686 Linux.
-    # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsi686Linux = super';
-            })
-          ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+      # All packages built for i686 Linux.
+      # Used by wine, firefox with debugging version of Flash, ...
+      pkgsi686Linux =
+        if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
+          mkHybridPkgs "pkgsi686Linux" {
             config = lib.systems.parse.tripleFromSystem (
               stdenv.hostPlatform.parsed
               // {
                 cpu = lib.systems.parse.cpuTypes.i686;
               }
             );
-          };
-        }
-      else
-        throw "i686 Linux package set can only be used with the x86 family.";
+          }
+        else
+          throw "i686 Linux package set can only be used with the x86 family.";
 
-    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin =
-      if stdenv.hostPlatform.isDarwin then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsx86_64Darwin = super';
-            })
-          ] ++ overlays;
-          localSystem = {
+      # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+      pkgsx86_64Darwin =
+        if stdenv.hostPlatform.isDarwin then
+          mkHybridPkgs "pkgsx86_64Darwin" {
             config = lib.systems.parse.tripleFromSystem (
               stdenv.hostPlatform.parsed
               // {
                 cpu = lib.systems.parse.cpuTypes.x86_64;
               }
             );
+          }
+        else
+          throw "x86_64 Darwin package set can only be used on Darwin systems.";
+
+      # If already linux: the same package set unaltered
+      # Otherwise, return a linux package set for the current cpu architecture string.
+      # ABI and other details will be set to the default for the cpu/os pair.
+      pkgsLinux =
+        if stdenv.hostPlatform.isLinux then
+          self
+        else
+          mkHybridPkgs "pkgsLinux" {
+            config = lib.systems.parse.tripleFromSystem (lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux")
+            .parsed;
           };
-        }
-      else
-        throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
-    # If already linux: the same package set unaltered
-    # Otherwise, return a natively built linux package set for the current cpu architecture string.
-    # (ABI and other details will be set to the default for the cpu/os pair)
-    pkgsLinux =
-      if stdenv.hostPlatform.isLinux then
-        self
-      else
-        nixpkgsFun {
-          localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
-        };
-
-    # Extend the package set with zero or more overlays. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    appendOverlays =
-      extraOverlays:
-      if extraOverlays == [ ] then self else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
-
-    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
-    #       of allocations. DO NOT USE THIS IN NIXPKGS.
-    #
-    # Extend the package set with a single overlay. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    # Prefer appendOverlays if used repeatedly.
-    extend = f: self.appendOverlays [ f ];
-
-    # Fully static packages.
-    # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
-      overlays = [
-        (self': super': {
-          pkgsStatic = super';
-        })
-      ] ++ overlays;
-      crossSystem = {
-        isStatic = true;
-        config = lib.systems.parse.tripleFromSystem (
-          if stdenv.hostPlatform.isLinux then
-            makeMuslParsedPlatform stdenv.hostPlatform.parsed
-          else
-            stdenv.hostPlatform.parsed
-        );
-        gcc =
-          lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; }
-          // stdenv.hostPlatform.gcc or { };
-      };
-    });
-
-    pkgsExtraHardening = nixpkgsFun {
-      overlays = [
-        (
-          self': super':
+      # Fully static packages.
+      # Currently uses Musl on Linux (couldn’t get static glibc to work).
+      pkgsStatic = mkPkgs "pkgsStatic" {
+        crossSystem = stdenv.hostPlatform.override (
           {
-            pkgsExtraHardening = super';
-            stdenv = super'.withDefaultHardeningFlags (
-              super'.stdenv.cc.defaultHardeningFlags
-              ++ [
-                "shadowstack"
-                "pacret"
-                "trivialautovarinit"
-              ]
-            ) super'.stdenv;
-            glibc = super'.glibc.override rec {
-              enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
-              enableCETRuntimeDefault = enableCET != false;
-            };
+            isStatic = true;
           }
-          // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
-            # causes shadowstack disablement
-            pcre = super'.pcre.override { enableJit = false; };
-            pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
-            pcre16 = super'.pcre16.override { enableJit = false; };
+          // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+            config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
           }
-        )
-      ] ++ overlays;
+          // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+            gcc = {
+              abi = "elfv2";
+            } // stdenv.hostPlatform.gcc or { };
+          }
+        );
+      };
+
+      pkgsExtraHardening = mkPkgs "pkgsExtraHardening" {
+        overlays = [
+          (
+            self': super':
+            {
+              stdenv = super'.withDefaultHardeningFlags (
+                super'.stdenv.cc.defaultHardeningFlags
+                ++ [
+                  "shadowstack"
+                  "pacret"
+                  "trivialautovarinit"
+                ]
+              ) super'.stdenv;
+              glibc = super'.glibc.override rec {
+                enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+                enableCETRuntimeDefault = enableCET != false;
+              };
+            }
+            // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+              # causes shadowstack disablement
+              pcre = super'.pcre.override { enableJit = false; };
+              pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+              pcre16 = super'.pcre16.override { enableJit = false; };
+            }
+          )
+        ];
+      };
+
+      # Extend the package set with zero or more overlays. This preserves
+      # preexisting overlays. Prefer to initialize with the right overlays
+      # in one go when calling Nixpkgs, for performance and simplicity.
+      appendOverlays =
+        extraOverlays:
+        if extraOverlays == [ ] then self else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+
+      # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
+      #       of allocations. DO NOT USE THIS IN NIXPKGS.
+      #
+      # Extend the package set with a single overlay. This preserves
+      # preexisting overlays. Prefer to initialize with the right overlays
+      # in one go when calling Nixpkgs, for performance and simplicity.
+      # Prefer appendOverlays if used repeatedly.
+      extend = f: self.appendOverlays [ f ];
     };
-  };
 
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
