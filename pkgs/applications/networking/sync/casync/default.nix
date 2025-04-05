@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   fetchFromGitHub,
   meson,
@@ -15,7 +16,7 @@
   xz,
   zstd,
   fuseSupport ? true,
-  selinuxSupport ? true,
+  selinuxSupport ? config.selinuxSupport,
   udevSupport ? true,
   glibcLocales,
   rsync,
