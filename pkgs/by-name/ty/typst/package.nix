@@ -8,6 +8,7 @@
   xz,
   nix-update-script,
   versionCheckHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -58,7 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    packages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
