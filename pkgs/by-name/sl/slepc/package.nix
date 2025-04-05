@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  sowing,
   python3,
   python3Packages,
   arpack-mpi,
@@ -17,13 +16,13 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.22.2";
+  version = "3.23.0";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a5DmsA7NAlhrEaS43TYPk7vtDfhXLEP+5sftu2A9Yt4=";
+    hash = "sha256-Z9CVZQ/Ezb1S2EkTb9amAPxaN4tiUnKrbvQIc3BnVuU=";
   };
 
   postPatch = ''
@@ -33,11 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
       "slepc.prefixdir,'${python3.sitePackages}'"
 
     patchShebangs lib/slepc/bin
-
-    # Use system bfort
-    substituteInPlace config/packages/sowing.py \
-      --replace-fail "bfort = os.path.join(archdir,'bin','bfort')" \
-      "bfort = '${sowing}/bin/bfort'"
   '';
 
   # Usually this project is being built as part of a `petsc` build or as part of
