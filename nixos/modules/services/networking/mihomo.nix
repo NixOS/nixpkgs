@@ -38,6 +38,8 @@ in
           - https://yacd.haishan.me
         - clash-dashboard:
           - https://clash.razord.top
+        - zashboard:
+          - https://board.zash.run.place
       '';
     };
 
