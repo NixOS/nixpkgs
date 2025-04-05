@@ -28,9 +28,7 @@ python3Packages.buildPythonPackage {
     sentry-sdk
     pypng
     pyinstaller
-  ];
-  nativeBuildInputs = with pkgs; [
-    gcc-arm-embedded
+    pkgs.gcc-arm-embedded
   ];
   src = fetchFromGitHub {
     owner = "purduesigbots";
