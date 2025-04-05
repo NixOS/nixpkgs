@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goaccess";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
     tag = "v${version}";
-    hash = "sha256-ZOngDAHA88YQvkx2pk5ZSpBzxqelvCIR4z5hiFmfGyc=";
+    hash = "sha256-KevxuZuIrMybNlPZgVDLO0zQe4LfAKxfVBbHnyTUC/o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
