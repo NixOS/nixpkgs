@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-nav";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-nav";
     tag = "v${version}";
-    hash = "sha256-EgHiphpMAL+1ZC+I8PxRHMk1gcyAgHcUm4eoVu67+Qc=";
+    hash = "sha256-UxqOaAXy5Sc41FYE3mSKDBpWWJ3g0YwkRkOeSXwqz7o=";
   };
 
   build-system = [ flit-core ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
-    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ phaer ];
   };
