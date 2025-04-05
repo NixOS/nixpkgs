@@ -26,4 +26,5 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
+export NIX_LDFLAGS="@ldflags@ $NIX_LDFLAGS"
 exec @prog@ "${extraBefore[@]}" "$@" "${extraAfter[@]}"
