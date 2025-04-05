@@ -24,11 +24,9 @@
   nss,
   nspr,
   vips,
-  wrapGAppsHook3,
   udev,
   libGL,
   unzip,
-  makeWrapper,
 }:
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
@@ -72,8 +70,6 @@ let
     nativeBuildInputs = [
       dpkg
       autoPatchelfHook
-      wrapGAppsHook3
-      makeWrapper
     ];
 
     buildInputs = [
@@ -99,29 +95,27 @@ let
       vips
     ];
 
-    runtimeDependencies = map lib.getLib [
-      udev
-    ];
-
     installPhase = ''
       runHook preInstall
 
-      cp -r opt $out
+      mkdir -p $out/bin $out/app
+      cp -r opt/Wave $out/app/waveterm
       cp -r usr/share $out/share
       substituteInPlace $out/share/applications/waveterm.desktop \
         --replace-fail "/opt/Wave/" ""
+      ln -s $out/app/waveterm/waveterm $out/bin/waveterm
 
       runHook postInstall
     '';
 
     preFixup = ''
-      mkdir $out/bin
-      makeWrapper $out/Wave/waveterm $out/bin/waveterm \
-        --prefix LD_LIBRARY_PATH : "${
+      patchelf --add-needed libGL.so.1 \
+        --add-rpath ${
           lib.makeLibraryPath [
             libGL
+            udev
           ]
-        }"
+        } $out/app/waveterm/waveterm
     '';
 
     meta = metaCommon // {
@@ -147,9 +141,7 @@ let
         };
       };
 
-    nativeBuildInputs = [
-      unzip
-    ];
+    nativeBuildInputs = [ unzip ];
 
     installPhase = ''
       runHook preInstall
