@@ -1,92 +1,68 @@
 {
+  stdenv,
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
+  fetchPypi,
   git,
   spdx-license-list-data,
-  replaceVars,
+  substituteAll,
 }:
-python3Packages.buildPythonApplication rec {
+with python3.pkgs;
+buildPythonPackage rec {
   pname = "platformio";
-  version = "6.1.18";
-  pyproject = true;
+
+  version = "6.1.16";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
-    tag = "v${version}";
-    hash = "sha256-h9/xDWXCoGHQ9r2f/ZzAtwTAs4qzDrvVAQ2kuLS9Lk8=";
+    rev = "v${version}";
+    sha256 = "sha256-hZgbLUk2Krynut5uD6GMxWA+95y8ONNUmv4kaAltumk=";
   };
 
-  outputs = [
-    "out"
-    "udev"
-  ];
+  # outputs = [ "out" ];
 
   patches = [
-    (replaceVars ./interpreter.patch {
-      inherit (python3Packages.python.withPackages (_: propagatedBuildInputs)) interpreter;
-    })
-    (replaceVars ./use-local-spdx-license-list.patch {
+    # ../../embedded/platformio/fix-searchpath.patch
+    (substituteAll {
+      src = ../../embedded/platformio/use-local-spdx-license-list.patch;
       spdx_license_list_data = spdx-license-list-data.json;
     })
-    ./missing-udev-rules-nixos.patch
-    (fetchpatch {
-      # restore PYTHONPATH when calling scons
-      # https://github.com/platformio/platformio-core/commit/097de2be98af533578671baa903a3ae825d90b94
-      url = "https://github.com/platformio/platformio-core/commit/097de2be98af533578671baa903a3ae825d90b94.patch";
-      hash = "sha256-yq+/QHCkhAkFND11MbKFiiWT3oF1cHhgWj5JkYjwuY0=";
-      revert = true;
-    })
+    ../../embedded/platformio/missing-udev-rules-nixos.patch
   ];
 
   postPatch = ''
-    # Disable update checks at runtime
-    substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
-
-    # Remove filterwarnings which fails on new deprecations in Python 3.12 for 3.14
-    rm tox.ini
+    substituteInPlace setup.py \
+      --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
+      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
+      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.22.*")' 'uvicorn"' \
+      --replace 'tabulate==%s" % ("0.8.10" if PY36 else "0.9.*")' 'tabulate>=0.8.10,<=0.9"' \
+      --replace 'wsproto==%s" % ("1.0.0" if PY36 else "1.2.*")' 'wsproto"'
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-    python3Packages.setuptools
+  propagatedBuildInputs = [
+    aiofiles
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    requests
+    semantic-version
+    spdx-license-list-data.json
+    starlette
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
   ];
-
-  pythonRelaxDeps = true;
-
-  propagatedBuildInputs =
-    [
-      git
-      spdx-license-list-data.json
-    ]
-    ++ (map (p: python3Packages.${p})
-      [
-        "aiofiles"
-        "ajsonrpc"
-        "bottle"
-        "click"
-        "click-completion"
-        "colorama"
-        "lockfile"
-        "marshmallow"
-        "pyelftools"
-        "pyserial"
-        "requests"
-        "semantic-version"
-        "setuptools"
-        "starlette"
-        "tabulate"
-        "uvicorn"
-        "wsproto"
-        "zeroconf"
-      ])
-    ++ lib.optionals (python3Packages.stdenv.hostPlatform.isDarwin && python3Packages.hostPlatform.isAarch64) [
-      python3Packages.chardet
-    ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -94,26 +70,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
-    python3Packages.jsondiff
-    python3Packages.pytestCheckHook
+    jsondiff
+    pytestCheckHook
   ];
-
-  # Install udev rules into a separate output so all of platformio-core is not a dependency if
-  # you want to use the udev rules on NixOS but not install platformio in your system packages.
-  postInstall = ''
-    mkdir -p $udev/lib/udev/rules.d
-    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
-
-    installShellCompletion --cmd platformio \
-      --bash <(_PLATFORMIO_COMPLETE=bash_source $out/bin/platformio) \
-      --zsh <(_PLATFORMIO_COMPLETE=zsh_source $out/bin/platformio) \
-      --fish <(_PLATFORMIO_COMPLETE=fish_source $out/bin/platformio)
-
-    installShellCompletion --cmd pio \
-      --bash <(_PIO_COMPLETE=bash_source $out/bin/pio) \
-      --zsh <(_PIO_COMPLETE=zsh_source $out/bin/pio) \
-      --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
-  '';
 
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"
@@ -131,13 +90,13 @@ python3Packages.buildPythonApplication rec {
     "tests/misc/test_maintenance.py"
     # requires internet connection
     "tests/misc/ino2cpp/test_ino2cpp.py"
+    "tests/project/test_metadata.py"
   ];
 
   disabledTests = [
     # requires internet connection
     "test_api_cache"
     "test_ping_internet_ips"
-    "test_metadata_dump"
   ];
 
   pytestFlagsArray =
@@ -201,22 +160,16 @@ python3Packages.buildPythonApplication rec {
       "test_misc.py::test_ping_internet_ips"
       "test_misc.py::test_platformio_cli"
       "test_pkgmanifest.py::test_packages"
+      "test_metadata.py::test_metadata_dump"
     ]);
 
-  passthru = {
-    inherit (python3Packages) python;
-  };
-
   meta = with lib; {
-    changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
-    description = "Open source ecosystem for IoT development";
-    downloadPage = "https://github.com/platformio/platformio-core";
+    description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [
       mog
       makefu
     ];
-    mainProgram = "platformio";
   };
 }
