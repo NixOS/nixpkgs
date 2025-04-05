@@ -16337,6 +16337,8 @@ self: super: with self; {
 
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
+  sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
+
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
