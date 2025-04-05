@@ -3,6 +3,7 @@
   jq,
   runCommand,
   writeText,
+  python3,
   ...
 }:
 {
@@ -123,9 +124,18 @@ let
 in
 runCommand "compare"
   {
-    nativeBuildInputs = [ jq ];
+    nativeBuildInputs = [
+      jq
+      python3
+    ];
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
+    env = {
+      BEFORE_DIR = "${beforeResultDir}";
+      AFTER_DIR = "${afterResultDir}";
+    };
+    # export BEFORE_DIR=${beforeResultDir}
+    # export AFTER_DIR=${afterResultDir}
   }
   ''
     mkdir $out
@@ -133,6 +143,18 @@ runCommand "compare"
     cp ${changed-paths} $out/changed-paths.json
 
     jq -r -f ${./generate-step-summary.jq} < ${changed-paths} > $out/step-summary.md
+
+    python3 ${./cmp-stats.py} >> $out/step-summary.md
+
+    # Check file size and truncate if necessary
+    # See: https://github.com/NixOS/nixpkgs/pull/365366
+    MAX_SIZE=1048576 # 1024 KB in bytes
+    FILE_SIZE=$(wc -c < "$out/step-summary.md")
+
+    if [ "$FILE_SIZE" -gt "$MAX_SIZE" ]; then
+        echo "File exceeds 1024 KB. Truncating..." >&2
+        truncate -s "$MAX_SIZE" "$out/step-summary.md"
+    fi
 
     cp "$maintainersPath" "$out/maintainers.json"
 
