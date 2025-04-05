@@ -1447,7 +1447,7 @@ in
     ];
     buildInputs = [ curl ];
     postPatch = ''
-      substituteInPlace lua/kulala/config/init.lua \
+      substituteInPlace lua/kulala/config/defaults.lua \
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
   };
@@ -2700,6 +2700,9 @@ in
     checkInputs = [
       curl
       ripgrep
+      # Optional integrations
+      self.blink-cmp
+      self.nvim-cmp
     ];
   };
 
