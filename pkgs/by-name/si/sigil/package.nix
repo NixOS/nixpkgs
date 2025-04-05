@@ -6,12 +6,8 @@
   pkg-config,
   boost,
   xercesc,
-  qtbase,
-  qttools,
-  qtwebengine,
-  qtsvg,
   python3Packages,
-  wrapQtAppsHook,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,16 +26,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
     xercesc
-    qtbase
-    qttools
-    qtwebengine
-    qtsvg
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwebengine
+    qt6.qtsvg
     python3Packages.lxml
   ];
 
