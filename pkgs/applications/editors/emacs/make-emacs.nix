@@ -13,7 +13,7 @@
   Xaw3d,
   acl,
   alsa-lib,
-  apple-sdk,
+  apple-sdk_14,
   autoreconfHook,
   cairo,
   dbus,
@@ -114,21 +114,6 @@
       "lucid"
   ),
 
-  # macOS dependencies for NS and macPort
-  Accelerate,
-  AppKit,
-  Carbon,
-  Cocoa,
-  GSS,
-  IOKit,
-  ImageCaptureCore,
-  ImageIO,
-  OSAKit,
-  Quartz,
-  QuartzCore,
-  UniformTypeIdentifiers,
-  WebKit,
-
   # test
   callPackage,
 }:
@@ -205,7 +190,7 @@ mkDerivation (finalAttrs: {
                 ]
                 ++ lib.optionals stdenv.hostPlatform.isDarwin [
                   # The linker needs to know where to find libSystem on Darwin.
-                  "${apple-sdk.sdkroot}/usr/lib"
+                  "${apple-sdk_14.sdkroot}/usr/lib"
                 ]
               )
             )
@@ -372,27 +357,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withNS [
       librsvg
-      AppKit
-      GSS
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport") [
-      Accelerate
-      AppKit
-      Carbon
-      Cocoa
-      IOKit
-      OSAKit
-      Quartz
-      QuartzCore
-      WebKit
-      # TODO are these optional?
-      GSS
-      ImageCaptureCore
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
-      UniformTypeIdentifiers
     ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail

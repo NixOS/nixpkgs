@@ -14190,11 +14190,10 @@ with pkgs;
     emacs30-nox
     emacs30-pgtk
 
-    emacs28-macport
-    emacs29-macport
+    emacs30-macport
     ;
 
-  emacs-macport = emacs29-macport;
+  emacs-macport = emacs30-macport;
   emacs = emacs30;
   emacs-gtk = emacs30-gtk3;
   emacs-nox = emacs30-nox;

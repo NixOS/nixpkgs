@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromBitbucket,
+  fetchFromGitHub,
   fetchFromSavannah,
 }:
 
@@ -31,8 +32,8 @@ let
             }
           );
           "macport" = (
-            fetchFromBitbucket {
-              owner = "mituharu";
+            fetchFromGitHub {
+              owner = "jdtsmith";
               repo = "emacs-mac";
               inherit rev hash;
             }
@@ -88,7 +89,9 @@ let
               matthewbauer
               panchoh
             ];
-            "macport" = with lib.maintainers; [ ];
+            "macport" = with lib.maintainers; [
+              lactose
+            ];
           }
           .${variant};
         platforms =
@@ -121,40 +124,12 @@ in
     ];
   });
 
-  emacs28-macport = import ./make-emacs.nix (mkArgs {
+  emacs30-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
-    version = "28.2";
+    version = "30.1.50";
     variant = "macport";
-    rev = "emacs-28.2-mac-9.1";
-    hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
-    patches = fetchpatch: [
-      # CVE-2022-45939
-      (fetchpatch {
-        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
-        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
-      })
-
-      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
-      })
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
-      })
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
-        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
-      })
-    ];
-  });
-
-  emacs29-macport = import ./make-emacs.nix (mkArgs {
-    pname = "emacs-mac";
-    version = "29.1";
-    variant = "macport";
-    rev = "emacs-29.1-mac-10.0";
-    hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+    rev = "a50f20585960d92510fb62c95cb12606218a2081";
+    hash = "sha256-Ap4ZBb9NYIbwLroOoqvpQU/hjhaJJDB+3/1V0Q2c6aA=";
+    patches = _: [ ./macport-stdbool.patch ];
   });
 }

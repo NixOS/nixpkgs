@@ -1,3 +1,7 @@
+#if __has_include("config.h")
+#include "config.h"
+#endif
+
 #ifndef NOESCAPE_NOOP_H_
 #define NOESCAPE_NOOP_H_
 
