@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "zdns";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-ypjUJbTQ0ntLXNRiA96BqDn/SgcbjVe9dd9zmmSqAic=";
+    hash = "sha256-3ksDCl2dwRwFASRo7PSX+TDHFmn7ezhKjVA5Y0Aju+A=";
   };
 
-  vendorHash = "sha256-Q7W+G/yA/EvHqvDUl3T5BoP+K5ZTcLFLSaWw4TPMH2U=";
+  vendorHash = "sha256-OkGVf++LS30QFFaf2FSCi+64UDRR70hExyz0PjNEe6g=";
 
   preCheck = ''
     # Tests require network access
@@ -25,9 +25,10 @@ buildGoModule rec {
 
   meta = {
     description = "CLI DNS lookup tool";
-    mainProgram = "zdns";
     homepage = "https://github.com/zmap/zdns";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/zmap/zdns/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "zdns";
   };
 }
