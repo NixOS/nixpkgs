@@ -36,7 +36,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "6.0-unstable-2025-01-02";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "pocl";
