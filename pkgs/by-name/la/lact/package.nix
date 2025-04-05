@@ -3,34 +3,37 @@
   rustPlatform,
   stdenv,
   fetchFromGitHub,
-  blueprint-compiler,
   pkg-config,
   wrapGAppsHook4,
   gdk-pixbuf,
   gtk4,
   libdrm,
   vulkan-loader,
+  vulkan-tools,
   coreutils,
+  nix-update-script,
+  hwdata,
+  fuse3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    rev = "v${version}";
-    hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
+    tag = "v${version}";
+    hash = "sha256-6nNt/EnJKHdldjpCW2pLPBkU5TLGEaqtnUUBraeRa3I=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rgpBmoGCNMU5nFVxzNtqsPaOn93mHW5P2isKgbP9UN4=";
+  cargoHash = "sha256-NoWngD0LJ+cteoQIJ0iye0MZgmLuuxN2YHHyMqeEABc=";
 
   nativeBuildInputs = [
-    blueprint-compiler
     pkg-config
     wrapGAppsHook4
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -38,7 +41,24 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libdrm
     vulkan-loader
+    vulkan-tools
+    hwdata
+    fuse3
   ];
+
+  # we do this here so that the binary is usable during integration tests
+  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
+    lib.concatStringsSep " " [
+      "-C link-arg=-Wl,-rpath,${
+        lib.makeLibraryPath [
+          vulkan-loader
+          libdrm
+        ]
+      }"
+      "-C link-arg=-Wl,--add-needed,${vulkan-loader}/lib/libvulkan.so"
+      "-C link-arg=-Wl,--add-needed,${libdrm}/lib/libdrm.so"
+    ]
+  );
 
   checkFlags = [
     # tries and fails to initialize gtk
@@ -54,6 +74,12 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace res/io.github.lact-linux.desktop \
       --replace-fail Exec={lact,$out/bin/lact}
+
+    # read() looks for the database in /usr/share so we use read_from_file() instead
+    substituteInPlace \
+      lact-daemon/src/server/handler.rs \
+      lact-daemon/src/tests/mod.rs \
+      --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
   '';
 
   postInstall = ''
@@ -62,11 +88,25 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 res/io.github.lact-linux.png -t $out/share/pixmaps
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ vulkan-tools ]}"
+    )
+  '';
+
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${
-      lib.makeLibraryPath [ vulkan-loader ]
+    patchelf $out/bin/.lact-wrapped \
+    --add-needed libvulkan.so \
+    --add-needed libdrm.so \
+    --add-rpath ${
+      lib.makeLibraryPath [
+        vulkan-loader
+        libdrm
+      ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
