@@ -92,6 +92,7 @@ buildGo124Module rec {
     maintainers = with lib.maintainers; [
       aciceri
       squalus
+      tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
