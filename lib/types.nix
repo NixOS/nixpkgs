@@ -669,7 +669,14 @@ let
             check =
               x:
               let
-                isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+                isInStore = lib.path.hasStorePathPrefix (
+                  if builtins.isPath x then
+                    x
+                  # Discarding string context is necessary to convert the value to
+                  # a path and safe as the result is never used in any derivation.
+                  else
+                    /. + builtins.unsafeDiscardStringContext x
+                );
                 isAbsolute = builtins.substring 0 1 (toString x) == "/";
                 isExpectedType = (
                   if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
