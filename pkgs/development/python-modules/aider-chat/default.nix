@@ -112,6 +112,7 @@
   torch,
   nltk,
   boto3,
+  nix-update-script,
 }:
 
 let
@@ -365,6 +366,8 @@ let
             makeWrapperArgs = makeWrapperArgs ++ playwrightArgs ++ helpArgs;
           }
         );
+
+      updateScript = nix-update-script { };
     };
 
     meta = {

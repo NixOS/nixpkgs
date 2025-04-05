@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
+  python,
   systemd,
   pandoc,
   kmod,
@@ -15,13 +16,11 @@
   replaceVars,
 
   # Python packages
-  python,
   setuptools,
   setuptools-scm,
   wheel,
   buildPythonApplication,
   pytestCheckHook,
-  pefile,
 
   # Optional dependencies
   withQemu ? false,
@@ -46,7 +45,7 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python.withPackages (_: [ pefile ]);
+  pythonWithPefile = python.withPackages (ps: [ ps.pefile ]);
 
   deps =
     [
@@ -85,7 +84,7 @@ buildPythonApplication rec {
     [
       (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
         UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
-        PYTHON_PEFILE = "${python3pefile}/bin/python3.12";
+        PYTHON_PEFILE = lib.getExe pythonWithPefile;
         NIX_PATH = toString (lib.makeBinPath deps);
         MKOSI_SANDBOX = null; # will be replaced in postPatch
       })

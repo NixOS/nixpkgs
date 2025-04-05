@@ -359,6 +359,8 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
+  copilot-language-server-fhs = copilot-language-server.fhs;
+
   curv = callPackage ../by-name/cu/curv/package.nix {
     openexr = openexr_3;
   };
@@ -2624,10 +2626,6 @@ with pkgs;
         else
           throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression."
       );
-
-  metabase = callPackage ../servers/metabase {
-    jdk11 = jdk11_headless;
-  };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -7425,8 +7423,6 @@ with pkgs;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   # 28 is pre-release
   beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
-
-  erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
@@ -14122,6 +14118,7 @@ with pkgs;
     docker_25
     docker_26
     docker_27
+    docker_28
     ;
 
   docker = docker_27;
@@ -15590,8 +15587,6 @@ with pkgs;
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
-
-  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
@@ -17219,12 +17214,6 @@ with pkgs;
   };
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
-
-  doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
-
-  zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
-
-  zdoom = callPackage ../games/doom-ports/zdoom { };
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
