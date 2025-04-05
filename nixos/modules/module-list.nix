@@ -1284,6 +1284,7 @@
   ./services/networking/searx.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
+  ./services/networking/sharkey.nix
   ./services/networking/shellhub-agent.nix
   ./services/networking/shorewall.nix
   ./services/networking/shorewall6.nix
