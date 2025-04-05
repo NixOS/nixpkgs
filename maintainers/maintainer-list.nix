@@ -6267,12 +6267,6 @@
     githubId = 875324;
     name = "David Johnson";
   };
-  dmrauh = {
-    email = "dmrauh@posteo.de";
-    github = "dmrauh";
-    githubId = 37698547;
-    name = "Dominik Michael Rauh";
-  };
   dmvianna = {
     email = "dmlvianna@gmail.com";
     github = "dmvianna";
