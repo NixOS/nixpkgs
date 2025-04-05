@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
   domdf-python-tools,
   handy-archives,
   hatchling,
@@ -20,13 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-+hbr1VdHRKCVlqs0IIOhHXIJ2NBc8yiR0cmFvn7Ay9c=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     domdf-python-tools
     handy-archives
-    hatchling
-    hatch-requirements-txt
     packaging
   ];
 
