@@ -68,6 +68,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    distutils # required in python312 to call subcommands (see https://github.com/Ericsson/codechecker/issues/4350)
     lxml
     sqlalchemy
     alembic
