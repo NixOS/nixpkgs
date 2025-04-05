@@ -451,4 +451,18 @@ rec {
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
+  docker_28 = callPackage dockerGen rec {
+    version = "28.0.4";
+    cliRev = "v${version}";
+    cliHash = "sha256-DLUcmxbCxJs3EA96SGaesA+GzvHq6DC2vrGe5PvA0dE=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-yvz8MUOU61OuphPaIDu6+1wsbCXkIxJYQKK0fhcVwp0=";
+    runcRev = "v1.2.6";
+    runcHash = "sha256-XMN+YKdQOQeOLLwvdrC6Si2iAIyyHD5RgZbrOHrQE/g=";
+    containerdRev = "v1.7.27";
+    containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
 }
