@@ -76,17 +76,17 @@
 }:
 
 let
-  version = "0.19.8";
+  version = "0.19.9";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-hveMyGeu9RhdtWMbV/4GQ4KUNfjSt0CKyW7Yx8QtlLM=";
+    hash = "sha256-DMV55Tweb2fKWbSTMwx2ZkeJDl+YNcEx/hRkrqMGSgI=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.3.0";
+    version = "0.19.9";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
