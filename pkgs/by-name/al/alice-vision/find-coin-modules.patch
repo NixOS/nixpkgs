@@ -1,0 +1,123 @@
+--- a/src/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/CMakeLists.txt	2023-04-03 16:32:16.994922955 +0200
+@@ -1,5 +1,7 @@
+ cmake_minimum_required(VERSION 3.11)
+ 
++list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../modules)
++
+ # ==============================================================================
+ # AliceVision version
+ # ==============================================================================
+@@ -433,6 +435,7 @@
+   find_package(CoinUtils REQUIRED)
+   find_package(Clp REQUIRED)
+   find_package(Osi REQUIRED)
++  find_package(OsiClp REQUIRED)
+ endif()
+ 
+ # ==============================================================================
+--- a/src/aliceVision/linearProgramming/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/aliceVision/linearProgramming/CMakeLists.txt	2023-04-03 16:33:09.883053876 +0200
+@@ -13,6 +13,7 @@
+   Coin::Clp        # clp + solver wrapper
+   Coin::CoinUtils  # container tools
+   Coin::Osi        # generic LP
++  Coin::OsiClp
+ )
+ 
+ if (NOT MOSEK_FOUND)
+--- /dev/null	2023-03-27 18:27:39.858686170 +0200
++++ b/modules/FindCoinUtils.cmake	2023-04-03 16:12:16.146494958 +0200
+@@ -0,0 +1,21 @@
++find_package(PkgConfig REQUIRED)
++if(PKG_CONFIG_FOUND)
++  pkg_check_modules(PC_COINUTILS REQUIRED IMPORTED_TARGET coinutils)
++
++  add_library(Coin::CoinUtils ALIAS PkgConfig::PC_COINUTILS)
++endif()
++
++find_path(COINUTILS_INCLUDE_DIRS
++          NAMES CoinUtilsConfig.h
++          HINTS ${PC_COINUTILS_INCLUDE_DIRS})
++
++if (EXISTS "${COINUTILS_INCLUDE_DIRS}/CoinUtilsConfig.h")
++  file(STRINGS "${COINUTILS_INCLUDE_DIRS}/CoinUtilsConfig.h" coinutils_version_str REGEX "^#define[\t ]+COINUTILS_VERSION[\t ]+\".*\"")
++  string(REGEX REPLACE "^#define[\t ]+COINUTILS_VERSION[\t ]+\"([^\"]*)\".*" "\\1" CoinUtils_VERSION "${coinutils_version_str}")
++endif()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(CoinUtils
++  REQUIRED_VARS COINUTILS_INCLUDE_DIRS
++  VERSION_VAR CoinUtils_VERSION
++	)
+--- /dev/null	2023-03-27 18:27:39.858686170 +0200
++++ b/modules/FindClp.cmake	2023-04-03 16:12:16.146494958 +0200
+@@ -0,0 +1,21 @@
++find_package(PkgConfig REQUIRED)
++if(PKG_CONFIG_FOUND)
++  pkg_check_modules(PC_CLP REQUIRED IMPORTED_TARGET clp)
++
++  add_library(Coin::Clp ALIAS PkgConfig::PC_CLP)
++endif()
++
++find_path(CLP_INCLUDE_DIRS
++          NAMES ClpConfig.h
++          HINTS ${PC_CLP_INCLUDE_DIRS})
++
++if (EXISTS "${CLP_INCLUDE_DIRS}/ClpConfig.h")
++  file(STRINGS "${CLP_INCLUDE_DIRS}/ClpConfig.h" clp_version_str REGEX "^#define[\t ]+CLP_VERSION[\t ]+\".*\"")
++  string(REGEX REPLACE "^#define[\t ]+CLP_VERSION[\t ]+\"([^\"]*)\".*" "\\1" Clp_VERSION "${clp_version_str}")
++endif()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Clp
++  REQUIRED_VARS CLP_INCLUDE_DIRS
++  VERSION_VAR Clp_VERSION
++	)
+--- /dev/null	2023-03-27 18:27:39.858686170 +0200
++++ b/modules/FindOsi.cmake	2023-04-03 16:12:16.147494961 +0200
+@@ -0,0 +1,22 @@
++find_package(PkgConfig REQUIRED)
++if(PKG_CONFIG_FOUND)
++  pkg_check_modules(PC_OSI REQUIRED IMPORTED_TARGET osi)
++
++  add_library(Coin::Osi ALIAS PkgConfig::PC_OSI)
++endif()
++
++find_path(OSI_INCLUDE_DIRS
++          NAMES OsiConfig.h
++          HINTS ${PC_OSI_INCLUDE_DIRS})
++
++if (EXISTS "${OSI_INCLUDE_DIRS}/OsiConfig.h")
++  file(STRINGS "${OSI_INCLUDE_DIRS}/OsiConfig.h" osi_version_str REGEX "^#define[\t ]+OSI_VERSION[\t ]+\".*\"")
++  string(REGEX REPLACE "^#define[\t ]+OSI_VERSION[\t ]+\"([^\"]*)\".*" "\\1" Osi_VERSION "${osi_version_str}")
++endif()
++
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Osi
++  REQUIRED_VARS OSI_INCLUDE_DIRS
++  VERSION_VAR Osi_VERSION
++	)
+--- /dev/null	2023-03-27 18:27:39.858686170 +0200
++++ b/modules/FindOsiClp.cmake	2023-04-03 16:31:08.255752799 +0200
+@@ -0,0 +1,18 @@
++find_package(PkgConfig REQUIRED)
++if(PKG_CONFIG_FOUND)
++  pkg_check_modules(PC_OSI_CLP REQUIRED IMPORTED_TARGET osi-clp)
++
++  add_library(Coin::OsiClp ALIAS PkgConfig::PC_OSI_CLP)
++
++  set(OsiClp_VERSION ${PC_OSI_CLP_VERSION})
++endif()
++
++find_path(OSI_CLP_INCLUDE_DIRS
++          NAMES OsiSolverInterface.hpp
++          HINTS ${PC_OSI_CLP_INCLUDE_DIRS})
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(OsiClp
++  REQUIRED_VARS OSI_CLP_INCLUDE_DIRS
++  VERSION_VAR OsiClp_VERSION
++	)
+
