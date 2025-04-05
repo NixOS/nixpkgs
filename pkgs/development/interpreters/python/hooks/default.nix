@@ -277,6 +277,30 @@ in
     } ./python-recompile-bytecode-hook.sh
   ) { };
 
+  pythonRelaxBuildDepsHook = callPackage (
+    {
+      makePythonHook,
+      writeTextFile,
+      packaging,
+      tomlkit,
+    }:
+    makePythonHook
+      {
+        name = "python-relax-build-deps-hook";
+      }
+      (writeTextFile {
+        name = "python-relax-build-deps-hook.sh";
+        text = ''
+          _pythonRelaxBuildDepsHook() {
+            PYTHONPATH="${packaging}/${pythonSitePackages}:${tomlkit}/${pythonSitePackages}:$PYTHONPATH" \
+              ${pythonInterpreter} ${./python-relax-build-deps-hook.py}
+          }
+
+          preConfigureHooks+=(_pythonRelaxBuildDepsHook)
+        '';
+      })
+  ) { };
+
   pythonRelaxDepsHook = callPackage (
     { makePythonHook, wheel }:
     makePythonHook {
