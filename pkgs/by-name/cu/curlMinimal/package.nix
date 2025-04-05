@@ -92,7 +92,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.12.1";
+  version = "8.13.0";
 
   src = fetchurl {
     urls = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-A0Hx7ZeibIEauuvTfWK4M5VnkrdgfqPxXQAWE8dt4gI=";
+    hash = "sha256-Sgk5eaPC0C3i+8AFSaMncQB/LngDLG+qXs0vep4VICU=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
