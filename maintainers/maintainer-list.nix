@@ -14617,6 +14617,11 @@
     githubId = 1189862;
     name = "Valter Nazianzeno";
   };
+  maningreen = {
+    email = "flibbers@protonmail.com";
+    github = "maningreen";
+    githubId = "184766246";
+  };
   manojkarthick = {
     email = "smanojkarthick@gmail.com";
     github = "manojkarthick";
