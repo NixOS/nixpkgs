@@ -2,20 +2,21 @@
   lib,
   rustPlatform,
   cmake,
-  rustfmt,
   fetchFromGitHub,
   Security,
   stdenv,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  inherit (stdenv.targetPlatform.rust) cargoShortTarget;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
   version = "31.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wasmtime";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IQeYmqCXhzWsuufrLKeBI2sw86dXbn7c5DbmcoJTWvo=";
     fetchSubmodules = true;
   };
@@ -37,15 +38,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
-
-  # rustfmt is brought into scope to fix the following
-  #   warning: cranelift-codegen@0.108.0:
-  #   Failed to run `rustfmt` on ISLE-generated code: Os
-  #   { code: 2, kind: NotFound, message: "No such file or directory" }
-  nativeBuildInputs = [
-    cmake
-    rustfmt
-  ];
+  nativeBuildInputs = [ cmake ];
 
   doCheck =
     with stdenv.buildPlatform;
@@ -65,9 +58,15 @@ rustPlatform.buildRustPackage rec {
       install -m 0644 ''${!outputLib}/lib/* $dev/lib
       rm -r ''${!outputLib}/lib
 
+      # copy the build.rs generated c-api headers
       install -d -m0755 $dev/include/wasmtime
-      install -m0644 $src/crates/c-api/include/*.h $dev/include
-      install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
+      # https://github.com/rust-lang/cargo/issues/9661
+      install -m0644 \
+        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/*.h \
+        $dev/include
+      install -m0644 \
+        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/wasmtime/*.h \
+        $dev/include/wasmtime
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
@@ -75,16 +74,16 @@ rustPlatform.buildRustPackage rec {
         $dev/lib/libwasmtime.dylib
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "wasmtime";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ereslibre
       matthewbauer
     ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";
   };
-}
+})
