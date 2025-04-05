@@ -5,7 +5,6 @@
   fetchpatch,
   autoreconfHook,
   pkg-config,
-  libiconv,
   gettext,
   xxd,
 }:
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ];
 
   # configure.ac:75: error: required file './config.rpath' not found
   # https://github.com/dosfstools/dosfstools/blob/master/autogen.sh

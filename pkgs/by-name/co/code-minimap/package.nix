@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,8 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-35qMpxROBnXfnTIAkCRUg7zRQTvSIIA2qGD0Vu9r488=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = with lib; {
     description = "High performance code minimap render";

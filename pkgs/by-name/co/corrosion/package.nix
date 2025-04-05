@@ -5,7 +5,6 @@
   cargo,
   cmake,
   rustc,
-  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +17,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-/Xq0SKaKuOgrMXbgw+Aa59NEnU1mPQhARoh7EqV01K8=";
   };
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake

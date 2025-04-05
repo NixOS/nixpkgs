@@ -7,7 +7,6 @@
   libgit2,
   openssl,
   stdenv,
-  darwin,
   gitMinimal,
 }:
 
@@ -36,14 +35,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   nativeCheckInputs = [ gitMinimal ];
 

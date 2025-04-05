@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   cctools,
-  libiconv,
   llvmPackages,
   ninja,
   openssl,
@@ -77,9 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       openssl
       zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart

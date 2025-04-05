@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   stdenv,
-  libiconv,
   ncurses,
   lua,
 }:
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     lua
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ];
 
   # fix paths
   prePatch = ''
