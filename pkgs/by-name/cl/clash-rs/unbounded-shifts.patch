@@ -1,0 +1,12 @@
+diff --git a/clash_lib/src/lib.rs b/clash_lib/src/lib.rs
+index ef4898b..64e4cab 100644
+--- a/clash_lib/src/lib.rs
++++ b/clash_lib/src/lib.rs
+@@ -1,6 +1,7 @@
+ #![feature(ip)]
+ #![feature(sync_unsafe_cell)]
+ #![feature(let_chains)]
++#![feature(unbounded_shifts)]
+ 
+ #[macro_use]
+ extern crate anyhow;
