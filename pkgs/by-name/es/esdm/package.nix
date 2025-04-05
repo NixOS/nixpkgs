@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   fetchFromGitHub,
   protobufc,
@@ -18,7 +19,7 @@
   # A brief explanation is given.
 
   # general options
-  selinux ? false, # enable selinux support
+  selinux ? config.selinuxSupport, # enable selinux support
   drngHashDrbg ? true, # set the default drng callback
   drngChaCha20 ? false, # set the default drng callback
   ais2031 ? false, # set the seeding strategy to be compliant with AIS 20/31
