@@ -34,6 +34,7 @@ GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
 CHECK_MOUNTPOINTS = "@checkMountpoints@"
 STORE_DIR = "@storeDir@"
+REMEMBER_LAST_CHOICE = "@rememberLastChoice"
 
 @dataclass
 class BootSpec:
@@ -103,7 +104,12 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
 def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
     with open(f"{LOADER_CONF}.tmp", 'w') as f:
         f.write(f"timeout {TIMEOUT}\n")
-        f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
+        if REMEMBER_LAST_CHOICE != "":
+            default_setting = generation_conf_filename(profile, generation, specialisation)
+        else:
+            default_setting = "@saved"
+        f.write("default %s\n" % default_setting)
+
         if not EDITOR:
             f.write("editor 0\n")
         if REBOOT_FOR_BITLOCKER:
