@@ -226,7 +226,7 @@ in
         (IPv4 or IPv6) to be assigned. If set to "both", dhcpcd will wait for
         both an IPv4 and an IPv6 address before forking.
         The option "if-carrier-up" is equivalent to "any" if either ethernet
-        is plugged nor WiFi is powered, and to "background" otherwise.
+        is plugged or WiFi is powered, and to "background" otherwise.
       '';
     };
 
