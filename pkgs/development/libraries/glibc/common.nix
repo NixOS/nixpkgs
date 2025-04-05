@@ -146,7 +146,7 @@ stdenv.mkDerivation (
       ''
       # FIXME: find a solution for infinite recursion in cross builds.
       # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
-      + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      + lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
 
         # Ensure that libidn2 is found.
         patch -p 1 <<EOF
@@ -183,20 +183,22 @@ stdenv.mkDerivation (
       ++ lib.optionals withLinuxHeaders [
         "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
       ]
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
         (lib.flip lib.withFeature "fp" (
           stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
         ))
         "--with-__thread"
       ]
-      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
-        "--host=arm-linux-gnueabi"
-        "--build=arm-linux-gnueabi"
+      ++
+        lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform && stdenv.hostPlatform.isAarch32)
+          [
+            "--host=arm-linux-gnueabi"
+            "--build=arm-linux-gnueabi"
 
-        # To avoid linking with -lgcc_s (dynamic link)
-        # so the glibc does not depend on its compiler store path
-        "libc_cv_as_needed=no"
-      ]
+            # To avoid linking with -lgcc_s (dynamic link)
+            # so the glibc does not depend on its compiler store path
+            "libc_cv_as_needed=no"
+          ]
       ++ lib.optional withGd "--with-gd";
 
     makeFlags =
@@ -288,7 +290,7 @@ stdenv.mkDerivation (
 
           configureScript="`pwd`/../$sourceRoot/configure"
         ''
-        + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+        + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
           sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
           cat > config.cache << "EOF"

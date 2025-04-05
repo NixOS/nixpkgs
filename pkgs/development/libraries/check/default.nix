@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # fortify breaks the libcompat vsnprintf implementation
   hardeningDisable = lib.optionals (
-    stdenv.hostPlatform.isMusl && (stdenv.hostPlatform != stdenv.buildPlatform)
+    stdenv.hostPlatform.isMusl && (stdenv.hostPlatform.notEquals stdenv.buildPlatform)
   ) [ "fortify" ];
 
   # Test can randomly fail: https://hydra.nixos.org/build/7243912

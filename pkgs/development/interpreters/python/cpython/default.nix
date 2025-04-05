@@ -199,7 +199,7 @@ let
       autoreconfHook
       pkg-config
     ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       buildPackages.stdenv.cc
       pythonOnBuildForHost
     ]
@@ -258,7 +258,7 @@ let
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
   pythonOnBuildForHostInterpreter =
-    if stdenv.hostPlatform == stdenv.buildPlatform then
+    if stdenv.hostPlatform.equals stdenv.buildPlatform then
       "$out/bin/python"
     else
       pythonOnBuildForHost.interpreter;
@@ -331,7 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
       # https://www.cve.org/CVERecord?id=CVE-2025-0938
       ./CVE-2025-0938.patch
     ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
+    ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # Cross compilation only supports a limited number of "known good"
       # configurations. If you're reading this and it's been a long time
       # since this diff, consider submitting this patch upstream!
@@ -492,7 +492,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS=-I${libxcrypt}/include"
       "LIBS=-L${libxcrypt}/lib"
     ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "ac_cv_buggy_getaddrinfo=no"
       # Assume little-endian IEEE 754 floating point when cross compiling
       "ac_cv_little_endian_double=yes"
@@ -515,7 +515,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
       "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
     ]
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
+    ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && pythonAtLeast "3.11") [
       "--with-build-python=${pythonOnBuildForHostInterpreter}"
     ]
     ++ optionals stdenv.hostPlatform.isLinux [
@@ -716,7 +716,7 @@ stdenv.mkDerivation (finalAttrs: {
       linkDLLsInfolder $out/lib/python*/lib-dynload/
     '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
     export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
   '';
@@ -758,7 +758,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals (openssl != null && !static && !enableFramework) [
       openssl.dev
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # Ensure we don't have references to build-time packages.
       # These typically end up in shebangs.
       pythonOnBuildForHost

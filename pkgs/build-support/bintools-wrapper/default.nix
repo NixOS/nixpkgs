@@ -107,7 +107,7 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform.notEquals hostPlatform) (targetPlatform.config + "-");
 
   bintoolsVersion = getVersion bintools;
   bintoolsName = removePrefix targetPrefix (getName bintools);

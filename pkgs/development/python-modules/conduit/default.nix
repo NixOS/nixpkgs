@@ -60,6 +60,6 @@ buildPythonPackage {
       ;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # Cross-compilation is broken
-    broken = stdenv.hostPlatform != stdenv.buildPlatform;
+    broken = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
   };
 }

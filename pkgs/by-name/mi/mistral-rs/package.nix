@@ -170,13 +170,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
 
-      withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
+      withMkl = lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") (
         mistral-rs.override { acceleration = "mkl"; }
       );
       withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
         mistral-rs.override { acceleration = "cuda"; }
       );
-      withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
+      withMetal = lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-darwin") (
         mistral-rs.override { acceleration = "metal"; }
       );
     };

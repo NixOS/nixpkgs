@@ -76,9 +76,7 @@ stdenv.mkDerivation (
 
     cmakeFlags =
       lib.optionals (lib.versionOlder release_version "14") [
-        "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${
-          lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"
-        }"
+        "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "-native"}"
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"

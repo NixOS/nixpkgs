@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  ] ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [
     c-ares
     re2
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       "-DgRPC_ABSL_PROVIDER=package"
       "-DBUILD_SHARED_LIBS=ON"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
       "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
     ]
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH to enable this. When cross compiling we need to avoid this,
   # since it can cause the grpc_cpp_plugin executable from buildPackages to
   # crash if build and host architecture are compatible (e. g. pkgsLLVM).
-  preBuild = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  preBuild = lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
+  dontStrip = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
 
   meta = with lib; {
     description = "Implementation of the rsync remote-delta algorithm";

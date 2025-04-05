@@ -715,7 +715,7 @@ in
     ];
 
     system.checks = lib.optional (
-      cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      cfg.checkConfig && pkgs.stdenv.hostPlatform.equals pkgs.stdenv.buildPlatform
     ) configFileCheck;
 
     systemd.services.postgresql = {

@@ -9,7 +9,7 @@
 }:
 
 let
-  isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCrossCompiling = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
 in
 
 stdenv.mkDerivation rec {

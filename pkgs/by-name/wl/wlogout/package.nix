@@ -16,7 +16,7 @@
   # on gobject-introspection.
   # Disable it when cross-compiling since it's an optional dependency.
   # This disables transparency support.
-  withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform),
+  withGtkLayerShell ? (stdenv.buildPlatform.equals stdenv.hostPlatform),
 }:
 
 stdenv.mkDerivation (finalAttrs: {

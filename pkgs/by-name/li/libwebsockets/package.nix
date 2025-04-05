@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       "-DDISABLE_WERROR=ON"
       "-DLWS_BUILD_HASH=no_hash"
     ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+    ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
     ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
     ++ (
       if stdenv.hostPlatform.isStatic then

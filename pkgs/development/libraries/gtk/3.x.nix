@@ -36,7 +36,7 @@
   gnome,
   gsettings-desktop-schemas,
   sassc,
-  trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform),
+  trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform.equals stdenv.hostPlatform),
   tinysparql,
   x11Support ? stdenv.hostPlatform.isLinux,
   waylandSupport ? stdenv.hostPlatform.isLinux,
@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
       done
     ''
-    + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.equals stdenv.hostPlatform) ''
       GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
     '';
 

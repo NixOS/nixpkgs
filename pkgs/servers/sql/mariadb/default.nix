@@ -59,7 +59,7 @@ let
     }:
 
     let
-      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+      isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
 
       libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 

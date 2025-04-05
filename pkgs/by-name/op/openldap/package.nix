@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       (lib.enableFeature withModules "argon2")
       (lib.enableFeature withModules "modules")
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "--with-yielding_select=yes"
       "ac_cv_func_memcmp_working=yes"
     ]

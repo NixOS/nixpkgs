@@ -339,7 +339,8 @@ let
     )
     // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
       env =
-        lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM)
+        lib.optionalAttrs
+          (stdenv.buildPlatform.notEquals stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM)
           {
             # The following warning is triggered with (at least) gcc >=
             # 12, but appears to occur only for cross compiles.

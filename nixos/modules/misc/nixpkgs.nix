@@ -73,7 +73,7 @@ let
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
-        isCross = cfg.buildPlatform != cfg.hostPlatform;
+        isCross = cfg.buildPlatform.notEquals cfg.hostPlatform;
         systemArgs =
           if isCross then
             {
@@ -226,7 +226,15 @@ in
           elaborated = lib.systems.elaborate inputBuildPlatform;
         in
         if lib.systems.equals elaborated cfg.hostPlatform then
-          cfg.hostPlatform # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
+          # Make equivalent platforms actually identical, so that `==` equality works.
+          # See https://github.com/NixOS/nixpkgs/issues/278001
+          # NOTE: `==` between platforms was deprecated 2025-02-08.
+          # Users should instead use the `canExecute`, `equals`, or `notEquals`
+          # functions included with platform attrsets or use `lib.systems.equals`.
+          # See https://github.com/NixOS/nixpkgs/pull/380005
+          # TODO: Once users have had chance to migrate, this `apply` function
+          # can be simplified to `lib.systems.elaborate`.
+          cfg.hostPlatform
         else
           elaborated;
       defaultText = lib.literalExpression ''config.nixpkgs.hostPlatform'';

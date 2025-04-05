@@ -102,7 +102,7 @@ let
     || stdenv.hostPlatform.isRiscV;
 
   target =
-    if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+    if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform.notEquals stdenv.buildPlatform) then
       (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
     else
       null;

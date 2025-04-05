@@ -16,7 +16,7 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gobject-introspection,
-  withDocs ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withDocs ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   gtk-doc,
   docbook-xsl-nons,
 }:

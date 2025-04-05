@@ -49,7 +49,7 @@
   withAom ? withHeadlessDeps, # AV1 reference encoder
   withAribb24 ? withFullDeps, # ARIB text and caption decoding
   withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1", # ARIB STD-B24 Caption Decoder/Renderer
-  withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform, # (Advanced) SubStation Alpha subtitle rendering
+  withAss ? withHeadlessDeps && stdenv.hostPlatform.equals stdenv.buildPlatform, # (Advanced) SubStation Alpha subtitle rendering
   withAvisynth ? withFullDeps, # AviSynth script files reading
   withBluray ? withHeadlessDeps, # BluRay reading
   withBs2b ? withFullDeps, # bs2b DSP library
@@ -72,7 +72,7 @@
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform
+      with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform.equals buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
@@ -141,7 +141,7 @@
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
   withVorbis ? withHeadlessDeps, # Vorbis de/encoding, native encoder exists
   withVpl ? false, # Hardware acceleration via intel libvpl
-  withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform, # VP8 & VP9 de/encoding
+  withVpx ? withHeadlessDeps && stdenv.buildPlatform.equals stdenv.hostPlatform, # VP8 & VP9 de/encoding
   withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin,
   withVvenc ? withFullDeps && lib.versionAtLeast version "7.1", # H.266/VVC encoding
   withWebp ? withHeadlessDeps, # WebP encoder
@@ -726,7 +726,7 @@ stdenv.mkDerivation (
         (enableFeature withExtraWarnings "extra-warnings")
         (enableFeature withStripping "stripping")
       ]
-      ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
         "--cross-prefix=${stdenv.cc.targetPrefix}"
         "--enable-cross-compile"
         "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
@@ -748,7 +748,7 @@ stdenv.mkDerivation (
       let
         toStrip =
           map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
-          ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
+          ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) buildPackages.stdenv.cc
           ++ lib.optional withMetal xcode;
       in
       "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
