@@ -23,18 +23,20 @@
   pytestCheckHook,
   syrupy,
   time-machine,
+  tree-sitter-python,
+  tree-sitter-markdown,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "2.1.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
+    hash = "sha256-bubOKqLF8DWlMNaqnmDNtUCuAb7K14ZG781htrEnDc0=";
   };
 
   build-system = [ poetry-core ];
@@ -63,6 +65,8 @@ buildPythonPackage rec {
     syrupy
     time-machine
     tree-sitter
+    tree-sitter-python
+    tree-sitter-markdown
   ];
 
   disabledTestPaths = [
@@ -75,16 +79,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion issues
+    # Depends on textual-dev which we can't add as it depends on this package
     "test_textual_env_var"
-
-    # Requirements for tests are not quite ready
-    "test_register_language"
-
-    # Requires python bindings for tree-sitter languages
-    # https://github.com/Textualize/textual/issues/5449
-    "test_setting_unknown_language"
-    "test_update_highlight_query"
   ];
 
   # Some tests in groups require state from previous tests
