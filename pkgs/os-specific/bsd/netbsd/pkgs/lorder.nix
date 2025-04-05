@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -18,4 +19,6 @@ mkDerivation {
     mandoc
     groff
   ];
+
+  meta.platforms = lib.platforms.unix;
 }

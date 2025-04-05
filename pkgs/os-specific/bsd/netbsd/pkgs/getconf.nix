@@ -1,3 +1,8 @@
-{ mkDerivation }:
-
-mkDerivation { path = "usr.bin/getconf"; }
+{
+  lib,
+  mkDerivation,
+}:
+mkDerivation {
+  path = "usr.bin/getconf";
+  meta.platforms = lib.platforms.unix;
+}
