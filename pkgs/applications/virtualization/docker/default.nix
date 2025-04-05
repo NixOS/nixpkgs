@@ -32,6 +32,7 @@ rec {
       runc,
       tini,
       libtool,
+      bash,
       sqlite,
       iproute2,
       docker-buildx,
@@ -81,6 +82,10 @@ rec {
           rev = runcRev;
           hash = runcHash;
         };
+
+        preBuild = ''
+          substituteInPlace Makefile --replace-warn "/bin/bash" "${lib.getExe bash}"
+        '';
 
         # docker/runc already include these patches / are not applicable
         patches = [ ];
@@ -433,15 +438,15 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.3.1";
+    version = "27.5.1";
     cliRev = "v${version}";
-    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
+    cliHash = "sha256-7laxRfssh2aGfJeZI0PsJ/MCiy2npigSmCa1SUlWY4s=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
-    runcRev = "v1.1.14";
-    runcHash = "sha256-7PYbSZqCQLTaeFppuNz5mxDlwEyLkA5zpdMhWy1tWmc=";
-    containerdRev = "v1.7.22";
-    containerdHash = "sha256-8IHBKai4PvvTuHPDTgx9wFEBzz4MM7Mwo8Q/bzFRzfk=";
+    mobyHash = "sha256-q+VCJZ93jvPJQE0xn89prH/6spsarVY3VUEmgwyMxU4=";
+    runcRev = "v1.2.4";
+    runcHash = "sha256-LdYCMxdqDP7rKo6Ek/B1DE6QvUFrltbSJVggkVkXQZo=";
+    containerdRev = "v1.7.25";
+    containerdHash = "sha256-T0F5bwxSCqa4Czs/W01NaAlJJFvgrzkBC1y/r+muivA=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
