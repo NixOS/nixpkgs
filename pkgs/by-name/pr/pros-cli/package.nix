@@ -11,7 +11,7 @@ in
 python3Packages.buildPythonApplication {
   inherit pname version;
   doCheck = false;
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     setuptools
     wheel
     jsonpickle
