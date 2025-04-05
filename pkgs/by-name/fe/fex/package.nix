@@ -5,20 +5,19 @@
   cmake,
   ninja,
   pkg-config,
-  gitMinimal,
   qt5,
   python3,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
   pname = "fex";
-  version = "2503";
+  version = "2504";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${version}";
-    hash = "sha256-NnYod6DeRv3/6h8SGkGYtgC+RRuIafxoQm3j1Sqk0mU=";
+    hash = "sha256-tqUJBHYSRlEUaLI4WItzotIHGMUNbdjA7o9NjBYZmHw=";
     fetchSubmodules = true;
   };
 
@@ -26,7 +25,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     cmake
     ninja
     pkg-config
-    gitMinimal
     qt5.wrapQtAppsHook
     llvmPackages.bintools
 
@@ -50,6 +48,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     "-DUSE_LINKER=lld"
     "-DENABLE_LTO=True"
     "-DENABLE_ASSERTIONS=False"
+    (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
