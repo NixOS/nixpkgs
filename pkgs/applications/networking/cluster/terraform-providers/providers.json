@@ -885,13 +885,13 @@
     "vendorHash": "sha256-YmZvHzrEZVvXI8CIcjX40s+MHTThPeXNQ05cnqkNbbE="
   },
   "ns1": {
-    "hash": "sha256-llJmz8QWwoApmhWEXlQMlVvteXSlkZhXh7tCWuMMbrc=",
+    "hash": "sha256-KvslOHWMEYFFrVCF2AOH3x2ENtoZeZQ+WC3ZvXiEcEc=",
     "homepage": "https://registry.terraform.io/providers/ns1-terraform/ns1",
     "owner": "ns1-terraform",
     "repo": "terraform-provider-ns1",
-    "rev": "v2.5.3",
+    "rev": "v2.6.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jZAwCXozHYReks6ZGjqkvIitWeg19AVGm3R9r20XsMM="
+    "vendorHash": "sha256-1qFfXwlLRIAKUswrTeLtWVsZmOE/LfXrfnW8MgM8JaU="
   },
   "null": {
     "hash": "sha256-zvzBWnxWVXNOebnlgaP8lzwk6DMwwkGxx4i1QKCLSz0=",
