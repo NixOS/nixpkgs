@@ -20,12 +20,15 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-BQbf/2lWLYnrSjwWjDo6QceFyR+J/vhDcVgCaytGfl0=";
+
   makeCacheWritable = true;
   dontNpmBuild = true;
   npmPackFlags = [ "--ignore-scripts" ];
   NODE_OPTIONS = "--openssl-legacy-provider";
+
   doInstallCheck = true;
-  nativeInstallCheck = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
