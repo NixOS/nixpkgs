@@ -243,7 +243,7 @@ in
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "xz";
   };
-  bind = handleTest ./bind.nix { };
+  bind = runTest ./bind.nix;
   bird = handleTest ./bird.nix { };
   birdwatcher = handleTest ./birdwatcher.nix { };
   bitbox-bridge = runTest ./bitbox-bridge.nix;
@@ -294,7 +294,7 @@ in
   ] ./ceph-single-node-bluestore-dmcrypt.nix { };
   certmgr = handleTest ./certmgr.nix { };
   cfssl = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix { };
-  cgit = handleTest ./cgit.nix { };
+  cgit = runTest ./cgit.nix;
   charliecloud = handleTest ./charliecloud.nix { };
   chromadb = runTest ./chromadb.nix;
   chromium = (handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./chromium.nix { }).stable or { };
@@ -584,7 +584,7 @@ in
   herbstluftwm = handleTest ./herbstluftwm.nix { };
   homebox = handleTest ./homebox.nix { };
   homer = handleTest ./homer { };
-  homepage-dashboard = handleTest ./homepage-dashboard.nix { };
+  homepage-dashboard = runTest ./homepage-dashboard.nix;
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests { });
   invidious = handleTest ./invidious.nix { };
@@ -795,7 +795,7 @@ in
       defaults.services.mongodb.package = config.node.pkgs.mongodb-ce;
     }
   );
-  moodle = handleTest ./moodle.nix { };
+  moodle = runTest ./moodle.nix;
   moonraker = handleTest ./moonraker.nix { };
   mopidy = handleTest ./mopidy.nix { };
   morph-browser = runTest ./morph-browser.nix;
