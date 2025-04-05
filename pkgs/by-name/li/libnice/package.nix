@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -12,13 +11,13 @@
   docbook_xsl,
   docbook_xml_dtd_412,
   glib,
-  gupnp-igd,
+  gupnp-igd_1_6,
   gst_all_1,
   gnutls,
   graphviz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnice";
   version = "0.1.22";
 
@@ -29,18 +28,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
+    url = "https://libnice.freedesktop.org/releases/libnice-${finalAttrs.version}.tar.gz";
     hash = "sha256-pfckzwnq5QxBp1FxQdidpKYeyerKMtpKAHP67VQXrX4=";
   };
 
   patches = [
-    # Fix generating data
-    # Note: upstream is not willing to merge our fix
-    # https://gitlab.freedesktop.org/libnice/libnice/merge_requests/35#note_98871
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libnice/libnice/commit/d470c4bf4f2449f7842df26ca1ce1efb63452bc6.patch";
-      sha256 = "0z74vizf92flfw1m83p7yz824vfykmnm0xbnk748bnnyq186i6mg";
-    })
+    # Bumps the gupnp_igd_dep version requested to 1.6
+    # https://gitlab.freedesktop.org/libnice/libnice/-/merge_requests/255
+    ./gupnp-igd-bump.patch
   ];
 
   nativeBuildInputs = [
@@ -61,7 +56,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gnutls
-    gupnp-igd
+    gupnp-igd_1_6
   ];
 
   propagatedBuildInputs = [
@@ -78,7 +73,7 @@ stdenv.mkDerivation rec {
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GLib ICE implementation";
     longDescription = ''
       Libnice is an implementation of the IETF's Interactice Connectivity
@@ -88,10 +83,10 @@ stdenv.mkDerivation rec {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       lgpl21
       mpl11
     ];
   };
-}
+})

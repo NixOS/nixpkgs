@@ -5,19 +5,20 @@
   pkg-config,
   meson,
   ninja,
+  cmake,
   gettext,
   gobject-introspection,
   gtk-doc,
   docbook_xsl,
   docbook_xml_dtd_412,
   glib,
-  gupnp,
+  gupnp_1_6,
   gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp-igd";
-  version = "1.2.0";
+  version = "1.6.0";
 
   outputs = [
     "out"
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp-igd/${lib.versions.majorMinor finalAttrs.version}/gupnp-igd-${finalAttrs.version}.tar.xz";
-    hash = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
+    hash = "sha256-QJmXgzmrIhJtSWjyozK20JT8RMeHl4YHgfH8LxF3G3Q=";
   };
 
   depsBuildBuild = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     meson
     ninja
+    cmake
     gettext
     gobject-introspection
     gtk-doc
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     glib
-    gupnp
+    gupnp_1_6
   ];
 
   mesonFlags = [
@@ -62,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript {
       packageName = "gupnp-igd";
       versionPolicy = "odd-unstable";
-      freeze = true;
     };
   };
 
