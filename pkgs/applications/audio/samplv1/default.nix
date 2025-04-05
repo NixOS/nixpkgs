@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "samplv1";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/samplv1/samplv1-${version}.tar.gz";
-    hash = "sha256-ZmRsiFDqJsG28FiFR/RbeXkeeLn2HBfImKQM5PaRF78=";
+    hash = "sha256-DcMtNGiMJ9YfTKZLns+3mBKHbkG3Ven3IJAU/qSDyh0=";
   };
 
   nativeBuildInputs = [
