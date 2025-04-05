@@ -37,10 +37,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-Lw3NJaFmJFt0g3N+jgmGLG5AMeMB4Tqk3d4mPPWvC/c=";
   };
   meta =
-    let
-      downloadPage = "https://github.com/purduesigbots/pros-cli/releases/tag/3.5.5";
-    in
-    with lib;
     {
       homepage = "https://pros.cs.purdue.edu/v5/index.html";
       inherit downloadPage;
