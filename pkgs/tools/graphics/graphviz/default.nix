@@ -13,6 +13,7 @@
   libjpeg,
   libpng,
   libtool,
+  makeWrapper,
   pango,
   bash,
   bison,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
     pkg-config
     python3
     bison
@@ -61,14 +63,7 @@ stdenv.mkDerivation rec {
       pango
       bash
     ]
-    ++ optionals withXorg (
-      with xorg;
-      [
-        libXrender
-        libXaw
-        libXpm
-      ]
-    )
+    ++ optionals withXorg (with xorg; [ libXrender ])
     ++ optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
@@ -93,9 +88,11 @@ stdenv.mkDerivation rec {
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
-      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
-      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
-      --replace /usr/bin/vimdot $out/bin/vimdot \
+      --replace-warn '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace-warn '"/usr/bin/vim"' '"$(command -v vim)"' \
+      --replace-warn /usr/bin/vimdot $out/bin/vimdot
+
+    wrapProgram $out/bin/vimdot --prefix PATH : "$out/bin"
   '';
 
   passthru.tests = {

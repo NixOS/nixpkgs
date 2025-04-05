@@ -16,6 +16,7 @@
   freetype,
   libjpeg,
   libpng,
+  libX11,
   harfbuzz,
   mcpp,
   wiiuse,
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
       curl
       libjpeg
       libpng
+      libX11
       harfbuzz
       mcpp
       wiiuse

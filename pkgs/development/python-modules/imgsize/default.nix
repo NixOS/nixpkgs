@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "imgsize";
-  version = "3.0.1";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     owner = "ojii";
     repo = "imgsize";
     tag = version;
-    sha256 = "sha256-i0YCt5jTnDAxnaxKSTloWrQn27yLAvZnghZlCgwZh0Q=";
+    sha256 = "sha256-jpEgAqMcQHR5S6EH9mNxrG0+bCyxYFs2P4NxaZxxk/E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-V/24lqMVTCw+9YMZQ7ABXnA0tzX8IQNxHtmNkHRbXbU=";
+    hash = "sha256-VgC0tp/X3T9K2ssdoUuBxsWZfe16rMRr2qXfwWsBXHM=";
   };
 
   nativeBuildInputs = [

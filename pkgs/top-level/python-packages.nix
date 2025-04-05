@@ -1894,6 +1894,8 @@ self: super: with self; {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+  blockbuster = callPackage ../development/python-modules/blockbuster { };
+
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -5150,6 +5152,8 @@ self: super: with self; {
 
   foolscap = callPackage ../development/python-modules/foolscap { };
 
+  forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
+
   fordpass = callPackage ../development/python-modules/fordpass { };
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
@@ -6053,6 +6057,8 @@ self: super: with self; {
   ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs { };
+
+  ha-silabs-firmware-client = callPackage ../development/python-modules/ha-silabs-firmware-client { };
 
   habanero = callPackage ../development/python-modules/habanero { };
 
@@ -7713,6 +7719,8 @@ self: super: with self; {
       python3 = python;
     }
   );
+
+  libpass = callPackage ../development/python-modules/libpass { };
 
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
@@ -10956,13 +10964,14 @@ self: super: with self; {
     inherit (pkgs)
       freetype
       lcms2
+      libavif
       libimagequant
       libjpeg
       libraqm
       libtiff
       libwebp
       openjpeg
-      zlib
+      zlib-ng
       ;
     inherit (pkgs.xorg) libxcb;
   };
@@ -13433,6 +13442,8 @@ self: super: with self; {
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
 
+  pytest-archon = callPackage ../development/python-modules/pytest-archon { };
+
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
@@ -13638,6 +13649,8 @@ self: super: with self; {
   pytest-responses = callPackage ../development/python-modules/pytest-responses { };
 
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
+
+  pytest-run-parallel = callPackage ../development/python-modules/pytest-run-parallel { };
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
 
@@ -17435,6 +17448,24 @@ self: super: with self; {
   tree-sitter-embedded-template =
     callPackage ../development/python-modules/tree-sitter-embedded-template
       { };
+
+  tree-sitter-grammars = lib.recurseIntoAttrs (
+    lib.mapAttrs
+      (
+        name: grammarDrv:
+        callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
+      )
+      (
+        # Filtering grammars not compatible with current py-tree-sitter version
+        lib.filterAttrs (
+          name: value:
+          !(builtins.elem name [
+            "tree-sitter-sql"
+            "tree-sitter-templ"
+          ])
+        ) pkgs.tree-sitter.builtGrammars
+      )
+  );
 
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 

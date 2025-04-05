@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "flask-pymongo";
-  version = "2.3.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-PyMongo";
     inherit version;
-    hash = "sha256-Yg6wLciAil/LkPJsq2y6nWv0l7FQMq48qZ34A2bjMxQ=";
+    hash = "sha256-0iW1HCHOyi5nDmzKebXFhK0XuWJStI6E47Qj3bczBMw=";
   };
 
   nativeBuildInputs = [

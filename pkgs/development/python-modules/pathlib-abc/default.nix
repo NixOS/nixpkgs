@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pathlib-abc";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pathlib_abc";
     inherit version;
-    hash = "sha256-gROV0nk6HGdf95wyRtPWtBoPlqOhR5wulsVrClFAIic=";
+    hash = "sha256-5mq5oqnMt51os9aVOc9lRs2jSlr+U7tiKqVricW7/LM=";
   };
 
   build-system = [ hatchling ];

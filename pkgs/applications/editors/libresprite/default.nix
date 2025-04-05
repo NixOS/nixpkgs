@@ -15,6 +15,7 @@
   libpng,
   libwebp,
   libarchive,
+  libX11,
   pixman,
   tinyxml-2,
   zlib,
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       libpng
       libwebp
       libarchive
+      libX11
       pixman
       tinyxml-2
       zlib

@@ -12,6 +12,7 @@
   glew,
   libGLU,
   libGL,
+  libX11,
   boost,
   glm,
   freetype,
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     ftgl
     libpng
     libjpeg
+    libX11
     pcre
     SDL2_image
     libGLU

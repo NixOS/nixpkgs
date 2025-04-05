@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.56.1";
+  version = "1.56.2";
 
   outputs = [
     "bin"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QmvmZGDJi4N4Vz5/awsqtFD2u20ux87MM66BF48kZIA=";
+    hash = "sha256-A7ev1+1zC+9lEVXL+1MgVWuO+SsNwEq7uXhNzUBXr+c=";
   };
 
   depsBuildBuild = [

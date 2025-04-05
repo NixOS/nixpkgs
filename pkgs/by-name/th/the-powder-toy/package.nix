@@ -8,6 +8,7 @@
   jsoncpp,
   lib,
   libpng,
+  libX11,
   lua,
   luajit,
   meson,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     fftwFloat
     jsoncpp
     libpng
+    libX11
     lua
     luajit
     SDL2

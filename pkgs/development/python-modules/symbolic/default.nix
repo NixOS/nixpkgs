@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "symbolic";
-  version = "10.2.1"; # glitchtip currently only works with symbolic 10.x
+  version = "12.14.1"; # glitchtip currently only works with symbolic 10.x
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolic";
     tag = version;
-    hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
+    hash = "sha256-u3nEYvnt2P+W/0zYctikMgdkalej86eCYhfWj9LW4pU=";
     # for some reason the `py` directory in the tarball is empty, so we fetch the source via git instead
     forceFetchGit = true;
   };
@@ -31,9 +31,8 @@ buildPythonPackage rec {
       pname
       version
       src
-      postPatch
       ;
-    hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
+    hash = "sha256-X8IjmSQD32bougiUFyuk8OOGIzIQgk/TjVM5bgUey5M=";
   };
 
   nativeBuildInputs = [
@@ -45,10 +44,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ cffi ];
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   preBuild = ''
     cd py

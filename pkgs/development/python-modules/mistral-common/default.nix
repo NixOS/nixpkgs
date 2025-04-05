@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.2";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mistral_common";
     inherit version;
-    hash = "sha256-nRFXsTdsSdNav8dD2+AITyyjezpavQPnQSdqG8ZshS8=";
+    hash = "sha256-CvQSSrCdFAl2HpHsYWgUdogtRvlBjuqJCNOcASIuD2s=";
   };
 
   # relax dependencies

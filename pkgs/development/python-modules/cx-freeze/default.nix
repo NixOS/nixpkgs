@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "7.2.8";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_freeze";
     inherit version;
-    hash = "sha256-Z4/lsHTBURkY7e17PL5ULqV7TuKSZFzazrnGkc4TKT4=";
+    hash = "sha256-gOH4e7FS7Q+X98ZDXgI31Eqt6Zl5knxGJ3cTIqJdVQ0=";
   };
 
   postPatch = ''

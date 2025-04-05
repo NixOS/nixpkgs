@@ -1881,7 +1881,7 @@ rec {
     : The type of the feature to be set, as described in
       https://cmake.org/cmake/help/latest/command/set.html
       the possible values (case insensitive) are:
-      BOOL FILEPATH PATH STRING INTERNAL
+      BOOL FILEPATH PATH STRING INTERNAL LIST
 
     `value`
     : The desired value
@@ -1911,6 +1911,7 @@ rec {
         "PATH"
         "STRING"
         "INTERNAL"
+        "LIST"
       ];
     in
     type: feature: value:

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "bindep";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wGtR5tC6OWWq2PPCXwpXS+D4AboHyxp4SV2olUZ952A=";
+    hash = "sha256-33VkdT5YMDO7ETM4FQ13JUAUW00YmkgB7FaiW17eUFA=";
   };
 
   env.PBR_VERSION = version;

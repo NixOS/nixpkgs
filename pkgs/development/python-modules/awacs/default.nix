@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "awacs";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sNo1auVjdOqHLGzbAJRrsi6c2BfD861rAIAZ46RdgEA=";
+    hash = "sha256-mdU88KH1bxsJROG70tS2FYvRSrlHlBK9GKxR4gg1OFw=";
   };
 
   propagatedBuildInputs = lib.lists.optionals (pythonOlder "3.8") [ typing-extensions ];

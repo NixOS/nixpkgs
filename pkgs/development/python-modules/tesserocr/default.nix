@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.7.1";
+  version = "2.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N0TFyLur8YFyhJx3Mb4A3C5eRPjFVtN8hQ54h5SuCvQ=";
+    hash = "sha256-vlGNGxtf9UwRqtoeD9EpQlCepwWB4KizmipHOgstvTY=";
   };
 
   # https://github.com/sirfz/tesserocr/issues/314

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.4.304.0";
+  version = "1.4.309.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-cpWvGCXS6VaS0YehnGYTaXydL6S4FU9HLPh0JZ+jfd8=";
+    hash = "sha256-ctSMpvw9Wx/IiF0jOGkLmNUAQk855Hf9RwTWYz7mk+k=";
   };
 
   nativeBuildInputs = [

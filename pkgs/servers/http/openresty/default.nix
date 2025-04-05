@@ -34,7 +34,10 @@ callPackage ../nginx/generic.nix args rec {
         --replace "b/" "b/bundle/nginx-${nginxVersion}/"
     '';
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    libpq.pg_config
+    perl
+  ];
 
   buildInputs = [ libpq ];
 

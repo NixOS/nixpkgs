@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mindsdb-evaluator";
-  version = "0.0.15";
+  version = "0.0.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mindsdb_evaluator";
     inherit version;
-    hash = "sha256-/3xRPrKzYAdSlY+sQxwCUzKhf3NJBSyWG2Q0ZKb6v3U=";
+    hash = "sha256-92XGu6ob1AfOoqcB/hqDf+lSDAUjZ5SPju5FkpcbOHA=";
   };
 
   build-system = [ poetry-core ];

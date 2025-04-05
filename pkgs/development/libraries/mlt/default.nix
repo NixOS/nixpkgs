@@ -14,6 +14,7 @@
   libsamplerate,
   libvorbis,
   libxml2,
+  libX11,
   makeWrapper,
   movit,
   opencv4,
@@ -109,9 +110,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals enableSDL1 [
       SDL
+      libX11
     ]
     ++ lib.optionals enableSDL2 [
       SDL2
+      libX11
     ];
 
   outputs = [
