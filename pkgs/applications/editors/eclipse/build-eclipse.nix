@@ -30,6 +30,7 @@
 
 stdenv.mkDerivation rec {
   inherit name src;
+  version = productVersion;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
