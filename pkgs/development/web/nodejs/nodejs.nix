@@ -442,9 +442,18 @@ let
         ];
 
       postInstall =
+        let
+          # nodejs_18 does not have node_js2c, and we don't want to rebuild the other ones
+          # FIXME: fix this cleanly in staging
+          tools =
+            if majorVersion == "18" then
+              "{bytecode_builtins_list_generator,mksnapshot,torque,gen-regexp-special-case}"
+            else
+              "{bytecode_builtins_list_generator,mksnapshot,torque,node_js2c,gen-regexp-special-case}";
+        in
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
           mkdir -p $dev/bin
-          cp out/Release/{bytecode_builtins_list_generator,mksnapshot,torque,node_js2c,gen-regexp-special-case} $dev/bin
+          cp out/Release/${tools} $dev/bin
         ''
         + ''
 
