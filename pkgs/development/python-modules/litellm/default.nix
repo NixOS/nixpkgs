@@ -17,6 +17,7 @@
   importlib-metadata,
   jinja2,
   jsonschema,
+  mcp,
   openai,
   orjson,
   poetry-core,
@@ -40,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.63.11";
+  version = "1.65.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}-stable";
-    hash = "sha256-j2RfuVffmWoeAAVcT579S9pU06haKEYYa7FcpMzu9uA=";
+    hash = "sha256-q6FDgSwU3G41bVvdofsTBVG90xoqi+NP6zUg9geNz9I=";
   };
 
   build-system = [ poetry-core ];
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     importlib-metadata
     jinja2
     jsonschema
+    mcp
     openai
     pydantic
     python-dotenv
