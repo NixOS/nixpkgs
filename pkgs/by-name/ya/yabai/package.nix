@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.13";
+  version = "7.1.14";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -66,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-1/fPBLbC6wcgQAX/soCCVeIUXXm124RnxTJJc/7ayzo=";
+        hash = "sha256-cDONHrNPBTzEkVqxN1cHDqVumfyfcHrTYGZxn4s/mEA=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-6yCMd7+RBqRj3OjnAwm3Ex4CVKVFPWyWdeMqXFaHZlM=";
+        hash = "sha256-YbEx1CzuvSFYFD3HgiZrrAd1x9cOQF6fGdgsOlkmUGU=";
       };
     };
 
