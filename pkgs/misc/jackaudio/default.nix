@@ -7,8 +7,6 @@
   python3Packages,
   makeWrapper,
   libsamplerate,
-  libsndfile,
-  readline,
   celt,
   wafHook,
   # Darwin Dependencies
@@ -70,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       libsamplerate
-      libsndfile
-      readline
       celt
       optDbus
       optPythonDBus
