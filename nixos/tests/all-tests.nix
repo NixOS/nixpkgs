@@ -274,7 +274,7 @@ in
   cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
   cage = handleTest ./cage.nix { };
   cagebreak = handleTest ./cagebreak.nix { };
-  calibre-web = handleTest ./calibre-web.nix { };
+  calibre-web = runTest ./calibre-web.nix;
   calibre-server = handleTest ./calibre-server.nix { };
   canaille = handleTest ./canaille.nix { };
   castopod = handleTest ./castopod.nix { };
