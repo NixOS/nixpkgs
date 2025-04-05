@@ -2,6 +2,15 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-anubis": [
+    "index.html#module-services-anubis"
+  ],
+  "module-services-anubis-configuration": [
+    "index.html#module-services-anubis-configuration"
+  ],
+  "module-services-anubis-quickstart": [
+    "index.html#module-services-anubis-quickstart"
+  ],
   "module-services-crab-hole": [
     "index.html#module-services-crab-hole"
   ],
