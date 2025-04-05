@@ -82,7 +82,10 @@ buildGoModule {
     description = "Shared library for Anytype clients";
     homepage = "https://anytype.io/";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ autrimpo ];
+    maintainers = with lib.maintainers; [
+      autrimpo
+      adda
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

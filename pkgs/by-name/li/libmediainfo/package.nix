@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libzen,
+  zlib,
 
-# Whether to enable resolving URLs via libcurl
-, curlSupport ? true, curl
+  # Whether to enable resolving URLs via libcurl
+  curlSupport ? true,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +21,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-NfH9q4EjnKNVxt41ioT73gR3/tjrNQ5d/valmBRcUgc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ zlib ] ++ lib.optionals curlSupport [ curl ];
   propagatedBuildInputs = [ libzen ];
 
@@ -24,11 +35,13 @@ stdenv.mkDerivation rec {
       --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
   '';
 
-  configureFlags = [
-    "--enable-shared"
-  ] ++ lib.optionals curlSupport [
-    "--with-libcurl"
-  ];
+  configureFlags =
+    [
+      "--enable-shared"
+    ]
+    ++ lib.optionals curlSupport [
+      "--with-libcurl"
+    ];
 
   enableParallelBuilding = true;
 

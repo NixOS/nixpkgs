@@ -13,7 +13,7 @@ let
 
   user = cfg.user;
   group = cfg.group;
-  php = lib.getExe pkgs.php82;
+  php = lib.getExe cfg.phpPackage;
 
   # shell script for local administration
   artisan = pkgs.writeScriptBin "agorakit" ''
@@ -34,6 +34,8 @@ in
 {
   options.services.agorakit = {
     enable = mkEnableOption "agorakit";
+
+    phpPackage = mkPackageOption pkgs "php82" { };
 
     user = mkOption {
       default = "agorakit";
@@ -340,6 +342,7 @@ in
 
     services.phpfpm.pools.agorakit = {
       inherit user group;
+      phpPackage = cfg.phpPackage;
       phpOptions = ''
         log_errors = on
         post_max_size = ${cfg.maxUploadSize}

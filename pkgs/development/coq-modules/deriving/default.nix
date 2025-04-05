@@ -48,7 +48,10 @@ mkCoqDerivation {
   release."0.1.1".sha256 = "sha256-Gu8aInLxTXfAFE0/gWRYI046Dx3Gv1j1+gx92v/UnPI=";
   release."0.1.0".sha256 = "sha256:11crnjm8hyis1qllkks3d7r07s1rfzwvyvpijya3s6iqfh8c7xwh";
 
-  propagatedBuildInputs = [ ssreflect stdlib ];
+  propagatedBuildInputs = [
+    ssreflect
+    stdlib
+  ];
 
   mlPlugin = true;
 

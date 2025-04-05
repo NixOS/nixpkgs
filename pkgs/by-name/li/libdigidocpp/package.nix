@@ -9,9 +9,7 @@
   pcsclite,
   opensc,
   openssl,
-  xercesc,
   pkg-config,
-  xsd,
   zlib,
   xmlsec,
   xxd,
@@ -38,8 +36,6 @@ stdenv.mkDerivation rec {
     pcsclite
     opensc
     openssl
-    xercesc
-    xsd
     zlib
     xmlsec
   ];

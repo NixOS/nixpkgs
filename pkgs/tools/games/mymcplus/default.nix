@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromSourcehut,
-  pythonPackages,
+  python3Packages,
   wrapGAppsHook3,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mymcplus";
   version = "3.0.5";
 
@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     pyopengl
     wxpython
   ];

@@ -8,20 +8,20 @@
 
 buildGoModule rec {
   pname = "arduino-create-agent";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-create-agent";
     rev = "${version}";
-    hash = "sha256-TWyjF/2F3ub+sGFOTWc3kv2w6SRrvDaBSztOki32oxc=";
+    hash = "sha256-L77LDMe6KTwQ2qAx3OT1O27h4DhAjZzcs8WL/N7E8hI=";
   };
 
   patches = [
     ./updater.patch
   ];
 
-  vendorHash = "sha256-SV0Cw0MrAufBleloG1m4qNPme03cBj0UgQGL7jY1wY4=";
+  vendorHash = "sha256-Nrw7l3nV1sMVWs1HECQJYohKiD0gPvWQOLD7eohEd1A=";
 
   ldflags = [
     "-X github.com/arduino/arduino-create-agent/version.versionString=${version}"

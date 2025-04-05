@@ -7,7 +7,6 @@
   google-api-core,
   httplib2,
   uritemplate,
-  oauth2client,
   setuptools,
   pythonOlder,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     google-api-core
     httplib2
     uritemplate
-    oauth2client
   ];
 
   # No tests included in archive
