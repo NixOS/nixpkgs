@@ -1,39 +1,40 @@
 {
   lib,
-  buildPerlPackage,
+  perlPackages,
   fetchFromGitHub,
   makeWrapper,
   openssh,
-  GitRepository,
-  URI,
-  XMLParser,
 }:
 
-buildPerlPackage {
+perlPackages.buildPerlPackage {
   pname = "ham-unstable";
-  version = "2023-10-06";
+  version = "2025-02-25";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";
     repo = "ham";
-    rev = "90d104ce481ee8f9b770be4b37d97f34eef5f82f";
-    hash = "sha256-DeHH7k9K7CmQW6eOyf8TCV/HNYS30oFnI1b8ztBDk/o=";
+    rev = "81b6f05fd91865c7d42b94a683388504489356dc";
+    hash = "sha256-a1JaUD/jrF7Yf+vyUoKQFjojxenmsCVw3Uo8u7RjPiQ=";
   };
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [
-    openssh
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+  buildInputs = with perlPackages; [
     GitRepository
     URI
     XMLParser
   ];
+  propagatedBuildInputs = [
+    openssh
+  ];
 
   preConfigure = ''
-    patchShebangs .
-    touch Makefile.PL
     rm -f Makefile
+    touch Makefile.PL
+    patchShebangs .
   '';
 
   installPhase = ''
