@@ -28,18 +28,6 @@ let
     pkg-config
     ;
 
-  baseVersion = version;
-
-  versionSuffix = lib.optionalString (!officialRelease) "pre";
-
-  fineVersionSuffix =
-    lib.optionalString (!officialRelease)
-      "pre${
-        builtins.substring 0 8 (src.lastModifiedDate or src.lastModified or "19700101")
-      }_${src.shortRev or "dirty"}";
-
-  fineVersion = baseVersion + fineVersionSuffix;
-
   root = ../.;
 
   # Indirection for Nixpkgs to override when package.nix files are vendored
@@ -217,8 +205,7 @@ in
 
 # This becomes the pkgs.nixComponents attribute set
 {
-  version = baseVersion + versionSuffix;
-  inherit versionSuffix;
+  inherit version;
   inherit maintainers;
 
   inherit filesetToSource;
@@ -365,15 +352,13 @@ in
 
   nix-cmd = callPackage ../src/libcmd/package.nix { };
 
-  nix-cli = callPackage ../src/nix/package.nix { version = fineVersion; };
+  nix-cli = callPackage ../src/nix/package.nix { };
 
-  nix-functional-tests = callPackage ../tests/functional/package.nix {
-    version = fineVersion;
-  };
+  nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
-  nix-manual = callPackage ../doc/manual/package.nix { version = fineVersion; };
-  nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { version = fineVersion; };
-  nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { version = fineVersion; };
+  nix-manual = callPackage ../doc/manual/package.nix { };
+  nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
+  nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
   nix-perl-bindings = callPackage ../src/perl/package.nix { };
 
