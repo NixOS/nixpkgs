@@ -288,6 +288,15 @@ let
           # those paths. This avoids a lot of circular dependency problems with different outputs,
           # and allows splitting them cleanly.
           CFLAGS = "-fdata-sections -ffunction-sections -flto";
+
+          # This flag was introduced upstream in:
+          # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+          # It causes errors when linking against libpq.a in pkgsStatic:
+          #   undefined reference to `pg_encoding_to_char'
+          # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+          # to have initdb load a libpq.so from a different major version and how to avoid that.
+          # This doesn't apply to us with Nix.
+          NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
         }
         // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
         // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
