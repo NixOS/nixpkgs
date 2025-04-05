@@ -33213,16 +33213,16 @@
   "repo": "sarg/emms-spotify",
   "unstable": {
    "version": [
-    20250322,
-    838
+    20250405,
+    915
    ],
    "deps": [
     "compat",
     "emms",
     "s"
    ],
-   "commit": "e553a2157fb2ebf4e0b00594067eea4c680a1940",
-   "sha256": "0avl3qz8l81mn6wnrvhlky7v50lbrb8s8ip9fsf6cdnf82l172n0"
+   "commit": "dec0d34736da7ff538117033b3758edde3b8e546",
+   "sha256": "1fhffnspnlw75523y5xma5i3wsyjd3h10p0z2h207cdlz1d1bwvv"
   },
   "stable": {
    "version": [
