@@ -3354,6 +3354,11 @@
     githubId = 33910565;
     name = "Abdallah Gamal";
   };
+  bohreromir = {
+    github = "bohreromir";
+    githubId = 40412303;
+    name = "bohreromir";
+  };
   boj = {
     email = "brian@uncannyworks.com";
     github = "boj";
