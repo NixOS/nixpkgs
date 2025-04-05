@@ -6,6 +6,8 @@
   dist-meta,
   dom-toml,
   domdf-python-tools,
+  hatchling,
+  hatch-requirements-txt,
   packaging,
   typing-extensions,
 }:
@@ -27,12 +29,9 @@ buildPythonPackage rec {
     domdf-python-tools
     packaging
     typing-extensions
+    hatchling
+    hatch-requirements-txt
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
-  '';
 
   meta = {
     description = "Utilities for handling packages.";
