@@ -25,6 +25,7 @@ let
     "ghc8107Binary"
     "ghc924Binary"
     "ghc963Binary"
+    "ghc984Binary"
     # ghcjs
     "ghcjs"
     "ghcjs810"
@@ -95,6 +96,10 @@ in
       };
 
       ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
+        llvmPackages = pkgs.llvmPackages_15;
+      };
+
+      ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix {
         llvmPackages = pkgs.llvmPackages_15;
       };
 
@@ -288,8 +293,10 @@ in
       ghc96 = compiler.ghc967;
       ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -306,8 +313,10 @@ in
       };
       ghc982 = callPackage ../development/compilers/ghc/9.8.2.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -324,8 +333,10 @@ in
       };
       ghc983 = callPackage ../development/compilers/ghc/9.8.3.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -342,8 +353,10 @@ in
       };
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
         bootPkgs =
-          # For GHC 9.6 no armv7l bindists are available.
-          if stdenv.buildPlatform.isAarch32 then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isAarch32 then
+            # For GHC 9.6 no armv7l bindists are available.
             bb.packages.ghc963
           else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc963
@@ -414,8 +427,13 @@ in
       ghc912 = compiler.ghc9122;
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs =
-          # No suitable bindist packaged yet
-          bb.packages.ghc9101;
+          # No armv7l bindists are available.
+          if stdenv.buildPlatform.isAarch32 then
+            bb.packages.ghc984
+          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+            bb.packages.ghc984
+          else
+            bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -494,6 +512,12 @@ in
         buildHaskellPackages = bh.packages.ghc963Binary;
         ghc = bh.compiler.ghc963Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+      ghc984Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc984Binary;
+        ghc = bh.compiler.ghc984Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc8107 = callPackage ../development/haskell-modules {

@@ -19,14 +19,12 @@
 
 # build-tools
 , bootPkgs
-, autoconf
-, automake
+, autoreconfHook
 , coreutils
 , fetchurl
 , fetchgit
 , perl
 , python3
-, m4
 , sphinx
 , xattr
 , autoSignDarwinBinariesHook
@@ -239,7 +237,16 @@
         # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
         ++ lib.optionals (lib.elem version [ "9.8.1" "9.8.2" ]) [
           ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
-        ];
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
+          (fetchpatch {
+            name = "enable-ignore-build-platform-mismatch.patch";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4ee094d46effd06093090fcba70f0a80d2a57e6c.patch";
+            includes = [ "configure.ac" ];
+            hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
+          })
+        ]
+      ;
 
       stdenv = stdenvNoCC;
     }
@@ -564,6 +571,10 @@ stdenv.mkDerivation ({
     "fp_cv_prog_ar_supports_dash_l=no"
   ] ++ lib.optionals enableUnregisterised [
     "--enable-unregisterised"
+  ] ++ lib.optionals (stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl && lib.versionOlder version "9.12") [
+    # The bootstrap binaries for aarch64 musl were built for the wrong triple.
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13182
+    "--enable-ignore-build-platform-mismatch"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -573,9 +584,7 @@ stdenv.mkDerivation ({
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-    # autoconf and friends are necessary for hadrian to create the bindist
-    autoconf automake m4
+    autoreconfHook perl hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
     # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
     # Tool used to update GHC's settings file in postInstall
