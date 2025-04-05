@@ -1,10 +1,12 @@
 {
   lib,
+  config ? { },
   buildPackages ? {
     inherit stdenvNoCC;
   },
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
+  srcOnly ? null,
   cacert ? null,
 }:
 
@@ -199,6 +201,9 @@ assert
       curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
 stdenvNoCC.mkDerivation (
+  # This is only for access to '_finalAttrs.finalPackage', please
+  # avoid referencing '_finalAttrs' for treewide eval performance reasons
+  _finalAttrs:
   (
     if (pname != "" && version != "") then
       { inherit pname version; }
@@ -271,8 +276,53 @@ stdenvNoCC.mkDerivation (
         '';
 
     inherit meta;
-    passthru = {
-      inherit url;
-    } // passthru;
+    passthru =
+      {
+        inherit url;
+      }
+      // lib.optionalAttrs (config.allowAliases or false && srcOnly != null) {
+        /**
+          A convenience derivation for quick access to downloaded
+          archives, as unpacked by the standard `unpackPhase` in `stdenv`.
+          If `recursiveHash` is set to `true` then this output will avoid
+          unnecessary builds and reference the `fetchurl` result directly.
+
+          This output is only available if `config.allowAliases=true`, to
+          disallow use within Nixpkgs which would push duplicate data to the cache.
+
+          This can be quickly be accessed built with e.g.`nix-build . -A hello.src.unpacked`.
+          Internally it makes use of `pkgs.srcOnly`, but it will not apply any patches
+          since it is not aware of any.
+
+          # Examples
+
+          ```shell
+          $ nix-build . -A hello.src.unpacked
+          this derivation will be built:
+            /nix/store/00b1nzgl2pdnxxardrbxv3349xvhcvz3-hello-2.12.1.tar.gz-unpacked.drv
+          building '/nix/store/00b1nzgl2pdnxxardrbxv3349xvhcvz3-hello-2.12.1.tar.gz-unpacked.drv'
+          Running phase: unpackPhase
+          unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+          source root is hello-2.12.1
+          $ head -n2 result/README
+          This is the README file for the GNU Hello distribution.
+          Hello prints a friendly greeting.  It also serves as a sample GNU
+          ```
+        */
+        unpacked =
+          if recursiveHash then
+            lib.removeAttrs _finalAttrs.finalPackage [ "unpacked" ]
+          else
+            srcOnly {
+              name = "${_finalAttrs.finalPackage.name}-unpacked";
+              src = _finalAttrs.finalPackage;
+              stdenv = stdenvNoCC;
+              inherit preferLocalBuild;
+              passthru = {
+                inherit url;
+              } // passthru;
+            };
+      }
+      // passthru;
   }
 )

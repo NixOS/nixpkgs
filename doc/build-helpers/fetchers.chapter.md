@@ -399,6 +399,17 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 : The same `url` attribute passed in the argument to `fetchurl`.
 
+`unpacked` (Derivation)
+
+: A convenience derivation for quick access to downloaded archives, as unpacked by the standard [`unpackPhase`](#ssec-unpack-phase) in [`stdenv`](#chap-stdenv).
+  If `recursiveHash` is set to `true` then this output will avoid unnecessary builds and reference the `fetchurl` result directly.
+
+  This output is only available if `config.allowAliases=true`, to disallow use within Nixpkgs which would push duplicate data to the cache.
+
+  This can be quickly be accessed built with e.g.`nix-build . -A hello.src.unpacked`.
+  Internally it makes use of `pkgs.srcOnly`, but it will not apply any patches since it is not aware of any.
+
+
 ### Examples {#ssec-pkgs-fetchers-fetchurl-examples}
 
 :::{.example #ex-fetchers-fetchurl-nixpkgs-version}
