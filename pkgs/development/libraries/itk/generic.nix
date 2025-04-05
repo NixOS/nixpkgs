@@ -1,6 +1,6 @@
 {
   version,
-  rev,
+  tag,
   sourceSha256,
 }:
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
-    inherit rev;
+    inherit tag;
     sha256 = sourceSha256;
   };
 
