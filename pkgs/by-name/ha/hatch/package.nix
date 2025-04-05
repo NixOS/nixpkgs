@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       darwin.ps
     ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray =
     [

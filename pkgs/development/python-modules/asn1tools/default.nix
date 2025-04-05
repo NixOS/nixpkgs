@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "asn1tools" ];
 

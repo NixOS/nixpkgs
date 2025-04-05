@@ -49,7 +49,7 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
