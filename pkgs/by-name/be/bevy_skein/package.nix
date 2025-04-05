@@ -12,6 +12,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "bevy_skein";
   version = "0.2.0-rc.1";
+
   src = fetchFromGitHub {
     owner = "rust-adventure";
     repo = "skein";
@@ -19,12 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OjOb+bAWApHIjt4EsfM/fscB7T5chArRuUGb5RbYuTk=";
   };
 
-  cargoLock = {
-    lockFile = "${src}/Cargo.lock";
-    outputHashes = {
-      # You'll need to add output hashes for any git dependencies here
-    };
-  };
+  # Use cargoHash instead of cargoSha256 (which is deprecated in newer Nixpkgs)
+  cargoHash = "sha256-75VKMeIv9tnNMVBNrOTRJBBoXP6kabTBqIv2oUdiDUo=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
@@ -32,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [
       alsa-lib
       udev
-    ] # Add ALSA for Linux
+    ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
