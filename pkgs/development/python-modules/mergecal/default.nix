@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pythonImportChecks = [ "mergecal" ];
+  pythonImportsCheck = [ "mergecal" ];
 
   meta = {
     homepage = "https://mergecal.readthedocs.io/en/latest/";

@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, buildPackages
-, fetchurl
-, pkgsCross
-, replaceVars
-, pkg-config
-, gi-docgen
-, gobject-introspection
-, meson
-, ninja
-, vala
-, gjs
-, glib
-, lua5_1
-, python3
-, spidermonkey_128
-, gnome
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  pkgsCross,
+  replaceVars,
+  pkg-config,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  vala,
+  gjs,
+  glib,
+  lua5_1,
+  python3,
+  spidermonkey_128,
+  gnome,
 }:
 
 let
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
   pname = "libpeas";
   version = "2.0.5";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

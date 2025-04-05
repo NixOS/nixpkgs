@@ -1,5 +1,5 @@
 {
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
 }:
@@ -12,7 +12,7 @@ let
       postInstall ? "",
       mainProgram,
     }:
-    buildGo122Module rec {
+    buildGoModule rec {
       inherit pname;
       version = "6.11.0";
       shortRev = "9587df6"; # for internal version info

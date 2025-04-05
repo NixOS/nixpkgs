@@ -17,7 +17,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-  patches = [ ./cross.patch ];
+  patches = [
+    ./cross.patch
+    # Fix reproducible timestamps.
+    ./fix-source-date.patch
+  ];
+
+  # fixes non-determinism between builds on macos
+  preConfigure = lib.optional stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="$LDFLAGS -Wl,-no_uuid -Wl,-install_name,@rpath/libJudy.1.dylib"
+  '';
 
   # Disable parallel builds as manpages lack some dependencies:
   #    ../tool/jhton ext/JudyHS_funcs_3.htm | grep -v '^[   ]*$' | sed -e 's/\.C//' > man/man3/JudyHS_funcs

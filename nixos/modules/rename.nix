@@ -143,6 +143,13 @@ in
     ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "grafana-agent"
+      ]
+      "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
+    )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
-, openssl
-, cmake
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  cmake,
+  SystemConfiguration,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,18 +18,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OWVDuKlF7YLipDURC46s14WOLWWagUqWg20sH0kSIA4=";
   };
 
-  buildInputs = [
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      SystemConfiguration
+    ];
 
   nativeBuildInputs = [ cmake ];
-  makeFlags = [ "USE_ZLIB=1" "USE_OPENSSL=1" "PREFIX=$(out)" ]
+  makeFlags =
+    [
+      "USE_ZLIB=1"
+      "USE_OPENSSL=1"
+      "PREFIX=$(out)"
+    ]
     ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-    ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"
-  ;
+    ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}";
   enableParallelBuilding = true;
   meta = {
     description = "Library for real-time communications with async IO support and a complete SIP stack";

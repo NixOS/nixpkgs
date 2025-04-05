@@ -26,7 +26,7 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
-  inherit (scx-common) version src patches;
+  inherit (scx-common) version src;
 
   # scx needs specific commits of bpftool and libbpf
   # can be found in meson.build of scx src
