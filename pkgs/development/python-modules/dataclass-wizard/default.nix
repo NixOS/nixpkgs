@@ -1,56 +1,60 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   buildPythonPackage,
   pythonOlder,
   pythonAtLeast,
+  python-dotenv,
   pytimeparse,
   pyyaml,
+  setuptools,
+  tomli,
+  tomli-w,
+  typing-extensions,
   pytestCheckHook,
   pytest-mock,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
-  version = "0.22.2";
-  format = "setuptools";
+  version = "0.35.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
     rev = "v${version}";
-    hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
+    hash = "sha256-Ed9/y2blOGYfNcmCCAe4TPWssKWUS0gxvRXKMf+cJh0=";
   };
 
-  propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+  build-system = [ setuptools ];
+  dependencies = lib.optional (pythonOlder "3.13") typing-extensions;
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     timedelta = [ pytimeparse ];
+    toml = [
+      tomli
+      tomli-w
+    ];
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-    ]
-    ++ optional-dependencies.timedelta
-    ++ optional-dependencies.yaml;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ] ++ lib.concatLists (lib.attrValues optional-dependencies);
 
-  disabledTests =
-    [ ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # Any/None internal changes, tests need adjusting upstream
-      "without_type_hinting"
-      "default_dict"
-      "test_frozenset"
-      "test_set"
-      "date_times_with_custom_pattern"
-      "from_dict_handles_identical_cased_json_keys"
-    ];
+  disabledTests = [
+    # TypeError: dumps() got an unexpected keyword argument 'indent'
+    "test_catch_all" # overly broad, but we're limited by pytest's selector syntax
+    "test_toml_wizard_methods"
+  ];
 
   pythonImportsCheck = [ "dataclass_wizard" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
