@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Cargo plugin to generate list of all licenses for a crate";
+    description = "Cargo plugin for linting your dependencies";
     mainProgram = "cargo-deny";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
     changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
