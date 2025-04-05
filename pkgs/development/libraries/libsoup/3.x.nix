@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gnome,
   libsysprof-capture,
   sqlite,
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       glib
       python3
     ]

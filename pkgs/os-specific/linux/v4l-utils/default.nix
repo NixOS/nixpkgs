@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   perl,
   argp-standalone,
   libjpeg,
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     perl
   ] ++ lib.optional withQt wrapQtAppsHook;
 

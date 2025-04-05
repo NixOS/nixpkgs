@@ -11,6 +11,7 @@
   libtiff,
   libwebp,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
   zlib,
   # Boolean flags
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [

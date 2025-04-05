@@ -2,6 +2,7 @@
   brotli,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   cmakeFlags = [

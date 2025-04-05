@@ -5,6 +5,7 @@
   gnutls,
   libxslt,
   pkg-config,
+  autoPatchPcHook,
   libgcrypt,
   libtool,
   openssl,
@@ -39,7 +40,10 @@ lib.fix (
       "dev"
     ];
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+      autoPatchPcHook
+    ];
 
     buildInputs = [
       libxml2

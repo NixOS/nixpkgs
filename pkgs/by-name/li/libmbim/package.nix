@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   glib,
   python3,
   help2man,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
     ]
     ++ lib.optionals withDocs [

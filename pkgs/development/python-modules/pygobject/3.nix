@@ -4,6 +4,7 @@
   fetchurl,
   buildPythonPackage,
   pkg-config,
+  autoPatchPcHook,
   glib,
   gobject-introspection,
   pycairo,
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-jYNudbWogdRX7hYiyuSjK826KKC6ViGTrbO7tHJHIhI=";
   };
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   nativeBuildInputs = [
     pkg-config

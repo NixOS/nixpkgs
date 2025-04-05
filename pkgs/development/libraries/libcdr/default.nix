@@ -6,6 +6,7 @@
   libwpd,
   lcms,
   pkg-config,
+  autoPatchPcHook,
   librevenge,
   icu,
   boost,
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   enableParallelBuilding = true;
 

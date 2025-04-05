@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   buildPackages,
   withIntrospection ?
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
       ninja
       pkg-config
       makeWrapper
+      autoPatchPcHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection

@@ -5,6 +5,7 @@
   fetchpatch,
   makeWrapper,
   pkg-config,
+  autoPatchPcHook,
   libxslt,
   meson,
   ninja,
@@ -89,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxslt
       makeWrapper
       pkg-config
+      autoPatchPcHook
       glib
     ]
     ++ lib.optionals withIntrospection [

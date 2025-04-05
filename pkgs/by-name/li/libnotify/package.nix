@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   libxslt,
   docbook-xsl-ns,
   glib,
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       libxslt
       docbook-xsl-ns
       glib # for glib-mkenums needed during the build

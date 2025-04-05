@@ -29,6 +29,9 @@
   makeWrapper,
   xar,
 }:
+let
+  openssl' = openssl.override { patchPcFiles = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
   version = "501";
@@ -86,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       # NB we use OpenSSL instead of CommonCrypto on Darwin.
-      openssl
+      openssl'
       zlib
       libxml2
       bzip2

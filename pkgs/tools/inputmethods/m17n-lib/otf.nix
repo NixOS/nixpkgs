@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   autoreconfHook,
   xorg,
   freetype,
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
   ];
 

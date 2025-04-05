@@ -3,6 +3,7 @@
   fetchgit,
   lib,
   pkg-config,
+  autoPatchPcHook,
   autoreconfHook,
   glib,
   dbus-glib,
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
     vala
     gobject-introspection

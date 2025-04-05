@@ -23,6 +23,7 @@
   perlPackages,
   python3Packages,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   ninja,
   libpaper,
@@ -271,6 +272,7 @@ rec {
     nativeBuildInputs =
       [
         pkg-config
+        autoPatchPcHook
       ]
       ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
         with texlive.bin.core;

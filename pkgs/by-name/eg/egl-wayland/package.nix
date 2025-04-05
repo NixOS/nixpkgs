@@ -4,6 +4,7 @@
   fetchFromGitHub,
   eglexternalplatform,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   wayland-scanner,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     wayland-scanner
   ];
 

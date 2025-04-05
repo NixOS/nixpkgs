@@ -4,6 +4,7 @@
   fetchurl,
   buildPackages,
   pkg-config,
+  autoPatchPcHook,
   expat,
   gettext,
   libiconv,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     gettext
     glib
   ];

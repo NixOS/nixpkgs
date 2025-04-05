@@ -22,6 +22,7 @@
   libxslt,
   docutils,
   gi-docgen,
+  autoPatchPcHook,
   # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
   util-linuxMinimal ? null,
   buildPackages,
@@ -207,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython # for patchPythonScript
       gettext
       libxslt
+      autoPatchPcHook
     ]
     ++ lib.optionals withIntrospection [
       gi-docgen

@@ -7,6 +7,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   libxml2,
   json-glib,
   glib,
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       gettext
       glib
       (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))

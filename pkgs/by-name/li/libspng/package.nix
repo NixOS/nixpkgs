@@ -6,6 +6,7 @@
   ninja,
   meson,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   libpng,
 }:
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     ninja
     meson
     pkg-config
+    autoPatchPcHook
   ];
 
   meta = with lib; {

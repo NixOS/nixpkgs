@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   wayland,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     wayland-scanner
   ];
 

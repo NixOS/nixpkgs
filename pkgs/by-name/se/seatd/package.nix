@@ -4,6 +4,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   scdoc,
   stdenv,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [
     pkg-config
+    autoPatchPcHook
   ];
 
   nativeBuildInputs = [

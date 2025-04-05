@@ -6,6 +6,7 @@
   ninja,
   glib,
   pkg-config,
+  autoPatchPcHook,
   udev,
   libevdev,
   libgudev,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     ninja
     python3

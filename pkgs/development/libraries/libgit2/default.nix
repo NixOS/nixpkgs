@@ -5,6 +5,7 @@
   fetchpatch,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   python3,
   zlib,
   libssh2,
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

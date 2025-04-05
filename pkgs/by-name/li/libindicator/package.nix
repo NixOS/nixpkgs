@@ -4,6 +4,7 @@
   lib,
   file,
   pkg-config,
+  autoPatchPcHook,
   glib,
   gtkVersion ? "3",
   gtk2,
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     glib
   ];
 

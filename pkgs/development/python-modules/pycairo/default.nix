@@ -7,6 +7,7 @@
   buildPythonPackage,
   pytestCheckHook,
   pkg-config,
+  autoPatchPcHook,
   cairo,
   libxcrypt,
   python,
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [ cairo ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];

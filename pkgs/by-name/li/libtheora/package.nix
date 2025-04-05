@@ -7,6 +7,7 @@
   libogg,
   libvorbis,
   pkg-config,
+  autoPatchPcHook,
   testers,
   validatePkgConfig,
 }:
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
     validatePkgConfig
   ];
 

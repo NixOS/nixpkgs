@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   libtool,
   gtk2-x11,
   gtk3-x11,
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs =
     [
       libpulseaudio

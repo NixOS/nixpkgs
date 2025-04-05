@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  validatePkgConfig,
+  autoPatchPcHook,
   openssl,
   windows,
 }:
@@ -18,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NLy9GuP4OT/kKAIIDXSHtsmaBzXRuFohFM/aM+46cao=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+    autoPatchPcHook
+  ];
 
   buildInputs =
     [

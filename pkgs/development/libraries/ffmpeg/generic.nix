@@ -6,6 +6,7 @@
   removeReferencesTo,
   addDriverRunpath,
   pkg-config,
+  autoPatchPcHook,
   perl,
   texinfo,
   texinfo6,
@@ -761,6 +762,7 @@ stdenv.mkDerivation (
         addDriverRunpath
         perl
         pkg-config
+        autoPatchPcHook
         yasm
       ]
       # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.

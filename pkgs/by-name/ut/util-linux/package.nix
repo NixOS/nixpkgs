@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
@@ -135,6 +136,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       installShellFiles
     ]
     ++ lib.optionals translateManpages [ po4a ]

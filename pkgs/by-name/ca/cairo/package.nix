@@ -7,6 +7,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3,
   docbook_xsl,
   fontconfig,
@@ -57,6 +58,7 @@ stdenv.mkDerivation (
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
     ];
 

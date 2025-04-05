@@ -1074,6 +1074,17 @@ self: super:
         sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
       })
     ];
+
+    preFixup = ''
+      # Circular dependency xorgproto -> libXau -> xorgproto
+      substituteInPlace $out/share/pkgconfig/printproto.pc \
+        --replace-fail "Requires.private: xau" "Requires.private:"
+
+      # Circular dependency xorgproto -> libXt -> xorgproto
+      substituteInPlace $out/share/pkgconfig/trapproto.pc \
+        --replace-fail "Requires: xt" "Requires:"
+    '';
+
     meta = attrs.meta // {
       platforms = lib.platforms.unix ++ lib.platforms.windows;
     };

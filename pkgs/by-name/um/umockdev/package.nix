@@ -12,6 +12,7 @@
   mesonEmulatorHook,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3,
   replaceVars,
   systemdMinimal,
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       vala
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

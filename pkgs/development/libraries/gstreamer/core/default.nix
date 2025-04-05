@@ -4,6 +4,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   bison,
   flex,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       gettext
       bison
       flex

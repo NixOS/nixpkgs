@@ -10,6 +10,7 @@
   appstream,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   gettext,
   xmlto,
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       cmake
       gettext
       libxslt

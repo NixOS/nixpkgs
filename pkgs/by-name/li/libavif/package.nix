@@ -6,6 +6,7 @@
   libaom,
   cmake,
   pkg-config,
+  autoPatchPcHook,
   zlib,
   libpng,
   libjpeg,
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     gdk-pixbuf
     makeWrapper
   ];

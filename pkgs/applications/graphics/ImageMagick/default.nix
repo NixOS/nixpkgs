@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   libtool,
   bzip2Support ? true,
   bzip2,
@@ -126,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     libtool
   ];
 

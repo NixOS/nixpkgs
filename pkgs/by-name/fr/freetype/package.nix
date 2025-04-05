@@ -5,6 +5,7 @@
   buildPackages,
   pkgsHostHost,
   pkg-config,
+  autoPatchPcHook,
   which,
   makeWrapper,
   zlib,
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       which
       __flattenIncludeHackHook
     ]

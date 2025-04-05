@@ -5,6 +5,7 @@
   alsa-lib,
   libjack2,
   pkg-config,
+  autoPatchPcHook,
   which,
 }:
 
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     which
   ];
   buildInputs =

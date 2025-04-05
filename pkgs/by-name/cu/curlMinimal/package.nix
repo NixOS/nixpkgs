@@ -57,6 +57,8 @@
   zlib,
   zstdSupport ? false,
   zstd,
+  patchPcFiles ? false,
+  autoPatchPcHook,
 
   # for passthru.tests
   coeurl,
@@ -130,10 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    perl
-  ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ]
+    ++ lib.optional patchPcFiles [ autoPatchPcHook ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

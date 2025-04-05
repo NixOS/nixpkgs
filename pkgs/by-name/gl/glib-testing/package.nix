@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43

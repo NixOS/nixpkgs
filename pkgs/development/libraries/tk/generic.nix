@@ -3,6 +3,7 @@
   lib,
   src,
   pkg-config,
+  autoPatchPcHook,
   tcl,
   libXft,
   zip,
@@ -67,6 +68,7 @@ tcl.mkTclDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals (lib.versionAtLeast tcl.version "9.0") [
       # Only used to detect the presence of zlib. Could be replaced with a stub.

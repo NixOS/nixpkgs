@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libwpd,
   zlib,
   librevenge,
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     librevenge
     boost
   ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   meta = with lib; {
     homepage = "https://libwpg.sourceforge.net";

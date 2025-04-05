@@ -8,6 +8,7 @@
   libjpeg,
   darwin,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
   enableHEIFCodec ? true,
   enableJPGCodec ? true,
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

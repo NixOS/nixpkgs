@@ -9,6 +9,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   vala,
   mesonEmulatorHook,
   gtk3,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       vala
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

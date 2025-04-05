@@ -5,6 +5,7 @@
   librdf_raptor2,
   gmp,
   pkg-config,
+  autoPatchPcHook,
   pcre,
   libxml2,
   perl,
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0z6rrwn4jsagvarg8d5zf0j352kjgi33py39jqd29gbhcnncj939";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   buildInputs = [
     gmp

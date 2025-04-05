@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [
     pkg-config
+    autoPatchPcHook
   ];
 
   nativeBuildInputs = [

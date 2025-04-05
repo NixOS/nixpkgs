@@ -14,6 +14,7 @@
   gdk-pixbuf,
   openexr_3,
   pkg-config,
+  autoPatchPcHook,
   makeWrapper,
   zlib,
   asciidoc,
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     gdk-pixbuf
     makeWrapper
     asciidoc

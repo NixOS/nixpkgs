@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pkg-config,
+  autoPatchPcHook,
   glib,
   expat,
   pam,
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
     [
       glib
       pkg-config
+      autoPatchPcHook
       gettext
       meson
       ninja

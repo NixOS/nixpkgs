@@ -14,6 +14,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
   replaceVars,
   vala,
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals withIntrospection [
       gi-docgen

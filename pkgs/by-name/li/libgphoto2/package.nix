@@ -5,6 +5,7 @@
   buildPackages,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   libusb1,
   libtool,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     libtool
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [

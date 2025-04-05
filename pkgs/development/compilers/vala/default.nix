@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   flex,
   bison,
   libxslt,
@@ -77,6 +78,7 @@ let
       nativeBuildInputs =
         [
           pkg-config
+          autoPatchPcHook
           flex
           bison
           libxslt

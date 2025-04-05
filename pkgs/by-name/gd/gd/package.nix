@@ -6,6 +6,7 @@
   autoconf,
   automake,
   pkg-config,
+  autoPatchPcHook,
   zlib,
   libpng,
   libjpeg,
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   cairo,
   harfbuzz,
   libintl,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       glib # for glib-mkenum
       pkg-config
+      autoPatchPcHook
       python3
       docutils # for rst2man, rst2html5
     ]

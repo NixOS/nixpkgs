@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   python3,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       meson
       ninja
       python3
