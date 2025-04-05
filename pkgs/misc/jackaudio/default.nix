@@ -9,7 +9,6 @@
   libsamplerate,
   libsndfile,
   readline,
-  eigen,
   celt,
   wafHook,
   # Darwin Dependencies
@@ -73,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsamplerate
       libsndfile
       readline
-      eigen
       celt
       optDbus
       optPythonDBus
