@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
   apeye-core,
   attrs,
   click,
@@ -30,15 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-/x3bXUJsbYs4rXPNotXK8/VohSy04M+Gk0XInoyg+3Y=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     apeye-core
     attrs
     dom-toml
     domdf-python-tools
-    hatchling
-    hatch-requirements-txt
     natsort
     packaging
     shippinglabel
