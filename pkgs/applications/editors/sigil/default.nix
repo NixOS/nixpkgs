@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = "https://github.com/Sigil-Ebook/Sigil/";
     license = lib.licenses.gpl3;
-    # currently unmaintained
+    maintainers = with lib.maintainers; [ prince213 ];
     platforms = lib.platforms.linux;
     mainProgram = "sigil";
   };
