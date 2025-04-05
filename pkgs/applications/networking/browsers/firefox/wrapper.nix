@@ -563,7 +563,6 @@ let
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
-        hydraPlatforms = [ ];
         priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     });
