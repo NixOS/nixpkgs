@@ -115,7 +115,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.4.0/torch/utils/cpp_extension.py#L1953
+  # https://github.com/pytorch/pytorch/blob/v2.6.0/torch/utils/cpp_extension.py#L2046-L2048
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -136,6 +136,7 @@ let
         "8.9"
         "9.0"
         "9.0a"
+        "10.0"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -210,6 +211,9 @@ let
   };
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
+    # https://github.com/pytorch/pytorch/issues/150174
+    "aarch64-linux with GCC14 is currently broken" =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
     "Unsupported CUDA version" =
@@ -241,12 +245,16 @@ let
     echo
     echo "# Update using: unroll-src [version]"
   '';
+
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
+
+  stdenv = stdenv';
 
   outputs = [
     "out" # output standard python package
@@ -266,7 +274,12 @@ buildPythonPackage rec {
   };
 
   patches =
-    [ ./clang19-template-warning.patch ]
+    [
+      ./clang19-template-warning.patch
+      # fix invalid static cast in XNNPACK
+      # https://github.com/google/XNNPACK/issues/7489
+      ./xnnpack-bfloat16.patch
+    ]
     ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
@@ -298,19 +311,19 @@ buildPythonPackage rec {
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297
       substituteInPlace third_party/gloo/cmake/Hipify.cmake \
-        --replace "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
+        --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
 
       # Replace hard-coded rocm paths
       substituteInPlace caffe2/CMakeLists.txt \
-        --replace "/opt/rocm" "${rocmtoolkit_joined}" \
-        --replace "hcc/include" "hip/include" \
-        --replace "rocblas/include" "include/rocblas" \
-        --replace "hipsparse/include" "include/hipsparse"
+        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}" \
+        --replace-fail "hcc/include" "hip/include" \
+        --replace-fail "rocblas/include" "include/rocblas" \
+        --replace-fail "hipsparse/include" "include/hipsparse"
 
       # Doesn't pick up the environment variable?
       substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
-        --replace "/opt/rocm" "${rocmtoolkit_joined}"
+        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
+        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}"
 
       # Strangely, this is never set in cmake
       substituteInPlace cmake/public/LoadHIP.cmake \
@@ -320,7 +333,7 @@ buildPythonPackage rec {
     # Detection of NCCL version doesn't work particularly well when using the static binary.
     + lib.optionalString cudaSupport ''
       substituteInPlace cmake/Modules/FindNCCL.cmake \
-        --replace \
+        --replace-fail \
           'message(FATAL_ERROR "Found NCCL header version and library version' \
           'message(WARNING "Found NCCL header version and library version'
     ''
@@ -440,7 +453,15 @@ buildPythonPackage rec {
       # bump, among other things.
       # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
       # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-      NIX_CFLAGS_COMPILE = "-Wno-error";
+      NIX_CFLAGS_COMPILE = toString (
+        [
+          "-Wno-error"
+        ]
+        # fix build aarch64-linux build failure with GCC14
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+          "-Wno-error=incompatible-pointer-types"
+        ]
+      );
       USE_VULKAN = setBool vulkanSupport;
     }
     // lib.optionalAttrs vulkanSupport {
@@ -480,6 +501,7 @@ buildPythonPackage rec {
         cuda_nvml_dev # <nvml.h>
         cuda_nvrtc
         cuda_nvtx # -llibNVToolsExt
+        cusparselt
         libcublas
         libcufft
         libcurand
@@ -600,11 +622,11 @@ buildPythonPackage rec {
       # Fix up library paths for split outputs
       substituteInPlace \
         $dev/share/cmake/Torch/TorchConfig.cmake \
-        --replace \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
+        --replace-fail \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
 
       substituteInPlace \
         $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-        --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
+        --replace-fail \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
       mkdir $lib
       mv $out/${python.sitePackages}/torch/lib $lib/lib
@@ -612,10 +634,10 @@ buildPythonPackage rec {
     ''
     + lib.optionalString rocmSupport ''
       substituteInPlace $dev/share/cmake/Tensorpipe/TensorpipeTargets-release.cmake \
-        --replace "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
+        --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
       substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-        --replace "/build/source/torch/include" "$dev/include"
+        --replace-fail "/build/source/torch/include" "$dev/include"
     '';
 
   postFixup =
