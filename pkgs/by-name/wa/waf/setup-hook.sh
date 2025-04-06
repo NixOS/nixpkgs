@@ -3,7 +3,9 @@
 wafConfigurePhase() {
     runHook preConfigure
 
-    if ! [ -f "${wafPath:=./waf}" ]; then
+    if [ -f "${wafPath:=./waf}" ]; then
+        patchShebangs --build "${wafPath}"
+    else
         wafPath="@waf@/bin/waf"
     fi
 
