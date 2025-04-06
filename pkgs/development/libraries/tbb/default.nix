@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   patches = [
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
     substituteInPlace test/CMakeLists.txt \
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Intel Thread Building Blocks C++ Library";
