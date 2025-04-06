@@ -2088,6 +2088,14 @@ self: super:
     )
   );
 
+  stack = super.stack.overrideScope (
+    self: super: {
+      # stack needs to be built with the same hpack version that the upstream releases use.
+      # https://github.com/NixOS/nixpkgs/issues/223390
+      hpack = self.hpack_0_38_0;
+    }
+  );
+
   # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
   # https://github.com/koalaman/shellcheck/issues/2677
   ShellCheck_0_9_0 = doJailbreak (
