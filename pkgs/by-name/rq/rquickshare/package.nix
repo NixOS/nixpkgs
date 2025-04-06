@@ -69,8 +69,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
-  cargoPatches = [ ./remove-duplicate-versions-of-sys-metrics.patch ];
-  cargoHash = app-type-either "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=" "sha256-4vBHxuKg4P9H0FZYYNUT+AVj4Qvz99q7Bhd7x47UC2w=";
+  cargoHash = app-type-either "sha256-9LFMWr/TQZ0nolQykrsGR2aqrSWIXoPZRLYO4mjTmpg=" "sha256-XtvFmYHVcOoY5UZYHs8aEipFbFjHNopgb9XhnHtYRec=";
 
   nativeBuildInputs = [
     proper-cargo-tauri.hook
