@@ -128,5 +128,8 @@ rustPlatform.buildRustPackage {
       bbigras
     ];
     mainProgram = "jj";
+    knownVulnerabilities = [
+      "GHSA-794x-2rpg-rfgr – consider using Jujutsu from 25.05/unstable"
+    ];
   };
 }

@@ -62,5 +62,8 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with maintainers; [ syberant ];
+    knownVulnerabilities = [
+      "CVE-2025-31130 / GHSA-2frx-2596-x5r6 – consider using gitoxide from 25.05/unstable"
+    ];
   };
 }
