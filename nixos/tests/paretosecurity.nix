@@ -4,53 +4,45 @@
   meta.maintainers = [ lib.maintainers.zupo ];
 
   nodes.terminal =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
-    let
-      # Create a patched version of the package that points to the local dashboard
-      # for easier testing
-      patchedPareto = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
-        postPatch = ''
-          substituteInPlace team/report.go \
-            --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
-                           'const reportURL = "http://dashboard"'
-        '';
-      });
-    in
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
+      networking.firewall.enable = true;
       services.paretosecurity = {
         enable = true;
-        package = patchedPareto;
-      };
 
-      networking.firewall.enable = true;
+        # Create a patched version of the package that points to the local dashboard
+        # for easier testing
+        package = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
+          postPatch =
+            oldAttrs.postPatch or ""
+            + ''
+              substituteInPlace team/report.go \
+                --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
+                               'const reportURL = "http://dashboard"'
+            '';
+        });
+      };
 
     };
 
-  nodes.dashboard =
-    { config, pkgs, ... }:
-    {
-      networking.firewall.allowedTCPPorts = [ 80 ];
+  nodes.dashboard = {
+    networking.firewall.allowedTCPPorts = [ 80 ];
 
-      services.nginx = {
-        enable = true;
-        virtualHosts."dashboard" = {
-          locations."/api/v1/team/".extraConfig = ''
-            add_header Content-Type application/json;
-            return 200 '{"message": "Linked device."}';
-          '';
-        };
+    services.nginx = {
+      enable = true;
+      virtualHosts."dashboard" = {
+        locations."/api/v1/team/".extraConfig = ''
+          add_header Content-Type application/json;
+          return 200 '{"message": "Linked device."}';
+        '';
       };
     };
+  };
 
   nodes.xfce =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
@@ -76,7 +68,6 @@
 
       environment.systemPackages = [ pkgs.xdotool ];
       environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
-
     };
 
   enableOCR = true;
@@ -125,6 +116,14 @@
         status, out = xfce.systemctl("is-enabled " + unit, "alice")
         assert status == 0, f"Unit {unit} is not enabled (status: {status}): {out}"
     xfce.succeed("xdotool mousemove 460 10")
+    xfce.screenshot("/tmp/xfce.png")
+
+    # temporary -- remove before merging
+    import base64
+    print('SCREENSHOT_BEGIN')
+    print(base64.b64encode(open('/tmp/xfce.png', 'rb').read()).decode())
+    print('SCREENSHOT_END')
+
     xfce.wait_for_text("Pareto Security")
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")
