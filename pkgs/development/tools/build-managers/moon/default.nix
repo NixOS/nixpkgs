@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "moon";
-  version = "1.33.0";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-i9G4mcHZy/nOiLv0eMrjsjiuneL2qRe0QTroeiP3LrY=";
+    hash = "sha256-25qRoWj3QeO/T/JLCkq41ZUI0CH0qgltbUy+wA9feJY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1cKD+HL6u8A+7LAZ4Df5wLpbKnodrj7KCE8wbJkwRkA=";
+  cargoHash = "sha256-8Y5ijsYkl9XoCk9kfM48zQVCcHh/e+EGw8FtYWC7r6o=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
