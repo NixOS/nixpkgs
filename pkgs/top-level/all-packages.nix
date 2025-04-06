@@ -8978,7 +8978,7 @@ with pkgs;
       else
         stdenv;
   };
-  abseil-cpp = abseil-cpp_202407;
+  abseil-cpp = abseil-cpp_202501;
 
   acl = callPackage ../development/libraries/acl { };
 
