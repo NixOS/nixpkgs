@@ -8,6 +8,7 @@
   libvorbis,
   openal,
   SDL2,
+  libGL,
   zlib,
   versionCheckHook,
   gitUpdater,
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
+    libGL
     libopenmpt
     libvorbis
     openal
