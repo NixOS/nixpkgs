@@ -24,8 +24,6 @@
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
 default-package-overrides:
-  # gi-gdkx11-4.x requires gtk-4.x, but stackage still restricts gi-gtk to 3.*
-  - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
