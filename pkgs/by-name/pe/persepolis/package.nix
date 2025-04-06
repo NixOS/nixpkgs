@@ -14,14 +14,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
-  version = "5.0.1";
+  version = "5.0.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
     tag = version;
-    hash = "sha256-ffEXPkpHGwvVzUxO6sjAEKYbxRod7o8f7DWR5AN+SkA=";
+    hash = "sha256-n8hMf+odUkL6cXYeh+SFmR4raI4RrmqzjEm5n/MpxHQ=";
   };
 
   postPatch = ''

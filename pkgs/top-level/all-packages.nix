@@ -17248,10 +17248,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
   };
 
-  bzflag = callPackage ../games/bzflag {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
-  };
-
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
 
   cataclysm-dda = cataclysmDDA.stable.tiles;

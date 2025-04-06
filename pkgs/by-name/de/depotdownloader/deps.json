@@ -11,8 +11,8 @@
   },
   {
     "pname": "Microsoft.Windows.CsWin32",
-    "version": "0.3.106",
-    "hash": "sha256-S1uQa684taPb6uh69784ebVpXoirMoX+pxBRA+Rrzlg="
+    "version": "0.3.183",
+    "hash": "sha256-bn0rHYoVLRTqiZqkkp6u3PMKtg0NNxA2F++1e/+3Jhw="
   },
   {
     "pname": "Microsoft.Windows.SDK.Win32Docs",
@@ -21,23 +21,23 @@
   },
   {
     "pname": "Microsoft.Windows.SDK.Win32Metadata",
-    "version": "60.0.34-preview",
-    "hash": "sha256-KdRe73sXipzMvm2BLmwwBZGh+l9isZDC9l8WFyUR1zM="
+    "version": "61.0.15-preview",
+    "hash": "sha256-OB60ThIv8e7AMGaRRzJ8dWme5HjN+Q0HoUDquP2ejTg="
   },
   {
     "pname": "Microsoft.Windows.WDK.Win32Metadata",
-    "version": "0.11.4-experimental",
-    "hash": "sha256-b3oKUKbr+3Udfl7RWzUY9BR/XWNsN+VmEkBxk6KiFo0="
+    "version": "0.12.8-experimental",
+    "hash": "sha256-YaN6JlgnpIooLYu3NdFVHwoqFwZYTeePtekXCfTiLTo="
   },
   {
     "pname": "protobuf-net",
-    "version": "3.2.45",
-    "hash": "sha256-rWitxe3uP3SOyoG1fwM5n00RpR5IL1V6u1zXMI0p0JA="
+    "version": "3.2.46",
+    "hash": "sha256-NirxAUXEIUQz0HHLS+KS4fgOZwJy1zJZYGcjPa5ujTs="
   },
   {
     "pname": "protobuf-net.Core",
-    "version": "3.2.45",
-    "hash": "sha256-bsMGUmd0yno8g0H0637jJboKJwyyHLHoHg45+bt9pLQ="
+    "version": "3.2.46",
+    "hash": "sha256-Srg7pP7rleL462idLPFUxgXBLrywWeHFyEvSV+keA4E="
   },
   {
     "pname": "QRCoder",
@@ -46,8 +46,8 @@
   },
   {
     "pname": "SteamKit2",
-    "version": "3.0.1",
-    "hash": "sha256-OnfUEPSEE9J6oTO1NFsa1MJRWvEH5MDR1wsGedKGzgI="
+    "version": "3.0.2",
+    "hash": "sha256-bRiLFaq/hsr+7BKtSKoD2+pf0VCGhBYe/rO3DgqMZpo="
   },
   {
     "pname": "System.Collections.Immutable",
@@ -56,8 +56,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "9.0.0",
-    "hash": "sha256-k6Pdndm5fTD6CB1QsQfP7G+2h4B30CWIsuvjHuBg3fc="
+    "version": "9.0.1",
+    "hash": "sha256-IJru9BdFNsNs7FbG+F9djJdkkWdpoz2IxQ+GgvKvUOs="
   },
   {
     "pname": "System.Security.AccessControl",
