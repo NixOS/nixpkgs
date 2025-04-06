@@ -10159,6 +10159,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ilarvne = {
+    email = "ilarvne@proton.me";
+    github = "ilarvne";
+    githubId = 99905590;
+    name = "Nurali Aslanbekov";
+  };
   ilaumjd = {
     email = "ilaumjd@gmail.com";
     github = "ilaumjd";
