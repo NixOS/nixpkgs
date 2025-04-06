@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -34,9 +35,12 @@ stdenv.mkDerivation (
     };
 
     nativeBuildInputs = [ installShellFiles ];
+    nativeInstallCheckInputs = [ versionCheckHook ];
 
     dontConfigure = true;
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    doInstallCheck = true;
+    versionCheckProgram = "${placeholder "out"}/bin/${binary}";
 
     # build without using Makefile as recommended by upstream
     buildPhase = ''
