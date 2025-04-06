@@ -1578,7 +1578,6 @@ dont-distribute-packages:
  - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
- - haskell-language-server
  - haskell-lsp
  - haskell-lsp-client
  - haskell-pdf-presenter
