@@ -265,7 +265,7 @@ stdenv.mkDerivation (
             hidden="$(dirname "$prog")/.$(basename "$prog")"
             mv "$prog" "$hidden"
             makeWrapper "$hidden" "$prog" \
-              --argv0 "" \
+              --inherit-argv0 \
               --set WINELOADER "$hidden" \
               --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
           fi
