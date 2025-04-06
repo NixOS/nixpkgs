@@ -7,9 +7,6 @@
   yq,
   _experimental-update-script-combinators,
   gitUpdater,
-  pdfium-binaries,
-  stdenv,
-  replaceVars,
 }:
 
 flutter327.buildFlutterApplication rec {
@@ -26,33 +23,6 @@ flutter327.buildFlutterApplication rec {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   sourceRoot = "${src.name}/app";
-
-  customSourceBuilders = {
-    # unofficial printing
-    printing =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "printing";
-        inherit version src;
-        inherit (src) passthru;
-
-        patches = [
-          (replaceVars ./printing.patch {
-            inherit pdfium-binaries;
-          })
-        ];
-
-        dontBuild = true;
-
-        installPhase = ''
-          runHook preInstall
-
-          cp -r . $out
-
-          runHook postInstall
-        '';
-      };
-  };
 
   gitHashes = {
     dart_leap = "sha256-eEyUqdVToybQoDwdmz47H0f3/5zRdJzmPv1d/5mTOgA=";

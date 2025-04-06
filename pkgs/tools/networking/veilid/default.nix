@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D6mfYiUj9W+2l/is/KkzwIQ1Erbapf5dl4uWGKd42r4=";
+    hash = "sha256-p9bQ90zUXVeVPUDuns+gmZb9SJHpAVrJOHe+RvEru7w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-jjcx78iSIwMxbkJP5K0Xh9aIL1sDsX8cvjc5br8JjLM=";
+  cargoHash = "sha256-xbtlZ7PP+RHPlW4a9UCmaCOcsQkDyPim3yPObbXVqns=";
 
   nativeBuildInputs = [
     capnproto

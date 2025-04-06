@@ -19,7 +19,10 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
+  libGL,
+  libGLU,
   libpng,
+  libX11,
   libxml2,
   protobuf,
   xvfb-run,
@@ -54,6 +57,9 @@ let
           inherit version;
           src = fetchArmagetron rev hash;
           extraBuildInputs = lib.optionals (!dedicatedServer) [
+            libGL
+            libGLU
+            libX11
             libpng
             SDL
             SDL_image
@@ -79,6 +85,9 @@ let
               glew
               ftgl
               freetype
+              libGL
+              libGLU
+              libX11
               SDL2
               SDL2_image
               SDL2_mixer
@@ -96,6 +105,9 @@ let
           version = "${latestVersionMajor}-sty+ct+ap-${builtins.substring 0 8 rev}";
           src = fetchArmagetron rev hash;
           extraBuildInputs = lib.optionals (!dedicatedServer) [
+            libGL
+            libGLU
+            libX11
             libpng
             SDL
             SDL_image

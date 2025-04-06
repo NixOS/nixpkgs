@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # Unit tests are hard to use, since most tests rely on downloading
   # models from Hugging Face Hub.
-  pythonImportCheck = [ "curated_transformers" ];
+  pythonImportsCheck = [ "curated_transformers" ];
 
   meta = with lib; {
     description = "PyTorch library of curated Transformer models and their composable components";

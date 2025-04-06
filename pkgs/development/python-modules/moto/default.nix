@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.28";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-++kkPiI3AOTF+VlvPWhjhuiIjiHQPa3M0Nmh3+1PHSE=";
+    hash = "sha256-KMIOLM7KQqF2JwYWHWAD9GVKRTd2adVBubwWrnlHGoQ=";
   };
 
   build-system = [
@@ -351,6 +351,9 @@ buildPythonPackage rec {
 
     # Parameter validation fails
     "test_conditional_write"
+
+    # Requires newer botocore version
+    "test_dynamodb_with_account_id_routing"
   ];
 
   disabledTestPaths = [

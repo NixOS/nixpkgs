@@ -89,7 +89,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.10.1";
   pname = "matplotlib";
   pyproject = true;
 
@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uIbQKlgblnBMnR/+VXCeSbTS1ScJzOvEvkLbhW5REng=";
+    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -192,8 +192,8 @@ buildPythonPackage rec {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {
         src = fetchurl {
-          url = "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          sha256 = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
+          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
         };
         patches = [ ];
       });

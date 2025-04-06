@@ -14,7 +14,7 @@ in
     programs.qgroundcontrol = {
       enable = lib.mkEnableOption "qgroundcontrol";
 
-      package = lib.mkPackageOption pkgs "qgroundcontrol" {};
+      package = lib.mkPackageOption pkgs "qgroundcontrol" { };
 
       blacklistModemManagerFromTTYUSB = lib.mkOption {
         type = lib.types.bool;

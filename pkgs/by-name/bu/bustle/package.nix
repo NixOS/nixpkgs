@@ -11,29 +11,27 @@
   rustPlatform,
   rustc,
   wrapGAppsHook4,
-  darwin,
   gettext,
   glib,
   gtk4,
   libadwaita,
-  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bustle";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "bustle";
-    rev = finalAttrs.version;
-    hash = "sha256-5ZZiRD64OOMtTNxI0uvilGM22rsJv7vU3yPDY8ROrxU=";
+    tag = finalAttrs.version;
+    hash = "sha256-aO7f5xLRuIGVAp+TVveFXtWx/rl/jqbmXNd6zN9dZZw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-XCKKzgSqTGF9WoaYnNtXB7e8BvtElmAfKH6s/7h8cGs=";
+    hash = "sha256-cofqxgSyj24wVhzImYs/gsWGjQpzOjaf49RdtYgsrbo=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -66,11 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical D-Bus message analyser and profiler";
     homepage = "https://gitlab.gnome.org/World/bustle";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      jtojnar
-      aleksana
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        jtojnar
+      ]
+      ++ lib.teams.gnome-circle.members;
     mainProgram = "bustle";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
   };
 })

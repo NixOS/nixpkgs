@@ -1,16 +1,17 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, gtk3
-, libnotify
-, libxfce4ui
-, libxfce4util
-, polkit
-, upower
-, wayland-protocols
-, wlr-protocols
-, xfconf
-, xfce4-panel
+{
+  lib,
+  mkXfceDerivation,
+  wayland-scanner,
+  gtk3,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  polkit,
+  upower,
+  wayland-protocols,
+  wlr-protocols,
+  xfconf,
+  xfce4-panel,
 }:
 
 mkXfceDerivation {

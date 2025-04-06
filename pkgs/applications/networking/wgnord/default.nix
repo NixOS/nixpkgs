@@ -1,14 +1,15 @@
-{ bash
-, coreutils
-, curl
-, fetchFromGitHub
-, gnugrep
-, gnused
-, iproute2
-, jq
-, lib
-, resholve
-, wireguard-tools
+{
+  bash,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  gnugrep,
+  gnused,
+  iproute2,
+  jq,
+  lib,
+  resholve,
+  wireguard-tools,
 }:
 
 resholve.mkDerivation rec {

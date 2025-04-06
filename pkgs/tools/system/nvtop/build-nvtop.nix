@@ -66,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [ ncurses ]
-    ++ lib.optional stdenv.isLinux udev
-    ++ lib.optional stdenv.isDarwin apple-sdk_12
+    ++ lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12
     ++ lib.optional nvidia cudatoolkit
     ++ lib.optional needDrm libdrm;
 

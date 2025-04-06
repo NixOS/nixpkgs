@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
@@ -10,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsmancli";
-  version = "2.6.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Openwsman";
     repo = "wsmancli";
-    rev = "v${version}";
-    sha256 = "sha256-A2PVhQuKVTZ/nDKyy+vZVBNLB/3xujBYBzUEWcTIYYg=";
+    tag = "v${version}";
+    hash = "sha256-pTA5p5+Fuiw2lQaaSKnp/29HMy8NZNTFwP5K/+sJ9OU=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
     touch AUTHORS NEWS README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Openwsman command-line client";
     longDescription = ''
       Openwsman provides a command-line tool, wsman, to perform basic

@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.18.2";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-qbvsYlf3byaT/4b+/BDvCgnaBKthL/J79y0CWh5Yid4=";
+    hash = "sha256-cBFSqp4GWnWJQtaCWdfbLj+C7fT8XSA0SpxK8MU5LT0=";
   };
 
   nativeBuildInputs = [

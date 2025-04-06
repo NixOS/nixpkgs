@@ -9,24 +9,24 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
-  version = "0.35.1-unstable-2024-11-27";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "9f6b08cbb2d0f43644a34f5d0210ac32b9add30c";
-    hash = "sha256-lFvlrVFzMk6igH/h/3TZnkl8SooanVyIRYbSyleb2OU=";
+    tag = "v${version}";
+    hash = "sha256-a+FFQqKXYws8b/iGr49eZMVmKBqacQGvW8P51ybtBSc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-cqYPxDhIPA45A29Kl3XlF1gd9/EzlyqyFHH69lAju2A=";
+  cargoHash = "sha256-1zPLnkNZvuZS5z9AEJvhyIv+8/y+YhqFcj5Mu7RSqnE=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   postInstall = ''
-    install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';

@@ -19,12 +19,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-3B3P1PlzIlpVqHJMKWpEnWXGgD/IaiWM1FVKn0BtRj0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "livesplit-auto-splitting-0.1.0" = "sha256-/xQEVJH6m6nH5Z1kuOPEElOcOqJmiG9Q8cOx0e6p3Wc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JHocpqDeF24Qn9lUr+YCnZqgckLhGRpWQD7WGCxVmd8=";
 
   nativeBuildInputs = [
     cmake

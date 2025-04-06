@@ -74,6 +74,9 @@ let
       lvm2 # dmsetup
     ];
 
+    # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
+    GOEXPERIMENT = "boringcrypto";
+
     # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
     ldflags = [
       "-w"
@@ -120,18 +123,32 @@ let
 
     doCheck = false;
 
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      # Verify that the binary uses BoringCrypto
+      go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
+      runHook postInstallCheck
+    '';
+
     passthru = {
       inherit updateScript;
       tests =
+        let
+          moduleTests =
+            let
+              package_version =
+                "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
+            in
+            lib.mapAttrs (name: value: nixosTests.rke2.${name}.${package_version}) nixosTests.rke2;
+        in
         {
           version = testers.testVersion {
             package = rke2;
             version = "v${version}";
           };
         }
-        // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-          inherit (nixosTests) rke2;
-        };
+        // moduleTests;
     } // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
     meta = with lib; {

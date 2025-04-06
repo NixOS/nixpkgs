@@ -17,10 +17,10 @@
   libxslt,
   docbook-xsl-nons,
   dbus,
+  util-linux,
   docbook_xml_dtd_412,
   gtk-doc,
   coreutils,
-  fetchpatch,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
   elogind,
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "124";
+  version = "126";
 
   outputs = [
     "bin"
@@ -54,22 +54,13 @@ stdenv.mkDerivation rec {
     owner = "polkit-org";
     repo = "polkit";
     rev = version;
-    hash = "sha256-Vc9G2xK6U1cX+xW2BnKp3oS/ACbSXS/lztbFP5oJOlM=";
+    hash = "sha256-ZSqgW//q5DFIsmY17U93mJcK/CHSCHphKTHsTxp40q8=";
   };
 
   patches = [
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
-
-    ./elogind.patch
-
-    # FIXME: remove in the next release
-    # https://github.com/NixOS/nixpkgs/issues/18012
-    (fetchpatch {
-      url = "https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce.patch";
-      sha256 = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
-    })
   ];
 
   depsBuildBuild = [
@@ -116,6 +107,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
+    util-linux # for mount
     (python3.pythonOnBuildForHost.withPackages (
       pp: with pp; [
         dbus-python
@@ -127,67 +119,50 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  env =
-    {
-      PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-      PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+    PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "${placeholder "out"}/lib/tmpfiles.d";
 
-      # HACK: We want to install policy files files to $out/share but polkit
-      # should read them from /run/current-system/sw/share on a NixOS system.
-      # Similarly for config files in /etc.
-      # With autotools, it was possible to override Make variables
-      # at install time but Meson does not support this
-      # so we need to convince it to install all files to a temporary
-      # location using DESTDIR and then move it to proper one in postInstall.
-      DESTDIR = "dest";
-    }
-    // lib.optionalAttrs (stdenv.cc.isGNU || stdenv.cc.isClang) {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    };
+    # HACK: We want to install policy files files to $out/share but polkit
+    # should read them from /run/current-system/sw/share on a NixOS system.
+    # Similarly for config files in /etc.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "dest";
+  };
 
   mesonFlags =
     [
       "--datadir=${system}/share"
       "--sysconfdir=/etc"
       "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
-      "-Dos_type=redhat" # only affects PAM includes
+      "-Dos_type=redhat" # affects PAM includes and privileged group name (wheel)
       "-Dintrospection=${lib.boolToString withIntrospection}"
       "-Dtests=${lib.boolToString doCheck}"
       "-Dgtk_doc=${lib.boolToString withIntrospection}"
       "-Dman=true"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
+      "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
     ];
 
   inherit doCheck;
 
   postPatch = ''
-    patchShebangs test/polkitbackend/polkitbackendjsauthoritytest-wrapper.py
+    patchShebangs \
+      test/wrapper.py
 
     # ‘libpolkit-agent-1.so’ should call the setuid wrapper on
     # NixOS.  Hard-coding the path is kinda ugly.  Maybe we can just
     # call through $PATH, but that might have security implications.
     substituteInPlace src/polkitagent/polkitagentsession.c \
-      --replace   'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
+      --replace-fail 'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
     substituteInPlace test/data/etc/polkit-1/rules.d/10-testing.rules \
-      --replace   /bin/true ${coreutils}/bin/true \
-      --replace   /bin/false ${coreutils}/bin/false
-  '';
-
-  postConfigure = lib.optionalString doCheck ''
-    # Unpacked by meson
-    chmod +x subprojects/mocklibc-1.0/bin/mocklibc
-    patchShebangs subprojects/mocklibc-1.0/bin/mocklibc
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    # tests need access to the system bus
-    dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS meson test --print-errorlogs'
-
-    runHook postCheck
+      --replace-fail /bin/true ${coreutils}/bin/true \
+      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   postInstall = ''
@@ -212,6 +187,6 @@ stdenv.mkDerivation rec {
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
+    maintainers = teams.freedesktop.members;
   };
 }

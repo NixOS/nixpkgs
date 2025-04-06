@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   SDL2,
   SDL2_image,
   rtaudio,
@@ -13,6 +12,7 @@
   cmake,
   pkg-config,
   zenity,
+  withEditor ? true,
 }:
 let
   # package depends on SDL2main static library
@@ -22,22 +22,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.15.000";
+  version = "1.22.200";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    hash = "sha256-pcPR2KCGbyL1JABF30yJrlcLPGU2h0//Ghf7e7zYO0s=";
+    hash = "sha256-Mvp9VrPk36wNTUwNQT83JPOEO72Xhqmhkn3/KfZhQX4=";
   };
-
-  patches = [
-    # https://github.com/luciusDXL/TheForceEngine/pull/493 -- fixes finding data files outside program directory
-    (fetchpatch {
-      url = "https://github.com/luciusDXL/TheForceEngine/commit/476a5277666bfdffb33ed10bdd1177bfe8ec3a70.diff";
-      hash = "sha256-ZcfKIXQMcWMmnM4xfQRd/Ozl09vkQr3jUxZ5e4Mw5CU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,8 +49,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_EDITOR" true)
-    (lib.cmakeBool "ENABLE_FORCE_SCRIPT" true)
+    (lib.cmakeBool "ENABLE_EDITOR" withEditor)
   ];
 
   prePatch = ''
@@ -78,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://theforceengine.github.io";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ devusb ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

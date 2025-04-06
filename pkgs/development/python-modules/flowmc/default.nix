@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "flowmc";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
     tag = "flowMC-${version}";
-    hash = "sha256-ambi2BMFjWAggeJ3PdlRpdKVmZeePe5LbvuKzCgNV/k=";
+    hash = "sha256-Qsh5nvLdJeIx3EHACdhRE4GDdI31MHYvUDHephMs+2Y=";
   };
 
   build-system = [ hatchling ];

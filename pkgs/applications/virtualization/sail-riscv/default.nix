@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sail-riscv";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = pname;
     rev = version;
-    hash = "sha256-cO0ZOr2frMMLE9NUGDxy9+KpuyBnixw6wcNzUArxDiE=";
+    hash = "sha256-Keu96+yHWUEFO3rRLvF7rzcJmF3y/V/uyK7TIFj0Xw0=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     gmp
   ];
   strictDeps = true;
-
-  postPatch = ''
-    rm -r prover_snapshots
-  '';
 
   preBuild = ''
     ninja \

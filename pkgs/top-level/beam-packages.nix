@@ -46,12 +46,6 @@ in
       inherit wxSupport systemdSupport;
     };
 
-    erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      inherit wxSupport systemdSupport;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_27.elixir`.
@@ -78,7 +72,6 @@ in
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
-    erlang_25 = self.packagesWith self.interpreters.erlang_25;
   };
 
   __attrsFailEvaluation = true;

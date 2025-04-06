@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "zoraxy";
-  version = "3.1.8";
+  version = "3.1.9";
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
     tag = "v${version}";
-    hash = "sha256-0BJuomRz/ZnvHQXPZBBrVv1nk2UFPGGdjsZ/FpUAtwk=";
+    hash = "sha256-zE8ksuZhoi/wPTpo/jq7c5sx0B6hwBr8djvzo9ea9DI=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-gqDgM+xyvzrpQEQz0fju8GEtQhJOaL6FeuwYxgeSRmo=";
+  vendorHash = "sha256-XHnDlGIb2K28udWHdkfXt0dPUGmGAjfULB9fykAlsJU=";
 
   checkFlags =
     let

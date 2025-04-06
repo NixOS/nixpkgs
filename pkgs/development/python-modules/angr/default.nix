@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.146";
+  version = "9.2.148";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-bBjD+rhS8VS7JKXJyqwlxl6hmi34grO9HCuZ06SFLh0=";
+    hash = "sha256-WObd/zpoRn4OQO1PWcuv/6odJ0qZnKW7uFx8Z0dUmv8=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
@@ -79,14 +79,13 @@ buildPythonPackage rec {
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
-    unicorn-angr
     unique-log-filter
   ];
 
   optional-dependencies = {
-    AngrDB = [ sqlalchemy ];
+    angrdb = [ sqlalchemy ];
+    unicorn = [ unicorn-angr ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [

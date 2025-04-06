@@ -134,5 +134,15 @@ stdenv.mkDerivation rec {
       ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
+
+    # 29-03-2025: On darwin, the libc++ standard library is used to compile C++ programs.
+    # 29-03-2025: Since the base template for `std::char_traits` was removed in LLVM 19,
+    # 29-03-2025: usages of `boost::u32regex` will no longer compile.
+    # 29-03-2025: Linux builds do not fail as they use libstdc++, which has not removed
+    # 29-03-2025: such `std::char_trait` declarations.
+    #
+    # 29-03-2025: See https://github.com/mapnik/mapnik/issues/4499 for more information
+    # 29-03-2025: and a Minimal Reproducible Example.
+    badPlatforms = platforms.darwin;
   };
 }

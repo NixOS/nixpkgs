@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.23.0";
+  version = "2.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-NYY1HuSksfu8mujvJHeXQxplp1DbZ6Zqh+pFkIyjBPM=";
+    hash = "sha256-Ri2oSfXScwFLwCHuWBRVut77O0ExK1vcVYg7XpRAugQ=";
   };
 
   build-system = [

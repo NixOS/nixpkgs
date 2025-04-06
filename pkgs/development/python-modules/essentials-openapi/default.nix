@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials-openapi";
     tag = "v${version}";
-    hash = "sha256-XPsVPeKaaDwBFrUoydSa/7UPhw46JWMu3ww3MZfy7wg=";
+    hash = "sha256-CdDRPzRNx/5docikL8BYdFnEIr/qav8ij/1exWb24fg=";
   };
 
   nativeBuildInputs = [ hatchling ];

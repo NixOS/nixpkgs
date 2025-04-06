@@ -22,13 +22,14 @@
   librsvg,
   libvpx,
   libwebp,
+  systemd,
   lz4,
   nv-codec-headers-10,
   nvidia_x11 ? null,
   pam,
   pandoc,
   pango,
-  pulseaudio,
+  pulseaudioFull,
   python3,
   stdenv,
   util-linux,
@@ -45,6 +46,8 @@
   xorgserver,
   xxHash,
   clang,
+  withHtml ? true,
+  xpra-html5,
 }@args:
 
 let
@@ -93,7 +96,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XY8NZhWCRLjpgq0dOClzftvMR7g/X64b+OYyjOGC/lM=";
   };
 
@@ -165,6 +168,7 @@ buildPythonApplication rec {
       openh264
       libyuv
       xxHash
+      systemd
     ]
     ++ lib.optional withNvenc [
       nvencHeaders
@@ -243,7 +247,7 @@ buildPythonApplication rec {
             xauth
             which
             util-linux
-            pulseaudio
+            pulseaudioFull
           ]
         }
     ''
@@ -254,16 +258,20 @@ buildPythonApplication rec {
       )
     '';
 
-  postInstall = ''
-    # append module paths to xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+  postInstall =
+    ''
+      # append module paths to xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
-    # make application icon visible to desktop environemnts
-    icon_dir="$out/share/icons/hicolor/64x64/apps"
-    mkdir -p "$icon_dir"
-    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
-  '';
+      # make application icon visible to desktop environemnts
+      icon_dir="$out/share/icons/hicolor/64x64/apps"
+      mkdir -p "$icon_dir"
+      ln -sr "$out/share/icons/xpra.png" "$icon_dir"
+    ''
+    + lib.optionalString withHtml ''
+      ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
+    '';
 
   doCheck = false;
 
@@ -274,17 +282,18 @@ buildPythonApplication rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       offline
       numinit
       mvnetbiz
+      lucasew
     ];
   };
 }

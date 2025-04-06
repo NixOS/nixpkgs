@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/zeromq/azmq";
     license = licenses.boost;
     description = "C++ language binding library integrating ZeroMQ with Boost Asio";
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

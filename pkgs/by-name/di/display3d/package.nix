@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI for rendering and animating 3D objects";

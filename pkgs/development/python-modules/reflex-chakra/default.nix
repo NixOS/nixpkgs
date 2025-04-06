@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     tag = "v${version}";
-    hash = "sha256-Smkpcy6jPYTUWskZwWKkL9V545Ji/riQ8RFjJXm44qM=";
+    hash = "sha256-foIXPLWcxNf33y39BgiRpvwRnZOTcfAjhCvC4TD8ZMs=";
   };
 
   pythonRemoveDeps = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Chakra Implementation in Reflex";
     homepage = "https://github.com/reflex-dev/reflex-chakra";
-    changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/v${version}";
+    changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

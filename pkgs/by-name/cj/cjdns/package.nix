@@ -31,12 +31,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libsodium-sys-0.2.6" = "sha256-yr6wh0njbCFZViLROcqSSoRFj7ZAMYG5lo1g0j75SN0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LJEKjhyAsK6b7mKObX8tNJdKt53iagMD/YLzoY5GVPw=";
 
   nativeBuildInputs =
     [

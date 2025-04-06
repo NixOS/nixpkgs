@@ -13,6 +13,8 @@
   raygui,
   darwin,
   lib,
+  writers,
+  raylib-python-cffi,
 }:
 
 let
@@ -73,6 +75,10 @@ buildPythonPackage rec {
       CoreFoundation
       CoreVideo
     ];
+
+  passthru.tests = import ./passthru-tests.nix {
+    inherit src raylib-python-cffi writers;
+  };
 
   meta = {
     description = "Python CFFI bindings for Raylib";

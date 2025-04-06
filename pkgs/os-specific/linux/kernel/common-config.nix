@@ -111,6 +111,10 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
     power-management =
@@ -868,6 +872,7 @@ let
       CGROUP_HUGETLB = yes;
       CGROUP_PERF = yes;
       CGROUP_RDMA = yes;
+      CGROUP_DMEM = whenAtLeast "6.14" yes;
 
       MEMCG = yes;
       MEMCG_SWAP = whenOlder "6.1" yes;
@@ -1094,6 +1099,10 @@ let
         UNIX = yes; # Unix domain sockets.
 
         MD = yes; # Device mapper (RAID, LVM, etc.)
+
+        # enable support for device trees and overlays
+        OF = option yes;
+        OF_OVERLAY = option yes;
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;

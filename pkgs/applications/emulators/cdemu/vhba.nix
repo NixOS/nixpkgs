@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vhba";
-  version = "20240917";
+  version = "20250329";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
-    hash = "sha256-zjTLriw2zvjX0Jxfa9QtaHG5tTC7cLTKEA+WSCP+Dpg=";
+    hash = "sha256-piog1yDd8M/lpTIo9FE9SY2JwurZ6a8LG2lZ/4EmB14=";
   };
 
   makeFlags = kernelModuleMakeFlags ++ [

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libunwind
-, python3
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libunwind,
+  python3,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,5 +45,8 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lnl7 ];
+    platforms = lib.platforms.linux;
+    # https://github.com/benfred/py-spy/pull/330
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

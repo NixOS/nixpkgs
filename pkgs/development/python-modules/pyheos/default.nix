@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyheos";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
     tag = version;
-    hash = "sha256-1Jv1889RSjuediG5RGRcNdr1OmlOhpzqodgjnNmE2RY=";
+    hash = "sha256-sVh0mxhC0v1xtov4UNPMXGgYgMMTLZJaai11AOCMdiU=";
   };
 
   build-system = [ setuptools ];

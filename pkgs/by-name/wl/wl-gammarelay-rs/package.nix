@@ -14,13 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zmtC4xNNAK/TiB5TU6qsY5y0Z3roaEnTwHMZPjq6SbE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustbus-0.19.3" = "sha256-Eq3qCsjiNKe3Vdpx7a3J1icPGQmKfCyz1wcgCyztH64=";
-      "rustbus-service-0.1.0" = "sha256-9yuIPqOecTqP0zsFqSue4hL7ZEF9MQpTF1gCJpKV6nk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UVkNA+AsW8pbT8UhlsoeddOwO+XUO/+y0q4VwzkY/D8=";
 
   meta = {
     description = "Simple program that provides DBus interface to control display temperature and brightness under wayland without flickering";

@@ -20,9 +20,9 @@
 let
   inherit
     (callPackage ./common-drv-attrs.nix {
-      version = "3.2.9";
+      version = "3.2.10";
       pname = "libmirage";
-      hash = "sha256-JBd+wHSZRyRW1SZsaAaRO2dNUFkpwRCr3s1f39KyWIs=";
+      hash = "sha256-+T5Gu3VcprCkSJcq/kTySRnNI7nc+GbRtctLkzPhgK4=";
     })
     pname
     version

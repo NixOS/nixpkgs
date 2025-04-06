@@ -85,7 +85,6 @@ rec {
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
-        (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
 
         # Way too many manual retries required on Hydra.

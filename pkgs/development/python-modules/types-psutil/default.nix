@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "types-psutil";
-  version = "6.1.0.20241221";
+  version = "7.0.0.20250218";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types_psutil";
     inherit version;
-    hash = "sha256-YA9aNr1eDriIfw4/P/LPFU2QaQrYEjyKcHu6SrlNMYU=";
+    hash = "sha256-HmQs2v6DeyQClbI7HL1GkdgLCKB9KZMhQ8u64w6w25w=";
   };
 
   # Module doesn't have tests

@@ -5,29 +5,30 @@
   cssselect,
   fetchFromGitHub,
   html5lib,
+  hypothesis,
   lxml,
+  mypy,
   pdm-backend,
+  pook,
   pyright,
   pytestCheckHook,
-  pythonOlder,
   typeguard,
   types-beautifulsoup4,
+  types-html5lib,
   typing-extensions,
-  hypothesis,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2025.02.24";
+  version = "2025.03.04";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-LkE4APp1r8mTofaTfOvrc8qRHQYRs3VQhRrdXKdBW/Q=";
+    hash = "sha256-dA9sspqEChHarwk2LrK2F7Ehri2ffjOlGk3nj4KFsfU=";
   };
 
   build-system = [ pdm-backend ];
@@ -35,18 +36,25 @@ buildPythonPackage rec {
   dependencies = [
     cssselect
     types-beautifulsoup4
+    types-html5lib
     typing-extensions
   ];
+
+  optional-dependencies = {
+    mypy = [ mypy ];
+    pyright = [ pyright ];
+  };
 
   nativeCheckInputs = [
     beautifulsoup4
     html5lib
     hypothesis
     lxml
-    pyright
+    pook
     pytestCheckHook
     typeguard
-  ];
+    urllib3
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "lxml-stubs" ];
 

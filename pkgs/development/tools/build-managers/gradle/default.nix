@@ -1,6 +1,8 @@
 {
+  jdk11,
   jdk17,
   jdk21,
+  jdk23,
 }:
 
 rec {
@@ -230,8 +232,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.12.1";
-    hash = "sha256-jZepeYT2y9K4X+TGCnQ0QKNHVEvxiBgEjmEfUojUbJQ=";
+    version = "8.13";
+    hash = "sha256-IPGxF2I3JUpvwgTYQ0GW+hGkz7OHVnUZxhVW6HEK7Xg=";
     defaultJava = jdk21;
   };
 
@@ -251,6 +253,7 @@ rec {
       concatTextFile,
       makeSetupHook,
       nix-update-script,
+      runCommand,
     }:
     gradle-unwrapped: updateAttrPath:
     lib.makeOverridable (
@@ -281,8 +284,33 @@ rec {
         passthru =
           {
             fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
-            inherit (gradle) jdk tests;
+            inherit (gradle) jdk;
             unwrapped = gradle;
+            tests = {
+              toolchains =
+                runCommand "detects-toolchains-from-nix-env"
+                  {
+                    # Use JDKs that are not the default for any of the gradle versions
+                    nativeBuildInputs = [
+                      (gradle.override {
+                        javaToolchains = [
+                          jdk11
+                          jdk23
+                        ];
+                      })
+                    ];
+                    src = ./tests/java-application;
+                  }
+                  ''
+                    cp -a $src/* .
+                    env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+                      gradle javaToolchains --no-daemon --quiet --console plain > $out
+                    cat $out | grep "Language Version:   11"
+                    cat $out | grep "Detected by:        environment variable 'JAVA_TOOLCHAIN_NIX_0'"
+                    cat $out | grep "Language Version:   23"
+                    cat $out | grep "Detected by:        environment variable 'JAVA_TOOLCHAIN_NIX_1'"
+                  '';
+            } // gradle.tests;
           }
           // lib.optionalAttrs (updateAttrPath != null) {
             updateScript = nix-update-script {

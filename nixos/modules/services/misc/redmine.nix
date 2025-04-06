@@ -395,8 +395,9 @@ in
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/plugins' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/public/assets' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/public/themes' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
 
       "d /run/redmine - - - - -"
@@ -405,8 +406,9 @@ in
       "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
       "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
       "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
+      "L+ /run/redmine/public/assets - - - - ${cfg.stateDir}/public/assets"
       "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
-      "L+ /run/redmine/public/themes - - - - ${cfg.stateDir}/public/themes"
+      "L+ /run/redmine/themes - - - - ${cfg.stateDir}/themes"
       "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
     ];
 
@@ -434,7 +436,7 @@ in
 
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
-        rm -rf "${cfg.stateDir}/public/themes/"*
+        rm -rf "${cfg.stateDir}/themes/"*
 
         # start with a fresh config directory
         # the config directory is copied instead of linked as some mutable data is stored in there
@@ -452,11 +454,11 @@ in
 
         # link in all user specified themes
         for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
-          ln -fs $theme/* "${cfg.stateDir}/public/themes"
+          ln -fs $theme/* "${cfg.stateDir}/themes"
         done
 
         # link in redmine provided themes
-        ln -sf ${cfg.package}/share/redmine/public/themes.dist/* "${cfg.stateDir}/public/themes/"
+        ln -sf ${cfg.package}/share/redmine/themes.dist/* "${cfg.stateDir}/themes/"
 
 
         # link in all user specified plugins
@@ -486,6 +488,7 @@ in
         ${bundle} exec rake db:migrate
         ${bundle} exec rake redmine:plugins:migrate
         ${bundle} exec rake redmine:load_default_data
+        ${bundle} exec rake assets:precompile
       '';
 
       serviceConfig = {

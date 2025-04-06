@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeBinaryWrapper
-, runtimeShell
-, bat
-, gnugrep
-, gnumake
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  runtimeShell,
+  bat,
+  gnugrep,
+  gnumake,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/fzf-make \
       --set SHELL ${runtimeShell} \
-      --suffix PATH : ${lib.makeBinPath [ bat gnugrep gnumake ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          bat
+          gnugrep
+          gnumake
+        ]
+      }
   '';
 
   meta = {
@@ -36,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda sigmanificient ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      sigmanificient
+    ];
     mainProgram = "fzf-make";
   };
 }

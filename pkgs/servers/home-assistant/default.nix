@@ -151,6 +151,18 @@ let
         ];
       });
 
+      # Pinned due to home-assistant still needing 1.10.0 verison
+      # Remove this when home-assistant upates the jellyfin-apiclient-python version
+      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
+        version = "1.10.0";
+        src = fetchFromGitHub {
+          owner = "jellyfin";
+          repo = "jellyfin-apiclient-python";
+          tag = "v${version}";
+          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
+        };
+      });
+
       # acme and thus hass-nabucasa doesn't support josepy v2
       # https://github.com/certbot/certbot/issues/10185
       josepy = super.josepy.overridePythonAttrs (old: rec {
@@ -393,7 +405,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.3";
+  hassVersion = "2025.3.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -414,13 +426,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-uWNK7izeaK5XZMNfDgq/npJ1PrmC/HYHvHc5NU7Rff8=";
+    hash = "sha256-g1t9xAjrSSePyAloTQ2qwxAGEXJUTWX2zIZmAvlGGa8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-axmqJRiOt5T8gr/eh7qXOQBMLrcR9ZSqLS8SlmTgkE8=";
+    hash = "sha256-MIh8FMTKZVEZ/zC+Av8fykTpz9kkXgZZfnsuOZbgP0M=";
   };
 
   build-system = with python.pkgs; [

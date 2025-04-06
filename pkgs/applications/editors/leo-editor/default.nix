@@ -1,4 +1,12 @@
-{ lib, mkDerivation, python3, fetchFromGitHub, makeWrapper, wrapQtAppsHook, makeDesktopItem }:
+{
+  lib,
+  mkDerivation,
+  python3,
+  fetchFromGitHub,
+  makeWrapper,
+  wrapQtAppsHook,
+  makeDesktopItem,
+}:
 
 mkDerivation rec {
   pname = "leo-editor";
@@ -13,8 +21,15 @@ mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ wrapQtAppsHook makeWrapper python3 ];
-  propagatedBuildInputs = with python3.pkgs; [ pyqt6 docutils ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    makeWrapper
+    python3
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyqt6
+    docutils
+  ];
 
   desktopItem = makeDesktopItem {
     name = "leo-editor";
@@ -24,17 +39,45 @@ mkDerivation rec {
     comment = meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
-    categories = [ "Application" "Development" "IDE" ];
+    categories = [
+      "Application"
+      "Development"
+      "IDE"
+    ];
     startupNotify = false;
     mimeTypes = [
-      "text/plain" "text/asp" "text/x-c" "text/x-script.elisp" "text/x-fortran"
-      "text/html" "application/inf" "text/x-java-source" "application/x-javascript"
-      "application/javascript" "text/ecmascript" "application/x-ksh" "text/x-script.ksh"
-      "application/x-tex" "text/x-script.rexx" "text/x-pascal" "text/x-script.perl"
-      "application/postscript" "text/x-script.scheme" "text/x-script.guile" "text/sgml"
-      "text/x-sgml" "application/x-bsh" "application/x-sh" "application/x-shar"
-      "text/x-script.sh" "application/x-tcl" "text/x-script.tcl" "application/x-texinfo"
-      "application/xml" "text/xml" "text/x-asm"
+      "text/plain"
+      "text/asp"
+      "text/x-c"
+      "text/x-script.elisp"
+      "text/x-fortran"
+      "text/html"
+      "application/inf"
+      "text/x-java-source"
+      "application/x-javascript"
+      "application/javascript"
+      "text/ecmascript"
+      "application/x-ksh"
+      "text/x-script.ksh"
+      "application/x-tex"
+      "text/x-script.rexx"
+      "text/x-pascal"
+      "text/x-script.perl"
+      "application/postscript"
+      "text/x-script.scheme"
+      "text/x-script.guile"
+      "text/sgml"
+      "text/x-sgml"
+      "application/x-bsh"
+      "application/x-sh"
+      "application/x-shar"
+      "text/x-script.sh"
+      "application/x-tcl"
+      "text/x-script.tcl"
+      "application/x-texinfo"
+      "application/xml"
+      "text/xml"
+      "text/x-asm"
     ];
   };
 
@@ -60,7 +103,10 @@ mkDerivation rec {
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;
-    maintainers = with maintainers; [ leonardoce kashw2 ];
+    maintainers = with maintainers; [
+      leonardoce
+      kashw2
+    ];
     mainProgram = "leo";
   };
 }

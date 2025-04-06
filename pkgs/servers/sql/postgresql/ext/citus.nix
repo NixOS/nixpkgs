@@ -11,13 +11,13 @@
 
 postgresqlBuildExtension rec {
   pname = "citus";
-  version = "13.0.2";
+  version = "13.0.3";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
     tag = "v${version}";
-    hash = "sha256-SuJs6OCHKO7efQagsATgn/V9rgMyuXQIHGCEP9ME7tQ=";
+    hash = "sha256-tQ2YkMUeziz+dhfXtfuK0x8PWH3vfoJiVbE+YvQ/Gzc=";
   };
 
   patches = [

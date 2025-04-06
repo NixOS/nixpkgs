@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "webauthn";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "duo-labs";
     repo = "py_webauthn";
     tag = "v${version}";
-    hash = "sha256-QXaZeR8PC3fW3KjmVKsupnftznSxLw8b1HvllOAiouk=";
+    hash = "sha256-r7enalDiFQDzjiLGuetXIJxFAUSGpWCnrCO/q5lkO10=";
   };
 
   build-system = [ setuptools ];

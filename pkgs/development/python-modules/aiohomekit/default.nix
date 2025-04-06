@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.8";
+  version = "3.2.13";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-b197P2hTk6lhLKm+4VvyvyPZDqb7NqO0aqoIf3BQBfs=";
+    hash = "sha256-J6VxfuLHdxJ92V1puOWv+dnlpBKRBww1iP6IcRMqamk=";
   };
 
   build-system = [ poetry-core ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aiohomekitctl";

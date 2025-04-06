@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "4.17";
+  version = "4.17.2";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WVNeox5xygQjD5ekmcwZX9AnfhBq6YpHBLC2+WZJzvI=";
+    hash = "sha256-erz/kkaywkuT4k3wg8a48p2pTEqzsr3pHDrtNDtrq2I=";
   };
 
   nativeBuildInputs = [

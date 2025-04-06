@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmathjax-directory=${nodePackages.mathjax}"
+    "-Dintrospection=true"
   ] ++ (map (x: "-D${x}=true") backends);
 
   buildInputs = [

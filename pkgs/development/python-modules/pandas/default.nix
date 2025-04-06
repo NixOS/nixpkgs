@@ -53,7 +53,6 @@
   # tests
   adv_cmds,
   glibc,
-  glibcLocales,
   hypothesis,
   pytestCheckHook,
   pytest-xdist,
@@ -179,7 +178,6 @@ let
 
     nativeCheckInputs =
       [
-        glibcLocales
         hypothesis
         pytest-asyncio
         pytest-xdist
@@ -231,7 +229,6 @@ let
     preCheck =
       ''
         export HOME=$TMPDIR
-        export LC_ALL="en_US.UTF-8"
         cd $out/${python.sitePackages}/pandas
       ''
       # TODO: Get locale and clipboard support working on darwin.

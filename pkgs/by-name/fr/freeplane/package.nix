@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
@@ -35,12 +36,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
+  patches = [
+    # Plugin update to support Gradle 8.13; remove when included in a release.
+    (fetchpatch {
+      url = "https://github.com/freeplane/freeplane/commit/e58958783ef6f85ab00bf270c1f897093c4d7006.patch";
+      hash = "sha256-oQF/GbItl2ZEVlTKzojqk9xTWl8CVP7V3yig/py71hk=";
+    })
+  ];
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" "-x" "test" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk}"
+    "-x"
+    "test"
+  ];
 
   # share/freeplane/core/org.freeplane.core/META-INF doesn't
   # always get generated with parallel building enabled

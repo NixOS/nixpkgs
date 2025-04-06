@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "velocity";
-  version = "3.4.0-unstable-2025-02-28";
+  version = "3.4.0-unstable-2025-04-03";
 
   src = fetchFromGitHub {
     owner = "PaperMC";
     repo = "Velocity";
-    rev = "b8fe3577c9582972a92134642e35eb7fac671376";
-    hash = "sha256-V+h2+M567niYmDWxT6hInbsVivL3pLp2pZO8D91kXkg=";
+    rev = "c72a3eefdeee26d39d5382c30435f9ce1819153e";
+    hash = "sha256-mBVNZAuAarBBQRD4H7XR/Hp+VmO+yoOwrkj/tQeEOWA=";
   };
 
   nativeBuildInputs =

@@ -80,6 +80,9 @@ buildPythonPackage rec {
     "test_jpg_cmyk"
     "test_miff_cmyk8"
     "test_tiff_cmyk8"
+    "test_miff_cmyk16"
+    "test_png_gray16"
+    "test_png_rgb16"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

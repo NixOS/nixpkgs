@@ -12,7 +12,7 @@
   makeWrapper,
   nix-update-script,
   pkg-config,
-  python3Full,
+  python3,
   SDL2,
   stdenv,
   versionCheckHook,
@@ -21,17 +21,17 @@
 }:
 
 let
-  python = python3Full;
+  python = python3;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  version = "8.3.6.25022803";
+  version = "8.3.7.25031702";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     tag = finalAttrs.version;
-    hash = "sha256-ibWbYf+e8PZ8ZxLHVPLzHBS0qf+eLzJasJJFHxXlCfk=";
+    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
   };
 
   nativeBuildInputs = [

@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       c-ares
       lua5_4
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
 

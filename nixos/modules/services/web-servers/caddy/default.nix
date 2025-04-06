@@ -53,13 +53,11 @@ let
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
         '';
 
-        Caddyfile-formatted =
-          pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; }
-            ''
-              mkdir -p $out
-              cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-              caddy fmt --overwrite $out/Caddyfile
-            '';
+        Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { } ''
+          mkdir -p $out
+          cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+          ${lib.getExe cfg.package} fmt --overwrite $out/Caddyfile
+        '';
       in
       "${
         if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
@@ -437,7 +435,7 @@ in
           # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
           ExecStart = [
             ""
-            ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}''
+            ''${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}''
           ];
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [

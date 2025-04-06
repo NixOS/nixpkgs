@@ -1,20 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
-    tls-cert =
-      pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-        openssl req \
-          -x509 -newkey rsa:4096 -sha256 -days 365 \
-          -nodes -out cert.pem -keyout key.pem \
-          -subj '/CN=minio' -addext "subjectAltName=DNS:localhost"
+    tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+      openssl req \
+        -x509 -newkey rsa:4096 -sha256 -days 365 \
+        -nodes -out cert.pem -keyout key.pem \
+        -subj '/CN=minio' -addext "subjectAltName=DNS:localhost"
 
-        mkdir -p $out
-        cp key.pem cert.pem $out
-      '';
+      mkdir -p $out
+      cp key.pem cert.pem $out
+    '';
 
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
     secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
     minioPythonScript = pkgs.writeScript "minio-test.py" ''
-      #! ${pkgs.python3.withPackages(ps: [ ps.minio ])}/bin/python
+      #! ${pkgs.python3.withPackages (ps: [ ps.minio ])}/bin/python
       import io
       import os
       import sys
@@ -53,19 +53,21 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
 
     nodes = {
-      machine = { pkgs, ... }: {
-        services.minio = {
-          enable = true;
-          inherit rootCredentialsFile;
+      machine =
+        { pkgs, ... }:
+        {
+          services.minio = {
+            enable = true;
+            inherit rootCredentialsFile;
+          };
+          environment.systemPackages = [ pkgs.minio-client ];
+
+          # Minio requires at least 1GiB of free disk space to run.
+          virtualisation.diskSize = 4 * 1024;
+
+          # Minio pre allocates 2GiB or memory, reserve some more
+          virtualisation.memorySize = 4096;
         };
-        environment.systemPackages = [ pkgs.minio-client ];
-
-        # Minio requires at least 1GiB of free disk space to run.
-        virtualisation.diskSize = 4 * 1024;
-
-        # Minio pre allocates 2GiB or memory, reserve some more
-        virtualisation.memorySize = 4096;
-      };
     };
 
     testScript = ''
@@ -110,4 +112,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       machine.shutdown()
     '';
-  })
+  }
+)

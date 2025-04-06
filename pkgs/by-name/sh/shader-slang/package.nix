@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/slangc";
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
