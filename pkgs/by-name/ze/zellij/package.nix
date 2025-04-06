@@ -24,6 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-EK+eQfNhfVxjIsoyj43tcRjHDT9O8/n7hUz24BC42nw=";
   };
 
+  # Fix build with Rust 1.86
+  # FIXME: remove when merged upstream
+  # See: https://github.com/zellij-org/zellij/pull/4118
+  cargoPatches = [
+    ./rust-1.86.patch
+  ];
+
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
   # the vendored one
   postPatch = ''
@@ -32,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0+cU2C6zjVv2G8h7oK0ztMDdukVR6QRzN81/SfLZapY=";
+  cargoHash = "sha256-d2/tEYU2tOLtC0NHa7YBGrbmHHDV7BkUZHJ2P7GdwAw=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
