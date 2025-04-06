@@ -31,7 +31,7 @@ buildGoModule {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${mainProgram}";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   passthru = {
     updateScript = nix-update-script { };
