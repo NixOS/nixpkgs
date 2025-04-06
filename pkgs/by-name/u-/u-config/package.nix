@@ -76,6 +76,11 @@ stdenv.mkDerivation (
     pname = "u-config";
     version = "0.33.3";
 
+    outputs = [
+      "out"
+      "man"
+    ];
+
     # fetch using fetchurl to permit use during bootstrap
     src = fetchurl {
       url = "https://github.com/skeeto/u-config/releases/download/v${finalAttrs.version}/u-config-${finalAttrs.version}.tar.gz";
@@ -123,6 +128,7 @@ stdenv.mkDerivation (
       runHook preInstall
 
       installBin ${binary}
+      installManPage u-config.1
 
       runHook postInstall
     '';
