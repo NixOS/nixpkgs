@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Dead simple, no frills Go cross compile tool";
     mainProgram = "gox";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }
