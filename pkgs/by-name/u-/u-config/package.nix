@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
@@ -27,11 +27,10 @@ stdenv.mkDerivation (
     pname = "u-config";
     version = "0.33.3";
 
-    src = fetchFromGitHub {
-      owner = "skeeto";
-      repo = "u-config";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
+    # fetch using fetchurl to permit use during bootstrap
+    src = fetchurl {
+      url = "https://github.com/skeeto/u-config/releases/download/v${finalAttrs.version}/u-config-${finalAttrs.version}.tar.gz";
+      hash = "sha256-wtSGgU99/UJ06Ww5+tmorhBx70It+cvfp2EO8fCH9ew=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
