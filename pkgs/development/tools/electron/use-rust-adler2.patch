@@ -6,8 +6,8 @@ index 6b996aa1fe3865187d02c017e56c0918bcc9b8f4..68b085be200fa4f116aa709b9157c4d2
      # These are no longer present in the Windows toolchain.
      stdlib_files += [
        "addr2line",
--      "adler2",
-+      "adler",
+-      "adler",
++      "adler2",
        "gimli",
        "libc",
        "memchr",
