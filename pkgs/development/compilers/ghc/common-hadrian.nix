@@ -186,9 +186,18 @@
       lib.optionals (lib.versionOlder version "9.6.7") [
         ./docs-sphinx-7.patch
       ]
-
+      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.5") [
+        # Fix aarch64-linux builds of 9.6.0 - 9.6.4.
+        # Fixes a pointer type mismatch in the RTS.
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/24348
+        (fetchpatch {
+          name = "fix-incompatible-pointer-types.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1e48c43483693398001bfb0ae644a3558bf6a9f3.diff";
+          hash = "sha256-zUlzpX7J1n+MCEv9AWpj69FTy2uzJH8wrQDkTexGbgM=";
+        })
+      ]
       ++
-        lib.optional
+        lib.optionals
           (
             # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
             lib.versionOlder version "9.11"
