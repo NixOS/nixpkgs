@@ -35,7 +35,13 @@ buildPythonApplication rec {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${version}";
-    hash = "sha256-mwe/CajmQD5nDNYtQXRQm4vIJJiY7P5uFrvn8Ngjqc4=";
+    hash = "sha256-HSAQJJqJMVh44wgOQm+0gteShLogklBFuIzWtoVTf9I=";
+    # Upstream uses versioneer, which relies on gitattributes substitution.
+    # This leads to non-reproducible archives on GitHub.
+    # See https://github.com/NixOS/nixpkgs/issues/84312
+    postFetch = ''
+      rm "$out/kikit/_version.py"
+    '';
   };
 
   build-system = [
@@ -74,6 +80,11 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "kikit"
   ];
+
+  postPatch = ''
+    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
+    echo 'def get_versions(): return {"version": "${version}"}' > kikit/_version.py
+  '';
 
   preCheck = ''
     export PATH=$PATH:$out/bin
