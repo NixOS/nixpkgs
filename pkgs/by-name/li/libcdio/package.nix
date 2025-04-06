@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchzip,
   nix-update-script,
   autoreconfHook,
   testers,
@@ -17,10 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio";
   version = "2.2.0";
 
-  src = fetchFromGitHub {
-    owner = "libcdio";
-    repo = "libcdio";
-    tag = finalAttrs.version;
+  src = fetchzip {
+    urls = [
+      "https://github.com/libcdio/libcdio/archive/refs/tags/${finalAttrs.version}.tar.gz"
+      "https://git.savannah.gnu.org/cgit/libcdio.git/snapshot/libcdio-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
   };
 
