@@ -34,6 +34,21 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
       hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
     })
+    (fetchpatch {
+      name = "fix-tbb-mingw-compile.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/1361.patch";
+      hash = "sha256-jVa4HQetZv0vImdv549MyTy6/8t9dy8m6YAmjPGNQ18=";
+    })
+    (fetchpatch {
+      name = "fix-tbb-mingw-link.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/1193.patch";
+      hash = "sha256-ZQbwUmuIZoGVBof8QNR3V8vU385e2X7EvU3+Fbj4+M8=";
+    })
+  ];
+
+  cmakeFlags = [
+    # Skip tests to work around https://github.com/uxlfoundation/oneTBB/issues/1695
+    (lib.cmakeBool "TBB_TEST" (!stdenv.hostPlatform.isWindows))
   ];
 
   # Fix build with modern gcc
@@ -77,7 +92,7 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
       thoughtpolice
       tmarkus

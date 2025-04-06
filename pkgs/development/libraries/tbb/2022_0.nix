@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  cmakeFlags = [
+    # Skip tests to work around https://github.com/uxlfoundation/oneTBB/issues/1695
+    (lib.cmakeBool "TBB_TEST" (!stdenv.hostPlatform.isWindows))
+  ];
+
   # Fix build with modern gcc
   # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
   NIX_CFLAGS_COMPILE =
@@ -77,7 +82,7 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
       thoughtpolice
       tmarkus
