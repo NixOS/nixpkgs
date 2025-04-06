@@ -2968,6 +2968,23 @@ self: super:
   # Stackage LTS 23.17 has 0.1.5, which was marked deprecated as it was broken.
   # Can probably be dropped for Stackage LTS >= 23.18
   network-control = doDistribute self.network-control_0_1_6;
+
+  # Needs to match pandoc, see:
+  # https://github.com/jgm/pandoc/commit/97b36ecb7703b434ed4325cc128402a9eb32418d
+  commonmark-pandoc = doDistribute self.commonmark-pandoc_0_2_2_3;
+
+  pandoc = lib.pipe super.pandoc [
+    # Test output changes with newer version of texmath
+    (appendPatch (fetchpatch {
+      url = "https://github.com/jgm/pandoc/commit/e2a0cc9ddaf9e7d35cbd3c76f37e39737a79c2bf.patch";
+      sha256 = "sha256-qA9mfYS/VhWwYbB9yu7wbHwozz3cqequ361PxkbAt08=";
+      includes = [ "test/*" ];
+    }))
+    (appendPatch (fetchpatch {
+      url = "https://github.com/jgm/pandoc/commit/4ba0bac5c118da4da1d44e3bbb38d7c7aef19e3b.patch";
+      sha256 = "sha256-ayRKeCqYKgZVA826xgAXxGhttm0Gx4ZrIRJlFlXPKhw=";
+    }))
+  ];
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
