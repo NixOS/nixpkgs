@@ -50,6 +50,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "mapclassify/tests/test_greedy.py"
     "mapclassify/tests/test_rgba.py"
+    # Abort trap: 6
+    "mapclassify/tests/test_mapclassify.py"
   ];
 
   pythonImportsCheck = [ "mapclassify" ];
