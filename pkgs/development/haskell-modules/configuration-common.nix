@@ -2675,9 +2675,6 @@ self: super:
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
-  # unbreak with tasty-quickcheck 0.11, can be dropped for Stackage LTS >= 23.9
-  text-builder = doDistribute self.text-builder_0_6_7_3;
-
   postgres-websockets = lib.pipe super.postgres-websockets [
     (addTestToolDepends [
       pkgs.postgresql
