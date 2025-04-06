@@ -15,7 +15,9 @@
         "jnoortheen.nix-ide"
       ],
       "settings": {
-        "nix.formatterPath": "nixfmt-rfc-style",
+        "[nix]": {
+            "editor.formatOnSave": true
+        },
         "nix.enableLanguageServer": true,
         "nix.serverPath": "nixd"
       }
