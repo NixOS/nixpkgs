@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
