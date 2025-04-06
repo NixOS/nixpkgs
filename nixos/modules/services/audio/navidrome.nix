@@ -102,6 +102,11 @@ in
             mode = "700";
             inherit (cfg) user group;
           };
+          "${cfg.settings.MusicFolder or (WorkingDirectory + "/music")}"."d" = {
+            mode = ":700";
+            user = ":${cfg.user}";
+            group = ":${cfg.group}";
+          };
         };
         services.navidrome = {
           description = "Navidrome Media Server";

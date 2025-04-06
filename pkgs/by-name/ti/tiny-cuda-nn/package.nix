@@ -1,4 +1,5 @@
 {
+  config,
   cmake,
   cudaPackages,
   fetchFromGitHub,
@@ -176,7 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ connorbaker ];
     platforms = platforms.linux;
-    # g++: error: unrecognized command-line option '-mf16c'
-    broken = stdenv.hostPlatform.isAarch64;
+    badPlatforms = [
+      # g++: error: unrecognized command-line option '-mf16c'
+      lib.systems.inspect.patterns.isAarch64
+    ];
+    # Requires torch.cuda._is_compiled() == True to build
+    broken = !config.cudaSupport;
   };
 })
