@@ -15,7 +15,7 @@
   webkitgtk_4_0,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tunefish";
   version = "0-unstable-2021-12-19";
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     pkg-config
     python3
   ];
+
   buildInputs = [
     alsa-lib
     curl
@@ -43,15 +44,18 @@ stdenv.mkDerivation {
     webkitgtk_4_0
   ];
 
-  postPatch = ''
-    patchShebangs src/tunefish4/generate-lv2-ttl.py
-  '';
-
   makeFlags = [
     "-C"
     "src/tunefish4/Builds/LinuxMakefile"
     "CONFIG=Release"
   ];
+
+  # silences build warnings
+  HOME = "/build";
+
+  postPatch = ''
+    patchShebangs src/tunefish4/generate-lv2-ttl.py
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -69,11 +73,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
