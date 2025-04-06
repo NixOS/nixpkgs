@@ -35,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmocka # cmake expects cmocka module
   ];
 
+  # BUILD file already exists in the source
+  cmakeBuildDir = "build.dir";
+
   cmakeFlags =
     lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
