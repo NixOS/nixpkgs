@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, fftw
-, alsa-lib
-, pulseaudio
+{
+  lib,
+  python3,
+  fetchPypi,
+  fftw,
+  alsa-lib,
+  pulseaudio,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -45,7 +46,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
-    maintainers = with maintainers; [ pulsation kashw2 ];
+    maintainers = with maintainers; [
+      pulsation
+      kashw2
+    ];
     platforms = platforms.linux;
   };
 }

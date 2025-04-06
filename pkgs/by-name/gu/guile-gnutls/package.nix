@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, gnutls
-, guile
-, libtool
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  gnutls,
+  guile,
+  libtool,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {

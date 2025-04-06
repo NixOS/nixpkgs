@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, buildGoModule
-, glib
-, pkg-config
-, cairo
-, gtk3
-, xcur2png
-, libX11
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  buildGoModule,
+  glib,
+  pkg-config,
+  cairo,
+  gtk3,
+  xcur2png,
+  libX11,
+  zlib,
 }:
 
 buildGoModule rec {
@@ -24,7 +25,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-KzAozP9pfqoFOgK+/xmwsI0m2QWAVW/b+hoWHlQoVX0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     pkg-config

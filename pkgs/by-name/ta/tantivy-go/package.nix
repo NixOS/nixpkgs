@@ -29,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     description = "Tantivy go bindings";
     homepage = "https://github.com/anyproto/tantivy-go";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ autrimpo ];
+    maintainers = with lib.maintainers; [
+      autrimpo
+      adda
+    ];
   };
 }

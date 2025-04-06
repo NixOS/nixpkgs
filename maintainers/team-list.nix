@@ -813,6 +813,7 @@ with lib.maintainers;
       _9999years
       Gabriella439
       curran
+      lf-
     ];
     scope = "Group registry for packages maintained by Mercury";
     shortName = "Mercury Employees";
@@ -836,6 +837,8 @@ with lib.maintainers;
     members = [
       raitobezarius
       qyriad
+      _9999years
+      lf-
     ];
     scope = "Maintain the Lix package manager inside of Nixpkgs.";
     shortName = "Lix ecosystem";
@@ -862,6 +865,19 @@ with lib.maintainers;
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";
+  };
+
+  nextcloud = {
+    members = [
+      bachp
+      britter
+      dotlambda
+      ma27
+      provokateurin
+    ];
+    scope = "Maintain Nextcloud, its tests and the integration of applications.";
+    shortName = "Nextcloud";
+    enableFeatureFreezePing = true;
   };
 
   ngi = {

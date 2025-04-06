@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
-  yara-x,
+  pkgs,
 }:
 buildPythonPackage rec {
   pname = "yara-x";
@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   buildAndTestSubdir = "py";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-8s8IUblGJGob/y8x8BoPcXJe83zRmqIZHMxs0iQD7R0=";
+    hash = "sha256-pD4qyw+TTpmcoX1N3C65VelYszYifm9sFOsEkXEysvo=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = [ yara-x ];
+  buildInputs = [ pkgs.yara-x ];
 
   pythonImportsCheck = [ "yara_x" ];
 

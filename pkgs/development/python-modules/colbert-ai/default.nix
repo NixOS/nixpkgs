@@ -74,10 +74,5 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       bachp
     ];
-    badPlatforms = [
-      # `import torch.distributed.tensor` fails on darwin:
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a packag
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

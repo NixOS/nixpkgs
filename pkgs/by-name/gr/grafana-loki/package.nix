@@ -12,14 +12,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.4.2";
+  version = "3.4.3";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-GE92NlFCOk6qFtrgeBvLDI0OkmWaJ1j07Q14+jgi9+w=";
+    hash = "sha256-1tI9X2eIKuWEWJBbN4UAw8yeRrjgfqcenJyTNMk5rqU=";
   };
 
   vendorHash = null;

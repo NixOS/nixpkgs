@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libassuan
-, libgpg-error
-, makeBinaryWrapper
-, texinfo
-, common-updater-scripts
-, writers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libassuan,
+  libgpg-error,
+  makeBinaryWrapper,
+  texinfo,
+  common-updater-scripts,
+  writers,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook makeBinaryWrapper texinfo ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeBinaryWrapper
+    texinfo
+  ];
 
   configureFlags = [
     "--enable-maintainer-mode"

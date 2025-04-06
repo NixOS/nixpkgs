@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-e4jHa+/HAe+bKUngcdF6zpI6+l7NvnjCEtNCAA5QHCo=";
+    hash = "sha256-mxQHqApyxO57zo/lK8p9xWEdEgkXF89yX/+pPBUlbwE=";
   };
 
   build-system = [
@@ -81,6 +81,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # NameError: name 'MockRemat' is not defined
+    # https://github.com/keras-team/keras/issues/21126
+    "test_functional_model_with_remat"
+
     # Tries to install the package in the sandbox
     "test_keras_imports"
 

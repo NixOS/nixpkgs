@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, libGLU }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  libGLU,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqglviewer";
@@ -12,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase libGLU ];
+  buildInputs = [
+    qtbase
+    libGLU
+  ];
 
   dontWrapQtApps = true;
 

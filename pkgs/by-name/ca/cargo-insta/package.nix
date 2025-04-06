@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +14,6 @@ rustPlatform.buildRustPackage rec {
     rev = "e81bae9b7b7f536bd9057158fe5a219facced116";
     hash = "sha256-5IGp4WuC34wRB7xSiDWzScLvV26yjsdw/LT/7CN9hWc=";
   };
-
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Vx26ArAcsW0NNVNZa4M5hqz/sm1gecrun/bbRWMu07Q=";
@@ -35,6 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      oxalica
+      matthiasbeyer
+    ];
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = {

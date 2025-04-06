@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kube-router }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  kube-router,
+}:
 
 buildGoModule rec {
   pname = "kube-router";

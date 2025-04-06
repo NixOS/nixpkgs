@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, makeWrapper, zig }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  zig,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-zigbuild";

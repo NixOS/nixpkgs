@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, cmake
-, pkg-config
-, makeWrapper
-, wrapGAppsHook3
-, bzip2
-, fontconfig
-, freetype
-, libGL
-, libX11
-, libXcursor
-, libXrandr
-, libXi
-, libxkbcommon
-, vulkan-loader
-, wayland
-, zenity
-, libsForQt5
-, cairo
-, pango
-, atkmm
-, gdk-pixbuf
-, dbus-glib
-, gtk3
-, glib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  wrapGAppsHook3,
+  bzip2,
+  fontconfig,
+  freetype,
+  libGL,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXi,
+  libxkbcommon,
+  vulkan-loader,
+  wayland,
+  zenity,
+  libsForQt5,
+  cairo,
+  pango,
+  atkmm,
+  gdk-pixbuf,
+  dbus-glib,
+  gtk3,
+  glib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -67,22 +68,24 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  postInstall = ''
-    install -Dm644 assets/linux/com.mtkennerly.ludusavi.metainfo.xml -t \
-      "$out/share/metainfo/"
-    install -Dm644 assets/icon.png \
-      "$out/share/icons/hicolor/64x64/apps/com.mtkennerly.ludusavi.png"
-    install -Dm644 assets/icon.svg \
-      "$out/share/icons/hicolor/scalable/apps/com.mtkennerly.ludusavi.svg"
-    install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
-    install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
-    install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ludusavi \
-      --bash <($out/bin/ludusavi complete bash) \
-      --fish <($out/bin/ludusavi complete fish) \
-      --zsh <($out/bin/ludusavi complete zsh)
-  '';
+  postInstall =
+    ''
+      install -Dm644 assets/linux/com.mtkennerly.ludusavi.metainfo.xml -t \
+        "$out/share/metainfo/"
+      install -Dm644 assets/icon.png \
+        "$out/share/icons/hicolor/64x64/apps/com.mtkennerly.ludusavi.png"
+      install -Dm644 assets/icon.svg \
+        "$out/share/icons/hicolor/scalable/apps/com.mtkennerly.ludusavi.svg"
+      install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
+      install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
+      install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd ludusavi \
+        --bash <($out/bin/ludusavi complete bash) \
+        --fish <($out/bin/ludusavi complete fish) \
+        --zsh <($out/bin/ludusavi complete zsh)
+    '';
 
   postFixup =
     let
@@ -105,17 +108,24 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]} \
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${
+        lib.makeBinPath [
+          zenity
+          libsForQt5.kdialog
+        ]
+      } \
         "''${gappsWrapperArgs[@]}"
     '';
-
 
   meta = with lib; {
     description = "Backup tool for PC game saves";
     homepage = "https://github.com/mtkennerly/ludusavi";
     changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 megheaiulian];
+    maintainers = with maintainers; [
+      pasqui23
+      megheaiulian
+    ];
     mainProgram = "ludusavi";
   };
 }

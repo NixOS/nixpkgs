@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf_26
-, git
-, testers
-, buf
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf_26,
+  git,
+  testers,
+  buf,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -28,7 +29,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
@@ -84,7 +88,11 @@ buildGoModule rec {
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jk lrewega aaronjheng ];
+    maintainers = with lib.maintainers; [
+      jk
+      lrewega
+      aaronjheng
+    ];
     mainProgram = "buf";
   };
 }

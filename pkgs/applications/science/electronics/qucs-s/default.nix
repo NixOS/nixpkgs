@@ -1,21 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, flex
-, bison
-, qtbase
-, qtcharts
-, qttools
-, qtsvg
-, qtwayland
-, wrapQtAppsHook
-, libX11
-, cmake
-, gperf
-, adms
-, ngspice
-, qucsator-rf
-, kernels ? [ ngspice qucsator-rf ]
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  flex,
+  bison,
+  qtbase,
+  qtcharts,
+  qttools,
+  qtsvg,
+  qtwayland,
+  wrapQtAppsHook,
+  libX11,
+  cmake,
+  gperf,
+  adms,
+  ngspice,
+  qucsator-rf,
+  kernels ? [
+    ngspice
+    qucsator-rf
+  ],
 }:
 
 stdenv.mkDerivation rec {
@@ -48,9 +52,25 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
-  buildInputs = [ qtbase qttools qtcharts qtsvg gperf adms ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland libX11 ]
+  nativeBuildInputs = [
+    flex
+    bison
+    wrapQtAppsHook
+    cmake
+  ];
+  buildInputs =
+    [
+      qtbase
+      qttools
+      qtcharts
+      qtsvg
+      gperf
+      adms
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      libX11
+    ]
     ++ kernels;
 
   cmakeFlags = [
@@ -58,7 +78,12 @@ stdenv.mkDerivation rec {
   ];
 
   # Make custom kernels available from qucs-s
-  qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath kernels)
+  ];
 
   QTDIR = qtbase.dev;
 
@@ -76,7 +101,11 @@ stdenv.mkDerivation rec {
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
     mainProgram = "qucs-s";
-    maintainers = with maintainers; [ mazurel kashw2 thomaslepoix ];
+    maintainers = with maintainers; [
+      mazurel
+      kashw2
+      thomaslepoix
+    ];
     platforms = with platforms; unix;
   };
 }

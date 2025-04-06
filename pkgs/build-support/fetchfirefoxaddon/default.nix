@@ -1,29 +1,39 @@
-{ stdenv
-, fetchurl
-, jq
-, strip-nondeterminism
-, unzip
-, writeScript
-, zip
+{
+  stdenv,
+  fetchurl,
+  jq,
+  strip-nondeterminism,
+  unzip,
+  writeScript,
+  zip,
 }:
 
-{ name
-, url ? null
-, sha1 ? ""
-, sha256 ? ""
-, sha512 ? ""
-, fixedExtid ? null
-, hash ? ""
-, src ? ""
+{
+  name,
+  url ? null,
+  sha1 ? "",
+  sha256 ? "",
+  sha512 ? "",
+  fixedExtid ? null,
+  hash ? "",
+  src ? "",
 }:
 
 let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
-  source = if url == null then src else
-  fetchurl {
-    url = url;
-    inherit sha1 sha256 sha512 hash;
-  };
+  source =
+    if url == null then
+      src
+    else
+      fetchurl {
+        url = url;
+        inherit
+          sha1
+          sha256
+          sha512
+          hash
+          ;
+      };
 in
 stdenv.mkDerivation {
   inherit name;

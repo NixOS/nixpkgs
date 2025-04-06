@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchgit
-, perl
-, gnutar
-, zlib
-, bzip2
-, xz
-, zstd
-, libmd
-, makeWrapper
-, coreutils
-, autoreconfHook
-, pkg-config
-, diffutils
-, glibc ? !stdenv.hostPlatform.isDarwin
-, darwin
+{
+  lib,
+  stdenv,
+  fetchgit,
+  perl,
+  gnutar,
+  zlib,
+  bzip2,
+  xz,
+  zstd,
+  libmd,
+  makeWrapper,
+  coreutils,
+  autoreconfHook,
+  pkg-config,
+  diffutils,
+  glibc ? !stdenv.hostPlatform.isDarwin,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,43 +56,55 @@ stdenv.mkDerivation rec {
       --replace-fail 'as_fn_error $? "cannot find a GNU tar program"' "#"
   '';
 
-  postPatch = ''
-    patchShebangs --host .
-
-    # Dpkg commands sometimes calls out to shell commands
-    substituteInPlace lib/dpkg/dpkg.h \
-       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
-       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
-       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
-       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
-       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
-       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
-       --replace '"dpkg"' \"$out/bin/dpkg\" \
-       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
-       --replace '"rm"' \"${coreutils}/bin/rm\" \
-       --replace '"cat"' \"${coreutils}/bin/cat\" \
-       --replace '"diff"' \"${diffutils}/bin/diff\"
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace src/main/help.c \
-       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
-  '';
-
-  buildInputs = [ perl zlib bzip2 xz zstd libmd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
-  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
-
-  postInstall =
+  postPatch =
     ''
-      for i in $out/bin/*; do
-        if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
-        fi
-      done
+      patchShebangs --host .
 
-      mkdir -p $out/etc/dpkg
-      cp -r scripts/t/origins $out/etc/dpkg
+      # Dpkg commands sometimes calls out to shell commands
+      substituteInPlace lib/dpkg/dpkg.h \
+         --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+         --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+         --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+         --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+         --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+         --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+         --replace '"dpkg"' \"$out/bin/dpkg\" \
+         --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+         --replace '"rm"' \"${coreutils}/bin/rm\" \
+         --replace '"cat"' \"${coreutils}/bin/cat\" \
+         --replace '"diff"' \"${diffutils}/bin/diff\"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace src/main/help.c \
+         --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
     '';
+
+  buildInputs = [
+    perl
+    zlib
+    bzip2
+    xz
+    zstd
+    libmd
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    autoreconfHook
+    pkg-config
+  ];
+
+  postInstall = ''
+    for i in $out/bin/*; do
+      if head -n 1 $i | grep -q perl; then
+        substituteInPlace $i --replace \
+          "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      fi
+    done
+
+    mkdir -p $out/etc/dpkg
+    cp -r scripts/t/origins $out/etc/dpkg
+  '';
 
   setupHook = ./setup-hook.sh;
 

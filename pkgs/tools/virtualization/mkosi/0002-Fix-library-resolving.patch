@@ -11,10 +11,10 @@ Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mkosi/sandbox.py b/mkosi/sandbox.py
-index bfcdb8bc62090235ebbe797982493194b575a5c0..4efee355a5f1ae036ccc5ba39595129a32705ee7 100755
+index c79b48739f3d7127375274bc0b1ef3463cae9032..1d7ad421f4534e25c6456c3a169ea9189668aefd 100755
 --- a/mkosi/sandbox.py
 +++ b/mkosi/sandbox.py
-@@ -86,7 +86,7 @@ class cap_user_data_t(ctypes.Structure):
+@@ -92,7 +92,7 @@ class cap_user_data_t(ctypes.Structure):
      ]
  
  
@@ -23,10 +23,10 @@ index bfcdb8bc62090235ebbe797982493194b575a5c0..4efee355a5f1ae036ccc5ba39595129a
  
  libc.syscall.restype = ctypes.c_long
  libc.unshare.argtypes = (ctypes.c_int,)
-@@ -198,7 +198,7 @@ def seccomp_suppress_chown() -> None:
-     owned by their own uid. To still allow non-root users to build images, if requested we install
-     a seccomp filter that makes calls to chown() and friends a noop.
-     """
+@@ -221,7 +221,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
+     if not chown and not sync:
+         return
+ 
 -    libseccomp = ctypes.CDLL("libseccomp.so.2")
 +    libseccomp = ctypes.CDLL("@LIBSECCOMP@")
      if libseccomp is None:

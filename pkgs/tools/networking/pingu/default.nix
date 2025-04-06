@@ -23,5 +23,8 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ CactiChameleon9 ];
     mainProgram = "pingu";
+    # Doesn't build with Go toolchain >1.22, build error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'.
+    broken = true;
   };
 }

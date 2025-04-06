@@ -66,7 +66,7 @@ buildPythonPackage rec {
       "test_register"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # torch.distributed is not available on darwin
+      # torch.distributed was not available on darwin at one point; revisit
       "test_create_distributed_evaluator"
       "test_distributed_evaluation"
       "test_distributed_evaluator_progress_bar"
@@ -96,7 +96,7 @@ buildPythonPackage rec {
       "tests/pytorch_pfn_extras_tests/dynamo_tests/test_compile.py"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # torch.distributed is not available on darwin
+      # torch.distributed was not available on darwin at one point; revisit
       "tests/pytorch_pfn_extras_tests/distributed_tests/test_distributed_validation_sampler.py"
       "tests/pytorch_pfn_extras_tests/nn_tests/parallel_tests/test_distributed.py"
       "tests/pytorch_pfn_extras_tests/profiler_tests/test_record.py"
@@ -116,5 +116,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+    badPlatforms = [
+      # test_profile_report is broken on darwin
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

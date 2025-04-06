@@ -1,18 +1,19 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, which
-, ocsigen_server
-, lwt_react
-, ppx_deriving
-, ppx_optcomp
-, js_of_ocaml-ocamlbuild
-, js_of_ocaml-ppx
-, js_of_ocaml-ppx_deriving_json
-, js_of_ocaml-lwt
-, js_of_ocaml-tyxml
-, lwt_ppx
-, ocsipersist
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  which,
+  ocsigen_server,
+  lwt_react,
+  ppx_deriving,
+  ppx_optcomp,
+  js_of_ocaml-ocamlbuild,
+  js_of_ocaml-ppx,
+  js_of_ocaml-ppx_deriving_json,
+  js_of_ocaml-lwt,
+  js_of_ocaml-tyxml,
+  lwt_ppx,
+  ocsipersist,
 }:
 
 buildDunePackage rec {

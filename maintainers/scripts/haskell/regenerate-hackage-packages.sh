@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git nix -I nixpkgs=.
+#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git nix nixfmt-rfc-style -I nixpkgs=.
 
 set -euo pipefail
 
@@ -89,6 +89,7 @@ compiler_config="$(nix-build -A haskellPackages.cabal2nix-unstable.compilerConfi
 
 echo "Running hackage2nix to regenerate pkgs/development/haskell-modules/hackage-packages.nix …"
 run_hackage2nix
+nixfmt pkgs/development/haskell-modules/hackage-packages.nix
 
 if [[ "$REGENERATE_TRANSITIVE" -eq 1 ]]; then
 

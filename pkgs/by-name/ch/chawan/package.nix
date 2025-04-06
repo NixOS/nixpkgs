@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, makeBinaryWrapper
-, curlMinimal
-, mandoc
-, ncurses
-, nim
-, pandoc
-, pkg-config
-, zlib
-, unstableGitUpdater
-, libseccomp
-, replaceVars
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  makeBinaryWrapper,
+  curlMinimal,
+  mandoc,
+  ncurses,
+  nim,
+  pandoc,
+  pkg-config,
+  zlib,
+  unstableGitUpdater,
+  libseccomp,
+  replaceVars,
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2025-01-06";
+  version = "0-unstable-2025-03-27";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "30a933adb2bade2ceee08a9b36371cecf554d648";
-    hash = "sha256-EepSEN66GTdWfCSiR/p69pN5bvTEiUFOMErCxedrq+g=";
-    fetchSubmodules = true;
+    rev = "b2d954b96f227597b62cfae1ac64785bd8f0fb37";
+    hash = "sha256-1kxqzzEMGDFNk25mQX8p7TuADuTMIz+hHZ7p+i7m494=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -53,23 +53,26 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  buildFlags = [ "all" "manpage" ];
+  buildFlags = [
+    "all"
+    "manpage"
+  ];
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX=/"
   ];
 
   postInstall =
-  let
-    makeWrapperArgs = ''
-      --set MANCHA_CHA $out/bin/cha \
-      --set MANCHA_MAN ${mandoc}/bin/man
+    let
+      makeWrapperArgs = ''
+        --set MANCHA_CHA $out/bin/cha \
+        --set MANCHA_MAN ${mandoc}/bin/man
+      '';
+    in
+    ''
+      wrapProgram $out/bin/cha ${makeWrapperArgs}
+      wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
-  in
-  ''
-    wrapProgram $out/bin/cha ${makeWrapperArgs}
-    wrapProgram $out/bin/mancha ${makeWrapperArgs}
-  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

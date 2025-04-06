@@ -1,20 +1,21 @@
-{ lib
-, python3Packages
-, fetchPypi
-, pkg-config
-, librsvg
-, gobject-introspection
-, atk
-, gtk3
-, gtkspell3
-, adwaita-icon-theme
-, glib
-, goocanvas2
-, gdk-pixbuf
-, pango
-, fontconfig
-, freetype
-, wrapGAppsHook3
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  pkg-config,
+  librsvg,
+  gobject-introspection,
+  atk,
+  gtk3,
+  gtkspell3,
+  adwaita-icon-theme,
+  glib,
+  goocanvas2,
+  gdk-pixbuf,
+  pango,
+  fontconfig,
+  freetype,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -81,6 +82,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ johbo udono ];
+    maintainers = with maintainers; [
+      johbo
+      udono
+    ];
   };
 }
