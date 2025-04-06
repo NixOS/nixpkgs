@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
 
   outputs = [
