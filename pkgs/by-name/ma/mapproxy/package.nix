@@ -1,26 +1,27 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+
+  python3Packages,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
-  version = "3.1.3";
+  version = "4.0.1";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = version;
-    hash = "sha256-Dltr4JlgE1aJfSybTbAxlUyjqkfaobupNNSj90j9taE=";
+    hash = "sha256-bqM25exBPUB7hFtseWMw4Q1W6IeHLx+JrplOkZVEIl0=";
   };
 
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
-  dependencies = [
+  dependencies = with python3Packages; [
     boto3 # needed for caches service
     future
     jsonschema
@@ -33,13 +34,10 @@ buildPythonApplication rec {
     setuptools
     werkzeug
   ];
+
   # Tests are disabled:
   # 1) Dependency list is huge.
   #    https://github.com/mapproxy/mapproxy/blob/master/requirements-tests.txt
-  #
-  # 2) There are security issues with package Riak
-  #    https://github.com/NixOS/nixpkgs/issues/33876
-  #    https://github.com/NixOS/nixpkgs/pull/56480
   doCheck = false;
 
   meta = {

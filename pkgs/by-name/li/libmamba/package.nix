@@ -16,7 +16,7 @@
   zstd,
   nix-update-script,
   bzip2,
-  python3Packages,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3Packages.python
+    python3
   ];
 
   buildInputs = [

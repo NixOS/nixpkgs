@@ -19,6 +19,7 @@
   qtsvg,
   qttools,
   libsecret,
+  libwebp,
 
   # optional client deps
   giflib,
@@ -51,6 +52,7 @@ let
     qtsvg
     qttools
     libsecret
+    libwebp
     # optional:
     giflib # gif animation export support
     kdnssd # local server discovery with Zeroconf
@@ -67,18 +69,18 @@ let
 in
 mkDerivation rec {
   pname = "drawpile";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-NS1aQlWpn3f+SW0oUjlYwHtOS9ZgbjFTrE9grjK5REM=";
+    sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-rY4zWSCBfVXvl6p9GvtDg/PFZfLkWTl8FTYdlKTzWYM=";
+    hash = "sha256-VUX6J7TfxWpa07HPFZ8JzpltIwJUYAl5TABIpBmGYYo=";
   };
 
   nativeBuildInputs = [

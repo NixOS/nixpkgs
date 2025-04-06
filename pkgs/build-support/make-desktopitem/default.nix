@@ -4,7 +4,6 @@
   buildPackages,
 }:
 
-
 /**
   A utility builder to create a desktop entry file at a predetermined location (by default, $out/share/applications).
 

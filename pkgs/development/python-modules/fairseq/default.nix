@@ -120,5 +120,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ happysalada ];
+    broken = true; # requires numpy1 which is incompatible with sacrebleu depending on numpy2
   };
 }

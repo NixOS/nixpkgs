@@ -43,21 +43,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # these try to download models from HF Hub
-      "test_get_observer_token_count"
-      "test_kv_cache_quantization"
-      "test_target_prioritization"
-      "test_load_compressed_sharded"
-      "test_save_compressed_model"
-      "test_apply_tinyllama_dynamic_activations"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      "test_composability"
-      "test_missing_and_unexpected_keys_on_compression"
-    ];
+  disabledTests = [
+    # these try to download models from HF Hub
+    "test_get_observer_token_count"
+    "test_kv_cache_quantization"
+    "test_target_prioritization"
+    "test_load_compressed_sharded"
+    "test_save_compressed_model"
+    "test_apply_tinyllama_dynamic_activations"
+  ];
 
   disabledTestPaths = [
     # these try to download models from HF Hub

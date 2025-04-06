@@ -11,12 +11,8 @@ runTest (
   { config, lib, ... }:
   {
     inherit name;
-    meta = with lib.maintainers; {
-      maintainers = [
-        globin
-        eqyiel
-        ma27
-      ];
+    meta = {
+      maintainers = lib.teams.nextcloud.members;
     };
 
     imports = [ testBase ];

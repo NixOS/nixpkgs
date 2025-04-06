@@ -8,6 +8,10 @@
   rustPlatform,
   Security,
   newScope,
+  editline,
+  ncurses,
+  stdenv,
+  clangStdenv,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -19,6 +23,10 @@ let
       lix-args,
       nix-eval-jobs-args,
     }:
+    let
+      # GCC 13.2 is known to miscompile Lix coroutines (introduced in 2.92).
+      lixStdenv = if lib.versionAtLeast lix-args.version "2.92" then clangStdenv else stdenv;
+    in
     lib.makeScope newScope (
       self:
       lib.recurseIntoAttrs {
@@ -58,6 +66,11 @@ let
               requiredSystemFeatures = [ ];
             };
 
+        editline = editline.override {
+          inherit ncurses;
+          enableTermcap = true;
+        };
+
         # NOTE: The `common-*.nix` helpers contain a top-level function which
         # takes the Lix source to build and version information. We use the
         # outer `callPackage` for that.
@@ -65,12 +78,15 @@ let
         # That *returns* another function which takes the actual build
         # dependencies, and that uses the new scope's `self.callPackage` so
         # that `nix-eval-jobs` can be built against the correct `lix` version.
-        lix = self.callPackage (callPackage ./common-lix.nix lix-args) { };
+        lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
+          stdenv = lixStdenv;
+        };
 
-        nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) { };
+        nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
+          stdenv = lixStdenv;
+        };
       }
     );
-
 in
 lib.makeExtensible (self: {
   inherit makeLixScope;
@@ -89,7 +105,6 @@ lib.makeExtensible (self: {
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
         inherit src;
-        allowGitDependencies = false;
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
       };
@@ -120,7 +135,6 @@ lib.makeExtensible (self: {
       docCargoDeps = rustPlatform.fetchCargoVendor {
         name = "lix-doc-${version}";
         inherit src;
-        allowGitDependencies = false;
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-U820gvcbQIBaFr2OWPidfFIDXycDFGgXX1NpWDDqENs=";
       };
@@ -137,7 +151,39 @@ lib.makeExtensible (self: {
     };
   };
 
-  latest = self.lix_2_91;
+  lix_2_92 = self.makeLixScope {
+    lix-args = rec {
+      version = "2.92.0";
+
+      src = fetchFromGitHub {
+        owner = "lix-project";
+        repo = "lix";
+        rev = version;
+        hash = "sha256-CCKIAE84dzkrnlxJCKFyffAxP3yfsOAbdvydUGqq24g=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        name = "lix-${version}";
+        inherit src;
+        allowGitDependencies = false;
+        hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
+      };
+    };
+
+    nix-eval-jobs-args = rec {
+      version = "2.92.0";
+      src = fetchgit {
+        url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
+        rev = version;
+        hash = "sha256-tPr61X9v/OMVt7VXOs1RRStciwN8gDGxEKx+h0/Fg48=";
+      };
+    };
+  };
+
+  latest = self.lix_2_92;
+
+  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
+  # See: https://git.lix.systems/lix-project/lix/issues/662
   stable = self.lix_2_91;
 
   # Previously, `nix-eval-jobs` was not packaged here, so we export an

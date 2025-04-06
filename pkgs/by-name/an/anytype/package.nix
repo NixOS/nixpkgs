@@ -138,6 +138,7 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       running-grass
       autrimpo
+      adda
     ];
     platforms = [
       "x86_64-linux"

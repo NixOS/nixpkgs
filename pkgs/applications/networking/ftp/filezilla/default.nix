@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchsvn
-, autoreconfHook
-, dbus
-, gettext
-, gnutls
-, libfilezilla
-, libidn
-, nettle
-, pkg-config
-, pugixml
-, sqlite
-, tinyxml
-, boost
-, wrapGAppsHook3
-, wxGTK32
-, gtk3
-, xdg-utils
-, CoreServices
-, Security
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+  dbus,
+  gettext,
+  gnutls,
+  libfilezilla,
+  libidn,
+  nettle,
+  pkg-config,
+  pugixml,
+  sqlite,
+  tinyxml,
+  boost,
+  wrapGAppsHook3,
+  wxGTK32,
+  gtk3,
+  xdg-utils,
+  CoreServices,
+  Security,
 }:
 
 stdenv.mkDerivation {
@@ -35,23 +37,32 @@ stdenv.mkDerivation {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [
-    boost
-    dbus
-    gettext
-    gnutls
-    libfilezilla
-    libidn
-    nettle
-    pugixml
-    sqlite
-    tinyxml
-    wxGTK32
-    gtk3
-    xdg-utils
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
+  buildInputs =
+    [
+      boost
+      dbus
+      gettext
+      gnutls
+      libfilezilla
+      libidn
+      nettle
+      pugixml
+      sqlite
+      tinyxml
+      wxGTK32
+      gtk3
+      xdg-utils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+    ];
 
   enableParallelBuilding = true;
 

@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "0.27.0";
+  version = "0.28.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -30,17 +30,12 @@ rustPlatform.buildRustPackage {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${version}";
-    hash = "sha256-fBgJrSglH46+NHu3spk5mC51ASDHWnOoW6veKZ0R2YA=";
+    hash = "sha256-LDMHMFg9fjEMi8I2Fc3TEyWMctqJurAbckubCgkkZiM=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoPatches = [
-    # <https://github.com/jj-vcs/jj/pull/5315>
-    ./libgit2-1.9.0.patch
-  ];
-
-  cargoHash = "sha256-35DJdAUXc2gb/EXECScwinSzzp7uaxFbUxedjqRGfj8=";
+  cargoHash = "sha256-y/GQSzI7bVPieuAmQKdZY1qticmmRYibBtgXSEJ7dU4=";
 
   nativeBuildInputs = [
     installShellFiles

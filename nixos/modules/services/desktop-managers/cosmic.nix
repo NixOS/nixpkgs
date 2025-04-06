@@ -7,7 +7,6 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 
@@ -97,13 +96,10 @@ in
     systemd = {
       packages = [ pkgs.cosmic-session ];
       user.targets = {
+        # TODO: remove when upstream has XDG autostart support
         cosmic-session = {
           wants = [ "xdg-desktop-autostart.target" ];
           before = [ "xdg-desktop-autostart.target" ];
-        };
-        tray = {
-          description = "Cosmic Tray Target";
-          requires = [ "graphical-session-pre.target" ];
         };
       };
     };
@@ -125,7 +121,7 @@ in
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
     services.libinput.enable = true;
     services.upower.enable = true;
-    # Setup PAM authentication for the `cosmic-greeter` user
+    # Required for screen locker
     security.pam.services.cosmic-greeter = { };
 
     # Good to have defaults

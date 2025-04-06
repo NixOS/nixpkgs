@@ -248,3 +248,6 @@ da9a092c34cef6947d7aee2b134f61df45171631
 # python-packages: sort with keep-sorted
 fd14c067813572afc03ddbf7cdedc3eab5a59954
 783add849cbca228a36ffdf407e5d380dc2fe6c4
+
+# treewide format of all Nix files
+374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt

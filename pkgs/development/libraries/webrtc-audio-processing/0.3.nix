@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, darwin, autoreconfHook, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  darwin,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "webrtc-audio-processing";
@@ -9,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     ./enable-riscv.patch
@@ -37,9 +48,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks; [ ApplicationServices ]
+  );
 
   patchPhase = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
@@ -53,6 +69,13 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v0.3.1/webrtc/typedefs.h
     # + our patches
-    platforms = intersectLists platforms.unix (platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.power ++ platforms.riscv ++ platforms.x86);
+    platforms = intersectLists platforms.unix (
+      platforms.arm
+      ++ platforms.aarch64
+      ++ platforms.mips
+      ++ platforms.power
+      ++ platforms.riscv
+      ++ platforms.x86
+    );
   };
 }
