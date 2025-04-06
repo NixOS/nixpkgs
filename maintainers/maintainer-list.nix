@@ -19509,6 +19509,12 @@
     githubId = 488734;
     name = "Puck Meerburg";
   };
+  PuercoPop = {
+    email = "pirata@gmail.com";
+    github = "PuercoPop";
+    githubId = 387111;
+    name = "Javier Olaechea";
+  };
   puffnfresh = {
     email = "brian@brianmckenna.org";
     github = "puffnfresh";
