@@ -340,6 +340,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       gbpdt
       ingenieroariel
+      taranarmo
     ];
     knownVulnerabilities = [
       "CVE-2023-50943"
