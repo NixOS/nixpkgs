@@ -6,57 +6,73 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs:
-let
-  binary = finalAttrs.meta.mainProgram + stdenv.hostPlatform.extensions.executable;
-  cppflags = lib.mapAttrsToList (name: value: "-D${name}=\"${value}\"") {
-    # set these to empty strings as there are no central directories for
-    # pkg-config modules, header files or libraries
-    PKG_CONFIG_PREFIX = "";
-    PKG_CONFIG_LIBDIR = "";
-    PKG_CONFIG_SYSTEM_INCLUDE_PATH = "";
-    PKG_CONFIG_SYSTEM_LIBRARY_PATH = "";
-  };
-in {
-  pname = "u-config";
-  version = "0.33.3";
+stdenv.mkDerivation (
+  finalAttrs:
+  let
+    inherit (lib) escapeShellArgs;
 
-  src = fetchFromGitHub {
-    owner = "skeeto";
-    repo = "u-config";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
-  };
+    exe = stdenv.hostPlatform.extensions.executable;
+    binary = finalAttrs.meta.mainProgram + exe;
+    cppflags = lib.mapAttrsToList (name: value: "-D${name}=\"${value}\"") {
+      # set these to empty strings as there are no central directories for
+      # pkg-config modules, header files or libraries
+      PKG_CONFIG_PREFIX = "";
+      PKG_CONFIG_LIBDIR = "";
+      PKG_CONFIG_SYSTEM_INCLUDE_PATH = "";
+      PKG_CONFIG_SYSTEM_LIBRARY_PATH = "";
+    };
+  in
+  {
+    pname = "u-config";
+    version = "0.33.3";
 
-  nativeBuildInputs = [ installShellFiles ];
+    src = fetchFromGitHub {
+      owner = "skeeto";
+      repo = "u-config";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
+    };
 
-  dontConfigure = true;
+    nativeBuildInputs = [ installShellFiles ];
 
-  # build without using Makefile as recommended by upstream
-  buildPhase = ''
-    runHook preBuild
+    dontConfigure = true;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-    $CC -o ${binary} ${lib.escapeShellArgs cppflags} generic_main.c
+    # build without using Makefile as recommended by upstream
+    buildPhase = ''
+      runHook preBuild
 
-    runHook postBuild
-  '';
+      $CC -o ${binary} ${escapeShellArgs cppflags} generic_main.c
 
-  installPhase = ''
-    runHook preInstall
+      runHook postBuild
+    '';
 
-    installBin ${binary}
+    checkPhase = ''
+      runHook preCheck
 
-    runHook postInstall
-  '';
+      $CC -o tests${exe} ${escapeShellArgs cppflags} test_main.c
+      ./tests${exe}
 
-  passthru.updateScript = nix-update-script { };
+      runHook postCheck
+    '';
 
-  meta = {
-    description = "Smaller, simpler, portable pkg-config clone";
-    homepage = "https://github.com/skeeto/u-config";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = lib.platforms.all;
-    mainProgram = "pkg-config";
-  };
-})
+    installPhase = ''
+      runHook preInstall
+
+      installBin ${binary}
+
+      runHook postInstall
+    '';
+
+    passthru.updateScript = nix-update-script { };
+
+    meta = {
+      description = "Smaller, simpler, portable pkg-config clone";
+      homepage = "https://github.com/skeeto/u-config";
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [ sigmanificient ];
+      platforms = lib.platforms.all;
+      mainProgram = "pkg-config";
+    };
+  }
+)
