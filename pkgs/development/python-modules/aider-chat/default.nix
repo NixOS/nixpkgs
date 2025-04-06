@@ -367,7 +367,12 @@ let
           }
         );
 
-      updateScript = nix-update-script { };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^v([0-9.]+)$"
+        ];
+      };
     };
 
     meta = {
