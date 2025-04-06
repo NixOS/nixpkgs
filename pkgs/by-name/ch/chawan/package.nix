@@ -11,7 +11,6 @@
   pkg-config,
   zlib,
   unstableGitUpdater,
-  libseccomp,
   replaceVars,
 }:
 
@@ -46,15 +45,11 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curlMinimal
-      ncurses
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libseccomp
-    ];
+  buildInputs = [
+    curlMinimal
+    ncurses
+    zlib
+  ];
 
   buildFlags = [
     "all"
