@@ -345,6 +345,12 @@ in
     _module.args.enableAutologin = false;
     _module.args.enableXWayland = true;
   };
+  cosmic-autologin = runTest {
+    imports = [ ./cosmic.nix ];
+    _module.args.testName = "cosmic-autologin";
+    _module.args.enableAutologin = true;
+    _module.args.enableXWayland = true;
+  };
   coturn = handleTest ./coturn.nix { };
   couchdb = handleTest ./couchdb.nix { };
   crabfit = handleTest ./crabfit.nix { };
