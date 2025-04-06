@@ -21,15 +21,15 @@
 }:
 
 {
-  name,
+  pname,
   src ? builtins.getAttr stdenv.hostPlatform.system sources,
   sources ? null,
   description,
-  productVersion,
+  version,
 }:
 
 stdenv.mkDerivation rec {
-  inherit name src;
+  inherit pname version src;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
