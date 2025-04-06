@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  libGL,
   cmake,
   makeWrapper,
   unstableGitUpdater,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
+    libGL
   ];
 
   installPhase = ''
