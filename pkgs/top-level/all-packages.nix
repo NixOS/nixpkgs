@@ -14228,9 +14228,9 @@ with pkgs;
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   greenfoot = callPackage ../applications/editors/greenfoot {
-    openjdk = openjdk17.override {
+    openjdk = openjdk21.override {
       enableJavaFX = true;
-      openjfx_jdk = openjfx17.override { withWebKit = true; };
+      openjfx_jdk = openjfx21.override { withWebKit = true; };
     };
   };
 
