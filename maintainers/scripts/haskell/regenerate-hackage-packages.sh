@@ -89,7 +89,6 @@ compiler_config="$(nix-build -A haskellPackages.cabal2nix-unstable.compilerConfi
 
 echo "Running hackage2nix to regenerate pkgs/development/haskell-modules/hackage-packages.nix …"
 run_hackage2nix
-nixfmt pkgs/development/haskell-modules/hackage-packages.nix
 
 if [[ "$REGENERATE_TRANSITIVE" -eq 1 ]]; then
 
@@ -103,6 +102,7 @@ run_hackage2nix
 
 fi
 
+nixfmt pkgs/development/haskell-modules/hackage-packages.nix
 
 if [[ "$DO_COMMIT" -eq 1 ]]; then
 git add pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml
