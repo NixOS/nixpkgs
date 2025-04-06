@@ -153,7 +153,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-Dtests=disabled"
     ]
-    ++ lib.optional (!enableX11) "-Dx11=disabled"
+    ++ lib.optionals (!enableX11) [
+      "-Dx11=disabled"
+      "-Dxi=disabled"
+      "-Dxvideo=disabled"
+    ]
     # TODO How to disable Wayland?
     ++ lib.optional (!enableGl) "-Dgl=disabled"
     ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
