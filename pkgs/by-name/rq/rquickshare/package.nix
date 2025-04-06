@@ -47,7 +47,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DZdzk0wqKhVa51PgQf8UsAY6EbGKvRIGru71Z8rvrwA=";
   };
 
-  patches = [ ./fix-pnpm-outdated-lockfile.patch ];
+  patches = [
+    ./fix-pnpm-outdated-lockfile.patch
+    ./remove-code-signing-darwin.patch
+  ];
 
   # from https://github.com/NixOS/nixpkgs/blob/04e40bca2a68d7ca85f1c47f00598abb062a8b12/pkgs/by-name/ca/cargo-tauri/test-app.nix#L23-L26
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -70,11 +73,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
-  cargoPatches = [
-    ./remove-duplicate-versions-of-sys-metrics.patch
-    ./remove-code-signing-darwin.patch
-  ];
-  cargoHash = app-type-either "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=" "sha256-4vBHxuKg4P9H0FZYYNUT+AVj4Qvz99q7Bhd7x47UC2w=";
+
+  cargoHash = app-type-either "sha256-9LFMWr/TQZ0nolQykrsGR2aqrSWIXoPZRLYO4mjTmpg=" "sha256-XtvFmYHVcOoY5UZYHs8aEipFbFjHNopgb9XhnHtYRec=";
 
   nativeBuildInputs =
     [
