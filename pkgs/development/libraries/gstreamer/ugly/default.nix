@@ -24,6 +24,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  gst-plugins-ugly,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -100,6 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests = {
+      lgplOnly = gst-plugins-ugly.override {
+        enableGplPlugins = false;
+      };
+    };
+
     updateScript = directoryListingUpdater { };
   };
 
