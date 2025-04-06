@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "decora_wifi";
-  version = "1.4";
+  version = "1.5";
   pyproject = true;
 
   #No tag in github, so fetchPypi is OK to use.
   src = fetchPypi {
     pname = "decora_wifi";
     inherit version;
-    hash = "sha256-BIQssxEpwCIyj5z0N2ev9cJr/y907g0Lb7h5iD9dApM=";
+    hash = "sha256-oWETtzZueNJC0lTWdLfk3SOuvnqrJ9wp5rOSPJxH3M4=";
   };
 
   build-system = [
