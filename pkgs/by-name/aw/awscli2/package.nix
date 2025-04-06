@@ -82,6 +82,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.8' 'ruamel.yaml.clib>=0.2.0' \
       --replace-fail 'zipp<3.21.0' 'zipp>=3.21.0'
 
     substituteInPlace requirements-base.txt \
