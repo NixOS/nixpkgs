@@ -5,6 +5,7 @@
   openssl,
   prisma,
   prisma-engines,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -62,6 +63,10 @@ buildNpmPackage rec {
 
   # Skip postinstall which runs prisma commands
   npmFlags = [ "--ignore-scripts" ];
+
+  passthru.tests = {
+    spliit = nixosTests.spliit;
+  };
 
   meta = {
     description = "Web UI for sharing expenses with your friends and family, a free and Open Source Alternative to Splitwise";

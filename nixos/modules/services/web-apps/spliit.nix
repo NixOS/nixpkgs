@@ -8,6 +8,10 @@ let
   cfg = config.services.spliit;
 in
 {
+  meta = {
+    maintainers = with lib.maintainers; [ qvalentin ];
+  };
+
   options.services.spliit = with lib; {
     enable = mkEnableOption (mdDoc "Spliit bill-splitting web application");
     package = mkPackageOption pkgs "spliit" { };
