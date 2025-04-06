@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "decora_wifi";
+  pname = "decora-wifi";
   version = "1.5";
   pyproject = true;
 
@@ -19,14 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-oWETtzZueNJC0lTWdLfk3SOuvnqrJ9wp5rOSPJxH3M4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
     inflect
   ];
+
   pythonImportsCheck = [ "decora_wifi" ];
 
   # No tests in Pypi source
@@ -35,6 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for controlling Leviton Decora Smart Wi-Fi devices";
     homepage = "https://github.com/tlyakhov/python-decora_wifi";
+    changelog = "https://github.com/tlyakhov/python-decora_wifi/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Continous ];
   };
