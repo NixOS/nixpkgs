@@ -4065,6 +4065,8 @@ self: super: with self; {
 
   donfig = callPackage ../development/python-modules/donfig { };
 
+  donut-shellcode = callPackage ../development/python-modules/donut-shellcode { };
+
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
 
   dopy = callPackage ../development/python-modules/dopy { };
@@ -13167,6 +13169,8 @@ self: super: with self; {
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pysearpc = toPythonModule (pkgs.libsearpc.override { python3 = self.python; });
+
+  pysecretsocks = callPackage ../development/python-modules/pysecretsocks { };
 
   pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
