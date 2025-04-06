@@ -16428,10 +16428,6 @@ with pkgs;
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
-  torrenttools = callPackage ../tools/misc/torrenttools {
-    fmt = fmt_9;
-  };
-
   tony = libsForQt5.callPackage ../applications/audio/tony { };
 
   trustedqsl = tqsl; # Alias added 2019-02-10
