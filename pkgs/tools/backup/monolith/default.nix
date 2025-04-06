@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D2dnKUFgs723/Ad6BV/gdpsN6UUcik4/ZUz/3+dXd50=";
+    hash = "sha256-048WUDMMaTjGsNY54m2eKY1MdyX9llojIzGvbcC+Buc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-I272NvpGhciFVz2nTr+UQ257ba+LyeO1DBq5FmN9wqs=";
+  cargoHash = "sha256-Q8gh6RuNC2+pc13VksI0tiX/uVjhxYwnR5GRyQYRWLg=";
 
   OPENSSL_NO_VENDOR = true;
 
