@@ -77,37 +77,37 @@ with haskellLib;
   unix = null;
   xhtml = null;
 
-  extra = doDistribute self.extra_1_8; # compatible with base 4.21
+  #
+  # Hand pick versions that are compatible with ghc 9.12 and base 4.21
+  #
+
+  extra = doDistribute self.extra_1_8;
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
-  time-compat = doDistribute (doJailbreak self.time-compat_1_9_8); # too strict lower bound on QuickCheck
+  time-compat = doDistribute self.time-compat_1_9_8;
+  extensions = doDistribute self.extensions_0_1_0_3;
+  doctest = doDistribute self.doctest_0_24_0;
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
   ghc-lib = doDistribute self.ghc-lib_9_12_1_20250105;
-  # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
-  ghc-exactprint_1_12_0_0 = addBuildDepends [
-    self.Diff
-    self.extra
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_12_0_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250320;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
   hlint = doDistribute self.hlint_3_10;
-  ormolu = doDistribute super.ormolu_0_8_0_0;
-  apply-refact = doDistribute super.apply-refact_0_15_0_0;
+  fourmolu = doDistribute self.fourmolu_0_18_0_0;
+  ormolu = doDistribute self.ormolu_0_8_0_0;
+  apply-refact = doDistribute self.apply-refact_0_15_0_0;
 
   #
   # Jailbreaks
   #
+
   lucid = doJailbreak super.lucid; # base <4.21
-  extensions = doDistribute (doJailbreak self.extensions_0_1_0_3); # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
+  extensions_0_1_0_3 = doJailbreak super.extensions_0_1_0_3; # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
   hie-compat = doJailbreak super.hie-compat; # base <4.21
   hiedb = doJailbreak super.hiedb; # base >=4.12 && <4.21, ghc >=8.6 && <9.11
   ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
   ghc-trace-events = doJailbreak super.ghc-trace-events; # base <4.21
+  time-compat_1_9_8 = doJailbreak super.time-compat_1_9_8; # too strict lower bound on QuickCheck
   cpphs = overrideCabal (drv: {
     # jail break manually the conditional dependencies
     postPatch = ''
@@ -119,6 +119,15 @@ with haskellLib;
   cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
   http-api-data = doJailbreak super.http-api-data; # base < 4.21
   servant = doJailbreak super.servant; # base < 4.21
+  ghc-exactprint_1_12_0_0 = addBuildDepends [
+    # somehow buildDepends was missing
+    self.Diff
+    self.extra
+    self.ghc-paths
+    self.silently
+    self.syb
+    self.HUnit
+  ] super.ghc-exactprint_1_12_0_0;
   co-log-core = doJailbreak super.co-log-core; # doctest >=0.16.0 && <0.24
 
   #
@@ -129,16 +138,14 @@ with haskellLib;
 
   relude = dontCheck super.relude;
 
-  doctest = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        # These tests require cabal-install (would cause infinite recursion)
-        "--skip=/Cabal.Options"
-        "--skip=/Cabal.Paths/paths"
-        "--skip=/Cabal.ReplOptions" # >= 0.23
-      ];
-    }) self.doctest_0_24_0
-  );
+  doctest_0_24_0 = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      # These tests require cabal-install (would cause infinite recursion)
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+      "--skip=/Cabal.ReplOptions" # >= 0.23
+    ];
+  }) super.doctest_0_24_0;
 
   # https://github.com/typeable/generic-arbitrary/issues/18
   generic-arbitrary = overrideCabal (drv: {
@@ -167,16 +174,14 @@ with haskellLib;
   newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 
   #
-  # Things having lots of issues
+  # Multiple issues
   #
 
-  fourmolu = doDistribute (
-    dontCheck (
-      super.fourmolu_0_18_0_0.override {
-        # Diff >=1 && <2
-        Diff = super.Diff_1_0_2;
-      }
-    )
+  fourmolu_0_18_0_0 = dontCheck (
+    super.fourmolu_0_18_0_0.override {
+      # Diff >=1 && <2
+      Diff = super.Diff_1_0_2;
+    }
   );
 
   doctest-parallel = overrideCabal (drv: {
