@@ -247,6 +247,10 @@ let
       gitMinimal
     ];
 
+    postPatch = ''
+      substituteInPlace aider/linter.py --replace-fail "\"flake8\"" "\"${flake8}\""
+    '';
+
     disabledTestPaths = [
       # Tests require network access
       "tests/scrape/test_scrape.py"
