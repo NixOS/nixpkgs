@@ -1,0 +1,12 @@
+# This file defines the ignore rules for zizmor.
+#
+# For rules that contain a high number of false positives, prefer listing them here
+# instead of adding ignore comments. Note that zizmor cannot ignore by line-within-a-string, so
+# there are some ignore items that encompass multiple problems within one `run` block. An issue
+# tracking this is at https://github.com/woodruffw/zizmor/issues/648.
+#
+# For more info, see the documentation: https://woodruffw.github.io/zizmor/usage/#ignoring-results
+
+rules:
+  dangerous-triggers:
+    disable: true
