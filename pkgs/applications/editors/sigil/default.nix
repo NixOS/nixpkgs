@@ -47,6 +47,20 @@ stdenv.mkDerivation rec {
     sed -i '/^QTLIB_DIR=/ d' src/Resource_Files/bash/sigil-sh_install
   '';
 
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/Applications
+    mv bin/Sigil.app $out/Applications
+    # https://github.com/NixOS/nixpkgs/issues/186653
+    chmod -x $out/Applications/Sigil.app/Contents/lib/*.dylib \
+      $out/Applications/Sigil.app/Contents/polyfills/*.js \
+      $out/Applications/Sigil.app/Contents/python3lib/*.py \
+      $out/Applications/Sigil.app/Contents/hunspell_dictionaries/*.{aff,dic}
+
+    runHook postInstall
+  '';
+
   preFixup = ''
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
@@ -56,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Sigil-Ebook/Sigil/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ prince213 ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sigil";
   };
 }
