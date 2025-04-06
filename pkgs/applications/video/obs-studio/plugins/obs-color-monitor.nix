@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-color-monitor";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-color-monitor";
     tag = finalAttrs.version;
-    hash = "sha256-cVMpmkcw8GzNGyd80g1oKmyiEYGMcRtWtDj9MC7RYf8=";
+    hash = "sha256-EIp1GQ5dKN43D7xodX/ucYcJm994eKsnidFlbLKWHuI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,6 +39,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hlad ];
-    broken = true;
   };
 })
