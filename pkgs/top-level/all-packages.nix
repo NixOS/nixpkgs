@@ -1254,7 +1254,7 @@ with pkgs;
   };
 
   yabridge = callPackage ../tools/audio/yabridge {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.stable;
   };
 
   yabridgectl = callPackage ../tools/audio/yabridgectl {
