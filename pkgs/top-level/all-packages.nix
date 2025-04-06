@@ -8671,8 +8671,6 @@ with pkgs;
 
   polar = callPackage ../tools/misc/polar { };
 
-  inherit (nodePackages) postcss-cli;
-
   pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
