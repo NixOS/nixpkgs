@@ -98,6 +98,11 @@ in
     language = "tr";
     hash = "sha256-+M43EdHHsmw1pJopLi0nMIGwcxk6+LeVvZjkxnxUatI=";
   };
+  # Polish
+  vscode-language-pack-pl = buildVscodeLanguagePack {
+    language = "pl";
+    hash = "sha256-6vmZo/zzPB5DfxQ+Hf8EsGLHbes2CBX4sCut9u+7ECc=";
+  };
   # Pseudo Language
   vscode-language-pack-qps-ploc = buildVscodeLanguagePack {
     language = "qps-ploc";
