@@ -19,7 +19,7 @@ wafConfigurePhase() {
     concatTo flagsArray wafConfigureFlags wafConfigureFlagsArray wafConfigureTargets=configure
 
     echoCmd 'waf configure flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
@@ -41,7 +41,7 @@ wafBuildPhase () {
     concatTo flagsArray wafFlags wafFlagsArray wafBuildFlags wafBuildFlagsArray wafBuildTargets=build
 
     echoCmd 'waf build flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
 }
@@ -57,7 +57,7 @@ wafInstallPhase() {
     concatTo flagsArray wafFlags wafFlagsArray wafInstallFlags wafInstallFlagsArray wafInstallTargets=install
 
     echoCmd 'waf install flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall
 }
