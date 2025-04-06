@@ -6,6 +6,7 @@
   dbus,
   glib,
   pkg-config,
+  autoPatchPcHook,
   expat,
 }:
 
@@ -59,7 +60,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     dbus
     glib

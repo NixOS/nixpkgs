@@ -6,6 +6,7 @@
   ragel,
   gengetopt,
   pkg-config,
+  autoPatchPcHook,
   libuv,
   openfecSupport ? true,
   openfec,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     ragel
     gengetopt
     pkg-config
+    autoPatchPcHook
   ];
 
   propagatedBuildInputs =

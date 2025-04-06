@@ -3,6 +3,8 @@
   fetchurl,
   stdenv,
   slang,
+  validatePkgConfig,
+  autoPatchPcHook,
   popt,
   python3,
   gettext,
@@ -33,7 +35,11 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    validatePkgConfig
+    autoPatchPcHook
+  ];
   buildInputs =
     [
       slang

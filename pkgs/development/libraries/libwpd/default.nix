@@ -4,6 +4,7 @@
   fetchurl,
   zlib,
   pkg-config,
+  autoPatchPcHook,
   glib,
   libgsf,
   libxml2,
@@ -31,7 +32,10 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   meta = with lib; {
     description = "Library for importing and exporting WordPerfect documents";

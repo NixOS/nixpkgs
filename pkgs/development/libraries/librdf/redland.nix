@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   openssl,
   libxslt,
   perl,
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
+    autoPatchPcHook
   ] ++ lib.optional withPostgresql libpq.pg_config;
 
   buildInputs =

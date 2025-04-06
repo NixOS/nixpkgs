@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   glib,
   gtk3,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     wrapGAppsHook3
     glib
     gobject-introspection

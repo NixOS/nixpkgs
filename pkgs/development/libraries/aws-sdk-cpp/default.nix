@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  validatePkgConfig,
+  autoPatchPcHook,
   curl,
   openssl,
   zlib,
@@ -83,6 +85,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     curl
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   buildInputs =

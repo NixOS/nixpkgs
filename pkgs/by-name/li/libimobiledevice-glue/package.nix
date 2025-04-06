@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   libplist,
   nix-update-script,
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   propagatedBuildInputs = [

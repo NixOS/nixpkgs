@@ -29,6 +29,8 @@ let
     libtapi = lib.head libtapi.srcs;
   };
 
+  openssl' = openssl.override { patchPcFiles = false; };
+
   ld64src = lib.escapeShellArg "${otherSrcs.ld64}";
   libtapisrc = lib.escapeShellArg "${otherSrcs.libtapi}";
 
@@ -107,13 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.xcodeProjectCheckHook
     meson
     ninja
-    openssl
+    openssl'
     pkg-config
   ];
 
   buildInputs = [
     llvm
-    openssl
+    openssl'
     xar
   ];
 

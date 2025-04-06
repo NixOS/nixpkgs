@@ -15,6 +15,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -34,7 +35,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -53,6 +57,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -70,7 +75,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -85,6 +93,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -110,6 +119,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -133,6 +143,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxkbfile,
       libX11,
@@ -158,6 +169,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -181,6 +193,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       mkfontscale,
       testers,
@@ -200,6 +213,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ ];
@@ -216,6 +230,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -237,6 +252,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -257,6 +273,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -278,6 +295,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -298,6 +316,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -319,6 +338,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -339,6 +359,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -360,6 +381,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -380,6 +402,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -400,6 +423,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -418,6 +442,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -434,7 +459,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -449,6 +477,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -470,6 +499,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -489,6 +519,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -510,6 +541,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -530,6 +562,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -551,6 +584,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -571,6 +605,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -592,6 +627,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -612,6 +648,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -633,6 +670,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -653,6 +691,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -673,6 +712,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -691,6 +731,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -711,6 +752,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -729,6 +771,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -750,6 +793,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -769,6 +813,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -790,6 +835,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -809,6 +855,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -829,6 +876,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -847,6 +895,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -867,6 +916,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -885,6 +935,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -906,6 +957,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -925,6 +977,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -946,6 +999,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -965,6 +1019,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -986,6 +1041,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1005,6 +1061,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1026,6 +1083,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1045,6 +1103,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -1065,6 +1124,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -1083,6 +1143,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1104,6 +1165,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1123,6 +1185,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1144,6 +1207,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1163,6 +1227,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1184,6 +1249,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1203,6 +1269,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1224,6 +1291,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1243,6 +1311,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -1263,6 +1332,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -1281,6 +1351,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -1301,6 +1372,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -1319,6 +1391,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1340,6 +1413,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -1360,6 +1434,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1381,6 +1456,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1400,6 +1476,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1421,6 +1498,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         fontutil
         mkfontscale
@@ -1441,6 +1519,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1462,6 +1541,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1481,6 +1561,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1502,6 +1583,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1521,6 +1603,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1542,6 +1625,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1561,6 +1645,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libfontenc,
       freetype,
@@ -1580,7 +1665,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libfontenc
         freetype
@@ -1599,6 +1687,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -1615,7 +1704,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -1630,6 +1722,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       bdftopcf,
@@ -1651,6 +1744,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         bdftopcf
         mkfontscale
       ];
@@ -1670,6 +1764,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontutil,
       mkfontscale,
@@ -1690,6 +1785,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         mkfontscale
       ];
       buildInputs = [ fontutil ];
@@ -1708,6 +1804,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -1724,7 +1821,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -1739,6 +1839,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       xorgproto,
@@ -1757,7 +1858,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libICE
         xorgproto
@@ -1775,6 +1879,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -1793,7 +1898,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -1811,6 +1919,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -1828,7 +1937,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -1843,6 +1955,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -1862,7 +1975,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -1881,6 +1997,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xtrans,
@@ -1899,7 +2016,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xtrans
@@ -1917,6 +2037,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xtrans,
@@ -1935,7 +2056,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xtrans
@@ -1953,6 +2077,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       libuuid,
@@ -1973,7 +2098,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libICE
         libuuid
@@ -1993,6 +2121,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2012,7 +2141,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2031,6 +2163,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpthreadstubs,
@@ -2051,7 +2184,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpthreadstubs
@@ -2074,6 +2210,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2093,7 +2230,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2112,6 +2252,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2132,7 +2273,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2152,6 +2296,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -2169,7 +2314,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -2184,6 +2332,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -2206,7 +2355,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -2231,6 +2383,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2250,7 +2403,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2269,6 +2425,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2289,7 +2446,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2309,6 +2469,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2328,7 +2489,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2347,6 +2511,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -2364,7 +2529,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -2379,6 +2547,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -2397,7 +2566,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -2415,6 +2587,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2433,7 +2606,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2451,6 +2627,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libfontenc,
       xorgproto,
@@ -2472,7 +2649,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libfontenc
         xorgproto
@@ -2493,6 +2673,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libfontenc,
       xorgproto,
@@ -2514,7 +2695,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libfontenc
         xorgproto
@@ -2535,6 +2719,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       fontconfig,
       freetype,
@@ -2556,7 +2741,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         fontconfig
         freetype
@@ -2577,6 +2765,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2597,7 +2786,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2617,6 +2809,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -2636,7 +2829,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -2655,6 +2851,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -2675,7 +2872,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -2698,6 +2898,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2718,7 +2919,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2738,6 +2942,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -2761,6 +2966,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         gettext
       ];
       buildInputs = [
@@ -2782,6 +2988,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2803,7 +3010,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2824,6 +3034,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2844,7 +3055,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2864,6 +3078,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2882,7 +3097,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2900,6 +3118,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2919,7 +3138,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -2938,6 +3160,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       xorgproto,
@@ -2958,7 +3181,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libICE
         xorgproto
@@ -2978,6 +3204,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -2998,7 +3225,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -3018,6 +3248,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -3037,7 +3268,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -3056,6 +3290,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -3076,7 +3311,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -3099,6 +3337,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -3118,7 +3357,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -3137,6 +3379,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -3156,7 +3399,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -3175,6 +3421,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -3194,7 +3441,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -3213,6 +3463,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -3232,7 +3483,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -3251,6 +3505,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       zlib,
@@ -3269,7 +3524,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         zlib
@@ -3287,6 +3545,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -3303,7 +3562,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3318,6 +3580,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -3334,7 +3597,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3349,6 +3615,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxslt,
       libpthreadstubs,
@@ -3373,6 +3640,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         python3
       ];
       buildInputs = [
@@ -3425,6 +3693,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       meson,
       ninja,
@@ -3445,6 +3714,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         meson
         ninja
       ];
@@ -3462,6 +3732,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -3480,7 +3751,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -3498,6 +3772,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -3515,7 +3790,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3530,6 +3808,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXaw,
       libXmu,
@@ -3550,7 +3829,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libXaw
         libXmu
@@ -3570,6 +3852,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -3587,7 +3870,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3602,6 +3888,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -3618,7 +3905,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3633,6 +3923,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libfontenc,
       freetype,
@@ -3653,7 +3944,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libfontenc
         freetype
@@ -3673,6 +3967,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxkbfile,
       libX11,
@@ -3697,6 +3992,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -3719,6 +4015,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       testers,
@@ -3736,7 +4033,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3751,6 +4051,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxkbfile,
@@ -3770,7 +4071,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxkbfile
@@ -3789,6 +4093,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       libSM,
@@ -3809,7 +4114,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libICE
         libSM
@@ -3829,6 +4137,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -3847,7 +4156,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -3865,6 +4177,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       libSM,
@@ -3889,7 +4202,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libICE
         libSM
@@ -3913,6 +4229,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -3929,7 +4246,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -3944,6 +4264,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXaw,
       libXmu,
@@ -3966,6 +4287,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -3986,6 +4308,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -4008,7 +4331,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -4030,6 +4356,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXau,
@@ -4051,7 +4378,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXau
@@ -4072,6 +4402,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxcb,
       xcbutil,
@@ -4090,7 +4421,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libxcb
         xcbutil
@@ -4108,6 +4442,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -4124,7 +4459,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -4139,6 +4477,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -4162,6 +4501,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -4183,6 +4523,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       python3,
       testers,
@@ -4202,6 +4543,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         python3
       ];
       buildInputs = [ ];
@@ -4218,6 +4560,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4240,6 +4583,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4265,6 +4609,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4289,6 +4634,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4311,6 +4657,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4335,6 +4682,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
         python3
       ];
@@ -4357,6 +4705,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4380,6 +4729,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4401,6 +4751,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4423,6 +4774,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4443,6 +4795,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4465,6 +4818,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4485,6 +4839,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       gperf,
       libxcb,
@@ -4507,6 +4862,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         m4
       ];
       buildInputs = [
@@ -4530,6 +4886,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -4557,6 +4914,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -4582,6 +4940,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       testers,
@@ -4599,7 +4958,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ libX11 ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -4614,6 +4976,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXcomposite,
       libXdamage,
@@ -4636,7 +4999,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libXcomposite
         libXdamage
@@ -4658,6 +5024,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -4682,6 +5049,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -4704,6 +5072,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libpng,
       libX11,
@@ -4724,7 +5093,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libpng
         libX11
@@ -4744,6 +5116,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXcursor,
       testers,
@@ -4761,7 +5134,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ libXcursor ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -4776,6 +5152,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXau,
@@ -4807,6 +5184,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -4836,6 +5214,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libdmx,
       libX11,
@@ -4865,7 +5244,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libdmx
         libX11
@@ -4894,6 +5276,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libGL,
       xorgproto,
@@ -4913,7 +5296,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libGL
         xorgproto
@@ -4932,6 +5318,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -4951,7 +5338,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -4970,6 +5360,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxcb,
@@ -4994,7 +5385,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxcb
@@ -5018,6 +5412,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libevdev,
@@ -5039,7 +5434,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libevdev
@@ -5060,6 +5458,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -5078,7 +5477,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -5096,6 +5498,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -5114,7 +5517,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -5132,6 +5538,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libinput,
@@ -5151,7 +5558,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libinput
@@ -5170,6 +5580,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -5188,7 +5599,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -5206,6 +5620,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libevdev,
@@ -5228,7 +5643,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libevdev
@@ -5250,6 +5668,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       udev,
@@ -5269,7 +5688,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         udev
@@ -5288,6 +5710,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgserver,
       xorgproto,
@@ -5306,7 +5729,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgserver
         xorgproto
@@ -5324,6 +5750,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libgbm,
@@ -5346,7 +5773,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libgbm
@@ -5368,6 +5798,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5387,7 +5818,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5406,6 +5840,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5425,7 +5860,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5444,6 +5882,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5463,7 +5902,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5482,6 +5924,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libgbm,
@@ -5505,7 +5948,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libgbm
@@ -5528,6 +5974,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5547,7 +5994,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5566,6 +6016,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5585,7 +6036,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5604,6 +6058,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -5622,7 +6077,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -5640,6 +6098,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5659,7 +6118,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5678,6 +6140,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5697,7 +6160,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5716,6 +6182,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -5734,7 +6201,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -5752,6 +6222,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libpciaccess,
       xorgproto,
@@ -5771,7 +6242,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libpciaccess
         xorgproto
@@ -5790,6 +6264,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5809,7 +6284,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5828,6 +6306,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5847,7 +6326,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -5866,6 +6348,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       cairo,
       xorgproto,
@@ -5901,7 +6384,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         cairo
         xorgproto
@@ -5936,6 +6422,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -5956,7 +6443,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -5976,6 +6466,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -5995,7 +6486,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6014,6 +6508,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -6032,7 +6527,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -6050,6 +6548,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6071,7 +6570,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6092,6 +6594,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6111,7 +6614,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6130,6 +6636,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6149,7 +6656,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6168,6 +6678,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6192,7 +6703,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6216,6 +6730,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6237,7 +6752,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6258,6 +6776,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6278,7 +6797,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6298,6 +6820,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6317,7 +6840,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6336,6 +6862,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6355,7 +6882,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6374,6 +6904,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6394,7 +6925,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6414,6 +6948,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6433,7 +6968,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6452,6 +6990,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6472,7 +7011,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6492,6 +7034,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6511,7 +7054,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6530,6 +7076,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -6548,7 +7095,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -6566,6 +7116,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -6584,7 +7135,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -6602,6 +7156,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -6620,7 +7175,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -6638,6 +7196,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6658,7 +7217,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6678,6 +7240,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6697,7 +7260,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6716,6 +7282,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6735,7 +7302,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6754,6 +7324,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       xorgserver,
@@ -6772,7 +7343,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         xorgserver
@@ -6790,6 +7364,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6809,7 +7384,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6828,6 +7406,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6847,7 +7426,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6866,6 +7448,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -6889,7 +7472,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -6912,6 +7498,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libpciaccess,
@@ -6931,7 +7518,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libpciaccess
@@ -6950,6 +7540,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgserver,
       xorgproto,
@@ -6968,7 +7559,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgserver
         xorgproto
@@ -6986,6 +7580,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libdrm,
@@ -7006,7 +7601,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libdrm
@@ -7026,6 +7624,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxkbfile,
       fontconfig,
@@ -7054,6 +7653,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         gettext
         wrapWithXFileSearchPathHook
       ];
@@ -7080,6 +7680,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -7105,6 +7706,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         gettext
         wrapWithXFileSearchPathHook
       ];
@@ -7128,6 +7730,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXfont2,
       xorgproto,
@@ -7147,7 +7750,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libXfont2
         xorgproto
@@ -7166,6 +7772,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libFS,
       xorgproto,
@@ -7184,7 +7791,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libFS
         xorgproto
@@ -7202,6 +7812,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -7221,7 +7832,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -7240,6 +7854,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXaw,
       libXt,
@@ -7261,6 +7876,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -7280,6 +7896,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXau,
@@ -7303,6 +7920,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         gettext
       ];
       buildInputs = [
@@ -7324,6 +7942,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -7342,7 +7961,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -7360,6 +7982,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -7382,7 +8005,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -7404,6 +8030,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxkbfile,
@@ -7423,7 +8050,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxkbfile
@@ -7442,6 +8072,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxkbfile,
@@ -7460,7 +8091,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxkbfile
@@ -7478,6 +8112,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxkbfile,
@@ -7497,7 +8132,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxkbfile
@@ -7516,6 +8154,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       libX11,
@@ -7536,7 +8175,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         libX11
@@ -7556,6 +8198,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -7572,7 +8215,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -7587,6 +8233,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXmu,
@@ -7606,7 +8253,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXmu
@@ -7625,6 +8275,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -7650,6 +8301,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         gettext
         wrapWithXFileSearchPathHook
       ];
@@ -7673,6 +8325,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxcb,
       testers,
@@ -7690,7 +8343,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ libxcb ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -7705,6 +8361,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxcb,
       testers,
@@ -7722,7 +8379,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ libxcb ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -7737,6 +8397,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -7755,7 +8416,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -7773,6 +8437,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXaw,
@@ -7797,6 +8462,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -7819,6 +8485,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXaw,
       libXt,
@@ -7840,6 +8507,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -7859,6 +8527,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -7877,7 +8546,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -7895,6 +8567,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXaw,
       xorgproto,
@@ -7917,6 +8590,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -7937,6 +8611,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -7953,7 +8628,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -7968,6 +8646,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -7984,7 +8663,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -7999,6 +8681,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libXt,
       python3,
@@ -8019,6 +8702,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         python3
       ];
       buildInputs = [ libXt ];
@@ -8075,6 +8759,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       xorgproto,
       openssl,
@@ -8097,14 +8782,17 @@ self: with self; {
       builder = ./builder.sh;
       src = fetchurl {
         url = "mirror://xorg/individual/xserver/xorg-server-21.1.16.tar.xz";
-        sha256 = "b14a116d2d805debc5b5b2aac505a279e69b217dae2fae2dfcb62400471a9970";
+        sha256 = "0w4r393h095nzhnswbxfglhrprkrl82wbamjnp2ynpc05mni2jmi";
       };
       hardeningDisable = [
         "bindnow"
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         xorgproto
         openssl
@@ -8133,6 +8821,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -8149,7 +8838,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -8164,6 +8856,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXmu,
@@ -8183,7 +8876,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXmu
@@ -8202,6 +8898,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -8220,7 +8917,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -8238,6 +8938,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -8258,7 +8959,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -8278,6 +8982,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXmu,
@@ -8297,7 +9002,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXmu
@@ -8316,6 +9024,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -8334,7 +9043,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -8352,6 +9064,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXext,
@@ -8373,7 +9086,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXext
@@ -8394,6 +9110,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xbitmaps,
@@ -8415,7 +9132,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xbitmaps
@@ -8436,6 +9156,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libICE,
       libSM,
@@ -8461,6 +9182,7 @@ self: with self; {
       strictDeps = true;
       nativeBuildInputs = [
         pkg-config
+        autoPatchPcHook
         wrapWithXFileSearchPathHook
       ];
       buildInputs = [
@@ -8484,6 +9206,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXmu,
@@ -8503,7 +9226,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXmu
@@ -8522,6 +9248,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       testers,
     }:
@@ -8538,7 +9265,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [ ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
@@ -8553,6 +9283,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libXt,
@@ -8572,7 +9303,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libXt
@@ -8591,6 +9325,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -8610,7 +9345,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto
@@ -8629,6 +9367,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libxkbfile,
       libX11,
@@ -8648,7 +9387,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libxkbfile
         libX11
@@ -8667,6 +9409,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       libxcb,
@@ -8686,7 +9429,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         libxcb
@@ -8705,6 +9451,7 @@ self: with self; {
     {
       stdenv,
       pkg-config,
+      autoPatchPcHook,
       fetchurl,
       libX11,
       xorgproto,
@@ -8723,7 +9470,10 @@ self: with self; {
         "relro"
       ];
       strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+        autoPatchPcHook
+      ];
       buildInputs = [
         libX11
         xorgproto

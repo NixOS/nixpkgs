@@ -5,6 +5,7 @@
   cmake,
   openssl,
   pkg-config,
+  autoPatchPcHook,
   qtbase,
   qt5compat ? null,
 }:
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
   ];
 
   dontWrapQtApps = true;

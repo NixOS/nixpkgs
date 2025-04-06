@@ -7,6 +7,7 @@
   libtasn1,
   nettle,
   pkg-config,
+  autoPatchPcHook,
   lzip,
   perl,
   gmp,
@@ -160,6 +161,7 @@ stdenv.mkDerivation rec {
     [
       perl
       pkg-config
+      autoPatchPcHook
       texinfo
     ]
     ++ [

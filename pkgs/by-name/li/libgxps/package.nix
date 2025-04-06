@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   glib,
   gobject-introspection,
   cairo,
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gobject-introspection
   ];
   buildInputs = [

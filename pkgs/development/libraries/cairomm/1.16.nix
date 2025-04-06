@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   cairo,
   fontconfig,
   libsigcxx30,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

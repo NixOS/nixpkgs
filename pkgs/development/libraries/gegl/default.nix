@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   vala,
   gi-docgen,
   gobject-introspection,
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     gettext
     meson
     ninja

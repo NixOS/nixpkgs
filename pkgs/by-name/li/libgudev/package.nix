@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   udev,
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       pkg-config
+      autoPatchPcHook
       meson
       ninja
       glib # for glib-mkenums needed during the build

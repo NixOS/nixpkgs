@@ -9,6 +9,7 @@
   ninja,
   nixosTests,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       gettext
       glib
       libxslt

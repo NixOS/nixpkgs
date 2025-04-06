@@ -8,6 +8,7 @@
   ppp,
   gettext,
   pkg-config,
+  autoPatchPcHook,
   libxslt,
   python3,
   libmbim,
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
       gettext
       glib
       pkg-config
+      autoPatchPcHook
       libxslt
       python3
     ]

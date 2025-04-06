@@ -5,6 +5,7 @@
   buildPackages,
   pcre2,
   pkg-config,
+  autoPatchPcHook,
   libsepol,
   enablePython ? false,
   swig ? null,
@@ -63,6 +64,7 @@ stdenv.mkDerivation (
       [
         pkg-config
         python3
+        autoPatchPcHook
       ]
       ++ lib.optionals enablePython [
         python3Packages.pip

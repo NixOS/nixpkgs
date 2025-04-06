@@ -5,6 +5,8 @@
   cmake,
   utf8cpp,
   zlib,
+  validatePkgConfig,
+  autoPatchPcHook,
   testers,
 }:
 
@@ -21,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+    autoPatchPcHook
+  ];
 
   buildInputs = [
     zlib

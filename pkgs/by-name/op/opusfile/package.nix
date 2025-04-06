@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   openssl,
   libogg,
   libopus,
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "02smwc5ah8nb3a67mnkjzqmrzk43j356hgj2a97s9midq40qd38i";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     openssl
     libogg

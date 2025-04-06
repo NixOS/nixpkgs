@@ -6,6 +6,7 @@
   darwin,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (

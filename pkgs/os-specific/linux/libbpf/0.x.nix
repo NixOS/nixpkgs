@@ -2,6 +2,7 @@
   fetchFromGitHub,
   elfutils,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
   zlib,
   lib,
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-J5cUvfUYc+uLdkFa2jx/2bqBoZg/eSzc6SWlgKqcfIc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     elfutils
     zlib

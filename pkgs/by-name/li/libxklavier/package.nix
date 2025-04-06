@@ -5,6 +5,7 @@
   fetchpatch,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   gtk-doc,
   xkeyboard_config,
   libxml2,
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
     gtk-doc
     docbook_xsl
     gobject-introspection

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libdvdread,
 }:
 
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [ libdvdread ];
 
   # The upstream supports two configuration workflow:

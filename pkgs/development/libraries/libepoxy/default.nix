@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   utilmacros,
   python3,
   libGL,
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     utilmacros
     python3
   ];

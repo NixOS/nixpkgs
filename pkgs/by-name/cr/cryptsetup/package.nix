@@ -8,6 +8,7 @@
   openssl,
   libuuid,
   pkg-config,
+  autoPatchPcHook,
   popt,
   nixosTests,
   libargon2,
@@ -76,7 +77,10 @@ stdenv.mkDerivation rec {
     ]
     ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ] ++ lib.optionals rebuildMan [ asciidoctor ];
   propagatedBuildInputs = [
     lvm2
     json_c

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildPackages,
   pkg-config,
+  autoPatchPcHook,
   cmake,
   alsa-lib,
   glib,
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     buildPackages.stdenv.cc
     pkg-config
+    autoPatchPcHook
     cmake
   ];
 

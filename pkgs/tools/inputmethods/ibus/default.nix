@@ -7,6 +7,7 @@
   gettext,
   makeWrapper,
   pkg-config,
+  autoPatchPcHook,
   vala,
   wrapGAppsHook3,
   dbus,
@@ -142,6 +143,7 @@ stdenv.mkDerivation rec {
     gettext
     makeWrapper
     pkg-config
+    autoPatchPcHook
     python3BuildEnv
     vala
     wrapGAppsHook3

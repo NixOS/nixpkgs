@@ -9,6 +9,7 @@
   vala,
   libxslt,
   pkg-config,
+  autoPatchPcHook,
   glib,
   bash-completion,
   dbus,
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       libxslt
       glib

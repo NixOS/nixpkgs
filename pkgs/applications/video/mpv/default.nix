@@ -49,6 +49,7 @@
   openalSoft,
   pipewire,
   pkg-config,
+  autoPatchPcHook,
   python3,
   rubberband,
   shaderc, # instead of spirv-cross
@@ -156,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       buildPackages.darwin.sigtool

@@ -4,6 +4,7 @@
   lib,
   file,
   pkg-config,
+  autoPatchPcHook,
   intltool,
   glib,
   dbus-glib,
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     vala
     pkg-config
+    autoPatchPcHook
     intltool
     gobject-introspection
   ];

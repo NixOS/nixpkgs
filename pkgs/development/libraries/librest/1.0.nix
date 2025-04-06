@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gi-docgen,
   glib,
   json-glib,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gi-docgen
     gobject-introspection
   ];

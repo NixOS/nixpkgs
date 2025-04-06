@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   glib,
   zlib,
   libpng,
@@ -50,6 +51,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchPcHook
     python3
     python3Packages.setuptools
     python3Packages.lxml # For the db converison

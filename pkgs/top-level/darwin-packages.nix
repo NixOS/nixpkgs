@@ -185,7 +185,11 @@ makeScopeWithSplicing' {
 
       libunwind = callPackage ../os-specific/darwin/libunwind { };
 
-      sigtool = callPackage ../os-specific/darwin/sigtool { };
+      sigtool = callPackage ../os-specific/darwin/sigtool {
+        openssl = pkgs.openssl.override {
+          patchPcFiles = false;
+        };
+      };
 
       signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
@@ -262,7 +266,7 @@ makeScopeWithSplicing' {
 
       xcodeProjectCheckHook = pkgs.makeSetupHook {
         name = "xcode-project-check-hook";
-        propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
+        propagatedBuildInputs = [ (pkgs.pkgsBuildHost.openssl.override { patchPcFiles = false; }) ];
       } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
 
       # Formerly the CF attribute. Use this is you need the open source release.

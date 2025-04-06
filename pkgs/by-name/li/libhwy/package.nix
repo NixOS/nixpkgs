@@ -3,6 +3,8 @@
   stdenv,
   cmake,
   ninja,
+  validatePkgConfig,
+  autoPatchPcHook,
   gtest,
   fetchFromGitHub,
   fetchpatch,
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   # Required for case-insensitive filesystems ("BUILD" exists)

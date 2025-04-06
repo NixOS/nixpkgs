@@ -7,6 +7,8 @@
   coreutils,
   writeShellScript,
   makeBinaryWrapper,
+  patchPcFiles ? true,
+  autoPatchPcHook,
   withCryptodev ? false,
   cryptodev,
   withZlib ? false,
@@ -103,7 +105,8 @@ let
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
         ++ [ perl ]
-        ++ lib.optionals static [ removeReferencesTo ];
+        ++ lib.optionals static [ removeReferencesTo ]
+        ++ lib.optional patchPcFiles autoPatchPcHook;
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
 
       # TODO(@Ericson2314): Improve with mass rebuild

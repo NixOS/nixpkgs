@@ -5,6 +5,7 @@
   gettext,
   glib,
   pkg-config,
+  autoPatchPcHook,
   polkit,
   python3,
   sqlite,
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     pkg-config
+    autoPatchPcHook
     gtk-doc
     meson
     libxslt

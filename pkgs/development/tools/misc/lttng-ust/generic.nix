@@ -5,6 +5,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   liburcu,
   numactl,
   python3,
@@ -37,7 +38,10 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
   buildInputs = [
     numactl
     python3

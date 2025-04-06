@@ -7,6 +7,7 @@
   lib,
   stdenv,
   pkg-config,
+  autoPatchPcHook,
   gnutls,
   p11-kit,
   openssl,
@@ -55,6 +56,7 @@ stdenv.mkDerivation {
     ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
   ];
 

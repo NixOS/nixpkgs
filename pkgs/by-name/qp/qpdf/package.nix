@@ -6,6 +6,8 @@
   libjpeg,
   perl,
   zlib,
+  validatePkgConfig,
+  autoPatchPcHook,
 
   # for passthru.tests
   cups-filters,
@@ -38,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
+    validatePkgConfig
+    autoPatchPcHook
   ];
 
   buildInputs = [

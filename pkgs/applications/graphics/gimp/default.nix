@@ -5,6 +5,7 @@
   replaceVars,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   intltool,
   babl,
   gegl,
@@ -95,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
       pkg-config
+      autoPatchPcHook
       intltool
       gettext
       makeWrapper

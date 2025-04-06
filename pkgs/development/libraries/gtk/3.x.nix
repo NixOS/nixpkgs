@@ -4,6 +4,7 @@
   replaceVars,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   gettext,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -110,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       sassc
       gdk-pixbuf

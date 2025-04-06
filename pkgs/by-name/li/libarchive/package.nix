@@ -11,6 +11,7 @@
   lzo,
   openssl,
   pkg-config,
+  autoPatchPcHook,
   sharutils,
   xz,
   zlib,
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     glibcLocalesUtf8 # test_I test requires an UTF-8 locale
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

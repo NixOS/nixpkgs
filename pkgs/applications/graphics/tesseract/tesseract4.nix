@@ -5,6 +5,7 @@
   autoreconfHook,
   autoconf-archive,
   pkg-config,
+  autoPatchPcHook,
   leptonica,
   libpng,
   libtiff,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     autoreconfHook
     autoconf-archive
   ];

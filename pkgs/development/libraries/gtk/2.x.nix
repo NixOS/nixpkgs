@@ -22,6 +22,7 @@
   pango,
   perl,
   pkg-config,
+  autoPatchPcHook,
   replaceVars,
   testers,
   AppKit,
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     perl
     pkg-config
+    autoPatchPcHook
   ];
 
   patches =

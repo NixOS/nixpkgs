@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   wayland-scanner,
   libGL,
   wayland,
@@ -70,6 +71,7 @@ let
         meson
         ninja
         pkg-config
+        autoPatchPcHook
         wayland-scanner
         glslang
         hwdata

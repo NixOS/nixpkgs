@@ -11,6 +11,7 @@
   mesonEmulatorHook,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   withDocs ? stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook

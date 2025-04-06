@@ -8,6 +8,7 @@
   libnl,
   libxcrypt,
   pkg-config,
+  autoPatchPcHook,
   withBluez ? false,
   withRemote ? false,
 
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     [
       flex
       bison
+      autoPatchPcHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
     ++ lib.optionals withBluez [ bluez.dev ];

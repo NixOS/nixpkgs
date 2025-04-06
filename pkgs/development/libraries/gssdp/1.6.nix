@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gobject-introspection,
   vala,
   pandoc,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     gobject-introspection
     vala
     pandoc

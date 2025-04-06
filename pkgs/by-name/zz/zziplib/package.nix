@@ -5,6 +5,7 @@
   cmake,
   perl,
   pkg-config,
+  autoPatchPcHook,
   python3,
   xmlto,
   zip,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     cmake
     perl
     pkg-config
+    autoPatchPcHook
     python3
     xmlto
     zip

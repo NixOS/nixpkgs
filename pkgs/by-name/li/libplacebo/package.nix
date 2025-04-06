@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3Packages,
   vulkan-headers,
   vulkan-loader,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3Packages.jinja2
     python3Packages.glad2
   ];

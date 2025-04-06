@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoPatchPcHook,
   libnfnetlink,
   libmnl,
 }:
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoPatchPcHook
+  ];
 
   meta = with lib; {
     description = "Userspace library providing interface to packets that have been logged by the kernel packet filter";

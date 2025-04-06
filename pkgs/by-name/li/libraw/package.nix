@@ -5,6 +5,7 @@
   autoreconfHook,
   lcms2,
   pkg-config,
+  autoPatchPcHook,
 
   # for passthru.tests
   freeimage,
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   enableParallelBuilding = true;

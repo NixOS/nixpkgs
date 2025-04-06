@@ -6,6 +6,7 @@
   # base build deps
   meson,
   pkg-config,
+  autoPatchPcHook,
   ninja,
   # docs build deps
   python3,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     [
       meson
       pkg-config
+      autoPatchPcHook
       ninja
     ]
     ++ lib.optionals enableDocs [

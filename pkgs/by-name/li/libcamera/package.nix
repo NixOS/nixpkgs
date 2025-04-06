@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   makeFontsConf,
   openssl,
   libdrm,
@@ -96,6 +97,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3
     python3Packages.jinja2
     python3Packages.pyyaml

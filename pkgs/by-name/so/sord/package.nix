@@ -7,6 +7,7 @@
   ninja,
   pcre2,
   pkg-config,
+  autoPatchPcHook,
   python3,
   serd,
   zix,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3
   ];
   buildInputs = [ pcre2 ];

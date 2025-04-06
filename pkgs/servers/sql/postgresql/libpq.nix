@@ -15,6 +15,7 @@
   makeWrapper,
   perl,
   pkg-config,
+  autoPatchPcHook,
 
   # passthru / meta
   postgresql,
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     perl
     pkg-config
+    autoPatchPcHook
   ];
 
   # causes random build failures

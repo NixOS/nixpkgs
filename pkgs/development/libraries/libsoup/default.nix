@@ -8,6 +8,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   gnome,
   libsysprof-capture,
   gobject-introspection,
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       glib
     ]
     ++ lib.optionals withIntrospection [

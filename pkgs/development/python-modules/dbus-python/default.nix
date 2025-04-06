@@ -10,6 +10,7 @@
   meson,
   meson-python,
   pkg-config,
+  autoPatchPcHook,
 
   # native dependencies
   dbus,
@@ -56,6 +57,7 @@ lib.fix (
       meson
       meson-python
       pkg-config
+      autoPatchPcHook
     ];
 
     buildInputs = [

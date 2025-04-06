@@ -5,6 +5,7 @@
   replaceVars,
   gettext,
   pkg-config,
+  autoPatchPcHook,
   dbus,
   gitUpdater,
   libuuid,
@@ -174,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       gettext
       pkg-config
+      autoPatchPcHook
       vala
       gobject-introspection
       perl

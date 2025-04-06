@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  validatePkgConfig,
+  autoPatchPcHook,
   doxygen,
   gettext,
   graphviz,
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
+    autoPatchPcHook
     doxygen
     gettext
     graphviz

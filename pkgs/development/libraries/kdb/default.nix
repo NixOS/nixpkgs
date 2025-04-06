@@ -3,6 +3,8 @@
   lib,
   fetchurl,
   fetchpatch,
+  validatePkgConfig,
+  autoPatchPcHook,
   extra-cmake-modules,
   qtbase,
   kcoreaddons,
@@ -36,6 +38,8 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    validatePkgConfig
+    autoPatchPcHook
     extra-cmake-modules
     qttools
   ];

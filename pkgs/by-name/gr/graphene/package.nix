@@ -5,6 +5,7 @@
   fetchpatch,
   nix-update-script,
   pkg-config,
+  autoPatchPcHook,
   meson,
   mesonEmulatorHook,
   ninja,
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
       python3
       makeWrapper
     ]

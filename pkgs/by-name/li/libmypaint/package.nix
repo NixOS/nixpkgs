@@ -9,6 +9,7 @@
   json_c,
   libtool,
   pkg-config,
+  autoPatchPcHook,
   python3,
 }:
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkg-config
+    autoPatchPcHook
     python3
   ];
 

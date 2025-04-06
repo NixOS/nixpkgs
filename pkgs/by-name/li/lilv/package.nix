@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   python3,
   libsndfile,
   serd,
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    autoPatchPcHook
     python3
   ];
   buildInputs = [

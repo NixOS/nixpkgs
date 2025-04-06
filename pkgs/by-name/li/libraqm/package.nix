@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   freetype,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     ninja
   ];

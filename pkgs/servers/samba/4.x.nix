@@ -6,6 +6,7 @@
   fetchpatch,
   wafHook,
   pkg-config,
+  autoPatchPcHook,
   bison,
   flex,
   perl,
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.python
       wafHook
       pkg-config
+      autoPatchPcHook
       bison
       flex
       perl

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  autoPatchPcHook,
   threadingSupport ? true, # multi-threading
   openglSupport ? false,
   libglut,
@@ -54,7 +55,10 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WEBP_BUILD_LIBWEBPMUX" libwebpmuxSupport)
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    autoPatchPcHook
+  ];
   buildInputs =
     [ ]
     ++ lib.optionals openglSupport [

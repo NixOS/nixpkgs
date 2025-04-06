@@ -19,6 +19,7 @@
   ninja,
   openjpeg,
   pkg-config,
+  autoPatchPcHook,
   python3,
   zlib,
   withData ? true,
@@ -96,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       cmake
       ninja
       pkg-config
+      autoPatchPcHook
       python3
     ]
     ++ lib.optionals (!minimal) [

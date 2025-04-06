@@ -3,6 +3,7 @@
   lib,
   fetchFromGitea,
   pkg-config,
+  autoPatchPcHook,
   meson,
   ninja,
   scdoc,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     ninja
     scdoc

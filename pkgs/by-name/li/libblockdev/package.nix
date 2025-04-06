@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   gtk-doc,
   docbook_xml_dtd_43,
   python3,
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     makeBinaryWrapper
     pkg-config
+    autoPatchPcHook
     python3
   ];
 

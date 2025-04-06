@@ -14,6 +14,7 @@
   swig,
   dns-root-data,
   pkg-config,
+  autoPatchPcHook,
   makeWrapper,
   symlinkJoin,
   bison,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withDNSTAP [ protobufc ]
     ++ [
       pkg-config
+      autoPatchPcHook
       flex
       bison
     ]

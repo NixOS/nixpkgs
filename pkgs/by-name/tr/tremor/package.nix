@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   libogg,
 }:
 
@@ -31,6 +32,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
   propagatedBuildInputs = [ libogg ];
 

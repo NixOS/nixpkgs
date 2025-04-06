@@ -5,6 +5,7 @@
   autoreconfHook,
   pcre,
   pkg-config,
+  autoPatchPcHook,
   protobufc,
   withCrypto ? true,
   openssl,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs =

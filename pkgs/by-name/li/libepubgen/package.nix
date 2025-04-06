@@ -4,6 +4,7 @@
   fetchgit,
   autoreconfHook,
   pkg-config,
+  autoPatchPcHook,
   boost,
   cppunit,
   librevenge,
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [

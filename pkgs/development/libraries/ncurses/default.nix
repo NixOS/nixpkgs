@@ -6,6 +6,7 @@
   updateAutotoolsGnuConfigScriptsHook,
   ncurses,
   pkg-config,
+  autoPatchPcHook,
   abiVersion ? "6",
   enableStatic ? stdenv.hostPlatform.isStatic,
   withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       updateAutotoolsGnuConfigScriptsHook
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.

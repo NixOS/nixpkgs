@@ -5,6 +5,7 @@
   atk,
   glibmm,
   pkg-config,
+  autoPatchPcHook,
   gnome,
   meson,
   ninja,
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoPatchPcHook
     meson
     python3
     ninja

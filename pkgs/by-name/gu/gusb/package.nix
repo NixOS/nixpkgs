@@ -6,6 +6,7 @@
   meson,
   ninja,
   pkg-config,
+  autoPatchPcHook,
   buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
       meson
       ninja
       pkg-config
+      autoPatchPcHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection

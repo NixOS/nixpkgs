@@ -6,6 +6,7 @@
   gtk3,
   lib,
   pkg-config,
+  autoPatchPcHook,
   stdenv,
 }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     cmake
     glib # for glib-mkenums
     pkg-config
+    autoPatchPcHook
   ];
 
   buildInputs = [ gtk3 ];
