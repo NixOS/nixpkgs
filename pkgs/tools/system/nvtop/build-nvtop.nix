@@ -65,10 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
   ];
-  nativeBuildInputs = [
-    cmake
-    gtest
-  ] ++ lib.optional nvidia addDriverRunpath;
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      gtest
+    ]
+    ++ lib.optional nvidia addDriverRunpath;
 
   buildInputs =
     [ ncurses ]
@@ -85,7 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString needDrm drm-postFixup)
     + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
 
-  doCheck = true;
+  # https://github.com/Syllo/nvtop/commit/33ec008e26a00227a666ccb11321e9971a50daf8
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests.version = testers.testVersion {
