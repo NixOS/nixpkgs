@@ -10,18 +10,24 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";
-  version = "1.11.4";
+  version = "1.11.9"; # from package.json
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equicord";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-BjAp+bubpG9tTo8y5LWcTCnpLbiyuY1Q6ZnprgeKoZg=";
+    # Upstream does not consistently tag their releases. We use a hash
+    # even if they have releases, because chances are the "latest" tag
+    # will be outdated regardless. I tried asking them to do it, but it
+    # appears that there is no interest. Please manually update the rev
+    # and pnpmDeps hash each time a version has been bumped in upstream
+    # package.json, to at least have a resemblance of stable tagging.
+    rev = "cf7dc5522d785a14878662d28153a5b90507bab1";
+    hash = "sha256-+IcyklSfSha/MFbVH/TbbxKW/4rUeFcJnlUm8jNavIM=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4uCo/pQ4f8k/7DNpCPDAeqfroZ9icFiTwapwS10uWkE=";
+    hash = "sha256-fjfzBy1Z7AUKA53yjjCQ6yasHc5QMaOBtXtXA5fNK5s=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     EQUICORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
-    EQUICORD_HASH = "${finalAttrs.src.tag}";
+    EQUICORD_HASH = "${finalAttrs.version}";
   };
 
   buildPhase = ''
