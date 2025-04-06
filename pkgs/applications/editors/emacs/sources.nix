@@ -13,6 +13,7 @@ let
       patches ? _: [ ],
       rev,
       hash,
+      meta ? { },
     }:
     {
       inherit
@@ -97,7 +98,7 @@ let
           }
           .${variant};
         mainProgram = "emacs";
-      };
+      } // meta;
     };
 in
 {
