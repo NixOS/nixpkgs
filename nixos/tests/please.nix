@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { lib, ... }:
   {
     name = "please";
-    meta.maintainers = with lib.maintainers; [ azahi ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { ... }:
