@@ -259,47 +259,19 @@ in
       };
 
       components = {
-        subversion = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Subversion integration.";
-        };
+        subversion = lib.mkEnableOption "Subversion integration.";
 
-        mercurial = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Mercurial integration.";
-        };
+        mercurial = lib.mkEnableOption "Mercurial integration.";
 
-        git = mkOption {
-          type = types.bool;
-          default = false;
-          description = "git integration.";
-        };
+        git = lib.mkEnableOption "git integration.";
 
-        cvs = mkOption {
-          type = types.bool;
-          default = false;
-          description = "cvs integration.";
-        };
+        cvs = lib.mkEnableOption "cvs integration.";
 
-        breezy = mkOption {
-          type = types.bool;
-          default = false;
-          description = "bazaar integration.";
-        };
+        breezy = lib.mkEnableOption "bazaar integration.";
 
-        imagemagick = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Allows exporting Gant diagrams as PNG.";
-        };
+        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG.";
 
-        ghostscript = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Allows exporting Gant diagrams as PDF.";
-        };
+        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
 
         minimagick_font_path = mkOption {
           type = types.str;
