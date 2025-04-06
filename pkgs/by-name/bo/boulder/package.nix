@@ -319,6 +319,6 @@ buildGoModule rec {
     '';
     license = licenses.mpl20;
     mainProgram = "boulder";
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }
