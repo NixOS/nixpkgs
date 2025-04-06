@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation {
   pname = "tunefish";
-  version = "unstable-2020-08-13";
+  version = "0-unstable-2021-12-19";
 
   src = fetchFromGitHub {
     owner = "jpcima";
     repo = "tunefish";
-    rev = "b3d83cc66201619f6399500f6897fbeb1786d9ed";
+    rev = "c801c6cab63bb9e78e38ed69bd92024f2c667f00";
+    hash = "sha256-ZH2VD0IydEFdbB3Ht5D6/lbcWLQHBuu9GyasVP7VefI=";
     fetchSubmodules = true;
-    sha256 = "0rjpq3s609fblzkvnc9729glcnfinmxljh0z8ldpzr245h367zxh";
   };
 
   nativeBuildInputs = [
@@ -54,8 +54,17 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    mkdir -p $out/lib/lv2
-    cp -r src/tunefish4/Builds/LinuxMakefile/build/Tunefish4.lv2 $out/lib/lv2
+    runHook preInstall
+
+    mkdir -p $out/lib/{lv2,vst,vst3/Tunefish4.vst3}
+
+    pushd src/tunefish4/Builds/LinuxMakefile/build
+    cp -r "Tunefish4.lv2" $out/lib/lv2
+    cp -r "Tunefish4.vst3/Contents/x86_64-linux"/* $out/lib/vst3/Tunefish4.vst3
+    cp "Tunefish4.so" $out/lib/vst
+    popd
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

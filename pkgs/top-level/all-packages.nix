@@ -16476,9 +16476,7 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
-  tunefish = callPackage ../applications/audio/tunefish {
-    stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
-  };
+  tunefish = callPackage ../applications/audio/tunefish { };
 
   tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
     tuxclocker-plugins = tuxclocker-plugins-with-unfree;
