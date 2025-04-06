@@ -93,6 +93,12 @@ stdenv.mkDerivation (
       hash = "sha256-7hkgWNsFpMk3x+cdOs7UgwOE8NvR8QM/q6izNHNYEjc=";
     };
 
+    # u-config does not provide its own pkg.m4
+    pkgM4 = fetchurl {
+      url = "https://raw.githubusercontent.com/pkgconf/pkgconf/1d37e711cefe83e6b5393b424af4c94da4e7e9d3/pkg.m4";
+      hash = "sha256-B/kN59rXR4I0wXDdjIW9urklLk2eP8TSxU7ydP83AUE=";
+    };
+
     nativeBuildInputs = [ installShellFiles ];
     nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -130,6 +136,10 @@ stdenv.mkDerivation (
       installBin ${binary}
       installManPage u-config.1
 
+      # pkg-config-wrapper requires this to be provided by unwrapped package
+      mkdir -p "$out/share/aclocal"
+      ln -s ${finalAttrs.pkgM4} "$out/share/aclocal/pkg.m4"
+
       runHook postInstall
     '';
 
@@ -138,12 +148,17 @@ stdenv.mkDerivation (
     meta = {
       description = "Smaller, simpler, portable pkg-config clone";
       homepage = "https://github.com/skeeto/u-config";
-      license = lib.licenses.unlicense;
+      license = with lib.licenses; [
+        unlicense # u-config
+        gpl2Plus # pkg.m4
+      ];
+
       maintainers = with lib.maintainers; [
         sigmanificient
         marcin-serwin
         mvs
       ];
+
       platforms = lib.platforms.all;
       mainProgram = "pkg-config";
     };
