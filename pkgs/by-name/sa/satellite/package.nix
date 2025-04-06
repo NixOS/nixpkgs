@@ -6,6 +6,7 @@
   libadwaita,
   modemmanager,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,6 +42,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   strictDeps = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Program for showing navigation satellite data";
