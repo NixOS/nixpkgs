@@ -19551,12 +19551,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  honeymarker = callPackage ../servers/tracing/honeycomb/honeymarker { };
-
-  honeytail = callPackage ../servers/tracing/honeycomb/honeytail { };
-
-  honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
-
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
