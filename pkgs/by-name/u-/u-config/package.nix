@@ -2,11 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
+  installShellFiles,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs:
+let
+  binary = finalAttrs.meta.mainProgram + stdenv.hostPlatform.extensions.executable;
+  cppflags = lib.mapAttrsToList (name: value: "-D${name}=\"${value}\"") {
+    # set these to empty strings as there are no central directories for
+    # pkg-config modules, header files or libraries
+    PKG_CONFIG_PREFIX = "";
+    PKG_CONFIG_LIBDIR = "";
+    PKG_CONFIG_SYSTEM_INCLUDE_PATH = "";
+    PKG_CONFIG_SYSTEM_LIBRARY_PATH = "";
+  };
+in {
   pname = "u-config";
   version = "0.33.3";
 
@@ -17,19 +28,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
   };
 
-  makeFlags = [
-    "CROSS=${stdenv.cc.targetPrefix}"
-    "CC=${lib.getExe stdenv.cc}"
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeBuildInputs = [ pkg-config ];
+  dontConfigure = true;
 
-  buildFlags = [ "pkg-config" ];
+  # build without using Makefile as recommended by upstream
+  buildPhase = ''
+    runHook preBuild
+
+    $CC -o ${binary} ${lib.escapeShellArgs cppflags} generic_main.c
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 pkg-config -t $out/bin
+    installBin ${binary}
 
     runHook postInstall
   '';
