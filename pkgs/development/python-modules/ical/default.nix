@@ -46,6 +46,12 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  disabledTests = [
+    # Missing timezone due to out of date tzdata
+    # ical.tzif.timezoneinfo.TimezoneInfoError: Unable to load tzdata module: America/Coyhaique
+    "test_all_zoneinfo"
+  ];
+
   pythonImportsCheck = [ "ical" ];
 
   meta = with lib; {
