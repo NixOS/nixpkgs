@@ -10037,6 +10037,12 @@
     github = "I-Al-Istannen";
     githubId = 20284688;
   };
+  iamanaws = {
+    email = "nixpkgs.yjzaw@slmail.me";
+    github = "Iamanaws";
+    githubId = 78835633;
+    name = "Angel J";
+  };
   iammrinal0 = {
     email = "nixpkgs@mrinalpurohit.in";
     matrix = "@iammrinal0:nixos.dev";
