@@ -431,6 +431,9 @@
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
   ],
+  "var-meta-teams": [
+    "index.html#var-meta-teams"
+  ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
   ],
