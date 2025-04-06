@@ -53,6 +53,10 @@ let
           "test_run_with_wsgi_containers"
           "test_swagger_ui"
         ];
+        postPatch = ''
+          substituteInPlace connexion/__init__.py \
+            --replace "2020.0.dev1" "${version}"
+        '';
       };
       werkzeug = pySuper.werkzeug.overridePythonAttrs rec {
         version = "2.3.8";
@@ -108,6 +112,28 @@ let
           # datetime.datetime.now(datetime.UTC).
           "-W ignore::DeprecationWarning"
         ];
+      };
+      flask-session = pySuper.flask-session.overridePythonAttrs rec {
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "palletc-eco";
+          repo = "flask-session";
+          tag = version;
+          hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
+        };
+        nativeCheckInputs = with pySelf; [ pytestCheckHook ];
+        pytestFlagsArray = [
+          "-k"
+          "'null_session or filesystem_session'"
+        ];
+        dependencies = with pySelf; [
+          flask-sqlalchemy
+          cachelib
+        ];
+        disabledTests = [ ];
+        disabledTestPaths = [ ];
+        preCheck = "";
+        postCheck = "";
       };
       # flask-appbuilder doesn't work with sqlalchemy 2.x, flask-appbuilder 3.x
       # https://github.com/dpgaspar/Flask-AppBuilder/issues/2038
@@ -168,7 +194,84 @@ let
       # apache-airflow doesn't work with sqlalchemy 2.x
       # https://github.com/apache/airflow/issues/28723
       sqlalchemy = pySuper.sqlalchemy_1_4;
-
+      gitpython = pySuper.gitpython.overridePythonAttrs rec {
+        version = "3.1.44";
+        src = fetchFromGitHub {
+          owner = "gitpython-developers";
+          repo = "gitpython";
+          rev = version;
+          hash = "sha256-KnKaBv/tKk4wiGWUWCEgd1vgrTouwUhqxJ1/nMjRaWk=";
+        };
+      };
+      # ValueError: Unknown classifier in field `project.classifiers`: Programming Language :: Python :: Free Threading :: 2 - Beta
+      urllib3 = pySuper.urllib3.overridePythonAttrs rec {
+        version = "2.5.0";
+        src = fetchPypi {
+          pname = "urllib3";
+          inherit version;
+          hash = "sha256-P8R3M8fkGdS8P2s9wrT4kLt0OQajDVa6Slv6S7/5J2A=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail ', "setuptools-scm>=8,<9"' ""
+        '';
+      };
+      smmap = pySuper.smmap.overridePythonAttrs rec {
+        version = "5.0.2";
+        src = fetchFromGitHub {
+          owner = "gitpython-developers";
+          repo = "smmap";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0Y175kjv/8UJpSxtLpWH4/VT7JrcVPAq79Nf3rtHZZM=";
+        };
+      };
+      trove-classifiers = pySuper.trove-classifiers.overridePythonAttrs rec {
+        version = "2024.10.21.16";
+        src = fetchPypi {
+          pname = "trove_classifiers";
+          inherit version;
+          hash = "sha256-F8vQVdZ9Xp2d5jKTqHMpQ/q8IVdOTHt07fEStJKM9fM=";
+        };
+        postPatch = "";
+      };
+      packaging = pySuper.packaging.overridePythonAttrs rec {
+        version = "24.2";
+        src = fetchPypi {
+          pname = "packaging";
+          inherit version;
+          hash = "sha256-wiim3F6TLTRrxXOTeRCdSeiFPdgiNXHHxbVSYO3AuX8=";
+        };
+      };
+      pluggy = pySuper.pluggy.overridePythonAttrs rec {
+        version = "1.5.0";
+        src = fetchFromGitHub {
+          owner = "pytest-dev";
+          repo = "pluggy";
+          tag = version;
+          hash = "sha256-f0DxyZZk6RoYtOEXLACcsOn2B+Hot4U4g5Ogr/hKmOE=";
+        };
+      };
+      pyproject-api = pySuper.pyproject-api.overridePythonAttrs rec {
+        version = "1.8.0";
+        src = fetchPypi {
+          pname = "pyproject_api";
+          inherit version;
+          hash = "sha256-d7gEny/rXTPu/MIbV/HieWNid6isita1hxA3skN3hJY=";
+        };
+        disabledTests = [
+          # AssertionError: assert ['magic>3', 'requests>2'] == ['magic >3', 'requests >2']
+          "test_frontend_setuptools"
+        ];
+      };
+      tox = pySuper.tox.overridePythonAttrs rec {
+        version = "4.27.0";
+        src = fetchFromGitHub {
+          owner = "tox-dev";
+          repo = "tox";
+          tag = version;
+          hash = "sha256-Z3qUK4w1ebPvdZD4ZuKgZXJPUu5lG0G41vn/pc9gC/0=";
+        };
+      };
       apache-airflow = pySelf.callPackage ./python-package.nix { };
     };
   };
