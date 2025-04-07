@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature enableSdltest "sdltest")
   ];
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   strictDeps = true;
 
   passthru.updateScript = unstableGitUpdater {

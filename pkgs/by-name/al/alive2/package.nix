@@ -8,17 +8,18 @@
   llvm_18,
   cmake,
   ninja,
+  nix-update-script,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "alive2";
-  version = "0-unstable-2024-09-23";
+  version = "20.0";
 
   src = fetchFromGitHub {
     owner = "AliveToolkit";
     repo = "alive2";
-    rev = "05a964284056b38a6dc1f807e7acad64a0308328";
-    sha256 = "sha256-okKKUU7WLXLD9Hvsfoz+1HQWoyQ/bqRpBk5ogr7kSJA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4QNrBRGH+rxXwb7zTRYAixxipN3ybcXuWCmO+BLU9r4=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +57,14 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Automatic verification of LLVM optimizations";
     homepage = "https://github.com/AliveToolkit/alive2";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ shogo ];
+    maintainers = with lib.maintainers; [ shogo ] ++ lib.teams.ngi.members;
     mainProgram = "alive";
   };
 })
