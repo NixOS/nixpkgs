@@ -211,7 +211,7 @@ lib.makeExtensible (
 
       nix_2_28 = addTests "nix_2_28" self.nixComponents_2_28.nix-everything;
 
-      latest = self.nix_2_26;
+      latest = self.nix_2_28;
 
       # The minimum Nix version supported by Nixpkgs
       # Note that some functionality *might* have been backported into this Nix version,
