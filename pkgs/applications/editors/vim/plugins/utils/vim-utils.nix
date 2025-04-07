@@ -158,8 +158,7 @@ let
   # transitive closure of plugin dependencies (plugin needs to be a derivation)
   transitiveClosure =
     plugin:
-    [ plugin ]
-    ++ (lib.unique (builtins.concatLists (map transitiveClosure plugin.dependencies or [ ])));
+    [ plugin ] ++ (lib.unique (builtins.concatMap transitiveClosure (plugin.dependencies or [ ])));
 
   findDependenciesRecursively = plugins: lib.concatMap transitiveClosure plugins;
 
