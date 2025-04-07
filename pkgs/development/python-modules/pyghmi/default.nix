@@ -25,8 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ pbr setuptools ];
 
-  nativeBuildInputs = [ wheel ];
-
   nativeCheckInputs = [
     coverage
     oslotest
