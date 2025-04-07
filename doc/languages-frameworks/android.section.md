@@ -255,10 +255,12 @@ let
 
   # Use buildToolsVersion when you define androidComposition
   androidComposition = <...>;
-in
-pkgs.mkShell rec {
+
   ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
   ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
+in
+pkgs.mkShell {
+  inherit ANDROID_HOME ANDROID_NDK_ROOT;
 
   # Use the same buildToolsVersion here
   GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/${buildToolsVersion}/aapt2";
@@ -275,10 +277,12 @@ let
 
   # Use cmakeVersion when you define androidComposition
   androidComposition = <...>;
-in
-pkgs.mkShell rec {
+
   ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
   ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
+in
+pkgs.mkShell {
+  inherit ANDROID_HOME ANDROID_NDK_ROOT;
 
   # Use the same cmakeVersion here
   shellHook = ''

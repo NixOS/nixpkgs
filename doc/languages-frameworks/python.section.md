@@ -1737,10 +1737,11 @@ with import <nixpkgs> { };
 
 let
   pythonPackages = python3Packages;
-in pkgs.mkShell rec {
+in
+pkgs.mkShell {
   name = "impurePythonEnv";
-  venvDir = "./.venv";
-  buildInputs = [
+
+  packages = [
     # A Python interpreter including the 'venv' module is required to bootstrap
     # the environment.
     pythonPackages.python
@@ -1766,6 +1767,8 @@ in pkgs.mkShell rec {
     zlib
   ];
 
+  venvDir = "./.venv";
+
   # Run this command, only after creating the virtual environment
   postVenvCreation = ''
     unset SOURCE_DATE_EPOCH
@@ -1778,7 +1781,6 @@ in pkgs.mkShell rec {
     # allow pip to install wheels
     unset SOURCE_DATE_EPOCH
   '';
-
 }
 ```
 
@@ -1792,9 +1794,11 @@ with import <nixpkgs> { };
 let
   venvDir = "./.venv";
   pythonPackages = python3Packages;
-in pkgs.mkShell rec {
+in
+pkgs.mkShell {
   name = "impurePythonEnv";
-  buildInputs = [
+
+  packages = [
     pythonPackages.python
     # Needed when using python 2.7
     # pythonPackages.virtualenv
@@ -2040,6 +2044,7 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+  or by adding the `writableTmpDirAsHomeHook` hook to `nativeCheckInputs`.
 * Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
   This can be fixed with two changes in the derivation: 1) replacing `pytest` with
   `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run

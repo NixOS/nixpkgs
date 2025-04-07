@@ -43,13 +43,13 @@ tree. For instance, here is how you specify a build of the
 {
   environment.systemPackages =
     let
-      my-hello = with pkgs; stdenv.mkDerivation rec {
+      my-hello = stdenv.mkDerivation (finalAttrs: {
         name = "hello-2.8";
-        src = fetchurl {
-          url = "mirror://gnu/hello/${name}.tar.gz";
+        src = pkgs.fetchurl {
+          url = "mirror://gnu/hello/${finalAttrs.name}.tar.gz";
           hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
         };
-      };
+      });
     in
     [ my-hello ];
 }
@@ -69,13 +69,13 @@ where `my-hello.nix` contains:
 ```nix
 with import <nixpkgs> {}; # bring all of Nixpkgs into scope
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "hello-2.8";
   src = fetchurl {
-    url = "mirror://gnu/hello/${name}.tar.gz";
+    url = "mirror://gnu/hello/${finalAttrs.name}.tar.gz";
     hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
   };
-}
+})
 ```
 
 This allows testing the package easily:

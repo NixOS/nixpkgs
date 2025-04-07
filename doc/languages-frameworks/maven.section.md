@@ -287,11 +287,17 @@ Traditionally the Maven repository is at `~/.m2/repository`. We will override th
 :::
 
 ```nix
-{ lib, stdenv, maven }:
+{
+  lib,
+  stdenv,
+  maven,
+}:
 stdenv.mkDerivation {
   name = "maven-repository";
   buildInputs = [ maven ];
+
   src = ./.; # or fetchFromGitHub, cleanSourceWith, etc
+
   buildPhase = ''
     runHook preBuild
 
@@ -315,6 +321,7 @@ stdenv.mkDerivation {
 
   # don't do any fixup
   dontFixup = true;
+
   outputHashAlgo = null;
   outputHashMode = "recursive";
   # replace this with the correct SHA256
@@ -349,10 +356,16 @@ If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a str
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
 ```nix
-{ stdenv, maven, callPackage }:
-# pick a repository derivation, here we will use buildMaven
-let repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+{
+  stdenv,
+  maven,
+  callPackage,
+}:
+let
+  # pick a repository derivation, here we will use buildMaven
+  repository = callPackage ./build-maven-repository.nix { };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
@@ -371,11 +384,11 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 target/${pname}-${version}.jar $out/share/java
+    install -Dm644 target/${finalAttrs.pname}-${finalAttrs.version}.jar $out/share/java
 
     runHook postInstall
   '';
-}
+})
 ```
 
 ::: {.tip}
@@ -413,15 +426,21 @@ We will read the Maven repository and flatten it to a single list. This list wil
 We make sure to provide this classpath to the `makeWrapper`.
 
 ```nix
-{ stdenv, maven, callPackage, makeWrapper, jre }:
+{
+  stdenv,
+  maven,
+  callPackage,
+  makeWrapper,
+  jre,
+}:
 let
   repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball
-    "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
@@ -440,16 +459,16 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     classpath=$(find ${repository} -name "*.jar" -printf ':%h/%f');
-    install -Dm644 target/${pname}-${version}.jar $out/share/java
+    install -Dm644 target/${finalAttrs.pname}-${finalAttrs.version}.jar $out/share/java
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-          --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+          --add-flags "-classpath $out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar:''${classpath#:}" \
           --add-flags "Main"
 
     runHook postInstall
   '';
-}
+})
 ```
 
 #### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
@@ -499,15 +518,22 @@ Main-Class: Main
 We will modify the derivation above to add a symlink to our repository so that it's accessible to our JAR during the `installPhase`.
 
 ```nix
-{ stdenv, maven, callPackage, makeWrapper, jre }:
-# pick a repository derivation, here we will use buildMaven
-let repository = callPackage ./build-maven-repository.nix { };
-in stdenv.mkDerivation rec {
+{
+  stdenv,
+  maven,
+  callPackage,
+  makeWrapper,
+  jre,
+}:
+let
+  # pick a repository derivation, here we will use buildMaven
+  repository = callPackage ./build-maven-repository.nix { };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball
-    "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
@@ -528,15 +554,15 @@ in stdenv.mkDerivation rec {
     # create a symbolic link for the repository directory
     ln -s ${repository} $out/repository
 
-    install -Dm644 target/${pname}-${version}.jar $out/share/java
+    install -Dm644 target/${finalAttrs.pname}-${finalAttrs.version}.jar $out/share/java
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-          --add-flags "-jar $out/share/java/${pname}-${version}.jar"
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+          --add-flags "-jar $out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar"
 
     runHook postInstall
   '';
-}
+})
 ```
 ::: {.note}
 Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.

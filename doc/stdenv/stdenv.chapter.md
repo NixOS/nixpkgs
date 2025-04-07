@@ -20,14 +20,14 @@ stdenv.mkDerivation {
 **Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfoo";
   version = "1.2.3";
   src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    url = "http://example.org/libfoo-source-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
-}
+})
 ```
 
 Many packages have dependencies that are not provided in the standard environment. It’s usually sufficient to specify those dependencies in the `buildInputs` attribute:
@@ -215,8 +215,23 @@ These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is se
 #### Example {#ssec-stdenv-dependencies-overview-example}
 
 Consider for example this simplified derivation for `solo5`, a sandboxing tool:
+
 ```nix
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  libseccomp,
+  dosfstools,
+  mtools,
+  parted,
+  syslinux,
+  util-linux,
+  qemu,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "solo5";
   version = "0.7.5";
 
@@ -225,7 +240,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -235,13 +253,23 @@ stdenv.mkDerivation rec {
       --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ util-linux qemu ];
-  checkPhase = '' [elided] '';
-}
+  nativeCheckInputs = [
+    util-linux
+    qemu
+  ];
+  checkPhase = ''[elided] '';
+})
 ```
 
 - `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.
