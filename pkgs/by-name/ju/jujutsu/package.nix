@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  zstd,
   libgit2,
   libssh2,
   openssl,
@@ -38,7 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    zstd
     libgit2
     libssh2
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];

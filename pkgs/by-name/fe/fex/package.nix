@@ -1,24 +1,24 @@
 {
-  fetchFromGitHub,
   lib,
   llvmPackages,
+  fetchFromGitHub,
   cmake,
   ninja,
   pkg-config,
-  gitMinimal,
   qt5,
   python3,
+  nix-update-script,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2503";
+  version = "2504";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
-    tag = "FEX-${version}";
-    hash = "sha256-NnYod6DeRv3/6h8SGkGYtgC+RRuIafxoQm3j1Sqk0mU=";
+    tag = "FEX-${finalAttrs.version}";
+    hash = "sha256-tqUJBHYSRlEUaLI4WItzotIHGMUNbdjA7o9NjBYZmHw=";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     cmake
     ninja
     pkg-config
-    gitMinimal
     qt5.wrapQtAppsHook
     llvmPackages.bintools
 
@@ -46,10 +45,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_LINKER=lld"
-    "-DENABLE_LTO=True"
-    "-DENABLE_ASSERTIONS=False"
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeFeature "USE_LINKER" "lld")
+    (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "ENABLE_ASSERTIONS" false)
+    (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
@@ -63,9 +63,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
     wrapQtApp $out/bin/FEXConfig
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Fast usermode x86 and x86-64 emulator for Arm64 Linux";
     homepage = "https://fex-emu.com/";
+    changelog = "https://github.com/FEX-Emu/FEX/releases/tag/FEX-${finalAttrs.version}";
     platforms = [ "aarch64-linux" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andre4ik3 ];

@@ -13,6 +13,7 @@
   libpng,
   SDL2,
   libGL,
+  libX11,
   openal,
   zlib,
 }:
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
     libjpeg
     SDL2
     libGL
+    libX11
     openal
     zlib
     libpng

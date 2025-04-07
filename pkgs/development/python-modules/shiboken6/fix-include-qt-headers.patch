@@ -1,10 +1,10 @@
 --- a/ApiExtractor/clangparser/compilersupport.cpp
 +++ b/ApiExtractor/clangparser/compilersupport.cpp
 @@ -16,6 +16,7 @@
- #include <QtCore/QStandardPaths>
- #include <QtCore/QStringList>
- #include <QtCore/QVersionNumber>
-+#include <QtCore/QRegularExpression>
+ #include <QtCore/qstandardpaths.h>
+ #include <QtCore/qstringlist.h>
+ #include <QtCore/qversionnumber.h>
++#include <QtCore/qregularexpression.h>
  
  #include <clang-c/Index.h>
  
