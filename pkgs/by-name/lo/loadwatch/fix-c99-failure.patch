@@ -1,0 +1,12 @@
+diff --git a/lw-ctl.c b/lw-ctl.c
+index 236761b..013bd24 100644
+--- a/lw-ctl.c
++++ b/lw-ctl.c
+@@ -4,6 +4,7 @@
+ #include <sys/un.h>
+ #include <errno.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ void send_cmd(char *sockname, char *cmd)
+ {

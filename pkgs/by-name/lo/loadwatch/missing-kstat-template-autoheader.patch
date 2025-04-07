@@ -1,0 +1,12 @@
+diff --git a/configure.in b/configure.in
+index 4dacc3e..40f8e3f 100644
+--- a/configure.in
++++ b/configure.in
+@@ -8,6 +8,7 @@ AC_PROG_INSTALL
+ 
+ dnl Checks for libraries.
+ AC_CHECK_LIB(elf, elf_begin, [LIBS="$LIBS -lelf"])
++AH_TEMPLATE([HAVE_KSTAT], [Define if kstat is available.])
+ AC_CHECK_LIB(kstat, kstat_open, [AC_DEFINE(HAVE_KSTAT) LIBS="$LIBS -lkstat"])
+ 
+ dnl Checks for header files.
