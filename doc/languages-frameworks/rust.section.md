@@ -30,8 +30,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = pname;
-    rev = version;
+    repo = "ripgrep";
+    tag = version;
     hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
@@ -562,7 +562,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "tokenizers";
     tag = "python-v${version}";
     hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
