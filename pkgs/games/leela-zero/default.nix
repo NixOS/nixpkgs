@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gcp";
     repo = "leela-zero";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
     fetchSubmodules = true;
   };

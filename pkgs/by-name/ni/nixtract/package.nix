@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nixtract";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-36ciPNSlB1LU+UXP8MLakrBRRqbyiVFN8Jp/JbCe1OY=";
   };
 

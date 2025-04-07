@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ewkx1okhpa05jn4DyN8pkl6UJoz4Ymw4jRe6GN1lWuA=";
   };
 

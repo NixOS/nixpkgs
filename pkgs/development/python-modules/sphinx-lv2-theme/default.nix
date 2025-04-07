@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "LV2";
     repo = "sphinx_lv2_theme";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-x3h2hOQIyzOmnh58WMHjuOARdML1sDiVAf7m0YghhJ4=";
   };
 

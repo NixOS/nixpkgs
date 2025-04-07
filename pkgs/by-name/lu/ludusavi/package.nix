@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-N2dDi47Z2PifMNlYE6Lk1nHxfpvwoL6h2QkUPthlh4A=";
   };
 

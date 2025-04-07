@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fsaintjacques";
     repo = "semver-tool";
-    rev = version;
+    tag = version;
     sha256 = "sha256-BnHuiCxE0VjzMWFTEMunQ9mkebQKIKbbMxZVfBUO57Y=";
   };
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
 

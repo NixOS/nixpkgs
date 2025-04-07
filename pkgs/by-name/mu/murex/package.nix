@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-czo2JCUwzENPuBBTaO4RYo7WRvepacaKElAj9DznFY0=";
   };
 

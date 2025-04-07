@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Yk0lGu6wHF5OBFx/yZPJr3h3DVMvyBV8pi5eSxl7hpw=";
   };
 

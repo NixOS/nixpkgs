@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fogti";
     repo = "zs-apc-spdu-ctl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
   };
 

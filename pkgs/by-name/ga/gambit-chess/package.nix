@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "gambit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RLbD9JK1yJn30WWg7KWDjJoj4WXIoy3Kb8t2F8rFPuk=";
   };
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     owner = "libretro";
     repo = "RetroArch";
     hash = "sha256-ER90i0BlHC8SXfz6DzoIPCP1G8n4NNyJcRE88YY0gXk=";
-    rev = "v${version}";
+    tag = "v${version}";
   };
 
   nativeBuildInputs =

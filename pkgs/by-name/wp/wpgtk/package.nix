@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
-    rev = version;
+    tag = version;
     sha256 = "sha256-NlJG9d078TW1jcnVrpBORIIwDUGIAGWZoDbXp9/qRr4=";
   };
 

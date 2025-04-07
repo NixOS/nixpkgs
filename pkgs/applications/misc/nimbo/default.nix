@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nimbo-sh";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
   };
 

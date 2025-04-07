@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "LBCrion";
     repo = "sfwbar";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jMEbw3Xla2cod/oKFQ4bD3sTHi7DZ0deG0H0Yt0Y7ck=";
   };
 

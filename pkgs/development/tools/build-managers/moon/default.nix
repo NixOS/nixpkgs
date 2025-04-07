@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-25qRoWj3QeO/T/JLCkq41ZUI0CH0qgltbUy+wA9feJY=";
   };
 

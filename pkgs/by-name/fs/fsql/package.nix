@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kshvmdn";
     repo = "fsql";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
   };
 

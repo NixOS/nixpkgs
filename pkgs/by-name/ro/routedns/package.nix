@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9H/l6EAbrNwD2DnweBqjmcoaJEnTH9BdGn2x/ZC3us4=";
   };
 

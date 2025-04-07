@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "Prodigal";
     owner = "hyattpd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1fs1hqk83qjbjhrvhw6ni75zakx5ki1ayy3v6wwkn3xvahc9hi5s";
   };
 

@@ -25,7 +25,7 @@ let
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-8EY+bU7i3fdUBQYsykUzgOIWS5VAJlmRYW8fsp0xfnY=";
       };
 

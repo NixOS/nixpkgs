@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sql-formatter-org";
     repo = "sql-formatter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-13S7Qagra+RxWOct7wsvK1C0QftWtLZRB58YVWw9gGU=";
   };
 

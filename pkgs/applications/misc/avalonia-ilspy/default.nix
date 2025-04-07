@@ -28,7 +28,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "AvaloniaILSpy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cCQy5cSpJNiVZqgphURcnraEM0ZyXGhzJLb5AThNfPQ=";
   };
 

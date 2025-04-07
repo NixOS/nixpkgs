@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "screwdriver-cd";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-CBEdE15lAMMawTsfc45ptHsC2AbqFP6v4/nnktytwvc=";
   };
 

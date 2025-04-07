@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "nestjs";
     repo = "nest-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-dko+hOC3oZToNS+EOqmm+z7DLHfqqKDeQsH2sYxburU=";
   };
 

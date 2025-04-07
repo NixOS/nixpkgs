@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "netsec-ethz";
     repo = "bootstrapper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-X4lNgd6klIw0NW9NVG+d1JK+WNfOclbu43GYucelB7o=";
   };
 

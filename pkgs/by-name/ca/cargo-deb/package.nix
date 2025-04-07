@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "cargo-deb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-E0PU0j0n1ITP65D+p1upn3cBFBKkoCbyHe6S5XxDAyU=";
   };
 

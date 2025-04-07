@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "elm-land";
     repo = "elm-land";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PFyiVTH2Cek377YZwaCmvDToQCaxWQvJrQkRhyNI2Wg=";
   };
 

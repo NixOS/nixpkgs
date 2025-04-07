@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "dashboard";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PY/jK96FK6Y0++Ie4Yg/7GrGoLtLcgCSzXIkqySxe2M=";
   };
 

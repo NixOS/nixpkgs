@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madman-bob";
     repo = "python-dataclasses-serialization";
-    rev = version;
+    tag = version;
     hash = "sha256-jLMR2D01KgzHHRP0zduMBJt8xgBmIquWLCjZYLo2/AA=";
   };
 

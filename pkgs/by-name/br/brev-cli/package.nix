@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "brevdev";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-gqx/aOTpoN7nfstlFl4EulQ9Kzm/YlYOOiyrWIoJvcU=";
   };
 

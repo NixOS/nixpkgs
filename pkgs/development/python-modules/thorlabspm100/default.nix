@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clade";
     repo = "ThorlabsPM100";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-X4qEow6u4aE0sbFwZfK3YEso2RS0c9j4iaWJPHaPQV4=";
   };
 

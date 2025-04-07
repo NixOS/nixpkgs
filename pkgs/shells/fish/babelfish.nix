@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bouk";
     repo = "babelfish";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
   };
 

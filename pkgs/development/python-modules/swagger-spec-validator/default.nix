@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "swagger_spec_validator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7+kFmtzeze0QlGf6z/M4J4F7z771a5NWewB1S3+bxn4=";
   };
 

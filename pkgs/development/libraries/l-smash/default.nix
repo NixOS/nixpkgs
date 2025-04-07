@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "l-smash";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0rcq9727im6kd8da8b7kzzbzxdldvmh5nsljj9pvr4m3lj484b02";
   };
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyXiaomiGateway";
-    rev = version;
+    tag = version;
     hash = "sha256-TAbZvs1RrUy9+l2KpfbBopc3poTy+M+Q3ERQLFYbQis=";
   };
 

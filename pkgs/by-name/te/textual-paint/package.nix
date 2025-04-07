@@ -35,7 +35,7 @@ let
         src = fetchFromGitHub {
           owner = "Textualize";
           repo = "textual";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-ag+sJFprYW3IpH+BiMR5eSRUFMBeVuOnF6GTTuXGBHw=";
         };
       };
@@ -51,7 +51,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "1j01";
     repo = "textual-paint";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ubBWK4aoa9+wyUED7CmWwjknWsWauR/mkurDgkKDiY8=";
   };
 

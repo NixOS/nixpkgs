@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6/e3h4et5xzo0Eoh5I90FW9drOUSut1Wz7MgTSlVXGk=";
   };
   ldflags = [

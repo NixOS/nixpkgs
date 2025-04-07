@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2Znrt+TiQf/9YI1HYAikDfqbekAghOvxKoC05S18scQ=";
     fetchSubmodules = true;
   };

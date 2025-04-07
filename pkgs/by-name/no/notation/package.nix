@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "notaryproject";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KxxksliL2ZxbvwbLKB81Lhpvjab9nm4o3QBT2CVFwDw=";
   };
 

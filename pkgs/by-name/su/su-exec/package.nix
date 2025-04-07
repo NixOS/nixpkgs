@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ncopa";
     repo = "su-exec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eymE9r9Rm/u4El5wXHbkAh7ma5goWV0EdJIhsq+leIs=";
   };
 

@@ -16,7 +16,7 @@ let
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wQGpl7N0D83FrrV4T+LFe9h3n5Q/MqLbGGO2F5R9k2g=";
   };
 

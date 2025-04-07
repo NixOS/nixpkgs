@@ -12,7 +12,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-gei";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-orDjHgyqwBo/LOuujCp/6p4G0SWDA/ZDWvtTfH1ofrU=";
   };
 

@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
   };
 

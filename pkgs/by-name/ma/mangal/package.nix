@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "metafates";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
 

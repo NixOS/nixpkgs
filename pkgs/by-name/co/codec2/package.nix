@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
 

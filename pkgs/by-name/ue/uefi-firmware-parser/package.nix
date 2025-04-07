@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Yiw9idmvSpx4CcVrXHznR8vK/xl7DTL+L7k4Nvql2B8=";
   };
 

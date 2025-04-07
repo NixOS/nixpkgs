@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "valyala";
     repo = "quicktemplate";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "cra3LZ3Yq0KNQErQ2q0bVSy7rOLKdSkIryIgQsNRBHw=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gregwar";
     repo = "fatcat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/iGNVP7Bz/UZAR+dFxAKMKM9jm07h0x0F3VGpdxlHdk=";
   };
 

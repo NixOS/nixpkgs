@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
-    rev = version;
+    tag = version;
     hash = "sha256-LyIKjXdfE2sK81zFpXPneaFyfKqa4tU4GfXtt89TZOg=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "boysetsfrog";
     repo = "vimpc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0lswzkap2nm7v5h7ppb6a64cb35rajysd09nb204rxgrkij4m6nx";
   };
 

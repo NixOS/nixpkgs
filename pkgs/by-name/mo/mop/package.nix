@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mop-tracker";
     repo = "mop";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-oe8RG8E7xcp3ZqdDXYvpOVF3AfeSBFMherHD1YYFE/M=";
   };
 

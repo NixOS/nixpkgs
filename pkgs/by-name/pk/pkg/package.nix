@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NTjAhqCUN2bN4ilijoeHHIkl58XXP5nSj/yLUL0N2fw=";
   };
 

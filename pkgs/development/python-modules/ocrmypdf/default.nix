@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    rev = "v${version}";
+    tag = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841

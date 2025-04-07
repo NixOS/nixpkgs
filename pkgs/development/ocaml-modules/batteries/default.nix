@@ -19,7 +19,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+PGfExdvp3WyX1s8dLTBYp1SoUOBkzrxyqMUuaW6Bto=";
   };
 

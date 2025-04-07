@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pandoc";
     repo = "lua-filters";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Y962kdwg2bS3ZoPfsktv4Fy34HUTRhIIuSxPi5ODwWg=";
   };
 

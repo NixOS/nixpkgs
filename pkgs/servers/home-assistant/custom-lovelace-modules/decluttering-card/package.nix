@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "custom-cards";
     repo = "decluttering-card";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8pf7G6RbLdpIdXYz801+wwAc3NcNs8l0x4fSGqlAmG0=";
   };
 

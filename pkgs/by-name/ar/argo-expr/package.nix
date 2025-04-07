@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "blacha";
     repo = "argo-expr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XQnPFzT3PRmKeAQXLzBE5R2VvXotzxmsq+u9u5iE1QA=";
   };
 

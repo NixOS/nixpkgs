@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "redict";
     repo = "redict";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-MY4OWoYQ4a5efqcUTN6lNL/kd1VrJ/OBqKw27cQ5WC8=";
   };
 

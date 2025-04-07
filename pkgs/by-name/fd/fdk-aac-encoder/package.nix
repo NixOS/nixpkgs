@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nu774";
     repo = "fdkaac";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nVVeYk7t4+n/BsOKs744stsvgJd+zNnbASk3bAgFTpk=";
   };
 

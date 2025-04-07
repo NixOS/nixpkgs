@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "14mRh4X0r";
     repo = "matrix-synapse-pam";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0jgz49cwiyih5cg3hr4byva04zjnq8aj7rima9874la9fc5sd2wf";
   };
 

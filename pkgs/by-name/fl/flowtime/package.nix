@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Diego-Ivan";
     repo = "Flowtime";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J0Pscv0ZOpA/LV2mPTLOmDPQpfZhizTghatGnrJHToE=";
   };
 

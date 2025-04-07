@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-o8OJnZjrDbzzhwfzRWmyCmhBWxMVKRDeDWWBCXy3C90=";
   };
 

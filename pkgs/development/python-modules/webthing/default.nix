@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WebThingsIO";
     repo = "webthing-python";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-z4GVycdq25QZxuzZPLg6nhj0MAD1bHrsqph4yHgmRhg=";
   };
 

@@ -21,7 +21,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "tategakibunko";
     repo = "jingoo";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-qIw69OE7wYyZYKnIc9QrmF8MzY5Fg5pBFyIpexmaYxA=";
   };
 

@@ -40,7 +40,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-bW8D8g4FPx0i4iPP7Pvm0UpaJFNsECR3kuHEZn8NLx0=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubepug";
     repo = "kubepug";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VNxaYQy81U0JWd6KS0jCvMexpyWL4v1cKpjxLRkxBLE=";
   };
 

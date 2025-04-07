@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-Fu0zQIryESRaTGzDlAaewX9Yo2nPEeUxmcb3yPJLuSI=";
   };
 

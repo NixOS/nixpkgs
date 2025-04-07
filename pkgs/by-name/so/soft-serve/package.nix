@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CFUcpQ0tFpK1yKNLBwhRP6ncr44Ql3s30BNWYUiXH/w=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "numactl";
     repo = "numactl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
   };
 

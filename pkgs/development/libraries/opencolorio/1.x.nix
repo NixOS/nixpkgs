@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "imageworks";
     repo = "OpenColorIO";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "12srvxca51czpfjl0gabpidj9n84mw78ivxy5w75qhq2mmc798sb";
   };
 

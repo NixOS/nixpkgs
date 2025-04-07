@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+L/rbp0a3p4PHq1yTJmuMcNj0gT5sqAPeaNRo3Sh6U8=";
   };
 

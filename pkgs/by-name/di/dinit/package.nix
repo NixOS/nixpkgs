@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davmac314";
     repo = "dinit";
-    rev = "v${version}";
+    tag = "v${version}";
     # fix for case-insensitive filesystems
     postFetch = ''
       [ -f "$out/BUILD" ] && rm "$out/BUILD"

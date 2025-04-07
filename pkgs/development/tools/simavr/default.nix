@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "buserror";
     repo = "simavr";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0njz03lkw5374x1lxrq08irz4b86lzj2hibx46ssp7zv712pq55q";
   };
 

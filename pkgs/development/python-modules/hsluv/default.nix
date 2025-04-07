@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hsluv";
     repo = "hsluv-python";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bjivmPTU3Gp3pcC0ru4GSZANdhPqS1QSTMeiPGN8GCI=";
   };
 

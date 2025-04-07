@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "sphinx-issues";
-    rev = version;
+    tag = version;
     sha256 = "1lns6isq9kwcw8z4jwgy927f7idx9srvri5adaa5zmypw5x47hha";
   };
 

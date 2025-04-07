@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shiftkey";
     repo = "node-keytar";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = pinData.srcHash;
   };
 

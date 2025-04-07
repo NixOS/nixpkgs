@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spook";
     repo = "sshping";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0p1fvpgrsy44yvj44xp9k9nf6z1fh0sqcjvy75pcb9f5icgms815";
   };
 

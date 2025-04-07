@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-wZdQq5u44AcZs2CWRQ92wih5WBzZFywt78+slVBYseg=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qtSJbp9BGX4669fl/B1Z6rGG3432Nj1IQ+aYfIE9W50=";
   };
 

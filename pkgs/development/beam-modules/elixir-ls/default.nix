@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y1QT+wRFc+++OVFJwEheqcDIwaKHlyjbhEjhLJ2rYaI=";
   };
 in

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "scripthaus-dev";
     repo = "scripthaus";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZWOSLkqjauONa+fKkagpUgWB4k+l1mzEEiC0RAMUmo0=";
   };
 

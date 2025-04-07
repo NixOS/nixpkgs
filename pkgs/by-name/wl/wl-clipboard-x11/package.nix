@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brunelli";
     repo = "wl-clipboard-x11";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };
 

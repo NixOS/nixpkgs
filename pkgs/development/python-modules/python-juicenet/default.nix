@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jesserockz";
     repo = "python-juicenet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5RKnVwOfEHzFZCiC8OUpS8exKrENK+I3Ok45HlKEvtU=";
   };
 

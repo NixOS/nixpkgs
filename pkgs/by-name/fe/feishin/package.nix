@@ -16,7 +16,7 @@ let
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Tjh68b+41YrMNB14AZ3jXqBXDOmaaOYQKXJOyTUF474=";
   };
 

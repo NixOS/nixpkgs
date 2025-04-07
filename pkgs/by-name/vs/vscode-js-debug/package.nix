@@ -22,7 +22,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MZY6gthj3q2ptAvV28hVvIYgBsW4dpsznasZmK1wVOU=";
   };
 

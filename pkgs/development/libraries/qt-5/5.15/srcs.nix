@@ -38,7 +38,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtpositioning";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-L/P+yAQItm3taPpCNoOOm7PNdOFZiIwJJYflk6JDWvU=";
     };
   };
@@ -49,7 +49,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtwebkit";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
     };
     version = "5.212.0-alpha4";

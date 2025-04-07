@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Gm82VRu8GP52BohQzpMUJfh6q2tiUA2GJWOcG7ymGgg=";
   };
 

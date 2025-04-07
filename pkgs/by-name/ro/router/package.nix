@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = "router";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pockata";
     repo = "mmutils";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "08wlb278m5lr218c87yqashk7farzny51ybl5h6j60i7pbpm01ml";
   };
 

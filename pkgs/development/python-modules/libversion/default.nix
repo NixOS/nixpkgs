@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "repology";
     repo = "py-libversion";
-    rev = version;
+    tag = version;
     hash = "sha256-p0wtSB+QXAERf+57MMb8cqWoy1bG3XaCpR9GPwYYvJM=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gotesttools";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7mLn2axlHoXau9JtLhk1zwzhxkFGHgYPo7igI+IAsP4=";
   };
 

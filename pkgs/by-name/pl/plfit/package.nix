@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ntamas";
     repo = "plfit";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0JrPAq/4yzr7XbxvcnFj8CKmMyZT05PkSdGprNdAsJA=";
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 

@@ -8,7 +8,7 @@
 buildGoModule rec {
   pname = "alertmanager-webhook-logger";
   version = "1.0";
-  rev = "${version}";
+  rev = version;
 
   src = fetchFromGitHub {
     inherit rev;

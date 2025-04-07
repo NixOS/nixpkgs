@@ -14,7 +14,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "project-trident";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "06kg057vwkvafnk69m9rar4wih3vq4h36wbzwbfc2kndsnn47lfl";
   };
 

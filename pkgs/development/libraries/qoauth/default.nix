@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ayoy";
     repo = "qoauth";
-    rev = "v${version}";
+    tag = "v${version}";
     name = "qoauth-${version}.tar.gz";
     sha256 = "1b2jdqs526ac635yb2whm049spcsk7almnnr6r5b4yqhq922anw3";
   };

@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "pymol-open-source";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2C9kUpNfK9g7ehmk83iUVqqz4gn4wKO3lW5rSduFP6U=";
   };
 

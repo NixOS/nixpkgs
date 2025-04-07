@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = "grmon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0J7f4DMADUut3Da0F1eTDsT1Hlk0rfInwzbcVcQNzg8=";
   };
 

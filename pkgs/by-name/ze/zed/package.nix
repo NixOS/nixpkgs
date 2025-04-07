@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "brimdata";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
   };
 

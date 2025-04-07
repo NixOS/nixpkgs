@@ -13,7 +13,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mDUx9cQoYpU9kSAls36kzNVYZ8a4aqHEMIWfzS41NBk=";
   };
 

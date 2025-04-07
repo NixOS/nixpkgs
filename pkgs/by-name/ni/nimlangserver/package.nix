@@ -15,7 +15,7 @@ buildNimPackage (
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "langserver";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-CbdlDcEkX/pPXEbIsSM6S9INeBCwgjx7NxonjUJAHrk=";
     };
 

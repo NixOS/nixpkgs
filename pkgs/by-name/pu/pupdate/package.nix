@@ -16,7 +16,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-kdxqG1Vw6jRT/YyRLi60APpayYyLG73KqAFga8N9G2A=";
   };
 

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-index";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-r3Vg9ox953HdUp5Csxd2DYUyBe9u61fmA94PpcAZRqo=";
   };
 

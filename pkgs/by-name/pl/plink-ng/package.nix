@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chrchang";
     repo = "plink-ng";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "vivid";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mxBBfezaMM2dfiXK/s+Htr+i5GJP1xVSXzkmYxEuwNs=";
   };
 

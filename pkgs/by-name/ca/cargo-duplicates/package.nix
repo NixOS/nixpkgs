@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "cargo-duplicates";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JzS1+BHSCEcZM5MokbQsck/AGJ7EeSwbzjNz0uLQsgE=";
   };
 

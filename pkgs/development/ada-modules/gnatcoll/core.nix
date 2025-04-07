@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-core";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1srnh7vhs46c2zy4hcy4pg0a0prghfzlpv7c82k0jan384yz1g6g";
   };
 

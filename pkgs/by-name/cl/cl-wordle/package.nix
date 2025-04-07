@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "conradludgate";
     repo = "wordle";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-wFTvzAzboUFQg3fauIwIdRChK7rmLES92jK+8ff1D3s=";
   };
 

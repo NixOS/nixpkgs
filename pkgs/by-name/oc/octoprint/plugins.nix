@@ -32,7 +32,7 @@ in
     src = fetchFromGitHub {
       owner = "ntoff";
       repo = "Octoprint-M84MotOff";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "1w6h4hia286lbz2gy33rslq02iypx067yqn413xcipb07ivhvdq7";
     };
 
@@ -71,7 +71,7 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-BedLevelVisualizer";
-      rev = version;
+      tag = version;
       sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
     };
 
@@ -90,7 +90,7 @@ in
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-CostEstimation";
-      rev = version;
+      tag = version;
       sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
@@ -109,7 +109,7 @@ in
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-CuraEngineLegacy";
-      rev = version;
+      tag = version;
       sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
 
@@ -128,7 +128,7 @@ in
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-DisplayProgress";
-      rev = version;
+      tag = version;
       sha256 = "080prvfwggl4vkzyi369vxh1n8231hrl8a44f399laqah3dn5qw4";
     };
 
@@ -147,7 +147,7 @@ in
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-DisplayLayerProgress";
-      rev = version;
+      tag = version;
       sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
 
@@ -185,7 +185,7 @@ in
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-FirmwareUpdater";
-      rev = version;
+      tag = version;
       sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
     };
 
@@ -206,7 +206,7 @@ in
     src = fetchFromGitHub {
       owner = "BillyBlaze";
       repo = "OctoPrint-FullScreen";
-      rev = version;
+      tag = version;
       sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
     };
 
@@ -225,7 +225,7 @@ in
     src = fetchFromGitHub {
       owner = "ieatacid";
       repo = "OctoPrint-GcodeEditor";
-      rev = version;
+      tag = version;
       sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
     };
 
@@ -244,7 +244,7 @@ in
     src = fetchFromGitHub {
       owner = "costas-basdekis";
       repo = "MarlinGcodeDocumentation";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
     };
 
@@ -263,7 +263,7 @@ in
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-MQTT";
-      rev = version;
+      tag = version;
       sha256 = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
     };
 
@@ -284,7 +284,7 @@ in
     src = fetchFromGitHub {
       owner = "synman";
       repo = "OctoPrint-MqttChamberTemperature";
-      rev = version;
+      tag = version;
       sha256 = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
     };
 
@@ -305,7 +305,7 @@ in
     src = fetchFromGitHub {
       owner = "imrahil";
       repo = "OctoPrint-NavbarTemp";
-      rev = version;
+      tag = version;
       sha256 = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
     };
 
@@ -324,7 +324,7 @@ in
     src = fetchFromGitHub {
       owner = "TheSpaghettiDetective";
       repo = "OctoPrint-Obico";
-      rev = version;
+      tag = version;
       sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
     };
 
@@ -350,7 +350,7 @@ in
     src = fetchFromGitHub {
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
-      rev = version;
+      tag = version;
       sha256 = "sha256-9QKC1MsYO3XihOTAijJUv5i20iMSQHOHPfLiYPV5y8s=";
     };
 
@@ -371,7 +371,7 @@ in
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
-      rev = version;
+      tag = version;
       sha256 = "sha256-hqm8RShCNpsVbrVXquat5VXqcVc7q5tn5+7Ipqmaw4U=";
     };
 
@@ -401,7 +401,7 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-PrusaSlicerThumbnails";
-      rev = version;
+      tag = version;
       sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
@@ -422,7 +422,7 @@ in
     src = fetchFromGitHub {
       owner = "kantlivelong";
       repo = "OctoPrint-PSUControl";
-      rev = version;
+      tag = version;
       sha256 = "sha256-S+lPm85+ZEO/3BXYsrxE4FU29EGWzWrSw3y1DLdByrM=";
     };
 
@@ -450,7 +450,7 @@ in
     src = fetchFromGitHub {
       owner = "Renaud11232";
       repo = "OctoPrint-Resource-Monitor";
-      rev = version;
+      tag = version;
       sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
     };
 
@@ -471,7 +471,7 @@ in
     src = fetchFromGitHub {
       owner = "Sebclem";
       repo = "OctoPrint-SimpleEmergencyStop";
-      rev = version;
+      tag = version;
       sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
     };
 
@@ -509,7 +509,7 @@ in
     src = fetchFromGitHub {
       owner = "fabianonline";
       repo = "OctoPrint-Telegram";
-      rev = version;
+      tag = version;
       sha256 = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
     };
 
@@ -530,7 +530,7 @@ in
     src = fetchFromGitHub {
       owner = "Birkbjo";
       repo = "Octoprint-Themeify";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
     };
 
@@ -549,7 +549,7 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-TimelapsePurger";
-      rev = version;
+      tag = version;
       sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
     };
 
@@ -568,7 +568,7 @@ in
     src = fetchFromGitHub {
       owner = "MoonshineSG";
       repo = "OctoPrint-TitleStatus";
-      rev = version;
+      tag = version;
       sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
     };
 
@@ -587,7 +587,7 @@ in
     src = fetchFromGitHub {
       owner = "BillyBlaze";
       repo = "OctoPrint-TouchUI";
-      rev = version;
+      tag = version;
       sha256 = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
     };
 
@@ -606,7 +606,7 @@ in
     src = fetchFromGitHub {
       owner = "AliceGrey";
       repo = "OctoprintKlipperPlugin";
-      rev = version;
+      tag = version;
       sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
     };
 
@@ -625,7 +625,7 @@ in
     src = fetchFromGitHub {
       owner = "FormerLurker";
       repo = "Octolapse";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-QP6PkKWKUv4uIaYdqTAsZmK7DVes94Q9K/DrBYrWxzY=";
     };
 
@@ -672,7 +672,7 @@ in
     src = fetchFromGitHub {
       owner = "StefanCohen";
       repo = "OctoPrint-Dashboard";
-      rev = version;
+      tag = version;
       sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
     };
 

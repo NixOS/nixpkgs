@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "rpm-sequoia";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AZCsboUv4muKOw5El2Hw5O1cvAgD3JhBppacrQCJT2k=";
   };
 

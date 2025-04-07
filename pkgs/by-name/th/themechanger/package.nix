@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+uTofigS1F/nBNs/OyJ+RSz10DNnqgvNjWpkTXAvARM=";
   };
 

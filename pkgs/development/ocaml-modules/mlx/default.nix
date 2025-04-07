@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "mlx";
-    rev = version;
+    tag = version;
     hash = "sha256-3hPtyBKD2dp4UJBykOudW6KR2KXPnBuDnuJ1UNLpAp0=";
   };
 

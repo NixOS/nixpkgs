@@ -33,7 +33,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+qmCeLixfLak09XxgSe6ONcH1IoHGl5Au0s9JyNm95g=";
   };
 

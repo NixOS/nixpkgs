@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "libsrtp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vWL5bksKT5NUoNkIRiJ2FeGODQthD8SgXjCaA7SeTe4=";
   };
 

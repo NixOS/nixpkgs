@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "rust-http-rendezvous-server";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-minwa+7HLTNSBtBtt5pnoHsFnNEh834nsVw80+FIQi8=";
   };
 

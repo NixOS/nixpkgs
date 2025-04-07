@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "lwt-canceler";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1xbb7012hp901b755kxmfgg293rz34rkhwzg2z9i6sakwd7i0h9p";
   };
   useDune2 = true;

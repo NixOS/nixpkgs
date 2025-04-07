@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "aspcud";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PdRfpmH7zF5dn+feoijtzdSUjaYhjHwyAUfuYoWCL9E=";
   };
 

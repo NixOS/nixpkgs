@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ToBinio";
     repo = "cargo-features-manager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NjXJCrLsX52M7CBg8wdgwlK3gaGiznfdRGz7BAbVVPk=";
   };
 

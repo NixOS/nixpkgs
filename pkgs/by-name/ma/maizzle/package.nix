@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "maizzle";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Nzl4Pp1jY+LaQgLDJHjEdDA8b6MOfMXZNpvazPdmrTA=";
   };
 

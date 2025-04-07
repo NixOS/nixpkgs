@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "varnish";
     repo = "libvmod-digest";
-    rev = version;
+    tag = version;
     inherit sha256;
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "monochromegane";
     repo = "the_platinum_searcher";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FNHlALFwMbajaHWOehdSFeQmvZSuCZLdqGqLZ7DF+pI=";
   };
 

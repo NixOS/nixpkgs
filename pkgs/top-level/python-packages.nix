@@ -16930,7 +16930,7 @@ self: super: with self; {
             src = pkgs.fetchFromGitHub {
               owner = "grpc";
               repo = "grpc";
-              rev = "v${version}";
+              tag = "v${version}";
               hash = "sha256-PpiOT4ZJe1uMp5j+ReQulC9jpT0xoR2sAl6vRYKA0AA=";
               fetchSubmodules = true;
             };

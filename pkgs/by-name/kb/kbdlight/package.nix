@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hobarrera";
     repo = "kbdlight";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1f08aid1xrbl4sb5447gkip9lnvkia1c4ap0v8zih5s9w8v72bny";
   };
 

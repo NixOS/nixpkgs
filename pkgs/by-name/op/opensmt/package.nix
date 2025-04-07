@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "usi-verification-and-security";
     repo = "opensmt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-zhNNnwc41B4sNq50kPub29EYhqV+FoDKRD/CLHnVyZw=";
   };
 

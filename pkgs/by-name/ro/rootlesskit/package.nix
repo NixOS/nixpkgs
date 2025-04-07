@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9jQNFjxMLjGa9m2gxmoauzLHqhljltEO/ZNsBjWjgtw=";
   };
 

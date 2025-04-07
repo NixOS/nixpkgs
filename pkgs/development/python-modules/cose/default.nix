@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TimothyClaeys";
     repo = "pycose";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8d6HebWlSKgx7dmOnT7ZZ5mrMfg6mNWhz1hHPv75XF4=";
   };
 

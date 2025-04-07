@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marksparkza";
     repo = "jschon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-uOvEIEUEILsoLuV5U9AJCQAlT4iHQhsnSt65gfCiW0k=";
     fetchSubmodules = true;
   };

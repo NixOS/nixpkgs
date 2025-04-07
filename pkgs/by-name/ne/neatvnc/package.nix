@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D9dwD5i9mScc5vn0mUxe7+0cxMI65F7LyivXn9J0aic=";
   };
 

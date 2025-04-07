@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-shhkaPYU1N3Q7eu8CyZXYrR11kxb+r9II4lpfRWTOas=";
   };
 

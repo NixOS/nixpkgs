@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "meta";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UWW5h4e6usxVkMH1TDGt62/ThlAhbeqivnYFIKPOqXE=";
   };
 

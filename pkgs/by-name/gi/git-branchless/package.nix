@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
   };
 

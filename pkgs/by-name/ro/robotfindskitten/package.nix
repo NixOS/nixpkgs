@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "robotfindskitten";
     repo = "robotfindskitten";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-z6//Yfp3BtJAtUdY05m1eKVrTdH19MvK7LZOwX5S1CM=";
   };
 

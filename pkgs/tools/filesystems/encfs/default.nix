@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "099rjb02knr6yz7przlnyj62ic0ag5ncs7vvcc36ikyqrmpqsdch";
-    rev = "v${version}";
+    tag = "v${version}";
     repo = "encfs";
     owner = "vgough";
   };

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "avahi";
     repo = "nss-mdns";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
   };
 

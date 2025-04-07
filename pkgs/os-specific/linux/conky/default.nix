@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L8YSbdk+qQl17L4IRajFD/AEWRXb2w7xH9sM9qPGrQo=";
   };
 

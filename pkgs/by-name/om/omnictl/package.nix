@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "omni";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/hv6YNaBfECFlf1xJCiSeWg+/PqmIa+Rtip6kFuHPCM=";
   };
 

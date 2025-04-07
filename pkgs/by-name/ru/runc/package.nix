@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
   };
 

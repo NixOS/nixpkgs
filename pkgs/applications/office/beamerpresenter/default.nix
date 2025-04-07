@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
   };
 

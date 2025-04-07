@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qcd92hQqVBjMT3hyntjcgk29o9wGQsg5Hg7HE5C0UNc=";
   };
 

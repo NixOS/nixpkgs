@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "Hyprkeys";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-u2NTSth9gminIEcbxgGm/2HHyzuwf/YPNQV4VzR14Kk=";
   };
 

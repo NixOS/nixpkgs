@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mpalmer";
     repo = "action-validator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lJHGx/GFddIwVVXRj75Z/l5CH/yuw/uIhr02Qkjruww=";
     fetchSubmodules = true;
   };

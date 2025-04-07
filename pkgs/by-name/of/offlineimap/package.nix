@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XLxKqO5OCXsFu8S3lMp2Ke5hp6uer9npZ3ujmL6Kb3g=";
   };
 

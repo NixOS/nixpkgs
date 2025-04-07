@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rqlite";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mMsQJETeDyENMkCOmKb6TxDp9lYHSQIjaJtbsYzTJMs=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "doc2go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-b4L20/9jm+bFGdNsHmcwSnzcmr3Il9XoV20284Ba8PU=";
   };
   vendorHash = "sha256-d5ZRMFi7GIfDHsYRNvMnDdfnGhTM1sA0WDYD2aDoEd0=";

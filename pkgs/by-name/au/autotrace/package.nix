@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "autotrace";
     repo = "autotrace";
-    rev = version;
+    tag = version;
     hash = "sha256-8qqB6oKmbz95dNLtdLvb69cEj/P7TzdoKEyJ8+4ITzs=";
   };
 

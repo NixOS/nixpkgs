@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "svn-all-fast-export";
     repo = "svn2git";
-    rev = version;
+    tag = version;
     sha256 = "1b5yx2316hbyvw3v30vn1ljma9yd21nd59wis1gi34g92lgvqcd6";
   };
 

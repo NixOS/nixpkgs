@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sil-quirk";
     repo = "sil-q";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-v/sWhPWF9cCKD8N0RHpwzChMM1t9G2yrMDmi1cZxdOs=";
   };
 

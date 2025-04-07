@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
-    rev = version;
+    tag = version;
     hash = "sha256-bagirVJtpGZOB3rULKemniGj1BkN9SQYpFhTm4ZX/is=";
   };
 

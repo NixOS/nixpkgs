@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "inadyn";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-aQHJtnMDaHF1XY9lwQVR6f78Zk2UI7OC3Oxt1r1KMak=";
   };
 

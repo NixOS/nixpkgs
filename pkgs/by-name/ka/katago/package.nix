@@ -52,7 +52,7 @@ stdenv'.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
   };
 

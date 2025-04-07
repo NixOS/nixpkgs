@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "libcircle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EfnoNL6wo6qQES6XzMtpTpYcsJ8V2gy32i26wiTldH0=";
   };
 

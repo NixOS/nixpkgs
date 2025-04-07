@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mcFkXUC7Qtajg5IPy5PAqlyvY44HDM8JL+pkkBYC0JA=";
   };
 

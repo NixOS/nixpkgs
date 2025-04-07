@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "hyperbeam";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g3eGuol3g1yfGHDSzI1wQXMxJudGCt4PHHdmtiRQS/Q=";
   };
 

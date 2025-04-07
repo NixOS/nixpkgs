@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aorimn";
     repo = "dislocker";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1ak68s1v5dwh8y2dy5zjybmrh0pnqralmyqzis67y21m87g47h2k";
   };
 

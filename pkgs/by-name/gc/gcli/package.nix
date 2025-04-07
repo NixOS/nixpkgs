@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "herrhotzenplotz";
     repo = "gcli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-N5dzGhyXPDWcm/cNUSUQt4rR+PzaD1OUssRO3Sdfmoo=";
   };
 

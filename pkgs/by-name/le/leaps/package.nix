@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Jeffail";
     repo = "leaps";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-9AYE8+K6B6/odwNR+UhTTqmJ1RD6HhKvtC3WibWUZic=";
   };
 

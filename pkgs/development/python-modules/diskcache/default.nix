@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
 

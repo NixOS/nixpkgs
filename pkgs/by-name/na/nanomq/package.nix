@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-aB1gEzo2dX8NY+e0Dq4ELgkUpL/NtvvuY/l539BPIng=";
     fetchSubmodules = true;
   };

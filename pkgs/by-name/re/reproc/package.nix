@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DaanDeMeyer";
     repo = "reproc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LWzBeKhE7cSiZsK8xWzoTdrOcPiU/zEkmi40WiFytic=";
   };
 

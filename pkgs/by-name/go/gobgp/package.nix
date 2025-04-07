@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vyMC3FcfMHVsRosLkTYgCawiTIcJs0R5GgSZERRPHnE=";
   };
 

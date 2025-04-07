@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "python-u2flib-server";
-    rev = version;
+    tag = version;
     hash = "sha256-ginP9u+aHcdaWpwcFYJWu0Ghf7+nDZq9i3TVAacIPhg=";
   };
 

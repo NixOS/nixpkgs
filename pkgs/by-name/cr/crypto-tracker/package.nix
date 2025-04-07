@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Nox04";
     repo = "crypto-tracker";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8tTaXpHZWcDq0Jfa9Hf258VYwfimLhYjCAzD4X/Ow0s=";
   };
 

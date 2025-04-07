@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LFou8gTF/XDBLNQbA4uurYJHQl7yOTKe2OGklUsmPrg=";
   };
 

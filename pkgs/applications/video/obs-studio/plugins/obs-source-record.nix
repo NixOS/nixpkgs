@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-record";
-    rev = version;
+    tag = version;
     sha256 = "sha256-wh5BVWKHelw/ry6algST4EFGmmqsKs+phmVacS77dqM=";
   };
 

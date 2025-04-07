@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-ImfEKVyuvl8VAsaq34DBe+fiAxf11Mr0jWVI51EsSRs=";
   };

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1GT+EgltLhveEACxhY+748L1HIIyQHbEs7wLKANFWr0=";
   };
 

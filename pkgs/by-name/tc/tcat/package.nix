@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rsc";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1szzfz5xsx9l8gjikfncgp86hydzpvsi0y5zvikd621xkp7g7l21";
   };
   vendorHash = null;

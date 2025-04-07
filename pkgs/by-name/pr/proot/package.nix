@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
   };
 

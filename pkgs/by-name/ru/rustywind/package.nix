@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3cLpyY2Ec3XUDUoq4QLyDx8Nr85TOevBkfoReguVGII=";
   };
 

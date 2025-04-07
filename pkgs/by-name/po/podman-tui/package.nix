@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dtXJRoOb/FhGuCaRB43/8y2DM3ZgpYVts1ATzsVsUFE=";
   };
 

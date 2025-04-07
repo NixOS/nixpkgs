@@ -37,7 +37,7 @@ let
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
-    rev = version;
+    tag = version;
     hash = "sha256-pAQBl5KbTu7LD3gKBaiyn4QiWeGYoGmxD3sDJfCZVdA=";
     fetchSubmodules = true;
   };

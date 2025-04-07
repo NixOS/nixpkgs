@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lf94";
     repo = "backlight-auto";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-QPymwlDrgKM/SXDzJdmfzWLSLU2D7egif1OIUE+SHoI=";
   };
 

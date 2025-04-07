@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sam-github";
     repo = "libnet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 

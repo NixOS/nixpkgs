@@ -33,7 +33,7 @@ import ./versions.nix (
     src = fetchFromGitHub {
       owner = "Mange";
       repo = "rofi-emoji";
-      rev = "v${version}";
+      tag = "v${version}";
       inherit hash;
     };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tias";
     repo = "xinput_calibrator";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "5ZkNw+CKNUcPt1PY5PLzB/OT2wcf5n3UcaQlmMcwRVE=";
   };
 

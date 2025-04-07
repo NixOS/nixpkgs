@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lib2rPUTKudzbZQIGZxxxzvWNlbLkLdWtb9h7+C05QE=";
   };
 

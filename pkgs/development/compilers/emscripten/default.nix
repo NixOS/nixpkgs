@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "emscripten-core";
     repo = "emscripten";
     hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
-    rev = version;
+    tag = version;
   };
 
   nativeBuildInputs = [ makeWrapper ];

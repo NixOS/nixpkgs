@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.suckless.org/tabbed";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-KpMWBnnoF4AGRKrG30NQsVt0CFfJXVdlXLLag0Dq0sU=";
   };
 

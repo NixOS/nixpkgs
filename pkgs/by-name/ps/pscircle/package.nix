@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mildlyparallel";
     repo = "pscircle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
   };
 

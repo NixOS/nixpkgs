@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-theora";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2FXB5BOBRQhnpEmdlYBdZZXuXW9K+1cu7akJQDuDAMc=";
   };
 

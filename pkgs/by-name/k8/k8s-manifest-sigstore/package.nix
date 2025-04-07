@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BDBkPXDg9DruIt5f7RrpStFeuTGiOOpsb6JiKaCTOOk=";
   };
 

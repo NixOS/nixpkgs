@@ -21,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "litmuschaos";
     repo = "litmusctl";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-Saj5sx5YkcKsnMrnIzPcLok+mgEZSh9p8rnfQbJhAeU=";
   };
 

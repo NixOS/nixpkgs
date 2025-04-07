@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7GAA5Kc5ximdf71Bd8Q5o2pXixLOobXykKxfI31j/4A=";
   };
 

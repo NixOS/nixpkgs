@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "antoinemine";
     repo = "apron";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gHLCurydxX1pS66DTAWUJGl9Yqu9RWRjkZh6lXzM7YY=";
   };
 

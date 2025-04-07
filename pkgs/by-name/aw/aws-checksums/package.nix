@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-checksums";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hiqV6FrOZ19YIxL3UKBuexLJwoC2mY7lqysnV7ze0gg=";
   };
 

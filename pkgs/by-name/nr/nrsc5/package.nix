@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "theori-io";
     repo = "nrsc5";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "09zzh3h1zzf2lwrbz3i7rif2hw36d9ska8irvxaa9lz6xc1y68pg";
   };
 

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
-    rev = version;
+    tag = version;
     sha256 = "sha256-WmvCmG/wk63VnfJTFk3HhiaLzCe9O6kdUc7GpYNAwP4=";
   };
 

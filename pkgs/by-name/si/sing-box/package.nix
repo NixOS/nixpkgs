@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/RTpdbDFCDk1sq7lBIXQ3ElgYqflDumffZy1DVP0zOY=";
   };
 

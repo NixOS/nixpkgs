@@ -18,7 +18,7 @@ let
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
-            rev = "v${version}";
+            tag = "v${version}";
             hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

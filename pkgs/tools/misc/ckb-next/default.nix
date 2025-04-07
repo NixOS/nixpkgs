@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
   };
 

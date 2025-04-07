@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "symbolicsoft";
     repo = "verifpal";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kBeQ7U97Ezj85A/FbNnE1dXR7VJzx0EUrDbzwOgKl8E=";
   };
 

@@ -18,7 +18,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "rhysd";
     repo = "vim-startuptime";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d6AXTWTUawkBCXCvMs3C937qoRUZmy0qCFdSLcWh0BE=";
   };
 

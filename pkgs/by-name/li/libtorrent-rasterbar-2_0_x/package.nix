@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
     fetchSubmodules = true;
   };

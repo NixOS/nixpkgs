@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "pinit";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-unvlMytZdjVbrWlwkpw90NZoFw9A6Ga0bB2XqFEPuVE=";
   };
 

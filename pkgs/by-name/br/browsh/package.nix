@@ -28,7 +28,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "browsh-org";
     repo = "browsh";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KbBVcNuERBL94LuRx872zpjQTzR6c5GalsBoNR52SuQ=";
   };
 

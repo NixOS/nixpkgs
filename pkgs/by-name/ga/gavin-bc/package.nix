@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "git.gavinhoward.com";
     owner = "gavin";
     repo = "bc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-V0L5OmpcI0Zu5JvESjuhp4wEs5Bu/CvjF6B5WllTEqo=";
   };
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grahamc";
     repo = "xmloscopy";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "06y5bckrmnq7b5ny2hfvlmdws910jw3xbw5nzy3bcpqsccqnjxrc";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Lurkki14";
     repo = "tuxclocker";
     fetchSubmodules = true;
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
   };
 

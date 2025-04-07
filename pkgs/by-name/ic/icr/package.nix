@@ -19,7 +19,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "crystal-community";
     repo = "icr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-29B/i8oEjwNOYjnc78QcYTl6fC/M9VfAVCCBjLBKp0Q=";
   };
 

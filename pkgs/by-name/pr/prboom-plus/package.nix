@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "prboom-plus";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
   };
 

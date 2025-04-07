@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "agude";
     repo = "wayback-machine-archiver";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0dnnqx507gpj8wsx6f2ivfmha969ydayiqsvxh23p9qcixw9257x";
   };
 

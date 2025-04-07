@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XnibLlwUspI2aveWfMg/TOe59vK6Z2WEnF7gafUmx6E=";
     fetchSubmodules = true;
   };

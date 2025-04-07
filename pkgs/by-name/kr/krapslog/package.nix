@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "acj";
     repo = "krapslog-rs";
-    rev = version;
+    tag = version;
     sha256 = "sha256-wRziLNMwLZBCn330FNC9x6loCCyuC+31Kh51ZI/j1Cc=";
   };
 

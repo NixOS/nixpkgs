@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
-    rev = version;
+    tag = version;
     hash = "sha256-0dyp7kNnmuw9YcYTH/5Eln+EzIbM2HTojXXC9NCA8vE=";
   };
 

@@ -13,7 +13,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "siavash119";
     repo = "qtchan";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1x11m1kwqindzc0dkpfifcglsb362impaxs85kgzx50p898sz9ll";
   };
 

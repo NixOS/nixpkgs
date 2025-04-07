@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "target-isns";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1b6jjalvvkkjyjbg1pcgk8vmvc6xzzksyjnh2pfi45bbpya4zxim";
   };
 

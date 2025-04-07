@@ -43,7 +43,7 @@ in
           src = fetchFromGitHub {
             owner = "aws";
             repo = "aws-sdk-cpp";
-            rev = version;
+            tag = version;
             hash = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
           };
           postPatch =
