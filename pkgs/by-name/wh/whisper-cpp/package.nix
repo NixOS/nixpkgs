@@ -2,6 +2,7 @@
   lib,
   stdenv,
   cmake,
+  git,
   apple-sdk_11,
   ninja,
   fetchFromGitHub,
@@ -73,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.2";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
-    owner = "ggerganov";
+    owner = "ggml-org";
     repo = "whisper.cpp";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tvCT0QRdmRGsjtQZcEZMgSe2/47tSkfdaPqS/2MuQTs=";
   };
 
   # The upstream download script tries to download the models to the
@@ -89,7 +90,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   patches = [ ./download-models.patch ];
 
   postPatch = ''
-    for target in examples/{bench,command,main,quantize,server,stream,talk}/CMakeLists.txt; do
+    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
       fi
@@ -99,6 +100,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       cmake
+      git
       ninja
       which
       makeWrapper
@@ -154,13 +156,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # Add "whisper-cpp" prefix before every command
-    mv -v $out/bin/{main,whisper-cpp}
-
-    for file in $out/bin/*; do
-      if [[ -x "$file" && -f "$file" && "$(basename $file)" != "whisper-cpp" ]]; then
-        mv -v "$file" "$out/bin/whisper-cpp-$(basename $file)"
-      fi
-    done
+    mv -v "$out/bin/"{quantize,whisper-quantize}
 
     install -v -D -m755 $src/models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 
@@ -174,7 +170,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/whisper-cpp --help >/dev/null
+    $out/bin/whisper-cli --help >/dev/null
     runHook postInstallCheck
   '';
 
@@ -186,7 +182,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
     license = lib.licenses.mit;
-    mainProgram = "whisper-cpp";
+    mainProgram = "whisper-cli";
     platforms = lib.platforms.all;
     broken = coreMLSupport;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
