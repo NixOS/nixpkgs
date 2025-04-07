@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Q7610i+2PQi+Oza3c2SwPneljrb+1cuFA4K4DQTpt8A=";
   };
 

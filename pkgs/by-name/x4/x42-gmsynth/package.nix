@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "x42";
     repo = "gmsynth.lv2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Fu/wCQY5fTvAWo18hhiQC9LZAUwi3WJfhgWLI0rgmKs=";
   };
 

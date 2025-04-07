@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "gopatch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zP5zC71icrVvzKzBBlxfX9h5JlKd89cf32Q6eZatX44=";
   };
 

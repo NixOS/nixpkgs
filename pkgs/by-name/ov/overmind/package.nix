@@ -25,7 +25,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DarthSim";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-wX29nFmzmbxbaXtwIWZNvueXFv9SKIOqexkc5pEITpw=";
   };
 

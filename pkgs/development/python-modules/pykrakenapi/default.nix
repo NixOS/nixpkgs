@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sMtNdXM+47iCnDgo33DCD1nx/I+jVX/oG/9aN80LfRg=";
   };
 

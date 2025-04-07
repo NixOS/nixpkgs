@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mantoni";
     repo = "eslint_d.js";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Mu3dSgRIC2L9IImKixJfaUsltlajY0cYdXOSikNQuPo=";
   };
 

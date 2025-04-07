@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Li/bMgl/wj9bHpXW5gwWvb7BvyBPzeLCP979J2kyRCM=";
   };
 

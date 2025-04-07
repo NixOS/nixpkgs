@@ -20,7 +20,7 @@ let
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
-            rev = "v${version}";
+            tag = "v${version}";
             hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -35,7 +35,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
-    rev = version;
+    tag = version;
     hash = "sha256-jajkHUz+3ujKXbcsfN7y3pwHqAofTgdQHEC29srzs1M=";
   };
 

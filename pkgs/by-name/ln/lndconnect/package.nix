@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "LN-Zap";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cuZkVeFUQq7+kQo/YjXCMPANUL5QooAWgegcoWo3M0c=";
   };
 

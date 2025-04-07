@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MHseb1XJ0t7jQ45VXKQclYPgddrzmJAC7cde8qqYhNQ=";
   };
 

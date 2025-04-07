@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yaA6WpP2XIQhjK7kpXBdBFUgKZyvtThd6JmSchUCfbI=";
   };
 

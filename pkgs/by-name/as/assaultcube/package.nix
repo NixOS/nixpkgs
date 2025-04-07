@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "assaultcube";
     repo = "AC";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0qv339zw9q5q1y7bghca03gw7z4v89sl4lbr6h3b7siy08mcwiz9";
   };
 

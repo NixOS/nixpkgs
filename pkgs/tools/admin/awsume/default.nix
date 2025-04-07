@@ -19,7 +19,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "awsume";
-    rev = version;
+    tag = version;
     sha256 = "sha256-lm9YANYckyHDoNbB1wytBm55iyBmUuxFPmZupfpReqc=";
   };
 

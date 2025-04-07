@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rockymadden";
     repo = "somafm-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1h5p9qsczgfr450sklh2vkllcpzb7nicbs8ciyvkavh3d7hds0yy";
   };
 

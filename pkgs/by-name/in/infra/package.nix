@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "infrahq";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-uz4wimhOfeHSL949m+biIhjfDwwEGnTiJWaz/r3Rsko=";
   };
 

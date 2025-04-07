@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-81WX9GAZ0mPai1/4FrqDGDu6k4OVYrKSJSC/FkPkZmE=";
   };
 

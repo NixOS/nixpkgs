@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-gtksourceview";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
   };
 

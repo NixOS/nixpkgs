@@ -13,7 +13,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = "synapse-admin";
-    rev = version;
+    tag = version;
     sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
 

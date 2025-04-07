@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "caio-ishikawa";
     repo = "slingshot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XI6uf54sEJ0htfY43aF8/X1/OF9m6peHUGDS+2nK3xA=";
   };
 

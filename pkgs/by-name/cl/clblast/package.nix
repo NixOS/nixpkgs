@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CNugteren";
     repo = "CLBlast";
-    rev = version;
+    tag = version;
     hash = "sha256-fzenYFCAQ0B2NQgh5OaErv/yNEzjznB6ogRapqfL6P4=";
   };
 

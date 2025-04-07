@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
-    rev = version;
+    tag = version;
     sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 

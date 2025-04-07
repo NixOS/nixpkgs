@@ -8,7 +8,7 @@ rec {
   rSrc = fetchFromGitHub {
     owner = "abathur";
     repo = "resholve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SzJbA0wLeSwvXnAE4bTNqh0tnpFPkn6N1hp7sZGAkB4=";
   };
 }

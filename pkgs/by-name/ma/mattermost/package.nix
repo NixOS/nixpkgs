@@ -18,11 +18,14 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.11";
-    srcHash = "sha256-ugFGb85Oolg9pXeNi2JFKWQ4eebmdr/O3xIGbKGFSvQ=";
-    vendorHash = "sha256-h/hcdVImU3wFp7BGHS/TxYBEWGv9v06y8etaz9OrHTA=";
-    npmDepsHash = "sha256-Kk0Bbx/Rs5xpwSpgpm9BSMMEMKmO6kgKgyv/oDIAZ7w=";
+    regex = "^v(10\\.5\\.[0-9]+)$";
+    version = "10.5.2";
+    srcHash = "sha256-wC8tkplOntZpucCe2QPmnlrecwcqkzyEiTni8lO0p1I=";
+    vendorHash = "sha256-7jghoXFKA+WZ/ywOT0wWDMTfqAcBqp5gswOvpB7weL0=";
+    npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
+    lockfileOverlay = ''
+      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
+    '';
   },
 }:
 
@@ -80,7 +83,7 @@ let
           tests.mattermostWithTests = withTests;
         };
     in
-    finalPassthru.withTests;
+    finalPassthru.withoutTests;
 in
 buildMattermost rec {
   pname = "mattermost";

@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2tam+3vYLC216Q78GIUI3fGnE5FJ/lECJAUQMSxz46w=";
   };
 in

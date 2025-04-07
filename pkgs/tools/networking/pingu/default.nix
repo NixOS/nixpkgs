@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sheepla";
     repo = "pingu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-iAHj6/qaZgpTfrUZZ9qdsjiNMJ2zH0CzhR4TVSC9oLE=";
   };
 

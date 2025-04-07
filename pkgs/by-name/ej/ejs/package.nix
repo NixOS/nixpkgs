@@ -13,7 +13,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "mde";
     repo = "ejs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3Rq+7oiYJlIY7sGPasx728sz2zj0ndAvKpHGsQX4tlc=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
   };
 

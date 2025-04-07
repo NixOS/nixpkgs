@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py_ecc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DKe+bI1GEzXg4Y4n5OA1/hWYz9L3X1AvaOFPEnCaAfs=";
   };
 

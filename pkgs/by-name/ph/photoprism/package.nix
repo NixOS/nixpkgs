@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
   };
 

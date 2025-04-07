@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-TSAVRLeOWh3IQ9X0Zr4CQS+h1vTeUZnzMp/IYujGMn0=";
   };
 

@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
   };
 

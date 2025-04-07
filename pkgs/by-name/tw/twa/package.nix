@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "twa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-B+UwH7oCtediLzurjYuLp56IxiKNAqyoW5QkwXX72MA=";
   };
 

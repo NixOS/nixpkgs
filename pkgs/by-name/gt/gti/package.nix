@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DUDCFcaB38Xkp3lLfEhjGC0j430dphXFBVhGzm7/Bp0=";
   };
 

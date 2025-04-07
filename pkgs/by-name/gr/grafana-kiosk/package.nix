@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-kiosk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kh62qGMVHNTssQMEBwLaEW0tRtP3iWMrxXeQU+fe+44=";
   };
 

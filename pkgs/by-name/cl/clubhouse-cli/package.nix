@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "andjosh";
     repo = "clubhouse-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OGUEPWKL3GBIQHEDljX1gXMRDEztIrJT5ivAIcyW91k=";
   };
 

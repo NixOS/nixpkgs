@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
   };
 

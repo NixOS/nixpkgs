@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "paintcompiler";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dmVBQUUyFc71zq8fXBQ4ii/llrGdtUCOponCzSeut6g=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
-    rev = version;
+    tag = version;
     hash = "sha256-03EDarU7rmsiE96IYHXFuPtD8nWur0qwj8NDzSj8OX0=";
   };
 

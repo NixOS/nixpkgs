@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "discordapp";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "04cxhqdv5r92lrpnhxf8702a8iackdf3sfk1050z7pijbijiql2a";
   };
 

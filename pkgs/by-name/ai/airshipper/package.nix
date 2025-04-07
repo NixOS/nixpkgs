@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MHwyXCAqdBzdJlYzSeUXr6bJdTVHcjJ/kGcuAsZCCW8=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
-    rev = version;
+    tag = version;
     hash = "sha256-rXtmmENBt9RMdLPq8GDyndh4+CYnCmz6NYpe3kH5OwU=";
   };
 

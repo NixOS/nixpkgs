@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-7AI8Eb6o/Gysli9CprwsgAzz1cGmNU79Qm7OzlsaTFw=";
   };
 

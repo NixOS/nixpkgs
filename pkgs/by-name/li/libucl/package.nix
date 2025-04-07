@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
-    rev = version;
+    tag = version;
     sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 

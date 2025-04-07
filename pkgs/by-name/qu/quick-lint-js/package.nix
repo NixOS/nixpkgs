@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
-    rev = version;
+    tag = version;
     hash = "sha256-L2LCRm1Fsg+xRdPc8YmgxDnuXJo92nxs862ewzObZ3I=";
   };
 

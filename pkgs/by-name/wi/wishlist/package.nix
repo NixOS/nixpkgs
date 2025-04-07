@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "wishlist";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-53fojA+gdvpSVNjx6QncH16F8/x+lpY5SkNs7obW2XQ=";
   };
 

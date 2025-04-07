@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "robokoding";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 

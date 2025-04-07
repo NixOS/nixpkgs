@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Scalr";
     repo = "scalr-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mDcirYhqpfeS2Wt9MnYPmTn/QZa85vlrN2uUkA1+7A4=";
   };
 

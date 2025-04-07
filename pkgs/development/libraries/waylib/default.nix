@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "waylib";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-djFwUe/+5CNEnOTKL5OAC8zVQqsT8BSqQEWjkbEt7xQ=";
   };
 

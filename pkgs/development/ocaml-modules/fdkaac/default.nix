@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-fdkaac";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cTPPQKBq0EFo35eK7TXlszbodHYIg1g7v+yQ/rG7Y9I=";
   };
 

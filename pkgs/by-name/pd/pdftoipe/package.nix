@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "otfried";
     repo = "ipe-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jlrjrjzZQo79CKMySayhCm1dqLh89wOQuXrXa2aqc0k=";
   };
 

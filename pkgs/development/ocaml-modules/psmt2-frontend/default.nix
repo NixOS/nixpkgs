@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ACoquereau";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
   };
 

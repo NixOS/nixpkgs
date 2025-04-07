@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2zLXkiouPLmjxveoggsr+WUmdcZEN+FzeiVR1Dk6EA8=";
   };
 

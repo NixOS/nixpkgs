@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-gd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-78cqxVEappTybRLk7Y6vW1POvZKFIxtGNVcmkKq9GEE=";
   };
 

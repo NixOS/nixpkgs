@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oauthlib";
     repo = "oauthlib";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
   };
 

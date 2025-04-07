@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
     repo = "py-ipfs-http-client";
-    rev = version;
+    tag = version;
     hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 

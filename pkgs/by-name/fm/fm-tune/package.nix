@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "fm_tune";
-    rev = version;
+    tag = version;
     hash = "sha256-pwL2G1Ni1Ixw/N0diSoGGIoVrtmF92mWZ5i57OOvkX4=";
   };
 

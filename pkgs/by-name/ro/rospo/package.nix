@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ferama";
     repo = "rospo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-H6hZbOnX+1P1Ob5fCROQtV+64NiFD9mO3kiaQY63OBM=";
   };
 

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pgPjkj0nMb5j3EvyJTTDpfmh0WigAcMzoleF5EOqBAM=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uael";
     repo = "sv";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sc7WTRY8XTm5+J+zlS7tGa2f+2d7apj+XHyBafZXXeE=";
   };
 

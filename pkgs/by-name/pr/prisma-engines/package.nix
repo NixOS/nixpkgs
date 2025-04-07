@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
-    rev = version;
+    tag = version;
     hash = "sha256-gQLDskabTaNk19BJi9Kv4TiEfVck2QZ7xdhopt5KH6M=";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jfcherng";
     repo = "copilot-node-server";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yOqA2Xo4c7u0g6RQYt9joQk8mI9KE0xTAnLjln9atmg=";
   };
 

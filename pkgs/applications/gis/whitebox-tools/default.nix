@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kvtfEEydwonoDux1VbAxqrF/Hf8Qh8mhprYnROGOC6g=";
   };
 

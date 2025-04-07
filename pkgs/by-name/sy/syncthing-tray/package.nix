@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alex2108";
     repo = "syncthing-tray";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g/seDpNdoJ1tc5CTh2EuXoeo8XNpa9CaR+s7bW2cySA=";
   };
 

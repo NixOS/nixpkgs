@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "particl";
     repo = "particl-core";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RxkLt+7u+r5jNwEWiArTUpZ8ykYwWtvIDFXTSKhGN/w=";
   };
 

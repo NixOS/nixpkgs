@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "neXromancers";
     repo = "shotgun";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sBstFz7cYfwVQpDZeC3wPjzbKU5zQzmnhiWNqiCda1k=";
   };
 

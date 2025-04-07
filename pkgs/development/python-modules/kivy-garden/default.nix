@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kivy-garden";
     repo = "garden";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xOMBPFKV7mTa51Q0VKja7b0E509IaWjwlJVlSRVdct8=";
   };
 

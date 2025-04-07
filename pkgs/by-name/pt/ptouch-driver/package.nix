@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "philpem";
     repo = "printer-driver-ptouch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3ZotSHn7lERp53hAzx47Ct/k565rEoensCcltwX/Xls=";
   };
 

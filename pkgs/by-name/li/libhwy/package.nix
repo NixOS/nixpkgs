@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
-    rev = version;
+    tag = version;
     hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
   };
 

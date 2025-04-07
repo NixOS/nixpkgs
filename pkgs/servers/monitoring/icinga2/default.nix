@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QXe/+yQlyyOa78eEiudDni08SCUP3nhTYVpbmVUVKA8=";
   };
 

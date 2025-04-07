@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hipages";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ggrFnyEdGBoZVh4dHMw+7RUm8nJ1hJXo/fownO3wvzE=";
   };
 

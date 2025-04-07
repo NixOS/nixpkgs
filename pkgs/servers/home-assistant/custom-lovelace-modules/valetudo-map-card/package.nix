@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Hypfer";
     repo = "lovelace-valetudo-map-card";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-owOIbA1tRlnbWJ/p/wAUpeDnz/Wzu+GmUammJ6VFxHc=";
   };
 

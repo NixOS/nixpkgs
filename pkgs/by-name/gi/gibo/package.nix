@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
-    rev = version;
+    tag = version;
     sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
   };
 

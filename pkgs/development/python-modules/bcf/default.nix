@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "i28VewTB2XEZSfk0UeCuwB7Z2wz4qPBhzvxJIYkKwJ4=";
   };
 

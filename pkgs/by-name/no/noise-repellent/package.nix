@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = "noise-repellent";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-d8csYC3z3vXdmN/G6mAK+H8ia0vOCsoUpoA3W8/OADc=";
   };
 

@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jaywink";
     repo = "matrix-alertmanager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GwASazYgZTYrMn696VL+JKEjECoCKxr2VWj2zae8U/E=";
   };
 

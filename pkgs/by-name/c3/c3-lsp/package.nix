@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pherrymason";
     repo = "c3-lsp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MScpFh4J4jVJI5WtW4tfNB18YDpxs+ass1HmXyOO5VM=";
   };
 

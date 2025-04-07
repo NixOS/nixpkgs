@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ak-ambi";
     repo = "python-airly";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
   };
 

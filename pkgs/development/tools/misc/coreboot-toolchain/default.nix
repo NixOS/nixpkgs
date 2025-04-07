@@ -30,7 +30,7 @@ let
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
-          rev = finalAttrs.version;
+          tag = finalAttrs.version;
           hash = "sha256-zyfBQKVton+2vjYd6fqrUqkHY9bci411pujRGabvTjQ=";
           fetchSubmodules = false;
           leaveDotGit = true;

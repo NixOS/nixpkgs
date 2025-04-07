@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0hikYA7oU3tTHZdEcxDzMXCg13+muk6V7MyqJwExm0A=";
   };
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
-    rev = version;
+    tag = version;
     hash = "sha256-x7ZRC/xwF6Y2BhbtApVZ4hPZGNGaJiilqpxLyax9r2g=";
   };
 

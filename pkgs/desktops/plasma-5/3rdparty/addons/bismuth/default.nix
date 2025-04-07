@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Bismuth-Forge";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-c13OFEw6E/I8j/mqeLnuc9Chi6pc3+AgwAMPpCzh974=";
   };
 

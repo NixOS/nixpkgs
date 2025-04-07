@@ -26,7 +26,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ua2INyKPncXDOwzmKrgnRCb7q8CFEApEaYuBbQeau98=";
   };
 

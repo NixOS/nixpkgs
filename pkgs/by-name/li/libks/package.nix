@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-zKL+ukAdKiCC4wh55hnZpebFraIdKWDFsRfhVzhUNj0=";
   };
 

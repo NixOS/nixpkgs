@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tobias-kuendig";
     repo = "hacompanion";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6fj9Gs/ezISx5Llele5mrTFR0IiQzzm1wWcAywTaFPk=";
   };
 

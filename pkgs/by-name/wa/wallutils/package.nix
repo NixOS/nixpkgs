@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
-    rev = version;
+    tag = version;
     hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
   };
 

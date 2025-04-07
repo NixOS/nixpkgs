@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "m3scluster";
     repo = "mesos-dns";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/zcjQ2AxZ17rAxrRmfztj5gH1pu2QswJgaCE022FieU=";
   };
 

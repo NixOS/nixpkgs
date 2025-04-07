@@ -15,7 +15,7 @@ buildLua (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tomasklaen";
     repo = "uosc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-UbSEJGlLSX5wZpfj+Cb3LfWw17pnjxIJUNtP8dclKoU=";
   };
   passthru.updateScript = gitUpdater { };

@@ -14,7 +14,7 @@ vimUtils.buildVimPlugin {
   src = fetchFromGitLab {
     owner = "gitlab-org/editor-extensions";
     repo = "gitlab.vim";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-W/FV+i/QJYX6A8uyxAQN4ov1kMd9UFCghFmSQp1kbnM=";
   };
 

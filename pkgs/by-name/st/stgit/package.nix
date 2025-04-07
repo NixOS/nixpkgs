@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YrJf4uNICPmXpuJvf0QRDHpODw39Q+40SLZuoIwZ5qA=";
   };
   useFetchCargoVendor = true;

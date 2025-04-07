@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "benmcollins";
     repo = "libjwt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
   };
 

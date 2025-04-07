@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protoc-gen-validate";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-kGnfR8o12bvjJH+grAwlYezF6UzWt7lgjGslq+07p3k=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbonara";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SwXoCA9ru5VgH4geKUDgdcPrgEYgNoVwNb5YUBAcXlo=";
   };
 

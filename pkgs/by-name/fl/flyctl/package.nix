@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eCAnOoP5YQL/UCKex/lGiY28JswJTBmg+AIRrrDaAmc=";
   };
 

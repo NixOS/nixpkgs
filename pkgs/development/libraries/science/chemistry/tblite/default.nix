@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tblite";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KV2fxB+SF4LilN/87YCvxUt4wsY4YyIV4tqnn+3/0oI=";
   };
 

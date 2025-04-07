@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vicgeralds";
     repo = "vitetris";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
   };
 

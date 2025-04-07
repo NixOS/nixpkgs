@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-napalm-plugin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nog6DymnnD0ABzG21jy00yNWhSTHfd7vJ4vo1DjsfKs=";
   };
 

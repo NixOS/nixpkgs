@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-compliance-checker";
-    rev = version;
+    tag = version;
     sha256 = "1f1f9j2nf9j83sfl2ljadch99v6ha8rq8xm7ax5akc05hjpyckij";
   };
 

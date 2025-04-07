@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zen-tools";
     repo = "gxkb";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-oBIBIkj4p6HlF0PRQtI/K5dhLs7pbPxN7Cgr/YZaI1s=";
   };
 

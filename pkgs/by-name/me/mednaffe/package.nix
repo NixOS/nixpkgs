@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AmatCoder";
     repo = "mednaffe";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZizW0EeY/Cc68m87cnbLAkx3G/ULyFT5b6Ku2ObzFRU=";
   };
 

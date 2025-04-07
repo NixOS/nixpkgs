@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "xat";
     repo = "castnow";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vAjeDPH+Lu/vj3GhwytXqpbSkg5hKpXsMRNV+8TUeio=";
   };
 

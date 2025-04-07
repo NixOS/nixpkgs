@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RXt9qcLepJJA+MMFm26UMLuwgh8V13DoBueY1Z+W63w=";
   };
 

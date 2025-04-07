@@ -29,7 +29,7 @@ let
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "nomad-autoscaler";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 

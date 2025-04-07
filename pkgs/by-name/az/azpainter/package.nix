@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = "azpainter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5rNLGF/mkW+rBH9vuIPCJHciyf4NhG17Es+X6l4xIoQ=";
   };
 

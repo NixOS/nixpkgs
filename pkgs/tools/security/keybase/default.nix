@@ -30,7 +30,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "client";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hRqxA2gPL1UKbz9DwgfZfjE6e5pB7zenZqK+k1i8F2g=";
   };
   vendorHash = "sha256-KHahkGzkXr6xp0XY9MyEeeiHnmphaNYi9dPBQ476+us=";

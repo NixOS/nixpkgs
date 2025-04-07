@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mdbtools";
     repo = "mdbtools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
   };
 

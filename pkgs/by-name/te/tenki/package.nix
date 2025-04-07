@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ckaznable";
     repo = "tenki";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jd7D0iC3+s3w6uG0WqlvL9F4xQL+cQzsUvAIOc7ORgw=";
   };
 

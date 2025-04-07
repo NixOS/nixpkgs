@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "fusco";
     repo = "gummy";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ic+kTBoirMX6g79NdNoeFbNNo1LYg/z+nlt/GAB6UyQ=";
   };
 

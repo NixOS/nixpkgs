@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "tcort";
     repo = "markdown-link-check";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UuzfIJL3nHIbGFQrs9ya+QiS/sM0z1GCHbJGLQBN5pE=";
   };
 

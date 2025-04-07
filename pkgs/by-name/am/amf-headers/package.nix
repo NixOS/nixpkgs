@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-u6gvdc1acemd01TO5EbuF3H7HkEJX4GUx73xCo71yPY=";
   };
 

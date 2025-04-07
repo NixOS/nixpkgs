@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-c";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 

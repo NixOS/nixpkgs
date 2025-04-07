@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mthom";
     repo = "scryer-prolog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0c0MsjrHRitg+5VEHB9/iSuiqcPztF+2inDZa9fQpwU=";
   };
 

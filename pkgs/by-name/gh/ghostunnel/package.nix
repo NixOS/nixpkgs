@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
   };
 

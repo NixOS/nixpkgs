@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kube-state-metrics";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-s46K5V7lwqeQ4qjaCPAoMoKLikezT+Ik5bJAkkJ5Q40=";
   };
 

@@ -5877,6 +5877,8 @@ self: super: with self; {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  granian = callPackage ../development/python-modules/granian { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
 
   grapheme = callPackage ../development/python-modules/grapheme { };
@@ -12244,6 +12246,8 @@ self: super: with self; {
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
+  pyghmi = callPackage ../development/python-modules/pyghmi { };
+
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   pygitguardian = callPackage ../development/python-modules/pygitguardian { };
@@ -16939,7 +16943,7 @@ self: super: with self; {
             src = pkgs.fetchFromGitHub {
               owner = "grpc";
               repo = "grpc";
-              rev = "v${version}";
+              tag = "v${version}";
               hash = "sha256-PpiOT4ZJe1uMp5j+ReQulC9jpT0xoR2sAl6vRYKA0AA=";
               fetchSubmodules = true;
             };

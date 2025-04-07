@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
-    rev = version;
+    tag = version;
     hash = "sha256-jhjFC8+A2dQomMwKZPSiEViXeQpty2Dk9alDcNsLvq0=";
   };
 

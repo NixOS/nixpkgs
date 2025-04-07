@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
     repo = "oranchelo-icon-theme";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
-    rev = version;
+    tag = version;
     hash = "sha256-Y3Q/y9UIiy7US8Jl4vxT0Pfw8h3hiXK+Cu9TEQHyAaA=";
   };
 

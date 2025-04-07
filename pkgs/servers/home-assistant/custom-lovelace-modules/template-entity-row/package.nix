@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "thomasloven";
     repo = "lovelace-template-entity-row";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XQxdnRQywWki5mJhmQU5Etz2XSB8jYC32tFGLWb3IXs=";
   };
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V3V18BoBRJU8mtvwWXvdYPbKBDIHdu5LzVSkDkGJjFU=";
   };
 

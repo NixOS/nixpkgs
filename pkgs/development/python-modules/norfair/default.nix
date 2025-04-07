@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tryolabs";
     repo = "norfair";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aKB5TYSLW7FOXIy9u2hK7px6eEmIQdKPrhChKaU1uYs=";
   };
 

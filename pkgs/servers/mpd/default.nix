@@ -205,7 +205,7 @@ let
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
         repo = "MPD";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-6wEFgiMsEoWvmfH609d+UZY7jzqDoNmXalpHBipqTN0=";
       };
 

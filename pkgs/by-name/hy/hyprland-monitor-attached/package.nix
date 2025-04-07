@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "coffebar";
     repo = "hyprland-monitor-attached";
-    rev = version;
+    tag = version;
     hash = "sha256-+bgOOm1B513COcWdUIJ/+GREQH5CR8/RNOcZVkjO2hI=";
   };
 

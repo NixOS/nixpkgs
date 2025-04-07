@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-text-pthread";
-    rev = version;
+    tag = version;
     sha256 = "sha256-zrgxKs3jmrwQJiEgKfZz1BOVToTLauQXtFYcuFlV71o=";
   };
 

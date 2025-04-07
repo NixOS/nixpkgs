@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
-    rev = version;
+    tag = version;
     hash = "sha256-0ZPBJ2MNeoGCvYW6HswVZ5SyjZpdR21lp9ebceIhsfw=";
   };
 

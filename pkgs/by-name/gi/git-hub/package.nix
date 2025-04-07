@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sociomantic-tsunami";
     repo = "git-hub";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fb/WDmBx1Vayu4fLeG+D1nmHJJawgIAAXcQsABsenBo=";
   };
 

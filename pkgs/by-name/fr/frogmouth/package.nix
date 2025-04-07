@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "frogmouth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0fcCON/M9JklE7X9aRfzTkEFG4ckJqLoQlYCSrWHHGQ=";
   };
 

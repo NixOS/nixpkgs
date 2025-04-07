@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "cli";
     owner = "paralus";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cVrT8wU9MJgc/hzMVe1b0lzm7f+0Prv9w1IjMOAh69E=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aTGuCkPk1GYUlRXCdNIy94d5zHxUPpNNFN4aapf8s0U=";
   };
 

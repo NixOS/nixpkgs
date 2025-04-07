@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5o4QliAXgSZekIy0CNWfEuOxNl0uetL8C8RKUJ8HsNA=";
   };
   app = buildNpmPackage {

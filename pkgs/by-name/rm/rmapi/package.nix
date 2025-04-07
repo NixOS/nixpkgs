@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmapi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pVmG9XD3AcHDRo1A25QSnPStKPsgku3lWhN47xdYrwE=";
   };
 

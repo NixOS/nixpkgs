@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elasticdog";
     repo = "transcrypt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-s95EnEmcdd5mFAKvtZ88aXxkrRLSZUP0VBrCy5PR4fo=";
   };
 

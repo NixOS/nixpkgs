@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dex4er";
     repo = "fakechroot";
-    rev = version;
+    tag = version;
     sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
 

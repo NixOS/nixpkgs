@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "esjeon";
     repo = "krohnkite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HZCD5884pHuHey+d+HRx/F/Sp1b6ZUy7MdqqZ08H0lU=";
   };
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-E8mbCMfmN3key1W3m8YbH1wKa56yESiXujACfKFS/+s=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KikoPlayProject";
     repo = "KikoPlay";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-y+sT0aHDvKFNaJIxnGxDXZXUiCzuXVF7FPc8t//RMW4=";
   };
 

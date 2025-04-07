@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "span-lite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BYRSdGzIvrOjPXxeabMj4tPFmQ0wfq7y+zJf6BD/bTw=";
   };
 

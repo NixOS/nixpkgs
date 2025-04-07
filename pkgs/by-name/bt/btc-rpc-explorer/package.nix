@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "janoside";
     repo = "btc-rpc-explorer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZGg3jwSl1XyzS9hMa2YqwExhHSNgrsUmSscZtfF2h54=";
   };
 

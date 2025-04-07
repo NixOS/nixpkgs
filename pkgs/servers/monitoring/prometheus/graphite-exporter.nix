@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "graphite_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Dr7I4+gQXZYKUMnf/P9DgLYRb4SRaDnvqvDwHfMpAn0=";
   };
 

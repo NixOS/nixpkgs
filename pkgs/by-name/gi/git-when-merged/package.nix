@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mhagger";
     repo = "git-when-merged";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
   };
 

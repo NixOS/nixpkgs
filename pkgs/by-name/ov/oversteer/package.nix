@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "oversteer";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-X58U7lFH53nCaXnE7uXgV7aea6qntNfH5TIt68xSefY=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scanny";
     repo = "python-pptx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KyBttTAtP8sVPjYdrY0XReB+4Xfru8GdyYWuiyNZ67w=";
   };
 

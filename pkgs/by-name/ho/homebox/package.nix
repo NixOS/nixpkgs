@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6iNlx0lBVU/awUZHqRYFKe84D86EJNFF7Nm1XChs75w=";
   };
 in

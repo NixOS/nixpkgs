@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "megapixels-org";
     repo = "Megapixels";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZXr0gmO72zKHwORn4p8zKuGcdICvb5+L/Q9d/ty8zwA=";
   };
 

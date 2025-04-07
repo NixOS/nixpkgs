@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pachyderm";
     repo = "pachyderm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-S3om62ibp/hbpoY6seJ7RaRQeAzDNsThqfGDFC0SEQM=";
   };
 

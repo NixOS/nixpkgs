@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fleaz";
     repo = "r53-ddns";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-KJAPhSGaC3upWLfo2eeSD3Vit9Blmbol7s8y3f849N4=";
   };
 

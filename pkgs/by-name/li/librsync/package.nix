@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fiOby8tOhv0KJ+ZwAWfh/ynqHlYC9kNqKfxNl3IhzR8=";
   };
 

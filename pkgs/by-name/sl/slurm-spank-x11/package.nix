@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hautreux";
     repo = "slurm-spank-x11";
-    rev = version;
+    tag = version;
     sha256 = "1dmsr7whxcxwnlvl1x4s3bqr5cr6q5ssb28vqi67w5hj4sshisry";
   };
 

@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YfIYQSJynI4Ou4oiq7yxZlfdCnpuwsuUUPYKDmFdIKg=";
   };
 

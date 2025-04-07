@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dennis-tra";
     repo = "pcp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-aZO8VuOiYhOPctFKZ6a2psJB0lKHlPc+NLy2RWDU4JI=";
   };
 

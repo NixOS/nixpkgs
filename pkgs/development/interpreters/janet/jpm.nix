@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-lPB4jew6RkJlDp8xOQ4YA9MkgLBImaBHcvv4WF/sLRc=";
   };
 

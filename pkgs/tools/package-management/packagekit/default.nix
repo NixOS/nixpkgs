@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MYZFI1Q90F/AXVSJJBhmw+E7IMLXrdwmSuFJwv5D/z4=";
   };
 

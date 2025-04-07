@@ -14,7 +14,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "Andy1978";
     repo = "octave-video";
-    rev = version;
+    tag = version;
     hash = "sha256-JFySAu/3lCnfuFMNGYPzX2MqhsRi1+IyJQBcKB9vCo0=";
   };
 

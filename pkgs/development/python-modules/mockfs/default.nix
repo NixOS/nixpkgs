@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mockfs";
     repo = "mockfs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JwSkOI0dz9ZetfE0ZL3CthvcCSXGFYX+yQZy/oC6VBk=";
   };
 

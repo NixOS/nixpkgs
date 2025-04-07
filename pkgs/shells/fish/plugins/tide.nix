@@ -13,7 +13,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "IlanCosman";
     repo = "tide";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZyEk/WoxdX5Fr2kXRERQS1U1QHH3oVSyBQvlwYnEYyc=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "ion-hash-python";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mXOLKXauWwwIA/LnF4qyZsBiF/QM+rF9MmE2ewmozYo=";
     fetchSubmodules = true;
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "csound";
     repo = "manual";
-    rev = version;
+    tag = version;
     sha256 = "sha256-W8MghqUBr3V7LPgNwU6Ugw16wdK3G37zAPuasMlZ2+I=";
   };
 

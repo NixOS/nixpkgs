@@ -24,7 +24,7 @@ let
   sources = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "activitywatch";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Z3WAg3b1zN0nS00u0zIose55JXRzQ7X7qy39XMY7Snk=";
     fetchSubmodules = true;
   };

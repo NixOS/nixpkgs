@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "esrrhs";
     repo = "pingtunnel";
-    rev = version;
+    tag = version;
     hash = "sha256-qkIeE6gNBUUd5/IhcKhDmXZbzeSTR0r6qCAK/Nz7Kew=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = "sord";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cFobmmO2RHJdfCgTyGigzsdLpj7YF6U3r71i267Azks=";
   };
 

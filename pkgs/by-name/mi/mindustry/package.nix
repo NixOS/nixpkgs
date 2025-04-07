@@ -49,13 +49,13 @@ let
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
   };
   soloud = fetchFromGitHub {

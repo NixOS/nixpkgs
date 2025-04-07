@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "edsu";
     repo = "microdata";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BAygCLBLxZ033ZWRFSR52dSM2nPY8jXplDXQ8WW3KPo=";
   };
 

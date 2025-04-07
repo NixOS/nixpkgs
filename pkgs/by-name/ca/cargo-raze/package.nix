@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "google";
     repo = "cargo-raze";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dn1MrF+FYBG+vD5AfXCwmzskmKK/TXArnMWW2BAfFFQ=";
   };
 in

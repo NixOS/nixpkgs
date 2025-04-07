@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "The-4n";
     repo = "hacpack";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0d846l36w1n9rxv79fbyhl2zdbqhlgrvk21b9vzr9x77yki89ygs";
   };
 

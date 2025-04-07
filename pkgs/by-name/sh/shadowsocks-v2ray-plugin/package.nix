@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "v2ray-plugin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iwfjINY/NQP9poAcCHz0ETxu0Nz58AmD7i1NbF8hBCs=";
   };
 

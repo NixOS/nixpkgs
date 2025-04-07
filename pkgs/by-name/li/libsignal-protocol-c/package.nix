@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal-protocol-c";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0z5p03vk15i6h870azfjgyfgxhv31q2vq6rfhnybrnkxq2wqzwhk";
   };
 

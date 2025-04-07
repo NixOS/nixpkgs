@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bzh6P+J8EoewjOofwWXMgtSXAhESetD3y9EiqLNOT54=";
   };
 

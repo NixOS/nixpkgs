@@ -19,7 +19,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "realnc";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-KIqufpvl7zeUtDBXUOAZxBIbfv+s51DoSaZr3jol+bw=";
   };
 

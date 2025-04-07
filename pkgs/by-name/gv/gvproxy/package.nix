@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rWZYwQ/wWYAbM0RRNcNboWzKUuNNPDigIFFbFdXDNuo=";
   };
 

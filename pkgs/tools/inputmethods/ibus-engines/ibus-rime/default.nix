@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rime";
     repo = "ibus-rime";
-    rev = version;
+    tag = version;
     sha256 = "sha256-6lqPdcIJmwHcr4G6BhIDMhEtEOpOPgWqfkKXqaDjUY0=";
   };
 

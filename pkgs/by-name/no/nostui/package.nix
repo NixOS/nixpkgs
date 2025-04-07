@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "akiomik";
     repo = "nostui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RCD11KdzM66Mkydc51r6fG+q8bmKl5eZma58YoARwPo=";
   };
 

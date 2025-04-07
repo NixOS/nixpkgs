@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "chcandido";
     repo = "brmodelo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-YJcGfrcB+Qw35bMnqVs/tBzMGVj2DmfhRZ0YsSGGGSc=";
   };
 

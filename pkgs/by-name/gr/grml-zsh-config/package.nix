@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-7UiP6CUP/qArOfcrFtpiNUBBwkcCSrvsPb29SSqSkmg=";
   };
 

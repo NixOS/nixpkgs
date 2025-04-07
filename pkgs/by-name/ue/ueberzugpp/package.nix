@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
   };
 

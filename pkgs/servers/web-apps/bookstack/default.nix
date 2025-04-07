@@ -32,7 +32,7 @@ package.override rec {
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-uuek56256NCIhvvLYTHgbRBea66SUg+9xnfcOsK5Bo0=";
   };
 

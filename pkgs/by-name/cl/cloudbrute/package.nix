@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "0xsha";
     repo = "CloudBrute";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L233VdQolSPDPDXQALLvF5seb3peHiLRiZuj2RqdaRU=";
   };
 

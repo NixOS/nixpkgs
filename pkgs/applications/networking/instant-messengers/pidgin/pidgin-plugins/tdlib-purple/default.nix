@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ars3niy";
     repo = "tdlib-purple";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mrowzTtNLyMc2WwLVIop8Mg2DbyiQs0OPXmJuM9QUnM=";
   };
 

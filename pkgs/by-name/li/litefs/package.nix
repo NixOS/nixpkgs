@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "superfly";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-I12bKImZkvAMyfwb6r/NxE+BcUk+SalN+cIDXP0q4xA=";
   };
 

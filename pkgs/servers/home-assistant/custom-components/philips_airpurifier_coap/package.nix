@@ -15,7 +15,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "philips-airpurifier-coap";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jQXQdcgW8IDmjaHjmeyXHcNTXYmknNDw7Flegy6wj2A=";
   };
 

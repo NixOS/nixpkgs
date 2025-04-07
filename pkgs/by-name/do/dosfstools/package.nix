@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dosfstools";
     repo = "dosfstools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 

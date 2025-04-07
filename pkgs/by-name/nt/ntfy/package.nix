@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dschep";
     repo = "ntfy";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aswinkarthik";
     repo = "csvdiff";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-66R5XxrNQ1YMMQicw0VCF/XzRo//5Gqdjlher/uMoTE=";
   };
 

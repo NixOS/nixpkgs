@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "crudini";
-    rev = version;
+    tag = version;
     hash = "sha256-BU4u7uBsNyDOwWUjOIlBWcf1AeUXXZ+johAe+bjws1U=";
   };
 

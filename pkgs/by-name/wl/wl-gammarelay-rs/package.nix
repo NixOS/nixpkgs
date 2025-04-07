@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wl-gammarelay-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zmtC4xNNAK/TiB5TU6qsY5y0Z3roaEnTwHMZPjq6SbE=";
   };
 

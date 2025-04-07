@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-srH7Gdiy9Lsv68fst/9jhifx03R2e+4kMia6pU/oCZg=";
   };
 

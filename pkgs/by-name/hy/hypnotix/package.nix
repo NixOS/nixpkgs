@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
-    rev = version;
+    tag = version;
     hash = "sha256-mM6NeDtRoPUSQ/smtvpYJ3qqeqiPHquP96ChJgSJWL0=";
   };
 

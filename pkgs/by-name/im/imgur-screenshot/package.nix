@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jomo";
     repo = "imgur-screenshot";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0fkhvfraijbrw806pgij41bn1hc3r7l7l3snkicmshxj83lmsd5k";
   };
 

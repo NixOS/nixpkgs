@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "faustCompressors";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "144f6g17q4m50kxzdncsfzdyycdfprnpwdaxcwgxj4jky1xsha1d";
   };
 

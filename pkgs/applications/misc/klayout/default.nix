@@ -21,7 +21,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-i7MQqkVf+NZkmcf589BpLofwqc5KGxRNqdr1Go84M9A=";
   };
 

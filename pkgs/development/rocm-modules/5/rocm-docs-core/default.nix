@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-docs-core";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-++Vi0jZLtHWsGy5IUohgF3P+Q6Jg/d0xWyDA6urbHUA=";
   };
 

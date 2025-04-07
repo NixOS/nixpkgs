@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
 

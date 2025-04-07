@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chayleaf";
     repo = "mitm-cache";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
 

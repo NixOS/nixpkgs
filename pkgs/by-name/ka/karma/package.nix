@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "karma";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SW/nmJcSk/LmoKLuD5stsSaRGaJctl6hVSODNCT9i64=";
   };
 

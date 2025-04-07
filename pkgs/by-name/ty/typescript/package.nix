@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fOA5IblxUd+C9ST3oI8IUmTTRL3exC63MPqW5hoWN0M=";
   };
 

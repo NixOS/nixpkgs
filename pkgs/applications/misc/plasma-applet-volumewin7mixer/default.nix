@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-applet-volumewin7mixer";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-VMOUNtAURTHDuJBOGz2N0+3VzxBmVNC1O8dVuyUZAa4=";
   };
 

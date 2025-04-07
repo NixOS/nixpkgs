@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Consensys";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pW8I4ivcKo6dsa8rQVKU6nUZuKxaki/7cMDKwEsSzNw=";
   };
 

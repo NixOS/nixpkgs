@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XQDbP+LO/brpl7viSxuV3H4ALN0yIkj9lwr5eS1txNs=";
     # solarxr
     fetchSubmodules = true;

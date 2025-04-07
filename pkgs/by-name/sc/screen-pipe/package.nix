@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "louis030195";
     repo = "screen-pipe";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rWKRCqWFuPO84C52mMrrS4euD6XdJU8kqZsAz28+vWE=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "MightyMoud";
     repo = "sidekick";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Y/dQRix/cxV3NGqTGtRP6Bcprj0jzzOpudgm9a1UMLc=";
   };
 

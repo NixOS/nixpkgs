@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-jhVUYyp6t5LleVotQQme07IJVdVnIOVFFtKEmzt8e2k=";
   };
 

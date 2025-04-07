@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FVd8NQVtzlZsDY40ZMJDdaX+6Q5jUxZHUq2v+kDFVOk=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Florian7843";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kmzFsOgmMb8bOkulg7G6vXEPdb0xizh7u5LjnHfEWWQ=";
   };
 

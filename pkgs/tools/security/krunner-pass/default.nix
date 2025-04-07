@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "akermu";
     repo = "krunner-pass";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "032fs2174ls545kjixbhzyd65wgxkw4s5vg8b20irc5c9ak3pxm0";
   };
 

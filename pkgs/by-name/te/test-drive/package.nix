@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = "test-drive";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
   };
 

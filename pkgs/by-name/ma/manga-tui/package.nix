@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "josueBarretogit";
     repo = "manga-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L5KZaBJDG0z6NUGPJfbOkKCp1xQEzqfJ9GREx189VqU=";
   };
 

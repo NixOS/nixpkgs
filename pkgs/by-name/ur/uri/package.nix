@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "uri";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
 

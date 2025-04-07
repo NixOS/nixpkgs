@@ -14,7 +14,7 @@ let
         src = fetchFromGitHub {
           owner = "microsoftgraph";
           repo = "msgraph-sdk-python-core";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-eRRlG3GJX3WeKTNJVWgNTTHY56qiUGOlxtvEZ2xObLA=";
         };
 

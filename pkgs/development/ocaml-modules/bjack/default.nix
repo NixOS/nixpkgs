@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-bjack";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jIxxqBVWphWYyLh+24rTxk4WWfPPdGCvNdevFJEKw70=";
   };
 

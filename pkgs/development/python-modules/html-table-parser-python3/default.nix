@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "schmijos";
     repo = "html-table-parser-python3";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-okYl0T12wVld7GVbFQH2hgEVKXSScipJN/vYaiRVdGY=";
   };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
 
