@@ -32,11 +32,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    bison
-    flex
-    pkg-config
-  ] ++ lib.optional enablePython swig;
+  nativeBuildInputs =
+    [
+      bison
+      flex
+      pkg-config
+    ]
+    ++ lib.optionals enablePython [
+      python
+      swig
+    ];
+
   buildInputs = [
     libsepol
     libselinux
