@@ -121,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ "install" ] ++ lib.optional enablePython "install-pywrap";
 
+  preFixup = lib.optionalString enablePython ''
+    mv $out/${python3.sitePackages}/selinux/* $py/${python3.sitePackages}/selinux/
+    rm -rf $out/lib/python*
+  '';
+
   meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux core library";
   };
