@@ -16,19 +16,17 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-TuD+qHQ6+csK33oCYKfWRtpqH6AmYqvZkli0PtFm8+8=";
   };
 
+  sourceRoot = "source/framework";
   nativeBuildInputs = [
     imagemagick
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out"/share/plymouth/themes
-    cp -r framework/ "$out"/share/plymouth/themes
-    for image in "$out"/share/plymouth/themes/framework/throbber*.png; do
+  buildPhase = ''
+    for image in throbber*.png; do
       [[ -e "$image" ]] || break
       magick "$image" -resize 25% "$image";
     done
+
     sed -i '{
       8s/3/2/     # decrease title font size from 30 to 20
       11s/382/8/  # move dialog to .8 of screen
@@ -37,7 +35,14 @@ stdenvNoCC.mkDerivation {
       28s/^/UseFirmwareBackground=true\n/  # display uefi logo @ boot
       31s/^/UseFirmwareBackground=true\n/  # display uefi logo @ shutdown
       34s/^/UseFirmwareBackground=true\n/  # display uefi logo @ reboot
-    }' "$out"/share/plymouth/themes/framework/framework.plymouth
+    }' framework.plymouth
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out"/share/plymouth/themes/framework
+    cp * "$out"/share/plymouth/themes/framework
     sed -i "s@/usr/@$out/@" "$out"/share/plymouth/themes/framework/framework.plymouth
 
     runHook postInstall
