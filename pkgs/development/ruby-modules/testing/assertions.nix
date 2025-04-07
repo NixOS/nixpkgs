@@ -20,7 +20,7 @@
 
   haveKeys =
     expected: actual:
-    if builtins.all (ex: builtins.any (ac: ex == ac) (builtins.attrNames actual)) expected then
+    if builtins.all (ex: actual ? ${ex}) expected then
       (test.passed "has expected keys")
     else
       (test.failed "keys differ: expected: [${lib.concatStringsSep ";" expected}] actual: [${lib.concatStringsSep ";" (builtins.attrNames actual)}]");
