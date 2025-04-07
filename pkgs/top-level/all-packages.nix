@@ -13040,10 +13040,6 @@ with pkgs;
 
   cryptodev = linuxPackages.cryptodev;
 
-  libsemanage = callPackage ../os-specific/linux/libsemanage {
-    python = python3;
-  };
-
   librasterlite2 = callPackage ../development/libraries/librasterlite2 {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
