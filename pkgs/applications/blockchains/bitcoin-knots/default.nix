@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "26.1.knots20240325";
+  version = "28.1.knots20250305";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
-    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
+    url = "https://bitcoinknots.org/files/28.x/${version}/bitcoin-${version}.tar.gz";
+    hash = "sha256-UILHfx3eMRNuRVNCSVj3AfysIr0MIUybURrW0vBnLj4=";
   };
 
   patches = [
