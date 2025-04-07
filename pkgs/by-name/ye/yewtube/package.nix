@@ -1,10 +1,27 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
+  fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # yewtube currently does not support httpx>=0.28.0, see:
+      # https://github.com/mps-youtube/yewtube/issues/1303
+      httpx = super.httpx.overridePythonAttrs rec {
+        version = "0.27.2";
+        src = fetchPypi {
+          pname = "httpx";
+          inherit version;
+          hash = "sha256-98K+HS88PDFg1EGAJAayBsK3b1lHsREV5t8QxsZeZsI=";
+        };
+      };
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "yewtube";
   version = "2.12.1";
 
@@ -22,7 +39,7 @@ python3Packages.buildPythonApplication rec {
       --replace "__version__ =" "__version__ = '${version}' #"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     pyperclip
     requests
     youtube-search-python
@@ -30,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     pylast
   ];
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
     dbus-python
     pygobject3
