@@ -1082,7 +1082,7 @@ in
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
-          (lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings)
+          (lib.mapAttrs (_: lib.mkOptionDefault) defaultPHPSettings)
           {
             upload_max_filesize = cfg.maxUploadSize;
             post_max_size = cfg.maxUploadSize;
