@@ -51,7 +51,6 @@
   odbcSupport ? false,
   odbcPackages ? [ unixODBC ],
   opensslPackage ? openssl,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wxPackages ? [
     libGL
     libGLU
