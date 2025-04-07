@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # BUILD file already exists in the source
-  cmakeBuildDir = "build.dir";
+  # TODO: make unconditional on staging.
+  cmakeBuildDir = if stdenv.isDarwin then "build.dir" else null;
 
   cmakeFlags =
     lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
