@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./add-config-path-env-var.patch
     ./respect-xml-catalog-files-var.patch
     ./specify-localedir.patch
   ];
