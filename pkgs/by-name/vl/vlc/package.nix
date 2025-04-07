@@ -296,6 +296,44 @@ stdenv.mkDerivation (finalAttrs: {
   # Given in EXTRA_DIST, but not in install-data target
   postInstall = ''
     cp -R share/hrtfs $out/share/vlc
+
+    # function to create a deterministic plugin.dat file by sorting content
+    generate_deterministic_plugin_dat() {
+      PLUGINS_DIR="$out/lib/vlc/plugins"
+      TEMP_DIR=$(mktemp -d)
+
+      # sort plugin by creating mirrored directory structure
+      for dir in "$PLUGINS_DIR"/*; do
+        if [ -d "$dir" ]; then
+          subdir_name=$(basename "$dir")
+          mkdir -p "$TEMP_DIR/$subdir_name"
+
+          # Create sorted symlinks for plugins to preserve filesystem traveral
+          # control and any internal dependecies
+          find "$dir" -maxdepth 1 -name "*.so" | sort | while read plugin; do
+            ln -sf "$plugin" "$TEMP_DIR/$subdir_name/$(basename "$plugin")"
+          done
+        fi
+      done
+
+      # Generate plugins.dat with the sorted plugin struture
+      VLC_CACHE_GEN=${
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc
+      }/lib/vlc/vlc-cache-gen
+
+      # created plugins.dat.new in /tmp/ to avoid nix permission error stopping it from creating the file
+      tmp_output=$(mktemp /tmp/plugins.dat.XXXX)
+      $VLC_CACHE_GEN $TEMP_DIR $tmp_output
+
+      # Replace the original Plugins.dat
+      cp $tmp_output $PLUGINS_DIR/plugins.dat
+
+      # clean up
+      rm -rd "$TEMP_DIR"
+    }
+
+    # call the function
+    generate_deterministic_plugin_dat "$out"
   '';
 
   preFixup = ''
