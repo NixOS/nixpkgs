@@ -1,10 +1,8 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
-with lib;
 {
   imports = [ ../profiles/qemu-guest.nix ];
 
@@ -12,7 +10,7 @@ with lib;
     enable = true;
 
     settings.PermitRootLogin = "prohibit-password";
-    settings.PasswordAuthentication = mkDefault false;
+    settings.PasswordAuthentication = lib.mkDefault false;
   };
 
   networking = {
@@ -40,7 +38,7 @@ with lib;
     autoResize = true;
   };
 
-  swapDevices = mkDefault [ { device = "/dev/sdb"; } ];
+  swapDevices = lib.mkDefault [ { device = "/dev/sdb"; } ];
 
   # Enable LISH and Linode Booting w/ GRUB
   boot = {
