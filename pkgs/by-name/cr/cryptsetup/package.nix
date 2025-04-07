@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
-  buildInputs = [
+  propagatedBuildInputs = [
     lvm2
     json_c
     openssl
@@ -106,7 +106,10 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2Plus;
     mainProgram = "cryptsetup";
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = with lib.maintainers; [
+      numinit
+      raitobezarius
+    ];
     platforms = with lib.platforms; linux;
   };
 }

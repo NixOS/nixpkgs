@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtsvg
-, qttools
-, exiv2
-, wrapQtAppsHook
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtsvg,
+  qttools,
+  exiv2,
+  wrapQtAppsHook,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NWh0+DEfKT1iZY6tXVGuxgaXF5U+UB9S5BlWyD+1Bko=";
   };
 

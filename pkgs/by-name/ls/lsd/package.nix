@@ -6,6 +6,7 @@
   pandoc,
   testers,
   lsd,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LlMcBMb40yN+rlvGVsh7JaC3j9sF60YxitQQXe1q/oI=";
   };
 
@@ -37,8 +38,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
 
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   passthru.tests.version = testers.testVersion { package = lsd; };
 

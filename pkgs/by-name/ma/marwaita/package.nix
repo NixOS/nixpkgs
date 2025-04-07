@@ -15,8 +15,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
-    rev = version;
+    repo = "marwaita";
+    tag = version;
     hash = "sha256-NFXvaKASWltskCSOidXDNVZpFpdpCTnuWjpfETxiI8U=";
   };
 

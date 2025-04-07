@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tweag";
-    repo = pname;
-    rev = "v${version}";
+    repo = "opam2json";
+    tag = "v${version}";
     sha256 = "sha256-5pXfbUfpVABtKbii6aaI2EdAZTjHJ2QntEf0QD2O5AM=";
   };
 

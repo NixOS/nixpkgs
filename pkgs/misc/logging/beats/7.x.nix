@@ -20,11 +20,11 @@ let
         src = fetchFromGitHub {
           owner = "elastic";
           repo = "beats";
-          rev = "v${version}";
-          hash = "sha256-0qwWHRIDLlnaPOCRmiiFGg+/jdanWuQtggM2QSaMR1o=";
+          tag = "v${version}";
+          hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
         };
 
-        vendorHash = "sha256-rwCCpptppkpvwQWUtqTjBUumP8GSpPHBTCaj0nYVQv8=";
+        vendorHash = "sha256-JOCcceYYutC5MI+/lXBqcqiET+mcrG1e3kWySo3+NIk=";
 
         subPackages = [ package ];
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-+EFvYloLm/cDOflqj6ZIgjFoljKhYBVIKxD8L9j2Hj4=";
   };
 

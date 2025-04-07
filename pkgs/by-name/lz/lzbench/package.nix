@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "inikep";
-    repo = pname;
-    rev = "v${version}";
+    repo = "lzbench";
+    tag = "v${version}";
     sha256 = "sha256-946AcnD9z60Oihm2pseS8D5j6pGdYeCxmhTLNcW9Mmc=";
   };
 

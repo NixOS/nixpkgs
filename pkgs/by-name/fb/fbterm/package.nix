@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
-    repo = pname;
+    repo = "fbterm";
     rev = "debian/${version}";
     hash = "sha256-vRUZgFpA1IkzkLzl7ImT+Yff5XqjFbUlkHmj/hd7XDE=";
   };

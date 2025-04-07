@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hG6OSi0I7Y6KZacGR9MCC+e7YcDcvaVfR3LSOjqz23A=";
   };
 

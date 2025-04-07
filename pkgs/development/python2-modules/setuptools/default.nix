@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "0z3q0qinyp1rmnxkw3y5f6nbsxhqlfq5k7skfrqa6ymb3zr009y1";
       name = "${pname}-${version}-source";
     };
@@ -45,7 +45,7 @@ let
     '';
   };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.

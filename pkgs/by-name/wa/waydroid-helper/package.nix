@@ -16,6 +16,7 @@
   dbus,
   systemd,
   bash,
+  gobject-introspection,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -91,6 +93,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "waydroid-helper";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ nayeko ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

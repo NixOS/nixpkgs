@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yXH/koNT4ec/SOZhSU01iPNAfD1MdMjM2+wNmjXWsrk=";
   };
 
@@ -41,6 +42,9 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [ pyrox0 katexochen ];
+    maintainers = with maintainers; [
+      pyrox0
+      katexochen
+    ];
   };
 }

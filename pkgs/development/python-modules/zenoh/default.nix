@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
-    rev = version;
+    tag = version;
     hash = "sha256-AIsIjMcT9g0mTAgxOL/shBEjpeuOm/7Wn4EOSyYbShE=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   pythonImportsCheck = [
     "zenoh"

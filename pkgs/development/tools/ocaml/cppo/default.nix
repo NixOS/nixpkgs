@@ -26,16 +26,16 @@ in
 
 if lib.versionAtLeast ocaml.version "4.02" then
 
-buildDunePackage rec {
-  inherit pname;
-  version = "1.8.0";
+  buildDunePackage rec {
+    inherit pname;
+    version = "1.8.0";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-community";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+HnAGM+GddYJK0RCvKrs+baZS+1o8Yq+/cVa3U3nFWg=";
-  };
+    src = fetchFromGitHub {
+      owner = "ocaml-community";
+      repo = pname;
+      tag = "v${version}";
+      hash = "sha256-+HnAGM+GddYJK0RCvKrs+baZS+1o8Yq+/cVa3U3nFWg=";
+    };
 
     doCheck = true;
 
@@ -55,7 +55,7 @@ else
     src = fetchFromGitHub {
       owner = "mjambon";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
     };
 

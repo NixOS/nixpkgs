@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pW3hhcsMzKSWmUX8HwAtZCB+v9B4qXw6WUGODhPtW+Q=";
   };
 

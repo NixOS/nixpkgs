@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "acpi_call";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1s7h9y3adyfhw7cjldlfmid79lrwz3vqlvziw9nwd6x5qdj4w9vp";
   };
 

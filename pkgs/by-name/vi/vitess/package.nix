@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, sqlite }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  sqlite,
+}:
 
 buildGoModule rec {
   pname = "vitess";
@@ -7,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vitessio";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZSxshQF84DjMQsurYhcMObPzzfT63oj8c5Pt9f9N+5Q=";
   };
 

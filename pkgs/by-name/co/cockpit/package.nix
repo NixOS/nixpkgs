@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "331";
+  version = "336.2";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-G0L1ZcvjUCSNkDvYoyConymZ4bsEye03t5K15EyI008=";
+    hash = "sha256-QRtKxrOIGZuAj+NrnXDpnejJQ/lm0hP/JqZyVZn/VL0=";
     fetchSubmodules = true;
   };
 
@@ -122,7 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
       # some files substituteInPlace report as missing and it's safe to ignore them
       substituteInPlace "$(realpath "$f")" \
         --replace-quiet '"/usr/bin/' '"' \
-        --replace-quiet '"/bin/' '"' || true
+        --replace-quiet '"/bin/' '"' \
+        --replace-quiet ' /bin/' ' ' \
+        || true
     done
 
     substituteInPlace src/common/Makefile-common.am \

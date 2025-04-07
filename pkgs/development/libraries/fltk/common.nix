@@ -49,7 +49,7 @@
 let
   onOff = value: if value then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fltk";
   inherit version;
 

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   zlib,
 }:
 
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "anestisb";
     repo = "android-simg2img";
-    rev = version;
+    tag = version;
     hash = "sha256-sNHdSbms35YnENASFEG+VMLJGkV/JAlQUVMquDrePDc=";
   };
 

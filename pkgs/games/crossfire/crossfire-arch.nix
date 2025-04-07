@@ -7,7 +7,7 @@
   sha256,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "crossfire-arch";
   version = rev;
 

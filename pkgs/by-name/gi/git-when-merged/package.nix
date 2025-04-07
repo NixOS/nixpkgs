@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mhagger";
-    repo = pname;
-    rev = "v${version}";
+    repo = "git-when-merged";
+    tag = "v${version}";
     sha256 = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
   };
 

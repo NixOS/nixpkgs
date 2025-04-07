@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, flex
-, pkg-config
-, boost
-, icu
-, libstemmer
-, mariadb-connector-c
-, re2
-, nlohmann_json
-, testers
-, manticoresearch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  boost,
+  icu,
+  libstemmer,
+  mariadb-connector-c,
+  re2,
+  nlohmann_json,
+  testers,
+  manticoresearch,
 }:
 
 let
@@ -22,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "columnar";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-TGFGFfoyHnPSr2U/9dpqFLUN3Dt2jDQrTF/xxDY4pdE=";
     };
     nativeBuildInputs = [ cmake ];

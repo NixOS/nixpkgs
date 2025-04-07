@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "michaelforney";
-    repo = pname;
-    rev = version;
+    repo = "samurai";
+    tag = version;
     hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
   };
 

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = pname;
-    rev = "v${version}";
+    repo = "initool";
+    tag = "v${version}";
     hash = "sha256-PROsyYw8xdnn0PX+3OyUPaybQbTmO88G2koeZhBfwjg=";
   };
 

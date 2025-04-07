@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
-    repo = pname;
+    repo = "lib3mf";
     tag = "v${version}";
     hash = "sha256-XEwrJINiNpI2+1wXxczirci8VJsUVs5iDUAMS6jWuNk=";
   };
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

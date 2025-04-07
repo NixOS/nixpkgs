@@ -18,6 +18,7 @@
   libusb1,
   magic-enum,
   libgbm,
+  pipewire,
   pkg-config,
   pugixml,
   qt6,
@@ -33,18 +34,18 @@
   xorg,
   xxHash,
   zlib-ng,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.6.0-unstable-2025-03-07";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "6b3746f3a688cd4c7c2acfbbe8238ebd97235d37";
-    hash = "sha256-j5gIrSmQsc7nbDJ0OeFPpauHBOCADFykN0RMjCA8P8A=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-g55Ob74Yhnnrsv9+fNA1+uTJ0H2nyH5UT4ITHnrGKDo=";
     fetchSubmodules = true;
   };
 
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     magic-enum
     libgbm
+    pipewire
     pugixml
     qt6.qtbase
     qt6.qtdeclarative
@@ -117,10 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = unstableGitUpdater {
-      tagFormat = "v.*";
-      tagPrefix = "v.";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

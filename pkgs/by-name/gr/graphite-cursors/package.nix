@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
-    rev = version;
+    repo = "graphite-cursors";
+    tag = version;
     sha256 = "sha256-Kopl2NweYrq9rhw+0EUMhY/pfGo4g387927TZAhI5/A=";
   };
 

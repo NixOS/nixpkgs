@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "phako";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dleyna-core";
+    tag = "v${version}";
     sha256 = "i4L9+iyAdBNtgImbD54jkjYL5hvzeZ2OaAyFrcFmuG0=";
   };
 

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dumb-init";
+    tag = "v${version}";
     sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 

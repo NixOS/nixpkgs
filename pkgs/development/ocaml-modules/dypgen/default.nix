@@ -15,7 +15,7 @@ let
         src = fetchFromGitHub {
           owner = "grain-lang";
           repo = "dypgen";
-          rev = version;
+          tag = version;
           hash = "sha256-fKuO/e5YbA2B7XcghWl9pXxwvKw9YlhnmZDZcuKe3cs=";
         };
       }
@@ -31,7 +31,7 @@ let
       throw "dypgen is not available for OCaml ${ocaml.version}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-dypgen";
   inherit (params) src version;
 

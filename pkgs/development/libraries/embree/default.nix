@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
   };
 
@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://embree.github.io/";
     maintainers = with maintainers; [
       hodapp
-      gebner
     ];
     license = licenses.asl20;
     platforms = platforms.unix;

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, libuuid
-, seafile-shared
-, jansson
-, libsearpc
-, withShibboleth ? true
-, qtwebengine
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qttools,
+  libuuid,
+  seafile-shared,
+  jansson,
+  libsearpc,
+  withShibboleth ? true,
+  qtwebengine,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-9ng8TsT211jAt2Vhv8fEIQGCtbQ6LQ6pCVFToVaK8LY=";
   };
 
@@ -49,7 +50,10 @@ stdenv.mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ schmittlauch greizgh ];
+    maintainers = with maintainers; [
+      schmittlauch
+      greizgh
+    ];
     mainProgram = "seafile-applet";
   };
 }

@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pychess";
     repo = "pychess";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-hxc+vYvCeiM0+oOu1peI9qkZg5PeIsDMCiydJQAuzOk=";
   };
 

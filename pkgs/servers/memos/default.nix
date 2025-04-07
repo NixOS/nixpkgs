@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lcOZg5mlFPp04ZCm5GDhQfSwE2ahSmGhmdAw+pygK0A=";
   };
 
@@ -33,7 +33,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule {
   pname = "memos";
   inherit version src;
 

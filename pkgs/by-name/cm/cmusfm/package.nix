@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Arkq";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cmusfm";
+    tag = "v${version}";
     sha256 = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
   };
 

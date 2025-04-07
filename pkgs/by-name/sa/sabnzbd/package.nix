@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
+    owner = "sabnzbd";
+    repo = "sabnzbd";
+    tag = version;
     hash = "sha256-7CR2hn+mXd6eKoFjrapZuB+Fpfi1UWzTQK5DnP2303k=";
   };
 

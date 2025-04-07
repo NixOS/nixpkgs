@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, gzip, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gzip,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ndppd";
@@ -7,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DanielAdolfsson";
     repo = "ndppd";
-    rev = version;
+    tag = version;
     sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
   };
 

@@ -1,8 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, installShellFiles
-, qmake, qttools
-, qtsvg, qtxmlpatterns
-, wrapQtAppsHook
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  installShellFiles,
+  qmake,
+  qttools,
+  qtsvg,
+  qtxmlpatterns,
+  wrapQtAppsHook,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "smart-pattern";
     repo = "valentina";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vIlqrK7wyFaXKfvcJ3FtkAwUt6Xb/47qxcDGy1Ty2uk=";
   };
 
@@ -21,9 +27,18 @@ stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
   '';
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook installShellFiles autoPatchelfHook ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+    installShellFiles
+    autoPatchelfHook
+  ];
 
-  buildInputs = [ qtsvg qtxmlpatterns ];
+  buildInputs = [
+    qtsvg
+    qtxmlpatterns
+  ];
 
   qmakeFlags = [
     "-r"

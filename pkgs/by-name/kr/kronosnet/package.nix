@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   version = "1.30";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "kronosnet";
+    repo = "kronosnet";
+    tag = "v${version}";
     sha256 = "sha256-Ydu7qS2Wuy5c5pCv1X8SdEIx8sTvfGusCJwltkb3YXQ=";
   };
 

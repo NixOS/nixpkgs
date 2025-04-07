@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pk7xlNgYybKHm7Zn6cbO1CMUOAKVtX1uxq+6vl48FZk=";
   };
 

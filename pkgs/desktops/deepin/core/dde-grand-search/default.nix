@@ -11,7 +11,7 @@
   deepin-pdfium,
   qt5integration,
   qt5platform-plugins,
-  taglib,
+  taglib_1,
   ffmpeg,
   ffmpegthumbnailer,
   pcre,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-6s6M0cL8gjq1B5tuIRGPi8D69p4T8hPJv5QvBIvsO1w=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     deepin-pdfium
     qt5integration
     qt5platform-plugins
-    taglib
+    taglib_1
     ffmpeg
     ffmpegthumbnailer
     pcre

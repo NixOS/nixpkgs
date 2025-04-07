@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QXioBUCMZ4ANkF2WOXiKUlExVq4abkaVFBd3efAGXMs=";
   };
 

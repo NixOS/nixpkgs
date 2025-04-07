@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "CiscoCXSecurity";
-    repo = pname;
-    rev = "v${version}";
+    repo = "enum4linux";
+    tag = "v${version}";
     sha256 = "sha256-/R0P4Ft9Y0LZwKwhDGAe36UKviih6CNbJbj1lcNKEkM=";
   };
 

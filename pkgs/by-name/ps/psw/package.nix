@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Wulfsta";
-    repo = pname;
-    rev = version;
+    repo = "psw";
+    tag = version;
     sha256 = "sha256-Rf6vpVgenTzb42/aGqItuxUodl61eNyUPlry7rgLPbI=";
   };
 

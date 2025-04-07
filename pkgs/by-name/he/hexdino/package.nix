@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Luz";
-    repo = pname;
-    rev = version;
+    repo = "hexdino";
+    tag = version;
     hash = "sha256-glbyftCJiP0/5trW7DOcVCU2q4ZH3zFK96eyGuYR8eY=";
   };
 

@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
-    repo = pname;
-    rev = "v${version}";
+    repo = "riff";
+    tag = "v${version}";
     hash = "sha256-ThHkEvu+lWojHmEgcrwdZDPROfxznB7vv78msyZf90A=";
   };
 

@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "svenstaro";
-    repo = pname;
-    rev = "v${version}";
+    repo = "rofi-calc";
+    tag = "v${version}";
     sha256 = "sha256-YDij0j/AOl69FlsGfolzv8lI+iQfDmJrXo2duTIoMRA=";
   };
 

@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "SpFFT";
+    tag = "v${version}";
     hash = "sha256-Qc/omdRv7dW9NJUOczMZJKhc+Z/sXeIxv3SbpegAGdU=";
   };
 

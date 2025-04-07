@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, libstrophe
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  libstrophe,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "xmpp-bridge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JXhVi2AiV/PmWPfoQJl/N92GAZQ9UxReAiCkiDxgdFY=";
   };
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     libstrophe
   ];
 
-  strictDeps  = true;
+  strictDeps = true;
 
   # Makefile is hardcoded to install to /usr, install manually
   installPhase = ''

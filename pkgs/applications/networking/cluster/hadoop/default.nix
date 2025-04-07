@@ -166,7 +166,7 @@ in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_4 = common rec {
+  hadoop_3_4 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {

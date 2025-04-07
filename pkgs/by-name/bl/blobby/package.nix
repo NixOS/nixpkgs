@@ -15,7 +15,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "blobby-volley";
   version = "1.1.1";
 

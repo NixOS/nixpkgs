@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "zeroc-ice";
       repo = "mcpp";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
     };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-l3cKsR8HSdtFGw1S12xueQOu/U9ABlOxQQtbHBj2izs=";
   };
 

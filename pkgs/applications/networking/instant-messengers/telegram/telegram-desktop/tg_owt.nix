@@ -43,6 +43,12 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix build with Pipewire 1.4
+    # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+    ./tg_owt-pipewire-1.4.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace-fail '"libEGL.so.1"' '"${lib.getLib libGL}/lib/libEGL.so.1"' \

@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "holos-run";
     repo = "holos";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4LCNKPf+b7O9DHCmOzaI8clCbmikyAAG+6C3I0aQdMg=";
   };
 

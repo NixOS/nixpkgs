@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "symisc";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
   };
 

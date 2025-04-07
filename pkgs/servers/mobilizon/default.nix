@@ -73,7 +73,7 @@ mixRelease rec {
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.
-        web_push_encryption = buildMix rec {
+        web_push_encryption = buildMix {
           name = "web_push_encryption";
           version = "0.3.1";
           src = fetchFromGitHub {

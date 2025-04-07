@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Muqtxdir";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xilhw5gbxsyy80ixxgj0nw6w782lz9dsinhi24026li1xny804c";
   };
 

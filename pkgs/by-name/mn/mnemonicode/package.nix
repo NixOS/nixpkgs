@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "singpolyma";
     repo = "mnemonicode";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-bGipPvLj6ig+lMLsl/Yve8PmuA93ETvhNKoMPh0JMBM=";
   };
   installPhase = ''

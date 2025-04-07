@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
+    repo = "conmon";
+    tag = "v${version}";
     hash = "sha256-XsVWcJsUc0Fkn7qGRJDG5xrQAsJr6KN7zMy3AtPuMTo=";
   };
 

@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "taviso";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ctypes.sh";
+    tag = "v${version}";
     sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
   };
 

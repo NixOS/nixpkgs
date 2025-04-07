@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jsonnet-bundler";
     repo = "jsonnet-bundler";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VaYfjDSDst1joN2MnDVdz9SGGMamhYxfNM/a2mJf8Lo=";
   };
 

@@ -25,7 +25,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1qbc2j9kalk7xqk9j27s7wnm5zawiyjs47xqkqphw683idmzmjzn";
   };
 

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -14,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AsTDbeRMb6QJE89Z0NGooyTY3xZpWFoWkT7dofsu0DI=";
   };
 
@@ -22,7 +23,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yq \
       --bash <($out/bin/yq shell-completion bash) \
       --fish <($out/bin/yq shell-completion fish) \

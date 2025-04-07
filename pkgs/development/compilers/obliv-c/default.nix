@@ -6,7 +6,7 @@
   ocamlPackages,
   perl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obliv-c";
 
   version = "0.0pre20210621";

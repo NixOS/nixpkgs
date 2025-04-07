@@ -6,7 +6,7 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-prezto";
   version = "0-unstable-2025-01-10";
 

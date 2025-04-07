@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "liquidprompt";
+    tag = "v${version}";
     hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };
 

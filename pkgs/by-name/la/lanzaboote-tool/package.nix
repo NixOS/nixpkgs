@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "lanzaboote";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Fb5TeRTdvUlo/5Yi2d+FC8a6KoRLk2h1VE0/peMhWPs=";
   };
 
@@ -50,10 +50,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
+    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems (unwrapped; does not contain the required stub)";
     homepage = "https://github.com/nix-community/lanzaboote";
     license = licenses.gpl3Only;
-    mainProgram = "lzbt";
+    mainProgram = "lzbt-unwrapped";
     maintainers = with maintainers; [
       raitobezarius
       nikstur

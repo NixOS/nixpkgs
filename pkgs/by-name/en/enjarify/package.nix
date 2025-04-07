@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = version;
+    repo = "enjarify";
+    tag = version;
     sha256 = "sha256-VDBC5n2jWLNJsilX+PV1smL5JeBDj23jYFRwdObXwYs=";
   };
 

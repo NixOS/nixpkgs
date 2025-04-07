@@ -34,7 +34,7 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
@@ -66,13 +66,8 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
-      cargoLock = {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "tao-0.5.2" = "sha256-HyQyPRoAHUcgtYgaAW7uqrwEMQ45V+xVSxmlAZJfhv0=";
-          "wry-0.12.2" = "sha256-kTMXvignEF3FlzL0iSlF6zn1YTOCpyRUDN8EHpUS+yI=";
-        };
-      };
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-pCj4SulUVEC4QTPBrPQBn5xJ+sHPs6KfjsdVRcsRapY=";
 
       pnpmDeps = pnpm.fetchDeps {
         inherit (finalAttrs) pname version src;
@@ -106,7 +101,7 @@ in
                 src = fetchFromGitHub {
                   owner = "evanw";
                   repo = "esbuild";
-                  rev = "v${version}";
+                  tag = "v${version}";
                   hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
                 };
                 vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

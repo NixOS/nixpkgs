@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "mcoffin";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fanctl";
+    tag = "v${version}";
     hash = "sha256-XmawybmqRJ9Lj6ii8TZBFwqdQZVp0pOLN4xiSLkU/bw=";
   };
 

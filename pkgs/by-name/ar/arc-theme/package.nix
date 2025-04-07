@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jnsh";
-    repo = pname;
-    rev = version;
+    repo = "arc-theme";
+    tag = version;
     sha256 = "sha256-7VmqsUCeG5GwmrVdt9BJj0eZ/1v+no/05KwGFb7E9ns=";
   };
 

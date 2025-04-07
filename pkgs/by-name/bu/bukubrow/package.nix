@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "SamHH";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bukubrow-host";
+    tag = "v${version}";
     sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 

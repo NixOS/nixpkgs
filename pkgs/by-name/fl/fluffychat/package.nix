@@ -5,7 +5,7 @@
   imagemagick,
   libgbm,
   libdrm,
-  flutter324,
+  flutter327,
   pulseaudio,
   makeDesktopItem,
   olm,
@@ -20,23 +20,22 @@ let
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter324.buildFlutterApplication (
+flutter327.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.23.0";
+    version = "1.25.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-T187GK0hBTRLGgUw23dNSzql6VZssreS84NbgCwf558=";
+      hash = "sha256-5hdFc4JPtTmNVUGTKVBiG7unGsc3NQQ3SJ9I63kfUVc=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
-      flutter_shortcuts = "sha256-4nptZ7/tM2W/zylk3rfQzxXgQ6AipFH36gcIb/0RbHo=";
-      keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
+      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
     };
 
     inherit targetFlutterPlatform;

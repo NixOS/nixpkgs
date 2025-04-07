@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   removeReferencesTo,
-  alsaSupport ? !stdenv.hostPlatform.isDarwin,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   dbusSupport ? !stdenv.hostPlatform.isDarwin,
   dbus,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = version;
+    tag = version;
     sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
   };
 

@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elogind";
-    repo = pname;
-    rev = "v${version}";
+    repo = "elogind";
+    tag = "v${version}";
     hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
   };
 

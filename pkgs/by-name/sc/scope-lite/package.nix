@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "scope-lite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/Vu3blgyEOQRFqhQjuT/6ukV0iWA0TdPrLnt2Z/gd6E=";
   };
 

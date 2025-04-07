@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
   };
 
@@ -37,12 +37,8 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "satellite-0.1.0" = "sha256-R5Tz4MpRnAEnMmkx/LhWPmwRIKpnCLIB4VxApMTBn78=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-du44N+G9/nN5YuOpkWXvr1VaSQfjCpZYJ8yDc48ATIU=";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.

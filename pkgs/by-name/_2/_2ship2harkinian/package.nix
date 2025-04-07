@@ -74,7 +74,7 @@ let
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
       repo = "StormLib";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
     };
     nativeBuildInputs = prev.nativeBuildInputs ++ [ pkg-config ];

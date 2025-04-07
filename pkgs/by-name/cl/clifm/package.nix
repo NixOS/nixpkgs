@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "leo-arch";
-    repo = pname;
-    rev = "v${version}";
+    repo = "clifm";
+    tag = "v${version}";
     hash = "sha256-RAxhjDNaNkMSIJaca1NNiMQNaEZ3WDAvaWzN3u/PceA=";
   };
 

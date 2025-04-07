@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xprompt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pOayKngUlrMY3bFsP4Fi+VsOLKCUQU3tdkZ+0OY1SCo=";
   };
 
@@ -30,11 +30,16 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    let
-      configFile =
-        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
-    in
-    lib.optionalString (conf != null) "cp ${configFile} config.h";
+    ''
+      sed -i "8i #include <time.h>" xprompt.c
+    ''
+    + (
+      let
+        configFile =
+          if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.h" conf;
+      in
+      lib.optionalString (conf != null) "cp ${configFile} config.h"
+    );
 
   makeFlags = [
     "CC:=$(CC)"
@@ -51,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phillbush/xprompt";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "xprompt";
   };

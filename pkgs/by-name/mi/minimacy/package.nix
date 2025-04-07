@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ambermind";
-    repo = pname;
-    rev = version;
+    repo = "minimacy";
+    tag = version;
     hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 

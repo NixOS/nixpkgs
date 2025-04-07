@@ -8,7 +8,7 @@
   gtk2,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "hasmail-unstable";
   version = "2019-08-24";
 

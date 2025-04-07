@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ArgosyLabs";
     repo = "wgnlpy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5XAfBiKx4SqouA57PxmaCb0ea7mT2VeUI1tgnQE/ZwQ=";
   };
 

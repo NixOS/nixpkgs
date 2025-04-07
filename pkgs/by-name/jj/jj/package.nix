@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, writeText
-, runCommand
-, jj
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  writeText,
+  runCommand,
+  jj,
 }:
 buildGoModule rec {
   pname = "jj";
@@ -14,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "jj";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Yijap5ZghTBe1ahkQgjjxuo++SriJWXgRqrNXIVQ0os=";
   };
 

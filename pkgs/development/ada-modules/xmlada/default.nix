@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-# use gprbuild-boot since gprbuild proper depends
-# on this xmlada derivation.
-, gprbuild-boot
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  # use gprbuild-boot since gprbuild proper depends
+  # on this xmlada derivation.
+  gprbuild-boot,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     name = "xmlada-${version}-src";
     owner = "AdaCore";
     repo = "xmlada";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-UMJiXSHMS8+X5gyV1nmC29gF71BFnz7LNPQnwUMD3Yg=";
   };
 
@@ -32,4 +33,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

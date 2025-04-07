@@ -107,6 +107,16 @@ let
         };
       });
 
+      brother = super.brother.overridePythonAttrs (rec {
+        version = "4.3.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "brother";
+          tag = version;
+          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
@@ -139,6 +149,18 @@ let
         dependencies = with self; [
           requests
         ];
+      });
+
+      # Pinned due to home-assistant still needing 1.10.0 verison
+      # Remove this when home-assistant upates the jellyfin-apiclient-python version
+      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
+        version = "1.10.0";
+        src = fetchFromGitHub {
+          owner = "jellyfin";
+          repo = "jellyfin-apiclient-python";
+          tag = "v${version}";
+          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
+        };
       });
 
       # acme and thus hass-nabucasa doesn't support josepy v2
@@ -214,7 +236,7 @@ let
         src = fetchFromGitHub {
           owner = "MatsNl";
           repo = "pyatag";
-          rev = version;
+          tag = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
@@ -348,7 +370,7 @@ let
         src = fetchFromGitHub {
           owner = "spry-group";
           repo = "python-vultr";
-          rev = version;
+          tag = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
         };
       });
@@ -383,7 +405,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.1";
+  hassVersion = "2025.3.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -404,13 +426,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-tM23n0/98kzB7fqCNZ0+qREQnLxlc6oBmPAKv//TDNk=";
+    hash = "sha256-g1t9xAjrSSePyAloTQ2qwxAGEXJUTWX2zIZmAvlGGa8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-s+4l9FZQ5A0cvPXXypxzxzpMgrEnrgogzH/S7VwUZe4=";
+    hash = "sha256-MIh8FMTKZVEZ/zC+Av8fykTpz9kkXgZZfnsuOZbgP0M=";
   };
 
   build-system = with python.pkgs; [

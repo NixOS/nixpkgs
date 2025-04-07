@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "royhills";
-    repo = pname;
-    rev = version;
+    repo = "ike-scan";
+    tag = version;
     sha256 = "sha256-mbfg8p3y4aKoXpmLuF9GXAMPEqV5CsvetwGCRDJ9UNY=";
   };
 

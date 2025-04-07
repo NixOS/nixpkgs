@@ -19,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.39.0";
+  version = "1.40.0";
   outputs =
     [
       "out"
@@ -31,13 +31,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = pname;
+    repo = "just";
     tag = version;
-    hash = "sha256-K2MUS6wo0qxJnnIWDdmxHRNwyzx1z7yscVwMzXKAwQA=";
+    hash = "sha256-pmuwZoBIgUsKWFTXo8HYHVxrDWPMO8cumD/UHajFS6A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nDwJgZPWw86qpaGaYWB/Qqbym0FR2EpEKAme5CKbMv0=";
+  cargoHash = "sha256-mQQGxtSgNuRbz/83eWru+dmtWiLSKdVH+3z88BNugQE=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]

@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "boto3" ];
+
   dependencies = [
     boto3
     orjson

@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
-    repo = pname;
-    rev = "v${version}";
+    repo = "rofi-vpn";
+    tag = "v${version}";
     sha256 = "04jcfb2jy8yyrk4mg68krwh3zb5qcyj1aq1bwk96fhybrq9k2hhp";
   };
 

@@ -22,25 +22,32 @@
   librsvg,
   libvpx,
   libwebp,
+  systemd,
   lz4,
   nv-codec-headers-10,
   nvidia_x11 ? null,
   pam,
   pandoc,
   pango,
-  pulseaudio,
+  pulseaudioFull,
   python3,
   stdenv,
   util-linux,
   which,
   x264,
   x265,
+  libavif,
+  libspng,
+  openh264,
+  libyuv,
   xauth,
   xdg-utils,
   xorg,
   xorgserver,
   xxHash,
   clang,
+  withHtml ? true,
+  xpra-html5,
 }@args:
 
 let
@@ -82,15 +89,15 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.2.3";
+  version = "6.2.5";
 
   stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
-    rev = "v${version}";
-    hash = "sha256-5f6yHz3uc5qsU1F6D8r0KPo8tbrFP4pfxXTvIJYqKuI=";
+    tag = "v${version}";
+    hash = "sha256-XY8NZhWCRLjpgq0dOClzftvMR7g/X64b+OYyjOGC/lM=";
   };
 
   patches = [
@@ -132,6 +139,8 @@ buildPythonApplication rec {
     ]
     ++ (with gst_all_1; [
       gst-libav
+      gst-vaapi
+      gst-plugins-ugly
       gst-plugins-bad
       gst-plugins-base
       gst-plugins-good
@@ -154,7 +163,12 @@ buildPythonApplication rec {
       pango
       x264
       x265
+      libavif
+      libspng
+      openh264
+      libyuv
       xxHash
+      systemd
     ]
     ++ lib.optional withNvenc [
       nvencHeaders
@@ -182,10 +196,14 @@ buildPythonApplication rec {
         pygobject3
         pyinotify
         pyopengl
+        pyopengl-accelerate
         python-uinput
         pyxdg
         rencode
         invoke
+        aioquic
+        uvloop
+        pyopenssl
       ]
       ++ lib.optionals withNvenc [
         pycuda
@@ -229,7 +247,7 @@ buildPythonApplication rec {
             xauth
             which
             util-linux
-            pulseaudio
+            pulseaudioFull
           ]
         }
     ''
@@ -240,16 +258,20 @@ buildPythonApplication rec {
       )
     '';
 
-  postInstall = ''
-    # append module paths to xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
-    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+  postInstall =
+    ''
+      # append module paths to xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+      cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
-    # make application icon visible to desktop environemnts
-    icon_dir="$out/share/icons/hicolor/64x64/apps"
-    mkdir -p "$icon_dir"
-    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
-  '';
+      # make application icon visible to desktop environemnts
+      icon_dir="$out/share/icons/hicolor/64x64/apps"
+      mkdir -p "$icon_dir"
+      ln -sr "$out/share/icons/xpra.png" "$icon_dir"
+    ''
+    + lib.optionalString withHtml ''
+      ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
+    '';
 
   doCheck = false;
 
@@ -260,17 +282,18 @@ buildPythonApplication rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       offline
       numinit
       mvnetbiz
+      lucasew
     ];
   };
 }

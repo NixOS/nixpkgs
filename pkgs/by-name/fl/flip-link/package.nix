@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "flip-link";
+    tag = "v${version}";
     hash = "sha256-Nw43I8EIlNGPptsLVxFBapFp6qdFoUOEicHc9FTcm2g=";
   };
 

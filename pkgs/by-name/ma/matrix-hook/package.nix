@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pinpox";
     repo = "matrix-hook";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YmDsibVlAWLEG5QcqDImVb6RJfrfW6zrFnOEMO3Zxcw=";
   };
   vendorHash = "sha256-185Wz9IpJRBmunl+KGj/iy37YeszbT3UYzyk9V994oQ=";

@@ -18,10 +18,13 @@ buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
+  # nixpkgs-update: no auto update
+  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
+  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
   };
 

@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({
+{
   name = "zrepl";
 
   nodes.host =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       config = {
         # Prerequisites for ZFS and tests.
@@ -73,4 +73,4 @@ import ./make-test-python.nix ({
             "zrepl_zfs_snapshot_duration_count{filesystem=\"test\"}" in out
         ), "zrepl snapshot counter for test was not found in Prometheus output"
   '';
-})
+}

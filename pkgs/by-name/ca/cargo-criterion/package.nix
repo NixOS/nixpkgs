@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "bheisler";
-    repo = pname;
-    rev = version;
+    repo = "cargo-criterion";
+    tag = version;
     sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 

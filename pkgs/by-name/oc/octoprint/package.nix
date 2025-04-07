@@ -52,10 +52,10 @@ let
             build-system = [ self.setuptools ];
             doCheck = false; # DeprecationWarnings
           });
-          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: rec {
+          pytest-httpbin = super.pytest-httpbin.overridePythonAttrs (oldAttrs: {
             doCheck = false; # fails in current overlay
           });
-          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: rec {
+          httpcore = super.httpcore.overridePythonAttrs (oldAttrs: {
             doCheck = false; # fails in current overlay
           });
 
@@ -79,7 +79,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
-            rev = version;
+            tag = version;
             sha256 = "sha256-Y7yvImnYahmrf5GC4c8Ki8IsOZ8r9I4uk8mYBhEQZ28=";
           };
           doCheck = false;
@@ -95,7 +95,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FirmwareCheck";
-            rev = version;
+            tag = version;
             hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
           };
           doCheck = false;
@@ -111,7 +111,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
-            rev = version;
+            tag = version;
             hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
           };
 
@@ -132,7 +132,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
-            rev = version;
+            tag = version;
             hash = "sha256-BToW1/AcQ01OK7RWZrkstX2M4+uKuL/wFB6HGkVUflk=";
           };
 
@@ -238,8 +238,6 @@ let
                 setup.py
             '';
 
-          dontUseSetuptoolsCheck = true;
-
           preCheck = ''
             export HOME=$(mktemp -d)
             rm pytest.ini
@@ -268,7 +266,6 @@ let
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
               abbradar
-              gebner
               WhittlesJr
               gador
             ];

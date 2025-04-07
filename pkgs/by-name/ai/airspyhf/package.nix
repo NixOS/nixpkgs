@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "airspy";
-    repo = pname;
-    rev = version;
+    repo = "airspyhf";
+    tag = version;
     hash = "sha256-RKTMEDPeKcerJZtXTn8eAShxDcZUMgeQg/+7pEpMyVg=";
   };
 

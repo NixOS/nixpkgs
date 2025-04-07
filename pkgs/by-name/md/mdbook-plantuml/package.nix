@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sytsereitsma";
-    repo = pname;
+    repo = "mdbook-plantuml";
     tag = "v${version}";
     hash = "sha256-26epwn6j/ZeMAphiFsrLjS0KIewvElr7V3p/EDr4Uqk=";
   };

@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "danobi";
-    repo = pname;
-    rev = "v${version}";
+    repo = "prr";
+    tag = "v${version}";
     hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
   };
 

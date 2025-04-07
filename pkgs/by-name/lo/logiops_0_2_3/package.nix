@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pixlone";
     repo = "logiops";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1v728hbIM2ODtB+r6SYzItczRJCsbuTvhYD2OUM1+/E=";
   };
 

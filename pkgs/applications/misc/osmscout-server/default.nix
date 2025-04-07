@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qmake,
   qttools,
@@ -36,7 +35,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "osmscout-server";
-    rev = version;
+    tag = version;
     hash = "sha256-GqUXHn3ZK8gdDlm3TitEp/jhBpQoVeQZUCfAyiyrDEg=";
     fetchSubmodules = true;
   };

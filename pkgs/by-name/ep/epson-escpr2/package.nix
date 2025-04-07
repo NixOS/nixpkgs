@@ -4,37 +4,23 @@
   fetchurl,
   autoreconfHook,
   cups,
-  rpm,
-  cpio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.26";
+  version = "1.2.28";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
-    # and retrieve the download link for source package for x86 CPU
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/65/06/8fdecc271f6473178d08ffd6b6f6ca2abc92e32f/epson-inkjet-printer-escpr2-1.2.26-1.src.rpm";
-    sha256 = "sha256-Js2iZCS9ZzJVRF8PbDA/U1muOne+upq4sA0u+NVIk/0=";
+    # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/80/15/8bd63ccd14a1966e9c3658d374686c5bb104bb04/epson-inkjet-printer-escpr2-1.2.28-1.tar.gz";
+    hash = "sha256-lv8Hgo7JzT4igY8ek7EXdyFO34l735dpMC+gWkO5rvY=";
   };
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    rpm2cpio $src | cpio -idmv
-    tar xvf ${pname}-${version}-1.tar.gz
-    cd ${pname}-${version}
-
-    runHook postUnpack
-  '';
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoreconfHook
-    rpm
-    cpio
   ];
 
   patches = [
@@ -51,7 +37,7 @@ stdenv.mkDerivation rec {
     "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''
@@ -60,12 +46,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ma9e
       ma27
       shawn8901
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

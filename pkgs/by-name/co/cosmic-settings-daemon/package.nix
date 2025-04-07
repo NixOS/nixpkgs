@@ -9,14 +9,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
-    rev = "epoch-${version}";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-DtwW6RxHnNh87Xu0NCULfUsHNzYU9tHtFKE9HO3rvME=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
-}
+})

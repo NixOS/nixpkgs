@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fbjni";
+    tag = "v${version}";
     sha256 = "sha256-97KqfFWtR3VJe2s0D60L3dsIDm4kMa0hpkKoZSAEoVY=";
   };
 

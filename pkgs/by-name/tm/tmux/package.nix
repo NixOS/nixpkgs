@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   bison,
   libevent,
@@ -41,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
   };
 

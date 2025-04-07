@@ -45,7 +45,7 @@ let
         hash = "sha256-rDi7pvDeKQM96GZTjDr6ZDQTGbaVu+OI77xf2egw6Sg=";
       };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pngout";
   version = "20230322";
 

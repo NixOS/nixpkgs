@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gala
-, gsettings-desktop-schemas
-, gtk4
-, glib
-, gnome-settings-daemon
-, granite7
-, libgee
-, mutter
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gala,
+  gsettings-desktop-schemas,
+  gtk4,
+  glib,
+  gnome-settings-daemon,
+  granite7,
+  libgee,
+  mutter,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
-    rev = version;
+    tag = version;
     sha256 = "sha256-RWFzs4rw/KC0MXkNfA178FejMbuIBh5FVox1RxmxCJA=";
   };
 

@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "icon-theme";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-V8xBZj6T4Ly/GHV0CVLZ1a4UZbmCkhYRe05qUfJk7Wg=";
   };
 

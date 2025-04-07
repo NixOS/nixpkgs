@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~ireas";
-    repo = pname;
+    repo = "rusty-man";
     rev = "v${version}";
     sha256 = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
   };

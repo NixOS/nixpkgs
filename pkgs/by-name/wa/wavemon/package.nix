@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uoaerg";
     repo = "wavemon";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OnELXlnzXamQflCAWuc4fxwvqHZtl+nrlTpkKK4IGKw=";
   };
 

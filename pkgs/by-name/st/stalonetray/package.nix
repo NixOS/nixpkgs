@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kolbusa";
-    repo = pname;
-    rev = "v${version}";
+    repo = "stalonetray";
+    tag = "v${version}";
     sha256 = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
   };
 

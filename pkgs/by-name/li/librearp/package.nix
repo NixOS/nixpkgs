@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "LibreArp";
     repo = "LibreArp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jEpES68NuHhelUq/L46CxEeadk3LbuPZ72JaGDbw8fg=";
     fetchSubmodules = true;
   };

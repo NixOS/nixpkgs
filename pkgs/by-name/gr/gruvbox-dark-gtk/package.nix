@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jmattheis";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gruvbox-dark-gtk";
+    tag = "v${version}";
     sha256 = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
   };
 

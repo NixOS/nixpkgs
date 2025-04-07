@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, replaceVars
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, gettext
-, gnome-settings-daemon
-, granite7
-, gsettings-desktop-schemas
-, gtk4
-, libxml2
-, libgnomekbd
-, libxklavier
-, ibus
-, onboard
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  gnome-settings-daemon,
+  granite7,
+  gsettings-desktop-schemas,
+  gtk4,
+  libxml2,
+  libgnomekbd,
+  libxklavier,
+  ibus,
+  onboard,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-/jfUftlNL+B4570ajropS7/2fqro380kZzpPwm+A9fA=";
   };
 

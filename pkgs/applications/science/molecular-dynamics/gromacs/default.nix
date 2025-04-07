@@ -53,8 +53,8 @@ let
       }
     else
       {
-        version = "2025.0";
-        hash = "sha256-onrTWmRilbvsEpq+aE2dA9Hi4L12sNYl6QVXRqrvroI=";
+        version = "2025.1";
+        hash = "sha256-Ct9iGoD9gEP43v7ITOAoEcDN9CoFIjKJCTLYHyXE0oo=";
       };
 
 in

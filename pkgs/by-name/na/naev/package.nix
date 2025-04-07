@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "naev";
     repo = "naev";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vdPkACgLGSTb9E/HZR5KoXn/fro0iHV7hX9kJim1j/M=";
     fetchSubmodules = true;
   };
@@ -77,6 +77,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build dat/outfits/bioship/generate.py utils/build/*.py utils/*.py
+
+    # Add a missing include to fix the build against luajit-2.1.1741730670.
+    # Otherwise the build fails as:
+    #   src/lutf8lib.c:421:22: error: 'INT_MAX' undeclared (first use in this function)
+    # TODO: drop after 0.12.3 release
+    sed -i '1i#include <limits.h>' src/lutf8lib.c
   '';
 
   meta = {

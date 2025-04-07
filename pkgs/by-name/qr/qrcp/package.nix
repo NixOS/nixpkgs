@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "qrcp";
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
     tag = "v${version}";
-    hash = "sha256-Ueow5lFnLLeJxk1+hcH4bhwrNu17pgJ50CXd2Adswvg=";
+    hash = "sha256-OLoGM9kG5k8iyCBQ8PW0i8WiSOASkW9S8YI1iRSb0Ic=";
   };
 
-  vendorHash = "sha256-0x35Ds3v5youpSBapgkP8R7YW3FuninFM5pyd2PJRP4=";
+  vendorHash = "sha256-BkR+hIbxIFuf3b4kHVkfC5Ex6/O7CVaFolKlcDPJ7YY=";
 
   subPackages = [ "." ];
 

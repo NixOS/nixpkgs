@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   perl,
   bsd-finger,
   withAbook ? true,

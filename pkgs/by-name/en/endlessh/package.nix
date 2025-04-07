@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "skeeto";
-    repo = pname;
-    rev = version;
+    repo = "endlessh";
+    tag = version;
     hash = "sha256-yHQzDrjZycDL/2oSQCJjxbZQJ30FoixVG1dnFyTKPH4=";
   };
 

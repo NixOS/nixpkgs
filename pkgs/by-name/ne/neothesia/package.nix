@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bQ2546q+oachvuNKMJHjQzF6uv06LG+f7eFQPoAn6mw=";
   };
 in
@@ -37,12 +37,8 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mpeg_encoder-0.2.1" = "sha256-+BNZZ1FIr1374n8Zs1mww2w3eWHOH6ENOTYXz9RT2Ck=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qIoH+YhyPXXIWFwgcJBly2KBSuVgaRg5kZtBazaTVJ0=";
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"

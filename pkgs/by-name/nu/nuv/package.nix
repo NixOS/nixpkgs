@@ -25,7 +25,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "nuvolaris";
     repo = "nuv";
-    rev = version;
+    tag = version;
     hash = "sha256-MdnBvlA4S2Mi/bcbE+O02x+wvlIrsK1Zc0dySz4FB/w=";
   };
 

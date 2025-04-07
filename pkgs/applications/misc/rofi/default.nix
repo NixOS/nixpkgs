@@ -11,6 +11,7 @@
   git,
   cairo,
   libxcb,
+  xcb-imdkit,
   xcb-util-cursor,
   xcbutilkeysyms,
   xcbutil,
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-TEn3LoTUc5mxYcVkckIFTfkqQ9cUJxkXyg/5TFv5TZ0=";
   };
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     check
     libstartup_notification
     libxcb
+    xcb-imdkit
     xcb-util-cursor
     xcbutilkeysyms
     xcbutil
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
     xcbutilxrm
     which
   ];
+
+  mesonFlags = [ "-Dimdkit=true" ];
 
   doCheck = false;
 

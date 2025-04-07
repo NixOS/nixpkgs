@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,11 +12,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-oLpgY8m0hwLrTVkUwxVW7O7vr4Hl7Bn+uIQwFEVSfvc=";
   };
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

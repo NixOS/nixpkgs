@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, aml
-, ffmpeg
-, gnutls
-, libjpeg_turbo
-, libgbm
-, pixman
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  aml,
+  ffmpeg,
+  gnutls,
+  libjpeg_turbo,
+  libgbm,
+  pixman,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D9dwD5i9mScc5vn0mUxe7+0cxMI65F7LyivXn9J0aic=";
   };
 

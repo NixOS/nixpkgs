@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ctrlcctrlv";
-    repo = pname;
-    rev = "v${version}";
+    repo = "TT2020";
+    tag = "v${version}";
     hash = "sha256-eAJzaookHcQ/7QNq/HUKA/O2liyKynJNdo6QuZ1Bv6k=";
   };
 

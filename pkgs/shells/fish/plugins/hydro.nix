@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "hydro";
   version = "0-unstable-2024-11-02";
 

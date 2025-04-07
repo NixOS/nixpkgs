@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "fornwall";
-    repo = pname;
-    rev = version;
+    repo = "rust-script";
+    tag = version;
     sha256 = "sha256-uKmQgrbsFIY0XwrO16Urz3L76Gm2SxHW/CpHeCIUinM=";
   };
 

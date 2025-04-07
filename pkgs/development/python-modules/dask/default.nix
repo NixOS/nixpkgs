@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.2.0";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-PpgzlaVWKW+aLbFtDztNjBMI79pmsiS3uN8su75Rako=";
+    hash = "sha256-j25+DfWReonXKqxkX9OVHjKo+Indh13rlBE5PyGe69c=";
   };
 
   postPatch = ''
@@ -67,10 +67,10 @@ buildPythonPackage rec {
     click
     cloudpickle
     fsspec
+    importlib-metadata
     packaging
     partd
     pyyaml
-    importlib-metadata
     toolz
   ];
 
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     ]
     ++ optional-dependencies.array
     ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray = [
     # Rerun failed tests up to three times

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ropery";
     repo = "FFcast";
-    rev = version;
+    tag = version;
     sha256 = "sha256-kxqwDGEguFTFHkQzXctXqxslt0+bYnfUdQ8C/8+eTXo=";
   };
 

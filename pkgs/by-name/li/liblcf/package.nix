@@ -5,7 +5,7 @@
   autoreconfHook,
   pkg-config,
   expat,
-  icu,
+  icu74,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
-    rev = version;
+    tag = version;
     hash = "sha256-jJGIsNw7wplTL5FBWGL8osb9255o9ZaWgl77R+RLDMM=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     expat
-    icu
+    icu74
   ];
 
   enableParallelBuilding = true;

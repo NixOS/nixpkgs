@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
+    repo = "shared-mime-info";
     rev = version;
     hash = "sha256-5eyMkfSBUOD7p8woIYTgz5C/L8uQMXyr0fhL0l23VMA=";
   };

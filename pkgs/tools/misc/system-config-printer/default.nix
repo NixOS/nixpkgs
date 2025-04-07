@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openPrinting";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-l3HEnYycP56vZWREWkAyHmcFgtu09dy4Ds65u7eqNZk=";
   };
 

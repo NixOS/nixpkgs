@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.28.0";
+  version = "1.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-zI167qTGXMKgjMUSGiEKjGw2tITRQL4//wMqzj3DhVU=";
+    hash = "sha256-jqrrQRviWllzZQEnlOTZ6oJM3WYQ3YlDvareTTBcNl4=";
   };
 
   build-system = [

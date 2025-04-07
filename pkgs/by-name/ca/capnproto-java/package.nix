@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "capnproto";
-    repo = pname;
-    rev = "v${version}";
+    repo = "capnproto-java";
+    tag = "v${version}";
     hash = "sha256-7uYtRHKsJvbE1b0HbNXGbRXpkUHHLjMDIWLlOUcQWDk=";
   };
 

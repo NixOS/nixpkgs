@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "umlx5h";
     repo = "gtrash";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-odvj0YY18aishVWz5jWcLDvkYJLQ97ZSGpumxvxui4Y=";
   };
 

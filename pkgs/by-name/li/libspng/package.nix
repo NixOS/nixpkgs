@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "randy408";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libspng";
+    tag = "v${version}";
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 

@@ -15,7 +15,7 @@
   libmysqlclient,
   log4cplus,
   openssl,
-  postgresql,
+  libpq,
   python3,
 
   # tests
@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.6.1"; # only even minor versions are stable
+  version = "2.6.2"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-0s4UqRwuJIrSh24pFS1ke8xeQzvGja+tDuluwWb8+tE=";
+    hash = "sha256-ilC2MQNzS1nDuGGczWdm0t/uPwLjpfnzq8HNVfcPpCQ=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       "--with-openssl=${lib.getDev openssl}"
     ]
-    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev postgresql}/bin/pg_config"
+    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev libpq}/bin/pg_config"
     ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   sphinxRoot = "doc/sphinx";
 
   buildInputs = [
-    boost186  # does not build with 1.87 yet, see https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2523
+    boost186 # does not build with 1.87 yet, see https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2523
     libmysqlclient
     log4cplus
     openssl

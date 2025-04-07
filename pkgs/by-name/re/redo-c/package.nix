@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
-    repo = pname;
-    rev = "v${version}";
+    repo = "redo-c";
+    tag = "v${version}";
     sha256 = "sha256-oZcaBgESIaD7/SUBE7luh7axucKTEzXPVkQAQs2NCXE=";
   };
 

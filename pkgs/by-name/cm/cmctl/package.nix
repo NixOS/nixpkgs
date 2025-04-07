@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZvrR8k1jiyAMUKM9VA6vKH2uhMKnd22OQe08CIlxXjs=";
   };
 

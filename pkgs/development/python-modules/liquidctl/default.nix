@@ -16,7 +16,6 @@
   colorlog,
   crcmod,
   pillow,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {

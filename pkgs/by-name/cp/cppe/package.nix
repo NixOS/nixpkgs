@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "maxscheurer";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cppe";
+    tag = "v${version}";
     sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 

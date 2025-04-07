@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mako";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
+    hash = "sha256-O93KOXonfkgIKtlIZP4YlsEgXBcupNifoC/cN+ZAYEM=";
   };
 
   strictDeps = true;

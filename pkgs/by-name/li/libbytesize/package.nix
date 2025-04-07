@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-scOnucn7xp6KKEtkpwfyrdzcntJF2l0h0fsQotcceLc=";
   };
 
@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/bytesize/bytesize.py \
       --replace-fail 'CDLL("libbytesize.so.1")' "CDLL('$out/lib/libbytesize.so.1')"
+
+    # Force compilation of .pyc files to make them deterministic
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} -m compileall $out/${python3Packages.python.sitePackages}/bytesize
   '';
 
   pythonImportsCheck = [ "bytesize" ];

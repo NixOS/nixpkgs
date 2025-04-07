@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arximboldi";
     repo = "zug";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7xTMDhPIx1I1PiYNanGUsK8pdrWuemMWM7BW+NQs2BQ=";
   };
   patches = [

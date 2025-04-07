@@ -5,7 +5,7 @@
   setuptools,
   pymupdf,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cardimpose";
   version = "0.2.1-unstable-2024-12-28";
   pyproject = true;

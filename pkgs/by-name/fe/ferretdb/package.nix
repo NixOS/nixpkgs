@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WMejspnk2PvJhvNGi4h+DF+fzipuOMcS1QWim5DnAhQ=";
   };
 
@@ -43,6 +44,10 @@ buildGoModule rec {
     changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${version}";
     homepage = "https://www.ferretdb.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya noisersup julienmalka ];
+    maintainers = with maintainers; [
+      dit7ya
+      noisersup
+      julienmalka
+    ];
   };
 }

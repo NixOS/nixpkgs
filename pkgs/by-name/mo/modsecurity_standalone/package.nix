@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
-    repo = pname;
-    rev = "v${version}";
+    repo = "modsecurity";
+    tag = "v${version}";
     sha256 = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
   };
 

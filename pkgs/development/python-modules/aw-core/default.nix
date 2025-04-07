@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "aw-core";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
 

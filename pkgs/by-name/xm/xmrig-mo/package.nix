@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, xmrig
+{
+  lib,
+  fetchFromGitHub,
+  xmrig,
 }:
 
 xmrig.overrideAttrs (oldAttrs: rec {
@@ -10,7 +11,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
   src = fetchFromGitHub {
     owner = "MoneroOcean";
     repo = "xmrig";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pJ4NTdpWCt7C98k1EqGoiU0Lup25Frdm1kFJuwTfXgY=";
   };
 
@@ -20,6 +21,9 @@ xmrig.overrideAttrs (oldAttrs: rec {
     license = licenses.gpl3Plus;
     mainProgram = "xmrig";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ j0hax redhawk ];
+    maintainers = with maintainers; [
+      j0hax
+      redhawk
+    ];
   };
 })

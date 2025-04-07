@@ -17,15 +17,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Michael-F-Bryan";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ZbraChBHuKAcUA62EVHZ1RygIotNEEGv24nhSPAEj00=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    allowGitDependencies = false;
-    hash = "sha256-Tt7ljjWv2CMtP/ELZNgSH/ifmBk/42+E0r9ZXQEJNP8=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Tt7ljjWv2CMtP/ELZNgSH/ifmBk/42+E0r9ZXQEJNP8=";
 
   buildInputs = if stdenv.hostPlatform.isDarwin then [ Security ] else [ openssl ];
 

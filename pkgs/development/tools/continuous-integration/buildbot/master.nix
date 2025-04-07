@@ -41,7 +41,6 @@
   importlib-resources,
   packaging,
   unidiff,
-  glibcLocales,
   nixosTests,
 }:
 
@@ -84,7 +83,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buildbot";
     repo = "buildbot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
   };
 
@@ -136,7 +135,6 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
@@ -155,7 +153,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
   '';
 

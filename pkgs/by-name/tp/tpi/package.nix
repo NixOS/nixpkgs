@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "turing-machines";
     repo = "tpi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-se5+8Zf+RKtvfkmDDxKiUVp5J+bQ9j9RFedDK/pxCgA=";
   };
 

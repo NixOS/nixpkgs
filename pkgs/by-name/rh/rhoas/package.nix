@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "app-services-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-9fydRgp2u1LWf0lEDMi1OxxFURd14oKCBDKACqrgWII=";
   };
 

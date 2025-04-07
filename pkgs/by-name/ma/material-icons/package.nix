@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-wX7UejIYUxXOnrH2WZYku9ljv4ZAlvgk8EEJJHOCCjE=";
   };
 

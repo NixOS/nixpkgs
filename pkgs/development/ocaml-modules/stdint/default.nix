@@ -38,6 +38,6 @@ buildDunePackage rec {
     description = "Various signed and unsigned integers for OCaml";
     homepage = "https://github.com/andrenth/ocaml-stdint";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.gebner ];
+    maintainers = [ ];
   };
 }

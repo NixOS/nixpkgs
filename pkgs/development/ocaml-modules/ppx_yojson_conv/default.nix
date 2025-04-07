@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
   };
 
@@ -28,7 +28,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "PPX syntax extension that generates code for converting OCaml types to and from Yojson";
     homepage = "https://github.com/janestreet/ppx_yojson_conv";
-    maintainers = with maintainers; [djacu];
-    license = with licenses; [mit];
+    maintainers = with maintainers; [ djacu ];
+    license = with licenses; [ mit ];
   };
 }

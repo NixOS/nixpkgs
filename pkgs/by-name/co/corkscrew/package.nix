@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "2.0";
   src = fetchFromGitHub {
     owner = "bryanpkc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "corkscrew";
+    tag = "v${version}";
     hash = "sha256-JiddvTbuOysenrVWGUEyKSzpCF1PJaYWQUdz3FuLCdw=";
   };
 

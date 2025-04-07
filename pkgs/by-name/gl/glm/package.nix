@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "g-truc";
-    repo = pname;
-    rev = version;
+    repo = "glm";
+    tag = version;
     sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
   };
 

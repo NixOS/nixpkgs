@@ -28,7 +28,7 @@ let
   main_src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-uL4lO6aWiDfOQkhpTnr/iVx1fI7n/fx7WYr5jDWPfYM=";
   };
 
@@ -72,7 +72,7 @@ lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] butt
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname version;
 
     srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;

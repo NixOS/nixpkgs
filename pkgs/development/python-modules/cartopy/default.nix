@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cython,
-  fetchpatch,
   fetchPypi,
   fontconfig,
   gdal,

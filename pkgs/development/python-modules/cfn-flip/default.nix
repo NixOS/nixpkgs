@@ -3,6 +3,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-cfn-template-flip";
-    rev = version;
+    tag = version;
     hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
   };
 
@@ -29,11 +30,10 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    sed -i "/--cov/d" tox.ini
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # TypeError: load() missing 1 required positional argument: 'Loader'

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2gK+CUpml6AaHcwNoq0tHLr2NwqtMPx+jP80/LLFFr4=";
   };
 

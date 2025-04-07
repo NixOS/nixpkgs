@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, gettext
-, pkg-config
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, systemd
-, writeText
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  gettext,
+  pkg-config,
+  gnome-keyring,
+  gnome-session,
+  wingpanel,
+  orca,
+  onboard,
+  elementary-default-settings,
+  gnome-settings-daemon,
+  runtimeShell,
+  systemd,
+  writeText,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = version;
+    tag = version;
     sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
   };
 

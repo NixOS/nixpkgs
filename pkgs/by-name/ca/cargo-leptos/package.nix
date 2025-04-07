@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cargo-leptos";
+    tag = "v${version}";
     hash = "sha256-SjpfM963Zux+H5QhK8prvDLuI56fP5PqX5gcVbthRx4=";
   };
 

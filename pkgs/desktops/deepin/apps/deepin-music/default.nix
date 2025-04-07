@@ -12,7 +12,7 @@
   ffmpeg_6,
   libvlc,
   qt6Packages,
-  taglib,
+  taglib_1,
   SDL2,
   gst_all_1,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-tj0XICmp7sM2m6aSf/DgxS7JXO3Wy/83sZIPGV17gFo=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       qt6Packages.qtmultimedia
       ffmpeg_6
       libvlc
-      taglib
+      taglib_1
       SDL2
     ]
     ++ (with gst_all_1; [

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pedrolcl";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sonivox";
+    tag = "v${version}";
     hash = "sha256-k+EhhLFp+ehptjDS8ZHvo5tfFxmSCA2lFTjkWFLi+cs=";
   };
 

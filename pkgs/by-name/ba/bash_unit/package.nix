@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pgrange";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bash_unit";
+    tag = "v${version}";
     sha256 = "sha256-n5ehN7NrWID72xP7EYOk/mpnQJaDn71esIugWrLbZr0=";
   };
 

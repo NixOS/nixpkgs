@@ -27,7 +27,7 @@ let
         src = fetchFromGitHub {
           owner = "mgnsk";
           repo = "FreshRSS-AutoTTL";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-OiTiLZ2BjQD1W/BD8EkUt7WB2wOjL6GMGJ+APT4YpwE=";
         };
         meta = {
@@ -56,7 +56,7 @@ let
         };
       };
 
-      reading-time = buildFreshRssExtension rec {
+      reading-time = buildFreshRssExtension {
         FreshRssExtUniqueId = "ReadingTime";
         pname = "reading-time";
         version = "1.5";
@@ -82,7 +82,7 @@ let
         src = fetchFromGitHub {
           owner = "aledeg";
           repo = "xExtension-RedditImage";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-H/uxt441ygLL0RoUdtTn9Q6Q/Ois8RHlhF8eLpTza4Q=";
         };
         meta = {

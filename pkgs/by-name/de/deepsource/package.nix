@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DeepSourceCorp";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6uNb4cQVerrlW/eUkjmlO1i1YKYX3qaVdo0i5cczt+I=";
   };
 
@@ -49,7 +49,7 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

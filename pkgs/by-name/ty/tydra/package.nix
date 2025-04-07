@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Mange";
-    repo = pname;
-    rev = "v${version}";
+    repo = "tydra";
+    tag = "v${version}";
     sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 

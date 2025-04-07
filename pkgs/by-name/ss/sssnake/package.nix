@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.3.2";
   src = fetchFromGitHub {
     owner = "angeljumbo";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sssnake";
+    tag = "v${version}";
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
   postPatch = ''

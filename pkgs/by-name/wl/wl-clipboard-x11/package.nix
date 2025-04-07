@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brunelli";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wl-clipboard-x11";
+    tag = "v${version}";
     hash = "sha256-i+oF1Mu72O5WPTWzqsvo4l2CERWWp4Jq/U0DffPZ8vg=";
   };
 

@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
-    repo = pname;
-    rev = "v${version}";
+    repo = "light-locker";
+    tag = "v${version}";
     sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
 

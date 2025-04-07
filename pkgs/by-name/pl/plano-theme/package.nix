@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
-    rev = "v${version}";
+    repo = "plano-theme";
+    tag = "v${version}";
     sha256 = "sha256-slGr2nsdKng6zaVDeXWFAWKIxZbcnOLU6RH6wM0293E=";
   };
 

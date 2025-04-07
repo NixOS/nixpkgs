@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, magic-enum
-, range-v3
-, spdlog
-, qtbase
-, qtconnectivity
-, qttools
-, qtlanguageserver
-, qtwayland
-, wrapQtAppsHook
-, libXScrnSaver
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  magic-enum,
+  range-v3,
+  spdlog,
+  qtbase,
+  qtconnectivity,
+  qttools,
+  qtlanguageserver,
+  qtwayland,
+  wrapQtAppsHook,
+  libXScrnSaver,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AlexandrePTJ";
     repo = "kemai";
-    rev = version;
+    tag = version;
     hash = "sha256-wclBAgeDyAIw/nGF6lzIwbwdoZMBTu+tjxsnIxIkODM=";
   };
 
@@ -52,7 +53,10 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -63,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AlexandrePTJ/kemai";
     license = licenses.mit;
     maintainers = with maintainers; [ poelzi ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "Kemai";
   };

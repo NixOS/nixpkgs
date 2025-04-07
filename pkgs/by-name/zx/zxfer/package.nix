@@ -20,8 +20,8 @@ resholve.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "allanjude";
-    repo = pname;
-    rev = "v${version}";
+    repo = "zxfer";
+    tag = "v${version}";
     hash = "sha256-11SQJcD3GqPYBIgaycyKkc62/diVKPuuj2Or97j+NZY=";
   };
 

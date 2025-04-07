@@ -15,7 +15,7 @@
 }:
 
 let
-  sedparse = python27.pkgs.buildPythonPackage rec {
+  sedparse = python27.pkgs.buildPythonPackage {
     pname = "sedparse";
     version = "0.1.2";
     src = fetchFromGitHub {

@@ -1,32 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, libxml2
-, glib
-, gtk3
-, shared-mime-info
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  glib,
+  gtk3,
+  shared-mime-info,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.4.0";
+  version = "299.5.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "gedit";
     repo = "libgedit-gtksourceview";
-    rev = finalAttrs.version;
-    hash = "sha256-befm5UIXh2aCpKN2NH0aJhCYLf9j/ug0kVDAD5xNt4k=";
+    tag = finalAttrs.version;
+    hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
   };
 
   patches = [

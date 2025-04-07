@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kcc";
-    rev = version;
+    tag = version;
     sha256 = "13sbpv8ynq8sjackv93jqxymk0bsy76c5fc0v29wz97v53q3izjp";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
 
   meta = with lib; {
-    homepage = "https://knightos.org/";
+    homepage = "https://github.com/KnightOS/kcc";
     description = "KnightOS C compiler";
     mainProgram = "kcc";
     license = licenses.gpl2Plus;

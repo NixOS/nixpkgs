@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "girlbossceo";
     repo = "conduwuit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ut3IWEueNR/hT7NyGfuK5IYtppC6ArSoJdEfFuD/0vE=";
   };
 
@@ -66,15 +66,18 @@ rustPlatform.buildRustPackage rec {
   # for available features.
   # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
-  buildFeatures = [
-    "brotli_compression"
-    "element_hacks"
-    "gzip_compression"
-    "release_max_log_level"
-    "sentry_telemetry"
-    "systemd"
-    "zstd_compression"
-  ] ++ lib.optional enableJemalloc "jemalloc" ++ lib.optional enableLiburing "io_uring";
+  buildFeatures =
+    [
+      "brotli_compression"
+      "element_hacks"
+      "gzip_compression"
+      "release_max_log_level"
+      "sentry_telemetry"
+      "systemd"
+      "zstd_compression"
+    ]
+    ++ lib.optional enableJemalloc "jemalloc"
+    ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     updateScript = nix-update-script { };

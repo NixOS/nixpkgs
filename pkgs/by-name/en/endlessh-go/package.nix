@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
-    rev = version;
+    tag = version;
     hash = "sha256-CLmlcuRb5dt1oPNdBfx0ql1Zmn/HahcmhVA0k50i6yA=";
   };
 
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) endlessh-go;

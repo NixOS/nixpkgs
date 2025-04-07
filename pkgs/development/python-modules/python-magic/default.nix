@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ahupp";
     repo = "python-magic";
-    rev = version;
+    tag = version;
     hash = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
   };
 
@@ -42,6 +42,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8
+  '';
+
+  postCheck = ''
+    unset LC_ALL
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

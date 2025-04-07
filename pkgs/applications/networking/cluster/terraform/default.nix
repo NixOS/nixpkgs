@@ -35,7 +35,7 @@ let
         src = fetchFromGitHub {
           owner = "hashicorp";
           repo = "terraform";
-          rev = "v${version}";
+          tag = "v${version}";
           inherit hash;
         };
 
@@ -184,9 +184,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.11.1";
-    hash = "sha256-z7GX0h6f4N+TszdVUQanqUH1qyIvy07V66MsKiLisrw=";
-    vendorHash = "sha256-Drje+HEWaqsYhqeRHHw8QFhhB5oGRyOptFXMV0amWhE=";
+    version = "1.11.3";
+    hash = "sha256-th2VaFlvRKvL0ZEcAGU9eJui+k5dTaPGtLB2u9Q/vxg=";
+    vendorHash = "sha256-Tz01h3VITbvyEAfT8sfU7ghHd+vlCBVsMTTQS96jp7c=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = version;
+    repo = "firmware-manager";
+    tag = version;
     hash = "sha256-Q+LJJ4xK583fAcwuOFykt6GKT0rVJgmTt+zUX4o4Tm4=";
   };
 

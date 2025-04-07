@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "exaloop";
     repo = "codon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-s2GqiFcekXRts8BU5CSmTrkFZ9xLqq4A5MybhB1o1Gg=";
   };
 

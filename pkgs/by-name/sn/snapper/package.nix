@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-yVjsbWa7t+md0xdy5eFST+pkPbXhgfyJcTt+aNkQpsQ=";
   };
 

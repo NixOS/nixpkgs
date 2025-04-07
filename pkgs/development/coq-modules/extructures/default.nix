@@ -75,6 +75,5 @@
   (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
-      ++ lib.optional (lib.versionAtLeast o.version "0.3.0"
-                       || o.version == "dev") deriving;
+      ++ lib.optional (lib.versionAtLeast o.version "0.3.0" || o.version == "dev") deriving;
   })

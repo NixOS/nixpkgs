@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Illumina";
-    repo = pname;
-    rev = "v${version}";
+    repo = "hap.py";
+    tag = "v${version}";
     hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
   };
   # For illumina script

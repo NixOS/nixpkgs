@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jrprice";
     repo = "oclgrind";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DGCF7X2rPV1w9guxg2bMylRirXQgez24sG7Unlct3ow=";
   };
 

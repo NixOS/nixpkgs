@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ory";
     repo = "oathkeeper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-R7xKhKF7mhS/vmSpOj+QDL0OBBWnh42X2Kr3TDQxVIo=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
-    rev = version;
+    tag = version;
     hash = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
@@ -46,7 +46,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       abbradar
-      gebner
     ];
   };
 }

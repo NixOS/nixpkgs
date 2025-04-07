@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
-    rev = version;
+    tag = version;
     hash = "sha256-Yrit1WdWIfjwqbjvyjrPT3EqSSkooYX+uoOstbxy//I=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Small binary that runs a list of commands in parallel and awaits termination";

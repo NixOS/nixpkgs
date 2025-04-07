@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
-  fetchurl,
   makeBinaryWrapper,
   zulu,
   ant,

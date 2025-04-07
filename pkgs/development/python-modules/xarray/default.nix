@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   numpy,
   packaging,
   pandas,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2025.01.1";
+  version = "2025.01.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-BUpMNdYu72/R36r6XXHQqwIWL/ip+O+yE4WxcQQ3ZLY=";
+    hash = "sha256-Ub3XHMhMnJ9i746o701PYSai8ulTdjLx4OWal2KUTLM=";
   };
 
   build-system = [

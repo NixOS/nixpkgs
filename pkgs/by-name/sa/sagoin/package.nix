@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "figsoda";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sagoin";
+    tag = "v${version}";
     hash = "sha256-zXYjR9ZFNX2guUSeMN/G77oBIlW3AowFWA4gwID2jQs=";
   };
 

@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
-    repo = pname;
-    rev = "v${version}";
+    repo = "weidu";
+    tag = "v${version}";
     sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 

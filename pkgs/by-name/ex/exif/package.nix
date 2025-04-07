@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libexif";
-    repo = pname;
-    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    repo = "exif";
+    rev = "exif-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
     sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
   };
 

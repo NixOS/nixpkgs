@@ -23,7 +23,7 @@
   nix-update-script,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "simplescreenrecorder";
   version = "0.4.4-unstable-2024-08-13";
 

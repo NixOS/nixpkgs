@@ -21,11 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-zV2VV2qN6kGQJAqvmTajf9dLS3kTymmjw2j8RHK7fhM=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-jinja2-0.2.0" = "sha256-Hfw85IcxwqFDKjkUxU+Zd9vyL7gaE0u5TZGKol2I9qg=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-luPAuRl+yrHinLs6H0ZRVnce2zz1DUrniVOCa1hu1S4=";
   };
 
   nativeBuildInputs = [

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "firebase-admin";
-  version = "6.6.0";
+  version = "6.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
     tag = "v${version}";
-    hash = "sha256-BjYo/H5CBII9KjefhGUiEeLKBAAsnQABX+21R4pR8wE=";
+    hash = "sha256-MQFGgWQ2YgAii+IVP/78JKU1Q7QgEvMXz5WvXGoyw7g=";
   };
 
   build-system = [ setuptools ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Firebase Admin Python SDK";
     homepage = "https://github.com/firebase/firebase-admin-python";
-    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/v${version}";
+    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jhahn ];
   };

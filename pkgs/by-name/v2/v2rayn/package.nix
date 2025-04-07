@@ -16,17 +16,18 @@
   bash,
   xorg,
   xdg-utils,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.10.0";
+  version = "7.10.5";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-j2s88MRyKcrNbUN+Ypewk+vRbhMtFwHpBy2xbabOe1w=";
+    hash = "sha256-5tLO7KVHj0DXQdJg02Jxs6fgRLJSfFWPbARg9dqKcSI=";
     fetchSubmodules = true;
   };
 
@@ -96,7 +97,7 @@ buildDotnetModule rec {
     install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";

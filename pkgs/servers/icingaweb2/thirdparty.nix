@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-thirdparty";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-T67DcsHVf3yDQveNtSPqLoOOPuT4ThkUSCJ9aCSVaIc=";
   };
 

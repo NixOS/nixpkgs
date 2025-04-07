@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "jcsalterego";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 

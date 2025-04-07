@@ -69,8 +69,12 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # AttributeError: module 'numpy' has no attribute 'product'
-    "tests/test_svd.py"
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask/dask-ml/issues/1016
+    "tests/model_selection/test_hyperband.py"
+    "tests/model_selection/test_incremental.py"
+    "tests/model_selection/test_incremental_warns.py"
+    "tests/model_selection/test_successive_halving.py"
   ];
 
   disabledTests = [

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   wrapGAppsHook3,
   wrapQtAppsHook,
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.4";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/1kAgzmSbnuCqd6YxbaYW2+gE0Gvy373y5VfUK4OVzI=";
+    sha256 = "sha256-ha3rBILekycHiPdcaPNsbvlF289NzFs9srP3unOuJRg=";
   };
 
   cmakeFlags = [
@@ -128,17 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
       qtwayland
     ];
 
-  postInstall =
-    ''
-      # Remove unneeded bundled libraries and headers
-      rm -r $out/{include,lib}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv "$out/mscore.app" "$out/Applications/mscore.app"
-      mkdir -p $out/bin
-      ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/mscore.app" "$out/Applications/mscore.app"
+    mkdir -p $out/bin
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
 
   # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
   # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".

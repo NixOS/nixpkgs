@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "saibotd";
-    repo = pname;
-    rev = version;
+    repo = "tp-auto-kbbl";
+    tag = version;
     hash = "sha256-fhBCsOjaQH2tRsBjMGiDmZSIkAgEVxxywVp8/0uAaTU=";
   };
 

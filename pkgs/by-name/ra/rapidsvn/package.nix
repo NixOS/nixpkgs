@@ -11,7 +11,7 @@
   darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rapidsvn";
   version = "unstable-2021-08-02";
 

@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "omrikiei";
     repo = "ktunnel";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-rcUCIUIyBCSuMly7y0GUNQCdJUgsj7Oi6Hpz23uXoJw=";
   };
 

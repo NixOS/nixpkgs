@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "zfxtop";
-    rev = version;
+    tag = version;
     hash = "sha256-7qeTC9CIx4K2fLRM/pYrSU1NHv9TFMsl7TT0W5Uph60=";
   };
 
@@ -21,6 +21,7 @@ buildGoModule rec {
     description = "fetch top for gen Z with X written by bubbletea enjoyer";
     homepage = "https://github.com/ssleert/zfxtop";
     license = licenses.bsd2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wozeparrot ];
     mainProgram = "zfxtop";
   };

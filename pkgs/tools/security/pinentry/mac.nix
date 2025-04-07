@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libassuan
-, libgpg-error
-, makeBinaryWrapper
-, texinfo
-, common-updater-scripts
-, writers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libassuan,
+  libgpg-error,
+  makeBinaryWrapper,
+  texinfo,
+  common-updater-scripts,
+  writers,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GPGTools";
     repo = "pinentry";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
     cp -r ${./mac/Main.nib} macosx/Main.nib
     cp -r ${./mac/Pinentry.nib} macosx/Pinentry.nib
     chmod -R u+w macosx/*.nib
+    # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
+    cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
   '';
 
   # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
@@ -37,7 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook makeBinaryWrapper texinfo ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeBinaryWrapper
+    texinfo
+  ];
 
   configureFlags = [
     "--enable-maintainer-mode"

@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notepadqq";
     repo = "notepadqq";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-XA9Ay9kJApY+bDeOf0iPv+BWYFuTmIuqsLEPgRTCZCE=";
   };
 

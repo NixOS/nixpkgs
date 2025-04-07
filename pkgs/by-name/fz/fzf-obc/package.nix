@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rockandska";
-    repo = pname;
-    rev = version;
+    repo = "fzf-obc";
+    tag = version;
     sha256 = "sha256-KIAlDpt1Udl+RLp3728utgQ9FCjZz/OyoG92MOJmgPI=";
   };
 

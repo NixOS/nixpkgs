@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dahenson";
-    repo = pname;
-    rev = version;
+    repo = "agenda";
+    tag = version;
     sha256 = "sha256-tzGcqCxIkoBNskpadEqv289Sj5bij9u+LdYySiGdop8=";
   };
 

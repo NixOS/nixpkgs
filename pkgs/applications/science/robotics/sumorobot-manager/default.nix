@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3,
+  python,
   qt5,
   fetchFromGitHub,
   wrapPython,
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "robokoding";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [ python ];
   pythonPath = [
     pyqt5.dev
     pyserial

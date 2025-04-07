@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nzig";
-    repo = pname;
-    rev = version;
+    repo = "sway-new-workspace";
+    tag = version;
     hash = "sha256-CoSfpsaGqNNR5jdAQys3nQxshI0NXXr8MacUnSTKFNo=";
   };
 

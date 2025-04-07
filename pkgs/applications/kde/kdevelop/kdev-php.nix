@@ -9,7 +9,7 @@
   kdevelop-pg-qt,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kdev-php";
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhmdnd";
     repo = "pycompliance";
-    rev = version;
+    tag = version;
     hash = "sha256-gCrKbKqRDlh9q9bETQ9NEPbf+40WKF1ltfBy6LYjlVw=";
   };
 

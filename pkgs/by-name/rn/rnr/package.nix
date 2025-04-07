@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ismaelgv";
-    repo = pname;
-    rev = "v${version}";
+    repo = "rnr";
+    tag = "v${version}";
     sha256 = "sha256-uuM8zh0wFSsySedXmdm8WGGR4HmUc5TCZ6socdztrZI=";
   };
 

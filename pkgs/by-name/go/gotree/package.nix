@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "elbachir-one";
     repo = "gt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sWKqfDWwMfj4shg/MxHu7Zr4WE5pxAzHHmsjU3jQY10=";
   };
 

@@ -65,9 +65,16 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
-  postPatch = ''
-    patchShebangs ./src/device/generate.py
-  '';
+  postPatch =
+    ''
+      patchShebangs ./src/device/generate.py
+    ''
+    # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
+    # in order to work with new constexpr handling
+    + lib.optionalString (cudaAtLeast "12.8") ''
+      substituteInPlace ./makefiles/common.mk \
+        --replace-fail "-std=c++11" "-std=c++14"
+    '';
 
   makeFlags =
     [

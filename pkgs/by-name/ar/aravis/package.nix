@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "AravisProject";
-    repo = pname;
-    rev = version;
+    repo = "aravis";
+    tag = version;
     sha256 = "sha256-D6zcTCaFJxJ2VhhsgEFu5+3Xx1MJov4ryrtA0VkjZlY=";
   };
 

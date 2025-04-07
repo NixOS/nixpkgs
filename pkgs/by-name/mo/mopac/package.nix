@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openmopac";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mopac";
+    tag = "v${version}";
     hash = "sha256-guMPXz7nQWxnmY4f+CGIAf3MBiV00GxSEdsZQ2fAjh4=";
   };
 

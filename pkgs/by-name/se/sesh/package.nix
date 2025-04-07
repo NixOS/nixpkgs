@@ -10,13 +10,16 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YFvUYacuvyzNXwY+y9kI4tPlrlojDuZpR7VaTGdVqb8=";
   };
 
   vendorHash = "sha256-3wNp1meUoUFPa2CEgKjuWcu4I6sxta3FPFvCb9QMQhQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "Smart session manager for the terminal";

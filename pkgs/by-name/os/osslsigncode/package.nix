@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
-    repo = pname;
-    rev = version;
+    repo = "osslsigncode";
+    tag = version;
     sha256 = "sha256-ENMFhIVQhPL4FDW9Ne2YGR3sXjvW55NN1bErfr/kDZg=";
   };
 

@@ -10,8 +10,8 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "tyrasd";
-    repo = pname;
-    rev = version;
+    repo = "osmtogeojson";
+    tag = version;
     hash = "sha256-T6d/KQQGoXHgV0iNhOms8d9zfjYMfnBNwPLShrEkHG4=";
   };
 

@@ -14,7 +14,7 @@ let
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
   };
 
@@ -24,7 +24,7 @@ let
   };
 in
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;

@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hexagonal-sun";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ite-backlight";
+    tag = "v${version}";
     sha256 = "1hany4bn93mac9qyz97r1l858d48zdvvmn3mabzr3441ivqr9j0a";
   };
 

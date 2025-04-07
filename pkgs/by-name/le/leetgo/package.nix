@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KEfRsaBsMCKO66HW71gNzHzZkun1yo6a05YqAvafomM=";
   };
 

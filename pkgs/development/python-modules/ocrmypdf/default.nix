@@ -18,7 +18,6 @@
   pngquant,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   reportlab,
   replaceVars,
@@ -29,23 +28,20 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.7.0";
-
-  disabled = pythonOlder "3.10";
-
+  version = "16.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    rev = "v${version}";
+    tag = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
+    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
   };
 
   patches = [

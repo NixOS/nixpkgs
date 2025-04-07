@@ -8,6 +8,7 @@
   cargo,
   rustc,
   clippy,
+  gcc,
   makeWrapper,
 }:
 let
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustlings";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VdIIcpyoCuid3MECVc9aKeIOUlxGlxcG7znqbqo9pjc=";
   };
 
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage {
         cargo
         rustc
         clippy
+        gcc
       ]
     }
   '';

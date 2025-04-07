@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  hatchling,
   mmcif-pdbx,
   numpy,
   propka,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pdb2pqr";
   version = "3.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [ "docutils" ];
+
+  build-system = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     mmcif-pdbx

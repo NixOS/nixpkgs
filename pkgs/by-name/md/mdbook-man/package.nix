@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-man";
   version = "unstable-2022-11-05";
 
   src = fetchFromGitHub {
     owner = "vv9k";
-    repo = pname;
+    repo = "mdbook-man";
     rev = "b9537dfbb241d7456835ed7e9d27ab8c8184e5f6";
     hash = "sha256-ssAk60jnwYzAjseL26/3FaDv1vBAylgdE+vLhWZ8It4=";
   };

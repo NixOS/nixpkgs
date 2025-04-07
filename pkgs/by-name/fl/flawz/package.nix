@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "flawz";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7p/BUXrElJutUcRMu+LxdsMxA6lCDnaci0fDaKGsawI=";
   };
 
@@ -75,6 +75,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flawz";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.hostPlatform.isDarwin; # needing some apple_sdk packages
   };
 }

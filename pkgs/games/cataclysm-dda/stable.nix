@@ -1,13 +1,14 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, fetchpatch
-, pkgs
-, wrapCDDA
-, attachPkgs
-, tiles ? true
-, debug ? false
-, useXdgDir ? false
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkgs,
+  wrapCDDA,
+  attachPkgs,
+  tiles ? true,
+  debug ? false,
+  useXdgDir ? false,
 }:
 
 let

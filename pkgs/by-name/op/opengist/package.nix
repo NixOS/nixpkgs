@@ -4,7 +4,6 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
   moreutils,
   jq,
   git,

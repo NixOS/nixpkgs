@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "johnthagen";
     repo = "pytap2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GN8yFnS7HVgIP73/nVtYnwwhCBI9doGHLGSOaFiWIdw=";
   };
 

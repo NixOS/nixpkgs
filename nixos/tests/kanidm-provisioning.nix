@@ -306,6 +306,10 @@ import ./make-test-python.nix (
             provision.succeed('${specialisations}/credentialProvision/bin/switch-to-configuration test')
             provision_login("${provisionIdmAdminPassword}")
 
+            # Make sure neither password is logged
+            provision.fail("journalctl --since -10m --unit kanidm.service --grep '${provisionAdminPassword}'")
+            provision.fail("journalctl --since -10m --unit kanidm.service --grep '${provisionIdmAdminPassword}'")
+
             # Test provisioned admin pw
             out = provision.succeed("KANIDM_PASSWORD=${provisionAdminPassword} kanidm login -D admin")
             assert_contains(out, "Login Success for admin")

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, glib
-, granite7
-, gsettings-desktop-schemas
-, gtk4
-, pantheon-wayland
-, systemd
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  glib,
+  granite7,
+  gsettings-desktop-schemas,
+  gtk4,
+  pantheon-wayland,
+  systemd,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
-    rev = version;
+    tag = version;
     sha256 = "sha256-pf7xQwsBRjjyOMUPe7fJp1vOhhBmuXJ6Uf4YosxbHtw=";
   };
 

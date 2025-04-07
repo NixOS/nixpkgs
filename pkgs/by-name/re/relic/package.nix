@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, relic
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  relic,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sassoftware";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-dXvKbuAJCL+H0Gh0ZF1VvtY+7cgjq7gs8zwtenI3JuI=";
   };
 

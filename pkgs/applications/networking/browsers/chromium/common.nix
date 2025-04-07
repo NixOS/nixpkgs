@@ -294,6 +294,7 @@ let
     nativeBuildInputs =
       [
         ninja
+        gnChromium
       ]
       ++ lib.optionals needsCompgen [
         bashInteractive # needed for compgen in buildPhase -> process_template
@@ -445,6 +446,9 @@ let
         ./patches/cross-compile.patch
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
+        # Fix build with Pipewire 1.4
+        # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        ./patches/webrtc-pipewire-1.4.patch
       ]
       ++ lib.optionals (packageName == "chromium") [
         # This patch is limited to chromium and ungoogled-chromium because electron-source sets
@@ -790,7 +794,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -798,10 +802,12 @@ let
       runHook postConfigure
     '';
 
-    # Don't spam warnings about unknown warning options. This is useful because
+    # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE =
+      "-Wno-unknown-warning-option"
+      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";

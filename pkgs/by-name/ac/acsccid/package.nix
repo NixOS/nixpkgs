@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "acshk";
-    repo = pname;
-    rev = "v${version}";
+    repo = "acsccid";
+    tag = "v${version}";
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-ZipFcwTpKKFnQWOPxXg07V71jitG0NSLpGLEzUSsUFA=";
   };
 

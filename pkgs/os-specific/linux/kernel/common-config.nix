@@ -43,16 +43,25 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7";
+  # Architecture support collected from HAVE_RUST Kconfig definitions and the following table:
+  # https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/rust/arch-support.rst
+  rustByDefault = (
+    lib.versionAtLeast version "6.12"
+    && (
+      stdenv.hostPlatform.isx86_64
+      || stdenv.hostPlatform.isLoongArch64
+      || stdenv.hostPlatform.isAarch64
+      || (stdenv.hostPlatform.isRiscV64 && !stdenv.cc.isGNU)
+    )
+  );
 
-  # Currently only enabling Rust by default on kernel 6.12+,
-  # which actually has features that use Rust that we want.
-  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
-    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
-      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
-    '';
-    (forceRust || defaultRust) && kernelSupportsRust;
+    lib.warnIfNot (forceRust -> rustAvailable)
+      "force-enabling Rust for Linux without an available rustc"
+      lib.warnIfNot
+      (forceRust -> rustByDefault)
+      "force-enabling Rust for Linux on an unsupported kernel version, host platform or compiler"
+      (forceRust || (rustAvailable && rustByDefault));
 
   options = {
 
@@ -102,6 +111,10 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
     power-management =
@@ -859,6 +872,7 @@ let
       CGROUP_HUGETLB = yes;
       CGROUP_PERF = yes;
       CGROUP_RDMA = yes;
+      CGROUP_DMEM = whenAtLeast "6.14" yes;
 
       MEMCG = yes;
       MEMCG_SWAP = whenOlder "6.1" yes;
@@ -1054,7 +1068,7 @@ let
         HIDRAW = yes;
 
         # Enable loading HID fixups as eBPF from userspace
-        HID_BPF = whenAtLeast "6.3" yes;
+        HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
 
         HID_ACRUX_FF = yes;
         DRAGONRISE_FF = yes;
@@ -1085,6 +1099,10 @@ let
         UNIX = yes; # Unix domain sockets.
 
         MD = yes; # Device mapper (RAID, LVM, etc.)
+
+        # enable support for device trees and overlays
+        OF = option yes;
+        OF_OVERLAY = option yes;
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
@@ -1281,7 +1299,7 @@ let
         LIRC = yes;
 
         SCHED_CORE = whenAtLeast "5.14" yes;
-        SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
+        SCHED_CLASS_EXT = whenAtLeast "6.12" (whenPlatformHasEBPFJit yes);
 
         LRU_GEN = whenAtLeast "6.1" yes;
         LRU_GEN_ENABLED = whenAtLeast "6.1" yes;

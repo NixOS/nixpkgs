@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "clearly-broken-software";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ninjas2";
+    tag = "v${version}";
     sha256 = "1kwp6pmnfar2ip9693gprfbcfscklgri1k1ycimxzlqr61nkd2k9";
     fetchSubmodules = true;
   };

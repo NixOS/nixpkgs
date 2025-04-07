@@ -1,23 +1,27 @@
 {
-  absl-py,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  absl-py,
   googleapis-common-protos,
   protobuf,
-  setuptools,
-  lib,
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
-  version = "1.16.1";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     tag = "v${version}";
-    hash = "sha256-MP5P4kFACT1guZVU3f9YrnKeQaUK0Tnu7edKRy4yvlM=";
+    hash = "sha256-DD37l5Sqsn6m9mrRagKi/pi3GKjhO1HzEkEfmnhItqI=";
   };
 
   patches = [ ./build.patch ];
@@ -43,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tensorflow_metadata" ];
 
-  meta = with lib; {
+  meta = {
     description = "Standard representations for metadata that are useful when training machine learning models with TensorFlow";
     homepage = "https://github.com/tensorflow/metadata";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

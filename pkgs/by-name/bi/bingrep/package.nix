@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "m4b";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bingrep";
+    tag = "v${version}";
     hash = "sha256-bHu3/f25U1QtRZv1z5OQSDMayOpLU6tbNaV00K55ZY8=";
   };
 

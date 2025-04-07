@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
-    rev = version;
+    tag = version;
     sha256 = "sha256-YSSAFH6azXVk527CmZ6RM2hBdzziTdXeOmYZKusF/DQ=";
   };
 

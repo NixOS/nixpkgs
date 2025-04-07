@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "omar-polo";
-    repo = pname;
-    rev = version;
+    repo = "gmid";
+    tag = version;
     hash = "sha256-JyiGkVF9aRJXgWAwZEnGgaD+IiH3UzamfTAcWyN0now=";
   };
 

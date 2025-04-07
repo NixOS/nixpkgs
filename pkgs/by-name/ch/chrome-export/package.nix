@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bdesham";
-    repo = pname;
-    rev = "v${version}";
+    repo = "chrome-export";
+    tag = "v${version}";
     sha256 = "0p1914wfjggjavw7a0dh2nb7z97z3wrkwrpwxkdc2pj5w5lv405m";
   };
 

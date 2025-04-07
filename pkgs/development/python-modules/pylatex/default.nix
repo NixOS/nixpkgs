@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JelteF";
     repo = "PyLaTeX";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gZKMYGMp7bzDY5+Xx9h1AFP4l0Zd936fDfSXyW5lY1k=";
   };
 

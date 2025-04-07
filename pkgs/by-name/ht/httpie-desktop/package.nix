@@ -4,21 +4,20 @@
   fetchurl,
   stdenv,
 }:
-
 appimageTools.wrapType2 rec {
   pname = "httpie-desktop";
-  version = "2025.1.0";
+  version = "2025.2.0";
 
   src =
     if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
-        hash = "sha256-YadVCoBNFFco4773COyJOGHtbFKW1zMzi5kazWqIGbY=";
+        hash = "sha256-FBzjlYwgCULgjaJUPALlqqRj7fZMps7hybt5m5EkeAo=";
       }
     else
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
-        hash = "sha256-8Ecamw+rmY3iun8ytMsJW3gGHLNcyuZ7VkOiNfiDEyk=";
+        hash = "sha256-qFDiFXQbYAhweQhgYfZW/lUMtmw09tqT9t/GPJRtZU8=";
       };
 
   extraInstallCommands =
@@ -26,12 +25,10 @@ appimageTools.wrapType2 rec {
       contents = appimageTools.extractType2 { inherit pname version src; };
     in
     ''
-      mkdir -p $out/share
-      cp -r ${contents}/usr/share/* $out/share
-      chmod +w $out/share
       install -Dm644 ${contents}/httpie.desktop $out/share/applications/httpie.desktop
       substituteInPlace $out/share/applications/httpie.desktop \
         --replace-fail 'Exec=AppRun' 'Exec=httpie-desktop'
+      cp -r ${contents}/usr/share/* $out/share
     '';
 
   meta = {

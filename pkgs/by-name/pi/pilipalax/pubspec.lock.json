@@ -1718,61 +1718,61 @@
       "dependency": "direct overridden",
       "description": {
         "name": "screen_brightness",
-        "sha256": "a9a98666045ad4ea0d82bca09fe5f007b8440e315075dc948c1507a9b72ee41f",
+        "sha256": "99b898dae860ebe55fc872d8e300c6eafff3ee4ccb09301b90adb3f241f29874",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.1"
+      "version": "2.1.1"
     },
     "screen_brightness_android": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_android",
-        "sha256": "74455f9901ab8a1a45c9097b83855dbbb7498110cc2bc249cb5a86570dd1cf7c",
+        "sha256": "ff9141bed547db02233e7dd88f990ab01973a0c8a8c04ddb855c7b072f33409a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.1.0"
     },
     "screen_brightness_ios": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_ios",
-        "sha256": "caee02b34e0089b138a7aee35c461bd2d7c78446dd417f07613def192598ca08",
+        "sha256": "bfd9bfd0ac852e7aa170e7e356cc27195b2a75037b72c8c6336cf6fb2115cffb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.1.1"
     },
     "screen_brightness_macos": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_macos",
-        "sha256": "84fc8ffcbcf19c03d76b7673b0f2c2a2663c09aa2bc37c76ea83ab049294a97a",
+        "sha256": "4edf330ad21078686d8bfaf89413325fbaf571dcebe1e89254d675a3f288b5b9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.1.1"
     },
     "screen_brightness_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_platform_interface",
-        "sha256": "321e9455b0057e3647fd37700931e063739d94a8aa1b094f98133c01cb56c27b",
+        "sha256": "737bd47b57746bc4291cab1b8a5843ee881af499514881b0247ec77447ee769c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.1.0"
     },
     "screen_brightness_windows": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_windows",
-        "sha256": "5edbfb1dcaedf960f6858efac8ca45d6c18faae17df86e2c03137d3a563ea155",
+        "sha256": "d3518bf0f5d7a884cee2c14449ae0b36803802866de09f7ef74077874b6b2448",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.1"
+      "version": "2.1.0"
     },
     "scrollable_positioned_list": {
       "dependency": "direct main",

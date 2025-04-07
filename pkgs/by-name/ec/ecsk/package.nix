@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  fetchgit,
 }:
 
 buildGoModule rec {

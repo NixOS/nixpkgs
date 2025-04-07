@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "sophie-h";
     repo = "key-rack";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-mthXtTlyrIChaKKwKosTsV1hK9OQ/zLScjrq6D3CRsg=";
   };
 

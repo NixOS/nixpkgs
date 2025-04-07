@@ -1,6 +1,6 @@
 { lib, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wooting-udev-rules";
   version = "0-unstable-2024-11-20";
 
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = "unknown";
     maintainers = with maintainers; [
-      davidtwco
       returntoreality
     ];
   };

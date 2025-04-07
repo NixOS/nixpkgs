@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "moar";
@@ -7,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-28rD8NYuvfNoBtegGXBuoa5qb3f1eYilkmE4ykIeHTU=";
   };
 
@@ -20,8 +25,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
-    "-X" "main.versionString=v${version}"
+    "-s"
+    "-w"
+    "-X"
+    "main.versionString=v${version}"
   ];
 
   meta = with lib; {

@@ -6,7 +6,7 @@
   libsecret,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lssecret";
   version = "unstable-2022-12-02";
 

@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
-    rev = version;
+    tag = version;
     hash = "sha256-a9fRbI3yv+K44/TIMqZMgZXRKN/Rh2AJyeTDhJynr4M=";
   };
 

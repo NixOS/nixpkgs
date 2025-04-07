@@ -1,28 +1,43 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, gettext
-, gnutls
-, nettle
-, pkg-config
-, libiconv
-, libxcrypt
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+  gettext,
+  gnutls,
+  nettle,
+  pkg-config,
+  libiconv,
+  libxcrypt,
+  ApplicationServices,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libfilezilla";
-  version = "0.47.0";
+  version = "0.49.0";
 
-  src = fetchurl {
-    url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-YYpYa2E773EKYzxCv92mFmbLsPyKkq1JA2HQvJHFg0E=";
+  src = fetchsvn {
+    url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
+    rev = "11192";
+    hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ gettext gnutls nettle libxcrypt ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ApplicationServices ];
+  buildInputs =
+    [
+      gettext
+      gnutls
+      nettle
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      ApplicationServices
+    ];
 
   enableParallelBuilding = true;
 

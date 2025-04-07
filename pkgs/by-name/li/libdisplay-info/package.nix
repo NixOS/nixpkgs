@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
-    repo = pname;
+    repo = "libdisplay-info";
     rev = version;
     sha256 = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
   };

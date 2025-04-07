@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "bspwm";
-    rev = version;
+    tag = version;
     sha256 = "0qlv7b4c2mmjfd65y100d11x8iqyg5f6lfiws3cgmpjidhdygnxc";
   };
 

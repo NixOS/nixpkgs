@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2024-08-07";
+  version = "0-unstable-2025-03-17";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "df6bfb51d7be335b4c258e2085f13d14e27f14a9";
-    hash = "sha256-WcQMwI0i7hON31FpgBSSUoqqlENj6SUwKTXfl7i6jn4=";
+    rev = "080e48b303fe9d7eebaba6d266ddef0543bba0d3";
+    hash = "sha256-5thnZhw22U2IVn6VNDEIw1fEaTnTwJv8pkgAdWdrHu8=";
     fetchSubmodules = true;
   };
 
@@ -60,5 +60,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "projectMSDL";
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # TODO build probably needs some fixing
   };
 }

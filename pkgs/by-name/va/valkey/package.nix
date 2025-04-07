@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-05EuPjVokzfJxhrnvFHD7prwt5y7gPxemeDIkLML7lw=";
   };
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-performance data structure server that primarily serves key/value workloads";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rucadi ];
+    maintainers = with maintainers; [ ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

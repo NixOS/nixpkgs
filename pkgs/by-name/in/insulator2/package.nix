@@ -21,7 +21,6 @@
   rustc,
   jq,
   moreutils,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +29,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "andrewinci";
-    repo = pname;
-    rev = "v${version}";
+    repo = "insulator2";
+    tag = "v${version}";
     hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
 

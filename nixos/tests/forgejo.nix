@@ -1,12 +1,7 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  forgejoPackage ? pkgs.forgejo,
+  runTest,
+  forgejoPackage,
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
 
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
@@ -24,37 +19,19 @@ let
   '';
   signingPrivateKeyId = "4D642DE8B678C79D";
 
-  actionsWorkflowYaml = ''
-    run-name: dummy workflow
-    on:
-      push:
-    jobs:
-      cat:
-        runs-on: native
-        steps:
-          - uses: http://localhost:3000/test/checkout@main
-          - run: cat testfile
-  '';
-  # https://github.com/actions/checkout/releases
-  checkoutActionSource = pkgs.fetchFromGitHub {
-    owner = "actions";
-    repo = "checkout";
-    rev = "v4.1.1";
-    hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
-  };
-
   metricSecret = "fakesecret";
 
-  supportedDbTypes = [
-    "mysql"
-    "postgres"
-    "sqlite3"
-  ];
-  makeForgejoTest =
-    type:
-    nameValuePair type (makeTest {
+  base =
+    {
+      lib,
+      pkgs,
+      type,
+      ...
+    }:
+
+    {
       name = "forgejo-${type}";
-      meta.maintainers = with maintainers; [
+      meta.maintainers = with lib.maintainers; [
         bendlas
         emilylange
       ];
@@ -141,6 +118,25 @@ let
             "${backupDir}/${file}";
           remoteUri = "forgejo@server:test/repo";
           remoteUriCheckoutAction = "forgejo@server:test/checkout";
+
+          actionsWorkflowYaml = ''
+            run-name: dummy workflow
+            on:
+              push:
+            jobs:
+              cat:
+                runs-on: native
+                steps:
+                  - uses: http://localhost:3000/test/checkout@main
+                  - run: cat testfile
+          '';
+          # https://github.com/actions/checkout/releases
+          checkoutActionSource = pkgs.fetchFromGitHub {
+            owner = "actions";
+            repo = "checkout";
+            rev = "v4.1.1";
+            hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
+          };
         in
         ''
           import json
@@ -285,7 +281,19 @@ let
               assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
               server.copy_from_vm("${dumpFile}")
         '';
-    });
+    };
 in
-
-listToAttrs (map makeForgejoTest supportedDbTypes)
+{
+  mysql = runTest {
+    imports = [ base ];
+    _module.args.type = "mysql";
+  };
+  sqlite3 = runTest {
+    imports = [ base ];
+    _module.args.type = "sqlite3";
+  };
+  postgres = runTest {
+    imports = [ base ];
+    _module.args.type = "postgres";
+  };
+}

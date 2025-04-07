@@ -398,6 +398,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      "d /var/lib/mobilizon/sitemap 700 mobilizon mobilizon - -"
       "d /var/lib/mobilizon/uploads/exports/csv 700 mobilizon mobilizon - -"
       "Z /var/lib/mobilizon 700 mobilizon mobilizon - -"
     ];

@@ -57,8 +57,8 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
 
     src = fetchFromGitHub {
       owner = "catppuccin";
-      repo = pname;
-      rev = "v${version}";
+      repo = "kde";
+      tag = "v${version}";
       hash = "sha256-pfG0L4eSXLYLZM8Mhla4yalpEro74S9kc0sOmQtnG3w=";
     };
 

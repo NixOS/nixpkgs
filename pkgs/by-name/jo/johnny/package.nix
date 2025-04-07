@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "johnny";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 

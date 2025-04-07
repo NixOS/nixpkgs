@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "badboy";
-    repo = pname;
-    rev = version;
+    repo = "mdbook-open-on-gh";
+    tag = version;
     hash = "sha256-73738Vei7rQ67LQIOrHPGOtsBnHClaXClRWDmA5pP58=";
   };
 

@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kalker";
+    tag = "v${version}";
     hash = "sha256-fFeHL+Q1Y0J3rOgbFA952rjae/OQgHTznDI0Kya1KMQ=";
   };
 

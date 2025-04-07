@@ -10,7 +10,7 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "kepler";
   version = "unstable-2023-07-19";
 

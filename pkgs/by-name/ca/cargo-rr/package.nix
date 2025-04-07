@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cargo-rr";
+    tag = "v${version}";
     sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
   };
 

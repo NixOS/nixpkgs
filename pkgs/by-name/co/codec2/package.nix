@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
 
@@ -62,5 +62,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
+    # generate_codebook only built for host platform
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

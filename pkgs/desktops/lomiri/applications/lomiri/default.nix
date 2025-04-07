@@ -3,7 +3,6 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  fetchpatch2,
   gitUpdater,
   linkFarm,
   replaceVars,
@@ -58,7 +57,6 @@
   qtsvg,
   wrapGAppsHook3,
   wrapQtAppsHook,
-  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Godl/SQ0+NkI6kwH85SXHPQ5GRlih3xvCyeYxwiqH/s=";
   };
 

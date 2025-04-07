@@ -10,7 +10,7 @@ let
   cfg = config.systemd.repart;
   initrdCfg = config.boot.initrd.systemd.repart;
 
-  format = pkgs.formats.ini { };
+  format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
   definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
     lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
@@ -93,6 +93,7 @@ in
               str
               int
               bool
+              (listOf str)
             ])
           );
         default = { };

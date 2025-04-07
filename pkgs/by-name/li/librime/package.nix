@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rime";
-    repo = pname;
-    rev = version;
+    repo = "librime";
+    tag = version;
     sha256 = "sha256-pv1I/YFzPLOmBDcT4HcrJWSikPEErEB5UzGrGqfJBvg=";
   };
 

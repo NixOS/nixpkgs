@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   version = "1.5.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "trimal";
     owner = "scapella";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6GXirih7nY0eD2XS8aplLcYf53EeLuae+ewdUgBiKQQ=";
   };
 

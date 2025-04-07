@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rumpelsepp";
     repo = "oscclip";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WQvZn+SWamEqEXPutIZVDZTIczybtHUG9QsN8XxUeg8=";
   };
 

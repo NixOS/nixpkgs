@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crystal-dock";
-  version = "2.8";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "dangvd";
     repo = "crystal-dock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-93rtDl+6eMXc02NO4anPMoocozMnWntMJjzMaQs8sMQ=";
+    hash = "sha256-edTBlqCJkw9ER06yZeXvJXQeQ5bJn//ss5ceYwt0QUU=";
   };
 
   nativeBuildInputs = [

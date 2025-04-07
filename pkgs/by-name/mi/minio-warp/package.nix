@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zRRvY/PpLSY8cx3vqcAGfVK7FJKzFnxtghhIwrlUh+Y=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

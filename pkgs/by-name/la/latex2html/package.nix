@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, ghostscript, netpbm, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ghostscript,
+  netpbm,
+  perl,
+}:
 # TODO: withTex
 
 stdenv.mkDerivation rec {
@@ -9,11 +16,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-xylIU2GY/1t9mA8zJzEjHwAIlvVxZmUAUdQ/IXEy+Wg=";
   };
 
-  buildInputs = [ ghostscript netpbm perl ];
+  buildInputs = [
+    ghostscript
+    netpbm
+    perl
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

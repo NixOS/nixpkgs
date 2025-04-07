@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kornelski";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dupe-krill";
+    tag = "v${version}";
     hash = "sha256-ze9OQHNtujzn2rY24bmFUkz5AYsjoMrwqm4jyQoF53Y=";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rXavUkoFRw5fWCisdz/eD+wL1Sc+vExyjskVEIN4QNQ=";
   };
 

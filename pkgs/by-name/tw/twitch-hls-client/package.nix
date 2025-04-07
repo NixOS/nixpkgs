@@ -13,14 +13,14 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "twitch-hls-client";
-    rev = version;
+    tag = version;
     hash = "sha256-H446qXFwRGippLMZemkW8sVhTV3YGpKmAvD8QBamAlo=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-sqhB2Lj3RK1OyXy87Be9aOkfcksqz+5VfRTlKuswerU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

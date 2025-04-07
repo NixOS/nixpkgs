@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "LongSoft";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ifrextractor-rs";
+    tag = "v${version}";
     hash = "sha256-zpoOThjkL2Hu/ytxdqWcr2GXzN4Cm8hph7PJhSF5BlU=";
   };
 

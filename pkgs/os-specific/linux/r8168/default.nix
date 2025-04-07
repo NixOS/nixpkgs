@@ -1,9 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
   version = "8.053.00";
@@ -16,7 +23,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
-    rev = version;
+    tag = version;
     sha256 = "0bHGs8jyWd+ZiixOoNkBqhS9RjDpRp3vveAgk1YuOWU=";
   };
 

@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ffts";
   version = "0-unstable-2019-03-19";
 

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  fetchpatch,
 }:
 buildGoModule rec {
   pname = "ssm-session-manager-plugin";
@@ -11,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "session-manager-plugin";
-    rev = version;
+    tag = version;
     hash = "sha256-4DPwFKt5pNNl4AczgIhZA7CuBHx7q41jMZKenDFYmwg=";
   };
 

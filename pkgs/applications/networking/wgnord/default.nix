@@ -1,14 +1,15 @@
-{ bash
-, coreutils
-, curl
-, fetchFromGitHub
-, gnugrep
-, gnused
-, iproute2
-, jq
-, lib
-, resholve
-, wireguard-tools
+{
+  bash,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  gnugrep,
+  gnused,
+  iproute2,
+  jq,
+  lib,
+  resholve,
+  wireguard-tools,
 }:
 
 resholve.mkDerivation rec {
@@ -18,7 +19,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 

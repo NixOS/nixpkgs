@@ -18,9 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
+
+  # See https://github.com/xtensor-stack/xtensor/pull/2821
+  patches = lib.optionals stdenv.cc.isClang [ ./0001-Fix-clang-build-errors-on-darwin.patch ];
 
   nativeBuildInputs = [
     cmake

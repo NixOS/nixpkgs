@@ -13,8 +13,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
+    repo = "mint-l-theme";
+    tag = version;
     hash = "sha256-umY14seqUjNugN6+wzMDIGbCiis/InseDwVR85PqrGs=";
   };
 

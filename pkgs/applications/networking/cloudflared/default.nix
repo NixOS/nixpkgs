@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, callPackage
-, gitUpdater
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+  gitUpdater,
 }:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2025.2.0";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = version;
-    hash = "sha256-K1xMk9y9cxqbLqXC0TU62kSqq1WxTF8T/fAgE0THOLQ=";
+    hash = "sha256-PKF7wP/ueLLhV8k3nMUm/c5fkg+7CwRf1oLnx0qbcA0=";
   };
 
   vendorHash = null;
@@ -82,7 +83,14 @@ buildGoModule rec {
     changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe qjoly ];
+    maintainers = with maintainers; [
+      bbigras
+      enorris
+      thoughtpolice
+      piperswe
+      qjoly
+      wrbbz
+    ];
     mainProgram = "cloudflared";
   };
 }

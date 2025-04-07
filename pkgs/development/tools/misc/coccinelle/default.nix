@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, ocamlPackages
-, pkg-config
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     repo = "coccinelle";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     owner = "coccinelle";
     hash = "sha256-be95cuFP6bAdpCT0Z9zBAx9cc3gYuuXAmHYaI/bmyTE=";
   };

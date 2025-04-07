@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
   };
 

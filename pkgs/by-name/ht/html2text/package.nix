@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "grobian";
     repo = "html2text";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
   };
 

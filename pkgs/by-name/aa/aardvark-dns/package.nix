@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aardvark-dns";
+    tag = "v${version}";
     hash = "sha256-mWaB1E/n/N2Tb5bqrMJX2XfPvZBCG+dxar3kGCHgv0I=";
   };
 

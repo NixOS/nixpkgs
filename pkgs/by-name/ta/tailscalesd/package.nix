@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cfunkhouser";
     repo = "tailscalesd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OcvLVsPtAIaGTxk5SKNme0+i0PsDc8uY/sDcM/L5yqU=";
   };
 

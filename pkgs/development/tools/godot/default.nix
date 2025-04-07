@@ -7,7 +7,7 @@ let
   mkGodotPackages =
     versionPrefix:
     let
-      attrs = import ./${versionPrefix};
+      attrs = import (./. + "/${versionPrefix}/default.nix");
       inherit (attrs)
         version
         hash
@@ -44,7 +44,7 @@ let
   godotPackages_4 = godotPackages_4_4;
   godotPackages = godotPackages_4;
 in
-rec {
+{
   godot3 = callPackage ./3 { };
   godot3-export-templates = callPackage ./3/export-templates.nix { };
   godot3-headless = callPackage ./3/headless.nix { };

@@ -8,7 +8,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gifticlib";
   version = "unstable-2020-07-07";
 

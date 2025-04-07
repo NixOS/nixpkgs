@@ -1,35 +1,39 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, replaceVars
-, openssl
-, gsound
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook3
-, glib
-, glib-networking
-, gtk3
-, openssh
-, gnome-shell
-, evolution-data-server-gtk4
-, gjs
-, nixosTests
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  openssl,
+  gsound,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook3,
+  glib,
+  glib-networking,
+  gtk3,
+  openssh,
+  gnome-shell,
+  evolution-data-server-gtk4,
+  gjs,
+  nixosTests,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
   version = "58";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bpy4G+f3NJ2iVsycPluV+98at0G2wlp7t5cPEMGM90s=";
   };
 

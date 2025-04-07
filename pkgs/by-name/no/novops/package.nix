@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "PierreBeucher";
-    repo = pname;
-    rev = "v${version}";
+    repo = "novops";
+    tag = "v${version}";
     hash = "sha256-bpv8Ybrsb2CAV8Qxj69F2E/mekYsOuAiZWuDNHDtxw0=";
   };
 

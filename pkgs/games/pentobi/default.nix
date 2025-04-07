@@ -23,7 +23,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "enz";
     repo = "pentobi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DQM3IJ0pRkX4OsrjZGROg50LfKb621UnpvtqSjxchz8=";
   };
 

@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "wobcom";
-    repo = pname;
-    rev = "v${version}";
+    repo = "iperf3d";
+    tag = "v${version}";
     hash = "sha256-pMwGoBgFRVY+H51k+YCamzHgBoaJVwEVqY0CvMPvE0w=";
   };
 

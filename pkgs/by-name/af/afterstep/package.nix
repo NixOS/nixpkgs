@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "afterstep";
     repo = "afterstep";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-j1ADTRZ3Mxv9VNZWhWCFMnM/CJfkphdrgbw9Ca3bBw0=";
   };
 

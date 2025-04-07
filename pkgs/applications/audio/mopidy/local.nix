@@ -3,7 +3,6 @@
   mopidy,
   python3Packages,
   fetchPypi,
-  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication rec {

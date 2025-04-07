@@ -13,8 +13,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
-    repo = pname;
-    rev = "v${version}";
+    repo = "oranchelo-icon-theme";
+    tag = "v${version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
 

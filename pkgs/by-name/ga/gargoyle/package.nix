@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
-    rev = version;
+    tag = version;
     sha256 = "0w54avmbp4i4zps2rb4acmpa641s6wvwbrln4vbdhcz97fx48nzz";
   };
 

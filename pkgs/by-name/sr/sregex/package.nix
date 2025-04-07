@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openresty";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sregex";
+    tag = "v${version}";
     hash = "sha256-HZ9O/3BQHHrTVLLlU0o1fLHxyRSesBhreT3IdGHnNsg=";
   };
 

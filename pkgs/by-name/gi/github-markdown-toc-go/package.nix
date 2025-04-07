@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ekalinin";
     repo = "github-markdown-toc.go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tZGAvbC9lrNhtRubCJUkQShRsfCsaAeI6XHhSp4FkS0=";
   };
 

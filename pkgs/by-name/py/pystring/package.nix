@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "imageworks";
     repo = "pystring";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1w31pjiyshqgk6zd6m3ab3xfgb0ribi77r6fwrry2aw8w1adjknf";
   };
 

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "eworm-de";
-    repo = pname;
-    rev = version;
+    repo = "xcur2png";
+    tag = version;
     sha256 = "0858wn2p14bxpv9lvaz2bz1rk6zk0g8zgxf8iy595m8fqv4q2fya";
   };
 

@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "l3tnun";
     repo = "EPGStation";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 

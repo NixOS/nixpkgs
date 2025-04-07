@@ -7,15 +7,15 @@
 
 buildDunePackage rec {
   pname = "duppy";
-  version = "0.9.4";
+  version = "0.9.5";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-duppy";
-    rev = "v${version}";
-    sha256 = "sha256-rVdfAMu26YgS/TZk2XPqaR6KTDLbh9Elkf8rjhSnNO4=";
+    tag = "v${version}";
+    sha256 = "sha256-hWR7utYMxMjz8Cw0j6cgoHlUj4Jc7Q4vJHD5kGHN4Rc=";
   };
 
   propagatedBuildInputs = [ re ];

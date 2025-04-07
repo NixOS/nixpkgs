@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ldn-softdev";
-    repo = pname;
-    rev = version;
+    repo = "jtc";
+    tag = version;
     sha256 = "sha256-VATRlOOV4wBInLOm9J0Dp2vhtL5mb0Yxdl/ya0JiqEU=";
   };
 

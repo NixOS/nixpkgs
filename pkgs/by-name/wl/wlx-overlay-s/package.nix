@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m2YVXF9bEjovZOWa+X1CYHAUaAsUI4dBMG2ni3jP9L4=";
   };
 

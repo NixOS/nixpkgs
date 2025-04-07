@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "chess-clock";
     rev = "v${version}";
     hash = "sha256-XDOCHFZC3s3b/4kD1ZkhWar3kozW3vXc0pk7O6oQfiE=";
   };

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "quick-settings";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-77NkzdE0Z655qeh718L4Mil6FkMxTNaEqh7DLHoldQ4=";
   };
 

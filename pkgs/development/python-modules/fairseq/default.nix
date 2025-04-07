@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XX/grU5ljQCwx33miGoFc/7Uj9fZDtmhm4Fz7L4U+Bc=";
   };
 
@@ -120,5 +120,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ happysalada ];
+    broken = true; # requires numpy1 which is incompatible with sacrebleu depending on numpy2
   };
 }

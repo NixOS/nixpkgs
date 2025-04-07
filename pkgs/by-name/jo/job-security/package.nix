@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "job-security";
   version = "0-unstable-2024-04-07";
 

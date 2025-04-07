@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sunaku";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dasht";
+    tag = "v${version}";
     sha256 = "08wssmifxi7pnvn9gqrvpzpkc2qpkfbzbhxh0dk1gff2y2211qqk";
   };
 

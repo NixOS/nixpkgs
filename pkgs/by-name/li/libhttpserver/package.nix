@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "etr";
-    repo = pname;
-    rev = version;
+    repo = "libhttpserver";
+    tag = version;
     hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 

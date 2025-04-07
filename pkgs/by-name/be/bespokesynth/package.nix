@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   gitUpdater,
   apple-sdk_11,
   cmake,

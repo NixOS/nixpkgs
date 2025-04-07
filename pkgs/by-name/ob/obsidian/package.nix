@@ -7,8 +7,7 @@
   makeDesktopItem,
   imagemagick,
   writeScript,
-  undmg,
-  unzip,
+  _7zz,
   commandLineArgs ? "",
 }:
 let
@@ -118,8 +117,7 @@ let
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
-      undmg
-      unzip
+      _7zz
     ];
     installPhase = ''
       runHook preInstall

@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cdown";
-    repo = pname;
-    rev = version;
+    repo = "psi-notify";
+    tag = version;
     sha256 = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
   };
 

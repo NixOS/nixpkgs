@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-bamboo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-yvyJHIXUYpOIeiSQasSRKTbN4Z0BAjohz8VlZKqMg0Q=";
     fetchSubmodules = true;
   };

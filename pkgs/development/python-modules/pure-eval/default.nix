@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "pure_eval";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-gdP8/MkzTyjkZaWUG5PoaOtBqzbCXYNYBX2XBLWLh18=";
   };
 
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Safely evaluate AST nodes without side effects";
     homepage = "https://github.com/alexmojaki/pure_eval";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   appstream,
   cmake,
-  fetchpatch,
   gettext,
   git,
   makeWrapper,
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-gpDwfRKXgp6hEpitflVIAIOU/k3Fx6hKKhyzQvLlog8=";
   };

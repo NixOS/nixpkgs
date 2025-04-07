@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
-    repo = pname;
-    rev = "v${version}";
+    repo = "stylua";
+    tag = "v${version}";
     sha256 = "sha256-sZrymo1RRfDLz8fPa7FnbutSpOCFoyQPoFVjA6BH5qQ=";
   };
 

@@ -55,7 +55,7 @@ rec {
   # ENGLISH
 
   en_US = en-us;
-  en-us = stdenv.mkDerivation rec {
+  en-us = stdenv.mkDerivation {
     nativeBuildInputs = hyphen.nativeBuildInputs;
     version = hyphen.version;
     pname = "hyphen-dict-en-us";

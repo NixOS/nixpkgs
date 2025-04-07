@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kalbasit";
     repo = "ssh-agents";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1l09zy87033v7hd17lhkxikwikqz5nj9x6c2w80rqpad4lp9ihwz";
   };
 

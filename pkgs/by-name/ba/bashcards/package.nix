@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rpearce";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bashcards";
+    tag = "v${version}";
     sha256 = "1rpqrh0022sbrjvd55a0jvpdqhhka5msf8dsz6adbbmxy3xzgdid";
   };
 

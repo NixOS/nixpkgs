@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
-    repo = pname;
-    rev = version;
+    repo = "nixel";
+    tag = version;
     sha256 = "sha256-dQ3wzBTjteqk9rju+FMAO+ydimnGu24Y2DEDLX/P+1A=";
   };
 

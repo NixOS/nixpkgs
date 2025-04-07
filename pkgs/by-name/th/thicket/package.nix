@@ -10,8 +10,8 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
-    repo = pname;
-    rev = "v${version}";
+    repo = "thicket";
+    tag = "v${version}";
     sha256 = "sha256-sF+fNKEZEfjpW3buh6kFUpL1P0yO9g4SrTb0rhx1uNc=";
   };
 

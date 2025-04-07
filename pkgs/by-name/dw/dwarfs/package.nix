@@ -33,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwarfs";
-  version = "0.10.2";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wQ+6jSf/RWAI7cSRMb1zG09kOiyMM5xiy8yS6tl1ybI=";
+    hash = "sha256-6dsBWQFYjxg1oxcbc7pzK69plbCIaOW2QFzhmYrm0ck=";
   };
 
   cmakeFlags = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   versionCheckProgram = "${placeholder "out"}/bin/dwarfs";
 
   meta = {

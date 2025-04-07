@@ -232,6 +232,13 @@ merging is handled.
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
+### Specialised types {#sec-option-types-specialised}
+
+`types.luaInline`
+
+:   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
+    inline within generated lua. Multiple definitions cannot be merged.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
@@ -364,7 +371,7 @@ If the you're interested in can be distinguished without a label, you may simpli
                 options.destination = mkOption { … };
               };
             };
-            ignore = types.mkOption {
+            drop = types.mkOption {
               description = "Drop the packet without sending anything back.";
               type = types.submodule {};
             };

@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yYvQxz+lAxKXpAWeLiBnepGuwYfNLyIhu4vQ8NdH3pc=";
   };
 

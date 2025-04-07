@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lastpass";
-    repo = pname;
-    rev = "v${version}";
+    repo = "lastpass-cli";
+    tag = "v${version}";
     sha256 = "sha256-Q0ZG5Ehg29STLeAerMoLfzjaH9JyPk7269RgiPmDJV8=";
   };
 

@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Francesco149";
-    repo = pname;
-    rev = version;
+    repo = "oppai-ng";
+    tag = version;
     sha256 = "sha256-L9eraLOWm1tMImS8bLB9T4Md4VdTSxqI9Bt4r8eqxqs=";
   };
 

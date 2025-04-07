@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
-    rev = "v${version}";
+    repo = "zuki-themes";
+    tag = "v${version}";
     sha256 = "1q026wa8xgyb6f5k7pqpm5zav30dbnm3b8w59as3sh8rhfgpbf80";
   };
 

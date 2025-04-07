@@ -1,0 +1,10 @@
+diff -r cba3e8ca3a87 OrthancServer/Sources/OrthancInitialization.cpp
+--- a/Sources/OrthancInitialization.cpp   Tue Mar 11 10:46:15 2025 +0100
++++ b/Sources/OrthancInitialization.cpp   Thu Mar 13 18:20:00 2025 +0100
+@@ -59,6 +59,7 @@
+ #    undef __FILE__
+ #    define __FILE__ __ORTHANC_FILE__
+ #  endif
++#  include <google/protobuf/stubs/common.h>
+ #  include <google/protobuf/any.h>
+ #endif

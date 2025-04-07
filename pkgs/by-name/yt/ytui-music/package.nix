@@ -8,7 +8,7 @@
   stdenv,
   darwin,
   mpv,
-  youtube-dl,
+  yt-dlp,
   makeBinaryWrapper,
 }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sudipghimire533";
     repo = "ytui-music";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f/23PVk4bpUCvcQ25iNI/UVXqiPBzPKWq6OohVF41p8=";
   };
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/ytui_music \
-      --prefix PATH : ${lib.makeBinPath [ youtube-dl ]}
+      --prefix PATH : ${lib.makeBinPath [ yt-dlp ]}
   '';
 
   doInstallCheck = true;

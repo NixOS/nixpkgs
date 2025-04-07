@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   buildPackages,
-  gnu-efi,
   mtools,
   openssl,
   perl,
@@ -49,10 +48,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-01-10";
+  version = "1.21.1-unstable-2025-03-27";
 
   nativeBuildInputs = [
-    gnu-efi
     mtools
     openssl
     perl
@@ -67,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "d88eb0a1935942cdeccd3efee38f9765d2f1c235";
-    hash = "sha256-R6ytWBqs0ntOtlc8K4C3gXtDRBa1hf7kpWTRZz9/h4s=";
+    rev = "09fbebc084bddcb5bc7277f1644154ab35e6a334";
+    hash = "sha256-7F7SYSvSiY23xZbiJdzjiSDMnfeB4gWNodlHVgm9MyE=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -112,22 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = lib.attrNames targets;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
-      ) targets
-    )}
-
-    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
-    # let's provide it as a symlink to be compatible in this case.
-    ln -s undionly.kpxe $out/undionly.kpxe.0
-
-    runHook postInstall
-  '';
+      mkdir -p $out
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
+        ) targets
+      )}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+      # let's provide it as a symlink to be compatible in this case.
+      ln -s undionly.kpxe $out/undionly.kpxe.0
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   enableParallelBuilding = true;
 

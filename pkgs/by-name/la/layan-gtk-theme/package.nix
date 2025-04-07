@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
-    rev = version;
+    repo = "layan-gtk-theme";
+    tag = version;
     sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
   };
 

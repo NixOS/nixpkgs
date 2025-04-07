@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "function-runner";
@@ -6,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Shopify";
-    repo = pname;
-    rev = "v${version}";
+    repo = "function-runner";
+    tag = "v${version}";
     sha256 = "sha256-i1RxK5NlKNV0mVm4vio557pM2claBTHTo8vmaNQPEvw=";
   };
 

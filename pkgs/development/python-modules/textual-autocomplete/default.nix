@@ -1,30 +1,27 @@
 {
   lib,
-  python3,
-  fetchFromGitHub,
+  buildPythonPackage,
+  fetchPypi,
   poetry-core,
   textual,
   typing-extensions,
   hatchling,
 }:
-python3.pkgs.buildPythonPackage rec {
-  pname = "textual_autocomplete";
-  version = "3.0.0a13";
+buildPythonPackage rec {
+  pname = "textual-autocomplete";
+  version = "4.0.0a0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "darrenburns";
-    repo = "textual-autocomplete";
-    rev = "2cb572bf5b1ea0554b396d0833dfb398cb45dc9b";
-    hash = "sha256-jfGYC3xDspwEr+KGApGB05VFuzluDe5S9a/Sjg5HtdI=";
+  src = fetchPypi {
+    pname = "textual_autocomplete";
+    inherit version;
+    hash = "sha256-wsjmgODvFgfbyqxW3jsH88JC8z0TZQOChLgics7wAHY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     hatchling
   ];
-
-  pythonRelaxDeps = true;
 
   dependencies = [
     textual
@@ -36,9 +33,12 @@ python3.pkgs.buildPythonPackage rec {
     "typing_extensions"
   ];
 
+  # No tests in the Pypi archive
+  doCheck = false;
+
   meta = {
     description = "Python library that provides autocomplete capabilities to textual";
-    homepage = "https://pypi.org/project/textual-autocomplete";
+    homepage = "https://github.com/darrenburns/textual-autocomplete";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jorikvanveen ];
   };

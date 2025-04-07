@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cminyard";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ser2net";
+    tag = "v${version}";
     hash = "sha256-acj9D23J5FvcCasBq5GrPgtsStJrzanTpbKINuy/sqI=";
   };
 

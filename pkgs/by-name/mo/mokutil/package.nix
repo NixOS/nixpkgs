@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lcp";
-    repo = pname;
-    rev = version;
+    repo = "mokutil";
+    tag = version;
     sha256 = "sha256-DO3S1O0AKoI8gssnUyBTRj5lDNs6hhisc/5dTIqmbzM=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "majutsushi";
     repo = "urxvt-font-size";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1526ap161cp3378f4ijd09nmsh71ld7bkxxhp8p6razdi2v8r16h";
   };
 

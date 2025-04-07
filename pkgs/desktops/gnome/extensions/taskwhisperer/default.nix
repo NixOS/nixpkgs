@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cinatic";
     repo = "taskwhisperer";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-UVBLFXsbOPRXC4P5laZ82Rs08yXnNnzJ+pp5fbx6Zqc=";
   };
 

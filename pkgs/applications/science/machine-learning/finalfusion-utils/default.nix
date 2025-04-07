@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "finalfusion";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-suzivynlgk4VvDOC2dQR40n5IJHoJ736+ObdrM9dIqE=";
   };
 

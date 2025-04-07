@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kennytm";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J25ER/g8Kylw/oTIEl4Gl8i1xmhR+4JM5M5EHpl1ras=";
   };
 
@@ -66,6 +66,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

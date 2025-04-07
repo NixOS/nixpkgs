@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orogene";
     repo = "orogene";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GMWrlvZZ2xlcvcRG3u8jS8KiewHpyX0brNe4pmCpHbM=";
     fetchSubmodules = true;
   };

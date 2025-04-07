@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "michaeladler";
-    repo = pname;
-    rev = "v${version}";
+    repo = "notmuch-mailmover";
+    tag = "v${version}";
     hash = "sha256-v70R6CgN4RzG6L8LUg3ZvW895+G4eU8HZ0TI+jRxZ10=";
   };
 

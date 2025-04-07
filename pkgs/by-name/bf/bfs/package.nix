@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
-    rev = version;
+    tag = version;
     hash = "sha256-TXnoy+VWkS5ilW6QEtE6vd80FaJ/nIWGaeBJ/cjvquM=";
   };
 

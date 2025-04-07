@@ -1,7 +1,7 @@
 {
-  lib,
   buildPgrxExtension,
   fetchFromGitHub,
+  lib,
   nix-update-script,
   postgresql,
   util-linux,

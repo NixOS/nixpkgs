@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
     repo = "libad9361-iio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9e66qSrKpczatZY9lPAzi/6f7lHChnl2+Pih53oa28Y=";
   };
 

@@ -18,8 +18,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.18.3";
-  sha256 = "0674f16f3bc284c11724cd3f7c2a43f7c2c13d2eb7a872dd0db198f3d588c5f2";
+  version = "20.19.0";
+  sha256 = "5ac2516fc905b6a0bc1a33e7302937eac664a820b887cc86bd48c035fba392d7";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -49,21 +49,6 @@ buildNodejs {
       extraPrefix = "deps/v8/";
       stripLen = 1;
       hash = "sha256-6y3aEqxNC4iTQEv1oewodJrhOHxjp5xZMq1P1QL94Rg=";
-    })
-
-    # Backport fixes for OpenSSL 3.4
-    # FIXME: remove when merged upstream
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/e799722f1a0bf43fe4d47e4824b9524363fe0d62.patch";
-      hash = "sha256-nz95vmBx+zFPdOR9kg0HdgiAlqgTeXistOP/NLF3qW0=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/e6a988dbdee47b3412094a90d35d6bd8207c750d.patch";
-      hash = "sha256-UJ8alA54PrhHXK9u120HvBgm0scuEDBwCRuuVYVa/Ng=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/7895b8eae9e4f2919028fe81e38790af07b4cc92.patch";
-      hash = "sha256-S2PmFw/e0/DY71UJb2RYXu9Qft/rBFC50K0Ex7v/9QE=";
     })
   ] ++ gypPatches;
 }

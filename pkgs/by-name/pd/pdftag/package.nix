@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "arrufat";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pdftag";
+    tag = "v${version}";
     sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
 

@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
-    rev = "v${version}";
+    repo = "elf2nucleus";
+    tag = "v${version}";
     hash = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 

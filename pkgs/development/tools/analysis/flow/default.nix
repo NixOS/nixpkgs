@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WlHta/wXTULehopXeIUdNAQb12Lf0SJnm1HIVHTDshA=";
   };
 

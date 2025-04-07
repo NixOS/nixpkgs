@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "olegkapitonov";
-    repo = pname;
-    rev = version;
+    repo = "kapitonov-plugins-pack";
+    tag = version;
     sha256 = "1mxi7b1vrzg25x85lqk8c77iziqrqyz18mqkfjlz09sxp5wfs9w4";
   };
 

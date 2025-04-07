@@ -22,8 +22,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jsamr";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bootiso";
+    tag = "v${version}";
     sha256 = "1l09d543b73r0wbpsj5m6kski8nq48lbraq1myxhidkgl3mm3d5i";
   };
 

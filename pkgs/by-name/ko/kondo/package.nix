@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "tbillington";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kondo";
+    tag = "v${version}";
     hash = "sha256-OqOmOujnyLTqwzNvLWudQi+xa5v37JTtyUXaItnpnfs=";
   };
 

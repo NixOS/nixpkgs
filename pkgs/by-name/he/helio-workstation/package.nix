@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "helio-fm";
-    repo = pname;
-    rev = version;
+    repo = "helio-workstation";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-o8vMHt6ypHY7HOHnhMifQphxGb5MjSg3hREVOnIdqfc=";
   };

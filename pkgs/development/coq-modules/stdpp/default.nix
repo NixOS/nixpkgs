@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "stdpp";
   inherit version;
   domain = "gitlab.mpi-sws.org";

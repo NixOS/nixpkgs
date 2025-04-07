@@ -1,11 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "bind_exporter";
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "prometheus-community";
     repo = "bind_exporter";
     sha256 = "sha256-x/XGatlXCKo9cI92JzFItApsjuZAfZX+8IZRpy7PVUo=";

@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "6.1.0";
+  version = "6.2.0";
 in
 buildPecl {
   inherit version;
@@ -15,8 +15,8 @@ buildPecl {
   src = fetchFromGitHub {
     repo = "phpredis";
     owner = "phpredis";
-    rev = version;
-    hash = "sha256-zuvdWBJl6vBDnIAR0txfar1+c06VqGnwtobZnxok2uU=";
+    tag = version;
+    hash = "sha256-uUnH+AS4PgIm+uias5T5+W7X5Pzq4hx4c6zAl4OYk1g=";
   };
 
   internalDeps = with php.extensions; [ session ];

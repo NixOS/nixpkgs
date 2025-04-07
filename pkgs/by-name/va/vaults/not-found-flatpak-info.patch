@@ -1,0 +1,11 @@
+--- a/src/global_config_manager.rs
++++ b/src/global_config_manager.rs
+@@ -100,7 +100,7 @@
+         let object: Self = glib::Object::new();
+ 
+         *object.imp().flatpak_info.borrow_mut() =
+-            Ini::load_from_file("/.flatpak-info").expect("Could not load .flatpak-info");
++            Ini::load_from_file("/.flatpak-info").unwrap_or_else(|_| Ini::new());
+ 
+         match user_config_dir().as_os_str().to_str() {
+             Some(user_config_directory) => {

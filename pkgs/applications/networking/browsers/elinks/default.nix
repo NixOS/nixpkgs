@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "elinks";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TTb/v24gIWKiCQCESHo0Pz6rvRtw5anoXK0b35dzfLM=";
   };
 
@@ -96,7 +96,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [
       iblech
-      gebner
     ];
   };
 }

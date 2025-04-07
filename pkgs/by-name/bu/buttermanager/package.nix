@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "egara";
     repo = "buttermanager";
-    rev = version;
+    tag = version;
     hash = "sha256-/U5IVJvYCw/YzBWjQ949YP9uoxsTNRJ5FO7rrI6Cvhs=";
   };
 

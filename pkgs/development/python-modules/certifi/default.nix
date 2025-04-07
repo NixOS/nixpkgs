@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2024.12.14";
+  version = "2025.01.31";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "python-certifi";
-    rev = version;
-    hash = "sha256-VXkgMqS+uDuKv/6VIfLwfTcYhupQtyB8g2q0NkkukYI=";
+    tag = version;
+    hash = "sha256-LHoFI9+vrrrRzyhWNchQYp4AAiFcQwZHdeNzMjTJ8jk=";
   };
 
   patches = [

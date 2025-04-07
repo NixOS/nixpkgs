@@ -6,7 +6,7 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sblim-sfcc";
   version = "2.2.8-unstable-2023-06-26";
 

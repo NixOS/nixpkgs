@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "adb_shell";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
   };
 

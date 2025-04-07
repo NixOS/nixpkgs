@@ -15,13 +15,14 @@ stdenv.mkDerivation rec {
     owner = "mono";
     repo = "dbus-sharp";
 
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1g5lblrvkd0wnhfzp326by6n3a9mj2bj7a7646g0ziwgsxp5w6y7";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    mono4 # gmcs
   ];
 
   # Use msbuild when https://github.com/NixOS/nixpkgs/pull/43680 is merged

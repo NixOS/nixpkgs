@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mookid";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ylZE2NtTXbGqsxE72ylEQCacTyxBO+/WgvEpoXd5OZI=";
   };
 
@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "diffr";
     homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

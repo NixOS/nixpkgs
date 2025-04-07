@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "WernerFP";
-    repo = pname;
-    rev = version;
+    repo = "shades-of-gray-theme";
+    tag = version;
     sha256 = "13ydym0i3032g5dyrnl5wxpvxv57b43q7iaq5achpmaixgn58gs8";
   };
 

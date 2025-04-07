@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "whitebophir";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4T7s9WrpyHVPcw0QY0C0sczDJYKzA4bAAfEv8q2pOy4=";
   };
 

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, zlib, boost186, openssl, python311, libiconv, ncurses, darwin
-, boost-build
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  zlib,
+  boost186,
+  openssl,
+  python311,
+  libiconv,
+  ncurses,
+  darwin,
+  boost-build,
 }:
 
 let
@@ -20,16 +31,19 @@ let
     taggedLayout = false;
   });
 
-  opensslStatic = openssl.override (_: { static = true; });
+  opensslStatic = openssl.override (_: {
+    static = true;
+  });
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HkpaOCBL+0Kc7M9DmnW2dUGC+b60a7n5n3i1SyRfkb4=";
   };
 
@@ -42,8 +56,14 @@ in stdenv.mkDerivation {
     python311.pkgs.setuptools
   ];
 
-  buildInputs = [ boostPython opensslStatic zlib python311 libiconv ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    boostPython
+    opensslStatic
+    zlib
+    python311
+    libiconv
+    ncurses
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preAutoreconf = ''
     mkdir -p build-aux
@@ -59,7 +79,11 @@ in stdenv.mkDerivation {
     moveToOutput "lib/${python311.libPrefix}" "$python"
   '';
 
-  outputs = [ "out" "dev" "python" ];
+  outputs = [
+    "out"
+    "dev"
+    "python"
+  ];
 
   configureFlags = [
     "--enable-python-binding"

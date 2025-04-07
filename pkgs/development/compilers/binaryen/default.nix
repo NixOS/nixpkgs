@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     "lit"
     "gtest"
   ];
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";

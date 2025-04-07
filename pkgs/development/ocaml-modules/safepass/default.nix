@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "ocaml-safepass";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1cwslwdb1774lfmhcclj9kymvidbcpjx1vp16jnjirqdqgl4zs5q";
   };
 

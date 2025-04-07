@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jsha";
     repo = "minica";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-YUeP3xBoZzonJYfEAOWZYCTFwOxFWySW7ezvpMLNZ1I=";
   };
 

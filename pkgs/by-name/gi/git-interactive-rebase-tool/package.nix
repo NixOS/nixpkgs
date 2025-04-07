@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "MitMaro";
-    repo = pname;
-    rev = version;
+    repo = "git-interactive-rebase-tool";
+    tag = version;
     hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 

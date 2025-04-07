@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "o2sh";
-    repo = pname;
-    rev = version;
+    repo = "onefetch";
+    tag = version;
     hash = "sha256-lQxv2gwZOGtxJrXjxvjBnbl225ppSs3cVNCfePFeqEE=";
   };
 

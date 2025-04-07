@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "1.2.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
+    owner = "exfatprogs";
+    repo = "exfatprogs";
+    tag = version;
     sha256 = "sha256-lPPUjSc6ti/CqSChWrsBLWCtASN95Cnj+O6FbVvFeDA=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "rabtap";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OUpDk6nfVbz/KP7vZeZV2JfbCzh/KcuxG015/uxYuEI=";
   };
 

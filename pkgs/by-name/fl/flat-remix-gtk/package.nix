@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "daniruiz";
-    repo = pname;
-    rev = version;
+    repo = "flat-remix-gtk";
+    tag = version;
     sha256 = "sha256-EWe84bLG14RkCNbHp0S5FbUQ5/Ye/KbCk3gPTsGg9oQ=";
   };
 

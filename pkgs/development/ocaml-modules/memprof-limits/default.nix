@@ -12,10 +12,10 @@ else
     pname = "memprof-limits";
     version = "0.2.1";
 
-    src = fetchFromGitLab rec {
+    src = fetchFromGitLab {
       owner = "gadmm";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-Pmuln5TihPoPZuehZlqPfERif6lf7O+0454kW9y3aKc=";
     };
 

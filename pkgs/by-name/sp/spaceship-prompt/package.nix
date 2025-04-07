@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
-    repo = pname;
-    rev = "v${version}";
+    repo = "spaceship-prompt";
+    tag = "v${version}";
     sha256 = "sha256-a7z/z++dmwMqIrutOc74ljz/Tu/wuEuQaN2XRBMtOvw=";
   };
 

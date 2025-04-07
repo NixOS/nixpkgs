@@ -1,16 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, testers
-, centrifugo
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  testers,
+  centrifugo,
 }:
 let
   # Inspect build flags with `go version -m centrifugo`.
   statsEndpoint = "https://graphite-prod-01-eu-west-0.grafana.net/graphite/metrics,https://stats.centrifugal.dev/usage";
-  statsToken = "425599:eyJrIjoi" +
-    "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
+  statsToken =
+    "425599:eyJrIjoi"
+    + "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
 in
 buildGoModule rec {
   pname = "centrifugo";
@@ -19,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "centrifugal";
     repo = "centrifugo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FDtAkoN1bdqVUEP0obbXBfQfVRpZN5YXbU1KT1yXWuI=";
   };
 

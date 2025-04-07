@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DehAWrEvoE/zWbfjQmF5Z7HTaQL5WMA/279Ee1Xm47g=";
   };
   nativeBuildInputs = [ makeWrapper ];

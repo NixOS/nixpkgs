@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
-    rev = "v${version}";
+    repo = "systeroid";
+    tag = "v${version}";
     sha256 = "sha256-nyQFNPmPcguPGeArd+w1Jexj4/J53PXAeGDvoRSsh/k=";
   };
 

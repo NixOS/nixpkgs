@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "COSTA";
+    tag = "v${version}";
     hash = "sha256-jiAyZXC7wiuEnOLsQFFLxhN3AsGXN09q/gHC2Hrb2gg=";
   };
 

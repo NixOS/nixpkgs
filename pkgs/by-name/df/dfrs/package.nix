@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "anthraxx";
-    repo = pname;
-    rev = version;
+    repo = "dfrs";
+    tag = version;
     sha256 = "01h00328kbw83q11yrsvcly69p0hql3kw49b4jx6gwkrdm8c2amk";
   };
 

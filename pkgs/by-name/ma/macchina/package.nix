@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Macchina-CLI";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GZO9xGc3KGdq2WdA10m/XV8cNAlQjUZFUVu1CzidJ5c=";
   };
 
@@ -38,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Macchina-CLI/macchina";
     changelog = "https://github.com/Macchina-CLI/macchina/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ _414owen figsoda ];
+    maintainers = with maintainers; [
+      _414owen
+      figsoda
+    ];
     mainProgram = "macchina";
   };
 }

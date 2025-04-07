@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
-    repo = pname;
-    rev = "v${version}";
+    repo = "scheme-bytestructures";
+    tag = "v${version}";
     sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 

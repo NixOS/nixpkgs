@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, cctools
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  cctools,
 }:
 
 buildNpmPackage rec {
@@ -13,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DwDlGTFdqAAsEWrhnieuaeYQ0N8COB/7b49xPJackJQ=";
   };
 
@@ -28,11 +29,13 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
 
-  nativeBuildInputs = [
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ];
 
   meta = {
     description = "Download sheet music";

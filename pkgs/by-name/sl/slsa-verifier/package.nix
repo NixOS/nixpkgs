@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slsa-framework";
     repo = "slsa-verifier";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wOK0S0XJ0LbFSr8Z/KEnKolq0u/SyBNDiugOAD0OmgY=";
   };
 
@@ -36,6 +37,9 @@ buildGoModule rec {
     description = "Verify provenance from SLSA compliant builders";
     mainProgram = "slsa-verifier";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ developer-guy mlieberman85 ];
+    maintainers = with lib.maintainers; [
+      developer-guy
+      mlieberman85
+    ];
   };
 }

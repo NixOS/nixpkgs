@@ -33,11 +33,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kata-containers";
     repo = "kata-containers";
-    rev = version;
+    tag = version;
     hash = "sha256-Ir+/ZZJHm6E+044wczU3UvL+Py9Wprgw2QKJaYyDrKU=";
   };
 
-  sourceRoot = "source/src/runtime";
+  sourceRoot = "${src.name}/src/runtime";
 
   vendorHash = null;
 

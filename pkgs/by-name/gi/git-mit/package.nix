@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  stdenv,
+  darwin,
 }:
 
 let
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "PurpleBooth";
     repo = "git-mit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+7rl4wxVQq4bLBsnLSeJD+1kkRuf7FCi81pXGrNNOPI=";
   };
 
@@ -38,13 +39,15 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;

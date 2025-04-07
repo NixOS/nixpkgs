@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, gitUpdater
-, gmp
-, gtk3
-, pkg-config
-, qtbase
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  gitUpdater,
+  gmp,
+  gtk3,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "robol";
     repo = "MPSolve";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-7lYwInodKj02G76xqhp/6e9MCzPY80gsAW3vTMNsfdA=";
   };
 

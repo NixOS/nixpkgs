@@ -1,18 +1,19 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  stdenv,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "dnsmasq_exporter";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2sOOJWEEseWwozIyZ7oes400rBjlxIrOOtkP3rSNFXo=";
   };
 
@@ -31,5 +32,8 @@ buildGo122Module rec {
       willibutz
       globin
     ];
+    # Broken on darwin for Go toolchain > 1.22, with error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

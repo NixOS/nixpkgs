@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mcodev31";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libmsym";
+    tag = "v${version}";
     sha256 = "k+OEwrA/saupP/wX6Ii5My0vffiJ0X9xMCTrliMSMik=";
   };
 

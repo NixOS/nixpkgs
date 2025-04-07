@@ -4,7 +4,7 @@
   fetchFromGitHub,
   dune-configurator,
   pkg-config,
-  taglib,
+  taglib_1,
   zlib,
 }:
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-taglib";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tAvzVr0PW1o0kKFxdi/ks4obqnyBm8YfiiFupXZkUho=";
   };
 
@@ -24,7 +24,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    taglib
+    taglib_1
     zlib
   ];
 

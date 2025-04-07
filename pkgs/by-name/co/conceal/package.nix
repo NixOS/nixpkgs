@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
-    repo = pname;
-    rev = "v${version}";
+    repo = "conceal";
+    tag = "v${version}";
     sha256 = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
   };
 

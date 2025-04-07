@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.11";
+  version = "3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.xfs";
     tag = version;
-    hash = "sha256-+dt47Wo5IMkMgd5lUWgpbB6n/tkWc+d1jnKD46Cq1Lc=";
+    hash = "sha256-DKM6z5lasvy2Is64W2lvClgpXslTgNehrfBpa/KtkT0=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the XFS file system";
     homepage = "https://github.com/fox-it/dissect.xfs";
-    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

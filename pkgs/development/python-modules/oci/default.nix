@@ -53,7 +53,6 @@ buildPythonPackage rec {
       upl
     ];
     maintainers = with lib.maintainers; [
-      adamcstephens
       ilian
     ];
   };

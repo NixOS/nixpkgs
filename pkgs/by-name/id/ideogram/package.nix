@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
-    repo = pname;
-    rev = version;
+    repo = "ideogram";
+    tag = version;
     sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "refresh-bio";
-    repo = pname;
-    rev = "v${version}";
+    repo = "whisper";
+    tag = "v${version}";
     sha256 = "0wpx1w1mar2d6zq2v14vy6nn896ds1n3zshxhhrrj5d528504iyw";
   };
 

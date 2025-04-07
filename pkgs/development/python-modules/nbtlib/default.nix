@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vberlier";
     repo = "nbtlib";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-L8eX6/0qiQ4UxbmDicLedzj+oBjYmlK96NpljE/A3eI=";
   };
 

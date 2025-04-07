@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "sqlalchemy-file";
-    rev = version;
+    tag = version;
     hash = "sha256-gtW7YA/rQ48tnqPdypMnSqqtwb90nhAkiQNhgEr1M3I=";
   };
 

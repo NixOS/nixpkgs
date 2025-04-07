@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "phako";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dleyna-connector-dbus";
+    tag = "v${version}";
     sha256 = "WDmymia9MD3BRU6BOCzCIMrz9V0ACRzmEGqjbbuUmlA=";
   };
 

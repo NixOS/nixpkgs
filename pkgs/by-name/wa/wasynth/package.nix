@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Rerumu";
     repo = "Wasynth";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
   };
 

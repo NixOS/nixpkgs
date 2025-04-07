@@ -229,7 +229,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 

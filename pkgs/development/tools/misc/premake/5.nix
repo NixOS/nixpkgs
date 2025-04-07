@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "premake";
     repo = "premake-core";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sNLCyIHWDW/8jIrMFCZAqtWsh4SRugqtPR4HaoW/Vzk=";
   };
 

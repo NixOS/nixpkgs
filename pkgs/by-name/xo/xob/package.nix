@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "florentc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "xob";
+    tag = "v${version}";
     sha256 = "1x4aafiyd9k4y8cmvn7rgfif3g5s5hhlbj5nz71qsyqg21nn7hrw";
   };
 

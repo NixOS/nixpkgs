@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sVQ6UgQvSTEIxXPxISeTI9tqAdJlxQpLxq1h4I31r6k=";
   };
 

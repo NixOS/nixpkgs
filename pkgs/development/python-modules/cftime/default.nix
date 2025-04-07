@@ -4,6 +4,7 @@
   cython,
   fetchPypi,
   numpy,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -20,10 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-UKx2zJ8Qq3vUbkSnHFGmknBRtJm0QH308pqxPXQblC8=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
   nativeBuildInputs = [
     cython
     numpy
@@ -31,7 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "cftime" ];
 

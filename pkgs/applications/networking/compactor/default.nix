@@ -5,7 +5,7 @@
   asciidoctor,
   autoreconfHook,
   pkg-config,
-  boost,
+  boost186,
   libctemplate,
   libmaxminddb,
   libpcap,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = "compactor";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    boost
+    boost186
     libctemplate
     libmaxminddb
     libpcap
@@ -69,10 +69,11 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost186.out}/lib"
+    "--with-boost=${boost186.dev}"
   ];
   enableParallelBuilding = true;
+  enableParallelInstalling = false; # race conditions when installing
 
   doCheck = !stdenv.hostPlatform.isDarwin; # check-dnstap.sh failing on Darwin
   nativeCheckInputs = [

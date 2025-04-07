@@ -32,7 +32,7 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
-  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: rec {
+  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
         fzfImpl='${fzf}/bin/fzf'
@@ -52,7 +52,7 @@ self: super: {
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-ansi";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "kFjTYFy0KF5WWEHU4hHFAnD/03/d3ptjqMMbTSaGImE=";
     };
 
@@ -86,7 +86,7 @@ self: super: {
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-plumb";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "1rz6pr786slnf1a78m3sj09axr4d2lb5rg7sfa4mfg1zcjh06ps6";
     };
 

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
   };
 

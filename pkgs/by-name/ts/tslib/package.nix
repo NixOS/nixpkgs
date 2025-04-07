@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libts";
     repo = "tslib";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = finalAttrs.hash;
   };
 

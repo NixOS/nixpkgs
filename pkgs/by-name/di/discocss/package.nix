@@ -13,8 +13,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mlvzk";
-    repo = pname;
-    rev = "v${version}";
+    repo = "discocss";
+    tag = "v${version}";
     sha256 = "sha256-of7OMgbuwebnFmbefGD1/dOhyTX1Hy7TccnWSRCweW0=";
   };
 

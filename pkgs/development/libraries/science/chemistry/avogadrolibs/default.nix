@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   zlib,
   eigen,
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-zDn5cgMBJYM27mfQHujxhIf4ZTljFxvFrKl7pNa4K9E=";
   };
 

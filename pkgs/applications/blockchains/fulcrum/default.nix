@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+hBc7jW1MVLVjYXNOV7QvFJJpZ5RzW5/c9NdqOXrsj0=";
   };
 

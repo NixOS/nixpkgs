@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sf-refugees";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ninvaders";
+    tag = "v${version}";
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };
 

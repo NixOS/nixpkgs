@@ -8,6 +8,7 @@
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
+  siphash24,
 }:
 
 buildPythonPackage rec {
@@ -31,23 +32,17 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     numpy = [ numpy ];
-    # siphash = [ siphash ];
+    siphash = [ siphash24 ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ optional-dependencies.siphash;
 
   pythonImportsCheck = [
     "pytools"
     "pytools.batchjob"
     "pytools.lex"
-  ];
-
-  disabledTests = [
-    # siphash is not available
-    "test_class_hashing"
-    "test_dataclass_hashing"
-    "test_datetime_hashing"
-    "test_hash_function"
   ];
 
   meta = {

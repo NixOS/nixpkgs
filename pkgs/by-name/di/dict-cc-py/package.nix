@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage {
   pname = "dict.cc.py";
   version = "3.1.0";
   format = "setuptools";

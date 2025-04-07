@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
   };
 

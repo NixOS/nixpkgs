@@ -1,8 +1,7 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   buildEnv,
   linkFarm,
   makeWrapper,
@@ -44,19 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.5.13";
-
-  buildGoModule = buildGo124Module;
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${version}";
-    hash = "sha256-GRufz01lTSgBmDzRImY02xuAeuzjlIEFWv578fI8ciY=";
+    hash = "sha256-d8TPVa/kujFDrHbjwv++bUe2txMlkOxAn34t7wXg4qE=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-s/qvMISNpxeEAZx8Je2v4yb2aPWhSYcKhwHQcEXJ20Y=";
+  vendorHash = "sha256-4wYgtdCHvz+ENNMiHptu6ulPJAznkWetQcdba3IEB6s=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -241,7 +238,7 @@ goBuild {
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

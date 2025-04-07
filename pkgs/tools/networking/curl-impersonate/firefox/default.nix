@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lwthiker";
     repo = "curl-impersonate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ExmEhjJC8FPzx08RuKOhRxKgJ4Dh+ElEl+OUHzRCzZc=";
   };
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   dontUseNinjaCheck = true;
 
   postUnpack = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} source/${name}") (
+    lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
       lib.filterAttrs (n: v: v ? outPath) passthru.deps
     )
   );

@@ -381,6 +381,14 @@ let
           '';
         };
 
+        autoRemoveOnStop = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Automatically remove the container when it is stopped or killed
+          '';
+        };
+
         networks = mkOption {
           type = with types; listOf str;
           default = [ ];
@@ -468,7 +476,6 @@ let
         ++ map escapeShellArg container.preRunExtraOptions
         ++ [
           "run"
-          "--rm"
           "--name=${escapedName}"
           "--log-driver=${container.log-driver}"
         ]
@@ -489,6 +496,7 @@ let
         ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
         ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ optional (container.privileged) "--privileged"
+        ++ optional (container.autoRemoveOnStop) "--rm"
         ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (
           filterAttrs (_: v: v == true) container.capabilities
         )

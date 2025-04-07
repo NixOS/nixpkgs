@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ugetdm";
     repo = "uget-integrator";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0bfqwbpprxp5sy49p2hqcjdfj7zamnp2hhcnnyccffkn7pghx8pp";
   };
 

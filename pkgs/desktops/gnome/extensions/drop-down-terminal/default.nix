@@ -8,7 +8,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-drop-down-terminal";
   version = "unstable-2020-03-25";
 

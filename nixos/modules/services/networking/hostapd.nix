@@ -1447,7 +1447,7 @@ in
         DeviceAllow = "/dev/rfkill rw";
         NoNewPrivileges = true;
         PrivateUsers = false; # hostapd requires true root access.
-        PrivateTmp = true;
+        PrivateTmp = false; # hostapd_cli opens a socket in /tmp
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;

@@ -4,24 +4,24 @@
   fetchFromGitHub,
   hddtemp,
   hdparm,
+  sdparm,
   smartmontools,
-  nixosTests,
   makeWrapper,
   installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hddfancontrol";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "hddfancontrol";
     tag = finalAttrs.version;
-    hash = "sha256-QckNS1IT2GorCYRgVX5B0VY5Rf5U6pHa1uSqzz8ctgE=";
+    hash = "sha256-/+bvTpfgAjyG8gkyhueLJCKJo3e2OvabfOYOM9vV+g8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-drOWc00zqkR2sep1aoAe3urZeA31zM0sUUGW6oDojOM=";
+  cargoHash = "sha256-yupjse1snr467otqZgoSANpKoxq2F8NDfo8NvwGNJxk=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeBinPath [
           hddtemp
           hdparm
+          sdparm
           smartmontools
         ]
       }

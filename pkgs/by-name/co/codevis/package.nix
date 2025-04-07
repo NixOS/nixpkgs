@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codevis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LZ6NsoyEPUvgcVdbG7U2Vzuz/TLLraScvW97PocUNpU=";
   };
 

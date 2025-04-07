@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, gtest
-, prometheus-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  gtest,
+  prometheus-cpp,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +15,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5xDg1duixLoWIuy59WT0r5ZBAvTR6RPP7YrhBYkMxc8=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs = [ gtest ];
 

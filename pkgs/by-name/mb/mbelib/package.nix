@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "szechyjs";
     repo = "mbelib";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0v6b7nf8fgxy7vzgcwffqyql5zhldrz30c88k1ylbjp78hwh4rif";
   };
 

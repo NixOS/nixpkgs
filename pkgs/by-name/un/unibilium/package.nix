@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "unibilium";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
   };
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
+    homepage = "https://github.com/neovim/unibilium";
     description = "Very basic terminfo library";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

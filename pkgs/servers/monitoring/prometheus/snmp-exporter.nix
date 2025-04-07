@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "snmp_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/uNmY4xON9VFXEi4njAC5nD1RVWn+nUr1oQnt9w8pmQ=";
   };
 

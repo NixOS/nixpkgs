@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "dwarf2json";
   version = "unstable-2021-04-15";
 

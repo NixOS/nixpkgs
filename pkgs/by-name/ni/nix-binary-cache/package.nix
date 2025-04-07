@@ -12,7 +12,7 @@
   lighttpd,
   iproute2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";
 

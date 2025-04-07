@@ -1,13 +1,14 @@
-{ lib
-, jdk
-, maven
-, fetchFromGitHub
-, fetchpatch
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  jdk,
+  maven,
+  fetchFromGitHub,
+  fetchpatch,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 let
@@ -20,7 +21,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
-    rev = version;
+    tag = version;
     hash = "sha256-gagIQGOiygJ0Onm0SrkbFWaovqWX2WJNx7LpSRheCLM=";
   };
 
@@ -83,8 +84,15 @@ maven.buildMavenPackage rec {
       desktopName = "Quark";
       comment = meta.description;
       terminal = false;
-      categories = [ "Utility" "FileTransfer" ];
-      keywords = [ "nintendo" "switch" "goldleaf" ];
+      categories = [
+        "Utility"
+        "FileTransfer"
+      ];
+      keywords = [
+        "nintendo"
+        "switch"
+        "goldleaf"
+      ];
     })
   ];
 
@@ -111,4 +119,3 @@ maven.buildMavenPackage rec {
     platforms = with lib.platforms; linux ++ darwin;
   };
 }
-

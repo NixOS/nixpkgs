@@ -12,7 +12,7 @@ buildDubPackage rec {
   src = fetchFromGitHub {
     owner = "fbeline";
     repo = "luneta";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pYE8hccXT87JIMh71PtXzVQBegTzU7bdpVEaV2VkaEk=";
   };
 

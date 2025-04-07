@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, go-md2man
-, installShellFiles
-, pkg-config
-, which
-, libapparmor
-, libseccomp
-, libselinux
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  which,
+  libapparmor,
+  libseccomp,
+  libselinux,
+  makeWrapper,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -19,16 +20,29 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
   };
 
   vendorHash = null;
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    makeWrapper
+    pkg-config
+    which
+  ];
 
-  buildInputs = [ libselinux libseccomp libapparmor ];
+  buildInputs = [
+    libselinux
+    libseccomp
+    libapparmor
+  ];
 
   makeFlags = [ "BUILDTAGS+=seccomp" ];
 

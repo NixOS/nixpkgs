@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-rf5cGq3Iv6ucURSUFuFANQzaGeufBZ+adjKlg4B5DRY=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       click
       requests
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       distro
     ];
 

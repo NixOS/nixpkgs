@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "y-256";
-    repo = pname;
-    rev = "${version}";
+    repo = "libdivsufsort";
+    tag = version;
     hash = "sha256-4p+L1bq9SBgWSHXx+WYWAe60V2g1AN+zlJvC+F367Tk=";
   };
 

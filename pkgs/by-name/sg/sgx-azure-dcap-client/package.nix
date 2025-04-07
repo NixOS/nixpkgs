@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
-    rev = version;
+    repo = "azure-dcap-client";
+    tag = version;
     hash = "sha256-zTDaICsSPXctgFRCZBiZwXV9dLk2pFL9kp5a8FkiTZA=";
   };
 

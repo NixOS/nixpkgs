@@ -1,77 +1,85 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook3
-, flac
-, gnome2
-, harfbuzzFull
-, nss
-, snappy
-, xdg-utils
-, xorg
-, alsa-lib
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, expat
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libX11
-, libxcb
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libdrm
-, libnotify
-, libopus
-, libpulseaudio
-, libuuid
-, libxshmfence
-, libgbm
-, nspr
-, pango
-, systemd
-, at-spi2-atk
-, at-spi2-core
-, libsForQt5
-, qt6
-, vivaldi-ffmpeg-codecs
-, edition ? "stable"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  flac,
+  gnome2,
+  harfbuzzFull,
+  nss,
+  snappy,
+  xdg-utils,
+  xorg,
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libX11,
+  libxcb,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libdrm,
+  libnotify,
+  libopus,
+  libpulseaudio,
+  libuuid,
+  libxshmfence,
+  libgbm,
+  nspr,
+  pango,
+  systemd,
+  at-spi2-atk,
+  at-spi2-core,
+  libsForQt5,
+  qt6,
+  vivaldi-ffmpeg-codecs,
+  edition ? "stable",
 }:
 
 let
-  version = {
-    corporate = "24.7.1.1195-1";
-    beta = "24.7.1.1124-1";
-    stable = "24.7.1.1120-1";
-  }.${edition};
+  version =
+    {
+      corporate = "24.7.1.1195-1";
+      beta = "24.7.1.1124-1";
+      stable = "24.7.1.1120-1";
+    }
+    .${edition};
 
-  hash = {
-    corporate = "sha256-HPEUeIZl9nRhMzrMv4MzIOnbF8mJ789vCtTWf9TcCH4=";
-    beta = "sha256-vcX/9MWqeUd/YlczHivcL6+TignE8Nk6rO5DaCjf2SQ=";
-    stable = "sha256-wrYPQ8WrttF/tlafA0+e3eDZMq9SFmLk5NOIeHQr14U=";
-  }.${edition};
+  hash =
+    {
+      corporate = "sha256-HPEUeIZl9nRhMzrMv4MzIOnbF8mJ789vCtTWf9TcCH4=";
+      beta = "sha256-vcX/9MWqeUd/YlczHivcL6+TignE8Nk6rO5DaCjf2SQ=";
+      stable = "sha256-wrYPQ8WrttF/tlafA0+e3eDZMq9SFmLk5NOIeHQr14U=";
+    }
+    .${edition};
 
-  app = {
-    corporate = "";
-    beta = "-beta";
-    stable = "";
-  }.${edition};
+  app =
+    {
+      corporate = "";
+      beta = "-beta";
+      stable = "";
+    }
+    .${edition};
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "yandex-browser-${edition}";
   inherit version;
 
@@ -151,25 +159,30 @@ in stdenv.mkDerivation rec {
     ln -sf $out/opt/yandex/browser${app}/yandex-browser${app} $out/bin/${pname}
   '';
 
-  runtimeDependencies = map lib.getLib [
-    libpulseaudio
-    curl
-    systemd
-    vivaldi-ffmpeg-codecs
-  ] ++ buildInputs;
+  runtimeDependencies =
+    map lib.getLib [
+      libpulseaudio
+      curl
+      systemd
+      vivaldi-ffmpeg-codecs
+    ]
+    ++ buildInputs;
 
   meta = with lib; {
     description = "Yandex Web Browser";
     homepage = "https://browser.yandex.ru/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
+    maintainers = with maintainers; [
+      dan4ik605743
+      ionutnechita
+    ];
     platforms = [ "x86_64-linux" ];
 
     knownVulnerabilities = [
       ''
-      Trusts a Russian government issued CA certificate for some websites.
-      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+        Trusts a Russian government issued CA certificate for some websites.
+        See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
       ''
     ];
   };

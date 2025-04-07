@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "marvinkreis";
-    repo = pname;
-    rev = version;
+    repo = "rofi-file-browser-extended";
+    tag = version;
     hash = "sha256-UEFv0skFzWhgFkmz1h8uV1ygW977zNq1Dw8VAawqUgw=";
     fetchSubmodules = true;
   };

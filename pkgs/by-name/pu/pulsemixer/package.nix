@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "GeorgeFilipkin";
-    repo = pname;
-    rev = version;
+    repo = "pulsemixer";
+    tag = version;
     sha256 = "1jagx9zmz5pfsld8y2rj2kqg6ww9f6vqiawfy3vhqc49x3xx92p4";
   };
 

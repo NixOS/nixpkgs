@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "coffebar";
-    repo = pname;
-    rev = version;
+    repo = "hyprland-per-window-layout";
+    tag = version;
     hash = "sha256-Bwdh+Cy5LTRSBDfk4r28FmPRUEHYI++nKRhS9eSSbyg=";
   };
 

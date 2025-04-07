@@ -1,9 +1,10 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
-  lib,
 }:
 
 buildGoModule rec {
@@ -13,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = "doggo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SbTwVvE699MCgfUXifnJ1oMNN8TdLg8P03Xx5hrQxF8=";
   };
 
@@ -26,7 +27,7 @@ buildGoModule rec {
     "-X main.buildVersion=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd doggo \
       --bash <($out/bin/doggo completions bash) \
       --fish <($out/bin/doggo completions fish) \

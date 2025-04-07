@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ducakar";
-    repo = pname;
-    rev = "v${version}";
+    repo = "openzone-cursors";
+    tag = "v${version}";
     sha256 = "02c536mc17ccsrzgma366k3wlm02ivklvr30fafxl981zgghlii4";
   };
 

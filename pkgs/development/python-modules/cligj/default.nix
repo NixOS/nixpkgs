@@ -4,7 +4,6 @@
   fetchFromGitHub,
   click,
   pytest,
-  glibcLocales,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "cligj";
-    rev = version;
+    tag = version;
     hash = "sha256-0f9+I6ozX93Vn0l7+WR0mpddDZymJQ3+Krovt6co22Y=";
   };
 
@@ -23,11 +22,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    glibcLocales
   ];
 
   checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest tests
+    pytest tests
   '';
 
   meta = with lib; {

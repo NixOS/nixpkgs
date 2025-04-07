@@ -17,7 +17,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "panzi";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
 

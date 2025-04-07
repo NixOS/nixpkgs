@@ -15,8 +15,6 @@
   libcap,
   libgbm,
   xorg,
-  libpng,
-  ffmpeg,
   hwdata,
   seatd,
   vulkan-loader,
@@ -51,7 +49,7 @@ let
         domain = "gitlab.freedesktop.org";
         owner = "wlroots";
         repo = "wlroots";
-        rev = finalAttrs.version;
+        tag = finalAttrs.version;
         inherit hash;
       };
 
@@ -77,13 +75,11 @@ let
 
       buildInputs =
         [
-          ffmpeg
           libliftoff
           libdisplay-info
           libGL
           libcap
           libinput
-          libpng
           libxkbcommon
           libgbm
           pixman

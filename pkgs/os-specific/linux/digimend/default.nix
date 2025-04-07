@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ PuercoPop ];
     platforms = platforms.linux;
   };
 }

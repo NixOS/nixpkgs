@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-eventlib";
-    rev = version;
+    tag = version;
     hash = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
   };
 
@@ -27,8 +27,6 @@ buildPythonPackage rec {
     twisted
     greenlet
   ];
-
-  dontUseSetuptoolsCheck = true;
 
   pythonImportsCheck = [ "eventlib" ];
 

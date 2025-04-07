@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubedock";
@@ -7,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
-    rev = version;
+    tag = version;
     hash = "sha256-O8heDxfYmBV4sSdBZOQri+FMHJMrRW9+kai1S62ffQY=";
   };
 

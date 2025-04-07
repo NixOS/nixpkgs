@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -10,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphqurl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q46DX/luUwBoVskKy9+hXOkpGmlh+lNRvwfcTn6DPN8=";
   };
 

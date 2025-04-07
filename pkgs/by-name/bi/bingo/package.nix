@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "bingo";
@@ -7,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bzh6P+J8EoewjOofwWXMgtSXAhESetD3y9EiqLNOT54=";
   };
 
@@ -19,7 +23,10 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "Like `go get` but for Go tools! CI Automating versioning of Go binaries in a nested, isolated Go modules";

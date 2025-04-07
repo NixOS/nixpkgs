@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dlbeer";
     repo = "mspdebug";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0prgwb5vx6fd4bj12ss1bbb6axj2kjyriyjxqrzd58s5jyyy8d3c";
   };
 

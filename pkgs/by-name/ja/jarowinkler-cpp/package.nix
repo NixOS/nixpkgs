@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "jarowinkler-cpp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GuwDSCYTfSwqTnzZSft3ufVSKL7255lVvbJhBxKxjJw=";
   };
 

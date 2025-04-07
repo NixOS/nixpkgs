@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   pname = "iptraf-ng";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "iptraf-ng";
+    repo = "iptraf-ng";
+    tag = "v${version}";
     sha256 = "sha256-SM1cJYNnZlGl3eWaYd8DlPrV4AL9nck1tjdOn0CHVUw=";
   };
 

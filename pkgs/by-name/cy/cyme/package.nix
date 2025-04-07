@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  installShellFiles,
   stdenv,
   darwin,
   versionCheckHook,
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KAHCeM1rAPGi98PrcVJtzkhTWGWFwf37VuSQTjqXSEg=";
   };
 
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs =
     [
       pkg-config
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.DarwinTools
@@ -39,12 +41,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_run"
   ];
 
+  postInstall = ''
+    installManPage doc/cyme.1
+    installShellCompletion --cmd cyme \
+      --bash doc/cyme.bash \
+      --fish doc/cyme.fish \
+      --zsh doc/_cyme
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

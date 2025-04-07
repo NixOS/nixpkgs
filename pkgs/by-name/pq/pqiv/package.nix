@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "pqiv";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-wpM8eG2/sEfwYLfh6s3AL+z73IzeXxwGm/scWRRKLPo=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pberndt.com/Programme/Linux/pqiv";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ donovanglover ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "pqiv";
   };
 })

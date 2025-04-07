@@ -74,6 +74,44 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
+  awesome-wm-widgets = callPackage (
+    {
+      stdenv,
+      fetchFromGitHub,
+      lua,
+      lib,
+    }:
+
+    stdenv.mkDerivation {
+      pname = "awesome-wm-widgets";
+      version = "0-unstable-2024-02-15";
+
+      src = fetchFromGitHub {
+        owner = "streetturtle";
+        repo = "awesome-wm-widgets";
+        rev = "2a27e625056c50b40b1519eed623da253d36cc27";
+        hash = "sha256-qz/kUIpuhWwTLbwbaES32wGKe4D2hfz90dnq+mrHrj0=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        target=$out/lib/lua/${lua.luaversion}/awesome-wm-widgets
+        mkdir -p $target
+        cp -r $src/* $target
+
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "Widgets for Awesome window manager";
+        homepage = "https://github.com/streetturtle/awesome-wm-widgets";
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ averdow ];
+      };
+    }
+  ) { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -130,7 +168,7 @@ rec {
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
       };
 
@@ -154,7 +192,7 @@ rec {
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-lrucache";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
       };
 
@@ -225,7 +263,7 @@ rec {
       src = fetchFromGitHub {
         owner = "vicious-widgets";
         repo = "vicious";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
       };
 

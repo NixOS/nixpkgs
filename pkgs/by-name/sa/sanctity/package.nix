@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
-    repo = pname;
+    repo = "sanctity";
     rev = "v${version}";
     hash = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };

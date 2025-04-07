@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "irontec";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sngrep";
+    tag = "v${version}";
     sha256 = "sha256-nvuT//FWJAa6DzmjBsBW9s2p1M+6Zs4cVmpK4dVemnE=";
   };
 

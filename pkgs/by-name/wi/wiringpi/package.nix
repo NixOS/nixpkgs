@@ -11,7 +11,7 @@ let
   srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
-    rev = version;
+    tag = version;
     sha256 = "sha256-OWR+yo+SnYaMd8J+ku9ettZi+rDHcHlGZCoucCiRkCI=";
   };
   mkSubProject =

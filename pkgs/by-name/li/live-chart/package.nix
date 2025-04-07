@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lcallarec";
     repo = "live-chart";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-SOZJ9sVrmsZybs5BVXWmqBJ/P7SZI/X8TGWHXGvXAU8=";
   };
 

@@ -12,11 +12,14 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go,
+  go_1_23,
   applyPatches,
   nvidia-modprobe,
 }:
 let
+  # https://github.com/NVIDIA/libnvidia-container/pull/297
+  go = go_1_23;
+
   modprobeVersion = "550.54.14";
   patchedModprobe = applyPatches {
     src = nvidia-modprobe.src.override {
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
   };
 
@@ -62,13 +65,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
+      -e 's/^REVISION ?=.*/REVISION = ${src.tag}/' \
       -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
       mk/common.mk
 
     sed -i \
       -e 's/^GIT_TAG ?=.*/GIT_TAG = ${version}/' \
-      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${src.rev}/' \
+      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${src.tag}/' \
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}

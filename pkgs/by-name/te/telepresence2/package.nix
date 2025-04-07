@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "datawire";
       repo = "go-fuseftp";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-bkaC+EOqFPQA4fDkVhO6EqgGhOJy31yGwVbbPoRd+70=";
     };
 
@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.21.3";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
-    rev = "v${version}";
-    hash = "sha256-s0P8l8EokVGCUXo9Bm+uPtxS9uwIhBULtFeVR/Fl38M=";
+    tag = "v${version}";
+    hash = "sha256-Bae77Kzc2cWxIb1yYKXctffuiC3ICPfi0qYP6fgaqvQ=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-FvNC0E367p473yNfbMntSOxh6TYa7OoR6/YbZ7q4WRs=";
+  vendorHash = "sha256-toqQDa3hY2EvWjYpFXWafV9yj1U5CZXZOqQAQtOMITo=";
 
   ldflags = [
     "-s"

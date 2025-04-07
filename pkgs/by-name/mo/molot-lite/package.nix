@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "magnetophon";
-    repo = pname;
-    rev = version;
+    repo = "molot-lite";
+    tag = version;
     sha256 = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
   };
 

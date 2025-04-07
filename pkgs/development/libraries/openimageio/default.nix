@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, giflib
-, libjpeg
-, libpng
-, libtiff
-, opencolorio
-, openexr
-, robin-map
-, unzip
-, fmt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  giflib,
+  libjpeg,
+  libpng,
+  libtiff,
+  opencolorio,
+  openexr,
+  robin-map,
+  unzip,
+  fmt,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenImageIO";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hUCwlzQW5mJH5HYPbLWOcupc36nxM12CV0sakZhiGzo=";
   };
 
@@ -30,7 +32,12 @@ stdenv.mkDerivation rec {
       --replace " @ZLIB_VERSION@" ""
   '';
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     cmake

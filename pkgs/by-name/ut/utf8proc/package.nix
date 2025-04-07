@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
-    repo = pname;
-    rev = "v${version}";
+    repo = "utf8proc";
+    tag = "v${version}";
     hash = "sha256-wmtMo6eBK/xxxkIeJfh5Yb293po9cKK+7WjqNPoxM9g=";
   };
 

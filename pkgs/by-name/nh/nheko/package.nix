@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hQb+K8ogNj/s6ZO2kgS/sZZ35y4CwMeS3lVeMYNucYQ=";
   };
 

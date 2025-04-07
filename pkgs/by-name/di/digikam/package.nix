@@ -4,7 +4,6 @@
   lib,
   fetchFromGitLab,
   fetchgit,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -26,7 +25,6 @@
   exiv2,
   libxml2,
   libxslt,
-  ffmpeg,
   jasper,
   eigen,
   lensfun,

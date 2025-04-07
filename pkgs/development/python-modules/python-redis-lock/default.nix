@@ -54,7 +54,7 @@ buildPythonPackage rec {
     gevent
     pytestCheckHook
     process-tests
-    pkgs.redis
+    pkgs.valkey
   ] ++ optional-dependencies.django;
 
   # For Django tests

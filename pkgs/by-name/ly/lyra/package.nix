@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
-    rev = version;
+    tag = version;
     sha256 = "sha256-tS2SPLiKaL8C35AmOXyJPstFUfynkE/A53rurqiySbI=";
   };
 
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Simple to use, composable, command line parser for C++ 11 and beyond";
     platforms = platforms.unix;
     license = licenses.boost;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

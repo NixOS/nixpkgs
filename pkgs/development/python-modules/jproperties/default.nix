@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tblue";
     repo = "python-jproperties";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
   };
 

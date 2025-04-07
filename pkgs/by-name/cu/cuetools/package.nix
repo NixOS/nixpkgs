@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "svend";
-    repo = pname;
-    rev = version;
+    repo = "cuetools";
+    tag = version;
     sha256 = "02ksv1ahf1v4cr2xbclsfv5x17m9ivzbssb5r8xjm97yh8a7spa3";
   };
 

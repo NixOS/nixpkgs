@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
-    repo = pname;
-    rev = version;
+    repo = "ubertooth";
+    tag = version;
     sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 

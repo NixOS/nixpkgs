@@ -6,7 +6,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uif2iso";
   version = "0.1.7";
 

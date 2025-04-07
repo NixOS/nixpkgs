@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "1.1.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "neptune-networks";
     repo = pname;
     sha256 = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";

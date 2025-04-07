@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   intltool,
   libxml2,
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = version;
+    tag = version;
     sha256 = "sha256-qyD6i44yH3EufIW+LA/LBMW20Tejb49zvsDfv6YFD6c=";
   };
 

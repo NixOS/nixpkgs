@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neilbrown";
     repo = "wiggle";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "18ilzr9sbal1j8p1d94ilm1j5blac5cngvcvjpdmgmpw6diy2ldf";
   };
 

@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "desbma";
-    repo = pname;
-    rev = version;
+    repo = "gotify-desktop";
+    tag = version;
     sha256 = "sha256-P6zZAd3381/JamrEdbZRVFouhDsPNy1cNAjy4K3jGro=";
   };
 

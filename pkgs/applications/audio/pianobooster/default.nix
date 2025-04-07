@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pianobooster";
     repo = "PianoBooster";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1WOlAm/HXSL6QK0Kd1mnFEZxxpMseTG+6WzgMNWt+RA=";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "milgra";
     repo = "sov";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-JgLah21ye3G9jE3UTZu8r+nanwBDIQXmqv9iP1C+aUw=";
   };
 
@@ -64,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
     # sys/timerfd.h header inexistent
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

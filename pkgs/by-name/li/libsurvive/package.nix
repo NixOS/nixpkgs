@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cntools";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libsurvive";
+    tag = "v${version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
     hash = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-xls";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wxsx/LfeBxi+NnHxfxk3svzsBcdwOiLQ1660eoHfmLg=";
   };
 

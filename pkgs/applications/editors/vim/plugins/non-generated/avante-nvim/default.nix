@@ -12,12 +12,12 @@
   pkgs,
 }:
 let
-  version = "0.0.22";
+  version = "0.0.23";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-m33yNoGnSYKfjTuabxx/QsMptiUxAcP8NVe/su+JfkE=";
+    hash = "sha256-Ud4NkJH7hze5796KjVe5Nj9DzxwQkDQErCJDDiBzAIY=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -80,7 +80,7 @@ vimUtils.buildVimPlugin {
     inherit avante-nvim-lib;
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Requires setup with corresponding provider
     "avante.providers.azure"
     "avante.providers.copilot"

@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bootimage";
+    tag = "v${version}";
     sha256 = "12p18mk3l473is3ydv3zmn6s7ck8wgjwavllimcpja3yjilxm3zg";
   };
 

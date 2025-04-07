@@ -1,4 +1,8 @@
-{ buildNpmPackage, fetchFromGitHub, lib }:
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildNpmPackage rec {
   pname = "terser";
@@ -7,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "terser";
     repo = "terser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iVl5L5qxpXkBfiW8OqsMr4iZ0UQiN4TSAYXz9d29bnA=";
   };
 

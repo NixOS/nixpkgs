@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  fetchpatch,
 }:
 
 buildGoModule rec {
@@ -12,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "goat";
     owner = "studio-b12";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7inoRBVR7zmt0jUFAGYjoYT2cdda0qgzyXLL+GiBFMg=";
   };
 

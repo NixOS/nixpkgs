@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "doas-sudo-shim";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-jgakKxglJi4LcxXsSE4mEdY/44kPxVb/jF7CgX7dllA=";
   };
 

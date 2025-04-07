@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OctoMap";
-    repo = pname;
-    rev = "v${version}";
+    repo = "octomap";
+    tag = "v${version}";
     hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
   };
 

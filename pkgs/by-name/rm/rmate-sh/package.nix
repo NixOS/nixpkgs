@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aurora";
-    repo = pname;
+    repo = "rmate";
     tag = "v${version}";
     hash = "sha256-fmK6h9bqZ0zO3HWfZvPdYuZ6i/0HZ1CA3FUnkS+E9ns=";
   };

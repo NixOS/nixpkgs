@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vkurup";
     repo = "python-tcxparser";
-    rev = version;
+    tag = version;
     hash = "sha256-HOACQpPVg/UKopz3Jdsyg0CIBnXYuVyhWUVPA+OXI0k=";
   };
 

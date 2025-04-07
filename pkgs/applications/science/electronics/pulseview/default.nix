@@ -22,7 +22,7 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pulseview";
   version = "0.4.2-unstable-2024-03-14";
 

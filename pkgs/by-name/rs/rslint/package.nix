@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rslint";
-    repo = pname;
-    rev = "v${version}";
+    repo = "rslint";
+    tag = "v${version}";
     sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 

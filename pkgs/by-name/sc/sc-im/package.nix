@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, which
-, bison
-, gnuplot
-, libxls
-, libxlsxwriter
-, libxml2
-, libzip
-, ncurses
-, xlsSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  which,
+  bison,
+  gnuplot,
+  libxls,
+  libxlsxwriter,
+  libxml2,
+  libzip,
+  ncurses,
+  xlsSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-nNOifSYbmJjuw6c8TerIQRlhCwbs7GnzD2J7O3vs0gI=";
   };
 
@@ -34,15 +35,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [
-    gnuplot
-    libxml2
-    libzip
-    ncurses
-  ] ++ lib.optionals xlsSupport [
-    libxls
-    libxlsxwriter
-  ];
+  buildInputs =
+    [
+      gnuplot
+      libxml2
+      libzip
+      ncurses
+    ]
+    ++ lib.optionals xlsSupport [
+      libxls
+      libxlsxwriter
+    ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 

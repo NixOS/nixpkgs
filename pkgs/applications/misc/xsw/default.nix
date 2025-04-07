@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andrenho";
     repo = "xsw";
-    rev = version;
+    tag = version;
     sha256 = "092vp61ngd2vscsvyisi7dv6qrk5m1i81gg19hyfl5qvjq5p0p8g";
   };
 
@@ -39,15 +39,18 @@ stdenv.mkDerivation rec {
     SDL_gfx
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (makeSDLFlags [
-    SDL
-    SDL_image
-    SDL_ttf
-    SDL_gfx
-  ]);
+  env.NIX_CFLAGS_COMPILE =
+    toString (makeSDLFlags [
+      SDL
+      SDL_image
+      SDL_ttf
+      SDL_gfx
+    ])
+    + " -lSDL";
 
   patches = [
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
+    ./sdl-error.patch # Adds required include for SDL_GetError.
   ];
 
   meta = with lib; {

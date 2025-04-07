@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "riverrun";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "17h8saja45bv612yk0pra9ncbp2mjnx5n10q25nqhl765ks4bmb5";
   };
 

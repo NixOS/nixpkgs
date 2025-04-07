@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fflas-ffpack";
+    tag = "v${version}";
     sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
 

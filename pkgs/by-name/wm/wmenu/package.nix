@@ -14,7 +14,7 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmenu";
   version = "0.1.9-unstable-2025-03-01";
 

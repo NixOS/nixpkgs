@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PvHIvWyhGovlLaeHk2WMp3yRz4VxvvINzX1oqkFgVuQ=";
   };
 

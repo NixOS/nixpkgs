@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "McKael";
     repo = "madonctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mo185EKjLkiujAKcAFM1XqkXWvcfYbnv+r3dF9ywaf8=";
   };
 

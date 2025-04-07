@@ -14,7 +14,7 @@
 
 let
   pname = "nezha";
-  version = "1.9.5";
+  version = "1.10.8";
 
   frontendName = lib.removePrefix "nezha-theme-";
 
@@ -58,7 +58,7 @@ buildGo124Module {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${version}";
-    hash = "sha256-06x/M3Np8223ovMVj1K6e7WyoI5+QZohEIHNs/9+bJ0=";
+    hash = "sha256-uYZclZPvjiOpCVpxkyU6BjdxBmdryBzoGkTctsRuapY=";
   };
 
   proxyVendor = true;
@@ -97,7 +97,7 @@ buildGo124Module {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
   '';
 
-  vendorHash = "sha256-q9/P6xSoGtMExhdwl5UuyvXTAaI+mD7MfIAidRz0rxw=";
+  vendorHash = "sha256-ftVcbO1QYIEYUwPqxAHE/7TNBwzgN5BNyu5+rTnOgIs=";
 
   ldflags = [
     "-s"
@@ -111,7 +111,7 @@ buildGo124Module {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
   passthru = {

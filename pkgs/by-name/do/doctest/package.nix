@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "doctest";
     repo = "doctest";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
   };
 
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

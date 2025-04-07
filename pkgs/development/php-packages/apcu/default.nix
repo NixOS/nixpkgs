@@ -1,7 +1,6 @@
 {
   buildPecl,
   lib,
-  fetchpatch,
   pcre2,
   fetchFromGitHub,
 }:
@@ -16,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "krakjoe";
     repo = "apcu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-g+Oo6y+24VOWHaDZ23iItkGwOa5bTtKMAjZOmAi6EOo=";
   };
 

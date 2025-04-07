@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
-    repo = pname;
+    repo = "syncstorage-rs";
     tag = version;
     hash = "sha256-YIj9yoZrVRMcWFczyy5RR2Djwhu1/CyQuumzPoApp3I=";
   };
@@ -47,9 +47,8 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-POm9JMv6sPIl00HzKoVJPUdvRcmBpsB/fbG/JmjePPM=";
 
   # almost all tests need a DB to test against
   doCheck = false;

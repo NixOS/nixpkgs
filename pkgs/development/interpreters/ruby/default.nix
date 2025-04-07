@@ -224,7 +224,6 @@ let
               rustPlatform.fetchCargoVendor {
                 inherit (finalAttrs) src;
                 sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-                allowGitDependencies = false;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -442,8 +441,8 @@ in
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "1" "";
-    hash = "sha256-PTheXSLTaLBkyBehPtjjzD9xp3BdftG654ATwzqnyH8=";
+    version = rubyVersion "3" "4" "2" "";
+    hash = "sha256-QTKKwh8r/dfeazVl708N11QzVNN+lvFXoVUqa9DrNks=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 }

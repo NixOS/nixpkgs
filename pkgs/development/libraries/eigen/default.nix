@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "eigen";
   version = "3.4.0-unstable-2022-05-19";
 

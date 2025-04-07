@@ -1,5 +1,10 @@
 # Accounts-SSO gSignOn daemon
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   package = pkgs.gsignond.override { plugins = config.services.gsignond.plugins; };
 in
@@ -24,7 +29,7 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         description = ''
           What plugins to use with the gSignOn daemon.
         '';

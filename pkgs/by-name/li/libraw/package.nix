@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
-    rev = version;
+    tag = version;
     hash = "sha256-QFyRQ0V7din/rnkRvEWf521kSzN7HwJ3kZiQ43PAmVI=";
   };
 
@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace libraw*.pc.in --replace-fail -lstdc++ ""
+  '';
 
   passthru.tests = {
     inherit imagemagick hdrmerge freeimage;

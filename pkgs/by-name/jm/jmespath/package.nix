@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jmespath";
     repo = "go-jmespath";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-djA/7TCmAqCsht28b1itoiWd8Mtdsn/5uLxyT23K/qM=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CERN-CERT";
     repo = "WAD";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/mlmOzFkyKpmK/uk4813Wk0cf/+ynX3Qxafnd1mGR5k=";
   };
 

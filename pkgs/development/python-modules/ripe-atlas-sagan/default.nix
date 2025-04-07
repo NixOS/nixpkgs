@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
   };
 

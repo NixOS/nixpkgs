@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   version = "2.28";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "minimap2";
     owner = "lh3";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-cBl2BKgPCP/xHZW6fTH51cY9/lV/1HVLsN7a1R1Blv4=";
   };
 

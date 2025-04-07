@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mikesart";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gpuvis";
+    tag = "v${version}";
     hash = "sha256-a9eAYDsiwyzZc4FAPo0wANysisIT4qCHLh2PrYswJtw=";
   };
 

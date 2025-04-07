@@ -68,6 +68,7 @@ in
 
     systemd.services."glances" = {
       description = "Glances";
+      documentation = [ "man:glances(1)" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 

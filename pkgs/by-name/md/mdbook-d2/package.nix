@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PsPCbuSK8JlNZOqFbxCK0f8h+7EC4tNFtjBfJqiPi7Q=";
   };
 

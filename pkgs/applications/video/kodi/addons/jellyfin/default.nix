@@ -22,7 +22,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-7PgE1KrKmSBWzzi6tZp1Pou/82P1mPX8iE/IQlBi1Cc=";
   };
 

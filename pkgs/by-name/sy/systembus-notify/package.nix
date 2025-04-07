@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "systembus-notify";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WzuBw7LXW54CCMgFE9BSJ2skxaz4IA2BcBny63Ihtt0=";
   };
 

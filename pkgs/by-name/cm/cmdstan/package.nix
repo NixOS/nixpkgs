@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stan-dev";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cmdstan";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-9Dan86C0nxxxkIXaOSKExY0hngAgWTpL4RlI3rTnBZo=";
   };

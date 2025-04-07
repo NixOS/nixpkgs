@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, nix
-, nix-prefetch-git
-, installShellFiles
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = version;
+    tag = version;
     hash = "sha256-esWhRnt7FhiYq0CcIxw9pvH+ybOQmWBfHYMtleaMhBE=";
   };
 

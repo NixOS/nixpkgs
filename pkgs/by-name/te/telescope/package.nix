@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "omar-polo";
-    repo = pname;
-    rev = version;
+    repo = "telescope";
+    tag = version;
     hash = "sha256-MVZ/pvDAETacQiEMEXM0gYM20LXqNiHtMfFGqS1vipY=";
   };
 

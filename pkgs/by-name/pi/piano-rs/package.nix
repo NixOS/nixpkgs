@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ritiek";
-    repo = pname;
-    rev = "v${version}";
+    repo = "piano-rs";
+    tag = "v${version}";
     hash = "sha256-qZeH9xXQPIOJ87mvLahnJB3DuEgLX0EAXPvECgxNlq0=";
   };
 

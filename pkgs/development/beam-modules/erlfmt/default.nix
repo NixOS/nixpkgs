@@ -6,13 +6,13 @@
 
 rebar3Relx rec {
   pname = "erlfmt";
-  version = "1.6.0";
+  version = "1.6.1";
   releaseType = "escript";
   src = fetchFromGitHub {
     owner = "WhatsApp";
     repo = "erlfmt";
-    sha256 = "sha256-p4cdnKDY02XqdFOkijhOo527eZenfMF8J2dbuvH/hcY=";
-    rev = "v${version}";
+    sha256 = "sha256-O7+7dMgmnNd9hHuRcJqMAI0gmONz5EO3qSlUC3tufh0=";
+    tag = "v${version}";
   };
   meta = with lib; {
     homepage = "https://github.com/WhatsApp/erlfmt";

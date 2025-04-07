@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, polaris-web
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  polaris-web,
+  darwin,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    rev = version;
+    tag = version;
     hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".

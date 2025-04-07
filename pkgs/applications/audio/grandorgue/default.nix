@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fftwFloat
-, alsa-lib
-, zlib
-, wavpack
-, wxGTK32
-, udev
-, jackaudioSupport ? false
-, libjack2
-, imagemagick
-, libicns
-, yaml-cpp
-, makeWrapper
-, Cocoa
-, includeDemo ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fftwFloat,
+  alsa-lib,
+  zlib,
+  wavpack,
+  wxGTK32,
+  udev,
+  jackaudioSupport ? false,
+  libjack2,
+  imagemagick,
+  libicns,
+  yaml-cpp,
+  makeWrapper,
+  Cocoa,
+  includeDemo ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,26 +27,44 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
 
   patches = [ ./darwin-fixes.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    imagemagick
+    libicns
+    makeWrapper
+  ];
 
-  buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+  buildInputs =
+    [
+      fftwFloat
+      zlib
+      wavpack
+      wxGTK32
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      udev
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optionals (!jackaudioSupport) [
-    "-DRTAUDIO_USE_JACK=OFF"
-    "-DRTMIDI_USE_JACK=OFF"
-    "-DGO_USE_JACK=OFF"
-    "-DINSTALL_DEPEND=OFF"
-  ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
+  cmakeFlags =
+    lib.optionals (!jackaudioSupport) [
+      "-DRTAUDIO_USE_JACK=OFF"
+      "-DRTMIDI_USE_JACK=OFF"
+      "-DGO_USE_JACK=OFF"
+      "-DINSTALL_DEPEND=OFF"
+    ]
+    ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}

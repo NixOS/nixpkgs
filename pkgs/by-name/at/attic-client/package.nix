@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix,
+  nixForLinking,
   nixosTests,
   boost,
   pkg-config,
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     [
-      nix
+      nixForLinking
       boost
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
 
   ATTIC_DISTRIBUTOR = "nixpkgs";
-  NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
+  NIX_INCLUDE_PATH = "${lib.getDev nixForLinking}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.

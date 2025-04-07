@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.37.0";
+  version = "1.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${version}";
-    hash = "sha256-5Fh0wLsI3syfrk/TE5P08gsmMdZ427agQ2/yilW0Sx8=";
+    hash = "sha256-VioahNz9mlai+pavSTvuyE8dm1gyrjFgBLlSPE1IKRw=";
   };
 
   pythonRelaxDeps = true;
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     rich
+    truststore
   ];
 
   nativeCheckInputs =

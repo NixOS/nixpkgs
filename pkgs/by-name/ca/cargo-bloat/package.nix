@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cargo-bloat";
+    tag = "v${version}";
     hash = "sha256-B71VX7cJe1giOLmk3cQE8Zxr7fKGyQkoXRuM+NzBcb8=";
   };
 

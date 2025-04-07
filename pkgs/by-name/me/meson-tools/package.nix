@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "afaerber";
-    repo = pname;
-    rev = "v${version}";
+    repo = "meson-tools";
+    tag = "v${version}";
     sha256 = "1bvshfa9pa012yzdwapi3nalpgcwmfq7d3n3w3mlr357a6kq64qk";
   };
 

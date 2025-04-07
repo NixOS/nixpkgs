@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./postfix-script-shell.patch
     ./post-install-script.patch
+    ./postfix-3.0-no-warnings.patch
     ./relative-symlinks.patch
 
     # glibc 2.34 compat

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Cubitect";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-izDKS08LNT2rV5rIxlWRHevJAKEbAVzekjfZy0Oen1I=";
     fetchSubmodules = true;
   };

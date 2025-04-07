@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "yixuan";
-    repo = pname;
-    rev = "v${version}";
+    repo = "spectra";
+    tag = "v${version}";
     sha256 = "sha256-ut6nEOpzIoFy+IUWQy9x2pJ4+sA0d/Dt8WaNq5AFCFg=";
   };
 

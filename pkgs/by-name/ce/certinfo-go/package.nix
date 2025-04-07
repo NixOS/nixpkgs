@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,8 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/certinfo/releases/tag/v${version}";

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "jtaimisto";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wAzBlCczsLfHboGYIsyN7dGwz52CMw+L3XQ0njfLVR0=";
   };
 

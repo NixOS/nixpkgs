@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "teleshoes";
     repo = "tpacpi-bat";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
   };
 

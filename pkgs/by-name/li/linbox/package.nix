@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = pname;
-    rev = "v${version}";
+    repo = "linbox";
+    tag = "v${version}";
     sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
 

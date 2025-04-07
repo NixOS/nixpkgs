@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "wllfaria";
     repo = "terml";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-2ifMfUaYYsCFOACgXgJ5IuoSEicHyIqumLpun2ZqcDc=";
   };
 

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "gf2x";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "gf2x";
+    rev = "gf2x-${version}";
     sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
   };
 

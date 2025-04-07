@@ -20,7 +20,7 @@ let
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
-            rev = "v${version}";
+            tag = "v${version}";
             hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -30,16 +30,16 @@ let
 in
 buildNpmPackage rec {
   pname = "zx";
-  version = "8.4.0";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
-    rev = version;
-    hash = "sha256-SzAyj7CrZndV1SD7QBVSqtoXOw95a6CboYkkvXEigV4=";
+    tag = version;
+    hash = "sha256-jajkHUz+3ujKXbcsfN7y3pwHqAofTgdQHEC29srzs1M=";
   };
 
-  npmDepsHash = "sha256-+X9UqfzFGyH4n3gACUBXLA7Bk6M8PfLE68A/TET42Ig=";
+  npmDepsHash = "sha256-OZuJ5akf6l+aVfoPNfYjWDLt1kUgZJv0qMpK/uiRl2Y=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

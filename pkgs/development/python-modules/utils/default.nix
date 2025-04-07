@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "haaksmash";
     repo = "pyutils";
-    rev = version;
+    tag = version;
     sha256 = "07pr39cfw5ayzkp6h53y7lfpd0w19pphsdzsf100fsyy3npavgbr";
   };
 

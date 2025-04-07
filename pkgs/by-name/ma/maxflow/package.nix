@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gerddie";
-    repo = pname;
-    rev = version;
+    repo = "maxflow";
+    tag = version;
     hash = "sha256-a84SxGMnfBEaoMEeeIFffTOtErSN5yzZBrAUDjkalGY=";
   };
 

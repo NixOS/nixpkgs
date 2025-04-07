@@ -3,6 +3,9 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  pytest,
   pythonOlder,
   requests,
   setuptools,
@@ -10,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.54.0";
+  version = "1.56.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,16 +22,22 @@ buildPythonPackage rec {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-eRGVC0M8PtK3UUuECXUXrD5rGnAK04f+3/xVl+2rjAM=";
+    hash = "sha256-OMoi4t7lMQF/fMV/lWg+GwSmKg5cXwiVSROfpZRtXJM=";
   };
 
-  build-system = [
-    setuptools
+  pythonRelaxDeps = [
+    "pytest"
+    "setuptools"
   ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    jinja2
+    pytest
     requests
+    setuptools
   ];
 
   # All tests require an API key

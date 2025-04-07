@@ -1,9 +1,11 @@
-{ fetchFromGitHub
-, bashInteractive
-, jq
-, makeWrapper
-, p7zip
-, lib, stdenv
+{
+  fetchFromGitHub,
+  bashInteractive,
+  jq,
+  makeWrapper,
+  p7zip,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Y9ZffztxfGYiUSphqwhe3rTbnJ/vmGGi1pLml+1tLP8=";
   };
 
@@ -21,10 +23,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${
+      lib.makeBinPath [
+        jq
+        p7zip
+      ]
+    }";
   '';
 
   meta = with lib; {

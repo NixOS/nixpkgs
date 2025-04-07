@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dictu-lang";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dictu";
+    tag = "v${version}";
     sha256 = "sha256-Tahi2K8Q/KPc9MN7yWhkqp/MzXfzJzrGSsvnTCyI03U=";
   };
 

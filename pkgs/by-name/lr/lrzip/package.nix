@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ckolivas";
-    repo = pname;
-    rev = "v${version}";
+    repo = "lrzip";
+    tag = "v${version}";
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
 

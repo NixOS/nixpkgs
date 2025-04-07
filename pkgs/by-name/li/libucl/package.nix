@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vstakhov";
-    repo = pname;
-    rev = version;
+    repo = "libucl";
+    tag = version;
     sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 

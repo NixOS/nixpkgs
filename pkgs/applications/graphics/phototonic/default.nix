@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oferkv";
     repo = "phototonic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BxJgTKblOKIwt88+PT7XZE0mk0t2B4SfsdXpQHttUTM=";
   };
 

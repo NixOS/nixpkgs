@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
     fetchSubmodules = true;
   };
@@ -143,7 +143,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
     maintainers = with maintainers; [
-      gebner
       linsui
     ];
   };

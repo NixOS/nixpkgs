@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.6.2";
+  version = "2.7.0";
 
   pyproject = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-3NFbAxgY183RmZ+ats6M5WM07VO2amj7EdqMCLcKNvI=";
+    hash = "sha256-Diu8cHy3tRWsyI7mPsAcYREK9nUG7tzasmZYAARzpXU=";
   };
 
   patches = [ ./bash-path.patch ];

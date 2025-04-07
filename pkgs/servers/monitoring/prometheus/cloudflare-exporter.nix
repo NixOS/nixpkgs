@@ -1,11 +1,15 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "cloudflare-exporter";
   version = "0.0.16";
 
   src = fetchFromGitHub {
-    rev = version;
+    tag = version;
     owner = "lablabs";
     repo = pname;
     sha256 = "sha256-7cyHAN4VQWfWMdlFbZvHL38nIEeC1z/vpCDR5R2pOAw=";

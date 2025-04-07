@@ -1,31 +1,72 @@
 {
   lib,
-  buildNpmPackage,
-  fetchurl,
+  stdenvNoCC,
+  buildFHSEnv,
+  fetchzip,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
-  pname = "copilot-language-server";
-  version = "1.275.0";
+let
+  arch =
+    {
+      aarch64-darwin = "arm64";
+      aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
+      x86_64-linux = "x64";
+    }
+    ."${stdenvNoCC.hostPlatform.system}"
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+  os =
+    {
+      aarch64-darwin = "darwin";
+      aarch64-linux = "linux";
+      x86_64-darwin = "darwin";
+      x86_64-linux = "linux";
+    }
+    ."${stdenvNoCC.hostPlatform.system}"
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/@github/copilot-language-server/-/copilot-language-server-${version}.tgz";
-    hash = "sha256-OVqtwz9T5vSYAZc8nof0jXn7H40i1r7SAS6jK4xeSlo=";
+  executableName = "copilot-language-server";
+  fhs =
+    { package }:
+    buildFHSEnv {
+      name = package.meta.mainProgram;
+      version = package.version;
+      targetPkgs = pkgs: [ pkgs.stdenv.cc.cc.lib ];
+      runScript = lib.getExe package;
+
+      meta = package.meta // {
+        description =
+          package.meta.description
+          + " (FHS-wrapped, expand package details for further information when to use it)";
+        longDescription = "Use this version if you encounter an error like `Could not start dynamically linked executable` or `SyntaxError: Invalid or unexpected token` (see nixpkgs issue [391730](https://github.com/NixOS/nixpkgs/issues/391730)).";
+      };
+    };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "copilot-language-server";
+  version = "1.294.0";
+
+  src = fetchzip {
+    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
+    hash = "sha256-8nB8vlrSy+949HiJRCa9yFqu/GAaluFH1VzE63AUUs8=";
+    stripRoot = false;
   };
 
-  npmDepsHash = "sha256-PLX/mN7xu8gMh2BkkyTncP3+rJ3nBmX+pHxl0ONXbe4=";
+  installPhase = ''
+    runHook preInstall
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+    install "${os}-${arch}/${executableName}" -Dm755 -t "$out"/bin
+
+    runHook postInstall
   '';
 
-  postInstall = ''
-    ln -s $out/lib/node_modules/@github/copilot-language-server/dist $out/lib/node_modules/@github/dist
-  '';
+  dontStrip = true;
 
-  dontNpmBuild = true;
-
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = nix-update-script { };
+    fhs = fhs { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Use GitHub Copilot with any editor or IDE via the Language Server Protocol";
@@ -38,12 +79,16 @@ buildNpmPackage rec {
       shortName = "GitHub Copilot License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
-    mainProgram = "copilot-language-server";
+    mainProgram = executableName;
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ arunoruto ];
+    maintainers = with lib.maintainers; [
+      arunoruto
+      wattmto
+    ];
   };
-}
+})

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dharple";
-    repo = pname;
-    rev = "v${version}";
+    repo = "detox";
+    tag = "v${version}";
     hash = "sha256-cTuK5EIimRVZ1nfuTa1ds6xrawYIAbwNNIkNONd9y4Q=";
   };
 

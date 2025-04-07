@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rofl0r";
-    repo = pname;
-    rev = "v${version}";
+    repo = "proxychains-ng";
+    tag = "v${version}";
     sha256 = "sha256-cHRWPQm6aXsror0z+S2Ddm7w14c1OvEruDublWsvnXs=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--hookmethod=${darwinHookMethod}"
   ];
 

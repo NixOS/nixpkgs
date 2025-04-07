@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lazytools";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QMc64ynPLHQGsmDOsoChgmqmpRDyMYmmSAPwAEFBK40=";
   };
 

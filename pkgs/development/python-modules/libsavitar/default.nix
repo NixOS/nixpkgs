@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
-    rev = version;
+    tag = version;
     hash = "sha256-MAA1WtGED6lvU6N4BE6wwY1aYaFrCq/gkmQFz3VWqNA=";
   };
 
@@ -38,7 +38,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       abbradar
       orivej
-      gebner
     ];
   };
 }

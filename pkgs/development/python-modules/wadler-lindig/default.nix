@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "wadler-lindig";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "wadler_lindig";
-    rev = "v${version}";
-    hash = "sha256-akb1x9UYbfEwnVS6ahpb42XnEl3y7kk3WkhwD8p7AA4=";
+    tag = "v${version}";
+    hash = "sha256-ykRyJ5kCxYb3jBb8/8ogGjpgXMcb/mvvvHaSy9fecxA=";
   };
 
   build-system = [

@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cholmod-extra";
     owner = "jluttine";
-    rev = version;
+    tag = version;
     sha256 = "0hz1lfp0zaarvl0dv0zgp337hyd8np41kmdpz5rr3fc6yzw7vmkg";
   };
 

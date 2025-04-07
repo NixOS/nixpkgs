@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   vulkan-headers,
   vulkan-loader,
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KomputeProject";
     repo = "kompute";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cf9Ef85R+VKao286+WHLgBWUqgwvuRocgeCzVJOGbdc=";
   };
 

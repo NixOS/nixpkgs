@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "corral";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-arcMtCSbXFLBT2ygdj44UKMdGStlgHyiBgt5xZpPRhs=";
   };
 

@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mstore";
+    tag = "v${version}";
     hash = "sha256-zfrxdrZ1Um52qTRNGJoqZNQuHhK3xM/mKfk0aBLrcjw=";
   };
 

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jceb";
-    repo = pname;
-    rev = "v${version}";
+    repo = "yeahconsole";
+    tag = "v${version}";
     hash = "sha256-Ea6erNF9hEhDHlWLctu1SHFVoXXXsPeWUbvCBSZwn4s=";
   };
 

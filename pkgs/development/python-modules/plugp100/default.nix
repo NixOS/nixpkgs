@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
-    rev = version;
+    tag = version;
     sha256 = "sha256-V+9cVBMN8H4oFU51T9BDrLF46xgQHqIsMj8nuPedUGA=";
   };
 

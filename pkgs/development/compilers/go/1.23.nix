@@ -5,7 +5,6 @@
   tzdata,
   replaceVars,
   iana-etc,
-  xcbuild,
   mailcap,
   buildPackages,
   pkgsBuildTarget,
@@ -49,11 +48,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.6";
+  version = "1.23.8";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-A5xbBOZSedrO7opvcecL0Fz1uAF4K293xuGeLtBREiI=";
+    hash = "sha256-DKHx436iVePOKDrz9OYoUC+0RFh9qYelu5bWxvFZMNQ=";
   };
 
   strictDeps = true;
@@ -61,10 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    xcbuild
-  ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -166,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/go
-    cp -a bin pkg src lib misc api doc go.env $out/share/go
+    cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
     mkdir -p $out/bin
     ln -s $out/share/go/bin/* $out/bin
     runHook postInstall

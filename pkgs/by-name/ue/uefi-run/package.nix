@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Richard-W";
-    repo = pname;
-    rev = "v${version}";
+    repo = "uefi-run";
+    tag = "v${version}";
     hash = "sha256-tR547osqw18dCMHJLqJ8AQBelbv8yCl7rAqslu+vnDQ=";
   };
 

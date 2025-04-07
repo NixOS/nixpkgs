@@ -14,7 +14,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.10.37";
   pname = "xcircuit";
 

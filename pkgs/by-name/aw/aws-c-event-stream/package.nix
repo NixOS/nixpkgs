@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aws-c-event-stream";
+    tag = "v${version}";
     hash = "sha256-lg1qS/u5Fi8nt/tv2ekd8dgQ7rlrF3DrRxqidAoEywY=";
   };
 

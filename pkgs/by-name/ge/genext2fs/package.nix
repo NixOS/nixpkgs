@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bestouff";
-    repo = pname;
-    rev = "v${version}";
+    repo = "genext2fs";
+    tag = "v${version}";
     sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };
 

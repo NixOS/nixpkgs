@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pengutronix";
-    repo = pname;
-    rev = "v${version}";
+    repo = "microcom";
+    tag = "v${version}";
     hash = "sha256-CT/myxOK4U3DzliGsa45WMIFcYLjcoxx6w5S1NL5c7Y=";
   };
 

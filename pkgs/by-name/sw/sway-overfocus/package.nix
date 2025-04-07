@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "korreman";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sway-overfocus";
+    tag = "v${version}";
     hash = "sha256-trpjKA0TV8InSfViIXKnMDeZeFXZfavpiU7/R3JDQkQ=";
   };
 

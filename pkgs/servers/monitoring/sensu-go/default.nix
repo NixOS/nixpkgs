@@ -1,5 +1,5 @@
 {
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
 }:
@@ -12,7 +12,7 @@ let
       postInstall ? "",
       mainProgram,
     }:
-    buildGo122Module rec {
+    buildGoModule rec {
       inherit pname;
       version = "6.11.0";
       shortRev = "9587df6"; # for internal version info
@@ -20,7 +20,7 @@ let
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
-        rev = "v${version}";
+        tag = "v${version}";
         sha256 = "sha256-Vcay8vUYLjV65g526btQX0+m5n/cRocIKx7C2LuWeP4=";
       };
 

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = version;
+    tag = version;
     sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 

@@ -44,7 +44,7 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "initialcommit-com";
     repo = "git-sim";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4jHkAlF2SAzHjBi8pmAJ0TKkcLxw+6EdGsXnHZUMILw=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tetratelabs";
     repo = "wazero";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yxnHLc0PFxh8NRBgK2hvhKaxRM1w3IZ9TnfJM0+uadg=";
   };
 

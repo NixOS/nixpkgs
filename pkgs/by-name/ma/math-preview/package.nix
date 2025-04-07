@@ -9,11 +9,12 @@
 buildNpmPackage rec {
   pname = "math-preview";
   version = "5.1.1";
+  inherit nodejs;
 
   src = fetchFromGitLab {
     owner = "matsievskiysv";
     repo = "math-preview";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P3TZ/D6D2PvwPV6alSrDEQujzgI8DhK4VOuCC0BCIFo=";
   };
 

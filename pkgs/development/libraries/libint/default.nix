@@ -150,7 +150,7 @@ let
     src = fetchFromGitHub {
       owner = "evaleev";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-y+Mo8J/UWDrkkNEDAoostb/k6jrhYYeU0u9Incrd2cE=";
     };
 

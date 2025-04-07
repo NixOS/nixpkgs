@@ -1,15 +1,16 @@
-{ lib
-, buildGoModule
-, bzip2
-, fetchFromGitHub
-, lz4
-, nixosTests
-, pkg-config
-, rocksdb_7_10
-, snappy
-, stdenv
-, zeromq
-, zlib
+{
+  lib,
+  buildGoModule,
+  bzip2,
+  fetchFromGitHub,
+  lz4,
+  nixosTests,
+  pkg-config,
+  rocksdb_7_10,
+  snappy,
+  stdenv,
+  zeromq,
+  zlib,
 }:
 
 let
@@ -23,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-98tp3QYaHfhVIiJ4xkA3bUanXwK1q05t+YNroFtBUxE=";
   };
 
@@ -33,7 +34,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
+  buildInputs = [
+    bzip2
+    lz4
+    rocksdb
+    snappy
+    zeromq
+    zlib
+  ];
 
   ldflags = [
     "-X github.com/trezor/blockbook/common.version=${version}"
@@ -74,7 +82,10 @@ buildGoModule rec {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mmahut _1000101 ];
+    maintainers = with maintainers; [
+      mmahut
+      _1000101
+    ];
     platforms = platforms.unix;
     mainProgram = "blockbook";
   };

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "buildkit-nix";
@@ -7,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-i8KQLLL36iP26jIj10fZLtYpS57Xni4eIQEJG4ixWy8=";
   };
 
@@ -15,7 +19,10 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Nix frontend for BuildKit";

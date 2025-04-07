@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flux";
-    rev = version;
+    tag = version;
     sha256 = "sha256-rKZ0fI9UN4oq6gfDMNR2+kCazlDexE1+UVzQ3xgkSA8=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "xnotify";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RfnmiAEFTPqQZursyVPDIZ6J3KBouvaaxyhTc1liqBc=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phillbush/xnotify";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "xnotify";
   };

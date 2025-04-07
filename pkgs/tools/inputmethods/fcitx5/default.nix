@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, wayland-scanner
-, cairo
-, pango
-, expat
-, fribidi
-, fmt
-, wayland
-, systemd
-, wayland-protocols
-, json_c
-, isocodes
-, xkeyboard_config
-, enchant
-, gdk-pixbuf
-, libGL
-, libuuid
-, libselinux
-, libXdmcp
-, libsepol
-, libxkbcommon
-, libthai
-, libdatrie
-, xcbutilkeysyms
-, pcre
-, xcbutil
-, xcbutilwm
-, xcb-imdkit
-, libxkbfile
-, nixosTests
-, gettext
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  extra-cmake-modules,
+  wayland-scanner,
+  cairo,
+  pango,
+  expat,
+  fribidi,
+  fmt,
+  wayland,
+  systemd,
+  wayland-protocols,
+  json_c,
+  isocodes,
+  xkeyboard_config,
+  enchant,
+  gdk-pixbuf,
+  libGL,
+  libuuid,
+  libselinux,
+  libXdmcp,
+  libsepol,
+  libxkbcommon,
+  libthai,
+  libdatrie,
+  xcbutilkeysyms,
+  pcre,
+  xcbutil,
+  xcbutilwm,
+  xcb-imdkit,
+  libxkbfile,
+  nixosTests,
+  gettext,
 }:
 let
   enDictVer = "20121020";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-Jk7YY6nrY1Yn9KeNlRJbMF/fCMIlUVg/Elt7SymlK84=";
   };
 

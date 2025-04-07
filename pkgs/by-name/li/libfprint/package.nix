@@ -9,18 +9,18 @@
   gusb,
   pixman,
   glib,
-  nss,
   gobject-introspection,
   cairo,
   libgudev,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfprint";
-  version = "1.94.8";
+  version = "1.94.9";
   outputs = [
     "out"
     "devdoc"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libfprint";
     repo = "libfprint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PZr4ZeVnuCKYfI8CKvRqBwalxsz9Ka17kSuLflwl7mE=";
+    hash = "sha256-UiUdZokgi27LlyO419dd+NIcQD2RSUfdsC08sW3qzko=";
   };
 
   postPatch = ''
@@ -57,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     gusb
     pixman
     glib
-    nss
     cairo
     libgudev
+    openssl
   ];
 
   mesonFlags = [

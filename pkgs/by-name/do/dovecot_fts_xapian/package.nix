@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
-    rev = version;
+    tag = version;
     hash = "sha256-jHXeCJVdRWGdLMooh5cq5ZeZPM5fDo1lO6U5VMcwf3g=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--with-moduledir=$(out)/lib/dovecot"
+    "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
   ];
 
   meta = with lib; {

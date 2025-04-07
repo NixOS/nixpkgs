@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "caverym";
-    repo = pname;
-    rev = version;
+    repo = "proton-caller";
+    tag = version;
     sha256 = "sha256-srzahBMihkEP9/+7oRij5POHkCcH6QBh4kGz42Pz0nM=";
   };
 

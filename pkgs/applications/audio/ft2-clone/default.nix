@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, nixosTests
-, alsa-lib
-, SDL2
-, libiconv
-, CoreAudio
-, CoreMIDI
-, CoreServices
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nixosTests,
+  alsa-lib,
+  SDL2,
+  libiconv,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,20 +20,21 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Xb4LHoon56P6OmHvd7RkODrOc4MDa0+U8npypGhcyw4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 ]
+  buildInputs =
+    [ SDL2 ]
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-         libiconv
-         CoreAudio
-         CoreMIDI
-         CoreServices
-         Cocoa
-       ];
+      libiconv
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Cocoa
+    ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;

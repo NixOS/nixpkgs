@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
-    repo = pname;
-    rev = version;
+    repo = "sozu";
+    tag = version;
     hash = "sha256-Cda53lhKPxm2w8guoKuQjdjhZNWJinzR1PHc5S57y2w=";
   };
 

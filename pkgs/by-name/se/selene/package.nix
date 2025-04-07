@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
-    repo = pname;
-    rev = version;
+    repo = "selene";
+    tag = version;
     sha256 = "sha256-QE9kXGQWg0pHtSI1bTppn5IE+53KoxqFED1VvwkumEI=";
   };
 

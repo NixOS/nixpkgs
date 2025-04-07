@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
   elfutils,

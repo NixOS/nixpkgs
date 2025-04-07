@@ -1,6 +1,6 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "volkovlabs-rss-datasource";
   version = "4.2.0";
   zipHash = "sha256-+3tgvpH6xlJORqN4Sx7qwzsiQZoLwdarzhx6kHvtOoY=";

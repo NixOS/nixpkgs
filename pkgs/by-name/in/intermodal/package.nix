@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = pname;
-    rev = "v${version}";
+    repo = "intermodal";
+    tag = "v${version}";
     hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
   };
 

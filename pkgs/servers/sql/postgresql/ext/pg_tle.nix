@@ -1,19 +1,19 @@
 {
-  lib,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension rec {
   pname = "pg_tle";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "pg_tle";
     tag = "v${version}";
-    hash = "sha256-crxj5R9jblIv0h8lpqddAoYe2UqgUlnvbOajKTzVces=";
+    hash = "sha256-GuHlmFQjMr9Kv4NqIm9mcVfLc36EQVj5Iy7Kh26k0l4=";
   };
 
   buildInputs = postgresql.buildInputs;

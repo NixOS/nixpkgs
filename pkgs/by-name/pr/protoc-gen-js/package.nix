@@ -1,4 +1,11 @@
-{ stdenv, lib, buildBazelPackage, bazel_6, fetchFromGitHub, cctools }:
+{
+  stdenv,
+  lib,
+  buildBazelPackage,
+  bazel_6,
+  fetchFromGitHub,
+  cctools,
+}:
 
 buildBazelPackage rec {
   pname = "protoc-gen-js";
@@ -7,13 +14,18 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TmP6xftUVTD7yML7UEM/DB8bcsL5RFlKPyCpcboD86U=";
   };
 
   bazel = bazel_6;
   bazelTargets = [ "generator:protoc-gen-js" ];
-  bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
+  bazelBuildFlags = lib.optionals stdenv.cc.isClang [
+    "--cxxopt=-x"
+    "--cxxopt=c++"
+    "--host_cxxopt=-x"
+    "--host_cxxopt=c++"
+  ];
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
@@ -31,7 +43,10 @@ buildBazelPackage rec {
     mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";
     platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [ asl20 bsd3 ];
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
     sourceProvenance = [ sourceTypes.fromSource ];
     maintainers = [ ];
   };

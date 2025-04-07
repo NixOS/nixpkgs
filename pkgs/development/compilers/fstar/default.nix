@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yaA6WpP2XIQhjK7kpXBdBFUgKZyvtThd6JmSchUCfbI=";
   };
 
@@ -84,9 +84,7 @@ stdenv.mkDerivation {
     homepage = "https://www.fstar-lang.org";
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      gebner
-    ];
+    maintainers = with maintainers; [ ];
     mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;
   };

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   pkg-config,
   libtool,
   autoreconfHook,
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       ))
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.PCSC
     ];
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://frankmorgner.github.io/vsmartcard/pcsc-relay/README.html";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
 })

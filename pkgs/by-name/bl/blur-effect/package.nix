@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sonald";
-    repo = pname;
-    rev = version;
+    repo = "blur-effect";
+    tag = version;
     sha256 = "0cjw7iz0p7x1bi4vmwrivfidry5wlkgfgdl9wly88cm3z9ib98jj";
   };
 

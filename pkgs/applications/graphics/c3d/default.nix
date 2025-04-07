@@ -7,7 +7,7 @@
   Cocoa,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "c3d";
   version = "1.4.1-unstable-2024-08-07";
 

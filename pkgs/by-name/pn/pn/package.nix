@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pn";
+    tag = "v${version}";
     sha256 = "sha256-vRF9MPcw/hCreHVLD6QB7g1r0wQiZv1xrfzIHj1Yf9M=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SpaceVim";
     repo = "SpaceVim";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qiNadhQJjU9RY14X8+pd4Ul+NLoNqbxuh3Kenw1dHDc=";
   };
 

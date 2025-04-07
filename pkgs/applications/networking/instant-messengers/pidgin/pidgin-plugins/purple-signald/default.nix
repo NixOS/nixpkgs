@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hoehermann";
     repo = "libpurple-signald";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2LiHjVRBwdPbfravIVM+gvsh3Gq4bhjtRD6eWAbkWmc=";
     fetchSubmodules = true;
   };

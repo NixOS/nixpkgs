@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nadoo";
     repo = "glider";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LrIHdI1/55llENjDgFJxh2KKsJf/tLT3P9L9jhLhfS0=";
   };
 

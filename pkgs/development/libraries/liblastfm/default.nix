@@ -12,7 +12,7 @@
   darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liblastfm-unstable";
   version = "2019-08-23";
 

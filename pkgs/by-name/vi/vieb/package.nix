@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-5LbVSwU+G3mu5MWxmnscoqfQw3ZA9xFXNJGYx3L+aUQ=";
   };
 
@@ -71,7 +71,6 @@ buildNpmPackage rec {
     description = "Vim Inspired Electron Browser";
     mainProgram = "vieb";
     maintainers = with maintainers; [
-      gebner
       tejing
     ];
     platforms = platforms.unix;

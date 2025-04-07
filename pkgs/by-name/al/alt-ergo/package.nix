@@ -17,7 +17,7 @@ let
 in
 
 let
-  alt-ergo-lib = ocamlPackages.buildDunePackage rec {
+  alt-ergo-lib = ocamlPackages.buildDunePackage {
     pname = "alt-ergo-lib";
     inherit version src;
     buildInputs = with ocamlPackages; [ ppx_blob ];
@@ -36,7 +36,7 @@ let
 in
 
 let
-  alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
+  alt-ergo-parsers = ocamlPackages.buildDunePackage {
     pname = "alt-ergo-parsers";
     inherit version src;
     nativeBuildInputs = [ ocamlPackages.menhir ];

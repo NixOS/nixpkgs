@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
@@ -8,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
-    rev = version;
+    tag = version;
     hash = "sha256-4gnK0KbqFnjBmWia9Jt2gveVWftmHrprpwBqYVqE/k0=";
   };
 

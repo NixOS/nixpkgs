@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-auditlog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SJ4GJp/gVIxiLbdAj3ZS+weevqIDZCMQnW/pqc5liJU=";
   };
 

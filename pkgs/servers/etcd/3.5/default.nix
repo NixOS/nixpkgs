@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = etcdSrcHash;
   };
 
@@ -33,7 +33,7 @@ let
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGoModule rec {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "unknownbrackets";
     repo = "maxcso";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6LjR1ZMZsi6toz9swPzNmSAlrUykwvVdYi1mR8Ctq5U=";
   };
 

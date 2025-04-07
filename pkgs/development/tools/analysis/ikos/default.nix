@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
     repo = "ikos";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kqgGD0plTW0N30kD7Y8xOvGODplJbi37Wh6yYAkzNKI=";
   };
 

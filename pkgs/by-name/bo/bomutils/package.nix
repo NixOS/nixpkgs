@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hogliux";
-    repo = pname;
-    rev = version;
+    repo = "bomutils";
+    tag = version;
     sha256 = "1i7nhbq1fcbrjwfg64znz8p4l7662f7qz2l6xcvwd5z93dnmgmdr";
   };
 

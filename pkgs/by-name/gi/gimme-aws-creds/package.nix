@@ -2,7 +2,6 @@
   lib,
   installShellFiles,
   python3,
-  fetchPypi,
   fetchFromGitHub,
   nix-update-script,
   testers,
@@ -17,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 

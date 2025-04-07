@@ -187,7 +187,7 @@ in
         };
 
         extraArgs = lib.mkOption {
-          type = with lib.types; either lines (listOf str);
+          type = with lib.types; listOf str;
           default = [ ];
           description = ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#frontend).
@@ -247,14 +247,10 @@ in
         };
 
         extraArgs = lib.mkOption {
-          type = with lib.types; either lines (listOf str);
+          type = with lib.types; listOf str;
           default = [ ];
           description = ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#proxy).
-
-            :::{.note}
-            Passing lines (plain strings) is deprecated in favour of passing lists of strings.
-            :::
           '';
         };
       };
@@ -264,15 +260,6 @@ in
   ###### implementation
 
   config = {
-
-    warnings =
-      lib.optional (cfg.frontend.enable && builtins.isString cfg.frontend.extraArgs) ''
-        Passing strings to `services.bird-lg.frontend.extraOptions' is deprecated. Please pass a list of strings instead.
-      ''
-      ++ lib.optional (cfg.proxy.enable && builtins.isString cfg.proxy.extraArgs) ''
-        Passing strings to `services.bird-lg.proxy.extraOptions' is deprecated. Please pass a list of strings instead.
-      '';
-
     systemd.services = {
       bird-lg-frontend = lib.mkIf cfg.frontend.enable {
         enable = true;

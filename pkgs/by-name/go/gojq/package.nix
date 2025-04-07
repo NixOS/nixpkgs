@@ -4,6 +4,7 @@
   fetchFromGitHub,
   testers,
   gojq,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -13,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zJkeghN3btF/fZZeuClHV1ndB/2tTTMljEukMYe7UWU=";
   };
 
@@ -23,6 +24,12 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd gojq --zsh _gojq
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = gojq;

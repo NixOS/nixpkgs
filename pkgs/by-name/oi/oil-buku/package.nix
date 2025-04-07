@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AndreiUlmeyda";
     repo = "oil";
-    rev = version;
+    tag = version;
     sha256 = "12g0fd7h11hh94b2pyg3pqwbf8bc7gcnrnm1qqbf18s6z02b6ixr";
   };
 

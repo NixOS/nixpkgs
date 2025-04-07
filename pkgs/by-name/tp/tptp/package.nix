@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     description = "Thousands of problems for theorem provers and tools";
     maintainers = with maintainers; [
       raskin
-      gebner
     ];
     # 6.3 GiB of data. Installation is unpacking and editing a few files.
     # No sense in letting Hydra build it.

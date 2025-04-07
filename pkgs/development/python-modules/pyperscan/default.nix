@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "pyperscan";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-uGZ0XFxnZHSLEWcwoHVd+xMulDRqEIrQ5Lf7886GdlM=";
   };
 

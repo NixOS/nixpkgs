@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.8.3";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-t4FdTFXbKs7Xfw8dKoME7WDn+Fpe/uHPXyr5Wj+AXSA=";
+    tag = "v${version}";
+    hash = "sha256-048WUDMMaTjGsNY54m2eKY1MdyX9llojIzGvbcC+Buc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-FBxNK50ONmezXH8tVFpaBpSFVENS0uMO6mHcaeJq7Og=";
+  cargoHash = "sha256-Q8gh6RuNC2+pc13VksI0tiX/uVjhxYwnR5GRyQYRWLg=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.cc0;
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

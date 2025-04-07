@@ -22,8 +22,8 @@ let
           nativeBuildInputs = [ nats-server ];
         }
         ''
-          nats-server --config "${configFile}" -t
-          ln -s "${configFile}" "$out"
+          nats-server --config "${file}" -t
+          ln -s "${file}" "$out"
         ''
     ) { };
 

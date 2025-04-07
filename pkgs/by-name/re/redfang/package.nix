@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     group = "kalilinux";
     owner = "packages";
-    repo = pname;
+    repo = "redfang";
     rev = "upstream/${version}";
     hash = "sha256-dF9QmBckyHAZ+JbLr0jTmp0eMu947unJqjrTMsJAfIE=";
   };

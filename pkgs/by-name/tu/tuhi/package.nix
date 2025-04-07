@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tuhiproject";
     repo = "tuhi";
-    rev = version;
+    tag = version;
     sha256 = "sha256-NwyG2KhOrAKRewgmU23OMO0+A9SjkQZsDL4SGnLVCvo=";
   };
 

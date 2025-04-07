@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZNUUp/0fGJxL/Rt8sAZ864rg8uCcNybIYSk4POt0vqg=";
   };
 

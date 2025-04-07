@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = pname;
-    rev = "v${version}";
+    repo = "tgt";
+    tag = "v${version}";
     hash = "sha256-e7rI8/WQl1L78l2Nk9ajomRucPwsSqZ7fLSHSw11jeY=";
   };
 

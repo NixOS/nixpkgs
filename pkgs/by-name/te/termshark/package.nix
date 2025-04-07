@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gcla";
     repo = "termshark";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
   };
 

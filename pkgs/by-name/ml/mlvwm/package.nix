@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "morgant";
-    repo = pname;
-    rev = version;
+    repo = "mlvwm";
+    tag = version;
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 

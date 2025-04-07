@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
-    rev = version;
+    repo = "canta-theme";
+    tag = version;
     sha256 = "05h42nrggb6znzjcbh4lqqfcm41h4r85n3vwimp3l4lq5p90igr2";
   };
 

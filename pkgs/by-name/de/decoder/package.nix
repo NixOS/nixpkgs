@@ -6,7 +6,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "decoder";
   version = "unstable-2021-11-20";
 

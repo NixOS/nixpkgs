@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "deadpixi";
-    repo = pname;
-    rev = version;
+    repo = "mtm";
+    tag = version;
     sha256 = "0gibrvah059z37jvn1qs4b6kvd4ivk2mfihmcpgx1vz6yg70zghv";
   };
 
