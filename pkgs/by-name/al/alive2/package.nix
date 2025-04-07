@@ -24,17 +24,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
+    re2c
   ];
   buildInputs = [
-    re2c
     z3
     hiredis
     llvm_18
-    ninja
   ];
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' "" \
       --replace-fail 'find_package(Git REQUIRED)' ""
   '';
 
