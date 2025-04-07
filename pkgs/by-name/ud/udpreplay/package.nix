@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rigtorp";
     repo = "udpreplay";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kF9a3pjQbFKf25NKyK7uSq0AAO6JK7QeChLhm9Z3wEA=";
   };
 

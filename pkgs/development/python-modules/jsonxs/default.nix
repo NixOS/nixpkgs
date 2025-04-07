@@ -16,7 +16,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "fboender";
     repo = "jsonxs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CmKK+qStb9xjmEACY41tQnffD4cMUUQPb74Cni5FTEk=";
   };
 

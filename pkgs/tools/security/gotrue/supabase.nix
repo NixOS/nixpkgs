@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "auth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dm6JBBHFX61acQ4tnkklZqAM4hiOqtvea0oy7/bSovQ=";
   };
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-4JF2ZAp8dx2fpSYRUz4I8US3oIZrSS90oljuxQDm38A=";
   };
 

@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gustash";
     repo = "hyprshot";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-9taTmV357cWglMGuN3NLq3bfNneFthwV6y+Ml4qEeHA=";
   };
 

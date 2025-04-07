@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gophish";
     repo = "gophish";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6OUhRB2d8k7h9tI3IPKy9f1KoEx1mvGbxQZF1sCngqs=";
   };
 

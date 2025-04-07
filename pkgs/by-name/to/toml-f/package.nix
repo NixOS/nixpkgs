@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+cac4rUNpd2w3yBdH1XoCKdJ9IgOHZioZg8AhzGY0FE=";
   };
 

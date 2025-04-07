@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://pagure.io/xmlto.git";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-wttag8J1t9cBPBHNY7me2H0IPOzS8IjfCLIHNWq67Do=";
   };
 

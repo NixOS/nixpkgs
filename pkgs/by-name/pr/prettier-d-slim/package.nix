@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "prettier_d_slim";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-M+qlFKtIro3geVsVaYu6dIfOrJIlUQY98LSBikKNV/I=";
   };
 

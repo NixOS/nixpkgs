@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "discord";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KRfbxPblOL4JznnGx9Jj5XXEWEKzan5xWvAwYmP7yGc=";
   };
 

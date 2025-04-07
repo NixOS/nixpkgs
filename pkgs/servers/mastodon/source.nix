@@ -11,7 +11,7 @@ in
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KmeWBMuyJ/ZdZnFXAlpvgXV+J8IZrcaTXvvui4l6mjY=";
   };
   patches = patches ++ [ ];

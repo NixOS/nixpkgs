@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = "tls_parser";
-    rev = version;
+    tag = version;
     hash = "sha256-2XHhUDiJ1EctnYdxYFbNSVLF8dmHP9cZXjziOE9+Dew=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zkat";
     repo = "srisum-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Nw3uTGOcz1ivAm9X+PnOdNA937wuK3vtJQ0iJHlHVdw=";
   };
   useFetchCargoVendor = true;

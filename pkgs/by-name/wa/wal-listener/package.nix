@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ihippik";
     repo = "wal-listener";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OqjCFIdU4wCiPGIMrlp+nGVr0XTNHTE8zB8/toZtM44=";
   };
 

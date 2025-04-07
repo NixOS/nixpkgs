@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "4U6U57";
     repo = "wsl-open";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-amqkDXdgIqGjRZMkltwco0UAI++G0RY/MxLXwtlxogE=";
   };
 

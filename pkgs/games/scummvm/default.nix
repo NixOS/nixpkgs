@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4/h1bzauYWNvG7skn6afF79t0KEdgYLZoeqeqRudH7I=";
   };
 

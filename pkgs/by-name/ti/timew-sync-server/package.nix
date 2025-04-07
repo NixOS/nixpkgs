@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3THRP+hydvq/dnxzUOFGeuu8//qL7pFN0RHJVxzgibI=";
   };
 

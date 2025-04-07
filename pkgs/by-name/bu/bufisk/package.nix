@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "bufisk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pVnqvQn7jwpx6T3sS4eA29JeJdh0GrPVm0J8n2UjJTw=";
   };
 

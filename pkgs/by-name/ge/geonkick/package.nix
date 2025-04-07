@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Geonkick-Synthesizer";
     repo = "geonkick";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QtBzrYW/yYnWSXyHV63gKzgdAR5kamij9Z0g+15CTPg=";
   };
 

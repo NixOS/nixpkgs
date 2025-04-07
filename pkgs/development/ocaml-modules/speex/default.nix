@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-speex";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0p4ip37kihlz9qy604llak2kzd00g45ix1yiihnrri2nm01scfab";
   };
 

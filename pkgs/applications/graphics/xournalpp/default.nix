@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VS5f+9daEQpPu5vam8DWhRqU0AWMmJab8KaRzTnRU/M=";
   };
 

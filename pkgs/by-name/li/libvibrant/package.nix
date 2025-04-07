@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libvibrant";
     repo = "libvibrant";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-APja211+U0WVuCRz8f3VIAQLF4oPhh0CJ3Y5EgSJnh0=";
   };
 

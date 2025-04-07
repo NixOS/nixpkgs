@@ -25,7 +25,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "jkboyce";
     repo = "jugglinglab";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Y87uHFpVs4A/wErNO2ZF6Su0v4LEvaE9nIysrqFoY8w=";
   };
 

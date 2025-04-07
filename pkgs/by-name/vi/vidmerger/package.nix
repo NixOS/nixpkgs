@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "TGotwig";
     repo = "vidmerger";
-    rev = version;
+    tag = version;
     hash = "sha256-E3Y1UaYXl6NdCMM7IepqFzWNuHaMGLCN5BvQ/lxjFoc=";
   };
 

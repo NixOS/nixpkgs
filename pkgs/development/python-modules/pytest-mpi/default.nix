@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aragilar";
     repo = "pytest-mpi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m3HTGLoPnYeg0oeIA1nzTzch7FtkuXTYpox4rRgo5MU=";
   };
 

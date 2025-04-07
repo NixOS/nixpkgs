@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "particledecay";
     repo = "kconf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-bLyLXkXOZRFaplv5sY0TgFffvbA3RUwz6b+7h3MN7kA=";
   };
 

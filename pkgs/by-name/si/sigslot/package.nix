@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "palacaze";
     repo = "sigslot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MKtVZLHp8UfXW8KJ3QjPMhxnt46xV+pA9NMqAX0iqiA=";
   };
 

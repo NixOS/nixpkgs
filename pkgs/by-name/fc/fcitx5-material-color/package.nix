@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hosxy";
     repo = "Fcitx5-Material-Color";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-i9JHIJ+cHLTBZUNzj9Ujl3LIdkCllTWpO1Ta4OT1LTc=";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "libkiwix";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-QP23ZS0FJsMVtnWOofywaAPIU0GJ2L+hLP/x0LXMKiU=";
   };
 

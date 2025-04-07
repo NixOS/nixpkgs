@@ -12,7 +12,7 @@ llvmPackages.stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EnzymeAD";
     repo = "Enzyme";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Yyn0yWcOWb379rzaA+KW0KiLVg0nbIwJJQ8NhQAsuN8=";
   };
 

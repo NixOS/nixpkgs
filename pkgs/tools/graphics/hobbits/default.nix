@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
     repo = "hobbits";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SbSuw5e2ll/wU5UBV0MOlvCXb4rvPtsE4l8XzRbBiLI=";
   };
 

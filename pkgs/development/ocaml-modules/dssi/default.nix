@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-dssi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1frbmx1aznwp60r6bkx1whqyr6mkflvd9ysmjg7s7b80mh0s4ix6";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    rev = version;
+    tag = version;
     hash = "sha256-IjQ2PqjXhNvXknVxfphSSwQEWBuTkSxMFrbwd2trlVI=";
   };
 

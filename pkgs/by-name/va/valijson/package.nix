@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nIXcS8PMKoo8D616uUZ+GdIbkGb3VGSlCvg7QqZtz20=";
   };
 

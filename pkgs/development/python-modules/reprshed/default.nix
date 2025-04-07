@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mentalisttraceur";
     repo = "python-reprshed";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XfmiewI74eDLKTAU6Ed76QXfJYMRb+idRACl6CW07ME=";
   };
 

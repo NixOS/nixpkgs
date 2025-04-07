@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maurosoria";
     repo = "dirsearch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eXB103qUB3m7V/9hlq2xv3Y3bIz89/pGJsbPZQ+AZXs=";
   };
 

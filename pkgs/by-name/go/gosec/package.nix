@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "securego";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MQ/dDK2t9H7bSsr5MMtlKySLAJIDimRbpATHyOYxrBo=";
   };
 

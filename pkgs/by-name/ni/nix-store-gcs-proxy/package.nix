@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nix-store-gcs-proxy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ljJrBNSGPZ9cV/+XcMNfMLT5le7tvtf/O42Tfou5BCA=";
   };
 

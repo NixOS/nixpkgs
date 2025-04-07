@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "glicol";
     repo = "glicol-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-v90FfF4vP5UPy8VnQFvYMKiCrledgNMpWbJR59Cv6a0=";
   };
 

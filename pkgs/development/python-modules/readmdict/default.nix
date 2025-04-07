@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ffreemt";
     repo = "readmdict";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1/f+o2bVscT3EA8XQyS2hWjhimLRzfIBM6u2O7UqwcA=";
   };
 

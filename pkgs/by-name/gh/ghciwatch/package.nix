@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-K7BNGRilzi01loE0yS4CZFDNz8TQ9Z+fELO5HUvGObE=";
   };
 

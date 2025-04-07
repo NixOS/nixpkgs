@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "mygene.py";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/KxlzOTbZTN5BA0PrJyivVFh4cLtW90/EFwczda61Tg=";
   };
 

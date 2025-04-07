@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "mastotool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KmYUt2WXLY6i17dZ+o5HOTyMwbQnynY7IT43LIEN3B0=";
   };
 

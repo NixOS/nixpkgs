@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlpkg";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1xmbdnfc34ia0a78dhkfv5jyadxndinhw8c47l1mjd4l7n8vqnph";
   };
 

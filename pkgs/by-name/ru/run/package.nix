@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "TekWizely";
     repo = "run";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-an5AuRJJEM18IssdLLZC/zzPpsVCCtawRQXK/AfzMN0=";
   };
 

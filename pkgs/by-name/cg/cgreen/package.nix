@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-W4MdB3acZcxavjRupJa4eXAv9g4QgYXFAQWOLoHrQZ8=";
   };
 

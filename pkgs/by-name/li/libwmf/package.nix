@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "caolanm";
     repo = "libwmf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vffohx57OvQKu8DfNXNBm9bPsA8KgkQWs/3mmFn7L6M=";
   };
 

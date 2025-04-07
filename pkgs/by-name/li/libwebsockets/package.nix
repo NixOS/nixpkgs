@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
   };
 

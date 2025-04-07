@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "BBVA";
     repo = "kapow";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-HUZ1Uf8Z2YbYvqKEUHckKAZ5q+C83zafi3UjemqHFM4=";
   };
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
-    rev = version;
+    tag = version;
     hash = "sha256-uLiXhigYz3v7NgY38twot3sBHxZS5QCrOiPfME4wWzE=";
   };
 

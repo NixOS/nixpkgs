@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "eunomia-bpf";
     repo = "eunomia-bpf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KfYCC+TJbmjHrV46LoshD+uXcaBVMKk6+cN7TZKKYp4=";
   };
 

@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ZDlVJLw9xKFTz1NR5sGiw3WnEmMyNQy69Vt9zkw0fPA=";
   };
 

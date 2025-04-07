@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MintArchit";
     repo = "gh-contribs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fqyxq/lpMcLXOYY0MNI5uv8Go2erpg7dEIsEI+ExSVI=";
   };
 

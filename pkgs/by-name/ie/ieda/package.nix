@@ -29,7 +29,7 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = "glog";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
     };
   });

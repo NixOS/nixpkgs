@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sccn";
     repo = "liblsl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-nmu7Kxk4U5sGO8Od9JR4id4V4mjeibj4AHjUYhpGPeo=";
   };
   passthru.updateScript = nix-update-script { };

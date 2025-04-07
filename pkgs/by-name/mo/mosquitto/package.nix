@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-E47NqiaMk67pNgf151DMhQ4DMyLvfzrECEQtk3jASPU=";
   };
 

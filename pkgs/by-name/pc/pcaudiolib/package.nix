@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "pcaudiolib";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-bBiGvAySEwAv6Qj2iSawb9oZfMCGBDCDIP8AYdbtQQc=";
   };
 

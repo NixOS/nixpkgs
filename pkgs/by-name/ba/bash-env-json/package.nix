@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tesujimath";
     repo = "bash-env-json";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-gyqj5r11DOfXd23LT7qwRLEoWvpHUbxbd28QJnlWTaQ=";
   };
 

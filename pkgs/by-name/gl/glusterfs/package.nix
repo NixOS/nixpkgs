@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gluster";
     repo = "glusterfs";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };
   inherit buildInputs propagatedBuildInputs;

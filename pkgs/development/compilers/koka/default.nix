@@ -36,7 +36,7 @@ let
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BNkMtYf5maWtKEZzob+218ke1SIkrP7/nboQ2sZKkxI=";
     fetchSubmodules = true;
   };

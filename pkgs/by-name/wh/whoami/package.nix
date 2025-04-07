@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "whoami";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3jzLdCmmts/7S1Oxig9Dg3kRGh/H5l5UD7ztev0yvXY=";
   };
 

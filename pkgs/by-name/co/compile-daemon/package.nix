@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "githubnemo";
     repo = "CompileDaemon";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-gpyXy7FO7ZVXJrkzcKHFez4S/dGiijXfZ9eSJtNlm58=";
   };
 

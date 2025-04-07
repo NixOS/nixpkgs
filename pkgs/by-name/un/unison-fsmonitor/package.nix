@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "autozimu";
     repo = "unison-fsmonitor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1W05b9s0Pg2LzNu0mFo/JKpPw0QORqZkXhbbSuCZIUo=";
   };
   useFetchCargoVendor = true;

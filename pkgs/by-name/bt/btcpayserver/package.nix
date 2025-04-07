@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LOyGNdlU8wvDFmYQ2v1H3Z12++ChVrGM53zBTWCCiCk=";
   };
 

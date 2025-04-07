@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iman-salmani";
     repo = "iplan";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BIoxaE8c3HmvPjgj4wcZK9YFTZ0wr9338AIdYEoAiqs=";
   };
 

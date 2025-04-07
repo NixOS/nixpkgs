@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "encodec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+iJZkX1HoyuNFu9VRxMO6aAzNQybkH9lrQJ5Ao9+/CY=";
   };
 

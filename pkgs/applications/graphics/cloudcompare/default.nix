@@ -29,7 +29,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };

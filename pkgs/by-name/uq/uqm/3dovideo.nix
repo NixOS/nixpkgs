@@ -35,7 +35,7 @@ let
       src = fetchFromGitHub {
         owner = "aszlig";
         repo = "uqm3donix";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-rK30u2PBysiSGSA9829F1Nom/wtoVN6rGTBneRKeWEw=";
       };
 

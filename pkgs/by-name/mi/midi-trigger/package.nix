@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "unclechu";
     repo = "MIDI-Trigger";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tMnN8mTd6Bm46ZIDy0JPSVe77xCZws2XwQLQexDWPgU=";
   };
 

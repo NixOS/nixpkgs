@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = "donfig";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hF4hzI1MTLgUexRIqwBEEEMV7Az2oDkp5GQQ5282vwE=";
   };
 

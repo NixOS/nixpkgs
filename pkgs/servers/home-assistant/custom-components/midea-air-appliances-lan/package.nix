@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-midea-air-appliances-lan";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-61LAecJRHQi9/Wf4L25HwAMOV5Yzsr8irAnh5xuWJ7c=";
   };
 

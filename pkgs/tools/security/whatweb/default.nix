@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "urbanadventurer";
     repo = "whatweb";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-HLF55x4C8n8aPO4SI0d6Z9wZe80krtUaGUFmMaYRBIE=";
   };
 

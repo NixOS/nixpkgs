@@ -6,7 +6,7 @@ rec {
   src = fetchFromGitHub {
     owner = "authelia";
     repo = "authelia";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Q/NGjJphuZ7MMnOSTAukzEg4iAQWc/VDFWs0jj4e0dY=";
   };
   vendorHash = "sha256-FE4YABsWKhifVjdzJSnjWPesjuSe/hWDa6oTg8MZjo8=";

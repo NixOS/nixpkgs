@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QoZcKFVjd0qYQ+Ds4Y/JKBPiL+z83wxm0ktuETX5ZPU=";
   };
 

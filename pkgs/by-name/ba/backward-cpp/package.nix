@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bombela";
     repo = "backward-cpp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
   };
 

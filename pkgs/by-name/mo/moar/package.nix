@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-28rD8NYuvfNoBtegGXBuoa5qb3f1eYilkmE4ykIeHTU=";
   };
 

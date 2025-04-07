@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "cbeuw";
     repo = "Cloak";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JbwjsLVOxQc6v47+6rG2f1JLS8ieZI6jYV/twtaVx9M=";
   };
 

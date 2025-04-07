@@ -15,7 +15,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dangvd";
     repo = "ksmoothdock";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hO7xgjFMFrEhQs3oc2peFTjSVEDsl7Ma/TeVybEZMEk=";
   };
 

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kakoune-lsp";
     repo = "kakoune-lsp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2jD0meehUNGvmywOY4D9CwP1qswD7QCPlctLBjngzvE=";
   };
 

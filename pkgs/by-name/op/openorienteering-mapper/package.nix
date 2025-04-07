@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BQbryRV5diBkOtva9sYuLD8yo3IwFqrkz3qC+C6eEfE=";
   };
 

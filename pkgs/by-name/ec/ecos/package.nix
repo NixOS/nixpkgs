@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos";
-    rev = version;
+    tag = version;
     sha256 = "1hsndim5kjvcwk5svqa4igawzahj982180xj1d7yd0dbjlgxc7w7";
   };
 

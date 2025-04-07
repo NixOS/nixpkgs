@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gopherdata";
     repo = "gophernotes";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-cGlYgay/t6XIl0U9XvrHkqNxZ6BXtXi0TIANY1WdZ3Y=";
   };
 

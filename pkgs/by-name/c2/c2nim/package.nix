@@ -10,7 +10,7 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "c2nim";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-E8sAhTFIWAnlfWyuvqK8h8g7Puf5ejLEqgLNb5N17os=";
   };
   meta = finalAttrs.src.meta // {

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "passage";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-tGHJFzDc2K117r5EMFdKsfw/+EpdZ0qzaExt+RGI4qo=";
   };
 

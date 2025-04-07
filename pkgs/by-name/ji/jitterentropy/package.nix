@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-A1Y+7CqzoQ6xoTwWU8gfq+dYJ+PiIpqtOOZSL0uVby4=";
   };
 

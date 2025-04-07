@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scipr-lab";
     repo = "libff";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0dczi829497vqlmn6n4fgi89bc2h9f13gx30av5z2h6ikik7crgn";
     fetchSubmodules = true;
   };

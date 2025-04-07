@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "rofi-systemd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0lgffb6rk1kf91j4j303lzpx8w2g9zy2gk99p8g8pk62a30c5asm";
   };
 

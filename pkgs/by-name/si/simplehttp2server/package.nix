@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleChromeLabs";
     repo = "simplehttp2server";
-    rev = version;
+    tag = version;
     sha256 = "113mcfvy1m91wask5039mhr0187nlw325ac32785yl4bb4igi8aw";
   };
 

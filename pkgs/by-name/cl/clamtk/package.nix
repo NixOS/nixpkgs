@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "dave-theunsub";
     repo = "clamtk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ClBsBXbGj67zgrkA9EjgK7s3OmXOJA+xV5xLGOcMsbI=";
   };
 

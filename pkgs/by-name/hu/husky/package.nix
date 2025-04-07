@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "typicode";
     repo = "husky";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KoF2+vikgFyCGjfKeaqkC720UVMuvCIn9ApDPKbudsA=";
   };
 

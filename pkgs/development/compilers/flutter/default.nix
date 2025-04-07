@@ -72,7 +72,7 @@ let
         src = fetchFromGitHub {
           owner = "flutter";
           repo = "flutter";
-          rev = version;
+          tag = version;
           hash = flutterHash;
         };
       };

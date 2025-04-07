@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kluctl";
     repo = "kluctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qtntImc+fiRPMUHVM4A8d2e17zklV47CJ10M9A8oa7k=";
   };
 

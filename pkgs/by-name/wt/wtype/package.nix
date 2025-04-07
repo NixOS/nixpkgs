@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atx";
     repo = "wtype";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TfpzAi0mkXugQn70MISyNFOXIJpDwvgh3enGv0Xq8S4=";
   };
 

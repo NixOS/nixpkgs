@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "urn";
     repo = "urn";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0nclr3d8ap0y5cg36i7g4ggdqci6m5q27y9f26b57km8p266kcpy";
   };
 

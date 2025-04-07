@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "piitaya";
     repo = "lovelace-mushroom";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IYixXKitnrqw9t4UMfIl6v1v627FQwiv0TZEh1LVJTI=";
   };
 

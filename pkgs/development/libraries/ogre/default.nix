@@ -57,7 +57,7 @@ let
       src = fetchFromGitHub {
         owner = "OGRECave";
         repo = "ogre";
-        rev = "v${version}";
+        tag = "v${version}";
         inherit hash;
       };
 
