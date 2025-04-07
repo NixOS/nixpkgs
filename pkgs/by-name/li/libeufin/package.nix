@@ -16,21 +16,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeufin";
-  version = "0.13.0";
+  version = "0.14.8";
 
   src = fetchgit {
     url = "https://git.taler.net/libeufin.git/";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-whGcFZYuyeFfhu+mIi7oUNJRXjaVGuL67sfUrHF85Fs=";
+    hash = "sha256-tI0Awe1UDK7TLGi1ugejSOn6fdnKViIHr14mRytESsM=";
     fetchSubmodules = true;
-    leaveDotGit = true; # required for correct submodule fetching
-    # Delete .git folder for reproducibility (otherwise, the hash changes unexpectedly after fetching submodules)
-    # Save the HEAD short commit hash in a file so it can be retrieved later for versioning.
+    # Add a fake HEAD commit hash. This file isn't necessary for versioning
+    # (run `libeufin-bank --version` to verify), but without it the build
+    # will fail.
     postFetch = ''
-      pushd $out
-      git rev-parse --short HEAD > ./common/src/main/resources/HEAD.txt
-      rm -rf .git
-      popd
+      echo "unknown" > $out/common/src/main/resources/HEAD.txt
     '';
   };
 
