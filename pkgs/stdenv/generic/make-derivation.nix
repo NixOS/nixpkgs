@@ -33,6 +33,7 @@ let
     optionalAttrs
     optionalString
     optionals
+    pipe
     remove
     splitString
     subtractLists
@@ -118,6 +119,8 @@ let
     "format"
     "fortify"
     "fortify3"
+    "strictflexarrays1"
+    "strictflexarrays3"
     "shadowstack"
     "nostrictaliasing"
     "pacret"
@@ -315,14 +318,16 @@ let
         ) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
-      hardeningDisable' =
-        if
-          any (x: x == "fortify") hardeningDisable
+      concretizeFlagImplications =
+        flag: impliesFlags: list:
+        if any (x: x == flag) list then unique (list ++ impliesFlags) else list;
+
+      hardeningDisable' = pipe hardeningDisable [
         # disabling fortify implies fortify3 should also be disabled
-        then
-          unique (hardeningDisable ++ [ "fortify3" ])
-        else
-          hardeningDisable;
+        (concretizeFlagImplications "fortify" [ "fortify3" ])
+        # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+        (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+      ];
       defaultHardeningFlags =
         (if stdenv.hasCC then stdenv.cc else { }).defaultHardeningFlags or
         # fallback safe-ish set of flags
