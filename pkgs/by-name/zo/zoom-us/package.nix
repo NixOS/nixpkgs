@@ -26,6 +26,7 @@
   nspr,
   nss,
   pango,
+  qt5,
   wayland,
   xorg,
   libxkbcommon,
@@ -94,6 +95,12 @@ let
       nspr
       nss
       pango
+      qt5.qt3d
+      qt5.qtgamepad
+      qt5.qtlottie
+      qt5.qtmultimedia
+      qt5.qtremoteobjects
+      qt5.qtxmlpatterns
       stdenv.cc.cc
       wayland
       xorg.libX11
