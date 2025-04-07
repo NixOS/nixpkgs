@@ -10,6 +10,9 @@
   pkg-config,
   stdenv,
   testers,
+
+  # whether to build the package as a header-only library
+  enableHeaderOnly ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,10 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
   ];
 
-  mesonFlags = [
-    "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-Dbuild_examples=true"
-  ];
+  mesonFlags =
+    if enableHeaderOnly then
+      [        
+        "-Dcompile_library=false"
+      ]
+    else
+      [
+        "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+        "-Dbuild_examples=true"
+      ];
 
   # almost all tests fail on Darwin with the following exception:
   # libc++abi: terminating due to uncaught exception of type std::runtime_error: collate_byname<char>::collate_byname failed to construct for
