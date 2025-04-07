@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
   version = "0.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
@@ -39,8 +40,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
   meta = {
-    description = "A simple blog generator plugin for MkDocs";
+    description = "Simple blog generator plugin for MkDocs";
     homepage = "https://github.com/FernandoCelmer/mkdocs-simple-blog";
+    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
