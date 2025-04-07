@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Librem5";
     repo = "millipixels";
-    rev = "v${version}";
+    tag = "v${version}";
     domain = "source.puri.sm";
     hash = "sha256-pRREQRYyD9+dpRvcfsNiNthFy08Yeup9xDn+x+RWDrE=";
   };

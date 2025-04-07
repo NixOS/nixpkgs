@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "netromdk";
     repo = "vermin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lgxYQ8oNfa0+8BUf3nRv0fcNLP+UATjz733ms3pM6gQ=";
   };
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "phfaist";
     repo = "pylatexenc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3Ho04qrmCtmmrR+BUJNbtdCZcK7lXhUGJjm4yfCTUkM=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kbld";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ikrxgukixnUCwwEt5FBzTmpjpjkjgtYTjr/AwNZ9kiI=";
   };
 

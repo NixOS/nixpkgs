@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     sha256 = "sha256-kPyk13yd4rc63Nh73opuHsCTj4DgYAVfro8To96tteA=";
-    rev = "v${version}";
+    tag = "v${version}";
     repo = "gita";
     owner = "nosarthur";
   };

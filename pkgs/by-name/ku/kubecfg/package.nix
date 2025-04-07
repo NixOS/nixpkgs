@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-27xek+rLJK7jbqi9QDuWdA9KrO5QXUPAj9IRXVxiS8Q=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1Rso7/S95+8KPoKa+3oFPJBWE+YGw4Qqo3Hn+crxNio=";
     fetchSubmodules = true;
   };

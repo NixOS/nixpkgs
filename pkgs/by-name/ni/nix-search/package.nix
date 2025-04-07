@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "nix-search";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dOdcXKfSwi0THOjtgP3O/46SWoUY+T7LL9nGwOXXJfw=";
   };
 

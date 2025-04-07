@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kitagry";
     repo = "regols";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
   };
 

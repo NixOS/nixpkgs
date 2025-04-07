@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "mobian1";
     repo = "eg25-manager";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Zna+JplmYrxPYsXToJ3vKOPzPMZYB3bEdfT8GIAHATs=";
   };
 

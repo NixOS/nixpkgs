@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "aokellermann";
     repo = "sway-scratch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1N/33XtkEWamgQYNDyZgSSaaGD+2HtbseEpQgrAz3CU=";
   };
 

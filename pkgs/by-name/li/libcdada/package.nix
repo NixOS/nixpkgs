@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "msune";
     repo = "libcdada";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-x//22FvgxIGL9H2whMAVCTyI9gAjlMWkEmpOAcoeOgE=";
   };
 

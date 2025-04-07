@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = "timew-sync-client";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8Bw+BI7EiW9UcHo6gaDthX4VH4kAlycm4EvAJEEAOWc=";
   };
 

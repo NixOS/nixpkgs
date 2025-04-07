@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TaylorSMarks";
     repo = "playsound";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0jbq641lmb0apq4fy6r2zyag8rdqgrz8c4wvydzrzmxrp6yx6wyd";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = false; # We'll use our own
     inherit (finalAttrs) hash;
   };

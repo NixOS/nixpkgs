@@ -25,7 +25,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "dkogan";
     repo = "feedgnuplot";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-r5rszxr65lSozkUNaqfBn4I4XjLtvQ6T/BG366JXLRM=";
   };
 

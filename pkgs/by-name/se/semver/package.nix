@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "catouc";
     repo = "semver-go";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0v3j7rw917wnmp4lyjscqzk4qf4azfiz70ynbq3wl4gwp1m783vv";
   };
 

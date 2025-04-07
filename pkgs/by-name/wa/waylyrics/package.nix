@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NDdZH33tkY+TgDLkT7r+M9uHCeE9/NRQgVZhJ7EuxEc=";
   };
 

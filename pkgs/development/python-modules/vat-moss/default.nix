@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "vat_moss-python";
-    rev = version;
+    tag = version;
     hash = "sha256-c0lcyeW8IUhWKcfn3BmsbNmHyAzm8T0sdYp0Zp0FbFw=";
   };
 

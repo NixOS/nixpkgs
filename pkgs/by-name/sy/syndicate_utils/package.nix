@@ -16,7 +16,7 @@ buildNimSbom (finalAttrs: {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
     repo = "syndicate_utils";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-X8sb/2mkhVp0jJpTk9uYSDhAVui4jHl355amRCnkNhA=";
   };
 

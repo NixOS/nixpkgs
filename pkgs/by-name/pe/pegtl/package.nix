@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "taocpp";
     repo = "PEGTL";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-nPWSO2wPl/qenUQgvQDQu7Oy1dKa/PnNFSclmkaoM8A=";
   };
 

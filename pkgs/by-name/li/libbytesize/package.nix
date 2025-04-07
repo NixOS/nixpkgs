@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-scOnucn7xp6KKEtkpwfyrdzcntJF2l0h0fsQotcceLc=";
   };
 

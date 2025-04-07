@@ -10,7 +10,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "montag451";
     repo = "pytun";
     sha256 = "sha256-DZ7CoLi6LPhuc55HF9dtek+/N4A29ecnZn7bk7jweuI=";

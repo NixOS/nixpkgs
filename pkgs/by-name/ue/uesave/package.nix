@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "trumank";
     repo = "uesave-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9gOOSLejVfR1KJMhcNuKDkuTOvPC6sNG8xQOZlt8NxI=";
   };
 

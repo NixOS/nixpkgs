@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "isaacs";
     repo = "node-glob";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-oLlNhQOnu/hlKjNWa5vjqslz1EarZJOpUEXUB+vGQvc=";
   };
 

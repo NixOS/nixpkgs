@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hardpixel";
     repo = "unite-shell";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ceo0HQupiihD6GW6/PUbjuArOXtPtAmUPxmNi7DS8E0=";
   };
 

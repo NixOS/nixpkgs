@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hareku";
     repo = "fanbox-dl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-el9+pusnqui7G+x05lJsLjnZ4OymvBVSCa7ReJTgqLw=";
   };
 

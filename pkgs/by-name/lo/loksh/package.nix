@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-R9yLrXzXeu7gUoV+CDOAu89p2YmPP0ImAWq2fod722c=";
   };

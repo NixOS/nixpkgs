@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "arabeyes-org";
     repo = "itools";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-DxTZaq2SlEmy9k7iAdjctpPkk+2rIaF+xEcfXj/ERWw=";
   };
 

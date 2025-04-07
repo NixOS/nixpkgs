@@ -44,7 +44,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "dependabot";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BD95YCPKoU/crlBPWYejI6kydpXhmYNAgtMEGi+iRsY=";
   };
 

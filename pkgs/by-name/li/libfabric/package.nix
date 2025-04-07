@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ofiwg";
     repo = "libfabric";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-TK45SCPyFIMhliBYBEMPSKX/UtHGPj075SlTNB92O0Y=";
   };
 

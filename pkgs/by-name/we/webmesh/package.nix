@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "webmeshproj";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Inh7j01/xBJgGYmX1tGBRNYjn1N4AO2sywBwZ8yXlsY=";
   };
 

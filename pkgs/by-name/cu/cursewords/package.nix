@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thisisparker";
     repo = "cursewords";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ssr15kSdWmyMFFG5uCregrpGQ3rI2cMXqY9+/a3gs84=";
   };
 

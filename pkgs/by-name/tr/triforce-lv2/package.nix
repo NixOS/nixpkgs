@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "triforce";
-    rev = version;
+    tag = version;
     hash = "sha256-Y9ufUADhpT3NPj/OfhQ7xJoBqoOkPkVFA0TvUwCubrU=";
   };
 

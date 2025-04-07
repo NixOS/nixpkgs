@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "keysmith";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+wYWIoPYc7qpTRS4Zlxp50Up8obZOmfQpiT0SWwVJE0=";
   };
 

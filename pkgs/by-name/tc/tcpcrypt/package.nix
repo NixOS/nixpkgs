@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "tcpcrypt";
     owner = "scslab";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0a015rlyvagz714pgwr85f8gjq1fkc0il7d7l39qcgxrsp15b96w";
   };
 

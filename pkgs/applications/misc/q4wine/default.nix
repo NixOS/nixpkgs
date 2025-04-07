@@ -22,7 +22,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brezerk";
     repo = "q4wine";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "04gw5y3dxdpivm2xqacqq85fdzx7xkl0c3h3hdazljb0c3cxxs6h";
   };
 

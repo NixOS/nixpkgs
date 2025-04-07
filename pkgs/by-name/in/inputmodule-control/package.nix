@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "inputmodule-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5sqTkaGqmKDDH7byDZ84rzB3FTu9AKsWxA6EIvUrLCU=";
   };
 

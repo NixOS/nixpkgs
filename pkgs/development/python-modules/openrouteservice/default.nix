@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GIScience";
     repo = "${pname}-py";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1d5qbygb81fhpwfdm1a118r3xv45xz9n9avfkgxkvw1n8y6ywz2q";
   };
 

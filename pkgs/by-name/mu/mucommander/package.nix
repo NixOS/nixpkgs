@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-J1paBXlAGe2eKMg4wvaXTzMIiSMFIJ1XIAaKrfOwQLc=";
   };
 

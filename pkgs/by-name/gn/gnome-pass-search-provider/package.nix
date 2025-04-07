@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jle64";
     repo = "gnome-pass-search-provider";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-PDR8fbDoT8IkHiTopQp0zd4DQg7JlacA6NdKYKYmrWw=";
   };
 

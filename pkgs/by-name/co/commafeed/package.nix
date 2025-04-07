@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
-    rev = version;
+    tag = version;
     hash = "sha256-Qc2l/CSVK+8k7b3RZA8hQsGTq29OvkDMbMzHcnPm/yE=";
   };
 

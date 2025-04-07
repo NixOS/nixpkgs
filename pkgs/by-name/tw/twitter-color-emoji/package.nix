@@ -22,7 +22,7 @@ let
     name = "twemoji";
     owner = "jdecked";
     repo = "twemoji";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
   };
 

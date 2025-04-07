@@ -30,7 +30,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
   };
 

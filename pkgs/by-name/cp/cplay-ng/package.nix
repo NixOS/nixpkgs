@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xi";
     repo = "cplay-ng";
-    rev = version;
+    tag = version;
     hash = "sha256-6mphhoLDkGZ2r+elzLlPl3B8fNz3loqrQB8x8276AHI=";
   };
 

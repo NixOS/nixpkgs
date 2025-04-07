@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "happylinks";
     repo = "gqlint";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m/Y7i3+93UdPnKQlZUHgtRbfSmJ1xYjao+bU+zxMgHw=";
   };
 

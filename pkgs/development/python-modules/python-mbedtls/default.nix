@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Synss";
     repo = "python-mbedtls";
-    rev = version;
+    tag = version;
     hash = "sha256-gMFludfAprQ/1JR77Ee6/xVvGLJ9pY1LrouLpSKVrzk=";
   };
 

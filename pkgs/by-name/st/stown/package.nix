@@ -4,6 +4,7 @@
   fetchFromGitHub,
   tree,
   versionCheckHook,
+  nix-update-script,
 }:
 let
   version = "1.2.0";
@@ -29,6 +30,8 @@ python3Packages.buildPythonApplication {
     tree
     versionCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage file system object mapping via symlinks. Lightweight alternative to GNU Stow";

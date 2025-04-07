@@ -12,7 +12,7 @@ rebar3Relx rec {
     owner = "WhatsApp";
     repo = "erlfmt";
     sha256 = "sha256-O7+7dMgmnNd9hHuRcJqMAI0gmONz5EO3qSlUC3tufh0=";
-    rev = "v${version}";
+    tag = "v${version}";
   };
   meta = with lib; {
     homepage = "https://github.com/WhatsApp/erlfmt";

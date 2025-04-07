@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "selwin";
     repo = "python-user-agents";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0pcbjqj21c2ixhl414bh2h8khi8y1igzfpkyqwan1pakix0lq45a";
   };
 

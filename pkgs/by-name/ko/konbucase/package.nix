@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "konbucase";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-md7drxg1JuW6TRJauKOk4Aqjx/V1RVZ+POa5v6DtKwk=";
     fetchSubmodules = true;
   };

@@ -27,7 +27,7 @@ in
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
-    rev = version;
+    tag = version;
     inherit sha256;
   };
 

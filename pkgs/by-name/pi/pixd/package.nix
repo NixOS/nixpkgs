@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FireyFly";
     repo = "pixd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1vmkbs39mg5vwmkzfcrxqm6p8zr9sj4qdwng9icmyf5k34c34xdg";
   };
 

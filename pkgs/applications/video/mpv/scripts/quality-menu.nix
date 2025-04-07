@@ -13,7 +13,7 @@ buildLua rec {
   src = fetchFromGitHub {
     owner = "christoph-heinrich";
     repo = "mpv-quality-menu";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-uaU4W72P7zhHzxmfr59icCAl1mJ3ycLGzkGcYasHllI=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

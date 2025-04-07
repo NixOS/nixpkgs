@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jterrace";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LDNIugQeRqNsAZ5ZxS/NxHokEAwefpfRutTRpR0IcXk=";
   };
 

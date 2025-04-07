@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrippa";
     repo = "ds4drv";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
   };
 

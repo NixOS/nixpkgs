@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
-    rev = version;
+    tag = version;
     hash = "sha256-GAQ80J7at8Apqu+DUMN3+rLi/lrNv5Y7w/DKpUN2iu8=";
   };
 

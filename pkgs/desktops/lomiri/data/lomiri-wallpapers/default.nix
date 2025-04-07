@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-wallpapers";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-n8+vY+MPVqW6s5kSo4aEtGZv1AsjB3nNEywbmcNWfhI=";
   };
 

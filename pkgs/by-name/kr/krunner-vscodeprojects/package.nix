@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "krunner-vscodeprojects";
-    rev = version;
+    tag = version;
     hash = "sha256-a24MFSXYFR4VVUVMOAY0n0sKqY0L9lUhnpgSeDFtceI=";
   };
 

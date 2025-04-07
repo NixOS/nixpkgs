@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "xapi-project";
     repo = "ocaml-xenstore-clients";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1kxxd9i4qiq98r7sgvl59iq2ni7y6drnv48qj580q5cyiyyc85q3";
   };
 

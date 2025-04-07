@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z4prbaPYRdN/fPdBwDz7D3/gKybh2ulA3UM1LZGeAK0=";
   };
 

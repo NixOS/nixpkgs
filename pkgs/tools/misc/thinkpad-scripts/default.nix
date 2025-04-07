@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martin-ueding";
     repo = "thinkpad-scripts";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "08adx8r5pwwazbnfahay42l5f203mmvcn2ipz5hg8myqc9jxm2ky";
   };
 

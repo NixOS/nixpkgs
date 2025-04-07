@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "favadi";
     repo = "protoc-go-inject-tag";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8mpkwv80PMfOPiammg596hW7xdrcum9Hl/v5O1DPWgY=";
   };
 

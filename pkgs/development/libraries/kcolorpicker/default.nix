@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kColorPicker";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FG/A4pDNuhGPOeJNZlsnX3paEy4ibJVWKxn8rVUGpN8=";
   };
 

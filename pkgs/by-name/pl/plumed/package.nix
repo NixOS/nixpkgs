@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "plumed";
     repo = "plumed2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KN412t64tp3QUQkhpLU3sAYDosQ3hw9HqpT1fzt5fwA=";
   };
 

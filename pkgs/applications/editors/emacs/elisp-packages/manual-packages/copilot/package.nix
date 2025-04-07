@@ -19,7 +19,7 @@ let
     src = fetchFromGitHub {
       owner = "jfcherng";
       repo = "copilot-node-server";
-      rev = version;
+      tag = version;
       hash = "sha256-Ds2agoO7LBXI2M1dwvifQyYJ3F9fm9eV2Kmm7WITgyo=";
     };
   });

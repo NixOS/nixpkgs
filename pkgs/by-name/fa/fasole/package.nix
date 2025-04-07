@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ProggerX";
     repo = "fasole";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qcCJgz/YXfd8+9ST1U4YFxLLd25D8HrfZzsDGpKgCdM=";
   };
 

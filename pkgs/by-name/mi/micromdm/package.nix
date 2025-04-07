@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "micromdm";
     repo = "micromdm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-o/HK1bjaUwsSQG7QbYe0gFnD/OKV00cHXLXpftNa3iY=";
   };
 

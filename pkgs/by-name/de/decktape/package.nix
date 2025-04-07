@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "astefanutti";
     repo = "decktape";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V7JoYtwP7iQYFi/WhFpkELs7mNKF6CqrMyjWhxLkcTA=";
   };
 

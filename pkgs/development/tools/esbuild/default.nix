@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "evanw";
     repo = "esbuild";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aDxheDMeQYqCT9XO3In6RbmzmXVchn+bjgf3nL3VE4I=";
   };
 

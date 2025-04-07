@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-tray-loader";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-LzRjOl3kHArpxwerh7XOisYIJ+t+r/zWUbvYh6k6zKw=";
   };
 

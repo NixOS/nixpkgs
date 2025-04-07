@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wavexx";
     repo = "facedetect";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0mddh71cjbsngpvjli406ndi2x613y39ydgb8bi4z1jp063865sd";
   };
 

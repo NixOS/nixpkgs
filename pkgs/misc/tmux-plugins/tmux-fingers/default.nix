@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
-      rev = "${version}";
+      tag = version;
       sha256 = "sha256-m9QON7diHVEDnnv/alXCJOG+BnfrAKygScrubZZ605I=";
     };
 

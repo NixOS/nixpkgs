@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chan-sccp";
     repo = "chan-sccp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Lonsh7rx3C17LU5pZpZuFxlki0iotDt+FivggFJbldU=";
   };
 

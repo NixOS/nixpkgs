@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8+HF5Wf6lQHbi8Vp2tpom1FO56lQ5RyYsgs8ii+2RD0=";
   };
 

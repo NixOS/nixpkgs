@@ -74,7 +74,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Aibu3yG/D1501Hr2F2qsGvjig14tbEAI+MBfqbxlpg8=";
   };
 

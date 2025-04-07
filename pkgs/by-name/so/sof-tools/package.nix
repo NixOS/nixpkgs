@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VmP0z3q1P8LqQ+ELZGkI7lEXGiMYdAPvS8Lbwv6dUyk=";
   };
 

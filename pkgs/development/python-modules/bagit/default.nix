@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";
     repo = "bagit-python";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-t01P7MPWgOrktuW2zF0TIzt6u/jkLmrpD2OnqawhJaI=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bitsed";
     repo = "qosmic";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "13nw1mkdib14430r21mj352v62vi546vf184vyhxm7yjjygyra1w";
   };
 

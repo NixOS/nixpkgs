@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ft08skfLASgfZo3lrlN+nuF2FK78kEm2geRVg8cO5hM=";
   };
 

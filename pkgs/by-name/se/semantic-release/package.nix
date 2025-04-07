@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DoOnrgS6g4Qie1v7AVyaJgseG/z7rZX8FwXyvokOy0Y=";
   };
 

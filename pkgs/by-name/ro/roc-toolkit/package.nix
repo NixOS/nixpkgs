@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "roc-streaming";
     repo = "roc-toolkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-53irDq803dTg0YqtC1SOXmYNGypSMAEK+9HJ65pR5PA=";
   };
 

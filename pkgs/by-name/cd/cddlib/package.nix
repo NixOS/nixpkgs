@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cddlib";
     repo = "cddlib";
-    rev = version;
+    tag = version;
     sha256 = "09s8323h5w9j6mpl1yc6lm770dkskfxd2ayyafkcjllmnncxzfa0";
   };
   buildInputs = [ gmp ];

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-j+3qknmezKqHVxvfmG9oPFtWOzJsimGXYe5PWX694mI=";
   };
 

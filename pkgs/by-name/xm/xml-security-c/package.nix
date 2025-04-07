@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xml-security";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-D60JtD4p9ERh6sowvwBHtE9XWVm3D8saooagDvA6ZtQ=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = "proxychains-ng";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-cHRWPQm6aXsror0z+S2Ddm7w14c1OvEruDublWsvnXs=";
   };
 

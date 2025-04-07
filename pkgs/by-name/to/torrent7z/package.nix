@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BubblesInTheTub";
     repo = "torrent7z";
-    rev = version;
+    tag = version;
     sha256 = "Y2tr0+z9uij4Ifi6FfWRN24BwcDXUZKVLkLtKUiVjU4=";
   };
 

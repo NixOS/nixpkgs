@@ -29,7 +29,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0rl8w7s2asff626clzfvyz987l2k4ml5dg417mqp9v8a962q0v2x";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bellini666";
     repo = "django-choices-field";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2oLMUM/aE4aY0eEU+CLIjTNQJAMUt/GK5Fw26QN7t34=";
   };
 

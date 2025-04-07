@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sniptt-official";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GOCuH9yiVs3N3sHCCoSGaQkaaJs4NY/klNBRWjZGLE4=";
   };
 

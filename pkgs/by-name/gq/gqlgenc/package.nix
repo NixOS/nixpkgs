@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yamashou";
     repo = "gqlgenc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-RGHfDrFr2HO4i+YQeNzYrEcU+Xe286f3f5g/yUmpxpA=";
   };
 

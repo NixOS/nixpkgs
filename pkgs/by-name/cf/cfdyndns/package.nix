@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nrdxp";
     repo = "cfdyndns";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OV1YRcZDzYy1FP1Bqp9m+Jxgu6Vc0aWpbAffNcdIW/4=";
   };
 

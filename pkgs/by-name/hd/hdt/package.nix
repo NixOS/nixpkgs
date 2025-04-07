@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rdfhdt";
     repo = "hdt-cpp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1vsq80jnix6cy78ayag7v8ajyw7h8dqyad1q6xkf2hzz3skvr34z";
   };
 

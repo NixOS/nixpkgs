@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2sYWTzj7+ozezNX0uFdJW+A0K6bwAmiVvqo/lr9UToA=";
   };
 

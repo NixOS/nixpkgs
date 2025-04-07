@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "cpu-energy-meter";
-    rev = version;
+    tag = version;
     hash = "sha256-QW65Z8mRYLHcyLeOtNAHjwPNWAUP214wqIYclK+whFw=";
   };
 

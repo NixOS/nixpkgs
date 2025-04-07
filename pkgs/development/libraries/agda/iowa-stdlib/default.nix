@@ -11,7 +11,7 @@ mkDerivation (rec {
   src = fetchFromGitHub {
     owner = "cedille";
     repo = "ial";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0dlis6v6nzbscf713cmwlx8h9n2gxghci8y21qak3hp18gkxdp0g";
   };
 

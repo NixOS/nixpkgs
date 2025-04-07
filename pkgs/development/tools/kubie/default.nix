@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.25.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "sbstp";
     repo = "kubie";
     sha256 = "sha256-aZM4rIYDEO1oezHeG2cL0O3hWrj7OJFzW/uFaX+cczw=";

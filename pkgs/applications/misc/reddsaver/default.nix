@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "reddsaver";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07xsrc0w0z7w2w0q44aqnn1ybf9vqry01v3xr96l1xzzc5mkqdzf";
   };
 

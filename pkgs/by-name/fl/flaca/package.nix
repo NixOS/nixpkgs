@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
       source = fetchFromGitHub {
         owner = "Blobfolio";
         repo = "flaca";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-GpxOTu7yjJ9IFMKVkgjLeKGNEUiKw0ZeWQorfhaOTsg=";
       };
       lockFile = fetchurl {

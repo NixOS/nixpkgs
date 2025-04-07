@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "libevdevc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0ry30krfizh87yckmmv8n082ad91mqhhbbynx1lfidqzb6gdy2dd";
   };
 

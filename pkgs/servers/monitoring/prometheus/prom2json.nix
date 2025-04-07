@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "1.4.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "prometheus";
     repo = "prom2json";
     sha256 = "sha256-cKz+ZFQYjsL7dFfXXCrl4T8OuvQkdqVAotG9HRNtN7o=";

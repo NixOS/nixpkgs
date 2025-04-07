@@ -10,7 +10,7 @@ let
   src = fetchFromGitHub {
     owner = "tnychn";
     repo = "mpv-discord";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P1UaXGboOiqrXapfLzJI6IT3esNtflkQkcNXt4Umukc=";
   };
 

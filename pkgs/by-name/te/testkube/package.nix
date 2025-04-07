@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubeshop";
     repo = "testkube";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Coi/aPEZb1VoMCOtzl2AcURomo4uS76AZDS449B4EcU=";
   };
 

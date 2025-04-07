@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "abuild";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-gNmje4USaklwmsVGs4NMFoharEk2syCmDdQ/SCSMKsI=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "rust-workshop-runner";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PfQPRbOPK1Y/j8Xtg78oDzBFUx8eiM3ZwRul/ao0SgI=";
   };
 
