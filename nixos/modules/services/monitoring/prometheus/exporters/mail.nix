@@ -15,6 +15,7 @@ let
     nameValuePair
     toLower
     filterAttrs
+    removeAttrs
     escapeShellArg
     literalExpression
     mkIf
@@ -41,7 +42,7 @@ let
           )
         else
           nameValuePair (toLower name) value
-      ) (filterAttrs (n: _: !(n == "_module")) cfg.configuration)
+      ) (removeAttrs cfg.configuration [ "_module" ])
     )
   );
 
