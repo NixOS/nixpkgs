@@ -156,9 +156,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Add "whisper-cpp" prefix before every command
     mv -v "$out/bin/"{quantize,whisper-quantize}
 
-    install -v -D -m755 $src/models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
+    install -v -D -m755 "$src/models/download-ggml-model.sh" "$out/bin/whisper-cpp-download-ggml-model"
 
-    wrapProgram $out/bin/whisper-cpp-download-ggml-model \
+    wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
   '';
 
@@ -168,7 +168,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/whisper-cli --help >/dev/null
+    "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
   '';
 
