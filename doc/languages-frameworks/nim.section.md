@@ -16,7 +16,7 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = lib.fakeHash;
   };
 

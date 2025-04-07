@@ -102,7 +102,7 @@ let
       src = fetchFromGitHub {
         owner = "Someone";
         repo = "AwesomeMod";
-        rev = "...";
+        tag = "...";
         hash = "...";
       };
       # Path to be installed in the unpacked source (default: ".")

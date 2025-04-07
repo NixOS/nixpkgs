@@ -51,7 +51,7 @@ agda.withPackages (p: [
     src =  fetchFromGitHub {
       repo = "agda-stdlib";
       owner = "agda";
-      rev = "v1.5";
+      tag = "v1.5";
       hash = "sha256-nEyxYGSWIDNJqBfGpRDLiOAnlHJKEKAOMnIaqfVZzJk=";
     };
   }))
@@ -82,7 +82,7 @@ agda.withPackages (p: [
       repo = "repo";
       owner = "owner";
       version = "...";
-      rev = "...";
+      tag = "...";
       hash = "...";
     };
   })

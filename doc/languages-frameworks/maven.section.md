@@ -18,7 +18,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "intoolswetrust";
     repo = pname;
-    rev = "${pname}-${version}";
+    tag = "jd-cli-${version}";
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
@@ -76,7 +76,7 @@ jd-cli.overrideMavenAttrs (old: rec {
   src = fetchFromGitHub {
     owner = old.src.owner;
     repo = old.src.repo;
-    rev = "${old.pname}-${version}";
+    tag = "${old.pname}-${version}";
     # old source hash of 1.2.0 version
     hash = "sha256-US7j6tQ6mh1libeHnQdFxPGoxHzbZHqehWSgCYynKx8=";
   };

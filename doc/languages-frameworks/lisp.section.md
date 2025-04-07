@@ -184,7 +184,7 @@ let
       domain = "gitlab.common-lisp.net";
       owner = "alexandria";
       repo = "alexandria";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
@@ -208,7 +208,7 @@ sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
     domain = "gitlab.common-lisp.net";
     owner = "alexandria";
     repo = "alexandria";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
   };
 })
