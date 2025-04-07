@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
   version = "0.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
