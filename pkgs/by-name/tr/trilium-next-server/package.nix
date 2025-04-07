@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.92.4";
+  version = "0.92.6";
 
   serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-x64.tar.xz";
-  serverSource_x64.sha256 = "1bcacr5sxmrq9zvh8xjyr30y5mz0y6qyx2m18dblswdi0mbi7cv4";
+  serverSource_x64.sha256 = "1mh7q11hwp5vrbdrwb0apmxkiv90i3163m8a3cbv0jhd5amv9rjv";
   serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-arm64.tar.xz";
-  serverSource_arm64.sha256 = "04mjkqywwdax46r8q8wygi9dxglz2qipmlrv3cqqpdvjm0yxh2g2";
+  serverSource_arm64.sha256 = "1w5208izjifcq4vsryjpmw2nr140fk2h802q9lkil1646r2b5lyg";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then
@@ -56,8 +56,7 @@ stdenv.mkDerivation {
       --add-flags "src/main"
 
     # Clean up broken symlinks and build tools.
-    rm "$out"/share/trilium-server/node/bin/{npm,npx}
-    rm -r "$out"/share/trilium-server/node_modules/{@npmcli,@rollup,@babel,.bin}
+    rm -r "$out"/share/trilium-server/node_modules/{@npmcli,@rollup,@babel}
 
     runHook postInstall
   '';
