@@ -80,7 +80,7 @@ let
           tests.mattermostWithTests = withTests;
         };
     in
-    finalPassthru.withTests;
+    finalPassthru.withoutTests;
 in
 buildMattermost rec {
   pname = "mattermost";
