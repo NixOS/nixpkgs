@@ -167,14 +167,14 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_25";
       };
 
-      nixComponents_2_26 = nixDependencies.callPackage ./modular/packages.nix {
+      nixComponents_2_26 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.26.3";
         inherit (self.nix_2_24.meta) maintainers;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "42fc03dd1f12df2d9152303f3fb8bf22b746462c";
+          tag = version;
           hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
         };
       };
@@ -183,14 +183,14 @@ lib.makeExtensible (
       # depend on the components they need in `nixComponents_2_26`.
       nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
 
-      nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix {
+      nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.27.1";
         inherit (self.nix_2_24.meta) maintainers;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_27";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "9cb662df7442a1e2c4600fb8ecb2ad613ebc5a95";
+          tag = version;
           hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
         };
       };
@@ -199,6 +199,7 @@ lib.makeExtensible (
 
       nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix {
         version = "2.28.1pre";
+      nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix rec {
         inherit (self.nix_2_24.meta) maintainers;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_28";
         src = fetchFromGitHub {
