@@ -10,7 +10,10 @@ in
 { lib, ... }:
 {
   name = "centrifugo";
-  meta.maintainers = [ lib.maintainers.tie ];
+  meta.maintainers = [
+    lib.maintainers.tie
+    lib.maintainers.valodim
+  ];
 
   nodes = lib.listToAttrs (
     lib.imap0 (index: name: {
