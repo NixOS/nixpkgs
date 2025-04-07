@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
   meta = {
-    description = "A simple blog generator plugin for MkDocs";
+    description = "Simple blog generator plugin for MkDocs";
     homepage = "https://github.com/FernandoCelmer/mkdocs-simple-blog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
