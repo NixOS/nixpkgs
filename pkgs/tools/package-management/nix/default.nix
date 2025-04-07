@@ -230,20 +230,6 @@ lib.makeExtensible (
       # depend on the components they need in `nixComponents_2_26`.
       nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
 
-      nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.27.1";
-        inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_27";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          tag = version;
-          hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
-        };
-      };
-
-      nix_2_27 = addTests "nix_2_27" self.nixComponents_2_27.nix-everything;
-
       nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.28.1";
         inherit (self.nix_2_24.meta) maintainers;
@@ -303,6 +289,9 @@ lib.makeExtensible (
         ) (lib.range 4 17)
       )
       // {
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+
         unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
       }
     )
