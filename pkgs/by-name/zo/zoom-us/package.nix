@@ -6,6 +6,7 @@
   xar,
   cpio,
   pulseaudioSupport ? true,
+  xdgDesktopPortalSupport ? true,
   callPackage,
   buildFHSEnv,
 }:
@@ -177,6 +178,17 @@ let
     ++ lib.optionals pulseaudioSupport [
       pkgs.libpulseaudio
       pkgs.pulseaudio
+    ]
+    ++ lib.optionals xdgDesktopPortalSupport [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.lxqt.xdg-desktop-portal-lxqt
+      pkgs.plasma5Packages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-xapp
     ];
 
   # We add the `unpacked` zoom archive to the FHS env
