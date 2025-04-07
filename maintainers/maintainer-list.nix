@@ -6444,6 +6444,11 @@
     github = "DrakeTDL";
     githubId = 22124013;
   };
+  drakon64 = {
+    name = "Adam Chance";
+    email = "nixpkgs@drakon.cloud";
+    githubId = 6444703;
+  };
   dramaturg = {
     email = "seb@ds.ag";
     github = "dramaturg";
