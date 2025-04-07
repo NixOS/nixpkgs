@@ -291,8 +291,8 @@ lib.makeExtensible (
       };
 
       nix_2_24 = common {
-        version = "2.24.13";
-        hash = "sha256-lUsK8lAwaaTEM+KFML/6sYwaVAiSf70g1EfSDJNNrU0=";
+        version = "2.24.14";
+        hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
         self_attribute_name = "nix_2_24";
       };
 
