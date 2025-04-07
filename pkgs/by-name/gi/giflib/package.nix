@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./CVE-2021-40633.patch
+      ./CVE-2025-31344.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       # Build dll libraries.
