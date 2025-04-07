@@ -52,7 +52,6 @@ in
       HBOX_MODE = mkDefault "production";
     };
     systemd.services.homebox = {
-      after = [ "network.target" ];
       environment = cfg.settings;
       serviceConfig = {
         User = "homebox";
