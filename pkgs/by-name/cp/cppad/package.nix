@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CppAD";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-rAKD/PAjepDchvrJp7iLYw5doNq8Af1oVh61gfMcNYI=";
   };
 

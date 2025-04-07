@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PHPCSStandards";
     repo = "PHP_CodeSniffer";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-wlI/ylBeSkeg96sDwvDV9EedSLILFqsl96yWIOFtDQo=";
   };
 
