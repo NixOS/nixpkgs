@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "werf";
     repo = "kubedog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xBTz1Ux2W0A0leOPNu0yONiz55LiYcYiviKEi8xsUTU=";
   };
 

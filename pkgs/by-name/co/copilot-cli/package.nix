@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iipDvjPCNtk6wHjukgtnWzz0qwAJOU9DpolesNM2ELo=";
   };
 

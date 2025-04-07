@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wasmer-pack";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+wqgYkdkuhPFkJBdQLnUKAGmUfGBU9mBfMRNBFmiT4E=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "orangekame3";
     repo = "ghfetch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Cmyd/wrobHPyG9ExUSfSsTwFUfbo9iuvmAr0uqunWWw=";
   };
 

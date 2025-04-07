@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "snooze";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-K77axli/mapUr3yxpmUfFq4iWwgRmEVUlP6+/0Iezwo=";
   };
   makeFlags = [

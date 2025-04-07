@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mondeja";
     repo = "pre-commit-po-hooks";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wTmcV8KkoQLuK4EWDt0pbp+EQJRatxnQYeBfikK+vlA=";
   };
 

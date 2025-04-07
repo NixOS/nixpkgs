@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q26XVS/LcyZPRqDNwKKA9exgBByE0muyuNb0Bbar2lY=";
   };
 

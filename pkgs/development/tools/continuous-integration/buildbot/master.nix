@@ -83,7 +83,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buildbot";
     repo = "buildbot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
   };
 

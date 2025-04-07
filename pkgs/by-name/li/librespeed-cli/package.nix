@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "librespeed";
     repo = "speedtest-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LFGlKYWUaHi/byoRPD6zsdr0U5r0zWxxRa2NJNB2yb8=";
   };
 

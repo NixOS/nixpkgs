@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vbatts";
     repo = "go-mtree";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MDX16z4H1fyuV5atEsZHReJyvC+MRdeA54DORCFtpqI=";
   };
 

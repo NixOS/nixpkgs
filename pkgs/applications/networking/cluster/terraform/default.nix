@@ -35,7 +35,7 @@ let
         src = fetchFromGitHub {
           owner = "hashicorp";
           repo = "terraform";
-          rev = "v${version}";
+          tag = "v${version}";
           inherit hash;
         };
 

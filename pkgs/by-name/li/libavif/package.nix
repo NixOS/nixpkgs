@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kop1S4A/+hP2YdgoMXP7OMVPc2eoRnHpoBrPnW6KWyM=";
   };
 

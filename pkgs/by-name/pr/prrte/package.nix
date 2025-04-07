@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wLM+txjngY5gh/+yiaSKrenG6oIzF2dPgMumIGyCsXU=";
     fetchSubmodules = true;
   };

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = version;
+    tag = version;
     hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };

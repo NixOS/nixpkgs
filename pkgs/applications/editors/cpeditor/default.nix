@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
-    rev = version;
+    tag = version;
     hash = "sha256-t7nn3sO45dOQq5OMWhaseO9XHicQ/1fjukXal5yPMgY";
     fetchSubmodules = true;
   };

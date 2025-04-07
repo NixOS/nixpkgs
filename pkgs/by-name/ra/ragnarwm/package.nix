@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cococry";
     repo = "Ragnar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-OZhIwrKEhTfkw9K8nZIwGZzxXBObseWS92Y+85HmdNs=";
   };
 

@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "obreitwi";
     repo = "asfa";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ARdUlACxmbjmOTuNW2oiVUcfd5agR4rcp9aMQYUAYsw=";
   };
 in

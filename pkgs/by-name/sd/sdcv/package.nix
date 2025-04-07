@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dushistov";
     repo = "sdcv";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
   };
 

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bq8N49qArdF0EFIGiK4lCsC0CZxwmeo0R8OiehrifTg=";
   };
 

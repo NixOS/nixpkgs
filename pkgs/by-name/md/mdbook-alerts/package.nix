@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lambdalisue";
     repo = "rs-mdbook-alerts";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MZS9TESITj3tzdaXYu5S2QUCW7cZuTpH1skFKeVi/sQ=";
   };
 

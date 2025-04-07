@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "0.7.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "esnet";
     repo = "gdg";
     sha256 = "sha256-0F4kdyQ4TXV2vb2IkPx7CisTmJAQjlSRtOAFhmZqaD8=";

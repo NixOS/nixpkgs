@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Eab5tXP5gv9v/hu/Eh2WC/SeJ/bG1u6FKbREKB/ry9c=";
     fetchSubmodules = true;
   };

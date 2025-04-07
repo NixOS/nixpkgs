@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ea6f2xTVmYekPmzAKasA9mNG4Voxw2MCkfZ9LB9gwbo=";
   };
 

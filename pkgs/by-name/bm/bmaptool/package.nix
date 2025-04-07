@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yoctoproject";
     repo = "bmaptool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
   };
 

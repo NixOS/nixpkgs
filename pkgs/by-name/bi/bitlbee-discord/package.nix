@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.4.3";
 
   src = fetchFromGitHub {
-    rev = version;
+    tag = version;
     owner = "sm00th";
     repo = "bitlbee-discord";
     sha256 = "00qgdvrp7hv02n0ns685igp810zxmv3adsama8601122al6x041n";

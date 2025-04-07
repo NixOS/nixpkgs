@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5FcvwGTzsL0lYrSYGlbSY89s6OKzg+2TRlwHlJjdzXo=";
   };
 

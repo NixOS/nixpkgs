@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
   };
 

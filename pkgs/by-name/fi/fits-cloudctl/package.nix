@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fi-ts";
     repo = "cloudctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-O3wX7IW2puMg0xhOf9BUfxzCMCKHxtPJxOCpc+wY0Ao=";
   };
 

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "dathere";
     repo = "qsv";
-    rev = version;
+    tag = version;
     hash = "sha256-LE3iQCZb3FKSsrb8/E5awjh26wGv9FlXw63+rNyzIIk=";
   };
 

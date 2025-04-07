@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "pierone-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-OypGYHfiFUfcUndylM2N2WfPnfXXJ4gvWypUbltYAYE=";
   };
 

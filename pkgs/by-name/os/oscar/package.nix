@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "CrimsonNape";
     repo = "OSCAR-code";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1rHgajjs+Vt9lcqkqKy92pWQLjvAHE10fPUTy8hurw4=";
   };
 

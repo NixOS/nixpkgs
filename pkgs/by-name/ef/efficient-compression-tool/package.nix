@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fhanau";
     repo = "Efficient-Compression-Tool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
     fetchSubmodules = true;
   };

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "psprint";
     repo = "zsh-navigation-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0c4kb19aprb868xnlyq8h1nd2d32r0zkrqblsrzvg7m9gx8vqps8";
   };
 

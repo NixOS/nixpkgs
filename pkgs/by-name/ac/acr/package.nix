@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-GgF2sen7RcnuXrtLzkeGllMvY65LffR+jPPqUhbsOGk=";
   };
 

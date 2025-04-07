@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "neocturne";
     repo = "fastd";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Sz6VEjKziL/w2a4VWFfMPDYvm7UZh5A/NmzP10rJ2r8=";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "compose-language-service";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UBnABi7DMKrAFkRA8H6us/Oq4yM0mJ+kwOm0Rt8XnGw=";
   };
 

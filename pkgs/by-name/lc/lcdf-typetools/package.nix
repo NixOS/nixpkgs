@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kohler";
     repo = "lcdf-typetools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hoILYYCef2R1v6aN9V+FoYnXYaKsnGN2jlpb/QFAN/w=";
   };
 

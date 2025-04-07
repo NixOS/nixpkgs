@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "libverto";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-csoJ0WdKyrza8kBSMKoaItKvcbijI6Wl8nWCbywPScQ=";
   };
 

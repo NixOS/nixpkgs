@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://codeberg.org/jahway603/ramfetch.git";
-    rev = version;
+    tag = version;
     hash = "sha256-sUreZ6zm+a1N77OZszjnpS4mmo5wL1dhNGVldJCGoag=";
   };
 

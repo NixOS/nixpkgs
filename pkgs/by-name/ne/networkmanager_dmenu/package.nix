@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Iy8Bi6aXtNXFfuQmRhLo50cs7pMx1l+OIv019Dqj6ow=";
   };
 

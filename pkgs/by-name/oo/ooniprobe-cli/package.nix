@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ooni";
     repo = "probe-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jg09yIX3jHMp0PwSwy2RMwYhZm0haJFTmpwcyTc5I0A=";
   };
 

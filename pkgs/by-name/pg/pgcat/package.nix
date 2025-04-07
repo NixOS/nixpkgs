@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "postgresml";
     repo = "pgcat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shazow";
     repo = "ssh-chat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LgrqIuM/tLC0JqDai2TLu6G/edZ5Q7WFXjX5bzc0Bcc=";
   };
 

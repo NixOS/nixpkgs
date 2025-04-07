@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d3f18wzk240yp0q8i2vskhcfj5ar61s4hw83vgps0wr2aglph3w";
     repo = "osm2xmap";
     owner = "sembruk";
-    rev = "v${version}";
+    tag = "v${version}";
   };
 
   makeFlags = [

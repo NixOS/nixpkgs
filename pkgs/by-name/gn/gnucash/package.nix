@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "Gnucash";
       repo = "gnucash-docs";
-      rev = version;
+      tag = version;
       hash = "sha256-uXpIAsucVUaAlqYTKfrfBg04Kb5Mza67l0ZU6fxkSUY=";
     };
 

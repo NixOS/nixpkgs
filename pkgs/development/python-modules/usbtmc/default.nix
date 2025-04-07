@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ivi";
     repo = "python-usbtmc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-69kqBTqnVqdWC2mqlXylzb9VkdhwTGZI0Ykf6lqbypI=";
   };
 

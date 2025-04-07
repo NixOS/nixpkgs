@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9/+wzPTaQ5PfPiqTZ5EuHdswXJgfgnvAul/FeeDbbJA=";
   };
 

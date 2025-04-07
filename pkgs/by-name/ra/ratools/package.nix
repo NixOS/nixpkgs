@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "danrl";
     repo = "ratools";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
   };
 

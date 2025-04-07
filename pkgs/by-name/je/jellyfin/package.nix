@@ -18,7 +18,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GWpzX8DvCafHb5V9it0ZPTXKm+NbLS7Oepe/CcMiFuI=";
   };
 

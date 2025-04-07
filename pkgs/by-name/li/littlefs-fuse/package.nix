@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "littlefs-project";
     repo = "littlefs-fuse";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RZpGLFVNo3WEXVU7V2tFjRs8iYN1Ge6AN4Bcq3d6mtc=";
   };
   buildInputs = [ fuse ];

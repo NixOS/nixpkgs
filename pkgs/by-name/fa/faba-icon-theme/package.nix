@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moka-project";
     repo = "faba-icon-theme";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xh6ppr73p76z60ym49b4d0liwdc96w41cc5p07d48hxjsa6qd6n";
   };
 

@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "APIDevTools";
     repo = "swagger-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WgzfSd57vRwa1HrSgNxD0F5ckczBkOaVmrEZ9tMAcRA=";
   };
 

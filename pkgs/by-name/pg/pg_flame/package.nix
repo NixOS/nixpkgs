@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mgartner";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-glvIv9GHIbp6IZUvZo9fyvkJ6QR03nMlrAOpZ3HfA6g=";
   };
 

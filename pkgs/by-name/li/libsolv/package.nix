@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
-    rev = version;
+    tag = version;
     hash = "sha256-3HOW3bip+0LKegwO773upeKKLiLv7JWUGEJcFiH0lcw=";
   };
 

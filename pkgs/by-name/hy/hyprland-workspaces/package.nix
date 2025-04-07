@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "FieldofClay";
     repo = "hyprland-workspaces";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-a5P99aSqhlZqClXAoaUNv/jmuM5duLDf+OzMeKGwDVI=";
   };
 

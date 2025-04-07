@@ -65,7 +65,7 @@ llvmPackages.stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5js1N8qVF0lCkahSU3ojT7+p/a9IaUpPWhIyFHEzqto=";
   };
 

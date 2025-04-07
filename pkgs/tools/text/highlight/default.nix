@@ -20,7 +20,7 @@ let
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-CpbVm5Z9cKPQdOzBNOXsgrX3rfC6DTVE7xfmOAshbEs=";
     };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plinss";
     repo = "widlparser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-G5N29K0/ByfKwP1XfxZH9u/5x361JD/8qAD6eZaySnU=";
   };
 

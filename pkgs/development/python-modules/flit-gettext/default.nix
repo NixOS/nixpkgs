@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "flit-gettext";
-    rev = version;
+    tag = version;
     hash = "sha256-YsRfpciSrHmivEJKfzdp6UaPx2tSr3VdjU4ZIbYQX6c=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wtCBRsP0b7qPOQfYgvmgDT0t2zZHocokO5J8yLZcsgQ=";
   };
 

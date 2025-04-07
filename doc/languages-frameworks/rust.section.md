@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
@@ -646,7 +646,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
-    rev = version;
+    tag = version;
     hash = "sha256-11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20=";
   };
 
@@ -984,7 +984,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    rev = version;
+    tag = version;
     hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 

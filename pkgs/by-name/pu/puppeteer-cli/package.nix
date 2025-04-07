@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "JarvusInnovations";
     repo = "puppeteer-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xrb8r4qc9ds7wmfd30nslnkqylxqfwr4gqf7b30v651sjyds29x";
   };
 

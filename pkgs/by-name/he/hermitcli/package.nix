@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "0.44.4";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "cashapp";
     repo = "hermit";
     hash = "sha256-fmIFonhzhLHzcRWWC4l3wDHmoXUy3vm//tA497rI0LE=";

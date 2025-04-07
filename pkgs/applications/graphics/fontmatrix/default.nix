@@ -14,7 +14,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fontmatrix";
     repo = "fontmatrix";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-DtajGhx79DiecglXHja9q/TKVq8Jl2faQdA5Ib/yT88=";
   };
 

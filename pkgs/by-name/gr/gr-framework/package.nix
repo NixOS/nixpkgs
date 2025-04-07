@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vCcXWgoaWcaNRgIk9CrXp8eTII/CBOHR1iDncC/Cd4k=";
   };
 

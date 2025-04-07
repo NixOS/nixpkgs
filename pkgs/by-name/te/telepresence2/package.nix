@@ -13,7 +13,7 @@ let
     src = fetchFromGitHub {
       owner = "datawire";
       repo = "go-fuseftp";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-bkaC+EOqFPQA4fDkVhO6EqgGhOJy31yGwVbbPoRd+70=";
     };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Bae77Kzc2cWxIb1yYKXctffuiC3ICPfi0qYP6fgaqvQ=";
   };
 

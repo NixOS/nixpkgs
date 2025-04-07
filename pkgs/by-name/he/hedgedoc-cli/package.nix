@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "uz+lkRRUTRr8WR295esNEbgjlZ/Em7mBk6Nx0BWLfg4=";
   };
 

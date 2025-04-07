@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vmVOrNwUsgB3iBvO8QhpJfI2OO0Kb9ZthcAXVaQ2cBM=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "p-gen";
     repo = "smenu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pAbtTqDIdDWReeaRK7UHXh/PS5f44/PRWaICluH02ec=";
   };
 

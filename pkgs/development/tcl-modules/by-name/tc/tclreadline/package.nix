@@ -17,7 +17,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclreadline";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6FIQJsAm28jPIfNG+7xsMlCJSLw9JStOVzDemw2P+EI=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-tojSzgpoGQg6MwV/MVpQpCA5w6bZO+9IOvfkw0Ydr6c=";
   };
 

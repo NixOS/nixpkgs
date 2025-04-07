@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "INRIA";
     repo = "zelus";
-    rev = version;
+    tag = version;
     hash = "sha256-NcGX343LProADtzJwlq1kmihLaya1giY6xv9ScvdgTA=";
   };
 

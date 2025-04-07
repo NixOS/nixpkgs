@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Versent";
     repo = "saml2aws";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-5g7mbjBkjNl1xvMMJXcITOZTNWXE7m2WhzzvLuULcuo=";
   };
 

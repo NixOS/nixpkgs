@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rcwgOXnhRPTmNKUppupfe/2qNUBDUqVb3TeDbrP5pnU=";
   };
 

@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-PQbr2sjASoWz0OHAMV6buAJERpnUJxVpLAigIVnADIc=";
   };
 

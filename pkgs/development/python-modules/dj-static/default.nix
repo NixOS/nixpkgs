@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "heroku-python";
     repo = "dj-static";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-B6TydlezbDkmfFgJjdFniZIYo/JjzPvFj43co+HYCdc=";
   };
 

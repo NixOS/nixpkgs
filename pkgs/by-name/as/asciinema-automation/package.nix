@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "PierreMarchand20";
     repo = "asciinema_automation";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SjUsPrhoNz2NTPAkmUH0Csv6hbDc6nyKdckGqV5S3GY=";
   };
 

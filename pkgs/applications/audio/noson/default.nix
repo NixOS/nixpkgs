@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "janbar";
     repo = "noson-app";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-hCVGi+++6CcTRMXeRKH8xRncm/Gl83GgU3aAIPI/yGU=";
   };
 

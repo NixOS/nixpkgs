@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Sound-Linux-More";
     repo = "sacd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "03s7jr75pzqj1xd41rkgbszlgf9zx6vzhd0nizc05wyf0fxq5xif";
   };
 

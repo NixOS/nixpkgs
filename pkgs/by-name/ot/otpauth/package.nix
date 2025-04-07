@@ -11,7 +11,7 @@ buildGo124Module rec {
   src = fetchFromGitHub {
     owner = "dim13";
     repo = "otpauth";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-gxFhuFOSiyE7FLWqTZzKPZzXerwK2PWy7Z0zshAJ4Yg=";
   };
 

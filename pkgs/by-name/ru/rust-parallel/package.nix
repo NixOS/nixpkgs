@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "aaronriekenberg";
     repo = "rust-parallel";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4f/JE8KWYDdLwx+bCSSbz0Cpfy/g3WIaRzqCvUix4t0=";
   };
 

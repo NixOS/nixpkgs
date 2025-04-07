@@ -11,7 +11,7 @@ buildLua rec {
   src = fetchFromGitHub {
     owner = "open-dynaMIX";
     repo = "simple-mpv-webui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I8lwpo3Hfpy3UnPMmHEJCdArVQnNL245NkxsYVmnMF0=";
     sparseCheckout = [
       "main.lua"

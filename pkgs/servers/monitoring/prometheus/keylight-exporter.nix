@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "keylight_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-yI1mmEb5SP2lbP37CpPxYITJL/nvd/mIwxB0RIQRe4I=";
   };
 

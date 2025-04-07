@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "B00merang-Artwork";
     repo = "Windows-10";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Yz6a7FcgPfzz4w8cKp8oq7/usIBUUZV7qhVmDewmzrI=";
   };
 

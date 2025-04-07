@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
-    rev = version;
+    tag = version;
     sha256 = "sha256-l7E5o7JNqfJZzKpyvsjIVd2i9fwLh4Qn8oJ/S5RlFQ8=";
   };
 

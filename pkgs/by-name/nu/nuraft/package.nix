@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eBay";
     repo = "NuRaft";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-puO8E7tSLqB0oq/NlzEZqQgIZKm7ZUb4HhR0XuI9dco=";
   };
 

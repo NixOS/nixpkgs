@@ -12,7 +12,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "ianka";
     repo = "mustache.tcl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-apM57LEZ0Y9hXcEPWrKYOoTVtP5QSqiaQrjTHQc3pc4=";
   };
 

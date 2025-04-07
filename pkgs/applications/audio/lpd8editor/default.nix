@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "charlesfleche";
     repo = "lpd8editor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lRp2RhNiIf1VrryfKqYFSbKG3pktw3M7B49fXVoj+C8=";
   };
 

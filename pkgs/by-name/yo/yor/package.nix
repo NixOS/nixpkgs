@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-IoQe1/D3Sl1y76dXH0CuwU6/LBC6n6or9vsysHhDeeg=";
   };
 

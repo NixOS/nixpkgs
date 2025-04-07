@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "papirus-folders";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BY1hnAGz31Deffy/EGKy/nuPKmpAA0u8FzPYgr1Plfs=";
   };
 

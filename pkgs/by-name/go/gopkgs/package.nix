@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "2.1.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    tag = "v${version}";
     owner = "uudashr";
     repo = "gopkgs";
     hash = "sha256-ll5fhwzzCNL0UtMLNSGOY6Yyy0EqI8OZ1iqWad4KU8k=";

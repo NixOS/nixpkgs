@@ -12,7 +12,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "gi-crystal";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0LsYREn4zWLQYUTpNWJhLLHWmg7UQzxOoQiAMmw3ZXQ=";
   };
 

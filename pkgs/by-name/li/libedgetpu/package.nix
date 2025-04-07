@@ -19,7 +19,7 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = "flatbuffers";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-e+dNPNbCHYDXUS/W+hMqf/37fhVgEGzId6rhP3cToTE=";
     };
   });

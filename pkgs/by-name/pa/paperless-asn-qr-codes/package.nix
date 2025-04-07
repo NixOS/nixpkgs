@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "entropia";
     repo = "paperless-asn-qr-codes";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/xCU6xDrmhkua4Iw/BCzhOuqO5GT/0rTJ+Y59wuMz6E=";
   };
 

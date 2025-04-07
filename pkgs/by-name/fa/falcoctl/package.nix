@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "falcoctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-X4fZBTEbOIQbfmuxDODEkYW43ntVIkwFDULYq+ps+9s=";
   };
 

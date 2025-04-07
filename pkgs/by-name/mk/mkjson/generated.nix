@@ -29,7 +29,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mfussenegger";
     repo = "mkjson";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-+NDLFtsWWxHv/6XC9hJOAHPU6YED5oHqS/j5BPwNsqA=";
   };
 

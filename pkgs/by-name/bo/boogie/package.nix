@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IWtYbb1IFB6DLIYYTP+q7q+h/0aqonxr/mWwf+83aRo=";
   };
 

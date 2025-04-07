@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amanse";
     repo = "game-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FuZl2yNre5jNSfHqF3tjiGwg5mRKbYer2FOPpLy0OrA=";
   };
 

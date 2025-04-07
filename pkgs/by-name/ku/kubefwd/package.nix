@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "txn2";
     repo = "kubefwd";
-    rev = version;
+    tag = version;
     hash = "sha256-xTd/1h9fW2GbZ2u3RsExbQouRZot9CUDuqNLItRySxM=";
   };
 

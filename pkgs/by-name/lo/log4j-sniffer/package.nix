@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "palantir";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pO6difzNvQvKQtRLyksXmExtQHlnnwyF3iNEmSBgUmU=";
   };
 

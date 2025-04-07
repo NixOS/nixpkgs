@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-rnKWzct2k/ObjBnf90uwMar7fjZAUvQ2RPPZVZQsWEA=";
   };
 

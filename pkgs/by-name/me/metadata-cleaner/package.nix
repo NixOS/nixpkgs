@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J+nwgLbAFoh1gq3J4cqQEShZJCSZesyCjT9DfkCWIHs=";
   };
 

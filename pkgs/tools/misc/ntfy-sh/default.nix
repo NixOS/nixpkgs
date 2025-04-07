@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lSj4LfS4nBC1xtTE/ee2Nhx9TmlU+138miwC0nEfVRY=";
   };
 

@@ -14,7 +14,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "firsttris";
     repo = "plugin.video.sendtokodi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ga+9Q7x8+sEmQmteHbSyCahZ/T/l28BAEM84w7bf7z8=";
   };
 

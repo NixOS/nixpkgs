@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-8kmYeqsmqR7tY044rZb3KuEAVGv37IObX6k1qjXWG0A=";
   };
 

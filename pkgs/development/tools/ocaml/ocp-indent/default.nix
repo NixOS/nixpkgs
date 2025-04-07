@@ -15,7 +15,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-indent";
-    rev = version;
+    tag = version;
     sha256 = "sha256-IyvURw/6R0eKrnahV1fqLV0iIeypykrmxDbliECgbLc=";
   };
 

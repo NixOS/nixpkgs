@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andikleen";
     repo = "mcelog";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1xy1082c67yd48idg5vwvrw7yx74gn6jj2d9c67d0rh6yji091ki";
   };
 

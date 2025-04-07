@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "quill";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lCDKM9zzGcey4oWp6imiHvGSNRor0xhlmlhRkSXFLlU=";
   };
 

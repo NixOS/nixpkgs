@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "coq2html";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dBXYeRwBhBWXJfdULLzfgZU+WD6WC6R8wV2eS1zAkq8=";
   };
 

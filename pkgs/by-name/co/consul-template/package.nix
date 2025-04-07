@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iqBcY7FYCO4qqQRAHxA2sxTnyL5c0vLVWKuhqvX0oJE=";
   };
 

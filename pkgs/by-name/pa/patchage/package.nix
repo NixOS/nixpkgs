@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "patchage";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LzN6RyF/VT4LUVeR0904BnLuNMFZjFTDu9oDIKYG2Yo=";
     fetchSubmodules = true;
   };

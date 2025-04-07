@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenXbox";
     repo = "ms_cv";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0pkna0kvmq1cp4rx3dnzxsvvlxxngryp77k42wkyw2phv19a2mjd";
   };
 

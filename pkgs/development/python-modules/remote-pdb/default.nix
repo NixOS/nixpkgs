@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "python-remote-pdb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/7RysJOJigU4coC6d/Ob2lrtw8u8nLZI8wBk4oEEY3g=";
   };
   meta = with lib; {

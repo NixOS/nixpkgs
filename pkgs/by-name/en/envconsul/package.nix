@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "envconsul";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hPq+r4DOMu2elOpaT0xDQoelUb1D/zYM/a6fZZdu/AY=";
   };
 

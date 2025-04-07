@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "burgerdev";
     repo = "ocaml-rfc7748";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 

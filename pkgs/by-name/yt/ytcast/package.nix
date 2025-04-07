@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "MarcoLucidi01";
     repo = "ytcast";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-iy9+MgXwP4ALz4NHJyn2ghC5boR53H3ioB2+7tcJunE=";
   };
 

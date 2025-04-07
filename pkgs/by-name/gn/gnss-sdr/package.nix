@@ -28,7 +28,7 @@ gnuradio.pkgs.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-IbkYdw1pwI+FMnZMChsxMz241Kv4EzMcBb0mm6/jq1k=";
   };
 

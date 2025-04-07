@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rY9xWqJ+2Yfs6VRHTF89LmuEruAavDI7MgBm4UFEuBs=";
   };
 

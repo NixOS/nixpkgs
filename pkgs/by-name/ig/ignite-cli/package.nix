@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "cli";
     owner = "ignite";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d7+T0VlmKQgmAJ8eyDg8JDL9HHJbU+nOTvJP0GTuIRY=";
   };
 

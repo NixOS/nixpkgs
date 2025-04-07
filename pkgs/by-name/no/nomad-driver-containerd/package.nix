@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Roblox";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-11K1ACk2hhEi+sAlI932eKpyy82Md7j1edRWH2JJ8sI=";
   };
 

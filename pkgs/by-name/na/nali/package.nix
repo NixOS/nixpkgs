@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5AI8TAKYFqjgLVKob9imrf7yVmXmAPq/zHh1bDfC5r0=";
   };
 

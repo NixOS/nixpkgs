@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "resgateio";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HQgBWH6dqfmAfKMezUjPbwXif8bqAClns589la2lBVA=";
   };
 

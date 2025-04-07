@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
-    rev = version;
+    tag = version;
     sha256 = "sha256-AQaMWpI7kFFotEQa536dqKxuP/mHuzNm75RPqUWw1VY=";
   };
 

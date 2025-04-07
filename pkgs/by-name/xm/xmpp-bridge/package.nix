@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "xmpp-bridge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JXhVi2AiV/PmWPfoQJl/N92GAZQ9UxReAiCkiDxgdFY=";
   };
 

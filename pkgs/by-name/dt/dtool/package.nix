@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "guoxbin";
     repo = "dtool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m4H+ANwEbK6vGW3oIVZqnqvMiAKxNJf2TLIGh/G6AU4=";
   };
 

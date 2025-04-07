@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tonyseek";
     repo = "python-base36";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "076nmk9s0zkmgs2zqzkaqij5cmzhf4mrhivbb9n6cvz52i1mppr5";
   };
 

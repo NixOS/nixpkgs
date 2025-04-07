@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tINIwxyQn8eeJCHwRmAMo2TYRgrgJlGaUrnrgbmM3Jo=";
   };
 

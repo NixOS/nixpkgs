@@ -54,7 +54,7 @@ let
     clingSrc = fetchFromGitHub {
       owner = "root-project";
       repo = "cling";
-      rev = "v${version}";
+      tag = "v${version}";
       sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
     };
 

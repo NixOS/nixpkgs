@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uobikiemukot";
     repo = "yaft";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0l1ig8wm545kpn4l7186rymny83jkahnjim290wsl7hsszfq1ckd";
   };
 

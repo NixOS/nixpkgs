@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomasbasham";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "04hy3hhh5xdqcsz0lx8j18zbj88kh5ik4wyi5d3a5sfy2hx70in2";
   };
 

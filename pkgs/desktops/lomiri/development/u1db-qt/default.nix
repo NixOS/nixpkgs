@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/u1db-qt";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-KmAEgnWHY0cDKJqRhZpY0fzVjNlEU67e559XEbAPpJI=";
   };
 

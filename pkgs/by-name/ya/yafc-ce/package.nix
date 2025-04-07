@@ -17,7 +17,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "shpaass";
     repo = "yafc-ce";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jWJOJ00VXBaHogm3xUsV9Shvv9islRA+Z4fkln5VuWM=";
   };
 

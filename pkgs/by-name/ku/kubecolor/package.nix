@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubecolor";
     repo = "kubecolor";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Q3Bl1ejuSpiMpQgiqKa2x/g02hNx326GM2MIDoi7q7o=";
   };
 

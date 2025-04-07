@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nicolasff";
     repo = "webdis";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-eFUI3RDDrEI1bV+SfTVsIO6yjswK7tzgNsNepoo7DQ4=";
   };
 

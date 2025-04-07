@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-T96F8xgB9HRwuvDLXi6+lfi8za/iNn1NAbG4AIpE0V0=";
   };
 

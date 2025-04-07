@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "isometry";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-l2Gr4AxikPWbSGeZqmkZa1wTRXNZ0l6fTSAcjl+6P8s=";
   };
 

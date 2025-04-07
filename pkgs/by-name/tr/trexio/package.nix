@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TREX-CoE";
     repo = "trexio";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KP8tpwBr/ymjcXmCssdn+Xti0UKgazJSGTgVpvE+CiM=";
   };
 

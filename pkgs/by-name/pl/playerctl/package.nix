@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 

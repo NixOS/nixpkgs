@@ -27,7 +27,7 @@ buildNpmPackage' rec {
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-44r0dbcX/KRmfucNy4p/OMrKFC2J8P9eQpwTOTOmwS4=";
   };
 

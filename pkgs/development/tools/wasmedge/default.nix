@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-70vvQGYcer3dosb1ulWO1F4xFwKwfo35l/TFSFa5idM=";
   };
 

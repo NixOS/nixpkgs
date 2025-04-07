@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ayrx";
     repo = "python-fastpbkdf2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1hvvlk3j28i6nswb6gy3mq7278nq0mgfnpxh1rv6jvi7xhd7qmlc";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LkFYkfHeBKC/0kr33DKu7oXxXrtfu1YcpuwzRRWsHpc=";
   };
 

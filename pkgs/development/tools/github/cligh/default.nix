@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CMB";
     repo = "cligh";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0d1fd78rzl2n75xpmy1gnxh1shvcs4qm0j4qqszqvfriwkg2flxn";
   };
 

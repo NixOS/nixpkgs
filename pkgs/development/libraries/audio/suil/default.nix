@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "lv2";
     repo = "suil";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rP8tq+zmHrAZeuNttakPPfraFXNvnwqbhtt+LtTNV/k=";
   };
 

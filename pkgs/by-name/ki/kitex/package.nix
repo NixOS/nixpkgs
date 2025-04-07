@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudwego";
     repo = "kitex";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1dgQgc9XljawyH+MIDPNqcwHMH0yW2BMY8TZnc+P13I=";
   };
 

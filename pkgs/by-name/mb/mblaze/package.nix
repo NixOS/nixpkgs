@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "mblaze";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
   };
 

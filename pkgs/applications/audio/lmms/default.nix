@@ -32,7 +32,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };

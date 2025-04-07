@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "zurawiki";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
   };
 

@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hY6ivTKWgl/2KLeP6MMAdWcM/LJ5b7zoNVRlg6nx6Sc=";
   };
 

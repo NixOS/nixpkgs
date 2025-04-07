@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "qmenumodel";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-zbKAfq9R5fD2IqVYOAhy903QX1TDom9m6Ib2qpkFMak=";
   };
 

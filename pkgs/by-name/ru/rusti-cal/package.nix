@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "arthurhenrique";
     repo = "rusti-cal";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pdsP2nuJh30BzqIyxSQXak/rceA4hI9jBYy1dDVEIvI=";
   };
 

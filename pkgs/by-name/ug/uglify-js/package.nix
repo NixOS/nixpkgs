@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mishoo";
     repo = "UglifyJS";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sMLQSB1+ux/ya/J22KGojlAxWhtPQdk22KdHy43zdyg=";
   };
 

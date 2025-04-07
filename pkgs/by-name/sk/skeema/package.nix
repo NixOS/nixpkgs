@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3sxUy/TkacuRN8UDGgrvkdUQi//6VufoYoVFN1+X3BM=";
   };
 

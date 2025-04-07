@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tuxera";
     repo = "ntfs-3g";
-    rev = version;
+    tag = version;
     sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 

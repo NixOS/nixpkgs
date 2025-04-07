@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    rev = version;
+    tag = version;
     hash = "sha256-EoQKbxzXEuKC50/W1/tBB2wASJZmNNwg9r1qhIB4Ws8=";
   };
 

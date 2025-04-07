@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sionescu";
     repo = "libfixposix";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-5qA6ytbqE+/05XQGxP9/4vEs9gFcuI3k7eJJYucW7fM=";
   };
 

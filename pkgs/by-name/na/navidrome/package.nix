@@ -23,7 +23,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BkgHUX2kQ7OMnb9vOIwsQ9eNcqCzekz2IVMtG0IMUaA=";
   };
 

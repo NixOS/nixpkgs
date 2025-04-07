@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ValiValpas";
     repo = "taskopen";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
   };
 

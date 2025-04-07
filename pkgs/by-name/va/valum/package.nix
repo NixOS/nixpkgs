@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "valum-framework";
     repo = "valum";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-baAv83YiX8HdBm/t++ktB7pmTVlt4aWZ5xnsAs/NrTI=";
   };
 

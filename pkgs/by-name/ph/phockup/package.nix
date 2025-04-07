@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ivandokov";
     repo = "phockup";
-    rev = version;
+    tag = version;
     sha256 = "sha256-44UjxTbC2XK+NThvesROdd7aGP7zr7g7bQiQZv2TvvM=";
   };
 

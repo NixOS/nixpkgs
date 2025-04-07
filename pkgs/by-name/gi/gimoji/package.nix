@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zeenix";
     repo = "gimoji";
-    rev = version;
+    tag = version;
     hash = "sha256-X1IiDnnRXiZBL/JBDfioKc/724TnVKaEjZLrNwX5SoA=";
   };
 

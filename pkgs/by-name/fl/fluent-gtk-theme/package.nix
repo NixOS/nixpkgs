@@ -65,7 +65,7 @@ lib.checkListOfEnum "${pname}: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "fluent-gtk-theme";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-ONhW68UUrFiv5hxkR7XI8U/5+qM+tYLIS2OM05pqJi0=";
     };
 

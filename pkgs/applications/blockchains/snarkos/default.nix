@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+z9dgg5HdR+Gomug03gI1zdCU6t4SBHkl1Pxoq69wrc=";
   };
 

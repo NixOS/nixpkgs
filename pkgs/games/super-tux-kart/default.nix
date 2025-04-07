@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "supertuxkart";
     repo = "stk-code";
-    rev = version;
+    tag = version;
     hash = "sha256-gqdaVvgNfCN40ZO/9y8+vTeIJPSq6udKxYZ/MAi4ZMM=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-B421xXt7TrBJVwi04vygnw9t5o7/KLVpuItQtwV4E24=";
   };
 

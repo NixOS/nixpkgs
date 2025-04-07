@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hardpixel";
     repo = "systemd-manager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V4vYv1nAjFjvkSYdOpcpt8h9L+g0ch4V2VZRVSbtSKE=";
   };
 

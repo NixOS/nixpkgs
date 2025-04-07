@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Genymobile";
     repo = "gnirehtet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ewLYCZgkjbh6lR9e4iTddCIrB+5dxyviIXhOqlZsLqc=";
   };
   passthru = {

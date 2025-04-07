@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "kcl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OMPo2cT0ngwHuGghVSfGoDgf+FThj2GsZ3Myb1wSxQM=";
   };
 

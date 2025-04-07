@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vCwRM6UIcT71e6u5QZzcTW6LK/VNlVG/19XxsHnn2a8=";
   };
 

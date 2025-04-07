@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nbfc-linux";
     repo = "nbfc-linux";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1tLW/xEh01y8BjVbgIa95DkYWf7CDVSo/lI/1U28Xs8=";
   };
 

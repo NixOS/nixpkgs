@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # GitHub repository 'collating patches for gpart from all distributions':
   src = fetchFromGitHub {
     sha256 = "1lsd9k876p944k9s6sxqk5yh9yr7m42nbw9vlsllin7pd4djl4ya";
-    rev = version;
+    tag = version;
     repo = "gpart";
     owner = "baruch";
   };

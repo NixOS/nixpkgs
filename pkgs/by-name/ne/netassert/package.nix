@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "netassert";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mRKjo0AfnM+XTl7sQoGDyQoquXpD3xPJ6i3/3Dj2rhE=";
   };
   vendorHash = "sha256-9mvSfAd1m95eRwljGG68+tjiFObgt1EuakjwFfn9Obo=";

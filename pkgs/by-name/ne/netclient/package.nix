@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/drujpz0oeAZmV24Fxy3N6aqa5z72WiVxkjccbc6xmE=";
   };
 

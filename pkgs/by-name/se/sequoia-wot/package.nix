@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-wot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Xbj1XLZQxyEYf/+R5e6EJMmL0C5ohfwZMZPVK5PwmUU=";
   };
 

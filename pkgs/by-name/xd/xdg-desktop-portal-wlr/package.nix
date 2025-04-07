@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-GIIDeZMIGUiZV0IUhcclRVThE5LKaqVc5VwnNT8beNU=";
   };
 

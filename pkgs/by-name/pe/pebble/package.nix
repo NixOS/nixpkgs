@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
   };
 

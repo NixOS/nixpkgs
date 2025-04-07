@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dell";
     repo = "biosdevname";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
   };
 

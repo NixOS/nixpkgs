@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-27mbIycenOk51PLQrAfU1cZcjiWddNtxoyC6Q9wxqFg=";
     fetchSubmodules = true;
   };

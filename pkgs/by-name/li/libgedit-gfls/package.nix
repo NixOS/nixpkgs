@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-gfls";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-kMkqEly8RDc5eKqUupQD4tkVIXxL1rt4e/OCAPoutIg=";
   };
 

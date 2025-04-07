@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "influxdb2-provision";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kgpUtXmwy9buupNzQj/6AIeN8XG2x0XjIckK3WIFC+I=";
   };
 

@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6Fnkw/lf64T0EXpWvSSnIRBuHJVt01Ft8Ks43/jvtZ0=";
   };
 

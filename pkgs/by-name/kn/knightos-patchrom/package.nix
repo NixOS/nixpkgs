@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "patchrom";
-    rev = version;
+    tag = version;
     sha256 = "0yc4q7n3k7k6rx3cxq5ddd5r0la8gw1287a74kql6gwkxjq0jmcv";
   };
 
