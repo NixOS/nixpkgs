@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwardrop";
     repo = "interface_meta";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0rzh11wnab33b11391vc2ynf8ncxn22b12wn46lmgkrc5mqza8hd";
   };
 

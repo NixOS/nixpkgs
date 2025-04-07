@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WhatAmISupposedToPutHere";
     repo = "tiny-dfr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5u5jyoDEt7aMs8/8QrhrUrUzFJJCNayqbN2WrMhUCV4=";
   };
 

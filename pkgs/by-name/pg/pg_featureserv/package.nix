@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
   };
 

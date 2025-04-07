@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EoB8qoCiB6jvHqfhkGHhiq9/79MBLt6GguvRIwY90B0=";
     domain = "invent.kde.org";
   };

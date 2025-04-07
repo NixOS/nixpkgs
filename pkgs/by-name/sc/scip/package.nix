@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-UXa5lMFenynHRIvA4MOXkjMVd705LBWs372s3MFAc+8=";
   };
 

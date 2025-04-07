@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dgageot";
     repo = "demoit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3g0k2Oau0d9tXYDtxHpUKvAQ1FnGhjRP05YVTlmgLhM=";
   };
 

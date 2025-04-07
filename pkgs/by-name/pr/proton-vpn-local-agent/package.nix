@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-local-agent";
-    rev = version;
+    tag = version;
     hash = "sha256-9dyyLZZEOB2080KxN0ffdkRhyvEY8xKE/7b2mA7JL+o=";
   };
 

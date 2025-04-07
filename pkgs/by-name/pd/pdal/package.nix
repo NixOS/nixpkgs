@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-52v7oDmvq820mJ91XAZI1rQEwssWcHagcd2QNVV6zPA=";
   };
 

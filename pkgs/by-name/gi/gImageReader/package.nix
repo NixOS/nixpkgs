@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "manisandro";
     repo = "gImageReader";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-yBkVeufRRoSAc20/8mV39widBPloHFz12K7B4Y9xiWg=";
   };
 

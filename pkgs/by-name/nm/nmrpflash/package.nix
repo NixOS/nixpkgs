@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jclehner";
     repo = "nmrpflash";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5oj+sIrVNAbLmmKHiBSDSVdJFrobK41UfWBmU0WRG3c=";
   };
 

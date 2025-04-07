@@ -24,7 +24,7 @@ let
         src = fetchFromGitHub {
           owner = "AdaCore";
           repo = "gpr";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
         };
       });

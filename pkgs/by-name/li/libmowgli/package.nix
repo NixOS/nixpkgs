@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atheme";
     repo = "libmowgli-2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
   };
 

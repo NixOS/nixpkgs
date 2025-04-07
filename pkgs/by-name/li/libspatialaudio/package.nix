@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = "libspatialaudio";
-    rev = version;
+    tag = version;
     hash = "sha256-sPnQPD41AceXM4uGqWXMYhuQv0TUkA6TZP8ChxUFIoI=";
   };
 

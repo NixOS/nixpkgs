@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "liblarch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "osxsnarf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1vpg39mpc5avnv1j0yfx0x2ncvv38slmm83zv6nmm7alfwfjr2ss";
   };
 

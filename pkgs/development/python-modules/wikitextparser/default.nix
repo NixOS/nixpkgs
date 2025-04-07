@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "5j9";
     repo = "wikitextparser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g0Hvxw8evmCebM2joGT7XMnakVjDG74VJmZhlvUiQMU=";
   };
 

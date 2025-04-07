@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tsenart";
     repo = "vegeta";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nTtQ/BB5rU+0k4dPRCmukCRNI0iFTjHIJiSTN0cNR+Q=";
   };
 

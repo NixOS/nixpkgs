@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "sniffglue";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Pp/SJJQFpEU/4GKZQB8BjRGS4hqB850QbSb5WoG6Wh4=";
   };
 

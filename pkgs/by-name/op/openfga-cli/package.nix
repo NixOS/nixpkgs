@@ -16,7 +16,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-p68dlo6U8cgwHzY6lkukSglNOAWtjAFwX163bpXCIl0=";
   };
 

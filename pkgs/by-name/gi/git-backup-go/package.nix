@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ChappIO";
     repo = "git-backup";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z32ThzmGkF89wsYqJnP/Koz4/2mulkrvvnUKHE6Crks=";
   };
 

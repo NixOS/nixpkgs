@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DNUKbb+d3BBp8guas6apQ4yFeXCc0Ilijtbt1hZkap4=";
   };
 

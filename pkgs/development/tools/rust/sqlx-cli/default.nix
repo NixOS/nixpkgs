@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kAZUconMYUF9gZbLSg7KW3fVb7pkTq/d/yQyVzscxRw=";
   };
 

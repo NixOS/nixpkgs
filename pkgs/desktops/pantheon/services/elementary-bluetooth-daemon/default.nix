@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "bluetooth-daemon";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-XRskwLtQKlG96fpIxNZKWG7kn3HR0ngjAUwyn7fnxdY=";
   };
 

@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "vivictorg";
       repo = "vivictpp";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-ScuCOmcK714YXEHncizwj6EWdiNIJA1xRMn5gfmg4K4=";
     };
 

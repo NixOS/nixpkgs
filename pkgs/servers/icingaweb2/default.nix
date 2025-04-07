@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PWP5fECKjdXhdX1E5hYaGv/fqb1KIKfclcPiCY/MMZM=";
   };
 

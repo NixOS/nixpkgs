@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "libspf2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tkCHP3B1sBb0+scHBjX5lCvaeSrZryfaGKye02LFlYs=";
   };
 

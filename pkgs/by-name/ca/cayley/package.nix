@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cayleygraph";
     repo = "cayley";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-jIX0v6ujiQvEAb/mKkrpNgsY0YLkJYHy2sUfQnooE48=";
   };
 

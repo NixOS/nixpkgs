@@ -49,7 +49,7 @@ let
         domain = "gitlab.freedesktop.org";
         owner = "wlroots";
         repo = "wlroots";
-        rev = finalAttrs.version;
+        tag = finalAttrs.version;
         inherit hash;
       };
 

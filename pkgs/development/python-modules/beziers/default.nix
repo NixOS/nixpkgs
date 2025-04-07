@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "beziers.py";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NjmWsRz/NPPwXPbiSaOeKJMrYmSyNTt5ikONyAljgvM=";
   };
 

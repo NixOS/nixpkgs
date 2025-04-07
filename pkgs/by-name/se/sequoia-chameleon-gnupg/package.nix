@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-chameleon-gnupg";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-K9aeWrqJGPx2RymCXWNdNUTXXtO4NNm6Rd3jz+YxEi0=";
   };
 

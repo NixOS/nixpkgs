@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "firehol";
     repo = "firehol";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-6O3AoQs7Qzcin8VXQgJfCVsNOI74H6fE1DgqdY+e4bA=";
   };
 

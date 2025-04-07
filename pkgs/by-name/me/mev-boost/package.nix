@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "flashbots";
     repo = "mev-boost";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EFPVBSSIef3cTrYp3X1xCEOtYcGpuW/GZXHXX+0wGd8=";
   };
 

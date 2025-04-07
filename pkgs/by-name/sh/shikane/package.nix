@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "w0lff";
     repo = "shikane";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Chc1+JUHXzuLl26NuBGVxSiXiaE4Ns1FXb0dBs6STVk=";
   };
 

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "flake-checker";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-K5E1sarWIUl4QavHBoS8sPr5Cp8ZndWjLYDLm++d7v0=";
   };
 

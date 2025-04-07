@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "jmtWTOkOlqVZ7tFya3IrQjr714Y8TzAVY5Cq+RzDuRs=";
   };
 

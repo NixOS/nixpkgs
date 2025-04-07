@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aptible";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tvDjjG8ym1wdQzQSO7T5BkbYbqD1M+EnPSPumbFKRhE=";
   };
 

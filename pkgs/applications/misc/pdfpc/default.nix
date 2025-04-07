@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5HFmbVsNajMwo+lBe9kJcJyQGe61N6Oy2CI/WJwmSE4=";
   };
 

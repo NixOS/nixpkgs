@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-3X8/8ewqXy9tvy4S9frmPENhsYTwaW6SydtJeiyVH1I=";
   };
 

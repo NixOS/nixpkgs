@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-rR+QvRt73wvulx+T+vhSc3354Cpx1QC6+adaodEiQ7Q=";
   };
 

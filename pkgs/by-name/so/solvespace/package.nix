@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sSDht8pBrOG1YpsWfC/CLTTWh2cI5pn2PXGH900Z0yA=";
     fetchSubmodules = true;
   };

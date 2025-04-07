@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SACGyNVxa6rFjloRQrEVtUgujEEF7WYL8Qhw6ZqLwdQ=";
     fetchSubmodules = true;
   };

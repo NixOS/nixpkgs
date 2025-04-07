@@ -40,7 +40,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "gabotechs";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m+afcnwVvPrD+S7c/kfE8mqlD7kO+VPI6sSXCCjXWZM=";
   };
 

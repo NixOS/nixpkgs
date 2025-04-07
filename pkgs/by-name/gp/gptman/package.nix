@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rust-disk-partition-management";
     repo = "gptman";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ebV61EilGggix6JSN/MW4Ka0itkSpvikLDSO005TTYY=";
   };
 

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kitao";
     repo = "pyxel";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6S+fl6J1JN785HxG8i0oYlwoTsqa3Gm1DpCd4swUPZ8=";
   };
 

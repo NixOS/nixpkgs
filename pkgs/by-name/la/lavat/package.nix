@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "AngelJumbo";
     repo = "lavat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wGtuYgZS03gXYgdNdugGu/UlROQTrQ3C1inJ/aTUBKk=";
   };
 

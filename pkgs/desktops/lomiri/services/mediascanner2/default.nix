@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-e1vDPnIIfevXj9ODEEKJ2y4TiU0H+08aTf2vU+emdQk=";
   };
 

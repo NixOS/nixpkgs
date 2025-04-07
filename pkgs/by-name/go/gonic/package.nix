@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+8rKODoADU2k1quKvbijjs/6S/hpkegHhG7Si0LSE0k=";
   };
 

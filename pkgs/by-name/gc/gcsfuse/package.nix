@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SWbIfAE/pmokhJO0rimfHqxqOH23HrJRTJHDikNC7TI=";
   };
 

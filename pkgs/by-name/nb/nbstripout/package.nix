@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   testAssets = fetchFromGitHub {
     owner = "kynan";
     repo = "nbstripout";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-OSJLrWkYQIhcdyofS3Bo39ppsU6K3A4546UKB8Q1GGg=";
   };
 

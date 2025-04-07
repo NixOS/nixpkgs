@@ -23,7 +23,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-discord";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = pin.srcHash;
   };
 

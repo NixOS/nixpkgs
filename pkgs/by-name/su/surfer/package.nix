@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "surfer-project";
     repo = "surfer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mvHyljAEVi1FMkEbKsPmCNx2Cg0/Ydw3ZQCZsowEKGc=";
     fetchSubmodules = true;
   };

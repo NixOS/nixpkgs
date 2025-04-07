@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-KP0ojwyZ5FaYKW0nK9mGGAiz1h+gTbfjCUDCgN2LAO8=";
   };
 

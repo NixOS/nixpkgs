@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zydis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-6J4pTUm3xQXwlQNBldjXVWRcse+auSFJtxGWaPRVzLg=";
   };
 

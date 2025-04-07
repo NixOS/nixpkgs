@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "iucode-tool";
     repo = "iucode-tool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ajDpywgyerbvgern0b8T4jJUWisMzwrhwKO1g7iOtBE=";
   };
 

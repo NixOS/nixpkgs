@@ -36,7 +36,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/ykKcwOotu8kn+EpJI+EUeqSkHZ2IrSh+o7lBGeHrZ0=";
   };
 

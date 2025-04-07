@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0mKCwb7nvl8BRtQyweItkMT0PrKRGTvpB9Acgro7QSM=";
   };
 

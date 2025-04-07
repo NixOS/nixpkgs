@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
-    rev = version;
+    tag = version;
     hash = "sha256-gUsv4peZhWrwujRloNisuSf/0Wx5W5xRusAHJCx0wNA=";
     fetchSubmodules = true;
   };

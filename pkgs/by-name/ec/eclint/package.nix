@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "greut";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XY+D0bRIgWTm2VH+uDVodYeyGeu+8Xyyq4xDvTDLii4=";
   };
 

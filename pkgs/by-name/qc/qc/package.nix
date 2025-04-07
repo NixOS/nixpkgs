@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D45uJk1Hb7k2qOLIbRdo0gQlPovUwcQ3rnYqhouhow0=";
   };
 

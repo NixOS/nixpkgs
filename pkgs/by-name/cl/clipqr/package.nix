@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-iuA6RqclMm1CWaiM1kpOpgfYvKaYGOIwFQkLr/nCL5M=";
   };
 

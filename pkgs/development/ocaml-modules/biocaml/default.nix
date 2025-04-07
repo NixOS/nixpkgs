@@ -26,7 +26,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "biocaml";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "01yw12yixs45ya1scpb9jy2f7dw1mbj7741xib2xpq3kkc1hc21s";
   };
 

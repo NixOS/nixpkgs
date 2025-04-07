@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucsator_rf";
-    rev = version;
+    tag = version;
     hash = "sha256-Q1hpCt3SeXRzUFX4jPUu8ZsPTx2W28LQ3YwlYtOZhqg=";
   };
 

@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge-js";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-OUjB/ZETv8z3YDf/ftyqL8oKDEqyp1h1pK5IgEcq+rw=";
     fetchSubmodules = true;
   };

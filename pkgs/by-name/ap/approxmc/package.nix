@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meelgroup";
     repo = "approxmc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-rADPC7SVwzjUN5jb7Wt341oGfr6+LszIaBUe8QgmpRU=";
   };
 

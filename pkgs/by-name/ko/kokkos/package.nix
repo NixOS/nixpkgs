@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kokkos";
     repo = "kokkos";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-4Or6Z/ZXH/WmA8GW6/Odn9+w7E/jdBDMCkWSpMf5Zoc=";
   };
 

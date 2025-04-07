@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZZwrqX7GkqMVtLhyzJvThzqmxg/PRwBxSshSv/Z7uKo=";
   };
 

@@ -20,7 +20,7 @@ let
         src = fetchFromGitHub {
           owner = "py-pdf";
           repo = "pypdf";
-          rev = version;
+          tag = version;
           fetchSubmodules = true;
           hash = "sha256-WnRbsy/PJcotZqY9mJPLadrYqkXykOVifLIbDyNf4s4=";
         };

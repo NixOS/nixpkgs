@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Nerdbergev";
     repo = "seilfahrt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pn3EsYPhggViL067nk6UhmIULGsf8IYm/dXSDudiZRA=";
   };
 

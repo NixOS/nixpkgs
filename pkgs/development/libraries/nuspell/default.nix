@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 

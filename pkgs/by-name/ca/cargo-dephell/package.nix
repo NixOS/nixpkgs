@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mimoo";
     repo = "cargo-dephell";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 

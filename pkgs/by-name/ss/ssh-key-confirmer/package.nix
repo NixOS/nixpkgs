@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "benjojo";
     repo = "ssh-key-confirmer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CXDjm8PMdCTwHnZWa0fYKel7Rmxq0XBWkfLmoVuSkKM=";
   };
 

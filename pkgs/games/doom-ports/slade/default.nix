@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = version;
+    tag = version;
     hash = "sha256-pcWmv1fnH18X/S8ljfHxaL1PjApo5jyM8W+WYn+/7zI=";
   };
 

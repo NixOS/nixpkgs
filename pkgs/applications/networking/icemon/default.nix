@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "icecc";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "09jnipr67dhawbxfn69yh7mmjrkylgiqmd0gmc2limd3z15d7pgc";
   };
 

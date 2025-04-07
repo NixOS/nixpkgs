@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "user-none";
     repo = "KDocker";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-ckTi/w2Yynsl3aJzV9Uxfc7WxJtcCt44glJyqEEZrig=";
   };
 

@@ -9,7 +9,7 @@ buildRebar3 rec {
   src = fetchFromGitHub {
     owner = "erlang-nix";
     repo = name;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "10ijc06qvv5hqv0qy3w7mbv9pshdb8bvy0f3phr1vd5hksbk731y";
   };
 

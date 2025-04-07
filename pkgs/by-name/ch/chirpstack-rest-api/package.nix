@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-rest-api";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-yYuSciMsQudGqBPNqj28TZgCGtZb9j7mtEkBR8tbEm4=";
   };
 

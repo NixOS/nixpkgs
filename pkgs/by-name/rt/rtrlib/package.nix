@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "rtrlib";
     owner = "rtrlib";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ISb4ojcDvXY/88GbFMrA5V5+SGE6CmE5D+pokDTwotQ=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jamesturk";
     repo = "jellyfish";
-    rev = version;
+    tag = version;
     hash = "sha256-xInjoTXYgZuHyvyKm+N4PAwHozE5BOkxoYhRzZnPs3Q=";
   };
 

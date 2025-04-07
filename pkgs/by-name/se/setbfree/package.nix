@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pantherb";
     repo = "setBfree";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jtiyJntaFnAVeC1Rvkzi3wNodyJpEQKgnOAP7++36wo=";
   };
 

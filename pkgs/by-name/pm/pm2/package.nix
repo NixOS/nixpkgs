@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Unitech";
     repo = "pm2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8Fsh7rld7rtT55qVgj3/XbujNpZx0BfzTRcLjdPLFSA=";
   };
 

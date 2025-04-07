@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "allaboutapps";
     repo = "integresql";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-heRa1H4ZSCZzSMCejhakBpJfnEnGQLmNFERKqMxbC04=";
   };
 

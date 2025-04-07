@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "libappimage";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V9Ilo0zFo9Urke+jCA4CSQB5tpzLC/S5jmon+bA+TEU=";
   };
 

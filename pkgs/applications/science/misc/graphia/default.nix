@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
-    rev = version;
+    tag = version;
     sha256 = "sha256-tS5oqpwpqvWGu67s8OuA4uQR3Zb5VzHTY/GnfVQki6k=";
   };
 

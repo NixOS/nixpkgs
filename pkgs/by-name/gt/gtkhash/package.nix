@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "gtkhash";
     owner = "gtkhash";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XpgTolpTSsW3i0xk19tt4cn9qANoeiq7YnBBR6g8ioU=";
   };
 

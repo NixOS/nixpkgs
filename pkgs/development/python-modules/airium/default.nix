@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "kamichal";
     repo = "airium";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qAU+rmj2ZHw7KdxVvRyponcPiRcyENfDyW1y9JTiwsY=";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "wiiload";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
 

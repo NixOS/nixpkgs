@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "toxic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qwMkqPTONtG+LnH6a/Debp+n39dJpbUMoy1nIukYjKo=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "urlpy";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
   };
 

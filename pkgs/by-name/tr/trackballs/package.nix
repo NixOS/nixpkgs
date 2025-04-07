@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trackballs";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
   };
 

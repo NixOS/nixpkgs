@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-k7nlBvoAVUTsh98XurTSRuk+yzEKbJh2HFSU1IvX1g0=";
   };
 

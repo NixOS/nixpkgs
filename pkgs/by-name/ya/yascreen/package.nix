@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "yascreen";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-z7j2yceiUyJNdyoVXAPiINln2/MUMqVJh+VwQnmzO2A=";
   };
 

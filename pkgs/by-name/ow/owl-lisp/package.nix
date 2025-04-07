@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "owl-lisp";
     repo = "owl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 

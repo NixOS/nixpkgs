@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "tytan652";
     repo = "door-knocker";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-6QHjmjR2ioR0I6JXtJ0Q+9Dl1fcTnQCGgWlcyFt9WoA=";
   };
 

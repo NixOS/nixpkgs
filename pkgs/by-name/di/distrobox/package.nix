@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-wTu+8SQZaf8TKkjyvKqTvIWnCZTiPnozybTu5uKXEJk=";
   };
 

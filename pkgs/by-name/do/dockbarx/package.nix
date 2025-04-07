@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "dockbarx";
-    rev = version;
+    tag = version;
     sha256 = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
   };
 

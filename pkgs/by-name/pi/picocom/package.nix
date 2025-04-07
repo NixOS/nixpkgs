@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "wsakernel";
     repo = "picocom";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-cQoEfi75iltjeAm26NvXgfrL7d1Hm+1veQ4dVe0S1q8=";
   };
 

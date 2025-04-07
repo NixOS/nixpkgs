@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "flutter_rust_bridge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pvKCiv7hUgetTXXp+NCs04Qo9xWaLUE2T1yHENhTGl4=";
     fetchSubmodules = true;
   };

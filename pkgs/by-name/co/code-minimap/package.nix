@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "code-minimap";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-unf7gFc/tQiUw3VqQ0KC96Srxn1E27WsmJviSggaCF4=";
   };
 

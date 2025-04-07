@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SRombauts";
     repo = "sqlitecpp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-rsVFk4FsonrwpBd3TonkxilwWeOBocH8AyeB+71OBdI=";
   };
 

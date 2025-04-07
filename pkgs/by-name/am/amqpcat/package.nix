@@ -14,7 +14,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QLVFAcymj7dERbUiRcseiDuuKgrQ8n4LbkdhUyXPcWw=";
   };
 

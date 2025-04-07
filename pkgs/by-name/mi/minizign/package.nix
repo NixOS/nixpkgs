@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "zig-minisign";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Su66UohRc9C4INIp+7NHiW28sUq5YBfrI0EoEbGojG0=";
   };
 

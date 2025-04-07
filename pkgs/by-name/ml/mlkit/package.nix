@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0nAQHBcQgGdcWd4SFhDon7I0zi5U+YRTdGvG78tri6A=";
   };
 

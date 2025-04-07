@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dotenv-linter";
     repo = "dotenv-linter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-HCP1OUWm/17e73TbinmDxYUi18/KXxppstyUSixjlSo=";
   };
 

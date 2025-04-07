@@ -14,7 +14,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4iXabFp0LqJ8TXOrqeD+oTAocg6ZTIfijfX3s3fMJuI=";
   };
 

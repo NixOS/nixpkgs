@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phako";
     repo = "dleyna-renderer";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-bGasT3XCa7QHV3D7z59TSHoqWksNSIgaO0z9zYfHHuw=";
   };
 

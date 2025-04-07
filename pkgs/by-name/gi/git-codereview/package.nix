@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZKu/roqkTIJWwvgKWrrDN5UL53n7QVsUqpqtXnunwiQ=";
   };
 

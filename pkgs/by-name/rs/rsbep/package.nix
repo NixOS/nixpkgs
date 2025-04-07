@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ttsiodras";
     repo = "rsbep-backup";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0is4jgil3wdqbvx9h66xcyzbqy84ndyydnnay2g9k81a4mcz4dns";
   };
 

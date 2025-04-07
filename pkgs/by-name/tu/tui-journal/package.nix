@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XbOKC+utKt53iFzNbm861tMGsNMZ2GQc+/J0Dm/SYS8=";
   };
 

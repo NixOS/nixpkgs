@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gucharmap";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-UaXgQIhAoI27iYWgZuZeO7Lv6J9pj06HPp0SZs/5abM=";
   };
 

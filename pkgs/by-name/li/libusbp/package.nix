@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "libusbp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-hFvQceUapzlD021KIOJbSXX7qv1IQMuEudRHYeCkbS8=";
   };
 

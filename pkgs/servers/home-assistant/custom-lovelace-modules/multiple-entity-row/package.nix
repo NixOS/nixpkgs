@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "benct";
     repo = "lovelace-multiple-entity-row";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CXRgXyH1NUg7ssQhenqP0tXr1m2qOkHna3Rf30K3SjI=";
   };
 

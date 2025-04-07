@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tsmetana";
     repo = "spotify-tray";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
   };
 

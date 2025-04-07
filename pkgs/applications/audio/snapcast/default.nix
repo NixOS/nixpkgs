@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
   };
 

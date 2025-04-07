@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetchFromGitHub {
       owner = "LemmyNet";
       repo = pname;
-      rev = version;
+      tag = version;
       fetchSubmodules = true;
       hash = pinData.uiHash;
     };

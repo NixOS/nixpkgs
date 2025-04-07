@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-mPmOnq9j9vnfTynGbOoChLslpyTpIzH6+B2fv5PTHZY=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libspatialindex";
     repo = "libspatialindex";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-a2CzRLHdQMnVhHZhwYsye4X644r8gp1m6vU2CJpSRpU=";
   };
 

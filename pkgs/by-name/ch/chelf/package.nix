@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gottox";
     repo = "chelf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xwd84aynyqsi2kcndbff176vmhrak3jmn3lfcwya59653pppjr6";
   };
 

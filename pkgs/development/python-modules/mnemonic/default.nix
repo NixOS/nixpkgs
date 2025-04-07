@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "python-mnemonic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-D1mS/JQhefYmwrShfWR9SdiGsBUM+jmuCkfWix9tDOU=";
   };
 

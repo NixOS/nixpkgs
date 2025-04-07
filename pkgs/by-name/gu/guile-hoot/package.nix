@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "spritely";
     repo = "guile-hoot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xPU4uLyh3gd2ubyGednCqB3uzKrabhXQhs6vBc8z0ps=";
   };
 

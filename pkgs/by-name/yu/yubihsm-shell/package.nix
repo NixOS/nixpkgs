@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
-    rev = version;
+    tag = version;
     hash = "sha256-0IsdIhuKpzfArVB4xBaxCPqtk0fKWb6RuGImUj1E4Zs=";
   };
 

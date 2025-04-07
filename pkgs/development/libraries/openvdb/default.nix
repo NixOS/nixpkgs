@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openvdb";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-S2uvzDCrTxAmvUMJr5PChcYTqhIHvRZbOfQLtUvzypI=";
   };
 

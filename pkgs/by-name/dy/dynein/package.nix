@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "dynein";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GU/zZ7IJPfpRbrWjrVwPDSFjFfMLoG/c8DDWlN6nZ94=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cpcloud";
     repo = "minesweep-rs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FzMCqsPBcbblItRzfnY43glY4We9jk0eBxjG0SZnau8=";
   };
 

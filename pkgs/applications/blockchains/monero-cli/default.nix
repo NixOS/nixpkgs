@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nDiFJjhsISYM8kTgJUaPYL44iyccnz5+Pd5beBh+lsM=";
   };
 

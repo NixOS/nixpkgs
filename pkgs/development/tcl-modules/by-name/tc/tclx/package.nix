@@ -11,7 +11,7 @@ mkTclDerivation rec {
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bzLF6qOF9o24joWnGR7B4S+Doj7zv9iTh/mo50iFbUs=";
   };
 

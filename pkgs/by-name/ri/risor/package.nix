@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "risor-io";
     repo = "risor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QtYqepNH+c0WDGKTLtMz/VUz0oDOgCbwe4D9I4wal5s=";
   };
 

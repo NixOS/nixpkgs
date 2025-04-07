@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
-    rev = "${version}";
+    tag = version;
     hash = "sha256-LtxaZ/7p/lqStoUmckVVaegQp02Ci3L46fMFEgledj4=";
   };
 

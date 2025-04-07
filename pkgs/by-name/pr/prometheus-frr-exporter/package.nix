@@ -9,7 +9,7 @@ let
   src = fetchFromGitHub {
     owner = "tynany";
     repo = "frr_exporter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J847Y2ZxD0JLEv7hYS5EsNBA6052PXO6VVoavFrWVUU=";
   };
 in

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-GTxl0lsM1BMWTUAQfNYkJupDUCnXWavTnRZrkaCRpPc=";
   };
   vendorHash = null;

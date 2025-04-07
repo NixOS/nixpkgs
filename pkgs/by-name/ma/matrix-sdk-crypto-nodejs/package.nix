@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk-crypto-nodejs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g86RPfhF9XHpbXhHRbyhl920VazCrQyRQrYV6tVCHy4=";
   };
 

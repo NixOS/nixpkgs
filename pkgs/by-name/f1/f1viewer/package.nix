@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SoMuchForSubtlety";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 

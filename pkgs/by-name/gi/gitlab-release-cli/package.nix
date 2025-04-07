@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "release-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-J+9BbzZYLR4Ie01NtjZRCcL/HtR78BiTEqFimfni/ps=";
   };
 

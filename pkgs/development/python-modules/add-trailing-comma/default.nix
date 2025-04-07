@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-B+wjBy42RwabVz/6qEMGpB0JmwJ9hqSskwcNj4x/B/k=";
   };
 

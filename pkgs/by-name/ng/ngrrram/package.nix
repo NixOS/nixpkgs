@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wintermute-cell";
     repo = "ngrrram";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-65cbNsGQZSpxKV0lq/Z7TK7CODPTqayOiPStukFbo44=";
   };
 

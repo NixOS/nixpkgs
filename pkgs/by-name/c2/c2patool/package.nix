@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "contentauth";
     repo = "c2patool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3OaCsy6xt2Pc/Cqm3qbbpr7kiQiA2BM/LqIQnuw73MY=";
   };
 

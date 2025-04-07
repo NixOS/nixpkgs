@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.c";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-hPudV1d+6QkHJzs7Mk47v8LVBfR3UTES/UyhdtMkNJA=";
   };
 

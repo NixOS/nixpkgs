@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/hfd-service";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-PvZPdisqpKl9OSuQXIJW1y6EJ5moesJiEAQjpQjzyWQ=";
   };
 

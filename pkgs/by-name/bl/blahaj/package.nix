@@ -15,7 +15,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "BLAHAJ";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CmMF9jDKUo+c8dYc2UEHKdBDE4dgwExcRS5sSUsUJik=";
   };
 

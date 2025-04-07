@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "swimlane";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 

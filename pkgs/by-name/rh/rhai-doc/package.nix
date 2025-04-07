@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rhaiscript";
     repo = "rhai-doc";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GZq5C8Q95OHKftEkps4Y6X6sAc4pzSfSq3ELUW/kPWI=";
   };
 

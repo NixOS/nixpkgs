@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-FOhtL8nIm5kuKRxFtkrDyUU2z1K22ZdHaes3GY0KmfQ=";
   };
 

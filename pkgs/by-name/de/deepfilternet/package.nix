@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Rikorose";
     repo = "DeepFilterNet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5bYbfO1kmduNm9YV5niaaPvRIDRmPt4QOX7eKpK+sWY=";
   };
 

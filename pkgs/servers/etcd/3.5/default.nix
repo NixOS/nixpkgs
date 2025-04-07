@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = etcdSrcHash;
   };
 

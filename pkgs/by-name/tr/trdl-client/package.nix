@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "werf";
     repo = "trdl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f7gyGGClMk/5+FCivuLasiIG/Ty17yeJ8qQ/GVEbC14=";
   };
 

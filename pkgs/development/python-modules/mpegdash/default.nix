@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sangwonl";
     repo = "python-mpegdash";
-    rev = version;
+    tag = version;
     hash = "sha256-eKtJ+QzeoMog5X1r1ix9vrmGTi/9KzdJiu80vrTX14I=";
   };
 

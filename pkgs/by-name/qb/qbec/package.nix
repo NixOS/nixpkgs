@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "splunk";
     repo = "qbec";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-zi8UPDJxa6SJslVTi6uOxph/au42LPRSCZ/oohXPYFs=";
   };
 

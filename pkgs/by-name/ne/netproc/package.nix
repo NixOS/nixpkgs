@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "berghetti";
     repo = "netproc";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-OQWlFwCga33rTseLeO8rAd+pkLHbSNf3YI5OSwrdIyk=";
   };
 

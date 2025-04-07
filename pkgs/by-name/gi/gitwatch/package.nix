@@ -17,7 +17,7 @@ runCommand "gitwatch"
     src = fetchFromGitHub {
       owner = "gitwatch";
       repo = "gitwatch";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-KuWD2FAMi2vZ/7e4fIg97DGuAPEV9b9iOuF8NIGFVpE=";
     };
     nativeBuildInputs = [ makeWrapper ];

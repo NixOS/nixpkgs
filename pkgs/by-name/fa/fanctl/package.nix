@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "mcoffin";
     repo = "fanctl";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XmawybmqRJ9Lj6ii8TZBFwqdQZVp0pOLN4xiSLkU/bw=";
   };
 

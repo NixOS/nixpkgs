@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
-    rev = version;
+    tag = version;
     hash = "sha256-d9xNXPhFX2TUjnzZlhvqq/YASITBn6lMVTzqi+TPNjI=";
   };
 

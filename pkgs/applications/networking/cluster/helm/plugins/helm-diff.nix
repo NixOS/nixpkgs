@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "databus23";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vRngZigXOyxdx9bG2uWpeQ0ASTW+4tKuQWZ1Vm47Y+k=";
   };
 

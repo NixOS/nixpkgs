@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sibprogrammer";
     repo = "xq";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KLpf4db3D+SQzbitc9ROO+k/VHggWpwZmwwhV3QVNiE=";
   };
 

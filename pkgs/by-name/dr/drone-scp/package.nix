@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "appleboy";
     repo = "drone-scp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cVgKWdhmCdjEHGazZ1FMAOJMVyU5pl8aIgwFMhxlhzg=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WiK2kZWik81HYZVVmzdqdqIE+jnAcYyu536NbdYWYxk=";
   };
 

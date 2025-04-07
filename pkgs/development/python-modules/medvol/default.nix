@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "medvol";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JOw0ODx5yuBY5FyXy9z5C/NE/iok5GwiInalgXW/1J8=";
   };
 

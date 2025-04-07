@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "matplotx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-EWEiEY23uFwd/vgWVLCH/buUmgRqz1rqqlJEdXINYMg=";
   };
 

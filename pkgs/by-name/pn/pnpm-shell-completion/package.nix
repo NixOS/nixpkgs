@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "pnpm-shell-completion";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bc2ZVHQF+lSAmhy/fvdiVfg9uzPPcXYrtiNChjkjHtA=";
   };
 

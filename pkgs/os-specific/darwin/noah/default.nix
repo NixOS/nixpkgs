@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-noah";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "0bivfsgb56kndz61lzjgdcnqlhjikqw89ma0h6f6radyvfzy0vis";
   };
 

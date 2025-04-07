@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pulb";
     repo = "mailnag-goa-plugin";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0bij6cy96nhq7xzslx0fnhmiac629h0x4wgy67k4i4npwqw10680";
   };
 

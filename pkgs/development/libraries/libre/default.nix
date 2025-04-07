@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "re";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-OWVDuKlF7YLipDURC46s14WOLWWagUqWg20sH0kSIA4=";
   };
 

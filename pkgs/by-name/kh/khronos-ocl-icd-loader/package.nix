@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-A+Rd/3LyBoUW2MrRDMOcwsTqTADuNxSQdF1HHgfq3mY=";
   };
 

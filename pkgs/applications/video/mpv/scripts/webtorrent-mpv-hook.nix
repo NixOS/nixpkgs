@@ -73,7 +73,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "mrxdst";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qFeQBVPZZFKkxz1fhK3+ah3TPDovklhhQwtv09TiSqo=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

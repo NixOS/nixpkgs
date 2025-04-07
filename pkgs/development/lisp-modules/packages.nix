@@ -161,7 +161,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "v${version}";
+          tag = "v${version}";
           hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
         };
         systems = [

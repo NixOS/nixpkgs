@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minetest-mapserver";
     repo = "mapserver";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wo3/7axVkEcnqkOG29KE136EeMt/FW63q68UlpIA3z8=";
   };
 

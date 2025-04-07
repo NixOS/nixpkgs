@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-menu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pWdLSoTeRgr5FPdBWMTVdsnijuwu8fLuNkyIRZ+JEe8=";
   };
 

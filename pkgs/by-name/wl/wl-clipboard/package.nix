@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BYRXqVpGt9FrEBYQpi2kHPSZyeMk9o1SXkxjjcduhiY=";
   };
 

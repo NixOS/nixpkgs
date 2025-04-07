@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zcash";
     repo = "lightwalletd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-M9xfV2T8L+nssrJj29QmPiErNMpfpT8BY/30Vj8wPjY=";
   };
 
