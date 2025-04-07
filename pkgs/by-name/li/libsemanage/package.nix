@@ -11,7 +11,7 @@
   audit,
   enablePython ? true,
   swig ? null,
-  python ? null,
+  python3 ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,17 +32,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    bison
-    flex
-    pkg-config
-  ] ++ lib.optional enablePython swig;
+  nativeBuildInputs =
+    [
+      bison
+      flex
+      pkg-config
+    ]
+    ++ lib.optionals enablePython [
+      python3
+      swig
+    ];
+
   buildInputs = [
     libsepol
     libselinux
     bzip2
     audit
-  ] ++ lib.optional enablePython python;
+  ] ++ lib.optional enablePython python3;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(man)/share/man/man5"
     "PYTHON=python"
     "PYPREFIX=python"
-    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
+    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
   ];
 
