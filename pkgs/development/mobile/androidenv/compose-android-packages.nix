@@ -175,7 +175,13 @@ let
                 passthru = {
                   info = packageInfo;
                 };
-              })
+              }).overrideAttrs
+                (prev: {
+                  # fetchurl won't generate the correct filename if we specify pname and version,
+                  # and we still want the version attribute to show up in search, so specify these in an override
+                  pname = packageInfo.name;
+                  version = packageInfo.revision;
+                })
             ) validArchives
           )
         )
@@ -207,8 +213,11 @@ let
       # Converts things like 'extras;google;auto' to 'extras-google-auto'
       toVersionKey =
         name:
-        lib.optionalString (lib.match "^[0-9].*" name != null) "v"
-        + lib.concatStringsSep "_" (lib.splitVersion (lib.replaceStrings [ ";" ] [ "-" ] name));
+        let
+          normalizedName = lib.replaceStrings [ ";" "." ] [ "-" "_" ] name;
+          versionParts = lib.match "^([0-9][0-9\\.]*)(.*)$" normalizedName;
+        in
+        if versionParts == null then normalizedName else "v" + lib.concatStrings versionParts;
 
       recurse = lib.mapAttrs' (
         name: value:
