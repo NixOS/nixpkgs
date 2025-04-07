@@ -79,6 +79,7 @@ let
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
     nix = nativePlatforms;
+    nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;
     rustc = nativePlatforms;
     cargo = nativePlatforms;
