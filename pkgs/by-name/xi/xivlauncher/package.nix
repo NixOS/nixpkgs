@@ -14,6 +14,7 @@
   makeDesktopItem,
   makeWrapper,
   useSteamRun ? true,
+  useGameMode ? false,
 }:
 
 let
@@ -72,7 +73,7 @@ buildDotnetModule rec {
       let
         steam-run =
           (steam.override {
-            extraPkgs = pkgs: [ pkgs.libunwind ];
+            extraPkgs = pkgs: [ pkgs.libunwind ] ++ lib.optional useGameMode pkgs.gamemode;
             extraProfile = ''
               unset TZ
             '';
