@@ -244,17 +244,19 @@ lib.makeExtensible (
 
       nix_2_28 = addTests "nix_2_28" self.nixComponents_2_28.nix-everything;
 
-      git = common rec {
-        version = "2.25.0";
-        suffix = "pre20241101_${lib.substring 0 8 src.rev}";
+      nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29pre20250407_${lib.substring 0 8 src.rev}";
+        inherit (self.nix_2_24.meta) maintainers;
+        otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
-          hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
+          rev = "73d3159ba0b4b711c1f124a587f16e2486d685d7";
+          hash = "sha256-9wJXUGqXIqMjNyKWJKCcxrDHM/KxDkvJMwo6S3s+WuM=";
         };
-        self_attribute_name = "git";
       };
+
+      git = addTests "git" self.nixComponents_git.nix-everything;
 
       latest = self.nix_2_24;
 
