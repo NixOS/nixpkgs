@@ -202,7 +202,7 @@ let
           startWithDeps = findDependenciesRecursively start;
           allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
           allPython3Dependencies =
-            ps: lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
+            ps: lib.concatMap (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins;
           python3Env = python3.withPackages allPython3Dependencies;
 
           packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
