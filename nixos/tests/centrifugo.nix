@@ -21,12 +21,15 @@ in
           services.centrifugo = {
             enable = true;
             settings = {
-              inherit name;
-              port = centrifugoPort;
-              # See https://centrifugal.dev/docs/server/engines#redis-sharding
-              engine = "redis";
-              # Connect to local Redis shard via Unix socket.
-              redis_address =
+              node = {
+                inherit name;
+              };
+              http_server.port = centrifugoPort;
+              http_api.insecure = true;
+              usage_stats.disabled = true;
+
+              engine.type = "redis";
+              engine.redis.address =
                 let
                   toRedisAddresses = map (name: "${name}:${toString redisPort}");
                 in
@@ -35,8 +38,6 @@ in
                   "unix://${config.services.redis.servers.centrifugo.unixSocket}"
                 ]
                 ++ toRedisAddresses (lib.drop (index + 1) nodes);
-              usage_stats_disable = true;
-              api_insecure = true;
             };
             extraGroups = [
               config.services.redis.servers.centrifugo.user
