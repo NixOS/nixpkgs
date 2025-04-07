@@ -102,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SELinux policy core utilities written in Python";
     license = licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    maintainers = with lib.maintainers; [
+      RossComputerGuy
+      numinit
+    ];
     platforms = platforms.linux;
   };
 })
