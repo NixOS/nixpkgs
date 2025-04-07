@@ -264,7 +264,7 @@ in
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
 
-        environment = lib.mapAttrs (lib.const (lib.generators.mkValueStringDefault { })) (
+        environment = lib.mapAttrs (_: (lib.generators.mkValueStringDefault { })) (
           lib.filterAttrs (_: v: v != null) (
             instance.settings
             // {

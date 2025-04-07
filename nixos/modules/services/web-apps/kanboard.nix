@@ -8,7 +8,7 @@
 let
   cfg = config.services.kanboard;
 
-  toStringAttrs = lib.mapAttrs (lib.const toString);
+  toStringAttrs = lib.mapAttrs (_: toString);
 in
 {
   meta.maintainers = with lib.maintainers; [ yzx9 ];

@@ -127,7 +127,7 @@ in
     services.grafana-image-renderer.chromium = lib.mkDefault pkgs.chromium;
 
     services.grafana-image-renderer.settings = {
-      rendering = lib.mapAttrs (lib.const lib.mkDefault) {
+      rendering = lib.mapAttrs (_: lib.mkDefault) {
         chromeBin = "${cfg.chromium}/bin/chromium";
         verboseLogging = cfg.verbose;
         timezone = config.time.timeZone;

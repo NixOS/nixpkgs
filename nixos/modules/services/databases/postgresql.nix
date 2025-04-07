@@ -11,7 +11,6 @@ let
     attrValues
     concatMapStrings
     concatStringsSep
-    const
     elem
     escapeShellArgs
     filter
@@ -57,7 +56,7 @@ let
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (
     concatStringsSep "\n" (
-      mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)
+      mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (_: x: x != null) cfg.settings)
     )
   );
 
@@ -731,7 +730,7 @@ in
     '';
 
     services.postgresql.systemCallFilter = mkMerge [
-      (mapAttrs (const mkDefault) {
+      (mapAttrs (_: mkDefault) {
         "@system-service" = true;
         "~@privileged" = true;
         "~@resources" = true;

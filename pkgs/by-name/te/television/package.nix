@@ -96,4 +96,4 @@ let
   });
 in
 
-if extraPackages == null then television else television.withPackages (lib.const extraPackages)
+if extraPackages == null then television else television.withPackages (_: extraPackages)

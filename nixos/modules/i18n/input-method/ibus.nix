@@ -45,7 +45,7 @@ in
         example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
-            enginesDrv = lib.filterAttrs (lib.const lib.isDerivation) pkgs.ibus-engines;
+            enginesDrv = lib.filterAttrs (_: lib.isDerivation) pkgs.ibus-engines;
             engines = lib.concatStringsSep ", " (map (name: "`${name}`") (lib.attrNames enginesDrv));
           in
           "Enabled IBus engines. Available engines are: ${engines}.";
