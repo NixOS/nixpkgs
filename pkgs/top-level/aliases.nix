@@ -1394,6 +1394,7 @@ mapAliases {
   pgroonga = postgresqlPackages.pgroonga;
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
+  postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
   postgis = postgresqlPackages.postgis;
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
   texinfo5 = throw "'texinfo5' has been removed from nixpkgs"; # Added 2024-09-10
@@ -1706,6 +1707,7 @@ mapAliases {
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
   tomcat_connectors = apacheHttpdPackages.mod_jk; # Added 2024-06-07
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
+  torrenttools = throw "torrenttools has been removed due to lack of maintanance upstream"; # Added 2025-04-06
   torq = throw "torq has been removed because the project went closed source"; # Added 2024-11-24
   transmission = lib.warnOnInstantiate (transmission3Warning { }) transmission_3; # Added 2024-06-10
   transmission-gtk = lib.warnOnInstantiate (transmission3Warning {

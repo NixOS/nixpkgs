@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management";

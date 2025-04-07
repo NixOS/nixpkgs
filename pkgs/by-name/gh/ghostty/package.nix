@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

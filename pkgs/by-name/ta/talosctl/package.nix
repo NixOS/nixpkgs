@@ -41,7 +41,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "CLI for out-of-band management of Kubernetes nodes created by Talos";

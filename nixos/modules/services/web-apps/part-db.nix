@@ -27,7 +27,7 @@ in
     phpPackage = mkPackageOption pkgs "php" { } // {
       apply =
         pkg:
-        pkg.override {
+        pkg.buildEnv {
           extraConfig = ''
             memory_limit = 256M;
           '';

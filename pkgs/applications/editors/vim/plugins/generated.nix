@@ -9347,6 +9347,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neovim-trunk = buildVimPlugin {
+    pname = "neovim-trunk";
+    version = "2024-06-19";
+    src = fetchFromGitHub {
+      owner = "trunk-io";
+      repo = "neovim-trunk";
+      rev = "835180d0cb2db4aa3a934daf65b1a56549018b94";
+      sha256 = "086l7zf2k2p537a13zwivfkamfgpdkrfgq5r23y014s2x2jrh5dw";
+    };
+    meta.homepage = "https://github.com/trunk-io/neovim-trunk/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neoyank-vim = buildVimPlugin {
     pname = "neoyank.vim";
     version = "2020-12-20";

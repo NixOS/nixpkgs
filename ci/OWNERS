@@ -299,6 +299,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
+# D
+/pkgs/build-support/dlang @jtbx @TomaSajt
+
 # Dhall
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
