@@ -6,6 +6,7 @@ Nim programs are built using a lockfile and either `buildNimPackage` or `buildNi
 ## buildNimPackage {#buildNimPackage}
 
 The following example shows a Nim program that depends only on Nim libraries:
+
 ```nix
 { lib, buildNimPackage, fetchFromGitHub }:
 
@@ -34,18 +35,20 @@ The `buildNimPackage` function takes an attrset of parameters that are passed on
 
 The following parameters are specific to `buildNimPackage`:
 
-* `lockFile`: JSON formatted lockfile.
-* `nimbleFile`: Specify the Nimble file location of the package being built
+- `lockFile`: JSON formatted lockfile.
+- `nimbleFile`: Specify the Nimble file location of the package being built
   rather than discover the file at build-time.
-* `nimRelease ? true`: Build the package in *release* mode.
-* `nimDefines ? []`: A list of Nim defines. Key-value tuples are not supported.
-* `nimFlags ? []`: A list of command line arguments to pass to the Nim compiler.
+- `nimRelease ? true`: Build the package in _release_ mode.
+- `nimDefines ? []`: A list of Nim defines. Key-value tuples are not supported.
+- `nimFlags ? []`: A list of command line arguments to pass to the Nim compiler.
   Use this to specify defines with arguments in the form of `-d:${name}=${value}`.
-* `nimDoc` ? false`: Build and install HTML documentation.
+- `nimDoc` ? false`: Build and install HTML documentation.
 
 ### Lockfiles {#nim-lockfiles}
+
 Nim lockfiles are created with the `nim_lk` utility.
 Run `nim_lk` with the source directory as an argument and it will print a lockfile to stdout.
+
 ```sh
 $ cd nixpkgs
 $ nix build -f . ttop.src
@@ -59,6 +62,7 @@ An alternative to `buildNimPackage` is `buildNimSbom` which builds packages from
 
 In the following minimal example only the source code checkout and a `buildInput` are specified.
 The SBOM file provides metadata such as `pname` and `version` as well as the sources to Nim dependencies.
+
 ```nix
 # pkgs/by-name/ni/nim_lk/package.nix
 {
@@ -103,6 +107,7 @@ The `buildNimPackage` function matches the libraries specified by `lockFile` to 
 The default overrides are maintained as the top-level `nimOverrides` attrset at `pkgs/top-level/nim-overrides.nix`.
 
 For example, to propagate a dependency on SDL2 for lockfiles that select the Nim `sdl2` library, an overlay is added to the set in the `nim-overrides.nix` file:
+
 ```nix
 { lib
 /* … */
@@ -123,6 +128,7 @@ For example, to propagate a dependency on SDL2 for lockfiles that select the Nim
 ```
 
 The annotations in the `nim-overrides.nix` set are functions that take two arguments and return a new attrset to be overlaid on the package being built.
+
 - lockAttrs: the attrset for this library from within a lockfile. This can be used to implement library version constraints, such as marking libraries as broken or insecure.
 - prevAttrs: the attrset produced by initial arguments to `buildNimPackage` and any preceding lockfile overlays.
 
@@ -131,6 +137,7 @@ The annotations in the `nim-overrides.nix` set are functions that take two argum
 The `nimOverrides` attrset makes it possible to modify overrides in a few different ways.
 
 Override a package internal to its definition:
+
 ```nix
 { lib, buildNimPackage, nimOverrides, libressl }:
 
@@ -146,6 +153,7 @@ in buildNimPackage' (finalAttrs: {
 ```
 
 Override a package externally:
+
 ```nix
 { pkgs }: {
   foo = pkgs.foo.override {

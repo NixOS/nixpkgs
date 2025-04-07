@@ -30,47 +30,48 @@ Note that no user namespace is created, which means that you won't be able to ru
 `args` (List of String)
 
 : Specifies a set of arguments to run inside the container.
-  Any packages referenced by `args` will be made available inside the container.
+Any packages referenced by `args` will be made available inside the container.
 
 `mounts` (Attribute Set; _optional_)
 
 : Would specify additional mounts that the runtime must make available to the container.
 
-  :::{.warning}
-  As explained in [issue #290879](https://github.com/NixOS/nixpkgs/issues/290879), this attribute is currently ignored.
-  :::
+:::{.warning}
+As explained in [issue #290879](https://github.com/NixOS/nixpkgs/issues/290879), this attribute is currently ignored.
+:::
 
-  :::{.note}
-  `buildContainer` includes a minimal set of necessary filesystems to be mounted into the container, and this set can't be changed with the `mounts` attribute.
-  :::
+:::{.note}
+`buildContainer` includes a minimal set of necessary filesystems to be mounted into the container, and this set can't be changed with the `mounts` attribute.
+:::
 
-  _Default value:_ `{}`.
+_Default value:_ `{}`.
 
 `readonly` (Boolean; _optional_)
 
 : If `true`, sets the container's root filesystem as read-only.
 
-  _Default value:_ `false`.
+_Default value:_ `false`.
 
 `os` **DEPRECATED**
 
 : Specifies the operating system on which the container filesystem is based on.
-  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
-  According to the linked specification, all possible values for `$GOOS` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `darwin` or `linux`.
+If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
+According to the linked specification, all possible values for `$GOOS` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `darwin` or `linux`.
 
-  _Default value:_ `"linux"`.
+_Default value:_ `"linux"`.
 
 `arch` **DEPRECATED**
 
 : Used to specify the architecture for which the binaries in the container filesystem have been compiled.
-  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
-  According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
+If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
+According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 
-  _Default value:_ `x86_64`.
+_Default value:_ `x86_64`.
 
 ### Examples {#ssec-pkgs-ociTools-buildContainer-examples}
 
 ::: {.example #ex-ociTools-buildContainer-bash}
+
 # Creating an OCI runtime container that runs `bash`
 
 This example uses `ociTools.buildContainer` to create a simple container that runs `bash`.
@@ -101,4 +102,5 @@ help
 GNU bash, version 5.2.26(1)-release (x86_64-pc-linux-gnu)
 (some output removed for clarity)
 ```
+
 :::

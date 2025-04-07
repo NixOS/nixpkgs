@@ -17,7 +17,7 @@ The transitive closure of these derivations' outputs will be copied into the cac
 
 : The compression algorithm to use.
 
-  _Default value:_ `zstd`.
+_Default value:_ `zstd`.
 
 ::: {.note}
 This function is meant for advanced use cases.

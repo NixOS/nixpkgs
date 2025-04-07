@@ -18,74 +18,75 @@ See [](#ex-portableService-hello) to understand how to use the output of `portab
 `pname` (String)
 
 : The name of the portable service.
-  The generated image will be named according to the template `$pname_$version.raw`, which is supported by the Portable Services specification.
+The generated image will be named according to the template `$pname_$version.raw`, which is supported by the Portable Services specification.
 
 `version` (String)
 
 : The version of the portable service.
-  The generated image will be named according to the template `$pname_$version.raw`, which is supported by the Portable Services specification.
+The generated image will be named according to the template `$pname_$version.raw`, which is supported by the Portable Services specification.
 
 `units` (List of Attribute Set)
 
 : A list of derivations for systemd unit files.
-  Each derivation must produce a single file, and must have a name that starts with the value of `pname` and ends with the suffix of the unit type (e.g. ".service", ".socket", ".timer", and so on).
-  See [](#ex-portableService-hello) to better understand this naming constraint.
+Each derivation must produce a single file, and must have a name that starts with the value of `pname` and ends with the suffix of the unit type (e.g. ".service", ".socket", ".timer", and so on).
+See [](#ex-portableService-hello) to better understand this naming constraint.
 
 `description` (String or Null; _optional_)
 
 : If specified, the value is added as `PORTABLE_PRETTY_NAME` to the `/etc/os-release` file in the generated image.
-  This could be used to provide more information to anyone inspecting the image.
+This could be used to provide more information to anyone inspecting the image.
 
-  _Default value:_ `null`.
+_Default value:_ `null`.
 
 `homepage` (String or Null; _optional_)
 
 : If specified, the value is added as `HOME_URL` to the `/etc/os-release` file in the generated image.
-  This could be used to provide more information to anyone inspecting the image.
+This could be used to provide more information to anyone inspecting the image.
 
-  _Default value:_ `null`.
+_Default value:_ `null`.
 
 `symlinks` (List of Attribute Set; _optional_)
 
 : A list of attribute sets in the format `{object, symlink}`.
-  For each item in the list, `portableService` will create a symlink in the path specified by `symlink` (relative to the root of the image) that points to `object`.
+For each item in the list, `portableService` will create a symlink in the path specified by `symlink` (relative to the root of the image) that points to `object`.
 
-  All packages that `object` depends on and their dependencies are automatically copied into the image.
+All packages that `object` depends on and their dependencies are automatically copied into the image.
 
-  This can be used to create symlinks for applications that assume some files to exist globally (`/etc/ssl` or `/bin/bash`, for example).
-  See [](#ex-portableService-symlinks) to understand how to do that.
+This can be used to create symlinks for applications that assume some files to exist globally (`/etc/ssl` or `/bin/bash`, for example).
+See [](#ex-portableService-symlinks) to understand how to do that.
 
-  _Default value:_ `[]`.
+_Default value:_ `[]`.
 
 `contents` (List of Attribute Set; _optional_)
 
 : A list of additional derivations to be included as-is in the image.
-  These derivations will be included directly in a `/nix/store` directory inside the image.
+These derivations will be included directly in a `/nix/store` directory inside the image.
 
-  _Default value:_ `[]`.
+_Default value:_ `[]`.
 
 `squashfsTools` (Attribute Set; _optional_)
 
 : Allows you to override the package that provides {manpage}`mksquashfs(1)`, which is used internally by `portableService`.
 
-  _Default value:_ `pkgs.squashfsTools`.
+_Default value:_ `pkgs.squashfsTools`.
 
 `squash-compression` (String; _optional_)
 
 : Passed as the compression option to {manpage}`mksquashfs(1)`, which is used internally by `portableService`.
 
-  _Default value:_ `"xz -Xdict-size 100%"`.
+_Default value:_ `"xz -Xdict-size 100%"`.
 
 `squash-block-size` (String; _optional_)
 
 : Passed as the block size option to {manpage}`mksquashfs(1)`, which is used internally by `portableService`.
 
-  _Default value:_ `"1M"`.
+_Default value:_ `"1M"`.
 
 ## Examples {#ssec-pkgs-portableService-examples}
 
 []{#ex-pkgs-portableService}
 :::{.example #ex-portableService-hello}
+
 # Building a Portable Service image
 
 The following example builds a Portable Service image with the `hello` package, along with a service unit that runs it.
@@ -139,9 +140,11 @@ Removed /etc/systemd/system.attached/hello.service.d.
 Removed /etc/portables/hello_2.12.1.raw.
 Removed /etc/systemd/system.attached.
 ```
+
 :::
 
 :::{.example #ex-portableService-symlinks}
+
 # Specifying symlinks when building a Portable Service image
 
 Some services may expect files or directories to be available globally.
@@ -171,4 +174,5 @@ portableService {
   ];
 }
 ```
+
 :::

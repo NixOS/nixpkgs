@@ -50,7 +50,7 @@ Disables using `zigInstallPhase`.
 The following variables are similar to their `stdenv.mkDerivation` counterparts.
 
 | `zig.hook` Variable | `stdenv.mkDerivation` Counterpart |
-|---------------------|-----------------------------------|
+| ------------------- | --------------------------------- |
 | `zigBuildFlags`     | `buildFlags`                      |
 | `zigCheckFlags`     | `checkFlags`                      |
 | `zigInstallFlags`   | `installFlags`                    |
