@@ -91,7 +91,7 @@ body:
     id: "metadata"
     attributes:
       label: "System metadata"
-      description: "Please run `nix-shell -p nix-info --run \"nix-info -m\"` on a terminal and paste the output of that command here."
+      description: 'Please run `nix-shell -p nix-info --run "nix-info -m"` on a terminal and paste the output of that command here.'
     validations:
       required: true
   - type: "textarea"
