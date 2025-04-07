@@ -14766,8 +14766,6 @@ with pkgs;
 
   pixinsight = qt6Packages.callPackage ../applications/graphics/pixinsight { };
 
-  protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
-
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
     apptainer
     singularity
