@@ -12,10 +12,8 @@
   seatd,
   udev,
   systemd,
-  xwayland,
   nix-update-script,
 
-  useXWayland ? true,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -58,10 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontCargoInstall = true;
-
-  preFixup = lib.optionalString useXWayland ''
-    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})
-  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

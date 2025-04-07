@@ -2,7 +2,7 @@ In a NixOS-like system, it doesn't make sense to hardcode these absolute paths.
 They even already use execvp!
 
 diff --git a/usr.sbin/jail/command.c b/usr.sbin/jail/command.c
-index 9eabcc5ff53c..2024f6bfb97a 100644
+index 9004b4729fec..669e85ed847e 100644
 --- a/usr.sbin/jail/command.c
 +++ b/usr.sbin/jail/command.c
 @@ -363,7 +363,7 @@ run_command(struct cfjail *j)
@@ -107,6 +107,6 @@ index 9eabcc5ff53c..2024f6bfb97a 100644
  		setenv("SHELL",
 -		    *pwd->pw_shell ? pwd->pw_shell : _PATH_BSHELL, 1);
 +		    *pwd->pw_shell ? pwd->pw_shell : "sh", 1);
- 		if (clean && chdir(pwd->pw_dir) < 0) {
+ 		if (clean && username && chdir(pwd->pw_dir) < 0) {
  			jail_warnx(j, "chdir %s: %s",
  			    pwd->pw_dir, strerror(errno));
