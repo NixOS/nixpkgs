@@ -10,7 +10,6 @@
   fontconfig,
   gd,
   gts,
-  libjpeg,
   libpng,
   libtool,
   makeWrapper,
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       libpng
-      libjpeg
       expat
       fontconfig
       gd
