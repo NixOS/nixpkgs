@@ -32,7 +32,7 @@
     sysstat
   ];
 
-  fileSystems."/" = {
+  fileSystems."/" = lib.mkImageMediaOverride {
     fsType = "ext4";
     device = "/dev/sda";
     autoResize = true;
