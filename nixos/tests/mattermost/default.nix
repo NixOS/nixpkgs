@@ -557,18 +557,21 @@ import ../make-test-python.nix (
             shutdown_queue.task_done()
         threading.Thread(target=shutdown_worker, daemon=True).start()
 
-        run_mattermost_tests(
-          shutdown_queue,
-          "${nodes.mysqlMutable.system.build.toplevel}",
-          mysqlMutable,
-          "${nodes.mysqlMostlyMutable.system.build.toplevel}",
-          "${nodes.mysqlMostlyMutable.services.mattermost.pluginsBundle}",
-          mysqlMostlyMutable,
-          "${nodes.mysqlImmutable.system.build.toplevel}",
-          mysqlImmutable,
-          "${nodes.mysqlEnvironmentFile.system.build.toplevel}",
-          mysqlEnvironmentFile
-        )
+        ${pkgs.lib.optionalString pkgs.stdenv.isx86_64 ''
+          # Only run the MySQL tests on x86_64 so we don't have to debug MySQL ARM issues.
+          run_mattermost_tests(
+            shutdown_queue,
+            "${nodes.mysqlMutable.system.build.toplevel}",
+            mysqlMutable,
+            "${nodes.mysqlMostlyMutable.system.build.toplevel}",
+            "${nodes.mysqlMostlyMutable.services.mattermost.pluginsBundle}",
+            mysqlMostlyMutable,
+            "${nodes.mysqlImmutable.system.build.toplevel}",
+            mysqlImmutable,
+            "${nodes.mysqlEnvironmentFile.system.build.toplevel}",
+            mysqlEnvironmentFile
+          )
+        ''}
 
         run_mattermost_tests(
           shutdown_queue,
