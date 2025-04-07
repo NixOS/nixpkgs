@@ -1,8 +1,4 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
+{ pkgs, ... }:
 
 with pkgs.lib;
 
@@ -13,7 +9,7 @@ let
       kafkaPackage,
       mode ? "kraft",
     }:
-    (import ./make-test-python.nix ({
+    (import ../make-test-python.nix ({
       inherit name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [ nequissimus ];
@@ -71,6 +67,7 @@ let
                 9092
                 9093
               ];
+              virtualisation.diskSize = 1024;
               # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
               virtualisation.memorySize = 2047;
             };
@@ -84,6 +81,7 @@ let
               };
 
               networking.firewall.allowedTCPPorts = [ 2181 ];
+              virtualisation.diskSize = 1024;
             };
         };
 
@@ -116,7 +114,7 @@ let
             + "--from-beginning --max-messages 1"
         )
       '';
-    }) { inherit system; });
+    }));
 
 in
 with pkgs;
