@@ -30,9 +30,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.Version=${version}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsEndpoint=${statsEndpoint}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsToken=${statsToken}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.Version=${version}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsEndpoint=${statsEndpoint}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsToken=${statsToken}"
   ];
 
   excludedPackages = [
