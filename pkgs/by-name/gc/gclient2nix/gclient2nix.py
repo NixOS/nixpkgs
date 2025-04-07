@@ -23,7 +23,7 @@ import gclient_utils
 logger = logging.getLogger(__name__)
 click_log.basic_config(logger)
 
-nixpkgs_path = "@nixpkgs_path@"
+nixpkgs_path = "<nixpkgs>"
 
 memory: Memory = Memory(user_cache_dir("gclient2nix"), verbose=0)
 
