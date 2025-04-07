@@ -23,6 +23,7 @@
   typing-extensions,
 
   # tests
+  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -34,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.10";
+  version = "0.11.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-bS4JmS8NkYkf6YUN9JLcIjMco94QuAw/7H0SguCWH+Y=";
+    hash = "sha256-KEh1w2lVQKch5QMwqLoAFnnaMOPqWX6WA7QM9sfunUU=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -69,6 +70,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiofiles
     chex
     google-cloud-logging
     mock
