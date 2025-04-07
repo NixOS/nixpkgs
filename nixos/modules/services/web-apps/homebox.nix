@@ -82,6 +82,7 @@ in
         ProcSubset = "pid";
         ProtectSystem = "strict";
         RestrictAddressFamilies = [
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
