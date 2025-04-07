@@ -47,16 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
   ];
 
-  mesonFlags =
-    if enableHeaderOnly then
-      [        
-        "-Dcompile_library=false"
-      ]
-    else
-      [
-        "-Dbuild_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-        "-Dbuild_examples=true"
-      ];
+  mesonFlags = [
+    (lib.mesonBool "build_tests" (!enableHeaderOnly && finalAttrs.finalPackage.doCheck))
+    (lib.mesonBool "compile_library" (!enableHeaderOnly))
+    (lib.mesonBool "build_examples" (!enableHeaderOnly))
+  ];
 
   # almost all tests fail on Darwin with the following exception:
   # libc++abi: terminating due to uncaught exception of type std::runtime_error: collate_byname<char>::collate_byname failed to construct for
@@ -69,12 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  # alias tomlplusplus as some packages like xmake expect toml++ to be the name of the library
+  postInstall =
+    let
+      libDir = if enableHeaderOnly then "share" else "lib";
+    in
+    ''
+      cat > $out/${libDir}/pkgconfig/toml++.pc <<EOF
+      Name: toml++
+      Description: Alias for tomlplusplus
+      Version: ${finalAttrs.version}
+      Requires: tomlplusplus
+      EOF
+    '';
+
   meta = with lib; {
     homepage = "https://github.com/marzer/tomlplusplus";
     description = "Header-only TOML config file parser and serializer for C++17";
     license = licenses.mit;
     maintainers = with maintainers; [ Scrumplex ];
-    pkgConfigModules = [ "tomlplusplus" ];
+    pkgConfigModules = [
+      "tomlplusplus"
+      "toml++"
+    ];
     platforms = platforms.unix;
   };
 })
