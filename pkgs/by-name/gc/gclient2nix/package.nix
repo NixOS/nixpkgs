@@ -3,7 +3,6 @@
   python3,
   runCommand,
   makeWrapper,
-  path,
   fetchgit,
   nurl,
   writers,
@@ -66,7 +65,6 @@ runCommand "gclient2nix"
     buildInputs = [ python ];
 
     # substitutions
-    nixpkgs_path = if builtins.pathExists (path + "/.git") then lib.cleanSource path else path;
     depot_tools_checkout = fetchgit {
       url = "https://chromium.googlesource.com/chromium/tools/depot_tools";
       rev = "452fe3be37f78fbecefa1b4b0d359531bcd70d0d";
