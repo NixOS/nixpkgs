@@ -69,7 +69,7 @@ let
 
   # Filter null values from the configuration, so that we can still advertise
   # optional options in the config attribute.
-  filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
+  filteredConfig = converge (filterAttrsRecursive (_: v: v != null)) (
     recursiveUpdate customLovelaceModulesResources (cfg.config or { })
   );
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
