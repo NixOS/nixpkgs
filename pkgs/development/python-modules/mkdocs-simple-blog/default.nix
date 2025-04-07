@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple blog generator plugin for MkDocs";
     homepage = "https://github.com/FernandoCelmer/mkdocs-simple-blog";
+    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
