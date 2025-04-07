@@ -208,7 +208,7 @@ in
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
   atd = runTest ./atd.nix;
-  atop = handleTest ./atop.nix { };
+  atop = import ./atop.nix { inherit pkgs runTest; };
   atticd = runTest ./atticd.nix;
   atuin = runTest ./atuin.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
@@ -274,8 +274,8 @@ in
   cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
   cage = handleTest ./cage.nix { };
   cagebreak = handleTest ./cagebreak.nix { };
-  calibre-web = handleTest ./calibre-web.nix { };
-  calibre-server = handleTest ./calibre-server.nix { };
+  calibre-web = runTest ./calibre-web.nix;
+  calibre-server = import ./calibre-server.nix { inherit pkgs runTest; };
   canaille = handleTest ./canaille.nix { };
   castopod = handleTest ./castopod.nix { };
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
@@ -511,12 +511,12 @@ in
   gemstash = handleTest ./gemstash.nix { };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
-  gerrit = handleTest ./gerrit.nix { };
+  gerrit = runTest ./gerrit.nix;
   geth = handleTest ./geth.nix { };
   ghostunnel = handleTest ./ghostunnel.nix { };
   gitdaemon = handleTest ./gitdaemon.nix { };
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
-  github-runner = handleTest ./github-runner.nix { };
+  github-runner = runTest ./github-runner.nix;
   gitlab = runTest ./gitlab.nix;
   gitolite = handleTest ./gitolite.nix { };
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix { };
@@ -524,7 +524,7 @@ in
   glances = runTest ./glances.nix;
   glitchtip = runTest ./glitchtip.nix;
   glusterfs = handleTest ./glusterfs.nix { };
-  gnome = handleTest ./gnome.nix { };
+  gnome = runTest ./gnome.nix;
   gnome-extensions = handleTest ./gnome-extensions.nix { };
   gnome-flashback = handleTest ./gnome-flashback.nix { };
   gnome-xorg = handleTest ./gnome-xorg.nix { };
@@ -675,7 +675,7 @@ in
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
-  kimai = handleTest ./kimai.nix { };
+  kimai = runTest ./kimai.nix;
   kmonad = runTest ./kmonad.nix;
   knot = runTest ./knot.nix;
   komga = handleTest ./komga.nix { };
@@ -741,7 +741,7 @@ in
   magnetico = handleTest ./magnetico.nix { };
   mailcatcher = runTest ./mailcatcher.nix;
   mailhog = handleTest ./mailhog.nix { };
-  mailpit = handleTest ./mailpit.nix { };
+  mailpit = runTest ./mailpit.nix;
   mailman = handleTest ./mailman.nix { };
   man = handleTest ./man.nix { };
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
@@ -807,7 +807,7 @@ in
   mpv = runTest ./mpv.nix;
   mtp = handleTest ./mtp.nix { };
   multipass = handleTest ./multipass.nix { };
-  mumble = handleTest ./mumble.nix { };
+  mumble = runTest ./mumble.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn [ "x86_64-linux" ] ./musescore.nix { };
@@ -1412,7 +1412,7 @@ in
   wakapi = runTest ./wakapi.nix;
   warzone2100 = handleTest ./warzone2100.nix { };
   wasabibackend = handleTest ./wasabibackend.nix { };
-  wastebin = handleTest ./wastebin.nix { };
+  wastebin = runTest ./wastebin.nix;
   watchdogd = handleTest ./watchdogd.nix { };
   webhook = runTest ./webhook.nix;
   weblate = handleTest ./web-apps/weblate.nix { };

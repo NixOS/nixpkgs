@@ -4065,6 +4065,8 @@ self: super: with self; {
 
   donfig = callPackage ../development/python-modules/donfig { };
 
+  donut-shellcode = callPackage ../development/python-modules/donut-shellcode { };
+
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
 
   dopy = callPackage ../development/python-modules/dopy { };
@@ -9683,6 +9685,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-attachments = callPackage ../development/python-modules/netbox-attachments { };
+
   netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
 
   netbox-contract = callPackage ../development/python-modules/netbox-contract { };
@@ -13168,6 +13172,8 @@ self: super: with self; {
 
   pysearpc = toPythonModule (pkgs.libsearpc.override { python3 = self.python; });
 
+  pysecretsocks = callPackage ../development/python-modules/pysecretsocks { };
+
   pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
@@ -13998,6 +14004,8 @@ self: super: with self; {
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
+
+  python-obfuscator = callPackage ../development/python-modules/python-obfuscator { };
 
   python-octaviaclient = callPackage ../development/python-modules/python-octaviaclient { };
 
@@ -16336,6 +16344,8 @@ self: super: with self; {
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
+
+  sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 

@@ -5,7 +5,6 @@
   installShellFiles,
   pkg-config,
   openssl,
-  xz,
   nix-update-script,
   versionCheckHook,
 }:
@@ -31,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-    xz
   ];
 
   env = {

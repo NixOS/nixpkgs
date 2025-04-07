@@ -186,7 +186,7 @@ lib.makeExtensible (
       nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix {
         version = "2.27.1";
         inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_27";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";

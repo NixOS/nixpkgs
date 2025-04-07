@@ -8664,8 +8664,6 @@ with pkgs;
 
   polar = callPackage ../tools/misc/polar { };
 
-  inherit (nodePackages) postcss-cli;
-
   pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
@@ -16424,10 +16422,6 @@ with pkgs;
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
-  torrenttools = callPackage ../tools/misc/torrenttools {
-    fmt = fmt_9;
-  };
-
   tony = libsForQt5.callPackage ../applications/audio/tony { };
 
   trustedqsl = tqsl; # Alias added 2019-02-10
@@ -17245,10 +17239,6 @@ with pkgs;
   bugdom = callPackage ../games/bugdom {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
-  };
-
-  bzflag = callPackage ../games/bzflag {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };

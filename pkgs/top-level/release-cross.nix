@@ -262,6 +262,7 @@ in
   or1k = mapTestOnCross systems.examples.or1k embedded;
   avr = mapTestOnCross systems.examples.avr embedded;
   arm-embedded = mapTestOnCross systems.examples.arm-embedded embedded;
+  arm-embedded-nano = mapTestOnCross systems.examples.arm-embedded-nano embedded;
   armhf-embedded = mapTestOnCross systems.examples.armhf-embedded embedded;
   aarch64-embedded = mapTestOnCross systems.examples.aarch64-embedded embedded;
   aarch64be-embedded = mapTestOnCross systems.examples.aarch64be-embedded embedded;

@@ -49,7 +49,7 @@ buildGoModule rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/task";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

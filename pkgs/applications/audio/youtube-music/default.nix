@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.7.4";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qzvfYxM5mxxujWE0SDUapmN+Px9NkP58e1UeLEtZ7bc=";
+    hash = "sha256-2oXHSYKqftuvPhBogPgl2RxajQZM12ch9ZrEX26wcjs=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-guD1yWFd+uO9H/egHS0PJ9HIIlF+wFS/98YtvjIzZW8=";
+    hash = "sha256-s3Ba7uxtJTDV5tRoLFD30VSL5M/nWHHQZkMc+2bM1wE=";
   };
 
   nativeBuildInputs = [
