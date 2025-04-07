@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postgis";
     repo = "postgis";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
