@@ -110,10 +110,7 @@ in
           mkdir -p $mountPoint/boot
           mount /dev/vda1 $mountPoint/boot
 
-          export HOME=$TMPDIR
-          ls -la $mountPoint/nix/var/nix/profiles
-
-          NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- ${config.system.build.toplevel}/bin/switch-to-configuration boot
+          HOME=$TMPDIR NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- ${config.system.build.toplevel}/bin/switch-to-configuration boot
         ''
     );
   };
