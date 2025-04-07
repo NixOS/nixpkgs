@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "7.2.1";
+  version = "7.3.0";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
-    hash = "sha256-N4Hj983zcsoS9/vmT1Yai5pQe4qLLE1s4o2OTfS+++o=";
+    hash = "sha256-/ZcKkCP46je4HFBlwGe/Fyb2VrOfWQe0gWmm+Y0wa6c=";
   };
 
   nativeBuildInputs = [
