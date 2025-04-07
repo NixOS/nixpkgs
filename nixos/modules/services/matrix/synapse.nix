@@ -1348,8 +1348,7 @@ in
               )
               && listenerSupportsResource "replication" listener
               && (
-                lib.hasAttr "host" main
-                && lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
+                lib.hasAttr "host" main && lib.elem [ main.host "0.0.0.0" "::" ] listener.bind_addresses
                 || lib.hasAttr "path" main
               )
             ) null cfg.settings.listeners;
