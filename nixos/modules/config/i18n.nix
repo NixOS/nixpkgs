@@ -12,7 +12,7 @@ let
   ]
   ++ lib.pipe config.i18n.extraLocaleSettings [
     # See description of extraLocaleSettings for why is this ignored here.
-    (lib.filterAttrs (n: v: n != "LANGUAGE"))
+    (x: lib.removeAttrs x [ "LANGUAGE" ])
     (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
     (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
   ]
