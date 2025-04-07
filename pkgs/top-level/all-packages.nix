@@ -7381,6 +7381,7 @@ with pkgs;
   beam = callPackage ./beam-packages.nix { };
   beam_minimal = callPackage ./beam-packages.nix {
     beam = beam_minimal;
+    systemdSupport = false;
     wxSupport = false;
   };
 
