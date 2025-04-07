@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
+    mainProgram = "rush";
     broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
