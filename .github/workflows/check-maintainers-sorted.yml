@@ -3,7 +3,7 @@ name: "Check that maintainer list is sorted"
 on:
   pull_request_target:
     paths:
-      - 'maintainers/maintainer-list.nix'
+      - "maintainers/maintainer-list.nix"
 
 permissions: {}
 

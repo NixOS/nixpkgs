@@ -3,8 +3,8 @@ name: "Building Nixpkgs lib-tests"
 on:
   pull_request_target:
     paths:
-      - 'lib/**'
-      - 'maintainers/**'
+      - "lib/**"
+      - "maintainers/**"
 
 permissions: {}
 
