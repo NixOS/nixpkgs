@@ -10871,6 +10871,12 @@
     githubId = 6874204;
     name = "Jason Carr";
   };
+  jasoncrevier = {
+    email = "jason@jasoncrevier.com";
+    github = "jasoncrevier";
+    githubId = 106266438;
+    name = "Jason Crevier";
+  };
   jasonodoom = {
     email = "jasonodoom@riseup.net";
     github = "jasonodoom";
@@ -11730,6 +11736,12 @@
     githubId = 13087841;
     name = "Johan Larsson";
     keys = [ { fingerprint = "F0D6 BDE7 C7D1 6B3F 7883  73E7 2A41 C0FE DD6F F540"; } ];
+  };
+  jolheiser = {
+    email = "nixpkgs@jolheiser.com";
+    github = "jolheiser";
+    githubId = 42128690;
+    name = "John Olheiser";
   };
   jonaenz = {
     name = "Jona Enzinger";
@@ -17854,6 +17866,12 @@
     githubId = 35628088;
     name = "oluceps";
   };
+  oluchitheanalyst = {
+    name = "ndukauba maryjane oluchi";
+    email = "ndukauba.oluchi2000@gmail.com";
+    github = "oluchitheanalyst";
+    githubId = 152318870;
+  };
   olynch = {
     email = "owen@olynch.me";
     github = "olynch";
@@ -19533,6 +19551,12 @@
     github = "puckipedia";
     githubId = 488734;
     name = "Puck Meerburg";
+  };
+  PuercoPop = {
+    email = "pirata@gmail.com";
+    github = "PuercoPop";
+    githubId = 387111;
+    name = "Javier Olaechea";
   };
   puffnfresh = {
     email = "brian@brianmckenna.org";

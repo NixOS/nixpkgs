@@ -9,21 +9,21 @@
   bytestring,
   cassava,
   containers,
-  data-default,
   directory,
   extra,
   fetchzip,
+  filelock,
   filepath,
   hermes-json,
   HUnit,
   lib,
-  lock-file,
   MemoTrie,
   nix-derivation,
   optics,
   random,
   relude,
   safe,
+  safe-exceptions,
   stm,
   streamly-core,
   strict,
@@ -38,10 +38,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.1.5";
+  version = "2.1.6";
   src = fetchzip {
-    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.5.tar.gz";
-    sha256 = "01rsd2x74ainpadmyldxmjypkcc80f3caiysz9dz6vm8q2arcfbd";
+    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.6.tar.gz";
+    sha256 = "0v291s6lx9rxlw38a3329gc37nyl2x24blyrf9rv8lzxc1q4bz31";
   };
   isLibrary = true;
   isExecutable = true;
@@ -53,17 +53,17 @@ mkDerivation {
     bytestring
     cassava
     containers
-    data-default
     directory
     extra
+    filelock
     filepath
     hermes-json
-    lock-file
     MemoTrie
     nix-derivation
     optics
     relude
     safe
+    safe-exceptions
     stm
     streamly-core
     strict
@@ -82,17 +82,17 @@ mkDerivation {
     bytestring
     cassava
     containers
-    data-default
     directory
     extra
+    filelock
     filepath
     hermes-json
-    lock-file
     MemoTrie
     nix-derivation
     optics
     relude
     safe
+    safe-exceptions
     stm
     streamly-core
     strict
@@ -113,19 +113,19 @@ mkDerivation {
     bytestring
     cassava
     containers
-    data-default
     directory
     extra
+    filelock
     filepath
     hermes-json
     HUnit
-    lock-file
     MemoTrie
     nix-derivation
     optics
     random
     relude
     safe
+    safe-exceptions
     stm
     streamly-core
     strict
