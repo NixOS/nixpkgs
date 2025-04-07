@@ -61884,8 +61884,8 @@
   "repo": "ushin/hyperdrive.el",
   "unstable": {
    "version": [
-    20250331,
-    427
+    20250406,
+    2225
    ],
    "deps": [
     "compat",
@@ -61896,8 +61896,8 @@
     "taxy-magit-section",
     "transient"
    ],
-   "commit": "1784ae20556990d205360463f069aba319c25909",
-   "sha256": "05p9avasp7nx1wx5mvc5rj85j1n28hw1ibwag0gbxrnpxvrbqvzr"
+   "commit": "42048ef8bc7e568f9f1e1fa82c9f70b06a4d574d",
+   "sha256": "07fvdzd93836msaxpw9rk0sdrxpm29fn2zk22ln91v7s9aazjd3w"
   },
   "stable": {
    "version": [
