@@ -21,7 +21,7 @@ in
     ''
       TAP version 13
       1..${toString (length reports)}''
-    + (foldl' (l: r: l + "\n" + r) "" (map testLine (withIndexes reports)))
+    + (concatStringsSep "\n" (map testLine (withIndexes reports)))
     + ''
 
       # Finished at ${toString currentTime}
