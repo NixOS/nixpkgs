@@ -2,46 +2,12 @@
   stdenv,
   lib,
   fetchurl,
-  pipewire,
   makeWrapper,
   xar,
   cpio,
-  # Dynamic libraries
-  alsa-lib,
-  atk,
-  at-spi2-atk,
-  at-spi2-core,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  libdrm,
-  libGL,
-  fontconfig,
-  freetype,
-  gtk3,
-  gdk-pixbuf,
-  glib,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  qt5,
-  wayland,
-  xorg,
-  libxkbcommon,
-  udev,
-  zlib,
-  libkrb5,
-  # Runtime
-  coreutils,
-  pciutils,
-  procps,
-  util-linux,
   pulseaudioSupport ? true,
-  libpulseaudio,
-  pulseaudio,
   callPackage,
+  buildFHSEnv,
 }:
 
 let
@@ -72,182 +38,181 @@ let
     };
   };
 
-  libs = lib.makeLibraryPath (
-    [
-      # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
-      alsa-lib
-      atk
-      at-spi2-atk
-      at-spi2-core
-      cairo
-      cups
-      dbus
-      expat
-      libdrm
-      libGL
-      pipewire
-      fontconfig
-      freetype
-      gtk3
-      gdk-pixbuf
-      glib
-      libgbm
-      nspr
-      nss
-      pango
-      qt5.qt3d
-      qt5.qtgamepad
-      qt5.qtlottie
-      qt5.qtmultimedia
-      qt5.qtremoteobjects
-      qt5.qtxmlpatterns
-      stdenv.cc.cc
-      wayland
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      libxkbcommon
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libxshmfence
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.libXfixes
-      xorg.libXtst
-      udev
-      zlib
-      libkrb5
-    ]
-    ++ lib.optional (pulseaudioSupport) libpulseaudio
-  );
+  unpacked = stdenv.mkDerivation {
+    pname = "zoom";
+    version = versions.${system} or throwSystem;
 
-  binPath = lib.makeBinPath (
-    [
-      coreutils
-      glib.dev
-      pciutils
-      pipewire
-      procps
-      util-linux
-    ]
-    ++ lib.optional pulseaudioSupport pulseaudio
-  );
-in
-stdenv.mkDerivation {
-  pname = "zoom";
-  version = versions.${system} or throwSystem;
+    src = srcs.${system} or throwSystem;
 
-  src = srcs.${system} or throwSystem;
+    dontUnpack = stdenv.hostPlatform.isLinux;
+    unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      xar -xf $src
+      zcat < zoomus.pkg/Payload | cpio -i
+    '';
 
-  dontUnpack = stdenv.hostPlatform.isLinux;
-  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    xar -xf $src
-    zcat < zoomus.pkg/Payload | cpio -i
-  '';
-
-  nativeBuildInputs =
-    [
+    # Note: In order to uncover missing libraries
+    # on x86_64-linux, add "pkgs" to this file's arguments
+    # (at the top of this file), then add these attributes here:
+    # > buildInputs = linuxGetDependencies pkgs;
+    # > dontAutoPatchelf = true;
+    # > dontWrapQtApps = true;
+    # > preFixup = ''
+    # >   addAutoPatchelfSearchPath $out/opt/zoom
+    # >   autoPatchelf $out/opt/zoom/{cef,Qt,*.so*,aomhost,zoom,zopen,ZoomLauncher,ZoomWebviewHost}
+    # > '';
+    # ...and finally "pkgs.autoPatchelfHook"
+    # to `nativeBuildInputs` right below.
+    # Then build `zoom-us.unpacked`:
+    # `autoPatchelfHook` will report missing library files.
+    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xar
       cpio
     ];
 
-  installPhase = ''
-    runHook preInstall
-    ${
-      rec {
-        aarch64-darwin = ''
-          mkdir -p $out/Applications
-          cp -R zoom.us.app $out/Applications/
-        '';
-        # darwin steps same on both architectures
-        x86_64-darwin = aarch64-darwin;
-        x86_64-linux = ''
-          mkdir $out
-          tar -C $out -xf $src
-          mv $out/usr/* $out/
-        '';
+    installPhase = ''
+      runHook preInstall
+      ${
+        rec {
+          aarch64-darwin = ''
+            mkdir -p $out/Applications
+            cp -R zoom.us.app $out/Applications/
+          '';
+          # darwin steps same on both architectures
+          x86_64-darwin = aarch64-darwin;
+          x86_64-linux = ''
+            mkdir $out
+            tar -C $out -xf $src
+            mv $out/usr/* $out/
+          '';
+        }
+        .${system} or throwSystem
       }
-      .${system} or throwSystem
-    }
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  postFixup =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
+    postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Desktop File
-      substituteInPlace $out/share/applications/Zoom.desktop \
+    '';
+
+    dontPatchELF = true;
+
+    passthru.updateScript = ./update.sh;
+    passthru.tests.startwindow = callPackage ./test.nix { };
+
+    meta = {
+      homepage = "https://zoom.us/";
+      changelog = "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222";
+      description = "zoom.us video conferencing application";
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = builtins.attrNames srcs;
+      maintainers = with lib.maintainers; [
+        danbst
+        tadfisher
+      ];
+      mainProgram = "zoom";
+    };
+  };
+  packages.aarch64-darwin = unpacked;
+  packages.x86_64-darwin = unpacked;
+
+  # linux definitions
+
+  linuxGetDependencies =
+    pkgs:
+    [
+      pkgs.alsa-lib
+      pkgs.at-spi2-atk
+      pkgs.at-spi2-core
+      pkgs.atk
+      pkgs.cairo
+      pkgs.coreutils
+      pkgs.cups
+      pkgs.dbus
+      pkgs.expat
+      pkgs.fontconfig
+      pkgs.freetype
+      pkgs.gdk-pixbuf
+      pkgs.glib
+      pkgs.glib.dev
+      pkgs.gtk3
+      pkgs.libGL
+      pkgs.libdrm
+      pkgs.libgbm
+      pkgs.libkrb5
+      pkgs.libxkbcommon
+      pkgs.nspr
+      pkgs.nss
+      pkgs.pango
+      pkgs.pciutils
+      pkgs.pipewire
+      pkgs.procps
+      pkgs.qt5.qt3d
+      pkgs.qt5.qtgamepad
+      pkgs.qt5.qtlottie
+      pkgs.qt5.qtmultimedia
+      pkgs.qt5.qtremoteobjects
+      pkgs.qt5.qtxmlpatterns
+      pkgs.stdenv.cc.cc
+      pkgs.udev
+      pkgs.util-linux
+      pkgs.wayland
+      pkgs.xorg.libX11
+      pkgs.xorg.libXcomposite
+      pkgs.xorg.libXdamage
+      pkgs.xorg.libXext
+      pkgs.xorg.libXfixes
+      pkgs.xorg.libXrandr
+      pkgs.xorg.libXrender
+      pkgs.xorg.libXtst
+      pkgs.xorg.libxcb
+      pkgs.xorg.libxshmfence
+      pkgs.xorg.xcbutilimage
+      pkgs.xorg.xcbutilkeysyms
+      pkgs.xorg.xcbutilrenderutil
+      pkgs.xorg.xcbutilwm
+      pkgs.zlib
+    ]
+    ++ lib.optionals pulseaudioSupport [
+      pkgs.libpulseaudio
+      pkgs.pulseaudio
+    ];
+
+  # We add the `unpacked` zoom archive to the FHS env
+  # and also bind-mount its `/opt` directory.
+  # This should assist Zoom in finding all its
+  # files in the places where it expects them to be.
+  packages.x86_64-linux = buildFHSEnv {
+    pname = "zoom"; # Will also be the program's name!
+    version = versions.${system} or throwSystem;
+
+    targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
+    extraPreBwrapCmds = ''
+      cd ${unpacked}/opt/zoom
+      unset QML2_IMPORT_PATH
+      unset QT_PLUGIN_PATH
+      unset QT_SCREEN_SCALE_FACTORS
+    '';
+    extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
+    runScript = "/opt/zoom/ZoomLauncher";
+
+    extraInstallCommands = ''
+      cp -Rt $out/ ${unpacked}/share
+      substituteInPlace \
+          $out/share/applications/Zoom.desktop \
           --replace-fail Exec={/usr/bin/,}zoom
-
-      for i in aomhost zopen ZoomLauncher ZoomWebviewHost; do
-        if [ -f $out/opt/zoom/$i ]; then
-          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
-        fi
-      done
-
-      # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
-      # IPC breaks if the executable name does not end in 'zoom'
-      # zoom binary does not like being touched by patchelf
-      #   => we call it indirectly via the dynamic linker
-      # zoom binary inspects /proc/self/exe to find its data files
-      #   => we must place a copy (not symlink) of the linker in zoom's data dir
-      mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
-      cp "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/ld.so
-      makeWrapper $out/opt/zoom/ld.so $out/opt/zoom/zoom \
-        --add-flags $out/opt/zoom/.zoom \
-        --prefix LD_LIBRARY_PATH ":" ${libs}
-
-      rm $out/bin/zoom
-      # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
-      # everybody runs Zoom only after cd to Zoom package directory? Anyway, :facepalm:
-      # Clear Qt paths to prevent tripping over "foreign" Qt resources.
-      # Clear Qt screen scaling settings to prevent over-scaling.
-      makeWrapper $out/opt/zoom/ZoomLauncher $out/bin/zoom \
-        --chdir "$out/opt/zoom" \
-        --unset QML2_IMPORT_PATH \
-        --unset QT_PLUGIN_PATH \
-        --unset QT_SCREEN_SCALE_FACTORS \
-        --prefix PATH : ${binPath} \
-        --prefix LD_LIBRARY_PATH ":" ${libs}
-
-      if [ -f $out/opt/zoom/ZoomWebviewHost ]; then
-        wrapProgram $out/opt/zoom/ZoomWebviewHost \
-          --unset QML2_IMPORT_PATH \
-          --unset QT_PLUGIN_PATH \
-          --unset QT_SCREEN_SCALE_FACTORS \
-          --prefix LD_LIBRARY_PATH ":" ${libs}
-      fi
 
       # Backwards compatibility: we used to call it zoom-us
       ln -s $out/bin/{zoom,zoom-us}
     '';
 
-  # already done
-  dontPatchELF = true;
-
-  passthru.updateScript = ./update.sh;
-  passthru.tests.startwindow = callPackage ./test.nix { };
-
-  meta = {
-    homepage = "https://zoom.us/";
-    changelog = "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222";
-    description = "zoom.us video conferencing application";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
-    platforms = builtins.attrNames srcs;
-    maintainers = with lib.maintainers; [
-      danbst
-      tadfisher
-    ];
-    mainProgram = "zoom";
+    passthru = unpacked.passthru // {
+      inherit unpacked;
+    };
+    inherit (unpacked) meta;
   };
-}
+
+in
+
+packages.${system} or throwSystem
