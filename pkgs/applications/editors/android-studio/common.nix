@@ -323,13 +323,12 @@ let
           # source-code itself).
           platforms = [ "x86_64-linux" ];
           maintainers =
-            with lib.maintainers;
             rec {
-              stable = [
-                alapshin
-                johnrtitor
-                numinit
-              ];
+              stable =
+                lib.teams.android.members
+                ++ (with lib.maintainers; [
+                  alapshin
+                ]);
               beta = stable;
               canary = stable;
               dev = stable;
