@@ -36,7 +36,9 @@ buildDubPackage rec {
 
   installPhase = ''
     runHook preInstall
+
     install -Dm755 btdu -t $out/bin
+
     runHook postInstall
   '';
 }

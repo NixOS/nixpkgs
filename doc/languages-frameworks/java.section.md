@@ -17,7 +17,9 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+
     ant # build the project using ant
+
     runHook postBuild
   '';
 

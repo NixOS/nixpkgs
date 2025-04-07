@@ -97,12 +97,16 @@ stdenv.mkDerivation rec {
   configurePhase = generated.configure;
 
   installPhase = ''
+    runHook preInstall
+
     # This is a special function that invokes swiftpm to find the location
     # of the binaries it produced.
     binPath="$(swiftpmBinPath)"
     # Now perform any installation steps.
     mkdir -p $out/bin
     cp $binPath/myproject $out/bin/
+
+    runHook postInstall
   '';
 }
 ```

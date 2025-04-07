@@ -621,9 +621,14 @@ It's important to use the `--offline` flag. For example if you script is `"build
 
 ```nix
 {
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 }
 ```
@@ -641,7 +646,11 @@ The configure phase can sometimes fail because it makes many assumptions which m
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     ln -s $node_modules node_modules
+
+    runHook postConfigure
   '';
 }
 ```
@@ -651,8 +660,12 @@ or if you need a writeable node_modules directory:
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     cp -r $node_modules node_modules
     chmod +w node_modules
+
+    runHook postConfigure
   '';
 }
 ```

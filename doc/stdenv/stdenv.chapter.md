@@ -51,12 +51,20 @@ stdenv.mkDerivation {
   version = "4.5";
   # ...
   buildPhase = ''
+    runHook preBuild
+
     gcc foo.c -o foo
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp foo $out/bin
-  '';
+
+    runHook postInstall
+'';
 }
 ```
 

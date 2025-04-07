@@ -378,7 +378,11 @@ writeTextFile {
   executable = true;
   destination = "/some/subpath/my-cool-script";
   checkPhase = ''
+    runHook preCheck
+
     ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
+
+    runHook postCheck
   '';
   meta = {
     license = pkgs.lib.licenses.cc0;

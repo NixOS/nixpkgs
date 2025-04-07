@@ -89,7 +89,9 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
     installPhase = ''
       runHook preInstall
+
       install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+
       runHook postInstall
     '';
   }

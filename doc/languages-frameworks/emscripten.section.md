@@ -45,9 +45,11 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
   buildInputs = old.buildInputs ++ [ pkg-config ];
   # we need to reset this setting!
   env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
+
+  # Some tests require writing at $HOME
+  nativeBuildInputs = old.nativeBuildInputs ++ [ writableTmpDirAsHomeHook ];
+
   configurePhase = ''
-    # FIXME: Some tests require writing at $HOME
-    HOME=$TMPDIR
     runHook preConfigure
 
     #export EMCC_DEBUG=2
@@ -58,12 +60,22 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
   dontStrip = true;
   outputs = [ "out" ];
   buildPhase = ''
+    runHook preBuild
+
     emmake make
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
+
     emmake make install
+
+    runHook postInstall
   '';
   checkPhase = ''
+    runHook preCheck
+
     echo "================= testing zlib using node ================="
 
     echo "Compiling a custom test"
@@ -82,6 +94,8 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
       echo "it seems to work! very good."
     fi
     echo "================= /testing zlib using node ================="
+
+    runHook postCheck
   '';
 
   postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
