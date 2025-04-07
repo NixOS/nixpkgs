@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-nJEL9x/+fZT/vpAKL5qVLXYVPcMvUXT9WSEvHzOrGZU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ pbr setuptools ];
 
   nativeBuildInputs = [ wheel ];
 
