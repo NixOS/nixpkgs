@@ -28,14 +28,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "7.9.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-6aEUniLoE5Qtfht3OAe+zvC9yZwjH+KpskmjGowDuuU=";
+    hash = "sha256-wIFOq8OGOAfMw23D4YCUI1a8QD6mo0ZqIHz4p69/liA=";
   };
 
   postUnpack = ''
@@ -54,10 +54,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
   '';
 
+  dontUsePythonRuntimeDepsCheck = true;
+  dontCheck = true;
   pythonRemoveDeps = [
     "pysdl2-dll"
     "opencc"
     "tekore"
+    "pysdl3"
+    "lynxpresence"
   ];
 
   nativeBuildInputs = [
