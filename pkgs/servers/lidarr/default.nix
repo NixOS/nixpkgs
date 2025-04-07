@@ -22,6 +22,7 @@ let
       x86_64-linux = "x64";
       aarch64-linux = "arm64";
       x86_64-darwin = "x64";
+      aarch64-darwin = "arm64";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
@@ -29,6 +30,7 @@ let
       x64-linux_hash = "sha256-PwHIUbXxk9VOKd+I7EcrTEYlikfw2NUdO6IQdiQWhWs=";
       arm64-linux_hash = "sha256-uu7iVexyss29Q7mZ280KeDLZWp6wwCh+TJj9XeZc/lQ=";
       x64-osx_hash = "sha256-POjIY2iPoYOQQci6AV/7X8t7GGbxVqROjlMzwERH/3c=";
+      arm64-osx_hash = "sha256-JSdiyA0opa4dy5/RTSn/QvnKJ9VCWJcGhTkH5YIi5lg=";
     }
     ."${arch}-${os}_hash";
 in
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 }
