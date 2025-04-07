@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "moodyhunter";
     repo = "applet-window-buttons6";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HnlgBQKT99vVkl6DWqMkN8Vz+QzzZBGj5tqOJ22VkJ8=";
   };
 

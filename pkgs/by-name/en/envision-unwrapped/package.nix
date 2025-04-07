@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
 

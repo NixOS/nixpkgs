@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NdxYrTy8SzPmy3C9wOQYMdzKKumDMeYe+k8Nu2ku/RY=";
   };
 

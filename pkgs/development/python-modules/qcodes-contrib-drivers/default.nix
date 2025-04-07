@@ -1,42 +1,39 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
+
+  # build-system
   setuptools,
   versioningit,
+
+  # dependencies
+  autobahn,
   cffi,
-  qcodes,
   packaging,
   pandas,
-  pytestCheckHook,
+  qcodes,
+  python-dotenv,
+
+  # tests
   pytest-mock,
+  pytestCheckHook,
   pyvisa-sim,
-  stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes-contrib-drivers";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
     tag = "v${version}";
-    sha256 = "sha256-/W5oC5iqYifMR3/s7aSQ2yTJNmkemkc0KVxIU0Es3zY=";
+    hash = "sha256-m2idBaQl2OVhrY5hcLTeXY6BycGf0ufa/ySgxaU2L/4=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "numpy-v2-compat.patch";
-      url = "https://github.com/QCoDeS/Qcodes_contrib_drivers/commit/fc792779dbc0b023bdccfe8877dac192d75a88db.patch?full_index=1";
-      hash = "sha256-G+/IVG9a4mOFudpqEpI+Q/+WwF6lm2nRKjODCdzWHe0=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -44,22 +41,25 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    autobahn
     cffi
-    qcodes
     packaging
     pandas
+    qcodes
+    python-dotenv
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
     pyvisa-sim
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "qcodes_contrib_drivers" ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isDarwin) [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
       "test_stability_diagram_external"
     ]
@@ -67,10 +67,6 @@ buildPythonPackage rec {
       # AssertionError: assert ['outp:trig4:...9999996', ...] == ['outp:trig4:...t 0.266', ...]
       "test_stability_diagram_external"
     ];
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
 
   meta = {
     description = "User contributed drivers for QCoDeS";

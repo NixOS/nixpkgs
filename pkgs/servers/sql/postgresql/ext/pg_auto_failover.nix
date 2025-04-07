@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension rec {
   pname = "pg_auto_failover";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "pg_auto_failover";
     tag = "v${version}";
-    hash = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
+    hash = "sha256-lsnVry+5n08kLOun8u0B7XFvI5ijTKJtFJ84fixMHe4=";
   };
 
   buildInputs = postgresql.buildInputs;
@@ -27,8 +27,5 @@ postgresqlBuildExtension rec {
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
-    # PostgreSQL 17 support issue upstream: https://github.com/hapostgres/pg_auto_failover/issues/1048
-    # Check after next package update.
-    broken = lib.versionAtLeast postgresql.version "17" && version == "2.1";
   };
 }

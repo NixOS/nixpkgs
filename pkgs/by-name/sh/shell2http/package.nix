@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "msoap";
     repo = "shell2http";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CU7ENLx5C1qCO1f9m0fl/AmUzmtmj6IjMlx9WNqAnS0=";
   };
 

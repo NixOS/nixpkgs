@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-EI8UOQuwhJqcAp8QnLYhI0K+uV/7ZqxdHNk8mPkDWA0=";
   };

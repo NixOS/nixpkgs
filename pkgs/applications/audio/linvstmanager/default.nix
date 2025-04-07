@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Goli4thus";
     repo = "linvstmanager";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-K6eugimMy/MZgHYkg+zfF8DDqUuqqoeymxHtcFGu2Uk=";
   };
 

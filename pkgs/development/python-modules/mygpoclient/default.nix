@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "mygpoclient";
-    rev = version;
+    tag = version;
     hash = "sha256-McHllitWiBiCdNuJlUg6K/vgr2l3ychu+KOx3r/UCv0=";
   };
 

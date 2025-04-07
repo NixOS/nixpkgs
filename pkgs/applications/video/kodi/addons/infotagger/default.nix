@@ -12,7 +12,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "jurialmunkey";
     repo = namespace;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ns1OjrYLKz4znXRxqUErDLcmC0HBjBFVYI9GFqDVurY=";
   };
 

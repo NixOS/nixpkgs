@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jmattheis";
     repo = "gruvbox-dark-gtk";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
   };
 

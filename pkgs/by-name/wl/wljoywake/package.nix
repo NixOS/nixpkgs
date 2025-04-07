@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "wljoywake";
     owner = "nowrep";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zSYNfsFjswaSXZPlIDMDC87NK/6AKtArHBeWCWDDR3E=";
   };
 

@@ -55,6 +55,7 @@
   pkgsBuildTarget,
   pkgsHostHost,
   pkgsTargetTarget,
+  __splices ? { },
 
   # build customization
   sourceVersion,
@@ -145,10 +146,28 @@ let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
       # bluez is excluded manually to break an infinite recursion.
       inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && !lib.isDerivation v) inputs;
+      # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
+      # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
+      # __splices as an arg and using the cache if populated.
+      splices = {
+        pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
+        pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
+        pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
+        pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
+        pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
+          override pkgsTargetTarget.${pythonAttr}
+        );
+      } // __splices;
       override =
         attr:
         let
-          python = attr.override (inputs' // { self = python; });
+          python = attr.override (
+            inputs'
+            // {
+              self = python;
+              __splices = splices;
+            }
+          );
         in
         python;
     in
@@ -160,13 +179,13 @@ let
       pythonVersion = with sourceVersion; "${major}.${minor}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
-      pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
-      pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
-      pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
-      pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-      pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
-        override pkgsTargetTarget.${pythonAttr}
-      );
+      inherit (splices)
+        pythonOnBuildForBuild
+        pythonOnBuildForHost
+        pythonOnBuildForTarget
+        pythonOnHostForHost
+        pythonOnTargetForTarget
+        ;
     };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";

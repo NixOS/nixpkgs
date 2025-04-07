@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jonathanio";
     repo = "update-systemd-resolved";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-lYJTR3oBmpENcqNHa9PFXsw7ly6agwjBWf4UXf1d8Kc=";
   };
 

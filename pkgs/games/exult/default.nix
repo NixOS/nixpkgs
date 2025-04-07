@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://exult.info";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     mainProgram = "exult";
   };
 }

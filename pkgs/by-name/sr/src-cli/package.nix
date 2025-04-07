@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-vxoki4kQL3B0v3AhqZGzw3U5BF73Jg5pX92EldTYiWg=";
   };
 

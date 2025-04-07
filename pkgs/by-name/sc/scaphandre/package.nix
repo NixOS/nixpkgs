@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "hubblo-org";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-I+cECdpLoIj4yuWXfirwHlcn0Hkm9NxPqo/EqFiBObw=";
   };
 

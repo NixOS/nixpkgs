@@ -421,8 +421,7 @@ in
           };
           environment = env;
 
-          preStart =
-            ''
+          preStart = ''
               # remove old papaerless-manage symlink
               # TODO: drop with NixOS 25.11
               [[ -L '${cfg.dataDir}/paperless-manage' ]] && rm '${cfg.dataDir}/paperless-manage'
@@ -448,13 +447,15 @@ in
                   ${cfg.package}/bin/paperless-ngx document_index reindex
                 fi
 
-                echo ${cfg.package.version} > "$versionFile"
-              fi
-            ''
-            + lib.optionalString (cfg.passwordFile != null) ''
+              echo ${cfg.package.version} > "$versionFile"
+            fi
+
+            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n $PAPERLESS_ADMIN_PASSWORD ]]; then
               export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-              PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
-              export PAPERLESS_ADMIN_PASSWORD
+              if [[ -e $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD ]]; then
+                PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
+                export PAPERLESS_ADMIN_PASSWORD
+              fi
               superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
               superuserStateFile="${cfg.dataDir}/superuser-state"
 
@@ -462,7 +463,8 @@ in
                 ${cfg.package}/bin/paperless-ngx manage_superuser
                 echo "$superuserState" > "$superuserStateFile"
               fi
-            '';
+            fi
+          '';
           requires = lib.optional cfg.database.createLocally "postgresql.service";
           after =
             lib.optional enableRedis "redis-paperless.service"

@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "near";
     repo = "near-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-C+viNYk+6BA11cdi5GqARU3QTTONTR2B2VEZf/SeeSQ=";
   };
 

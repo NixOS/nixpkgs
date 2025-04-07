@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ilXJWPvu3qwzuUN6AsQNyzrTHdQO51IFZcvZiQ/+/tU=";
   };
 

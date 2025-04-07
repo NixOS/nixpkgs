@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "przemoc";
     repo = "metastore";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0mb10wfckswqgi0bq25ncgabnd3iwj7s7hhg3wpcyfgckdynwizv";
   };
 

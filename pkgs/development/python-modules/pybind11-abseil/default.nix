@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11_abseil";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hFVuGzEFqAEm2p2RmfhFtLB6qOqNuVNcwcLh8dIWi0k=";
   };
 

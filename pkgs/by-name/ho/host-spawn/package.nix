@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "1player";
     repo = "host-spawn";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-V8WI0TyJw+dkCyG8huIrg6VDFI2Kmak7bI/GXU8RI/w=";
   };
 

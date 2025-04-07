@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BioPP";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1mc09g8jswzsa4wgrfv59jxn15ys3q8s0227p1j838wkphlwn2qk";
   };
 

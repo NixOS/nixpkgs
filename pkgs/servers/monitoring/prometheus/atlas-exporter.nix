@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "atlas_exporter";
-    rev = version;
+    tag = version;
     sha256 = "sha256-vhUhWO7fQpUHT5nyxbT8AylgUqDNZRSb+EGRNGZJ14E=";
   };
 

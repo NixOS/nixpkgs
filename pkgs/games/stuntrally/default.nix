@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stuntrally";
     repo = "stuntrally";
-    rev = version;
+    tag = version;
     hash = "sha256-0Eh9ilIHSh/Uz8TuPnXxLQfy7KF7qqNXUgBXQUCz9ys=";
   };
   tracks = fetchFromGitHub {
     owner = "stuntrally";
     repo = "tracks";
-    rev = version;
+    tag = version;
     hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sctp";
     repo = "lksctp-tools";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+vbdNvHuJLYp901QgtBzMejlbzMyr9Z1eXxR3Zy7eAE=";
   };
 

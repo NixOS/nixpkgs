@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "unifiedpush";
     repo = "common-proxies";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-pMzKK18FZCqJ86nqXfOT7tKCqIw6P0ioxRUi72aef0A=";
   };
 

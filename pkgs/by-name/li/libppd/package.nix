@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "libppd";
-    rev = version;
+    tag = version;
     hash = "sha256-8ofCv+tKgBk9GoGD4lmBPB/S4ABZ6cWGOk/KqDsEzNk=";
   };
 

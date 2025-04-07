@@ -8,7 +8,7 @@ from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = dict[str, str]
+type ImageVariants = list[str]
 
 
 class NRError(Exception):

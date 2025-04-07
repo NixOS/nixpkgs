@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "mpifileutils";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WnjStOLWP/VsZyl2wPqR1Q+YqlJQRCQ4R50uOyqkWuM=";
   };
 

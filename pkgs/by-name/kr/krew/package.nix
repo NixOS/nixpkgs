@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "krew";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-3GoC2HEp9XJe853/JYvX9kAAcFf7XxglVEeU9oQ/5Ms=";
   };
 

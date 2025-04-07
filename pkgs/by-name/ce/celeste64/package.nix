@@ -25,7 +25,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     repo = "Celeste64";
     owner = "ExOK";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XRAjDYIqYaQYCWNNT7UuLDKDBgq3vqxtCzay7pGICtA=";
   };
   projectFile = "Celeste64.csproj";

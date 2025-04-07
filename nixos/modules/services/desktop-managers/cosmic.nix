@@ -45,7 +45,7 @@ in
         cosmic-applets
         cosmic-applibrary
         cosmic-bg
-        (cosmic-comp.override { useXWayland = false; })
+        cosmic-comp
         cosmic-edit
         cosmic-files
         config.services.displayManager.cosmic-greeter.package

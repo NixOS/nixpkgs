@@ -2192,6 +2192,10 @@ self: super: with self; {
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
 
+  canonical-sphinx-extensions =
+    callPackage ../development/python-modules/canonical-sphinx-extensions
+      { };
+
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   canopen = callPackage ../development/python-modules/canopen { };
@@ -3275,6 +3279,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  decora-wifi = callPackage ../development/python-modules/decora-wifi { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deebot-client = callPackage ../development/python-modules/deebot-client { };
@@ -4058,6 +4064,8 @@ self: super: with self; {
   dominate = callPackage ../development/python-modules/dominate { };
 
   donfig = callPackage ../development/python-modules/donfig { };
+
+  donut-shellcode = callPackage ../development/python-modules/donut-shellcode { };
 
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
 
@@ -5865,6 +5873,8 @@ self: super: with self; {
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
+  granian = callPackage ../development/python-modules/granian { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
 
   grapheme = callPackage ../development/python-modules/grapheme { };
@@ -7454,10 +7464,6 @@ self: super: with self; {
 
   langgraph-checkpoint = callPackage ../development/python-modules/langgraph-checkpoint { };
 
-  langgraph-checkpoint-duckdb =
-    callPackage ../development/python-modules/langgraph-checkpoint-duckdb
-      { };
-
   langgraph-checkpoint-postgres =
     callPackage ../development/python-modules/langgraph-checkpoint-postgres
       { };
@@ -7800,7 +7806,7 @@ self: super: with self; {
       p.override {
         enablePython = true;
         python3 = python;
-        python3Packages = pythonPackages;
+        python3Packages = self;
       }
     )
     (p: p.py)
@@ -9681,6 +9687,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-attachments = callPackage ../development/python-modules/netbox-attachments { };
+
   netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
 
   netbox-contract = callPackage ../development/python-modules/netbox-contract { };
@@ -10033,6 +10041,8 @@ self: super: with self; {
   od = callPackage ../development/python-modules/od { };
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
+
+  odc-loader = callPackage ../development/python-modules/odc-loader { };
 
   odc-stac = callPackage ../development/python-modules/odc-stac { };
 
@@ -12227,6 +12237,8 @@ self: super: with self; {
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
+  pyghmi = callPackage ../development/python-modules/pyghmi { };
+
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   pygitguardian = callPackage ../development/python-modules/pygitguardian { };
@@ -12877,6 +12889,8 @@ self: super: with self; {
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
+  pyporscheconnectapi = callPackage ../development/python-modules/pyporscheconnectapi { };
+
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
   pyppmd = callPackage ../development/python-modules/pyppmd { };
@@ -13088,6 +13102,8 @@ self: super: with self; {
 
   pyro5 = callPackage ../development/python-modules/pyro5 { };
 
+  pyroaring = callPackage ../development/python-modules/pyroaring { };
+
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
   pyroma = callPackage ../development/python-modules/pyroma { };
@@ -13161,6 +13177,8 @@ self: super: with self; {
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pysearpc = toPythonModule (pkgs.libsearpc.override { python3 = self.python; });
+
+  pysecretsocks = callPackage ../development/python-modules/pysecretsocks { };
 
   pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
@@ -13319,6 +13337,8 @@ self: super: with self; {
   pyspeex-noise = callPackage ../development/python-modules/pyspeex-noise { };
 
   pyspellchecker = callPackage ../development/python-modules/pyspellchecker { };
+
+  pyspelling = callPackage ../development/python-modules/pyspelling { };
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 
@@ -13990,6 +14010,8 @@ self: super: with self; {
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
+
+  python-obfuscator = callPackage ../development/python-modules/python-obfuscator { };
 
   python-octaviaclient = callPackage ../development/python-modules/python-octaviaclient { };
 
@@ -16165,6 +16187,10 @@ self: super: with self; {
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
+  sphinx-reredirects = callPackage ../development/python-modules/sphinx-reredirects { };
+
+  sphinx-remove-toctrees = callPackage ../development/python-modules/sphinx-remove-toctrees { };
+
   sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
@@ -16324,6 +16350,8 @@ self: super: with self; {
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
+
+  sqlalchemy-utc = callPackage ../development/python-modules/sqlalchemy-utc { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
@@ -16902,7 +16930,7 @@ self: super: with self; {
             src = pkgs.fetchFromGitHub {
               owner = "grpc";
               repo = "grpc";
-              rev = "v${version}";
+              tag = "v${version}";
               hash = "sha256-PpiOT4ZJe1uMp5j+ReQulC9jpT0xoR2sAl6vRYKA0AA=";
               fetchSubmodules = true;
             };

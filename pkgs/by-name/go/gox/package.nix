@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mitchellh";
     repo = "gox";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Dead simple, no frills Go cross compile tool";
     mainProgram = "gox";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

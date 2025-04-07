@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Gko1fFut5zWH/L6X5hEe5OZBjRIbKWIrrjjhh2wrsCg=";
   };
 

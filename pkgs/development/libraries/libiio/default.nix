@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
     repo = "libiio";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
   };
 

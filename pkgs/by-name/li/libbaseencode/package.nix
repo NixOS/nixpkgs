@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "libbaseencode";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-WiE+ZMX4oZieER1pu43aSWytkxfkQdX+S3JI98XPpL4=";
   };
 

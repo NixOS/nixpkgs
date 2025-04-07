@@ -16,7 +16,7 @@ let
   user = cfg.user;
   group = cfg.group;
 
-  php = lib.getExe pkgs.php83;
+  php = lib.getExe cfg.phpPackage;
 
   # shell script for local administration
   artisan = pkgs.writeScriptBin "monica" ''
@@ -37,6 +37,8 @@ in
 {
   options.services.monica = {
     enable = mkEnableOption "monica";
+
+    phpPackage = mkPackageOption pkgs "php83" { };
 
     user = mkOption {
       default = "monica";
@@ -342,6 +344,7 @@ in
 
     services.phpfpm.pools.monica = {
       inherit user group;
+      phpPackage = cfg.phpPackage;
       phpOptions = ''
         log_errors = on
         post_max_size = ${cfg.maxUploadSize}

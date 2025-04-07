@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "jj";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Yijap5ZghTBe1ahkQgjjxuo++SriJWXgRqrNXIVQ0os=";
   };
 

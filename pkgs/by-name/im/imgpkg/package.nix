@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "imgpkg";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DuLxNH0fcVPvZYG4AYtaT8kJysTLRNX2tB6UBhQoP9Q=";
   };
 

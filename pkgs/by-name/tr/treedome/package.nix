@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
-    rev = version;
+    tag = version;
     hash = "sha256-fJnrM9I11JKqzrprXa51mJiz9oO5hDp6u69FqJs5l8o=";
     fetchLFS = true;
   };

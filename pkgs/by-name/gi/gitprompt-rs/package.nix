@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "9ary";
     repo = "gitprompt-rs";
-    rev = version;
+    tag = version;
     hash = "sha256-U0ylhgD86lbXvt6jMLaEQdL/zbcbXnfrA72FMEzBkN0=";
   };
 

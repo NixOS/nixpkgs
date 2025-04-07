@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kamranahmedse";
     repo = "git-standup";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-x7Z4w4UzshXYc25ag6HopRrKbP+/ELkFPdsUBaUE1vY=";
   };
 

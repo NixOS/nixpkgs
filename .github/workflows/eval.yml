@@ -75,6 +75,9 @@ jobs:
         with:
           extra_nix_config: sandbox = true
 
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
+
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
           time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
@@ -241,7 +244,7 @@ jobs:
     steps:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@af35edadc00be37caa72ed9f3e6d5f7801bfdf09 # v1.11.7
+      - uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}

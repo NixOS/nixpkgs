@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "efm-langserver";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-3ZrWc8/4aC5TOoL9vybkMZC9HkIL43TokebFcJYyrcI=";
   };
 

@@ -6,22 +6,23 @@
 
 callPackage ../generic.nix rec {
   pname = "tower-pixel-dungeon";
-  version = "0.3.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "FixAkaTheFix";
     repo = "Tower-Pixel-Dungeon";
-    rev = "TPDv${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-ZyqrrSuA++L7FOUj6Ytk2lld0YMY4B7WOCzpohOKhdU=";
+    tag = "TPDv${lib.replaceStrings [ "." ] [ "" ] version}";
+    hash = "sha256-6b7EC7rye7nSevMJhRwSKJU7zuzta6KUCgzizWPFk8I=";
   };
 
   sourceRoot = src.name + "/pixel-towers-master";
 
   desktopName = "Tower Pixel Dungeon";
 
-  # Sprite sources (Paint.NET files) interfere with the build process.
+  # Sprite sources (Paint.NET files) and other files interfere with the build process.
   postPatch = ''
     rm core/src/main/assets/{levelsplashes,sprites}/*.pdn
+    rm core/src/main/assets/environment/*.lnk
   '';
 
   meta = {

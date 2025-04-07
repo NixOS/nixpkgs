@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lipnitsk";
     repo = "libcue";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ZMUUa8CmpFNparPsM/P2yvRto9E85EdTxpID5sKQbNI=";
   };
 

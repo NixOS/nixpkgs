@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "odpi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-CvsQ/w5r0d/l0m6wkgZtVBkX66Hcrz4U3b8qpHM0Dm8=";
   };
 

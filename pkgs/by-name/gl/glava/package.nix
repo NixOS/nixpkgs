@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wacossusca34";
     repo = "glava";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
   };
 

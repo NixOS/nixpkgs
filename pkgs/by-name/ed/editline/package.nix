@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-0FeDUVCUahbweH24nfaZwa7j7lSfZh1TnQK7KYqO+3g=";
   };
 

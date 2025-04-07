@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ideveCore";
     repo = "Valuta";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g2x+pqs7dXdTMSxzSU5TeQtE+Q+tdQ93xaMtUVEE5/U=";
   };
 

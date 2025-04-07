@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-passbook";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xN37nM2AQVxFg+TOZ3cEvEV4F115U9m6YVX12al4SIw=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tsuk1ko";
     repo = "pxder";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+WZbs10+id+nohTZzLjEofb6k8PMGd73YhY3FUTXx5Q=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "git.sleeping.town";
     owner = "wonder";
     repo = "colstr";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0V2S/yYu5L7qxkT4Zf18x9+cHoPMztFmgSywpxF8QqA=";
   };
 

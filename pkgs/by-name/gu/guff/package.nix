@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "silentbicycle";
     repo = "guff";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0n8mc9j3044j4b3vgc94ryd2j9ik6g73fqja54yxfdfrks4ksyds";
   };
 

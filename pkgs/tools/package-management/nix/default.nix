@@ -156,8 +156,8 @@ lib.makeExtensible (
           };
 
       nix_2_24 = common {
-        version = "2.24.13";
-        hash = "sha256-lUsK8lAwaaTEM+KFML/6sYwaVAiSf70g1EfSDJNNrU0=";
+        version = "2.24.14";
+        hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
         self_attribute_name = "nix_2_24";
       };
 
@@ -167,14 +167,14 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_25";
       };
 
-      nixComponents_2_26 = nixDependencies.callPackage ./modular/packages.nix {
+      nixComponents_2_26 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.26.3";
         inherit (self.nix_2_24.meta) maintainers;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "42fc03dd1f12df2d9152303f3fb8bf22b746462c";
+          tag = version;
           hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
         };
       };
@@ -183,21 +183,21 @@ lib.makeExtensible (
       # depend on the components they need in `nixComponents_2_26`.
       nix_2_26 = addTests "nix_2_26" self.nixComponents_2_26.nix-everything;
 
-      nixComponents_2_27 = nixDependencies.callPackage ./modular/packages.nix {
-        version = "2.27.1";
+      nixComponents_2_28 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.28.1";
         inherit (self.nix_2_24.meta) maintainers;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_26";
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_28";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "9cb662df7442a1e2c4600fb8ecb2ad613ebc5a95";
-          hash = "sha256-rBPulEBpn4IiqkPsetuh7BRzT2iGCzZYnogTAsbrvhU=";
+          rev = version;
+          hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
         };
       };
 
-      nix_2_27 = addTests "nix_2_27" self.nixComponents_2_27.nix-everything;
+      nix_2_28 = addTests "nix_2_28" self.nixComponents_2_28.nix-everything;
 
-      latest = self.nix_2_26;
+      latest = self.nix_2_28;
 
       # The minimum Nix version supported by Nixpkgs
       # Note that some functionality *might* have been backported into this Nix version,
@@ -230,6 +230,9 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
         git = throw "nixVersions.git has been removed. use nixVersions.latest or the nix flake.";
       }

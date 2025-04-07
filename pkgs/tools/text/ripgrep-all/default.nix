@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "phiresky";
     repo = "ripgrep-all";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ns7RL7kiG72r07LkF6RzShNg8M2SU6tU5+gXDxzUQHM=";
   };
 

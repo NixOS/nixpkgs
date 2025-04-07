@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "viaduct-ai";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qIYV0wDzBRPt6s6d2dL4FobBSMlmVm+Z0ogig3r0Q/c=";
   };
 

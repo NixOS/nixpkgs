@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "yubikey-agent";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 

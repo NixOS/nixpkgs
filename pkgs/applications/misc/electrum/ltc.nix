@@ -34,7 +34,7 @@ let
   tests = fetchFromGitHub {
     owner = "pooler";
     repo = "electrum-ltc";
-    rev = version;
+    tag = version;
     sha256 = "sha256-qu72LIV07pgHqvKv+Kcw9ZmNk6IBz+4/vdJELlT5tE4=";
 
     postFetch = ''

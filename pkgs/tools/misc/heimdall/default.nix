@@ -17,7 +17,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Benjamin-Dobell";
     repo = "Heimdall";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1ygn4snvcmi98rgldgxf5hwm7zzi1zcsihfvm6awf9s6mpcjzbqz";
   };
 

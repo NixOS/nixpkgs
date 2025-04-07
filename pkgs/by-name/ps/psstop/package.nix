@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "clearlinux";
     repo = "psstop";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "03ir3jjpzm7q8n1qc5jr99hqarr9r529w1zb6f7q4wak2vfj7w9h";
   };
 

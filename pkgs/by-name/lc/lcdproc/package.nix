@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lcdproc";
     repo = "lcdproc";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1r885zv1gsh88j43x6fvzbdgfkh712a227d369h4fdcbnnfd0kpm";
   };
 

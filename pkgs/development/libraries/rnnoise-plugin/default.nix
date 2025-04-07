@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "werman";
     repo = "noise-suppression-for-voice";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 

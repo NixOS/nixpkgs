@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MmlCTF7tZBBOCnyhUjTatDjajFMGd+Nk2kYyxjzZc04=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = "waybox";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-hAXS9laDfigWR2pfNmdPiOeez3NpTIuKHnpeQyYa9IQ=";
   };
 

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vnmH8zhjecghaNe7/oguCOs9OXmtBRGdZeH4n24oXsg=";
   };
 

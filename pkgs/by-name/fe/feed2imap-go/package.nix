@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Necoro";
     repo = "feed2imap-go";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-LMtuGrNRVG3/2cgZFS7YlVmassbWDhH/nQgPh08NmpA=";
   };
 

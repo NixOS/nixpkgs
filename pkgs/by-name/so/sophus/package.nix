@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "strasdat";
     repo = "Sophus";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-k5t3kSUrH6B1f60dtqq3Ai4R4D2h+Ld+6Cpljl/AN0w=";
   };
 

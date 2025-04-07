@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Eliot00";
     repo = "commit-formatter";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "EYzhb9jJ4MzHxIbaTb1MxeXUgoxTwcnq5JdxAv2uNcA=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
     sha256 = "sha256-G5pOSlO1FU7kvHwH1yw8UBEeDwQ5aIxubdyFcWQ2Z/8=";
-    rev = "v${version}";
+    tag = "v${version}";
   };
 
   buildInputs = [

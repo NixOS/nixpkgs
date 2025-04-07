@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lapwat";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dkOLlWeG6ixbqLJU/1x2R1meKpcXb63C8EXH5FlD38k=";
   };
 

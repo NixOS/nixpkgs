@@ -14,7 +14,7 @@ let
     src = fetchFromGitHub {
       owner = "grantjenks";
       repo = "python-sortedcontainers";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-YRbSM2isWi7AzfquFvuZBlpEMNUnBJTBLBn0/XYVHKQ=";
     };
 

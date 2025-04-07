@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-minexr";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Om67ttAHxu7C3IwPB+JHYi78E9qBi1E6layMVg4+S3M=";
   };
 

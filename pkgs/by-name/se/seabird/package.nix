@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y+QIBqU3kAxedhWLnu07m9HQOCgHfOvVscIxxWtUcZo=";
   };
 

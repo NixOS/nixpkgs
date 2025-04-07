@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aHmLcWiDy5GMbcKi285tfBggNmGkpVAoZMm4dt8LKak=";
   };
 

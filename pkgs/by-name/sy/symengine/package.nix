@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-WriVcYt3fkObR2U4J6a4KGGc2HgyyFyFpdrwxBD+AHA=";
   };
 

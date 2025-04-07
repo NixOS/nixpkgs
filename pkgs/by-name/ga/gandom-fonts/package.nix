@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "gandom-font";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nez8T0TtRLyXxIIR69LrVGde5ThCvA0fLXkYLyYQRV8=";
   };
 

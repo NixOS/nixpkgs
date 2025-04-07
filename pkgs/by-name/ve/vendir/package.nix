@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-vendir";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-VIP1NkSZMoTZfvl6xAAbs0sL9rBc6FDaZHgOmRViStY=";
   };
 

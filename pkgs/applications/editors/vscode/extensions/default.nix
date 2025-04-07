@@ -90,15 +90,15 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.27.0";
-          hash = "sha256-urXGyHpIDWQ0Bc+8LODC0DcEo6jQ5tA/QptyxCej9yU=";
+          version = "4.33.1";
+          hash = "sha256-iq0UpVaZMOzh4NIRPLk49ciFuO4A6PDSEMe1KKhfSxA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
           description = "Visual Studio Code extension with rich support for the OpenAPI Specification (OAS)";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi";
           homepage = "https://github.com/42Crunch/vscode-openapi";
-          license = lib.licenses.gpl3;
+          license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.benhiemer ];
         };
       };
@@ -737,8 +737,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.14.3";
-          hash = "sha256-YmrE0HQlqtuFqD3CDuU5SHnvDbZsfZWEIAZLTkiNXtE=";
+          version = "1.14.4";
+          hash = "sha256-WBtaRLAdE2Ttlq4fAS2kI3d0dUAVB+CTdksiSILJ4hY=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -5038,8 +5038,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.61";
-          hash = "sha256-cKiIva4nzROp+bbwkMxBvguLMXVe/9uGcdhVhLxmae0=";
+          version = "0.0.63";
+          hash = "sha256-qlBcnQyH5VbgmBlTvVi59OpYtyuVrJLoSuRIbrBGFVE=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

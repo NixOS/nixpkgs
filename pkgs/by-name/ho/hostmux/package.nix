@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hukl";
     repo = "hostmux";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Rh8eyKoUydixj+X7muWleZW9u8djCQAyexIfRWIOr0o=";
   };
 

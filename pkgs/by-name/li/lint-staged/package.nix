@@ -13,7 +13,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "okonet";
     repo = "lint-staged";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xZ4fKwryGHVD1AhSKJVvBGIDJin10YejKxDp1yMi8Pg=";
   };
 

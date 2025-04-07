@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matejcik";
     repo = "construct-classes";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-l4sVacKTuQbhXCw2lVHCl1OzpCiKmEAm9nSQ8pxFuTo=";
   };
 

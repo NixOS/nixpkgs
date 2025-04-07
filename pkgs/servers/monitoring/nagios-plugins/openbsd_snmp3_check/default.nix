@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alexander-naumov";
     repo = "openbsd_snmp3_check";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qDYANMvQU72f9wz8os7S1PfBH08AAqhtWLHVuSmkub4=";
   };
 

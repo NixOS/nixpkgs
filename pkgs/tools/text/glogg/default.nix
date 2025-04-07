@@ -14,7 +14,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nickbnf";
     repo = "glogg";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0hf1c2m8n88frmxmyn0ndr8129p7iky49nq565sw1asaydm5z6pb";
   };
 

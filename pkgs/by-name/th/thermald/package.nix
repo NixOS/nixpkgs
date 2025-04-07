@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ydv6wZ3r2QxVji9bSx0sgpaOQNtgN+Y4rPZ44XtxNh8=";
   };
 

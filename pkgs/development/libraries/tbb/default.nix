@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +19,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-zGZHMtAUVzBKFbCshpepm3ce3tW6wQ+F30kYYXAQ/TE=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   patches = [
@@ -32,6 +34,21 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
       hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
     })
+    (fetchpatch {
+      name = "fix-tbb-mingw-compile.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/1361.patch";
+      hash = "sha256-jVa4HQetZv0vImdv549MyTy6/8t9dy8m6YAmjPGNQ18=";
+    })
+    (fetchpatch {
+      name = "fix-tbb-mingw-link.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/1193.patch";
+      hash = "sha256-ZQbwUmuIZoGVBof8QNR3V8vU385e2X7EvU3+Fbj4+M8=";
+    })
+  ];
+
+  cmakeFlags = [
+    # Skip tests to work around https://github.com/uxlfoundation/oneTBB/issues/1695
+    (lib.cmakeBool "TBB_TEST" (!stdenv.hostPlatform.isWindows))
   ];
 
   # Fix build with modern gcc
@@ -61,6 +78,8 @@ stdenv.mkDerivation rec {
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
@@ -73,7 +92,7 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
       thoughtpolice
       tmarkus

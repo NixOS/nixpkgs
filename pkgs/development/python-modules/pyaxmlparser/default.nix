@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "appknox";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
   };
 

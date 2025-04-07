@@ -36,7 +36,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "space-wizards";
     repo = "SS14.Launcher";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Gajs8zINWBJ3BvAPKYan0bCRbEVscz56pyE9WOLiOqU=";
     fetchSubmodules = true;
   };

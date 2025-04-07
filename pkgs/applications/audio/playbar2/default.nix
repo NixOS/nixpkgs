@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "audoban";
     repo = "PlayBar2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0iv2m4flgaz2r0k7f6l0ca8p6cw8j8j2gin1gci2pg3l5g5khbch";
   };
 

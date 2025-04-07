@@ -284,7 +284,7 @@ with pkgs;
     extraPackages = [ jdk17 ];
   };
 
-  asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
+  asitop = callPackage ../os-specific/darwin/asitop { };
 
   cve = with python3Packages; toPythonApplication cvelib;
 
@@ -359,11 +359,13 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
+  copilot-language-server-fhs = copilot-language-server.fhs;
+
   curv = callPackage ../by-name/cu/curv/package.nix {
     openexr = openexr_3;
   };
 
-  databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
+  databricks-sql-cli = callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
     buildGoModule = buildGo123Module;
@@ -403,7 +405,7 @@ with pkgs;
 
   inherit (gridlock) nyarr;
 
-  html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
+  html5validator = callPackage ../applications/misc/html5validator { };
 
   inspec = callPackage ../tools/misc/inspec { };
 
@@ -1175,7 +1177,7 @@ with pkgs;
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
-  mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
+  mymcplus = callPackage ../tools/games/mymcplus { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
@@ -1206,7 +1208,7 @@ with pkgs;
 
   shaperglot = with python3Packages; toPythonApplication shaperglot;
 
-  snagboot = python3.pkgs.callPackage ../applications/misc/snagboot { };
+  snagboot = callPackage ../applications/misc/snagboot { };
 
   slipstream = callPackage ../tools/games/slipstream {
     jdk = jdk8;
@@ -1242,6 +1244,13 @@ with pkgs;
   winbox = winbox3;
   winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
+  };
+
+  x2t = callPackage ../by-name/x2/x2t/package.nix {
+    openssl = openssl.override {
+      enableMD2 = true;
+      static = true;
+    };
   };
 
   yabridge = callPackage ../tools/audio/yabridge {
@@ -1850,7 +1859,7 @@ with pkgs;
 
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
-  catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
+  catcli = callPackage ../tools/filesystems/catcli { };
 
   chipsec = callPackage ../tools/security/chipsec {
     kernel = null;
@@ -2617,10 +2626,6 @@ with pkgs;
         else
           throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression."
       );
-
-  metabase = callPackage ../servers/metabase {
-    jdk11 = jdk11_headless;
-  };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -4192,7 +4197,7 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  netexec = python3Packages.callPackage ../tools/security/netexec { };
+  netexec = callPackage ../tools/security/netexec { };
 
   netdata = callPackage ../tools/system/netdata {
     protobuf = protobuf_21;
@@ -4496,6 +4501,7 @@ with pkgs;
 
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
+      description = "Utility which reads and writes data across network connections — LibreSSL implementation";
       mainProgram = "nc";
     };
   });
@@ -5459,11 +5465,11 @@ with pkgs;
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
 
-  twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
+  twtxt = callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
 
-  ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
+  ubidump = callPackage ../tools/filesystems/ubidump { };
 
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
@@ -5958,7 +5964,7 @@ with pkgs;
     llvmPackages = crystal.llvmPackages;
   };
 
-  devpi-client = python3Packages.callPackage ../development/tools/devpi-client { };
+  devpi-client = callPackage ../development/tools/devpi-client { };
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
 
@@ -7375,6 +7381,7 @@ with pkgs;
   beam = callPackage ./beam-packages.nix { };
   beam_minimal = callPackage ./beam-packages.nix {
     beam = beam_minimal;
+    systemdSupport = false;
     wxSupport = false;
   };
 
@@ -7383,7 +7390,6 @@ with pkgs;
     erlang_28
     erlang_27
     erlang_26
-    erlang_25
     elixir
     elixir_1_18
     elixir_1_17
@@ -7409,19 +7415,15 @@ with pkgs;
   beamPackages = dontRecurseIntoAttrs beam27Packages;
   beamMinimalPackages = dontRecurseIntoAttrs beamMinimal27Packages;
 
-  beam25Packages = recurseIntoAttrs beam.packages.erlang_25.beamPackages;
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   # 28 is pre-release
   beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28.beamPackages;
 
-  beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25.beamPackages;
   beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   # 28 is pre-release
   beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
-
-  erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
@@ -7915,8 +7917,6 @@ with pkgs;
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
-  ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
-
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
@@ -7928,10 +7928,6 @@ with pkgs;
       { };
 
   inherit (callPackages ../development/tools/language-servers/nixd { }) nixf nixt nixd;
-
-  ansible-later = callPackage ../tools/admin/ansible/later.nix { };
-
-  ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
@@ -8592,7 +8588,7 @@ with pkgs;
     )
       haskellPackages.haskell-ci;
 
-  nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
+  nimbo = callPackage ../applications/misc/nimbo { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
@@ -8669,8 +8665,6 @@ with pkgs;
   portableService = callPackage ../build-support/portable-service { };
 
   polar = callPackage ../tools/misc/polar { };
-
-  inherit (nodePackages) postcss-cli;
 
   pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
 
@@ -9271,8 +9265,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
 
-  factor-lang-scope = callPackage ../development/compilers/factor-lang/scope.nix { };
-  factor-lang = factor-lang-scope.interpreter;
+  factorPackages = callPackage ./factor-packages.nix { };
+  factor-lang = factorPackages.factor-lang;
 
   far2l = callPackage ../applications/misc/far2l {
     inherit (darwin.apple_sdk.frameworks)
@@ -10639,8 +10633,6 @@ with pkgs;
       ;
   };
 
-  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix { };
-
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
   };
@@ -11156,7 +11148,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
     };
   };
@@ -11167,7 +11159,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
     };
   };
@@ -11178,7 +11170,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
     };
   };
@@ -11189,7 +11181,7 @@ with pkgs;
     src = fetchFromGitHub {
       owner = "facebook";
       repo = pname;
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
     };
   };
@@ -14119,6 +14111,7 @@ with pkgs;
     docker_25
     docker_26
     docker_27
+    docker_28
     ;
 
   docker = docker_27;
@@ -15102,7 +15095,7 @@ with pkgs;
   };
 
   kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix {
-    buildGoModule = buildGo123Module;
+    buildGoModule = buildGo124Module;
   };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
@@ -15588,8 +15581,6 @@ with pkgs;
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
 
-  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
-
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
@@ -15722,7 +15713,7 @@ with pkgs;
 
   openscad = libsForQt5.callPackage ../applications/graphics/openscad { };
 
-  opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client { };
+  opentimestamps-client = callPackage ../tools/misc/opentimestamps-client { };
 
   opentoonz = libsForQt5.callPackage ../applications/graphics/opentoonz { };
 
@@ -16433,10 +16424,6 @@ with pkgs;
 
   tlp = callPackage ../tools/misc/tlp {
     inherit (linuxPackages) x86_energy_perf_policy;
-  };
-
-  torrenttools = callPackage ../tools/misc/torrenttools {
-    fmt = fmt_9;
   };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
@@ -17217,12 +17204,6 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
-
-  zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
-
-  zdoom = callPackage ../games/doom-ports/zdoom { };
-
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
@@ -17262,10 +17243,6 @@ with pkgs;
   bugdom = callPackage ../games/bugdom {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
-  };
-
-  bzflag = callPackage ../games/bzflag {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
 
   cataclysmDDA = callPackage ../games/cataclysm-dda { };
@@ -17447,7 +17424,7 @@ with pkgs;
 
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
-  gshogi = python3Packages.callPackage ../games/gshogi { };
+  gshogi = callPackage ../games/gshogi { };
 
   qtads = qt5.callPackage ../games/qtads { };
 
@@ -17626,7 +17603,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  pysolfc = python3Packages.callPackage ../games/pysolfc { };
+  pysolfc = callPackage ../games/pysolfc { };
 
   quake3wrapper = callPackage ../games/quake3/wrapper { };
 
@@ -18625,7 +18602,7 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace { };
+  nextinspace = callPackage ../applications/science/misc/nextinspace { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 
@@ -18678,7 +18655,7 @@ with pkgs;
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
   avell-unofficial-control-center =
-    python3Packages.callPackage ../applications/misc/avell-unofficial-control-center
+    callPackage ../applications/misc/avell-unofficial-control-center
       { };
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
@@ -19025,7 +19002,7 @@ with pkgs;
   nixosOptionsDoc = attrs: (import ../../nixos/lib/make-options-doc) ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_26;
+    nix = nixVersions.nix_2_28;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
@@ -19226,7 +19203,7 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  tftui = python3Packages.callPackage ../applications/networking/cluster/tftui { };
+  tftui = callPackage ../applications/networking/cluster/tftui { };
 
   trufflehog = callPackage ../tools/security/trufflehog {
     buildGoModule = buildGo123Module;

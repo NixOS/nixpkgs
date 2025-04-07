@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
   };
 

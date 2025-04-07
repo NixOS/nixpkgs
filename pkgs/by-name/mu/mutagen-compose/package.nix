@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MK/icz/d7wymUm0m3aq4bBR1ZmxFngPVp+iPC9ufluU=";
   };
 

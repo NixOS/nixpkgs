@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hackerb9";
     repo = "lsix";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-msTG7otjzksg/2XyPDy31LEb7uGXSgB8fzfHvad9nPA=";
   };
 

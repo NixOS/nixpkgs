@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-sdkutils";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z9c+uBiGMXW5v+khdNaElhno16ikBO4voTzwd2mP6rA=";
   };
 

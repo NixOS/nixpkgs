@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
     repo = "PowerDNS-Admin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q9mt8wjSNFb452Xsg+qhNOWa03KJkYVGAeCWVSzZCyk=";
   };
 

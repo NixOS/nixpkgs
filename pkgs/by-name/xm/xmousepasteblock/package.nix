@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "milaq";
     repo = "XMousePasteBlock";
     hash = "sha256-uHlHGVnIro6X4kRp79ibtqMmiv2XQT+zgbQagUxdB0c=";
-    rev = version;
+    tag = version;
   };
   makeFlags = [
     "PREFIX=$(out)"

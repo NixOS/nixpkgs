@@ -65,6 +65,7 @@ let
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
+  useSendmail = configEnv.USE_SENDMAIL or null == "true";
 in
 {
   imports = [
@@ -236,10 +237,10 @@ in
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
+        NoNewPrivileges = !useSendmail;
+        PrivateDevices = !useSendmail;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = !useSendmail;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -262,10 +263,13 @@ in
         inherit StateDirectory;
         StateDirectoryMode = "0700";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-        ];
+        SystemCallFilter =
+          [
+            "@system-service"
+          ]
+          ++ lib.optionals (!useSendmail) [
+            "~@privileged"
+          ];
         Restart = "always";
         UMask = "0077";
       };

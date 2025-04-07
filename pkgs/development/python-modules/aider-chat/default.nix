@@ -112,6 +112,7 @@
   torch,
   nltk,
   boto3,
+  nix-update-script,
 }:
 
 let
@@ -123,7 +124,7 @@ let
     ];
   };
 
-  version = "0.80.0";
+  version = "0.81.1";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -136,7 +137,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-W3GO5+0rprQHmn1upL3pcXuv2e9Wir6TW0tUnvZj48E=";
+      hash = "sha256-TNSdsJBmF/9OCkFe1dZV0y7X2FSTjgp3YV4HGlA9GMc=";
     };
 
     pythonRelaxDeps = true;
@@ -246,6 +247,10 @@ let
       gitMinimal
     ];
 
+    postPatch = ''
+      substituteInPlace aider/linter.py --replace-fail "\"flake8\"" "\"${flake8}\""
+    '';
+
     disabledTestPaths = [
       # Tests require network access
       "tests/scrape/test_scrape.py"
@@ -329,42 +334,43 @@ let
             propagatedBuildInputs ? [ ],
             ...
           }:
-          let
-            playwrightDeps =
-              if withPlaywright || withAll then aider-chat.optional-dependencies.playwright else [ ];
-            browserDeps = if withBrowser || withAll then aider-chat.optional-dependencies.browser else [ ];
-            helpDeps = if withHelp || withAll then aider-chat.optional-dependencies.help else [ ];
-            bedrockDeps = if withBedrock || withAll then aider-chat.optional-dependencies.bedrock else [ ];
 
-            playwrightInputs = if withPlaywright || withAll then [ playwright-driver.browsers ] else [ ];
-            playwrightArgs =
-              if withPlaywright || withAll then
-                [
-                  "--set"
-                  "PLAYWRIGHT_BROWSERS_PATH"
-                  "${playwright-driver.browsers}"
-                  "--set"
-                  "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
-                  "true"
-                ]
-              else
-                [ ];
-            helpArgs =
-              if withHelp || withAll then
-                [
-                  "--set"
-                  "NLTK_DATA"
-                  "${aider-nltk-data}"
-                ]
-              else
-                [ ];
-          in
           {
-            dependencies = dependencies ++ playwrightDeps ++ browserDeps ++ helpDeps ++ bedrockDeps;
-            propagatedBuildInputs = propagatedBuildInputs ++ playwrightInputs;
-            makeWrapperArgs = makeWrapperArgs ++ playwrightArgs ++ helpArgs;
+            dependencies =
+              dependencies
+              ++ lib.optionals (withAll || withPlaywright) aider-chat.optional-dependencies.playwright
+              ++ lib.optionals (withAll || withBrowser) aider-chat.optional-dependencies.browser
+              ++ lib.optionals (withAll || withHelp) aider-chat.optional-dependencies.help
+              ++ lib.optionals (withAll || withBedrock) aider-chat.optional-dependencies.bedrock;
+
+            propagatedBuildInputs =
+              propagatedBuildInputs
+              ++ lib.optionals (withAll || withPlaywright) [ playwright-driver.browsers ];
+
+            makeWrapperArgs =
+              makeWrapperArgs
+              ++ lib.optionals (withAll || withPlaywright) [
+                "--set"
+                "PLAYWRIGHT_BROWSERS_PATH"
+                "${playwright-driver.browsers}"
+                "--set"
+                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                "true"
+              ]
+              ++ lib.optionals (withAll || withHelp) [
+                "--set"
+                "NLTK_DATA"
+                "${aider-nltk-data}"
+              ];
           }
         );
+
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^v([0-9.]+)$"
+        ];
+      };
     };
 
     meta = {

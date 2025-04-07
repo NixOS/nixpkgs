@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KgpKpnOVtS3VoIqKhIzDvbdR54M014tQj2/ufhWMZDo=";
   };
 

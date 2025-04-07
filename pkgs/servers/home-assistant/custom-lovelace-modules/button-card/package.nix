@@ -12,7 +12,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "custom-cards";
     repo = "button-card";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ntg1sNgAehcL2fT0rP0YHzV5q6rB5p1TyFXtbZyB3Vo=";
   };
 

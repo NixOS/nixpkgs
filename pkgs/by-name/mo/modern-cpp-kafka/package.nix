@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "modern-cpp-kafka";
     owner = "morganstanley";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7hkwM1YbveQpDRqwMZ3MXM88LTwlAT7uB8NL0t409To=";
   };
 

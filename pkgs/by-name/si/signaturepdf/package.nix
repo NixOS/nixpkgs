@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "24eme";
     repo = "signaturepdf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8R1eowMpdb4oj3j+gMJ2RsWVzHvNiXPwFaLHR0jqFJo=";
   };
 

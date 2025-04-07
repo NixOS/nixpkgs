@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ianthehenry";
     repo = "sd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
   };
 

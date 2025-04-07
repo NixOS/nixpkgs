@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "qarkai";
     repo = "xautoclick";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
   };
 

@@ -12,6 +12,7 @@
   darwin,
   testers,
   espup,
+  gitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sPWGpQi9JrkdaPV2jvwaY9zjb8urK+ibhvxw/CC2UOQ=";
   };
 
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
+  passthru.updateScript = gitUpdater { };
   passthru.tests.version = testers.testVersion {
     package = espup;
   };

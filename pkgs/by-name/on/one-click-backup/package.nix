@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "dev-nis";
     repo = "nis-one-click-backup-qt";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-F+gA+Z4gZoNJYdy28uIjqiJcwcNsyUzl6BXsiIZO0gE=";
   };
 

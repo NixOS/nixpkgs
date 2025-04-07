@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubectl-validate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0r3ffrZSRtSe5CgvocRhoJz0zqUsx9vtABP2h1o9vCw=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zycore-c";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/RQl43gx3CO0OxH1syz4l3E4+/m46ql+HKVyuC1x4sA=";
   };
 

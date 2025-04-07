@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "khenriks";
     repo = "mp3fs";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
   };
 

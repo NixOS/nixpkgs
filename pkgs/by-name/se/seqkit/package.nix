@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "seqkit";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-W272ymy56aHRSOmi/0nCaU+AeaC0U/RyxzHOKR9meo4=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-totp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-aeWhI2GQcWa0xAqlmHfcbCMg78UqcD6eanLlEVNVnRM=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm-mapkubeapis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0DIBdSi/WIHVF8O7OtJOaFnIfpObsUXzgpj25kJuS6E=";
   };
 

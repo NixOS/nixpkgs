@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sdaqo";
     repo = "mpv-subs-popout";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z8IWiYKitkbEFdjca5G6P0I6j4Fg2fIHco6fD90UoBw=";
   };
 

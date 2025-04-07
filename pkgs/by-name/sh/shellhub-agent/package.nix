@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ByKj9rnRGS3B+BEqeo7QJvjSxVXytOXydmZMx7lK8Xc=";
   };
 

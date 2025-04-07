@@ -228,7 +228,7 @@ let
         lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
       );
 
-      lldb = callPackage ./lldb.nix (
+      lldb = callPackage ./lldb (
         {
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {

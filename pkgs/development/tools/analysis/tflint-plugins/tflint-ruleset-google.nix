@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DMFIJ0ywR2goHad3SvUSbj5w2057HJ4k0pNbiR/Y0pI=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "turtle-build";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-PDpiLPMyBZzj2nBy76cSC4ab/kyaoZC/Gd2HSaRVHUM=";
   };
 

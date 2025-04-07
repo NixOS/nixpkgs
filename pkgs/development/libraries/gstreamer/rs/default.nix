@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "gstreamer";
     repo = "gst-plugins-rs";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-G6JdZXBNiZfbu6EBTOsJ4Id+BvPhIToZmHHi7zuapnE=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''

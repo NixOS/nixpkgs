@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dmachard";
     repo = "go-dnscollector";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-rJHU/hDmnANziJj/K2FGccZjWFe8eyggtjIc2nt0pgo=";
   };
 

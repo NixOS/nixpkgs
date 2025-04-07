@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ytsutano";
     repo = "axmldec";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-LFDZZbRDa8mQmglgS4DA/OqXp0HJZ2uqg1hbStdgvUw=";
   };

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = "insulator2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
 

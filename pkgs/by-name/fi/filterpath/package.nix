@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Sigmanificient";
     repo = "filterpath";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-9rHooXgpvfNNeWxS8UF6hmb8vCz+xKABrJNd+AgKFJs=";
   };
 

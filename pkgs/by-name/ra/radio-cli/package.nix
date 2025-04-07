@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "margual56";
     repo = "radio-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-De/3tkvHf8dp04A0hug+aCbiXUc+XUYeHWYOiJ/bac0=";
   };
 

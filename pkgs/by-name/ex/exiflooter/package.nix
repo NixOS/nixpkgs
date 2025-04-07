@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aydinnyunus";
     repo = "exiflooter";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-E7fxV+w8N9xi8UuaKBTZBzPjIHJt9/U+oVIu2+Ond+Y=";
   };
 

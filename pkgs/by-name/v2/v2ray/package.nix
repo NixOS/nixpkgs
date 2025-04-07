@@ -21,7 +21,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-HCXfyWpwjryFcmk/7uUByqeJzdhJgb1zv1LDREc0k10=";
   };
 

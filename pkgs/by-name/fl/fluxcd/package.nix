@@ -27,7 +27,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = srcHash;
   };
 

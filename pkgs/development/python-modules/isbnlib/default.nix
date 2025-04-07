@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xlcnd";
     repo = "isbnlib";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-d6p0wv7kj+NOZJRE2rzQgb7PXv+E3tASIibYCjzCdx8=";
   };
 

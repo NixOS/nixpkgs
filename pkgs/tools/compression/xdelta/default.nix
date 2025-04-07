@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
-    rev = "v${version}";
+    tag = "v${version}";
     repo = "xdelta-devel";
     owner = "jmacd";
   };

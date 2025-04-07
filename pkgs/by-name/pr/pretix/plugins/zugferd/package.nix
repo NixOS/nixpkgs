@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-zugferd";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-VtmlgxqV34e3Yu9uTYwJAZoZQ/TQoEJgjHcpqUsxxq8=";
   };
 

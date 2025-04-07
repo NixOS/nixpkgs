@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "bitfield";
     repo = "gotestdox";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AZDXMwADOjcaMiofMWoHp+eSnD3a8iFtwpWDKl9Ess8=";
   };
 

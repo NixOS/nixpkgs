@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "IogaMaster";
     repo = "leaf";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-y0NO9YcOO7T7Cqc+/WeactwBAkeUqdCca87afOlO1Bk=";
   };
 

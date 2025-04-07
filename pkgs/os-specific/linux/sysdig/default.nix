@@ -66,7 +66,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
-    rev = version;
+    tag = version;
     hash = "sha256-oufRTr5TFdpF50pmem2L3bBFIfwxCR8f1xi0A328iHo=";
   };
 

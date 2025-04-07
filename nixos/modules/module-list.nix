@@ -361,6 +361,7 @@
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme
+  ./security/agnos.nix
   ./security/apparmor.nix
   ./security/audit.nix
   ./security/auditd.nix
@@ -1419,6 +1420,7 @@
   ./services/security/paretosecurity.nix
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
+  ./services/security/pocket-id.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
   ./services/security/sshguard.nix

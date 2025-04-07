@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "the-lean-crate";
     repo = "cargo-diet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SuJ1H/2YfSVVigdgLUd9veMClI7ZT7xkkyQ4PfXoQdQ=";
   };
 

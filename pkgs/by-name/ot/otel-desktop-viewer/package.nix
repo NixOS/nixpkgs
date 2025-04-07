@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kMgcco4X7X9WoCCH8iZz5qGr/1dWPSeQOpruTSUnonI=";
   };
 

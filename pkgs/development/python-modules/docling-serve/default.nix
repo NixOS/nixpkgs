@@ -12,6 +12,10 @@
   python-multipart,
   uvicorn,
   websockets,
+  gradio,
+  nodejs,
+  which,
+  withUI ? false,
 }:
 
 buildPythonPackage rec {
@@ -43,7 +47,15 @@ buildPythonPackage rec {
     python-multipart
     uvicorn
     websockets
-  ];
+  ] ++ lib.optionals withUI optional-dependencies.ui;
+
+  optional-dependencies = {
+    ui = [
+      gradio
+      nodejs
+      which
+    ];
+  };
 
   pythonImportsCheck = [
     "docling_serve"

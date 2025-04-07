@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "schlagmichdoch";
     repo = "PairDrop";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LvrBIdBjb4M2LidEJVCdK2uYydsJY+Cr5eXdfbS46dk=";
   };
 

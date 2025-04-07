@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "galkahana";
     repo = "PDF-Writer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sCa/yu+DVggN7Sha7dP9FXzZUJ2tGLYEFrq87dD4tsE=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Penlect";
     repo = "rectangle-packer";
-    rev = version;
+    tag = version;
     hash = "sha256-YsMLB9jfAC5yB8TnlY9j6ybXM2ILireOgQ8m8wYo4ts=";
   };
 

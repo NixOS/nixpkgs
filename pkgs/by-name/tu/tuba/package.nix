@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-SQrk6zsn3zZQTIruqVfjzs5cNyT2pAvM8XNI8SmyFM0=";
   };
 

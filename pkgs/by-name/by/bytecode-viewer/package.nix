@@ -16,7 +16,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "Konloch";
     repo = "bytecode-viewer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-opAUmkEcWPOrcxAL+I1rBQXwHmvzbu0+InTnsg9r+z8=";
   };
 

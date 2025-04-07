@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1KJ6YUYpOHp9AFSDmbPWqcyRdf/4XNQtuT9oiNcKRnU=";
   };
 

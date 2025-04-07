@@ -91,7 +91,7 @@ rec {
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-po8tMrOahfwayVXa7Eadr9+ZEmZizHlCmxi094cOJSY=";
       };
 
@@ -114,7 +114,7 @@ rec {
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-OxkPpmnYTl65ns+hKHJd5IAPUiMj0g3HUpyRpwDNut8=";
       };
 

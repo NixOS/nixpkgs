@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "antijingoist";
     repo = "opendyslexic";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-a8hh8NGt5djj9EC7ChO3SnnjuYMOryzbHWTK4gC/vIw=";
   };
 

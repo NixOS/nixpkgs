@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kronuz";
     repo = "esprima-python";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "WtkPCReXhxyr6pOzE9gsdIeBlLk+nSnbxkS3OowEaHo=";
   };
 

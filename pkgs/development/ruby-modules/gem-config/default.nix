@@ -79,7 +79,7 @@
   libvirt,
   glib,
   vips,
-  taglib_1,
+  taglib,
   libopus,
   linux-pam,
   libidn,
@@ -642,14 +642,9 @@ in
   };
 
   iconv = attrs: {
-    dontBuild = false;
     buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
-    ];
-    patches = [
-      # Fix incompatible function pointer conversion errors with clang 16
-      ./iconv-fix-incompatible-function-pointer-conversions.patch
     ];
   };
 
@@ -841,6 +836,12 @@ in
     buildInputs = [
       curl
       libxml2
+    ];
+    # https://github.com/oVirt/ovirt-engine-sdk-ruby/issues/13
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-int-conversion"
     ];
     dontBuild = false;
     meta.broken = stdenv.hostPlatform.isDarwin; # At least until releasing https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/17
@@ -1109,7 +1110,7 @@ in
   };
 
   taglib-ruby = attrs: {
-    buildInputs = [ taglib_1 ];
+    buildInputs = [ taglib ];
   };
 
   timfel-krb5-auth = attrs: {

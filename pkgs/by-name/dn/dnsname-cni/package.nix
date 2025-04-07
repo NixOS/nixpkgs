@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "dnsname";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-kebN1OLMOrBKBz4aBV0VYm+LmLm6S0mKnVgG2u5I+d4=";
   };
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YkBHvwN573qqQWe/p0n4C2NlyNQHSZNz2jyMKGPITF4=";
     fetchSubmodules = true;
   };

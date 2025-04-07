@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/suru-icon-theme";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-rbhfcjca0vMBa0tJWGpXMRGGygZH1hmdQv/nLJWPS7s=";
   };
 

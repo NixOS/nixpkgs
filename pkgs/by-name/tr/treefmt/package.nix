@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-097qAvJnMpxvhXNEjk54TXQHIODXP8lpitbN0ekWN+U=";
   };
 

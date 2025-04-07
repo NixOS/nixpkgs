@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sqvfzXHqVeiw+VKWPtCYv0USNpbfBE7ILUiqXZtLmgI=";
   };
 

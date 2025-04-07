@@ -21,7 +21,7 @@ let
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0gqFUIV0ETdVuVmC+SwoKsO6OkoT/s+qKO1f8fkaZj4=";
   };
 

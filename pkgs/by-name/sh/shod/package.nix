@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "shod";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0bKp1BTIdYVBDVdeGnTVo76UtBxa4UbXLZihdjHS/og=";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phillbush/shod";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

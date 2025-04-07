@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "kaniko";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-8SLE9s+P6Xh4PzrvTwUtIAtkG9Gor/fGBwrqq/fz0UM=";
   };
 

@@ -42,7 +42,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "09fcyjm0hg3y51fnjax88m93im39nbynxj79ffdknsazmqw9ac0h";
-    rev = "v${version}";
+    tag = "v${version}";
     repo = "dfasma";
     owner = "gillesdegottex";
   };

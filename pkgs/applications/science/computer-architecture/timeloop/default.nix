@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
   };
 

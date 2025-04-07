@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "tamarin-prover";
     repo = "tamarin-prover";
-    rev = version;
+    tag = version;
     hash = "sha256-v1BruU2p/Sg/g7b9a+QRza46bD7PkMtsGq82qFaNhpI=";
   };
 

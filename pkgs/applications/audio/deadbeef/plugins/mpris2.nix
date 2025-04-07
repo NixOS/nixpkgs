@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f6iHgwLdzQJJEquyuUQGWFfOfpjH/Hxh9IqQ5HkYrog=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "codeplea";
     repo = "genann";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0z45ndpd4a64i6jayr4yxfcr5h87bsmhm7lfgnbp35pnfywiclmq";
   };
 

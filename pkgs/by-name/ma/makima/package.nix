@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cyber-sushi";
     repo = "makima";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-kC0GJ1K7DMfkYxaYog5y1y0DMfFjZ7iD7pGQQE67N9o=";
   };
 

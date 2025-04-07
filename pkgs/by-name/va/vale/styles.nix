@@ -49,7 +49,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "alex";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-p0CQg6ZLusSKr57SugwlnoDEoPNVY3UIM8rHHxOL2l0=";
     };
     meta = {
@@ -65,7 +65,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-ldwK9tMA04H/jTd3dQeRX/sZOwZcyPb+I56cDg0vZDg=";
     };
     meta = {
@@ -81,7 +81,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Joblint";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-zRz5ThOg5RLTZj3dYPe0PDvOF5DjO31lduSpi2Us87U=";
     };
     meta = {
@@ -97,7 +97,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-4j05bIGAVEy6untUqtrUxdLKlhyOcJsbcsow8OxRp1A=";
     };
     meta = {
@@ -113,7 +113,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "proselint";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-ryKJDX1JrvDWVKLC5qQGctweDf74yuwEXxl/IqumM4s=";
     };
     meta = {
@@ -129,7 +129,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "readability";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-5Y9v8QsZjC2w3/pGIcL5nBdhpogyJznO5IFa0s8VOOI=";
     };
     meta = {
@@ -145,7 +145,7 @@ in
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "write-good";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-W/eHlXklAVlAnY8nLPi/SIKsg8UUnH8UkH99BDo5yKk=";
     };
     meta = {

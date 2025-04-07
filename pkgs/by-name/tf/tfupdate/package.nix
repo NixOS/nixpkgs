@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfupdate";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-iWiY1IuNZCqHpnAoib0SkWwAg1Mnuqr2QjKI3KZGYs0=";
   };
 

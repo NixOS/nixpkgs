@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Brewtarget";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-PqaiZ2eLH8+qRRkIolnQClTL9O9EgHMqFH/nUffosV8=";
   };
 

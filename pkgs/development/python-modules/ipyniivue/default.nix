@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niivue";
     repo = "ipyniivue";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rgScBBJ0Jqr5REZ+YFJcKwWcV33RzJ/sn6RqTL/limo=";
   };
 

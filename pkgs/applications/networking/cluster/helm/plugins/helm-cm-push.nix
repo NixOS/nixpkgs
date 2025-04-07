@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "chartmuseum";
     repo = "helm-push";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-YnhI1/BDk9swr3YFm5ajGf4LLgPty7blA2tlsMH0erY=";
   };
 
@@ -43,6 +43,6 @@ buildGoModule rec {
     description = "Helm plugin to push chart package to ChartMuseum";
     homepage = "https://github.com/chartmuseum/helm-push";
     license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

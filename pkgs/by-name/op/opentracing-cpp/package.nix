@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opentracing";
     repo = "opentracing-cpp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "09wdwbz8gbjgyqi764cyb6aw72wng6hwk44xpl432gl7whrrysvi";
   };
 

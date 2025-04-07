@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eQd/MNlnuzXzgFzvwUMchvHoIvkIrbpGKV7iknO14Cc=";
   };
 

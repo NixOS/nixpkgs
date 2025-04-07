@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
   };
 

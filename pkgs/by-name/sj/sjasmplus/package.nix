@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "z00m128";
     repo = "sjasmplus";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+FvNYfJ5I91RfuJTiOPhj5KW8HoOq8OgnnpFEgefSGc=";
   };
 

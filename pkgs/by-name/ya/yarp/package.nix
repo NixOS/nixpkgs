@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "yarp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0mphh899niy30xbjjwi9xpsliq8mladfldbbbjfngdrqfhiray1a";
   };
 

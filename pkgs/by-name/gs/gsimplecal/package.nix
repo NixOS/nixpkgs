@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dmedvinsky";
     repo = "gsimplecal";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Q8vK+rIRr+Tzwq0Xw5a1pYoLkSwF6PEdqc3/Dk01++o=";
   };
 

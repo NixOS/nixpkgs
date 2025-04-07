@@ -18,7 +18,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/qSfxGHcCSoNp516LFYWgEL4csf8EKgtSffBt1C02uE=";
   };
 

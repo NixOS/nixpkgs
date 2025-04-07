@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
   };
 

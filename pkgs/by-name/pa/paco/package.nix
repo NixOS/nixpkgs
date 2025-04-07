@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pacolang";
     repo = "paco";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sCU7cjmsUTrhf/7Lm3wBPKwk80SAhCfc4lrCBggspw8=";
   };
 

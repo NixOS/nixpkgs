@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "papis";
     repo = "python-doi";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1wa5inh2a0drjswrnhjv6m23mvbfdgqj2jb8fya7q0armzp7l6fr";
   };
 

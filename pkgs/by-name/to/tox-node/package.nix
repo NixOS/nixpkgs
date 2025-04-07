@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tox-rs";
     repo = "tox";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
   };
 

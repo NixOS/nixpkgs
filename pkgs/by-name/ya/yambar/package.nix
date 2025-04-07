@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-QCwwMpBYuMWYqxE2ugPFpG/QtZDW7VsSBYs5EqKYejA=";
   };
 

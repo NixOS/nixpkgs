@@ -23,7 +23,7 @@ let
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4gwK/AxzhsU0vgvKgIXrOyQLCgZMeZyKjj7PWbUmJ+8=";
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/assets/package-lock.json

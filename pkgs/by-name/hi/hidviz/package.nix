@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hidviz";
     repo = "hidviz";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-9crHFYVNNxJjwJojwqB8qdAGyr1Ieux9qC3m3rpIJw0=";
   };
 

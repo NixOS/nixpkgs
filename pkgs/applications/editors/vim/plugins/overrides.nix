@@ -1447,7 +1447,7 @@ in
     ];
     buildInputs = [ curl ];
     postPatch = ''
-      substituteInPlace lua/kulala/config/init.lua \
+      substituteInPlace lua/kulala/config/defaults.lua \
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
   };
@@ -2153,6 +2153,13 @@ in
     ];
   };
 
+  neovim-trunk = super.neovim-trunk.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -2700,6 +2707,9 @@ in
     checkInputs = [
       curl
       ripgrep
+      # Optional integrations
+      self.blink-cmp
+      self.nvim-cmp
     ];
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trygveaa";
     repo = "python-tunigo";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
   };
 

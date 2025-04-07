@@ -98,7 +98,7 @@ rec {
       src = fetchFromGitHub {
         owner = "irods";
         repo = "irods";
-        rev = finalAttrs.version;
+        tag = finalAttrs.version;
         hash = "sha256-SmN2FzeoA2/gjiDfGs2oifOVj0mK2WdQCgiSdIlENfk=";
         fetchSubmodules = true;
       };
@@ -143,7 +143,7 @@ rec {
       src = fetchFromGitHub {
         owner = "irods";
         repo = "irods_client_icommands";
-        rev = finalAttrs.version;
+        tag = finalAttrs.version;
         hash = "sha256-cc0V6BztJk3njobWt27VeJNmQUXyH6aBJkvYIDFEzWY=";
       };
 

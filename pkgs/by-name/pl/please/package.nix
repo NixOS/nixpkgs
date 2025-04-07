@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "edneville";
     repo = "please";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bQ91uCDA2HKuiBmHZ9QP4V6tM6c7hRvECqXzfC6EEnI=";
   };
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.usenix.org.uk/content/please.html";
     changelog = "https://github.com/edneville/please/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
