@@ -188,12 +188,7 @@ let
     version = versions.${system} or throwSystem;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = ''
-      cd ${unpacked}/opt/zoom
-      unset QML2_IMPORT_PATH
-      unset QT_PLUGIN_PATH
-      unset QT_SCREEN_SCALE_FACTORS
-    '';
+    extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
