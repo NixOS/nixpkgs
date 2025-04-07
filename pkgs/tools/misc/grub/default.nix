@@ -71,7 +71,7 @@ let
     x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
   };
 
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
+  inPCSystems = lib.hasAttr stdenv.hostPlatform.system pcSystems;
 
   gnulib = fetchgit {
     url = "https://https.git.savannah.gnu.org/git/gnulib.git";
