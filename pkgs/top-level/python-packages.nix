@@ -2651,6 +2651,8 @@ self: super: with self; {
 
   colbert-ai = callPackage ../development/python-modules/colbert-ai { };
 
+  colcon = callPackage ../development/python-modules/colcon { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
