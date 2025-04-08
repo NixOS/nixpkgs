@@ -46,11 +46,15 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    (lib.enableFeature enableNls "nls")
-    (lib.enableFeature enableTiny "tiny")
-  ];
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      (lib.enableFeature enableNls "nls")
+      (lib.enableFeature enableTiny "tiny")
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "gl_cv_func_strcasecmp_works=yes"
+    ];
 
   postInstall =
     if enableTiny then
@@ -61,6 +65,7 @@ stdenv.mkDerivation rec {
       '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru = {
     tests = {

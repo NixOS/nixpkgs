@@ -57,16 +57,24 @@ with pkgs;
 
       temurin-bin = recurseIntoAttrs (
         let
-          temurinLinux = callPackage ../development/compilers/temurin-bin/jdk-linux.nix { };
-          temurinDarwin = callPackage ../development/compilers/temurin-bin/jdk-darwin.nix { };
+          temurinLinux = import ../development/compilers/temurin-bin/jdk-linux.nix {
+            inherit (pkgs) lib callPackage stdenv;
+          };
+          temurinDarwin = import ../development/compilers/temurin-bin/jdk-darwin.nix {
+            inherit (pkgs) lib callPackage;
+          };
         in
         lib.mapAttrs (name: drv: mkLinuxDarwin drv temurinDarwin.${name}) temurinLinux
       );
 
       semeru-bin = recurseIntoAttrs (
         let
-          semeruLinux = callPackage ../development/compilers/semeru-bin/jdk-linux.nix { };
-          semeruDarwin = callPackage ../development/compilers/semeru-bin/jdk-darwin.nix { };
+          semeruLinux = import ../development/compilers/semeru-bin/jdk-linux.nix {
+            inherit (pkgs) lib callPackage;
+          };
+          semeruDarwin = import ../development/compilers/semeru-bin/jdk-darwin.nix {
+            inherit (pkgs) lib callPackage;
+          };
         in
         lib.mapAttrs (name: drv: mkLinuxDarwin drv semeruDarwin.${name}) semeruLinux
       );
