@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.26.2";
+  version = "2.28.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
+    hash = "sha256-DzOAwPw/XX8UiawB6ayWEIxlysiTp+iAZkbMO74Yt34=";
   };
 
   build-system = [ poetry-core ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${src.tag}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
